@@ -71,7 +71,7 @@ export const ReferenceRenderer = ({
                                                     <AccordionItemHeading>
                                                         <AccordionItemButton>
                                                             <div className="flex-container">
-                                                                 <h3 className={"add-section-heading"}>{fields.get(index).specialization || 'Reference'}</h3>
+                                                                 <h3 className={"add-section-heading"}>{fields.get(index).reference_name || 'Reference'}</h3>
                                                             <span className={expanded.indexOf(index) > -1 ? "opened-accordion" : "closed-accordion"}></span>
                                                                 <div className="addon-buttons mr-10">
                                                                 <span

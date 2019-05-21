@@ -71,7 +71,7 @@ export const CourseRenderer = ({
                                                 <AccordionItemHeading>
                                                     <AccordionItemButton>
                                                         <div className="flex-container">
-                                                             <h3 className={"add-section-heading"}>{fields.get(index).specialization || 'Course'}</h3>
+                                                             <h3 className={"add-section-heading"}>{fields.get(index).name_of_certification || 'Course'}</h3>
                                                             <span className={expanded.indexOf(index) > -1 ? "opened-accordion" : "closed-accordion"}></span>
                                                             <div className="addon-buttons mr-10">
                                                                 <span

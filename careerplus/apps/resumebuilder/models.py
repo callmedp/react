@@ -53,9 +53,11 @@ class CandidateProfile(AbstractAutoDate):
     @property
     def owner_id(self):
         return self.candidate.candidate_id
+
     @property
     def extracurricular_list(self):
-        return [interest_dict[int(x)] for x in self.extracurricular.split(',')]
+        # return [interest_dict[int(x)] for x in self.extracurricular.split(',')]
+        return []
 
     class Meta:
         abstract = True

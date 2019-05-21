@@ -345,7 +345,6 @@ class CandidateResumePreview(APIView):
             return {}
 
         entity_preference = eval(candidate.entity_preference_data)
-
         extracurricular = candidate.extracurricular_list
         education = candidate.candidateeducation_set.all().order_by('order')
         experience = candidate.candidateexperience_set.all().order_by('order')

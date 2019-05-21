@@ -68,7 +68,7 @@ export const LanguageRenderer = ({
                                                 <AccordionItemHeading>
                                                     <AccordionItemButton>
                                                         <div className="flex-container">
-                                                             <h3 className={"add-section-heading"}>{fields.get(index).specialization || 'Language'}</h3>
+                                                             <h3 className={"add-section-heading"}>{fields.get(index).name || 'Language'}</h3>
                                                             <span className={expanded.indexOf(index) > -1 ? "opened-accordion" : "closed-accordion"}></span>
                                                             <div className="addon-buttons mr-10">
                                                                 <span
