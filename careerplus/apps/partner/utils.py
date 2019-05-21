@@ -266,7 +266,7 @@ MAPPING_SCORE_TYPE_VENDOR = {
 
 # Max_Score
 MAPPING_VENDOR_MAX_SCORE = {
-    'amcat': 1000,
+    'amcat': 900,
 }
 
 
