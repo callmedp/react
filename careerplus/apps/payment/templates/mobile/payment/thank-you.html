@@ -66,7 +66,7 @@
 
     <div class="text-center mt-20">
       {% if order.status == 1 %}
-          <span class="icon-tick"></span>
+          <span class="icon-tickBig"></span>
           <p class="fs-22 mt-20">Your payment has been made successfully!</p>
       {% else %}
           <span class="icon-wait"></span>
@@ -148,6 +148,26 @@
 
                   </ul>
                 </div><!-- /.Item wrap -->
+            {% elif oi.product.is_assesment %}
+
+            <div class="w100fl item-wrap c6">
+              <div class="w100fl">
+                <span class="item">
+                  <strong class="block">SEO Expert Test</strong>
+                </span>
+                <a href="#" class="btn-sm btn-orange">Take test</a>
+              </div>
+            </div><!-- /.Item wrap -->
+            
+            <div class="w100fl item-wrap c6">
+              <div class="w100fl">
+                <span class="item">
+                  <strong class="block">Social Media Test</strong>
+                </span>
+                <a href="#" class="btn-sm btn-orange">Take test</a>
+              </div>
+            </div><!-- /.Item wrap -->
+
             {% else %}
                 <div class="w100fl item-wrap c6">
                   <div class="w100fl">
