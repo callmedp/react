@@ -251,7 +251,7 @@ class ThankYouView(TemplateView):
                     no_process=False, oi_status=2)
 
                 assesment_items = order.orderitems.filter(
-                    order__status__in=[0, 1],
+                    order__status__in=[0],
                     product__type_flow=16,
                     product__sub_type_flow=1602
                 )

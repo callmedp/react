@@ -148,23 +148,14 @@
 
                   </ul>
                 </div><!-- /.Item wrap -->
-            {% elif oi.product.is_assesment %}
+            {% elif oi.product.is_assesment and oi.product.sub_type_flow == 1602 %}
 
             <div class="w100fl item-wrap c6">
               <div class="w100fl">
                 <span class="item">
-                  <strong class="block">SEO Expert Test</strong>
+                  <strong class="block">{{oi.product.get_name}}</strong>
                 </span>
-                <a href="#" class="btn-sm btn-orange">Take test</a>
-              </div>
-            </div><!-- /.Item wrap -->
-            
-            <div class="w100fl item-wrap c6">
-              <div class="w100fl">
-                <span class="item">
-                  <strong class="block">Social Media Test</strong>
-                </span>
-                <a href="#" class="btn-sm btn-orange">Take test</a>
+                {% if oi.order.status == 1 %} <a href="{{ oi.autologin_url }}"class="btn-sm btn-orange">Take test</a> {% endif %}
               </div>
             </div><!-- /.Item wrap -->
 
