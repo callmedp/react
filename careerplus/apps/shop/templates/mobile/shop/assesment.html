@@ -232,6 +232,11 @@
                 <div class="content-box row pt-30 pb-30">
                     <h2 class="fs-18">Topics covered</h2>
                     <div class="list-tick-item">
+                    	<ul>
+                    	{% for chapter in chapter_list %}
+                          <li>{{ chapter.heading }}</li>
+                        {% endfor %}
+                    	</ul>
                     {{prd_uget|safe}}
                		 </div>
                 </div>
