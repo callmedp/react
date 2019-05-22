@@ -219,14 +219,16 @@
 
             {% if chapter_list %}
               <section class="container-fluid detail-box">
-                <div class="career-outcomes mb-40">
-                <h2>Topics Covered</h2>
-                  <ul class="list-tick-item">
-                      {% for chapter in chapter_list %}
-                        <li class="col-md-6">{{ chapter.heading }}</li>
-                      {% endfor %}
-                  </ul>
-              </div>
+                <div class="container">
+                  <div class="career-outcomes mb-40">
+                    <h2>Topics Covered</h2>
+                      <ul class="list-tick-item">
+                          {% for chapter in chapter_list %}
+                            <li class="col-md-6">{{ chapter.heading }}</li>
+                          {% endfor %}
+                      </ul>
+                  </div>
+                </div>
               </section>
             {% endif %}
 
