@@ -13,10 +13,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RemoveField(
-            model_name='universitycoursedetail',
-            name='late_fee',
-        ),
-        migrations.RemoveField(
             model_name='universitycoursedetailscreen',
             name='late_fee',
         ),

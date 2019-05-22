@@ -336,26 +336,26 @@ class ResumeGenerate(object):
         return file
 
     # if file exists then return only the path , name hence don't overwrite it again
-    def is_file_exist(self, file_path):
-
+    def is_file_exist(self,file_path):
         file = Path(settings.RESUME_TEMPLATE_DIR)
-
         if file.is_file():
             return True
 
-    def store_file(self, file_dir: object, file_name, file: object) -> object:
+    def store_file(self,file_dir,file_name,file_content):
         if settings.IS_GCP:
-            return GCPPrivateMediaStorage().save(settings.RESUME_TEMPLATE_DIR + file_dir + file_name, file)
+            gcp_file = GCPPrivateMediaStorage().open("{}/{}/{}".\
+                format(settings.RESUME_TEMPLATE_DIR,file_dir,file_name), 'wb')
+            gcp_file.write(file_content)
+            gcp_file.close()
+            return
 
         if not os.path.exists(settings.RESUME_TEMPLATE_DIR + file_dir):
             os.makedirs(settings.RESUME_TEMPLATE_DIR + file_dir)
         dest = open(settings.RESUME_TEMPLATE_DIR + file_dir + file_name, 'wb')
-        for chunk in file.chunks():
-            dest.write(chunk)
+        dest.write(file_content)
         dest.close()
 
     def handle_content_type(self, order=None, content_type='pdf', index='1'):
-
         file_dir = 'order/%s/' % str(order.pk)
         file_name = 'resumetemplateupload-' + str(order.number) + '-' \
                     + timezone.now().strftime('%Y%m%d')

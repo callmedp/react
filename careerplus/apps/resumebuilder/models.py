@@ -1,12 +1,21 @@
+#python imports
+import json
+
 # django imports
 from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import post_save
-from .mixins import PreviewImageCreationMixin
-from django.apps import apps
+from django_mysql.models.fields import JSONField
 
-# import from inter app
+#local imports
+from .choices import *
+from .mixins import PreviewImageCreationMixin
+from .constants import TEMPLATE_DEFAULT_ENTITY_POSITION,TEMPLATE_ALLOW_LEFT_RIGHT_SWITCH
+
+# inter app imports
 from seo.models import AbstractAutoDate
+
+#third party imports
 
 SOCIAL_LINKS = ((1, 'LinkedIn'), (2, 'Github'), (3, 'Behance'), (4, 'Dribble'), (5, 'Keggle')
                 , (6, 'NPM'), (7, 'Upwork'), (8, 'PyPI'), (9, 'Stack Overflow'))
@@ -70,8 +79,33 @@ class Candidate(PreviewImageCreationMixin,CandidateProfile):
 
     parent_object_key = "id"
 
+    def create_template_customisations(self,candidate_id):
+        for i in range(1,6):
+            obj = OrderCustomisation()
+            obj.candidate_id = candidate_id
+            obj.template_no = i
+            obj.entity_position = json.dumps(TEMPLATE_DEFAULT_ENTITY_POSITION[i])
+            obj.save()
+
+    def save(self,**kwargs):
+        created = not bool(getattr(self,"id"))
+        obj = super(Candidate,self).save(**kwargs)
+
+        if created:
+            self.create_template_customisations(obj.id)
+
+        return obj
+
     def __str__(self):
         return '{}-{}'.format(self.first_name, self.last_name)
+
+
+class OrderCustomisation(PreviewImageCreationMixin,models.Model):
+    candidate = models.ForeignKey(Candidate,on_delete=models.CASCADE, verbose_name='Candidate')
+    template_no = models.SmallIntegerField(default=1)
+    color = models.SmallIntegerField(choices=RESUME_COLOR_CHOICES,default=1)
+    font_size = models.SmallIntegerField(choices=RESUME_FONT_SIZE_CHOICES,default=1)
+    entity_position = JSONField(blank=True,null=True)
 
 
 class Skill(PreviewImageCreationMixin,AbstractAutoDate):
@@ -86,8 +120,6 @@ class Skill(PreviewImageCreationMixin,AbstractAutoDate):
 
     def __str__(self):
         return self.name
-
-    
 
 
 class CandidateExperience(PreviewImageCreationMixin,models.Model):
@@ -224,7 +256,9 @@ class CandidateLanguage(PreviewImageCreationMixin,models.Model):
         return self.name
 
 
-senders=[Candidate,Skill,CandidateExperience,CandidateEducation,CandidateCertification,CandidateProject,CandidateReference,CandidateAchievement,CandidateLanguage]
+senders=[Candidate,Skill,CandidateExperience,CandidateEducation,\
+            CandidateCertification,CandidateProject,CandidateReference,\
+                CandidateAchievement,CandidateLanguage]
 
 for model_name in senders:
     post_save.connect(model_name.preview_image_task_call,sender=model_name)

@@ -1,9 +1,19 @@
-from celery.decorators import task
-from django.template.loader import get_template
-from weasyprint import HTML, CSS
+#python imports
+from io import BytesIO
 from datetime import date
-from PIL import Image
+
+#django imports
+from django.template.loader import get_template
 from django.core.files.uploadedfile import SimpleUploadedFile
+
+#local imports
+
+#inter app imports
+
+#third party imports
+from PIL import Image
+from weasyprint import HTML, CSS
+from celery.decorators import task
 
 @task
 def generate_image_for_resume(candidate_id):
@@ -45,26 +55,19 @@ def generate_image_for_resume(candidate_id):
         rendered_template = template.render(
             {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,
             'achievements': achievements, 'references': references, 'projects': projects,
-  
             'certifications': certifications, 'extracurricular': extracurricular, 'languages': languages,
             'current_exp': current_exp, 'latest_exp': latest_experience,
             'preference_list': entity_preference,
             }).encode(encoding='UTF-8')
+
         file_name = 'resumetemplate-' + str(i) + '.png'
         file = HTML(string=rendered_template).write_png(stylesheets=[CSS(string='@page {size:A3; margin:0px}')])
-        from io import BytesIO
-        # image = Image.frombytes('RGBA', (128,128), file, 'raw')
-        img = Image.open(BytesIO(file))
+        in_mem_file = BytesIO(file)
+        in_mem_file_to_upload = BytesIO()
+        img = Image.open(in_mem_file)
         img = remove_transparency(img)
-        img.save(file_name,"PNG")
-
-        
-       
-        file_dir='images/'+str(candidate_id)
-    
-        file =open(file_name, 'rb')
-        
-        ResumeGenerate().store_file(file_dir, file_name, file)
+        img.save(in_mem_file_to_upload,"PNG")
+        ResumeGenerate().store_file(str(candidate.id), file_name,in_mem_file_to_upload.getvalue())
 
 def remove_transparency(im, bg_colour=(255, 255, 255)):
 

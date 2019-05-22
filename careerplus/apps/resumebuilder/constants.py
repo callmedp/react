@@ -384,3 +384,31 @@ EDUCATION_PARENT_CHILD_HEIRARCHY_LIST = [{'child': [{'cdesc': 'Arts and Humaniti
                    {'cdesc': 'Other', 'cid': 506}],
          'pdesc': 'Ph.D/Doctorate',
          'pid': 138}]
+
+
+TEMPLATE_DEFAULT_ENTITY_POSITION = {
+    1:[
+      {"pos":1,"entity_id":6,"alignment":"left"},   #Summary
+      {"pos":2,"entity_id":1,"alignment":"right"},  #Personal
+      {"pos":3,"entity_id":3,"alignment":"center"}, #Experience
+      {"pos":4,"entity_id":2,"alignment":"left"},   #Education
+      {"pos":5,"entity_id":4,"alignment":"right"},  #Projects
+      {"pos":6,"entity_id":5,"alignment":"left"},   #Skills
+      {"pos":7,"entity_id":9,"alignment":"right"},  #Languages
+      {"pos":8,"entity_id":8,"alignment":"center"}, #Certifications   
+      {"pos":9,"entity_id":10,"alignment":"left"},  #References
+      {"pos":10,"entity_id":7,"alignment":"right"}   #Awards
+    ],
+
+    2:[],
+    3:[],
+    4:[],
+    5:[]
+}
+
+TEMPLATE_ALLOW_LEFT_RIGHT_SWITCH = {1:True,
+                                  2:False,
+                                  3:False,
+                                  4:False,
+                                  5:False
+                                  }

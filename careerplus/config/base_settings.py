@@ -554,3 +554,6 @@ MEDIA_ALLOWED_CONTENT_TYPES = ['image/jpeg', 'image/jpg', 'image/gif', 'image/pn
                                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', \
                                'application/vnd.ms-powerpoint',
                                'application/vnd.openxmlformats-officedocument.presentationml.presentation']
+
+
+RESUME_TEMPLATE_DIR = "resume-builder"
