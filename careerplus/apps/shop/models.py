@@ -1888,6 +1888,13 @@ class ProductScreen(AbstractProduct):
         else:
             return False
 
+    @property
+    def is_assesment(self):
+        if self.product_class and self.product_class.slug in settings.ASSESSMENT_SLUG:
+            return True
+        else:
+            return False
+
 
 # class ProductArchive(AbstractProduct):
 #     product = models.ForeignKey(

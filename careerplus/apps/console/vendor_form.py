@@ -351,7 +351,7 @@ class ChangeScreenProductForm(forms.ModelForm):
 
     def clean_buy_shine(self):
         buy_shine = self.cleaned_data.get('buy_shine', '')
-        if buy_shine:
+        if buy_shine or self.instance.type_flow == 16:
             pass
         else:
             raise forms.ValidationError(

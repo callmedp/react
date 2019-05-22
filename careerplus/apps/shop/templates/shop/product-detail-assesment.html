@@ -216,15 +216,15 @@
             </div>
             </section>
 
-            {% if prd_uget %}
+            {% if chapter_list %}
               <section class="container-fluid detail-box">
-              <div class="container">
-                <div class="row">
-                  <div id="course" class="col-sm-12 col-md-8">
-                    <h2>Topics Covered</h2>                     
-                       {{prd_uget|safe}}
-                    </div>
-                </div>
+                <div class="career-outcomes mb-40">
+                <h2>Topics Covered</h2>
+                  <ul>
+                      {% for chapter in chapter_list %}
+                        <li>{{ chapter.heading }}</li>
+                      {% endfor %}
+                  </ul>
               </div>
               </section>
             {% endif %}

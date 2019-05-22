@@ -364,7 +364,7 @@ class ProductInformationMixin(object):
         if product:
             ctx.update(self.get_breadcrumbs(product, product.category_main))
         ctx.update(self.solar_info(sqs))
-        if product.is_course:
+        if product.is_course or product.is_assesment:
             ctx.update(self.solar_program_structure(sqs))
         ctx.update(self.solar_faq(sqs))
 

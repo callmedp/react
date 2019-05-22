@@ -247,7 +247,7 @@ class ProductModeration(object):
                         messages.error(request, "INR Price is negetive")
                         return test_pass
                     if product.type_product in [0,1,3,5]:
-                        if product.is_course:
+                        if product.is_course or product.is_assesment:
                             if not product.chapter_product.filter(status=True):
                                 messages.error(request, "Product has no active chapter")
                                 return test_pass
@@ -1064,7 +1064,7 @@ class ProductValidation(object):
                         return test_pass
                     
                     if product.type_product in [0,1,3,5]:
-                        if product.is_course:
+                        if product.is_course or product.is_assesment:
                             if not product.chapter_product.filter(status=True):
                                 messages.error(request, "Product has no active chapter")
                                 return test_pass
@@ -1073,6 +1073,10 @@ class ProductValidation(object):
                     if product.type_product in [0, 1, 3, 4] and product.type_flow != 16:
                         if not product.description:
                             messages.error(request, "Description is required")
+                            return test_pass
+                    if product.type_flow == 16:
+                        if not product.about:
+                            messages.error(request, "About is Required")
                             return test_pass
                     if not product.countries.all().exists():
                         messages.error(request, "Available Country is required")
