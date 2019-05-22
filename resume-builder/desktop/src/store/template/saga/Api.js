@@ -7,7 +7,12 @@ const fetchTemplate = (candidateId, templateId = 6) => {
     return BaseApiService.get(`${siteDomain}/api/v1/resume/${url}`);
 };
 
+const customizeTemplate = (candidateId, templateId, data) => {
+    const url = `candidate/${candidateId}/customize/${templateId}/`
+    return BaseApiService.patch(`${siteDomain}/api/v1/resume/${url}`, data)
+}
+
 export const Api = {
     fetchTemplate,
-
+    customizeTemplate
 }

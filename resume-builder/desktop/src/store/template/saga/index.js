@@ -9,7 +9,7 @@ function* fetchTemplate(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
         yield put({type: UPDATE_UI, data: {loader: true}});
-        const result = yield call(Api.fetchTemplate, candidateId,action.payload.template);
+        const result = yield call(Api.fetchTemplate, candidateId, action.payload.template);
         if (result['error']) {
             console.log('error');
         }
@@ -21,6 +21,26 @@ function* fetchTemplate(action) {
     }
 }
 
+function* customizeTemplate(action) {
+    try {
+        const candidateId = localStorage.getItem('candidateId') || '';
+        yield put({type: UPDATE_UI, data: {loader: true}});
+        const {payload} = action;
+        const result = yield call(Api.customizeTemplate, candidateId, payload.template, payload);
+        if (result['error']) {
+            console.log('error');
+        }
+        yield put({type: UPDATE_UI, data: {loader: false}});
+
+        // yield call(fetchTemplate)
+
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 export default function* watchTemplate() {
     yield  takeLatest(Actions.FETCH_TEMPLATE, fetchTemplate)
+    yield  takeLatest(Actions.CUSTOMIZE_TEMPLATE, customizeTemplate)
+
 }
