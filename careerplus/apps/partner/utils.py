@@ -287,10 +287,9 @@ MULTIPLE_VALUES_2 = {
         'certificate': {
             'name': 'certificateName',
             'skill': 'skillValidated',
-            'vendor_certificate_id': 'amcatID',
+            'vendor_certificate_id': 'licenseNumber',
             'active_from': 'certificationDate',
             'expiry': 'validTill',
-            'licenseNumber': 'licenseNumber'
         }
     }
 }
@@ -557,11 +556,18 @@ class CertiticateParser:
         shineid = ShineCandidateDetail().get_shine_id(
             email=user_certificate.candidate_email, headers=headers)
         if shineid:
+            today_date = datetime.now().strftime('%Y-%m-%d')
             post_data = {
                 'certification_name': user_certificate.certificate.name,
                 'certification_year': user_certificate.year,
                 'score': user_certificate.assesment.overallScore,
-                'certiticate_id': user_certificate.certificate.vendor_certificate_id
+                'vendor_certificate_id': user_certificate.certificate.vendor_certificate_id,
+                'expiry_date': user_certificate.expiry.strftime('%Y-%m-%d'),
+                'is_validated': True,
+                'validation_date': today_date,
+                'active_date': today_date,
+                'skills': user_certificate.certiticate.skill.split(','),
+                'provider': user_certificate.certiticate.provider
             }
 
             flag, jsonrsp = ShineCertificateUpdate().update_shine_certificate_data(

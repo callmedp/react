@@ -341,7 +341,7 @@ class ImportCertificateSerializer(Serializer):
     class Meta:
         fields = (
             'name', 'skill', 'vendor_certificate_id', 'active_from',
-            'expiry', 'licenseNumber'
+            'expiry'
         )
 
     def __init__(self, *args, **kwargs):
@@ -355,7 +355,6 @@ class ImportCertificateSerializer(Serializer):
     vendor_certificate_id = serializers.CharField()
     active_from = serializers.CharField()
     expiry = serializers.CharField()
-    licenseNumber = serializers.CharField()
     vendor_provider = serializers.SerializerMethodField()
     overallScore = serializers.CharField()
 
