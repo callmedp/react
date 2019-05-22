@@ -773,7 +773,31 @@ class UpdateCertificateAndAssesment(APIView):
                         (str(certificate.name), str(user_certificate.candidate_id))
                     )
         if getattr(parsed_data.user_certificate, 'order_item_id'):
-            flag = parser.update_order_and_badge_user(parsed_data, vendor=data['vendor'])
+            if user_certificates:
+                flag = parser.update_order_and_badge_user(parsed_data, vendor=data['vendor'])
+            else:
+                logging.getLogger('error_log').error(
+                    "Order Item id present , Certificate not available, badging not done" % (data)
+                )
+                orderitem_id = int(parsed_data.user_certificate.order_item_id)
+                oi = OrderItem.objects.filter(id=orderitem_id).first()
+                last_oi_status = oi.oi_status
+                oi.oi_status = 4
+                oi.closed_on = timezone.now()
+                oi.last_oi_status = 6
+                oi.save()
+                oi.orderitemoperation_set.create(
+                    oi_status=6,
+                    last_oi_status=last_oi_status,
+                    assigned_to=oi.assigned_to)
+                oi.orderitemoperation_set.create(
+                    oi_status=oi.oi_status,
+                    last_oi_status=oi.last_oi_status,
+                    assigned_to=oi.assigned_to)
+        else:
+            logging.getLogger('error_log').error(
+                "Order Item id not present , so unable close item related to this data ( %s ) " % (data)
+            )
 
         return Response({
             "status": 1,
