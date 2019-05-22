@@ -117,7 +117,7 @@
                     <span>
                     {% if prd_num_bought %}<strong>&nbsp;{{prd_num_bought}}</strong>{% else %}<strong>&nbsp;10</strong>{% endif %}&nbsp;people bought</span>
                     </li>
-                    {% if prd_service == 'course' %}
+                    {% if prd_service == 'course' or prd_service == 'assessment'  %}
                   
                     {% if prd_num_jobs %}
                       <li>
@@ -146,7 +146,7 @@
               <div class="row">
                 <div class="col-sm-12 col-md-8 mt-40">
                 {% if prd_about %}
-                  <h2 class="detail-heading">About{% if prd_service == 'test' %} Test {% elif prd_service == 'course' %}course{% else %}service{% endif %}</h2>
+                  <h2 class="detail-heading">About{% if prd_service == 'assessment' %} Test {% elif prd_service == 'course' %}course{% else %}service{% endif %}</h2>
                  {{prd_about}}
                  {% if prd_asft %}
                   <div class="test-wrap mt-30">

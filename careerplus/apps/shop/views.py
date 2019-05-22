@@ -148,7 +148,7 @@ class ProductInformationMixin(object):
         elif product.pPc == 'service':
             info['prd_service'] = 'service'
         elif product.pPc == 'assessment':
-            info['prd_service'] = 'test'
+            info['prd_service'] = 'assessment'
         else:
             info['prd_service'] = 'other'
         info['prd_product'] = product.pTP
