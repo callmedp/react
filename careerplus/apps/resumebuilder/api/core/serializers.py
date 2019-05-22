@@ -7,10 +7,11 @@ from django.utils import timezone
 from resumebuilder.choices import BUILDER_ENTITY_MAPPING
 from resumebuilder.models import (Candidate, Skill, CandidateExperience, CandidateEducation, CandidateCertification,
                                   CandidateProject, CandidateReference, CandidateSocialLink, CandidateAchievement,
-                                  CandidateLanguage)
+                                  CandidateLanguage,OrderCustomisation)
 
 # inter app imports
 from order.models import Order, OrderItem
+
 # third party imports
 from rest_framework import serializers
 from datetime import timedelta
@@ -250,3 +251,24 @@ class CandidateAchievementSerializer(serializers.ModelSerializer):
     class Meta:
         model = CandidateAchievement
         fields = ('id', 'candidate_id', 'title', 'date', 'summary', 'order')
+
+
+class OrderCustomisationSerializer(serializers.ModelSerializer):
+    candidate_id = serializers.CharField(allow_blank=True, allow_null=True)
+
+    def validate_candidate_id(self, candidate_id):
+        if not self.instance:
+            user_id = self.context['request'].user.id
+            candidate = Candidate.objects.filter(candidate_id=user_id).first()
+            if candidate is None:
+                raise serializers.ValidationError("User with given id does not exits.")
+            return candidate.id
+        return self.instance.candidate.id
+
+    class Meta:
+        model = OrderCustomisation
+        exclude = ()
+
+
+
+

@@ -8,12 +8,12 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 # local imports
 from resumebuilder.models import (Candidate, Skill, CandidateExperience, CandidateEducation, CandidateCertification,
                                   CandidateProject, CandidateReference, CandidateSocialLink, CandidateAchievement,
-                                  CandidateLanguage)
+                                  CandidateLanguage,OrderCustomisation)
 from resumebuilder.api.core.serializers import (CandidateSerializer, SkillSerializer, CandidateExperienceSerializer,
                                                 CandidateEducationSerializer, CandidateCertificationSerializer,
                                                 CandidateProjectSerializer, CandidateAchievementSerializer,
                                                 CandidateReferenceSerializer, CandidateSocialLinkSerializer,
-                                                CandidateLanguageSerializer)
+                                                CandidateLanguageSerializer,OrderCustomisationSerializer)
 
 from resumebuilder.mixins import (SessionManagerMixin)
 from resumebuilder.constants import EDUCATION_PARENT_CHILD_HEIRARCHY_LIST
@@ -653,4 +653,24 @@ class InterestView(ListAPIView):
     
     def get(self, request, *args, **kwargs):
         return Response({"data":interest_dict})
+
+
+class OrderCustomisationListView(ListAPIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = OrderCustomisationSerializer
+
+    def get_queryset(self):
+        return OrderCustomisation.objects.filter(candidate__candidate_id=self.request.user.id)
+
+class OrderCustomisationRUDView(RetrieveUpdateDestroyAPIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = OrderCustomisationSerializer
+    lookup_field = "template_no"
+    lookup_url_kwarg = "template_no"
+
+    def get_queryset(self):
+        return OrderCustomisation.objects.filter(candidate__candidate_id=self.request.user.id)
+
 
