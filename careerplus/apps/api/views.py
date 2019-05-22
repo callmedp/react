@@ -772,7 +772,6 @@ class UpdateCertificateAndAssesment(APIView):
                         "Error Occured for Certificate %s for Candidate Id %s" %
                         (str(certificate.name), str(user_certificate.candidate_id))
                     )
-        import ipdb; ipdb.set_trace();
         if getattr(parsed_data.user_certificate, 'order_item_id'):
             if user_certificates:
                 flag = parser.update_order_and_badge_user(parsed_data, vendor=data['vendor'])
