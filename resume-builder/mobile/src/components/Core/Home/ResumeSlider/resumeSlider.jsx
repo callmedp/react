@@ -10,9 +10,16 @@ export default class ResumeSlider extends Component {
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
     }
 
-    customise() {
+    async customise() {
         localStorage.setItem('template',(parseInt(document.getElementsByClassName('slick-current')[0].getAttribute('data-index')) + 1))
-        window.location = '/resume-builder/edit/?type=profile'
+        if (!this.props.showtext){
+            await this.props.updateSelectedTemplate(this.props.personalInfo)
+            this.props.updateModalStatus({modal_status:false})
+            this.props.fetchTemplate();
+        }
+        else{
+            window.location = '/resume-builder/edit/?type=profile'
+        }
     }
 
     render() {
@@ -23,14 +30,18 @@ export default class ResumeSlider extends Component {
             slidesToShow: 1,
             slidesToScroll: 1
         };
+        const {showtext} = this.props
 
         return (
+            
             <section className="section proven-resume pt-30" id="templates">
+            {showtext ?
                 <div className="text-center">
                     <h2 className="section__head">Proven resume templates</h2>
                     <p className="section__subHead">Choose from a library of classic templates <br/>and land a new job
                     </p>
-                </div>
+                </div>:''
+            }
 
                 <div className="proven-resume__slideWrap">
                     <Slider {...settings}>

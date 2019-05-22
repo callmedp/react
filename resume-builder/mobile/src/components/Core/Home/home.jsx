@@ -110,7 +110,7 @@ class Home extends Component {
                     </div>
                 </section>
 
-                <ResumeSlider/>
+                <ResumeSlider showtext={true}/>
 
                 <section className="section pt-30 pb-30">
                     <div className="text-center">

@@ -22,7 +22,7 @@ class Header extends Component {
     }
 
     render() {
-        const {page} = this.props;
+        const {page,history,updateModalStatus} = this.props;
         return (
             <header className="header">
 
@@ -35,24 +35,28 @@ class Header extends Component {
                         </div>
                         <Link to={'/resume-builder'} className="btn btn__round btn--outline">Back to home</Link>
                     </React.Fragment>
-                    : <React.Fragment>
+                    : 
+                    page === 'preview' ?
+                    <React.Fragment>
+                        <div className="header__left">
+                            <button role="button" className="header__menu" onClick={()=>{history.goBack()}}>
+                                <i className="sprite icon--back-white"></i>
+                            </button>
+    
+                            {<span>Resume Preview</span>}
+                        </div>
+    
+                        <a className="btn btn__round btn--outline" onClick={()=>{updateModalStatus({modal_status:true})}}>Change template</a>
+                    </React.Fragment>:
+                    <React.Fragment>
                         <div className="header--logo">
                             <img src={`${this.staticUrl}react/assets/images/mobile/logo.png`} alt=""/>
                         </div>
                         <div className="header--logo"></div>
                     </React.Fragment>}
 
-
-                {/*<div className="header__left">
-                    <button role="button" className="header__menu">
-                        <i className="sprite icon--back-white"></i>
-                    </button>
-
-                    {<sapn>Resume Preview</sapn>}
-                    <sapn>Choose your plan</sapn>
-        </div>*/}
-
-                {/*<a href="#" className="btn btn__round btn--outline">Change template</a>*/}
+                
+                
 
 
             </header>

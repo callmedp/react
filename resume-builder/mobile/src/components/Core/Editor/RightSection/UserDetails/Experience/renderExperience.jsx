@@ -34,9 +34,11 @@ const renderExperiences = ({
                     }
                     <i className="sprite icon--edit" onClick={editHeadingClick.bind(true)}></i>
                 </div>
-                <button role="button"
-                    onClick={handleSubmit(handleAddition.bind(this,fields,experienceNewData(fields),780,'experience'))}
-                    type={'button'} className="btn btn__round btn--outline">+ Add new</button>
+                {!editHeading ?
+                    <button role="button"
+                        onClick={handleSubmit(handleAddition.bind(this,fields,experienceNewData(fields),780,'experience'))}
+                        type={'button'} className="btn btn__round btn--outline">+ Add new</button>:''
+                }
             </div>
             {fields.map((member, index) => {
                 return (
@@ -119,4 +121,4 @@ const renderExperiences = ({
     )
 }
 
-export default renderExperiences
+export default renderExperiences;

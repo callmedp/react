@@ -31,9 +31,11 @@ const renderLanguage = ({
                     }
                     <i className="sprite icon--edit" onClick={editHeadingClick.bind(true)}></i>
                 </div>
-                <button role="button" className="btn btn__round btn--outline"
-                    onClick={handleSubmit(handleAddition.bind(this,fields,languageNewData(fields),0,'language'))}
-                    type={'button'} >+ Add new</button>
+                {!editHeading ?
+                    <button role="button" className="btn btn__round btn--outline"
+                        onClick={handleSubmit(handleAddition.bind(this,fields,languageNewData(fields),0,'language'))}
+                        type={'button'} >+ Add new</button>:''
+                }
             </div>
             {fields.map((member, index) => {
                 return (

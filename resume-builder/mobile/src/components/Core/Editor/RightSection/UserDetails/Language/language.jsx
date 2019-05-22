@@ -3,7 +3,7 @@ import './language.scss'
 import {reduxForm, FieldArray} from "redux-form";
 import * as actions from "../../../../../../store/language/actions";
 import {connect} from "react-redux";
-import PreviewModal from "../../../Preview/previewModal";
+import PreviewModal from "../../../Preview/changeTemplateModal";
 import renderLanguage from "./renderLanguage";
 import validate from "../../../../../FormHandler/validtaions/language/validate"
 import {siteDomain} from "../../../../../../Utils/domains";
@@ -178,7 +178,7 @@ class Language extends Component {
                         <li className="form__group">
                             <div className="btn-wrap">
                                 <button className="btn btn__round btn--outline" 
-                                    onClick={()=>{this.props.updateModalStatus({modal_status:true});this.props.fetchTemplate()}} 
+                                    onClick={()=>{this.props.history.push(`/resume-builder/preview`) }}
                                     type={'button'}>Preview</button>
                                 <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
                                     {(length === pos +1) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}

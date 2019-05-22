@@ -4,7 +4,7 @@ import * as actions from "../../../../../../store/reference/actions";
 import {connect} from "react-redux";
 import renderReferences from "./renderReference"
 import validate from "../../../../../FormHandler/validtaions/reference/validate"
-import PreviewModal from "../../../Preview/previewModal";
+import PreviewModal from "../../../Preview/changeTemplateModal";
 import {siteDomain} from "../../../../../../Utils/domains";
 
 class References extends Component {
@@ -175,7 +175,7 @@ class References extends Component {
                         <li className="form__group">
                             <div className="btn-wrap">
                                 <button className="btn btn__round btn--outline" 
-                                    onClick={()=>{this.props.updateModalStatus({modal_status:true});this.props.fetchTemplate()}} 
+                                    onClick={()=>{this.props.history.push(`/resume-builder/preview`) }}
                                     type={'button'}>Preview</button>
                                 <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
                                 {(length === pos +1) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}

@@ -32,8 +32,10 @@ const renderSkills = ({
                         }
                         <i className="sprite icon--edit" onClick={editHeadingClick.bind(true)}></i>
                     </div>
-                    <button type={'button'}  onClick={handleSubmit(handleAddition.bind(this,fields,skillNewData(fields),0,'skill'))} 
-                        className="btn btn__round btn--outline">+ Add new</button>
+                    {!editHeading ?
+                        <button type={'button'}  onClick={handleSubmit(handleAddition.bind(this,fields,skillNewData(fields),0,'skill'))} 
+                            className="btn btn__round btn--outline">+ Add new</button>:''
+                    }
                 </div>
             
             {fields.map((member, index) => {
@@ -95,4 +97,4 @@ const renderSkills = ({
     )
 }
 
-export default renderSkills
+export default renderSkills;

@@ -37,7 +37,7 @@
     left: 30px;
     right: 30px;
     bottom: 30px;
-    background-color: $white;
+    background-color: transparent;
     border-radius: 8px;
     overflow: hidden;
 
@@ -55,6 +55,7 @@
         font-size: 28px;
         font-weight: 300;
         background-color: transparent;
+        color: white;
 
         &:focus {
             outline: 0;

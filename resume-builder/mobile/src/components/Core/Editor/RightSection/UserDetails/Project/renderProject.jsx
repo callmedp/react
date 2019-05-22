@@ -33,9 +33,11 @@ const renderProjects = ({
                     }
                     <i className="sprite icon--edit" onClick={editHeadingClick.bind(true)}></i>
                 </div>
-                <button role="button" className="btn btn__round btn--outline"
-                    onClick={handleSubmit(handleAddition.bind(this,fields,projectNewData(fields),200,'project'))}
-                    type={'button'}>+ Add new</button>
+                {!editHeading ?
+                    <button role="button" className="btn btn__round btn--outline"
+                        onClick={handleSubmit(handleAddition.bind(this,fields,projectNewData(fields),200,'project'))}
+                        type={'button'}>+ Add new</button>:''
+                }
             </div>
             {fields.map((member, index) => {
                 return (
