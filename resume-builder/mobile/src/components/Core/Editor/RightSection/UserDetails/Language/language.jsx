@@ -69,6 +69,7 @@ class Language extends Component {
         currentLinkPos++
         
         this.setState({submit:true})
+        values = this.props.handleOrdering(values)
         await this.props.bulkUpdateUserLanguage(values.list);
          if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
@@ -90,10 +91,8 @@ class Language extends Component {
 
         if(!this.state.submit){
             const form_data = this.props.info.form.Language;
-            console.log(form_data)
             let error = false
             let error_values =form_data["syncErrors"]
-            // console.log(error_values)
             if(error_values){
                 for(let i of  error_values['list']){
                     for(let j of Object.keys(i)){
@@ -104,10 +103,10 @@ class Language extends Component {
                     }
                 }
             }
-            console.log("error",error)
+            
             if(!error){
-                console.log("Came Here")
-                this.props.bulkUpdateUserLanguage(form_data['values']['list'])
+                const values = this.props.handleOrdering(form_data['values'])
+                this.props.bulkUpdateUserLanguage(values.list)
             }
         }
 

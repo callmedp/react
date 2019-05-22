@@ -13,8 +13,12 @@
             left: 50%;
             transform: translateX(-50%);
         }
+        .slick-list {
+            text-align: center;
+        }
 
         .slick-slide {
+            height: auto;
             padding: 1.5rem;
         }
 
@@ -71,5 +75,6 @@
         border: 3px solid $white;
         box-shadow: 0 0 10px rgba($black, .3);
         margin-right: 15px;
+        width: auto !important;
     }
 }

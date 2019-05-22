@@ -18,19 +18,33 @@ class Project extends Component {
         this.state = {
             'editHeading': false,
             'heading' : '',
-            'submit' : false
+            'submit' : false,
+            'till_today': [],
         }
         this.updateInputValue =this.updateInputValue.bind(this);
         this.editHeadingClick = this.editHeadingClick.bind(this);
+        this.tillTodayDisable = this.tillTodayDisable.bind(this);
     }
 
     componentDidMount() {
         this.props.fetchUserProject()
+        let till_today = []
+        for (let i of this.props.initialValues.list) {
+            till_today.push(i.currently_working)
+        }
+        this.setState({till_today})
         if (this.props.personalInfo.entity_preference_data.length) {
             this.setState({heading : this.props.personalInfo.entity_preference_data[3].entity_text})
         }
 
     }
+
+    tillTodayDisable(index, checked, e) {
+        e.stopPropagation();
+        let {till_today} = this.state
+        till_today[parseInt(index)] = checked
+    }
+
 
     updateInputValue(key,e) {
         if(e.keyCode === 13){
@@ -58,6 +72,13 @@ class Project extends Component {
         if (this.props.personalInfo.entity_preference_data !== prevProps.personalInfo.entity_preference_data) {
             this.setState({heading : this.props.personalInfo.entity_preference_data[3].entity_text})
         }
+        if (this.props.initialValues.list !== prevProps.initialValues.list) {
+            let till_today = []
+            for (let i of this.props.initialValues.list) {
+                till_today.push(i.currently_working)
+            }
+            this.setState({till_today})
+        }
     }
 
     editHeadingClick(){
@@ -68,6 +89,7 @@ class Project extends Component {
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
         this.setState({submit:true})
+        values = this.props.handleOrdering(values)
         await this.props.bulkUpdateUserProject(values.list);
          if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
@@ -101,7 +123,8 @@ class Project extends Component {
                 }
             }
             if(!error){
-                this.props.bulkUpdateUserProject(form_data['values']['list'])
+                const values = this.props.handleOrdering(form_data['values'])
+                this.props.bulkUpdateUserProject(values.list)
             }
         }
     }
@@ -150,9 +173,8 @@ class Project extends Component {
     render () {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {handleSubmit,submitting} = this.props;
-        const {editHeading,heading} =this.state;
-        const {subscription_status} = this.props.personalInfo;
+        const {handleSubmit,submitting,personalInfo:{subscription_status}} = this.props;
+        const {editHeading,heading,till_today} =this.state;
         return(
             <div className="buildResume">
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
@@ -168,7 +190,9 @@ class Project extends Component {
                                 editHeading={editHeading}
                                 editHeadingClick={this.editHeadingClick}
                                 loader={this.props.loader.dataloader}
-                                heading ={heading}/>
+                                heading ={heading}
+                                till_today={till_today}
+                                tillTodayDisable={this.tillTodayDisable}/>
                     <ul className="form">
                         <li className="form__group">
                             <div className="btn-wrap">

@@ -38,6 +38,7 @@ class Course extends Component {
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
         this.setState({submit:true})
+        values = this.props.handleOrdering(values)
         await this.props.bulkUpdateUserCourse(values.list);
          if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
@@ -124,7 +125,8 @@ class Course extends Component {
                 }
             }
             if(!error){
-                this.props.bulkUpdateUserCourse(form_data['values']['list'])
+                const values = this.props.handleOrdering(form_data['values'])
+                this.props.bulkUpdateUserCourse(values.list)
             }
         }
     }

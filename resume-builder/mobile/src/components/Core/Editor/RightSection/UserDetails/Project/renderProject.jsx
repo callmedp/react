@@ -1,6 +1,6 @@
 import React from 'react';
 import {Field} from "redux-form";
-import {datepicker, renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer.jsx";
+import {datepicker, renderField, renderTextArea,renderCheckboxField} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import DataLoader from "../../../../../Common/DataLoader/dataloader"
 import {projectNewData} from "../../../../../../Utils/addnewData"
 
@@ -16,7 +16,9 @@ const renderProjects = ({
                             heading,
                             updateInputValue,
                             editHeadingClick,
-                            loader
+                            loader,
+                            till_today,
+                            tillTodayDisable,
                         }) => {
     return (
         
@@ -75,7 +77,18 @@ const renderProjects = ({
 
                             <li className="form__group">
                                 <Field component={datepicker} label={"Date to"}  type={"date"} 
-                                    name={`${member}.end_date`} id={`${member}.end_date`}/>
+                                    name={`${member}.end_date`} id={`${member}.end_date`} disabled={till_today[index]}/>
+                            </li>
+
+                            <li className="form__radio-group d-flex justify-content-end fs-14">
+                                <Field type="checkbox" name={`${member}.currently_working`} component={renderCheckboxField} 
+                                    className="form__radio-input" id={`${member}.currently_working`} tillTodayDisable={tillTodayDisable}
+                                    index={`${index}`}  />
+                                <label className="form__radio-label" htmlFor={`${member}.currently_working`}>
+                                    <span className="form__radio-button"></span>
+                                    Till today
+                                </label>
+                                
                             </li>
 
                             <li className="form__group">

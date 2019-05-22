@@ -90,15 +90,24 @@ class RightSection extends Component {
 
 }
 
-const handleAddition = (fields,data,offset,type) =>{
+const handleAddition = (fields,data,offset,type,containerId) =>{
     fields.push(data)
+    console.log("I am here")
 
     scroller.scrollTo(`${type}${fields.length -1}`, {
         duration: 800,
         delay: 0,
         smooth: 'easeInOutQuad',
-        offset
+        offset,
+        containerId
     })
+}
+
+const handleOrdering = (values) =>{
+    values['list'].map((el,index)=>{
+        el['order'] = index
+    })
+    return values
 }
 
 const mapStateToProps = (state) => {
@@ -119,6 +128,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         "handleAddition":(fields,data,offset,type)=>{
             return handleAddition(fields,data,offset,type)
+        },
+        "handleOrdering":(values)=>{
+            return handleOrdering(values)
         }
     }
 };

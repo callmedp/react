@@ -19,16 +19,19 @@ class Education extends Component {
         this.state = {
             'editHeading': false,
             'heading' : '',
-            'submit' : false
+            'submit' : false,
+            'till_today': [],
         }
         this.updateInputValue =this.updateInputValue.bind(this);
         this.editHeadingClick = this.editHeadingClick.bind(this);
+        this.tillTodayDisable = this.tillTodayDisable.bind(this);
     }
 
     async handleSubmit(values) {
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
         this.setState({submit:true})
+        values = this.props.handleOrdering(values)
         await this.props.bulkUpdateUserEducation(values.list);
          if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
@@ -44,6 +47,12 @@ class Education extends Component {
             this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)    
         }
         
+    }
+
+    tillTodayDisable(index, checked, e) {
+        e.stopPropagation();
+        let {till_today} = this.state
+        till_today[parseInt(index)] = checked
     }
 
     componentWillUnmount() {
@@ -65,7 +74,8 @@ class Education extends Component {
                 }
             }
             if(!error){
-                this.props.bulkUpdateUserEducation(form_data['values']['list'])
+                const values = this.props.handleOrdering(form_data['values'])
+                this.props.bulkUpdateUserEducation(values.list)
             }
         }
     }
@@ -96,8 +106,14 @@ class Education extends Component {
         this.setState({editHeading:true})
     }
 
+
     componentDidMount() {
         this.props.fetchUserEducation()
+        let till_today = []
+        for (let i of this.props.initialValues.list) {
+            till_today.push(i.is_pursuing)
+        }
+        this.setState({till_today})
         if (this.props.personalInfo.entity_preference_data.length) {
             this.setState({heading : this.props.personalInfo.entity_preference_data[1].entity_text})
         }
@@ -106,6 +122,13 @@ class Education extends Component {
     componentDidUpdate(prevProps) {
         if (this.props.personalInfo.entity_preference_data !== prevProps.personalInfo.entity_preference_data) {
             this.setState({heading : this.props.personalInfo.entity_preference_data[1].entity_text})
+        }
+        if (this.props.initialValues.list !== prevProps.initialValues.list) {
+            let till_today = []
+            for (let i of this.props.initialValues.list) {
+                till_today.push(i.is_pursuing)
+            }
+            this.setState({till_today})
         }
     }
 
@@ -152,11 +175,10 @@ class Education extends Component {
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {handleSubmit, education,submitting,submitSucceeded} = this.props;
-        const {editHeading,heading} =this.state;
-        const {subscription_status} = this.props.personalInfo;
+        const {handleSubmit,submitting,personalInfo:{subscription_status}} = this.props;
+        const {editHeading,heading,till_today} =this.state;
         return(
-            <div className="buildResume">
+            <div className="buildResume" id="education">
                 <form onSubmit={handleSubmit(this.handleSubmit)}> 
                     <PreviewModal {...this.props}/>
                     <FieldArray name={'list'}
@@ -170,7 +192,9 @@ class Education extends Component {
                                 editHeading={editHeading}
                                 editHeadingClick={this.editHeadingClick}
                                 loader={this.props.loader.dataloader}
-                                heading ={heading}/> 
+                                heading ={heading}
+                                till_today={till_today}
+                                tillTodayDisable={this.tillTodayDisable}/> 
                     <ul className="form">
                         <li className="form__group">
                             <div className="btn-wrap">

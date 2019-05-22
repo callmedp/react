@@ -38,7 +38,7 @@ class PreviewImageCreationMixin(object):
     def preview_image_task_call(self, sender,instance, **kwargs):
         parent_object_key = getattr(self,"parent_object_key","candidate_id")
         candidate_id = getattr(instance,parent_object_key)
-        generate_image_for_resume(candidate_id)
+        generate_image_for_resume.delay(candidate_id)
 
         
 

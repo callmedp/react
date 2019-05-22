@@ -20,7 +20,7 @@ export const renderField = ({
             <label className="form__label" htmlFor={input.name}>{label}</label>
             {!prepend ?
                 <React.Fragment>
-                    <input {...input} className={className +(touched && error ? " error" : "")} id={id} type={type}/>
+                    <input {...input} className={className +(touched && error ? " error" : "")} id={id} type={type} autoComplete="off"/>
                     {touched &&
                         ((<span className={'error-message'}>{error}</span>) ||
                             (warning && <span className={'warn-Message'}>{warning}</span>))
@@ -33,7 +33,7 @@ export const renderField = ({
                     <i className={iconClass}></i>
                 </span>
                 </div>
-                <input {...input} className={className} id={id} type={type}/>
+                <input {...input} className={className} id={id} type={type} autoComplete="off"/>
                 {touched &&
                     ((<span className={'error-message'}>{error}</span>) ||
                         (warning && <span className={'warn-Message'}>{warning}</span>))
@@ -44,6 +44,21 @@ export const renderField = ({
         </React.Fragment>
 );
 
+export const renderCheckboxField = ({
+        input,
+        type,
+        className,
+        id,
+        tillTodayDisable,
+        index
+    }) => (
+
+
+    <React.Fragment>
+        <input {...input} className={className} onClick={(e) => tillTodayDisable(index, !input.checked, e)} id={id} type={type}/>
+    </React.Fragment>
+);
+
 
 export const datepicker =
     ({
@@ -51,6 +66,7 @@ export const datepicker =
          label,
          className,
          id,
+         disabled,
          meta: {touched, error, warning}
      }) => (
         <React.Fragment>
@@ -62,8 +78,9 @@ export const datepicker =
                     </span>
                 </div>
                 <DatePicker {...input} dateFormat="yyyy-MM-dd" className={className}
+                        value={disabled ? "This is disabled" : input.value}
                         selected={input.value ? new Date(input.value) : null}
-                        onChange={date => input.onChange(date)} id={id}
+                        onChange={date => input.onChange(date)} id={id} disabled={disabled} autoComplete="off"
                 />
                 {touched &&  ((error && <span className={'error-message'}>{error}</span>) ||
                 (warning && <span className={'warn-Message'}>{warning}</span>))}
@@ -125,31 +142,6 @@ export const renderSelect = ({
         
     </React.Fragment>
 );
-
-export const checkbox = ({
-                            input,
-                            className,
-                            id,
-                            value,
-                            meta: {touched, error, warning}
-                        }) => {
-    return (
-      <div className="flex items-center mv4 w-100">
-      {/* {console.log(value)} */}
-        <input
-          {...input}
-          className={className}
-          type="checkbox"
-          checked={input.value}
-          id={id}
-        />
-        <label className="form__radio-label" htmlFor={input.name}>
-            <span className="form__radio-button"></span>
-            Till today
-        </label>
-      </div>
-    );
-  }
 
 
 export const renderMultiselect = ({ input,className, data, valueField, textField,defaultValue }) =>(

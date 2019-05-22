@@ -27,6 +27,7 @@ class References extends Component {
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
         this.setState({submit:true})
+        values = this.props.handleOrdering(values)
         await this.props.bulkUpdateUserReference(values.list);
         if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
@@ -61,7 +62,8 @@ class References extends Component {
                 }
             }
             if(!error){
-                this.props.bulkUpdateUserReference(form_data['values']['list'])
+                const values = this.props.handleOrdering(form_data['values'])
+                this.props.bulkUpdateUserReference(values.list)
             }
         }
 

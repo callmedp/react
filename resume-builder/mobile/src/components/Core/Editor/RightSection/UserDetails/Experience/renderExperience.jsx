@@ -1,5 +1,5 @@
 import React from 'react';
-import {renderField, renderTextArea, datepicker} from '../../../../../FormHandler/formFieldRenderer.jsx'
+import {renderField, renderTextArea, datepicker,renderCheckboxField} from '../../../../../FormHandler/formFieldRenderer.jsx'
 import {Field} from 'redux-form';
 import DataLoader from "../../../../../Common/DataLoader/dataloader"
 import {experienceNewData} from "../../../../../../Utils/addnewData"
@@ -17,7 +17,9 @@ const renderExperiences = ({
                             heading,
                             updateInputValue,
                             editHeadingClick,
-                            loader
+                            loader,
+                            till_today,
+                            tillTodayDisable
                             }) => {
     return (
         
@@ -81,12 +83,13 @@ const renderExperiences = ({
 
                         <li className="form__group">
                             <Field component={datepicker} label={"Date to"}  type={"date"} 
-                                name={`${member}.end_date`} id={`${member}.end_date`}/>
+                                name={`${member}.end_date`} id={`${member}.end_date`} disabled={till_today[index]}/>
                         </li>
 
                         <li className="form__radio-group d-flex justify-content-end fs-14">
-                            <Field type="checkbox" name={`${member}.is_working`} component={"input"} 
-                                className="form__radio-input" id={`${member}.is_working`}  />
+                            <Field type="checkbox" name={`${member}.is_working`} component={renderCheckboxField} 
+                                className="form__radio-input" id={`${member}.is_working`} tillTodayDisable={tillTodayDisable}
+                                index={`${index}`}  />
                             <label className="form__radio-label" htmlFor={`${member}.is_working`}>
                                 <span className="form__radio-button"></span>
                                 Till today
