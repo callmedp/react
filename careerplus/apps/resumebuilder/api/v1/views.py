@@ -3,6 +3,7 @@ from datetime import datetime, date
 
 # django imports
 from django.template.loader import get_template
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 # local imports
 from resumebuilder.models import (Candidate, Skill, CandidateExperience, CandidateEducation, CandidateCertification,
@@ -32,6 +33,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from weasyprint import HTML, CSS
 from resumebuilder.models import interest_dict
+from weasyprint import HTML, CSS
 
 
 class CandidateListCreateView(ListCreateAPIView):

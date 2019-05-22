@@ -344,7 +344,6 @@ class ResumeGenerate(object):
             return True
 
     def store_file(self, file_dir: object, file_name, file: object) -> object:
-
         if settings.IS_GCP:
             return GCPPrivateMediaStorage().save(settings.RESUME_TEMPLATE_DIR + file_dir + file_name, file)
 

@@ -1,5 +1,9 @@
 # django imports
 from django.db import models
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+from .mixins import PreviewImageCreationMixin
+from django.apps import apps
 
 # import from inter app
 from seo.models import AbstractAutoDate
@@ -56,20 +60,21 @@ class CandidateProfile(AbstractAutoDate):
 
     @property
     def extracurricular_list(self):
-        # return [interest_dict[int(x)] for x in self.extracurricular.split(',')]
-        return []
+        return [interest_dict[int(x)] for x in self.extracurricular.split(',')] if self.extracurricular != '' else []
 
     class Meta:
         abstract = True
 
 
-class Candidate(CandidateProfile):
+class Candidate(PreviewImageCreationMixin,CandidateProfile):
+
+    parent_object_key = "id"
 
     def __str__(self):
         return '{}-{}'.format(self.first_name, self.last_name)
 
 
-class Skill(AbstractAutoDate):
+class Skill(PreviewImageCreationMixin,AbstractAutoDate):
     name = models.CharField('Skill Name', max_length=100)
     proficiency = models.IntegerField('Proficiency', default=5)
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
@@ -82,8 +87,10 @@ class Skill(AbstractAutoDate):
     def __str__(self):
         return self.name
 
+    
 
-class CandidateExperience(models.Model):
+
+class CandidateExperience(PreviewImageCreationMixin,models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     job_profile = models.CharField('Job Profile', max_length=100)
     company_name = models.CharField('Company Name', max_length=200)
@@ -102,7 +109,7 @@ class CandidateExperience(models.Model):
         return self.company_name
 
 
-class CandidateEducation(models.Model):
+class CandidateEducation(PreviewImageCreationMixin,models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     specialization = models.CharField('Specialization', max_length=200)
     institution_name = models.CharField('Institution Name', max_length=250)
@@ -122,7 +129,7 @@ class CandidateEducation(models.Model):
         return self.specialization
 
 
-class CandidateCertification(models.Model):
+class CandidateCertification(PreviewImageCreationMixin,models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     name_of_certification = models.CharField('Certification Name', max_length=250)
     year_of_certification = models.IntegerField('Year of Certification')
@@ -136,7 +143,7 @@ class CandidateCertification(models.Model):
         return self.name_of_certification
 
 
-class CandidateProject(models.Model):
+class CandidateProject(PreviewImageCreationMixin,models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     project_name = models.CharField('Project Name', max_length=150)
     start_date = models.DateField('Start Date', blank=False)
@@ -154,7 +161,7 @@ class CandidateProject(models.Model):
         return self.project_name
 
 
-class CandidateReference(models.Model):
+class CandidateReference(PreviewImageCreationMixin,models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     reference_name = models.CharField('Reference Name', max_length=150)
     reference_designation = models.CharField('Reference Designation', max_length=150)
@@ -169,7 +176,7 @@ class CandidateReference(models.Model):
         return self.reference_name
 
 
-class CandidateSocialLink(models.Model):
+class CandidateSocialLink(PreviewImageCreationMixin,models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     link_name = models.CharField('Link Name', max_length=10,
                                  choices=SOCIAL_LINKS)
@@ -188,7 +195,7 @@ class CandidateSocialLink(models.Model):
         return self.link_name
 
 
-class CandidateAchievement(models.Model):
+class CandidateAchievement(PreviewImageCreationMixin,models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     title = models.CharField('Title', max_length=100)
     date = models.DateField('Date')
@@ -203,7 +210,7 @@ class CandidateAchievement(models.Model):
         return self.title
 
 
-class CandidateLanguage(models.Model):
+class CandidateLanguage(PreviewImageCreationMixin,models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     name = models.CharField('Language Name', max_length=100)
     proficiency = models.IntegerField('Proficiency', default=3)
@@ -215,3 +222,9 @@ class CandidateLanguage(models.Model):
 
     def __str__(self):
         return self.name
+
+
+senders=[Candidate,Skill,CandidateExperience,CandidateEducation,CandidateCertification,CandidateProject,CandidateReference,CandidateAchievement,CandidateLanguage]
+
+for model_name in senders:
+    post_save.connect(model_name.preview_image_task_call,sender=model_name)
