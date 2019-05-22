@@ -1,7 +1,9 @@
 # python imports
+import base64
 from datetime import datetime, date
 
 # django imports
+from django.conf import settings
 from django.template.loader import get_template
 from django.core.files.uploadedfile import SimpleUploadedFile
 
@@ -22,6 +24,7 @@ from resumebuilder.constants import EDUCATION_PARENT_CHILD_HEIRARCHY_LIST
 from shine.core import ShineCandidateDetail
 from shared.rest_addons.authentication import ShineUserAuthentication
 from shared.permissions import IsObjectOwner
+from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 
 # third party imports
 from rest_framework import status
@@ -672,5 +675,35 @@ class OrderCustomisationRUDView(RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return OrderCustomisation.objects.filter(candidate__candidate_id=self.request.user.id)
+
+
+class ResumeImagePreviewView(APIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = None
+
+    def get(self,request,*args,**kwargs):
+        candidate_id = kwargs.get('candidate_id')
+        template_no = kwargs.get('template_no')
+
+        candidate_obj = Candidate.objects.filter(id=candidate_id).first()
+        if not candidate_obj:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        if candidate_obj.candidate_id != request.user.id:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        file_obj = GCPPrivateMediaStorage().open("{}/{}/resumetemplate-{}.png".\
+            format(settings.RESUME_TEMPLATE_DIR,candidate_id,template_no),"rb")
+
+        if not file_obj.size:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        return Response(base64.b64encode(file_obj.read()))
+
+
+
+
+
 
 
