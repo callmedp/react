@@ -29,6 +29,7 @@ export default class TemplateModal extends React.Component {
                             left: '10%',
                             right: '10%',
                             top: '15%',
+                            bottom: '0',
                         }
                     }}
                     isOpen={modal}
