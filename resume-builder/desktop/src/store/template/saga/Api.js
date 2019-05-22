@@ -7,6 +7,12 @@ const fetchTemplate = (candidateId, templateId = 6) => {
     return BaseApiService.get(`${siteDomain}/api/v1/resume/${url}`);
 };
 
+const fetchTemplateImages = (candidateId, templateId = 6) => {
+
+    const url = `candidate/${candidateId}/image-preview/${templateId}/`;
+    return BaseApiService.get(`${siteDomain}/api/v1/resume/${url}`);
+};
+
 const customizeTemplate = (candidateId, templateId, data) => {
     const url = `candidate/${candidateId}/customize/${templateId}/`
     return BaseApiService.patch(`${siteDomain}/api/v1/resume/${url}`, data)
@@ -14,5 +20,6 @@ const customizeTemplate = (candidateId, templateId, data) => {
 
 export const Api = {
     fetchTemplate,
-    customizeTemplate
+    customizeTemplate,
+    fetchTemplateImages
 }

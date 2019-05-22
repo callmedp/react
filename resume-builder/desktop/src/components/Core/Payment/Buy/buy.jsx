@@ -14,7 +14,7 @@ import moment from "moment"
 import {fetchPersonalInfo, updatePersonalInfo} from '../../../../store/personalInfo/actions/index'
 import SelectTemplateModal from '../../../Modal/selectTemplateModal';
 import LoaderPage from '../../../Loader/loaderPage';
-import {displaySelectedTemplate} from "../../../../store/template/actions";
+import {displaySelectedTemplate,fetchTemplateImages} from "../../../../store/template/actions";
 
 
 function SampleNextArrow(props) {
@@ -81,7 +81,7 @@ export class Buy extends Component {
     componentDidMount() {
         this.props.getProductIds();
         this.props.fetchUserInfo();
-
+        this.props.fetchTemplateImages();
     }
 
     handleOnChange(checkedProduct) {
@@ -265,6 +265,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         displaySelectedTemplate(templateId) {
             return dispatch(displaySelectedTemplate(templateId))
+        },
+        fetchTemplateImages() {
+            return dispatch(fetchTemplateImages())
         }
     }
 };

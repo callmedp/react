@@ -1,4 +1,4 @@
-import {FETCH_TEMPLATE,SET_SELECTED_TEMPLATE, CUSTOMIZE_TEMPLATE} from './actionTypes'
+import {FETCH_TEMPLATE, SET_SELECTED_TEMPLATE, CUSTOMIZE_TEMPLATE,FETCH_TEMPLATE_IMAGES} from './actionTypes'
 
 
 export const fetchTemplate = (payload) => {
@@ -15,9 +15,15 @@ export const displaySelectedTemplate = (templateId) => {
     }
 }
 
-export const customizeTemplate = ( payload) => {
+export const customizeTemplate = (payload) => {
     return {
         type: CUSTOMIZE_TEMPLATE,
         payload
+    }
+}
+
+export const fetchTemplateImages = () => {
+    return {
+        type: FETCH_TEMPLATE_IMAGES,
     }
 }

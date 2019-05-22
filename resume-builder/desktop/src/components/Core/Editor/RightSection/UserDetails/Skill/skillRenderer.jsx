@@ -62,7 +62,7 @@ export const SkillRenderer = ({
                     <Accordion
 
                         onChange={(value) => {
-                            handleAccordionClick(value)
+                            console.log('value ', value);
                         }}
                         allowZeroExpanded={false}
                         allowMultipleExpanded={true}
@@ -75,8 +75,9 @@ export const SkillRenderer = ({
                                             <AccordionItemHeading>
                                                 <AccordionItemButton>
                                                     <div className="flex-container">
-                                                         <h3 className={"add-section-heading"}>{fields.get(index).name || 'Skill'}</h3>
-                                                            <span className={expanded.indexOf(index) > -1 ? "opened-accordion" : "closed-accordion"}></span>
+                                                        <h3 className={"add-section-heading"}>{fields.get(index).name || 'Skill'}</h3>
+                                                        <span
+                                                            className={expanded.indexOf(index) > -1 ? "opened-accordion" : "closed-accordion"}></span>
                                                         <div className="addon-buttons mr-10">
                                                                 <span
                                                                     onClick={(event) => deleteSkill(index, fields, event)}
