@@ -221,35 +221,14 @@
               <section class="container-fluid detail-box">
                 <div class="career-outcomes mb-40">
                 <h2>Topics Covered</h2>
-                  <ul>
+                  <ul class="list-tick-item">
                       {% for chapter in chapter_list %}
-                        <li>{{ chapter.heading }}</li>
+                        <li class="col-md-6">{{ chapter.heading }}</li>
                       {% endfor %}
                   </ul>
               </div>
               </section>
             {% endif %}
-
-            <!-- Topics covered Starts here -->
-            <div class="container-fluid detail-box">
-              <div class="container">
-                <div class="row">
-                  <div class="col-sm-12 col-md-8">
-                    <h2>Topics covered</h2>
-                    <ul class="list-tick-item">
-                      <li class="col-md-6">Keyword Density</li>
-                      <li class="col-md-6">Inbound- outbound links</li>
-                      <li class="col-md-6">Keywok Searching</li>
-                      <li class="col-md-6">Internal linking</li>
-                      <li class="col-md-6">Keyword matching categories</li>
-                      <li class="col-md-6">Page rank</li>
-                      <li class="col-md-6">Link sharing</li>
-                      <li class="col-md-6">SEO rules</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div><!-- ./ Topics covered -->
 
             {% include "shop/partials/delivery_flow.html" %}
 
