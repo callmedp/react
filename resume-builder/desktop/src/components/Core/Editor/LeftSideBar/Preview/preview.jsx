@@ -268,6 +268,11 @@ export default class Preview extends Component {
                                     </AccordionItemButton>
                                 </AccordionItemHeading>
                                 <AccordionItemPanel>
+                                    <ul class="reorder-tab-heading">
+                                        <li class=" tab-heading--top-left-right-radius no-shadow">
+                                            <a href="#">Left</a>
+                                        </li>
+                                        <li class=" tab-heading--top-left-right-radius active shadow2"><a href="#">Right</a></li></ul>
                                     <ul className="reorder-content">
                                         <li className="reorder-content--select-box reorder-content--select-box__select">
                                             Personal Info
