@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './preview.scss'
 import queryString from "query-string";
+import {entityList} from '../../../../../Utils/formCategoryList'
 import {
     Accordion,
     AccordionItem,
@@ -16,12 +17,13 @@ export default class Preview extends Component {
         this.handleCustomization = this.handleCustomization.bind(this);
         this.selectCurrentTab = this.selectCurrentTab.bind(this);
         this.handleFontSize = this.handleFontSize.bind(this);
-
+        this.handleActiveSection = this.handleActiveSection.bind(this);
         this.state = {
             currentTab: 1,
             selectedColor: 1,
             headingFontSize: 1,
-            textFontSize: 1
+            textFontSize: 1,
+            activeSection: 'left'
 
         }
     }
@@ -109,7 +111,7 @@ export default class Preview extends Component {
     componentDidMount() {
 
         this.props.fetchDefaultCustomization(localStorage.getItem('selected_template'));
-        
+
         let elem1 = this.refs.bar1;
         let slider1 = this.refs.slider1;
         let elem2 = this.refs.bar2;
@@ -207,10 +209,18 @@ export default class Preview extends Component {
     }
 
 
+    handleActiveSection(section) {
+        this.setState({
+            activeSection: section
+        })
+    }
+
     render() {
 
         const {userInfo: {selected_template}, template: {heading_font_size, text_font_size, entity_position}} = this.props;
-        const {currentTab, selectedColor, headingFontSize, textFontSize} = this.state;
+        const {currentTab, selectedColor, headingFontSize, textFontSize, activeSection} = this.state;
+        const entity_elements = entity_position && eval(entity_position) || [];
+        console.log('---', entity_elements);
 
         // this.handleFontSize(headingFontSize, textFontSize)
 
@@ -380,11 +390,15 @@ export default class Preview extends Component {
                                 </AccordionItemHeading>
                                 <AccordionItemPanel>
                                     <ul class="reorder-tab-heading">
-                                        <li class=" tab-heading--top-left-right-radius no-shadow">
-                                            <a href="#">Left</a>
+                                        <li
+                                            onClick={() => this.handleActiveSection('left')}
+                                            className={"tab-heading--top-left-right-radius no-shadow " + (activeSection === 'left' ? 'active shadow2' : '')}>
+                                            <span>Left</span>
                                         </li>
-                                        <li class=" tab-heading--top-left-right-radius active shadow2"><a
-                                            href="#">Right</a></li>
+                                        <li
+                                            onClick={() => this.handleActiveSection('right')}
+                                            className={"tab-heading--top-left-right-radius no-shadow " + (activeSection === 'right' ? 'active shadow2' : ' ')}>
+                                            <span>Right</span></li>
                                     </ul>
                                     <ul className="reorder-content">
                                         <li className="reorder-content--select-box reorder-content--select-box__select">
@@ -394,10 +408,17 @@ export default class Preview extends Component {
 	                				<span className="icon-descend1 ml-0"></span>
 	                			</span>
                                         </li>
-                                        <li className="reorder-content--select-box">Summary</li>
-                                        <li className="reorder-content--select-box">Experience</li>
-                                        <li className="reorder-content--select-box">Education</li>
-                                        <li className="reorder-content--select-box">Skills</li>
+                                        {
+                                            (entity_elements || []).filter(els => els['alignment'] === activeSection).map(el => {
+
+                                                const entityValue = entityList.find(elm => elm.entity_id == el.entity_id);
+                                                return (
+                                                    <li className="reorder-content--select-box">{entityValue['entity_text']}</li>
+                                                )
+
+
+                                            })
+                                        }
                                     </ul>
                                 </AccordionItemPanel>
                             </div>
