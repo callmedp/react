@@ -181,31 +181,49 @@
 
                       <td>{% if obj.first_name %}{{obj.first_name}}{% endif %}{% if obj.last_name %} {{obj.last_name}}{% endif %}</td>
                       <td><div id="{{obj.id}}">
+                            {% if not exoitel_status%}
                           {{obj.email}}
                           {%if obj.alt_email%}<br/>
                           <span style=" white-space: nowrap;">
                          <b>Alt-</b>  {{obj.alt_email}}</span>
                           {%endif%}
+
+                          {% else %}
+                            {{obj.masked_email}}
+
+                           {% endif %}
+
                           </div>
 
-                          <button type="button" class="btn btn-default btn-xs" aria-hidden="true" onclick="alt_email_update('{{obj.email}}','{{obj.number}}')">
+                          <button type="button" class="btn btn-default btn-xs" aria-hidden="true" onclick="alt_email_update('{{obj.masked_email}}','{{obj.number}}')">
                                 <i class="fa fa-envelope"> Alternate Email</i>
                               </button>
                       </td>
-                      <td> <div id="{{obj.number}}" style="display: -moz-inline-stack;">{{obj.country_code}}-
+                      <td> <div id="{{obj.number}}" style="display: -moz-inline-stack;">
+                           {% if not exoitel_status%}
+                          {{obj.country_code}}-
                           {{obj.mobile}}
                           {%if obj.alt_mobile%}
                           <span style=" white-space: nowrap;"> <b>Alt-</b>
                               {{obj.country_code}}-{{obj.alt_mobile}}</span>
                           {%endif%}
+                           {% else %}
+                           {% if show_btn %}
+                            <button id="{{obj.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{obj.id}});"></button>
+                            <span style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{obj.id}}callingbtn-error"></span>
+                                {% endif %}
+                            {{obj.masked_mobile}}
+
+                           {% endif %}
+
 
                           </div>
-
-
-
-                          <button type="button" class="btn btn-default btn-xs" aria-hidden="true" onclick="alt_num_update('{{obj.mobile}}','{{obj.number}}')">
+                          <button type="button" class="btn btn-default btn-xs" aria-hidden="true" onclick="alt_num_update('{{obj.masked_mobile}}','{{obj.number}}')">
                                 <i class="fa fa-phone"> Alternate Number</i>
-                              </button> </td>
+                              </button>
+
+
+                      </td>
                       <td>
                           {% for txn in obj.get_txns %}
                               {{txn.txn}}<br>{{txn.get_payment_mode}} {{txn.get_payment_status}}<br>
@@ -333,6 +351,7 @@
 
   {% compress js %}
   <!-- Parsley Validate Scripts -->
+  <script type="text/javascript" src="{% static 'console/js/order/exotelCall.js' %}"></script>
   <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/moment/moment.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/datepicker/daterangepicker.js' %}"></script>

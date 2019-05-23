@@ -2,21 +2,23 @@ var emailtemp;
 var mobitemp;
 function alt_email_update(email_id,order_id)
 {
-emailtemp=email_id;
-document.getElementById('id_alt_email').value=email_id ;
+document.getElementById('primary_email').innerHTML=email_id ;
 document.getElementById("order_id").value=order_id ;
 document.getElementById("email-error").innerHTML='';
 $('#alteremail').parsley().reset();
+$('#alteremail')[0].reset();
+
 $("#emailmodal").modal();
 }
 
 function alt_num_update(alt_num,order_id)
 {
-mobitemp=alt_num;
-document.getElementById('id_alt_mobile').value=alt_num ;
+document.getElementById('primary_mobile').value=alt_num ;
 document.getElementById('order_id1').value=order_id;
-document.getElementById("email-error").innerHTML='';
+document.getElementById("mobile-error").innerHTML='';
 $('#alternumber').parsley().reset();
+$('#alternumber')[0].reset();
+
 $("#numbermodal").modal();
 }
 
@@ -34,7 +36,7 @@ function email_alt_update(){
             	if (json.status == 'success'){
 	            	alert('successfully updated');
 	            	if (json.obj_altemail){
-	            	    document.getElementById(json.object_id).innerHTML=emailtemp+'<br/><b>Alt</b>-'+json.obj_altemail;
+	            	    document.getElementById(json.object_id).innerHTML='<span><b>Alt</b>-'+json.obj_altemail + "</span>";
                 }
                 $("#emailmodal").modal('hide');
 
@@ -64,8 +66,8 @@ function numb_alt_update(){
             success: function(json) {
             	if (json.status == 'success'){
 	            	alert('successfully updated');
-	            	document.getElementById(json.object_id).innerHTML= json.country+ "-" + mobitemp + '<br/><span><b>Alt</b>-'+json.obj_altnum+"</span>";
-               $("#numbermodal").modal('hide');
+	            	document.getElementById(json.object_id).innerHTML = ' <span><b>Alt</b>-'+json.obj_altnum+"</span>";
+                    $("#numbermodal").modal('hide');
            	}
             	else{
             	document.getElementById("mobile-error").innerHTML='<div class="alert alert-danger"><strong>'+json.error +'</strong></div>';

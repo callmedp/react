@@ -255,9 +255,22 @@
                              <span id="orderitempk">({{obj.pk}})</span>
                       </td>
                       <td>
-                        email:{{obj.order.email}}<br>
-                        name:{{obj.order.first_name}}<br>
-                        mobile:{{obj.order.mobile}}
+                       <b> email</b>:{% if not exoitel_status%}
+                          {{obj.order.email}}
+                          {% else %}
+                            {{obj.order.masked_email}}
+                           {% endif %}<br>
+                        <b>name</b>:{{obj.order.first_name}}<br>
+                        <b>mobile</b>:  {% if not exoitel_status%}
+                          {{obj.order.country_code}}-
+                          {{obj.order.mobile}}
+                           {% else %}
+                           {% if show_btn %}
+                            <button id="{{obj.order.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{obj.order.id}});"></button>
+                            <span style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{obj.order.id}}callingbtn-error"></span>
+                                {% endif %}
+                            {{obj.order.masked_mobile}}
+                           {% endif %}
                       </td>
                       <td>
                           {% if obj.parent and obj.is_variation %}
@@ -449,6 +462,8 @@
   {{ block.super }}
 
   {% compress js %}
+  <script type="text/javascript" src="{% static 'console/js/order/exotelCall.js' %}"></script>
+
   <script type="text/javascript" 
     src="{% static 'console/js/moment/moment.min.js' %}">
   </script>

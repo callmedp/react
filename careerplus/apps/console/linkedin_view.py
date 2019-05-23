@@ -85,6 +85,8 @@ class LinkedinQueueView(ListView, PaginationMixin):
             "draft_level": self.draft_level,
             "delivery_type": self.delivery_type}
         filter_form = LinkedinOIFilterForm(initial)
+        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
+        show_btn = True if has_permission else False
         context.update({
             "action_form": LinkedinInboxActionForm(),
             "messages": alert,
@@ -92,6 +94,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
             "message_form": MessageForm(),
             "query": self.query,
             var: 'checked',
+            'show_btn':show_btn
         })
         return context
 
@@ -253,6 +256,8 @@ class LinkedinOrderDetailVeiw(DetailView):
         obj = self.get_object()
         max_limit_draft = settings.DRAFT_MAX_LIMIT
         order = self.get_object()
+        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
+        show_btn = True if has_permission else False
         order_items = order.orderitems.all().select_related('product', 'partner')
         context.update({
             "order": order,
@@ -260,6 +265,7 @@ class LinkedinOrderDetailVeiw(DetailView):
             "max_limit_draft": max_limit_draft,
             "messages": alert,
             "message_form": MessageForm(),
+            'show_btn':show_btn,
         })
         return context
 
@@ -477,6 +483,8 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
             "delivery_type": self.delivery_type,
             "draft_level": self.draft_level, }
         filter_form = LinkedinOIFilterForm(initial)
+        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
+        show_btn = True if has_permission else False
         context.update({
             "messages": alert,
             "max_limit_draft": max_limit_draft,
@@ -485,6 +493,7 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
             "query": self.query,
             "action_form": OIActionForm(),
             var: 'checked',
+            'show_btn':show_btn,
         })
         return context
 
@@ -597,6 +606,8 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
             "delivery_type": self.delivery_type,
             "draft_level": self.draft_level, }
         filter_form = LinkedinOIFilterForm(initial)
+        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
+        show_btn = True if has_permission else False
         context.update({
             "messages": alert,
             "max_limit_draft": max_limit_draft,
@@ -605,6 +616,7 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
             "query": self.query,
             "action_form": LinkedinInboxActionForm(),
             var: 'checked',
+            'show_btn':show_btn,
         })
         return context
 
@@ -712,6 +724,8 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
         max_limit_draft = settings.DRAFT_MAX_LIMIT
+        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
+        show_btn = True if has_permission else False
 
         initial = {
             "modified": self.modified,
@@ -728,6 +742,7 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
             "query": self.query,
             "action_form": OIActionForm(),
             self.sel_opt: "checked",
+            'show_btn':show_btn,
         })
         return context
 
@@ -825,6 +840,8 @@ class ApprovedLinkedinQueueVeiw(ListView, PaginationMixin):
         var=self.sel_opt
         alert = messages.get_messages(self.request)
         max_limit_draft = settings.DRAFT_MAX_LIMIT
+        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
+        show_btn = True if has_permission else False
         initial = {
             "modified": self.modified,
             "writer": self.writer,
@@ -837,6 +854,7 @@ class ApprovedLinkedinQueueVeiw(ListView, PaginationMixin):
             "query": self.query,
             "filter_form": filter_form,
             var:'checked',
+            'show_btn':show_btn
         })
         return context
 
@@ -954,6 +972,8 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
             "payment_date": self.payment_date,
             "modified": self.modified, }
         filter_form = LinkedinOIFilterForm(initial)
+        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
+        show_btn = True if has_permission else False
         context.update({
             "assignment_form": AssignmentInterNationalForm(),
             "messages": alert,
@@ -961,7 +981,8 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
             "message_form": MessageForm(),
             "filter_form": filter_form,
             "action_form": OIActionForm(queue_name="internationalprofileupdate"),
-            var:'checked'
+            var:'checked',
+            'show_btn':show_btn,
         })
 
         return context
@@ -1088,6 +1109,9 @@ class InterNationalApprovalQueue(ListView, PaginationMixin):
             "payment_date": self.payment_date,
             "modified": self.modified, }
         filter_form = LinkedinOIFilterForm(initial)
+        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
+        show_btn = True if has_permission else False
+
         context.update({
             "messages": alert,
             "query": self.query,
@@ -1095,6 +1119,7 @@ class InterNationalApprovalQueue(ListView, PaginationMixin):
             "filter_form": filter_form,
             "action_form": OIActionForm(queue_name="internationalapproval"),
              var: 'checked',
+            'show_btn':show_btn,
         })
 
         return context

@@ -61,22 +61,47 @@
                       <tbody>
                         <tr>
                           <td>{{order.number}}</td>
-                            <td><div >{{order.email}}</div><div style=" white-space: nowrap;">
-                              {% if order.alt_email %}<b>  Alt
-                                -</b>{{order.alt_email}}{%endif%}
-                            </div></td>
-                          <td><div>{{order.country_code}} {{order.mobile}}
-                          </div><div
-                                  style=" white-space: nowrap;">
-                              {% if order.alt_mobile %}<b>Alt
-                                  -</b>{{order.country_code}}
-                              {{order.alt_mobile}}
-                              {% endif %}
-                          </div>
-                            {% if show_btn %}
+                        <td><div id="{{order.id}}">
+
+                                  {% if not exoitel_status%}
+                          {{order.email}}
+                          {%if order.alt_email%}<br/>
+                          <span style=" white-space: nowrap;">
+                         <b>Alt-</b>  {{order.alt_email}}</span>
+                          {%endif%}
+
+                          {% else %}
+                            {{order.masked_email}}
+
+                           {% endif %}
+                              </div>
+
+                          <button type="button" class="btn btn-default btn-xs" aria-hidden="true" onclick="alt_email_update('{{order.masked_email}}','{{order.number}}')">
+                                <i class="fa fa-envelope"> Alternate Email</i>
+                              </button>
+                            </td>
+                         <td> <div id="{{order.number}}" style="display: -moz-inline-stack;">
+                            {% if not exoitel_status%}
+                          {{obj.country_code}}-
+                          {{obj.mobile}}
+                          {%if obj.alt_mobile%}
+                          <span style=" white-space: nowrap;"> <b>Alt-</b>
+                              {{obj.country_code}}-{{obj.alt_mobile}}</span>
+                          {%endif%}
+                           {% else %}
+                           {% if show_btn %}
                             <button id="{{order.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{order.id}});"></button>
-                            <div style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{order.id}}callingbtn-error"></div>
+                            <span style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{order.id}}callingbtn-error"></span>
                                 {% endif %}
+                            {{order.masked_mobile}}
+
+                           {% endif %}
+
+                         </div>
+                          <button type="button" class="btn btn-default btn-xs" aria-hidden="true" onclick="alt_num_update('{{order.masked_mobile}}','{{order.number}}')">
+                                <i class="fa fa-phone"> Alternate Number</i>
+                              </button>
+
                           </td>
                           <td>{{order.first_name}} {{order.last_name}}</td>
                           <td>{{order.get_status}}</td>
@@ -357,6 +382,8 @@
             </div>
           </div>
 
+         {%include "console/order/partials/modals.html" %}
+
         </div>
       </div>
     </div>
@@ -372,6 +399,8 @@
   <script type="text/javascript" src="{% static 'console/js/order/exotelCall.js' %}"></script>
   <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/order/draft-upload.js' %}"></script>
+  <script type="text/javascript" src="{% static 'console/js/order/alter.js' %}"></script>
+
   {% endcompress %}
 
 {% endblock js_block %}

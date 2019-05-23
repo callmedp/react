@@ -222,8 +222,25 @@
                    <td><a target="_blank" href="{% url "console:order-detail" obj.pk %}"><b style="text-decoration: underline;">{{obj.number}}</b></a></td>
 
                       <td>{{obj.first_name}} {{obj.last_name}}</td>
-                      <td>{{obj.email}}</td>
-                      <td>{{obj.country_code}} {{obj.mobile}}</td>
+                      <td>
+                                 {% if not exoitel_status%}
+                          {{obj.email}}
+                          {% else %}
+                            {{obj.masked_email}}
+                           {% endif %}
+                      </td>
+                      <td>
+                            {% if not exoitel_status%}
+                          {{obj.country_code}}-
+                          {{obj.mobile}}
+                           {% else %}
+                           {% if show_btn %}
+                            <button id="{{obj.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{obj.id}});"></button>
+                            <span style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{obj.id}}callingbtn-error"></span>
+                                {% endif %}
+                            {{obj.masked_mobile}}
+                           {% endif %}
+                      </td>
                       <!--
                       <td>
                             {% if obj.parent and obj.is_variation %}
@@ -349,6 +366,8 @@ function upload_click(pk){
 </script>
   {% compress js %}
   <!-- Parsley Validate Scripts -->
+  <script type="text/javascript" src="{% static 'console/js/order/exotelCall.js' %}"></script>
+
   <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'packages/iCheck/icheck.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/order/orderitem-action.js' %}"></script>
