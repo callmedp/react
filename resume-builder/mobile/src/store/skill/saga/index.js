@@ -100,7 +100,7 @@ function* updateUserSkill(action) {
 function* bulkSaveUserSkill(action) {
     try {
         yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
-        let {payload: {list}} = action;
+        let {payload: {list,resolve,reject}} = action;
 
 
         const candidateId = localStorage.getItem('candidateId') || '';
@@ -109,14 +109,16 @@ function* bulkSaveUserSkill(action) {
         const result = yield call(Api.bulkSaveUserSkill, list, candidateId);
 
         if (result['error']) {
-            ////console.log(result['error']);
+            return reject(new SubmissionError({_error: result['errorMessage']}));
         }
         else{
             if (localStorage.getItem('skill')){
                 localStorage.removeItem('skill')
                 yield call(fetchUserSkill)
             }
+            yield put({type: Actions.SAVE_USER_SKILL, data: {list: result['data']}})
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+            return resolve('Bulk Update Done.');
         }
 
         ////console.log('---', result);

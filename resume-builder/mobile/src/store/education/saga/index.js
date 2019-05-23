@@ -103,8 +103,9 @@ function* updateUserEducation(action) {
 
 function* bulkUpdateUserEducation(action) {
     try {
+        console.log("My Action",action)
         yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
-        let {payload: {list}} = action;
+        let {payload: {list,resolve,reject}} = action;
 
 
         const candidateId = localStorage.getItem('candidateId') || '';
@@ -113,14 +114,18 @@ function* bulkUpdateUserEducation(action) {
         const result = yield call(Api.bulkUpdateUserEducation, list, candidateId);
 
         if (result['error']) {
-            ////console.log(result['error']);
+            return reject(new SubmissionError({_error: result['errorMessage']}));
         }
         else{
             if (localStorage.getItem('education')){
                 localStorage.removeItem('education')
                 yield call(fetchUserEducation)
             }
+            yield put({type: Actions.SAVE_USER_EDUCATION, data:{list: result['data']}})
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+            console.log("Came Here before resolve")
+            console.log(resolve)
+            return resolve('Bulk Update Done.');
         }
 
         ////console.log('---', result);

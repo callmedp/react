@@ -21,6 +21,7 @@ class References extends Component {
         }
         this.updateInputValue =this.updateInputValue.bind(this);
         this.editHeadingClick = this.editHeadingClick.bind(this);
+        this.updateInfoBeforeLoss = this.updateInfoBeforeLoss.bind(this)
     }
 
     async handleSubmit(values) {
@@ -45,7 +46,7 @@ class References extends Component {
         
     }
 
-    componentWillUnmount() {
+    async updateInfoBeforeLoss(){
 
         if(!this.state.submit){
             const form_data = this.props.info.form.reference;
@@ -63,10 +64,14 @@ class References extends Component {
             }
             if(!error){
                 const values = this.props.handleOrdering(form_data['values'])
-                this.props.bulkUpdateUserReference(values.list)
+                await this.props.bulkUpdateUserReference(values.list)
+                this.setState({submit:true})
             }
         }
+    }
 
+    componentWillUnmount() {
+        this.updateInfoBeforeLoss()
     }
 
     componentDidMount() {
@@ -131,7 +136,6 @@ class References extends Component {
         fields.remove(index - 1)
         fields.insert(index - 1, prevItem)
         fields.swap(index, index - 1)
-        await this.props.bulkUpdateUserReference(fields.getAll());
     }
 
     async changeOrderingDown(index,fields,event){
@@ -146,7 +150,6 @@ class References extends Component {
         fields.remove(index+1)
         fields.insert(index + 1, nextItem)
         fields.swap(index, index + 1);
-        await this.props.bulkUpdateUserReference(fields.getAll());
     }
 
     render () {
@@ -174,8 +177,8 @@ class References extends Component {
                     <ul className="form">
                         <li className="form__group">
                             <div className="btn-wrap">
-                                <button className="btn btn__round btn--outline" 
-                                    onClick={()=>{this.props.history.push(`/resume-builder/preview`) }}
+                                 <button className="btn btn__round btn--outline" 
+                                    onClick={async()=>{await this.updateInfoBeforeLoss();this.props.history.push(`/resume-builder/preview`) }}
                                     type={'button'}>Preview</button>
                                 <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
                                 {(length === pos +1) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}
@@ -223,7 +226,9 @@ const mapDispatchToProps = (dispatch) => {
                 if (!userReference['id']) delete userReference['id'];
                 return userReference;
             })
-            return dispatch(actions.bulkUpdateUserReference({list: listItems}))
+            return new Promise((resolve, reject) => {
+                return dispatch(actions.bulkUpdateUserReference({list: listItems,resolve,reject}))
+            })
         }
     }
 };

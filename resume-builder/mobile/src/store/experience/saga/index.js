@@ -104,7 +104,7 @@ function* updateUserExperience(action) {
 function* bulkUserExperienceUpdate(action) {
     try {
         yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
-        let {payload: {list}} = action;
+        let {payload: {list,resolve,reject}} = action;
 
 
         const candidateId = localStorage.getItem('candidateId') || '';
@@ -113,14 +113,17 @@ function* bulkUserExperienceUpdate(action) {
         const result = yield call(Api.bulkUpdateUserExperience, list, candidateId);
 
         if (result['error']) {
-            ////console.log(result['error']);
+            return reject(new SubmissionError({_error: result['errorMessage']}));
         }
         else{
             if (localStorage.getItem('experience')){
                 localStorage.removeItem('experience')
                 yield call(fetchUserExperience)
             }
+            yield put({type: Actions.SAVE_USER_EXPERIENCE, data: {list: result['data']}})
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+            return resolve('Bulk Update Done.');
+
         }
 
         ////console.log('---', result);

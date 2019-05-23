@@ -102,7 +102,7 @@ function* fetchUserProject(action) {
 function* bulkUpdateUserProject(action) {
     try {
         yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
-        let {payload: {list}} = action;
+        let {payload: {list,resolve,reject}} = action;
 
 
         const candidateId = localStorage.getItem('candidateId') || '';
@@ -111,14 +111,16 @@ function* bulkUpdateUserProject(action) {
         const result = yield call(Api.bulkUpdateUserProject, list, candidateId);
 
         if (result['error']) {
-            ////console.log(result['error']);
+            return reject(new SubmissionError({_error: result['errorMessage']}));
         }
         else{
             if (localStorage.getItem('project')){
                 localStorage.removeItem('project')
                 yield call(fetchUserProject)
             }
+            yield put({type: Actions.SAVE_USER_PROJECT, data: {list: result['data']}})
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+            return resolve('Bulk Update Done.');
         }
 
         ////console.log('---', result);

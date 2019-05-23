@@ -82,7 +82,7 @@ class Summary extends Component {
         
     }
 
-    componentWillUnmount() {
+    async updateInfoBeforeLoss(){
 
         if(!this.state.submit){
             const form_data = this.props.info.form.summary;
@@ -97,15 +97,15 @@ class Summary extends Component {
                 }
             }
             if(!error){
-                this.updateInfoBeforeLoss(form_data)
+                await this.props.onSubmit(form_data['values']);
+                this.setState({submit:true})
             }
         }
     }
 
-    async updateInfoBeforeLoss(form_data){
-        await this.props.onSubmit(form_data['values']);
+    componentWillUnmount() {
+        this.updateInfoBeforeLoss()
     }
-
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)

@@ -92,7 +92,7 @@ function* updateUserReference(action) {
 
 function* bulkUpdateUserReference(action) {
     try {
-        let {payload: {list}} = action;
+        let {payload: {list,resolve,reject}} = action;
         yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
 
 
@@ -102,14 +102,17 @@ function* bulkUpdateUserReference(action) {
         const result = yield call(Api.bulkUpdateUserReference, list, candidateId);
 
         if (result['error']) {
-            ////console.log(result['error']);
+            return reject(new SubmissionError({_error: result['errorMessage']}));
         }
         else{
             if (localStorage.getItem('reference')){
                 localStorage.removeItem('reference')
                 yield call(fetchUserReference)
             }
+            yield put({type: Actions.SAVE_USER_REFERENCE, data: {list: result['data']}})
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+            return resolve('Bulk Update Done.');
+            
         }
         ////console.log('---', result);
         // yield call(fetchUserLanguage)

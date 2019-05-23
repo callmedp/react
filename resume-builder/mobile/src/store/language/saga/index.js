@@ -98,7 +98,7 @@ function* updateUserLanguage(action) {
 function* bulkUpdateUserLanguage(action) {
     try {
         yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
-        let {payload: {list}} = action;
+        let {payload: {list,resolve,reject}} = action;
 
 
         const candidateId = localStorage.getItem('candidateId') || '';
@@ -107,14 +107,16 @@ function* bulkUpdateUserLanguage(action) {
         const result = yield call(Api.bulkUpdateUserLanguage, list, candidateId);
 
         if (result['error']) {
-            ////console.log(result['error']);
+            return reject(new SubmissionError({_error: result['errorMessage']}));
         }
         else{
             if (localStorage.getItem('language')){
                 localStorage.removeItem('language')
                 yield call(fetchUserLanguage)
             }
+            yield put({type: Actions.SAVE_USER_LANGUAGE, data: {list: result['data']}})
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+            return resolve('Bulk Update Done.');
         }
 
         ////console.log('-language swap result--', result);

@@ -92,7 +92,7 @@ function* updateUserAward(action) {
 
 function* bulkUpdateUserAward(action) {
     try {
-        let {payload: {list}} = action;
+        let {payload: {list,resolve,reject}} = action;
 
 
         const candidateId = localStorage.getItem('candidateId') || '';
@@ -101,14 +101,18 @@ function* bulkUpdateUserAward(action) {
         const result = yield call(Api.bulkUpdateUserAward, list, candidateId);
 
         if (result['error']) {
-            ////console.log(result['error']);
+            return reject(new SubmissionError({_error: result['errorMessage']}));
         }
         else{
+            
             if (localStorage.getItem('award')){
                 localStorage.removeItem('award')
                 yield call(fetchUserAward)
             }
+            
+            yield put({type: Actions.SAVE_USER_AWARD, data:{list:result['data']}});
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+            return resolve('Bulk Update Done.');
         }
         
         ////console.log('---', result);

@@ -25,6 +25,7 @@ class Education extends Component {
         this.updateInputValue =this.updateInputValue.bind(this);
         this.editHeadingClick = this.editHeadingClick.bind(this);
         this.tillTodayDisable = this.tillTodayDisable.bind(this);
+        this.updateInfoBeforeLoss = this.updateInfoBeforeLoss.bind(this)
     }
 
     async handleSubmit(values) {
@@ -55,12 +56,11 @@ class Education extends Component {
         till_today[parseInt(index)] = checked
     }
 
-    componentWillUnmount() {
+    async updateInfoBeforeLoss(){
 
         if(!this.state.submit){
             
             const form_data = this.props.info.form.education;
-            console.log("COming inside Unmount",form_data)
             let error = false
             let error_values =form_data["syncErrors"]
             if(error_values){
@@ -74,10 +74,17 @@ class Education extends Component {
                 }
             }
             if(!error){
+                console.log("YO")
                 const values = this.props.handleOrdering(form_data['values'])
-                this.props.bulkUpdateUserEducation(values.list)
+                await this.props.bulkUpdateUserEducation(values.list)
+                this.setState({submit:true})
             }
         }
+    }
+
+    componentWillUnmount() {
+        console.log("unmount")
+        this.updateInfoBeforeLoss()
     }
 
     updateInputValue(key,e) {
@@ -154,7 +161,6 @@ class Education extends Component {
         fields.remove(index - 1)
         fields.insert(index - 1, prevItem)
         fields.swap(index, index - 1)
-        await this.props.bulkUpdateUserEducation(fields.getAll());
     }
 
     async changeOrderingDown(index,fields,event){
@@ -169,7 +175,6 @@ class Education extends Component {
         fields.remove(index+1)
         fields.insert(index + 1, nextItem)
         fields.swap(index, index + 1);
-        await this.props.bulkUpdateUserEducation(fields.getAll());
     }
 
     render() {
@@ -198,8 +203,12 @@ class Education extends Component {
                     <ul className="form">
                         <li className="form__group">
                             <div className="btn-wrap">
-                                <button className="btn btn__round btn--outline" 
-                                    onClick={()=>{this.props.history.push(`/resume-builder/preview`) }}
+                                 <button className="btn btn__round btn--outline" 
+                                    onClick={async()=>{
+                                        await this.updateInfoBeforeLoss();
+                                        console.log("djfsjhfsdj");
+                                        this.props.history.push(`/resume-builder/preview`) }
+                                    }
                                     type={'button'}>Preview</button>
                                 <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
                                     {(length === pos +1) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}
@@ -250,7 +259,9 @@ const mapDispatchToProps = (dispatch) => {
                     return userEducation;
                 }
             );
-            return dispatch(actions.bulkUpdateUserEducation({list: listItems}))
+            return new Promise((resolve, reject) => {
+                return dispatch(actions.bulkUpdateUserEducation({list: listItems,resolve,reject}))
+            })
         }
     }
 };

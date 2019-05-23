@@ -67,6 +67,8 @@ export const datepicker =
          className,
          id,
          disabled,
+         maxDateAllowed,
+         yearDropDownItemNumber,
          meta: {touched, error, warning}
      }) => (
         <React.Fragment>
@@ -81,6 +83,12 @@ export const datepicker =
                         value={disabled ? "This is disabled" : input.value}
                         selected={input.value ? new Date(input.value) : null}
                         onChange={date => input.onChange(date)} id={id} disabled={disabled} autoComplete="off"
+                        maxDate={maxDateAllowed ? new Date() : null}
+                        // minDate={dateValue !== ''  ? moment(dateValue).add(1, 'days') : null}
+                        showYearDropdown
+                        yearDropdownItemNumber={yearDropDownItemNumber}
+                        scrollableYearDropdown
+                        showMonthDropdown
                 />
                 {touched &&  ((error && <span className={'error-message'}>{error}</span>) ||
                 (warning && <span className={'warn-Message'}>{warning}</span>))}

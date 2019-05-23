@@ -64,8 +64,8 @@ class PersonalInfo extends Component {
         }
         
     }
-    componentWillUnmount() {
 
+    async updateInfoBeforeLoss(){
         if(!this.state.submit){
             const form_data = this.props.info.form.personalInfo;
             // console.log(form_data)
@@ -81,16 +81,18 @@ class PersonalInfo extends Component {
                 }
             }
             if(!error){
-                this.updateInfoBeforeLoss(form_data)
+                await this.props.onSubmit(form_data['values'],this.state.imageURL);
+                this.setState({submit:true})
             }
         }
         
-
     }
 
-    async updateInfoBeforeLoss(form_data){
-        await this.props.onSubmit(form_data['values'],this.state.imageURL);
+    async componentWillUnmount() {
+        this.updateInfoBeforeLoss();
     }
+
+    
 
     
 
@@ -259,7 +261,7 @@ class PersonalInfo extends Component {
                         <li className="form__group">
                             <div className="btn-wrap">
                                 <button className="btn btn__round btn--outline" 
-                                    onClick={()=>{this.props.history.push(`/resume-builder/preview`) }}
+                                    onClick={async()=>{await this.updateInfoBeforeLoss();this.props.history.push(`/resume-builder/preview`) }}
                                     type={'button'}>Preview</button>
                                 <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
                                     {(length === pos +1) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}

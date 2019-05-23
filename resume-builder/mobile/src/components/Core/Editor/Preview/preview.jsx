@@ -17,9 +17,21 @@ class Preview extends Component {
         }
     }
 
-    componentDidMount(){
+    async componentDidMount(){
+        await this.props.fetchPersonalInfo();
         this.props.fetchTemplate();
-        this.props.fetchPersonalInfo();
+        console.log(this.props.allinfo)
+    }
+
+    componentDidUpdate(prevProps) {
+        // let {allinfo} = this.props
+        // delete allinfo['loader']
+        // let prev_allinfo =prevProps.allinfo
+        // delete prev_allinfo['loader']
+        // if (this.props.allinfo !== prevProps.allinfo) {
+        //     this.props.fetchTemplate()
+        //     console.log(this.props.allinfo)
+        // }
     }
     render(){
         const {customize} = this.state
@@ -293,7 +305,8 @@ const mapStateToProps = (state) => {
     return {
         initialValues: state.template,
         loader: state.loader,
-        personalInfo: state.personalInfo
+        personalInfo: state.personalInfo,
+        allinfo:state
     }
 };
 

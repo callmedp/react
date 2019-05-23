@@ -95,7 +95,7 @@ function* updateUserCourse(action) {
 function* bulkUpdateUserCourse(action) {
     try {
         yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
-        let {payload: {list}} = action;
+        let {payload: {list,resolve,reject}} = action;
 
 
         const candidateId = localStorage.getItem('candidateId') || '';
@@ -104,15 +104,16 @@ function* bulkUpdateUserCourse(action) {
         const result = yield call(Api.bulkUpdateUserCourse, list, candidateId);
 
         if (result['error']) {
-            ////console.log(result['error']);
+            return reject(new SubmissionError({_error: result['errorMessage']}));
         }
         else{
             if (localStorage.getItem('course')){
                 localStorage.removeItem('course')
                 yield call(fetchUserCourse)
             }
-            
+            yield put({type: Actions.SAVE_USER_COURSE, data:{list: result['data']}});
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+            return resolve('Bulk Update Done.');
         }
 
         ////console.log('---', result);
