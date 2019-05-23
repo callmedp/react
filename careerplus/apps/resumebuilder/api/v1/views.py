@@ -1,12 +1,13 @@
 # python imports
 import base64
+import random
 from datetime import datetime, date
 
 # django imports
 from django.conf import settings
 from django.template.loader import get_template
 from django.core.files.uploadedfile import SimpleUploadedFile
-
+from django_redis import get_redis_connection
 # local imports
 from resumebuilder.models import (Candidate, Skill, CandidateExperience, CandidateEducation, CandidateCertification,
                                   CandidateProject, CandidateReference, CandidateSocialLink, CandidateAchievement,
@@ -701,6 +702,47 @@ class ResumeImagePreviewView(APIView):
 
         return Response(base64.b64encode(file_obj.read()))
 
+
+class JobtoExperienceSuggestionApiView(APIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = None
+
+    def get(self, request, *args, **kwargs):
+        job_title = kwargs.get('job_title', None)
+        cache = get_redis_connection('search_lookup')
+        if job_title:
+            job_title = job_title.lower()
+            suggestion = cache.hget('suggestion_set', job_title.encode())
+            suggestion = eval(suggestion)
+        else:
+            job_title_keys = list(cache.hgetall('suggestion_set').keys())
+            random_int = random.randint(0,len(job_title_keys))
+            job_title = job_title_keys[random_int]
+            suggestion = cache.hget('suggestion_set', job_title)
+        return Response(
+            data=suggestion,
+            status=status.HTTP_200_OK
+        )
+
+
+
+class JobTitleSuggestionApiView(APIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = None
+
+    def get(self, request, *args, **kwargs):
+        job_title = kwargs.get('job_title', None)
+        cache = get_redis_connection('search_lookup')
+        if job_title:
+            job_title = job_title.lower()
+            job_title_keys = list(map(lambda x: x.decode(), list(cache.hgetall('suggestion_set').keys())))
+            suggestion_keys = [key for key in job_title_keys if key.startswith(job_title)]
+        return Response(
+            data=suggestion_keys,
+            status=status.HTTP_200_OK
+        )
 
 
 

@@ -18,6 +18,11 @@
 		align-items: center;
 		justify-content: center;
 	}
+
+	.accordion__item {
+		border-top: none !important;
+		border-bottom: none !important;
+	}
 }
 
 .preivew-scroll {
@@ -34,6 +39,7 @@
 		padding: 15px 20px;
 		color: $blue1;
 		position: relative;
+		background: $white;
 
 		&:after {
 			position: absolute;
@@ -71,6 +77,20 @@
 		.icon-change-reorder {
 		    background-position: -107px -107px;
 		}
+	}
+
+	.accordion__button {
+		padding: 0 !important;
+		background: $grey-bg1 !important;
+	}
+
+	.accordion__panel {
+		border: 1px solid transparent;
+	}
+
+	.accordion__item {
+		border-top: none !important;
+		border-bottom: none !important;
 	}
 }
 
@@ -204,7 +224,7 @@
 
 		&__bar {
 			position: absolute; 
-			right: 219px;
+			right: 205px;
 			top: -4px;
 			width: 15px; 
 			height: 15px; 
@@ -231,7 +251,7 @@
 	&--select-box {
 		border: 1px solid $grey2;
 		height: 34px;
-		margin: 5px 15px;
+		margin: 5px 5px;
 		padding: 0 5px 0 10px;
 		font-size: 1.3rem;
 		@include flexbox();

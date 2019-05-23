@@ -1,0 +1,391 @@
+{% load static compress resume_tags %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% block css_section %}
+        <link type="text/css" href="{% static 'shinelearn/css/resume-builder/resume6.css' %}" rel="stylesheet">
+    {% endblock css_section %}
+
+</head>
+<body>
+<div class="resume">
+    <div class="resume-content">
+        <div class="top-panel mb-30">
+            <div class="resume-container">
+
+                <div class="left-panel">
+                    {% if candidate.image %}
+                        <span class="resume-image">
+                    <img src={{ candidate.image }} alt="CandidateImage">
+                  </span>
+                    {% endif %}
+                    <h1>{{ candidate.first_name }} {{ candidate.last_name }}</h1>
+                    {% if latest_exp %}
+                        <h2>{{ latest_exp }}</h2>
+                    {% endif %}
+
+                    <p>{{ candidate.extra_info }}</p>
+                </div><!-- left panel -->
+
+                <div class="right-panel">
+                    <ul class="resume-list">
+                        <li>
+                            <span class="icon"><img src="images/mobile-icon.png" alt=""></span>
+                            <span>+91 {{ candidate.number }}</span>
+                        </li>
+                        <li>
+                            <span class="icon"><img src="images/email-icon.png" alt=""></span>
+                            <span>{{ candidate.email }}</span>
+                        </li>
+                        <li>
+                            <span class="icon"><img src="images/location-icon.png" alt=""></span>
+                            <span>{{ candidate.location }}</span>
+                        </li>
+                        {#                        <li>#}
+                        {#                            <span class="icon"><img src="images/linkedin-icon.png" alt=""></span>#}
+                        {#                            <span>linkedin.com/candidatename</span>#}
+                        {#                        </li>#}
+                        {#                        <li>#}
+                        {#                            <span class="icon"><img src="images/facebook-icon.png" alt=""></span>#}
+                        {#                            <span>Facebook.com/candidatename</span>#}
+                        {#                        </li>#}
+                    </ul>
+                </div><!-- right panel -->
+            </div>
+        </div><!-- /. Top panel -->
+        <div class="resume-container">
+            {% if experience %}
+                <div class="experience mb-30">
+                    <div class="heading">{{ preference_list.2.entity_text }}</div>
+                    <ul class="list">
+                        {% for exp in experience %}
+                            <li>
+                                <span class="dot"></span>
+                                <div class="experience-content">
+                                    <h3>{{ exp.job_profile }}</h3>
+                                    <p>{{ exp.company_name }}</p>
+                                    <p>{{ exp.work_description }}</p>
+                                </div>
+                                {% if exp.is_working %}
+                                    <span class="experience-status">({{ exp.start_date|date:"M Y" }} - Current)</span>
+                                {% else %}
+                                    <span class="experience-status">({{ exp.start_date|date:"M Y" }} - {{ exp.end_date|date:"M Y" }})</span>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div><!-- experience-->
+            {% endif %}
+
+            {% for item in preference_list|resume1filter %}
+                {% if item.entity_id != 3 %}
+                    {% if forloop.counter0|divisibleby:2 %}
+                        <div class="d-flex justify-content-between mb-30">
+                    {% endif %}
+                {% if item.entity_id == 5 %}
+                    <div class="skills w-50">
+                        <div class="heading">{{ item.entity_text }}</div>
+
+                        <div class="skill-wrap">
+                            <div class="skill-graph">
+                                {% if skills|length >= 5 %}
+                                    <!--5 skills-->
+                                    <div style="padding: 0; display: table; margin: 20% 0 5% 30%; height: 200px;">
+                                        <div style="position: relative;">
+                                            {% if skills.0 %}
+                                                <div style="position: absolute; left: 0; right: 0; display: table-cell; margin: 10px auto; width: 130px; height: 130px; border-radius: 50%; background-color: #ebebeb; background-image:
+                                                        linear-gradient({{ skills.0.proficiency|degree }}deg, {{ skills.0.proficiency|skill_color:"#d8d8d8" }} {{ 50 }}%, {{ 'transparent' }} {{ 50.1 }}%, {{ 'transparent' }}),
+                                                        linear-gradient({{ 270 }}deg, {{ '#d8d8d8' }} {{ 50 }}%, {{ '#ebebeb' }} {{ 50.1 }}%, {{ '#ebebeb' }}); text-align: center;">
+                                                <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 100px; height: 100px; margin-left: -38%; margin-top: -38%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
+                                                    <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px; transform:translateY(-30%); ">{{ skills.0.name|mainSkillFilterTemplate1 }}</span>
+                                                </span>
+                                                </div>
+                                            {% endif %}
+                                            {% if skills.1 %}
+                                                <div style="position: absolute; top: -80px; left: 25px; display: table-cell; margin: 10px auto; width: 85px; height: 85px; border-radius: 50%; background-color: #ebebeb; background-image:
+                                                        linear-gradient({{ skills.1.proficiency|degree }}deg, {{ skills.1.proficiency|skill_color:"#ef8080" }} {{ 50 }}%, {{ 'transparent' }} {{ 50.1 }}%, {{ 'transparent' }}),linear-gradient({{ 270 }}deg, {{ '#ef8080' }} {{ 50 }}%, {{ '#ebebeb' }} {{ 50.1 }}%, {{ '#ebebeb' }}); text-align: center;">
+                                                <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 65px; height: 65px; margin-left: -38%; margin-top: -39%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
+                                                    <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px; transform: translateY(-20%);">{{ skills.1.name|skillFilterTemplate1 }}</span>
+                                                </span>
+                                                </div>
+                                            {% endif %}
+                                            {% if skills.2 %}
+                                                <div style="position: absolute; top: 25px; right: -210px; display: table-cell; margin: 10px auto; width: 85px; height: 85px; border-radius: 50%; background-color: #ebebeb; background-image:
+                                                        linear-gradient({{ skills.2.proficiency|degree }}deg, {{ skills.2.proficiency|skill_color:'#a7c4f4' }} {{ 50 }}%, {{ 'transparent' }} {{ 50.1 }}%, {{ 'transparent' }}),
+                                                        linear-gradient({{ 270 }}deg, {{ '#a7c4f4' }} {{ 50 }}%, {{ '#ebebeb' }} {{ 50.1 }}%, {{ '#ebebeb' }}); text-align: center;">
+                                                <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 65px; height: 65px; margin-left: -38%; margin-top: -39%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
+                                                    <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px; transform: translateY(-20%);">{{ skills.2.name|skillFilterTemplate1 }}</span>
+                                                </span>
+                                                </div>
+                                            {% endif %}
+                                            {% if skills.3 %}
+                                                <div style="position: absolute; bottom: -230px; left: 25px; display: table-cell; margin: 10px auto; width: 85px; height: 85px; border-radius: 50%; background-color: #ebebeb; background-image:
+                                                        linear-gradient({{ skills.3.proficiency|degree }}deg, {{ skills.3.proficiency|skill_color:'#e2bd58' }} {{ 50 }}%, {{ 'transparent' }} {{ 50.1 }}%, {{ 'transparent' }}),
+                                                        linear-gradient({{ 270 }}deg, {{ '#e2bd58' }} {{ 50 }}%, {{ '#ebebeb' }} {{ 50.1 }}%, {{ '#ebebeb' }}); text-align: center;">
+                                                <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 65px; height: 65px; margin-left: -38%; margin-top: -39%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
+                                                    <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px; transform: translateY(-20%);">{{ skills.3.name|skillFilterTemplate1 }}</span>
+                                                </span>
+                                                </div>
+                                            {% endif %}
+                                            {% if skills.4 %}
+                                                <div style="position: absolute; top: 25px; left: -80px; display: table-cell; margin: 10px auto; width: 85px; height: 85px; border-radius: 50%; background-color: #ebebeb; background-image:
+                                                        linear-gradient({{ skills.4.proficiency|degree }}deg, {{ skills.4.proficiency|skill_color:'#abc881' }} {{ 50 }}%, {{ 'transparent' }} {{ 50.1 }}%, {{ 'transparent' }}),
+                                                        linear-gradient({{ 270 }}deg, {{ '#abc881' }} {{ 50 }}%, {{ '#ebebeb' }} {{ 50.1 }}%, {{ '#ebebeb' }}); text-align: center;">
+                                                <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 65px; height: 65px; margin-left: -38%; margin-top: -39%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
+                                                    <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px; transform: translateY(-20%);">{{ skills.4.name|skillFilterTemplate1 }}</span>
+                                                </span>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    {% for skill in skills|slice:"5:" %}
+                                        {{ skill.name }}
+                                    {% endfor %}
+                                {% elif skills|length >= 4 %}
+                                    <!--4 skills-->
+                                    <div style="padding: 0; display: table; margin: 20% 0 5% 30%; height: 120px;">
+                                        <div style="position: relative;">
+                                            <div style="position: absolute; left: 0; right: 0; display: table-cell; margin: 10px auto; width: 130px; height: 130px; border-radius: 50%; background-color: #ebebeb; background-image:
+                                                    linear-gradient({{ skills.0.proficiency|degree }}deg, {{ skills.0.proficiency|skill_color:'#d8d8d8' }} {{ 50 }}%, {{ 'transparent' }} {{ 50.1 }}%, {{ 'transparent' }}),
+                                                    linear-gradient({{ 270 }}deg, {{ '#d8d8d8' }} {{ 50 }}%, {{ '#ebebeb' }} {{ 50.1 }}%, {{ '#ebebeb' }}); text-align: center;">
+                              <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 100px; height: 100px; margin-left: -38%; margin-top: -38%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
+                                <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">{{ skills.0.name|mainSkillFilterTemplate1 }}</span>
+                              </span>
+                                            </div>
+                                            <div style="position: absolute; top: -80px; left: 25px; display: table-cell; margin: 10px auto; width: 85px; height: 85px; border-radius: 50%; background-color: #ebebeb; background-image:
+                                                    linear-gradient({{ skills.1.proficiency|degree }}deg, {{ skills.1.proficiency|skill_color:'#ef8080' }} {{ 50 }}%, {{ 'transparent' }} {{ 50.1 }}%, {{ 'transparent' }}),
+                                                    linear-gradient({{ 270 }}deg, {{ '#ef8080' }} {{ 50 }}%, {{ '#ebebeb' }} {{ 50.1 }}%, {{ '#ebebeb' }}); text-align: center;">
+                              <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 65px; height: 65px; margin-left: -38%; margin-top: -39%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
+                                <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">{{ skills.1.name|mainSkillFilterTemplate1 }}</span>
+                              </span>
+                                            </div>
+                                            <div style="position: absolute; top: 50px; right: -205px; display: table-cell; margin: 10px auto; width: 85px; height: 85px; border-radius: 50%; background-color: #ebebeb; background-image:
+                                                    linear-gradient({{ skills.2.proficiency|degree }}deg, {{ skills.2.proficiency|skill_color:'#a7c4f4' }} {{ 50 }}%, {{ 'transparent' }} {{ 50.1 }}%, {{ 'transparent' }}),
+                                                    linear-gradient({{ 270 }}deg, {{ '#a7c4f4' }} {{ '50' }}%, {{ '#ebebeb' }} {{ 50.1 }}%, {{ '#ebebeb' }}); text-align: center;">
+                              <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 65px; height: 65px; margin-left: -38%; margin-top: -39%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
+                                <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">{{ skills.2.name|mainSkillFilterTemplate1 }}</span>
+                              </span>
+                                            </div>
+                                            <div style="position: absolute; top: 50px; left: -75px; display: table-cell; margin: 10px auto; width: 85px; height: 85px; border-radius: 50%; background-color: #ebebeb; background-image:
+                                                    linear-gradient({{ skills.3.proficiency|degree }}deg, {{ skills.3.proficiency|skill_color:'#abc881' }} {{ 50 }}%, {{ 'transparent' }} {{ 50.1 }}%, {{ 'transparent' }}),
+                                                    linear-gradient({{ 270 }}deg, {{ '#abc881' }} {{ 50 }}%, {{ '#ebebeb' }} {{ 50.1 }}%, {{ '#ebebeb' }}); text-align: center;">
+                              <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 65px; height: 65px; margin-left: -38%; margin-top: -39%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
+                                <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">{{ skills.3.name|mainSkillFilterTemplate1 }}</span>
+                              </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% for skill in skills|slice:"4:" %}
+                                        {{ skill.name }}
+                                    {% endfor %}
+                                {% elif skills|length >= 3 %}
+                                    <!--3 skills-->
+                                    <div style="padding: 0; display: table; margin: 1% 0 5% 30%; height: 125px;">
+                                        <div style="position: relative;">
+                                            <div style="position: absolute; left: 0; right: 0; display: table-cell; margin: 10px auto; width: 130px; height: 130px; border-radius: 50%; background-color: #ebebeb; background-image:
+                                                    linear-gradient({{ skills.0.proficiency|degree }}deg, {{ skills.0.proficiency|skill_color:'#d8d8d8' }} {{ 50 }}%, {{ 'transparent' }} {{ 50.1 }}%, {{ 'transparent' }}),
+                                                    linear-gradient({{ 270 }}deg, {{ '#d8d8d8' }} {{ 50 }}%, {{ '#ebebeb' }} {{ 50.1 }}%, {{ '#ebebeb' }}); text-align: center;">
+                              <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 100px; height: 100px; margin-left: -38%; margin-top: -38%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
+                                <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">{{ skills.0.name|mainSkillFilterTemplate1 }}</span>
+                              </span>
+                                            </div>
+                                            <div style="position: absolute; top: 25px; right: -210px; display: table-cell; margin: 10px auto; width: 85px; height: 85px; border-radius: 50%; background-color: #ebebeb; background-image:
+                                                    linear-gradient({{ skills.1.proficiency|degree }}deg, {{ skills.1.proficiency|skill_color:'#a7c4f4' }} {{ 50 }}%, {{ 'transparent' }} {{ 50.1 }}%, {{ 'transparent' }}),
+                                                    linear-gradient({{ 270 }}deg, {{ '#a7c4f4' }} {{ 50 }}%, {{ '#ebebeb' }} {{ 50.1 }}%, {{ '#ebebeb' }}); text-align: center;">
+                              <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 65px; height: 65px; margin-left: -38%; margin-top: -39%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
+                                <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">{{ skills.1.name|mainSkillFilterTemplate1 }}</span>
+                              </span>
+                                            </div>
+                                            <div style="position: absolute; top: 25px; left: -80px; display: table-cell; margin: 10px auto; width: 85px; height: 85px; border-radius: 50%; background-color: #ebebeb; background-image:
+                                                    linear-gradient({{ skills.2.proficiency|degree }}deg, {{ skills.2.proficiency|skill_color:'#abc881' }} {{ 50 }}%, {{ 'transparent' }} {{ 50.1 }}%, {{ 'transparent' }}),
+                                                    linear-gradient({{ 270 }}deg, {{ '#abc881' }} {{ 50 }}%, {{ '#ebebeb' }} {{ 50.1 }}%, {{ '#ebebeb' }}); text-align: center;">
+                              <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 65px; height: 65px; margin-left: -38%; margin-top: -39%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
+                                <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">{{ skills.2.name|mainSkillFilterTemplate1 }}</span>
+                              </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% for skill in skills|slice:"3:" %}
+                                        {{ skill.name }}
+                                    {% endfor %}
+
+
+                                {% elif skills|length >= 2 %}
+                                    <!--2 skills-->
+                                    <div style="padding: 0; display: table; margin: 1% 0 5% 20%; height: 125px;">
+                                        <div style="position: relative;">
+                                            <div style="position: absolute; left: 0; right: 0; display: table-cell; margin: 10px auto; width: 130px; height: 130px; border-radius: 50%; background-color: #ebebeb; background-image:
+                                                    linear-gradient({{ skills.0.proficiency|degree }}deg, {{ skills.0.proficiency|skill_color:'#d8d8d8' }} {{ 50 }}%, {{ 'transparent' }} {{ 50.1 }}%, {{ 'transparent' }}),
+                                                    linear-gradient({{ 270 }}deg, {{ '#d8d8d8' }} {{ 50 }}%, {{ '#ebebeb' }} {{ 50.1 }}%, {{ '#ebebeb' }}); text-align: center;">
+                            <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 100px; height: 100px; margin-left: -38%; margin-top: -38%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
+                              <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">{{ skills.0.name|mainSkillFilterTemplate1 }}</span>
+                            </span>
+                                            </div>
+                                            <div style="position: absolute; top: 25px; right: -210px; display: table-cell; margin: 10px auto; width: 85px; height: 85px; border-radius: 50%; background-color: #ebebeb; background-image:
+                                                    linear-gradient({{ skills.1.proficiency|degree }}deg, {{ skills.1.proficiency|skill_color:'#a7c4f4' }} {{ 50 }}%, {{ 'transparent' }} {{ 50.1 }}%, {{ 'transparent' }}),
+                                                    linear-gradient({{ 270 }}deg, {{ '#a7c4f4' }} {{ 50 }}%, {{ '#ebebeb' }} {{ 50.1 }}%, {{ '#ebebeb' }}); text-align: center;">
+                            <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 65px; height: 65px; margin-left: -38%; margin-top: -39%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
+                              <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">{{ skills.1.name|mainSkillFilterTemplate1 }}</span>
+                            </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {% for skill in skills|slice:"2:" %}
+                                        {{ skill.name }}
+                                    {% endfor %}
+
+                                {% elif skills|length >= 1 %}
+                                    <!--1 skills-->
+                                    <div style="padding: 0; display: table; margin: 1% 0 5% 30%; height: 125px; ">
+                                        <div style="position: relative;">
+                                            <div style="position: absolute; left: 0; right: 0; display: table-cell; margin: 10px auto; width: 130px; height: 130px; border-radius: 50%; background-color: #ebebeb; background-image:
+                                                    linear-gradient({{ skills.0.proficiency|degree }}deg, {{ skills.0.proficiency|skill_color:'#d8d8d8' }} {{ 50 }}%, {{ 'transparent' }} {{ 50.1 }}%, {{ 'transparent' }}),
+                                                    linear-gradient({{ 270 }}deg, {{ '#d8d8d8' }} {{ 50 }}%, {{ '#ebebeb' }} {{ 50.1 }}%, {{ '#ebebeb' }}); text-align: center;">
+                            <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 100px; height: 100px; margin-left: -38%; margin-top: -38%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
+                              <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">{{ skills.0.name|mainSkillFilterTemplate1 }}</span>
+                            </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% for skill in skills|slice:"1:" %}
+                                        {{ skill.name }}
+                                    {% endfor %}
+
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    {% if item.entity_id == 2 %}
+                        <div class="w-50">
+                            <div class="heading">{{ item.entity_text }}</div>
+                            <ul class="list">
+                                {% for edu in education %}
+                                    <li>
+                                        <span class="dot"></span>
+                                        <div class="education-content">
+                                            <h3>{{ edu.specialization }} - 80%</h3>
+                                            <p> {{ edu.institution_name }}</p>
+                                        </div>
+
+                                        <div class="education-year">({{ edu.start_date|date:"Y" }}
+                                            - {{ edu.end_date|date:"Y" }})
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    {% if item.entity_id == 4 %}
+                        <div class="w-50">
+                            <div class="heading">{{ item.entity_text }}</div>
+                            <ul class="list">
+                                {% for project in projects %}
+                                    <li>
+                                        <span class="dot"></span>
+                                        <div class="experience-content w-100">
+                                            <h3>{{ project.project_name }}</h3>
+                                            <p>{{ project.description }}</p>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    {% if item.entity_id == 7 %}
+                        <div class="w-50">
+                            <div class="heading">{{ item.entity_text }}</div>
+                            <ul class="list">
+                                {% for award in achievements %}
+                                    <li>
+                                        <span class="dot"></span>
+                                        {{ award.title }}
+                                        <div class="education-content w-100">
+                                            {{ award.summary }}
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    {% if item.entity_id == 8 %}
+                        <div class="w-50">
+                            <div class="heading">{{ item.entity_text }}</div>
+                            <ul class="list list-2">
+                                {% for course in certifications %}
+                                    <li>
+                                        <span class="dot"></span>
+                                        {{ course.name_of_certification }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    {% if item.entity_id == 9 %}
+                        <div class="w-50">
+                            <div class="heading">{{ item.entity_text }}</div>
+                            <ul class="list list-2">
+                                {% for language in languages %}
+                                    <li>
+                                        <span class="dot"></span>
+                                        {{ language.name }}
+                                    </li>
+                                {% endfor %}
+
+                            </ul>
+                        </div>
+                    {% endif %}
+                    {% if item.entity_id == 10 %}
+                        <div class="w-50">
+                            <div class="heading">{{ item.entity_text }}</div>
+                            <ul class="list">
+                                {% for ref in references %}
+                                    <li>
+                                        <span class="dot"></span>
+                                        <div class="flex-row">
+                                            <h3 class="heading2">{{ ref.reference_name }}<span>({{ ref.reference_designation }})</span>
+                                            </h3>
+                                            <p>{{ ref.about_candidate }}</p>
+                                        </div>
+
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    {% if item.entity_id == 11 %}
+                        <div class="w-50">
+                            <div class="heading">{{ item.entity_text }}</div>
+                            <ul class="list">
+                                {% for interest in extracurricular %}
+                                    <li>
+                                        <span class="dot"></span>
+                                        <div class="flex-row">
+                                            <h3 class="heading2">{{ interest }}
+                                            </h3>
+                                        </div>
+
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                {% endif %}
+                {% if not forloop.counter0|divisibleby:2 %}
+                    </div>
+                {% endif %}
+                {% else %}
+                    </div>
+                {% endif %}
+
+            {% endfor %}
+    </div>
+
+</div>
+
+
+</body>
+</html>
