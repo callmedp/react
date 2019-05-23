@@ -5,7 +5,10 @@ export default class Loader extends Component {
     render() {
         return (
             <div className="loader">
-                <img src={`/media/static/react/assets/images/mobile/loader.gif`} width="100" height="100" alt=""/>
+                <div className="loader__wrap">
+                <img src={`/media/static/react/assets/images/mobile/loader.png`} width="64" height="64" alt=""/>
+                <p>Processing <br/>please wait....</p>
+                </div>
             </div>
         )
     }

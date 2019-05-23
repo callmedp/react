@@ -164,6 +164,12 @@
     background-position: -77px -62px;
   }
 
+  &--close {
+    @include size(14px, 14px, block);
+    background-position: -133px -184px;
+    margin: 8px 0 0 8px;
+  }
+
   // &--back-white {
   //     @include square(15px, 15px);
   //     display: block;

@@ -93,7 +93,8 @@
     @include square (270px);
     border: 1px dashed $grey-ec;
     padding: 1.0rem 1.0rem 0.3rem;
-    overflow: hidden;
+    // overflow: hidden;
+    position: relative;
 
     img {
         width: 100%;

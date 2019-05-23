@@ -25,7 +25,7 @@ function* fetchTemplate(action) {
         ////console.log(result)
 
         yield put({type: Actions.SAVE_TEMPLATE, data: result['data']})
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+        // yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
         ////console.log(e);
     }

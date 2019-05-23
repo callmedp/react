@@ -14,6 +14,16 @@
     justify-content: center;
     align-content: center;
 
+    &__wrap {
+        @include size(140px, 110px, block);
+        text-align: center;
+        align-self: center;
+        color: $white;
+        z-index: 1;
+        position: relative;
+        font-size: 2rem;
+    }
+
     img {
         @include size(50px, 50px); 
         align-self: center;

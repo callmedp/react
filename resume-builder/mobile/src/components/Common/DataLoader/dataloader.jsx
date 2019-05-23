@@ -6,7 +6,7 @@ export default class DataLoader extends Component {
         return (
             <div className="dataloader">
                 <div className="dataloader--data">
-                    <img src={`/media/static/react/assets/images/mobile/loader.gif`} width="100" height="100" alt=""/>
+                    <img src={`/media/static/react/assets/images/mobile/loader.png`} width="64" height="64" alt=""/>
                     <p>Processing <br/>please wait....</p>
                 </div>
             </div>

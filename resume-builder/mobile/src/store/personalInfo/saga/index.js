@@ -38,7 +38,7 @@ function* getPersonalDetails(action) {
                 type: Actions.SAVE_USER_INFO,
                 data: modifyPersonalInfo(JSON.parse(localStorage.getItem('personalInfo')) || [])
             })
-            yield put({type:LoaderAction.UPDATE_MAIN_PAGE_LOADER,payload:{mainloader: false}})
+            // yield put({type:LoaderAction.UPDATE_MAIN_PAGE_LOADER,payload:{mainloader: false}})
             return;
         }
 
@@ -52,7 +52,7 @@ function* getPersonalDetails(action) {
         ////console.log('data');
         yield put({type: Actions.SAVE_USER_INFO, data: data});
 
-        yield put({type:LoaderAction.UPDATE_MAIN_PAGE_LOADER,payload:{mainloader: false}})
+        // yield put({type:LoaderAction.UPDATE_MAIN_PAGE_LOADER,payload:{mainloader: false}})
         // yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
 
     } catch (e) {

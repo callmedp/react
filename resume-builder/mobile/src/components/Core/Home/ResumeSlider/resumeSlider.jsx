@@ -34,7 +34,7 @@ export default class ResumeSlider extends Component {
 
         return (
             
-            <section className="section proven-resume pt-30" id="templates">
+            <section className="section proven-resume" id="templates">
             {showtext ?
                 <div className="text-center">
                     <h2 className="section__head">Proven resume templates</h2>
@@ -43,7 +43,7 @@ export default class ResumeSlider extends Component {
                 </div>:''
             }
 
-                <div className="proven-resume__slideWrap">
+                <div className="proven-resume__slideWrap mt-0">
                     <Slider {...settings}>
                         <div className="proven-resume__imageWrap">
                             <img src={`${this.staticUrl}react/assets/images/mobile/resume.jpg`} alt=""/>

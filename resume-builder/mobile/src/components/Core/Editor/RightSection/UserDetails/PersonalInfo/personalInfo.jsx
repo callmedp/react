@@ -243,6 +243,9 @@ class PersonalInfo extends Component {
 
                         <li className="form__group">
                             <span className="upload--image">
+                            <span className="close-wrap">
+                                <i className="sprite icon--close"></i>
+                            </span>
                             {
                                 this.state.imageURI || personalInfo.image ?
                                     <img alt={"User Profile"}
