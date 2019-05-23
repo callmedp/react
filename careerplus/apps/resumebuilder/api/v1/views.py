@@ -727,6 +727,25 @@ class JobtoExperienceSuggestionApiView(APIView):
 
 
 
+class JobTitleSuggestionApiView(APIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = None
+
+    def get(self, request, *args, **kwargs):
+        job_title = kwargs.get('job_title', None)
+        cache = get_redis_connection('search_lookup')
+        if job_title:
+            job_title = job_title.lower()
+            job_title_keys = list(map(lambda x: x.decode(), list(cache.hgetall('suggestion_set').keys())))
+            suggestion_keys = [key for key in job_title_keys if key.startswith(job_title)]
+        return Response(
+            data=suggestion_keys,
+            status=status.HTTP_200_OK
+        )
+
+
+
 
 
 
