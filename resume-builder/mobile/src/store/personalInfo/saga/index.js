@@ -94,10 +94,32 @@ function* updatePersonalDetails(action) {
     }
 }
 
+function* getInterestList(action){
+    try{
+        const result = yield call(Api.fetchInterestList);
+        console.log(result)
+        if (result['error']) {
+            console.log('error');
+        }
+        let {data:{data}} = result;
+
+        let updated_data={}; 
+        Object.keys(data).map((el,key)=>{
+            updated_data[key] = {'value':key,'label':data[el]}
+        })
+        yield put({type: Actions.SAVE_INTEREST_LIST,data:updated_data})
+
+    }catch (e) {
+        console.log(e);
+    }
+}
+
 
 function* fetchImageUrl(action) {
     try {
         const {payload: {imageFile, resolve, reject}} = action;
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
+
 
         var data = new FormData();
 
@@ -114,6 +136,8 @@ function* fetchImageUrl(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
 
         const result = yield call(Api.fetchImageUrl, data, candidateId);
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+
 
         return resolve(result['data']['path'])
 
@@ -129,5 +153,6 @@ export default function* watchPersonalInfo() {
     yield takeLatest(Actions.FETCH_PERSONAL_INFO, getPersonalDetails)
     yield takeLatest(Actions.UPDATE_PERSONAL_INFO, updatePersonalDetails)
     yield takeLatest(Actions.FETCH_IMAGE_URL, fetchImageUrl)
+    yield takeLatest(Actions.FETCH_INTEREST_LIST, getInterestList);
 
 }

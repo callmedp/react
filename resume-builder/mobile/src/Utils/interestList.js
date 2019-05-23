@@ -33,4 +33,5 @@ export const interestList = {
         value: '6', 'label':
             'Baking'
     }
+    
 }

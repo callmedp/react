@@ -7,6 +7,7 @@ import {Link} from 'react-router-dom';
 import RenderNavItem from './renderNavItem';
 import * as profileActions from '../../../../store/personalInfo/actions/index';
 import {entityLinkNameLink ,iconClassList,delete_icon} from '../../../../Utils/entitydata.js'
+import moment from 'moment'
 
 class LeftSideBar extends Component {
 
@@ -272,11 +273,15 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(actions.updateCurrentLinkPos(data))
         },
         "updateSideNav": (addmore,personalInfo) => {
+            let { date_of_birth, extracurricular} = personalInfo;
+            let interest = extracurricular
+            interest =  ((interest|| []).map((item)=>item.value)).join(",")
             let personalDetails = {
                 ...personalInfo,
                 ...{
-                    entity_preference_data: addmore,
-                    'extracurricular': ''
+                    'date_of_birth': (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
+                    'extracurricular':interest,
+                    'entity_preference_data': addmore,
                 }
             }
             return new Promise((resolve, reject) => {

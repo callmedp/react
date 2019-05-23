@@ -183,7 +183,7 @@ class Education extends Component {
         const {handleSubmit,submitting,personalInfo:{subscription_status},history,previewHandling} = this.props;
         const {editHeading,heading,till_today} =this.state;
         return(
-            <div className="buildResume" id="education">
+            <div className="buildResume">
                 <form onSubmit={handleSubmit(this.handleSubmit)}> 
                     <PreviewModal {...this.props}/>
                     <FieldArray name={'list'}

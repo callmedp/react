@@ -14,6 +14,7 @@ export const loaderReducer = (state = initialState, action) => {
             }
         }
         case UPDATE_DATA_LOADER: {
+            console.log(action)
             return {
                 ...state,
                 ...action.payload

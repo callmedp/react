@@ -16,6 +16,7 @@ import moment from 'moment';
 import PreviewModal from "../../../Preview/changeTemplateModal";
 import validate from "../../../../../FormHandler/validtaions/profile/validate"
 import {siteDomain} from "../../../../../../Utils/domains";
+import DataLoader from '../../../../../Common/DataLoader/dataloader';
 
 class PersonalInfo extends Component {
     constructor(props) {
@@ -38,6 +39,7 @@ class PersonalInfo extends Component {
     }
 
     componentDidMount() {
+        this.props.fetchInterestList();
         if (this.props.personalInfo.entity_preference_data.length) {
             this.setState({heading : this.props.personalInfo.entity_preference_data[0].entity_text})
         }
@@ -161,12 +163,13 @@ class PersonalInfo extends Component {
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {handleSubmit, personalInfo,submitting,previewHandling,history} = this.props;
+        const {handleSubmit, personalInfo,submitting,previewHandling,history,loader:{dataloader}} = this.props;
         const {editHeading,heading} =this.state;
         const {subscription_status} = this.props.personalInfo;
         return (
             
         <div className="buildResume">
+            {dataloader ?<DataLoader/> : ""}
             <PreviewModal {...this.props}/>
             <div className="buildResume__wrap">
             {/* {this.props.loader.dataloader ?  <DataLoader/> :""} */}
@@ -225,7 +228,7 @@ class PersonalInfo extends Component {
                         </li>
 
                         <li className="form__group">
-                            <Field name="extracurricular" component={renderMultiselect} data={Object.values(interestList)}
+                            <Field name="extracurricular" component={renderMultiselect} data={Object.values(personalInfo.interest_list)}
                                     valueField='value' textField='label' className={'multi-select'}
                                     defaultValue={personalInfo.extracurricular}
                             />
@@ -294,7 +297,6 @@ const mapDispatchToProps = (dispatch) => {
         "onSubmit": (personalDetails, imageURL) => {
 
             let { date_of_birth, extracurricular} = personalDetails;
-            console.log("Inter-----" ,extracurricular)
             let interest = extracurricular
             interest =  ((interest|| []).map((item)=>item.value)).join(",")
             personalDetails = {
@@ -313,6 +315,9 @@ const mapDispatchToProps = (dispatch) => {
             return new Promise((resolve, reject) => {
                 dispatch(actions.fetchImageUrl({imageFile, resolve, reject}));
             })
+        },
+        "fetchInterestList": () => {
+                dispatch(actions.fetchInterestList());
         }
     }
 };

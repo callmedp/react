@@ -19,9 +19,13 @@ const fetchImageUrl = (data) => {
         {}, false, true);
 };
 
+const fetchInterestList = () => {
+    return BaseApiService.get(`${siteDomain}/api/v1/resume/interest-list/`);
+};
 
 export const Api = {
     fetchPersonalInfo,
     updatePersonalData,
-    fetchImageUrl
+    fetchImageUrl,
+    fetchInterestList
 }
