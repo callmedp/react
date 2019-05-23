@@ -15,9 +15,13 @@ export default class Preview extends Component {
         this.goToBuyPage = this.goToBuyPage.bind(this);
         this.handleCustomization = this.handleCustomization.bind(this);
         this.selectCurrentTab = this.selectCurrentTab.bind(this);
+        this.handleFontSize = this.handleFontSize.bind(this);
+
         this.state = {
             currentTab: 1,
-            selectedColor: 1
+            selectedColor: 1,
+            headingFontSize: 1,
+            textFontSize: 1
 
         }
     }
@@ -43,12 +47,61 @@ export default class Preview extends Component {
 
 
     static getDerivedStateFromProps(nextProp, prevState) {
-        const {template: {color}} = nextProp;
+        const {template: {color, heading_font_size, text_font_size}} = nextProp;
+        let obj = prevState;
         if (color !== prevState['selectedColor']) {
-            console.log('---', color, prevState);
-            return ({
-                selectedColor: color
-            })
+            obj['selectedColor'] = color;
+        }
+        if (heading_font_size !== prevState['headingFontSize']) {
+            obj['headingFontSize'] = heading_font_size;
+        }
+        if (text_font_size !== prevState['textFontSize']) {
+            obj['textFontSize'] = text_font_size;
+        }
+        return obj;
+
+    }
+
+    handleFontSize() {
+        let elem1 = this.refs.bar1;
+        let slider1 = this.refs.slider1;
+        let elem2 = this.refs.bar2;
+        let slider2 = this.refs.slider2;
+
+        if (!elem1 || !slider1 || !elem2 || !slider2)
+            return;
+        let rightEdge1 = slider1.offsetWidth - elem1.offsetWidth;
+        let rightEdge2 = slider2.offsetWidth - elem2.offsetWidth;
+
+        console.log('----', rightEdge1, rightEdge2, elem1, elem2, slider1, slider2);
+        switch (this.state.headingFontSize) {
+            case 1: {
+                elem1.style.left = 0 + 'px';
+                break;
+            }
+            case 2: {
+                elem1.style.left = rightEdge1 / 2 + 'px';
+                break;
+            }
+            case 3: {
+                elem1.style.left = rightEdge1 + 'px';
+                break;
+            }
+        }
+
+        switch (this.state.textFontSize) {
+            case 1: {
+                elem2.style.left = 0 + 'px';
+                break;
+            }
+            case 2: {
+                elem2.style.left = rightEdge2 / 2 + 'px';
+                break;
+            }
+            case 3: {
+                elem2.style.left = rightEdge2 + 'px';
+                break;
+            }
         }
 
     }
@@ -56,7 +109,7 @@ export default class Preview extends Component {
     componentDidMount() {
 
         this.props.fetchDefaultCustomization(localStorage.getItem('selected_template'));
-
+        
         let elem1 = this.refs.bar1;
         let slider1 = this.refs.slider1;
         let elem2 = this.refs.bar2;
@@ -65,6 +118,7 @@ export default class Preview extends Component {
         const self = this;
 
         function handleElemEvent(event, element, sliderElement, section) {
+
             let shiftX = event.clientX - element.getBoundingClientRect().left;
             document.addEventListener('mousemove', onMouseMove);
             document.addEventListener('mouseup', onMouseUp);
@@ -154,9 +208,12 @@ export default class Preview extends Component {
 
 
     render() {
-        const {userInfo: {selected_template}, template: {color, heading_font_size, text_font_size, entity_position}} = this.props;
-        const {currentTab, selectedColor} = this.state;
-        console.log('---', selectedColor);
+
+        const {userInfo: {selected_template}, template: {heading_font_size, text_font_size, entity_position}} = this.props;
+        const {currentTab, selectedColor, headingFontSize, textFontSize} = this.state;
+
+        // this.handleFontSize(headingFontSize, textFontSize)
+
         return (
             <div className="preview-section">
                 <strong>Complete your customisation</strong>
@@ -182,6 +239,7 @@ export default class Preview extends Component {
                                                     color: 1,
                                                     template: selected_template
                                                 }, 1)}
+                                                readOnly
                                                 type="radio"
                                                 name="radio1" id="green" value="green"
                                                 checked={selectedColor === 1}/>
@@ -194,6 +252,7 @@ export default class Preview extends Component {
                                                 }, 2)}
                                                 type="radio"
                                                 name="radio1"
+                                                readOnly
                                                 id="blue"
                                                 value="blue"
                                                 checked={selectedColor === 2}
@@ -208,6 +267,7 @@ export default class Preview extends Component {
                                                 }, 3)}
                                                 type="radio"
                                                 name="radio1"
+                                                readOnly
                                                 id="red"
                                                 value="red"
                                                 checked={selectedColor === 3}
@@ -220,7 +280,9 @@ export default class Preview extends Component {
                                                     color: 4,
                                                     template: selected_template
                                                 }, 4)}
-                                                type="radio" name="radio1" id="black" value="black"
+                                                type="radio"
+                                                readOnly
+                                                name="radio1" id="black" value="black"
                                                 checked={selectedColor === 4}/>
                                             <label htmlFor="black"><span className="theme-black"></span></label>
                                         </li>
@@ -232,6 +294,7 @@ export default class Preview extends Component {
                                                 }, 5)}
                                                 type="radio"
                                                 name="radio1"
+                                                readOnly
                                                 id="brown" value="brown"
                                                 checked={selectedColor === 5}
                                             />
@@ -243,7 +306,9 @@ export default class Preview extends Component {
                                                     color: 6,
                                                     template: selected_template
                                                 }, 6)}
-                                                type="radio" name="radio1" id="violet" value="violet"
+                                                type="radio"
+                                                readOnly
+                                                name="radio1" id="violet" value="violet"
                                                 checked={selectedColor === 6}/>
                                             <label htmlFor="violet"><span className="theme-violet"></span></label>
                                         </li>
@@ -284,6 +349,7 @@ export default class Preview extends Component {
                                             <div ref="slider2" className="change-font-content--font-box">
                                                 <div role="progressbar" aria-valuenow="40" aria-valuemin="0"
                                                      aria-valuemax="100"
+
                                                      className="change-font-content--font-bar">
                                                     <span ref="bar2"
                                                           className="change-font-content--font-bar__bar"></span>
@@ -317,7 +383,9 @@ export default class Preview extends Component {
                                         <li class=" tab-heading--top-left-right-radius no-shadow">
                                             <a href="#">Left</a>
                                         </li>
-                                        <li class=" tab-heading--top-left-right-radius active shadow2"><a href="#">Right</a></li></ul>
+                                        <li class=" tab-heading--top-left-right-radius active shadow2"><a
+                                            href="#">Right</a></li>
+                                    </ul>
                                     <ul className="reorder-content">
                                         <li className="reorder-content--select-box reorder-content--select-box__select">
                                             Personal Info
