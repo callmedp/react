@@ -562,12 +562,12 @@ class CertiticateParser:
                 'certification_year': user_certificate.year,
                 'score': user_certificate.assesment.overallScore,
                 'vendor_certificate_id': user_certificate.certificate.vendor_certificate_id,
-                'expiry_date': user_certificate.expiry.strftime('%Y-%m-%d'),
+                'expiry_date': user_certificate.expiry_date.strftime('%Y-%m-%d'),
                 'is_validated': True,
                 'validation_date': today_date,
                 'active_date': today_date,
-                'skills': user_certificate.certiticate.skill.split(','),
-                'provider': user_certificate.certiticate.provider
+                'skills': user_certificate.certificate.skill.split(','),
+                'provider': user_certificate.certificate.provider
             }
 
             flag, jsonrsp = ShineCertificateUpdate().update_shine_certificate_data(
