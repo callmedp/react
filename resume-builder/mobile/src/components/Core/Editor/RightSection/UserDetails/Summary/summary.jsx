@@ -109,9 +109,8 @@ class Summary extends Component {
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {personalInfo: {extra_info}, handleSubmit,submitting,submitSucceeded} = this.props;
+        const {personalInfo: {subscription_status}, handleSubmit,submitting,history,previewHandling} = this.props;
         const {editHeading,heading} =this.state;
-        const {subscription_status} = this.props.personalInfo;
         return (
         <div className="buildResume">
             <PreviewModal {...this.props}/>
@@ -135,7 +134,7 @@ class Summary extends Component {
                         <li className="form__group">
                             <div className="btn-wrap">
                                 <button className="btn btn__round btn--outline" 
-                                    onClick={()=>{this.props.history.push(`/resume-builder/preview`) }}
+                                    onClick={async()=>{previewHandling(this.updateInfoBeforeLoss,history) }}
                                     type={'button'}>Preview</button>
                                 <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
                                     {(length === pos +1) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}

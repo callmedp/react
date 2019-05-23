@@ -110,6 +110,11 @@ const handleOrdering = (values) =>{
     return values
 }
 
+const previewHandling = async(callback,history) =>{
+    await callback();
+    history.push(`/resume-builder/preview`);
+}
+
 const mapStateToProps = (state) => {
     return {
         initialValues: state.sidenav,
@@ -131,6 +136,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         "handleOrdering":(values)=>{
             return handleOrdering(values)
+        },
+        "previewHandling":(callback,history)=>{
+            return previewHandling(callback,history)
         }
     }
 };

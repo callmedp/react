@@ -158,8 +158,7 @@ class Award extends Component {
     }
 
     render () {
-        const {handleSubmit, award,  error, submitting, submitSucceeded, invalid} = this.props;
-        const {subscription_status} = this.props.personalInfo;
+        const {handleSubmit,submitting,history,previewHandling,personalInfo:{subscription_status}} = this.props;
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
         const {editHeading,heading} =this.state;
@@ -184,7 +183,7 @@ class Award extends Component {
                         <li className="form__group">
                             <div className="btn-wrap">
                                  <button className="btn btn__round btn--outline" 
-                                    onClick={async()=>{await this.updateInfoBeforeLoss();this.props.history.push(`/resume-builder/preview`) }}
+                                    onClick={async()=>{previewHandling(this.updateInfoBeforeLoss,history) }}
                                     type={'button'}>Preview</button>
                                 <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
                                     {(length === pos +1) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}

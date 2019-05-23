@@ -155,9 +155,8 @@ class References extends Component {
     render () {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const { handleSubmit,reference,submitting,submitSucceeded} = this.props;
+        const { handleSubmit,history,previewHandling,personalInfo:{subscription_status},submitting} = this.props;
         const {editHeading,heading} =this.state;
-        const {subscription_status} = this.props.personalInfo;
         return(
             <div className="buildResume">
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
@@ -178,7 +177,7 @@ class References extends Component {
                         <li className="form__group">
                             <div className="btn-wrap">
                                  <button className="btn btn__round btn--outline" 
-                                    onClick={async()=>{await this.updateInfoBeforeLoss();this.props.history.push(`/resume-builder/preview`) }}
+                                    onClick={async()=>{previewHandling(this.updateInfoBeforeLoss,history) }}
                                     type={'button'}>Preview</button>
                                 <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
                                 {(length === pos +1) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}
