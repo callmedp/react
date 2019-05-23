@@ -278,6 +278,7 @@ MULTIPLE_VALUES_1 = {
             'name': 'certificateName',
             'vendor_certificate_id': 'licenseNumber',
             'expiry': 'validTill',
+            'skill': 'skillValidated'
         },
     }
 }
@@ -290,6 +291,7 @@ MULTIPLE_VALUES_2 = {
             'vendor_certificate_id': 'licenseNumber',
             'active_from': 'certificationDate',
             'expiry': 'validTill',
+            'amcatID': 'amcatID'
         }
     }
 }
@@ -496,13 +498,6 @@ class CertiticateParser:
             if vendor_field == 'vendor_text':
                 certificate_data['vendor_text'] = vendor
 
-            orderitem_id = parse_data.user_certificate.order_item_id
-            if orderitem_id:
-                oi = OrderItem.objects.filter(id=orderitem_id).first()
-                if oi:
-                    product = oi.product
-                    skill = list(product.new_productskills.all().values_list('skill__name', flat=True))
-                    certificate_data['skill'] = ','.join(skill)
             certificate, created = Certificate.objects.get_or_create(
                 **certificate_data
             )
@@ -548,7 +543,6 @@ class CertiticateParser:
                     last_op_type=last_op_type)
                 user_certificates.append(user_certificate)
         return (certificates, user_certificates)
-
 
 
     def update_certificate_on_shine(self, user_certificate):
@@ -631,7 +625,7 @@ class CertiticateParser:
     def attach_score_to_certificates(self, parsed_data, data):
         all_scores = self.get_list_of_dictionary(data, 'scores')
         for certificate in parsed_data.certificates:
-            current_certificate_id = certificate.vendor_certificate_id
+            current_certificate_id = certificate.amcatID
             for score in all_scores:
                 if str(current_certificate_id) == str(score['amcatID']):
                     overallScore = score.get('overallScore', None)
