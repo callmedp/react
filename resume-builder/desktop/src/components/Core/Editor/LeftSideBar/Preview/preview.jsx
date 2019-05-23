@@ -16,12 +16,17 @@ export default class Preview extends Component {
         this.handleCustomization = this.handleCustomization.bind(this);
         this.selectCurrentTab = this.selectCurrentTab.bind(this);
         this.state = {
-            currentTab: 1
+            currentTab: 1,
+            selectedColor: 1
+
         }
     }
 
 
-    handleCustomization(data) {
+    handleCustomization(data, color) {
+        this.setState({
+            selectedColor: color
+        })
         this.props.customizeTemplate(data)
     }
 
@@ -36,7 +41,22 @@ export default class Preview extends Component {
         this.props.history.push('/resume-builder/buy')
     }
 
+
+    static getDerivedStateFromProps(nextProp, prevState) {
+        const {template: {color}} = nextProp;
+        if (color !== prevState['selectedColor']) {
+            console.log('---', color, prevState);
+            return ({
+                selectedColor: color
+            })
+        }
+
+    }
+
     componentDidMount() {
+
+        this.props.fetchDefaultCustomization(localStorage.getItem('selected_template'));
+
         let elem1 = this.refs.bar1;
         let slider1 = this.refs.slider1;
         let elem2 = this.refs.bar2;
@@ -78,29 +98,28 @@ export default class Preview extends Component {
             function onMouseUp() {
                 const {userInfo: {selected_template}} = self.props;
 
-                let size = 'small';
+                let size = 1;
                 if (leftEdge > ((rEdge / 2) + 50)) {
                     element.style.left = rEdge + 'px';
-                    size = 'large';
+                    size = 3;
 
                 } else if (leftEdge < ((rEdge / 2)) - 50) {
                     element.style.left = 0 + 'px';
-                    size = 'small';
+                    size = 1;
                 } else {
                     element.style.left = rEdge / 2 + 'px';
-                    size = 'medium';
+                    size = 2;
                 }
 
                 if (section === 'text') {
                     self.props.customizeTemplate({
-                        'text': size,
+                        'text_font_size': size,
                         'template': selected_template
                     })
                 } else {
                     self.props.customizeTemplate({
-                        'heading': size,
+                        'heading_font_size': size,
                         'template': selected_template
-
                     })
                 }
 
@@ -135,14 +154,14 @@ export default class Preview extends Component {
 
 
     render() {
-        const {userInfo: {selected_template}} = this.props;
-        const {currentTab} = this.state;
+        const {userInfo: {selected_template}, template: {color, heading_font_size, text_font_size, entity_position}} = this.props;
+        const {currentTab, selectedColor} = this.state;
+        console.log('---', selectedColor);
         return (
             <div className="preview-section">
                 <strong>Complete your customisation</strong>
                 <Accordion>
                     <div className="preivew-scroll">
-
                         <AccordionItem>
                             <div className="change-theme">
                                 <AccordionItemHeading>
@@ -160,46 +179,72 @@ export default class Preview extends Component {
                                         <li>
                                             <input
                                                 onClick={() => this.handleCustomization({
-                                                    color: 'green',
+                                                    color: 1,
                                                     template: selected_template
-                                                })}
+                                                }, 1)}
                                                 type="radio"
-                                                name="radio1" id="green" value="green"/>
+                                                name="radio1" id="green" value="green"
+                                                checked={selectedColor === 1}/>
                                             <label htmlFor="green"><span className="theme-green"></span></label>
                                         </li>
                                         <li>
                                             <input
                                                 onClick={() => this.handleCustomization({
-                                                    color: 'blue', template: selected_template
-                                                })}
-                                                type="radio" name="radio1" id="blue" value="blue"/>
+                                                    color: 2, template: selected_template
+                                                }, 2)}
+                                                type="radio"
+                                                name="radio1"
+                                                id="blue"
+                                                value="blue"
+                                                checked={selectedColor === 2}
+                                            />
                                             <label htmlFor="blue"><span className="theme-blue"></span></label>
                                         </li>
                                         <li>
                                             <input
                                                 onClick={() => this.handleCustomization({
-                                                    color: 'red',
+                                                    color: 3,
                                                     template: selected_template
-                                                })}
-                                                type="radio" name="radio1" id="red" value="red"/>
+                                                }, 3)}
+                                                type="radio"
+                                                name="radio1"
+                                                id="red"
+                                                value="red"
+                                                checked={selectedColor === 3}
+                                            />
                                             <label htmlFor="red"><span className="theme-red"></span></label>
                                         </li>
                                         <li>
                                             <input
-                                                onClick={() => this.handleCustomization({color: 'black'})}
-                                                type="radio" name="radio1" id="black" value="black"/>
+                                                onClick={() => this.handleCustomization({
+                                                    color: 4,
+                                                    template: selected_template
+                                                }, 4)}
+                                                type="radio" name="radio1" id="black" value="black"
+                                                checked={selectedColor === 4}/>
                                             <label htmlFor="black"><span className="theme-black"></span></label>
                                         </li>
                                         <li>
                                             <input
-                                                onClick={() => this.handleCustomization({color: 'brown'})}
-                                                type="radio" name="radio1" id="brown" value="brown"/>
+                                                onClick={() => this.handleCustomization({
+                                                    color: 5,
+                                                    template: selected_template
+                                                }, 5)}
+                                                type="radio"
+                                                name="radio1"
+                                                id="brown" value="brown"
+                                                checked={selectedColor === 5}
+                                            />
                                             <label htmlFor="brown"><span className="theme-brown"></span></label>
                                         </li>
                                         <li>
                                             <input
-                                                onClick={() => this.handleCustomization({color: 'violet'})}
-                                                type="radio" name="radio1" id="violet" value="violet"/>
+                                                onClick={() => this.handleCustomization({
+                                                    color: 6,
+                                                    template: selected_template
+                                                }, 6)}
+                                                type="radio" name="radio1" id="violet" value="violet"
+                                                checked={selectedColor === 6}/>
                                             <label htmlFor="violet"><span className="theme-violet"></span></label>
                                         </li>
                                     </ul>

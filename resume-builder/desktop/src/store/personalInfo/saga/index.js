@@ -104,7 +104,7 @@ function* updatePersonalDetails(action) {
                     'selected_template' : localStorage.getItem('selected_template')
                 }
             }
-            localStorage.removeItem('selected_template')
+            // localStorage.removeItem('selected_template')
         }
 
         yield put({type: UPDATE_UI, data: {loader: true}});

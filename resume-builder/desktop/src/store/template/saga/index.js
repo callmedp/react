@@ -3,7 +3,7 @@ import {call, takeLatest, put, all} from 'redux-saga/effects'
 import * as Actions from '../actions/actionTypes'
 import {Api} from "./Api";
 import {UPDATE_UI} from "../../ui/actions/actionTypes";
-import {FETCH_TEMPLATE_IMAGES} from "../actions/actionTypes";
+import {FETCH_TEMPLATE_IMAGES, SET_CUSTOMIZATION} from "../actions/actionTypes";
 
 
 function* fetchTemplate(action) {
@@ -31,6 +31,20 @@ function* customizeTemplate(action) {
         if (result['error']) {
             console.log('error');
         }
+
+
+        let {data} = result;
+
+        data = {
+            ...data,
+            ...{
+                templateId: data['template_no']
+            }
+        };
+
+        yield put({type: SET_CUSTOMIZATION, data: data});
+
+
         yield put({type: UPDATE_UI, data: {loader: false}});
 
         // yield call(fetchTemplate)
@@ -43,7 +57,7 @@ function* customizeTemplate(action) {
 
 function* fetchTemplateImages(action) {
     try {
-        const candidateId =  12; //localStorage.getItem('candidateId') || '';
+        const candidateId = 12; //localStorage.getItem('candidateId') || '';
         yield put({type: UPDATE_UI, data: {loader: true}});
 
         const result = yield all([
@@ -66,9 +80,42 @@ function* fetchTemplateImages(action) {
     }
 }
 
+
+function* fetchDefaultCustomization(action) {
+    try {
+        const candidateId = 12; //localStorage.getItem('candidateId') || '';
+        yield put({type: UPDATE_UI, data: {loader: true}});
+        const {templateId} = action;
+        const result = yield call(Api.fetchDefaultCustomization, candidateId, templateId);
+
+        if (result['error']) {
+            console.log('error');
+        }
+        let {data} = result;
+
+        data = {
+            ...data,
+            ...{
+                templateId: data['template_no']
+            }
+        }
+
+        yield put({type: SET_CUSTOMIZATION, data: data});
+
+        yield put({type: UPDATE_UI, data: {loader: false}});
+
+
+        // yield call(fetchTemplate)
+
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 export default function* watchTemplate() {
     yield  takeLatest(Actions.FETCH_TEMPLATE, fetchTemplate)
     yield  takeLatest(Actions.CUSTOMIZE_TEMPLATE, customizeTemplate)
     yield  takeLatest(Actions.FETCH_TEMPLATE_IMAGES, fetchTemplateImages)
+    yield  takeLatest(Actions.FETCH_DEFAULT_CUSTOMIZATION, fetchDefaultCustomization)
 
 }

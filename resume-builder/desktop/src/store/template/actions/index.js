@@ -1,4 +1,10 @@
-import {FETCH_TEMPLATE, SET_SELECTED_TEMPLATE, CUSTOMIZE_TEMPLATE,FETCH_TEMPLATE_IMAGES} from './actionTypes'
+import {
+    FETCH_TEMPLATE,
+    SET_SELECTED_TEMPLATE,
+    CUSTOMIZE_TEMPLATE,
+    FETCH_TEMPLATE_IMAGES,
+    FETCH_DEFAULT_CUSTOMIZATION
+} from './actionTypes'
 
 
 export const fetchTemplate = (payload) => {
@@ -19,6 +25,14 @@ export const customizeTemplate = (payload) => {
     return {
         type: CUSTOMIZE_TEMPLATE,
         payload
+    }
+}
+
+export const fetchDefaultCustomization = (templateId) => {
+    return {
+        type: FETCH_DEFAULT_CUSTOMIZATION,
+        templateId
+
     }
 }
 

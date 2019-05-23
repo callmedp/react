@@ -30,8 +30,13 @@ BUILDER_ENTITY_KEYS = ((1, "personalInfo"),
                        (8, "language"),
                        (9, "award"))
 
-RESUME_COLOR_CHOICES = ((1,"Black"),)
+RESUME_COLOR_CHOICES = ((1, "Green"),
+                        (2, "Blue"),
+                        (3, "Red"),
+                        (4, "Black"),
+                        (5, "Yellow"),
+                        (6, "Purple"))
 
-RESUME_FONT_SIZE_CHOICES = ((1,"Small"),
-                        (2,"Medium"),
-                        (3,"Large"))
+RESUME_FONT_SIZE_CHOICES = ((1, "Small"),
+                            (2, "Medium"),
+                            (3, "Large"))

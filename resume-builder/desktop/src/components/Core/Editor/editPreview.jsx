@@ -10,7 +10,7 @@ import {withRouter} from "react-router-dom";
 import {siteDomain} from "../../../Utils/domains";
 import LoaderPage from "../../Loader/loaderPage.jsx";
 import * as actions from "../../../store/ui/actions"
-import {customizeTemplate} from "../../../store/template/actions"
+import {customizeTemplate, fetchDefaultCustomization} from "../../../store/template/actions"
 import * as profileActions from "../../../store/personalInfo/actions"
 import SelectTemplateModal from '../../Modal/selectTemplateModal';
 import moment from 'moment'
@@ -77,6 +77,9 @@ const mapDispatchToProps = (dispatch) => {
 
         "customizeTemplate": (data) => {
             return dispatch(customizeTemplate(data))
+        },
+        "fetchDefaultCustomization": (templateId) => {
+            return dispatch(fetchDefaultCustomization(templateId))
         },
         "updateSelectedTemplate": (personalDetails) => {
             const {gender, date_of_birth, extracurricular} = personalDetails;
