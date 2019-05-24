@@ -2,6 +2,8 @@ import React from 'react'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Multiselect from 'react-widgets/lib/Multiselect'
+import moment from 'moment'
+import addDays from "date-fns/addDays";
 
 
 export const renderField = ({
@@ -67,7 +69,7 @@ export const datepicker =
          className,
          id,
          disabled,
-         maxDateAllowed,
+         minDate,
          yearDropDownItemNumber,
          meta: {touched, error, warning}
      }) => (
@@ -79,16 +81,22 @@ export const datepicker =
                         <i className="sprite icon--date"></i>
                     </span>
                 </div>
-                <DatePicker {...input} dateFormat="yyyy-MM-dd" className={className}
-                        value={disabled ? "This is disabled" : input.value}
-                        selected={input.value ? new Date(input.value) : null}
-                        onChange={date => input.onChange(date)} id={id} disabled={disabled} autoComplete="off"
-                        maxDate={maxDateAllowed ? new Date() : null}
-                        // minDate={dateValue !== ''  ? moment(dateValue).add(1, 'days') : null}
-                        showYearDropdown
-                        yearDropdownItemNumber={yearDropDownItemNumber}
-                        scrollableYearDropdown
-                        showMonthDropdown
+                <DatePicker {...input}
+                            value={disabled ? "This is disabled" : input.value}
+                            className={className}
+                            dateFormat="yyyy-MM-dd"
+                            autoComplete="off"
+                            selected={input.value ? new Date(input.value) : null}
+                            maxDate={new Date()}
+                            id={id}
+                            onChange={date => input.onChange(date)}
+                            showYearDropdown
+                            yearDropdownItemNumber={yearDropDownItemNumber}
+                            scrollableYearDropdown
+                            showMonthDropdown
+                            disabled={disabled}
+                            minDate={minDate ? addDays(new Date(minDate),1) : null}
+
                 />
                 {touched &&  ((error && <span className={'error-message'}>{error}</span>) ||
                 (warning && <span className={'warn-Message'}>{warning}</span>))}

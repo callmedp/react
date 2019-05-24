@@ -79,13 +79,13 @@ const renderEducation = ({
                             </li>
                             
                             <li className="form__group">
-                                <Field component={datepicker} label={"Date from"}  type={"date"} 
+                                <Field component={datepicker} label={"Date from"}  type={"date"} yearDropDownItemNumber={15}
                                     name={`${member}.start_date`} id={`${member}.start_date`}/>
                             </li>
 
                             <li className="form__group">
-                                <Field component={datepicker} label={"Date to"}  type={"date"} 
-                                    name={`${member}.end_date`} id={`${member}.end_date`} disabled={till_today[index]}/>
+                                <Field component={datepicker} label={"Date to"}  type={"date"} minDate={fields.get(index).start_date}
+                                    yearDropDownItemNumber={15} name={`${member}.end_date`} id={`${member}.end_date`} disabled={till_today[index]}/>
                             </li>
 
                             <li className="form__radio-group d-flex justify-content-end fs-14">

@@ -76,7 +76,7 @@ export const datepicker =
                             autoComplete="off"
                             selected={input.value ? new Date(input.value) : null}
                             maxDate={maxDateAllowed ? new Date() : null}
-                    // minDate={dateValue !== ''  ? moment(dateValue).add(1, 'days') : null}
+                            // minDate={dateValue !== ''  ? moment(dateValue).add(1, 'days') : null}
                             onChange={date => input.onChange(date)}
                             showYearDropdown
                             yearDropdownItemNumber={yearDropDownItemNumber}

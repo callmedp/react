@@ -41,7 +41,7 @@ const renderCourse = ({
             return (
                 <div className="form-wrap" key={index} id={`course${index}`}>
                     <div className="subHeading pb-0">
-                        <h2>{fields.get(index).name_of_certification || 'New Course'}</h2>
+                        <h2>{fields.get(index).name_of_certification || 'Course'}</h2>
                         <ul className="subHeading__control">
                             <li className="subHeading__delete">
                                 <span className={"sprite icon--delete " +(fields.length === 1 && !fields.get(index).id ? "hide":"")}

@@ -92,7 +92,6 @@ export const renderAwards = ({
                     </ul>
                 </div>
             )})}
-            {error && <li>{error}</li>}
         </div>
             
     )

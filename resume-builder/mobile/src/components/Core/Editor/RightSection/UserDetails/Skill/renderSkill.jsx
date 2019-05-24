@@ -90,7 +90,6 @@ const renderSkills = ({
                         </ul>
                     </div>
             )})}
-            {error && <li>{error}</li>}
             </div>
      
         </React.Fragment>         
