@@ -474,7 +474,9 @@ class ProfileEntityBulkUpdateView(APIView):
         if not isinstance(data, list):
             return Response({"detail": "Invalid data format"}, status=status.HTTP_400_BAD_REQUEST)
 
-        for record in data:
+        total_records_received = len(data)
+
+        for rcount,record in enumerate(data):
             obj_id = str(record.get('id', 0))
 
             if obj_id and not obj_id.isdigit():
@@ -493,6 +495,12 @@ class ProfileEntityBulkUpdateView(APIView):
                 break
 
             context = {'request': request}
+            if instance:
+                instance.initiate_image_upload_task = False
+                
+            if instance and rcount == (total_records_received - 1):
+                instance.initiate_image_upload_task = True
+
             serializer_obj = serializer_class(data=record, instance=instance, context=context) if \
                 instance else serializer_class(data=record, context=context)
 

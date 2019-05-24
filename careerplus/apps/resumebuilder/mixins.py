@@ -34,11 +34,14 @@ class SessionManagerMixin(object):
 
 class PreviewImageCreationMixin(object):
 
+    initiate_image_upload_task = True
+
     @classmethod
     def preview_image_task_call(self, sender,instance, **kwargs):
         parent_object_key = getattr(self,"parent_object_key","candidate_id")
         candidate_id = getattr(instance,parent_object_key)
-        generate_image_for_resume.delay(candidate_id)
+        if kwargs.get('created') or self.initiate_image_upload_task:
+            generate_image_for_resume.delay(candidate_id)
 
         
 
