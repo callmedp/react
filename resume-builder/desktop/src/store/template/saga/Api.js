@@ -7,9 +7,10 @@ const fetchTemplate = (candidateId, templateId = 6) => {
     return BaseApiService.get(`${siteDomain}/api/v1/resume/${url}`);
 };
 
-const fetchTemplateImages = (candidateId, templateId = 6) => {
+const fetchTemplateImages = (candidateId, templateId = 6, query) => {
 
-    const url = `candidate/${candidateId}/image-preview/${templateId}/?tsize=151x249`;
+    let url = `candidate/${candidateId}/image-preview/${templateId}/`;
+    if (query) url += `?${query}`;
     return BaseApiService.get(`${siteDomain}/api/v1/resume/${url}`);
 };
 const fetchDefaultCustomization = (candidateId, templateId = 6) => {
