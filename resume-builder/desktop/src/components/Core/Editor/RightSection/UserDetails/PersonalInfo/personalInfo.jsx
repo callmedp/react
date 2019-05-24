@@ -210,6 +210,7 @@ export class PersonalInfo extends Component {
                                         // loadOptions={this.fetchInterestList.bind(this)}
                                            defaultOptions={Object.keys(personalInfo.interest_list).map(key => personalInfo.interest_list[key])}
                                            value={personalInfo.extracurricular}
+                                           isMulti={true}
                                            closeMenuOnSelect={false}
                                            iconClass={'icon-interest'}
                                            label="Select Interest"/>

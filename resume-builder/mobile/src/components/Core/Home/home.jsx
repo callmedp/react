@@ -21,7 +21,7 @@ class Home extends Component {
         this.state.token = token;
     }
     componentDidMount() {
-        this.props.loginCandidate(this.state.token);
+        // this.props.loginCandidate(this.state.token);
     }
     
     render() {
@@ -31,15 +31,6 @@ class Home extends Component {
                 <Header />
                 <Banner/>
                 
-                <section className="info">
-                    <ul className="info__items">
-                        <li className="icon--expertise"><strong>10 years</strong> of expertise in resume building</li>
-                        <li className="icon--build">Build your resume in a minute by importing your <strong>Shine profile</strong></li>
-                        <li className="icon--download"><strong>Download</strong> your customised resume anytime</li>
-                        <li className="icon--custom"><strong>Highly customizable</strong> resume  </li>
-                        <li className="icon--power">Power to get you <strong>hired 33% faster</strong></li>
-                    </ul>
-                </section>
 
                 <section className="section professional">
                     <div className="text-center">

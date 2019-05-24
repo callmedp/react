@@ -91,7 +91,7 @@ class Language extends Component {
     async updateInfoBeforeLoss(){
 
         if(!this.state.submit){
-            const form_data = this.props.info.form.Language;
+            const form_data = this.props.info.form.language;
             let error = false
             let error_values =form_data["syncErrors"]
             if(error_values){
@@ -195,7 +195,7 @@ class Language extends Component {
 }
 
 export const LanguageForm = reduxForm({
-    form: 'Language',
+    form: 'language',
     enableReinitialize: true,
     validate
 })(Language);

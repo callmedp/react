@@ -27,6 +27,7 @@ class Home extends Component {
         const values = queryString.parse(this.props.location.search);
         const token = (values && values.token) || '';
         this.state.token = token;
+        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
     }
 
     scrollTo(elem) {
@@ -76,18 +77,18 @@ class Home extends Component {
                 <Header page={'home'} userName={first_name} getclass={this.state.scrolled ? 'color-change' : ''}/>
                 <Banner/>
                 <section className="section-container">
-                    <h2>Professional advantage</h2>
-                    <strong className="section-container--sub-head">Resume builder advantages which will make your
-                        career brighter</strong>
+                    <h2>Resume builder advantages</h2>
+                    <strong className="section-container--sub-head">Resume builder advantages which will make your career brighter</strong>
                     <ul className="advantages mt-30">
                         <li className="advantages--list">
                             <div className="advantages--image">
                                 <span className="icon-advantage1"></span>
                             </div>
                             <div className="advantages--content">
-                                <h3>A resume layout hat stands out </h3>
-                                <p>Our resume layout optimizer makes sure all your content is aligned and organized so
-                                    your resume looks like a work of art.</p>
+                                <h3>Visually Striking Resume</h3>
+                                <p>Our resume layout optimizer makes sure all your
+                                content is aligned and organized so your resume looks
+                                like a work of art.</p>
                             </div>
                         </li>
                         <li className="advantages--list">
@@ -95,9 +96,9 @@ class Home extends Component {
                                 <span className="icon-advantage2"></span>
                             </div>
                             <div className="advantages--content">
-                                <h3>Create a great first impression to recruiters </h3>
-                                <p>Our resume has the capability to catch recruiter’s attention fast as you just have 6
-                                    secs to catch recruiter’s attention.</p>
+                                <h3>Unlimited Downloads</h3>
+                                <p>Our Resume Builder subscription gives you the
+                                flexibility to edit and download your resume unlimited time</p>
                             </div>
                         </li>
                         <li className="advantages--list">
@@ -105,9 +106,8 @@ class Home extends Component {
                                 <span className="icon-advantage3"></span>
                             </div>
                             <div className="advantages--content">
-                                <h3>Increased recruiter views </h3>
-                                <p>A creative, professional layout can grab a recruiter's attention. Each job has on an
-                                    average of 500 applicants with 95% of resume never read. </p>
+                                <h3>Higher Recruiter Views</h3>
+                                <p>Each job has on average of 500 applicants with 95% of resume never read. Our resume builder increases the chances of your resume getting read.</p>
                             </div>
                         </li>
                         <li className="advantages--list">
@@ -115,9 +115,8 @@ class Home extends Component {
                                 <span className="icon-advantage4"></span>
                             </div>
                             <div className="advantages--content">
-                                <h3>Application Tracking Software (ATS) Friendly </h3>
-                                <p>Most of the resume filtering is done by machine. So, it becomes very important to
-                                    design your CV as per the ATS</p>
+                                <h3>Get your CV past screening software</h3>
+                                <p>Most of the resume filtering is done by machine. So, it becomes very important to design your CV as per the ATS</p>
                             </div>
                         </li>
                     </ul>
@@ -134,8 +133,7 @@ class Home extends Component {
                             </div>
                             <div className="works--content">
                                 <h3>Choose your resume template</h3>
-                                <p>Our professional resume templates are designed strictly following all industry
-                                    guidelines and best practices employers are looking for.</p>
+                                <p>Our professional resume templates are designed strictly following all industry guidelines and best practices employers are looking for.</p>
                             </div>
                         </li>
                         <li className="works--list">
@@ -145,8 +143,7 @@ class Home extends Component {
                             </div>
                             <div className="works--content">
                                 <h3>Verify your profile imported from Shine</h3>
-                                <p>We import your Shine Profile to create your resume automatically. You may edit the
-                                    details, if required</p>
+                                <p>We import your Shine Profile to create your resume automatically. You may edit the details, if required</p>
                             </div>
                         </li>
                         <li className="works--list">
@@ -156,8 +153,7 @@ class Home extends Component {
                             </div>
                             <div className="works--content">
                                 <h3>Download your Resume</h3>
-                                <p>Start impressing employers. Download your awesome resume and land the job you are
-                                    looking for, effortlessly.</p>
+                                <p>Start impressing employers. Download your awesome resume and land the job you are looking for, effortlessly.</p>
                             </div>
                         </li>
                     </ul>
@@ -174,8 +170,8 @@ class Home extends Component {
                                 <span className="icon-features1"></span>
                             </div>
                             <div className="features--content">
-                                <h3>Switch template</h3>
-                                <p>Change the template any time you want while editing your resume</p>
+                                <h3>Expert assistance</h3>
+                                <p>Get professional summary and job profile recommendation</p>
                             </div>
                         </li>
                         <li className="features--list">
@@ -183,8 +179,8 @@ class Home extends Component {
                                 <span className="icon-features2"></span>
                             </div>
                             <div className="features--content">
-                                <h3>Edit text</h3>
-                                <p>You can edit the text on resume as well font size change</p>
+                                <h3>Import data from Shine</h3>
+                                <p>You can import all data from your shine profile to your resume</p>
                             </div>
                         </li>
                         <li className="features--list">
@@ -192,8 +188,8 @@ class Home extends Component {
                                 <span className="icon-features3"></span>
                             </div>
                             <div className="features--content">
-                                <h3>Theme change</h3>
-                                <p>We have different color theme which you can apply on your resume</p>
+                                <h3>Update resume back to Shine</h3>
+                                <p>You can update your resume on your shine profile</p>
                             </div>
                         </li>
                         <li className="features--list">
@@ -201,8 +197,8 @@ class Home extends Component {
                                 <span className="icon-features4"></span>
                             </div>
                             <div className="features--content">
-                                <h3>Move sections</h3>
-                                <p>All sections on resume can be move anywhere where you want</p>
+                                <h3>Customize your resume</h3>
+                                <p>Customize your resume with professional font, colors and templates</p>
                             </div>
                         </li>
                         <li className="features--list">
@@ -210,8 +206,8 @@ class Home extends Component {
                                 <span className="icon-features5"></span>
                             </div>
                             <div className="features--content">
-                                <h3>Upload image</h3>
-                                <p>While editing you can upload your recent image on resume</p>
+                                <h3>Reorder sections</h3>
+                                <p>All sections on resume can be reorder anywhere where you want</p>
                             </div>
                         </li>
                         <li className="features--list">
@@ -219,8 +215,8 @@ class Home extends Component {
                                 <span className="icon-features6"></span>
                             </div>
                             <div className="features--content">
-                                <h3>Preview resume</h3>
-                                <p>At any stage of editing resume you can preview it</p>
+                                <h3>Display your photo</h3>
+                                <p>Display your photo in your resume for more views</p>
                             </div>
                         </li>
                     </ul>
@@ -230,7 +226,46 @@ class Home extends Component {
 
                 </section>
 
+                <section className="section-container">
+                    <h2>Next generation ready resume</h2>
+                    <strong className="section-container--sub-head">Difference between shine resume and others</strong>
+                    
+                    <div>
+                        <img className="img-responsive" alt={"Next generation ready resume"}
+                                            src={`${this.staticUrl}react/assets/images/nextgen-resume.jpg`}/>
+                    </div>
+
+                </section>
+
                 <Testimonial/>
+
+                <section className="section-container flex-container pb-0">
+                    <div className="shinelearning">
+                        <span className="icon-shinelearning"></span>
+                        <p>Shine Learning is India’s largest professional courses and career skills portal. Launched by Shine.com, Shine Learning has a vision to up-skill the Indian talent pool to adapt to the changing job market.</p>
+                        <ul>
+                            <li>Explore courses</li>
+                            <li>Job assistance</li>
+                            <li>Free rescources</li>
+                            <li>Talent economy</li>
+                        </ul>
+                    </div>
+
+                    <div class="reachout-tous">
+                        <h2>Reach out to us</h2>
+                        <strong>Feel free to share your feedback with us</strong>
+                        <div className="flex-container">
+                            <input type="text" name="" placeholder="Name"/>
+                        </div>
+                        <div className="flex-container">
+                            <input type="text" name="" placeholder="Email"/>
+                        </div>
+                        <div className="flex-container">
+                            <input type="text" name="" placeholder="Message"/>
+                        </div>
+                        <button className="orange-button">Submit</button>
+                    </div>
+                </section>
 
                 <Footer/>
             </div>

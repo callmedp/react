@@ -166,8 +166,14 @@
 
   &--close {
     @include size(14px, 14px, block);
-    background-position: -133px -184px;
+    background-position: -134px -182px;
     margin: 8px 0 0 8px;
+  }
+ 
+  &--editTick {
+    @include size(19px, 14px, block);
+    background-position: -133px -202px;
+    margin-left: 8px;
   }
 
   // &--back-white {
@@ -387,6 +393,13 @@
     @include size(19px, 20px, block);
     background-position: -135px -160px;
   }
+  
+  &--higher {
+    @include size(19px, 20px, block);
+    background-position: -135px -160px;
+  }
+
+
 }
 
 

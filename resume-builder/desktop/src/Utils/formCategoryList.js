@@ -106,7 +106,7 @@ export const entityList = [
         "entity_id": 4,
         "entity_text": "Projects",
         "active": true,
-            "priority": 4
+        "priority": 4
     },
     {
         "entity_id": 5,
@@ -144,6 +144,13 @@ export const entityList = [
         "entity_text": "References",
         "active": false,
         "priority": 10
+    },
+    {
+        "entity_id": 11,
+        "entity_text": "Interest",
+        "active": false,
+        "priority": 0
     }
+
 
 ];

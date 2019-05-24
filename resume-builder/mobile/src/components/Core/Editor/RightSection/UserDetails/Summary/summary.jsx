@@ -128,7 +128,7 @@ class Summary extends Component {
                     
                         <li className="form__group">
                             <Field component={renderTextArea} label={"Summary"}  type={"text"} name="extra_info" 
-                                id="extra_info" prepend={false} className="form__input h-300"/>
+                                id="extra_info" prepend={false} className="form__input h-150"/>
                         </li>
                         
                         <li className="form__group">

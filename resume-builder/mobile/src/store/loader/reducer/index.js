@@ -1,8 +1,9 @@
-import {UPDATE_MAIN_PAGE_LOADER,UPDATE_DATA_LOADER} from "../actions/actionTypes";
+import {UPDATE_MAIN_PAGE_LOADER,UPDATE_DATA_LOADER,CHANGE_FORM_NAME} from "../actions/actionTypes";
 
 const initialState = {
     'mainloader': true,
-    'dataloader': false
+    'dataloader': false,
+    'formName' : ''
 };
 
 export const loaderReducer = (state = initialState, action) => {
@@ -14,6 +15,12 @@ export const loaderReducer = (state = initialState, action) => {
             }
         }
         case UPDATE_DATA_LOADER: {
+            return {
+                ...state,
+                ...action.payload
+            }
+        }
+        case CHANGE_FORM_NAME: {
             return {
                 ...state,
                 ...action.payload

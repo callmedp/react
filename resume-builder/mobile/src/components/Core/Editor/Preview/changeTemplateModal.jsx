@@ -18,10 +18,10 @@ export default class ChangeTemplateModal extends Component{
                 <div className="Modal--iframe">
                     <ResumeSlider showtext={false} {...this.props}/>
                 </div>
-                <button className="Modal--close" onClick={()=>{this.props.updateModalStatus({modal_status:false})}}>+</button>
+                <span className="close-wrap" onClick={()=>{this.props.updateModalStatus({modal_status:false})}}>
+                    <i class="sprite icon--close"></i>
+                </span>
             </Modal>
         )
     }
-
-    
 }

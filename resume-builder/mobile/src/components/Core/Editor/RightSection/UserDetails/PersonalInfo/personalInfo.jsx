@@ -178,8 +178,11 @@ class PersonalInfo extends Component {
                         <h1>{heading}</h1>:
                         <input type="text" autoFocus placeholder={heading} onBlur={(e)=>this.updateInputValue('blur',e)}
                          onKeyDown={(e)=>this.updateInputValue('keyPress',e)}/>
+                         
                     }
                     <i className="sprite icon--edit" onClick={()=>{this.setState({editHeading:true})}}></i>
+                   
+                    <i className="sprite icon--editTick"></i>
                 </div>
                 
                 
@@ -260,19 +263,16 @@ class PersonalInfo extends Component {
                             }
                             </span>
                         </li>
-
-                        <li className="form__group">
-                            <div className="btn-wrap">
-                                <button className="btn btn__round btn--outline" 
-                                    onClick={async()=>{previewHandling(this.updateInfoBeforeLoss,history) }}
-                                    type={'button'}>Preview</button>
-                                <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
-                                    {(length === pos +1) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}
-                                </button>
-                            </div>
-                        </li>
                     </ul>
                 </form>
+            </div>
+            <div className="btn-wrap">
+                <button className="btn btn__round btn--outline" 
+                    onClick={async()=>{previewHandling(this.updateInfoBeforeLoss,history) }}
+                    type={'button'}>Preview</button>
+                <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
+                    {(length === pos +1) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}
+                </button>
             </div>
         </div>
         )
