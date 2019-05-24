@@ -79,6 +79,7 @@ export class Buy extends Component {
     }
 
     componentDidMount() {
+        // this.props.fetchDefaultCustomization(localStorage.getItem('selected_template'));
         this.props.getProductIds();
         this.props.fetchUserInfo();
         this.props.fetchTemplateImages();

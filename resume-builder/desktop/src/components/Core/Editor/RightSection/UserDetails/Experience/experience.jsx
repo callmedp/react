@@ -118,7 +118,7 @@ class Experience extends Component {
         const {
             handleSubmit, ui: {loader}, isEditable,
             editHeading, saveTitle, entityName, nextEntity, handlePreview,
-            changeOrderingDown, changeOrderingUp, currentFields
+            changeOrderingDown, changeOrderingUp, currentFields, fetchJobTitles
         } = this.props;
         const {till_today} = this.state;
 
@@ -138,6 +138,7 @@ class Experience extends Component {
                             isEditable={isEditable}
                             entityName={entityName}
                             expanded={this.state.active}
+                            fetchJobTitles={(inputValue) => fetchJobTitles(inputValue)}
                             till_today={till_today}
                             tillTodayDisable={this.tillTodayDisable}
                 />
@@ -189,7 +190,6 @@ const mapDispatchToProps = (dispatch) => {
         },
 
         "bulkUpdateOrCreate": (listItems) => {
-            console.log('--list Items <>>>>>>-', listItems);
             listItems = (listItems || []).map((userExperience, index) => {
                 const {start_date, end_date} = userExperience;
                 if (!userExperience['id']) delete userExperience['id'];
@@ -209,6 +209,12 @@ const mapDispatchToProps = (dispatch) => {
             })
 
         },
+        "fetchJobTitles": (inputValue) => {
+            if (inputValue.length < 3) return new Promise(res => res([]));
+            return new Promise((res, rej) => {
+                return dispatch(actions.fetchJobTitles({inputValue, res, rej}))
+            })
+        }
     }
 };
 

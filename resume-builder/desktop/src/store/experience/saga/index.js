@@ -133,10 +133,37 @@ function* deleteUserExperience(action) {
     }
 }
 
+function* fetchJobTitles(action) {
+    try {
+
+        const {payload: {inputValue, res, rej}} = action;
+        console.log('---', action);
+        const result = yield call(Api.fetchJobTitles, inputValue);
+
+
+        if (result['error']) {
+            return rej(new SubmissionError({_error: result['errorMessage']}));
+        }
+
+        console.log('-res', result);
+        let {data} = result;
+        data = (data || []).map((el) => ({
+            label: el.toLowerCase().replace(/(^|\s)\S/g,
+                (firstLetter) => firstLetter.toUpperCase()), value: el.toString()
+        }))
+        return res(data);
+
+
+    } catch (e) {
+        console.log('error', e);
+    }
+}
+
 export default function* watchExperience() {
     yield takeLatest(Actions.FETCH_USER_EXPERIENCE, fetchUserExperience);
     yield takeLatest(Actions.UPDATE_USER_EXPERIENCE, updateUserExperience);
     yield takeLatest(Actions.DELETE_USER_EXPERIENCE, deleteUserExperience);
     yield takeLatest(Actions.HANDLE_EXPERIENCE_SWAP, handleExperienceSwap);
     yield takeLatest(Actions.BULK_U_C_USER_EXPERIENCE, handleExperienceSwap);
+    yield takeLatest(Actions.FETCH_EXPERIENCE_LIST, fetchJobTitles);
 }

@@ -57,7 +57,7 @@ function* customizeTemplate(action) {
 
 function* fetchTemplateImages(action) {
     try {
-        const candidateId = 12; //localStorage.getItem('candidateId') || '';
+        const candidateId = localStorage.getItem('candidateId') || '';
         yield put({type: UPDATE_UI, data: {loader: true}});
 
         const result = yield all([
