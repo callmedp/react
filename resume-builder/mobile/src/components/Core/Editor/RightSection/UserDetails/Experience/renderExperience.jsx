@@ -107,7 +107,7 @@ const renderExperiences = ({
                         <li className="form__group">
                             <label className="form__label" htmlFor="work_description">Description</label>
                             <Field component={renderTextArea} type={"textarea"} name={`${member}.work_description`}
-                                className="form__input h-300" rows="5" 
+                                className="form__input h-150" rows="5" 
                             />
                         </li>
 

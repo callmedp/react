@@ -44,6 +44,20 @@ export default class Banner extends Component {
                     <a className="btn pt-10 pb-10 btn__round btn__primary" onClick={() => this.scrollTo('templates')}>Build
                         your resume</a>
                 </p>
+                <ul className="resume-pointer">
+                    <li>
+                        <span className="sprite icon--higher"></span>
+                        <span><strong>33% higher</strong> chances of shortlisting</span>
+                    </li>
+                    <li>
+                        <span className="sprite icon-experience"></span>
+                        <span><strong>10+ years</strong> of Resume Building Experience</span>
+                    </li>
+                    <li>
+                        <span className="sprite icon-profile"></span>
+                        <span>Resume data fetched from <strong>Shine profile</strong></span>
+                    </li>
+                </ul>
             </section>
         )
     }
