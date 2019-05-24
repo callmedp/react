@@ -678,7 +678,46 @@ class OrderCustomisationRUDView(RetrieveUpdateDestroyAPIView):
         return OrderCustomisation.objects.filter(candidate__candidate_id=self.request.user.id)
 
 
+class EntityReorderView(APIView):
+    """
+    Sample Input Data - 
+    {
+        "entity_id":5,
+        "step":-1
+    }
+    """
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = None
+
+    def post(self,request,*args,**kwargs):
+        candidate_id = kwargs.get('candidate_id')
+        template_no = int(str(kwargs.get('template_no','')))
+        entity_id = request.data.get('entity_id')
+        step = request.data.get('step')
+
+        current_entity_data = OrderCustomisation.objects.filter(\
+            candidate_id=candidate_id,template_no=template_no).first()
+
+        entity_position = json.loads(current_entity_data.entity_position)
+        entity_status = None
+
+        for item in entity_position:
+            if item.get('entity_id') == entity_id:
+                entity_status = item
+                break
+
+        entity_pos = entity_status.get('pos')
+        entity_alignment = entity_status.get('alignment')
+
+
+
+
 class ResumeImagePreviewView(APIView):
+    """
+    Returns base64 encoded image from cloud.
+    If not found, returns 404.
+    """
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsAuthenticated,)
     serializer_class = None
