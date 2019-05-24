@@ -4,7 +4,9 @@ import {
     SHOW_SELECT_TEMPLATE_MODAL,
     HIDE_SELECT_TEMPLATE_MODAL,
     SELECT_CURRENT_FORM,
-    SHOW_MORE_SECTION
+    SHOW_MORE_SECTION,
+    SHOW_SUGGESTION_MODAL,
+    HIDE_SUGGESTION_MODAL
 } from "./actionTypes";
 
 
@@ -15,12 +17,29 @@ export const showModal = () => {
     }
 }
 
+
+export const showSuggestionModal = () => {
+    return {
+        type: SHOW_SUGGESTION_MODAL,
+        data: {'suggestionModal': true}
+    }
+}
+
+
+export const hideSuggestionModal = () => {
+    return {
+        type: HIDE_SUGGESTION_MODAL,
+        data: {'suggestionModal': false}
+    }
+}
+
 export const hideModal = () => {
     return {
         type: HIDE_TEMPLATE_MODAL,
         data: {modal: false}
     }
 }
+
 
 export const showSelectTemplateModal = () => {
     return {

@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import * as actions from '../../../../../../store/personalInfo/actions/index';
+import {hideSuggestionModal, showSuggestionModal} from '../../../../../../store/ui/actions/index';
+import SuggestionModal from '../../../../../Modal/suggestionModal'
+
 import {Field, reduxForm} from 'redux-form';
 import styles from './summary.scss'
 
@@ -49,10 +52,11 @@ class Summary extends Component {
 
 
     render() {
-        const {personalInfo: {extra_info}, ui: {loader}, handleSubmit, handlePreview, isEditable, editHeading, saveTitle, entityName, nextEntity} = this.props;
+        const {personalInfo: {extra_info}, ui: {loader, suggestionModal}, handleSubmit, handlePreview, isEditable, editHeading, saveTitle, entityName, nextEntity, showSuggestionModal} = this.props;
         let elem = null;
         return (
             <div>
+                <SuggestionModal {...this.props} />
                 <section className="head-section">
                     <span className="icon-box"><i className="icon-summary1"/></span>
                     <h2 className={"comp-heading"}
@@ -70,9 +74,12 @@ class Summary extends Component {
                             <Field
                                 noIcon={true}
                                 component={renderTextArea} type={"textarea"} name="extra_info"
-                                   className="summary-box--summary-txt" rows="10" value={extra_info}/>
+                                className="summary-box--summary-txt" rows="10" value={extra_info}/>
                         </div>
+                        <span onClick={showSuggestionModal}>Select suggested summary</span>
+
                     </section>
+
 
                     <div className="flex-container items-right mr-20 mb-30">
                         <button className="blue-button mr-20" type={'button'} onClick={handlePreview}>Preview</button>
@@ -118,6 +125,12 @@ const mapDispatchToProps = (dispatch) => {
                 dispatch(actions.updatePersonalInfo({personalDetails, resolve, reject}));
             })
         },
+        "hideSuggestionModal": () => {
+            return dispatch(hideSuggestionModal())
+        },
+        "showSuggestionModal": () => {
+            return dispatch(showSuggestionModal())
+        }
     }
 };
 

@@ -28,8 +28,8 @@ class Experience extends Component {
 
     componentDidMount() {
 
-        this.props.fetchUserExperience()
-        let till_today = []
+        this.props.fetchUserExperience();
+        let till_today = [];
         for (let i of this.props.initialValues.list) {
             till_today.push(i.is_working)
         }

@@ -86,7 +86,17 @@ export const datepicker =
                             scrollableYearDropdown
                             showMonthDropdown
                             disabled={disabled}
-
+                            popperModifiers={{
+                                offset: {
+                                    enabled: true,
+                                    offset: '5px, 10px'
+                                },
+                                preventOverflow: {
+                                    enabled: true,
+                                    escapeWithReference: false, // force popper to stay in viewport (even when input is scrolled out of view)
+                                    boundariesElement: 'viewport'
+                                }
+                            }}
                 />
                 {touched &&
                 ((error && <span className={'Error-message'}>{error}</span>) ||

@@ -5,7 +5,9 @@ import {
     HIDE_SELECT_TEMPLATE_MODAL,
     SELECT_CURRENT_FORM,
     SHOW_MORE_SECTION,
-    HIDE_MORE_SECTION
+    HIDE_MORE_SECTION,
+    SHOW_SUGGESTION_MODAL,
+    HIDE_SUGGESTION_MODAL
 } from "../actions/actionTypes";
 
 const initialState = {
@@ -13,7 +15,8 @@ const initialState = {
     'modal': false,
     'select_template_modal': false,
     'formName': '',
-    'showMoreSection': false
+    'showMoreSection': false,
+    'suggestionModal': false
 };
 
 export const uiReducer = (state = initialState, action) => {
@@ -61,6 +64,18 @@ export const uiReducer = (state = initialState, action) => {
             }
         }
         case HIDE_MORE_SECTION: {
+            return {
+                ...state,
+                ...action.data
+            }
+        }
+        case SHOW_SUGGESTION_MODAL: {
+            return {
+                ...state,
+                ...action.data
+            }
+        }
+        case HIDE_SUGGESTION_MODAL: {
             return {
                 ...state,
                 ...action.data
