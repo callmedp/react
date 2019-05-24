@@ -39,7 +39,7 @@ class MobileDetectionMiddleware(object):
         pass
 
     def process_request(self, request):
-        is_mobile = True
+        is_mobile = False
         if request.META.get('HTTP_HOST') == settings.MOBILE_SITE_DOMAIN:
             is_mobile = True
         if is_mobile:
