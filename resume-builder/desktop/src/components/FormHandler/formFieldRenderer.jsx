@@ -16,6 +16,7 @@ export const renderField = ({
                                 index,
                                 text,
                                 iconClass,
+                                autoFocus,
                                 meta: {touched, error, warning}
                             }) => {
     return (
@@ -40,7 +41,9 @@ export const renderField = ({
                         <span className={iconClass}></span>
                     </div>
                     <div className="Error">
-                        <input {...input} className={className} autoComplete="off" placeholder={label} type={type}/>
+                        <input {...input}
+                               autoFocus={autoFocus}
+                               className={className} autoComplete="off" placeholder={label} type={type}/>
                         {touched &&
                         ((error && <span className={'Error-message'}>{error}</span>) ||
                             (warning && <span className={'Warn-Message'}>{warning}</span>))}
@@ -71,7 +74,7 @@ export const datepicker =
             </div>
             <div className="Error">
                 <DatePicker {...input}
-                            value={disabled ? "This is disabled" : input.value}
+                            value={disabled ? moment().format('YYYY-MM-DD').toString() : input.value}
                             dateFormat="yyyy-MM-dd"
                             autoComplete="off"
                             selected={input.value ? new Date(input.value) : null}

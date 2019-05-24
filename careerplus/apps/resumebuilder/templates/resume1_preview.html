@@ -11,339 +11,63 @@
 <body>
 <div style="max-width: 1536px; width: 100%; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777; line-height: 20px;">
 
-      <div style="width: 100%; background: #d34d4d; padding: 3%;">
+    <div style="width: 100%; background: #d34d4d; padding: 3%;">
 
-        <!--top left-->
-        <div style="width: 46%; padding-right: 2%; display: inline-block; vertical-align: top; border-right: 1px solid #de8080;">
-          <img src="{% static 'resumebuilder/images/resume1/resume-pic.png' %}" alt="Resume" style="border-radius: 100%; margin-bottom: 10px; width: 150px; height: 150px;" width="150" height="150">
-          <h1 style="margin: 0; color: #ffffff; font-size: 32px;">Amit Sinha</h1>
-          <strong style="display: block; font-size: 16px; color: #ffd7d7; font-weight: normal; margin-bottom: 20px;">IT Project Manager</strong>
-          <p style="color: #ffffff">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspend isse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.</p>
-        </div>
+        <!--top left 1-->
 
-        <!--top right-->
-        <div style="width: 48%; display: inline-block; vertical-align: top; padding-left: 3%;">
-          <ul style="margin: 20px 0 0 0; padding: 0; font-size: 14px; color: #ffffff; list-style-type: none;">
-            <li style="display: table; margin-bottom: 15px;"><span style="display: table-cell; padding-right: 10px;"><img src="{% static 'resumebuilder/images/resume1/mobile-icon.png' %}" alt="Mobile" style="vertical-align: middle;"></span>+91 9876512345</li>
-            <li style="display: table; margin-bottom: 15px;"><span style="display: table-cell; padding-right: 10px;"><img src="{% static 'resumebuilder/images/resume1/email-icon.png' %}" alt="Email" style="vertical-align: middle;"></span>youremailid@gmail.com</li>
-            <li style="display: table; margin-bottom: 15px;"><span style="display: table-cell; padding-right: 10px;"><img src="{% static 'resumebuilder/images/resume1/location-icon.png' %}" alt="Location" style="vertical-align: middle;"></span>BPTP Park Centra, 7th Floor Tower A Jal Vayu Vihar, Sector 30, Gurugram, Haryana 122003</li>
-            <li style="display: table; margin-bottom: 15px;"><span style="display: table-cell; padding-right: 10px;"><img src="{% static 'resumebuilder/images/resume1/linkedin-icon.png' %}" alt="Linkedin" style="vertical-align: text-top;"></span>linkedin.com/candidatename</li>
-            <li style="display: table; margin-bottom: 15px;"><span style="display: table-cell; padding-right: 10px;"><img src="{% static 'resumebuilder/images/resume1/facebook-icon.png' %}" alt="Facebook" style="vertical-align: middle;"></span>Facebook.com/candidatename</li>
-          </ul>
-        </div>
+        {% include "partials1/summary.html" %}
 
-      </div>
 
-      <div style="width: 100%; border-bottom: 13px solid #d34d4d; padding: 3% 3% 0 3%;">
+        <!--top right  2-->
+        {% include "partials1/profile.html" %}
 
-        <!--Experience-->
-        <div style="vertical-align: top; font-size: 13px; color: #999999; margin-bottom: 30px;">
-          <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 16px;">Experience</strong>
-          <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
-            <li style="vertical-align: top; margin: 10px 0;">
-              <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
-              <span style="display: inline-block; width: 75%; vertical-align: top;">
-                <strong style="display: block; font-size: 16px; color: #333333;">IT Project Manager</strong>
-                Infocom Network Pvt. Ltd
-                <p style="font-size: 14px; color: #777777; margin-top: 5px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Lorem ipsum dolor sit amet, consectetur adipiscing elit,</p>
-              </span>
-              <span style="font-style: italic; color: #333333; width: 20%; display: inline-block; vertical-align: top;">(Oct 2016 - Current)</span> 
-            </li>
-            <li style="vertical-align: top; margin: 10px 0;">
-              <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
-              <span style="display: inline-block; width: 75%; vertical-align: top;">
-                <strong style="display: block; font-size: 16px; color: #333333;">IT Project Manager</strong>
-                Infocom Network Pvt. Ltd
-                <p style="font-size: 14px; color: #777777; margin-top: 5px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Lorem ipsum dolor sit amet, consectetur adipiscing elit,</p>
-              </span>
-              <span style="font-style: italic; color: #333333; width: 20%; display: inline-block; vertical-align: top;">(Oct 2016 - Current)</span> 
-            </li>
-            <li style="vertical-align: top; margin: 10px 0;">
-              <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
-              <span style="display: inline-block; width: 75%; vertical-align: top;">
-                <strong style="display: block; font-size: 16px; color: #333333;">IT Project Manager</strong>
-                Infocom Network Pvt. Ltd
-                <p style="font-size: 14px; color: #777777; margin-top: 5px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Lorem ipsum dolor sit amet, consectetur adipiscing elit,</p>
-              </span>
-              <span style="font-style: italic; color: #333333; width: 20%; display: inline-block; vertical-align: top;">(Oct 2016 - Current)</span> 
-            </li>
-          </ul>
-        </div>
-
-        <!--Skills-->
-        <div style="vertical-align: top; font-size: 13px; color: #333333; margin-bottom: 30px; display: inline-block; width: 47.5%; margin-right: 2%;">
-          <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 16px;">Skills</strong>
-
-          <div style="width: 65%; margin: 3% 0 0 19%; display: inline-block; font-size: 13px; color: #333333; text-align: center;">
-            <!--5 skills-->
-            <div style="padding: 0; display: table; margin: 20% 0 5% 30%; height: 200px;">
-              <div style="position: relative;">
-                <div style="position: absolute; left: 0; right: 0; display: table-cell; margin: 10px auto; width: 130px; height: 130px; border-radius: 50%; background-color: #ebebeb; background-image: linear-gradient(14.4deg, #d8d8d8 50%, transparent 50.1%, transparent),linear-gradient(270deg, #d8d8d8 50%, #ebebeb 50.1%, #ebebeb); text-align: center;">
-                  <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 100px; height: 100px; margin-left: -38%; margin-top: -38%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
-                    <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">Data Engineering</span>
-                  </span>
-                </div>
-                <div style="position: absolute; top: -80px; left: 25px; display: table-cell; margin: 10px auto; width: 85px; height: 85px; border-radius: 50%; background-color: #ebebeb; background-image: linear-gradient(14.4deg, #ef8080 50%, transparent 50.1%, transparent),linear-gradient(270deg, #ef8080 50%, #ebebeb 50.1%, #ebebeb); text-align: center;">
-                  <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 65px; height: 65px; margin-left: -38%; margin-top: -39%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
-                    <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">Dev OPS</span>
-                  </span>
-                </div>
-                <div style="position: absolute; top: 25px; right: -210px; display: table-cell; margin: 10px auto; width: 85px; height: 85px; border-radius: 50%; background-color: #ebebeb; background-image: linear-gradient(14.4deg, #a7c4f4 50%, transparent 50.1%, transparent),linear-gradient(270deg, #a7c4f4 50%, #ebebeb 50.1%, #ebebeb); text-align: center;">
-                  <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 65px; height: 65px; margin-left: -38%; margin-top: -39%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
-                    <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">Full stack developer</span>
-                  </span>
-                </div>
-                <div style="position: absolute; bottom: -230px; left: 25px; display: table-cell; margin: 10px auto; width: 85px; height: 85px; border-radius: 50%; background-color: #ebebeb; background-image: linear-gradient(14.4deg, #e2bd58 50%, transparent 50.1%, transparent),linear-gradient(270deg, #e2bd58 50%, #ebebeb 50.1%, #ebebeb); text-align: center;">
-                  <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 65px; height: 65px; margin-left: -38%; margin-top: -39%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
-                    <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">Machine</span>
-                  </span>
-                </div>
-                <div style="position: absolute; top: 25px; left: -80px; display: table-cell; margin: 10px auto; width: 85px; height: 85px; border-radius: 50%; background-color: #ebebeb; background-image: linear-gradient(14.4deg, #abc881 50%, transparent 50.1%, transparent),linear-gradient(270deg, #abc881 50%, #ebebeb 50.1%, #ebebeb); text-align: center;">
-                  <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 65px; height: 65px; margin-left: -38%; margin-top: -39%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
-                    <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">OOP</span>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <!--4 skills-->
-            <div style="padding: 0; display: table; margin: 20% 0 5% 30%; height: 120px; display: none;">
-              <div style="position: relative;">
-                <div style="position: absolute; left: 0; right: 0; display: table-cell; margin: 10px auto; width: 130px; height: 130px; border-radius: 50%; background-color: #ebebeb; background-image: linear-gradient(14.4deg, #d8d8d8 50%, transparent 50.1%, transparent),linear-gradient(270deg, #d8d8d8 50%, #ebebeb 50.1%, #ebebeb); text-align: center;">
-                  <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 100px; height: 100px; margin-left: -38%; margin-top: -38%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
-                    <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">Data Engineering</span>
-                  </span>
-                </div>
-                <div style="position: absolute; top: -80px; left: 25px; display: table-cell; margin: 10px auto; width: 85px; height: 85px; border-radius: 50%; background-color: #ebebeb; background-image: linear-gradient(14.4deg, #ef8080 50%, transparent 50.1%, transparent),linear-gradient(270deg, #ef8080 50%, #ebebeb 50.1%, #ebebeb); text-align: center;">
-                  <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 65px; height: 65px; margin-left: -38%; margin-top: -39%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
-                    <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">Dev OPS</span>
-                  </span>
-                </div>
-                <div style="position: absolute; top: 50px; right: -205px; display: table-cell; margin: 10px auto; width: 85px; height: 85px; border-radius: 50%; background-color: #ebebeb; background-image: linear-gradient(14.4deg, #a7c4f4 50%, transparent 50.1%, transparent),linear-gradient(270deg, #a7c4f4 50%, #ebebeb 50.1%, #ebebeb); text-align: center;">
-                  <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 65px; height: 65px; margin-left: -38%; margin-top: -39%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
-                    <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">Full stack developer</span>
-                  </span>
-                </div>
-                <div style="position: absolute; top: 50px; left: -75px; display: table-cell; margin: 10px auto; width: 85px; height: 85px; border-radius: 50%; background-color: #ebebeb; background-image: linear-gradient(14.4deg, #abc881 50%, transparent 50.1%, transparent),linear-gradient(270deg, #abc881 50%, #ebebeb 50.1%, #ebebeb); text-align: center;">
-                  <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 65px; height: 65px; margin-left: -38%; margin-top: -39%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
-                    <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">OOP</span>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <!--3 skills-->
-            <div style="padding: 0; display: table; margin: 1% 0 5% 30%; height: 125px; display: none;">
-              <div style="position: relative;">
-                <div style="position: absolute; left: 0; right: 0; display: table-cell; margin: 10px auto; width: 130px; height: 130px; border-radius: 50%; background-color: #ebebeb; background-image: linear-gradient(14.4deg, #d8d8d8 50%, transparent 50.1%, transparent),linear-gradient(270deg, #d8d8d8 50%, #ebebeb 50.1%, #ebebeb); text-align: center;">
-                  <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 100px; height: 100px; margin-left: -38%; margin-top: -38%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
-                    <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">Data Engineering</span>
-                  </span>
-                </div>
-                <div style="position: absolute; top: 25px; right: -210px; display: table-cell; margin: 10px auto; width: 85px; height: 85px; border-radius: 50%; background-color: #ebebeb; background-image: linear-gradient(14.4deg, #a7c4f4 50%, transparent 50.1%, transparent),linear-gradient(270deg, #a7c4f4 50%, #ebebeb 50.1%, #ebebeb); text-align: center;">
-                  <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 65px; height: 65px; margin-left: -38%; margin-top: -39%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
-                    <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">Full stack developer</span>
-                  </span>
-                </div>
-                <div style="position: absolute; top: 25px; left: -80px; display: table-cell; margin: 10px auto; width: 85px; height: 85px; border-radius: 50%; background-color: #ebebeb; background-image: linear-gradient(14.4deg, #abc881 50%, transparent 50.1%, transparent),linear-gradient(270deg, #abc881 50%, #ebebeb 50.1%, #ebebeb); text-align: center;">
-                  <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 65px; height: 65px; margin-left: -38%; margin-top: -39%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
-                    <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">OOP</span>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <!--2 skills-->
-            <div style="padding: 0; display: table; margin: 1% 0 5% 20%; height: 125px; display: none;">
-              <div style="position: relative;">
-                <div style="position: absolute; left: 0; right: 0; display: table-cell; margin: 10px auto; width: 130px; height: 130px; border-radius: 50%; background-color: #ebebeb; background-image: linear-gradient(14.4deg, #d8d8d8 50%, transparent 50.1%, transparent),linear-gradient(270deg, #d8d8d8 50%, #ebebeb 50.1%, #ebebeb); text-align: center;">
-                  <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 100px; height: 100px; margin-left: -38%; margin-top: -38%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
-                    <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">Data Engineering</span>
-                  </span>
-                </div>
-                <div style="position: absolute; top: 25px; right: -210px; display: table-cell; margin: 10px auto; width: 85px; height: 85px; border-radius: 50%; background-color: #ebebeb; background-image: linear-gradient(14.4deg, #a7c4f4 50%, transparent 50.1%, transparent),linear-gradient(270deg, #a7c4f4 50%, #ebebeb 50.1%, #ebebeb); text-align: center;">
-                  <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 65px; height: 65px; margin-left: -38%; margin-top: -39%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
-                    <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">Full stack developer</span>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <!--1 skills-->
-            <div style="padding: 0; display: table; margin: 1% 0 5% 30%; height: 125px; display: none;">
-              <div style="position: relative;">
-                <div style="position: absolute; left: 0; right: 0; display: table-cell; margin: 10px auto; width: 130px; height: 130px; border-radius: 50%; background-color: #ebebeb; background-image: linear-gradient(14.4deg, #d8d8d8 50%, transparent 50.1%, transparent),linear-gradient(270deg, #d8d8d8 50%, #ebebeb 50.1%, #ebebeb); text-align: center;">
-                  <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 100px; height: 100px; margin-left: -38%; margin-top: -38%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
-                    <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">Data Engineering</span>
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <p style="margin-bottom: 0; padding: 0; color: #000000; line-height: 20px; text-align: left;">Markdown  |  Git  |  Vim  |  Sublime Text Eclipse  |  Android Studio  |  Coral Draw Adobe Illustrator  |  Photoshop</p>
-        </div>
-
-        <!--Project-->
-        <div style="vertical-align: top; font-size: 13px; color: #333333; margin-bottom: 30px; display: inline-block; width: 47.5%; margin-left: 2%;">
-          <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 16px;">Project</strong>
-          <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none; display: block;">
-            <li style="vertical-align: top; margin: 10px 0; display: block;">
-              <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
-              <span style="display: inline-block; width: 93%; vertical-align: top; color: #999999; font-size: 14px;">
-                <strong style="display: block; font-size: 16px; color: #333333; margin-bottom: 5px;">Project 1</strong>
-                Digital Certificate Dapp using Ethereum Blockchain, Web3JS A Dapp issue certificate and verify. An Idea to use Blockchain to create Digital Certificate.
-              </span>
-            </li>
-            <li style="vertical-align: top; margin: 10px 0; display: block;">
-              <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
-              <span style="display: inline-block; width: 93%; vertical-align: top; color: #999999; font-size: 14px;">
-                <strong style="display: block; font-size: 16px; color: #333333; margin-bottom: 5px;">Project 2</strong>
-                Small Project Android, Data Analysis, Image Processing Result Portal, Voice Calci, Cubic Bispline, Image Compression, smoothing, Fitng Curve.
-              </span>
-            </li>
-          </ul>
-        </div>
-
-        <!--Courses done-->
-        <div style="vertical-align: top; font-size: 13px; color: #333333; margin-bottom: 30px; display: inline-block; width: 47.5%; margin-right: 2%;">
-          <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 16px;">Courses done</strong>
-          <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
-            <li style="vertical-align: top; margin: 5px 0; width: 49.3%; display: inline-block;">
-              <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
-              <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top; width: 86%;">Data Structure</span> 
-            </li>
-            <li style="vertical-align: top; margin: 5px 0; width: 49.3%; display: inline-block;">
-              <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
-              <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top; width: 86%;">Operating Systems</span> 
-            </li>
-            <li style="vertical-align: top; margin: 5px 0; width: 49.3%; display: inline-block;">
-              <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
-              <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top; width: 86%;">Algorithm</span> 
-            </li>
-            <li style="vertical-align: top; margin: 5px 0; width: 49.3%; display: inline-block;">
-              <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
-              <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top; width: 86%;">MySQL</span> 
-            </li>
-            <li style="vertical-align: top; margin: 5px 0; width: 49.3%; display: inline-block;">
-              <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
-              <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top; width: 86%;">Neural Networks</span> 
-            </li>
-            <li style="vertical-align: top; margin: 5px 0; width: 49.3%; display: inline-block;">
-              <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
-              <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top; width: 86%;">Data Analysis</span> 
-            </li>
-            <li style="vertical-align: top; margin: 5px 0; width: 49.3%; display: inline-block;">
-              <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
-              <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top; width: 86%;">Discrete Mathematics</span> 
-            </li>
-            <li style="vertical-align: top; margin: 5px 0; width: 49.3%; display: inline-block;">
-              <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
-              <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top; width: 86%;">Big Data Certification</span> 
-            </li>
-            <li style="vertical-align: top; margin: 5px 0; width: 49.3%; display: inline-block;">
-              <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
-              <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top; width: 86%;">Data Analytics</span> 
-            </li>
-          </ul>
-        </div>        
-
-        <!--Education-->
-        <div style="vertical-align: top; font-size: 13px; color: #333333; margin-bottom: 30px; display: inline-block; width: 47.5%; margin-left: 2%;">
-          <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 16px;">Education</strong>
-          <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
-            <li style="vertical-align: top; margin: 10px 0;">
-              <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
-              <span style="display: inline-block; width: 57%; vertical-align: top; color: #999999;">
-                <strong style="display: block; font-size: 16px; color: #333333;">MBA (Finance) <span style="font-size: 16px; color: #333333; font-weight: bold;">- 80%</span></strong>
-                B. R. Ambedkar University
-              </span>
-              <span style="font-size: 14px; font-style: italic; color: #333333; width: 35%; display: inline-block; vertical-align: top;">2011 - 2013</span> 
-            </li>
-            <li style="vertical-align: top; margin: 10px 0;">
-              <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
-              <span style="display: inline-block; width: 57%; vertical-align: top; color: #999999;">
-                <strong style="display: block; font-size: 16px; color: #333333;">B.Com (Honours) <span style="font-size: 16px; color: #333333; font-weight: bold;">- 90%</span></strong>
-                B. R. Ambedkar University
-              </span>
-              <span style="font-size: 14px; font-style: italic; color: #333333; width: 35%; display: inline-block; vertical-align: top;">2007 - 2011</span> 
-            </li>
-            <li style="vertical-align: top; margin: 10px 0;">
-              <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
-              <span style="display: inline-block; width: 57%; vertical-align: top; color: #999999;">
-                <strong style="display: block; font-size: 16px; color: #333333;">I.Sc (PCM) <span style="font-size: 16px; color: #333333; font-weight: bold;">- 80%</span></strong>
-                Munshi Singh College
-              </span>
-              <span style="font-size: 14px; font-style: italic; color: #333333; width: 35%; display: inline-block; vertical-align: top;">2014 - 2016</span> 
-            </li>
-          </ul>
-        </div>
-
-        <!--Interest-->
-        <div style="vertical-align: top; font-size: 13px; color: #333333; margin-bottom: 30px; display: inline-block; width: 47.5%; margin-right: 2%;">
-          <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 16px;">Interest</strong>
-          <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
-            <li style="vertical-align: top; margin: 5px 0; width: 49.3%; display: inline-block;">
-              <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
-              <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top; width: 86%;">Listening Music</span> 
-            </li>
-            <li style="vertical-align: top; margin: 5px 0; width: 49.3%; display: inline-block;">
-              <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
-              <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top; width: 86%;">Travelling</span> 
-            </li>
-            <li style="vertical-align: top; margin: 5px 0; width: 49.3%; display: inline-block;">
-              <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
-              <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top; width: 86%;">Reading literature Books</span> 
-            </li>
-            <li style="vertical-align: top; margin: 5px 0; width: 49.3%; display: inline-block;">
-              <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
-              <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top; width: 86%;">Action Movies</span> 
-            </li>
-          </ul>
-        </div>
-
-        <!--Certificate-->
-        <div style="vertical-align: top; font-size: 13px; color: #333333; margin-bottom: 30px; display: inline-block; width: 47.5%; margin-left: 2%;">
-          <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 16px;">Certificate</strong>
-          <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
-            <li style="vertical-align: top; margin: 5px 0 10px 0; display: block;">
-              <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
-              <span style="font-size: 14px; color: #555555; display: inline-block; vertical-align: top; width: 93%;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span> 
-            </li>
-            <li style="vertical-align: top; margin: 5px 0 10px 0; display: block;">
-              <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
-              <span style="font-size: 14px; color: #555555; display: inline-block; vertical-align: top; width: 93%;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span> 
-            </li>
-          </ul>
-        </div>
-
-        <!--Reference-->
-        <div style="vertical-align: top; font-size: 13px; color: #333333; margin-bottom: 30px; display: inline-block; width: 47.5%; margin-right: 2%;">
-          <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 16px;">Reference</strong>
-          <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
-            <li style="vertical-align: top; margin: 10px 0;">
-              <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
-              <span style="display: inline-block; width: 75%; vertical-align: top;">
-                <strong style="display: block; font-size: 16px; color: #333333;">Amardeep Singh <span style="font-size: 14px; font-weight: normal; color: #777777; display: inline-block;">(Project Manager)</span> </strong>
-                Infocom Network Pvt. Ltd</span>
-            </li>
-          </ul>
-        </div>
-
-        <!--Languages-->
-        <div style="vertical-align: top; font-size: 13px; color: #333333; margin-bottom: 30px; display: inline-block; width: 47.5%; margin-left: 2%;">
-          <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 16px;">Languages</strong>
-          <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
-            <li style="vertical-align: top; margin: 5px 0; width: 49.3%; display: inline-block;">
-              <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
-              <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top; width: 86%;">English</span> 
-            </li>
-            <li style="vertical-align: top; margin: 5px 0; width: 49.3%; display: inline-block;">
-              <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
-              <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top; width: 86%;">Hindi</span> 
-            </li>
-          </ul>
-        </div>
-        
-      </div>
 
     </div>
-    <div style="position: fixed; left: 0; right: 0; top: 2%; margin: 0 auto;"><img src="images/watermark.png" alt="shinelearning.com" style="width: 100%;"></div>
+
+    <div style="width: 100%; border-bottom: 13px solid #d34d4d; padding: 3% 3% 0 3%;">
+
+        <!--Experience 3-->
+        {% include "partials1/experience.html" %}
+
+
+        <!--Skills 4-->
+        {% include "partials1/skill.html" %}
+
+
+        <!--Project  5-->
+        {% include "partials1/project.html" %}
+
+
+        <!--Courses done  6-->
+        {% include "partials1/course.html" %}
+
+
+        <!--Education  7-->
+        {% include "partials1/education.html" %}
+
+
+        <!--Interest  8-->
+        {% include "partials1/interest.html" %}
+
+
+        <!--Achievement  9-->
+        {% include "partials1/award.html" %}
+
+
+        <!--Reference  10-->
+        {% include "partials1/reference.html" %}
+
+
+        <!--Languages  11-->
+        {% include "partials1/language.html" %}
+
+
+    </div>
+
+</div>
+<div style="position: fixed; left: 0; right: 0; top: 2%; margin: 0 auto;"><img src="images/watermark.png"
+                                                                               alt="shinelearning.com"
+                                                                               style="width: 100%;"></div>
 
 
 </body>

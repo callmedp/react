@@ -14,7 +14,7 @@ import moment from "moment"
 import {fetchPersonalInfo, updatePersonalInfo} from '../../../../store/personalInfo/actions/index'
 import SelectTemplateModal from '../../../Modal/selectTemplateModal';
 import LoaderPage from '../../../Loader/loaderPage';
-import {displaySelectedTemplate,fetchTemplateImages} from "../../../../store/template/actions";
+import {displaySelectedTemplate, fetchTemplateImages} from "../../../../store/template/actions";
 
 
 function SampleNextArrow(props) {
@@ -105,7 +105,7 @@ export class Buy extends Component {
             slidesToScroll: 3,
             variableWidth: true
         };
-        const {userInfo: {first_name, selected_template}, ui: {loader}} = this.props;
+        const {userInfo: {first_name, selected_template}, ui: {loader}, template: {templateImages}} = this.props;
         const {userInfo} = this.props;
         const {checked} = this.state;
         return (
@@ -127,7 +127,7 @@ export class Buy extends Component {
                         <section className="left-sidebar half-width pos-rel">
                             <span onClick={() => this.showEnlargedTemplate(selected_template)} className="zoom"/>
                             <div className="right-sidebar-scroll-main">
-                                <img src={`${this.staticUrl}react/assets/images/resume${selected_template}_preview.jpg`}
+                                <img src={`data:image/png;base64,${templateImages[selected_template - 1]}`}
                                      className="img-responsive" alt=""/>
                             </div>
 
@@ -176,7 +176,7 @@ export class Buy extends Component {
                                                             <span></span>
                                                         </div>
                                                         <img
-                                                            src={`${this.staticUrl}react/assets/images/resume-thumb-${el}.jpg`}
+                                                            src={`data:image/png;base64,${templateImages[key]}`}
                                                             className="img-responsive"
                                                             alt=""/>
                                                     </div>

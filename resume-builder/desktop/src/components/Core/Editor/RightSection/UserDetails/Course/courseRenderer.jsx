@@ -71,8 +71,9 @@ export const CourseRenderer = ({
                                                 <AccordionItemHeading>
                                                     <AccordionItemButton>
                                                         <div className="flex-container">
-                                                             <h3 className={"add-section-heading"}>{fields.get(index).name_of_certification || 'Course'}</h3>
-                                                            <span className={expanded.indexOf(index) > -1 ? "opened-accordion" : "closed-accordion"}></span>
+                                                            <h3 className={"add-section-heading"}>{fields.get(index).name_of_certification || 'Course'}</h3>
+                                                            <span
+                                                                className={expanded.indexOf(index) > -1 ? "opened-accordion" : "closed-accordion"}></span>
                                                             <div className="addon-buttons mr-10">
                                                                 <span
                                                                     onClick={(event) => deleteCourse(index, fields, event)}
@@ -97,6 +98,7 @@ export const CourseRenderer = ({
                                                         <fieldset>
                                                             <label>Course Name</label>
                                                             <Field
+                                                                autoFocus={true}
                                                                 iconClass={'icon-courses-gr'}
                                                                 component={renderField}
                                                                 type={"text"}

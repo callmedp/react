@@ -51,6 +51,7 @@ class Education extends Component {
     }
 
     componentDidMount() {
+
         let till_today = []
         for (let i of this.props.initialValues.list) {
             till_today.push(i.is_pursuing)
@@ -85,12 +86,12 @@ class Education extends Component {
             order: listLength
         })
 
-        scroller.scrollTo(`education${fields.length -1}`, {
+        scroller.scrollTo(`education${fields.length - 1}`, {
             duration: 800,
             delay: 0,
             smooth: 'easeInOutQuad',
             offset: 350,
-            containerId:'education'
+            containerId: 'education'
         })
 
 

@@ -9,7 +9,9 @@ import './styles/main.scss';
 const rootElement = document.getElementById('react-app');
 
 
-ReactDOM.render( <Provider store={store}>
-    <App/>
-    </Provider>, rootElement)
+
+ReactDOM.render( < Provider
+store = {store} >
+    < App / >
+    < /Provider>, rootElement)
 ;

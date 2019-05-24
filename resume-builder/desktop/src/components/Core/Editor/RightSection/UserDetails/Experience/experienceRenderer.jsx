@@ -95,6 +95,7 @@ export const ExperienceRenderer = ({
                                                         <fieldset>
                                                             <label>Designation</label>
                                                             <Field
+                                                                autoFocus={true}
                                                                 iconClass={'icon-designation'}
                                                                 component={renderField}
                                                                 type={"text"}

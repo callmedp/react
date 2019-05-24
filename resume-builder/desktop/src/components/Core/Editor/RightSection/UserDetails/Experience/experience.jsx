@@ -27,6 +27,7 @@ class Experience extends Component {
     }
 
     componentDidMount() {
+
         this.props.fetchUserExperience()
         let till_today = []
         for (let i of this.props.initialValues.list) {
@@ -90,12 +91,12 @@ class Experience extends Component {
             order: listLength
         })
 
-        scroller.scrollTo(`experience${fields.length -1}`, {
+        scroller.scrollTo(`experience${fields.length - 1}`, {
             duration: 800,
             delay: 0,
             smooth: 'easeInOutQuad',
             offset: 470,
-            containerId:'experience'
+            containerId: 'experience'
         })
     }
 

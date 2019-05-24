@@ -98,6 +98,7 @@ export const EducationRenderer = ({
                                                         <fieldset>
                                                             <label>Institution Name </label>
                                                             <Field
+                                                                autoFocus={true}
                                                                 iconClass={'icon-company'}
                                                                 component={renderField} type={"text"}
                                                                 name={`${member}.institution_name`}/>

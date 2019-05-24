@@ -25,6 +25,9 @@ class Project extends Component {
     }
 
     componentDidMount() {
+
+        // document.getElementsByClassName('react-datepicker__current-month')[0].style.display = "none"
+
         this.props.fetchUserProject()
         let till_today = []
         for (let i of this.props.initialValues.list) {
@@ -81,12 +84,12 @@ class Project extends Component {
             order: listLength,
         })
 
-        scroller.scrollTo(`project${fields.length -1}`, {
+        scroller.scrollTo(`project${fields.length - 1}`, {
             duration: 800,
             delay: 0,
             smooth: 'easeInOutQuad',
             offset: 400,
-            containerId:'project'
+            containerId: 'project'
         })
     }
 

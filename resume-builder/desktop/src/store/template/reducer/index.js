@@ -1,4 +1,10 @@
-import {FETCH_TEMPLATE, SAVE_TEMPLATE, SET_SELECTED_TEMPLATE, SET_CUSTOMIZATION} from "../actions/actionTypes";
+import {
+    FETCH_TEMPLATE,
+    SAVE_TEMPLATE,
+    SET_SELECTED_TEMPLATE,
+    SET_CUSTOMIZATION,
+    SAVE_TEMPLATE_IMAGES
+} from "../actions/actionTypes";
 
 const initialState = {
     'html': '',
@@ -7,7 +13,9 @@ const initialState = {
     'text_font_size': 1,
     'heading_font_size': 1,
     'color': 1,
-    'entity_position': []
+    'entity_position': [],
+    'templateImages': []
+
 };
 
 
@@ -31,6 +39,13 @@ export const templateReducer = (state = initialState, action) => {
                 ...action.data
             }
         }
+        case SAVE_TEMPLATE_IMAGES: {
+            return {
+                ...state,
+                ...action.data
+            }
+        }
+
         case SET_SELECTED_TEMPLATE: {
             return {
                 ...state,

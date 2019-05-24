@@ -337,3 +337,7 @@ input[type='submit']:hover {
   z-index: 1000;
   position: relative;
 }
+
+.react-datepicker__current-month {
+  display: none;
+}
