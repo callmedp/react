@@ -12,6 +12,7 @@ import Reference from './UserDetails/Reference/references.jsx';
 import './rightSection.scss'
 import queryString from 'query-string'
 import * as actions from "../../../../store/sidenav/actions";
+import {changeFormName} from "../../../../store/loader/actions/index";
 import {connect} from "react-redux";
 import { animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 
@@ -26,14 +27,18 @@ class RightSection extends Component {
         }
     }
 
+    componentDidMount(){
+        this.props.changeFormName({formName:this.state.type})
+    }
+
 
     componentDidUpdate(prevProps) {
         if (this.props.location !== prevProps.location) {
-            
             const values = queryString.parse(this.props.location.search)
             this.setState({
                 type: (values && values.type) || ''
-            })
+            },()=>{this.props.changeFormName({formName:this.state.type})})
+
         }
     }
 
@@ -92,7 +97,6 @@ class RightSection extends Component {
 
 const handleAddition = (fields,data,offset,type,containerId) =>{
     fields.push(data)
-    console.log("I am here")
 
     scroller.scrollTo(`${type}${fields.length -1}`, {
         duration: 800,
@@ -130,6 +134,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         "updateCurrentLinkPos": (data) => {
             return dispatch(actions.updateCurrentLinkPos(data))
+        },
+        "changeFormName": (data) => {
+            return dispatch(changeFormName(data))
         },
         "handleAddition":(fields,data,offset,type)=>{
             return handleAddition(fields,data,offset,type)

@@ -3,11 +3,11 @@ import './leftSideBar.scss'
 import * as actions from "../../../../store/sidenav/actions";
 import {connect} from "react-redux";
 import queryString from "query-string";
-import {Link} from 'react-router-dom';
 import RenderNavItem from './renderNavItem';
 import * as profileActions from '../../../../store/personalInfo/actions/index';
 import {entityLinkNameLink ,iconClassList,delete_icon} from '../../../../Utils/entitydata.js'
 import moment from 'moment'
+import Swal from 'sweetalert2'
 
 class LeftSideBar extends Component {
 
@@ -20,6 +20,7 @@ class LeftSideBar extends Component {
         this.changeLink = this.changeLink.bind(this);
         this.closeSideNav = this.closeSideNav.bind(this);
         this.updateLink = this.updateLink.bind(this);
+        this.showErrorMessage = this.showErrorMessage.bind(this);
         const values = queryString.parse(this.props.location.search);
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
         this.state = {
@@ -45,16 +46,13 @@ class LeftSideBar extends Component {
     }
 
     changeLink(page) {
-        ////console.log(page)
         this.setState({
             current_page: page
         })
         const {listOfLinks} = this.props.sidenav
-        //console.log(listOfLinks)
         for (let i in listOfLinks) {
             if (page === listOfLinks[i]) {
                 this.props.updateCurrentLinkPos({currentLinkPos: i})
-                ////console.log("Change pos")
             }
         }
 
@@ -63,16 +61,11 @@ class LeftSideBar extends Component {
     addItem(item) {
         let addmore = {...this.state.addmore};
         addmore[item -1].active = true;
-        //this.setState({addMore: addMore})
-        // const addmore_sorted = [].concat(this.state.addmore).sort((a, b) => b.active - a.active)
-        // this.setState({addmore: addmore_sorted})
     }
 
     removeItem(item) {
         let addmore = {...this.state.addmore};
         addmore[item -1].active = false
-        // const addmore_sorted = [].concat(this.state.addmore).sort((a, b) => b.active - a.active)
-        // this.setState({addmore: addmore_sorted})
     }
 
     closeSideNav() {
@@ -93,25 +86,35 @@ class LeftSideBar extends Component {
 
 
     componentDidMount() {
-        ////console.log("mount")
         this.props.fetchPersonalInfo()
+        // this.showErrorMessage('profile')
         let current_page = this.props.location.search.split('=')[1]
         this.setState({
             current_page
         })
         this.props.fetchSideNavStatus()
-        let found_link = false
         for (let i in this.props.sidenav.listOfLinks) {
             if (current_page === this.props.sidenav.listOfLinks[i]) {
-                found_link = true
-                console.log("Here")
                 this.props.updateCurrentLinkPos({currentLinkPos: i})
             }
         }
-        // if (!found_link) {
-        //     this.props.history.push(`/resume-builder/edit/?type=${this.props.sidenav.listOfLinks[0]}`)
-        //     this.props.updateCurrentLinkPos({currentLinkPos: 0})
-        // }
+    }
+
+    showErrorMessage(link) {
+        console.log("Came In Swal")
+        Swal.fire({
+            title: 'Are you sure?',
+            text: `Some information may be lost as required fields are not filled.`,
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, change it!'
+        }).then((result) => {
+            if (result.value) {
+                this.props.history.push(`/resume-builder/edit/?type=${link}`)  
+            }
+        })
     }
 
     componentDidUpdate(prevProps) {
@@ -128,7 +131,6 @@ class LeftSideBar extends Component {
             })
             for (let i in this.props.sidenav.listOfLinks) {
                 if (current_page === this.props.sidenav.listOfLinks[i]) {
-                    console.log("Here")
                     this.props.updateCurrentLinkPos({currentLinkPos: i})
                 }
             }
@@ -137,31 +139,32 @@ class LeftSideBar extends Component {
         if (this.props.personalInfo.entity_preference_data !== prevProps.personalInfo.entity_preference_data && !this.state.loaded) {
             
             this.setState({addmore: this.props.personalInfo.entity_preference_data},this.updateLink)
-            //console.log("UpdateMount here")
 
         }
-        // this.updateLink()
-
-
     }
 
     updateLink() {
-        //console.log("came here")
         let links = []
         for (let i of this.state.addmore) {
             if (i.active) {
                 links.push(entityLinkNameLink[i.entity_id])
-                ////console.log(i.entity_link)
             }
         }
         console.log(links)
         this.props.updateListOfLink({listOfLinks: links})
-        ////console.log("I am here")
     }
 
     render() {
         const {type, addmore, current_page} = this.state;
-        const {sidenavStatus} = this.props.sidenav
+        const {sidenav:{sidenavStatus},formData,loader:{formName}} = this.props
+        let error = false;
+        const obj = formData && formData[formName] || {};
+        let syncErrors = obj['syncErrors'] || {};
+        if ('fields' in obj) {
+            if ('list' in syncErrors) (syncErrors && syncErrors['list'] || []).map(el => (el ? Object.keys(el) : []).map(key => (!!el[key] ? error = true : false)))
+            else Object.keys(syncErrors || {}).map(key => (!!syncErrors[key] ? error = true : false));
+        }
+        console.log("ERROR",error)
         return (
             <React.Fragment>
                 {(addmore.length) ?
@@ -195,6 +198,8 @@ class LeftSideBar extends Component {
                                                         iconClass={iconClassList[item.entity_id]}
                                                         removeItem={this.removeItem}
                                                         addItem={this.addItem}
+                                                        error={error}
+                                                        showErrorMessage={this.showErrorMessage}
                                                         deleteIconExist={delete_icon[item.entity_id]}/>)
                                         }
                                         
@@ -252,6 +257,8 @@ const mapStateToProps = (state) => {
     return {
         initialValues: state.sidenav,
         sidenav: state.sidenav,
+        formData: state && state.form,
+        loader: state && state.loader
     }
 };
 
