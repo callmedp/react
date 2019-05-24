@@ -258,7 +258,7 @@ const mapDispatchToProps = (dispatch) => {
                     ...userExperience,
                     ...{
                         start_date: (start_date && moment(start_date).format('YYYY-MM-DD')) || '',
-                        end_date: (end_date && moment(end_date).format('YYYY-MM-DD')) || ''
+                        end_date: (end_date && moment(end_date).format('YYYY-MM-DD')) || null
                     }
                 };
                 return userExperience;
