@@ -19,7 +19,6 @@ from resumebuilder.api.core.serializers import (CandidateSerializer, SkillSerial
                                                 CandidateReferenceSerializer, CandidateSocialLinkSerializer,
                                                 CandidateLanguageSerializer,OrderCustomisationSerializer)
 
-from resumebuilder.mixins import (SessionManagerMixin)
 from resumebuilder.utils import ResumeEntityReorderUtility
 from resumebuilder.constants import EDUCATION_PARENT_CHILD_HEIRARCHY_LIST
 
@@ -32,7 +31,7 @@ from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 # third party imports
 from rest_framework import status
 from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView)
-from rest_framework.views import (APIView)
+from rest_framework.views import APIView
 from rest_framework.parsers import (FormParser, MultiPartParser)
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
@@ -721,6 +720,10 @@ class ResumeImagePreviewView(APIView):
     """
     Returns base64 encoded image from cloud.
     If not found, returns 404.
+
+    GET params supported - 
+
+    tsize - Get thumbnails (?tsize=200x200)
     """
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsAuthenticated,)
@@ -729,6 +732,7 @@ class ResumeImagePreviewView(APIView):
     def get(self,request,*args,**kwargs):
         candidate_id = kwargs.get('candidate_id')
         template_no = kwargs.get('template_no')
+        tsize = request.GET.get('tsize','')
 
         candidate_obj = Candidate.objects.filter(candidate_id=candidate_id).first()
         if not candidate_obj:
@@ -737,9 +741,14 @@ class ResumeImagePreviewView(APIView):
         if candidate_obj.candidate_id != request.user.id:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+        name_suffix = template_no
+        split_tsize = tsize.split("x")
+        if tsize and  len(split_tsize) > 1:
+            name_suffix += "-{}x{}".format(split_tsize[0],split_tsize[1])
+
         try:
             file_obj = GCPPrivateMediaStorage().open("{}/{}/resumetemplate-{}.png".\
-                format(settings.RESUME_TEMPLATE_DIR,candidate_obj.id,template_no),"rb")
+                format(settings.RESUME_TEMPLATE_DIR,candidate_obj.id,name_suffix),"rb")
         except Exception as e:
             logging.getLogger('error_log').error("Not Found - {}/{}/resumetemplate-{}.png".\
                 format(settings.RESUME_TEMPLATE_DIR,candidate_obj.id,template_no))

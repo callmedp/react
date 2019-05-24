@@ -19,9 +19,12 @@ from celery.decorators import task
 def generate_image_for_resume(candidate_id):
     from .models import Candidate
     from core.mixins import ResumeGenerate
+
     candidate = Candidate.objects.filter(id=candidate_id).first()
     if not candidate:
-        return {}
+        return
+
+    thumbnail_sizes = [(249,151)]
 
     entity_preference = eval(candidate.entity_preference_data)
     extracurricular = candidate.extracurricular_list
@@ -34,6 +37,8 @@ def generate_image_for_resume(candidate_id):
     certifications = candidate.candidatecertification_set.all().order_by('order')
     languages = candidate.candidatelanguage_set.all().order_by('order')
     current_exp = experience.filter(is_working=True).order_by('-start_date').first()
+
+    generator_obj = ResumeGenerate()
 
     latest_experience, latest_end_date = '', None
     for i in experience:
@@ -67,10 +72,16 @@ def generate_image_for_resume(candidate_id):
         img = Image.open(in_mem_file)
         img = remove_transparency(img)
         img.save(in_mem_file_to_upload,"PNG")
-        ResumeGenerate().store_file(str(candidate.id), file_name,in_mem_file_to_upload.getvalue())
+        generator_obj.store_file(str(candidate.id),file_name,in_mem_file_to_upload.getvalue())
+
+        for tsize in thumbnail_sizes:
+            tname = "resumetemplate-{}-{}x{}.png".format(i,tsize[0],tsize[1])
+            in_mem_file_to_upload = BytesIO()
+            img.thumbnail(tsize,Image.ANTIALIAS)
+            img.save(in_mem_file_to_upload, "PNG")
+            generator_obj.store_file(str(candidate.id),tname,in_mem_file_to_upload.getvalue())
 
 def remove_transparency(im, bg_colour=(255, 255, 255)):
-
     if im.mode in ('RGBA', 'LA') or (im.mode == 'P' and 'transparency' in im.info):
         alpha = im.convert('RGBA').split()[-1]
         bg = Image.new("RGBA", im.size, bg_colour + (255,))
