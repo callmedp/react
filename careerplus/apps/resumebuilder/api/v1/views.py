@@ -18,8 +18,9 @@ from resumebuilder.api.core.serializers import (CandidateSerializer, SkillSerial
                                                 CandidateReferenceSerializer, CandidateSocialLinkSerializer,
                                                 CandidateLanguageSerializer,OrderCustomisationSerializer)
 
+
 from resumebuilder.mixins import (SessionManagerMixin)
-from resumebuilder.constants import EDUCATION_PARENT_CHILD_HEIRARCHY_LIST
+from resumebuilder.constants import EDUCATION_PARENT_CHILD_HEIRARCHY_LIST, JOB_TITLES
 
 # inter app imports
 from shine.core import ShineCandidateDetail
@@ -742,49 +743,75 @@ class ResumeImagePreviewView(APIView):
         return Response(base64.b64encode(file_obj.read()))
 
 
-class JobtoExperienceSuggestionApiView(APIView):
-    authentication_classes = (ShineUserAuthentication,)
-    permission_classes = (IsAuthenticated,)
+class SuggestionApiView(APIView):
+    authentication_classes = ()
+    permission_classes = ()
     serializer_class = None
 
+    PARAMS_MAPPING_TO_FUNCTION = {
+        'autocomplete': {
+            'job_title': 'get_job_title_suggestion'
+        },
+        'suggestion_job_title': {
+            'experience': 'job_title_to_experience',
+            'summary': 'job_title_to_summary'
+
+        }
+    }
+
     def get(self, request, *args, **kwargs):
-        job_title = kwargs.get('job_title', None)
-        cache = get_redis_connection('search_lookup')
-        if job_title:
-            job_title = job_title.lower()
-            suggestion = cache.hget('suggestion_set', job_title.encode())
-            suggestion = eval(suggestion)
-        else:
-            job_title_keys = list(cache.hgetall('suggestion_set').keys())
-            random_int = random.randint(0,len(job_title_keys))
-            job_title = job_title_keys[random_int]
-            suggestion = cache.hget('suggestion_set', job_title)
+        main_type = request.GET.get('main_type', None)
+        if main_type:
+            sub_type = request.GET.get('sub_type', None)
+            if sub_type:
+                func = self.PARAMS_MAPPING_TO_FUNCTION['suggestion_' + main_type].get(sub_type, None)
+            else:
+                func = self.PARAMS_MAPPING_TO_FUNCTION['autocomplete'].get(main_type, None)
+            if func:
+                return getattr(self, func)(request, *args, **kwargs)
+
         return Response(
-            data=suggestion,
+            data=[],
+            status=status.HTTP_200_OK
+        )
+
+    def job_title_to_experience(self, request, *args, **kwargs):
+        job_title = request.GET.get('query', None)
+        cache = get_redis_connection('search_lookup')
+        suggestion = []
+        if job_title:
+            job_title = job_title.title()
+            suggest = cache.hget('suggestion_set_jt_experience', job_title.title())
+            if suggest:
+                suggestion = eval(suggest)
+
+        return Response(
+            data={'result': suggestion},
             status=status.HTTP_200_OK
         )
 
 
-
-class JobTitleSuggestionApiView(APIView):
-    authentication_classes = (ShineUserAuthentication,)
-    permission_classes = (IsAuthenticated,)
-    serializer_class = None
-
-    def get(self, request, *args, **kwargs):
-        job_title = kwargs.get('job_title', None)
-        cache = get_redis_connection('search_lookup')
+    def get_job_title_suggestion(self, request, *args, **kwargs):
+        job_title = request.GET.get('query', None)
         if job_title:
-            job_title = job_title.lower()
-            job_title_keys = list(map(lambda x: x.decode(), list(cache.hgetall('suggestion_set').keys())))
-            suggestion_keys = [key for key in job_title_keys if key.startswith(job_title)]
+            job_title = job_title.title()
+            suggestion_keys = [key for key in JOB_TITLES if key.startswith(job_title)]
         return Response(
-            data=suggestion_keys,
+            data={'result':suggestion_keys},
             status=status.HTTP_200_OK
         )
 
+    def job_title_to_summary(self, request, *args, **kwargs):
+        job_title = request.GET.get('query', None)
+        cache = get_redis_connection('search_lookup')
+        suggestion = []
+        if job_title:
+            job_title = job_title.title()
+            suggest = cache.hget('suggestion_set_jt_summary', job_title.title())
+            if suggest:
+                suggestion = eval(suggest)
 
-
-
-
-
+        return Response(
+            data={'result':suggestion},
+            status=status.HTTP_200_OK
+        )
