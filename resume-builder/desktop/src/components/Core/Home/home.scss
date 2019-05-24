@@ -98,11 +98,11 @@
     }
 
     &--image {
-        height: 103px;
-        @include border-radius(8px);
+        height: 83px;
+        @include border-radius(100%);
         background: $blue1;
-        box-shadow: 6.729px 1.929px 18px 0px rgba(0, 0, 0, 0.39);
-        flex: 0 0 105px;
+        box-shadow: 6.729px 1.929px 9px 0px rgba(0, 0, 0, 0.23);
+        flex: 0 0 83px;
         margin-left: -60px;
         position: relative;
 
@@ -212,12 +212,26 @@
     }
 
     &--image {
-        flex: 0 0 60px;
+        flex: 0 0 57px;
         @include flexbox();
         flex-direction: row;
         justify-content: flex-start;
         align-self: flex-start;
         margin-top: 5px;
+        height: 57px;
+        background: $white;
+        @include border-radius(100%);
+        box-shadow: -1.452px 5.822px 20px 0px rgba(0, 0, 0, 0.13);
+        position: relative;
+
+        span {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+        }
     }
 
     &--content {
@@ -225,7 +239,96 @@
         @include flexbox();
         flex-direction: column;
         justify-content: flex-start;
-        padding-right: 30px;
+        padding-left: 20px;
+        padding-right: 10px;
         align-self: flex-start;
+    }
+}
+
+.shinelearning {
+    @include flexbox();
+    align-items: flex-start;
+    justify-content: flex-start;
+    position: relative;
+    flex-direction: column;
+    flex: 1;
+    margin-right: 50px;
+
+    p {
+        font-size: 1.4rem;
+        margin: 30px 0 40px 0;
+    }
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding-left: 0;
+        line-height: 20px;
+
+        li {
+            display: inline-block;
+            margin-right: 15px;
+            background: #f8f8f8;
+            padding: 5px 20px 5px 35px;
+            @include border-radius(8px);
+            color: $txt1;
+            position: relative;
+
+            &:before {
+                position: absolute;
+                left: 15px;
+                top: 12px;
+                content: '';
+                width: 6px;
+                height: 6px;
+                @include border-radius(100%);
+                display: inline-block;
+                background: $blue1;
+            }
+        }
+    }
+}
+
+.reachout-tous {
+    box-shadow: 0 0 15px 0px rgba(0, 0, 0, 0.16);
+    @include border-radius(4px);
+    @include flexbox();
+    align-items: flex-start;
+    justify-content: flex-start;
+    position: relative;
+    flex-direction: column;
+    flex: 0 0 362px;
+    padding: 15px 20px 30px 20px;
+    margin: -6% 15px 30px 15px;
+    background: $white;
+
+    h2 {
+        margin: 10px 0 10px 0!important;
+    }
+
+    strong {
+        margin-bottom: 20px;
+    }
+
+      input[type='text'] {
+      width: 100%;
+      border: 1px solid $border1;
+      height: 45px;
+      @include border-radius(10px);
+      box-shadow: none;
+      padding: 0 10px;
+      font-weight: 400;
+      font-size: 1.3rem;
+    }
+
+    .flex-container {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .orange-button {
+        margin: 5px 0 0 0;
+        padding-left: 40px;
+        padding-right: 40px;
     }
 }
