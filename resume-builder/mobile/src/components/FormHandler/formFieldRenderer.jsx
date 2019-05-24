@@ -82,7 +82,7 @@ export const datepicker =
                     </span>
                 </div>
                 <DatePicker {...input}
-                            value={disabled ? "This is disabled" : input.value}
+                            value={disabled ? moment().format('YYYY-MM-DD').toString() : input.value}
                             className={className}
                             dateFormat="yyyy-MM-dd"
                             autoComplete="off"
