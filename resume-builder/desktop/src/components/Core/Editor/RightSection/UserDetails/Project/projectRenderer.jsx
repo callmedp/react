@@ -72,8 +72,9 @@ export const ProjectRenderer = ({
                                                 <AccordionItemHeading>
                                                     <AccordionItemButton>
                                                         <div className="flex-container">
-                                                             <h3 className={"add-section-heading"}>{fields.get(index).project_name || 'Project'}</h3>
-                                                            <span className={expanded.indexOf(index) > -1 ? "opened-accordion" : "closed-accordion"}></span>
+                                                            <h3 className={"add-section-heading"}>{fields.get(index).project_name || 'Project'}</h3>
+                                                            <span
+                                                                className={expanded.indexOf(index) > -1 ? "opened-accordion" : "closed-accordion"}></span>
                                                             <div className="addon-buttons mr-10">
                                                                     <span
                                                                         onClick={(event) => deleteProject(index, fields, event)}
@@ -98,6 +99,7 @@ export const ProjectRenderer = ({
                                                         <fieldset>
                                                             <label>Project Name</label>
                                                             <Field component={renderField}
+                                                                   autoFocus={true}
                                                                    iconClass={'icon-projects-gr'}
                                                                    type={"text"}
                                                                    name={`${member}.project_name`}

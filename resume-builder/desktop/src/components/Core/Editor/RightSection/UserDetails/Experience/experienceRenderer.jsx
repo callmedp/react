@@ -6,7 +6,7 @@ import {
     AccordionItemPanel
 } from "react-accessible-accordion";
 import {Field} from "redux-form";
-import {datepicker, renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer";
+import {datepicker, renderField, renderTextArea,  renderDynamicSelect} from "../../../../../FormHandler/formFieldRenderer";
 import React from "react";
 import styles from './experience.scss'
 
@@ -95,6 +95,7 @@ export const ExperienceRenderer = ({
                                                         <fieldset>
                                                             <label>Designation</label>
                                                             <Field
+                                                                autoFocus={true}
                                                                 iconClass={'icon-designation'}
                                                                 component={renderField}
                                                                 type={"text"}

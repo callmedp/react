@@ -16,6 +16,7 @@ class Edit extends Component {
         this.deleteFromVisibleList = this.deleteFromVisibleList.bind(this);
         this.addIntoVisibleList = this.addIntoVisibleList.bind(this);
         this.showErrorMessage = this.showErrorMessage.bind(this);
+        this.handleDeleteClick = this.handleDeleteClick.bind(this);
         this.state = {
             preferenceList: this.props.entityList
         };
@@ -92,6 +93,22 @@ class Edit extends Component {
         })
     }
 
+    handleDeleteClick(elem) {
+        Swal.fire({
+            text: "Do you really want to remove this section?",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Confirm'
+        }).then((result) => {
+            if (result.value) {
+                this.deleteFromVisibleList(elem);
+            }
+        })
+
+    }
+
     componentDidUpdate(prevProps) {
         if (this.props.location !== prevProps.location) {
             const values = queryString.parse(this.props.location.search);
@@ -141,7 +158,7 @@ class Edit extends Component {
                                     }
                                     {
                                         !!(elem['entity_id'] !== 1 && elem['entity_id'] !== 6) ?
-                                            <span onClick={() => this.deleteFromVisibleList(elem)}
+                                            <span onClick={() => this.handleDeleteClick(elem)}
                                                   className="icon-delete pull-right mt-20"/> : ''
                                     }
                                 </li>
@@ -181,7 +198,6 @@ const mapStateToProps = (state) => {
         entityList: state.personalInfo && state.personalInfo.entity_preference_data || [],
         ui: state.ui,
         formData: state && state.form
-
     }
 }
 

@@ -3,7 +3,7 @@ import {call, takeLatest, put, all} from 'redux-saga/effects'
 import * as Actions from '../actions/actionTypes'
 import {Api} from "./Api";
 import {UPDATE_UI} from "../../ui/actions/actionTypes";
-import {FETCH_TEMPLATE_IMAGES, SET_CUSTOMIZATION} from "../actions/actionTypes";
+import {FETCH_TEMPLATE_IMAGES, SET_CUSTOMIZATION, SAVE_TEMPLATE_IMAGES} from "../actions/actionTypes";
 
 
 function* fetchTemplate(action) {
@@ -70,7 +70,8 @@ function* fetchTemplateImages(action) {
         if (result['error']) {
             console.log('error');
         }
-        console.log('---', result)
+        const images = result.map(el => el.data)
+        yield  put({type: SAVE_TEMPLATE_IMAGES, data: {templateImages: images}})
         yield put({type: UPDATE_UI, data: {loader: false}});
 
         // yield call(fetchTemplate)

@@ -94,6 +94,7 @@ export const AwardRenderer = ({
                                                         <fieldset className="error">
                                                             <label>Title</label>
                                                             <Field
+                                                                autoFocus ={true}
                                                                 iconClass={'icon-awards-gr'}
                                                                 component={renderField} type={"text"}
                                                                 name={`${member}.title`}

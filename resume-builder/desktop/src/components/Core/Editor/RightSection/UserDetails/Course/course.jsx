@@ -23,6 +23,7 @@ class Course extends Component {
     }
 
     componentDidMount() {
+
         this.props.fetchUserCourse()
     }
 

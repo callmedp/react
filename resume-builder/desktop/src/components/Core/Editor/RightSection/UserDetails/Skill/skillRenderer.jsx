@@ -61,9 +61,7 @@ export const SkillRenderer = ({
                 <ul>
                     <Accordion
 
-                        onChange={(value) => {
-                            console.log('value ', value);
-                        }}
+                        onChange={(value) => handleAccordionClick(value)}
                         allowZeroExpanded={false}
                         allowMultipleExpanded={true}
                         preExpanded={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}>
@@ -102,6 +100,7 @@ export const SkillRenderer = ({
                                                     <fieldset>
                                                         <label>Skill name</label>
                                                         <Field
+                                                            autoFocus={true}
                                                             iconClass={'icon-skills-gr'}
                                                             component={renderField}
                                                             type={"text"} name={`${member}.name`}
