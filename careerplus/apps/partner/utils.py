@@ -568,7 +568,7 @@ class CertiticateParser:
                 candidate_id=shineid, data=post_data, headers=headers
             )
             if flag:
-                logging.getLogger('inf_log').error("Certificate %s for Candidate Id %s" % (str(user_certificate.certificate.name), str(user_certificate.candidate_id)))
+                logging.getLogger('info_log').error("Certificate %s for Candidate Id %s" % (str(user_certificate.certificate.name), str(user_certificate.candidate_id)))
                 last_op_type = user_certificate.status
                 user_certificate.status = 1
                 user_certificate.candidate_id = shineid
