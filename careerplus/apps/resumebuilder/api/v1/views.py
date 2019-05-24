@@ -1,5 +1,5 @@
 # python imports
-import base64
+import base64, json, logging
 import random
 from datetime import datetime, date
 
@@ -8,6 +8,7 @@ from django.conf import settings
 from django.template.loader import get_template
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django_redis import get_redis_connection
+
 # local imports
 from resumebuilder.models import (Candidate, Skill, CandidateExperience, CandidateEducation, CandidateCertification,
                                   CandidateProject, CandidateReference, CandidateSocialLink, CandidateAchievement,
@@ -18,7 +19,7 @@ from resumebuilder.api.core.serializers import (CandidateSerializer, SkillSerial
                                                 CandidateReferenceSerializer, CandidateSocialLinkSerializer,
                                                 CandidateLanguageSerializer,OrderCustomisationSerializer)
 
-from resumebuilder.mixins import (SessionManagerMixin)
+from resumebuilder.utils import ResumeEntityReorderUtility
 from resumebuilder.constants import EDUCATION_PARENT_CHILD_HEIRARCHY_LIST
 
 # inter app imports
@@ -30,7 +31,7 @@ from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 # third party imports
 from rest_framework import status
 from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView)
-from rest_framework.views import (APIView)
+from rest_framework.views import APIView
 from rest_framework.parsers import (FormParser, MultiPartParser)
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
@@ -693,30 +694,36 @@ class EntityReorderView(APIView):
     def post(self,request,*args,**kwargs):
         candidate_id = kwargs.get('candidate_id')
         template_no = int(str(kwargs.get('template_no','')))
-        entity_id = request.data.get('entity_id')
-        step = request.data.get('step')
+        entity_id = str(request.data.get('entity_id',''))
+        step = str(request.data.get('step',''))
 
-        current_entity_data = OrderCustomisation.objects.filter(\
-            candidate_id=candidate_id,template_no=template_no).first()
+        if not step or not step in ['1','-1']:
+            return Response({"detail":"Please provide proper data"},status=status.HTTP_400_BAD_REQUEST)
 
-        entity_position = json.loads(current_entity_data.entity_position)
-        entity_status = None
+        entity_order_object = OrderCustomisation.objects.filter(\
+            candidate__candidate_id=candidate_id,template_no=template_no).first()
 
-        for item in entity_position:
-            if item.get('entity_id') == entity_id:
-                entity_status = item
-                break
+        if not entity_order_object:
+            return Response({"detail":"User data not found"},status=status.HTTP_400_BAD_REQUEST)
 
-        entity_pos = entity_status.get('pos')
-        entity_alignment = entity_status.get('alignment')
+        step = int(step)
+        entity_id = int(entity_id)
+        order_reshuffle_object = ResumeEntityReorderUtility(candidate_id=candidate_id,template_no=template_no)
+        entity_position = order_reshuffle_object.move_entity(entity_id,step)
+        entity_order_object.entity_position = json.dumps(entity_position)
+        entity_order_object.save()
 
-
+        return Response({"data":entity_order_object.entity_position},status=status.HTTP_200_OK)
 
 
 class ResumeImagePreviewView(APIView):
     """
     Returns base64 encoded image from cloud.
     If not found, returns 404.
+
+    GET params supported - 
+
+    tsize - Get thumbnails (?tsize=200x200)
     """
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsAuthenticated,)
@@ -725,16 +732,27 @@ class ResumeImagePreviewView(APIView):
     def get(self,request,*args,**kwargs):
         candidate_id = kwargs.get('candidate_id')
         template_no = kwargs.get('template_no')
+        tsize = request.GET.get('tsize','')
 
-        candidate_obj = Candidate.objects.filter(id=candidate_id).first()
+        candidate_obj = Candidate.objects.filter(candidate_id=candidate_id).first()
         if not candidate_obj:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         if candidate_obj.candidate_id != request.user.id:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        file_obj = GCPPrivateMediaStorage().open("{}/{}/resumetemplate-{}.png".\
-            format(settings.RESUME_TEMPLATE_DIR,candidate_id,template_no),"rb")
+        name_suffix = template_no
+        split_tsize = tsize.split("x")
+        if tsize and  len(split_tsize) > 1:
+            name_suffix += "-{}x{}".format(split_tsize[0],split_tsize[1])
+
+        try:
+            file_obj = GCPPrivateMediaStorage().open("{}/{}/resumetemplate-{}.png".\
+                format(settings.RESUME_TEMPLATE_DIR,candidate_obj.id,name_suffix),"rb")
+        except Exception as e:
+            logging.getLogger('error_log').error("Not Found - {}/{}/resumetemplate-{}.png".\
+                format(settings.RESUME_TEMPLATE_DIR,candidate_obj.id,template_no))
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
         if not file_obj.size:
             return Response(status=status.HTTP_404_NOT_FOUND)
@@ -763,7 +781,6 @@ class JobtoExperienceSuggestionApiView(APIView):
             data=suggestion,
             status=status.HTTP_200_OK
         )
-
 
 
 class JobTitleSuggestionApiView(APIView):

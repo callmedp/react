@@ -147,55 +147,55 @@
 }
 
 .icon-advantage1 {
-    @include icon-inblock (51px, 51px, -1px -243px);
+    @include icon-inblock (29px, 34px, -89px -241px);
 }
 
 .icon-advantage2 {
-    @include icon-inblock (56px, 56px, -76px -244px);
+    @include icon-inblock (26px, 26px, -125px -241px);
 }
 
 .icon-advantage3 {
-    @include icon-inblock (54px, 52px, -155px -244px);
+    @include icon-inblock (34px, 19px, -159px -241px);
 }
 
 .icon-advantage4 {
-    @include icon-inblock (40px, 53px, -236px -244px);
+    @include icon-inblock (48px, 32px, -203px -240px);
 }
 
 .icon-works1 {
-    @include icon-inblock (119px, 122px, -1px -359px);
+    @include icon-inblock (119px, 122px, -1px -327px);
 }
 
 .icon-works2 {
-    @include icon-inblock (113px, 115px, -129px -354px);
+    @include icon-inblock (113px, 115px, -129px -322px);
 }
 
 .icon-works3 {
-    @include icon-inblock (113px, 112px, -251px -354px);
+    @include icon-inblock (113px, 112px, -251px -322px);
 }
 
 .icon-features1 {
-    @include icon-inblock (39px, 47px, -362px -240px);
+    @include icon-inblock (19px, 22px, 0 -267px);
 }
 
 .icon-features2 {
-    @include icon-inblock (35px, 35px, -410px -240px);
+    @include icon-inblock (19px, 19px, -26px -269px);
 }
 
 .icon-features3 {
-    @include icon-inblock (34px, 45px, -459px -240px);
+    @include icon-inblock (25px, 19px, -51px -268px);
 }
 
 .icon-features4 {
-    @include icon-inblock (41px, 42px, 0 -306px);
+    @include icon-inblock (19px, 19px, 0 -297px);
 }
 
 .icon-features5 {
-    @include icon-inblock (38px, 40px, -52px -306px);
+    @include icon-inblock (14px, 27px, -26px -295px);
 }
 
 .icon-features6 {
-    @include icon-inblock (42px, 42px, -105px -306px);
+    @include icon-inblock (23px, 26px, -48px -294px);
 }
 
 .icon-close {
@@ -288,4 +288,20 @@
 
 .icon-gender {
     @include icon-inblock (20px, 20px, -357px -150px);
+}
+
+.icon-builderexpert1 {
+    @include icon-inblock (23px, 22px, 0 -240px);
+}
+
+.icon-builderexpert2 {
+    @include icon-inblock (18px, 16px, -34px -240px);
+}
+
+.icon-builderexpert3 {
+    @include icon-inblock (20px, 14px, -61px -240px);
+}
+
+.icon-shinelearning {
+    @include icon-inblock (190px, 40px, -84px -280px);
 }

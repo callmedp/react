@@ -102,7 +102,7 @@ class Skill extends Component {
     async updateInfoBeforeLoss(){
 
         if(!this.state.submit){
-            const form_data = this.props.info.form.Skill;
+            const form_data = this.props.info.form.skill;
             let error = false
             let error_values =form_data["syncErrors"]
             if(error_values){
@@ -197,7 +197,7 @@ class Skill extends Component {
 }
 
 export const SkillForm = reduxForm({
-    form: 'Skill',
+    form: 'skill',
     validate,
     enableReinitialize: true
 })(Skill);
