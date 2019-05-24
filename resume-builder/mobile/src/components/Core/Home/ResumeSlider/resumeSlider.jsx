@@ -46,19 +46,19 @@ export default class ResumeSlider extends Component {
                 <div className="proven-resume__slideWrap mt-0">
                     <Slider {...settings}>
                         <div className="proven-resume__imageWrap">
-                            <img src={`${this.staticUrl}react/assets/images/mobile/resume.jpg`} alt=""/>
+                            <img src={`${this.staticUrl}react/assets/images/mobile/resume-1.jpg`} alt=""/>
                         </div>
                         <div className="proven-resume__imageWrap">
-                            <img src={`${this.staticUrl}react/assets/images/mobile/resume.jpg`} alt=""/>
+                            <img src={`${this.staticUrl}react/assets/images/mobile/resume-2.jpg`} alt=""/>
                         </div>
                         <div className="proven-resume__imageWrap">
-                            <img src={`${this.staticUrl}react/assets/images/mobile/resume.jpg`} alt=""/>
+                            <img src={`${this.staticUrl}react/assets/images/mobile/resume-3.jpg`} alt=""/>
                         </div>
                         <div className="proven-resume__imageWrap">
-                            <img src={`${this.staticUrl}react/assets/images/mobile/resume.jpg`} alt=""/>
+                            <img src={`${this.staticUrl}react/assets/images/mobile/resume-4.jpg`} alt=""/>
                         </div>
                         <div className="proven-resume__imageWrap">
-                            <img src={`${this.staticUrl}react/assets/images/mobile/resume.jpg`} alt=""/>
+                            <img src={`${this.staticUrl}react/assets/images/mobile/resume-5.jpg`} alt=""/>
                         </div>
                     </Slider>
 
