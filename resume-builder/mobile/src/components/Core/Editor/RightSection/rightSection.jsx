@@ -28,16 +28,22 @@ class RightSection extends Component {
     }
 
     componentDidMount(){
-        this.props.changeFormName({formName:this.state.type})
+        this.state.type === 'profile' ?
+             this.props.changeFormName({formName:'personalInfo'}):
+             this.props.changeFormName({formName:this.state.type})
     }
 
 
     componentDidUpdate(prevProps) {
+
         if (this.props.location !== prevProps.location) {
             const values = queryString.parse(this.props.location.search)
             this.setState({
                 type: (values && values.type) || ''
-            },()=>{this.props.changeFormName({formName:this.state.type})})
+            },()=>{     this.state.type === 'profile' ?
+                        this.props.changeFormName({formName:'personalInfo'}): 
+                        this.props.changeFormName({formName:this.state.type})
+                    })
 
         }
     }
