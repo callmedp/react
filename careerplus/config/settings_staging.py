@@ -403,11 +403,3 @@ try:
     from .settings_local import *
 except:
     pass
-
-##for testing purpose using live working key
-
-# CCAVENUE_WORKING_KEY = 'BB84397177B2D640744BA272627C2A61'
-
-
-# for testing purpose. Delete below site_url after use
-# STATIC_URL = 'http://127.0.0.1:8000/media/static/'
