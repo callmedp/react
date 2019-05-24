@@ -169,6 +169,12 @@
     background-position: -134px -182px;
     margin: 8px 0 0 8px;
   }
+ 
+  &--editTick {
+    @include size(19px, 14px, block);
+    background-position: -133px -202px;
+    margin-left: 8px;
+  }
 
   // &--back-white {
   //     @include square(15px, 15px);

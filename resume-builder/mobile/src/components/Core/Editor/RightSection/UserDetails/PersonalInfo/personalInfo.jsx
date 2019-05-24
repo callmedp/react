@@ -178,8 +178,11 @@ class PersonalInfo extends Component {
                         <h1>{heading}</h1>:
                         <input type="text" autoFocus placeholder={heading} onBlur={(e)=>this.updateInputValue('blur',e)}
                          onKeyDown={(e)=>this.updateInputValue('keyPress',e)}/>
+                         
                     }
                     <i className="sprite icon--edit" onClick={()=>{this.setState({editHeading:true})}}></i>
+                   
+                    <i className="sprite icon--editTick"></i>
                 </div>
                 
                 
