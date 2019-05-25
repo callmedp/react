@@ -15,12 +15,12 @@ const fetchTemplateImages = (candidateId, templateId = 6, query) => {
 };
 const fetchDefaultCustomization = (candidateId, templateId = 6) => {
 
-    const url = `candidate/${candidateId}/customisations/${templateId}/`;
+    const url = `candidate/${candidateId}/order-customisations/${templateId}/`;
     return BaseApiService.get(`${siteDomain}/api/v1/resume/${url}`);
 };
 
 const customizeTemplate = (candidateId, templateId, data) => {
-    const url = `candidate/${candidateId}/customisations/${templateId}/`
+    const url = `candidate/${candidateId}/order-customisations/${templateId}/`
     return BaseApiService.patch(`${siteDomain}/api/v1/resume/${url}`, data)
 }
 

@@ -70,23 +70,37 @@ def skill_color(proficiency, color):
 
 @register.filter
 def degree(proficiency):
-    if proficiency == 1:
-        return -50
-    elif proficiency == 2:
-        return -20
-    elif proficiency == 3:
-        return 10
-    elif proficiency == 4:
-        return 50
-    elif proficiency == 5:
-        return 90
-    elif proficiency == 6:
-        return -65
-    elif proficiency == 7:
-        return -30
-    elif proficiency == 8:
-        return 10
-    elif proficiency == 9:
-        return 50
-    elif proficiency == 10:
-        return 90
+    proficiency_dict = {
+        1: -50,
+        2: -20,
+        3: 10,
+        4: 50,
+        5: 90,
+        6: -65,
+        7: -30,
+        8: 10,
+        9: 50,
+        10: 90
+    }
+    return proficiency_dict[proficiency]
+
+
+@register.filter
+def background_color_choice(color_code):
+    code_dict = {
+        1: '#639F59',
+        2: '#4D7BA7',
+        3: '#D95B5B',
+        4: '#000000',
+        5: '#C6A828',
+        6: '#7C39CA'
+    }
+    return code_dict[color_code]
+
+
+def heading_font_size_choice(size):
+    size_dict = {
+        1: 16,
+        2: 17,
+        3: 18,
+    }

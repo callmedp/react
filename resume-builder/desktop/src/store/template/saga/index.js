@@ -50,10 +50,11 @@ function* customizeTemplate(action) {
 
         yield put({type: SET_CUSTOMIZATION, data: data});
 
+        yield call(fetchTemplate, {payload: {template: data['templateId']}})
+
 
         yield put({type: UPDATE_UI, data: {loader: false}});
 
-        // yield call(fetchTemplate)
 
     } catch (e) {
         console.log(e);
@@ -120,7 +121,7 @@ function* fetchThumbnailImages(action) {
 
 function* fetchDefaultCustomization(action) {
     try {
-        const candidateId = 12; //localStorage.getItem('candidateId') || '';
+        const candidateId = localStorage.getItem('candidateId') || '';
         yield put({type: UPDATE_UI, data: {loader: true}});
         const {templateId} = action;
         const result = yield call(Api.fetchDefaultCustomization, candidateId, templateId);

@@ -15,7 +15,7 @@ For Mobile case
  {% endcomment %}
 <div style="max-width: 1536px; width: 100%; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777; line-height: 20px;">
 
-    <div style="width: 100%; background: #d34d4d; padding: 3%;">
+    <div style="width: 100%; background: {{ current_config.color|background_color_choice }}; padding: 3%;">
 
         <!--top left 1-->
 
@@ -28,7 +28,7 @@ For Mobile case
 
     </div>
 
-    <div style="width: 100%; border-bottom: 13px solid #d34d4d; padding: 3% 3% 0 3%;">
+    <div style="width: 100%; border-bottom: 13px solid {{ current_config.color|background_color_choice }}; padding: 3% 3% 0 3%;">
 
         <!--Experience 3-->
         {% include "partials1/experience.html" %}
