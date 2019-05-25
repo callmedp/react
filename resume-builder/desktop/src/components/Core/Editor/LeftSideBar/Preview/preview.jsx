@@ -457,17 +457,6 @@ export default class Preview extends Component {
                                             <span>Right</span></li>
                                     </ul>
                                     <ul className="reorder-content">
-                                        <li className="reorder-content--select-box reorder-content--select-box__select">
-                                            {sectionEntityName || entityName}
-                                            <span className="addon-buttons">
-	                				<span
-                                        onClick={() => this.moveUpSection(selectedEntity || currentEntity, selected_template)}
-                                        className="icon-ascend1 mr-5 ml-0"/>
-	                				<span
-                                        onClick={() => this.moveDownSection(selectedEntity || currentEntity, selected_template)}
-                                        className="icon-descend1 ml-0"/>
-	                			</span>
-                                        </li>
                                         {
                                             (entity_position && eval(entity_position) || []).filter(els =>
                                                 (els['alignment'] === activeSection ||
@@ -478,7 +467,20 @@ export default class Preview extends Component {
                                                 const entityValue = entityList.find(elm => elm.entity_id == el.entity_id);
                                                 return (
                                                     <li key={index} onClick={() => this.selectSection(entityValue)}
-                                                        className="reorder-content--select-box">{entityValue['entity_text']}</li>
+                                                        className={"reorder-content--select-box " + (!!(entityValue['entity_text'] === sectionEntityName) ? " reorder-content--select-box__select" : '')}>
+                                                        {entityValue['entity_text']}
+                                                        {
+                                                            !!(entityValue['entity_text'] === sectionEntityName || (!sectionEntityName) &&  index === 0 ) ?
+                                                                < span className="addon-buttons">
+                                                            <span
+                                                                onClick={() => this.moveUpSection(selectedEntity || currentEntity, selected_template)}
+                                                                className="icon-ascend1 mr-5 ml-0"/>
+                                                            <span
+                                                                onClick={() => this.moveDownSection(selectedEntity || currentEntity, selected_template)}
+                                                                className="icon-descend1 ml-0"/>
+                                                            </span> : ''
+                                                        }
+                                                    </li>
                                                 )
 
 

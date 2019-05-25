@@ -347,6 +347,8 @@ class CandidateResumePreview(APIView):
     def get(self, request, *args, **kwargs):
         candidate_id = self.kwargs.get('candidate_id', '')
         template_id = self.kwargs.get('pk', '')
+        import ipdb;
+        ipdb.set_trace();
         candidate = Candidate.objects.filter(candidate_id=candidate_id).first()
         if not candidate:
             return {}
