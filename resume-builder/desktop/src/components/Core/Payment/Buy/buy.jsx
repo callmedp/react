@@ -14,7 +14,12 @@ import moment from "moment"
 import {fetchPersonalInfo, updatePersonalInfo} from '../../../../store/personalInfo/actions/index'
 import SelectTemplateModal from '../../../Modal/selectTemplateModal';
 import LoaderPage from '../../../Loader/loaderPage';
-import {displaySelectedTemplate, fetchTemplateImages,fetchSelectedTemplateImage, fetchThumbNailImages} from "../../../../store/template/actions";
+import {
+    displaySelectedTemplate,
+    fetchTemplateImages,
+    fetchSelectedTemplateImage,
+    fetchThumbNailImages
+} from "../../../../store/template/actions";
 
 
 function SampleNextArrow(props) {
@@ -80,9 +85,9 @@ export class Buy extends Component {
 
     componentDidMount() {
         this.props.fetchThumbNailImages();
+        this.props.fetchTemplateImages();
         this.props.getProductIds();
         this.props.fetchUserInfo();
-        this.props.fetchTemplateImages();
     }
 
     handleOnChange(checkedProduct) {
@@ -109,6 +114,7 @@ export class Buy extends Component {
         const {userInfo: {first_name, selected_template}, ui: {loader}, template: {templateImages, thumbnailImages}} = this.props;
         const {userInfo} = this.props;
         const {checked} = this.state;
+        console.log('--template imag---', templateImages, thumbnailImages, selected_template);
         return (
             /*
             * @desc Top Bar component
@@ -128,8 +134,17 @@ export class Buy extends Component {
                         <section className="left-sidebar half-width pos-rel">
                             <span onClick={() => this.showEnlargedTemplate(selected_template)} className="zoom"/>
                             <div className="right-sidebar-scroll-main">
-                                <img src={`data:image/png;base64,${templateImages[selected_template-1]}`}
-                                     className="img-responsive" alt=""/>
+                                {
+                                    !!(thumbnailImages && thumbnailImages.length) ?
+                                        <img
+                                            src={`data:image/png;base64,${templateImages[selected_template - 1]}`}
+                                            className="img-responsive" alt=""/>
+                                        :
+                                        <img
+                                            src={`${this.staticUrl}react/assets/images/resume${selected_template || localStorage.getItem(('selected_template')) || 1}_preview.jpg`}
+                                            className="img-responsive" alt=""/>
+                                }
+
                             </div>
 
                         </section>
@@ -176,10 +191,15 @@ export class Buy extends Component {
                                                              className="triangle-topright">
                                                             <span></span>
                                                         </div>
-                                                        <img
-                                                            src={`data:image/png;base64,${thumbnailImages[key]}`}
-                                                            className="img-responsive"
-                                                            alt=""/>
+                                                        {
+                                                            !!(thumbnailImages && thumbnailImages.length) ?
+                                                                <img
+                                                                    src={`data:image/png;base64,${thumbnailImages[key]}`}
+                                                                    className="img-responsive" alt=""/> :
+                                                                <img
+                                                                    src={`${this.staticUrl}react/assets/images/resume-thumb-${selected_template || el}.jpg`}
+                                                                    className="img-responsive" alt=""/>
+                                                        }
                                                     </div>
                                                 ))
                                             }
@@ -274,7 +294,7 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(fetchThumbNailImages())
         },
         fetchSelectedTemplateImage(templateId) {
-             return dispatch(fetchSelectedTemplateImage(templateId))
+            return dispatch(fetchSelectedTemplateImage(templateId))
         }
     }
 };

@@ -76,11 +76,10 @@ function* fetchTemplateImages(action) {
         if (result['error']) {
             console.log('error');
         }
-        const images = result.map(el => el.data)
-        yield  put({type: SAVE_TEMPLATE_IMAGES, data: {templateImages: images}})
+        const images = result.map(el => el.data);
+        yield  put({type: SAVE_TEMPLATE_IMAGES, data: {templateImages: images}});
 
         yield put({type: UPDATE_UI, data: {loader: false}});
-
 
         // yield call(fetchTemplate)
 
@@ -95,22 +94,21 @@ function* fetchThumbnailImages(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
         yield put({type: UPDATE_UI, data: {loader: true}});
 
-        const query ='tsize=151x249';
+        const query = 'tsize=151x249';
         const result = yield all([
-            call(Api.fetchTemplateImages, candidateId, 1,query),
-            call(Api.fetchTemplateImages, candidateId, 2,query),
-            call(Api.fetchTemplateImages, candidateId, 3,query),
-            call(Api.fetchTemplateImages, candidateId, 4,query),
-            call(Api.fetchTemplateImages, candidateId, 5,query),
+            call(Api.fetchTemplateImages, candidateId, 1, query),
+            call(Api.fetchTemplateImages, candidateId, 2, query),
+            call(Api.fetchTemplateImages, candidateId, 3, query),
+            call(Api.fetchTemplateImages, candidateId, 4, query),
+            call(Api.fetchTemplateImages, candidateId, 5, query),
         ]);
         if (result['error']) {
             console.log('error');
         }
-        const images = result.map(el => el.data)
-        yield  put({type: SAVE_THUMBNAIL_IMAGES, data: {thumbnailImages: images}})
+        const images = result.map(el => el.data);
+        yield  put({type: SAVE_THUMBNAIL_IMAGES, data: {thumbnailImages: images}});
 
         yield put({type: UPDATE_UI, data: {loader: false}});
-
 
         // yield call(fetchTemplate)
 
