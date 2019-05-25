@@ -4,6 +4,7 @@ import * as Actions from '../actions/actionTypes'
 import {Api} from "./Api";
 import * as LoaderAction from '../../loader/actions/actionTypes';
 import {FETCH_TEMPLATE_IMAGES, SET_CUSTOMIZATION} from "../actions/actionTypes";
+import {SubmissionError} from 'redux-form'
 
 
 const getLoaderStatus = state => state.loader;
@@ -44,8 +45,6 @@ function* fetchTemplate(action) {
             case (width>700) : scale = 0.6; break;
             default : scale = 0.32; break;
         }
-
-        console.log(scale)
         
         
         let  newhtml = html.splice(pos + 5, 0, ` style ="transform-origin: top left;
@@ -62,11 +61,11 @@ function* fetchTemplate(action) {
 function* customizeTemplate(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
-        // yield put({type: UPDATE_UI, data: {loader: true}});
-        const {payload} = action;
-        const result = yield call(Api.customizeTemplate, candidateId, payload.template, payload);
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+        const {payload:{resolve,reject,template_data}} = action;
+        const result = yield call(Api.customizeTemplate, candidateId, template_data.template, template_data);
         if (result['error']) {
-            console.log('error');
+            return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
 
@@ -80,10 +79,8 @@ function* customizeTemplate(action) {
         };
 
         yield put({type: SET_CUSTOMIZATION, data: data});
-
-
-        // yield put({type: UPDATE_UI, data: {loader: false}});
-
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+        return resolve("Customize Done")
         // yield call(fetchTemplate)
 
     } catch (e) {

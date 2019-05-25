@@ -46,6 +46,15 @@ const put = (url, data, headers = defaultHeaders, isStringify = true) => {
         .then(handleResponse)
 };
 
+const patch = (url, data, headers = defaultHeaders, isStringify = true, isUpload = false) => {
+    return fetch(url, {
+        headers,
+        method: 'PATCH',
+        body: isStringify ? JSON.stringify(data) : isUpload ? data : handleParams(data)
+    })
+        .then(handleResponse)
+};
+
 
 async function handleResponse(response, isFetchingHTML) {
     // handle all the status and conditions here
@@ -73,5 +82,6 @@ export default {
     get,
     post,
     put,
-    deleteMethod
+    deleteMethod,
+    patch
 }

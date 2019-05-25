@@ -129,7 +129,6 @@ export const renderSelect = ({
             <select {...input} className={className}
                 onBlur={() => {
                     input.onBlur(input.value)
-                    ////console.log(input.label)
                 }}
                 >
                 {children}
@@ -147,7 +146,6 @@ export const renderSelect = ({
             <select {...input} className={className +(touched && error ? " error" : "")}
                 onBlur={() => {
                     input.onBlur(input.value)
-                    ////console.log(input.label)
                 }}
                 >
                 {children}

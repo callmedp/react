@@ -45,7 +45,6 @@ class Summary extends Component {
                 this.setState({editHeading:false,heading:e.target.value})
             }
             else{
-                // console.log("came here")
                 this.setState({editHeading:false})
             }
         }

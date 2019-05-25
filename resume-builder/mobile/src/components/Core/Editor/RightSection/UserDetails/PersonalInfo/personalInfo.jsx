@@ -47,7 +47,6 @@ class PersonalInfo extends Component {
     }
 
     async handleSubmit(values) {
-        console.log("In Submit")
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
         this.setState({submit:true})
@@ -161,7 +160,6 @@ class PersonalInfo extends Component {
         const {handleSubmit, personalInfo,submitting,previewHandling,history,loader:{dataloader}} = this.props;
         const {editHeading,heading} =this.state;
         const {subscription_status} = this.props.personalInfo;
-        console.log("In Personal Info")
         return (
             
         <div className="buildResume">
@@ -265,7 +263,7 @@ class PersonalInfo extends Component {
                         <button className="btn btn__round btn--outline" 
                             onClick={async()=>{previewHandling(this.updateInfoBeforeLoss,history) }}
                             type={'button'}>Preview</button>
-                        <button className="btn btn__round btn__primary" type={'submit'}>
+                        <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
                             {(length === pos +1) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}
                         </button>
                     </div>

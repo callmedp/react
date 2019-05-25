@@ -18,7 +18,7 @@
                     @include border-radius(100%);
                     @include square(23px,23px);
                     content: '';
-                    background: $sprite -53px -260px $white;
+                    background: url($sprite) -53px -260px $white;
                     z-index: 999;
                     position: absolute;
                     top: -10px;

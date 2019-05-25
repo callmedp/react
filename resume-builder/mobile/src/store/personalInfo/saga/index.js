@@ -12,10 +12,8 @@ import {SubmissionError} from 'redux-form'
 import {interestList} from '../../../Utils/interestList'
 
 function modifyPersonalInfo(data) {
-    console.log("Came inside Modify")
     let {date_of_birth, gender, extracurricular} = data;
     extracurricular = extracurricular ?(extracurricular).split(',').map(key => interestList[key]):[]
-    console.log(extracurricular)
     let newData = {
             ...data,
             ...{
@@ -23,13 +21,11 @@ function modifyPersonalInfo(data) {
                 extracurricular
                 }
         }
-    console.log("Came Here Outside Modify")
     return newData;
 }
 
 function* getPersonalDetails(action) {
     try {
-        console.log("Came inside personal")
         const candidateId = localStorage.getItem('candidateId') || '';
 
         if (localStorage.getItem('personalInfo')) {
@@ -48,8 +44,6 @@ function* getPersonalDetails(action) {
         }
         let {data} = result;
         data =modifyPersonalInfo(data)
-        console.log('in ehrer');
-        ////console.log('data');
         yield put({type: Actions.SAVE_USER_INFO, data: data});
 
         yield put({type:LoaderAction.UPDATE_MAIN_PAGE_LOADER,payload:{mainloader: false}})
@@ -71,7 +65,6 @@ function* updatePersonalDetails(action) {
                     'selected_template' : localStorage.getItem('template')
                 }
             }
-            localStorage.removeItem('template')
         }
         const candidateId = localStorage.getItem('candidateId') || '';
         yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})

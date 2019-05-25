@@ -2,7 +2,7 @@ import React ,{Component} from 'react';
 import Header from '../../../Common/Header/header.jsx';
 import './preview.scss';
 import {connect} from "react-redux";
-import {fetchTemplate,updateModalStatus} from "../../../../store/template/actions/index"
+import {fetchTemplate,updateModalStatus,customizeTemplate,fetchDefaultCustomization} from "../../../../store/template/actions/index"
 import {updatePersonalInfo,fetchPersonalInfo} from "../../../../store/personalInfo/actions/index"
 import Loader from '../../../Common/Loader/loader.jsx';
 import ChangeTemplateModal from './changeTemplateModal.jsx';
@@ -21,23 +21,41 @@ class Preview extends Component {
         super(props)
         this.state={
             'customize' : false,
-            currentTab: 0,
+            currentTab: 1,
             selectedColor: 1,
             headingFontSize: 1,
             textFontSize: 1
+        }
+        this.handleCustomization = this.handleCustomization.bind(this);
+    }
+
+    componentWillUpdate(prevProps){
+        const {initialValues} = this.props
+        if(initialValues !== prevProps.initialValues){
+
+            this.setState({
+                selectedColor:initialValues.color,
+                headingFontSize:initialValues.heading_font_size,
+                textFontSize:initialValues.text_font_size
+            })
         }
     }
 
     async componentDidMount(){
         await this.props.fetchPersonalInfo();
         this.props.fetchTemplate();
-        console.log(this.props.allinfo)
+        this.props.fetchDefaultCustomization();
+    }
+
+    async handleCustomization(data) {
+        await this.props.customizeTemplate(data)
+        this.props.fetchTemplate();
+        this.setState({customize:false})
     }
 
     render(){
-        const {customize,currentTab} = this.state
-        const {initialValues:{html},loader:{mainloader}} = this.props
-        console.log("current Tab",currentTab)
+        const {customize,currentTab,selectedColor} = this.state
+        const {initialValues:{html},loader:{mainloader},personalInfo:{selected_template}} = this.props
         return(
             <div className="preview">
                <Header page={'preview'} {...this.props}/>
@@ -49,7 +67,7 @@ class Preview extends Component {
                      __html: html
                  }}/> */}
 
-                <iframe srcdoc={html} className={"iframe-new"}></iframe>
+                <iframe srcDoc={html} className={"iframe-new"}></iframe>
 
                <div className="preview__bottom-btns">
                     <span className="btn btn__round btn--outline" onClick={()=>{this.setState({customize:true})}}>Customize template</span>
@@ -63,8 +81,8 @@ class Preview extends Component {
                                 
                                 <div className="filter__accordion">
                                     <h2 className="filter__wrap--heading">Customize template</h2>
-                                    <Accordion>
-                                        <AccordionItem>
+                                    <Accordion preExpanded={["1"]}>
+                                        <AccordionItem uuid="1">
                                             <div className={"filter__accordion__card " +(currentTab === 1 ? "filter__accordion--active":"")}>
                                             <AccordionItemHeading>
                                                 <AccordionItemButton>
@@ -84,42 +102,54 @@ class Preview extends Component {
                                                 <div className="filter__accordion__card--content">  
                                                     <ul className="resume-color-theme">
                                                         <li className="resume-color-theme__item">
-                                                            <input className="resume-color-theme__item--input" type="radio" name="radio1" id="green" value="green" />
+                                                            <input className="resume-color-theme__item--input" type="radio" name="radio1" id="green" value="green"
+                                                                onClick={()=>{this.setState({selectedColor:1})}}
+                                                                checked={selectedColor === 1} />
                                                             <label htmlFor="green" className="resume-color-theme__item__label">
                                                                 <span className="resume-color-theme__item__theme resume-color-theme__item--green"></span>
                                                             </label>
                                                         </li>
 
                                                         <li className="resume-color-theme__item">
-                                                            <input className="resume-color-theme__item--input" type="radio" name="radio1" id="blue" value="blue" />
+                                                            <input className="resume-color-theme__item--input" type="radio" name="radio1" id="blue" value="blue"
+                                                                onClick={()=>{this.setState({selectedColor:2})}} 
+                                                                checked={selectedColor === 2}/>
                                                             <label htmlFor="blue" className="resume-color-theme__item__label">
                                                                 <span className="resume-color-theme__item__theme resume-color-theme__item--blue"></span>
                                                             </label>
                                                         </li>
                                                         
                                                         <li className="resume-color-theme__item">
-                                                            <input className="resume-color-theme__item--input" type="radio" name="radio1" id="red" value="red"/>
+                                                            <input className="resume-color-theme__item--input" type="radio" name="radio1" id="red" value="red"
+                                                                onClick={()=>{this.setState({selectedColor:3})}}
+                                                                checked={selectedColor === 3}/>
                                                             <label htmlFor="red" className="resume-color-theme__item__label">
                                                                 <span className="resume-color-theme__item__theme resume-color-theme__item--red"></span>
                                                             </label>
                                                         </li>
                                                         
                                                         <li className="resume-color-theme__item">
-                                                            <input className="resume-color-theme__item--input" type="radio" name="radio1" id="black" value="black" />
+                                                            <input className="resume-color-theme__item--input" type="radio" name="radio1" id="black" value="black" 
+                                                                onClick={()=>{this.setState({selectedColor:4})}}
+                                                                checked={selectedColor === 4}/>
                                                             <label htmlFor="black" className="resume-color-theme__item__label">
                                                                 <span className="resume-color-theme__item__theme resume-color-theme__item--black"></span>
                                                             </label>
                                                         </li>
                                                         
                                                         <li className="resume-color-theme__item">
-                                                            <input className="resume-color-theme__item--input" type="radio" name="radio1" id="brown" value="brown"/>
+                                                            <input className="resume-color-theme__item--input" type="radio" name="radio1" id="brown" value="brown"
+                                                                onClick={()=>{this.setState({selectedColor:5})}} 
+                                                                checked={selectedColor === 5}/>
                                                             <label htmlFor="brown" className="resume-color-theme__item__label">
                                                                 <span className="resume-color-theme__item__theme resume-color-theme__item--brown"></span>
                                                             </label>
                                                         </li>
                                                         
                                                         <li className="resume-color-theme__item">
-                                                            <input className="resume-color-theme__item--input" type="radio" name="radio1" id="violet" value="violet" />
+                                                            <input className="resume-color-theme__item--input" type="radio" name="radio1" id="violet" value="violet" 
+                                                                onClick={()=>{this.setState({selectedColor:6})}} 
+                                                                checked={selectedColor === 6}/>
                                                             <label htmlFor="violet" className="resume-color-theme__item__label">
                                                                 <span className="resume-color-theme__item__theme resume-color-theme__item--violet"></span>
                                                             </label>
@@ -311,7 +341,11 @@ class Preview extends Component {
 
                                 <div className="filter__apply-btn">
                                     <span className="btn" onClick={()=>{this.setState({customize:false})}}>Cancel</span>
-                                    <span className="btn btn__round btn--outline">Apply</span>
+                                    <span className="btn btn__round btn--outline" 
+                                    onClick={() => this.handleCustomization({
+                                                                    color: selectedColor,
+                                                                    template: selected_template
+                                                                })} >Apply</span>
                                 </div>
                             </div>
                         </div>
@@ -344,6 +378,14 @@ const mapDispatchToProps = (dispatch) => {
         },
         "fetchPersonalInfo": (data) => {
             return dispatch(fetchPersonalInfo(data))
+        },
+        "customizeTemplate": (template_data) => {
+            return new Promise((resolve, reject) => {
+                return dispatch(customizeTemplate({template_data,resolve,reject}))
+            })
+        },
+        "fetchDefaultCustomization": () => {
+            return dispatch(fetchDefaultCustomization(1))
         },
         "updateSelectedTemplate": (personalInfo) => {
             let { date_of_birth, extracurricular} = personalInfo;
