@@ -142,15 +142,16 @@ class Summary extends Component {
                             </p>
                         </li>
                     </ul>
+                    <div className="btn-wrap">
+                        <button className="btn btn__round btn--outline" 
+                            onClick={async()=>{previewHandling(this.updateInfoBeforeLoss,history) }}
+                            type={'button'}>Preview</button>
+                        <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
+                            {(length === pos +1) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}
+                        </button>
+                    </div>
                 </form>
-                <div className="btn-wrap">
-                    <button className="btn btn__round btn--outline" 
-                        onClick={async()=>{previewHandling(this.updateInfoBeforeLoss,history) }}
-                        type={'button'}>Preview</button>
-                    <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
-                        {(length === pos +1) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}
-                    </button>
-                </div>
+                
             </div>
         </div>
         )

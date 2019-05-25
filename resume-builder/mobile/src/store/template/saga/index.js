@@ -10,6 +10,10 @@ const getLoaderStatus = state => state.loader;
 
 const getTemplateNo = state => state.personalInfo.selected_template
 
+String.prototype.splice = function(idx, rem, str) {
+    return this.slice(0, idx) + str + this.slice(idx + Math.abs(rem));
+};
+
 function* fetchTemplate(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
@@ -23,9 +27,32 @@ function* fetchTemplate(action) {
         if (result['error']) {
             ////console.log('error');
         }
-        ////console.log(result)
+        let w = window,
+            d = document,
+            e = d.documentElement,
+            g = d.getElementsByTagName('body')[0],
+            width = w.innerWidth || e.clientWidth || g.clientWidth;
+        
+        let htmlString = '<html'
+        let html = result['data'] && result['data'].html
+        let pos = html.indexOf(htmlString)
+        let scale
+        switch(true){
+            case (width>400 && width <=500) : scale = 0.37; break;
+            case (width>500 && width <=600) : scale = 0.45; break;
+            case (width>600 && width <=700) : scale = 0.53; break;
+            case (width>700) : scale = 0.6; break;
+            default : scale = 0.32; break;
+        }
 
-        yield put({type: Actions.SAVE_TEMPLATE, data: result['data']})
+        console.log(scale)
+        
+        
+        let  newhtml = html.splice(pos + 5, 0, ` style ="transform-origin: top left;
+                                                    transform: scale(${scale});
+                                                    width: 1236px;
+                                                    max-height: 105vh;"`)
+        yield put({type: Actions.SAVE_TEMPLATE, data:{html : newhtml}})
         yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
         ////console.log(e);

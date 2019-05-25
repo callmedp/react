@@ -34,16 +34,6 @@ class Preview extends Component {
         console.log(this.props.allinfo)
     }
 
-    componentDidUpdate(prevProps) {
-        // let {allinfo} = this.props
-        // delete allinfo['loader']
-        // let prev_allinfo =prevProps.allinfo
-        // delete prev_allinfo['loader']
-        // if (this.props.allinfo !== prevProps.allinfo) {
-        //     this.props.fetchTemplate()
-        //     console.log(this.props.allinfo)
-        // }
-    }
     render(){
         const {customize,currentTab} = this.state
         const {initialValues:{html},loader:{mainloader}} = this.props
@@ -54,10 +44,12 @@ class Preview extends Component {
                <ChangeTemplateModal {...this.props}/>
                {mainloader ? <Loader/> :""}
 
-               <div className="preview__resume"
+               {/* <div className="preview__resume"
                  dangerouslySetInnerHTML={{
                      __html: html
-                 }}/>
+                 }}/> */}
+
+                <iframe srcdoc={html} className={"iframe-new"}></iframe>
 
                <div className="preview__bottom-btns">
                     <span className="btn btn__round btn--outline" onClick={()=>{this.setState({customize:true})}}>Customize template</span>
