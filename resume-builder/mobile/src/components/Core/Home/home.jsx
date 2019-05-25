@@ -21,7 +21,7 @@ class Home extends Component {
         this.state.token = token;
     }
     componentDidMount() {
-        // this.props.loginCandidate(this.state.token);
+        this.props.loginCandidate(this.state.token);
     }
     
     render() {
