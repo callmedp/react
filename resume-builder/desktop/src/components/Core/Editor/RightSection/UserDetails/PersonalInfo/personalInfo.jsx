@@ -130,6 +130,8 @@ export class PersonalInfo extends Component {
                     }
                     <span onClick={() => editHeading(elem)}
                           className={!!(!isEditable) ? "icon-edit " + styles['icon-edit__cursor'] : ''}/>
+                    <input type="text" name=""/>
+                    <span className="icon-tick"></span>
                 </section>
                 <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                     <section id="personal-section" className="flex-container right-sidebar-scroll">

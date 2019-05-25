@@ -39,6 +39,18 @@
 	border-bottom: 1px solid $grey2;
 	width: 100%;
 	flex-wrap: nowrap;
+
+	input {
+		display: inline-block;
+		width: auto !important;
+		font-size: 1.8rem;
+		font-weight: 700 !important;
+		margin: 0 10px;
+	}
+
+	.icon-tick {
+		cursor: pointer;
+	}
 }
 
 .pic-section {
