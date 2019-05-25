@@ -14,6 +14,7 @@ import {
     AccordionItemHeading,
     AccordionItemPanel
 } from "react-accessible-accordion";
+import InputRange from 'react-input-range';
 
 class Preview extends Component {
 
@@ -24,7 +25,7 @@ class Preview extends Component {
             currentTab: 1,
             selectedColor: 1,
             headingFontSize: 1,
-            textFontSize: 1
+            textFontSize: 1,
         }
         this.handleCustomization = this.handleCustomization.bind(this);
     }
@@ -35,8 +36,8 @@ class Preview extends Component {
 
             this.setState({
                 selectedColor:initialValues.color,
-                headingFontSize:initialValues.heading_font_size,
-                textFontSize:initialValues.text_font_size
+                headingFontSize:initialValues.heading_font_size -1,
+                textFontSize:initialValues.text_font_size -1 
             })
         }
     }
@@ -50,11 +51,11 @@ class Preview extends Component {
     async handleCustomization(data) {
         await this.props.customizeTemplate(data)
         this.props.fetchTemplate();
-        this.setState({customize:false})
+        this.setState({customize:false,currentTab:1})
     }
 
     render(){
-        const {customize,currentTab,selectedColor} = this.state
+        const {customize,currentTab,selectedColor,headingFontSize,textFontSize} = this.state
         const {initialValues:{html},loader:{mainloader},personalInfo:{selected_template}} = this.props
         return(
             <div className="preview">
@@ -82,7 +83,7 @@ class Preview extends Component {
                                 <div className="filter__accordion">
                                     <h2 className="filter__wrap--heading">Customize template</h2>
                                     <Accordion preExpanded={["1"]}>
-                                        <AccordionItem uuid="1">
+                                        <AccordionItem >
                                             <div className={"filter__accordion__card " +(currentTab === 1 ? "filter__accordion--active":"")}>
                                             <AccordionItemHeading>
                                                 <AccordionItemButton>
@@ -159,7 +160,7 @@ class Preview extends Component {
                                             </AccordionItemPanel>
                                             </div>
                                         </AccordionItem>
-                                        <AccordionItem>
+                                        <AccordionItem uuid="1">
                                             <div className={"filter__accordion__card " +(currentTab === 2 ? "filter__accordion--active":"")}>
                                             <AccordionItemHeading>
                                                 <AccordionItemButton>
@@ -178,14 +179,29 @@ class Preview extends Component {
                                             <AccordionItemPanel>
                                                 <div className="filter__accordion__card--content">
                                                 <div className="font-filter">
-                                                    <h3>Section Heading</h3>
+                                                    {/* <h3>Section Heading</h3>
                                                     <div className="font-filter__slide-bar">
                                                         <span className="font-filter__dot"></span>
                                                         <span className="font-filter--small mt-10 fs-12">S</span>
                                                         <span className="font-filter--medium mt-10 fs-12">M</span>
                                                         <span className="font-filter--large mt-10 fs-12">L</span>
-                                                    </div>
-
+                                                    </div> */}
+                                                    <h3>Section Heading</h3>
+                                                    <InputRange
+                                                        name = "heading_font_size"
+                                                        maxValue={2}
+                                                        minValue={0}
+                                                        formatLabel={value => value===0 ? 's' : value===1?'m' :'l'}
+                                                        value={headingFontSize}
+                                                        onChange={value => this.setState({ headingFontSize: value })} />
+                                                    <h3>Section Text</h3>
+                                                    <InputRange
+                                                        name="text_font_size"
+                                                        maxValue={2}
+                                                        minValue={0}
+                                                        formatLabel={value => value===0 ? 's' : value===1?'m' :'l'}
+                                                        value={textFontSize}
+                                                        onChange={value => this.setState({ textFontSize: value })} />
                                                 </div>
                                             </div>
                                             </AccordionItemPanel>
@@ -340,11 +356,13 @@ class Preview extends Component {
                                 </div>
 
                                 <div className="filter__apply-btn">
-                                    <span className="btn" onClick={()=>{this.setState({customize:false})}}>Cancel</span>
+                                    <span className="btn" onClick={()=>{this.setState({customize:false,currentTab:1})}}>Cancel</span>
                                     <span className="btn btn__round btn--outline" 
                                     onClick={() => this.handleCustomization({
                                                                     color: selectedColor,
-                                                                    template: selected_template
+                                                                    template: selected_template,
+                                                                    heading_font_size: headingFontSize + 1,
+                                                                    text_font_size: textFontSize + 1
                                                                 })} >Apply</span>
                                 </div>
                             </div>
