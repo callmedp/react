@@ -2,6 +2,15 @@ import React, {Component} from 'react';
 import './dataloader.scss'
 
 export default class DataLoader extends Component {
+
+    componentDidMount(){
+        document.body.classList.add('loader-overflow')
+    }
+
+    componentWillUnmount(){
+        document.body.classList.remove('loader-overflow')
+    }
+    
     render() {
         return (
             <div className="dataloader">

@@ -5,11 +5,12 @@
 .dataloader {
     width: 100%;
     height: 100%;
+    min-height: 100vh;
     position: absolute;
     background-color: rgba(0, 0, 0, 0.7);
     top: 50px;
     left: 0px;
-    z-index: 1;
+    z-index: 3;
 
     display: flex;
     justify-content: center;
@@ -17,7 +18,6 @@
 
     img {
         @include size(50px, 50px); 
-        align-self: center;
     }
 
     &--data {
@@ -25,12 +25,15 @@
         height: 100px;
         color: $white;
         font-weight: 700;
-        align-self: center;
         position: relative;
-        top: -60px;
+        top: 90px;
 
         p {
             font-size: 1.8rem;
         }
     }
+}
+
+.loader-overflow{
+    overflow:hidden;
 }

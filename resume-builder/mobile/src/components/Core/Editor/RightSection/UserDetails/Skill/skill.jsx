@@ -67,8 +67,6 @@ class Skill extends Component {
 
     deleteSkill(index, fields, event) {
         event.stopPropagation();
-        ////console.log(index)
-        ////console.log(fields.get(index))
         const skill = fields.get(index);
         fields.remove(index);
         if (skill && skill.id) {
@@ -77,7 +75,6 @@ class Skill extends Component {
     }
 
     async handleSubmit(values) {
-        // console.log("In Submit")
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
         this.setState({submit:true})
@@ -129,7 +126,6 @@ class Skill extends Component {
 
     async changeOrderingUp(index,fields,event){
         event.stopPropagation();
-        ////console.log("Clicked Up")
         let currentItem = fields.get(index);
         let prevItem = fields.get(index - 1);
         currentItem['order'] = index - 1;
@@ -143,7 +139,6 @@ class Skill extends Component {
 
     async changeOrderingDown(index,fields,event){
         event.stopPropagation();
-        ////console.log("Clicked Down")
         let currentItem = fields.get(index);
         let nextItem = fields.get(index + 1);
         currentItem['order'] = index + 1;

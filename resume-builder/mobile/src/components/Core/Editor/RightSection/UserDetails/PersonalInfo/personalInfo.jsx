@@ -47,6 +47,7 @@ class PersonalInfo extends Component {
     }
 
     async handleSubmit(values) {
+        console.log("In Submit")
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
         this.setState({submit:true})
@@ -70,10 +71,8 @@ class PersonalInfo extends Component {
     async updateInfoBeforeLoss(){
         if(!this.state.submit){
             const form_data = this.props.info.form.personalInfo;
-            // console.log(form_data)
             let error = false
             let error_values =form_data["syncErrors"]
-            // console.log(error_values)
             if(error_values){
                 for(let i of  Object.keys(error_values)){
                     if(error_values[i]){
@@ -113,7 +112,6 @@ class PersonalInfo extends Component {
     componentDidUpdate(prevProps) {
         if (this.props.personalInfo.entity_preference_data !== prevProps.personalInfo.entity_preference_data) {
             this.setState({heading : this.props.personalInfo.entity_preference_data[0].entity_text})
-            // console.log("Came Inside")
         }
     }
 
@@ -122,7 +120,6 @@ class PersonalInfo extends Component {
             if(e.target.value.length){
                 this.props.headingChange(this.props.personalInfo,0,e.target.value)
                 this.setState({editHeading:false,heading:e.target.value})
-                // console.log("update value")
             }
             else{
                 this.setState({editHeading:false})
@@ -132,7 +129,6 @@ class PersonalInfo extends Component {
             if(e.target.value.length){
                 this.props.headingChange(this.props.personalInfo,0,e.target.value)
                 this.setState({editHeading:false,heading:e.target.value})
-                // console.log("blur value")
             }
             else{
                 this.setState({editHeading:false})
@@ -154,7 +150,6 @@ class PersonalInfo extends Component {
         reader.readAsDataURL(event.target.files[0]);
 
         let url = await this.props.fetchImageUrl(event.target.files[0]);
-        ////console.log(url)
 
         this.setState({
             'imageURL': url
@@ -166,13 +161,13 @@ class PersonalInfo extends Component {
         const {handleSubmit, personalInfo,submitting,previewHandling,history,loader:{dataloader}} = this.props;
         const {editHeading,heading} =this.state;
         const {subscription_status} = this.props.personalInfo;
+        console.log("In Personal Info")
         return (
             
         <div className="buildResume">
             {dataloader ?<DataLoader/> : ""}
             <PreviewModal {...this.props}/>
             <div className="buildResume__wrap">
-            {/* {this.props.loader.dataloader ?  <DataLoader/> :""} */}
                 <div className="buildResume__heading">
                     {!editHeading ?
                         <h1>{heading}</h1>:
@@ -182,7 +177,7 @@ class PersonalInfo extends Component {
                     }
                     <i className="sprite icon--edit" onClick={()=>{this.setState({editHeading:true})}}></i>
                    
-                    <i className="sprite icon--editTick"></i>
+                    {/* <i className="sprite icon--editTick"></i> */}
                 </div>
                 
                 
@@ -251,29 +246,32 @@ class PersonalInfo extends Component {
 
                         <li className="form__group">
                             <span className="upload--image">
-                            <span className="close-wrap">
-                                <i className="sprite icon--close"></i>
-                            </span>
                             {
                                 this.state.imageURI || personalInfo.image ?
-                                    <img alt={"User Profile"}
-                                            src={this.state.imageURI || personalInfo.image}/> :
+                                    <React.Fragment>
+                                        <span className="close-wrap">
+                                            <i className="sprite icon--close" onClick={()=>{this.setState({imageURL:'',imageURI:''})}}></i>
+                                        </span>
+                                        <img alt={"User Profile"}
+                                                src={this.state.imageURI || personalInfo.image}/> 
+                                    </React.Fragment>:
                                     <img alt={"User Profile"}
                                             src="/media/static/react/assets/images/mobile/default-user.jpg"/>
                             }
                             </span>
                         </li>
                     </ul>
+                    <div className="btn-wrap">
+                        <button className="btn btn__round btn--outline" 
+                            onClick={async()=>{previewHandling(this.updateInfoBeforeLoss,history) }}
+                            type={'button'}>Preview</button>
+                        <button className="btn btn__round btn__primary" type={'submit'}>
+                            {(length === pos +1) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}
+                        </button>
+                    </div>
                 </form>
             </div>
-            <div className="btn-wrap">
-                <button className="btn btn__round btn--outline" 
-                    onClick={async()=>{previewHandling(this.updateInfoBeforeLoss,history) }}
-                    type={'button'}>Preview</button>
-                <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
-                    {(length === pos +1) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}
-                </button>
-            </div>
+            
         </div>
         )
     }

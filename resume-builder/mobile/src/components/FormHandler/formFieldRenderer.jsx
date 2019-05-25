@@ -94,8 +94,10 @@ export const datepicker =
                             yearDropdownItemNumber={yearDropDownItemNumber}
                             scrollableYearDropdown
                             showMonthDropdown
+                            withPortal
                             disabled={disabled}
                             minDate={minDate ? addDays(new Date(minDate),1) : null}
+                            
 
                 />
                 {touched &&  ((error && <span className={'error-message'}>{error}</span>) ||

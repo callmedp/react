@@ -81,6 +81,8 @@
 	.st75{mask:url(#mask-42_1_);fill-rule:evenodd;clip-rule:evenodd;fill:#3E6EB8;}
 	.st76{fill-rule:evenodd;clip-rule:evenodd;fill:#3E6EB8;}
 	.st77{opacity:0.3985;}
+	.st78{clip-path:url(#SVGID_2_);}
+	.st79{clip-path:url(#SVGID_4_);fill:#3E6EB8;}
 </style>
 <filter  filterUnits="objectBoundingBox" height="131.1%" id="filter-34" width="131.1%" x="-15.6%" y="-11.1%">
 	<feOffset  dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
@@ -1341,6 +1343,25 @@
 		<path class="st36" d="M142.4,189l4.3-4.3c0.4-0.4,0.4-1,0-1.4c-0.4-0.4-1-0.4-1.4,0l-4.3,4.3l-4.3-4.3c-0.4-0.4-1-0.4-1.4,0
 			c-0.4,0.4-0.4,1,0,1.4l4.3,4.3l-4.3,4.3c-0.4,0.4-0.4,1,0,1.4c0.4,0.4,1,0.4,1.4,0l4.3-4.3l4.3,4.3c0.4,0.4,1,0.4,1.4,0
 			c0.4-0.4,0.4-1,0-1.4L142.4,189z"/>
+	</g>
+	<g>
+		<defs>
+			<path id="SVGID_1_" d="M133.3,209.5c-0.1-0.1-0.2-0.4-0.2-0.5s0.1-0.4,0.2-0.5l1-1c0.3-0.3,0.7-0.3,1,0l0.1,0.1l4,4.2
+				c0.1,0.1,0.4,0.1,0.5,0l9.8-9.9h0.1c0.3-0.3,0.7-0.3,1,0l1,1c0.3,0.3,0.3,0.7,0,1l-11.7,11.8c-0.1,0.1-0.3,0.2-0.5,0.2
+				c-0.2,0-0.4-0.1-0.5-0.2l-5.7-6L133.3,209.5z"/>
+		</defs>
+		<clipPath id="SVGID_2_">
+			<use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
+		</clipPath>
+		<g class="st78">
+			<defs>
+				<rect id="SVGID_3_" x="-125.9" y="121.7" width="360" height="454"/>
+			</defs>
+			<clipPath id="SVGID_4_">
+				<use xlink:href="#SVGID_3_"  style="overflow:visible;"/>
+			</clipPath>
+			<rect x="128.1" y="196.7" class="st79" width="29" height="24.2"/>
+		</g>
 	</g>
 </g>
 </svg>

@@ -101,7 +101,6 @@ class LeftSideBar extends Component {
     }
 
     showErrorMessage(link) {
-        console.log("Came In Swal")
         Swal.fire({
             title: 'Are you sure?',
             text: `Some information may be lost as required fields are not filled.`,
@@ -150,7 +149,6 @@ class LeftSideBar extends Component {
                 links.push(entityLinkNameLink[i.entity_id])
             }
         }
-        console.log(links)
         this.props.updateListOfLink({listOfLinks: links})
     }
 
@@ -164,7 +162,6 @@ class LeftSideBar extends Component {
             if ('list' in syncErrors) (syncErrors && syncErrors['list'] || []).map(el => (el ? Object.keys(el) : []).map(key => (!!el[key] ? error = true : false)))
             else Object.keys(syncErrors || {}).map(key => (!!syncErrors[key] ? error = true : false));
         }
-        console.log("ERROR",error)
         return (
             <React.Fragment>
                 {(addmore.length) ?

@@ -12,7 +12,7 @@ export default class  RenderNavItem extends Component {
                     <li className={"sidebar__item " + (type === title ? 'sidebar--active' : '') 
                         + (exist || sidenavStatus ? '' : 'hide')} onClick={()=>{showErrorMessage(title)}}>
                             <div 
-                                className="sidebar__anchor" onClick={!sidenavStatus ? changeLink.bind(this,title) : ()=>{}}>
+                                className="sidebar__anchor" >
                                 <div className="sidebar__wrap">
                                     <i className={iconClass}></i>
                                     <span className="sidebar__link">{label}</span>
