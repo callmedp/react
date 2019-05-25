@@ -1,12 +1,18 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
+import Modal from 'react-modal';
 import * as actions from '../../../../../../store/personalInfo/actions/index';
 import {Field, reduxForm} from 'redux-form';
+import './summary.scss';
+import addSuggestedSummary from "./addSuggestedSummary.jsx";
+
+
 
 import {
     renderTextArea
 } from "../../../../../FormHandler/formFieldRenderer.jsx";
 import PreviewModal from "../../../Preview/changeTemplateModal";
+
 import validate from "../../../../../FormHandler/validtaions/summary/validate"
 import {siteDomain} from "../../../../../../Utils/domains";
 
@@ -114,6 +120,8 @@ class Summary extends Component {
         return (
         <div className="buildResume">
             <PreviewModal {...this.props}/>
+            <addSuggestedSummary {...this.props}/>
+            
             <div className="buildResume__wrap pb-0">
                 <div className="buildResume__heading">
                     {!editHeading ?
@@ -129,20 +137,20 @@ class Summary extends Component {
                         <li className="form__group">
                             <Field component={renderTextArea} label={"Summary"}  type={"text"} name="extra_info" 
                                 id="extra_info" prepend={false} className="form__input h-150"/>
-                        </li>
-                        
-                        <li className="form__group">
-                            <div className="btn-wrap">
-                                <button className="btn btn__round btn--outline" 
-                                    onClick={async()=>{previewHandling(this.updateInfoBeforeLoss,history) }}
-                                    type={'button'}>Preview</button>
-                                <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
-                                    {(length === pos +1) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}
-                                </button>
-                            </div>
+                            <p className="add-suggested" onClick={this.handleOpenModal}>
+                                <span>+</span>Add suggested summary
+                            </p>
                         </li>
                     </ul>
                 </form>
+                <div className="btn-wrap">
+                    <button className="btn btn__round btn--outline" 
+                        onClick={async()=>{previewHandling(this.updateInfoBeforeLoss,history) }}
+                        type={'button'}>Preview</button>
+                    <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
+                        {(length === pos +1) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}
+                    </button>
+                </div>
             </div>
         </div>
         )

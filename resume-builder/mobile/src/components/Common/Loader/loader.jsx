@@ -4,9 +4,9 @@ import './loader.scss'
 export default class Loader extends Component {
     render() {
         return (
-            <div className="loader">
+            <div className="">
                 <div className="loader__wrap">
-                <img src={`/media/static/react/assets/images/mobile/loader.png`} width="64" height="64" alt=""/>
+                <img src={`/media/static/react/assets/images/mobile/loadesr.png`} width="64" height="64" alt=""/>
                 <p>Processing <br/>please wait....</p>
                 </div>
             </div>

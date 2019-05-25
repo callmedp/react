@@ -49,6 +49,13 @@
     &__shadow {
         box-shadow: 0 0 10px rgba($black, .3);
     }
+
+    &__blue {
+        background-color: $blue;
+        color: $white;
+        display: flex;
+        justify-content: center;
+    }
     
 }
 
