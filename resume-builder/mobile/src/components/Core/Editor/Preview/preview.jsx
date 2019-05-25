@@ -83,7 +83,7 @@ class Preview extends Component {
                                 <div className="filter__accordion">
                                     <h2 className="filter__wrap--heading">Customize template</h2>
                                     <Accordion preExpanded={["1"]}>
-                                        <AccordionItem >
+                                        <AccordionItem uuid="1">
                                             <div className={"filter__accordion__card " +(currentTab === 1 ? "filter__accordion--active":"")}>
                                             <AccordionItemHeading>
                                                 <AccordionItemButton>
@@ -160,7 +160,7 @@ class Preview extends Component {
                                             </AccordionItemPanel>
                                             </div>
                                         </AccordionItem>
-                                        <AccordionItem uuid="1">
+                                        <AccordionItem >
                                             <div className={"filter__accordion__card " +(currentTab === 2 ? "filter__accordion--active":"")}>
                                             <AccordionItemHeading>
                                                 <AccordionItemButton>
