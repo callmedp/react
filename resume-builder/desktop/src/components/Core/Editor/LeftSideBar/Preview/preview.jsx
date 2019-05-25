@@ -18,12 +18,20 @@ export default class Preview extends Component {
         this.selectCurrentTab = this.selectCurrentTab.bind(this);
         this.handleFontSize = this.handleFontSize.bind(this);
         this.handleActiveSection = this.handleActiveSection.bind(this);
+        this.selectSection = this.selectSection.bind(this);
+        this.moveDownSection = this.moveDownSection.bind(this);
+        this.moveUpSection = this.moveUpSection.bind(this);
+        this.getEntityName = this.getEntityName.bind(this);
+
+
         this.state = {
             currentTab: 1,
             selectedColor: 1,
             headingFontSize: 1,
             textFontSize: 1,
-            activeSection: 'left'
+            activeSection: 'left',
+            sectionEntityName: '',
+            selectedEntity: ''
 
         }
     }
@@ -208,6 +216,15 @@ export default class Preview extends Component {
         };
     }
 
+    selectSection(section) {
+
+        this.setState({
+            sectionEntityName: section['entity_text'],
+            selectedEntity: section
+        })
+
+    }
+
 
     handleActiveSection(section) {
         this.setState({
@@ -215,14 +232,53 @@ export default class Preview extends Component {
         })
     }
 
+    moveUpSection(selectedEntity, selectedTemplate) {
+
+        this.props.reorderSection({
+            templateId: selectedTemplate,
+            info: {entity_id: selectedEntity['entity_id'], step: -1}
+        })
+    }
+
+    moveDownSection(selectedEntity, selectedTemplate) {
+        this.props.reorderSection({
+            templateId: selectedTemplate,
+            info: {entity_id: selectedEntity['entity_id'], step: 1}
+        })
+    }
+
+    getEntityName(entity_position, activeSection) {
+        const entityElements = entity_position && eval(entity_position) || [];
+        const entityElementSectionList = (entityElements || []).filter(els =>
+            (els['alignment'] === activeSection ||
+                els['alignment'] === 'center') &&
+            (els['entity_id'] !== 6 && els['entity_id'] !== 1)
+            )
+            || [];
+        const entityElementId = entityElementSectionList && entityElementSectionList.length && entityElementSectionList[0]['entity_id'];
+        const currentEntity = entityList.find(el => el.entity_id === entityElementId);
+        const entityName = currentEntity && currentEntity['entity_text'] || 'Personal Info'
+        return [entityName, currentEntity];
+
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.state.activeSection !== prevState.activeSection) {
+            const {template: {entity_position}} = this.props;
+            const {activeSection} = this.state;
+            const [entityName, currentEntity] = this.getEntityName(entity_position, activeSection)
+            this.setState({
+                sectionEntityName: entityName,
+                selectedEntity: currentEntity
+            })
+        }
+    }
+
     render() {
-
         const {userInfo: {selected_template}, template: {heading_font_size, text_font_size, entity_position}} = this.props;
-        const {currentTab, selectedColor, headingFontSize, textFontSize, activeSection} = this.state;
-        const entity_elements = entity_position && eval(entity_position) || [];
-        console.log('---', entity_elements);
+        const {currentTab, selectedColor, headingFontSize, textFontSize, activeSection, sectionEntityName, selectedEntity} = this.state;
+        const [entityName, currentEntity] = this.getEntityName(entity_position, activeSection);
 
-        // this.handleFontSize(headingFontSize, textFontSize)
 
         return (
             <div className="preview-section">
@@ -389,7 +445,7 @@ export default class Preview extends Component {
                                     </AccordionItemButton>
                                 </AccordionItemHeading>
                                 <AccordionItemPanel>
-                                    <ul class="reorder-tab-heading">
+                                    <ul className="reorder-tab-heading">
                                         <li
                                             onClick={() => this.handleActiveSection('left')}
                                             className={"tab-heading--top-left-right-radius no-shadow " + (activeSection === 'left' ? 'active shadow2' : '')}>
@@ -402,18 +458,27 @@ export default class Preview extends Component {
                                     </ul>
                                     <ul className="reorder-content">
                                         <li className="reorder-content--select-box reorder-content--select-box__select">
-                                            Personal Info
+                                            {sectionEntityName || entityName}
                                             <span className="addon-buttons">
-	                				<span className="icon-ascend1 mr-5 ml-0"></span>
-	                				<span className="icon-descend1 ml-0"></span>
+	                				<span
+                                        onClick={() => this.moveUpSection(selectedEntity || currentEntity, selected_template)}
+                                        className="icon-ascend1 mr-5 ml-0"/>
+	                				<span
+                                        onClick={() => this.moveDownSection(selectedEntity || currentEntity, selected_template)}
+                                        className="icon-descend1 ml-0"/>
 	                			</span>
                                         </li>
                                         {
-                                            (entity_elements || []).filter(els => els['alignment'] === activeSection).map(el => {
+                                            (entity_position && eval(entity_position) || []).filter(els =>
+                                                (els['alignment'] === activeSection ||
+                                                    els['alignment'] === 'center') &&
+                                                (els['entity_id'] !== 6 && els['entity_id'] !== 1)
+                                            ).map((el, index) => {
 
                                                 const entityValue = entityList.find(elm => elm.entity_id == el.entity_id);
                                                 return (
-                                                    <li className="reorder-content--select-box">{entityValue['entity_text']}</li>
+                                                    <li key={index} onClick={() => this.selectSection(entityValue)}
+                                                        className="reorder-content--select-box">{entityValue['entity_text']}</li>
                                                 )
 
 

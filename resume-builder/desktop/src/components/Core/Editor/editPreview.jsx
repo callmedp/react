@@ -10,7 +10,7 @@ import {withRouter} from "react-router-dom";
 import {siteDomain} from "../../../Utils/domains";
 import LoaderPage from "../../Loader/loaderPage.jsx";
 import * as actions from "../../../store/ui/actions"
-import {customizeTemplate, fetchDefaultCustomization} from "../../../store/template/actions"
+import {customizeTemplate, fetchDefaultCustomization, reorderSection} from "../../../store/template/actions"
 import * as profileActions from "../../../store/personalInfo/actions"
 import SelectTemplateModal from '../../Modal/selectTemplateModal';
 import moment from 'moment'
@@ -95,6 +95,9 @@ const mapDispatchToProps = (dispatch) => {
             return new Promise((resolve, reject) => {
                 dispatch(profileActions.updatePersonalInfo({personalDetails, resolve, reject}));
             })
+        },
+        "reorderSection": (payload) => {
+            return dispatch(reorderSection(payload))
         }
     }
 }

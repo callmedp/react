@@ -150,6 +150,37 @@ function* fetchDefaultCustomization(action) {
     }
 }
 
+
+function* reorderSection(action) {
+    try {
+        const candidateId = localStorage.getItem('candidateId') || '';
+        yield put({type: UPDATE_UI, data: {loader: true}});
+        const {payload: {templateId, info}} = action;
+        const result = yield call(Api.reorderSection, candidateId, templateId, info);
+
+        if (result['error']) {
+            console.log('error');
+        }
+        let {data: {data}} = result;
+        // console.log('order ----', JSON.parse(data));
+        data = {
+            entity_position: data
+        }
+
+        yield put({type: SET_CUSTOMIZATION, data: data});
+
+        yield put({type: UPDATE_UI, data: {loader: false}});
+
+
+        // yield call(fetchTemplate)
+
+    } catch
+        (e) {
+        console.log(e);
+    }
+}
+
+
 export default function* watchTemplate() {
     yield  takeLatest(Actions.FETCH_TEMPLATE, fetchTemplate)
     yield  takeLatest(Actions.CUSTOMIZE_TEMPLATE, customizeTemplate)
@@ -157,5 +188,6 @@ export default function* watchTemplate() {
     yield  takeLatest(Actions.FETCH_DEFAULT_CUSTOMIZATION, fetchDefaultCustomization)
     yield  takeLatest(Actions.FETCH_SELECTED_TEMPLATE_IMAGE, fetchTemplateImages)
     yield  takeLatest(Actions.FETCH_THUMBNAIL_IMAGES, fetchThumbnailImages)
+    yield  takeLatest(Actions.REORDER_SECTION, reorderSection)
 
 }

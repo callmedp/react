@@ -5,7 +5,8 @@ import {
     FETCH_TEMPLATE_IMAGES,
     FETCH_THUMBNAIL_IMAGES,
     FETCH_DEFAULT_CUSTOMIZATION,
-    FETCH_SELECTED_TEMPLATE_IMAGE
+    FETCH_SELECTED_TEMPLATE_IMAGE,
+    REORDER_SECTION
 } from './actionTypes'
 
 
@@ -54,5 +55,11 @@ export const fetchSelectedTemplateImage = (templateId) => {
     return {
         type: FETCH_SELECTED_TEMPLATE_IMAGE,
         templateId
+    }
+}
+export const reorderSection = (payload) => {
+    return {
+        type: REORDER_SECTION,
+        payload
     }
 }

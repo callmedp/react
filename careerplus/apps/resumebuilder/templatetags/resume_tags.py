@@ -98,9 +98,31 @@ def background_color_choice(color_code):
     return code_dict[color_code]
 
 
+@register.filter
 def heading_font_size_choice(size):
-    size_dict = {
+    heading_size_dict = {
         1: 16,
         2: 17,
         3: 18,
     }
+    return heading_size_dict[size]
+
+
+@register.filter
+def sub_heading_font_size(size):
+    text_size_dict = {
+        1: 16,
+        2: 17,
+        3: 18
+    }
+    return text_size_dict[size]
+
+
+@register.filter
+def text_font_size(size):
+    text_size_dict = {
+        1: 13,
+        2: 14,
+        3: 15
+    }
+    return text_size_dict[size]
