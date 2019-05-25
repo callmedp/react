@@ -91,3 +91,15 @@ def remove_transparency(im,bg_colour=(255, 255, 255)):
     else:
         return im
     
+@task
+def update_customisations_for_all_templates(candidate_id):
+    from resumebuilder.models import Candidate, OrderCustomisation
+    candidate_obj = Candidate.objects.get(id=candidate_id)
+    customisation_objects = OrderCustomisation.objects.filter(candidate_id=candidate_id)
+    entity_id_data_mapping = candidate_obj.entity_id_data_mapping
+
+
+
+
+
+

@@ -1,5 +1,5 @@
 # python imports
-import json
+import json,ast
 
 # django imports
 from django.db import models
@@ -10,6 +10,7 @@ from django_mysql.models.fields import JSONField
 # local imports
 from .choices import *
 from .mixins import PreviewImageCreationMixin
+from .tasks import update_customisations_for_all_templates
 from .constants import TEMPLATE_DEFAULT_ENTITY_POSITION, TEMPLATE_ALLOW_LEFT_RIGHT_SWITCH
 
 # inter app imports
@@ -68,6 +69,19 @@ class CandidateProfile(AbstractAutoDate):
         return self.candidate.candidate_id
 
     @property
+    def entity_id_data_mapping(self):
+        try:
+            entity_data = ast.literal_eval(self.entity_preference_data)
+        except:
+            return {}
+
+        data = {}
+        for item in entity_data:
+            data[item.get('entity_id')] = {"active":item.get('active'),"entity_text":item.get("entity_text")}
+
+        return data
+    
+    @property
     def extracurricular_list(self):
         return [interest_dict[int(x)] for x in self.extracurricular.split(',')] if self.extracurricular != '' else []
 
@@ -93,6 +107,9 @@ class Candidate(PreviewImageCreationMixin, CandidateProfile):
         if created:
             self.create_template_customisations(obj.id)
 
+        if not created:
+            update_customisations_for_all_templates.delay(self.id)
+
         return obj
 
     def __str__(self):
@@ -106,6 +123,13 @@ class OrderCustomisation(PreviewImageCreationMixin, models.Model):
     heading_font_size = models.SmallIntegerField(choices=RESUME_FONT_SIZE_CHOICES, default=1)
     text_font_size = models.SmallIntegerField(choices=RESUME_FONT_SIZE_CHOICES, default=1)
     entity_position = JSONField(blank=True, null=True)
+
+    @property
+    def entity_position_eval(self):
+        try:
+            return json.loads(self.entity_position) 
+        except:
+            return []
 
 
 class Skill(PreviewImageCreationMixin, AbstractAutoDate):
@@ -262,3 +286,7 @@ senders = [Candidate, Skill, CandidateExperience, CandidateEducation, \
 
 for model_name in senders:
     post_save.connect(model_name.preview_image_task_call, sender=model_name)
+
+
+
+
