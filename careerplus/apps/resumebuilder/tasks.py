@@ -1,4 +1,5 @@
 #python imports
+import json
 from io import BytesIO
 from datetime import date
 
@@ -94,9 +95,27 @@ def remove_transparency(im,bg_colour=(255, 255, 255)):
 @task
 def update_customisations_for_all_templates(candidate_id):
     from resumebuilder.models import Candidate, OrderCustomisation
+
     candidate_obj = Candidate.objects.get(id=candidate_id)
     customisation_objects = OrderCustomisation.objects.filter(candidate_id=candidate_id)
     entity_id_data_mapping = candidate_obj.entity_id_data_mapping
+
+    for obj in customisation_objects:
+        existing_data = obj.entity_position_eval
+        data = []
+
+        for item in existing_data:
+            d = {key:value for key,value in item.items()}
+            d['active'] = entity_id_data_mapping[d['entity_id']]['active']
+            d['entity_text'] = entity_id_data_mapping[d['entity_id']]['entity_text']
+            data.append(d)
+
+        obj.entity_position = json.dumps(data)
+        obj.save()
+
+
+
+
 
 
 
