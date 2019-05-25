@@ -60,47 +60,29 @@
 	font-weight: 700;
 	display: table;
 	width: 100%;
-	@include border-radius(2px);
 	text-transform: uppercase;
-	background: $grey1;
-	padding: 0 10px;
 
 	li {
 		display: table-cell;
 		width: 45%;
 		text-align: center;
 		vertical-align: middle;
-		padding: 10px 10px;
-		background: $grey1;
+		padding: 0 10px;
+		border-bottom: 1px solid $grey2;
+		cursor: pointer;
+		line-height: 40px;
 
 		a {
 			color: $black;
 			font-weight: 600;
+			border-bottom: 3px solid transparent;
 		}
 	}
 
 	.active {
 		background: $white;
-		position: relative;
+		border-bottom: 3px solid $blue1;
 	}
 
-	.no-shadow {
-		box-shadow: none;
-	}
-
-	.shadow1 {
-		box-shadow: 8px -3px 7px -1px rgba(186,186,186,0.40);
-	}
-
-	.shadow2 {
-		box-shadow: 0 -3px 6px 0 rgba(199,199,199,0.50);
-	}
-
-	&--top-left-right-radius {
-		border-top-left-radius: 4px;
-		border-top-right-radius: 4px;
-	}
-	&--top-right-radius {
-		border-top-right-radius: 4px;
-	}
+	
 }

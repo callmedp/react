@@ -76,7 +76,7 @@ class Summary extends Component {
                                 component={renderTextArea} type={"textarea"} name="extra_info"
                                 className="summary-box--summary-txt" rows="10" value={extra_info}/>
                         </div>
-                        <span onClick={showSuggestionModal}>Select suggested summary</span>
+                        <span className="add-suggested" onClick={showSuggestionModal}>Add suggested summary</span>
 
                     </section>
 

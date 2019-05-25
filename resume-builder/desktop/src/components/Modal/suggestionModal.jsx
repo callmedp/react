@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
-import './templateModal.scss'
+import './suggestionModal.scss'
 
 Modal.setAppElement(document.getElementById('react-app'));
 
@@ -35,13 +35,21 @@ export default class SuggestionModal extends React.Component {
                     onRequestClose={this.closeModal}
                     contentLabel="Example Modal"
                 >
-                    <div className="pr">
+                    <div className="pr suggested-summary">
                         <i onClick={this.closeModal} className='icon-close icon-close--position'></i>
+                        <h2>Add from suggested summary</h2>
                         <ul>
-                            {[1, 2, 3, 4, 5, 6, 7].map(el => {
-                               return( <li>el</li>)
+                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(el => {
+                               return( <li>
+                                <span className="">
+                                    <input type="checkbox" name=""/> Add
+                                </span>
+                               <p>Took concepts and produced design mockups and prototypes to strengthen designs, enhance user experiences and improve site interactions.</p>
+                                </li>)
                             })}
                         </ul>
+                        <button className="orange-button"
+                                type={'submit'}>Save and Continue</button>
                     </div>
                 </Modal>
             </div>

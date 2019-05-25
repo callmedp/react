@@ -39,12 +39,12 @@ export default class LeftSideBar extends Component {
 
                 <ul className="tab-heading">
                     <li className={
-                        ' tab-heading--top-left-radius ' + (isEdit ? "active shadow1" : 'no-shadow')}>
+                        ' tab-heading--top-left-radius ' + (isEdit ? "active" : 'no-shadow')}>
                         <span className="icon-edit"></span>
                         <Link to="/resume-builder/edit">Add/ Edit</Link>
                     </li>
                     <li className={' tab-heading--top-right-radius ' +
-                    (!isEdit ? "active shadow2" : 'no-shadow')}>
+                    (!isEdit ? "active" : 'no-shadow')}>
                         <span className="icon-preview"></span>
                         <Link to="/resume-builder/preview">Preview</Link>
                     </li>
