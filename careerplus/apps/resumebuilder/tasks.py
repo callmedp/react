@@ -72,16 +72,16 @@ def generate_image_for_resume(candidate_id):
         img = Image.open(in_mem_file)
         img = remove_transparency(img)
         img.save(in_mem_file_to_upload,"PNG")
-        generator_obj.store_file(str(candidate.id),file_name,in_mem_file_to_upload.getvalue())
+        generator_obj.store_file(str(candidate.id)+"/images",file_name,in_mem_file_to_upload.getvalue())
 
         for tsize in thumbnail_sizes:
             tname = "resumetemplate-{}-{}x{}.png".format(i,tsize[0],tsize[1])
             in_mem_file_to_upload = BytesIO()
             img.thumbnail(tsize,Image.ANTIALIAS)
             img.save(in_mem_file_to_upload, "PNG")
-            generator_obj.store_file(str(candidate.id),tname,in_mem_file_to_upload.getvalue())
+            generator_obj.store_file(str(candidate.id)+"/images",tname,in_mem_file_to_upload.getvalue())
 
-def remove_transparency(im, bg_colour=(255, 255, 255)):
+def remove_transparency(im,bg_colour=(255, 255, 255)):
     if im.mode in ('RGBA', 'LA') or (im.mode == 'P' and 'transparency' in im.info):
         alpha = im.convert('RGBA').split()[-1]
         bg = Image.new("RGBA", im.size, bg_colour + (255,))

@@ -399,6 +399,8 @@ EXOTEL_DICT = {
     'check_dnd_url': 'https://{sid}:{token}@api.exotel.com/v1/Accounts/{sid}/Numbers/{number}.json',
 }
 
+RESUME_BUILDER_NON_COMBO_PID = 3092
+
 try:
     from .settings_local import *
 except:

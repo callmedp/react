@@ -757,12 +757,11 @@ class ResumeImagePreviewView(APIView):
             name_suffix += "-{}x{}".format(split_tsize[0], split_tsize[1])
 
         try:
-            file_obj = GCPPrivateMediaStorage().open("{}/{}/resumetemplate-{}.png". \
-                                                     format(settings.RESUME_TEMPLATE_DIR, candidate_obj.id,
-                                                            name_suffix), "rb")
+            file_obj = GCPPrivateMediaStorage().open("{}/{}/resumetemplate-{}.png".\
+                format(settings.RESUME_TEMPLATE_DIR,str(candidate_obj.id)+"/images",name_suffix),"rb")
         except Exception as e:
-            logging.getLogger('error_log').error("Not Found - {}/{}/resumetemplate-{}.png". \
-                                                 format(settings.RESUME_TEMPLATE_DIR, candidate_obj.id, template_no))
+            logging.getLogger('error_log').error("Not Found - {}/{}/resumetemplate-{}.png".\
+                format(settings.RESUME_TEMPLATE_DIR,str(candidate_obj.id)+"/images",template_no))
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         if not file_obj.size:

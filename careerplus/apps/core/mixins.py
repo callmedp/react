@@ -1,25 +1,31 @@
+#python imports
 import datetime
 import base64
 import os
 import logging, gzip, shutil
+from io import BytesIO
+from pathlib import Path
 
+#django imports
 from django.conf import settings
 from decimal import Decimal, ROUND_HALF_DOWN
-from Crypto.Cipher import XOR
-
 from django.conf import settings
 from django.template import Context
 from django.template.loader import get_template
 from django.utils import timezone
 from django.core.files.uploadedfile import SimpleUploadedFile
-# from django.http import HttpResponse
-from core.library.gcloud.custom_cloud_storage import (GCPInvoiceStorage, GCPPrivateMediaStorage)
-from pathlib import Path
-from weasyprint import HTML, CSS
-from resumebuilder.models import Candidate
-from PIL import Image
-import zipfile
 
+#local imports
+
+#inter app imports
+from resumebuilder.models import Candidate
+from core.library.gcloud.custom_cloud_storage import (GCPInvoiceStorage, GCPPrivateMediaStorage)
+
+#third party imports
+import zipfile
+from PIL import Image
+from Crypto.Cipher import XOR
+from weasyprint import HTML, CSS
 
 
 class TokenExpiry(object):
@@ -319,13 +325,11 @@ class InvoiceGenerate(object):
 
 class ResumeGenerate(object):
 
-    # common file generator method.
-    def generate_file(self, context_dict: object = {}, template_src: object = None,
-                      file_type: object = 'pdf') -> object:
+    def generate_file(self,context_dict={},template_src= None,file_type= 'pdf'):
         if not template_src:
             return None
+            
         html_template = get_template(template_src)
-
         rendered_html = html_template.render(context_dict).encode(encoding='UTF-8')
 
         if file_type == 'pdf':
@@ -334,12 +338,6 @@ class ResumeGenerate(object):
             file = HTML(string=rendered_html).write_png()
 
         return file
-
-    # if file exists then return only the path , name hence don't overwrite it again
-    def is_file_exist(self,file_path):
-        file = Path(settings.RESUME_TEMPLATE_DIR)
-        if file.is_file():
-            return True
 
     def store_file(self,file_dir,file_name,file_content):
         if settings.IS_GCP:
@@ -355,121 +353,70 @@ class ResumeGenerate(object):
         dest.write(file_content)
         dest.close()
 
-    def handle_content_type(self, order=None, content_type='pdf', index='1'):
-        file_dir = 'order/%s/' % str(order.pk)
-        file_name = 'resumetemplateupload-' + str(order.number) + '-' \
-                    + timezone.now().strftime('%Y%m%d')
-        if index and content_type == 'pdf':
-            file_name += '-' + index + '.%s' % content_type
-        elif content_type == 'pdf':
-            file_name += '.%s' % content_type
-        elif content_type == 'png':
-            file_name += '.%s' % content_type
+    def zip_all_resume_pdfs(self,order):
+        content_type = "zip"
+        candidate = Candidate.objects.get(candidate_id=order.candidate_id)
+        file_dir = "{}/{}".format(candidate.id,content_type)
+        file_name = "{}.{}".format("combo",content_type)
 
-        file_path = settings.RESUME_TEMPLATE_DIR + file_dir + file_name
+        zip_stream = BytesIO()
+        zf = zipfile.ZipFile(zip_stream, "w")
 
-        if self.is_file_exist(file_path):
-            return order, file_path, file_name
-        #  handle for pdf
-        if content_type == 'pdf':
-            candidate = Candidate.objects.get(candidate_id=order.candidate_id)
+        for i in range(1, 6):
+            current_file = "{}_{}-{}.{}".format(order.first_name,order.last_name,i,"pdf")
+            pdf_file_path = "resume-builder/{}/pdf/{}.pdf".format(candidate.id,i)
+            file_obj = GCPPrivateMediaStorage().open(pdf_file_path)
+            open(current_file, 'wb').write(file_obj.read())
+            zf.write(current_file)
+            os.unlink(current_file)
 
-            education = candidate.candidateeducation_set.all()
-            experience = candidate.candidateexperience_set.all()
-            skills = candidate.skill_set.all()
-            achievements = candidate.candidateachievement_set.all()
-            references = candidate.candidatereference_set.all()
-            projects = candidate.candidateproject_set.all()
-            certifications = candidate.candidatecertification_set.all()
-            languages = candidate.candidatelanguage_set.all()
-            current_exp = experience.filter(is_working=True).order_by('-start_date').first()
-            latest_experience = experience and experience[0].job_profile or 'FULL STACK DEVELOPER'
+        self.store_file(file_dir,file_name,zip_stream.getvalue())
 
-            #  handle context here later
-            context_dict = {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,
-                            'achievements': achievements, 'references': references, 'projects': projects,
-                            'certifications': certifications, 'extracurricular': '', 'languages': languages,
-                            'current_exp': current_exp, 'latest_exp': latest_experience}
+    def generate_pdf_for_template(self, order=None, index='1'):
+        content_type = "pdf"
+        candidate = Candidate.objects.get(candidate_id=order.candidate_id)
+        file_dir = "{}/{}".format(candidate.id,content_type)
+        file_name = "{}.{}".format(index,content_type)
 
-            
+        education = candidate.candidateeducation_set.all()
+        experience = candidate.candidateexperience_set.all()
+        skills = candidate.skill_set.all()
+        achievements = candidate.candidateachievement_set.all()
+        references = candidate.candidatereference_set.all()
+        projects = candidate.candidateproject_set.all()
+        certifications = candidate.candidatecertification_set.all()
+        languages = candidate.candidatelanguage_set.all()
+        current_exp = experience.filter(is_working=True).order_by('-start_date').first()
+        latest_experience = experience and experience[0].job_profile or 'FULL STACK DEVELOPER'
 
-            pdf_file = self.generate_file(
-                context_dict=context_dict,
-                template_src='resume{}.html'.format(index),
-                file_type='pdf')
+        #  handle context here later
+        context_dict = {'candidate': candidate, 'education': education, 'experience': experience, 
+                        'skills': skills,'achievements': achievements, 'references': references, 
+                        'projects': projects,'certifications': certifications, 
+                        'extracurricular': '', 'languages': languages,
+                        'current_exp': current_exp, 'latest_exp': latest_experience}
 
-            #  pdf file
-            pdf_file = SimpleUploadedFile(
-                file_name, pdf_file,
-                content_type='application/pdf')
+        pdf_file = self.generate_file(
+                    context_dict=context_dict,
+                    template_src='resume{}.html'.format(index),
+                    file_type='pdf')
 
-            self.store_file(file_dir, file_name, pdf_file)
+        self.store_file(file_dir, file_name, pdf_file)
 
-        #  handle for zip
-        elif content_type == 'zip':
-
-            zip_dir = 'order/%s-zip/' % str(order.pk)
-
-            file_path = settings.RESUME_TEMPLATE_DIR + zip_dir + file_name + '.zip'
-
-            if self.is_file_exist(file_path):
-                return order, file_path, file_name
-
-            #  if directory does not exists
-            if not os.path.exists(settings.RESUME_TEMPLATE_DIR + zip_dir):
-                os.makedirs(settings.RESUME_TEMPLATE_DIR + zip_dir)
-
-            shutil.make_archive(settings.RESUME_TEMPLATE_DIR + zip_dir + file_name, 'zip',
-                                settings.RESUME_TEMPLATE_DIR + file_dir)
-
-            file_name += '.zip'
-
-        #  handle for jpg
-        elif content_type == 'png':
-
-            img_dir = 'order/%s-img/' % str(order.pk)
-
-            file_path = settings.RESUME_TEMPLATE_DIR + img_dir + file_name
-
-            #  handle context here later
-            context_dict = {"STATIC_URL": settings.STATIC_URL, "SITE_DOMAIN": settings.SITE_DOMAIN,
-                            "SITE_PROTOCOL": settings.SITE_PROTOCOL}
-
-            img_file = self.generate_file(
-                context_dict=context_dict,
-                template_src='emailers/candidate/index.html',
-                file_type='png'
-            )
-
-            #  img file
-            img_file = SimpleUploadedFile(
-                file_name, img_file,
-                content_type='image/png')
-
-            self.store_file(img_dir, file_name, img_file)
-
-            # img = Image.open(file_path)
-            # rgb_im = img.convert('RGB')
-            #
-            # jpg_img_path = os.path.splitext(file_path)[0]
-            # jpg_img_path += '.jpg'
-            # rgb_im.save(jpg_img_path)
-            #
-            # self.store_file(img_dir, file_name, rgb_im)
-
-        return order, file_path, file_name
 
     def save_order_resume_pdf(self, order=None, is_combo=False,index=None):
         if not order:
             return None, None
 
-        # check if pack is combo or not
         if not is_combo:
-            # self.handle_content_type(order, content_type='png')
-            return self.handle_content_type(order, content_type='pdf',index=str(index))
-        for i in range(1, 6):
-            # self.handle_content_type(order, content_type='png', index=str(i))
-            self.handle_content_type(order, content_type='pdf', index=str(i))
+            return self.generate_pdf_for_template(order, index=str(index))
 
-        # handle zip content type
-        return self.handle_content_type(order, content_type='zip')
+        for i in range(1, 6):
+            self.generate_pdf_for_template(order, index=str(i))
+
+        return self.zip_all_resume_pdfs(order)
+
+
+
+
+

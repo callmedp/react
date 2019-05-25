@@ -58,8 +58,7 @@ FLOW_CHOICES = (
     (13, 'Executive Bio,Portfolio,Visual Resume,Cover Letter,Second Regular Resume'),  # flow 13
     (14, 'University Courses'),
     (15, 'Resume Booster International'),
-    (16, 'Resume Builder'),  # flow 15
-
+    (16, 'Resume Builder'),
 )
 
 SUB_FLOWS = {

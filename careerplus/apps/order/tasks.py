@@ -3,7 +3,7 @@ from celery.decorators import task
 from django.conf import settings
 
 from linkedin.autologin import AutoLogin
-from order.models import Order
+
 from order.functions import (
     create_short_url,
     send_email
@@ -17,6 +17,7 @@ from coupon.mixins import CouponMixin
 
 @task(name="invoice_generation_order")
 def invoice_generation_order(order_pk=None):
+    from order.models import Order
     try:
         order = Order.objects.get(pk=order_pk)
         InvoiceGenerate().save_order_invoice_pdf(order=order)
@@ -333,6 +334,7 @@ def pending_item_email(pk=None):
 
 @task(name="process_mailer")
 def process_mailer(pk=None):
+    from order.models import Order
     order = None
     try:
         order = Order.objects.get(pk=pk)
@@ -574,6 +576,7 @@ def process_mailer(pk=None):
 
 @task(name="payment_pending_mailer")
 def payment_pending_mailer(pk=None):
+    from order.models import Order
     order = None
     try:
         order = Order.objects.get(pk=pk)
@@ -661,6 +664,7 @@ def payment_pending_mailer(pk=None):
 
 @task(name="payment_realisation_mailer")
 def payment_realisation_mailer(pk=None):
+    from order.models import Order
     order = None
     mail_type = "SHINE_PAYMENT_CONFIRMATION"
     try:
@@ -709,6 +713,7 @@ def payment_realisation_mailer(pk=None):
 
 @task(name="service_initiation")
 def service_initiation(pk=None):
+    from order.models import Order
     order = None
     try:
         order = Order.objects.get(pk=pk)
@@ -785,3 +790,27 @@ def service_initiation(pk=None):
                             "%s - %s" % (str(sms_type), str(e)))
     except Exception as e:
         logging.getLogger('error_log').error('service initiation failed%s'%str(e))
+
+
+@task
+def generate_resume_for_order(order_id):
+    from resumebuilder.models import Candidate
+    from order.models import Order
+    from core.mixins import ResumeGenerate
+
+    order_obj = Order.objects.get(id=order_id)
+    candidate_id = order_obj.candidate_id
+    
+    for item in order_obj.orderitems.all():
+        if item.product.type_flow == 16:
+            product_id = item.product.id
+            break
+
+    is_combo = True if product_id != settings.RESUME_BUILDER_NON_COMBO_PID else False
+    selected_template = Candidate.objects.filter(candidate_id = candidate_id).first().selected_template
+
+    order, resume_template_full_path, resume_template_name = \
+        ResumeGenerate().save_order_resume_pdf(order=order_obj,is_combo=is_combo,index=selected_template)
+
+
+

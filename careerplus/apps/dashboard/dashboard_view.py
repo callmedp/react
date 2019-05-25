@@ -840,40 +840,42 @@ class DashboardResumeTemplateDownload(View):
     def post(self, request, *args, **kwargs):
         candidate_id = request.session.get('candidate_id', None)
         email = request.session.get('email', None)
+        product_id = request.POST.get('product_id', None)
+        is_combo = True if product_id != str(settings.RESUME_BUILDER_NON_COMBO_PID) else False
+        order_pk = request.POST.get('order_pk', None)
+        candidate_obj = Candidate.objects.filter(candidate_id = candidate_id).first()
+        selected_template = candidate_obj.selected_template if candidate_obj.selected_template else 1
+        order = Order.objects.get(pk=order_pk)
+
+        if not candidate_id or not order.status in [1, 3, 0] or not (order.email == email) \
+                or not (order.candidate_id == candidate_id):
+            return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))
+
+        filename_prefix = "{}_{}".format(order.first_name,order.last_name)
+        file_path = "resume-builder/{}/pdf/{}.pdf".format(candidate_obj.id,selected_template)
+        content_type = "application/pdf"
+        filename_suffix = ".pdf"
+        
+        if is_combo:
+            file_path = "resume-builder/{}/zip/combo.zip".format(candidate_obj.id)
+            content_type = "application/zip"
+            filename_suffix = ".zip"
+        
         try:
-            product_id = request.POST.get('product_id', None)
-            is_combo = False
-            if product_id != "3092":
-                is_combo = True
-            order_pk = request.POST.get('order_pk', None)
-            # product_id = request.POST.get('product_id',None)
-            selected_template = Candidate.objects.filter(candidate_id = candidate_id) and Candidate.objects.filter(candidate_id = candidate_id).first() \
-                and Candidate.objects.filter(candidate_id = candidate_id).first().selected_template or '1'
-            # selected_template = Candidate.objects.filter(candidate_id = candidate_id).first().selected_template
-            order = Order.objects.get(pk=order_pk)
-            if not candidate_id or not order.status in [1, 3, 0] or not (order.email == email) \
-                    or not (order.candidate_id == candidate_id):
-                return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))
-
-            order, resume_template_full_path, resume_template_name = \
-                ResumeGenerate().save_order_resume_pdf(order=order,is_combo=is_combo,index=selected_template)
-
-
-            if resume_template_full_path:
+            if not settings.IS_GCP:
                 file_path = resume_template_full_path
-                if not settings.IS_GCP:
-                    file_path = resume_template_full_path
-                    fsock = FileWrapper(open(file_path, 'rb'))
-                else:
-                    fsock = GCPPrivateMediaStorage().open(file_path)
-                filename = resume_template_name
-                response = HttpResponse(fsock, content_type=mimetypes.guess_type(filename)[0])
-                response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
-                return response
+                fsock = FileWrapper(open(file_path, 'rb'))
+            else:
+                fsock = GCPPrivateMediaStorage().open(file_path)
+            
+            filename = filename_prefix + filename_suffix
+            response = HttpResponse(fsock, content_type=content_type)
+            response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
+            return response
+
         except Exception as e:
             logging.getLogger('error_log').error("%s" % str(e))
-
-        return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))
+            return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))
 
 
 class DashboardCancelOrderView(View):
