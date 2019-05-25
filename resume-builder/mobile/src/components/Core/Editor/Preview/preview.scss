@@ -132,3 +132,35 @@
     height:100%;
     min-height:85vh;
 }
+
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 1px solid $border1;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+     
+    li {
+        flex: 0 0 50%;
+        text-align: center;
+        text-transform: uppercase;
+
+        &.active {
+            color: $blue;
+            border-bottom: 3px solid $blue;
+        }
+    }
+}
+
+.input-range__label--min, .input-range__label--max {
+    bottom: -2rem;
+}
+
+.input-range__label {
+    font-size: 1.4rem;
+}
+
+.input-range__label--value {
+    top: -2.5rem;
+}

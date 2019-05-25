@@ -217,7 +217,7 @@ class Preview extends Component {
                                                         <span>Reorder section</span>
                                                     </div>
 
-                                                    <div className="filter__accordion__card__heading--right">
+                                                    <div            className="filter__accordion__card__heading--right">
                                                         <i className={"sprite "  +(currentTab === 3 ? "icon--minus":"icon--plus")}></i>
                                                     </div>
                                                 </div>
@@ -225,6 +225,13 @@ class Preview extends Component {
                                             </AccordionItemHeading>
                                             <AccordionItemPanel>
                                                 <div className="filter__accordion__card--content">
+
+                                                    <ul className="tabs">
+                                                        <li className="active">Left</li>
+                                                        <li>Right</li>
+                                                    </ul>
+
+
                                                     <div className="reorder">
                                                         <ul className="reorder__items">
                                                             <li className="reorder__item reorder--select">
@@ -348,6 +355,9 @@ class Preview extends Component {
                                                             </li>
                                                         </ul>
                                                     </div>
+
+
+
                                                 </div>
                                             </AccordionItemPanel>
                                             </div>
