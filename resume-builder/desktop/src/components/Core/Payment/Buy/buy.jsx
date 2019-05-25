@@ -14,7 +14,7 @@ import moment from "moment"
 import {fetchPersonalInfo, updatePersonalInfo} from '../../../../store/personalInfo/actions/index'
 import SelectTemplateModal from '../../../Modal/selectTemplateModal';
 import LoaderPage from '../../../Loader/loaderPage';
-import {displaySelectedTemplate, fetchTemplateImages} from "../../../../store/template/actions";
+import {displaySelectedTemplate, fetchTemplateImages,fetchSelectedTemplateImage, fetchThumbNailImages} from "../../../../store/template/actions";
 
 
 function SampleNextArrow(props) {
@@ -79,6 +79,7 @@ export class Buy extends Component {
     }
 
     componentDidMount() {
+        this.props.fetchThumbNailImages();
         this.props.getProductIds();
         this.props.fetchUserInfo();
         this.props.fetchTemplateImages();
@@ -105,7 +106,7 @@ export class Buy extends Component {
             slidesToScroll: 3,
             variableWidth: true
         };
-        const {userInfo: {first_name, selected_template}, ui: {loader}, template: {templateImages}} = this.props;
+        const {userInfo: {first_name, selected_template}, ui: {loader}, template: {templateImages, thumbnailImages}} = this.props;
         const {userInfo} = this.props;
         const {checked} = this.state;
         return (
@@ -127,7 +128,7 @@ export class Buy extends Component {
                         <section className="left-sidebar half-width pos-rel">
                             <span onClick={() => this.showEnlargedTemplate(selected_template)} className="zoom"/>
                             <div className="right-sidebar-scroll-main">
-                                <img src={`data:image/png;base64,${templateImages[selected_template - 1]}`}
+                                <img src={`data:image/png;base64,${templateImages[selected_template-1]}`}
                                      className="img-responsive" alt=""/>
                             </div>
 
@@ -176,7 +177,7 @@ export class Buy extends Component {
                                                             <span></span>
                                                         </div>
                                                         <img
-                                                            src={`data:image/png;base64,${templateImages[key]}`}
+                                                            src={`data:image/png;base64,${thumbnailImages[key]}`}
                                                             className="img-responsive"
                                                             alt=""/>
                                                     </div>
@@ -268,6 +269,12 @@ const mapDispatchToProps = (dispatch) => {
         },
         fetchTemplateImages() {
             return dispatch(fetchTemplateImages())
+        },
+        fetchThumbNailImages() {
+            return dispatch(fetchThumbNailImages())
+        },
+        fetchSelectedTemplateImage(templateId) {
+             return dispatch(fetchSelectedTemplateImage(templateId))
         }
     }
 };

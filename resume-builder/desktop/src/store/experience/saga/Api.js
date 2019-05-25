@@ -41,11 +41,19 @@ const bulkUpdateUserExperience = (data, candidateId) => {
 
 };
 
+const fetchJobTitles = (title) => {
+
+    const url = `job-title-suggestion/${title}/`;
+    return BaseApiService.get(`${siteDomain}/api/v1/resume/${url}`);
+
+};
+
 
 export const Api = {
     fetchUserExperience,
     updateUserExperience,
     createUserExperience,
     deleteUserExperience,
-    bulkUpdateUserExperience
+    bulkUpdateUserExperience,
+    fetchJobTitles
 }

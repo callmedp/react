@@ -13,16 +13,14 @@ django.setup()
 
 conn = get_redis_connection('search_lookup')
 
-with open('data.json') as fp:
-    data=json.load(fp)
+with open('merged_experience.json') as fp:
+    data = eval(fp.read())
 
-conn.hmset('suggestion_set', data)
-
-
+conn.hmset('suggestion_set_jt_experience', data)
 
 
+with open('merged_summary.json') as fp:
+    data = eval(fp.read())
 
+conn.hmset('suggestion_set_jt_summary', data)
 
-
-
-    

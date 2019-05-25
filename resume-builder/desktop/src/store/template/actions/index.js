@@ -3,7 +3,9 @@ import {
     SET_SELECTED_TEMPLATE,
     CUSTOMIZE_TEMPLATE,
     FETCH_TEMPLATE_IMAGES,
-    FETCH_DEFAULT_CUSTOMIZATION
+    FETCH_THUMBNAIL_IMAGES,
+    FETCH_DEFAULT_CUSTOMIZATION,
+    FETCH_SELECTED_TEMPLATE_IMAGE
 } from './actionTypes'
 
 
@@ -39,5 +41,18 @@ export const fetchDefaultCustomization = (templateId) => {
 export const fetchTemplateImages = () => {
     return {
         type: FETCH_TEMPLATE_IMAGES,
+    }
+}
+
+export const fetchThumbNailImages = () => {
+    return {
+        type: FETCH_THUMBNAIL_IMAGES,
+    }
+}
+
+export const fetchSelectedTemplateImage = (templateId) => {
+    return {
+        type: FETCH_SELECTED_TEMPLATE_IMAGE,
+        templateId
     }
 }

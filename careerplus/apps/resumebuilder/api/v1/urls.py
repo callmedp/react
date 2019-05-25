@@ -18,8 +18,7 @@ from .views import (CandidateListCreateView, CandidateRetrieveUpdateView, SkillR
                     CandidateLanguageRetrieveUpdateView,
                     CandidateResumePreview,ProfileEntityBulkUpdateView, InterestView,
                     OrderCustomisationListView,OrderCustomisationRUDView,ResumeImagePreviewView,
-                    JobtoExperienceSuggestionApiView, JobTitleSuggestionApiView, JobTitleSuggestionApiView,
-                    EntityReorderView)
+                    SuggestionApiView, EntityReorderView)
 
 #inter app imports
 
@@ -61,7 +60,6 @@ urlpatterns = [
     url(r'^candidate/(?P<candidate_id>[0-9a-z]+)/entity-reorder/(?P<template_no>\d+)/$', EntityReorderView.as_view()),
     url(r'^candidate/(?P<candidate_id>[0-9a-z]+)/bulk-update/(?P<entity_slug>[a-z\-]+)/$', ProfileEntityBulkUpdateView.as_view()),
     url(r'^interest-list/$', InterestView.as_view()),
-    url(r'^job-title-suggestion/(?P<job_title>[\w|\W]+)/$', JobTitleSuggestionApiView.as_view()),
-    url(r'^job-title-experience-suggestion/(?P<job_title>[\w|\W]+)/$', JobtoExperienceSuggestionApiView.as_view())
+    url(r'^suggestion/$', SuggestionApiView.as_view()),
 
 ]

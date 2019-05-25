@@ -6,7 +6,12 @@ import {
     AccordionItemPanel
 } from "react-accessible-accordion";
 import {Field} from "redux-form";
-import {datepicker, renderField, renderTextArea,  renderDynamicSelect} from "../../../../../FormHandler/formFieldRenderer";
+import {
+    datepicker,
+    renderField,
+    renderTextArea,
+    renderDynamicSelect
+} from "../../../../../FormHandler/formFieldRenderer";
 import React from "react";
 import styles from './experience.scss'
 
@@ -27,6 +32,7 @@ export const ExperienceRenderer = ({
                                        isEditable,
                                        entityName,
                                        expanded,
+                                       fetchJobTitles,
                                        till_today,
                                        tillTodayDisable
                                    }) => {
@@ -69,8 +75,9 @@ export const ExperienceRenderer = ({
                                                 <AccordionItemHeading>
                                                     <AccordionItemButton>
                                                         <div className="flex-container">
-                                                             <h3 className={"add-section-heading"}>{fields.get(index).job_profile || 'Experience'}</h3>
-                                                            <span className={expanded.indexOf(index) > -1 ? "opened-accordion" : "closed-accordion"}></span>
+                                                            <h3 className={"add-section-heading"}>{fields.get(index).job_profile || 'Experience'}</h3>
+                                                            <span
+                                                                className={expanded.indexOf(index) > -1 ? "opened-accordion" : "closed-accordion"}></span>
                                                             <div className="addon-buttons mr-10">
                                                                 <span
                                                                     onClick={(event) => deleteExperience(index, fields, event)}
@@ -95,10 +102,15 @@ export const ExperienceRenderer = ({
                                                         <fieldset>
                                                             <label>Designation</label>
                                                             <Field
-                                                                autoFocus={true}
+                                                                // autoFocus={true}
+                                                                 label="Select Experience"
                                                                 iconClass={'icon-designation'}
-                                                                component={renderField}
-                                                                type={"text"}
+                                                                component={renderDynamicSelect}
+                                                                closeMenuOnSelect={false}
+                                                                isMulti={false}
+                                                                loadOptions={(inputValue) => fetchJobTitles(inputValue)}
+                                                                value={{value:'test', 'label':'test' }}
+                                                                defaultOptions={[{value: 'aman', label: "aman"}]}
                                                                 name={`${member}.job_profile`}/>
 
                                                         </fieldset>
