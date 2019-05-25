@@ -19,11 +19,11 @@ For Mobile case
 
         <!--top left 1-->
 
-        {% include  "partials1/summary.html" %}
+        {% include entity_position.0.entity_id|render_section:"partials1/" %}
 
 
         <!--top right  2-->
-        {% include "partials1/profile.html" %}
+        {% include entity_position.1.entity_id|render_section:"partials1/" %}
 
 
     </div>
@@ -31,39 +31,39 @@ For Mobile case
     <div style="width: 100%; border-bottom: 13px solid {{ current_config.color|background_color_choice }}; padding: 3% 3% 0 3%;">
 
         <!--Experience 3-->
-        {% include "partials1/experience.html" %}
+        {% include entity_position.2.entity_id|render_section:"partials1/" %}
 
 
         <!--Skills 4-->
-        {% include "partials1/skill.html" %}
+        {% include entity_position.3.entity_id|render_section:"partials1/" %}
 
 
         <!--Project  5-->
-        {% include "partials1/project.html" %}
+        {% include entity_position.4.entity_id|render_section:"partials1/" %}
 
 
         <!--Courses done  6-->
-        {% include "partials1/course.html" %}
+        {% include entity_position.5.entity_id|render_section:"partials1/" %}
 
 
         <!--Education  7-->
-        {% include "partials1/education.html" %}
+        {% include entity_position.6.entity_id|render_section:"partials1/" %}
 
 
         <!--Interest  8-->
-        {% include "partials1/interest.html" %}
+        {% include entity_position.7.entity_id|render_section:"partials1/" %}
 
 
         <!--Achievement  9-->
-        {% include "partials1/award.html" %}
+        {% include entity_position.8.entity_id|render_section:"partials1/" %}
 
 
         <!--Reference  10-->
-        {% include "partials1/reference.html" %}
+        {% include entity_position.9.entity_id|render_section:"partials1/" %}
 
 
         <!--Languages  11-->
-        {% include "partials1/language.html" %}
+{#        {% include entity_position.9.entity_id|render_section:"partials1/" %}#}
 
 
     </div>

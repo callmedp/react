@@ -126,3 +126,21 @@ def text_font_size(size):
         3: 15
     }
     return text_size_dict[size]
+
+
+@register.filter
+def render_section(choice, template_partial):
+    section_choice = {
+        1: "profile",
+        2: "education",
+        3: "experience",
+        4: "project",
+        5: "skill",
+        6: "summary",
+        7: "award",
+        8: "course",
+        9: "language",
+        10: "reference",
+        11: "interest"
+    }
+    return template_partial + section_choice[choice] + ".html"

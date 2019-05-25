@@ -140,6 +140,7 @@ function* fetchDefaultCustomization(action) {
 
         yield put({type: SET_CUSTOMIZATION, data: data});
 
+
         yield put({type: UPDATE_UI, data: {loader: false}});
 
 
@@ -168,6 +169,10 @@ function* reorderSection(action) {
         }
 
         yield put({type: SET_CUSTOMIZATION, data: data});
+
+
+        yield call(fetchTemplate, {payload: {template: templateId}})
+
 
         yield put({type: UPDATE_UI, data: {loader: false}});
 

@@ -347,8 +347,6 @@ class CandidateResumePreview(APIView):
     def get(self, request, *args, **kwargs):
         candidate_id = self.kwargs.get('candidate_id', '')
         template_id = self.kwargs.get('pk', '')
-        import ipdb;
-        ipdb.set_trace();
         candidate = Candidate.objects.filter(candidate_id=candidate_id).first()
         if not candidate:
             return {}
@@ -365,6 +363,7 @@ class CandidateResumePreview(APIView):
         languages = candidate.candidatelanguage_set.all().order_by('order')
         current_exp = experience.filter(is_working=True).order_by('-start_date').first()
         current_config = candidate.ordercustomisation_set.filter(template_no=template_id).first()
+        entity_position = current_config.entity_position_eval
 
         latest_experience, latest_end_date = '', None
         for i in experience:
@@ -388,7 +387,8 @@ class CandidateResumePreview(APIView):
              'achievements': achievements, 'references': references, 'projects': projects,
              'certifications': certifications, 'extracurricular': extracurricular, 'languages': languages,
              'current_exp': current_exp, 'latest_exp': latest_experience,
-             'preference_list': entity_preference, 'current_config': current_config
+             'preference_list': entity_preference, 'current_config': current_config,
+             'entity_position': entity_position
              }).encode(encoding='UTF-8')
 
         return Response({
@@ -759,11 +759,12 @@ class ResumeImagePreviewView(APIView):
             name_suffix += "-{}x{}".format(split_tsize[0], split_tsize[1])
 
         try:
-            file_obj = GCPPrivateMediaStorage().open("{}/{}/resumetemplate-{}.png".\
-                format(settings.RESUME_TEMPLATE_DIR,str(candidate_obj.id)+"/images",name_suffix),"rb")
+            file_obj = GCPPrivateMediaStorage().open("{}/{}/resumetemplate-{}.png". \
+                                                     format(settings.RESUME_TEMPLATE_DIR, candidate_obj.id,
+                                                            name_suffix), "rb")
         except Exception as e:
-            logging.getLogger('error_log').error("Not Found - {}/{}/resumetemplate-{}.png".\
-                format(settings.RESUME_TEMPLATE_DIR,str(candidate_obj.id)+"/images",template_no))
+            logging.getLogger('error_log').error("Not Found - {}/{}/resumetemplate-{}.png". \
+                                                 format(settings.RESUME_TEMPLATE_DIR, candidate_obj.id, template_no))
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         if not file_obj.size:
