@@ -72,7 +72,7 @@ class Preview extends Component {
 
                <div className="preview__bottom-btns">
                     <span className="btn btn__round btn--outline" onClick={()=>{this.setState({customize:true})}}>Customize template</span>
-                    <span className="btn btn__round btn__primary">Get your resume</span>
+                    <span className="btn btn__round btn__primary" onClick={()=>{this.props.history.push(`/resume-builder/buy`) }}>Get your resume</span>
                </div>
 
                {customize ?

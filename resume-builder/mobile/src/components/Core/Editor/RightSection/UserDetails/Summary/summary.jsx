@@ -123,12 +123,18 @@ class Summary extends Component {
             
             <div className="buildResume__wrap pb-0">
                 <div className="buildResume__heading">
-                    {!editHeading ?
-                        <h1>{heading}</h1>:
-                        <input autoFocus type="text" id="heading" placeholder={heading} onBlur={(e)=>this.updateInputValue('blur',e)}
-                         onKeyDown={(e)=>this.updateInputValue('keyPress',e)}/>
+                {!editHeading ?
+                        <React.Fragment>
+                            <h1>{heading}</h1>
+                            <i className="sprite icon--edit" onClick={()=>{this.setState({editHeading:true})}}></i>
+                        </React.Fragment>:
+                        <React.Fragment>
+                            <input type="text" autoFocus placeholder={heading} onBlur={(e)=>this.updateInputValue('blur',e)}
+                                onKeyDown={(e)=>this.updateInputValue('keyPress',e)}/>
+                            <i className="sprite icon--editTick"></i>
+                        </React.Fragment>
+                         
                     }
-                    <i className="sprite icon--edit" onClick={()=>{this.setState({editHeading:true})}}></i>
                 </div>
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <ul className="form">

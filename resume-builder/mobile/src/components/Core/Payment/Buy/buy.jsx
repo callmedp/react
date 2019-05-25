@@ -5,6 +5,7 @@ import * as action from '../../../../store/buy/actions';
 import {connect} from "react-redux";
 import {siteDomain} from "../../../../Utils/domains";
 import Slider from "react-slick";
+import Loader from '../../../Common/Loader/loader.jsx';
 
 
 class Buy extends Component {
@@ -69,20 +70,24 @@ class Buy extends Component {
             speed: 500,
             slidesToShow: 2,
           };
+          const {loader:{mainloader}} = this.props
+          const template = localStorage.getItem('template') || 1;
+          const {checked,pay_button_clicked} = this.state
           
         return (
 
             <div className="buy-container">
                 <Header/>
+                {mainloader ? <Loader/> :""}
 
                 <div className="pay-now">
                     <div className="pay-now__price">
                         <span className="fs-14 pay-now__price--pay">You pay</span>
                         <span
-                            className="fs-26 color-333 semi-bold">Rs. {this.state.checked === 'product1' ? 999 : 1249}/-</span>
+                            className="fs-26 color-333 semi-bold">Rs. {checked === 'product1' ? 999 : 1249}/-</span>
                     </div>
 
-                    <button className="btn btn__round btn__primary fs-" disabled={this.state.pay_button_clicked}
+                    <button className="btn btn__round btn__primary fs-" disabled={pay_button_clicked}
                             onClick={this.redirectToCart.bind(this)}>Pay Now
                     </button>
                 </div>
@@ -93,7 +98,7 @@ class Buy extends Component {
                             <div className="buy__item--left form__radio-group">
                                 <input className="buy__item--input form__radio-input" type="radio" id="your-resume"
                                        name="product-1"
-                                       checked={this.state.checked === 'product1' ? true : false}
+                                       checked={checked === 'product1' ? true : false}
                                        onChange={this.handleOnChange.bind(this, 'product1')}></input>
                                 <label className="buy__item--label form__radio-label" htmlFor="your-resume">
                                     <span className="form__radio-button"></span>
@@ -105,7 +110,7 @@ class Buy extends Component {
                                 <span className="buy__item--image">
                                     <img src={`${this.staticUrl}react/assets/images/mobile/Resume4.png`} alt="Resume"/>
                                 </span>
-                                <a href="#" className="fs-12 mt-5">Edit</a>
+                                <a className="fs-12 mt-5" onClick onClick={()=>{this.props.history.push(`/resume-builder/edit/?type=profile`) }}>Edit</a>
                             </div>
                         </div>
 
@@ -115,7 +120,7 @@ class Buy extends Component {
                             <div className="buy__item--left form__radio-group">
                                 <input className="buy__item--input form__radio-input" type="radio" id="all-resumes"
                                        name="product2"
-                                       checked={this.state.checked === 'product2' ? true : false}
+                                       checked={checked === 'product2' ? true : false}
                                        onChange={this.handleOnChange.bind(this, 'product2')}></input>
                                 <label className="buy__item--label form__radio-label" htmlFor="all-resumes">
                                     <span className="form__radio-button"></span>
@@ -167,7 +172,10 @@ class Buy extends Component {
 }
 
 const mapStateToProps = (state) => {
-    return {productIds: state.productIds}
+    return {
+        productIds: state.productIds,
+        loader: state.loader,
+    }
 };
 
 const mapDispatchToProps = (dispatch) => {

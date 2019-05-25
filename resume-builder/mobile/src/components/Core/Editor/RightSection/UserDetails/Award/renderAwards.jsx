@@ -26,11 +26,16 @@ export const renderAwards = ({
             <div className="buildResume__heading heading">
                 <div className="heading__info">
                     {!editHeading ?
-                        <h1>{heading}</h1>:
-                        <input type="text" autoFocus placeholder={heading} onBlur={(e)=>updateInputValue('blur',e)}
-                         onKeyDown={(e)=>updateInputValue('keyPress',e)}/>
+                        <React.Fragment>
+                            <h1>{heading}</h1>
+                            <i className="sprite icon--edit" onClick={editHeadingClick.bind(true)}></i>
+                        </React.Fragment>:
+                        <React.Fragment>
+                            <input type="text" autoFocus placeholder={heading} onBlur={(e)=>updateInputValue('blur',e)}
+                                onKeyDown={(e)=>updateInputValue('keyPress',e)}/>
+                            <i className="sprite icon--editTick"></i>
+                        </React.Fragment>
                     }
-                    <i className="sprite icon--edit" onClick={editHeadingClick.bind(true)}></i>
                 </div>
                 {!editHeading ?
                     <button role="button" onClick={handleSubmit(handleAddition.bind(this,fields,awardNewData(fields),100,'award'))}
