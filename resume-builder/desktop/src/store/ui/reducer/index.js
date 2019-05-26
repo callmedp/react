@@ -7,7 +7,9 @@ import {
     SHOW_MORE_SECTION,
     HIDE_MORE_SECTION,
     SHOW_SUGGESTION_MODAL,
-    HIDE_SUGGESTION_MODAL
+    HIDE_SUGGESTION_MODAL,
+    SHOW_ALERT_MODAL,
+    HIDE_ALERT_MODAL
 } from "../actions/actionTypes";
 
 const initialState = {
@@ -16,7 +18,8 @@ const initialState = {
     'select_template_modal': false,
     'formName': '',
     'showMoreSection': false,
-    'suggestionModal': false
+    'suggestionModal': false,
+    'alertModal': false
 };
 
 export const uiReducer = (state = initialState, action) => {
@@ -81,7 +84,18 @@ export const uiReducer = (state = initialState, action) => {
                 ...action.data
             }
         }
-
+        case SHOW_ALERT_MODAL: {
+            return {
+                ...state,
+                ...action.data
+            }
+        }
+        case HIDE_ALERT_MODAL: {
+            return {
+                ...state,
+                ...action.data
+            }
+        }
         default: {
             return state;
         }

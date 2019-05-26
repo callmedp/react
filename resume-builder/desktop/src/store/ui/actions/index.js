@@ -6,7 +6,9 @@ import {
     SELECT_CURRENT_FORM,
     SHOW_MORE_SECTION,
     SHOW_SUGGESTION_MODAL,
-    HIDE_SUGGESTION_MODAL
+    HIDE_SUGGESTION_MODAL,
+    SHOW_ALERT_MODAL,
+    HIDE_ALERT_MODAL
 } from "./actionTypes";
 
 
@@ -73,5 +75,18 @@ export const hideMoreSection = () => {
     return {
         type: SHOW_MORE_SECTION,
         data: {showMoreSection: false}
+    }
+}
+export const showAlertModal = () => {
+    return {
+        type: SHOW_ALERT_MODAL,
+        data: {alertModal: true}
+    }
+}
+
+export const hideAlertModal = () => {
+    return {
+        type: HIDE_ALERT_MODAL,
+        data: {alertModal: false}
     }
 }

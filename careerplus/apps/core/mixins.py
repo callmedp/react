@@ -333,7 +333,7 @@ class ResumeGenerate(object):
         rendered_html = html_template.render(context_dict).encode(encoding='UTF-8')
 
         if file_type == 'pdf':
-            file = HTML(string=rendered_html).write_pdf(stylesheets=[CSS(string='@page {size:A3; margin:0px}')])
+            file = HTML(string=rendered_html).write_pdf(stylesheets=[CSS(string='@page:first {size:A3; margin:0px} @page {size:A3; margin:0px; margin-top:50px}')])
         elif file_type == 'png':
             file = HTML(string=rendered_html).write_png()
 

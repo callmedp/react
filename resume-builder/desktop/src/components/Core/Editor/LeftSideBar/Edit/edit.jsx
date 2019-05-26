@@ -5,8 +5,9 @@ import queryString from "query-string";
 import {formCategoryList, entityList} from "../../../../../Utils/formCategoryList";
 import {connect} from 'react-redux'
 import * as actions from '../../../../../store/personalInfo/actions/index'
-import {showMoreSection} from '../../../../../store/ui/actions/index'
+import {showMoreSection, showAlertModal, hideAlertModal} from '../../../../../store/ui/actions/index'
 import Swal from 'sweetalert2'
+import AlertModal from '../../../../Modal/alertModal.jsx'
 
 class Edit extends Component {
     constructor(props) {
@@ -77,6 +78,7 @@ class Edit extends Component {
     }
 
     showErrorMessage(link) {
+        this.props.showAlertModal();
         const {ui: {formName}} = this.props;
         Swal.fire({
             title: 'Are you sure?',
@@ -94,6 +96,7 @@ class Edit extends Component {
     }
 
     handleDeleteClick(elem) {
+        this.props.showAlertModal();
         Swal.fire({
             text: "Do you really want to remove this section?",
             type: 'warning',
@@ -136,6 +139,7 @@ class Edit extends Component {
         }
         return (
             <div className="edit-section">
+                <AlertModal {...this.props}/>
                 <strong>Complete your information</strong>
                 <ul>
                     {
@@ -208,6 +212,12 @@ const mapDispatchToProps = (dispatch) => {
         },
         'showMoreSection': () => {
             return dispatch(showMoreSection())
+        },
+        'showAlertModal': () => {
+            return dispatch(showAlertModal())
+        },
+        'hideAlertModal': () => {
+            return dispatch(hideAlertModal())
         }
     }
 };
