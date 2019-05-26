@@ -25,10 +25,16 @@ const customizeTemplate = (candidateId, templateId, data) => {
     return BaseApiService.patch(`${siteDomain}/api/v1/resume/${url}`, data)
 }
 
+const reorderSection = (candidateId, templateId, data) => {
+    const url = `candidate/${candidateId}/entity-reorder/${templateId}/`;
+    return BaseApiService.post(`${siteDomain}/api/v1/resume/${url}`, data)
+}
+
 export const Api = {
     fetchTemplate,
     customizeTemplate,
     fetchTemplateImages,
-    fetchDefaultCustomization
+    fetchDefaultCustomization,
+    reorderSection
 
 }

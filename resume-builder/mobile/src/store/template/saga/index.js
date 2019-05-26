@@ -3,7 +3,7 @@ import {call, takeLatest, put,select,all} from 'redux-saga/effects'
 import * as Actions from '../actions/actionTypes'
 import {Api} from "./Api";
 import * as LoaderAction from '../../loader/actions/actionTypes';
-import {FETCH_TEMPLATE_IMAGES, SET_CUSTOMIZATION} from "../actions/actionTypes";
+import {SAVE_THUMBNAIL_IMAGES, SET_CUSTOMIZATION,SAVE_TEMPLATE_IMAGES} from "../actions/actionTypes";
 import {SubmissionError} from 'redux-form'
 
 
@@ -70,11 +70,13 @@ function* customizeTemplate(action) {
 
 
         let {data} = result;
+        let {entity_position,template_no} = data
 
         data = {
             ...data,
             ...{
-                templateId: data['template_no']
+                entity_position:JSON.parse(entity_position),
+                templateId: template_no
             }
         };
 
@@ -88,25 +90,80 @@ function* customizeTemplate(action) {
     }
 }
 
-
-function* fetchTemplateImages(action) {
+function* reorderSection(action) {
     try {
-        const candidateId = 12; //localStorage.getItem('candidateId') || '';
+        const candidateId = localStorage.getItem('candidateId') || '';
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+        const {payload: {templateId, info}} = action;
+        const result = yield call(Api.reorderSection, candidateId, templateId, info);
+
+        if (result['error']) {
+            console.log('error');
+        }
+        let {data: {data}} = result;
+        // console.log('order ----', JSON.parse(data));
+        data = {
+            entity_position: JSON.parse(data)
+        }
+
+        yield put({type: SET_CUSTOMIZATION, data:data});
+
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+
+
+        // yield call(fetchTemplate)
+
+    } catch
+        (e) {
+        console.log(e);
+    }
+}
+
+function* fetchThumbnailImages(action) {
+    try {
+        const candidateId = localStorage.getItem('candidateId') || '';
         // yield put({type: UPDATE_UI, data: {loader: true}});
 
+        const query = 'tsize=151x213';
         const result = yield all([
-            call(Api.fetchTemplateImages, candidateId, 1),
-            call(Api.fetchTemplateImages, candidateId, 2),
-            call(Api.fetchTemplateImages, candidateId, 3),
-            call(Api.fetchTemplateImages, candidateId, 4),
-            call(Api.fetchTemplateImages, candidateId, 5),
+            call(Api.fetchTemplateImages, candidateId, 1, query),
+            call(Api.fetchTemplateImages, candidateId, 2, query),
+            call(Api.fetchTemplateImages, candidateId, 3, query),
+            call(Api.fetchTemplateImages, candidateId, 4, query),
+            call(Api.fetchTemplateImages, candidateId, 5, query),
         ]);
         if (result['error']) {
             console.log('error');
         }
-        console.log('---', result)
+        const images = result.map(el => el.data);
+        yield  put({type: SAVE_THUMBNAIL_IMAGES, data: {thumbnailImages: images}});
+
         // yield put({type: UPDATE_UI, data: {loader: false}});
 
+        // yield call(fetchTemplate)
+
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+
+function* fetchTemplateImages(action) {
+    try {
+        const candidateId = localStorage.getItem('candidateId') || '';
+        console.log(action)
+        const {payload:{resolve,reject,template_id}} = action;
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+
+        const result = yield call(Api.fetchTemplateImages, candidateId, template_id);
+        if (result['error']) {
+            return reject(new SubmissionError({_error: result['errorMessage']}));
+        }
+        const images = result['data']
+        yield  put({type: SAVE_TEMPLATE_IMAGES, data: {templateImage: images}});
+
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+        return resolve("Image Received")
         // yield call(fetchTemplate)
 
     } catch (e) {
@@ -126,11 +183,13 @@ function* fetchDefaultCustomization(action) {
             console.log('error');
         }
         let {data} = result;
+        let {entity_position,template_no} = data
 
         data = {
             ...data,
             ...{
-                templateId: data['template_no']
+                entity_position: JSON.parse(entity_position),
+                templateId: template_no
             }
         }
 
@@ -149,6 +208,8 @@ function* fetchDefaultCustomization(action) {
 export default function* watchTemplate() {
     yield  takeLatest(Actions.FETCH_TEMPLATE, fetchTemplate)
     yield  takeLatest(Actions.CUSTOMIZE_TEMPLATE, customizeTemplate)
-    yield  takeLatest(Actions.FETCH_TEMPLATE_IMAGES, fetchTemplateImages)
     yield  takeLatest(Actions.FETCH_DEFAULT_CUSTOMIZATION, fetchDefaultCustomization)
+    yield  takeLatest(Actions.REORDER_SECTION, reorderSection)
+    yield  takeLatest(Actions.FETCH_SELECTED_TEMPLATE_IMAGE, fetchTemplateImages)
+    yield  takeLatest(Actions.FETCH_THUMBNAIL_IMAGES, fetchThumbnailImages)
 }

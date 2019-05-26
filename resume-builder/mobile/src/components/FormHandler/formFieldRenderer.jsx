@@ -94,7 +94,7 @@ export const datepicker =
                             yearDropdownItemNumber={yearDropDownItemNumber}
                             scrollableYearDropdown
                             showMonthDropdown
-                            withPortal
+                            disabledKeyboardNavigation
                             disabled={disabled}
                             minDate={minDate ? addDays(new Date(minDate),1) : null}
                             

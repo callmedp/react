@@ -1,4 +1,4 @@
-import {FETCH_TEMPLATE,UPDATE_MODAL_STATUS,CUSTOMIZE_TEMPLATE,FETCH_DEFAULT_CUSTOMIZATION,FETCH_TEMPLATE_IMAGES} from './actionTypes'
+import {FETCH_TEMPLATE,UPDATE_MODAL_STATUS,CUSTOMIZE_TEMPLATE,FETCH_DEFAULT_CUSTOMIZATION,FETCH_THUMBNAIL_IMAGES,REORDER_SECTION,FETCH_SELECTED_TEMPLATE_IMAGE} from './actionTypes'
 
 
 export const fetchTemplate = () => {
@@ -29,8 +29,22 @@ export const fetchDefaultCustomization = (templateId) => {
     }
 }
 
-export const fetchTemplateImages = () => {
+export const fetchThumbNailImages = () => {
     return {
-        type: FETCH_TEMPLATE_IMAGES,
+        type: FETCH_THUMBNAIL_IMAGES,
+    }
+}
+
+export const fetchSelectedTemplateImage = (payload) => {
+    return {
+        type: FETCH_SELECTED_TEMPLATE_IMAGE,
+        payload
+    }
+}
+
+export const reorderSection = (payload) => {
+    return {
+        type: REORDER_SECTION,
+        payload
     }
 }

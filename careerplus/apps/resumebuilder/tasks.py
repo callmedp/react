@@ -25,7 +25,7 @@ def generate_image_for_resume(candidate_id):
     if not candidate:
         return
 
-    thumbnail_sizes = [(151,249)]
+    thumbnail_sizes = [(151,249),(144,149)]
 
     entity_preference = eval(candidate.entity_preference_data)
     extracurricular = candidate.extracurricular_list

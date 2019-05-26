@@ -2,7 +2,7 @@ import React ,{Component} from 'react';
 import Header from '../../../Common/Header/header.jsx';
 import './preview.scss';
 import {connect} from "react-redux";
-import {fetchTemplate,updateModalStatus,customizeTemplate,fetchDefaultCustomization} from "../../../../store/template/actions/index"
+import {fetchTemplate,updateModalStatus,customizeTemplate,fetchDefaultCustomization,reorderSection} from "../../../../store/template/actions/index"
 import {updatePersonalInfo,fetchPersonalInfo} from "../../../../store/personalInfo/actions/index"
 import Loader from '../../../Common/Loader/loader.jsx';
 import ChangeTemplateModal from './changeTemplateModal.jsx';
@@ -26,8 +26,13 @@ class Preview extends Component {
             selectedColor: 1,
             headingFontSize: 1,
             textFontSize: 1,
+            side:'left',
+            selected:{left:0,right:0},
         }
         this.handleCustomization = this.handleCustomization.bind(this);
+        this.updateIndexOfReordering = this.updateIndexOfReordering.bind(this);
+        this.moveUpSection = this.moveUpSection.bind(this);
+        this.moveDownSection = this.moveDownSection.bind(this);
     }
 
     componentWillUpdate(prevProps){
@@ -47,6 +52,37 @@ class Preview extends Component {
         this.props.fetchTemplate();
         this.props.fetchDefaultCustomization();
     }
+    updateIndexOfReordering(selected,side,index){
+        selected = side === 'left' ? 
+        {
+            ...selected,
+            ...{
+                left:index
+            }
+        }:
+        {
+            ...selected,
+            ...{
+                right:index
+            }
+        }
+        this.setState({selected})
+    }
+
+    moveUpSection(selectedEntity, selectedTemplate) {
+
+        this.props.reorderSection({
+            templateId: selectedTemplate,
+            info: {entity_id: selectedEntity['entity_id'], step: -1}
+        })
+    }
+
+    moveDownSection(selectedEntity, selectedTemplate) {
+        this.props.reorderSection({
+            templateId: selectedTemplate,
+            info: {entity_id: selectedEntity['entity_id'], step: 1}
+        })
+    }
 
     async handleCustomization(data) {
         await this.props.customizeTemplate(data)
@@ -55,8 +91,8 @@ class Preview extends Component {
     }
 
     render(){
-        const {customize,currentTab,selectedColor,headingFontSize,textFontSize} = this.state
-        const {initialValues:{html},loader:{mainloader},personalInfo:{selected_template}} = this.props
+        const {customize,currentTab,selectedColor,headingFontSize,textFontSize,side,selected} = this.state
+        const {initialValues:{html,entity_position},loader:{mainloader},personalInfo:{selected_template}} = this.props
         return(
             <div className="preview">
                <Header page={'preview'} {...this.props}/>
@@ -207,7 +243,7 @@ class Preview extends Component {
                                             </AccordionItemPanel>
                                         </div>
                                         </AccordionItem>
-                                        <AccordionItem>
+                                        <AccordionItem >
                                             <div className={"filter__accordion__card " +(currentTab === 3 ? "filter__accordion--active":"")}>
                                             <AccordionItemHeading>
                                                 <AccordionItemButton>
@@ -227,133 +263,32 @@ class Preview extends Component {
                                                 <div className="filter__accordion__card--content">
 
                                                     <ul className="tabs">
-                                                        <li className="active">Left</li>
-                                                        <li>Right</li>
+                                                        <li className={side ==='left' ? "active":""} 
+                                                            onClick={()=>{this.setState({side:'left'})}}>Left</li>
+                                                        <li className={side ==='right' ? "active":""}
+                                                            onClick={()=>{this.setState({side:'right'})}}>Right</li>
                                                     </ul>
-
-
                                                     <div className="reorder">
                                                         <ul className="reorder__items">
-                                                            <li className="reorder__item reorder--select">
-                                                                <span className="reorder__title">Personal Info</span>
-                                                                <div className="reorder__nav">
-                                                                    <span className="reorder__nav--item">
-                                                                        <i className="sprite icon--upArrow"></i>
-                                                                    </span>
-                                                                    <span className="reorder__nav--item">
-                                                                        <i className="sprite icon--downArrow"></i>
-                                                                    </span>
-                                                                </div>
-                                                            </li>
-                                                            
-                                                            <li className="reorder__item">
-                                                                <span className="reorder__title">Summary</span>
-                                                                <div className="reorder__nav">
-                                                                    <span className="reorder__nav--item">
-                                                                        <i className="sprite icon--upArrow"></i>
-                                                                    </span>
-                                                                    <span className="reorder__nav--item">
-                                                                        <i className="sprite icon--downArrow"></i>
-                                                                    </span>
-                                                                </div>
-                                                            </li>
-                                                            
-                                                            <li className="reorder__item">
-                                                                <span className="reorder__title">Experience</span>
-                                                                <div className="reorder__nav">
-                                                                    <span className="reorder__nav--item">
-                                                                        <i className="sprite icon--upArrow"></i>
-                                                                    </span>
-                                                                    <span className="reorder__nav--item">
-                                                                        <i className="sprite icon--downArrow"></i>
-                                                                    </span>
-                                                                </div>
-                                                            </li>
-                                                            
-                                                            <li className="reorder__item">
-                                                                <span className="reorder__title">Education</span>
-                                                                <div className="reorder__nav">
-                                                                    <span className="reorder__nav--item">
-                                                                        <i className="sprite icon--upArrow"></i>
-                                                                    </span>
-                                                                    <span className="reorder__nav--item">
-                                                                        <i className="sprite icon--downArrow"></i>
-                                                                    </span>
-                                                                </div>
-                                                            </li>
-                                                            
-                                                            <li className="reorder__item">
-                                                                <span className="reorder__title">Skills</span>
-                                                                <div className="reorder__nav">
-                                                                    <span className="reorder__nav--item">
-                                                                        <i className="sprite icon--upArrow"></i>
-                                                                    </span>
-                                                                    <span className="reorder__nav--item">
-                                                                        <i className="sprite icon--downArrow"></i>
-                                                                    </span>
-                                                                </div>
-                                                            </li>
-                                                            
-                                                            <li className="reorder__item">
-                                                                <span className="reorder__title">Language</span>
-                                                                <div className="reorder__nav">
-                                                                    <span className="reorder__nav--item">
-                                                                        <i className="sprite icon--upArrow"></i>
-                                                                    </span>
-                                                                    <span className="reorder__nav--item">
-                                                                        <i className="sprite icon--downArrow"></i>
-                                                                    </span>
-                                                                </div>
-                                                            </li>
-                                                            
-                                                            <li className="reorder__item">
-                                                                <span className="reorder__title">Awards</span>
-                                                                <div className="reorder__nav">
-                                                                    <span className="reorder__nav--item">
-                                                                        <i className="sprite icon--upArrow"></i>
-                                                                    </span>
-                                                                    <span className="reorder__nav--item">
-                                                                        <i className="sprite icon--downArrow"></i>
-                                                                    </span>
-                                                                </div>
-                                                            </li>
-                                                            
-                                                            <li className="reorder__item">
-                                                                <span className="reorder__title">Courses</span>
-                                                                <div className="reorder__nav">
-                                                                    <span className="reorder__nav--item">
-                                                                        <i className="sprite icon--upArrow"></i>
-                                                                    </span>
-                                                                    <span className="reorder__nav--item">
-                                                                        <i className="sprite icon--downArrow"></i>
-                                                                    </span>
-                                                                </div>
-                                                            </li>
-                                                            
-                                                            <li className="reorder__item">
-                                                                <span className="reorder__title">Projects</span>
-                                                                <div className="reorder__nav">
-                                                                    <span className="reorder__nav--item">
-                                                                        <i className="sprite icon--upArrow"></i>
-                                                                    </span>
-                                                                    <span className="reorder__nav--item">
-                                                                        <i className="sprite icon--downArrow"></i>
-                                                                    </span>
-                                                                </div>
-                                                            </li>
-                                                            
-                                                            <li className="reorder__item">
-                                                                <span className="reorder__title">References</span>
-                                                                <div className="reorder__nav">
-                                                                    <span className="reorder__nav--item">
-                                                                        <i className="sprite icon--upArrow"></i>
-                                                                    </span>
-                                                                    <span className="reorder__nav--item">
-                                                                        <i className="sprite icon--downArrow"></i>
-                                                                    </span>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
+                                                            {entity_position.filter(item =>item.alignment ===side || item.alignment === 'center').map((el,index)=>{
+                                                                return(
+                                                                        <li className={"reorder__item " + 
+                                                                            (selected[`${side}`] === index ? " reorder--select":"")}
+                                                                            onClick={()=>{this.updateIndexOfReordering(selected,side,index)}} >
+                                                                            <span className="reorder__title">{el.entity_text}</span>
+                                                                            <div className="reorder__nav">
+                                                                                <span className="reorder__nav--item">
+                                                                                    <i className="sprite icon--upArrow" onClick={()=>{this.moveUpSection(el,selected_template);this.updateIndexOfReordering(selected,side,index-1)}}></i>
+                                                                                </span>
+                                                                                <span className="reorder__nav--item">
+                                                                                    <i className="sprite icon--downArrow" onClick={()=>{this.moveDownSection(el,selected_template);;this.updateIndexOfReordering(selected,side,index+1)}}></i>
+                                                                                </span>
+                                                                            </div>
+                                                                        </li>
+                                                                )
+                                                                
+                                                            })}
+                                                        </ul> 
                                                     </div>
 
 
@@ -414,6 +349,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         "fetchDefaultCustomization": () => {
             return dispatch(fetchDefaultCustomization(1))
+        },
+        "reorderSection": (data) => {
+            return dispatch(reorderSection(data))
         },
         "updateSelectedTemplate": (personalInfo) => {
             let { date_of_birth, extracurricular} = personalInfo;

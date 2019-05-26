@@ -2,10 +2,12 @@ import React, {Component} from 'react';
 import Header from '../../../Common/Header/header.jsx';
 import './buy.scss';
 import * as action from '../../../../store/buy/actions';
+import {fetchThumbNailImages,fetchSelectedTemplateImage} from '../../../../store/template/actions/index'
 import {connect} from "react-redux";
 import {siteDomain} from "../../../../Utils/domains";
 import Slider from "react-slick";
 import Loader from '../../../Common/Loader/loader.jsx';
+import BuyTemplateModal from '../../../Common/BuyTemplateModal/buyTemplateModal.jsx';
 
 
 class Buy extends Component {
@@ -15,13 +17,16 @@ class Buy extends Component {
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
         this.state = {
             'checked': 'product1',
-            'pay_button_clicked': false
+            'pay_button_clicked': false,
+            'modal_status': false,
+            'template_id': ''
         }
+        this.closeModalStatus = this.closeModalStatus.bind(this);
+        this.openModal = this.openModal.bind(this);
     }
 
 
      redirectToCart() {
-        // console.log("Here")
 
         if (!this.props.productIds[0])
             return;
@@ -44,10 +49,18 @@ class Buy extends Component {
         this.setState({pay_button_clicked:true})
     }
 
+    closeModalStatus(){
+        this.setState({modal_status: false})
+    }
+
+    async openModal(index){
+        await this.props.fetchSelectedTemplateImage(index +1 )
+        this.setState({modal_status:true,template_id:index +1 })
+    }
+
     componentDidMount() {
         this.props.getProductIds();
-        ////console.log(this.props.productIds[0])
-
+        this.props.fetchThumbNailImages();
     }
 
     handleOnChange(checkedProduct) {
@@ -70,15 +83,18 @@ class Buy extends Component {
             speed: 500,
             slidesToShow: 2,
           };
-          const {loader:{mainloader}} = this.props
+          const {loader:{mainloader},template:{thumbnailImages,templateImage}} = this.props
           const template = localStorage.getItem('template') || 1;
-          const {checked,pay_button_clicked} = this.state
+          const {checked,pay_button_clicked,modal_status} = this.state
           
         return (
 
             <div className="buy-container">
                 <Header/>
                 {mainloader ? <Loader/> :""}
+                {modal_status ? <BuyTemplateModal modal_status={modal_status} 
+                    closeModalStatus={this.closeModalStatus}
+                    templateImage={templateImage}/>:''}
 
                 <div className="pay-now">
                     <div className="pay-now__price">
@@ -108,7 +124,10 @@ class Buy extends Component {
                             </div>
                             <div className="buy__item--right">
                                 <span className="buy__item--image">
-                                    <img src={`${this.staticUrl}react/assets/images/mobile/Resume4.png`} alt="Resume"/>
+                                    { thumbnailImages.length === 5 ?
+                                        <img  src={`data:image/png;base64, ${thumbnailImages[template]}`} alt="Resume"/>:
+                                        <img src={`${this.staticUrl}react/assets/images/mobile/Resume4.png`} alt="Custom resume" />
+                                    }
                                 </span>
                                 <a className="fs-12 mt-5" onClick onClick={()=>{this.props.history.push(`/resume-builder/edit/?type=profile`) }}>Edit</a>
                             </div>
@@ -136,26 +155,29 @@ class Buy extends Component {
                             <div className="buy__item--right">
                                 <div className="buy__item--right__sliderWrap mt-20">
                                     <Slider {...settings}>
-                                        <div className="buy__recommended__item">
-                                            <span className="buy__recommended__image">
-                                                <span className="sprite icon--zoom"></span>
-                                                <img src={`${this.staticUrl}react/assets/images/mobile/resume-2.png`} alt="Custom resume" />
-                                            </span>
-                                        </div>
-                                        
-                                        <div className="buy__recommended__item">
-                                            <span className="buy__recommended__image">
-                                                <span className="sprite icon--zoom"></span>
-                                                <img src={`${this.staticUrl}react/assets/images/mobile/resume-1.png`} alt="Custom resume" />
-                                            </span>
-                                        </div>
-                                       
-                                        <div className="buy__recommended__item">
-                                            <span className="buy__recommended__image">
-                                                <span className="sprite icon--zoom"></span>
-                                                <img src={`${this.staticUrl}react/assets/images/mobile/resume-2.png`} alt="Custom resume" />
-                                            </span>
-                                        </div>
+                                    { thumbnailImages.length === 5 ?
+                                        thumbnailImages.map((el,index) =>{
+                                            return(
+                                                <div className="buy__recommended__item" key={index}>
+                                                    <span className="buy__recommended__image">
+                                                        <span className="sprite icon--zoom" 
+                                                            onClick={()=>{this.openModal(index)}}></span>
+                                                        <img src={`data:image/png;base64, ${el}`} alt="Custom resume" />
+                                                    </span>
+                                                </div>
+                                            )
+                                        }):
+                                        [1,2,1].map((el,index)=>{
+                                            return(
+                                                <div className="buy__recommended__item" key={index}>
+                                                    <span className="buy__recommended__image">
+                                                        <img src={`${this.staticUrl}react/assets/images/mobile/resume-${el}.png`} alt="Custom resume" />
+                                                    </span>
+                                                </div>
+                                            )
+                                            
+                                        })
+                                    }
                                     </Slider>
                                 </div>
                             </div>
@@ -175,6 +197,7 @@ const mapStateToProps = (state) => {
     return {
         productIds: state.productIds,
         loader: state.loader,
+        template: state.template
     }
 };
 
@@ -182,6 +205,14 @@ const mapDispatchToProps = (dispatch) => {
     return {
         'getProductIds': () => {
             return dispatch(action.getProductIds())
+        },
+        'fetchThumbNailImages': () => {
+            return dispatch(fetchThumbNailImages())
+        },
+        'fetchSelectedTemplateImage': (template_id) => {
+            return new Promise((resolve, reject) => {
+                return dispatch(fetchSelectedTemplateImage({template_id,resolve,reject}))
+            })
         },
         'addToCart': (data) => {
             return new Promise((resolve, reject) => {
