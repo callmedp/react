@@ -252,7 +252,7 @@ export default class Preview extends Component {
         const entityElementSectionList = (entityElements || []).filter(els =>
             (els['alignment'] === activeSection ||
                 els['alignment'] === 'center') &&
-            (els['entity_id'] !== 6 && els['entity_id'] !== 1)
+            (els['entity_id'] !== 6 && els['entity_id'] !== 1) && els['active']
             )
             || [];
         const entityElementId = entityElementSectionList && entityElementSectionList.length && entityElementSectionList[0]['entity_id'];
@@ -461,7 +461,8 @@ export default class Preview extends Component {
                                             (entity_position && eval(entity_position) || []).filter(els =>
                                                 (els['alignment'] === activeSection ||
                                                     els['alignment'] === 'center') &&
-                                                (els['entity_id'] !== 6 && els['entity_id'] !== 1)
+                                                (els['entity_id'] !== 6 && els['entity_id'] !== 1) &&
+                                                (els['active'])
                                             ).map((el, index) => {
 
                                                 const entityValue = entityList.find(elm => elm.entity_id == el.entity_id);
@@ -470,7 +471,7 @@ export default class Preview extends Component {
                                                         className={"reorder-content--select-box " + (!!(entityValue['entity_text'] === sectionEntityName) ? " reorder-content--select-box__select" : '')}>
                                                         {entityValue['entity_text']}
                                                         {
-                                                            !!(entityValue['entity_text'] === sectionEntityName || (!sectionEntityName) &&  index === 0 ) ?
+                                                            !!(entityValue['entity_text'] === sectionEntityName || (!sectionEntityName) && index === 0) ?
                                                                 < span className="addon-buttons">
                                                             <span
                                                                 onClick={() => this.moveUpSection(selectedEntity || currentEntity, selected_template)}

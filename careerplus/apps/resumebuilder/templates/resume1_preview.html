@@ -18,12 +18,15 @@ For Mobile case
     <div style="width: 100%; background: {{ current_config.color|background_color_choice }}; padding: 3%;">
 
         <!--top left 1-->
-
-        {% include entity_position.0.entity_id|render_section:"partials1/" %}
+        {% if entity_position.0.active %}
+            {% include entity_position.0.entity_id|render_section:"partials1/" %}
+        {% endif %}
 
 
         <!--top right  2-->
-        {% include entity_position.1.entity_id|render_section:"partials1/" %}
+        {% if entity_position.1.active %}
+            {% include entity_position.1.entity_id|render_section:"partials1/" %}
+        {% endif %}
 
 
     </div>
@@ -31,39 +34,55 @@ For Mobile case
     <div style="width: 100%; border-bottom: 13px solid {{ current_config.color|background_color_choice }}; padding: 3% 3% 0 3%;">
 
         <!--Experience 3-->
-        {% include entity_position.2.entity_id|render_section:"partials1/" %}
+        {% if entity_position.2.active %}
+            {% include entity_position.2.entity_id|render_section:"partials1/" %}
+        {% endif %}
 
 
         <!--Skills 4-->
-        {% include entity_position.3.entity_id|render_section:"partials1/" %}
+        {% if entity_position.3.active %}
+            {% include entity_position.3.entity_id|render_section:"partials1/" %}
+        {% endif %}
 
 
         <!--Project  5-->
-        {% include entity_position.4.entity_id|render_section:"partials1/" %}
+        {% if entity_position.4.active %}
+            {% include entity_position.4.entity_id|render_section:"partials1/" %}
+        {% endif %}
 
 
         <!--Courses done  6-->
-        {% include entity_position.5.entity_id|render_section:"partials1/" %}
+        {% if entity_position.5.active %}
+            {% include entity_position.5.entity_id|render_section:"partials1/" %}
+        {% endif %}
 
 
         <!--Education  7-->
-        {% include entity_position.6.entity_id|render_section:"partials1/" %}
+        {% if entity_position.6.active %}
+            {% include entity_position.6.entity_id|render_section:"partials1/" %}
+        {% endif %}
 
 
         <!--Interest  8-->
-        {% include entity_position.7.entity_id|render_section:"partials1/" %}
+        {% if entity_position.7.active %}
+            {% include entity_position.7.entity_id|render_section:"partials1/" %}
+        {% endif %}
 
 
         <!--Achievement  9-->
-        {% include entity_position.8.entity_id|render_section:"partials1/" %}
+        {% if entity_position.8.active %}
+            {% include entity_position.8.entity_id|render_section:"partials1/" %}
+        {% endif %}
 
 
         <!--Reference  10-->
-        {% include entity_position.9.entity_id|render_section:"partials1/" %}
+        {% if entity_position.9.active %}
+            {% include entity_position.9.entity_id|render_section:"partials1/" %}
+        {% endif %}
 
 
         <!--Languages  11-->
-{#        {% include entity_position.9.entity_id|render_section:"partials1/" %}#}
+        {#        {% include entity_position.9.entity_id|render_section:"partials1/" %}#}
 
 
     </div>
