@@ -76,7 +76,7 @@ class Award extends Component {
     render() {
         const {
             handleSubmit, ui: {loader}, saveTitle, editHeading,
-            isEditable, entityName, nextEntity, handlePreview, changeOrderingDown, changeOrderingUp
+            isEditable, entityName, handleInputValue, nextEntity, handlePreview, changeOrderingDown, changeOrderingUp
         } = this.props;
 
         return (
@@ -94,6 +94,7 @@ class Award extends Component {
                             editHeading={(value) => editHeading(value)}
                             entityName={entityName}
                             isEditable={isEditable}
+                            handleInputValue={handleInputValue}
                             expanded={this.state.active}
                 />
                 <div className={'flex-container items-right mr-20 mb-30'}>

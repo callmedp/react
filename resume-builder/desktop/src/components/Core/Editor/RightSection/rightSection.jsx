@@ -28,12 +28,14 @@ class RightSection extends Component {
         this.handlePreview = this.handlePreview.bind(this);
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.changeOrderingDown = this.changeOrderingDown.bind(this);
+        this.handleInputValue = this.handleInputValue.bind(this);
 
 
         this.state = {
             type: (values && values.type) || '',
             'isEditable': false,
-            'currentFields': []
+            'currentFields': [],
+            'titleValue': ''
         }
     }
 
@@ -54,30 +56,30 @@ class RightSection extends Component {
     }
 
 
-    editHeading(elem) {
+    editHeading() {
         this.setState({
             'isEditable': true
         });
-        setTimeout(() => {
-            elem.focus()
-        }, 0)
-
-
     }
 
     saveTitle(event, entityId) {
         event.stopPropagation();
-        if (event.keyCode === 13) {
-            this.setState({
-                'isEditable': false
-            });
-            let {entityList} = this.props;
-            if (entityList && entityList.length) {
-                entityList[entityId]['entity_text'] = event.target.textContent || '';
-                this.props.updateEntityPreference(entityList)
-            }
-
+        this.setState({
+            'isEditable': false
+        });
+        const {titleValue} = this.state;
+        let {entityList} = this.props;
+        if (entityList && entityList.length) {
+            entityList[entityId]['entity_text'] = titleValue || '';
+            this.props.updateEntityPreference(entityList)
         }
+
+    }
+
+    handleInputValue(value) {
+        this.setState({
+            titleValue: value
+        })
     }
 
     changeOrderingUp(index, fields, event) {
@@ -120,7 +122,7 @@ class RightSection extends Component {
     renderSwitch() {
         const {entityList, ui: {showMoreSection}, hideMoreSection} = this.props;
         let entity, nextEntity;
-        const {isEditable} = this.state;
+        const {isEditable, titleValue} = this.state;
 
         switch (this.state.type) {
             case 'profile': {
@@ -139,6 +141,8 @@ class RightSection extends Component {
                                     entityName={entity && entity['entity_text'] || 'Personal Info'}
                                     nextEntity={nextEntity && nextEntity['link'] || nextEntity}
                                     editHeading={(elem) => this.editHeading(elem)}
+                                    handleInputValue={(value) => this.handleInputValue(value)}
+
                     />
             }
 
@@ -162,6 +166,8 @@ class RightSection extends Component {
                                  changeOrderingDown={this.changeOrderingDown}
                                  saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
                                  currentFields={this.state.currentFields}
+                                 handleInputValue={this.handleInputValue}
+
                     />
             }
 
@@ -184,6 +190,7 @@ class RightSection extends Component {
                                   changeOrderingDown={this.changeOrderingDown}
                                   editHeading={(elem) => this.editHeading(elem)}
                                   currentFields={this.state.currentFields}
+                                  handleInputValue={this.handleInputValue}
 
                     />
             }
@@ -207,6 +214,8 @@ class RightSection extends Component {
                                changeOrderingDown={this.changeOrderingDown}
                                editHeading={(elem) => this.editHeading(elem)}
                                currentFields={this.state.currentFields}
+                               handleInputValue={this.handleInputValue}
+
                     />
             }
             case 'skill': {
@@ -229,6 +238,8 @@ class RightSection extends Component {
                              changeOrderingDown={this.changeOrderingDown}
                              editHeading={(elem) => this.editHeading(elem)}
                              currentFields={this.state.currentFields}
+                             handleInputValue={this.handleInputValue}
+
                     />
             }
             case 'summary': {
@@ -248,6 +259,8 @@ class RightSection extends Component {
                                entityName={entity && entity['entity_text'] || 'Summary'}
                                saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
                                editHeading={(elem) => this.editHeading(elem)}
+                               handleInputValue={this.handleInputValue}
+
                     />
             }
             case 'award': {
@@ -270,6 +283,7 @@ class RightSection extends Component {
                              changeOrderingDown={this.changeOrderingDown}
                              editHeading={(elem) => this.editHeading(elem)}
                              currentFields={this.state.currentFields}
+                             handleInputValue={this.handleInputValue}
                     />
             }
             case 'course': {
@@ -292,6 +306,8 @@ class RightSection extends Component {
                               changeOrderingDown={this.changeOrderingDown}
                               editHeading={(elem) => this.editHeading(elem)}
                               currentFields={this.state.currentFields}
+                              handleInputValue={this.handleInputValue}
+
                     />
             }
             case 'language': {
@@ -314,6 +330,7 @@ class RightSection extends Component {
                                 changeOrderingDown={this.changeOrderingDown}
                                 editHeading={(elem) => this.editHeading(elem)}
                                 currentFields={this.state.currentFields}
+                                handleInputValue={this.handleInputValue}
                     />
             }
             case 'reference': {
@@ -335,6 +352,7 @@ class RightSection extends Component {
                                  changeOrderingDown={this.changeOrderingDown}
                                  editHeading={(elem) => this.editHeading(elem)}
                                  currentFields={this.state.currentFields}
+                                 handleInputValue={this.handleInputValue}
                     />
             }
             default: {

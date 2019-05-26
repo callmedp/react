@@ -118,7 +118,7 @@ class Experience extends Component {
         const {
             handleSubmit, ui: {loader}, isEditable,
             editHeading, saveTitle, entityName, nextEntity, handlePreview,
-            changeOrderingDown, changeOrderingUp, currentFields, fetchJobTitles
+            changeOrderingDown, changeOrderingUp, handleInputValue, currentFields, fetchJobTitles
         } = this.props;
         const {till_today} = this.state;
 
@@ -141,6 +141,9 @@ class Experience extends Component {
                             fetchJobTitles={(inputValue) => fetchJobTitles(inputValue)}
                             till_today={till_today}
                             tillTodayDisable={this.tillTodayDisable}
+                            handleInputValue={handleInputValue}
+
+
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">

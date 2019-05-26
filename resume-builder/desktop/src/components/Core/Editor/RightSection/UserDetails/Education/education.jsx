@@ -113,7 +113,7 @@ class Education extends Component {
     render() {
         const {
             handleSubmit, ui: {loader}, saveTitle, isEditable,
-            editHeading, entityName, nextEntity, handlePreview, changeOrderingUp
+            editHeading, entityName, nextEntity, handleInputValue, handlePreview, changeOrderingUp
             , changeOrderingDown
         } = this.props;
         const {till_today} = this.state
@@ -136,6 +136,8 @@ class Education extends Component {
                             expanded={this.state.active}
                             till_today={till_today}
                             tillTodayDisable={this.tillTodayDisable}
+                            handleInputValue={handleInputValue}
+
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">

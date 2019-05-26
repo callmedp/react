@@ -114,24 +114,25 @@ export class PersonalInfo extends Component {
     render() {
         const {
             handleSubmit, personalInfo, ui: {loader}, isEditable,
-            editHeading, saveTitle, entityName, nextEntity, handlePreview
+            editHeading, saveTitle, entityName, nextEntity, handlePreview,  handleInputValue
         } = this.props;
         let elem = null;
         return (
             <div>
                 <section className="head-section">
                     <span className="icon-box"><i className="icon-info1"/></span>
-                    {
-                        <h2 ref={(value) => {
-                            elem = value
-                        }} onKeyUp={(event) => saveTitle(event, 0)}
-                            contenteditable={!!(isEditable) ? "true" : "false"}>{entityName}
-                        </h2>
+                    {!!(!isEditable) ?
+                        <h2>{entityName}
+                        </h2> :
+                        <React.Fragment>
+                            <input autoFocus type="text" name="" defaultValue={entityName}
+                                   onChange={(value) => handleInputValue(value || entityName)}/>
+                            <span onClick={(event) => saveTitle(event, 0)} className="icon-tick"/>
+                        </React.Fragment>
                     }
                     <span onClick={() => editHeading(elem)}
                           className={!!(!isEditable) ? "icon-edit " + styles['icon-edit__cursor'] : ''}/>
-                    <input type="text" name=""/>
-                    <span className="icon-tick"></span>
+
                 </section>
                 <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                     <section id="personal-section" className="flex-container right-sidebar-scroll">

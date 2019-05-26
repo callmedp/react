@@ -34,18 +34,24 @@ export const ExperienceRenderer = ({
                                        expanded,
                                        fetchJobTitles,
                                        till_today,
-                                       tillTodayDisable
+                                       tillTodayDisable,
+                                       handleInputValue
+
                                    }) => {
-    let elem = null;
     return (
         <div>
             <section className="head-section">
                 <span className="icon-box"><i className="icon-experience1"/></span>
-                <h2 className={"comp-heading"} ref={(value) => {
-                    elem = value
-                }} onKeyUp={(event) => saveTitle(event)}
-                    contenteditable={isEditable ? "true" : "false"}>{entityName}</h2>
-                <span onClick={() => editHeading(elem)}
+                {!!(!isEditable) ?
+                    <h2>{entityName}
+                    </h2> :
+                    <React.Fragment>
+                        <input autoFocus type="text" name="" defaultValue={entityName}
+                               onChange={(event) => handleInputValue(event.target.value || entityName)}/>
+                        <span onClick={(event) => saveTitle(event)} className="icon-tick"/>
+                    </React.Fragment>
+                }
+                <span onClick={() => editHeading()}
                       className={!!(!isEditable) ? "icon-edit " + styles['icon-experience__cursor'] : ''}/>
 
                 <button
@@ -103,13 +109,13 @@ export const ExperienceRenderer = ({
                                                             <label>Designation</label>
                                                             <Field
                                                                 // autoFocus={true}
-                                                                 label="Select Experience"
+                                                                label="Select Experience"
                                                                 iconClass={'icon-designation'}
                                                                 component={renderDynamicSelect}
                                                                 closeMenuOnSelect={false}
                                                                 isMulti={false}
                                                                 loadOptions={(inputValue) => fetchJobTitles(inputValue)}
-                                                                value={{value:'test', 'label':'test' }}
+                                                                value={{value: 'test', 'label': 'test'}}
                                                                 defaultOptions={[{value: 'aman', label: "aman"}]}
                                                                 name={`${member}.job_profile`}/>
 

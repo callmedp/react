@@ -26,19 +26,24 @@ export const EducationRenderer = ({
                                       entityName,
                                       expanded,
                                       till_today,
-                                      tillTodayDisable
+                                      tillTodayDisable,
+                                      handleInputValue
                                   }) => {
-    let elem = null;
     return (
         <div>
             {/*{<LoaderSection/>}*/}
             <section className="head-section">
                 <span className="icon-box"><i className="icon-education1"></i></span>
-                <h2 className={"comp-heading"} ref={(value) => {
-                    elem = value
-                }} onKeyUp={(event) => saveTitle(event)}
-                    contenteditable={isEditable ? "true" : "false"}>{entityName}</h2>
-                <span onClick={() => editHeading(elem)}
+               {!!(!isEditable) ?
+                    <h2>{entityName}
+                    </h2> :
+                    <React.Fragment>
+                        <input autoFocus type="text" name="" defaultValue={entityName}
+                               onChange={(event) => handleInputValue(event.target.value || entityName)}/>
+                        <span onClick={(event) => saveTitle(event)} className="icon-tick"/>
+                    </React.Fragment>
+                }
+                <span onClick={() => editHeading()}
                       className={!!(!isEditable) ? "icon-edit " + styles['icon-education__cursor'] : ''}/>
 
                 <button
@@ -72,7 +77,8 @@ export const EducationRenderer = ({
                                                     <AccordionItemButton>
                                                         <div className="flex-container">
                                                             <h3 className={"add-section-heading"}>{fields.get(index).specialization || 'Education'}</h3>
-                                                            <span className={expanded.indexOf(index) > -1 ? "opened-accordion" : "closed-accordion"}></span>
+                                                            <span
+                                                                className={expanded.indexOf(index) > -1 ? "opened-accordion" : "closed-accordion"}></span>
                                                             <div className="addon-buttons mr-10">
                                                                 <span
                                                                     onClick={(event) => deleteEducation(index, fields, event)}
