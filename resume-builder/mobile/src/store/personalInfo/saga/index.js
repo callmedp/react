@@ -68,7 +68,11 @@ function* updatePersonalDetails(action) {
         }
         const candidateId = localStorage.getItem('candidateId') || '';
         yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
-        const result = yield call(Api.updatePersonalData, personalDetails, candidateId);
+
+        let result = null;
+        if (localStorage.getItem('personalInfo')) result = yield call(Api.createPersonalInfo, personalDetails);
+        else result = yield call(Api.updatePersonalData, personalDetails, candidateId);
+        
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }

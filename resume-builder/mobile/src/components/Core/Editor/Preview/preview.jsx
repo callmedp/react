@@ -141,7 +141,7 @@ class Preview extends Component {
                                                         <li className="resume-color-theme__item">
                                                             <input className="resume-color-theme__item--input" type="radio" name="radio1" id="green" value="green"
                                                                 onClick={()=>{this.setState({selectedColor:1})}}
-                                                                checked={selectedColor === 1} />
+                                                                checked={selectedColor === 1} readOnly />
                                                             <label htmlFor="green" className="resume-color-theme__item__label">
                                                                 <span className="resume-color-theme__item__theme resume-color-theme__item--green"></span>
                                                             </label>
@@ -150,7 +150,7 @@ class Preview extends Component {
                                                         <li className="resume-color-theme__item">
                                                             <input className="resume-color-theme__item--input" type="radio" name="radio1" id="blue" value="blue"
                                                                 onClick={()=>{this.setState({selectedColor:2})}} 
-                                                                checked={selectedColor === 2}/>
+                                                                checked={selectedColor === 2} readOnly/>
                                                             <label htmlFor="blue" className="resume-color-theme__item__label">
                                                                 <span className="resume-color-theme__item__theme resume-color-theme__item--blue"></span>
                                                             </label>
@@ -159,7 +159,7 @@ class Preview extends Component {
                                                         <li className="resume-color-theme__item">
                                                             <input className="resume-color-theme__item--input" type="radio" name="radio1" id="red" value="red"
                                                                 onClick={()=>{this.setState({selectedColor:3})}}
-                                                                checked={selectedColor === 3}/>
+                                                                checked={selectedColor === 3} readOnly/>
                                                             <label htmlFor="red" className="resume-color-theme__item__label">
                                                                 <span className="resume-color-theme__item__theme resume-color-theme__item--red"></span>
                                                             </label>
@@ -168,7 +168,7 @@ class Preview extends Component {
                                                         <li className="resume-color-theme__item">
                                                             <input className="resume-color-theme__item--input" type="radio" name="radio1" id="black" value="black" 
                                                                 onClick={()=>{this.setState({selectedColor:4})}}
-                                                                checked={selectedColor === 4}/>
+                                                                checked={selectedColor === 4} readOnly/>
                                                             <label htmlFor="black" className="resume-color-theme__item__label">
                                                                 <span className="resume-color-theme__item__theme resume-color-theme__item--black"></span>
                                                             </label>
@@ -177,7 +177,7 @@ class Preview extends Component {
                                                         <li className="resume-color-theme__item">
                                                             <input className="resume-color-theme__item--input" type="radio" name="radio1" id="brown" value="brown"
                                                                 onClick={()=>{this.setState({selectedColor:5})}} 
-                                                                checked={selectedColor === 5}/>
+                                                                checked={selectedColor === 5} readOnly/>
                                                             <label htmlFor="brown" className="resume-color-theme__item__label">
                                                                 <span className="resume-color-theme__item__theme resume-color-theme__item--brown"></span>
                                                             </label>
@@ -186,7 +186,7 @@ class Preview extends Component {
                                                         <li className="resume-color-theme__item">
                                                             <input className="resume-color-theme__item--input" type="radio" name="radio1" id="violet" value="violet" 
                                                                 onClick={()=>{this.setState({selectedColor:6})}} 
-                                                                checked={selectedColor === 6}/>
+                                                                checked={selectedColor === 6} readOnly/>
                                                             <label htmlFor="violet" className="resume-color-theme__item__label">
                                                                 <span className="resume-color-theme__item__theme resume-color-theme__item--violet"></span>
                                                             </label>
@@ -270,11 +270,13 @@ class Preview extends Component {
                                                     </ul>
                                                     <div className="reorder">
                                                         <ul className="reorder__items">
-                                                            {entity_position.filter(item =>item.alignment ===side || item.alignment === 'center').map((el,index)=>{
+                                                            {entity_position.filter(item =>(item.alignment ===side  || item.alignment === 'center') && 
+                                                                    (item.entity_id!==1 && item.entity_id!==6)
+                                                                    && (item['active'])).map((el,index)=>{
                                                                 return(
                                                                         <li className={"reorder__item " + 
                                                                             (selected[`${side}`] === index ? " reorder--select":"")}
-                                                                            onClick={()=>{this.updateIndexOfReordering(selected,side,index)}} >
+                                                                            onClick={()=>{this.updateIndexOfReordering(selected,side,index)}}key={index} >
                                                                             <span className="reorder__title">{el.entity_text}</span>
                                                                             <div className="reorder__nav">
                                                                                 <span className="reorder__nav--item">
