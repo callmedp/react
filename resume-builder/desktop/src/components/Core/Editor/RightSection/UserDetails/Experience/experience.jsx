@@ -218,10 +218,10 @@ const mapDispatchToProps = (dispatch) => {
             })
 
         },
-        "fetchJobTitles": (inputValue, suggestions) => {
+        "fetchJobTitles": (inputValue, suggestionType) => {
             if (inputValue.length < 3) return new Promise(res => res([]));
             return new Promise((res, rej) => {
-                return dispatch(actions.fetchJobTitles({inputValue, suggestions, res, rej}))
+                return dispatch(actions.fetchJobTitles({inputValue, suggestionType, res, rej}))
             })
         },
         "hideSuggestionModal": () => {

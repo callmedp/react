@@ -151,21 +151,21 @@ function* deleteUserExperience(action) {
 function* fetchJobTitlesAndSuggestions(action) {
     try {
 
-        const {payload: {inputValue, res, rej}} = action;
+        const {payload: {inputValue, suggestionType, res, rej}} = action;
         console.log('---', action);
-        const result = yield call(Api.fetchJobTitlesAndSuggestions, inputValue);
+        const apiResult = yield call(Api.fetchJobTitlesAndSuggestions, inputValue, suggestionType);
 
 
-        if (result['error']) {
-            return rej(new SubmissionError({_error: result['errorMessage']}));
+        if (apiResult['error']) {
+            return rej(new SubmissionError({_error: apiResult['errorMessage']}));
         }
 
-        console.log('-res', result);
-        let {data} = result;
-        data = (data || []).map((el) => ({
+        console.log('-res', apiResult);
+        let {data: {result}} = apiResult;
+        result = (result || []).map((el) => ({
             label: el, value: el.toString()
         }))
-        return res(data);
+        return res(result);
 
 
     } catch (e) {
