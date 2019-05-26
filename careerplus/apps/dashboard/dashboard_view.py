@@ -863,7 +863,7 @@ class DashboardResumeTemplateDownload(View):
         
         try:
             if not settings.IS_GCP:
-                file_path = resume_template_full_path
+                file_path = "{}/{}".format(settings.MEDIA_ROOT,file_path)
                 fsock = FileWrapper(open(file_path, 'rb'))
             else:
                 file_path = "{}/{}".format(settings.MEDIA_ROOT,file_path)
