@@ -866,6 +866,7 @@ class DashboardResumeTemplateDownload(View):
                 file_path = resume_template_full_path
                 fsock = FileWrapper(open(file_path, 'rb'))
             else:
+                file_path = "{}/{}".format(settings.MEDIA_ROOT,file_path)
                 fsock = GCPPrivateMediaStorage().open(file_path)
             
             filename = filename_prefix + filename_suffix

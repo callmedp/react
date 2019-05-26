@@ -808,9 +808,8 @@ def generate_resume_for_order(order_id):
 
     is_combo = True if product_id != settings.RESUME_BUILDER_NON_COMBO_PID else False
     selected_template = Candidate.objects.filter(candidate_id = candidate_id).first().selected_template
-
-    order, resume_template_full_path, resume_template_name = \
-        ResumeGenerate().save_order_resume_pdf(order=order_obj,is_combo=is_combo,index=selected_template)
+    builder_obj = ResumeGenerate()
+    builder_obj.save_order_resume_pdf(order=order_obj,is_combo=is_combo,index=selected_template)
 
 
 

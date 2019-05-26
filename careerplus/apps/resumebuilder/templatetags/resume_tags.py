@@ -18,7 +18,6 @@ def skillFilterTemplate1(skill):
     skill = ' '.join(result)
     return skill
 
-
 @register.filter
 def mainSkillFilterTemplate1(skill):
     skill = skill.split()
@@ -34,7 +33,6 @@ def mainSkillFilterTemplate1(skill):
     skill = ' '.join(result)
     return skill
 
-
 @register.filter
 def resume1filter(entity_preference):
     exp = entity_preference[2]
@@ -42,7 +40,6 @@ def resume1filter(entity_preference):
     entity_preference.append({'entity_id': 11, 'entity_text': 'Interest', 'active': True})
     entity_preference.append(exp)
     return [x for x in entity_preference if x.get('active')]
-
 
 @register.filter
 def skill_color(proficiency, color):
@@ -82,7 +79,7 @@ def degree(proficiency):
         9: 50,
         10: 90
     }
-    return proficiency_dict[proficiency]
+    return proficiency_dict.get(proficiency,50)
 
 
 @register.filter
@@ -95,7 +92,7 @@ def background_color_choice(color_code):
         5: '#C6A828',
         6: '#7C39CA'
     }
-    return code_dict[color_code]
+    return code_dict.get(color_code,'#639F59')
 
 
 @register.filter
@@ -105,7 +102,7 @@ def heading_font_size_choice(size):
         2: 17,
         3: 18,
     }
-    return heading_size_dict[size]
+    return heading_size_dict.get(size,17)
 
 
 @register.filter
@@ -115,7 +112,7 @@ def sub_heading_font_size(size):
         2: 17,
         3: 18
     }
-    return text_size_dict[size]
+    return text_size_dict.get(size,17)
 
 
 @register.filter
@@ -125,7 +122,7 @@ def text_font_size(size):
         2: 14,
         3: 15
     }
-    return text_size_dict[size]
+    return text_size_dict.get(size,14)
 
 
 @register.filter

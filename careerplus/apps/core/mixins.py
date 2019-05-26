@@ -340,16 +340,17 @@ class ResumeGenerate(object):
         return file
 
     def store_file(self,file_dir,file_name,file_content):
+        directory_path = "{}/{}".format(settings.RESUME_TEMPLATE_DIR,file_dir)
         if settings.IS_GCP:
-            gcp_file = GCPPrivateMediaStorage().open("{}/{}/{}".\
-                format(settings.RESUME_TEMPLATE_DIR,file_dir,file_name), 'wb')
+            gcp_file = GCPPrivateMediaStorage().open("{}/{}".format(directory_path,file_name), 'wb')
             gcp_file.write(file_content)
             gcp_file.close()
             return
 
-        if not os.path.exists(settings.RESUME_TEMPLATE_DIR + file_dir):
-            os.makedirs(settings.RESUME_TEMPLATE_DIR + file_dir)
-        dest = open(settings.RESUME_TEMPLATE_DIR + file_dir + file_name, 'wb')
+        directory_path = "{}/{}".format(settings.MEDIA_ROOT,directory_path)
+        if not os.path.exists(directory_path):
+            os.makedirs(directory_path)
+        dest = open("{}/{}".format(directory_path,file_name), 'wb')
         dest.write(file_content)
         dest.close()
 
@@ -364,8 +365,20 @@ class ResumeGenerate(object):
 
         for i in range(1, 6):
             current_file = "{}_{}-{}.{}".format(order.first_name,order.last_name,i,"pdf")
-            pdf_file_path = "resume-builder/{}/pdf/{}.pdf".format(candidate.id,i)
-            file_obj = GCPPrivateMediaStorage().open(pdf_file_path)
+            pdf_file_path = "{}/{}/pdf/{}.pdf".format(settings.RESUME_TEMPLATE_DIR,candidate.id,i)
+            try:
+                file_obj = GCPPrivateMediaStorage().open(pdf_file_path)
+            except:
+                logging.getLogger('error_log').error("Unable to open file - {}".format(pdf_file_path))
+            
+            if not settings.IS_GCP:
+                pdf_file_path = "{}/{}".format(settings.MEDIA_ROOT,pdf_file_path)
+                try:
+                    file_obj = open(pdf_file_path,"rb")
+                except:
+                    logging.getLogger('error_log').error("Unable to open file - {}".format(pdf_file_path))
+                    continue
+            
             open(current_file, 'wb').write(file_obj.read())
             zf.write(current_file)
             os.unlink(current_file)
@@ -401,8 +414,7 @@ class ResumeGenerate(object):
                     template_src='resume{}.html'.format(index),
                     file_type='pdf')
 
-        self.store_file(file_dir, file_name, pdf_file)
-
+        self.store_file(file_dir,file_name,pdf_file)
 
     def save_order_resume_pdf(self, order=None, is_combo=False,index=None):
         if not order:
