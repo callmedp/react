@@ -78,12 +78,12 @@ class ResumeEntityReorderUtility:
         return {pos+step:pos,pos:pos+step}
 
     def get_swap_dict_for_entity(self,entity_pos,alignment,step):
-        end = MIN_DEPTH - 1 if step == -1 else MAX_DEPTH + 1
+        end = MIN_DEPTH if step == -1 else MAX_DEPTH + 1
         swap_dict = {}
         pos_item_mapping = self.get_pos_item_mapping()
 
         if alignment == "center":
-            if entity_pos + step > MAX_DEPTH or entity_pos + step < MIN_DEPTH:
+            if entity_pos + step > MAX_DEPTH or entity_pos + step <= MIN_DEPTH:
                 return swap_dict
 
             swap_dict.update(self._handle_center_item_swapping(entity_pos,step))
