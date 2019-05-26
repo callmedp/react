@@ -1,13 +1,15 @@
 {% load static compress resume_tags %}
 <div style="vertical-align: top; font-size: 13px; color: #333333; margin-bottom: 30px; display: inline-block; width: 47.5%; margin-right: 2%;">
-    <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 16px;">Reference</strong>
+    <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 16px;">{{preference_list.9.entity_text}}</strong>
     <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
-        <li style="vertical-align: top; margin: 10px 0;">
-            <span style="width: 9px; height: 9px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
-            <span style="display: inline-block; width: 75%; vertical-align: top;">
-                <strong style="display: block; font-size: 16px; color: #333333;">Amardeep Singh <span
-                        style="font-size: 14px; font-weight: normal; color: #777777; display: inline-block;">(Project Manager)</span> </strong>
-                Infocom Network Pvt. Ltd</span>
-        </li>
+        {% for ref in references %}
+            <li style="vertical-align: top; margin: 10px 0;">
+                <span style="width: 9px; height: 9px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
+                <span style="display: inline-block; width: 75%; vertical-align: top;">
+                    <strong style="display: block; font-size: 16px; color: #333333;">{{ ref.reference_name }} <span
+                            style="font-size: 14px; font-weight: normal; color: #777777; display: inline-block;">({{ ref.reference_designation }})</span> </strong>
+                    {{ ref.about_candidate }}</span>
+            </li>
+        {% endfor %}
     </ul>
 </div>

@@ -1,33 +1,21 @@
 {% load static compress resume_tags %}
 <div style="vertical-align: top; font-size: 13px; color: #999999; margin-bottom: 30px;">
-    <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px;">Experience</strong>
+    <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px;">{{preference_list.2.entity_text}}</strong>
     <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
-        <li style="vertical-align: top; margin: 10px 0;">
-            <span style="width: 9px; height: 9px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
-            <span style="display: inline-block; width: 75%; vertical-align: top;">
-                <strong style="display: block; font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #333333;">IT Project Manager</strong>
-                Infocom Network Pvt. Ltd
-                <p style="font-size: {{ current_config.text_font_size|text_font_size }}px; color: #777777; margin-top: 5px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Lorem ipsum dolor sit amet, consectetur adipiscing elit,</p>
-              </span>
-            <span style="font-style: italic; color: #333333; width: 20%; display: inline-block; vertical-align: top;">(Oct 2016 - Current)</span>
-        </li>
-        <li style="vertical-align: top; margin: 10px 0;">
-            <span style="width: 9px; height: 9px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
-            <span style="display: inline-block; width: 75%; vertical-align: top;">
-                <strong style="display: block; font-size:  {{ current_config.text_font_size|sub_heading_font_size }}px; color: #333333;">IT Project Manager</strong>
-                Infocom Network Pvt. Ltd
-                <p style="font-size: {{ current_config.text_font_size|text_font_size }}px; color: #777777; margin-top: 5px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Lorem ipsum dolor sit amet, consectetur adipiscing elit,</p>
-              </span>
-            <span style="font-style: italic; color: #333333; width: 20%; display: inline-block; vertical-align: top;">(Oct 2016 - Current)</span>
-        </li>
-        <li style="vertical-align: top; margin: 10px 0;">
-            <span style="width: 9px; height: 9px; border-radius: 100%; background: {{ current_config.color|background_color_choice }} ; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
-            <span style="display: inline-block; width: 75%; vertical-align: top;">
-                <strong style="display: block; font-size:  {{ current_config.text_font_size|sub_heading_font_size }}px; color: #333333;">IT Project Manager</strong>
-                Infocom Network Pvt. Ltd
-                <p style="font-size:  {{ current_config.text_font_size|text_font_size }}px; color: #777777; margin-top: 5px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Lorem ipsum dolor sit amet, consectetur adipiscing elit,</p>
-              </span>
-            <span style="font-style: italic; color: #333333; width: 20%; display: inline-block; vertical-align: top;">(Oct 2016 - Current)</span>
-        </li>
+        {% for exp in experience %}
+            <li style="vertical-align: top; margin: 10px 0;">
+                <span style="width: 9px; height: 9px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
+                <span style="display: inline-block; width: 75%; vertical-align: top;">
+                    <strong style="display: block; font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #333333;">{{ exp.job_profile }}</strong>
+                    {{ exp.company_name }}
+                    <p style="font-size: {{ current_config.text_font_size|text_font_size }}px; color: #777777; margin-top: 5px;">{{ exp.work_description }}</p>
+                </span>
+                {% if exp.is_working %}
+                    <span style="font-style: italic; color: #333333; width: 20%; display: inline-block; vertical-align: top;">({{ exp.start_date|date:"M Y" }} - Current)</span>
+                {% else %}
+                    <span style="font-style: italic; color: #333333; width: 20%; display: inline-block; vertical-align: top;">({{ exp.start_date|date:"M Y" }} - {{ exp.end_date|date:"M Y" }})</span>
+                {% endif %}
+            </li>
+        {% endfor %}
     </ul>
 </div>

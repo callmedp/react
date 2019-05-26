@@ -25,11 +25,11 @@ export const iconClassList ={
 
 export const delete_icon ={
     '1': false,
-    '2': false,
+    '2': true,
     '3': true,
     '4': true,
-    '5': false,
-    '6': true,
+    '5': true,
+    '6': false,
     '7': true,
     '8': true,
     '9': true,
