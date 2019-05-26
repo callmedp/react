@@ -200,15 +200,15 @@ const mapDispatchToProps = (dispatch) => {
 
         "bulkUpdateOrCreate": (listItems) => {
             listItems = (listItems || []).map((userExperience, index) => {
-                const {start_date, end_date} = userExperience;
+                const {start_date, end_date, job_profile} = userExperience;
                 if (!userExperience['id']) delete userExperience['id'];
                 userExperience = {
                     ...userExperience,
                     ...{
                         start_date: (start_date && moment(start_date).format('YYYY-MM-DD')) || '',
                         end_date: (end_date && moment(end_date).format('YYYY-MM-DD')) || null,
-                        order: index
-
+                        order: index,
+                        job_profile: job_profile && job_profile.value || ''
                     }
                 };
                 return userExperience;
