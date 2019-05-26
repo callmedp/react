@@ -18,17 +18,20 @@ function* fetchUserCourse(action) {
         }
 
         if (localStorage.getItem('course')) {
+            let local_data = JSON.parse(localStorage.getItem('course')).length ? 
+                            JSON.parse(localStorage.getItem('course')) :
+                            [
+                                {
+                                    "candidate_id": '',
+                                    "id": '',
+                                    "name_of_certification": '',
+                                    "year_of_certification": '',
+                                    "order": 0
+                                }
+                            ]
 
-            yield put({type: Actions.SAVE_USER_COURSE, data: {list:JSON.parse(localStorage.getItem('course'))
-            || [
-                {
-                    "candidate_id": '',
-                    "id": '',
-                    "name_of_certification": '',
-                    "year_of_certification": '',
-                    "order": 0
-                }
-            ]}})
+            yield put({type: Actions.SAVE_USER_COURSE, data: {list:local_data}})
+          
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
             return;
         }

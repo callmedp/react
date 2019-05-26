@@ -18,17 +18,21 @@ function* fetchUserAward(action) {
         }
 
         if (localStorage.getItem('award')) {
+            let local_data = JSON.parse(localStorage.getItem('award')).length ? 
+                            JSON.parse(localStorage.getItem('award')) :
+                            [
+                                {
+                                    "candidate_id": '',
+                                    "id": '',
+                                    "title": '',
+                                    "date": '',
+                                    "summary": '',
+                                    "order": 0
+                                }
+                            ]
 
-            yield put({type: Actions.SAVE_USER_AWARD, data: {list:JSON.parse(localStorage.getItem('award')) || [
-                                                                                                                    {
-                                                                                                                        "candidate_id": '',
-                                                                                                                        "id": '',
-                                                                                                                        "title": '',
-                                                                                                                        "date": '',
-                                                                                                                        "summary": '',
-                                                                                                                        "order": 0
-                                                                                                                    }
-                                                                                                                ]}})
+            yield put({type: Actions.SAVE_USER_AWARD, data: {list:local_data}})
+
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
             return;
         }

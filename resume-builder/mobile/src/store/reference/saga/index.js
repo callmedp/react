@@ -19,17 +19,20 @@ function* fetchUserReference(action) {
 
         if (localStorage.getItem('reference')) {
 
-            yield put({type: Actions.SAVE_USER_REFERENCE, data: {list:JSON.parse(localStorage.getItem('reference'))
-             || [
-                {
-                    "candidate_id": '',
-                    "id": '',
-                    "reference_name": '',
-                    "reference_designation": '',
-                    "about_user": "",
-                    "order": 0
-                }
-            ]}})
+            let local_data = JSON.parse(localStorage.getItem('reference')).length ? 
+                            JSON.parse(localStorage.getItem('reference')) :
+                            [
+                                {
+                                    "candidate_id": '',
+                                    "id": '',
+                                    "reference_name": '',
+                                    "reference_designation": '',
+                                    "about_user": "",
+                                    "order": 0
+                                }
+                            ]
+
+            yield put({type: Actions.SAVE_USER_REFERENCE, data: {list:local_data}})
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
             return;
         }

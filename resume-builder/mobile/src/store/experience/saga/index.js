@@ -19,23 +19,22 @@ function* fetchUserExperience(action) {
 
         if (localStorage.getItem('experience')) {
 
-            yield put({
-                type: Actions.SAVE_USER_EXPERIENCE,
-                data: {list: JSON.parse(localStorage.getItem('experience'))
-                 || [{
-                        "candidate_id": '',
-                        "id": '',
-                        "job_profile": '',
-                        "company_name": '',
-                        "start_date": '',
-                        "end_date": '',
-                        "is_working": false,
-                        "job_location": '',
-                        "work_description": '',
-                        "order": 0
-                    }]}
-                
-            })
+            let local_data = JSON.parse(localStorage.getItem('experience')).length ? 
+                            JSON.parse(localStorage.getItem('experience')) :
+                            [{
+                                "candidate_id": '',
+                                "id": '',
+                                "job_profile": '',
+                                "company_name": '',
+                                "start_date": '',
+                                "end_date": '',
+                                "is_working": false,
+                                "job_location": '',
+                                "work_description": '',
+                                "order": 0
+                            }]
+
+            yield put({type: Actions.SAVE_USER_EXPERIENCE, data: {list:local_data}})
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
             return;
         }

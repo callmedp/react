@@ -19,23 +19,22 @@ function* fetchUserProject(action) {
         
 
         if (localStorage.getItem('project')) {
+            let local_data = JSON.parse(localStorage.getItem('project')).length ? 
+                            JSON.parse(localStorage.getItem('project')) :
+                            [
+                                {
+                                    "candidate_id": '',
+                                    "id": '',
+                                    "project_name": '',
+                                    "start_date": '',
+                                    "end_date": '',
+                                    "skills": [],
+                                    "description": '',
+                                    "order": 0
+                                }
+                            ]
 
-            yield put({
-                type: Actions.SAVE_USER_PROJECT,
-                data: {list: JSON.parse(localStorage.getItem('project'))
-                 || [
-                    {
-                        "candidate_id": '',
-                        "id": '',
-                        "project_name": '',
-                        "start_date": '',
-                        "end_date": '',
-                        "skills": [],
-                        "description": '',
-                        "order": 0
-                    }
-                ]}
-            })
+            yield put({type: Actions.SAVE_USER_PROJECT, data: {list:local_data}})
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
             return;
         }

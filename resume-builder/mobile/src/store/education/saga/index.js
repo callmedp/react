@@ -18,22 +18,23 @@ function* fetchUserEducation(action) {
         }
         if (localStorage.getItem('education')) {
 
-            yield put({
-                type: Actions.SAVE_USER_EDUCATION,
-                data:{list: JSON.parse(localStorage.getItem('education'))
-                 || [
-                    {
-                    "candidate_id": '',
-                    "id": '',
-                    "specialization": '',
-                    "institution_name": '',
-                    "course_type": '',
-                    "start_date": '',
-                    "percentage_cgpa": '',
-                    "end_date": '',
-                    "is_pursuing": false,
-                    "order": 0}
-            ]}})
+            let local_data = JSON.parse(localStorage.getItem('education')).length ? 
+                            JSON.parse(localStorage.getItem('education')) :
+                            [
+                                {
+                                "candidate_id": '',
+                                "id": '',
+                                "specialization": '',
+                                "institution_name": '',
+                                "course_type": '',
+                                "start_date": '',
+                                "percentage_cgpa": '',
+                                "end_date": '',
+                                "is_pursuing": false,
+                                "order": 0}
+                            ]
+
+            yield put({type: Actions.SAVE_USER_EDUCATION, data: {list:local_data}})
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
             return;
         }

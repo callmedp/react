@@ -124,7 +124,7 @@ function* fetchThumbnailImages(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
         // yield put({type: UPDATE_UI, data: {loader: true}});
 
-        const query = 'tsize=151x213';
+        const query = 'tsize=151x249';
         const result = yield all([
             call(Api.fetchTemplateImages, candidateId, 1, query),
             call(Api.fetchTemplateImages, candidateId, 2, query),
@@ -174,7 +174,7 @@ function* fetchTemplateImages(action) {
 
 function* fetchDefaultCustomization(action) {
     try {
-        const candidateId = 12; //localStorage.getItem('candidateId') || '';
+        const candidateId = localStorage.getItem('candidateId') || '';
         // yield put({type: UPDATE_UI, data: {loader: true}});
         const {templateId} = action;
         const result = yield call(Api.fetchDefaultCustomization, candidateId, templateId);

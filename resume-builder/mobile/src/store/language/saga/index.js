@@ -18,19 +18,19 @@ function* fetchUserLanguage(action) {
 
         if (localStorage.getItem('language')) {
 
-            yield put({
-                type: Actions.SAVE_USER_LANGUAGE,
-                data: {list: JSON.parse(localStorage.getItem('language')) || 
-                [
-                    {
-                        "candidate_id": '',
-                        "id": '',
-                        "name": '',
-                        "proficiency": '',
-                        "order": 0
-                    }
-                ]}
-            });
+            let local_data = JSON.parse(localStorage.getItem('language')).length ? 
+                            JSON.parse(localStorage.getItem('language')) :
+                            [
+                                {
+                                    "candidate_id": '',
+                                    "id": '',
+                                    "name": '',
+                                    "proficiency": '',
+                                    "order": 0
+                                }
+                            ]
+
+            yield put({type: Actions.SAVE_USER_LANGUAGE, data: {list:local_data}})
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
             return;
         }
