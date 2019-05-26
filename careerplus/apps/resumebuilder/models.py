@@ -105,7 +105,7 @@ class Candidate(PreviewImageCreationMixin, CandidateProfile):
         obj = super(Candidate, self).save(**kwargs)
 
         if created:
-            self.create_template_customisations(obj.id)
+            self.create_template_customisations(self.id)
 
         if not created:
             update_customisations_for_all_templates.delay(self.id)

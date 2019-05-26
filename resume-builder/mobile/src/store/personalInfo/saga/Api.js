@@ -13,6 +13,11 @@ const updatePersonalData = (data, candidateId) => {
     return BaseApiService.put(`${siteDomain}/api/v1/resume/${url}`, data);
 };
 
+const createPersonalInfo = (data) => {
+    const url = `candidates/`;
+    return BaseApiService.post(`${siteDomain}/api/v1/resume/${url}`, data);
+}
+
 const fetchImageUrl = (data) => {
     const url = `media-upload/`;
     return BaseApiService.post(`${siteDomain}/api/v1/${url}`, data,
@@ -27,5 +32,6 @@ export const Api = {
     fetchPersonalInfo,
     updatePersonalData,
     fetchImageUrl,
+    createPersonalInfo,
     fetchInterestList
 }
