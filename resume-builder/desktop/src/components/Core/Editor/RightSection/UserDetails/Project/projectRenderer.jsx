@@ -27,9 +27,9 @@ export const ProjectRenderer = ({
                                     expanded,
                                     tillTodayDisable,
                                     till_today,
-                                    formValues
+                                    formValues,
+                                    handleInputValue
                                 }) => {
-    let elem = null;
 
     return (
         <div>
@@ -38,13 +38,16 @@ export const ProjectRenderer = ({
             {/*}*/}
             <section className="head-section">
                 <span className="icon-box"><i className="icon-projects1"/></span>
-                <h2 className={"comp-heading"}
-                    ref={(value) => {
-                        elem = value
-                    }} onKeyUp={(event) => saveTitle(event)}
-                    contenteditable={isEditable ? "true" : "false"}>{entityName}
-                </h2>
-                <span onClick={() => editHeading(elem)}
+                {!!(!isEditable) ?
+                    <h2>{entityName}
+                    </h2> :
+                    <React.Fragment>
+                        <input autoFocus type="text" name="" defaultValue={entityName}
+                               onChange={(event) => handleInputValue(event.target.value || entityName)}/>
+                        <span onClick={(event) => saveTitle(event)} className="icon-tick"/>
+                    </React.Fragment>
+                }
+                <span onClick={() => editHeading()}
                       className={!!(!isEditable) ? "icon-edit " + styles['icon-edit__cursor'] : ""}/>
 
                 <button

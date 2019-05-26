@@ -25,7 +25,8 @@ export const SkillRenderer = ({
                                   editHeading,
                                   saveTitle,
                                   entityName,
-                                  expanded
+                                  expanded,
+                                  handleInputValue
                               }) => {
 
     let elem = null;
@@ -36,13 +37,15 @@ export const SkillRenderer = ({
             {/*}*/}
             <section className="head-section">
                 <span className="icon-box"><i className="icon-skills1"/></span>
-                <h2
-                    className={"comp-heading"}
-                    ref={(value) => {
-                        elem = value
-                    }} onKeyUp={(event) => saveTitle(event)}
-                    contenteditable={isEditable ? "true" : "false"}
-                >{entityName}</h2>
+                {!!(!isEditable) ?
+                    <h2>{entityName}
+                    </h2> :
+                    <React.Fragment>
+                        <input autoFocus type="text" name="" defaultValue={entityName}
+                               onChange={(event) => handleInputValue(event.target.value || entityName)}/>
+                        <span onClick={(event) => saveTitle(event)} className="icon-tick"/>
+                    </React.Fragment>
+                }
                 <span onClick={() => editHeading(elem)}
                       className={!!(!isEditable) ? "icon-edit " + styles['icon-education__cursor'] : ""}
                 />

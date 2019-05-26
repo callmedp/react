@@ -129,7 +129,7 @@ class Education extends Component {
                             changeOrderingUp={changeOrderingUp}
                             changeOrderingDown={changeOrderingDown}
                             component={EducationRenderer}
-                            saveTitle={(event) => saveTitle(event, 1)}
+                            saveTitle={(event) => saveTitle(event, 2)}
                             editHeading={(value) => editHeading(value)}
                             isEditable={isEditable}
                             entityName={entityName}

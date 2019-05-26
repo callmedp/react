@@ -52,19 +52,22 @@ class Summary extends Component {
 
 
     render() {
-        const {personalInfo: {extra_info}, ui: {loader, suggestionModal}, handleSubmit, handlePreview, isEditable, editHeading, saveTitle, entityName, nextEntity, showSuggestionModal} = this.props;
-        let elem = null;
+        const {personalInfo: {extra_info}, ui: {loader, suggestionModal}, handleInputValue, handleSubmit, handlePreview, isEditable, editHeading, saveTitle, entityName, nextEntity, showSuggestionModal} = this.props;
         return (
             <div>
                 <SuggestionModal {...this.props} />
                 <section className="head-section">
                     <span className="icon-box"><i className="icon-summary1"/></span>
-                    <h2 className={"comp-heading"}
-                        ref={(value) => {
-                            elem = value
-                        }} onKeyUp={(event) => saveTitle(event, 5)}
-                        contenteditable={!!(isEditable) ? "true" : "false"}>{entityName}</h2>
-                    <span onClick={() => editHeading(elem)}
+                    {!!(!isEditable) ?
+                        <h2>{entityName}
+                        </h2> :
+                        <React.Fragment>
+                            <input autoFocus type="text" name="" defaultValue={entityName}
+                                   onChange={(event) => handleInputValue(event.target.value || entityName)}/>
+                            <span onClick={(event) => saveTitle(event, 6)} className="icon-tick"/>
+                        </React.Fragment>
+                    }
+                    <span onClick={() => editHeading()}
                           className={!!(!isEditable) ? "icon-edit " + styles['icon-summary__cursor'] : ''}/>
                 </section>
                 <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>

@@ -77,7 +77,7 @@ class Course extends Component {
     render() {
         const {
             handleSubmit, ui: {loader}, editHeading, saveTitle, isEditable,
-            entityName, nextEntity, handlePreview, changeOrderingUp, changeOrderingDown
+            entityName, nextEntity, handlePreview, handleInputValue, changeOrderingUp, changeOrderingDown
         } = this.props;
 
         return (
@@ -91,11 +91,13 @@ class Course extends Component {
                             changeOrderingUp={changeOrderingUp}
                             changeOrderingDown={changeOrderingDown}
                             component={CourseRenderer}
-                            saveTitle={(event) => saveTitle(event, 7)}
+                            saveTitle={(event) => saveTitle(event, 8)}
                             editHeading={(value) => editHeading(value)}
                             isEditable={isEditable}
                             entityName={entityName}
                             expanded={this.state.active}
+                            handleInputValue={handleInputValue}
+
 
                 />
                 <div className="flex-container items-right mr-20 mb-30">

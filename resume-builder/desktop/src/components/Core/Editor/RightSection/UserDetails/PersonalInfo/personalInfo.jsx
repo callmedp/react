@@ -126,8 +126,8 @@ export class PersonalInfo extends Component {
                         </h2> :
                         <React.Fragment>
                             <input autoFocus type="text" name="" defaultValue={entityName}
-                                   onChange={(value) => handleInputValue(value || entityName)}/>
-                            <span onClick={(event) => saveTitle(event, 0)} className="icon-tick"/>
+                                   onChange={(event) => handleInputValue(event.target.value || entityName)}/>
+                            <span onClick={(event) => saveTitle(event, 1)} className="icon-tick"/>
                         </React.Fragment>
                     }
                     <span onClick={() => editHeading(elem)}

@@ -133,7 +133,7 @@ class Experience extends Component {
                             changeOrderingUp={changeOrderingUp}
                             changeOrderingDown={changeOrderingDown}
                             component={ExperienceRenderer}
-                            saveTitle={(event) => saveTitle(event, 2)}
+                            saveTitle={(event) => saveTitle(event, 3)}
                             editHeading={(value) => editHeading(value)}
                             isEditable={isEditable}
                             entityName={entityName}

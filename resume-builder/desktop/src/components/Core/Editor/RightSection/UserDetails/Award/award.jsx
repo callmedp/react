@@ -90,7 +90,7 @@ class Award extends Component {
                             changeOrderingUp={changeOrderingUp}
                             changeOrderingDown={changeOrderingDown}
                             component={AwardRenderer}
-                            saveTitle={(event) => saveTitle(event, 6)}
+                            saveTitle={(event) => saveTitle(event, 7)}
                             editHeading={(value) => editHeading(value)}
                             entityName={entityName}
                             isEditable={isEditable}

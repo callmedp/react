@@ -69,14 +69,18 @@ class RightSection extends Component {
         });
         const {titleValue} = this.state;
         let {entityList} = this.props;
+        console.log('-entity--', entityId, entityList, titleValue);
         if (entityList && entityList.length) {
-            entityList[entityId]['entity_text'] = titleValue || '';
+            let index = entityList.findIndex(el => el.entity_id === entityId);
+            console.log('--index-',index);
+            entityList[index]['entity_text'] = titleValue || '';
             this.props.updateEntityPreference(entityList)
         }
 
     }
 
     handleInputValue(value) {
+        console.log('----', value);
         this.setState({
             titleValue: value
         })

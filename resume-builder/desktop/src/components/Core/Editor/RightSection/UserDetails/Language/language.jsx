@@ -63,12 +63,12 @@ class Language extends Component {
             order: listLength
         })
 
-        scroller.scrollTo(`language${fields.length -1}`, {
+        scroller.scrollTo(`language${fields.length - 1}`, {
             duration: 800,
             delay: 0,
             smooth: 'easeInOutQuad',
             offset: 0,
-            containerId:'language'
+            containerId: 'language'
         })
     }
 
@@ -91,7 +91,7 @@ class Language extends Component {
         const {
             handleSubmit, ui: {loader}, isEditable,
             editHeading, saveTitle, entityName, nextEntity,
-            handlePreview, changeOrderingUp, changeOrderingDown
+            handlePreview, changeOrderingUp, changeOrderingDown, handleInputValue
         } = this.props;
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
@@ -105,11 +105,12 @@ class Language extends Component {
                     changeOrderingUp={changeOrderingUp}
                     changeOrderingDown={changeOrderingDown}
                     component={LanguageRenderer}
-                    saveTitle={(event) => saveTitle(event, 8)}
+                    saveTitle={(event) => saveTitle(event, 9)}
                     editHeading={(value) => editHeading(value)}
                     isEditable={isEditable}
                     entityName={entityName}
                     expanded={this.state.active}
+                    handleInputValue={handleInputValue}
 
                 />
 

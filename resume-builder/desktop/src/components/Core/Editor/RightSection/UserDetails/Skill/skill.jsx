@@ -64,12 +64,12 @@ class Skill extends Component {
             order: listLength
         });
 
-        scroller.scrollTo(`skill${fields.length -1}`, {
+        scroller.scrollTo(`skill${fields.length - 1}`, {
             duration: 800,
             delay: 0,
             smooth: 'easeInOutQuad',
             offset: 0,
-            containerId:'skill'
+            containerId: 'skill'
         })
     }
 
@@ -94,7 +94,7 @@ class Skill extends Component {
         const {
             error, handleSubmit, pristine, reset, submitting, handlePreview,
             ui: {loader}, isEditable, editHeading, saveTitle, entityName, nextEntity,
-            changeOrderingUp, changeOrderingDown
+            changeOrderingUp, changeOrderingDown, handleInputValue
         } = this.props;
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
@@ -108,11 +108,13 @@ class Skill extends Component {
                     changeOrderingDown={changeOrderingDown}
                     loader={loader}
                     component={SkillRenderer}
-                    saveTitle={(event) => saveTitle(event, 4)}
+                    saveTitle={(event) => saveTitle(event, 5)}
                     editHeading={(value) => editHeading(value)}
                     isEditable={isEditable}
                     entityName={entityName}
                     expanded={this.state.active}
+                    handleInputValue={handleInputValue}
+
 
                 />
 

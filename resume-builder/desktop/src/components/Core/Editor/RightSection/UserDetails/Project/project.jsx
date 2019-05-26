@@ -117,7 +117,7 @@ class Project extends Component {
         const {
             handleSubmit, ui: {loader}, saveTitle,
             editHeading, isEditable, entityName, nextEntity,
-            handlePreview, changeOrderingDown, changeOrderingUp, formData: {project}
+            handlePreview, changeOrderingDown, changeOrderingUp, handleInputValue, formData: {project}
         } = this.props;
         const {till_today} = this.state
         return (
@@ -132,7 +132,7 @@ class Project extends Component {
                     changeOrderingDown={changeOrderingDown}
                     loader={loader}
                     component={ProjectRenderer}
-                    saveTitle={(event) => saveTitle(event, 3)}
+                    saveTitle={(event) => saveTitle(event, 4)}
                     editHeading={(value) => editHeading(value)}
                     isEditable={isEditable}
                     entityName={entityName}
@@ -140,6 +140,8 @@ class Project extends Component {
                     till_today={till_today}
                     tillTodayDisable={this.tillTodayDisable}
                     formValues={project && project.values}
+                    handleInputValue={handleInputValue}
+
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">

@@ -62,12 +62,12 @@ class Reference extends Component {
             order: listLength
         })
 
-        scroller.scrollTo(`reference${fields.length -1}`, {
+        scroller.scrollTo(`reference${fields.length - 1}`, {
             duration: 800,
             delay: 0,
             smooth: 'easeInOutQuad',
             offset: 200,
-            containerId:'reference'
+            containerId: 'reference'
         })
     }
 
@@ -91,7 +91,7 @@ class Reference extends Component {
     render() {
         const {
             handleSubmit, ui: {loader}, isEditable, changeOrderingDown,
-            editHeading, saveTitle, entityName, nextEntity, handlePreview, changeOrderingUp
+            editHeading, saveTitle, entityName, nextEntity, handlePreview, handleInputValue,changeOrderingUp
         } = this.props;
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
@@ -105,11 +105,13 @@ class Reference extends Component {
                     changeOrderingDown={changeOrderingDown}
                     loader={loader}
                     component={ReferenceRenderer}
-                    saveTitle={(event) => saveTitle(event, 9)}
+                    saveTitle={(event) => saveTitle(event, 10)}
                     editHeading={(value) => editHeading(value)}
                     isEditable={isEditable}
                     entityName={entityName}
                     expanded={this.state.active}
+                    handleInputValue={handleInputValue}
+
 
                 />
 
