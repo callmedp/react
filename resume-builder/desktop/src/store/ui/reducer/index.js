@@ -19,7 +19,8 @@ const initialState = {
     'formName': '',
     'showMoreSection': false,
     'suggestionModal': false,
-    'alertModal': false
+    'alertModal': false,
+    'alertType': 'error'
 };
 
 export const uiReducer = (state = initialState, action) => {

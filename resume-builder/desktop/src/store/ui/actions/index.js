@@ -77,10 +77,10 @@ export const hideMoreSection = () => {
         data: {showMoreSection: false}
     }
 }
-export const showAlertModal = () => {
+export const showAlertModal = (alertType) => {
     return {
         type: SHOW_ALERT_MODAL,
-        data: {alertModal: true}
+        data: {alertModal: true, alertType:alertType}
     }
 }
 

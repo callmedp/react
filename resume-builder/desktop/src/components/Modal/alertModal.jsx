@@ -19,73 +19,78 @@ export default class AlertModal extends React.Component {
     }
 
     render() {
-        const {ui: {alertModal}} = this.props;
+        const {ui: {alertModal, alertType}, nextLink, deleteFromVisibleList, elemToDelete} = this.props;
         return (
-            <div className="pr alert-modal">
+            <React.Fragment>
+                {
+                    alertType === 'error' ? <div className="pr alert-modal">
 
-                <Modal
-                    style={{
-                        content: {
-                            left: '0',
-                            right: '0',
-                            top: '10%',
-                            bottom: '0',
-                            width: '450px',
-                            margin: 'auto',
-                            height: '280px',
-                        }
-                    }}
-                    isOpen={alertModal}
-                    onRequestClose={this.closeModal}
-                    contentLabel="Example Modal"
-                >
-                    <div className="pr">
-                        <i onClick={this.closeModal} className='icon-close icon-close--position'></i>
+                            <Modal
+                                style={{
+                                    content: {
+                                        left: '0',
+                                        right: '0',
+                                        top: '10%',
+                                        bottom: '0',
+                                        width: '450px',
+                                        margin: 'auto',
+                                        height: '280px',
+                                    }
+                                }}
+                                isOpen={alertModal}
+                                onRequestClose={this.closeModal}
+                                contentLabel="Example Modal"
+                                shouldCloseOnOverlayClick={false}
+                            >
+                                <div className="pr">
+                                    <div className="alert-modal">
+                                        <span className="icon-alert"></span>
+                                        <strong>Are you sure?</strong>
+                                        <p>Some information may be lost as required fields are not filled.</p>
+                                        <div className="flex-container">
+                                            <button className="orange-button mr-10"
+                                                    onclick={() => this.props.history.push(nextLink)}>Yes, changes it!
+                                            </button>
+                                            <button className="blue-button" onClick={this.closeModal}>Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Modal>
+                        </div> :
+                        <div className="pr alert-modal">
 
-                        <div className="alert-modal">
-                            <span className="icon-alert"></span>
-                            <strong>Are you sure?</strong>
-                            <p>Some information may be lost as required fields are not filled.</p>
-                            <div class="flex-container">
-                                <button className="orange-button mr-10">Yes, changes it!</button>
-                                <button className="blue-button">Cancel</button>
-                            </div>
+                            <Modal
+                                style={{
+                                    content: {
+                                        left: '0',
+                                        right: '0',
+                                        top: '10%',
+                                        bottom: '0',
+                                        width: '450px',
+                                        margin: 'auto',
+                                        height: '280px',
+                                    }
+                                }}
+                                isOpen={alertModal}
+                                onRequestClose={this.closeModal}
+                                contentLabel="Example Modal"
+                                shouldCloseOnOverlayClick={false}
+                            >
+                                <div className="pr">
+                                    <div className="alert-modal">
+                                        <span className="icon-alert"></span>
+                                        <p>Do you really want to <strong>remove this section?</strong></p>
+                                        <div className="flex-container">
+                                            <button className="orange-button mr-10">Confirm</button>
+                                            <button className="blue-button" onClick={this.closeModal}>Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Modal>
                         </div>
-                    </div>
-                </Modal>
-            </div>
-            /*<div className="pr alert-modal">
-
-                <Modal
-                    style={{
-                        content: {
-                            left: '0',
-                            right: '0',
-                            top: '10%',
-                            bottom: '0',
-                            width: '450px',
-                            margin: 'auto',
-                            height: '280px',
-                        }
-                    }}
-                    isOpen={alertModal}
-                    onRequestClose={this.closeModal}
-                    contentLabel="Example Modal"
-                >
-                    <div className="pr">
-                        <i onClick={this.closeModal} className='icon-close icon-close--position'></i>
-
-                        <div className="alert-modal">
-                            <span className="icon-alert"></span>
-                            <p>Do you really want to <strong>remove this section?</strong></p>
-                            <div class="flex-container">
-                                <button className="orange-button mr-10">Confirm</button>
-                                <button className="blue-button">Cancel</button>
-                            </div>
-                        </div>
-                    </div>
-                </Modal>
-            </div>*/
-        );
+                }
+            </React.Fragment>
+        )
+            ;
     }
 }

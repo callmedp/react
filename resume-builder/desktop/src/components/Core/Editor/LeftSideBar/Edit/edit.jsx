@@ -19,7 +19,10 @@ class Edit extends Component {
         this.showErrorMessage = this.showErrorMessage.bind(this);
         this.handleDeleteClick = this.handleDeleteClick.bind(this);
         this.state = {
-            preferenceList: this.props.entityList
+            preferenceList: this.props.entityList,
+            nextLink: '',
+            elementToDelete: null
+
         };
     }
 
@@ -78,37 +81,44 @@ class Edit extends Component {
     }
 
     showErrorMessage(link) {
-        this.props.showAlertModal();
-        const {ui: {formName}} = this.props;
-        Swal.fire({
-            title: 'Are you sure?',
-            text: `Some information may be lost as required fields are not filled.`,
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, change it!'
-        }).then((result) => {
-            if (result.value) {
-                this.props.history.push(link)
-            }
+        this.setState({
+            nextLink: link
         })
+        this.props.showAlertModal('error');
+        const {ui: {formName}} = this.props;
+        // Swal.fire({
+        //     title: 'Are you sure?',
+        //     text: `Some information may be lost as required fields are not filled.`,
+        //     type: 'warning',
+        //     showCancelButton: true,
+        //     confirmButtonColor: '#3085d6',
+        //     cancelButtonColor: '#d33',
+        //     confirmButtonText: 'Yes, change it!'
+        // }).then((result) => {
+        //     if (result.value) {
+        //         this.props.history.push(link)
+        //     }
+        // })
     }
 
     handleDeleteClick(elem) {
-        this.props.showAlertModal();
-        Swal.fire({
-            text: "Do you really want to remove this section?",
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Confirm'
-        }).then((result) => {
-            if (result.value) {
-                this.deleteFromVisibleList(elem);
-            }
+        this.setState({
+            elemToDelete: elem
         })
+        this.props.showAlertModal('delete');
+
+        // Swal.fire({
+        //     text: "Do you really want to remove this section?",
+        //     type: 'warning',
+        //     showCancelButton: true,
+        //     confirmButtonColor: '#3085d6',
+        //     cancelButtonColor: '#d33',
+        //     confirmButtonText: 'Confirm'
+        // }).then((result) => {
+        //     if (result.value) {
+        //         this.deleteFromVisibleList(elem);
+        //     }
+        // })
 
     }
 
@@ -128,7 +138,7 @@ class Edit extends Component {
     }
 
     render() {
-        const {type, preferenceList} = this.state;
+        const {type, preferenceList, nextLink, elemToDelete} = this.state;
         let {formData, ui: {formName, showMoreSection}} = this.props;
         let error = false;
         const obj = formData && formData[formName] || {};
@@ -139,7 +149,11 @@ class Edit extends Component {
         }
         return (
             <div className="edit-section">
-                <AlertModal {...this.props}/>
+                <AlertModal {...this.props}
+                            nextLink={nextLink}
+                            elemToDelete={elemToDelete}
+                                deleteFromVisibleList={this.deleteFromVisibleList}
+                />
                 <strong>Complete your information</strong>
                 <ul>
                     {
@@ -213,8 +227,8 @@ const mapDispatchToProps = (dispatch) => {
         'showMoreSection': () => {
             return dispatch(showMoreSection())
         },
-        'showAlertModal': () => {
-            return dispatch(showAlertModal())
+        'showAlertModal': (alertType) => {
+            return dispatch(showAlertModal(alertType))
         },
         'hideAlertModal': () => {
             return dispatch(hideAlertModal())
