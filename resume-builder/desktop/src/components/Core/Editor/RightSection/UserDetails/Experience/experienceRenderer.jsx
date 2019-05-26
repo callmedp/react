@@ -115,7 +115,7 @@ export const ExperienceRenderer = ({
                                                                 component={renderDynamicSelect}
                                                                 closeMenuOnSelect={false}
                                                                 isMulti={false}
-                                                                loadOptions={(inputValue) => fetchJobTitles(inputValue)}
+                                                                loadOptions={(inputValue) => fetchJobTitles(inputValue, '')}
                                                                 defaultOptions={[{value: 'aman', label: "aman"}]}
                                                                 name={`${member}.job_profile`}/>
 

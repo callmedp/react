@@ -17,7 +17,8 @@ BUILDER_ENTITY_MAPPING = ((1, "Personal Info"),
                           (7, "Awards"),
                           (8, "Courses"),
                           (9, "Languages"),
-                          (10, "References")
+                          (10, "References"),
+                          (11, 'Interest')
                           )
 
 BUILDER_ENTITY_KEYS = ((1, "personalInfo"),
