@@ -40,6 +40,21 @@ function* fetchUserExperience(action) {
             results = list
         }
         let data = results.length ? {list: results} : initialState
+
+        data = {
+            ...data,
+            ...{
+                list: (data.list || []).map(el => {
+                    el['job_profile'] = {
+                        value: el['job_profile'],
+                        label: el['job_profile']
+                    }
+                    return el;
+                })
+            }
+        }
+        console.log('daat  ', data);
+
         yield put({type: Actions.SAVE_USER_EXPERIENCE, data: data})
     } catch (e) {
         console.log(e);
@@ -133,12 +148,12 @@ function* deleteUserExperience(action) {
     }
 }
 
-function* fetchJobTitles(action) {
+function* fetchJobTitlesAndSuggestions(action) {
     try {
 
         const {payload: {inputValue, res, rej}} = action;
         console.log('---', action);
-        const result = yield call(Api.fetchJobTitles, inputValue);
+        const result = yield call(Api.fetchJobTitlesAndSuggestions, inputValue);
 
 
         if (result['error']) {
@@ -148,8 +163,7 @@ function* fetchJobTitles(action) {
         console.log('-res', result);
         let {data} = result;
         data = (data || []).map((el) => ({
-            label: el.toLowerCase().replace(/(^|\s)\S/g,
-                (firstLetter) => firstLetter.toUpperCase()), value: el.toString()
+            label: el, value: el.toString()
         }))
         return res(data);
 
@@ -165,5 +179,5 @@ export default function* watchExperience() {
     yield takeLatest(Actions.DELETE_USER_EXPERIENCE, deleteUserExperience);
     yield takeLatest(Actions.HANDLE_EXPERIENCE_SWAP, handleExperienceSwap);
     yield takeLatest(Actions.BULK_U_C_USER_EXPERIENCE, handleExperienceSwap);
-    yield takeLatest(Actions.FETCH_EXPERIENCE_LIST, fetchJobTitles);
+    yield takeLatest(Actions.FETCH_EXPERIENCE_LIST, fetchJobTitlesAndSuggestions);
 }

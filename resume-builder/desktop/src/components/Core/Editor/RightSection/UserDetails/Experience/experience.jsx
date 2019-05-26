@@ -7,6 +7,8 @@ import moment from 'moment';
 import {ExperienceRenderer} from "./experienceRenderer";
 import validate from '../../../../../FormHandler/validations/experience/validate'
 import {scroller} from "react-scroll/modules";
+import SuggestionModal from '../../../../../Modal/suggestionModal'
+import {hideSuggestionModal, showSuggestionModal} from "../../../../../../store/ui/actions";
 
 
 class Experience extends Component {
@@ -118,40 +120,44 @@ class Experience extends Component {
         const {
             handleSubmit, ui: {loader}, isEditable,
             editHeading, saveTitle, entityName, nextEntity, handlePreview,
-            changeOrderingDown, changeOrderingUp, handleInputValue, currentFields, fetchJobTitles
+            changeOrderingDown, changeOrderingUp, handleInputValue, currentFields, fetchJobTitles, showSuggestionModal
         } = this.props;
         const {till_today} = this.state;
 
         return (
-            <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity, currentFields))}>
-                <FieldArray name={"list"}
-                            loader={loader}
-                            handleSubmit={handleSubmit}
-                            handleAccordionClick={this.handleAccordionClick}
-                            handleAddition={this.handleAddition}
-                            deleteExperience={this.deleteExperience}
-                            changeOrderingUp={changeOrderingUp}
-                            changeOrderingDown={changeOrderingDown}
-                            component={ExperienceRenderer}
-                            saveTitle={(event) => saveTitle(event, 3)}
-                            editHeading={(value) => editHeading(value)}
-                            isEditable={isEditable}
-                            entityName={entityName}
-                            expanded={this.state.active}
-                            fetchJobTitles={(inputValue) => fetchJobTitles(inputValue)}
-                            till_today={till_today}
-                            tillTodayDisable={this.tillTodayDisable}
-                            handleInputValue={handleInputValue}
+            <React.Fragment>
+                <SuggestionModal {...this.props} />
+                <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity, currentFields))}>
+                    <FieldArray name={"list"}
+                                loader={loader}
+                                handleSubmit={handleSubmit}
+                                handleAccordionClick={this.handleAccordionClick}
+                                handleAddition={this.handleAddition}
+                                deleteExperience={this.deleteExperience}
+                                changeOrderingUp={changeOrderingUp}
+                                changeOrderingDown={changeOrderingDown}
+                                component={ExperienceRenderer}
+                                saveTitle={(event) => saveTitle(event, 3)}
+                                editHeading={(value) => editHeading(value)}
+                                isEditable={isEditable}
+                                entityName={entityName}
+                                expanded={this.state.active}
+                                fetchJobTitles={(inputValue) => fetchJobTitles(inputValue)}
+                                till_today={till_today}
+                                tillTodayDisable={this.tillTodayDisable}
+                                handleInputValue={handleInputValue}
+                                showSuggestionModal={showSuggestionModal}
 
 
-                />
+                    />
 
-                <div className="flex-container items-right mr-20 mb-30">
-                    <button className="blue-button mr-10" type="button" onClick={handlePreview}>Preview</button>
-                    <button className="orange-button"
-                            type="submit">{!nextEntity ? "Download" : 'Save and Continue'}</button>
-                </div>
-            </form>
+                    <div className="flex-container items-right mr-20 mb-30">
+                        <button className="blue-button mr-10" type="button" onClick={handlePreview}>Preview</button>
+                        <button className="orange-button"
+                                type="submit">{!nextEntity ? "Download" : 'Save and Continue'}</button>
+                    </div>
+                </form>
+            </React.Fragment>
         )
     }
 }
@@ -217,6 +223,12 @@ const mapDispatchToProps = (dispatch) => {
             return new Promise((res, rej) => {
                 return dispatch(actions.fetchJobTitles({inputValue, res, rej}))
             })
+        },
+        "hideSuggestionModal": () => {
+            return dispatch(hideSuggestionModal())
+        },
+        "showSuggestionModal": () => {
+            return dispatch(showSuggestionModal())
         }
     }
 };

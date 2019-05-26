@@ -15,6 +15,7 @@ import {
 import React from "react";
 import styles from './experience.scss'
 
+
 export const ExperienceRenderer = ({
                                        fields,
                                        loader,
@@ -35,7 +36,8 @@ export const ExperienceRenderer = ({
                                        fetchJobTitles,
                                        till_today,
                                        tillTodayDisable,
-                                       handleInputValue
+                                       handleInputValue,
+                                       showSuggestionModal
 
                                    }) => {
     return (
@@ -81,7 +83,7 @@ export const ExperienceRenderer = ({
                                                 <AccordionItemHeading>
                                                     <AccordionItemButton>
                                                         <div className="flex-container">
-                                                            <h3 className={"add-section-heading"}>{fields.get(index).job_profile || 'Experience'}</h3>
+                                                            <h3 className={"add-section-heading"}>{fields.get(index).job_profile.value || 'Experience'}</h3>
                                                             <span
                                                                 className={expanded.indexOf(index) > -1 ? "opened-accordion" : "closed-accordion"}></span>
                                                             <div className="addon-buttons mr-10">
@@ -109,13 +111,11 @@ export const ExperienceRenderer = ({
                                                             <label>Designation</label>
                                                             <Field
                                                                 // autoFocus={true}
-                                                                label="Select Experience"
                                                                 iconClass={'icon-designation'}
                                                                 component={renderDynamicSelect}
                                                                 closeMenuOnSelect={false}
                                                                 isMulti={false}
                                                                 loadOptions={(inputValue) => fetchJobTitles(inputValue)}
-                                                                value={{value: 'test', 'label': 'test'}}
                                                                 defaultOptions={[{value: 'aman', label: "aman"}]}
                                                                 name={`${member}.job_profile`}/>
 
@@ -185,6 +185,14 @@ export const ExperienceRenderer = ({
                                                                    name={`${member}.work_description`}/>
                                                         </fieldset>
                                                     </div>
+                                                    <div className="flex-container">
+                                                        <fieldset>
+                                                            <span className="add-suggested"
+                                                                  onClick={showSuggestionModal}>Add suggested experience</span>
+
+                                                        </fieldset>
+                                                    </div>
+
 
                                                 </AccordionItemPanel>
                                             </AccordionItem>
