@@ -65,17 +65,42 @@ class ResumeEntityReorderUtility:
         entity_alignment = entity_status.get('alignment',"center")
         return entity_alignment
 
+    def swap_entities_for_deactivation(self,entity_pos,alignment):
+        pos_in_focus = entity_pos
+        end = MAX_DEPTH + 1
+        swap_dict = {}
+        pos_item_mapping = self.get_pos_item_mapping()
+
+        for pos in range(entity_pos+1,end):
+            pos_item =  pos_item_mapping.get(pos)
+            
+            if not pos_item:
+                continue
+
+            if pos_item['alignment'] == alignment and pos_item['active']:
+                swap_dict.update({pos_in_focus:[pos,alignment,entity_pos != pos_in_focus]})
+                pos_in_focus = pos
+                break
+
+        swap_dict.update({pos_in_focus:[entity_pos,alignment,True]})
+        return swap_dict
+
     def _handle_center_item_swapping(self,pos,step):
+        if step == 0:
+            return self.swap_entities_for_deactivation(pos,"center")
+
         pos_item_mapping = self.get_pos_item_mapping()
         step_item = pos_item_mapping.get(pos+step)
+        if not step_item.get('active'):
+            return {}
         
         if step_item.get('alignment') in ['left','right']:
-            return {pos+step:pos,
-                    pos+(2*step):pos+step,
-                    pos:pos+(2*step)
+            return {pos+step:[pos,"center",True],
+                    pos+(2*step):[pos+step,step_item.get('alignment'),True],
+                    pos:[pos+(2*step),step_item.get('alignment'),True]
                     }
 
-        return {pos+step:pos,pos:pos+step}
+        return {pos+step:[pos,"center",True],pos:[pos+step,"center",True]}
 
     def get_swap_dict_for_entity(self,entity_pos,alignment,step):
         end = MIN_DEPTH if step == -1 else MAX_DEPTH + 1
@@ -89,6 +114,9 @@ class ResumeEntityReorderUtility:
             swap_dict.update(self._handle_center_item_swapping(entity_pos,step))
             return swap_dict
 
+        if step == 0:
+            return self.swap_entities_for_deactivation(entity_pos,alignment)
+
         for pos in range(entity_pos+step,end,step):
             pos_item =  pos_item_mapping.get(pos)
             
@@ -96,7 +124,7 @@ class ResumeEntityReorderUtility:
                 continue
 
             if pos_item['alignment'] == alignment:
-                swap_dict.update({pos:entity_pos,entity_pos:pos})
+                swap_dict.update({pos:[entity_pos,alignment,True],entity_pos:[pos,alignment,True]})
                 break
 
         return swap_dict
@@ -109,7 +137,9 @@ class ResumeEntityReorderUtility:
         if current_pos not in swap_positions:
             return data_copy
 
-        data_copy['pos'] = swap_dict[current_pos]
+        data_copy['pos'] = swap_dict[current_pos][0]
+        data_copy['alignment'] = swap_dict[current_pos][1]
+        data_copy['active'] = swap_dict[current_pos][2]
         return data_copy
 
     def move_entity(self,entity_id,step):

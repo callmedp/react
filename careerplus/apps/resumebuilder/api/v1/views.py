@@ -709,7 +709,7 @@ class EntityReorderView(APIView):
         entity_id = str(request.data.get('entity_id', ''))
         step = str(request.data.get('step', ''))
 
-        if not step or not step in ['1', '-1']:
+        if not step or not step in ['1','-1','0']:
             return Response({"detail": "Please provide proper data"}, status=status.HTTP_400_BAD_REQUEST)
 
         entity_order_object = OrderCustomisation.objects.filter( \
