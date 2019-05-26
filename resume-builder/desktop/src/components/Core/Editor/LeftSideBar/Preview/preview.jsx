@@ -255,8 +255,7 @@ export default class Preview extends Component {
             (els['entity_id'] !== 6 && els['entity_id'] !== 1) && els['active']
             )
             || [];
-        const entityElementId = entityElementSectionList && entityElementSectionList.length && entityElementSectionList[0]['entity_id'];
-        const currentEntity = entityList.find(el => el.entity_id === entityElementId);
+        const currentEntity = entityElementSectionList && entityElementSectionList.length && entityElementSectionList[0]
         const entityName = currentEntity && currentEntity['entity_text'] || 'Personal Info'
         return [entityName, currentEntity];
 
@@ -465,7 +464,7 @@ export default class Preview extends Component {
                                                 (els['active'])
                                             ).map((el, index) => {
 
-                                                const entityValue = entityList.find(elm => elm.entity_id == el.entity_id);
+                                                const entityValue = el;
                                                 return (
                                                     <li key={index} onClick={() => this.selectSection(entityValue)}
                                                         className={"reorder-content--select-box " + (!!(entityValue['entity_text'] === sectionEntityName) ? " reorder-content--select-box__select" : '')}>
