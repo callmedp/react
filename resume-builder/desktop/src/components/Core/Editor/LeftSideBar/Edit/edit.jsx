@@ -22,7 +22,6 @@ class Edit extends Component {
             preferenceList: this.props.entityList,
             nextLink: '',
             elementToDelete: null
-
         };
     }
 

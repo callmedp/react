@@ -14,12 +14,14 @@ export default class AlertModal extends React.Component {
         this.closeModal = this.closeModal.bind(this);
     }
 
+
     closeModal() {
         this.props.hideAlertModal()
     }
 
     render() {
         const {ui: {alertModal, alertType}, nextLink, deleteFromVisibleList, elemToDelete} = this.props;
+        console.log('--next Link-', nextLink, elemToDelete);
         return (
             <React.Fragment>
                 {
@@ -49,7 +51,11 @@ export default class AlertModal extends React.Component {
                                         <p>Some information may be lost as required fields are not filled.</p>
                                         <div className="flex-container">
                                             <button className="orange-button mr-10"
-                                                    onclick={() => this.props.history.push(nextLink)}>Yes, changes it!
+                                                    onClick={() => {
+                                                        this.props.history.push(nextLink);
+                                                        this.closeModal();
+                                                    }
+                                                    }>Yes, changes it!
                                             </button>
                                             <button className="blue-button" onClick={this.closeModal}>Cancel</button>
                                         </div>
@@ -81,7 +87,13 @@ export default class AlertModal extends React.Component {
                                         <span className="icon-alert"></span>
                                         <p>Do you really want to <strong>remove this section?</strong></p>
                                         <div className="flex-container">
-                                            <button className="orange-button mr-10">Confirm</button>
+                                            <button
+                                                onClick={() => {
+                                                    deleteFromVisibleList(elemToDelete)
+                                                    this.closeModal();
+                                                }}
+                                                className="orange-button mr-10">Confirm
+                                            </button>
                                             <button className="blue-button" onClick={this.closeModal}>Cancel</button>
                                         </div>
                                     </div>
