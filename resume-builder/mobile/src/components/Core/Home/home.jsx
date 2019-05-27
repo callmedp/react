@@ -19,6 +19,7 @@ class Home extends Component {
         const values = queryString.parse(this.props.location.search);
         const token = (values && values.token) || '';
         this.state.token = token;
+        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
     }
     componentDidMount() {
         this.props.loginCandidate(this.state.token);
@@ -34,7 +35,7 @@ class Home extends Component {
 
                 <section className="section professional">
                     <div className="text-center">
-                        <h2 className="section__head">Professional advantage</h2>
+                        <h2 className="section__head">Resume builder advantages</h2>
                         <p  className="section__subHead">Resume builder advantages which will make your career brighter</p>
                     </div>
 
@@ -43,28 +44,28 @@ class Home extends Component {
                             <span>
                                 <i className="sprite icon--resume"></i>
                             </span>
-                            A resume layout that stands out 
+                            Visually Striking Resume
                         </li>
                         
                         <li className="professional__item">
                             <span>
                                 <i className="sprite icon--create"></i>
                             </span>
-                            Create a great first impression to recruiters  
+                            Unlimited Downloads of your customised resume  
                         </li>
                         
                         <li className="professional__item">
                             <span>
                                 <i className="sprite icon--increase"></i>
                             </span>
-                            Increased recruiter views on your profile 
+                            Get higher Recruiter Views of your resume 
                         </li>
                         
                         <li className="professional__item">
                             <span>
                                 <i className="sprite icon--application"></i>
                             </span>
-                            Application Tracking Software (ATS) Friendly 
+                            Get your CV past screening software
                         </li>
                     </ul>
                 </section>
@@ -111,18 +112,29 @@ class Home extends Component {
 
                     <div className="mt-20 resume-builder">
                         <ul className="resume-builder__items">
-                            <li className="resume-builder__item"><i className="sprite icon--switch"></i>Switch template</li>
+                            <li className="resume-builder__item"><i className="sprite icon--switch"></i>Expert assistance</li>
 
-                            <li className="resume-builder__item"><i className="sprite icon--editText"></i>Edit text</li>
+                            <li className="resume-builder__item"><i className="sprite icon--editText"></i>Import data from Shine</li>
 
-                            <li className="resume-builder__item"><i className="sprite icon--theme"></i>Theme change</li>
+                            <li className="resume-builder__item"><i className="sprite icon--theme"></i>Update resume back to Shine</li>
 
-                            <li className="resume-builder__item"><i className="sprite icon--move"></i>Move sections</li>
+                            <li className="resume-builder__item"><i className="sprite icon--move"></i>Customize your resume</li>
 
-                            <li className="resume-builder__item"><i className="sprite icon--upload"></i>Upload image</li>
+                            <li className="resume-builder__item"><i className="sprite icon--upload"></i>Reorder resume sections</li>
 
-                            <li className="resume-builder__item"><i className="sprite icon--preview"></i>Preview resume</li>
+                            <li className="resume-builder__item"><i className="sprite icon--preview"></i>Display your photo</li>
                         </ul>
+                    </div>
+                </section>
+                <section className="section pt-30 pb-30">
+                    <div className="text-center">
+                        <h2 className="section__head">Next generation ready resume</h2>
+                        <p  className="section__subHead">Difference between shine resume and others</p>
+                    </div>
+
+                    <div className="mt-20 resume-builder">
+                        <img src={`${this.staticUrl}react/assets/images/mobile/nextgen-resume.jpg`} alt=""
+                     className="img-fluid"/>
                     </div>
                 </section>
                 <Testimonial/>
@@ -140,7 +152,7 @@ class Home extends Component {
                     </ul>
                 </section>
 
-                <section className="section mt-30">
+                <section className="section mt-30 grey-bg">
                     <div className="text-center">
                         <h2 className="section__head">Reach out to us</h2>
                         <p  className="section__subHead">Feel free to share your feedback with us</p>

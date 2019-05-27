@@ -34,7 +34,7 @@ export default class Banner extends Component {
     render() {
         return (
             <section className="banner">
-                <h1 className="mt-15">Quickest <br/>Resume Builder</h1>
+                <h1 className="mt-15">Resume Builder <br/> <strong>by Experts</strong></h1>
                 <p><strong>Amit</strong>, secure the job you want with our
                     resume builder</p>
 

@@ -244,6 +244,26 @@
       left: 0;
 
     }
+
+    &--advantages1 {
+      @include size(22px, 27px, block);
+      background-position: -138px -225px;
+    }
+
+    &--advantages2 {
+      @include size(20px, 20px, block);
+      background-position: -139px -261px;
+    }
+
+    &--advantages3 {
+      @include size(29px, 17px, block);
+      background-position: -137px -290px;
+    }
+
+    &--advantages4 {
+      @include size(25px, 27px, block);
+      background-position: -137px -312px;
+    }
   }
 
   &--build {
@@ -304,6 +324,10 @@
       left: 0;
 
     }
+  }
+
+  &--advantages1 {
+    background-position: -138px -225px;
   }
 
   &--resume {
