@@ -26,13 +26,16 @@ class Preview extends Component {
             selectedColor: 1,
             headingFontSize: 1,
             textFontSize: 1,
-            side:'left',
-            selected:{left:0,right:0},
+            activeSection: 'left',
+            sectionEntityName: '',
+            selectedEntity: ''
         }
         this.handleCustomization = this.handleCustomization.bind(this);
-        this.updateIndexOfReordering = this.updateIndexOfReordering.bind(this);
+        this.selectSection = this.selectSection.bind(this);
         this.moveUpSection = this.moveUpSection.bind(this);
         this.moveDownSection = this.moveDownSection.bind(this);
+        this.handleActiveSection = this.handleActiveSection.bind(this);
+
     }
 
     componentWillUpdate(prevProps){
@@ -52,21 +55,20 @@ class Preview extends Component {
         this.props.fetchTemplate();
         this.props.fetchDefaultCustomization();
     }
-    updateIndexOfReordering(selected,side,index){
-        selected = side === 'left' ? 
-        {
-            ...selected,
-            ...{
-                left:index
-            }
-        }:
-        {
-            ...selected,
-            ...{
-                right:index
-            }
-        }
-        this.setState({selected})
+
+    selectSection(section) {
+
+        this.setState({
+            sectionEntityName: section['entity_text'],
+            selectedEntity: section
+        })
+
+    }
+
+    handleActiveSection(section) {
+        this.setState({
+            activeSection: section
+        })
     }
 
     moveUpSection(selectedEntity, selectedTemplate) {
@@ -91,7 +93,7 @@ class Preview extends Component {
     }
 
     render(){
-        const {customize,currentTab,selectedColor,headingFontSize,textFontSize,side,selected} = this.state
+        const {customize,currentTab,selectedColor,headingFontSize,textFontSize,sectionEntityName,activeSection} = this.state
         const {initialValues:{html,entity_position},loader:{mainloader},personalInfo:{selected_template}} = this.props
         return(
             <div className="preview">
@@ -263,27 +265,26 @@ class Preview extends Component {
                                                 <div className="filter__accordion__card--content">
 
                                                     <ul className="tabs">
-                                                        <li className={side ==='left' ? "active":""} 
-                                                            onClick={()=>{this.setState({side:'left'})}}>Left</li>
-                                                        <li className={side ==='right' ? "active":""}
-                                                            onClick={()=>{this.setState({side:'right'})}}>Right</li>
+                                                        <li className={activeSection ==='left' ? "active":""} 
+                                                            onClick={() => this.handleActiveSection('left')}>Left</li>
+                                                        <li className={activeSection ==='right' ? "active":""}
+                                                            onClick={() => this.handleActiveSection('right')}>Right</li>
                                                     </ul>
                                                     <div className="reorder">
                                                         <ul className="reorder__items">
-                                                            {entity_position.filter(item =>(item.alignment ===side  || item.alignment === 'center') && 
+                                                            {entity_position.filter(item =>(item.alignment ===activeSection  || item.alignment === 'center') && 
                                                                     (item.entity_id!==1 && item.entity_id!==6)
                                                                     && (item['active'])).map((el,index)=>{
                                                                 return(
-                                                                        <li className={"reorder__item " + 
-                                                                            (selected[`${side}`] === index ? " reorder--select":"")}
-                                                                            onClick={()=>{this.updateIndexOfReordering(selected,side,index)}}key={index} >
+                                                                        <li className={"reorder__item " + (!!(el['entity_text'] === sectionEntityName)? " reorder--select":"")}
+                                                                            onClick={() => this.selectSection(el)} >
                                                                             <span className="reorder__title">{el.entity_text}</span>
                                                                             <div className="reorder__nav">
                                                                                 <span className="reorder__nav--item">
-                                                                                    <i className="sprite icon--upArrow" onClick={()=>{this.moveUpSection(el,selected_template);this.updateIndexOfReordering(selected,side,index-1)}}></i>
+                                                                                    <i className="sprite icon--upArrow" onClick={()=>{this.moveUpSection(el,selected_template);}}></i>
                                                                                 </span>
                                                                                 <span className="reorder__nav--item">
-                                                                                    <i className="sprite icon--downArrow" onClick={()=>{this.moveDownSection(el,selected_template);;this.updateIndexOfReordering(selected,side,index+1)}}></i>
+                                                                                    <i className="sprite icon--downArrow" onClick={()=>{this.moveDownSection(el,selected_template);}}></i>
                                                                                 </span>
                                                                             </div>
                                                                         </li>
