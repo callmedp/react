@@ -5,6 +5,7 @@ import os
 import logging, gzip, shutil
 from io import BytesIO
 from pathlib import Path
+from datetime import date
 
 #django imports
 from django.conf import settings
@@ -387,31 +388,56 @@ class ResumeGenerate(object):
 
     def generate_pdf_for_template(self, order=None, index='1'):
         content_type = "pdf"
-        candidate = Candidate.objects.get(candidate_id=order.candidate_id)
+        candidate_id = order.candidate_id
+        template_id = int(index)
+        candidate = Candidate.objects.filter(candidate_id=candidate_id).first()
+        if not candidate:
+            return {}
+
         file_dir = "{}/{}".format(candidate.id,content_type)
         file_name = "{}.{}".format(index,content_type)
-
-        education = candidate.candidateeducation_set.all()
-        experience = candidate.candidateexperience_set.all()
-        skills = candidate.skill_set.all()
-        achievements = candidate.candidateachievement_set.all()
-        references = candidate.candidatereference_set.all()
-        projects = candidate.candidateproject_set.all()
-        certifications = candidate.candidatecertification_set.all()
-        languages = candidate.candidatelanguage_set.all()
+        entity_preference = eval(candidate.entity_preference_data)
+        extracurricular = candidate.extracurricular_list
+        education = candidate.candidateeducation_set.all().order_by('order')
+        experience = candidate.candidateexperience_set.all().order_by('order')
+        skills = candidate.skill_set.all().order_by('order')
+        achievements = candidate.candidateachievement_set.all().order_by('order')
+        references = candidate.candidatereference_set.all().order_by('order')
+        projects = candidate.candidateproject_set.all().order_by('order')
+        certifications = candidate.candidatecertification_set.all().order_by('order')
+        languages = candidate.candidatelanguage_set.all().order_by('order')
         current_exp = experience.filter(is_working=True).order_by('-start_date').first()
-        latest_experience = experience and experience[0].job_profile or 'FULL STACK DEVELOPER'
+        current_config = candidate.ordercustomisation_set.filter(template_no=template_id).first()
+        entity_position = current_config.entity_position_eval
 
-        #  handle context here later
-        context_dict = {'candidate': candidate, 'education': education, 'experience': experience, 
-                        'skills': skills,'achievements': achievements, 'references': references, 
-                        'projects': projects,'certifications': certifications, 
-                        'extracurricular': '', 'languages': languages,
-                        'current_exp': current_exp, 'latest_exp': latest_experience}
+        latest_experience, latest_end_date = '', None
+        for i in experience:
+            if i.is_working:
+                latest_end_date = date.today()
+                latest_experience = i.job_profile
+                break
+            elif latest_end_date == None:
+                latest_end_date = i.end_date
+                latest_experience = i.job_profile
+            else:
+                if latest_end_date < i.end_date:
+                    latest_end_date = i.end_date
+                    latest_experience = i.job_profile
+
+        # latest_experience = experience and experience[0].job_profile or 'FULL STACK DEVELOPER'
+
+        template = get_template('resume{}_preview.html'.format(template_id))
+        context_dict = {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,
+             'achievements': achievements, 'references': references, 'projects': projects,
+             'certifications': certifications, 'extracurricular': extracurricular, 'languages': languages,
+             'current_exp': current_exp, 'latest_exp': latest_experience,
+             'preference_list': entity_preference, 'current_config': current_config,
+             'entity_position': entity_position
+             }
 
         pdf_file = self.generate_file(
                     context_dict=context_dict,
-                    template_src='resume{}.html'.format(index),
+                    template_src='resume{}_preview.html'.format(index),
                     file_type='pdf')
 
         self.store_file(file_dir,file_name,pdf_file)
