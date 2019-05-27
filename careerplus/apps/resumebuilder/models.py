@@ -202,8 +202,8 @@ class CandidateCertification(PreviewImageCreationMixin, models.Model):
 class CandidateProject(PreviewImageCreationMixin, models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     project_name = models.CharField('Project Name', max_length=150)
-    start_date = models.DateField('Start Date', blank=False)
-    end_date = models.DateField('End Date', blank=True)
+    start_date = models.DateField('Start Date', blank=False,null=True)
+    end_date = models.DateField('End Date', blank=True,null=True)
     skills = models.ManyToManyField(Skill, verbose_name='List of Skills', null=True, blank=True)
     currently_working = models.BooleanField('Currently Working', default=False)
     description = models.TextField('Project Description', blank=True, null=True)
@@ -254,7 +254,7 @@ class CandidateSocialLink(PreviewImageCreationMixin, models.Model):
 class CandidateAchievement(PreviewImageCreationMixin, models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     title = models.CharField('Title', max_length=100)
-    date = models.DateField('Date')
+    date = models.DateField('Date',blank=True,null=True)
     summary = models.TextField('Summary', null=True, blank=True)
     order = models.IntegerField('Order', default=0)
 

@@ -508,6 +508,7 @@ class ProfileEntityBulkUpdateView(APIView):
                 instance else serializer_class(data=record, context=context)
 
             if not serializer_obj.is_valid():
+                logging.getLogger('info_log').info(serializer_obj.errors)
                 invalid_data = True
                 break
 
