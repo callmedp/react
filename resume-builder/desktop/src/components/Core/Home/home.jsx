@@ -12,6 +12,7 @@ import {Events, animateScroll as scroll, scrollSpy, scroller} from 'react-scroll
 import queryString from "query-string";
 import {hideModal, showModal} from "../../../store/ui/actions";
 import {displaySelectedTemplate} from '../../../store/template/actions'
+import Swal from 'sweetalert2'
 
 
 class Home extends Component {
@@ -21,12 +22,16 @@ class Home extends Component {
         this.addclass = this.addclass.bind(this);
         this.state = {
             'scrolled': false,
-            'token': ''
+            'token': '',
+            'name_error':false,
+            'email_error':false,
+            'message_error':false
         }
 
         const values = queryString.parse(this.props.location.search);
         const token = (values && values.token) || '';
         this.state.token = token;
+        this.feedbackForm = this.feedbackForm.bind(this);
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
     }
 
@@ -52,9 +57,31 @@ class Home extends Component {
         }
     }
 
+    feedbackForm(e){
+        e.preventDefault();
+        let name =document.getElementById('name').value
+        let email = document.getElementById('email').value
+        let message = document.getElementById('message').value
+        let {name_error,email_error,message_error} = this.state;
+
+        name_error = !name ? true : false;
+        email_error = !email ? true : false;
+        // email_error = email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email) ? true : false
+        message_error = !message ? true : false;
+        this.setState({name_error,email_error,message_error})
+        if(name_error || email_error || message_error) return;
+        
+        document.getElementById("feedback").reset();
+        Swal.fire(
+            'Query Submitted Successfully!',
+            '',
+            'success'
+          )
+    }
+
     componentDidMount() {
 
-        this.props.loginCandidate(this.state.token);
+        // this.props.loginCandidate(this.state.token);
         Events.scrollEvent.register('begin', function () {
         });
 
@@ -72,6 +99,7 @@ class Home extends Component {
 
     render() {
         const {userInfo: {first_name}} = this.props;
+        const {name_error,email_error,message_error} = this.state;
         return (
             <div className="nav-fixed">
                 <Header page={'home'} userName={first_name} getclass={this.state.scrolled ? 'color-change' : ''}/>
@@ -250,21 +278,26 @@ class Home extends Component {
                             <li>Talent economy</li>
                         </ul>
                     </div>
-
-                    <div class="reachout-tous">
-                        <h2>Reach out to us</h2>
-                        <strong>Feel free to share your feedback with us</strong>
-                        <div className="flex-container">
-                            <input type="text" name="" placeholder="Name"/>
+                    <form id="feedback">
+                        <div class="reachout-tous">
+                            <h2>Reach out to us</h2>
+                            <strong>Feel free to share your feedback with us</strong>
+                            
+                            <div className={"flex-container"}>
+                                <input type="text"  name="" placeholder="Name" id="name" className={(name_error ? "error": '')}/>
+                                {/* { name_error ?<p>Required</p> : ''} */}
+                            </div>
+                            <div className={"flex-container"}>
+                                <input type="text"  name="" placeholder="Email" id="email" className={(email_error ? "error": '')}/>
+                                {/* { email_error ?<p>Required</p> : ''} */}
+                            </div>
+                            <div className={"flex-container"}>
+                                <input type="text" name="" placeholder="Message" id="message" className={(message_error ? "error": '')}/>
+                                {/* { message_error ?<p>Required</p> : ''} */}
+                            </div>
+                            <button className="orange-button" type="submit" onClick={(e)=>{this.feedbackForm(e)}}>Submit</button>
                         </div>
-                        <div className="flex-container">
-                            <input type="text" name="" placeholder="Email"/>
-                        </div>
-                        <div className="flex-container">
-                            <input type="text" name="" placeholder="Message"/>
-                        </div>
-                        <button className="orange-button">Submit</button>
-                    </div>
+                    </form>
                 </section>
 
                 <Footer/>
