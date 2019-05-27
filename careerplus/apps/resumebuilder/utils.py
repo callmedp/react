@@ -95,9 +95,9 @@ class ResumeEntityReorderUtility:
             return {}
         
         if step_item.get('alignment') in ['left','right']:
-            return {pos+step:[pos,"center",True],
-                    pos+(2*step):[pos+step,pos_item_mapping[pos+step].get('alignment'),True],
-                    pos:[pos+(2*step),pos_item_mapping[pos+(2*step)].get('alignment'),True]
+            return {pos+step:[pos,pos_item_mapping[pos+step].get('alignment'),True],
+                    pos+(2*step):[pos+step,pos_item_mapping[pos+(2*step)].get('alignment'),True],
+                    pos:[pos+(2*step),pos_item_mapping[pos].get('alignment'),True]
                     }
 
         return {pos+step:[pos,"center",True],pos:[pos+step,"center",True]}
