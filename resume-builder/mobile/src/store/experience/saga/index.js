@@ -14,7 +14,7 @@ function* fetchUserExperience(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
         const loader = yield select(getLoaderStatus)
         if(!loader.mainloader){
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
         }
 
         if (localStorage.getItem('experience')) {
@@ -35,7 +35,7 @@ function* fetchUserExperience(action) {
                             }]
 
             yield put({type: Actions.SAVE_USER_EXPERIENCE, data: {list:local_data}})
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
             return;
         }
 
@@ -68,7 +68,7 @@ function* fetchUserExperience(action) {
             };
         }
         yield put({type: Actions.SAVE_USER_EXPERIENCE, data: data})
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
         ////console.log(e);
     }
@@ -102,7 +102,7 @@ function* updateUserExperience(action) {
 
 function* bulkUserExperienceUpdate(action) {
     try {
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
         let {payload: {list,resolve,reject}} = action;
 
 
@@ -120,7 +120,7 @@ function* bulkUserExperienceUpdate(action) {
                 yield call(fetchUserExperience)
             }
             yield put({type: Actions.SAVE_USER_EXPERIENCE, data: {list: result['data']}})
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
             return resolve('Bulk Update Done.');
 
         }
@@ -138,7 +138,7 @@ function* deleteUserExperience(action) {
     try {
 
         const candidateId = localStorage.getItem('candidateId') || '';
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
 
         const {experienceId} = action;
 
@@ -150,7 +150,7 @@ function* deleteUserExperience(action) {
         }
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_EXPERIENCE, id: experienceId});
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
         yield call(fetchUserExperience)
         
 

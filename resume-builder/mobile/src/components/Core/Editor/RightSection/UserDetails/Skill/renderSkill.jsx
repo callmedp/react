@@ -22,7 +22,7 @@ const renderSkills = ({
     return (
         <React.Fragment>
             <div className="buildResume__wrap pb-0">
-                {loader ? <DataLoader/> :""}
+                {/* {loader ? <DataLoader/> :""} */}
                 <div className="buildResume__heading heading">
                     <div className="heading__info">
                     {!editHeading ?

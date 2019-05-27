@@ -4,7 +4,7 @@
 
 .dataloader {
     width: 100%;
-    height: 100%;
+    height: 100vh;
     min-height: 100vh;
     position: absolute;
     background-color: rgba(0, 0, 0, 0.7);
@@ -26,7 +26,8 @@
         color: $white;
         font-weight: 700;
         position: relative;
-        top: 90px;
+        align-self: center;
+        top: -40px;
 
         p {
             font-size: 1.8rem;

@@ -163,7 +163,7 @@ class PersonalInfo extends Component {
         return (
             
         <div className="buildResume">
-            {dataloader ?<DataLoader/> : ""}
+            {/* {dataloader ?<DataLoader/> : ""} */}
             <PreviewModal {...this.props}/>
             <div className="buildResume__wrap">
                 <div className="buildResume__heading">
@@ -299,7 +299,7 @@ const mapDispatchToProps = (dispatch) => {
         "onSubmit": (personalDetails, imageURL) => {
             let { date_of_birth, extracurricular,gender} = personalDetails;
             let interest = extracurricular
-            interest =  ((interest|| []).map((item)=>item.value)).join(",")
+            interest =  ((interest|| []).filter((item)=>item !==null).map((item)=>item.value)).join(",")
             personalDetails = {
                 ...personalDetails,
                 ...{

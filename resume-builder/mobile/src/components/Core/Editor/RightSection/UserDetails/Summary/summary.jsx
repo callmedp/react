@@ -182,7 +182,7 @@ const mapDispatchToProps = (dispatch) => {
         "onSubmit": (personalDetails) => {
             let { date_of_birth, extracurricular,gender,image} = personalDetails;
             let interest = extracurricular
-            interest =  ((interest|| []).map((item)=>item.value)).join(",")
+            interest =  ((interest|| []).filter((item)=>item !==null).map((item)=>item.value)).join(",")
             personalDetails = {
                 ...personalDetails,
                 ...{

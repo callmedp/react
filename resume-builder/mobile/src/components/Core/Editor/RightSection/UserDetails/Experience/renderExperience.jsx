@@ -24,7 +24,7 @@ const renderExperiences = ({
     return (
         
         <div className="buildResume__wrap">
-                {loader ? <DataLoader/> :""}
+                {/* {loader ? <DataLoader/> :""} */}
             <div className="buildResume__heading heading">
                 <div className="heading__info">
                 {!editHeading ?

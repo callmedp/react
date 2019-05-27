@@ -13,7 +13,7 @@ function* fetchUserLanguage(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
         const loader = yield select(getLoaderStatus)
         if(!loader.mainloader){
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
         }
 
         if (localStorage.getItem('language')) {
@@ -31,7 +31,7 @@ function* fetchUserLanguage(action) {
                             ]
 
             yield put({type: Actions.SAVE_USER_LANGUAGE, data: {list:local_data}})
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
             return;
         }
 
@@ -66,7 +66,7 @@ function* fetchUserLanguage(action) {
             };
         }
         yield put({type: Actions.SAVE_USER_LANGUAGE, data: data})
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
         ////console.log(e);
     }
@@ -97,7 +97,7 @@ function* updateUserLanguage(action) {
 
 function* bulkUpdateUserLanguage(action) {
     try {
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
         let {payload: {list,resolve,reject}} = action;
 
 
@@ -115,7 +115,7 @@ function* bulkUpdateUserLanguage(action) {
                 yield call(fetchUserLanguage)
             }
             yield put({type: Actions.SAVE_USER_LANGUAGE, data: {list: result['data']}})
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
             return resolve('Bulk Update Done.');
         }
 
@@ -132,7 +132,7 @@ function* deleteUserLanguage(action) {
     try {
 
         const candidateId = localStorage.getItem('candidateId') || '';
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
 
         // userLanguage['cc_id'] = candidateId;
         const {languageId} = action;
@@ -145,7 +145,7 @@ function* deleteUserLanguage(action) {
         }
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_LANGUAGE, id: languageId});
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
         yield call(fetchUserLanguage)
 
     } catch (e) {

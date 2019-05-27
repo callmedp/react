@@ -14,7 +14,7 @@ function* fetchUserReference(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
         const loader = yield select(getLoaderStatus)
         if(!loader.mainloader){
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
         }
 
         if (localStorage.getItem('reference')) {
@@ -33,7 +33,7 @@ function* fetchUserReference(action) {
                             ]
 
             yield put({type: Actions.SAVE_USER_REFERENCE, data: {list:local_data}})
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
             return;
         }
 
@@ -62,7 +62,7 @@ function* fetchUserReference(action) {
             };
         }
         yield put({type: Actions.SAVE_USER_REFERENCE, data: data})
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
         ////console.log(e);
     }
@@ -96,7 +96,7 @@ function* updateUserReference(action) {
 function* bulkUpdateUserReference(action) {
     try {
         let {payload: {list,resolve,reject}} = action;
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
 
 
         const candidateId = localStorage.getItem('candidateId') || '';
@@ -113,7 +113,7 @@ function* bulkUpdateUserReference(action) {
                 yield call(fetchUserReference)
             }
             yield put({type: Actions.SAVE_USER_REFERENCE, data: {list: result['data']}})
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
             return resolve('Bulk Update Done.');
             
         }
@@ -130,7 +130,7 @@ function* deleteUserReference(action) {
     try {
 
         const candidateId = localStorage.getItem('candidateId') || '';
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
 
         const {referenceId} = action;
 
@@ -142,7 +142,7 @@ function* deleteUserReference(action) {
         }
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_REFERENCE, id: referenceId});
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
         yield call(fetchUserReference)
 
     } catch (e) {

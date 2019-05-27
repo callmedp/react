@@ -14,7 +14,7 @@ function* fetchUserEducation(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
         const loader = yield select(getLoaderStatus)
         if(!loader.mainloader){
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
         }
         if (localStorage.getItem('education')) {
 
@@ -35,7 +35,7 @@ function* fetchUserEducation(action) {
                             ]
 
             yield put({type: Actions.SAVE_USER_EDUCATION, data: {list:local_data}})
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
             return;
         }
 
@@ -75,7 +75,7 @@ function* fetchUserEducation(action) {
             };
         }
         yield put({type: Actions.SAVE_USER_EDUCATION, data: data})
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
         ////console.log(e);
     }
@@ -105,7 +105,7 @@ function* updateUserEducation(action) {
 function* bulkUpdateUserEducation(action) {
     try {
         console.log("My Action",action)
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
         let {payload: {list,resolve,reject}} = action;
 
 
@@ -123,7 +123,7 @@ function* bulkUpdateUserEducation(action) {
                 yield call(fetchUserEducation)
             }
             yield put({type: Actions.SAVE_USER_EDUCATION, data:{list: result['data']}})
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
             console.log("Came Here before resolve")
             console.log(resolve)
             return resolve('Bulk Update Done.');
@@ -142,7 +142,7 @@ function* deleteUserEducation(action) {
     try {
 
         const candidateId = localStorage.getItem('candidateId') || '';
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
 
         const {educationId} = action;
 
@@ -154,7 +154,7 @@ function* deleteUserEducation(action) {
         }
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_EDUCATION, id: educationId});
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
         yield call(fetchUserEducation)
         
 

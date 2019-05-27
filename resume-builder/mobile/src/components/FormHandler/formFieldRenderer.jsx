@@ -169,6 +169,7 @@ export const renderMultiselect = ({ input,className, data, valueField, textField
             <Multiselect {...input}
                 onBlur={() => input.onBlur()}
                 value={input.value.length ? input.value :defaultValue}
+                defaultValue={defaultValue}
                 data={data}
                 className={className}
                 valueField={valueField}

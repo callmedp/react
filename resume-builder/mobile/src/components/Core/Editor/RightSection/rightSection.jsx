@@ -15,6 +15,7 @@ import * as actions from "../../../../store/sidenav/actions";
 import {changeFormName} from "../../../../store/loader/actions/index";
 import {connect} from "react-redux";
 import { animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
+import Loader from '../../../Common/Loader/loader.jsx';
 
 class RightSection extends Component {
 
@@ -88,8 +89,10 @@ class RightSection extends Component {
     }
 
     render() {
+        const {info:{loader:{mainloader}}} = this.props
         return (
             <React.Fragment>
+                {mainloader ? <Loader/>:''}
                 <section id="right-panel-section" className="right-panel">
                     {
                         this.renderSwitch()
@@ -129,7 +132,7 @@ const mapStateToProps = (state) => {
     return {
         initialValues: state.sidenav,
         sidenav: state.sidenav,
-        info: state
+        info: state,
     }
 };
 

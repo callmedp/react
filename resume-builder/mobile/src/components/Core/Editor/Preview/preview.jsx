@@ -359,7 +359,7 @@ const mapDispatchToProps = (dispatch) => {
         "updateSelectedTemplate": (personalInfo) => {
             let { date_of_birth, extracurricular,image,gender} = personalInfo;
             let interest = extracurricular
-            interest =  ((interest|| []).filter((item)=>item.value).map((item)=>item.value)).join(",")
+            interest =  ((interest|| []).filter((item)=>item !==null).map((item)=>item.value)).join(",")
             let personalDetails = {
                 ...personalInfo,
                 ...{

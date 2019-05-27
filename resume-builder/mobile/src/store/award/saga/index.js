@@ -14,7 +14,7 @@ function* fetchUserAward(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
         const loader = yield select(getLoaderStatus)
         if(!loader.mainloader){
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
         }
 
         if (localStorage.getItem('award')) {
@@ -33,7 +33,7 @@ function* fetchUserAward(action) {
 
             yield put({type: Actions.SAVE_USER_AWARD, data: {list:local_data}})
 
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
             return;
         }
         
@@ -65,7 +65,7 @@ function* fetchUserAward(action) {
         }
         ////console.log('---', data);
         yield put({type: Actions.SAVE_USER_AWARD, data: data})
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
         ////console.log(e);
     }
@@ -100,7 +100,7 @@ function* bulkUpdateUserAward(action) {
 
 
         const candidateId = localStorage.getItem('candidateId') || '';
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
 
         const result = yield call(Api.bulkUpdateUserAward, list, candidateId);
 
@@ -115,7 +115,7 @@ function* bulkUpdateUserAward(action) {
             }
             
             yield put({type: Actions.SAVE_USER_AWARD, data:{list:result['data']}});
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
             return resolve('Bulk Update Done.');
         }
         
@@ -132,7 +132,7 @@ function* deleteUserAward(action) {
     try {
 
         const candidateId = localStorage.getItem('candidateId') || '';
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
 
         const {awardId} = action;
 
@@ -144,7 +144,7 @@ function* deleteUserAward(action) {
         }
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_AWARD, id: awardId});
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
         yield call(fetchUserAward)
         
 

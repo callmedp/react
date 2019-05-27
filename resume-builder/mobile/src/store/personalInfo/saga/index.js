@@ -12,13 +12,15 @@ import {SubmissionError} from 'redux-form'
 import {interestList} from '../../../Utils/interestList'
 
 function modifyPersonalInfo(data) {
-    let {date_of_birth, gender, extracurricular} = data;
+    let {date_of_birth, gender, extracurricular,image} = data;
     extracurricular = extracurricular ?(extracurricular).split(',').map(key => interestList[key]):[]
     let newData = {
             ...data,
             ...{
                 "date_of_birth": (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
-                extracurricular
+                extracurricular,
+                gender,
+                image
                 }
         }
     return newData;
@@ -47,7 +49,7 @@ function* getPersonalDetails(action) {
         yield put({type: Actions.SAVE_USER_INFO, data: data});
 
         yield put({type:LoaderAction.UPDATE_MAIN_PAGE_LOADER,payload:{mainloader: false}})
-        // yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+        // yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
 
     } catch (e) {
         ////console.log(e);
@@ -67,7 +69,7 @@ function* updatePersonalDetails(action) {
             }
         }
         const candidateId = localStorage.getItem('candidateId') || '';
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
 
         let result = null;
         if (localStorage.getItem('personalInfo')) result = yield call(Api.createPersonalInfo, personalDetails);
@@ -81,7 +83,7 @@ function* updatePersonalDetails(action) {
         
 
         yield put({type: Actions.SAVE_USER_INFO, data:modifyPersonalInfo(result['data'])});
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
 
         return resolve('User Personal  Info saved successfully.');
 
@@ -104,6 +106,7 @@ function* getInterestList(action){
         Object.keys(data).map((el,key)=>{
             updated_data[key] = {'value':key,'label':data[el]}
         })
+        console.log(updated_data)
         yield put({type: Actions.SAVE_INTEREST_LIST,data:updated_data})
 
     }catch (e) {
@@ -115,7 +118,7 @@ function* getInterestList(action){
 function* fetchImageUrl(action) {
     try {
         const {payload: {imageFile, resolve, reject}} = action;
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
 
 
         var data = new FormData();
@@ -133,7 +136,7 @@ function* fetchImageUrl(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
 
         const result = yield call(Api.fetchImageUrl, data, candidateId);
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
 
 
         return resolve(result['data']['path'])

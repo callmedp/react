@@ -1,37 +1,104 @@
 export const interestList = {
-    '0': {
-        value: '0', 'label':
-            '3D printing'
-    }
-    ,
-    '1': {
-        value: '1', 'label':
-            'Acrobatics'
-    }
-    ,
-    '2': {
-        value: '2', 'label':
-            'Acting'
-    }
-    ,
-    '3': {
-        value: '3', 'label':
-            'Amateur radio'
-    }
-    ,
-    '4': {
-        value: '4', 'label':
-            'Animation'
-    }
-    ,
-    '5': {
-        value: '5', 'label':
-            'Aquascaping'
-    }
-    ,
-    '6': {
-        value: '6', 'label':
-            'Baking'
-    }
-    
+
+    0: {value: 0, label: "3D printing"},
+    1: {value: 1, label: "Acrobatics"},
+    2: {value: 2, label: "Acting"},
+    3: {value: 3, label: "Amateur radio"},
+    4: {value: 4, label: "Animation"},
+    5: {value: 5, label: "Aquascaping"},
+    6: {value: 6, label: "Baking"},
+    7: {value: 7, label: "Baton twirling"},
+    8: {value: 8, label: "Beatboxing"},
+    9: {value: 9, label: "Board/tabletop games"},
+    10: {value: 10, label: "Book restoration"},
+    11: {value: 11, label: "Brazilian jiu-jitsu"},
+    12: {value: 12, label: "Cabaret"},
+    13: {value: 13, label: "Calligraphy"},
+    14: {value: 14, label: "Candle making"},
+    15: {value: 15, label: "Coffee roasting"},
+    16: {value: 16, label: "Collecting"},
+    17: {value: 17, label: "Coloring"},
+    18: {value: 18, label: "Computer programming"},
+    19: {value: 19, label: "Cooking"},
+    20: {value: 20, label: "Cosplaying"},
+    21: {value: 21, label: "Couponing"},
+    22: {value: 22, label: "Creative writing"},
+    23: {value: 23, label: "Crocheting"},
+    24: {value: 24, label: "Cross-stitch"},
+    25: {value: 25, label: "Crossword puzzles"},
+    26: {value: 26, label: "Cryptography"},
+    27: {value: 27, label: "Dance"},
+    28: {value: 28, label: "Digital arts"},
+    29: {value: 29, label: "Do it yourself"},
+    30: {value: 30, label: "Drama"},
+    31: {value: 31, label: "Drawing"},
+    32: {value: 32, label: "Electronics"},
+    33: {value: 33, label: "Embroidery"},
+    34: {value: 34, label: "Fantasy sports"},
+    35: {value: 35, label: "Fashion"},
+    36: {value: 36, label: "Fishkeeping"},
+    37: {value: 37, label: "Flower arranging"},
+    38: {value: 38, label: "Foreign language learning"},
+    39: {value: 39, label: "Gaming (tabletop games and role-playing games)"},
+    40: {value: 40, label: "Genealogy"},
+    41: {value: 41, label: "Glassblowing"},
+    42: {value: 42, label: "Graphic design"},
+    43: {value: 43, label: "Gunsmithing"},
+    44: {value: 44, label: "Herp keeping"},
+    45: {value: 45, label: "Homebrewing"},
+    46: {value: 46, label: "Hydroponics"},
+    47: {value: 47, label: "Ice skating"},
+    48: {value: 48, label: "Jewelry making"},
+    49: {value: 49, label: "Jigsaw puzzles"},
+    50: {value: 50, label: "Juggling"},
+    51: {value: 51, label: "Karate"},
+    52: {value: 52, label: "Knife making"},
+    53: {value: 53, label: "Knitting"},
+    54: {value: 54, label: "Kombucha brewing"},
+    55: {value: 55, label: "Lace making"},
+    56: {value: 56, label: "Lapidary"},
+    57: {value: 57, label: "Leather crafting"},
+    58: {value: 58, label: "Lego building"},
+    59: {value: 59, label: "Lock Picking"},
+    60: {value: 60, label: "Listening to music"},
+    61: {value: 61, label: "Machining"},
+    62: {value: 62, label: "Macrame"},
+    63: {value: 63, label: "Magic"},
+    64: {value: 64, label: "Metalworking"},
+    65: {value: 65, label: "Model building"},
+    66: {value: 66, label: "Model engineering"},
+    67: {value: 67, label: "Needlepoint"},
+    68: {value: 68, label: "Origami"},
+    69: {value: 69, label: "Painting"},
+    70: {value: 70, label: "Philately"},
+    71: {value: 71, label: "Photography"},
+    72: {value: 72, label: "Playing musical instruments"},
+    73: {value: 73, label: "Poi"},
+    74: {value: 74, label: "Pottery"},
+    75: {value: 75, label: "Puzzles"},
+    76: {value: 76, label: "Quilling"},
+    77: {value: 77, label: "Quilting"},
+    78: {value: 78, label: "Reading"},
+    79: {value: 79, label: "Robot combat"},
+    80: {value: 80, label: "Scrapbooking"},
+    81: {value: 81, label: "Sculpting"},
+    82: {value: 82, label: "Sewing"},
+    83: {value: 83, label: "Singing"},
+    84: {value: 84, label: "Sketching"},
+    85: {value: 85, label: "Soapmaking"},
+    86: {value: 86, label: "Stand-up comedy"},
+    87: {value: 87, label: "Taxidermy"},
+    88: {value: 88, label: "Video game developing"},
+    89: {value: 89, label: "Video gaming"},
+    90: {value: 90, label: "Video editing"},
+    91: {value: 91, label: "Watching movies"},
+    92: {value: 92, label: "Watching television"},
+    93: {value: 93, label: "Whittling"},
+    94: {value: 94, label: "Wood carving"},
+    95: {value: 95, label: "Woodworking"},
+    96: {value: 96, label: "Worldbuilding"},
+    97: {value: 97, label: "Writing"},
+    98: {value: 98, label: "Yo-yoing"},
+    99: {value: 99, label: "Yoga"},
 }
+

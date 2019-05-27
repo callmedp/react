@@ -5,7 +5,7 @@
 .loader {
     @include size(100%, 100%);
     position: fixed;
-    background-color: rgba($black, .7);
+    background-color: rgba($black, .4);
     top: 0;
     left: 0;
     z-index: 9;
