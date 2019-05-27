@@ -107,7 +107,7 @@ export const ExperienceRenderer = ({
                                                 </AccordionItemHeading>
                                                 <AccordionItemPanel>
                                                     <div className="flex-container">
-                                                        <fieldset>
+                                                        <fieldset className="custom">
                                                             <label>Designation</label>
                                                             <Field
                                                                 // autoFocus={true}
