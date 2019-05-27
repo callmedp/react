@@ -182,6 +182,6 @@ class PixelTracker(AbstractAutoDate):
     )
     conversion_urls = models.TextField(help_text='conversion_page_url')
     landing_urls = models.TextField(help_text='landing_page_urls')
-    days = models.IntegerField(help_text='No. of days for tracking')
+    days = models.IntegerField(help_text='No. of days for tracking', blank=True, null=True)
 
 

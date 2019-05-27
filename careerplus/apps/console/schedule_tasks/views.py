@@ -29,7 +29,7 @@ from .tasks import (
 from . import forms
 
 from shop.models import Product
-from partner.models import Vendor
+from partner.models import Vendor, PixelTracker
 
 
 @Decorate(stop_browser_cache())
@@ -297,9 +297,11 @@ class DownloadProductListView(TemplateView, PaginationMixin):
         return HttpResponseRedirect(reverse('console:tasks:tasklist'))
 
 
-class GeneratePixelTracker(FormView):
+class GeneratePixelTracker(FormView, PaginationMixin):
     template_name = 'console/tasks/generate-pixel-tracker.html'
     form_class = forms.PixelGenerationForm
+    page = 1
+    paginated_by = 10
 
     def generate_pixel_code(self, pixel_slug, landing_urls, conversion_url, days=90):
         pixel_file = open('pixel_tracker.js')
@@ -311,10 +313,18 @@ class GeneratePixelTracker(FormView):
         content = content.replace('readcookieurls', ",".join(["'" + url + "'" for url in conversion_url]))
         return content
 
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        return super(GeneratePixelTracker, self).get(request, args, **kwargs)
+
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
-            obj = form.save()
+            obj, created = PixelTracker.objects.get_or_create(pixel_slug=form.cleaned_data.get('pixel_slug'))
+            obj.landing_urls = form.cleaned_data.get('landing_urls')
+            obj.conversion_urls = form.cleaned_data.get('conversion_urls')
+            obj.days = form.cleaned_data.get('days')
+            obj.save()
             content = self.generate_pixel_code(
                 obj.pixel_slug,
                 obj.landing_urls.split(','),
@@ -325,4 +335,13 @@ class GeneratePixelTracker(FormView):
             context.update({'pixel_tracker': content})
             return self.render_to_response(context) 
         return self.form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(GeneratePixelTracker, self).get_context_data(**kwargs)
+        pixel_trackers = PixelTracker.objects.all()
+
+        paginator = Paginator(pixel_trackers, self.paginated_by)
+
+        context.update(self.pagination(paginator, self.page))
+        return context
 
