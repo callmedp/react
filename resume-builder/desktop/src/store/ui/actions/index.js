@@ -8,7 +8,8 @@ import {
     SHOW_SUGGESTION_MODAL,
     HIDE_SUGGESTION_MODAL,
     SHOW_ALERT_MODAL,
-    HIDE_ALERT_MODAL
+    HIDE_ALERT_MODAL,
+    SET_SUGGESTION_TYPE
 } from "./actionTypes";
 
 
@@ -88,5 +89,11 @@ export const hideAlertModal = () => {
     return {
         type: HIDE_ALERT_MODAL,
         data: {alertModal: false}
+    }
+}
+export const setSuggestionType = (type) => {
+    return {
+        type: SET_SUGGESTION_TYPE,
+        data: {suggestionType: type}
     }
 }

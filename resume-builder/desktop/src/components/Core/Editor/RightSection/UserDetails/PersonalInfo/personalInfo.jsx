@@ -114,7 +114,7 @@ export class PersonalInfo extends Component {
     render() {
         const {
             handleSubmit, personalInfo, ui: {loader}, isEditable,
-            editHeading, saveTitle, entityName, nextEntity, handlePreview,  handleInputValue
+            editHeading, saveTitle, entityName, nextEntity, handlePreview, handleInputValue
         } = this.props;
         let elem = null;
         return (
@@ -314,9 +314,17 @@ const mapDispatchToProps = (dispatch) => {
                     'gender': (gender && gender['value']) || '',
                     'image': imageURL || (flag ? image : ''),
                     'extracurricular': extracurricular instanceof Array ?
-                        (extracurricular || []).map(el => el.value).join(',') : extracurricular
+                        (extracurricular || []).filter(el => el !== undefined).map(el => el.value).join(',') : ''
                 }
             }
+            personalDetails = {
+                ...personalDetails,
+                ...{
+                    'extracurricular': personalDetails.extracurricular instanceof Array && personalDetails.extracurricular.length ?
+                        '' : personalDetails.extracurricular
+
+                }
+            };
             return new Promise((resolve, reject) => {
                 dispatch(actions.updatePersonalInfo({personalDetails, resolve, reject}));
             })

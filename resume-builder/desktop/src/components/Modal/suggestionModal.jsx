@@ -12,6 +12,24 @@ export default class SuggestionModal extends React.Component {
         super(props);
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
         this.closeModal = this.closeModal.bind(this);
+        this.handleClick = this.handleClick.bind(this);
+        this.state = {
+            selectedArray: []
+        }
+    }
+
+    handleClick(index) {
+        let {selectedArray} = this.state;
+        const ind = selectedArray.indexOf(index);
+        if (ind > -1) {
+            selectedArray = selectedArray.filter(el => el !== index)
+        } else {
+            selectedArray.push(index)
+        }
+        this.setState({
+            selectedArray: selectedArray
+        })
+
     }
 
     closeModal() {
@@ -19,7 +37,8 @@ export default class SuggestionModal extends React.Component {
     }
 
     render() {
-        const {ui: {suggestionModal}} = this.props;
+        const {ui: {suggestionModal, suggestions, suggestionType}} = this.props;
+        const {selectedArray} = this.state;
         return (
             <div className="pr">
                 <Modal
@@ -37,19 +56,20 @@ export default class SuggestionModal extends React.Component {
                 >
                     <div className="pr suggested-summary">
                         <i onClick={this.closeModal} className='icon-close icon-close--position'></i>
-                        <h2>Add from suggested summary</h2>
+                        <h2>Add from suggested {suggestionType}</h2>
                         <ul>
-                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(el => {
-                               return( <li>
-                                <span className="">
-                                    <input type="checkbox" name=""/> Add
+                            {(suggestions || []).map((el, index) => {
+                                return (<li>
+                                <span className={selectedArray.indexOf(index) > '-1' ? 'selected' : ''}>
+                                    <input onClick={() => this.handleClick(index)} type="checkbox" name=""/> Add
                                 </span>
-                               <p>Took concepts and produced design mockups and prototypes to strengthen designs, enhance user experiences and improve site interactions.</p>
+                                    <p>{el}</p>
                                 </li>)
                             })}
                         </ul>
                         <button className="orange-button"
-                                type={'submit'}>Save and Continue</button>
+                                type={'submit'}>Save and Continue
+                        </button>
                     </div>
                 </Modal>
             </div>

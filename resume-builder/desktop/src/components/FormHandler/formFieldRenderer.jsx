@@ -18,6 +18,7 @@ export const renderField = ({
                                 index,
                                 text,
                                 iconClass,
+                                autoFocus,
                                 meta: {touched, error, warning}
                             }) => {
     return (
@@ -25,7 +26,7 @@ export const renderField = ({
             {index ?
 
 
-                <div className="Error">
+                <div className={"Error " + (touched && error ? 'errormsg' : '')}>
                     <input {...input} className={className}
                            onClick={(e) => tillTodayDisable(index, !input.checked, e)}
                            autoComplete="off" placeholder={label} type={type}/>
@@ -33,7 +34,7 @@ export const renderField = ({
                         !!(text) && <span>{text}</span>
                     }
                     {touched &&
-                    ((error && <span className={'Error-message'}>{error}</span>) ||
+                    ((error && <span className={'errormsg-txt'}>{error}</span>) ||
                         (warning && <span className={'Warn-Message'}>{warning}</span>))}
                 </div>
                 :
@@ -41,10 +42,12 @@ export const renderField = ({
                     <div className="input-group--input-group-icon">
                         <span className={iconClass}></span>
                     </div>
-                    <div className="Error">
-                        <input {...input} className={className} autoComplete="off" placeholder={label} type={type}/>
+                    <div className={"Error " + (touched && error ? 'errormsg' : '')}>
+                        <input {...input}
+                               autoFocus={autoFocus}
+                               className={className} autoComplete="off" placeholder={label} type={type}/>
                         {touched &&
-                        ((error && <span className={'Error-message'}>{error}</span>) ||
+                        ((error && <span className={'errormsg-txt'}>{error}</span>) ||
                             (warning && <span className={'Warn-Message'}>{warning}</span>))}
                     </div>
                 </div>
@@ -71,9 +74,9 @@ export const datepicker =
             <div className="input-group--input-group-icon">
                 <span className={iconClass}></span>
             </div>
-            <div className="Error">
+            <div className={"Error " + (touched && error ? 'errormsg' : '')}>
                 <DatePicker {...input}
-                            value={disabled ? "This is disabled" : input.value}
+                            value={disabled ? moment().format('YYYY-MM-DD').toString() : input.value}
                             dateFormat="yyyy-MM-dd"
                             autoComplete="off"
                             selected={input.value ? new Date(input.value) : null}
@@ -85,10 +88,20 @@ export const datepicker =
                             scrollableYearDropdown
                             showMonthDropdown
                             disabled={disabled}
-
+                            popperModifiers={{
+                                offset: {
+                                    enabled: true,
+                                    offset: '5px, 10px'
+                                },
+                                preventOverflow: {
+                                    enabled: true,
+                                    escapeWithReference: false, // force popper to stay in viewport (even when input is scrolled out of view)
+                                    boundariesElement: 'viewport'
+                                }
+                            }}
                 />
                 {touched &&
-                ((error && <span className={'Error-message'}>{error}</span>) ||
+                ((error && <span className={'errormsg-txt'}>{error}</span>) ||
                     (warning && <span className={'Warn-Message'}>{warning}</span>))}
             </div>
         </div>
@@ -110,7 +123,7 @@ export const renderSelect = ({
         <div className="input-group--input-group-icon">
             <span className={iconClass}></span>
         </div>
-        <div className="Error">
+        <div className={"Error "+ (touched && error ? 'errormsg' : '')}>
             <Select {...input}
                     placeholder={label}
                     styles={{menuPortal: base => ({...base, zIndex: 9999})}}
@@ -127,7 +140,7 @@ export const renderSelect = ({
                     }}
             />
             {touched &&
-            ((error && <span className={'Error-message'}>{error}</span>) ||
+            ((error && <span className={'errormsg-txt'}>{error}</span>) ||
                 (warning && <span className={'Warn-Message'}>{warning}</span>))}
         </div>
     </div>
@@ -140,35 +153,39 @@ export const renderDynamicSelect = ({
                                         label,
                                         defaultOptions,
                                         iconClass,
+                                        isMulti,
                                         closeMenuOnSelect,
                                         meta: {touched, error, warning}
-                                    }) => (
-    <div className={"input-group " + (touched && error ? 'errormsg' : '')}>
-        <div className="input-group--input-group-icon">
-            <span className={iconClass}></span>
+                                    }) => {
+    console.log('0---', input);
+    return (
+        <div className={"input-group " + (touched && error ? 'errormsg' : '')}>
+            <div className="input-group--input-group-icon">
+                <span className={iconClass}></span>
+            </div>
+            <div className={"Error "+ (touched && error ? 'errormsg' : '')}>
+                <AsyncSelect {...input}
+                             loadOptions={loadOptions}
+                             styles={{menuPortal: base => ({...base, zIndex: 9999})}}
+                             menuPortalTarget={document.getElementById('right-panel-section')}
+                             menuPosition={'absolute'}
+                             menuPlacement={'auto'}
+                             defaultOptions={defaultOptions}
+                             placeholder={label}
+                             isMulti={isMulti}
+                             autoComplete="off"
+                             closeMenuOnSelect={closeMenuOnSelect}
+                             onBlur={() => {
+                                 input.onBlur(input.value)
+                             }}
+                />
+                {touched &&
+                ((error && <span className={'errormsg-txt'}>{error}</span>) ||
+                    (warning && <span className={'Warn-Message'}>{warning}</span>))}
+            </div>
         </div>
-        <div className="Error">
-            <AsyncSelect {...input}
-                         loadOptions={loadOptions}
-                         styles={{menuPortal: base => ({...base, zIndex: 9999})}}
-                         menuPortalTarget={document.getElementById('right-panel-section')}
-                         menuPosition={'absolute'}
-                         menuPlacement={'auto'}
-                         defaultOptions={defaultOptions}
-                         placeholder={label}
-                         isMulti={true}
-                         autoComplete="off"
-                         closeMenuOnSelect={closeMenuOnSelect}
-                         onBlur={() => {
-                             input.onBlur(input.value)
-                         }}
-            />
-            {touched &&
-            ((error && <span className={'Error-message'}>{error}</span>) ||
-                (warning && <span className={'Warn-Message'}>{warning}</span>))}
-        </div>
-    </div>
-)
+    )
+}
 
 
 export const renderAsyncCreatableSelect = ({
@@ -187,7 +204,7 @@ export const renderAsyncCreatableSelect = ({
             <div className="input-group--input-group-icon">
                 <span className={iconClass}></span>
             </div>
-            <div className="Error">
+            <div className={"Error "+ (touched && error ? 'errormsg' : '')}>
                 <AsyncCreatableSelect {...input}
                                       cacheOptions
                                       loadOptions={loadOptions}
@@ -205,7 +222,7 @@ export const renderAsyncCreatableSelect = ({
                                       }}
                 />
                 {touched &&
-                ((error && <span className={'Error-message'}>{error}</span>) ||
+                ((error && <span className={'errormsg-txt'}>{error}</span>) ||
                     (warning && <span className={'Warn-Message'}>{warning}</span>))}
             </div>
         </div>
@@ -224,13 +241,13 @@ export const renderTextArea = ({
                                }) => (
     <React.Fragment>
         {noIcon ?
-            <div className="Error">
+            <div className={"Error "+ (touched && error ? 'errormsg' : '')}>
         <textarea {...input}
                   autoComplete="off"
                   placeholder={label}
                   rows={rows} type={type}/>
                 {touched &&
-                ((error && <span className={'Error-message'}>{error}</span>) ||
+                ((error && <span className={'errormsg-txt'}>{error}</span>) ||
                     (warning && <span className={'Warn-Message'}>{warning}</span>))}
             </div>
             :
@@ -238,13 +255,13 @@ export const renderTextArea = ({
                 <div className="input-group--input-group-icon">
                     <span className={iconClass}></span>
                 </div>
-                <div className="Error">
+                <div className={"Error "+ (touched && error ? 'errormsg' : '')}>
         <textarea {...input}
                   autoComplete="off"
                   placeholder={label}
                   rows={rows} type={type}/>
                     {touched &&
-                    ((error && <span className={'Error-message'}>{error}</span>) ||
+                    ((error && <span className={'errormsg-txt'}>{error}</span>) ||
                         (warning && <span className={'Warn-Message'}>{warning}</span>))}
                 </div>
             </div>

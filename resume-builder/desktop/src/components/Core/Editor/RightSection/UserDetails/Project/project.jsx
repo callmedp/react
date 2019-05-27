@@ -78,7 +78,6 @@ class Project extends Component {
             "project_name": '',
             "start_date": '',
             "end_date": '',
-            "skills": '',
             "currently_working": false,
             "description": '',
             order: listLength,

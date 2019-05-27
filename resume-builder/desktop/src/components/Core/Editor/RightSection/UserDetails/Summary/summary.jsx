@@ -121,9 +121,20 @@ const mapDispatchToProps = (dispatch) => {
                 ...personalDetails,
                 ...{
                     'gender': gender && gender['value'] || '',
-                    'extracurricular': (extracurricular || []).map(el => el.value).join(',')
+                    'extracurricular': extracurricular instanceof Array ?
+                        (extracurricular || []).filter(el => el !== undefined).map(el => el.value).join(',') : ''
                 }
-            }
+            };
+
+            personalDetails = {
+                ...personalDetails,
+                ...{
+                    'extracurricular': personalDetails.extracurricular instanceof Array && personalDetails.extracurricular.length ?
+                        '' : personalDetails.extracurricular
+
+                }
+            };
+
             return new Promise((resolve, reject) => {
                 dispatch(actions.updatePersonalInfo({personalDetails, resolve, reject}));
             })

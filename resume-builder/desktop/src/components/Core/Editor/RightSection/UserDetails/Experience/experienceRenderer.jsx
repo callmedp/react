@@ -78,6 +78,7 @@ export const ExperienceRenderer = ({
                         preExpanded={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}>
                         {
                             fields.map((member, index) => {
+                                console.log('---', fields.get(index))
                                 return (
                                     <li key={index} name={`experience${index}`} id={`experience${index}`}>
                                         <section className="info-section">
@@ -190,7 +191,7 @@ export const ExperienceRenderer = ({
                                                     <div className="flex-container">
                                                         <fieldset>
                                                             <span className="add-suggested"
-                                                                  onClick={showSuggestionModal}>Add suggested experience</span>
+                                                                  onClick={()=> showSuggestionModal(fields.get(index))}>Add suggested experience</span>
 
                                                         </fieldset>
                                                     </div>

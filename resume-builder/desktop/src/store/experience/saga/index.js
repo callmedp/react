@@ -6,7 +6,7 @@ import * as Actions from '../actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
 
-import {UPDATE_UI} from '../../ui/actions/actionTypes'
+import {UPDATE_UI, SAVE_SUGGESTIONS} from '../../ui/actions/actionTypes'
 import {initialState} from '../reducer/index'
 
 
@@ -30,7 +30,7 @@ function* fetchUserExperience(action) {
         if (result['error']) {
             console.log('error');
         }
-        yield put({type: UPDATE_UI, data: {loader: false}})
+        yield put({type: UPDATE_UI, data: {loader: false}});
 
         let {data: {results}} = result;
 
@@ -53,8 +53,6 @@ function* fetchUserExperience(action) {
                 })
             }
         }
-        console.log('daat  ', data);
-
         yield put({type: Actions.SAVE_USER_EXPERIENCE, data: data})
     } catch (e) {
         console.log(e);
@@ -113,7 +111,11 @@ function* handleExperienceSwap(action) {
 
         data.sort((a, b) => a.order <= b.order);
 
+
         data = {list: data};
+
+        console.log('--data in the ---', data);
+
         yield put({type: Actions.SAVE_USER_EXPERIENCE, data: data})
 
         return resolve('User Experience  Info saved successfully.');
@@ -152,7 +154,6 @@ function* fetchJobTitlesAndSuggestions(action) {
     try {
 
         const {payload: {inputValue, suggestionType, res, rej}} = action;
-        console.log('---', action);
         const apiResult = yield call(Api.fetchJobTitlesAndSuggestions, inputValue, suggestionType);
 
 
@@ -160,14 +161,17 @@ function* fetchJobTitlesAndSuggestions(action) {
             return rej(new SubmissionError({_error: apiResult['errorMessage']}));
         }
 
-        console.log('-res', apiResult);
         let {data: {result}} = apiResult;
-        result = (result || []).map((el) => ({
-            label: el, value: el.toString()
-        }))
-        return res(result);
 
+        if (!suggestionType) {
+            result = (result || []).map((el) => ({
+                label: el, value: el.toString()
+            }))
+            return res(result);
+        }
 
+        yield  put({type: SAVE_SUGGESTIONS, data: {suggestions: result}});
+        res([])
     } catch (e) {
         console.log('error', e);
     }

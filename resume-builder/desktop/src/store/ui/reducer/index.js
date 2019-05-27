@@ -9,7 +9,10 @@ import {
     SHOW_SUGGESTION_MODAL,
     HIDE_SUGGESTION_MODAL,
     SHOW_ALERT_MODAL,
-    HIDE_ALERT_MODAL
+    HIDE_ALERT_MODAL,
+    SAVE_SUGGESTIONS,
+    SET_SUGGESTION_TYPE
+
 } from "../actions/actionTypes";
 
 const initialState = {
@@ -20,7 +23,9 @@ const initialState = {
     'showMoreSection': false,
     'suggestionModal': false,
     'alertModal': false,
-    'alertType': 'error'
+    'alertType': 'error',
+    'suggestions': [],
+    'suggestionType': 'experience'
 };
 
 export const uiReducer = (state = initialState, action) => {
@@ -97,6 +102,19 @@ export const uiReducer = (state = initialState, action) => {
                 ...action.data
             }
         }
+        case SAVE_SUGGESTIONS: {
+            return {
+                ...state,
+                ...action.data
+            }
+        }
+        case SET_SUGGESTION_TYPE: {
+            return {
+                ...state,
+                ...action.data
+            }
+        }
+
         default: {
             return state;
         }

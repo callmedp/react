@@ -8,7 +8,7 @@ import {ExperienceRenderer} from "./experienceRenderer";
 import validate from '../../../../../FormHandler/validations/experience/validate'
 import {scroller} from "react-scroll/modules";
 import SuggestionModal from '../../../../../Modal/suggestionModal'
-import {hideSuggestionModal, showSuggestionModal} from "../../../../../../store/ui/actions";
+import {hideSuggestionModal, showSuggestionModal, setSuggestionType} from "../../../../../../store/ui/actions";
 
 
 class Experience extends Component {
@@ -19,6 +19,7 @@ class Experience extends Component {
         this.handleAddition = this.handleAddition.bind(this);
         this.deleteExperience = this.deleteExperience.bind(this);
         this.tillTodayDisable = this.tillTodayDisable.bind(this);
+        this.handleSuggestion = this.handleSuggestion.bind(this);
         this.state = {
             active: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             submit: false,
@@ -77,13 +78,24 @@ class Experience extends Component {
 
     }
 
+
+    handleSuggestion(currentField) {
+        console.log('---', currentField);
+        this.props.fetchJobTitles(currentField.job_profile && currentField.job_profile.value || '', 'experience');
+        this.props.setSuggestionType('experience')
+        this.props.showSuggestionModal();
+    }
+
     handleAddition(fields, error) {
         const listLength = fields.length;
 
         fields.push({
             "candidate_id": '',
             "id": '',
-            "job_profile": '',
+            "job_profile": {
+                "label": '',
+                "value": ''
+            },
             "company_name": '',
             "start_date": '',
             "end_date": '',
@@ -142,11 +154,11 @@ class Experience extends Component {
                                 isEditable={isEditable}
                                 entityName={entityName}
                                 expanded={this.state.active}
-                                fetchJobTitles={(inputValue) => fetchJobTitles(inputValue)}
+                                fetchJobTitles={(inputValue) => fetchJobTitles(inputValue, '')}
                                 till_today={till_today}
                                 tillTodayDisable={this.tillTodayDisable}
                                 handleInputValue={handleInputValue}
-                                showSuggestionModal={showSuggestionModal}
+                                showSuggestionModal={(currentField) => this.handleSuggestion(currentField)}
 
 
                     />
@@ -229,6 +241,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         "showSuggestionModal": () => {
             return dispatch(showSuggestionModal())
+        },
+        "setSuggestionType": (type) => {
+            return dispatch(setSuggestionType(type))
         }
     }
 };
