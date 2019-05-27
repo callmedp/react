@@ -1,5 +1,5 @@
 {% load static compress resume_tags %}
-<div style="width: 48%; display: inline-block; vertical-align: top; padding-left: 3%;">
+<div style="width: 48%; display: table-cell; vertical-align: middle; padding-left: 3%;">
     <ul style="margin: 20px 0 0 0; padding: 0; font-size:  {{ current_config.text_font_size|text_font_size }}px; color: #ffffff; list-style-type: none;">
         <li style="display: table; margin-bottom: 15px;"><span style="display: table-cell; padding-right: 10px;"><img
                 src="{% static 'resumebuilder/images/resume1/mobile-icon.png' %}" alt="Mobile"
@@ -13,13 +13,13 @@
                 src="{% static 'resumebuilder/images/resume1/location-icon.png' %}" alt="Location"
                 style="vertical-align: middle;"></span>{{ candidate.location }}
         </li>
-       {% comment %} <li style="display: table; margin-bottom: 15px;"><span style="display: table-cell; padding-right: 10px;"><img
+        <li style="display: table; margin-bottom: 15px;"><span style="display: table-cell; padding-right: 10px;"><img
                 src="{% static 'resumebuilder/images/resume1/linkedin-icon.png' %}" alt="Linkedin"
-                style="vertical-align: text-top;"></span>linkedin.com/candidatename
+                style="vertical-align: text-top;"></span>linkedin.com/animeshsharma
         </li>
         <li style="display: table; margin-bottom: 15px;"><span style="display: table-cell; padding-right: 10px;"><img
                 src="{% static 'resumebuilder/images/resume1/facebook-icon.png' %}" alt="Facebook"
-                style="vertical-align: middle;"></span>Facebook.com/candidatename
-        </li>{% endcomment %}
+                style="vertical-align: middle;"></span>Facebook.com/animeshsharma
+        </li>
     </ul>
 </div>
