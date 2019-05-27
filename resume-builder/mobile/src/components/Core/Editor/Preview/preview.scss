@@ -21,7 +21,7 @@
 
     &__bottom-btns {
         @include size(100%, auto, flex);
-        position: absolute;
+        position: fixed;
         bottom: 0;
         background-color: $white;
         box-shadow: 0 0 10px rgba($black, .2);
