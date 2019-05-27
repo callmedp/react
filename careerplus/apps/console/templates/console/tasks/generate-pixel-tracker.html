@@ -1,0 +1,82 @@
+{% extends "console/base_console.html" %}
+{% load static compress %}
+{% load console_tags %}
+{% load humanize %}
+{% load thumbnail %}
+
+{% block title %}
+  <title>Product Listing</title>
+{% endblock title %}
+
+{% block pagecontent %}
+<!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>Pixel Tracker Generator</h3>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        {% if messages %}
+            {% for message in messages %}
+
+              <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+              {{ message }}
+              </div>
+            {% endfor %}
+        {% endif %}
+
+      </div>
+    </div>
+    <div class="clearfix"></div>
+    
+    <div class="row">
+
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+
+
+          <div class="x_content">
+          <form action="." method="post" novalidate>
+            {% csrf_token %}
+            {{form}}
+            <br>
+            <button type="submit" class="btn btn-primary">Submit </button>
+          </form>
+          {% if pixel_tracker %}
+          <div class="row">
+            <textarea style="resize: none; width: 700px;" rows="20" cols="500" disabled readonly>{{pixel_tracker}}</textarea>
+                      </div>
+          {% endif %}
+                
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /page content -->
+
+
+{% endblock pagecontent %}
+
+        
+{% block js_block %}
+  {{ block.super }}
+  <script type="text/javascript" src="{% static 'packages/jquery.tagsinput/src/jquery.tagsinput.js' %}"></script>
+  <script>
+    $('#id_conversion_urls').tagsInput({
+      width: 'auto'
+    });
+    $('#id_landing_urls').tagsInput({
+      width: 'auto'
+    });
+  </script>
+
+
+{% endblock js_block %}
