@@ -9,6 +9,7 @@ import {withRouter} from "react-router-dom";
 import * as profileActions from '../../../store/personalInfo/actions/index';
 import * as loaderActions from '../../../store/loader/actions/index';
 import Loader from '../../Common/Loader/loader'
+import moment from 'moment'
 
 class EditPreview extends Component {
 
@@ -58,6 +59,10 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(profileActions.fetchPersonalInfo())
         },
         "headingChange": (personalInfo,id,heading) => {
+
+            let { date_of_birth, extracurricular} = personalInfo;
+            let interest = extracurricular
+            interest =  ((interest|| []).filter((item)=>item.value).map((item)=>item.value)).join(",")
             let personalDetails = {
                 ...personalInfo,
                 ...{
@@ -66,9 +71,9 @@ const mapDispatchToProps = (dispatch) => {
                             item.entity_text = heading
                         }
                         return item
-                    })
-                ,
-                    'extracurricular': ''
+                    }),
+                    'date_of_birth': (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
+                    'extracurricular': interest,
                 }
             }
             return new Promise((resolve, reject) => {

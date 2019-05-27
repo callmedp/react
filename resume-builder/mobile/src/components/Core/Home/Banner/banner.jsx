@@ -46,7 +46,7 @@ export default class Banner extends Component {
                 </p>
                 <ul className="resume-pointer">
                     <li>
-                        <span className="sprite icon--higher"></span>
+                        {/* <span className="sprite icon--higher"></span> */}
                         <span><strong>33% higher</strong> chances of shortlisting</span>
                     </li>
                     <li>

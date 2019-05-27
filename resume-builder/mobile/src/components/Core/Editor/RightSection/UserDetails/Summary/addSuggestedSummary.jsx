@@ -3,12 +3,12 @@ import Modal from 'react-modal';
 
 Modal.setAppElement(document.getElementById('react-app'));
 
-export default class ChangeTemplateModal extends Component{
+export default class AddSuggestedSummary extends Component{
 
     render(){
         return(
             <Modal 
-                isOpen={true} 
+                isOpen={false} 
                 contentLabel="AddSuggested Summary"
                 className="Modal"
                 overlayClassName="Overlay">

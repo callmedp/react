@@ -98,6 +98,7 @@ class LeftSideBar extends Component {
                 this.props.updateCurrentLinkPos({currentLinkPos: i})
             }
         }
+        console.log(this.props)
     }
 
     showErrorMessage(link) {
@@ -154,7 +155,7 @@ class LeftSideBar extends Component {
 
     render() {
         const {type, addmore, current_page} = this.state;
-        const {sidenav:{sidenavStatus},formData,loader:{formName}} = this.props
+        const {sidenav:{sidenavStatus},formData,loader:{formName},personalInfo:{first_name}} = this.props
         let error = false;
         const obj = formData && formData[formName] || {};
         let syncErrors = obj['syncErrors'] || {};
@@ -179,7 +180,7 @@ class LeftSideBar extends Component {
                                         <img src={`${this.staticUrl}react/assets/images/mobile/default-user.jpg`}
                                              alt=""/>
                                     </span>
-                                        <span className="user__name">Hello Amit</span>
+                                        <span className="user__name">Hello {first_name? first_name : 'User'}</span>
                                     </li>
                                     {addmore.filter(item =>item.active ===true).map((item, key) =>
                                         {
@@ -279,7 +280,7 @@ const mapDispatchToProps = (dispatch) => {
         "updateSideNav": (addmore,personalInfo) => {
             let { date_of_birth, extracurricular} = personalInfo;
             let interest = extracurricular
-            interest =  ((interest|| []).map((item)=>item.value)).join(",")
+            interest =  ((interest|| []).filter((item)=>item.value).map((item)=>item.value)).join(",")
             let personalDetails = {
                 ...personalInfo,
                 ...{

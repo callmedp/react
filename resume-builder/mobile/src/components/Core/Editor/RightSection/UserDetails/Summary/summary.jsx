@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import Modal from 'react-modal';
 import * as actions from '../../../../../../store/personalInfo/actions/index';
 import {Field, reduxForm} from 'redux-form';
 import './summary.scss';
-import addSuggestedSummary from "./addSuggestedSummary.jsx";
 
 
 
@@ -119,7 +117,6 @@ class Summary extends Component {
         return (
         <div className="buildResume">
             <PreviewModal {...this.props}/>
-            <addSuggestedSummary {...this.props}/>
             
             <div className="buildResume__wrap pb-0">
                 <div className="buildResume__heading">
@@ -129,7 +126,7 @@ class Summary extends Component {
                             <i className="sprite icon--edit" onClick={()=>{this.setState({editHeading:true})}}></i>
                         </React.Fragment>:
                         <React.Fragment>
-                            <input type="text" autoFocus placeholder={heading} onBlur={(e)=>this.updateInputValue('blur',e)}
+                            <input type="text" autoFocus defaultValue={heading} onBlur={(e)=>this.updateInputValue('blur',e)}
                                 onKeyDown={(e)=>this.updateInputValue('keyPress',e)}/>
                             <i className="sprite icon--editTick"></i>
                         </React.Fragment>
@@ -142,9 +139,9 @@ class Summary extends Component {
                         <li className="form__group">
                             <Field component={renderTextArea} label={"Summary"}  type={"text"} name="extra_info" 
                                 id="extra_info" prepend={false} className="form__input h-150"/>
-                            <p className="add-suggested" onClick={this.handleOpenModal}>
+                            {/* <p className="add-suggested" onClick={this.handleOpenModal}>
                                 <span>+</span>Add suggested summary
-                            </p>
+                            </p> */}
                         </li>
                     </ul>
                     <div className="btn-wrap">

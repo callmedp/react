@@ -32,7 +32,7 @@ const renderEducation = ({
                             <i className="sprite icon--edit" onClick={editHeadingClick.bind(true)}></i>
                         </React.Fragment>:
                         <React.Fragment>
-                            <input type="text" autoFocus placeholder={heading} onBlur={(e)=>updateInputValue('blur',e)}
+                            <input type="text" autoFocus defaultValue={heading} onBlur={(e)=>updateInputValue('blur',e)}
                                 onKeyDown={(e)=>updateInputValue('keyPress',e)}/>
                             <i className="sprite icon--editTick"></i>
                         </React.Fragment>

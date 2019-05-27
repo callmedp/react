@@ -81,7 +81,7 @@ class PersonalInfo extends Component {
                 }
             }
             if(!error){
-                await this.props.onSubmit(form_data['values'],this.state.imageURL);
+                await this.props.onSubmit(form_data['values']);
                 this.setState({submit:true})
             }
         }
@@ -173,7 +173,7 @@ class PersonalInfo extends Component {
                             <i className="sprite icon--edit" onClick={()=>{this.setState({editHeading:true})}}></i>
                         </React.Fragment>:
                         <React.Fragment>
-                            <input type="text" autoFocus placeholder={heading} onBlur={(e)=>this.updateInputValue('blur',e)}
+                            <input type="text" autoFocus defaultValue={heading} onBlur={(e)=>this.updateInputValue('blur',e)}
                                 onKeyDown={(e)=>this.updateInputValue('keyPress',e)}/>
                             <i className="sprite icon--editTick"></i>
                         </React.Fragment>
@@ -297,7 +297,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         "onSubmit": (personalDetails, imageURL) => {
-
             let { date_of_birth, extracurricular} = personalDetails;
             let interest = extracurricular
             interest =  ((interest|| []).map((item)=>item.value)).join(",")
@@ -305,7 +304,7 @@ const mapDispatchToProps = (dispatch) => {
                 ...personalDetails,
                 ...{
                     'date_of_birth': (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
-                    'image': imageURL,
+                    'image': imageURL || personalDetails['image'],
                     'extracurricular':interest
                 }
             }
