@@ -13,6 +13,7 @@ export default class SuggestionModal extends React.Component {
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
         this.closeModal = this.closeModal.bind(this);
         this.handleClick = this.handleClick.bind(this);
+        this.handleSuggestion = this.handleSuggestion.bind(this);
         this.state = {
             selectedArray: []
         }
@@ -32,13 +33,24 @@ export default class SuggestionModal extends React.Component {
 
     }
 
+    handleSuggestion() {
+        const {selectedArray} = this.state;
+        this.props.handleSuggestionSubmit(selectedArray);
+        this.setState({
+            selectedArray: []
+        })
+
+    }
+
     closeModal() {
         this.props.hideSuggestionModal()
     }
 
     render() {
-        const {ui: {suggestionModal, suggestions, suggestionType}} = this.props;
+        const {ui: {suggestionModal, suggestions, suggestionType}, handleSuggestionSubmit} = this.props;
         const {selectedArray} = this.state;
+        console.log('---', selectedArray);
+
         return (
             <div className="pr">
                 <Modal
@@ -68,7 +80,7 @@ export default class SuggestionModal extends React.Component {
                             })}
                         </ul>
                         <button className="orange-button"
-                                type={'submit'}>Save and Continue
+                                type={'submit'} onClick={this.handleSuggestion}>Save and Continue
                         </button>
                     </div>
                 </Modal>

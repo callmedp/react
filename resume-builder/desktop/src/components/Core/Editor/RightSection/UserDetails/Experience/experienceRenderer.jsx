@@ -116,7 +116,7 @@ export const ExperienceRenderer = ({
                                                                 // autoFocus={true}
                                                                 iconClass={'icon-designation'}
                                                                 component={renderAsyncCreatableSelect}
-                                                                closeMenuOnSelect={false}
+                                                                closeMenuOnSelect={true}
                                                                 isMulti={false}
                                                                 loadOptions={(inputValue) => fetchJobTitles(inputValue, '')}
                                                                 defaultOptions={jobTitles}
@@ -188,13 +188,17 @@ export const ExperienceRenderer = ({
                                                                    name={`${member}.work_description`}/>
                                                         </fieldset>
                                                     </div>
-                                                    <div className="flex-container">
+                                                    {
+                                                            fields.get(index).job_profile.value &&
+
+                                                    < div className="flex-container">
                                                         <fieldset>
-                                                            <span className="add-suggested"
-                                                                  onClick={()=> showSuggestionModal(fields.get(index))}>Add suggested experience</span>
+                                                        <span className="add-suggested"
+                                                              onClick={() => showSuggestionModal(fields.get(index), fields, index)}>Add suggested experience</span>
 
                                                         </fieldset>
                                                     </div>
+                                                    }
 
 
                                                 </AccordionItemPanel>

@@ -20,10 +20,14 @@ class Experience extends Component {
         this.deleteExperience = this.deleteExperience.bind(this);
         this.tillTodayDisable = this.tillTodayDisable.bind(this);
         this.handleSuggestion = this.handleSuggestion.bind(this);
+        this.handleSuggestionSubmit = this.handleSuggestionSubmit.bind(this);
+
         this.state = {
             active: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             submit: false,
             till_today: [],
+            fieldArray: [],
+            currentIndex: null
 
         };
         this.props.currentForm('experience');
@@ -79,11 +83,31 @@ class Experience extends Component {
     }
 
 
-    handleSuggestion(currentField) {
-        console.log('---', currentField);
+    handleSuggestion(currentField, fields, index) {
+        // console.log('---', currentField, fields);
+        this.setState({
+            fieldArray: fields,
+            currentIndex: index
+
+        })
         this.props.fetchJobTitles(currentField.job_profile && currentField.job_profile.value || '', 'experience');
         this.props.setSuggestionType('experience')
         this.props.showSuggestionModal();
+    }
+
+    handleSuggestionSubmit(suggestionsArray) {
+        const {ui: {suggestions}} = this.props;
+        let suggestionsList = "";
+        (suggestions || []).filter((el, index) => suggestionsArray.indexOf(index) > -1).map((el, index) =>
+            suggestionsList += (index !== 0 ? "\n" : '') + el
+        )
+        let {fieldArray, currentIndex} = this.state;
+        let currentField = fieldArray && fieldArray.get(currentIndex)
+        console.log("dfdfdfdfdfd", currentField);
+        currentField['work_description'] = suggestionsList;
+        fieldArray.remove(currentIndex);
+        fieldArray.insert(currentIndex, currentField)
+        this.props.hideSuggestionModal()
     }
 
     handleAddition(fields, error) {
@@ -138,7 +162,7 @@ class Experience extends Component {
 
         return (
             <React.Fragment>
-                <SuggestionModal {...this.props} />
+                <SuggestionModal {...this.props} handleSuggestionSubmit={this.handleSuggestionSubmit}/>
                 <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity, currentFields))}>
                     <FieldArray name={"list"}
                                 loader={loader}
@@ -158,7 +182,7 @@ class Experience extends Component {
                                 till_today={till_today}
                                 tillTodayDisable={this.tillTodayDisable}
                                 handleInputValue={handleInputValue}
-                                showSuggestionModal={(currentField) => this.handleSuggestion(currentField)}
+                                showSuggestionModal={(currentField, fields, index) => this.handleSuggestion(currentField, fields, index)}
 
 
                     />
