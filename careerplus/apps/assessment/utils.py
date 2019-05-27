@@ -3,6 +3,9 @@ import json
 import logging
 
 from django.conf import settings
+from .config import *
+
+from .models import Question
 
 class VskillTest(object):
 
@@ -60,9 +63,45 @@ class VskillTest(object):
                                                  .format(test_id, str(e)))
 
         if response.status_code == 200:
-            response = response.text
+            response = json.loads(response.text)
         else:
             logging.getLogger('info_log').info('Unable to get status 200 in single test id {}'. \
                                                format(test_id))
             response = None
         return response
+
+
+class VskillParser:
+
+    def prepare_questions(self,data_list,test):
+
+        if not data_list or not isinstance(data_list, list):
+            return
+
+        create_dict = {'test_id': test}
+
+        for data in data_list:
+            for key, values in PARSER_FIELDS.get('Vskills').items():
+                if key == "question_options":
+                    val = self.prepare_json_options(data.get(values))
+                    create_dict.update({key: val})
+                create_dict.update({key: data.get(values)})
+            Question.objects.get_or_create(**create_dict)
+
+    def prepare_json_options(self, data):
+        if not data or not isinstance(data, list):
+            return
+        option_dict = {}
+        option_list = []
+        for option in data:
+            if option.get('option_image'):
+                option_dict.update({"question_options": option.get('option') + str(option.get('option_image'))})
+            else:
+                option_dict.update({"question_options": option.get("option")})
+
+            option_dict.update({"option_id": option.get("option_id"),
+                                "is_correct": [option.get("is_correct")]})
+            option_list.append(option_dict)
+
+        return json.dumps(option_list)
+
