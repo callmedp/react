@@ -41,7 +41,7 @@ const bulkUpdateUserExperience = (data, candidateId) => {
 
 };
 
-const fetchJobTitlesAndSuggestions = (title, subType = 'experience') => {
+const fetchJobTitlesAndSuggestions = (title, subType = '') => {
 
     let url = `suggestion/?main_type=job_title&query=${title}`;
     if (subType) {

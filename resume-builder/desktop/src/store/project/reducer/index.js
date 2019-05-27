@@ -7,7 +7,6 @@ export const initialState = {
         "project_name": '',
         "start_date": '',
         "end_date": '',
-        "skills": [],
         "description": ''
     }]
 };

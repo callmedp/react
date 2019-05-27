@@ -2,10 +2,12 @@ import React from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import AsyncSelect from 'react-select/lib/Async';
+import AsyncCreatableSelect from 'react-select/lib/AsyncCreatable';
 import Select from 'react-select';
 import makeAnimated from 'react-select/lib/animated';
 import moment from 'moment';
 import {Field} from "redux-form";
+
 
 export const renderField = ({
                                 input,
@@ -167,6 +169,48 @@ export const renderDynamicSelect = ({
         </div>
     </div>
 )
+
+
+export const renderAsyncCreatableSelect = ({
+                                               input,
+                                               loadOptions,
+                                               label,
+                                               defaultOptions,
+                                               iconClass,
+                                               isMulti,
+                                               closeMenuOnSelect,
+                                               meta: {touched, error, warning}
+                                           }) => {
+    console.log('0---', input);
+    return (
+        <div className={"input-group " + (touched && error ? 'errormsg' : '')}>
+            <div className="input-group--input-group-icon">
+                <span className={iconClass}></span>
+            </div>
+            <div className="Error">
+                <AsyncCreatableSelect {...input}
+                                      cacheOptions
+                                      loadOptions={loadOptions}
+                                      styles={{menuPortal: base => ({...base, zIndex: 9999})}}
+                                      menuPortalTarget={document.getElementById('right-panel-section')}
+                                      menuPosition={'absolute'}
+                                      menuPlacement={'auto'}
+                                      defaultOptions={defaultOptions}
+                                      placeholder={label}
+                                      isMulti={isMulti}
+                                      autoComplete="off"
+                                      closeMenuOnSelect={closeMenuOnSelect}
+                                      onBlur={() => {
+                                          input.onBlur(input.value)
+                                      }}
+                />
+                {touched &&
+                ((error && <span className={'Error-message'}>{error}</span>) ||
+                    (warning && <span className={'Warn-Message'}>{warning}</span>))}
+            </div>
+        </div>
+    )
+}
 
 export const renderTextArea = ({
                                    input,

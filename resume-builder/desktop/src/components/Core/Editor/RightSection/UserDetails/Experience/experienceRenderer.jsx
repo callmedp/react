@@ -10,10 +10,12 @@ import {
     datepicker,
     renderField,
     renderTextArea,
-    renderDynamicSelect
+    renderDynamicSelect,
+    renderAsyncCreatableSelect
 } from "../../../../../FormHandler/formFieldRenderer";
 import React from "react";
 import styles from './experience.scss'
+import {jobTitles} from '../../../../../../Utils/jobTitles'
 
 
 export const ExperienceRenderer = ({
@@ -112,11 +114,11 @@ export const ExperienceRenderer = ({
                                                             <Field
                                                                 // autoFocus={true}
                                                                 iconClass={'icon-designation'}
-                                                                component={renderDynamicSelect}
+                                                                component={renderAsyncCreatableSelect}
                                                                 closeMenuOnSelect={false}
                                                                 isMulti={false}
                                                                 loadOptions={(inputValue) => fetchJobTitles(inputValue, '')}
-                                                                defaultOptions={[{value: 'aman', label: "aman"}]}
+                                                                defaultOptions={jobTitles}
                                                                 name={`${member}.job_profile`}/>
 
                                                         </fieldset>
