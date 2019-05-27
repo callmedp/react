@@ -207,7 +207,7 @@ export class PersonalInfo extends Component {
                             </div>
 
                             <div className="flex-container">
-                                <fieldset id="interest-select" className="custom">
+                                <fieldset id="interest-select" className="">
                                     <label>Interest</label>
                                     <Field name="extracurricular" component={renderDynamicSelect}
                                         // loadOptions={this.fetchInterestList.bind(this)}

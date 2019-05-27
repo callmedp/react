@@ -54,27 +54,11 @@ input[type='text'] {
 .Error {
   position: relative;
   flex: 1;
-
-  .Error-message {
-    color: $white;
-    background: $red;
-    font-size: 1.1rem;
-    display: inline-block;
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: 2px;
-  }
-
-  input {
-    /*box-shadow: inset 0 1px 8px 0 rgba(252,5,5,0.1)*/
-  }
-  
 }
 
 .errormsg {
-  border: 1px solid $red;
   position: relative;
+  flex: 1;
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
 
@@ -89,8 +73,8 @@ input[type='text'] {
     padding: 2px;
   }
 
-  input {
-    /*box-shadow: inset 0 1px 8px 0 rgba(252,5,5,0.1)*/
+  input, select, textarea {
+    box-shadow: inset 0 1px 8px 0 rgba(252,5,5,0.1)
   }
 
 }

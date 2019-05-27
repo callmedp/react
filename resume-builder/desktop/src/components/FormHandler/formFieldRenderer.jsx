@@ -16,7 +16,6 @@ export const renderField = ({
                                 index,
                                 text,
                                 iconClass,
-                                autoFocus,
                                 meta: {touched, error, warning}
                             }) => {
     return (
@@ -41,9 +40,7 @@ export const renderField = ({
                         <span className={iconClass}></span>
                     </div>
                     <div className="Error">
-                        <input {...input}
-                               autoFocus={autoFocus}
-                               className={className} autoComplete="off" placeholder={label} type={type}/>
+                        <input {...input} className={className} autoComplete="off" placeholder={label} type={type}/>
                         {touched &&
                         ((error && <span className={'Error-message'}>{error}</span>) ||
                             (warning && <span className={'Warn-Message'}>{warning}</span>))}
@@ -74,7 +71,7 @@ export const datepicker =
             </div>
             <div className="Error">
                 <DatePicker {...input}
-                            value={disabled ? moment().format('YYYY-MM-DD').toString() : input.value}
+                            value={disabled ? "This is disabled" : input.value}
                             dateFormat="yyyy-MM-dd"
                             autoComplete="off"
                             selected={input.value ? new Date(input.value) : null}
@@ -86,17 +83,7 @@ export const datepicker =
                             scrollableYearDropdown
                             showMonthDropdown
                             disabled={disabled}
-                            popperModifiers={{
-                                offset: {
-                                    enabled: true,
-                                    offset: '5px, 10px'
-                                },
-                                preventOverflow: {
-                                    enabled: true,
-                                    escapeWithReference: false, // force popper to stay in viewport (even when input is scrolled out of view)
-                                    boundariesElement: 'viewport'
-                                }
-                            }}
+
                 />
                 {touched &&
                 ((error && <span className={'Error-message'}>{error}</span>) ||
@@ -151,39 +138,35 @@ export const renderDynamicSelect = ({
                                         label,
                                         defaultOptions,
                                         iconClass,
-                                        isMulti,
                                         closeMenuOnSelect,
                                         meta: {touched, error, warning}
-                                    }) => {
-    console.log('0---', input);
-    return (
-        <div className={"input-group " + (touched && error ? 'errormsg' : '')}>
-            <div className="input-group--input-group-icon">
-                <span className={iconClass}></span>
-            </div>
-            <div className="Error">
-                <AsyncSelect {...input}
-                             loadOptions={loadOptions}
-                             styles={{menuPortal: base => ({...base, zIndex: 9999})}}
-                             menuPortalTarget={document.getElementById('right-panel-section')}
-                             menuPosition={'absolute'}
-                             menuPlacement={'auto'}
-                             defaultOptions={defaultOptions}
-                             placeholder={label}
-                             isMulti={isMulti}
-                             autoComplete="off"
-                             closeMenuOnSelect={closeMenuOnSelect}
-                             onBlur={() => {
-                                 input.onBlur(input.value)
-                             }}
-                />
-                {touched &&
-                ((error && <span className={'Error-message'}>{error}</span>) ||
-                    (warning && <span className={'Warn-Message'}>{warning}</span>))}
-            </div>
+                                    }) => (
+    <div className={"input-group " + (touched && error ? 'errormsg' : '')}>
+        <div className="input-group--input-group-icon">
+            <span className={iconClass}></span>
         </div>
-    )
-}
+        <div className="Error">
+            <AsyncSelect {...input}
+                         loadOptions={loadOptions}
+                         styles={{menuPortal: base => ({...base, zIndex: 9999})}}
+                         menuPortalTarget={document.getElementById('right-panel-section')}
+                         menuPosition={'absolute'}
+                         menuPlacement={'auto'}
+                         defaultOptions={defaultOptions}
+                         placeholder={label}
+                         isMulti={true}
+                         autoComplete="off"
+                         closeMenuOnSelect={closeMenuOnSelect}
+                         onBlur={() => {
+                             input.onBlur(input.value)
+                         }}
+            />
+            {touched &&
+            ((error && <span className={'Error-message'}>{error}</span>) ||
+                (warning && <span className={'Warn-Message'}>{warning}</span>))}
+        </div>
+    </div>
+)
 
 export const renderTextArea = ({
                                    input,
