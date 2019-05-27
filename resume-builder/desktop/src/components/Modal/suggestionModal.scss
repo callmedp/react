@@ -56,7 +56,7 @@
 		display: table;
 	}
 
-	.icon-close {
+	:local(.icon-close) {
 		top: 130px;
 	}
 }

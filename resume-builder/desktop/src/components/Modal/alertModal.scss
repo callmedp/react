@@ -1,7 +1,7 @@
 @import '../../styles/variables/vars.scss';
 @import '../../styles/variables/mixins.scss';
 
-.icon-close--position {
+:local(.icon-close--position) {
 	right: 34.5% !important;
 	top: 38.5%;
 }
