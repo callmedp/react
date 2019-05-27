@@ -124,7 +124,7 @@ class Skill extends Component {
         this.updateInfoBeforeLoss()
     }
 
-    async changeOrderingUp(index,fields,event){
+    changeOrderingUp(index,fields,event){
         event.stopPropagation();
         let currentItem = fields.get(index);
         let prevItem = fields.get(index - 1);
@@ -135,9 +135,10 @@ class Skill extends Component {
         fields.remove(index - 1)
         fields.insert(index - 1, prevItem)
         fields.swap(index, index - 1)
+        // console.log(fields.getAll())
     }
 
-    async changeOrderingDown(index,fields,event){
+    changeOrderingDown(index,fields,event){
         event.stopPropagation();
         let currentItem = fields.get(index);
         let nextItem = fields.get(index + 1);
@@ -148,6 +149,7 @@ class Skill extends Component {
         fields.remove(index+1)
         fields.insert(index + 1, nextItem)
         fields.swap(index, index + 1);
+        // console.log(fields.getAll())
     }
 
     render() {

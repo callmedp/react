@@ -53,13 +53,13 @@ const renderSkills = ({
                                     <span onClick={(event) => deleteSkill(index, fields, event)}
                                      className={"sprite icon--delete " +(fields.length === 1 && !fields.get(index).id ? "hide":"")} role="button"></span>
                                 </li>
-                                {index == 0 ? '':
+                                {index === 0 ? '':
                                     <li className="subHeading__btn"
                                         onClick={(event) => changeOrderingUp(index, fields, event)}>
                                         <i className="sprite icon--upArrow"></i>
                                     </li>
                                 }
-                                {index == fields.length-1 ? '':
+                                {index === fields.length-1 ? '':
                                     <li className="subHeading__btn"
                                         onClick={(event) => changeOrderingDown(index, fields, event)}>
                                         <i className="sprite icon--downArrow"></i>

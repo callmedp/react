@@ -72,29 +72,29 @@ function* fetchUserSkill(action) {
 }
 
 
-function* updateUserSkill(action) {
-    try {
-        let {payload: {userSkill, resolve, reject}} = action;
+// function* updateUserSkill(action) {
+//     try {
+//         let {payload: {userSkill, resolve, reject}} = action;
 
 
-        const candidateId = localStorage.getItem('candidateId') || '';
+//         const candidateId = localStorage.getItem('candidateId') || '';
 
-        const {id} = userSkill;
+//         const {id} = userSkill;
 
-        const result = yield call(id ? Api.updateUserSkill : Api.createUserSkill, userSkill, candidateId, id);
-        if (result['error']) {
-            return reject(new SubmissionError({_error: result['errorMessage']}));
-        }
-        localStorage.removeItem('skill');
+//         const result = yield call(id ? Api.updateUserSkill : Api.createUserSkill, userSkill, candidateId, id);
+//         if (result['error']) {
+//             return reject(new SubmissionError({_error: result['errorMessage']}));
+//         }
+//         localStorage.removeItem('skill');
 
-        yield put({type: Actions.SAVE_USER_SKILL, data: result['data']});
+//         yield put({type: Actions.SAVE_USER_SKILL, data: result['data']});
 
-        return resolve('User Skill  Info saved successfully.');
+//         return resolve('User Skill  Info saved successfully.');
 
-    } catch (e) {
-        ////console.log('error', e);
-    }
-}
+//     } catch (e) {
+//         ////console.log('error', e);
+//     }
+// }
 
 
 function* bulkSaveUserSkill(action) {
@@ -115,6 +115,7 @@ function* bulkSaveUserSkill(action) {
             if (localStorage.getItem('skill')){
                 localStorage.removeItem('skill')
                 yield call(fetchUserSkill)
+                return resolve('Bulk Update Done.');
             }
             yield put({type: Actions.SAVE_USER_SKILL, data: {list: result['data']}})
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
@@ -161,7 +162,7 @@ function* deleteUserSkill(action) {
 
 export default function* watchSkill() {
     yield takeLatest(Actions.FETCH_USER_SKILL, fetchUserSkill);
-    yield takeLatest(Actions.UPDATE_USER_SKILL, updateUserSkill);
+    // yield takeLatest(Actions.UPDATE_USER_SKILL, updateUserSkill);
     yield takeLatest(Actions.DELETE_USER_SKILL, deleteUserSkill);
     yield takeLatest(Actions.BULK_SAVE_USER_SKILL, bulkSaveUserSkill);
 }
