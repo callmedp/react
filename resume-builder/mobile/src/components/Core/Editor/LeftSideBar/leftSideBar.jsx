@@ -278,7 +278,7 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(actions.updateCurrentLinkPos(data))
         },
         "updateSideNav": (addmore,personalInfo) => {
-            let { date_of_birth, extracurricular} = personalInfo;
+            let { date_of_birth, extracurricular,image,gender} = personalInfo;
             let interest = extracurricular
             interest =  ((interest|| []).filter((item)=>item.value).map((item)=>item.value)).join(",")
             let personalDetails = {
@@ -287,6 +287,8 @@ const mapDispatchToProps = (dispatch) => {
                     'date_of_birth': (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
                     'extracurricular':interest,
                     'entity_preference_data': addmore,
+                    'image' : image,
+                    'gender' : gender
                 }
             }
             return new Promise((resolve, reject) => {

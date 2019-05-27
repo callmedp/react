@@ -297,7 +297,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         "onSubmit": (personalDetails, imageURL) => {
-            let { date_of_birth, extracurricular} = personalDetails;
+            let { date_of_birth, extracurricular,gender} = personalDetails;
             let interest = extracurricular
             interest =  ((interest|| []).map((item)=>item.value)).join(",")
             personalDetails = {
@@ -305,7 +305,8 @@ const mapDispatchToProps = (dispatch) => {
                 ...{
                     'date_of_birth': (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
                     'image': imageURL || personalDetails['image'],
-                    'extracurricular':interest
+                    'extracurricular':interest,
+                    'gender' : gender
                 }
             }
             return new Promise((resolve, reject) => {

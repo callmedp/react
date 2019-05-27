@@ -10,7 +10,7 @@ import {
     renderTextArea
 } from "../../../../../FormHandler/formFieldRenderer.jsx";
 import PreviewModal from "../../../Preview/changeTemplateModal";
-
+import moment from 'moment'
 import validate from "../../../../../FormHandler/validtaions/summary/validate"
 import {siteDomain} from "../../../../../../Utils/domains";
 
@@ -180,13 +180,16 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(actions.fetchPersonalInfo())
         },
         "onSubmit": (personalDetails) => {
-            const {gender, date_of_birth, extracurricular} = personalDetails
+            let { date_of_birth, extracurricular,gender,image} = personalDetails;
+            let interest = extracurricular
+            interest =  ((interest|| []).map((item)=>item.value)).join(",")
             personalDetails = {
                 ...personalDetails,
                 ...{
-                    'gender': gender && gender['value'] || '',
-                    'extracurricular':''
-                    // 'extracurricular': (extracurricular || []).map(el => el.value).join(',')
+                    'date_of_birth': (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
+                    'image': image,
+                    'extracurricular':interest,
+                    'gender' : gender
                 }
             }
             return new Promise((resolve, reject) => {
