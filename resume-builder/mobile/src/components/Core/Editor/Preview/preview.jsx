@@ -108,7 +108,7 @@ class Preview extends Component {
 
                 <iframe srcDoc={html} className={"iframe-new"}></iframe>
 
-               <div className="preview__bottom-btns">
+               <div className="preview__bottom-btns pos-fixed">
                     <span className="btn btn__round btn--outline" onClick={()=>{this.setState({customize:true})}}>Customize template</span>
                     <span className="btn btn__round btn__primary" onClick={()=>{this.props.history.push(`/resume-builder/buy`) }}>Get your resume</span>
                </div>
