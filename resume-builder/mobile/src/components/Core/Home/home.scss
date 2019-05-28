@@ -61,11 +61,12 @@
             background-color: $blue;
             position: absolute;
             left: -1.5rem;
+            box-shadow: 0 5px 10px rgba($black, .2);
 
             i {
                 @include size(16px, 16px, block);
                 position: absolute;
-                transform: scale(2.5);
+                transform: scale(1.6);
                 top: 21px;
                 left: 21px;
             }

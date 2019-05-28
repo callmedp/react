@@ -46,15 +46,15 @@ export default class Banner extends Component {
                 </p>
                 <ul className="resume-pointer">
                     <li>
-                        {/* <span className="sprite icon--higher"></span> */}
+                        <span className="sprite icon--shortlisting mr-5"></span>
                         <span><strong>33% higher</strong> chances of shortlisting</span>
                     </li>
                     <li>
-                        <span className="sprite icon-experience"></span>
+                        <span className="sprite icon--experience-home mr-5"></span>
                         <span><strong>10+ years</strong> of Resume Building Experience</span>
                     </li>
                     <li>
-                        <span className="sprite icon-profile"></span>
+                        <span className="sprite icon--profile mr-5"></span>
                         <span>Resume data fetched from <strong>Shine profile</strong></span>
                     </li>
                 </ul>

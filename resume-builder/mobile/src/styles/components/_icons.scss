@@ -344,9 +344,10 @@
 
   &--application {
     height: 22px !important;
-    transform: scale(2) !important;
+    transform: scale(1.6) !important;
     top: 20px !important;
-    background-position: -112px -237px;
+    background-position: -111px -235px;
+    width: 20px !important;
   }
 
   &--choose-resume {
@@ -363,7 +364,32 @@
 
   &--switch {
     @include size(16px, 19px, block);
-    background-position: -114px -261px;
+    background-position: -114px -255px;
+  }
+ 
+  &--import {
+    @include size(16px, 19px, block);
+    background-position: -113px -273px;
+  }
+ 
+  &--update {
+    @include size(20px, 14px, block);
+    background-position: -110px -297px;
+  }
+ 
+  &--custom-resume {
+    @include size(15px, 15px, block);
+    background-position: -110px -319px;
+  }
+ 
+  &--reorder-home {
+    @include size(9px, 17px, block);
+    background-position: -112px -343px;
+  }
+ 
+  &--display-home {
+    @include size(15px, 17px, block);
+    background-position: -136px -296px;
   }
 
   &--editText {
@@ -418,9 +444,19 @@
     background-position: -135px -160px;
   }
   
-  &--higher {
-    @include size(19px, 20px, block);
-    background-position: -135px -160px;
+  &--shortlisting {
+    @include size(24px, 24px, block);
+    background-position: -133px -219px;
+  }
+
+  &--experience-home {
+    @include size(20px, 16px, block);
+    background-position: -135px -247px;
+  }
+
+  &--profile {
+    @include size(20px, 16px, block);
+    background-position: -133px -264px;
   }
 
 

@@ -37,7 +37,7 @@
     transition: all .2s;
 
     &__item {
-        height: 55px;
+        height: 50px;
 
         display: flex;
         align-items: center;
@@ -52,7 +52,7 @@
     }
 
     &__wrap {
-        height: 55px;
+        height: 50px;
         text-align: center;
 
         flex: 0 0 55px;
@@ -93,7 +93,7 @@
     &__wrap {
         font-size: 1.6rem;
         color: $blue;
-        height: 55px;
+        height: 50px;
         padding-right: 15px;
         
 

@@ -114,18 +114,23 @@ class Home extends Component {
                         <ul className="resume-builder__items">
                             <li className="resume-builder__item"><i className="sprite icon--switch"></i>Expert assistance</li>
 
-                            <li className="resume-builder__item"><i className="sprite icon--editText"></i>Import data from Shine</li>
+                            <li className="resume-builder__item"><i className="sprite icon--import"></i>Import data from Shine</li>
 
-                            <li className="resume-builder__item"><i className="sprite icon--theme"></i>Update resume back to Shine</li>
+                            <li className="resume-builder__item"><i className="sprite icon--update"></i>Update resume back to Shine</li>
 
-                            <li className="resume-builder__item"><i className="sprite icon--move"></i>Customize your resume</li>
+                            <li className="resume-builder__item"><i className="sprite icon--custom-resume"></i>Customize your resume</li>
 
-                            <li className="resume-builder__item"><i className="sprite icon--upload"></i>Reorder resume sections</li>
+                            <li className="resume-builder__item"><i className="sprite icon--reorder-home"></i>Reorder resume sections</li>
 
-                            <li className="resume-builder__item"><i className="sprite icon--preview"></i>Display your photo</li>
+                            <li className="resume-builder__item"><i className="sprite icon--display-home"></i>Display your photo</li>
                         </ul>
                     </div>
-                </section>
+
+                    <div className="text-center mt-30">
+                        <a href="#" className="btn btn__medium btn__shadow btn__round btn__primary">Build your resume</a>
+                    </div>
+               
+                    </section>
                 <section className="section pt-30 pb-30">
                     <div className="text-center">
                         <h2 className="section__head">Next generation ready resume</h2>
@@ -158,7 +163,7 @@ class Home extends Component {
                         <p  className="section__subHead">Feel free to share your feedback with us</p>
                     </div>
 
-                    <div className="white-box mt-30 relative">
+                    <div className="white-box mt-30 mb-30 relative">
                         <ul className="line-form p-0 mt-10">
                             <li className="line-form__group">
                                 <input type="text" id="name" className="line-form__input" placeholder="Full name" />
@@ -188,7 +193,7 @@ class Home extends Component {
                             </li>
 
                             <li className="d-flex justify-content-center">
-                                <button className="btn btn__round btn__primary">Submit</button>
+                                <button className="btn btn__medium btn__round btn__primary">Submit</button>
                             </li>
                         </ul>
                     </div>

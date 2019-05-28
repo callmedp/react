@@ -33,6 +33,8 @@
          font-size: 1.4rem;
          color: $grey-333;
 
+        display: flex;
+
          &:not(:last-child) {
             margin-bottom: 1rem;
          }
