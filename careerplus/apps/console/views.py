@@ -1,11 +1,21 @@
+#python imports
+import logging
+from datetime import datetime
+
+#django imports
 from django.views.generic import View, TemplateView, FormView
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth import authenticate, login, logout
-import logging
+
+#local imports
 from .forms import PasswordResetRequestForm, SetConfirmPasswordForm
+
+#inter app imports
+
+#third party imports
 from core.mixins import TokenGeneration
 from users.models import User
 
@@ -50,7 +60,12 @@ class ConsoleLoginView(TemplateView):
         password = request.POST['password']
         user = authenticate(username=username, password=password)
         if user is not None and user.is_active:
+            request.session.set_expiry(settings.CONSOLE_SESSION_TIMEOUT)
             login(request, user)
+            user.last_login = datetime.now()
+            user.save()
+            logging.getLogger('info_log').info("Console Login Record - {}, {}, {}".\
+                format(user.email,user.name,user.last_login))
             return HttpResponseRedirect(reverse_lazy('console:dashboard'))
         else:
             messages.add_message(

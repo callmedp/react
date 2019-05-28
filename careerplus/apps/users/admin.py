@@ -128,7 +128,7 @@ class UserAdmin(BaseUserAdmin):
         ('Personal Information', {'fields': ('name',)}),
         ('Permission', {'fields': ('is_staff', 'is_active', 'is_superuser',
             'groups', 'user_permissions')}),
-        ('Others', {'fields': ('date_joined',)}),
+        ('Others', {'fields': ('date_joined','last_login')}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
@@ -142,6 +142,7 @@ class UserAdmin(BaseUserAdmin):
     ordering = ('email',)
     filter_horizontal = ('groups', 'user_permissions')
     inlines = [UserProfileInline, ]
+    readonly_fields = ('date_joined','last_login')
 
 # Now register the new UserAdmin...
 admin.site.register(User, UserAdmin)
