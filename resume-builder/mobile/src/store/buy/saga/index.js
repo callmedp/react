@@ -14,13 +14,13 @@ function* fetchProductIds(action) {
         yield put({type:LoaderAction.UPDATE_MAIN_PAGE_LOADER,payload:{mainloader: true}})
         const result = yield call(Api.fetchProductIds);
         if (result['error']) {
-            ////console.log('error');
+            console.log('error');
         }
         const {data: {results}} = result;
         yield put({type: Actions.SAVE_PRODUCT_IDS, data: results})
         yield put({type:LoaderAction.UPDATE_MAIN_PAGE_LOADER,payload:{mainloader: false}})
     } catch (e) {
-        ////console.log(e);
+        console.log(e);
     }
 }
 
@@ -40,7 +40,7 @@ function* addToCart(action) {
 
 
     } catch (e) {
-        ////console.log(e);
+        console.log(e);
     }
 }
 

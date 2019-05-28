@@ -74,7 +74,6 @@ class Education extends Component {
                 }
             }
             if(!error){
-                console.log("YO")
                 const values = this.props.handleOrdering(form_data['values'])
                 await this.props.bulkUpdateUserEducation(values.list)
                 this.setState({submit:true})
@@ -83,7 +82,6 @@ class Education extends Component {
     }
 
     componentWillUnmount() {
-        console.log("unmount")
         this.updateInfoBeforeLoss()
     }
 
@@ -151,7 +149,6 @@ class Education extends Component {
 
     async changeOrderingUp(index,fields,event){
         event.stopPropagation();
-        ////console.log("Clicked Up")
         let currentItem = fields.get(index);
         let prevItem = fields.get(index - 1);
         currentItem['order'] = index - 1;
@@ -165,7 +162,6 @@ class Education extends Component {
 
     async changeOrderingDown(index,fields,event){
         event.stopPropagation();
-        ////console.log("Clicked Down")
         let currentItem = fields.get(index);
         let nextItem = fields.get(index + 1);
         currentItem['order'] = index + 1;

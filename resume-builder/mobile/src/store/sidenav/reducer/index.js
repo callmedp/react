@@ -17,14 +17,12 @@ export const sidenavReducer = (state = initialState, action) => {
             };
         }
         case UPDATE_LIST_LINK: {
-            ////console.log(action)
             return {
                 ...state,
                 ...action.payload
             }
         }
         case UPDATE_CURRENT_LINK_POS: {
-            //console.log(action)
             return {
                 ...state,
                 ...action.payload

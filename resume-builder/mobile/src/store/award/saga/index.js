@@ -39,12 +39,9 @@ function* fetchUserAward(action) {
         
         const result = yield call(Api.fetchUserAward, candidateId);
         if (result['error']) {
-            ////console.log('error');
         }
         const {data: {results}} = result;
         results.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
-        ////console.log("Sorted list ")
-        ////console.log(results)
         let data = {list: results};
         if(! data.list.length){
             data = {
@@ -63,11 +60,9 @@ function* fetchUserAward(action) {
                 }
             };
         }
-        ////console.log('---', data);
         yield put({type: Actions.SAVE_USER_AWARD, data: data})
         yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
-        ////console.log(e);
     }
 }
 
@@ -79,7 +74,6 @@ function* updateUserAward(action) {
 
         const {id} = userAward;
         const result = yield call(id ? Api.updateUserAward : Api.createUserAward, userAward, candidateId, id);
-        ////console.log('---', result);
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
@@ -89,7 +83,7 @@ function* updateUserAward(action) {
         return resolve('User Award  Info saved successfully.');
 
     } catch (e) {
-        ////console.log('error', e);
+        console.log('error', e);
     }
 }
 
@@ -118,12 +112,9 @@ function* bulkUpdateUserAward(action) {
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
             return resolve('Bulk Update Done.');
         }
-        
-        ////console.log('---', result);
-        // yield call(fetchUserLanguage)
 
     } catch (e) {
-        ////console.log('error', e);
+        console.log('error', e);
     }
 }
 
@@ -140,7 +131,7 @@ function* deleteUserAward(action) {
 
 
         if (result['error']) {
-            ////console.log(result['error'])
+            console.log(result['error'])
         }
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_AWARD, id: awardId});
@@ -149,7 +140,7 @@ function* deleteUserAward(action) {
         
 
     } catch (e) {
-        ////console.log('error', e);
+        console.log('error', e);
     }
 }
 

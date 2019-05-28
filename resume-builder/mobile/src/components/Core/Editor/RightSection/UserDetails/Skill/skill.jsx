@@ -135,7 +135,6 @@ class Skill extends Component {
         fields.remove(index - 1)
         fields.insert(index - 1, prevItem)
         fields.swap(index, index - 1)
-        // console.log(fields.getAll())
     }
 
     changeOrderingDown(index,fields,event){
@@ -149,7 +148,6 @@ class Skill extends Component {
         fields.remove(index+1)
         fields.insert(index + 1, nextItem)
         fields.swap(index, index + 1);
-        // console.log(fields.getAll())
     }
 
     render() {

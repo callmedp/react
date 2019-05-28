@@ -26,7 +26,7 @@ function* fetchTemplate(action) {
 
         const result = yield call(Api.fetchTemplate, candidateId,selected_template);
         if (result['error']) {
-            ////console.log('error');
+            console.log('error');
         }
         let w = window,
             d = document,
@@ -54,7 +54,7 @@ function* fetchTemplate(action) {
         yield put({type: Actions.SAVE_TEMPLATE, data:{html : newhtml}})
         yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
-        ////console.log(e);
+        console.log(e);
     }
 }
 
@@ -83,7 +83,6 @@ function* customizeTemplate(action) {
         yield put({type: SET_CUSTOMIZATION, data: data});
         yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
         return resolve("Customize Done")
-        // yield call(fetchTemplate)
 
     } catch (e) {
         console.log(e);
@@ -101,7 +100,6 @@ function* reorderSection(action) {
             console.log('error');
         }
         let {data: {data}} = result;
-        // console.log('order ----', JSON.parse(data));
         data = {
             entity_position: JSON.parse(data)
         }
@@ -151,7 +149,6 @@ function* fetchThumbnailImages(action) {
 function* fetchTemplateImages(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
-        console.log(action)
         const {payload:{resolve,reject,template_id}} = action;
         yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
 
@@ -164,7 +161,6 @@ function* fetchTemplateImages(action) {
 
         yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
         return resolve("Image Received")
-        // yield call(fetchTemplate)
 
     } catch (e) {
         console.log(e);
@@ -175,7 +171,6 @@ function* fetchTemplateImages(action) {
 function* fetchDefaultCustomization(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
-        // yield put({type: UPDATE_UI, data: {loader: true}});
         const {templateId} = action;
         const result = yield call(Api.fetchDefaultCustomization, candidateId, templateId);
 
@@ -194,11 +189,6 @@ function* fetchDefaultCustomization(action) {
         }
 
         yield put({type: SET_CUSTOMIZATION, data: data});
-
-        // yield put({type: UPDATE_UI, data: {loader: false}});
-
-
-        // yield call(fetchTemplate)
 
     } catch (e) {
         console.log(e);

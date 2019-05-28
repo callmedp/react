@@ -42,17 +42,16 @@ function* getPersonalDetails(action) {
 
         const result = yield call(Api.fetchPersonalInfo, candidateId);
         if (result['error']) {
-            ////console.log('error');
+            console.log('error');
         }
         let {data} = result;
         data =modifyPersonalInfo(data)
         yield put({type: Actions.SAVE_USER_INFO, data: data});
 
         yield put({type:LoaderAction.UPDATE_MAIN_PAGE_LOADER,payload:{mainloader: false}})
-        // yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
 
     } catch (e) {
-        ////console.log(e);
+        console.log(e);
     }
 }
 
@@ -89,14 +88,13 @@ function* updatePersonalDetails(action) {
 
     } catch (e) {
 
-        ////console.log('error', e);
+        console.log('error', e);
     }
 }
 
 function* getInterestList(action){
     try{
         const result = yield call(Api.fetchInterestList);
-        console.log(result)
         if (result['error']) {
             console.log('error');
         }
@@ -106,7 +104,6 @@ function* getInterestList(action){
         Object.keys(data).map((el,key)=>{
             updated_data[key] = {'value':key,'label':data[el]}
         })
-        console.log(updated_data)
         yield put({type: Actions.SAVE_INTEREST_LIST,data:updated_data})
 
     }catch (e) {
@@ -144,7 +141,7 @@ function* fetchImageUrl(action) {
 
     } catch (e) {
 
-        ////console.log('error', e);
+        console.log('error', e);
     }
 }
 

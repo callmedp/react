@@ -16,7 +16,6 @@ const validate = values => {
         });
         if (listErrors.length) {
             errors.list = listErrors;
-            ////console.log(errors)
             return errors;
         }
     }

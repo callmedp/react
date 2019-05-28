@@ -38,14 +38,13 @@ function* fetchUserCourse(action) {
 
         const result = yield call(Api.fetchUserCourse, candidateId);
         if (result['error']) {
-            ////console.log('error');
+            console.log('error');
         }
         const {data: {results}} = result;
         results.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
         results.map((data)=>{
             data.year_of_certification =`${data.year_of_certification}-01-01`
         })
-        ////console.log(results)
         let data = {list: results}
         if(! data.list.length){
             data = {
@@ -66,7 +65,7 @@ function* fetchUserCourse(action) {
         yield put({type: Actions.SAVE_USER_COURSE, data: data})
         yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
-        ////console.log(e);
+        console.log(e);
     }
 }
 
@@ -90,7 +89,7 @@ function* updateUserCourse(action) {
         return resolve('User Course  Info saved successfully.');
 
     } catch (e) {
-        ////console.log('error', e);
+        console.log('error', e);
     }
 }
 
@@ -119,11 +118,8 @@ function* bulkUpdateUserCourse(action) {
             return resolve('Bulk Update Done.');
         }
 
-        ////console.log('---', result);
-        // yield call(fetchUserLanguage)
-
     } catch (e) {
-        ////console.log('error', e);
+        console.log('error', e);
     }
 }
 
@@ -140,7 +136,7 @@ function* deleteUserCourse(action) {
 
 
         if (result['error']) {
-            ////console.log(result['error'])
+            console.log(result['error'])
         }
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_COURSE, id: courseId});
@@ -148,7 +144,7 @@ function* deleteUserCourse(action) {
         yield call(fetchUserCourse)
 
     } catch (e) {
-        ////console.log('error', e);
+        console.log('error', e);
     }
 }
 

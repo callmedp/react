@@ -41,7 +41,7 @@ function* fetchUserProject(action) {
 
         const result = yield call(Api.fetchUserProject, candidateId);
         if (result['error']) {
-            ////console.log('error');
+            console.log('error');
         }
         const {data: {results}} = result;
         results.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
@@ -69,7 +69,7 @@ function* fetchUserProject(action) {
         yield put({type: Actions.SAVE_USER_PROJECT, data: data})
         yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
-        ////console.log(e);
+        console.log(e);
     }
 }
 
@@ -93,7 +93,7 @@ function* fetchUserProject(action) {
         return resolve('User Project have saved successfully.');
 
     } catch (e) {
-        ////console.log('error', e);
+        console.log('error', e);
     }
 }
 
@@ -122,11 +122,8 @@ function* bulkUpdateUserProject(action) {
             return resolve('Bulk Update Done.');
         }
 
-        ////console.log('---', result);
-        // yield call(fetchUserLanguage)
-
     } catch (e) {
-        ////console.log('error', e);
+        console.log('error', e);
     }
 }
 
@@ -143,16 +140,15 @@ function* deleteUserProject(action) {
 
 
         if (result['error']) {
-            ////console.log(result['error'])
+            console.log(result['error'])
         }
-        // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_PROJECT, id: projectId});
         yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
         
         yield call(fetchUserProject)
 
     } catch (e) {
-        ////console.log('error', e);
+        console.log('error', e);
     }
 }
 

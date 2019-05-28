@@ -30,12 +30,10 @@ class Award extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props)
         this.props.fetchUserAward()
         if (this.props.personalInfo.entity_preference_data.length) {
             this.setState({heading : this.props.personalInfo.entity_preference_data[6].entity_text})
         }
-        ////console.log(this.props.sidenav)
     }
 
     async updateInfoBeforeLoss(){
@@ -90,7 +88,6 @@ class Award extends Component {
     deleteAward(index, fields, event) {
         event.stopPropagation();
         const award = fields.get(index);
-        ////console.log(award)
         fields.remove(index);
         if (award && award.id) {
             this.props.removeAward(award.id)
@@ -99,7 +96,6 @@ class Award extends Component {
 
     async changeOrderingUp(index,fields,event){
         event.stopPropagation();
-        ////console.log("Clicked Up")
         let currentItem = fields.get(index);
         let prevItem = fields.get(index - 1);
         currentItem['order'] = index - 1;
@@ -145,7 +141,6 @@ class Award extends Component {
 
     async changeOrderingDown(index,fields,event){
         event.stopPropagation();
-        ////console.log("Clicked Down")
         let currentItem = fields.get(index);
         let nextItem = fields.get(index + 1);
         currentItem['order'] = index + 1;
@@ -223,8 +218,6 @@ const mapDispatchToProps = (dispatch) => {
                     date: (date && moment(date).format('YYYY-MM-DD')) || '',
                 }
             };
-            ////console.log(userAward)
-            //return "yes"
             return new Promise((resolve, reject) => {
                 return dispatch(actions.updateUserAward({userAward, resolve, reject}));
             })
@@ -233,7 +226,6 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(actions.fetchUserAward())
         },
         "removeAward": (awardId) => {
-            ////console.log("Award iD   "+awardId)
             return dispatch(actions.deleteAward(awardId))
         },
         "bulkUpdateUserAward": (listItems) => {
@@ -248,8 +240,6 @@ const mapDispatchToProps = (dispatch) => {
                 };
                 return userAward;
             })
-
-            console.log(listItems)
             return new Promise((resolve, reject) => {
                 return dispatch(actions.bulkUpdateUserAward({list: listItems,resolve,reject}))
             })

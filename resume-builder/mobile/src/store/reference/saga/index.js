@@ -39,7 +39,7 @@ function* fetchUserReference(action) {
 
         const result = yield call(Api.fetchUserReference, candidateId);
         if (result['error']) {
-            ////console.log('error');
+            console.log('error');
         }
         const {data: {results}} = result;
         results.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
@@ -64,7 +64,7 @@ function* fetchUserReference(action) {
         yield put({type: Actions.SAVE_USER_REFERENCE, data: data})
         yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
-        ////console.log(e);
+        console.log(e);
     }
 }
 
@@ -88,7 +88,7 @@ function* updateUserReference(action) {
         return resolve('User Reference have saved successfully.');
 
     } catch (e) {
-        ////console.log('error', e);
+        console.log('error', e);
     }
 }
 
@@ -117,11 +117,9 @@ function* bulkUpdateUserReference(action) {
             return resolve('Bulk Update Done.');
             
         }
-        ////console.log('---', result);
-        // yield call(fetchUserLanguage)
 
     } catch (e) {
-        ////console.log('error', e);
+        console.log('error', e);
     }
 }
 
@@ -138,15 +136,14 @@ function* deleteUserReference(action) {
 
 
         if (result['error']) {
-            ////console.log(result['error'])
+            console.log(result['error'])
         }
-        // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_REFERENCE, id: referenceId});
         yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
         yield call(fetchUserReference)
 
     } catch (e) {
-        ////console.log('error', e);
+        console.log('error', e);
     }
 }
 

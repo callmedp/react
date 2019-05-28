@@ -98,7 +98,6 @@ class LeftSideBar extends Component {
                 this.props.updateCurrentLinkPos({currentLinkPos: i})
             }
         }
-        console.log(this.props)
     }
 
     showErrorMessage(link) {

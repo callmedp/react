@@ -28,7 +28,6 @@ class Course extends Component {
     }
     
     componentDidMount() {
-        console.log("Inside Course")
         this.props.fetchUserCourse()
         if (this.props.personalInfo.entity_preference_data.length) {
             this.setState({heading : this.props.personalInfo.entity_preference_data[7].entity_text})
@@ -68,7 +67,6 @@ class Course extends Component {
 
     async changeOrderingUp(index,fields,event){
         event.stopPropagation();
-        ////console.log("Clicked Up")
         let currentItem = fields.get(index);
         let prevItem = fields.get(index - 1);
         currentItem['order'] = index - 1;
@@ -142,7 +140,6 @@ class Course extends Component {
 
     async changeOrderingDown(index,fields,event){
         event.stopPropagation();
-        ////console.log("Clicked Down")
         let currentItem = fields.get(index);
         let nextItem = fields.get(index + 1);
         currentItem['order'] = index + 1;
@@ -218,7 +215,6 @@ const mapDispatchToProps = (dispatch) => {
                     year_of_certification: (year_of_certification && moment(year_of_certification).format('YYYY')) || '',
                 }
             };
-            ////console.log(userCourse)
             return new Promise((resolve, reject) => {
                 return dispatch(actions.updateUserCourse({userCourse, resolve, reject}));
             })

@@ -37,7 +37,7 @@ function* fetchUserSkill(action) {
 
         const result = yield call(Api.fetchUserSkill, candidateId);
         if (result['error']) {
-            ////console.log('error');
+            console.log('error');
         }
         const {data: {results}} = result;
         results.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
@@ -67,7 +67,7 @@ function* fetchUserSkill(action) {
         yield put({type: Actions.SAVE_USER_SKILL, data: data})
         yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
-        ////console.log(e);
+        console.log(e);
     }
 }
 
@@ -122,10 +122,8 @@ function* bulkSaveUserSkill(action) {
             return resolve('Bulk Update Done.');
         }
 
-        ////console.log('---', result);
-
     } catch (e) {
-        ////console.log('error', e);
+        console.log('error', e);
     }
 }
 
@@ -139,10 +137,8 @@ function* deleteUserSkill(action) {
         const {skillId} = action;
 
         const result = yield call(Api.deleteUserSkill, candidateId, skillId);
-
-        console.log(result)
         if (result['error']) {
-            ////console.log(result['error'])
+            console.log(result['error'])
         }
         else{
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
@@ -155,7 +151,7 @@ function* deleteUserSkill(action) {
         
 
     } catch (e) {
-        ////console.log('error', e);
+        console.log('error', e);
     }
 }
 

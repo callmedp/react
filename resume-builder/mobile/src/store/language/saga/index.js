@@ -37,7 +37,7 @@ function* fetchUserLanguage(action) {
 
         const result = yield call(Api.fetchUserLanguage, candidateId);
         if (result['error']) {
-            ////console.log('error');
+            console.log('error');
         }
         let {data: {results}} = result;
         results.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
@@ -68,7 +68,7 @@ function* fetchUserLanguage(action) {
         yield put({type: Actions.SAVE_USER_LANGUAGE, data: data})
         yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
-        ////console.log(e);
+        console.log(e);
     }
 }
 
@@ -90,7 +90,7 @@ function* updateUserLanguage(action) {
         return resolve('User Language  Info saved successfully.');
 
     } catch (e) {
-        ////console.log('error', e);
+        console.log('error', e);
     }
 }
 
@@ -119,11 +119,8 @@ function* bulkUpdateUserLanguage(action) {
             return resolve('Bulk Update Done.');
         }
 
-        ////console.log('-language swap result--', result);
-        // yield call(fetchUserLanguage)
-
     } catch (e) {
-        ////console.log('error', e);
+        console.log('error', e);
     }
 }
 
@@ -133,23 +130,21 @@ function* deleteUserLanguage(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
         yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
-
-        // userLanguage['cc_id'] = candidateId;
         const {languageId} = action;
 
         const result = yield call(Api.deleteUserLanguage, candidateId, languageId);
 
 
         if (result['error']) {
-            ////console.log(result['error'])
+            console.log(result['error'])
         }
-        // yield call(fetchUserLanguage)
+        
         yield put({type: Actions.REMOVE_LANGUAGE, id: languageId});
         yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
         yield call(fetchUserLanguage)
 
     } catch (e) {
-        ////console.log('error', e);
+        console.log('error', e);
     }
 }
 
