@@ -4,6 +4,7 @@ import datetime
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from django.conf import settings
+from django.db.models import Q
 
 from order.models import OrderItem, Order
 from emailers.tasks import send_email_task
@@ -106,9 +107,8 @@ def unfeature():
     ''' featured profile cron for closing updated orderitem '''
 
     featured_orderitems = OrderItem.objects.filter(
-        order__status__in=[1, 3], product__type_flow=[5, 16], oi_status=28, product__sub_type_flow__in=[501, 503, 1602])
+        order__status__in=[1, 3], product__type_flow__in=[5, 16], oi_status=28, product__sub_type_flow__in=[501, 503, 1602])
     featured_orderitems = featured_orderitems.select_related('order')
-
     unfeature_count = 0
 
     for obj in featured_orderitems:
@@ -121,7 +121,10 @@ def unfeature():
             order = Order.objects.get(pk=obj.order.pk)
             if order.candidate_id:
                 candidate_id = obj.order.candidate_id
-        featured_ops = obj.orderitemoperation_set.filter(oi_status=28)
+        if obj.product.sub_type_flow == 502:
+            featured_ops = obj.orderitemoperation_set.filter(oi_status=5)
+        else:
+            featured_ops = obj.orderitemoperation_set.filter(oi_status=28)
 
         try:
             activation_date = featured_ops[0].created

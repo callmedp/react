@@ -144,7 +144,7 @@
             data-client='324ed0abb0694b0c66a6daecb178352d'>
         </script>
         {% endblock johukum %} -->
-        
+
     {% endblock js_section %}
 
     {% block zendesk %}
@@ -200,4 +200,26 @@
         }
     }
     });
+
+    jQuery(document).ready(function($){
+
+      $("#done_click").click(function(){
+          updateTextArea();
+          $("#sidebar-countries").hide();
+          $(".cls_mask").hide();
+          $('body').css('overflow','auto');
+      });
+      $("#sidebar-countries-trigger").click(function(){
+          $("#sidebar-countries").show();
+      });
+
+      $("#enquire_btn").on('click', function() {
+        $('#enquire').addClass('show');
+      });
+
+      $("#back_btn").on('click', function() {
+        $('#enquire').removeClass('show');
+      });
+  });
+
 </script>

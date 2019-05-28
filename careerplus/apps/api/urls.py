@@ -39,8 +39,9 @@ urlpatterns = [
     url(r'^v1/import-certificates/(?P<vendor_name>[\w\-]+)/$',
         views.ImportCertificateApiView.as_view(),
         name='import-certificate'),
-
-    
+    url(r'^v1/talent-economy-blogs/$',
+        views.TalentEconomyApiView.as_view(),
+        name='talent-economy-blogs'),
 ]
 
 if settings.DEBUG:

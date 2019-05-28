@@ -25,6 +25,11 @@ class CeritficateAdmin(admin.ModelAdmin):
     model = models.Certificate
 
 
+class PixelTrackerAdmin(admin.ModelAdmin):
+    list_display = ('id', 'pixel_slug', 'days')
+    model = models.PixelTracker
+
+
 class UserCertificateAdmin(admin.ModelAdmin):
     list_display = (
         'id', 'year', 'candidate_email',
@@ -131,5 +136,4 @@ admin.site.register(models.Assesment, AssesmentAdmin)
 admin.site.register(models.Score, ScoreAdmin)
 admin.site.register(models.UserCertificateOperations, UserCertificateOperationsAdmin)
 admin.site.register(models.ProductSkill, ProductSkillAdmin)
-
-
+admin.site.register(models.PixelTracker, PixelTrackerAdmin)

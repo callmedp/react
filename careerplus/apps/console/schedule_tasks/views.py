@@ -1,6 +1,7 @@
 import logging
 import os
 import mimetypes
+from jsmin import jsmin
 
 from wsgiref.util import FileWrapper
 
@@ -28,7 +29,7 @@ from .tasks import (
 from . import forms
 
 from shop.models import Product
-from partner.models import Vendor
+from partner.models import Vendor, PixelTracker
 
 
 @Decorate(stop_browser_cache())
@@ -294,4 +295,53 @@ class DownloadProductListView(TemplateView, PaginationMixin):
             request, messages.SUCCESS,
             'Task Created SuccessFully, Product List is generating')
         return HttpResponseRedirect(reverse('console:tasks:tasklist'))
+
+
+class GeneratePixelTracker(FormView, PaginationMixin):
+    template_name = 'console/tasks/generate-pixel-tracker.html'
+    form_class = forms.PixelGenerationForm
+    page = 1
+    paginated_by = 10
+
+    def generate_pixel_code(self, pixel_slug, landing_urls, conversion_url, days=90):
+        pixel_file = open('pixel_tracker.js')
+        content = jsmin(pixel_file.read())
+        pixel_url = settings.SITE_DOMAIN + '/pixel/' + pixel_slug
+        content = content.replace('pixel_url', "'" + pixel_url + "'")
+        content = content.replace('no_of_days', str(days))
+        content = content.replace('createcookiurls', ",".join(["'" + url + "'" for url in landing_urls]))
+        content = content.replace('readcookieurls', ",".join(["'" + url + "'" for url in conversion_url]))
+        return content
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        return super(GeneratePixelTracker, self).get(request, args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            obj, created = PixelTracker.objects.get_or_create(pixel_slug=form.cleaned_data.get('pixel_slug'))
+            obj.landing_urls = form.cleaned_data.get('landing_urls')
+            obj.conversion_urls = form.cleaned_data.get('conversion_urls')
+            obj.days = form.cleaned_data.get('days')
+            obj.save()
+            content = self.generate_pixel_code(
+                obj.pixel_slug,
+                obj.landing_urls.split(','),
+                obj.conversion_urls.split(','),
+                obj.days
+            )
+            context = self.get_context_data()
+            context.update({'pixel_tracker': content})
+            return self.render_to_response(context) 
+        return self.form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(GeneratePixelTracker, self).get_context_data(**kwargs)
+        pixel_trackers = PixelTracker.objects.all()
+
+        paginator = Paginator(pixel_trackers, self.paginated_by)
+
+        context.update(self.pagination(paginator, self.page))
+        return context
 

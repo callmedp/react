@@ -24,7 +24,7 @@ from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from users.tasks import user_register
 from order.models import Order, OrderItem, RefundRequest
 from shop.views import ProductInformationMixin
-from shop.models import Product
+from shop.models import Product,Category
 from coupon.models import Coupon, CouponUser
 from core.api_mixin import ShineCandidateDetail, AmcatApiMixin
 from payment.tasks import add_reward_point_in_wallet
@@ -36,6 +36,7 @@ from order.tasks import (
     invoice_generation_order
 )
 from shop.models import Skill, DeliveryService, ShineProfileData
+from blog.models import Blog
 
 from .serializers import (
     OrderListHistorySerializer,
@@ -44,9 +45,11 @@ from .serializers import (
     VendorCertificateSerializer,
     ImportCertificateSerializer,
     ShineDataFlowDataSerializer,
-    CertificateSerializer)
-from shared.rest_addons.pagination import Learning_custom_pagination
+    CertificateSerializer,TalentEconomySerializer)
+
 from partner.models import Certificate, Vendor
+from shared.rest_addons.pagination import LearningCustomPagination
+from shared.rest_addons.mixins import (SerializerFieldsMixin,FieldFilterMixin)
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
     authentication_classes = [OAuth2Authentication]
@@ -449,7 +452,6 @@ class EmailLTValueApiView(APIView):
         return Response(
             {"status": "SUCCESS", "ltv_price": str(ltv), "name": name, "last_order": str(last_order)},
             status=status.HTTP_200_OK)
-                            
 
 
 class OrderHistoryAPIView(ListAPIView):
@@ -661,7 +663,7 @@ class RecommendedProductsApiView(ListAPIView):
     authentication_classes = []
     permission_classes = []
     serializer_class = RecommendedProductSerializerSolr
-    pagination_class = Learning_custom_pagination
+    pagination_class = LearningCustomPagination
 
     def get_queryset(self, *args, **kwargs):
         skills = self.request.GET.get('skills', [])
@@ -813,6 +815,7 @@ class ShineDataFlowDataApiView(ListAPIView):
     pagination_class = None
 
 
+<<<<<<< HEAD
 
 class VendorCertificateMappingApiView(ListAPIView):
     authentication_classes = [OAuth2Authentication]
@@ -898,4 +901,75 @@ class ImportCertificateApiView(APIView, AmcatApiMixin):
             return Response(resp, status=status.HTTP_200_OK)
         else:
             return Response(data, status=data['code'])
+=======
+class TalentEconomyApiView(FieldFilterMixin,ListAPIView):
+    """
+    Include params -
+
+    include_p_cat_id - Get data related to parent category
+    include_p_user_id -Get data related to User
+
+
+    Filter params-
+    status -{ 0 for articles which are draft
+             1 for articles which are published
+             }
+
+    visibility -{ 1 for ShineLearning
+                 2 for TalentEconomy
+                 3 for HR-Blogger
+                 4 for HR-Conclave
+                 5 for HR-Jobfair
+                 }
+    To view particular Fields only:
+        include fl= id,title, (include fields with ',' separated)
+    To view all articles do not include status and visibility in parameter
+
+    pagination params-
+            nopage -  get all results(unpaginated)
+            page_size  - to get the how many result to be display per page
+
+    Example:-
+
+    {
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 15,
+            "title": "Questions To Ask During Job Interview - Learning.Shine"
+        }
+    ]
+}
+
+    """
+    permission_classes = []
+    authentication_classes = []
+    serializer_class = TalentEconomySerializer
+    pagination_class = LearningCustomPagination
+
+
+
+
+    def get_queryset(self,*args, **kwargs):
+        status = self.request.GET.get('status',)
+        visibility = self.request.GET.get('visibility')
+        filter_dict = {}
+        if status:
+            filter_dict.update({'status': status})
+        if visibility:
+            filter_dict.update({'visibility': visibility})
+        return Blog.objects.filter(**filter_dict)
+
+
+
+
+
+
+
+
+
+
+>>>>>>> SH-218-sdk-pixel-implementatiomn
 

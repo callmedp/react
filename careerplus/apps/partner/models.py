@@ -224,7 +224,6 @@ class BoosterRecruiter(AbstractAutoDate):
     def __str__(self):
         return '<' + self.get_type_recruiter_display() + '>'
 
-
 class Report(models.Model):
 
     assessment_id = models.IntegerField()
@@ -286,3 +285,13 @@ class ProductSkill(AbstractAutoDate):
         unique_together = ('product', 'skill')
         verbose_name = _('Product Skill')
         verbose_name_plural = _('Product Skills')
+
+class PixelTracker(AbstractAutoDate):
+    pixel_slug = models.CharField(
+        max_length=255, help_text=('Pixel Slug')
+    )
+    conversion_urls = models.TextField(help_text='conversion_page_url')
+    landing_urls = models.TextField(help_text='landing_page_urls')
+    days = models.IntegerField(help_text='No. of days for tracking', blank=True, null=True)
+
+

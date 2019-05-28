@@ -343,5 +343,5 @@ $(function() {
 
       $(document).on('click', '.icon-downlod', function () {
 
-    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms resume Enquiry', 'success');
+    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms Resume Enquiry', 'success');
 });

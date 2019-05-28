@@ -1,5 +1,5 @@
 from django import forms
-
+from partner.models import PixelTracker
 
 class LoginTokenGenerateForm(forms.Form):
     file = forms.FileField(
@@ -71,4 +71,19 @@ class EncryptedURLSGenerateForm(forms.Form):
         return file
 
 
+class PixelGenerationForm(forms.ModelForm):
 
+    class Meta:
+        model = PixelTracker
+        fields = ['pixel_slug', 'landing_urls', 'conversion_urls', 'days']
+
+    pixel_slug = forms.CharField(
+        label=("Pixel Slug"),
+        required=True,
+        max_length=255, initial='',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control'})
+    )
+    landing_urls = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}))
+    conversion_urls = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}))
+    days = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control'}))
