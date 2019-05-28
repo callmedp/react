@@ -123,7 +123,7 @@ export const renderSelect = ({
         <div className="input-group--input-group-icon">
             <span className={iconClass}></span>
         </div>
-        <div className={"Error "+ (touched && error ? 'errormsg' : '')}>
+        <div className={"Error " + (touched && error ? 'errormsg' : '')}>
             <Select {...input}
                     placeholder={label}
                     styles={{menuPortal: base => ({...base, zIndex: 9999})}}
@@ -163,7 +163,7 @@ export const renderDynamicSelect = ({
             <div className="input-group--input-group-icon">
                 <span className={iconClass}></span>
             </div>
-            <div className={"Error "+ (touched && error ? 'errormsg' : '')}>
+            <div className={"Error " + (touched && error ? 'errormsg' : '')}>
                 <AsyncSelect {...input}
                              loadOptions={loadOptions}
                              styles={{menuPortal: base => ({...base, zIndex: 9999})}}
@@ -204,7 +204,7 @@ export const renderAsyncCreatableSelect = ({
             <div className="input-group--input-group-icon">
                 <span className={iconClass}></span>
             </div>
-            <div className={"Error "+ (touched && error ? 'errormsg' : '')}>
+            <div className={"Error " + (touched && error ? 'errormsg' : '')}>
                 <AsyncCreatableSelect {...input}
                                       cacheOptions
                                       loadOptions={loadOptions}
@@ -241,7 +241,7 @@ export const renderTextArea = ({
                                }) => (
     <React.Fragment>
         {noIcon ?
-            <div className={"Error "+ (touched && error ? 'errormsg' : '')}>
+            <div className={"Error " + (touched && error ? 'errormsg' : '')}>
         <textarea {...input}
                   autoComplete="off"
                   placeholder={label}
@@ -255,7 +255,7 @@ export const renderTextArea = ({
                 <div className="input-group--input-group-icon">
                     <span className={iconClass}></span>
                 </div>
-                <div className={"Error "+ (touched && error ? 'errormsg' : '')}>
+                <div className={"Error " + (touched && error ? 'errormsg' : '')}>
         <textarea {...input}
                   autoComplete="off"
                   placeholder={label}
