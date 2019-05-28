@@ -314,7 +314,6 @@ class ShineDataFlowDataSerializer(ModelSerializer):
             return obj.image.url
 
 
-<<<<<<< HEAD
 class CertificateSerializer(ModelSerializer):
     skill = serializers.SerializerMethodField()
 
