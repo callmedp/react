@@ -815,8 +815,6 @@ class ShineDataFlowDataApiView(ListAPIView):
     pagination_class = None
 
 
-<<<<<<< HEAD
-
 class VendorCertificateMappingApiView(ListAPIView):
     authentication_classes = [OAuth2Authentication]
     permission_classes = [IsAuthenticated]
@@ -901,7 +899,7 @@ class ImportCertificateApiView(APIView, AmcatApiMixin):
             return Response(resp, status=status.HTTP_200_OK)
         else:
             return Response(data, status=data['code'])
-=======
+
 class TalentEconomyApiView(FieldFilterMixin,ListAPIView):
     """
     Include params -
@@ -961,15 +959,4 @@ class TalentEconomyApiView(FieldFilterMixin,ListAPIView):
         if visibility:
             filter_dict.update({'visibility': visibility})
         return Blog.objects.filter(**filter_dict)
-
-
-
-
-
-
-
-
-
-
->>>>>>> SH-218-sdk-pixel-implementatiomn
 
