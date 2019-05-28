@@ -13,9 +13,9 @@
 For Mobile case
  <div style=" width: 1536px; transform-origin: top left; transform : scale(0.32); font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777; line-height: 20px;">
  {% endcomment %}
-<div style="max-width: 1536px; width: 100%; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777; line-height: 20px;">
+<div style="max-width: 1536px; word-break: break-word; width: 100%; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777; line-height: 20px;">
 
-    <div style="width: 100%; background: {{ current_config.color|background_color_choice }}; padding: 3%;">
+    <div style="width: {{ width }}%; background: {{ current_config.color|background_color_choice }}; padding: 3%;">
 
         <!--top left 1-->
         {% if entity_position.0.active %}
@@ -31,7 +31,7 @@ For Mobile case
 
     </div>
 
-    <div style="width: 100%; border-bottom: 13px solid {{ current_config.color|background_color_choice }}; padding: 3% 3% 0 3%;">
+    <div style="width: {{ width }}%; border-bottom: 13px solid {{ current_config.color|background_color_choice }}; padding: 3% 3% 0 3%;">
 
         <!--Experience 3-->
         {% if entity_position.2.active %}

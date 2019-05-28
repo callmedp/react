@@ -45,7 +45,7 @@ export default class ResumeSlider extends Component {
         const {ui: {select_template_modal}, page} = this.props;
         return (
             <Fragment>
-                <TemplateModal {...this.props} />
+                <TemplateModal {...this.props} page={'home'}/>
                 < section
                     name="templates"
                     id="templates"

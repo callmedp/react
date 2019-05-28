@@ -1,4 +1,4 @@
-#python imports
+# python imports
 import datetime
 import base64
 import os
@@ -7,7 +7,7 @@ from io import BytesIO
 from pathlib import Path
 from datetime import date
 
-#django imports
+# django imports
 from django.conf import settings
 from decimal import Decimal, ROUND_HALF_DOWN
 from django.conf import settings
@@ -16,13 +16,13 @@ from django.template.loader import get_template
 from django.utils import timezone
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-#local imports
+# local imports
 
-#inter app imports
+# inter app imports
 from resumebuilder.models import Candidate
 from core.library.gcloud.custom_cloud_storage import (GCPInvoiceStorage, GCPPrivateMediaStorage)
 
-#third party imports
+# third party imports
 import zipfile
 from PIL import Image
 from Crypto.Cipher import XOR
@@ -326,65 +326,66 @@ class InvoiceGenerate(object):
 
 class ResumeGenerate(object):
 
-    def generate_file(self,context_dict={},template_src= None,file_type= 'pdf'):
+    def generate_file(self, context_dict={}, template_src=None, file_type='pdf'):
         if not template_src:
             return None
-            
+
         html_template = get_template(template_src)
         rendered_html = html_template.render(context_dict).encode(encoding='UTF-8')
 
         if file_type == 'pdf':
-            file = HTML(string=rendered_html).write_pdf(stylesheets=[CSS(string='@page:first {size:A3; margin:0px} @page {size:A3; margin:0px; margin-top:50px}')])
+            file = HTML(string=rendered_html).write_pdf(stylesheets=[
+                CSS(string='@page {size:A3; margin:0px; margin-top:50px} @page:first {size:A3; margin:0px}')])
         elif file_type == 'png':
             file = HTML(string=rendered_html).write_png()
 
         return file
 
-    def store_file(self,file_dir,file_name,file_content):
-        directory_path = "{}/{}".format(settings.RESUME_TEMPLATE_DIR,file_dir)
+    def store_file(self, file_dir, file_name, file_content):
+        directory_path = "{}/{}".format(settings.RESUME_TEMPLATE_DIR, file_dir)
         if settings.IS_GCP:
-            gcp_file = GCPPrivateMediaStorage().open("{}/{}".format(directory_path,file_name), 'wb')
+            gcp_file = GCPPrivateMediaStorage().open("{}/{}".format(directory_path, file_name), 'wb')
             gcp_file.write(file_content)
             gcp_file.close()
             return
 
-        directory_path = "{}/{}".format(settings.MEDIA_ROOT,directory_path)
+        directory_path = "{}/{}".format(settings.MEDIA_ROOT, directory_path)
         if not os.path.exists(directory_path):
             os.makedirs(directory_path)
-        dest = open("{}/{}".format(directory_path,file_name), 'wb')
+        dest = open("{}/{}".format(directory_path, file_name), 'wb')
         dest.write(file_content)
         dest.close()
 
-    def zip_all_resume_pdfs(self,order):
+    def zip_all_resume_pdfs(self, order):
         content_type = "zip"
         candidate = Candidate.objects.get(candidate_id=order.candidate_id)
-        file_dir = "{}/{}".format(candidate.id,content_type)
-        file_name = "{}.{}".format("combo",content_type)
+        file_dir = "{}/{}".format(candidate.id, content_type)
+        file_name = "{}.{}".format("combo", content_type)
 
         zip_stream = BytesIO()
         zf = zipfile.ZipFile(zip_stream, "w")
 
         for i in range(1, 6):
-            current_file = "{}_{}-{}.{}".format(order.first_name,order.last_name,i,"pdf")
-            pdf_file_path = "{}/{}/pdf/{}.pdf".format(settings.RESUME_TEMPLATE_DIR,candidate.id,i)
+            current_file = "{}_{}-{}.{}".format(order.first_name, order.last_name, i, "pdf")
+            pdf_file_path = "{}/{}/pdf/{}.pdf".format(settings.RESUME_TEMPLATE_DIR, candidate.id, i)
             try:
                 file_obj = GCPPrivateMediaStorage().open(pdf_file_path)
             except:
                 logging.getLogger('error_log').error("Unable to open file - {}".format(pdf_file_path))
-            
+
             if not settings.IS_GCP:
-                pdf_file_path = "{}/{}".format(settings.MEDIA_ROOT,pdf_file_path)
+                pdf_file_path = "{}/{}".format(settings.MEDIA_ROOT, pdf_file_path)
                 try:
-                    file_obj = open(pdf_file_path,"rb")
+                    file_obj = open(pdf_file_path, "rb")
                 except:
                     logging.getLogger('error_log').error("Unable to open file - {}".format(pdf_file_path))
                     continue
-            
+
             open(current_file, 'wb').write(file_obj.read())
             zf.write(current_file)
             os.unlink(current_file)
 
-        self.store_file(file_dir,file_name,zip_stream.getvalue())
+        self.store_file(file_dir, file_name, zip_stream.getvalue())
 
     def generate_pdf_for_template(self, order=None, index='1'):
         content_type = "pdf"
@@ -394,8 +395,8 @@ class ResumeGenerate(object):
         if not candidate:
             return {}
 
-        file_dir = "{}/{}".format(candidate.id,content_type)
-        file_name = "{}.{}".format(index,content_type)
+        file_dir = "{}/{}".format(candidate.id, content_type)
+        file_name = "{}.{}".format(index, content_type)
         entity_preference = eval(candidate.entity_preference_data)
         extracurricular = candidate.extracurricular_list
         education = candidate.candidateeducation_set.all().order_by('order')
@@ -428,21 +429,21 @@ class ResumeGenerate(object):
 
         template = get_template('resume{}_preview.html'.format(template_id))
         context_dict = {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,
-             'achievements': achievements, 'references': references, 'projects': projects,
-             'certifications': certifications, 'extracurricular': extracurricular, 'languages': languages,
-             'current_exp': current_exp, 'latest_exp': latest_experience,
-             'preference_list': entity_preference, 'current_config': current_config,
-             'entity_position': entity_position
-             }
+                        'achievements': achievements, 'references': references, 'projects': projects,
+                        'certifications': certifications, 'extracurricular': extracurricular, 'languages': languages,
+                        'current_exp': current_exp, 'latest_exp': latest_experience,
+                        'preference_list': entity_preference, 'current_config': current_config,
+                        'entity_position': entity_position, "width": 93.7
+                        }
 
         pdf_file = self.generate_file(
-                    context_dict=context_dict,
-                    template_src='resume{}_preview.html'.format(index),
-                    file_type='pdf')
+            context_dict=context_dict,
+            template_src='resume{}_preview.html'.format(index),
+            file_type='pdf')
 
-        self.store_file(file_dir,file_name,pdf_file)
+        self.store_file(file_dir, file_name, pdf_file)
 
-    def save_order_resume_pdf(self, order=None, is_combo=False,index=None):
+    def save_order_resume_pdf(self, order=None, is_combo=False, index=None):
         if not order:
             return None, None
 
@@ -453,8 +454,3 @@ class ResumeGenerate(object):
             self.generate_pdf_for_template(order, index=str(i))
 
         return self.zip_all_resume_pdfs(order)
-
-
-
-
-

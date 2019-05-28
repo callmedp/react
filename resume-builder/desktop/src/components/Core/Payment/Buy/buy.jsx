@@ -121,7 +121,7 @@ export class Buy extends Component {
             * */
             <div>
                 <Header userName={first_name}/>
-                <TemplateModal {...this.props} />
+                <TemplateModal {...this.props}  page={'buy'}/>
                 <SelectTemplateModal {...this.props}/>
                 {
                     !!(loader) &&

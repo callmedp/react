@@ -388,7 +388,7 @@ class CandidateResumePreview(APIView):
              'certifications': certifications, 'extracurricular': extracurricular, 'languages': languages,
              'current_exp': current_exp, 'latest_exp': latest_experience,
              'preference_list': entity_preference, 'current_config': current_config,
-             'entity_position': entity_position
+             'entity_position': entity_position, 'width': 100,
              }).encode(encoding='UTF-8')
 
         return Response({
@@ -710,7 +710,7 @@ class EntityReorderView(APIView):
         entity_id = str(request.data.get('entity_id', ''))
         step = str(request.data.get('step', ''))
 
-        if not step or not step in ['1','-1','0']:
+        if not step or not step in ['1', '-1', '0']:
             return Response({"detail": "Please provide proper data"}, status=status.HTTP_400_BAD_REQUEST)
 
         entity_order_object = OrderCustomisation.objects.filter( \
@@ -762,21 +762,23 @@ class ResumeImagePreviewView(APIView):
         if not settings.IS_GCP:
             try:
                 file_obj = open("{}/{}/{}/images/resumetemplate-{}.png". \
-                                format(settings.MEDIA_ROOT,settings.RESUME_TEMPLATE_DIR, candidate_obj.id,
-                                    name_suffix), "rb")
+                                format(settings.MEDIA_ROOT, settings.RESUME_TEMPLATE_DIR, candidate_obj.id,
+                                       name_suffix), "rb")
             except Exception as e:
                 logging.getLogger('error_log').error("Not Found - {}/{}/{}/images/resumetemplate-{}.png". \
-                    format(settings.MEDIA_ROOT,settings.RESUME_TEMPLATE_DIR, candidate_obj.id, template_no))
+                                                     format(settings.MEDIA_ROOT, settings.RESUME_TEMPLATE_DIR,
+                                                            candidate_obj.id, template_no))
                 return Response(status=status.HTTP_404_NOT_FOUND)
 
         else:
             try:
                 file_obj = GCPPrivateMediaStorage().open("{}/{}/images/resumetemplate-{}.png". \
-                                format(settings.RESUME_TEMPLATE_DIR, candidate_obj.id,
-                                    name_suffix), "rb")
+                                                         format(settings.RESUME_TEMPLATE_DIR, candidate_obj.id,
+                                                                name_suffix), "rb")
             except Exception as e:
                 logging.getLogger('error_log').error("Not Found - {}/{}/images/resumetemplate-{}.png". \
-                                                     format(settings.RESUME_TEMPLATE_DIR, candidate_obj.id, template_no))
+                                                     format(settings.RESUME_TEMPLATE_DIR, candidate_obj.id,
+                                                            template_no))
                 return Response(status=status.HTTP_404_NOT_FOUND)
 
         if not file_obj:
