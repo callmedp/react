@@ -175,7 +175,7 @@ export class Buy extends Component {
                                                    onChange={this.handleOnChange.bind(this, 'product2')}/>
                                             </span>
                                             <span className="choose-plan--price">
-                                            <p>Buy all 6 customised resumes</p>
+                                            <p>Buy all 5 customised resumes</p>
                                             Rs. <strong>1249/-</strong>
                                             <strike className="ml-10">Rs. 3499</strike>
                                             <span className="choose-plan--off ml-10">63% off</span>
