@@ -126,7 +126,7 @@ class Buy extends Component {
                                 <span className="buy__item--image">
                                     { thumbnailImages.length === 5 ?
                                         <img  src={`data:image/png;base64, ${thumbnailImages[template]}`} alt="Resume"/>:
-                                        <img src={`${this.staticUrl}react/assets/images/mobile/small-resume-${template}.png`} alt="Custom resume" />
+                                        <img src={`${this.staticUrl}react/assets/images/mobile/small-resume-${template}.jpg`} alt="Custom resume" />
                                     }
                                 </span>
                                 <a className="fs-12 mt-5" onClick onClick={()=>{this.props.history.push(`/resume-builder/edit/?type=profile`) }}>Edit</a>
@@ -171,7 +171,7 @@ class Buy extends Component {
                                             return(
                                                 <div className="buy__recommended__item" key={index}>
                                                     <span className="buy__recommended__image">
-                                                        <img src={`${this.staticUrl}react/assets/images/mobile/resumebig-${el}.png`} alt="Custom resume" />
+                                                        <img src={`${this.staticUrl}react/assets/images/mobile/resumebig-${el}.jpg`} alt="Custom resume" />
                                                     </span>
                                                 </div>
                                             )
