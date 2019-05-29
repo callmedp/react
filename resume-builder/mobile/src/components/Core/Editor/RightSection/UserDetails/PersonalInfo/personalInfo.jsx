@@ -82,7 +82,6 @@ class PersonalInfo extends Component {
             }
             if(!error){
                 await this.props.onSubmit(form_data['values']);
-                this.setState({submit:true})
             }
         }
         
@@ -267,7 +266,7 @@ class PersonalInfo extends Component {
                     </ul>
                     <div className="btn-wrap">
                         <button className="btn btn__round btn--outline" 
-                            onClick={async()=>{previewHandling(this.updateInfoBeforeLoss,history) }}
+                            onClick={async()=>{previewHandling(this.updateInfoBeforeLoss,history);this.setState({submit:true}) }}
                             type={'button'}>Preview</button>
                         <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
                             {(length === pos +1) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}

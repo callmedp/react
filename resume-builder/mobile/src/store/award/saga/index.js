@@ -66,27 +66,6 @@ function* fetchUserAward(action) {
     }
 }
 
-function* updateUserAward(action) {
-    try {
-        const {payload: {userAward, resolve, reject}} = action;
-
-        const candidateId = localStorage.getItem('candidateId') || '';
-
-        const {id} = userAward;
-        const result = yield call(id ? Api.updateUserAward : Api.createUserAward, userAward, candidateId, id);
-        if (result['error']) {
-            return reject(new SubmissionError({_error: result['errorMessage']}));
-        }
-        
-        yield put({type: Actions.SAVE_USER_AWARD, data: result['data']});
-
-        return resolve('User Award  Info saved successfully.');
-
-    } catch (e) {
-        console.log('error', e);
-    }
-}
-
 
 function* bulkUpdateUserAward(action) {
     try {
@@ -147,7 +126,6 @@ function* deleteUserAward(action) {
 
 export default function* watchAward() {
     yield takeLatest(Actions.FETCH_USER_AWARD, fetchUserAward);
-    yield takeLatest(Actions.UPDATE_USER_AWARD, updateUserAward);
     yield takeLatest(Actions.DELETE_USER_AWARD, deleteUserAward);
     yield takeLatest(Actions.BULK_UPDTATE_USER_AWARD, bulkUpdateUserAward);
 }

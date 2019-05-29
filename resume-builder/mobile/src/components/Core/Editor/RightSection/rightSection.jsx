@@ -116,6 +116,31 @@ const handleAddition = (fields,data,offset,type,containerId) =>{
     })
 }
 
+const changeOrderingUp = (index,fields,event) => {
+    
+    event.stopPropagation();
+    let currentItem = fields.get(index);
+    let prevItem = fields.get(index - 1);
+    currentItem['order'] = index - 1;
+    prevItem['order'] = index;
+
+    fields.splice(index -1 ,2,currentItem)
+    fields.splice(index ,0,prevItem)
+    return fields.getAll()
+}
+
+const changeOrderingDown = (index,fields,event) => {
+    event.stopPropagation();
+    let currentItem = fields.get(index);
+    let nextItem = fields.get(index + 1);
+    currentItem['order'] = index + 1;
+    nextItem['order'] = index;
+
+    fields.splice(index ,2,nextItem)
+    fields.splice(index+1 ,0,currentItem)
+    return fields.getAll()
+}
+
 const handleOrdering = (values) =>{
     values['list'].map((el,index)=>{
         el['order'] = index
@@ -155,7 +180,13 @@ const mapDispatchToProps = (dispatch) => {
         },
         "previewHandling":(callback,history)=>{
             return previewHandling(callback,history)
-        }
+        },
+        "changeOrderingUp":(index,fields,event)=>{
+            return changeOrderingUp(index,fields,event)
+        },
+        "changeOrderingDown":(index,fields,event)=>{
+            return changeOrderingDown(index,fields,event)
+        },
     }
 };
 

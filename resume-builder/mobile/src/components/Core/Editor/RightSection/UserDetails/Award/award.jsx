@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
-import {Field, reduxForm, FieldArray} from "redux-form";
+import {reduxForm, FieldArray} from "redux-form";
 import * as actions from "../../.../../../../../../store/award/actions";
 import {connect} from "react-redux";
 import validate from "../../../../../FormHandler/validtaions/award/validate"
-import {datepicker, renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import moment from "moment";
 import PreviewModal from "../../../Preview/changeTemplateModal";
 import renderAwards from "./renderAwards"
@@ -17,8 +16,6 @@ class Award extends Component {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.deleteAward = this.deleteAward.bind(this);
-        this.changeOrderingUp = this.changeOrderingUp.bind(this);
-        this.changeOrderingDown = this.changeOrderingDown.bind(this);
         this.state = {
             'editHeading': false,
             'heading' : '',
@@ -54,7 +51,6 @@ class Award extends Component {
             if(!error){
                 const values = this.props.handleOrdering(form_data['values'])
                 await this.props.bulkUpdateUserAward(values.list)
-                this.setState({submit:true})
             }
         }  
     }
@@ -65,11 +61,11 @@ class Award extends Component {
     
 
     async handleSubmit(values) {
+        values = this.state.fields ? this.state.fields : values.list
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
         this.setState({submit:true})
-        values = this.props.handleOrdering(values)
-        await this.props.bulkUpdateUserAward(values.list);
+        await this.props.bulkUpdateUserAward(values);
          if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
             if(this.props.personalInfo.subscription_status){
@@ -92,19 +88,6 @@ class Award extends Component {
         if (award && award.id) {
             this.props.removeAward(award.id)
         }
-    }
-
-    async changeOrderingUp(index,fields,event){
-        event.stopPropagation();
-        let currentItem = fields.get(index);
-        let prevItem = fields.get(index - 1);
-        currentItem['order'] = index - 1;
-        prevItem['order'] = index;
-        fields.remove(index)
-        fields.insert(index, currentItem)
-        fields.remove(index - 1)
-        fields.insert(index - 1, prevItem)
-        fields.swap(index, index - 1)
     }
 
     updateInputValue(key,e) {
@@ -139,21 +122,8 @@ class Award extends Component {
         }
     }
 
-    async changeOrderingDown(index,fields,event){
-        event.stopPropagation();
-        let currentItem = fields.get(index);
-        let nextItem = fields.get(index + 1);
-        currentItem['order'] = index + 1;
-        nextItem['order'] = index;
-        fields.remove(index)
-        fields.insert(index, currentItem)
-        fields.remove(index+1)
-        fields.insert(index + 1, nextItem)
-        fields.swap(index, index + 1);
-    }
-
     render () {
-        const {handleSubmit,submitting,history,previewHandling,personalInfo:{subscription_status}} = this.props;
+        const {handleSubmit,submitting,history,previewHandling,personalInfo:{subscription_status},changeOrderingUp,changeOrderingDown} = this.props;
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
         const {editHeading,heading} =this.state;
@@ -161,24 +131,25 @@ class Award extends Component {
         return(
             <div className="buildResume">
                 <PreviewModal {...this.props}/>
-                <form onSubmit={handleSubmit(this.handleSubmit)}>
+                <form onSubmit={handleSubmit((values)=>this.handleSubmit(values))}>
                     <FieldArray name="list" 
                                 handleSubmit={handleSubmit}
                                 handleAddition={this.props.handleAddition}
                                 deleteAward={this.deleteAward}
-                                changeOrderingUp={this.changeOrderingUp}
-                                changeOrderingDown={this.changeOrderingDown}
+                                changeOrderingUp={changeOrderingUp}
+                                changeOrderingDown={changeOrderingDown}
                                 component={renderAwards}
                                 updateInputValue={this.updateInputValue}
                                 editHeading={editHeading}
                                 editHeadingClick={this.editHeadingClick}
                                 loader={this.props.loader.dataloader}
+                                context={this}
                                 heading ={heading}/>
                     <ul className="form">
                         <li className="form__group">
                             <div className="btn-wrap">
                                  <button className="btn btn__round btn--outline" 
-                                    onClick={async()=>{previewHandling(this.updateInfoBeforeLoss,history) }}
+                                    onClick={async()=>{previewHandling(this.updateInfoBeforeLoss,history);this.setState({submit:true}) }}
                                     type={'button'}>Preview</button>
                                 <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
                                     {(length === pos +1) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}
@@ -203,25 +174,13 @@ export const AwardForm = reduxForm({
 const mapStateToProps = (state) => {
     return {
         initialValues: state.award,
-        award: state.award
+        award: state.award,
+        info123: state
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        "onSubmit": (userAward) => {
-            const {date} = userAward;
-
-            userAward = {
-                ...userAward,
-                ...{
-                    date: (date && moment(date).format('YYYY-MM-DD')) || '',
-                }
-            };
-            return new Promise((resolve, reject) => {
-                return dispatch(actions.updateUserAward({userAward, resolve, reject}));
-            })
-        },
         "fetchUserAward": () => {
             return dispatch(actions.fetchUserAward())
         },

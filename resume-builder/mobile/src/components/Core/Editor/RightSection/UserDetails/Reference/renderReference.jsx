@@ -16,7 +16,8 @@ const renderReferences = ({
                             heading,
                             updateInputValue,
                             editHeadingClick,
-                            loader
+                            loader,
+                            context,
                         }) => {
     return (
         
@@ -52,15 +53,15 @@ const renderReferences = ({
                                     <span className={"sprite icon--delete " +(fields.length === 1 && !fields.get(index).id ? "hide":"")} role="button"
                                     onClick={(event) => deleteReference(index, fields, event)}></span>
                                 </li>
-                                {index == 0 ? '':
+                                {index === 0 ? '':
                                     <li className="subHeading__btn"
-                                        onClick={(event) => changeOrderingUp(index, fields, event)}>
+                                        onClick={(event) =>{fields=changeOrderingUp(index, fields, event);context.setState({fields})}}>
                                         <i className="sprite icon--upArrow"></i>
                                     </li>
                                 }
-                                {index == fields.length-1 ? '':
+                                {index === fields.length-1 ? '':
                                     <li className="subHeading__btn"
-                                        onClick={(event) => changeOrderingDown(index, fields, event)}>
+                                        onClick={(event) =>{fields=changeOrderingDown(index, fields, event);context.setState({fields})}}>
                                         <i className="sprite icon--downArrow"></i>
                                     </li>
                                 }

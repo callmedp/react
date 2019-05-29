@@ -27,7 +27,8 @@ class LeftSideBar extends Component {
             type: (values && values.type) || '',
             addmore: [],
             current_page: '',
-            loaded: false
+            loaded: false,
+            sidenav_active_pos: 1
         };
         if (!(values && values.type)) {
             this.props.history.push(`/resume-builder/edit/?type=profile`)
@@ -58,14 +59,16 @@ class LeftSideBar extends Component {
 
     }
 
-    addItem(item) {
-        let addmore = {...this.state.addmore};
-        addmore[item -1].active = true;
+    addItem(pos) {
+        let {addmore} = this.state;
+        addmore[pos -1].active = true;
+        this.setState({addmore,sidenav_active_pos:pos})
     }
 
-    removeItem(item) {
-        let addmore = {...this.state.addmore};
-        addmore[item -1].active = false
+    removeItem(pos) {
+        let {addmore} = this.state;
+        addmore[pos -1].active = false
+        this.setState({addmore,sidenav_active_pos:pos})
     }
 
     closeSideNav() {
@@ -81,13 +84,13 @@ class LeftSideBar extends Component {
                 }
             }
         }
+        this.setState({sidenav_active_pos:1})
 
     }
 
 
     componentDidMount() {
         this.props.fetchPersonalInfo()
-        // this.showErrorMessage('profile')
         let current_page = this.props.location.search.split('=')[1]
         this.setState({
             current_page
@@ -110,9 +113,15 @@ class LeftSideBar extends Component {
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes, change it!'
         }).then((result) => {
-            if (result.value) {
-                this.props.history.push(`/resume-builder/edit/?type=${link}`)  
+            if(link === 'addMore'){
+                this.addMore();
             }
+            else{
+                if (result.value) {
+                    this.props.history.push(`/resume-builder/edit/?type=${link}`)  
+                }
+            }
+            
         })
     }
 
@@ -153,7 +162,7 @@ class LeftSideBar extends Component {
     }
 
     render() {
-        const {type, addmore, current_page} = this.state;
+        const {type, addmore, current_page,sidenav_active_pos} = this.state;
         const {sidenav:{sidenavStatus},formData,loader:{formName},personalInfo:{first_name}} = this.props
         let error = false;
         const obj = formData && formData[formName] || {};
@@ -196,6 +205,7 @@ class LeftSideBar extends Component {
                                                         removeItem={this.removeItem}
                                                         addItem={this.addItem}
                                                         error={error}
+                                                        sidenav_active_pos={sidenav_active_pos}
                                                         showErrorMessage={this.showErrorMessage}
                                                         deleteIconExist={delete_icon[item.entity_id]}/>)
                                         }
@@ -214,6 +224,7 @@ class LeftSideBar extends Component {
                                                         changeLink={this.changeLink}
                                                         iconClass={iconClassList[item.entity_id]}
                                                         removeItem={this.removeItem}
+                                                        sidenav_active_pos={sidenav_active_pos}
                                                         addItem={this.addItem}
                                                         deleteIconExist={delete_icon[item.entity_id]}/>)
                                         }
@@ -224,7 +235,7 @@ class LeftSideBar extends Component {
                                         <a href="#" className="sidebar__anchor">
                                             <div className="sidebar__wrap">
                                                 <i className="sprite icon--add-more"></i>
-                                                <span className="sidebar__link" onClick={this.addMore}>Add more</span>
+                                                <span className="sidebar__link" onClick={!error ?this.addMore:this.showErrorMessage.bind(this,'addMore')}>Add more</span>
                                             </div>
 
                                             <div className="sidebar-open__wrap">

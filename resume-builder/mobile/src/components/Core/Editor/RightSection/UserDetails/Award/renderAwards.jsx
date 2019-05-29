@@ -16,12 +16,12 @@ export const renderAwards = ({
                                 heading,
                                 updateInputValue,
                                 editHeadingClick,
+                                context,
                                 loader
                             }) => {
     return (
         
         <div className="buildResume__wrap">
-            
             {/* {loader ? <DataLoader/> :""} */}
             <div className="buildResume__heading heading">
                 <div className="heading__info">
@@ -48,22 +48,20 @@ export const renderAwards = ({
                 <div className="form-wrap" key={index} id={`award${index}`}>
                     <div className="subHeading pb-0">
                         <h2>{fields.get(index).title || 'Award'}</h2>
-
-                        
                         <ul className="subHeading__control">
                             <li className="subHeading__delete">
                                 <span className={"sprite icon--delete " +(fields.length === 1 && !fields.get(index).id ? "hide":"")}  role="button"
                                     onClick={(event) => deleteAward(index, fields, event)}></span>
                             </li>
-                            {index == 0 ? '':
+                            {index === 0 ? '':
                                 <li className="subHeading__btn"
-                                    onClick={(event) => changeOrderingUp(index, fields, event)}>
+                                    onClick={(event) =>{fields=changeOrderingUp(index, fields, event);context.setState({fields})}}>
                                     <i className="sprite icon--upArrow"></i>
                                 </li>
                             }
-                            {index == fields.length-1 ? '':
+                            {index === fields.length-1 ? '':
                                 <li className="subHeading__btn"
-                                    onClick={(event) => changeOrderingDown(index, fields, event)}>
+                                    onClick={(event) =>{fields=changeOrderingDown(index, fields, event);context.setState({fields})}}>
                                     <i className="sprite icon--downArrow"></i>
                                 </li>
                             }

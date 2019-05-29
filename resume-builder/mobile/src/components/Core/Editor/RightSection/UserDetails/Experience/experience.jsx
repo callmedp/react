@@ -15,8 +15,6 @@ class Experience extends Component {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.deleteExperience = this.deleteExperience.bind(this);
-        this.changeOrderingUp = this.changeOrderingUp.bind(this);
-        this.changeOrderingDown = this.changeOrderingDown.bind(this);
         this.state = {
             'editHeading': false,
             'heading' : '',
@@ -74,11 +72,11 @@ class Experience extends Component {
     }
 
     async handleSubmit(values) {
+        values = this.state.fields ? this.state.fields : values.list
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         this.setState({submit:true})
         currentLinkPos++
-        values = this.props.handleOrdering(values)
-        await this.props.bulkUpdateUserExperience(values.list);
+        await this.props.bulkUpdateUserExperience(values);
          if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
             if(this.props.personalInfo.subscription_status){
@@ -114,7 +112,6 @@ class Experience extends Component {
             if(!error){
                 const values = this.props.handleOrdering(form_data['values'])
                 await this.props.bulkUpdateUserExperience(values.list)
-                this.setState({submit:true})
             }
         }
     }
@@ -145,36 +142,10 @@ class Experience extends Component {
         }
     }
 
-  async changeOrderingUp(index,fields,event){
-        event.stopPropagation();
-        let currentItem = fields.get(index);
-        let prevItem = fields.get(index - 1);
-        currentItem['order'] = index - 1;
-        prevItem['order'] = index;
-        fields.remove(index)
-        fields.insert(index, currentItem)
-        fields.remove(index - 1)
-        fields.insert(index - 1, prevItem)
-        fields.swap(index, index - 1)
-    }
-
-    async changeOrderingDown(index,fields,event){
-        event.stopPropagation();
-        let currentItem = fields.get(index);
-        let nextItem = fields.get(index + 1);
-        currentItem['order'] = index + 1;
-        nextItem['order'] = index;
-        fields.remove(index)
-        fields.insert(index, currentItem)
-        fields.remove(index+1)
-        fields.insert(index + 1, nextItem)
-        fields.swap(index, index + 1);
-    }
-
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {handleSubmit,submitting,personalInfo:{subscription_status},history,previewHandling} = this.props;
+        const {handleSubmit,submitting,personalInfo:{subscription_status},history,previewHandling,changeOrderingUp,changeOrderingDown} = this.props;
         const {editHeading,heading,till_today} =this.state;
         return(
             <div className="buildResume">
@@ -184,21 +155,22 @@ class Experience extends Component {
                                 handleSubmit={handleSubmit}
                                 handleAddition={this.props.handleAddition}
                                 deleteExperience={this.deleteExperience}
-                                changeOrderingUp={this.changeOrderingUp}
-                                changeOrderingDown={this.changeOrderingDown}
+                                changeOrderingUp={changeOrderingUp}
+                                changeOrderingDown={changeOrderingDown}
                                 component={renderExperiences}
                                 updateInputValue={this.updateInputValue}
                                 editHeading={editHeading}
                                 editHeadingClick={this.editHeadingClick}
                                 loader={this.props.loader.dataloader}
                                 heading ={heading}
+                                context={this}
                                 till_today={till_today}
                                 tillTodayDisable={this.tillTodayDisable}/>
                     <ul className="form mt-15">
                         <li className="form__group">
                             <div className="btn-wrap">
                                  <button className="btn btn__round btn--outline" 
-                                    onClick={async()=>{previewHandling(this.updateInfoBeforeLoss,history) }}
+                                    onClick={async()=>{previewHandling(this.updateInfoBeforeLoss,history);this.setState({submit:true}) }}
                                     type={'button'}>Preview</button>
                                 <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
                                     {(length === pos +1) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}

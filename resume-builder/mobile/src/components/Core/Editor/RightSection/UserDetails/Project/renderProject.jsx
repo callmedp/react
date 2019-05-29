@@ -17,6 +17,7 @@ const renderProjects = ({
                             updateInputValue,
                             editHeadingClick,
                             loader,
+                            context,
                             till_today,
                             tillTodayDisable,
                         }) => {
@@ -55,15 +56,15 @@ const renderProjects = ({
                                     onClick={(event) => deleteProject(index, fields, event)}
                                     role="button"></span>
                                 </li>
-                                {index == 0 ? '':
+                                {index === 0 ? '':
                                     <li className="subHeading__btn"
-                                        onClick={(event) => changeOrderingUp(index, fields, event)}>
+                                        onClick={(event) =>{fields=changeOrderingUp(index, fields, event);context.setState({fields})}}>
                                         <i className="sprite icon--upArrow"></i>
                                     </li>
                                 }
-                                {index == fields.length-1 ? '':
+                                {index === fields.length-1 ? '':
                                     <li className="subHeading__btn"
-                                        onClick={(event) => changeOrderingDown(index, fields, event)}>
+                                        onClick={(event) =>{fields=changeOrderingDown(index, fields, event);context.setState({fields})}}>
                                         <i className="sprite icon--downArrow"></i>
                                     </li>
                                 }
