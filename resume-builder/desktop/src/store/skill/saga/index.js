@@ -8,7 +8,7 @@ import {SubmissionError} from 'redux-form'
 import {proficiencyList} from "../../../Utils/proficiencyList";
 import {UPDATE_UI} from "../../ui/actions/actionTypes";
 import {courseTypeList} from "../../../Utils/courseTypeList";
-import { initialState } from '../reducer';
+import {initialState} from '../reducer';
 
 
 function modifySkill(data) {
@@ -101,9 +101,11 @@ function* handleSkillSwap(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
+        yield put({type: UPDATE_UI, data: {loader: true}});
 
         const result = yield call(Api.bulkUpdateUserSkill, list, candidateId);
 
+        yield put({type: UPDATE_UI, data: {loader: false}});
 
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));

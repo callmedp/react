@@ -6,7 +6,7 @@ import * as Actions from '../actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
 import {UPDATE_UI} from "../../ui/actions/actionTypes";
-import { initialState } from '../reducer';
+import {initialState} from '../reducer';
 
 
 function* fetchUserReference(action) {
@@ -85,8 +85,11 @@ function* handleReferenceSwap(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
+        yield put({type: UPDATE_UI, data: {loader: true}});
 
         const result = yield call(Api.bulkUpdateUserReference, list, candidateId);
+
+        yield put({type: UPDATE_UI, data: {loader: false}});
 
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));

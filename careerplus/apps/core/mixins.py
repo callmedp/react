@@ -412,18 +412,18 @@ class ResumeGenerate(object):
         entity_position = current_config.entity_position_eval
 
         latest_experience, latest_end_date = '', None
-        for i in experience:
-            if i.is_working:
+        for exp in experience:
+            if exp.is_working:
                 latest_end_date = date.today()
-                latest_experience = i.job_profile
+                latest_experience = exp.job_profile
                 break
-            elif latest_end_date == None:
-                latest_end_date = i.end_date
-                latest_experience = i.job_profile
+            elif latest_end_date is None:
+                latest_end_date = exp.end_date
+                latest_experience = exp.job_profile
             else:
-                if latest_end_date < i.end_date:
-                    latest_end_date = i.end_date
-                    latest_experience = i.job_profile
+                if latest_end_date < exp.end_date:
+                    latest_end_date = exp.end_date
+                    latest_experience = exp.job_profile
 
         # latest_experience = experience and experience[0].job_profile or 'FULL STACK DEVELOPER'
 

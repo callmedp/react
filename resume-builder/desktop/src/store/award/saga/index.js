@@ -16,7 +16,7 @@ function* fetchUserAward(action) {
 
         if (localStorage.getItem('award')) {
 
-            let data = {list: JSON.parse(localStorage.getItem('award')) || []} 
+            let data = {list: JSON.parse(localStorage.getItem('award')) || []}
             yield put({type: Actions.SAVE_USER_AWARD, data: data.list.length ? data : initialState});
             return;
         }
@@ -82,9 +82,11 @@ function* handleAwardSwap(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
+        yield put({type: UPDATE_UI, data: {loader: true}});
 
         const result = yield call(Api.bulkUpdateUserAward, list, candidateId);
 
+        yield put({type: UPDATE_UI, data: {loader: false}});
 
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));

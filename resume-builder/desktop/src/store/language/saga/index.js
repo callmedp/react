@@ -7,7 +7,7 @@ import {proficiencyList} from "../../../Utils/proficiencyList";
 import {SubmissionError} from 'redux-form'
 import {UPDATE_UI} from "../../ui/actions/actionTypes";
 import {courseTypeList} from "../../../Utils/courseTypeList";
-import { initialState } from '../reducer';
+import {initialState} from '../reducer';
 
 
 function modifyLanguage(data) {
@@ -22,7 +22,7 @@ function modifyLanguage(data) {
             })
         }
     };
-    return data.list.length ? data: initialState ;
+    return data.list.length ? data : initialState;
 }
 
 function* fetchUserLanguage(action) {
@@ -103,9 +103,11 @@ function* handleLanguageSwap(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
+        yield put({type: UPDATE_UI, data: {loader: true}});
 
         const result = yield call(Api.bulkUpdateUserLanguage, list, candidateId);
 
+        yield put({type: UPDATE_UI, data: {loader: false}});
 
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
@@ -152,7 +154,7 @@ function* deleteUserLanguage(action) {
 
         localStorage.removeItem('language');
 
-        
+
         yield put({type: Actions.REMOVE_LANGUAGE, id: languageId});
         // yield call(fetchUserLanguage)
 

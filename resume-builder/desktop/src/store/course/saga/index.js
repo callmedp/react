@@ -13,10 +13,10 @@ function* fetchUserCourse(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        
+
         if (localStorage.getItem('course')) {
-            let data = {list: JSON.parse(localStorage.getItem('course')) || []} 
-            yield put({type: Actions.SAVE_USER_COURSE, data: data.list.length ?  data : initialState });
+            let data = {list: JSON.parse(localStorage.getItem('course')) || []}
+            yield put({type: Actions.SAVE_USER_COURSE, data: data.list.length ? data : initialState});
             return;
         }
 
@@ -79,8 +79,11 @@ function* handleCourseSwap(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
+        yield put({type: UPDATE_UI, data: {loader: true}});
 
         const result = yield call(Api.bulkUpdateUserCourse, list, candidateId);
+
+        yield put({type: UPDATE_UI, data: {loader: false}});
 
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));

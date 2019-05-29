@@ -69,10 +69,8 @@ class RightSection extends Component {
         });
         const {titleValue} = this.state;
         let {entityList} = this.props;
-        console.log('-entity--', entityId, entityList, titleValue);
         if (entityList && entityList.length) {
             let index = entityList.findIndex(el => el.entity_id === entityId);
-            console.log('--index-',index);
             entityList[index]['entity_text'] = titleValue || '';
             this.props.updateEntityPreference(entityList)
         }
@@ -80,7 +78,6 @@ class RightSection extends Component {
     }
 
     handleInputValue(value) {
-        console.log('----', value);
         this.setState({
             titleValue: value
         })
@@ -97,7 +94,6 @@ class RightSection extends Component {
         fields.remove(index - 1)
         fields.insert(index - 1, prevItem)
         fields.swap(index, index - 1)
-        console.log('-up order--', fields.getAll());
         this.setState({
             currentFields: fields
         })
@@ -115,7 +111,6 @@ class RightSection extends Component {
         fields.remove(index + 1)
         fields.insert(index + 1, nextItem)
         fields.swap(index, index + 1);
-        console.log('-down order--', fields.getAll());
         this.setState({
             currentFields: fields
         })
