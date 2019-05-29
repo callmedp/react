@@ -36,3 +36,8 @@ $("#loginform").validate({
 
   });
 });
+
+function swapVisibleSection(){
+  $("#forgot-password-section").toggle();
+  $("#login-section").toggle();
+}
