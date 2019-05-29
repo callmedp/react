@@ -361,6 +361,10 @@ EXOTEL_DICT = {
             }
 
 
+URL_SHORTENER_AUTH_DICT = {"access_token":"29d325106d379436d7fbe9dc76844350859d24c1",
+                        "end_point":"https://u.shine.com/api/generate-url/"
+                        }
+
 try:
     from .settings_local import *
 except:

@@ -380,20 +380,10 @@ IS_MAINTENANCE = False
 MAINTENANCE_MESSAGE = "This site will be under maintenance from 9 pm to 12 pm on Friday, 11 Jan, 2019."
 
 
-
-
 ############### VIRTUAL_ENV PATH
 VENV_PATH = "/root/virtualenvs/careerplus3.6/bin/python3"
 
 CODE_PATH ="/code/careerplus/"
-
-try:
-    from .settings_local import *
-except:
-    pass
-
-
-
 
 EXOTEL_DICT = {
            'token': '9e4df38c0c3bd1009ca142da306d827e71e74737',
@@ -405,13 +395,12 @@ EXOTEL_DICT = {
             }
 
 
+URL_SHORTENER_ACCESS_TOKEN = "29d325106d379436d7fbe9dc76844350859d24c1"
+
 try:
     from .settings_local import *
 except:
     pass
-
-
-
 
 
 ##for testing purpose using live working key

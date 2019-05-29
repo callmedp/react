@@ -131,17 +131,20 @@ def get_upload_path_order_invoice(instance, filename):
 def create_short_url(login_url={}):
     short_url = {}
     data = {}
-    data['longUrl'] = login_url.get('upload_url')
-    google_api = "%s?key=%s" % (
-        settings.URL_SHORTENER_API, settings.URL_SHORTENER_ACCESS_KEY)
+    data['url'] = login_url.get('upload_url')
+    
+    headers = {"Authorization":"Token {}".format(settings.URL_SHORTENER_AUTH_DICT.get('access_token','')),
+            "Content-Type":"application/json",
+            "Accept":"application/json"}
+
     response = requests.post(
-        url=google_api, data=json.dumps(data),
-        headers={'Content-Type': 'application/json'})
+        url=settings.URL_SHORTENER_AUTH_DICT.get('end_point',''), data=json.dumps(data),headers=headers)
+
     if response.ok:
         resp = response.json()
-        short_url.update({'url': resp.get('id')})
+        short_url.update({'url': resp.get('uri')})
+    
     return short_url
-
 
 def send_email(to_emails, mail_type, email_dict, status=None, oi=None):
     try:
