@@ -8,7 +8,6 @@ export default class Testimonial extends Component {
     constructor(props) {
         super(props);
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
-
     }
 
     render() {
@@ -20,6 +19,7 @@ export default class Testimonial extends Component {
             slidesToScroll: 3,
             arrows: false,
             variableWidth: true,
+            adaptiveHeight: true,
             dotClass: "testimonials--indicators"
         };
         return (
