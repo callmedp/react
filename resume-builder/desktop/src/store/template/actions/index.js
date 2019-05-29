@@ -31,10 +31,10 @@ export const customizeTemplate = (payload) => {
     }
 }
 
-export const fetchDefaultCustomization = (templateId) => {
+export const fetchDefaultCustomization = (payload) => {
     return {
         type: FETCH_DEFAULT_CUSTOMIZATION,
-        templateId
+        payload
 
     }
 }

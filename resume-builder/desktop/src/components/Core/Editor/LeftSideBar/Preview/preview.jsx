@@ -73,17 +73,14 @@ export default class Preview extends Component {
     }
 
     handleFontSize() {
-        let elem1 = this.refs.bar1;
-        let slider1 = this.refs.slider1;
-        let elem2 = this.refs.bar2;
-        let slider2 = this.refs.slider2;
+        let elem1 = this.refs.bar1, slider1 = this.refs.slider1, elem2 = this.refs.bar2, slider2 = this.refs.slider2;
 
         if (!elem1 || !slider1 || !elem2 || !slider2)
             return;
+
         let rightEdge1 = slider1.offsetWidth - elem1.offsetWidth;
         let rightEdge2 = slider2.offsetWidth - elem2.offsetWidth;
 
-        console.log('----', rightEdge1, rightEdge2, elem1, elem2, slider1, slider2);
         switch (this.state.headingFontSize) {
             case 1: {
                 elem1.style.left = 0 + 'px';
@@ -116,16 +113,13 @@ export default class Preview extends Component {
 
     }
 
-    componentDidMount() {
+    async componentDidMount() {
 
-        this.props.fetchDefaultCustomization(localStorage.getItem('selected_template'));
-
-        let elem1 = this.refs.bar1;
-        let slider1 = this.refs.slider1;
-        let elem2 = this.refs.bar2;
-        let slider2 = this.refs.slider2;
+        let {heading_font_size: headingFontSize, text_font_size: textFontSize} = await this.props.fetchDefaultCustomization(localStorage.getItem('selected_template'));
+        let elem1 = this.refs.bar1, slider1 = this.refs.slider1, elem2 = this.refs.bar2, slider2 = this.refs.slider2;
 
         const self = this;
+
 
         function handleElemEvent(event, element, sliderElement, section) {
 
@@ -136,6 +130,7 @@ export default class Preview extends Component {
             let leftEdge = 0, rEdge = 0;
 
             function onMouseMove(event) {
+
 
                 let newLeft = event.clientX - shiftX - sliderElement.getBoundingClientRect().left;
 
@@ -193,6 +188,57 @@ export default class Preview extends Component {
 
         }
 
+
+        slider1.onmousedown = (event) => {
+            event.preventDefault();
+            const {userInfo: {selected_template}} = self.props;
+            const elementValue = event.screenX - slider1.getBoundingClientRect().left;
+            const rightEdge = slider1.offsetWidth - elem1.offsetWidth;
+            let size = 1;
+
+            if (elementValue > ((rightEdge / 2) + 50)) {
+                elem1.style.left = rightEdge + 'px';
+                size = 3;
+            } else if (elementValue < ((rightEdge / 2) - 50)) {
+                elem1.style.left = 0 + 'px';
+                size = 1;
+            } else if (((rightEdge / 2) - 50) <= elementValue && elementValue <= ((rightEdge / 2) + 50)) {
+                elem1.style.left = rightEdge / 2 + 'px';
+                size = 2;
+            }
+
+            self.props.customizeTemplate({
+                'heading_font_size': size,
+                'template': selected_template
+            })
+
+        };
+        slider2.onmousedown = (event) => {
+            event.preventDefault();
+            const {userInfo: {selected_template}} = self.props;
+            let size = 1;
+
+            const elementValue = event.screenX - slider2.getBoundingClientRect().left;
+            const rightEdge = slider2.offsetWidth - elem2.offsetWidth;
+            if (elementValue > ((rightEdge / 2) + 50)) {
+                elem2.style.left = rightEdge + 'px';
+                size = 3;
+
+            } else if (elementValue < ((rightEdge / 2) - 50)) {
+                elem2.style.left = 0 + 'px';
+                size = 1;
+
+            } else if (((rightEdge / 2) - 50) <= elementValue && elementValue <= ((rightEdge / 2) + 50)) {
+                elem2.style.left = rightEdge / 2 + 'px';
+                size = 2;
+
+            }
+            self.props.customizeTemplate({
+                'text_font_size': size,
+                'template': selected_template
+            })
+        }
+
         elem1.onmousedown = function (event) {
             event.preventDefault(); // prevent selection start (browser action)
 
@@ -214,6 +260,7 @@ export default class Preview extends Component {
         elem2.ondragstart = function () {
             return false;
         };
+
     }
 
     selectSection(section) {
@@ -271,18 +318,22 @@ export default class Preview extends Component {
                 selectedEntity: currentEntity
             })
         }
+        if (this.state.currentTab === 2 && prevState.currentTab !== this.state.currentTab) {
+
+            this.handleFontSize()
+        }
     }
 
     render() {
-        const {userInfo: {selected_template}, template: {heading_font_size, text_font_size, entity_position}} = this.props;
-        const {currentTab, selectedColor, headingFontSize, textFontSize, activeSection, sectionEntityName, selectedEntity} = this.state;
-        const [entityName, currentEntity] = this.getEntityName(entity_position, activeSection);
-
+        const {userInfo: {selected_template}, template: {entity_position}} = this.props;
+        const {currentTab, selectedColor, activeSection, sectionEntityName, selectedEntity} = this.state;
+        const [currentEntity] = this.getEntityName(entity_position, activeSection);
 
         return (
             <div className="preview-section">
                 <strong>Complete your customisation</strong>
-                <Accordion>
+                <Accordion
+                    preExpanded={[0]}>
                     <div className="preivew-scroll">
                         <AccordionItem>
                             <div className="change-theme">

@@ -79,7 +79,10 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(customizeTemplate(data))
         },
         "fetchDefaultCustomization": (templateId) => {
-            return dispatch(fetchDefaultCustomization(templateId))
+            return new Promise((resolve, reject) => {
+
+                return dispatch(fetchDefaultCustomization({templateId, resolve,reject}))
+            })
         },
         "updateSelectedTemplate": (personalDetails) => {
             const {gender, date_of_birth, extracurricular} = personalDetails;

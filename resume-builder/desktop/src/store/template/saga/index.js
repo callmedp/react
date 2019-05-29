@@ -123,7 +123,7 @@ function* fetchDefaultCustomization(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
         yield put({type: UPDATE_UI, data: {loader: true}});
-        const {templateId} = action;
+        const {payload: {templateId, resolve, reject}} = action;
         const result = yield call(Api.fetchDefaultCustomization, candidateId, templateId);
 
         if (result['error']) {
@@ -143,6 +143,8 @@ function* fetchDefaultCustomization(action) {
 
         yield put({type: UPDATE_UI, data: {loader: false}});
 
+
+        resolve(data)
 
         // yield call(fetchTemplate)
 
