@@ -162,7 +162,6 @@ class Project extends Component {
                                 updateInputValue={this.updateInputValue}
                                 editHeading={editHeading}
                                 editHeadingClick={this.editHeadingClick}
-                                loader={this.props.loader.dataloader}
                                 context={this}
                                 heading ={heading}
                                 till_today={till_today}

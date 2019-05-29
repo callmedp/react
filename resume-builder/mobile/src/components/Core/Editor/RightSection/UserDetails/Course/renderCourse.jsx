@@ -1,7 +1,6 @@
 import React from 'react';
 import {Field} from "redux-form";
 import {renderField, datepicker} from "../../../../../FormHandler/formFieldRenderer.jsx";
-import DataLoader from "../../../../../Common/DataLoader/dataloader"
 import {courseNewData} from "../../../../../../Utils/addnewData"
 
 const renderCourse = ({
@@ -16,13 +15,11 @@ const renderCourse = ({
                         heading,
                         updateInputValue,
                         context,
-                        loader,
                         editHeadingClick}) => 
 {
     return (
         
         <div className="buildResume__wrap">
-                {/* {loader ? <DataLoader/> : ""} */}
             <div className="buildResume__heading heading">
                 <div className="heading__info">
                     {!editHeading ?

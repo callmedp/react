@@ -3,18 +3,18 @@ import {Api} from './Api';
 import {takeLatest, put, call,select} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
-import * as LoaderAction from '../../loader/actions/actionTypes';
+import * as uiAction from '../../ui/actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
 
-const getLoaderStatus = state => state.loader;
+const getUIStatus = state => state.ui;
 
 function* fetchUserProject(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
-        const loader = yield select(getLoaderStatus)
-        if(!loader.mainloader){
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+        const ui = yield select(getUIStatus)
+        if(!ui.mainloader){
+            yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
         }
         
 
@@ -35,7 +35,7 @@ function* fetchUserProject(action) {
                             ]
 
             yield put({type: Actions.SAVE_USER_PROJECT, data: {list:local_data}})
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+            yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
             return;
         }
 
@@ -67,7 +67,7 @@ function* fetchUserProject(action) {
         }
 
         yield put({type: Actions.SAVE_USER_PROJECT, data: data})
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
         console.log(e);
     }
@@ -100,7 +100,7 @@ function* fetchUserProject(action) {
 
 function* bulkUpdateUserProject(action) {
     try {
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
         let {payload: {list,resolve,reject}} = action;
 
 
@@ -118,7 +118,7 @@ function* bulkUpdateUserProject(action) {
                 yield call(fetchUserProject)
             }
             yield put({type: Actions.SAVE_USER_PROJECT, data: {list: result['data']}})
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+            yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
             return resolve('Bulk Update Done.');
         }
 
@@ -132,7 +132,7 @@ function* deleteUserProject(action) {
     try {
 
         const candidateId = localStorage.getItem('candidateId') || '';
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
 
         const {projectId} = action;
 
@@ -143,7 +143,7 @@ function* deleteUserProject(action) {
             console.log(result['error'])
         }
         yield put({type: Actions.REMOVE_PROJECT, id: projectId});
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
         
         yield call(fetchUserProject)
 

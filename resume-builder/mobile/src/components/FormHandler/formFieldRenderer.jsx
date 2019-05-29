@@ -4,6 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import Multiselect from 'react-widgets/lib/Multiselect'
 import moment from 'moment'
 import addDays from "date-fns/addDays";
+import AsyncCreatableSelect from 'react-select/async-creatable';
 
 
 export const renderField = ({
@@ -227,3 +228,48 @@ export const renderTextArea = ({
 
 )
 
+export const renderAsyncCreatableSelect = ({
+    input,
+    loadOptions,
+    label,
+    defaultOptions,
+    iconClass,
+    className,
+    isMulti,
+    closeMenuOnSelect,
+    meta: {touched, error, warning}
+}) => {
+        return (
+            <React.Fragment>
+                <label className="form__label" htmlFor={input.name}>{label}</label>
+                <div className={"input-group " + (touched && error ? "error" : "")} >
+                    <div className="input-group__prepend">
+                    <span className="input-group__text">
+                        <i className={iconClass}></i>
+                    </span>
+                    </div>
+                    <AsyncCreatableSelect {...input} className={className}
+                                cacheOptions
+                                loadOptions={loadOptions}
+                                // styles={{menuPortal: base => ({...base, zIndex: 9999})}}
+                                // menuPortalTarget={document.getElementById('right-panel-section')}
+                                // menuPosition={'absolute'}
+                                // menuPlacement={'auto'}
+                                // value={'New Value'}
+                                defaultOptions={[{value:'Enter atleast 3 characters to search',label:'Enter atleast 3 characters to search'}]}
+                                // placeholder={input.value}
+                                // value={input.value}
+                                // isMulti={isMulti}
+                                autoComplete="off"
+                                // closeMenuOnSelect={closeMenuOnSelect}
+                                onBlur={event => event.preventDefault()}
+                        />
+                    {touched &&
+                        ((<span className={'error-message'}>{error}</span>) ||
+                            (warning && <span className={'warn-Message'}>{warning}</span>))
+                    }
+                
+                </div>
+            </React.Fragment>
+        )
+}

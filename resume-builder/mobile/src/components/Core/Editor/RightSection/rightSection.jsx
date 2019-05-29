@@ -12,7 +12,7 @@ import Reference from './UserDetails/Reference/references.jsx';
 import './rightSection.scss'
 import queryString from 'query-string'
 import * as actions from "../../../../store/sidenav/actions";
-import {changeFormName} from "../../../../store/loader/actions/index";
+import {changeFormName} from "../../../../store/ui/actions/index";
 import {connect} from "react-redux";
 import { animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 import Loader from '../../../Common/Loader/loader.jsx';
@@ -89,7 +89,7 @@ class RightSection extends Component {
     }
 
     render() {
-        const {info:{loader:{mainloader}}} = this.props
+        const {info:{ui:{mainloader}}} = this.props
         return (
             <React.Fragment>
                 {mainloader ? <Loader/>:''}

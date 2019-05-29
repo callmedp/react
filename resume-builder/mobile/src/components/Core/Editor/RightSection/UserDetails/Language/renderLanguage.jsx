@@ -1,7 +1,6 @@
 import React from 'react';
 import {Field} from "redux-form";
 import {renderField, renderSelect} from "../../../../../FormHandler/formFieldRenderer.jsx";
-import DataLoader from "../../../../../Common/DataLoader/dataloader"
 import {languageNewData} from "../../../../../../Utils/addnewData"
 
 const renderLanguage = ({
@@ -17,12 +16,10 @@ const renderLanguage = ({
                             updateInputValue,
                             editHeadingClick,
                             context,
-                            loader
                         }) => {
     return (
         
         <div className="buildResume__wrap pb-0">
-            {/* {loader ? <DataLoader/> :""} */}
             <div className="buildResume__heading heading">
                 <div className="heading__info">
                 {!editHeading ?

@@ -1,12 +1,14 @@
-import {UPDATE_MAIN_PAGE_LOADER,UPDATE_DATA_LOADER,CHANGE_FORM_NAME} from "../actions/actionTypes";
+import {UPDATE_MAIN_PAGE_LOADER,UPDATE_DATA_LOADER,CHANGE_FORM_NAME,SAVE_SUGGESTIONS,SET_SUGGESTION_TYPE} from "../actions/actionTypes";
 
 const initialState = {
     'mainloader': true,
     'dataloader': false,
-    'formName' : ''
+    'formName' : '',
+    'suggestions': [],
+    'suggestionType': 'experience'
 };
 
-export const loaderReducer = (state = initialState, action) => {
+export const uiReducer = (state = initialState, action) => {
     switch (action.type) {
         case UPDATE_MAIN_PAGE_LOADER: {
             return {
@@ -24,6 +26,18 @@ export const loaderReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action.payload
+            }
+        }
+        case SAVE_SUGGESTIONS: {
+            return {
+                ...state,
+                ...action.data
+            }
+        }
+        case SET_SUGGESTION_TYPE: {
+            return {
+                ...state,
+                ...action.data
             }
         }
         default: {

@@ -83,7 +83,7 @@ class Buy extends Component {
             speed: 500,
             slidesToShow: 2,
           };
-          const {loader:{mainloader},template:{thumbnailImages,templateImage}} = this.props
+          const {ui:{mainloader},template:{thumbnailImages,templateImage}} = this.props
           const template = localStorage.getItem('template') || 1;
           const {checked,pay_button_clicked,modal_status} = this.state
           
@@ -196,7 +196,7 @@ class Buy extends Component {
 const mapStateToProps = (state) => {
     return {
         productIds: state.productIds,
-        loader: state.loader,
+        ui: state.ui,
         template: state.template
     }
 };

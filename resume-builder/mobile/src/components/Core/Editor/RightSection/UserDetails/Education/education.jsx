@@ -163,7 +163,6 @@ class Education extends Component {
                                 updateInputValue={this.updateInputValue}
                                 editHeading={editHeading}
                                 editHeadingClick={this.editHeadingClick}
-                                loader={this.props.loader.dataloader}
                                 heading ={heading}
                                 context={this}
                                 till_today={till_today}

@@ -1,4 +1,4 @@
-import {UPDATE_MAIN_PAGE_LOADER,UPDATE_DATA_LOADER,FETCH_LOADER_STATUS,CHANGE_FORM_NAME} from './actionTypes'
+import {UPDATE_MAIN_PAGE_LOADER,UPDATE_DATA_LOADER,FETCH_LOADER_STATUS,CHANGE_FORM_NAME,SET_SUGGESTION_TYPE} from './actionTypes'
 
 
 export const updateMainLoader = (payload) => {
@@ -25,5 +25,12 @@ export const changeFormName = (payload) => {
     return {
         type: CHANGE_FORM_NAME,
         payload
+    }
+}
+
+export const setSuggestionType = (type) => {
+    return {
+        type: SET_SUGGESTION_TYPE,
+        data: {suggestionType: type}
     }
 }

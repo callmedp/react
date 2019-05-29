@@ -145,7 +145,7 @@ class Experience extends Component {
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {handleSubmit,submitting,personalInfo:{subscription_status},history,previewHandling,changeOrderingUp,changeOrderingDown} = this.props;
+        const {handleSubmit,submitting,personalInfo:{subscription_status},history,previewHandling,changeOrderingUp,changeOrderingDown,fetchJobTitles} = this.props;
         const {editHeading,heading,till_today} =this.state;
         return(
             <div className="buildResume">
@@ -161,10 +161,10 @@ class Experience extends Component {
                                 updateInputValue={this.updateInputValue}
                                 editHeading={editHeading}
                                 editHeadingClick={this.editHeadingClick}
-                                loader={this.props.loader.dataloader}
                                 heading ={heading}
                                 context={this}
                                 till_today={till_today}
+                                fetchJobTitles={fetchJobTitles}
                                 tillTodayDisable={this.tillTodayDisable}/>
                     <ul className="form mt-15">
                         <li className="form__group">
@@ -218,6 +218,12 @@ const mapDispatchToProps = (dispatch) => {
         },
         "removeExperience": (experienceId) => {
             return dispatch(actions.deleteExperience(experienceId))
+        },
+        "fetchJobTitles": (inputValue, suggestionType) => {
+            if (inputValue.length < 3) return new Promise(resolve => resolve([]));
+            return new Promise((resolve, reject) => {
+                return dispatch(actions.fetchJobTitles({inputValue, suggestionType, resolve, reject}))
+            })
         },
 
         "bulkUpdateUserExperience": (listItems) => {

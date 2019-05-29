@@ -1,7 +1,6 @@
 import React from 'react';
 import {Field} from "redux-form"
 import {renderField, renderSelect} from "../../../../../FormHandler/formFieldRenderer.jsx";
-import DataLoader from "../../../../../Common/DataLoader/dataloader"
 import {skillNewData} from "../../../../../../Utils/addnewData"
 
 
@@ -18,12 +17,10 @@ const renderSkills = ({
                         updateInputValue,
                         context,
                         editHeadingClick,
-                        loader
                     }) => {
     return (
         <React.Fragment>
             <div className="buildResume__wrap pb-0">
-                {/* {loader ? <DataLoader/> :""} */}
                 <div className="buildResume__heading heading">
                     <div className="heading__info">
                     {!editHeading ?

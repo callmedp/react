@@ -94,7 +94,7 @@ class Preview extends Component {
 
     render(){
         const {customize,currentTab,selectedColor,headingFontSize,textFontSize,sectionEntityName,activeSection} = this.state
-        const {initialValues:{html,entity_position},loader:{mainloader},personalInfo:{selected_template}} = this.props
+        const {initialValues:{html,entity_position},ui:{mainloader},personalInfo:{selected_template}} = this.props
         return(
             <div className="preview">
                <Header page={'preview'} {...this.props}/>
@@ -328,7 +328,7 @@ class Preview extends Component {
 const mapStateToProps = (state) => {
     return {
         initialValues: state.template,
-        loader: state.loader,
+        ui: state.ui,
         personalInfo: state.personalInfo,
         allinfo:state
     }

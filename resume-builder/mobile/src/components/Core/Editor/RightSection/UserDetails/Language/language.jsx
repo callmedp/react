@@ -143,7 +143,6 @@ class Language extends Component {
                                 editHeading={editHeading}
                                 editHeadingClick={this.editHeadingClick}
                                 context={this}
-                                loader={this.props.loader.dataloader}
                                 heading ={heading}/>
                     <ul className="form">
                         <li className="form__group">

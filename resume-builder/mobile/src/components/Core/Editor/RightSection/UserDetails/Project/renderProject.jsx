@@ -1,7 +1,6 @@
 import React from 'react';
 import {Field} from "redux-form";
 import {datepicker, renderField, renderTextArea,renderCheckboxField} from "../../../../../FormHandler/formFieldRenderer.jsx";
-import DataLoader from "../../../../../Common/DataLoader/dataloader"
 import {projectNewData} from "../../../../../../Utils/addnewData"
 
 const renderProjects = ({
@@ -16,7 +15,6 @@ const renderProjects = ({
                             heading,
                             updateInputValue,
                             editHeadingClick,
-                            loader,
                             context,
                             till_today,
                             tillTodayDisable,
@@ -24,7 +22,6 @@ const renderProjects = ({
     return (
         
         <div className="buildResume__wrap">
-                {/* {loader ? <DataLoader/> :""} */}
             <div className="buildResume__heading heading">
                 <div className="heading__info">
                 {!editHeading ?

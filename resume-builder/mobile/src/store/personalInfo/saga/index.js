@@ -3,7 +3,7 @@ import {Api} from './Api';
 import {takeLatest, put, call, select} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
-import * as LoaderAction from '../../loader/actions/actionTypes';
+import * as uiAction from '../../ui/actions/actionTypes';
 
 import moment from 'moment'
 
@@ -29,14 +29,14 @@ function modifyPersonalInfo(data) {
 function* getPersonalDetails(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
-
+        yield put({type:uiAction.UPDATE_MAIN_PAGE_LOADER,payload:{mainloader: true}})
         if (localStorage.getItem('personalInfo')) {
 
             yield put({
                 type: Actions.SAVE_USER_INFO,
                 data: modifyPersonalInfo(JSON.parse(localStorage.getItem('personalInfo')) || [])
             })
-            yield put({type:LoaderAction.UPDATE_MAIN_PAGE_LOADER,payload:{mainloader: false}})
+            yield put({type:uiAction.UPDATE_MAIN_PAGE_LOADER,payload:{mainloader: false}})
             return;
         }
 
@@ -48,7 +48,7 @@ function* getPersonalDetails(action) {
         data =modifyPersonalInfo(data)
         yield put({type: Actions.SAVE_USER_INFO, data: data});
 
-        yield put({type:LoaderAction.UPDATE_MAIN_PAGE_LOADER,payload:{mainloader: false}})
+        yield put({type:uiAction.UPDATE_MAIN_PAGE_LOADER,payload:{mainloader: false}})
 
     } catch (e) {
         console.log(e);
@@ -68,7 +68,7 @@ function* updatePersonalDetails(action) {
             }
         }
         const candidateId = localStorage.getItem('candidateId') || '';
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
 
         let result = null;
         if (localStorage.getItem('personalInfo')) result = yield call(Api.createPersonalInfo, personalDetails);
@@ -82,7 +82,7 @@ function* updatePersonalDetails(action) {
         
 
         yield put({type: Actions.SAVE_USER_INFO, data:modifyPersonalInfo(result['data'])});
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
 
         return resolve('User Personal  Info saved successfully.');
 
@@ -115,7 +115,7 @@ function* getInterestList(action){
 function* fetchImageUrl(action) {
     try {
         const {payload: {imageFile, resolve, reject}} = action;
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
 
 
         var data = new FormData();
@@ -133,7 +133,7 @@ function* fetchImageUrl(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
 
         const result = yield call(Api.fetchImageUrl, data, candidateId);
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
 
 
         return resolve(result['data']['path'])

@@ -3,18 +3,19 @@ import {Api} from './Api';
 import {takeLatest, put, call,select} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
-import * as LoaderAction from '../../loader/actions/actionTypes';
+import * as uiAction from '../../ui/actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
 
-const getLoaderStatus = state => state.loader;
+const getUIStatus = state => state.ui;
 
 function* fetchUserAward(action) {
     try {
+        let x=10
         const candidateId = localStorage.getItem('candidateId') || '';
-        const loader = yield select(getLoaderStatus)
-        if(!loader.mainloader){
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+        const ui = yield select(getUIStatus)
+        if(!ui.mainloader){
+            yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
         }
 
         if (localStorage.getItem('award')) {
@@ -33,7 +34,7 @@ function* fetchUserAward(action) {
 
             yield put({type: Actions.SAVE_USER_AWARD, data: {list:local_data}})
 
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+            yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
             return;
         }
         
@@ -61,7 +62,7 @@ function* fetchUserAward(action) {
             };
         }
         yield put({type: Actions.SAVE_USER_AWARD, data: data})
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
     }
 }
@@ -73,7 +74,7 @@ function* bulkUpdateUserAward(action) {
 
 
         const candidateId = localStorage.getItem('candidateId') || '';
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
 
         const result = yield call(Api.bulkUpdateUserAward, list, candidateId);
 
@@ -88,7 +89,7 @@ function* bulkUpdateUserAward(action) {
             }
             
             yield put({type: Actions.SAVE_USER_AWARD, data:{list:result['data']}});
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+            yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
             return resolve('Bulk Update Done.');
         }
 
@@ -102,7 +103,7 @@ function* deleteUserAward(action) {
     try {
 
         const candidateId = localStorage.getItem('candidateId') || '';
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
 
         const {awardId} = action;
 
@@ -114,7 +115,7 @@ function* deleteUserAward(action) {
         }
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_AWARD, id: awardId});
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
         yield call(fetchUserAward)
         
 

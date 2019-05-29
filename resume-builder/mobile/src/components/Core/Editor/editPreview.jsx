@@ -7,7 +7,7 @@ import * as actions from "../../../store/template/actions";
 import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
 import * as profileActions from '../../../store/personalInfo/actions/index';
-import * as loaderActions from '../../../store/loader/actions/index';
+import * as uiActions from '../../../store/ui/actions/index';
 import Loader from '../../Common/Loader/loader'
 import moment from 'moment'
 
@@ -29,7 +29,7 @@ class EditPreview extends Component {
     render() {
         return (
             <div className="edit-section">
-                {this.props.loader.mainloader ? <Loader/> :""}
+                {this.props.ui.mainloader ? <Loader/> :""}
                 <Header page={'edit'}/>
                 <LeftSideBar {...this.props}/>
                 <RightSection {...this.props} changeLink={this.changeLink}/>
@@ -43,7 +43,7 @@ const mapStateToProps = (state) => {
         initialValues: state.template,
         template: state.template,
         personalInfo: state.personalInfo,
-        loader:state.loader,
+        ui:state.ui,
     }
 };
 
@@ -83,7 +83,7 @@ const mapDispatchToProps = (dispatch) => {
             })
         },
         "fetchLoaderStatus": () => {
-            return dispatch(loaderActions.fetchLoaderStatus())
+            return dispatch(uiActions.fetchLoaderStatus())
         },
     }
 };

@@ -37,10 +37,19 @@ const deleteUserExperience = (candidateId, experienceId) => {
 const bulkUpdateUserExperience = (data, candidateId) => {
 
     const url = `candidate/${candidateId}/bulk-update/experience/`;
-    return BaseApiService.post(`${siteDomain}/api/v1/resume/${url}`,data);
+    return BaseApiService.post(`${siteDomain}/api/v1/resume/${url}`, data);
 
+};
 
-}
+const fetchJobTitlesAndSuggestions = (title, subType = '') => {
+
+    let url = `suggestion/?main_type=job_title&query=${title}`;
+    if (subType) {
+        url += `&sub_type=${subType}`
+    }
+    return BaseApiService.get(`${siteDomain}/api/v1/resume/${url}`);
+
+};
 
 
 export const Api = {
@@ -48,5 +57,6 @@ export const Api = {
     updateUserExperience,
     createUserExperience,
     deleteUserExperience,
-    bulkUpdateUserExperience
+    bulkUpdateUserExperience,
+    fetchJobTitlesAndSuggestions
 }

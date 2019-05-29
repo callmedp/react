@@ -1,7 +1,6 @@
 import React from 'react';
 import {datepicker, renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import {Field} from "redux-form";
-import DataLoader from "../../../../../Common/DataLoader/dataloader"
 import {awardNewData} from "../../../../../../Utils/addnewData"
 
 export const renderAwards = ({
@@ -17,12 +16,10 @@ export const renderAwards = ({
                                 updateInputValue,
                                 editHeadingClick,
                                 context,
-                                loader
                             }) => {
     return (
         
         <div className="buildResume__wrap">
-            {/* {loader ? <DataLoader/> :""} */}
             <div className="buildResume__heading heading">
                 <div className="heading__info">
                     {!editHeading ?

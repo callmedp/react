@@ -163,7 +163,7 @@ class LeftSideBar extends Component {
 
     render() {
         const {type, addmore, current_page,sidenav_active_pos} = this.state;
-        const {sidenav:{sidenavStatus},formData,loader:{formName},personalInfo:{first_name}} = this.props
+        const {sidenav:{sidenavStatus},formData,ui:{formName},personalInfo:{first_name}} = this.props
         let error = false;
         const obj = formData && formData[formName] || {};
         let syncErrors = obj['syncErrors'] || {};
@@ -266,7 +266,7 @@ const mapStateToProps = (state) => {
         initialValues: state.sidenav,
         sidenav: state.sidenav,
         formData: state && state.form,
-        loader: state && state.loader
+        ui: state && state.ui
     }
 };
 

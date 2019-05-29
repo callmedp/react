@@ -1,7 +1,6 @@
 import React from 'react';
 import {Field} from "redux-form";
 import {renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer.jsx";
-import DataLoader from "../../../../../Common/DataLoader/dataloader"
 import {referenceNewData} from "../../../../../../Utils/addnewData"
 
 const renderReferences = ({
@@ -16,13 +15,11 @@ const renderReferences = ({
                             heading,
                             updateInputValue,
                             editHeadingClick,
-                            loader,
                             context,
                         }) => {
     return (
         
         <div className="buildResume__wrap">
-                {/* {loader ? <DataLoader/> :""} */}
             <div className="buildResume__heading heading">
                 <div className="heading__info">
                 {!editHeading ?

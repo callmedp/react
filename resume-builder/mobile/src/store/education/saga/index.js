@@ -3,18 +3,18 @@ import {Api} from './Api';
 import {takeLatest, put, call,select} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
-import * as LoaderAction from '../../loader/actions/actionTypes';
+import * as uiAction from '../../ui/actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
 
-const getLoaderStatus = state => state.loader;
+const getUIStatus = state => state.ui;
 
 function* fetchUserEducation(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
-        const loader = yield select(getLoaderStatus)
-        if(!loader.mainloader){
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+        const ui = yield select(getUIStatus)
+        if(!ui.mainloader){
+            yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
         }
         if (localStorage.getItem('education')) {
 
@@ -35,7 +35,7 @@ function* fetchUserEducation(action) {
                             ]
 
             yield put({type: Actions.SAVE_USER_EDUCATION, data: {list:local_data}})
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+            yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
             return;
         }
 
@@ -75,7 +75,7 @@ function* fetchUserEducation(action) {
             };
         }
         yield put({type: Actions.SAVE_USER_EDUCATION, data: data})
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
         console.log(e);
     }
@@ -103,7 +103,7 @@ function* updateUserEducation(action) {
 
 function* bulkUpdateUserEducation(action) {
     try {
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
         let {payload: {list,resolve,reject}} = action;
 
 
@@ -121,7 +121,7 @@ function* bulkUpdateUserEducation(action) {
                 yield call(fetchUserEducation)
             }
             yield put({type: Actions.SAVE_USER_EDUCATION, data:{list: result['data']}})
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+            yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
             return resolve('Bulk Update Done.');
         }
 
@@ -135,7 +135,7 @@ function* deleteUserEducation(action) {
     try {
 
         const candidateId = localStorage.getItem('candidateId') || '';
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
 
         const {educationId} = action;
 
@@ -147,7 +147,7 @@ function* deleteUserEducation(action) {
         }
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_EDUCATION, id: educationId});
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
         yield call(fetchUserEducation)
         
 

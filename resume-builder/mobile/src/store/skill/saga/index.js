@@ -3,18 +3,18 @@ import {Api} from './Api';
 import {takeLatest, put, call,select} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
-import * as LoaderAction from '../../loader/actions/actionTypes';
+import * as uiAction from '../../ui/actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
 
-const getLoaderStatus = state => state.loader;
+const getUIStatus = state => state.ui;
 
 function* fetchUserSkill(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
-        const loader = yield select(getLoaderStatus)
-        if(!loader.mainloader){
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+        const ui = yield select(getUIStatus)
+        if(!ui.mainloader){
+            yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
         }
 
         if (localStorage.getItem('skill')) {
@@ -31,7 +31,7 @@ function* fetchUserSkill(action) {
                             ]
 
             yield put({type: Actions.SAVE_USER_SKILL, data: {list:local_data}})
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+            yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
             return;
         }
 
@@ -65,7 +65,7 @@ function* fetchUserSkill(action) {
             };
         }
         yield put({type: Actions.SAVE_USER_SKILL, data: data})
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
         console.log(e);
     }
@@ -99,7 +99,7 @@ function* fetchUserSkill(action) {
 
 function* bulkSaveUserSkill(action) {
     try {
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
         let {payload: {list,resolve,reject}} = action;
 
 
@@ -118,7 +118,7 @@ function* bulkSaveUserSkill(action) {
                 return resolve('Bulk Update Done.');
             }
             yield put({type: Actions.SAVE_USER_SKILL, data: {list: result['data']}})
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+            yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
             return resolve('Bulk Update Done.');
         }
 
@@ -132,7 +132,7 @@ function* deleteUserSkill(action) {
     try {
 
         const candidateId = localStorage.getItem('candidateId') || '';
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
 
         const {skillId} = action;
 
@@ -141,7 +141,7 @@ function* deleteUserSkill(action) {
             console.log(result['error'])
         }
         else{
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+            yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
             if(localStorage.getItem('skill'))
                 localStorage.deleteItem('skill');
             yield put({type: Actions.REMOVE_SKILL, id: skillId});

@@ -3,18 +3,18 @@ import {Api} from './Api';
 import {takeLatest, put, call,select} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
-import * as LoaderAction from '../../loader/actions/actionTypes';
+import * as uiAction from '../../ui/actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
 
-const getLoaderStatus = state => state.loader;
+const getUIStatus = state => state.ui;
 
 function* fetchUserExperience(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
-        const loader = yield select(getLoaderStatus)
-        if(!loader.mainloader){
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+        const ui = yield select(getUIStatus)
+        if(!ui.mainloader){
+            yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
         }
 
         if (localStorage.getItem('experience')) {
@@ -35,7 +35,7 @@ function* fetchUserExperience(action) {
                             }]
 
             yield put({type: Actions.SAVE_USER_EXPERIENCE, data: {list:local_data}})
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+            yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
             return;
         }
 
@@ -43,8 +43,12 @@ function* fetchUserExperience(action) {
         if (result['error']) {
             console.log('error');
         }
-        const {data: {results}} = result;
+        let {data: {results}} = result;
         results.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
+        results.map((el) => {
+            let job_profile = el.job_profile
+            el.job_profile = {label:job_profile,value:job_profile}
+        })
         let data = {list: results}
         if(! data.list.length){
             data = {
@@ -67,45 +71,23 @@ function* fetchUserExperience(action) {
                 }
             };
         }
+
         yield put({type: Actions.SAVE_USER_EXPERIENCE, data: data})
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
         console.log(e);
-    }
-}
-
-function* updateUserExperience(action) {
-    try {
-        let {payload: {userExperience, resolve, reject}} = action;
-
-
-        const candidateId = localStorage.getItem('candidateId') || '';
-
-        const {id} = userExperience;
-
-        const result = yield call(id ? Api.updateUserExperience : Api.createUserExperience, userExperience, candidateId, userExperience.id);
-        if (result['error']) {
-            return reject(new SubmissionError({_error: result['errorMessage']}));
-        }
-
-        localStorage.removeItem('experience');
-
-        yield put({type: Actions.SAVE_USER_EXPERIENCE, data: result['data']});
-
-        return resolve('User Experience  Info saved successfully.');
-
-    } catch (e) {
-        console.log('error', e);
     }
 }
 
 
 function* bulkUserExperienceUpdate(action) {
     try {
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
         let {payload: {list,resolve,reject}} = action;
 
-
+        list.map((el) => {
+            el.job_profile = el.job_profile.label
+         })
         const candidateId = localStorage.getItem('candidateId') || '';
 
 
@@ -120,7 +102,7 @@ function* bulkUserExperienceUpdate(action) {
                 yield call(fetchUserExperience)
             }
             yield put({type: Actions.SAVE_USER_EXPERIENCE, data: {list: result['data']}})
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+            yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
             return resolve('Bulk Update Done.');
 
         }
@@ -135,7 +117,7 @@ function* deleteUserExperience(action) {
     try {
 
         const candidateId = localStorage.getItem('candidateId') || '';
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
 
         const {experienceId} = action;
 
@@ -146,7 +128,7 @@ function* deleteUserExperience(action) {
             console.log(result['error'])
         }
         yield put({type: Actions.REMOVE_EXPERIENCE, id: experienceId});
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
         yield call(fetchUserExperience)
         
 
@@ -155,9 +137,37 @@ function* deleteUserExperience(action) {
     }
 }
 
+
+function* fetchJobTitlesAndSuggestions(action) {
+    try {
+
+        const {payload: {inputValue, suggestionType, resolve, reject}} = action;
+        const apiResult = yield call(Api.fetchJobTitlesAndSuggestions, inputValue, suggestionType);
+
+
+        if (apiResult['error']) {
+            return reject(new SubmissionError({_error: apiResult['errorMessage']}));
+        }
+
+        let {data: {result}} = apiResult;
+
+        if (!suggestionType) {
+            result = (result || []).map((el) => ({
+                label: el, value: el.toString()
+            }))
+            return resolve(result);
+        }
+
+        yield  put({type:uiAction.SAVE_SUGGESTIONS, data: {suggestions: result}});
+        resolve([])
+    } catch (e) {
+        console.log('error', e);
+    }
+}
+
 export default function* watchExperience() {
     yield takeLatest(Actions.FETCH_USER_EXPERIENCE, fetchUserExperience);
-    yield takeLatest(Actions.UPDATE_USER_EXPERIENCE, updateUserExperience);
     yield takeLatest(Actions.DELETE_USER_EXPERIENCE, deleteUserExperience);
     yield takeLatest(Actions.BULK_UPDATE_USER_EXPERIENCE, bulkUserExperienceUpdate);
+    yield takeLatest(Actions.FETCH_EXPERIENCE_LIST, fetchJobTitlesAndSuggestions);
 }

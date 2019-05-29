@@ -142,7 +142,6 @@ class Course extends Component {
                                 updateInputValue={this.updateInputValue}
                                 editHeading={editHeading}
                                 editHeadingClick={this.editHeadingClick}
-                                loader={this.props.loader.dataloader}
                                 context={this}
                                 heading ={heading}/>
                     <ul className="form">

@@ -1,7 +1,6 @@
 import React from 'react';
-import {renderField, renderTextArea, datepicker,renderCheckboxField} from '../../../../../FormHandler/formFieldRenderer.jsx'
+import {renderField, renderTextArea, datepicker,renderCheckboxField,renderAsyncCreatableSelect} from '../../../../../FormHandler/formFieldRenderer.jsx'
 import {Field} from 'redux-form';
-import DataLoader from "../../../../../Common/DataLoader/dataloader"
 import {experienceNewData} from "../../../../../../Utils/addnewData"
 
 
@@ -17,15 +16,14 @@ const renderExperiences = ({
                             heading,
                             updateInputValue,
                             editHeadingClick,
-                            loader,
                             till_today,
                             context,
-                            tillTodayDisable
+                            tillTodayDisable,
+                            fetchJobTitles
                             }) => {
     return (
         
         <div className="buildResume__wrap">
-                {/* {loader ? <DataLoader/> :""} */}
             <div className="buildResume__heading heading">
                 <div className="heading__info">
                 {!editHeading ?
@@ -74,9 +72,17 @@ const renderExperiences = ({
 
                     <ul className="form pb-0">
 
-                        <li className="form__group">
+                        {/* <li className="form__group">
+                            
                             <Field component={renderField} label={"Designation"}  type={"text"} name={`${member}.job_profile`} prepend={true} 
                                 id={`${member}.job_profile`} iconClass={"sprite icon--designation"} className="form__input"/>
+                        </li> */}
+
+                        <li className="form__group">
+                            <Field component={renderAsyncCreatableSelect} label={"Designation"} name={`${member}.job_profile`} 
+                                id={`${member}.job_profile`} iconClass={"sprite icon--designation"} className={'async-select'}
+                                closeMenuOnSelect={true} isMulti={false}loadOptions={(inputValue) => fetchJobTitles(inputValue, '')}
+                                />
                         </li>
 
                         <li className="form__group">

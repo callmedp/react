@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import * as actions from '../../../../../../store/personalInfo/actions/index';
 import {Field, reduxForm} from 'redux-form';
-import {interestList} from '../../../../../../Utils/interestList';
 import './personalInfo.scss';
 import {
     renderField,
@@ -16,7 +15,6 @@ import moment from 'moment';
 import PreviewModal from "../../../Preview/changeTemplateModal";
 import validate from "../../../../../FormHandler/validtaions/profile/validate"
 import {siteDomain} from "../../../../../../Utils/domains";
-import DataLoader from '../../../../../Common/DataLoader/dataloader';
 
 class PersonalInfo extends Component {
     constructor(props) {
@@ -156,13 +154,12 @@ class PersonalInfo extends Component {
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {handleSubmit, personalInfo,submitting,previewHandling,history,loader:{dataloader}} = this.props;
+        const {handleSubmit, personalInfo,submitting,previewHandling,history} = this.props;
         const {editHeading,heading} =this.state;
         const {subscription_status} = this.props.personalInfo;
         return (
             
         <div className="buildResume">
-            {/* {dataloader ?<DataLoader/> : ""} */}
             <PreviewModal {...this.props}/>
             <div className="buildResume__wrap">
                 <div className="buildResume__heading">

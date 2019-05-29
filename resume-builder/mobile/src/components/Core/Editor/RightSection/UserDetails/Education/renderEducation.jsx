@@ -1,7 +1,6 @@
 import {renderField, renderCheckboxField, renderSelect, datepicker} from '../../../../../FormHandler/formFieldRenderer.jsx'
 import React from 'react';
 import {Field} from "redux-form";
-import DataLoader from "../../../../../Common/DataLoader/dataloader"
 import {educationNewData} from "../../../../../../Utils/addnewData"
 
 const renderEducation = ({
@@ -15,7 +14,6 @@ const renderEducation = ({
                             editHeading,
                             heading,
                             updateInputValue,
-                            loader,
                             editHeadingClick,
                             till_today,
                             context,
@@ -24,7 +22,6 @@ const renderEducation = ({
     return (
         
         <div className="buildResume__wrap" id="education">
-                {/* {loader ?<DataLoader/> : ""} */}
             <div className="buildResume__heading heading">
                 <div className="heading__info">
                     {!editHeading ?

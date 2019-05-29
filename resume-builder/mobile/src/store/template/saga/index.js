@@ -2,12 +2,12 @@ import {call, takeLatest, put,select,all} from 'redux-saga/effects'
 
 import * as Actions from '../actions/actionTypes'
 import {Api} from "./Api";
-import * as LoaderAction from '../../loader/actions/actionTypes';
+import * as uiAction from '../../ui/actions/actionTypes';
 import {SAVE_THUMBNAIL_IMAGES, SET_CUSTOMIZATION,SAVE_TEMPLATE_IMAGES} from "../actions/actionTypes";
 import {SubmissionError} from 'redux-form'
 
 
-const getLoaderStatus = state => state.loader;
+const getUIStatus = state => state.ui;
 
 const getTemplateNo = state => state.personalInfo.selected_template
 
@@ -18,10 +18,10 @@ String.prototype.splice = function(idx, rem, str) {
 function* fetchTemplate(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
-        const loader = yield select(getLoaderStatus)
+        const ui = yield select(getUIStatus)
         const selected_template = yield select(getTemplateNo)
-        if(!loader.mainloader){
-            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+        if(!ui.mainloader){
+            yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
         }
 
         const result = yield call(Api.fetchTemplate, candidateId,selected_template);
@@ -52,7 +52,7 @@ function* fetchTemplate(action) {
                                                     width: 1236px;
                                                     max-height: 105vh;"`)
         yield put({type: Actions.SAVE_TEMPLATE, data:{html : newhtml}})
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
         console.log(e);
     }
@@ -61,7 +61,7 @@ function* fetchTemplate(action) {
 function* customizeTemplate(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
         const {payload:{resolve,reject,template_data}} = action;
         const result = yield call(Api.customizeTemplate, candidateId, template_data.template, template_data);
         if (result['error']) {
@@ -81,7 +81,7 @@ function* customizeTemplate(action) {
         };
 
         yield put({type: SET_CUSTOMIZATION, data: data});
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
         return resolve("Customize Done")
 
     } catch (e) {
@@ -92,7 +92,7 @@ function* customizeTemplate(action) {
 function* reorderSection(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
         const {payload: {templateId, info}} = action;
         const result = yield call(Api.reorderSection, candidateId, templateId, info);
 
@@ -106,7 +106,7 @@ function* reorderSection(action) {
 
         yield put({type: SET_CUSTOMIZATION, data:data});
 
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
 
 
         // yield call(fetchTemplate)
@@ -150,7 +150,7 @@ function* fetchTemplateImages(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
         const {payload:{resolve,reject,template_id}} = action;
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
 
         const result = yield call(Api.fetchTemplateImages, candidateId, template_id);
         if (result['error']) {
@@ -159,7 +159,7 @@ function* fetchTemplateImages(action) {
         const images = result['data']
         yield  put({type: SAVE_TEMPLATE_IMAGES, data: {templateImage: images}});
 
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
         return resolve("Image Received")
 
     } catch (e) {
