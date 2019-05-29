@@ -45,7 +45,7 @@ export class Project extends React.Component {
 
         if (invalid) return;
         let projectList = projects || [];
-        const {skills} = projectValues
+        const {skills} = projectValues;
         const updatedSkills = (skills || []).map(skill => skill['value'])
 
         projectList.push({

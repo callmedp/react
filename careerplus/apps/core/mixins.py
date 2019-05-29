@@ -326,7 +326,8 @@ class InvoiceGenerate(object):
 
 class ResumeGenerate(object):
 
-    def generate_file(self, context_dict={}, template_src=None, file_type='pdf'):
+    def generate_file(self, context_dict: object = {}, template_src: object = None,
+                      file_type: object = 'pdf') -> object:
         if not template_src:
             return None
 
@@ -335,7 +336,7 @@ class ResumeGenerate(object):
 
         if file_type == 'pdf':
             file = HTML(string=rendered_html).write_pdf(stylesheets=[
-                CSS(string='@page {size:A3; margin:0px; margin-top:50px} @page:first {size:A3; margin:0px}')])
+                CSS(string='@page {size:Letter; margin:0} @page:first {size:Letter; margin:0;}')])
         elif file_type == 'png':
             file = HTML(string=rendered_html).write_png()
 

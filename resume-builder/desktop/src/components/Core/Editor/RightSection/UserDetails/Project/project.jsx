@@ -51,7 +51,7 @@ class Project extends Component {
     componentWillUnmount() {
         let {formData: {project: {values, syncErrors}}} = this.props;
         let error = false;
-        (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el).map(key => (!!el[key] ? error = true : false)))
+        (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el || {}     ).map(key => (!!el[key] ? error = true : false)))
         if (!error && !this.state.submit) this.props.bulkUpdateOrCreate(values && values['list'])
 
     }

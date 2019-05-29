@@ -58,7 +58,7 @@ class Experience extends Component {
         let {formData: {experience: {values, syncErrors}}} = this.props;
         console.log('-syncErrors-   -', syncErrors, values);
         let error = false;
-        (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el).map(key => (!!el[key] ? error = true : false)))
+        (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el || {}).map(key => (!!el[key] ? error = true : false)))
         if (!error && !this.state.submit) this.props.bulkUpdateOrCreate(values && values['list'])
 
     }
