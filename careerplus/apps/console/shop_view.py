@@ -2485,6 +2485,11 @@ class DownloadDiscountReportView(TemplateView):
         return super(DownloadDiscountReportView,self).dispatch(request,*args,**kwargs)
 
     def post(self,request,*args,**kwargs):
+        if not request.user.is_authenticated():
+            return HttpResponseForbidden()
+        if 'order.can_download_discount_report' not in request.user.get_all_permissions():
+            return HttpResponseForbidden()
+
         report_type = request.POST.get('report_type')
         report_date = request.POST.get('report_date')
         file_found = False
@@ -2507,6 +2512,8 @@ class DownloadDiscountReportView(TemplateView):
                 pass
         
         if file_found:
+            logging.getLogger('info_log').info("Discount Report Downloaded | {},{},{},{}".\
+                format(request.user.id,request.user.get_full_name(),datetime.now(),report_date))
             response = HttpResponse(
                 fsock,content_type=mimetypes.guess_type(filename)[0])
             response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
@@ -2527,6 +2534,11 @@ class DownloadUpsellReportView(TemplateView):
         return super(DownloadUpsellReportView,self).dispatch(request,*args,**kwargs)
 
     def post(self,request,*args,**kwargs):
+        if not request.user.is_authenticated():
+            return HttpResponseForbidden()
+        if 'order.can_download_upsell_report' not in request.user.get_all_permissions():
+            return HttpResponseForbidden()
+
         report_type = request.POST.get('report_type','')
         report_date = request.POST.get('report_date','')
         report_year,report_month,report_day = map(int,report_date.split("_"))
@@ -2551,6 +2563,8 @@ class DownloadUpsellReportView(TemplateView):
                 pass
         
         if file_found:
+            logging.getLogger('info_log').info("Upsell Report Downloaded | {},{},{},{}".\
+                format(request.user.id,request.user.get_full_name(),datetime.now(),report_date))
             response = HttpResponse(
                 fsock,content_type=mimetypes.guess_type(filename)[0])
             response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)

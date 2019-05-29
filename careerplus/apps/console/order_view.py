@@ -2944,8 +2944,6 @@ class ComplianceReport(TemplateView):
     model = OrderItem
     template_name = 'console/order/compliance_report.html'
 
-
-
     def post(self,request,*args,**kwargs):
         start_date = request.POST.get('start_date', None)
         end_date = request.POST.get('end_date', None)
@@ -2992,6 +2990,11 @@ class ComplianceReport(TemplateView):
             task_id=Task.pk,
             start_date=start_date,
             end_date=end_date)
+
+        logging.getLogger('info_log').info("Compliance Report Downloaded | {},{},{},{},{}".\
+                format(request.user.id,request.user.get_full_name(),\
+                    datetime.datetime.now(),start_date,end_date))
+
         messages.add_message(
             request, messages.SUCCESS,
             'Task Created SuccessFully, Compliance Report is generating')
