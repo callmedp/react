@@ -18,6 +18,7 @@ const renderExperiences = ({
                             editHeadingClick,
                             till_today,
                             context,
+                            openModal,
                             tillTodayDisable,
                             fetchJobTitles
                             }) => {
@@ -121,7 +122,12 @@ const renderExperiences = ({
                             <Field component={renderTextArea} type={"textarea"} name={`${member}.work_description`}
                                 className="form__input h-150" rows="5" 
                             />
+                            <p className="add-suggested"onClick={event => {event.preventDefault();openModal(fields.get(index))}}>
+                                <span>+</span>Add suggested Description
+                            </p>
                         </li>
+
+                        
 
                     </ul>
                 </div>

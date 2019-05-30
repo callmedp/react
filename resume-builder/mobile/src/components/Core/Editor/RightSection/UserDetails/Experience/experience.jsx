@@ -8,6 +8,7 @@ import validate from "../../../../../FormHandler/validtaions/experience/validate
 import PreviewModal from "../../../Preview/changeTemplateModal";
 import renderExperiences from "./renderExperience"
 import {siteDomain} from "../../../../../../Utils/domains";
+import AddSuggesion from '../../../../../Common/AddSuggestion/addSuggesion';
 
 class Experience extends Component {
 
@@ -20,11 +21,15 @@ class Experience extends Component {
             'heading' : '',
             'submit' : false,
             'till_today': [],
+            'modal_status':false,
+            'scrollpos':'',
         }
         this.updateInputValue =this.updateInputValue.bind(this);
         this.editHeadingClick = this.editHeadingClick.bind(this);
         this.tillTodayDisable = this.tillTodayDisable.bind(this);
-        this.updateInfoBeforeLoss = this.updateInfoBeforeLoss.bind(this)
+        this.updateInfoBeforeLoss = this.updateInfoBeforeLoss.bind(this);
+        this.openModal = this.openModal.bind(this);
+        this.closeModal = this.closeModal.bind(this);
 
     }
     componentDidMount() {
@@ -133,6 +138,16 @@ class Experience extends Component {
         }
     }
 
+    async openModal(experience){
+        const {job_profile:{label}} = experience
+        await this.props.fetchJobTitles(label,'experience')
+        this.setState({modal_status:true,scrollpos:window.scrollY})
+    }
+
+    closeModal(){
+        this.setState({modal_status:false},()=>{ window.scrollTo(0, this.state.scrollpos)})
+    }
+
     deleteExperience(index, fields, event) {
         event.stopPropagation();
         const experience = fields.get(index);
@@ -145,12 +160,14 @@ class Experience extends Component {
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {handleSubmit,submitting,personalInfo:{subscription_status},history,previewHandling,changeOrderingUp,changeOrderingDown,fetchJobTitles} = this.props;
-        const {editHeading,heading,till_today} =this.state;
+        const {handleSubmit,submitting,personalInfo:{subscription_status},history,previewHandling,
+                changeOrderingUp,changeOrderingDown,fetchJobTitles,ui:{suggestions}} = this.props;
+        const {editHeading,heading,till_today,modal_status} =this.state;
         return(
             <div className="buildResume">
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <PreviewModal {...this.props}/>
+                    <AddSuggesion label={'Description'} modal_status={modal_status} closeModal={this.closeModal} suggestions={suggestions}  />
                     <FieldArray name="list" 
                                 handleSubmit={handleSubmit}
                                 handleAddition={this.props.handleAddition}
@@ -163,6 +180,7 @@ class Experience extends Component {
                                 editHeadingClick={this.editHeadingClick}
                                 heading ={heading}
                                 context={this}
+                                openModal={this.openModal}
                                 till_today={till_today}
                                 fetchJobTitles={fetchJobTitles}
                                 tillTodayDisable={this.tillTodayDisable}/>
@@ -194,7 +212,8 @@ export const ExperienceForm = reduxForm({
 const mapStateToProps = (state) => {
     return {
         initialValues: state.experience,
-        experience: state.experience
+        experience: state.experience,
+        ui: state.ui
     }
 };
 

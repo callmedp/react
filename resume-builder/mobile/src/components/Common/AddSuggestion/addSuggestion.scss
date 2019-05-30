@@ -1,0 +1,27 @@
+@import '../../../styles/variables/vars.scss';
+@import '../../../styles/variables/mixins.scss';
+@import '~react-widgets/dist/css/react-widgets.css';
+
+.add-suggested {
+    color: $blue;
+    font-size: 1.4rem;
+    margin-top: 1.5rem;
+
+    span {
+        @include square(20px);
+        display: inline-block;
+        border-radius: 50%;
+        border: 1px solid $blue;
+        font-size: 1.8rem;
+        line-height: 1.8rem;
+        text-align: center;
+        margin-right: .5rem;
+        position: relative;
+        top: 2px;
+    }
+}
+
+.ReactModal__Body--open {
+    overflow: hidden;
+}
+
