@@ -15,6 +15,7 @@ import moment from 'moment';
 import PreviewModal from "../../../Preview/changeTemplateModal";
 import validate from "../../../../../FormHandler/validtaions/profile/validate"
 import {siteDomain} from "../../../../../../Utils/domains";
+import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 
 class PersonalInfo extends Component {
     constructor(props) {
@@ -280,7 +281,7 @@ class PersonalInfo extends Component {
 export const PersonalInfoForm = reduxForm({
     form: 'personalInfo',
     enableReinitialize: true,
-    // onSubmitFail: (errors) => scrollOnErrors(errors,'award',-100),
+    onSubmitFail: (errors) => scrollOnErrors(errors,'profile',-100),
     validate
 })(PersonalInfo);
 
