@@ -11,12 +11,18 @@ export default class TemplateModal extends React.Component {
     constructor(props) {
         super(props);
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
+        this.disableScroll = this.disableScroll.bind(this);
         this.closeModal = this.closeModal.bind(this);
     }
 
     closeModal() {
         this.props.hideModal()
     }
+
+    disableScroll = () => {
+        document.body.style.overflow = 'hidden'
+    }
+
 
     render() {
         const {template: {templateId, templateImages}, ui: {modal}, page} = this.props;
@@ -41,7 +47,7 @@ export default class TemplateModal extends React.Component {
                         {page === 'buy' ?
                             < img className="img-responsive"
                                   src={`data:image/png;base64,${templateImages[templateId - 1]}`}/> :
-                             < img className="img-responsive"
+                            < img className="img-responsive"
                                   src={`${this.staticUrl}react/assets/images/resume${templateId || '1'}_preview.jpg`}/>
                         }
                     </div>

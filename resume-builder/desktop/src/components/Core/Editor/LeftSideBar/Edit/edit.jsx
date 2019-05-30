@@ -151,7 +151,7 @@ class Edit extends Component {
                 <AlertModal {...this.props}
                             nextLink={nextLink}
                             elemToDelete={elemToDelete}
-                                deleteFromVisibleList={this.deleteFromVisibleList}
+                            deleteFromVisibleList={this.deleteFromVisibleList}
                 />
                 <strong>Complete your information</strong>
                 <ul>
