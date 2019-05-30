@@ -259,21 +259,28 @@
                              ({{obj.pk}})
                       </td>
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
-                      <td>{% if not exoitel_status%}
-                          {{obj.order.email}}
-                          {% else %}
-                            {{obj.order.masked_email}}
-                           {% endif %}</td>
-                      <td>{% if not exoitel_status%}
-                          {{obj.order.country_code}}-
-                          {{obj.order.mobile}}
-                           {% else %}
-                           {% if show_btn %}
-                            <button id="{{obj.order.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{obj.order.id}});"></button>
-                            <span style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{obj.order.id}}callingbtn-error"></span>
-                                {% endif %}
-                            {{obj.order.masked_mobile}}
-                           {% endif %}</td>
+                                           <td>
+                         <div>
+                            <div id="email_field{{obj.order.id}}"></div>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-primary btn-xs" onclick="order_get_details('{{obj.order.id}}','email,alt_email','email');"><i class="fa fa-search" aria-hidden="true"></i>ClickToView</button>
+                        </div>
+
+                      </td>
+
+                        <td>
+                    <div>
+                        <div id="mobile_field{{obj.order.id}}"> </div>
+                        {% if exoitel_status%}
+                        <button id="{{obj.order.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{obj.order.id}});"></button>
+                        <span style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{obj.order.id}}callingbtn-error"></span>
+                        {% endif %}
+                        <button type="button" onclick="order_get_details('{{obj.order.id}}','mobile,alt_mobile','mobile');" class="btn btn-primary btn-xs"><i class="fa fa-phone" aria-hidden="true"></i>ClickToView</button>
+					</div>
+
+
+                      </td>
                       <td>
                         {% if obj.parent and obj.is_variation %}
                           <strong>{{obj.parent.product.get_name}}{% if obj.parent.product.get_exp_db %} - Exp: {{obj.parent.product.get_exp_db}}{% endif %}:</strong><br/>
@@ -481,6 +488,9 @@
   <script type="text/javascript" 
     src="{% static 'console/js/linkedin/reject_candidate.js' %}">
   </script>
+  <script type="text/javascript" src = "{% static 'console/js/order-info.js' %}"></script>
+
+
 
   {% endcompress %}
 

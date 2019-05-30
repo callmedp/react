@@ -1,8 +1,7 @@
 var emailtemp;
 var mobitemp;
-function alt_email_update(email_id,order_id)
+function alt_email_update(order_id)
 {
-document.getElementById('primary_email').innerHTML=email_id ;
 document.getElementById("order_id").value=order_id ;
 document.getElementById("email-error").innerHTML='';
 $('#alteremail').parsley().reset();
@@ -11,9 +10,8 @@ $('#alteremail')[0].reset();
 $("#emailmodal").modal();
 }
 
-function alt_num_update(alt_num,order_id)
+function alt_num_update(order_id)
 {
-document.getElementById('primary_mobile').value=alt_num ;
 document.getElementById('order_id1').value=order_id;
 document.getElementById("mobile-error").innerHTML='';
 $('#alternumber').parsley().reset();
@@ -36,7 +34,7 @@ function email_alt_update(){
             	if (json.status == 'success'){
 	            	alert('successfully updated');
 	            	if (json.obj_altemail){
-	            	    document.getElementById(json.object_id).innerHTML='<span><b>Alt</b>-'+json.obj_altemail + "</span>";
+	            	    document.getElementById('email'+json.object_id).innerHTML='<span id="email_field'+json.object_id+'"><b>Alt</b>- '+json.obj_altemail + "</span>";
                 }
                 $("#emailmodal").modal('hide');
 
@@ -66,7 +64,7 @@ function numb_alt_update(){
             success: function(json) {
             	if (json.status == 'success'){
 	            	alert('successfully updated');
-	            	document.getElementById(json.object_id).innerHTML = ' <span><b>Alt</b>-'+json.obj_altnum+"</span>";
+	            	document.getElementById('mobile'+json.object_id).innerHTML = ' <span id="mobile_field'+json.object_id+'"><b>Alt</b>-'+json.obj_altnum+"</span>";
                     $("#numbermodal").modal('hide');
            	}
             	else{

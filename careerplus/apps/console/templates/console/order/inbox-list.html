@@ -2,460 +2,400 @@
 {% load static compress %}
 {% load humanize %}
 {% load thumbnail %}
-
 {% block title %}
-  <title>Inbox Order Item - Shine Learning</title>
+<title>Inbox Order Item - Shine Learning</title>
 {% endblock title %}
-
 {% block css_block %}
-    {{block.super}}
-
-    {% compress css %}
-    <link href="{% static 'packages/iCheck/skins/flat/green.css' %}" rel="stylesheet" type="text/css">
-    <link type="text/css" href="{% static 'console/css/datepicker/daterangepicker.css' %}" rel="stylesheet">
-    {% endcompress %}
-
+{{block.super}}
+{% compress css %}
+<link href="{% static 'packages/iCheck/skins/flat/green.css' %}" rel="stylesheet" type="text/css">
+<link type="text/css" href="{% static 'console/css/datepicker/daterangepicker.css' %}" rel="stylesheet">
+{% endcompress %}
 {% endblock css_block %}
-
-
-
 {% block pagecontent %}
 <!-- page content -->
 <div class="right_col" role="main">
-  <div class="">
-    <div class="page-title">
-      <div class="title_left">
-        <h3>My Inbox</h3>
-      </div>
-
-      <form autocomplete="off" class="form-group" method="GET" action="{% url "console:queue-inbox" %}" id="filter-tables">
-          <div class="title_right">
-            <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
-              <div class="input-group">
-                <input type="text" name="query" class="form-control" {% if query %} value="{{query}}" {% endif %} placeholder="Search for...">
-
-                <div style="display:none">
-                    <div class="form-group">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            {{ filter_form.writer }}
-                        </div>
-                        <br/>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            {{ filter_form.created }}
-                        </div>
-                        <br/>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            {{ filter_form.delivery_type }}
-                        </div>
-                        <br/>
-                    </div>
-                </div>
-
-                <span class="input-group-btn">
-                  <button type="submit" class="btn btn-default" id="search_button" type="button">Go!</button>
-                </span>
-              </div>
-                               <div class="form-group">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-<label class="radio-inline"><input type="radio" name="rad_search" value="number" checked><b>OrderId</b></label>
-<label class="radio-inline"><input type="radio" name="rad_search" value="id" {{id}}><b>ID</b></label>
-<label class="radio-inline"><input type="radio" name="rad_search" value="email" {{email}}><b>Email</b></label>
-<label class="radio-inline"><input type="radio" name="rad_search" value="mobile" {{mobile}}><b>Mobile</b></label>
-<label class="radio-inline"><input type="radio" name="rad_search" value="product" {{product}}><b>Product</b></label>
-                      </div>
-                    </div>
-
-
-            </div>
-          </div>
-      </form>
-    </div>
-
-    <div class="row top_tiles">
-
-      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <button type="button" class="btn btn-app" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-filter"></i>Filter By</button>
-      </div>
-      <div class="modal fade bs-example-modal-sm filter" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-sm">
-              <div class="modal-content">
-
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-                  </button>
-                  <h4 class="modal-title" id="myModalLabel2">Filter By</h4>
-                </div>
-                <div class="modal-body">
-                  <form autocomplete="off" class="form-group" method="GET" action="{% url "console:queue-inbox" %}" id="list-filter-form">
-                        <div class="form-group">
-                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.writer.label }}</label></br>
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                {{ filter_form.writer }}
-                            </div>
-                            <br/>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.created.label }}</label></br>
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                {{ filter_form.created }}
-                            </div>
-                            <br/>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.delivery_type.label }}</label></br>
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                {{ filter_form.delivery_type }}
-                            </div>
-                            <br/>
-                        </div>
-                       {% if query %}
-                           <input type="hidden" name="query" value="{{query}}">
-                       {% endif %}
-                    </form>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                  <button type="button" id="id_filter" class="btn btn-primary" data-dismiss="modal">Filter</button>
-                </div>
-              </div>
-            </div>
-        </div>
-        <!-- /modals -->
-    </div>
-
-    <div class="row">
-      <div class="col-md-12 col-sm-12 col-xs-12">
-        {% if messages %}
-            {% for message in messages %}
-
-              <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
-              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-
-              {{ message }}
-              </div>
-            {% endfor %}
-        {% endif %}
-
-      </div>
-    </div>
-
-    
-    <div class="clearfix"></div>
-    
-    <div class="row">
-
-      <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="x_panel">
-          <div class="x_title">
-            {% if perms.order.writer_inbox_assigner %}
-                <div class="col-sm-4">
-                    <div class="input-group">
-                        {{action_form.action}}
-                        <span class="input-group-btn">
-                          <button type="button" class="btn btn-primary" id="action_button_go">Assign To!</button>
-                        </span>
-                    </div>
-                </div>
-            {% endif %}
-            <!--h2>Select Comment to Change</h2-->
-            <!-- large modal -->
-
-            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="actionModal">
-                <div class="modal-dialog modal-lg">
-                  <div class="modal-content">
-
-                    <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                      </button>
-                      <h4 class="modal-title" id="myModalLabel">Action On Inbox</h4>
-                    </div>
-                    <div class="modal-body" id="myModalbody">
-                      Are You Sure???
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary" id="action_inbox">Yes</button>
-                    </div>
-
-                  </div>
-                </div>
-            </div>
-            <ul class="nav navbar-right panel_toolbox">
-              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-              </li>
-            </ul>
-            <div class="clearfix"></div>
-          </div>
-
-          <div class="x_content">
-            {% if page %}
-                <b>{{page.object_list.count}}</b> item listed out of <b>{{ page.paginator.count }}</b>
-            {% endif %}
-            <div class="table-responsive">
-              <table class="table table-striped jambo_table bulk_action" id="inbox-table">
-                <thead>
-                  <tr class="headings">
-                    {% if perms.order.writer_inbox_assigner %}
-                        <th>
-                          <input autocomplete="off" type="checkbox" id="check-all" class="flat">
-                        </th>
-                        <th class="bulk-actions" colspan="100%">
-                            <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-                        </th>
-                    {% endif %}
-                    <th class="column-title">OrderId</th>
-                    <th class="column-title">Name</th>
-                    <th class="column-title">Email</th>
-                    <th class="column-title">Mobile</th>
-                    <th class="column-title">Item Name</th>
-
-                    <th class="column-title">Delivery Type</th>
-                    <th class="column-title">How Old</th>
-                    <th class="column-title">Assigned</th>
-                    <th class="column-title">Added On</th>
-
-                    {% if perms.order.can_view_extra_field_inbox %}
-                        <th class="column-title">Actions</th>
-                        <th class="column-title">Submit Msg</th>
-                    {% endif %}
-                  </tr>
-                </thead>
-
-                <tbody id="body-table-inbox">
-                  {% for obj in page %}
-                    <tr class="even pointer">
-                      {% if perms.order.writer_inbox_assigner %}
-                          <td class="a-center ">
-                              <input autocomplete="off" autocomplete="off" type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
-                          </td>
-                      {% endif %}
-
-                                      <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><b style="text-decoration: underline;">{{obj.order.number}}</b></a>
-                                      <br/>
-                                         <span id="orderitempk">({{obj.pk}})</span>
-                                      </td>
-                      <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
-                      <td>
-                                 {% if not exoitel_status%}
-                          {{obj.order.email}}
-                          {% else %}
-                            {{obj.order.masked_email}}
-                           {% endif %}
-
-                      </td>
-                      <td>
-                                {% if not exoitel_status%}
-                          {{obj.order.country_code}}-
-                          {{obj.order.mobile}}
-                           {% else %}
-                           {% if show_btn %}
-                            <button id="{{obj.order.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{obj.order.id}});"></button>
-                            <span style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{obj.order.id}}callingbtn-error"></span>
-                                {% endif %}
-                            {{obj.order.masked_mobile}}
-                           {% endif %}
-                      </td>
-                      <td>
-                        {% if obj.parent and obj.is_variation %}
-                              <strong>{{obj.parent.product.get_name}}{% if obj.parent.product.get_exp_db %} - Exp: {{obj.parent.product.get_exp_db}}{% endif %}:</strong><br/>
-                            {% endif %}
-                                {{obj.product.get_name}}<br/>
-                            {%if obj.product.get_exp_db %}
-                                <strong>Exp:</strong> {{obj.product.get_exp_db}}<br/>
-                            {% endif %}
-                            {% if obj.product.get_studymode_db %}
-                                <strong>Study mode:</strong> {{obj.product.get_studymode_db}}<br/>
-                            {% endif %}
-                            {% if obj.product.get_coursetype_db %}
-                                <strong>Course type:</strong> {{obj.product.get_coursetype_db}}<br/>
-                            {% endif %}
-                            {% if obj.product.get_duration_db %}
-                                <strong>Duration:</strong> {{obj.product.get_duration_db}}
-                            {% endif %}
-                      </td>
-                      <td>{% if obj.delivery_service %}{{obj.delivery_service.name}}{% endif %}</td>
-                      <td>
-                        {{obj.modified|naturaltime}}
-                        <b>Updated On: {{obj.modified}}</b>
-                      </td>
-
-                       <td>{% if obj.assigned_to %}{{obj.assigned_to.name}} {% else %} Not Assigned{% endif %}</td>
-
-                       <td>{{obj.created}}</td>
-
-                       {% if perms.order.can_view_extra_field_inbox %}
-
-                             <td> {% if obj.oi_resume %}<a href="{% url "console:queue-resume-download" %}?path={{obj.oi_resume.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-download"></i> View Doc</button></a>{% endif %}
-                                 <hr style="height:1px; margin-top: 4px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
-                            <form autocomplete="off" role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="draft-upload-form{{obj.pk}}">{% csrf_token %}
-                                {{draft_form.file}}
-                                <div style="display:none">
-                                    <input type="hidden" name="oi_pk" value="{{obj.pk}}">
-                                </div>
-                                <button style="margin-top:3px;" type="button" onclick="clickSubmitDraft('{{obj.pk}}',)" class="btn btn-primary btn-xs"><i class="fa fa-upload"> Upload Draft</i></button>
-                            </form>
-                            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="draftmodal{{obj.pk}}">
-                                <div class="modal-dialog modal-lg">
-                                  <div class="modal-content">
-
-                                    <div class="modal-header">
-                                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                                      </button>
-                                      <h4 class="modal-title" id="myModalLabel">Draft Upload</h4>
-                                    </div>
-                                    <div class="modal-body" id="myModalbody{{obj.pk}}">
-                                      Are You Sure???
-                                    </div>
-                                    <div class="modal-footer">
-                                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                      <button type="button" id="uploadDraftAction{{obj.pk}}" data-dismiss="modal" class="btn btn-primary" onclick="uploadDraft('{{obj.pk}}',)">Yes</button>
-                                    </div>
-
-                                  </div>
-                                </div>
-                            </div>
-
-                     <hr style="height:1px; margin-top: 6px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
-
-                            <form autocomplete="off" role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="waiting-form{{obj.pk}}">{% csrf_token %}
-                                <div class="form-group">
-                                <input type="checkbox" class="flat form-control" {% if obj.waiting_for_input %}checked="checked"{% endif %} name="waiting_input"> Waiting for User Input </br></div>
-                                <div style="display:none">
-                                    <input type="hidden" name="oi_pk" value="{{obj.pk}}">
-                                    <textarea id="msgid" maxlength="255" name="inputmsg">
-                                    </textarea>
-                                </div>
-
-                                <button type="button" onclick="saveWaitingForInput('{{obj.pk}}',)" class="btn btn-success btn-xs">Save</button>
-                            </form>
-
-
-
-                             </td>
-                          <td>
-                            <form autocomplete="off" id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
-                                <fieldset>
-
-                                    {% for field in message_form %}
-                                        <div class="form-group"> 
-                                            <div class="col-md-10">
-                                                {{ field }}
-                                                {% if field.help_text %}
-                                                  <small style="margin-left:5px;">{{ field.help_text }}</small>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                    {% endfor %}
-                                    <div style='display:none'>
-                                        <input type="hidden" name="pk" value="{{obj.pk}}">
-                                    </div>
-                                </fieldset>
-                                  <div class="form-group">
-                                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                      <center><button type="button" onclick="submitMessage('{{obj.pk}}',)" class="btn btn-success btn-xs">Submit</button></center>
-                                    </div>
-                                </div>
-                            </form>
-                          </td>
-
-                       {% endif %}
-                    </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-            </div>
-            {% block main_pagination %}
-                <div class="main_pagination">
-                  {% if page %}
-                  <div class="col-sm-4">
-                       <div class="pull-left" style="display: inline-block;adding-left: 0;margin: 20px 0;">
-                        {% with current_page=page.number total_page=page.paginator.num_pages %}Page {{ current_page }} of {{ total_page }}
-                        {% endwith %}
-                      </div>
-                  </div>
-
-                <div class="col-sm-8">
-                    <div class="pull-right">
-                        <ul class="pagination">
-                        {% if page.has_previous %}
-                            <li class="paginate_button previous">
-                                <a href="?page={{ page.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >&laquo;</a>
-                            </li>
-                        {% endif %}
-
-                        {% for page_number in begin %}
-                            <li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %} ">
-                                <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
-                            </li>
-                        {% endfor %}
-
-                        {% if middle %}
-                            <li class="paginate_button disable"><a href="javascript:void(0);">&hellip;</a></li>
-                            {% for page_number in middle %}
-                                <li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %}">
-                                    <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
-                                    
-                                </li>
-                            {% endfor %}
-                        {% endif %}
-
-                        {% if page_end %}
-                            <li class="paginate_button disable"><a href="javascript:void(0);">&hellip;</a></li>
-                            {% for page_number in page_end %}
-                                <li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %}">
-                                    <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
-                                </li>
-                            {% endfor %}
-                        {% endif %}
-
-                        {% if page.has_next %}
-                            <li class="paginate_button next">
-                                <a href="?page={{ page.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >&raquo;</a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                  </div>
-                </div>
-                {% endif %}
-
-
-      </div><!-- main_pagination end here -->
-      {% endblock main_pagination %}
-     
-                
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+	<div class="">
+		<div class="page-title">
+			<div class="title_left">
+				<h3>My Inbox</h3>
+			</div>
+			<form autocomplete="off" class="form-group" method="GET" action="{% url "console:queue-inbox" %}" id="filter-tables">
+			<div class="title_right">
+				<div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
+					<div class="input-group">
+						<input type="text" name="query" class="form-control" {% if query %} value="{{query}}" {% endif %} placeholder="Search for...">
+						<div style="display:none">
+							<div class="form-group">
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									{{ filter_form.writer }}
+								</div>
+								<br/>
+							</div>
+							<div class="form-group">
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									{{ filter_form.created }}
+								</div>
+								<br/>
+							</div>
+							<div class="form-group">
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									{{ filter_form.delivery_type }}
+								</div>
+								<br/>
+							</div>
+						</div>
+						<span class="input-group-btn">
+						<button type="submit" class="btn btn-default" id="search_button" type="button">Go!</button>
+						</span>
+					</div>
+					<div class="form-group">
+						<div class="col-md-12 col-sm-12 col-xs-12">
+							<label class="radio-inline"><input type="radio" name="rad_search" value="number" checked><b>OrderId</b></label>
+							<label class="radio-inline"><input type="radio" name="rad_search" value="id" {{id}}><b>ID</b></label>
+							<label class="radio-inline"><input type="radio" name="rad_search" value="email" {{email}}><b>Email</b></label>
+							<label class="radio-inline"><input type="radio" name="rad_search" value="mobile" {{mobile}}><b>Mobile</b></label>
+							<label class="radio-inline"><input type="radio" name="rad_search" value="product" {{product}}><b>Product</b></label>
+						</div>
+					</div>
+				</div>
+			</div>
+			</form>
+		</div>
+		<div class="row top_tiles">
+			<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+				<button type="button" class="btn btn-app" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-filter"></i>Filter By</button>
+			</div>
+			<div class="modal fade bs-example-modal-sm filter" tabindex="-1" role="dialog" aria-hidden="true">
+				<div class="modal-dialog modal-sm">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel2">Filter By</h4>
+						</div>
+						<div class="modal-body">
+							<form autocomplete="off" class="form-group" method="GET" action="{% url "console:queue-inbox" %}" id="list-filter-form">
+							<div class="form-group">
+								<label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.writer.label }}</label></br>
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									{{ filter_form.writer }}
+								</div>
+								<br/>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.created.label }}</label></br>
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									{{ filter_form.created }}
+								</div>
+								<br/>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.delivery_type.label }}</label></br>
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									{{ filter_form.delivery_type }}
+								</div>
+								<br/>
+							</div>
+							{% if query %}
+							<input type="hidden" name="query" value="{{query}}">
+							{% endif %}
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							<button type="button" id="id_filter" class="btn btn-primary" data-dismiss="modal">Filter</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /modals -->
+		</div>
+		<div class="row">
+			<div class="col-md-12 col-sm-12 col-xs-12">
+				{% if messages %}
+				{% for message in messages %}
+				<div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				{{ message }}
+			</div>
+			{% endfor %}
+			{% endif %}
+		</div>
+	</div>
+	<div class="clearfix"></div>
+	<div class="row">
+		<div class="col-md-12 col-sm-12 col-xs-12">
+			<div class="x_panel">
+				<div class="x_title">
+					{% if perms.order.writer_inbox_assigner %}
+					<div class="col-sm-4">
+						<div class="input-group">
+							{{action_form.action}}
+							<span class="input-group-btn">
+							<button type="button" class="btn btn-primary" id="action_button_go">Assign To!</button>
+							</span>
+						</div>
+					</div>
+					{% endif %}
+					<!--h2>Select Comment to Change</h2-->
+					<!-- large modal -->
+					<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="actionModal">
+						<div class="modal-dialog modal-lg">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+									</button>
+									<h4 class="modal-title" id="myModalLabel">Action On Inbox</h4>
+								</div>
+								<div class="modal-body" id="myModalbody">
+									Are You Sure???
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+									<button type="button" class="btn btn-primary" id="action_inbox">Yes</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<ul class="nav navbar-right panel_toolbox">
+						<li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+						</li>
+					</ul>
+					<div class="clearfix"></div>
+				</div>
+				<div class="x_content">
+					{% if page %}
+					<b>{{page.object_list.count}}</b> item listed out of <b>{{ page.paginator.count }}</b>
+					{% endif %}
+					<div class="table-responsive">
+						<table class="table table-striped jambo_table bulk_action" id="inbox-table">
+							<thead>
+								<tr class="headings">
+									{% if perms.order.writer_inbox_assigner %}
+									<th>
+										<input autocomplete="off" type="checkbox" id="check-all" class="flat">
+									</th>
+									<th class="bulk-actions" colspan="100%">
+										<a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+									</th>
+									{% endif %}
+									<th class="column-title">OrderId</th>
+									<th class="column-title">Name</th>
+									<th class="column-title">Email</th>
+									<th class="column-title">Mobile</th>
+									<th class="column-title">Item Name</th>
+									<th class="column-title">Delivery Type</th>
+									<th class="column-title">How Old</th>
+									<th class="column-title">Assigned</th>
+									<th class="column-title">Added On</th>
+									{% if perms.order.can_view_extra_field_inbox %}
+									<th class="column-title">Actions</th>
+									<th class="column-title">Submit Msg</th>
+									{% endif %}
+								</tr>
+							</thead>
+							<tbody id="body-table-inbox">
+								{% for obj in page %}
+								<tr class="even pointer">
+									{% if perms.order.writer_inbox_assigner %}
+									<td class="a-center ">
+										<input autocomplete="off" autocomplete="off" type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
+									</td>
+									{% endif %}
+									<td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><b style="text-decoration: underline;">{{obj.order.number}}</b></a>
+										<br/>
+										<span id="orderitempk">({{obj.pk}})</span>
+									</td>
+									<td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
+									<td>
+										<div>
+											<div id="email_field{{obj.order.id}}"></div>
+										</div>
+										<div>
+											<button type="button" class="btn btn-primary btn-xs" onclick="order_get_details('{{obj.order.id}}','email,alt_email','email');"><i class="fa fa-search" aria-hidden="true"></i>ClickToView</button>
+										</div>
+									</td>
+									<td>
+										<div>
+											<div id="mobile_field{{obj.order.id}}"> </div>
+											{% if exoitel_status%}
+											<button id="{{obj.order.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{obj.order.id}});"></button>
+											<span style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{obj.order.id}}callingbtn-error"></span>
+											{% endif %}
+											<button type="button" onclick="order_get_details('{{obj.order.id}}','mobile,alt_mobile','mobile');" class="btn btn-primary btn-xs"><i class="fa fa-phone" aria-hidden="true"></i>ClickToView</button>
+										</div>
+									</td>
+									<td>
+										{% if obj.parent and obj.is_variation %}
+										<strong>{{obj.parent.product.get_name}}{% if obj.parent.product.get_exp_db %} - Exp: {{obj.parent.product.get_exp_db}}{% endif %}:</strong><br/>
+										{% endif %}
+										{{obj.product.get_name}}<br/>
+										{%if obj.product.get_exp_db %}
+										<strong>Exp:</strong> {{obj.product.get_exp_db}}<br/>
+										{% endif %}
+										{% if obj.product.get_studymode_db %}
+										<strong>Study mode:</strong> {{obj.product.get_studymode_db}}<br/>
+										{% endif %}
+										{% if obj.product.get_coursetype_db %}
+										<strong>Course type:</strong> {{obj.product.get_coursetype_db}}<br/>
+										{% endif %}
+										{% if obj.product.get_duration_db %}
+										<strong>Duration:</strong> {{obj.product.get_duration_db}}
+										{% endif %}
+									</td>
+									<td>{% if obj.delivery_service %}{{obj.delivery_service.name}}{% endif %}</td>
+									<td>
+										{{obj.modified|naturaltime}}
+										<b>Updated On: {{obj.modified}}</b>
+									</td>
+									<td>{% if obj.assigned_to %}{{obj.assigned_to.name}} {% else %} Not Assigned{% endif %}</td>
+									<td>{{obj.created}}</td>
+									{% if perms.order.can_view_extra_field_inbox %}
+									<td>
+										{% if obj.oi_resume %}<a href="{% url "console:queue-resume-download" %}?path={{obj.oi_resume.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-download"></i> View Doc</button></a>{% endif %}
+										<hr style="height:1px; margin-top: 4px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
+										<form autocomplete="off" role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="draft-upload-form{{obj.pk}}">
+											{% csrf_token %}
+											{{draft_form.file}}
+											<div style="display:none">
+												<input type="hidden" name="oi_pk" value="{{obj.pk}}">
+											</div>
+											<button style="margin-top:3px;" type="button" onclick="clickSubmitDraft('{{obj.pk}}',)" class="btn btn-primary btn-xs"><i class="fa fa-upload"> Upload Draft</i></button>
+										</form>
+										<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="draftmodal{{obj.pk}}">
+											<div class="modal-dialog modal-lg">
+												<div class="modal-content">
+													<div class="modal-header">
+														<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+														</button>
+														<h4 class="modal-title" id="myModalLabel">Draft Upload</h4>
+													</div>
+													<div class="modal-body" id="myModalbody{{obj.pk}}">
+														Are You Sure???
+													</div>
+													<div class="modal-footer">
+														<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+														<button type="button" id="uploadDraftAction{{obj.pk}}" data-dismiss="modal" class="btn btn-primary" onclick="uploadDraft('{{obj.pk}}',)">Yes</button>
+													</div>
+												</div>
+											</div>
+										</div>
+										<hr style="height:1px; margin-top: 6px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
+										<form autocomplete="off" role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="waiting-form{{obj.pk}}">
+											{% csrf_token %}
+											<div class="form-group">
+												<input type="checkbox" class="flat form-control" {% if obj.waiting_for_input %}checked="checked"{% endif %} name="waiting_input"> Waiting for User Input </br>
+											</div>
+											<div style="display:none">
+												<input type="hidden" name="oi_pk" value="{{obj.pk}}">
+												<textarea id="msgid" maxlength="255" name="inputmsg">
+												</textarea>
+											</div>
+											<button type="button" onclick="saveWaitingForInput('{{obj.pk}}',)" class="btn btn-success btn-xs">Save</button>
+										</form>
+									</td>
+									<td>
+										<form autocomplete="off" id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">
+											{% csrf_token %}
+											<fieldset>
+												{% for field in message_form %}
+												<div class="form-group">
+													<div class="col-md-10">
+														{{ field }}
+														{% if field.help_text %}
+														<small style="margin-left:5px;">{{ field.help_text }}</small>
+														{% endif %}
+													</div>
+												</div>
+												{% endfor %}
+												<div style='display:none'>
+													<input type="hidden" name="pk" value="{{obj.pk}}">
+												</div>
+											</fieldset>
+											<div class="form-group">
+												<div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+													<center><button type="button" onclick="submitMessage('{{obj.pk}}',)" class="btn btn-success btn-xs">Submit</button></center>
+												</div>
+											</div>
+										</form>
+									</td>
+									{% endif %}
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+					{% block main_pagination %}
+					<div class="main_pagination">
+						{% if page %}
+						<div class="col-sm-4">
+							<div class="pull-left" style="display: inline-block;adding-left: 0;margin: 20px 0;">
+								{% with current_page=page.number total_page=page.paginator.num_pages %}Page {{ current_page }} of {{ total_page }}
+								{% endwith %}
+							</div>
+						</div>
+						<div class="col-sm-8">
+							<div class="pull-right">
+								<ul class="pagination">
+									{% if page.has_previous %}
+									<li class="paginate_button previous">
+										<a href="?page={{ page.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >&laquo;</a>
+									</li>
+									{% endif %}
+									{% for page_number in begin %}
+									<li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %} ">
+										<a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
+									</li>
+									{% endfor %}
+									{% if middle %}
+									<li class="paginate_button disable"><a href="javascript:void(0);">&hellip;</a></li>
+									{% for page_number in middle %}
+									<li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %}">
+										<a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
+									</li>
+									{% endfor %}
+									{% endif %}
+									{% if page_end %}
+									<li class="paginate_button disable"><a href="javascript:void(0);">&hellip;</a></li>
+									{% for page_number in page_end %}
+									<li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %}">
+										<a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
+									</li>
+									{% endfor %}
+									{% endif %}
+									{% if page.has_next %}
+									<li class="paginate_button next">
+										<a href="?page={{ page.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >&raquo;</a>
+									</li>
+									{% endif %}
+								</ul>
+							</div>
+						</div>
+						{% endif %}
+					</div>
+					<!-- main_pagination end here -->
+					{% endblock main_pagination %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 </div>
 <!-- /page content -->
-
-
 {% endblock pagecontent %}
-
-        
 {% block js_block %}
-  {{ block.super }}
-
-  {% compress js %}
-  <script type="text/javascript" src="{% static 'console/js/order/exotelCall.js' %}"></script>
-
-  <script type="text/javascript" src="{% static 'console/js/moment/moment.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'console/js/datepicker/daterangepicker.js' %}"></script>
-  <!-- Parsley Validate Scripts -->
-  <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'packages/iCheck/icheck.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'console/js/order/inbox-list.js' %}"></script>
-
-  <script type="text/javascript" src="{% static 'console/js/order/draft-upload.js' %}"></script>
-
-  <script type="text/javascript" src="{% static 'console/js/order/filter.js' %}"></script>
-
-  {% endcompress js %}
-
+{{ block.super }}
+{% compress js %}
+<script type="text/javascript" src="{% static 'console/js/order/exotelCall.js' %}"></script>
+<script type="text/javascript" src="{% static 'console/js/moment/moment.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'console/js/datepicker/daterangepicker.js' %}"></script>
+<!-- Parsley Validate Scripts -->
+<script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'packages/iCheck/icheck.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'console/js/order/inbox-list.js' %}"></script>
+<script type="text/javascript" src="{% static 'console/js/order/draft-upload.js' %}"></script>
+<script type="text/javascript" src="{% static 'console/js/order/filter.js' %}"></script>
+<script type="text/javascript" src = "{% static 'console/js/order-info.js' %}"></script>
+{% endcompress js %}
 {% endblock js_block %}

@@ -34,6 +34,10 @@ urlpatterns = [
         views.TalentEconomyApiView.as_view(),
         name='talent-economy-blogs'),
 
+    url(r'^v1/order-detail/(?P<pk>\d+)/$',
+        views.OrderDetailApiView.as_view(),
+        name='order-detail'),
+
 ]
 
 if settings.DEBUG:

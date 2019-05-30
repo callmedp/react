@@ -12,6 +12,8 @@ from payment.models import PaymentTxn
 from blog.models import *
 from users.models import User
 
+from geolocation.models import Country
+
 from shared.rest_addons.mixins import (SerializerFieldsMixin,
 ListSerializerContextMixin, ListSerializerDataMixin)
 
@@ -333,3 +335,22 @@ class TalentEconomySerializer(SerializerFieldsMixin, ListSerializerContextMixin,
     class Meta:
         model = Blog
         fields = '__all__'
+
+
+class OrderDetailSerializer(SerializerFieldsMixin,ModelSerializer):
+
+    class Meta:
+        model = Order
+        fields = '__all__'
+    # #
+    # list_lookup_fields = ['paid_by', 'assigned_to', 'country']
+    # fields_required_mapping = {'crm_sales_id': ['name'], 'paid_by': ['name'],
+    #                            'assigned_to': ['name'], 'country': ['name'], }
+    # field_model_mapping = {'crm_sales_id': User, 'paid_by': User, 'assigned_to': User,'country':Country}
+
+
+    # def to_representation(self,instance):
+    #     ret = super(OrderDetailSerializer,self).to_representation(instance)
+    #     asked_fields = self.context.get('asked_fields',[])
+    #     [ret.pop(field,"") for field in asked_fields]
+    #     return ret

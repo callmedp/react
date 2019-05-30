@@ -18,7 +18,7 @@ from haystack import connections
 from haystack.query import SearchQuerySet
 from core.library.haystack.query import SQS
 
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView,RetrieveAPIView
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 
 from users.tasks import user_register
@@ -42,7 +42,8 @@ from .serializers import (
     OrderListHistorySerializer,
     RecommendedProductSerializer,
     RecommendedProductSerializerSolr,
-    ShineDataFlowDataSerializer,TalentEconomySerializer)
+    ShineDataFlowDataSerializer,TalentEconomySerializer,
+    OrderDetailSerializer)
 from shared.rest_addons.pagination import LearningCustomPagination
 from shared.rest_addons.mixins import (SerializerFieldsMixin,FieldFilterMixin)
 
@@ -794,8 +795,6 @@ class TalentEconomyApiView(FieldFilterMixin,ListAPIView):
     pagination_class = LearningCustomPagination
 
 
-
-
     def get_queryset(self,*args, **kwargs):
         status = self.request.GET.get('status',)
         visibility = self.request.GET.get('visibility')
@@ -806,6 +805,15 @@ class TalentEconomyApiView(FieldFilterMixin,ListAPIView):
             filter_dict.update({'visibility': visibility})
         return Blog.objects.filter(**filter_dict)
 
+
+
+
+class OrderDetailApiView(FieldFilterMixin,RetrieveAPIView):
+
+    permission_classes = []
+    authentication_classes = []
+    serializer_class = OrderDetailSerializer
+    queryset = Order.objects.all()
 
 
 

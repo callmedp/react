@@ -96,9 +96,6 @@ class OrderListView(ListView, PaginationMixin):
         paginator = Paginator(context['order_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         var = self.sel_opt
-        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
-        show_btn = True if has_permission else False
-
         alert = messages.get_messages(self.request)
         initial = {"payment_date": self.payment_date, "created": self.created, "status": self.status}
         filter_form = OrderFilterForm(initial)
@@ -111,7 +108,6 @@ class OrderListView(ListView, PaginationMixin):
             var: "checked",
             'email_form': email_form,
             'mobil_form': mobil_form,
-            'show_btn': show_btn,
 
         })
         return context
@@ -368,8 +364,8 @@ class MidOutQueueView(TemplateView, PaginationMixin):
         initial = {
             "payment_date": self.payment_date,
         }
-        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
-        show_btn = True if has_permission else False
+        # has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
+        # show_btn = True if has_permission else False
         filter_form = OIFilterForm(initial)
         context.update({
             "messages": alert,
@@ -378,7 +374,7 @@ class MidOutQueueView(TemplateView, PaginationMixin):
             "filter_form": filter_form,
             "action_form": OIActionForm(queue_name='midout'),
             var: "checked",
-            "show_btn":show_btn,
+            # "show_btn":show_btn,
         })
         return context
 
@@ -486,8 +482,6 @@ class InboxQueueVeiw(ListView, PaginationMixin):
             "created": self.created, "writer": self.writer,
             "delivery_type": self.delivery_type}
         filter_form = OIFilterForm(initial)
-        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
-        show_btn = True if has_permission else False
 
         context.update({
             "action_form": InboxActionForm(),
@@ -497,7 +491,6 @@ class InboxQueueVeiw(ListView, PaginationMixin):
             "filter_form": filter_form,
             "query": self.query,
             var: "checked",
-            'show_btn':show_btn,
         })
         return context
 
@@ -731,8 +724,8 @@ class OrderDetailVeiw(DetailView):
         max_limit_draft = settings.DRAFT_MAX_LIMIT
         last_status_object = order.welcomecalloperation_set.exclude(wc_status__in=[0, 1, 2])\
             .order_by('id').last()
-        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
-        show_btn = True if has_permission else False
+        # has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
+        # show_btn = True if has_permission else False
         email_form = emailupdateform()
         mobil_form = mobileupdateform()
         if not last_status_object:
@@ -751,7 +744,7 @@ class OrderDetailVeiw(DetailView):
             "messages": alert,
             "message_form": MessageForm(),
             "draft_form": FileUploadForm(),
-            "show_btn": show_btn,
+            # "show_btn": show_btn,
             'email_form': email_form,
             'mobil_form': mobil_form,
 
@@ -795,8 +788,6 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
         var=self.sel_opt
         alert = messages.get_messages(self.request)
         max_limit_draft = settings.DRAFT_MAX_LIMIT
-        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
-        show_btn = True if has_permission else False
 
         initial = {
             "modified": self.modified,
@@ -812,7 +803,6 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
             "query": self.query,
             "action_form": OIActionForm(),
              var: "checked",
-            'show_btn':show_btn,
         })
         return context
 
@@ -934,11 +924,8 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
         paginator = Paginator(context['approved_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
-        var=self.sel_opt
+        var = self.sel_opt
         max_limit_draft = settings.DRAFT_MAX_LIMIT
-        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
-        show_btn = True if has_permission else False
-
         initial = {
             "modified": self.modified,
             "writer": self.writer,
@@ -951,7 +938,6 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
             "query": self.query,
             "filter_form": filter_form,
              var: "checked",
-            'show_btn':show_btn,
         })
         return context
 
@@ -1074,10 +1060,8 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
         paginator = Paginator(context['rejectedbyadmin_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
-        var=self.sel_opt
+        var = self.sel_opt
         max_limit_draft = settings.DRAFT_MAX_LIMIT
-        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
-        show_btn = True if has_permission else False
         initial = {
             "modified": self.modified,
             "writer": self.writer,
@@ -1093,7 +1077,6 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
             "query": self.query,
             "action_form": OIActionForm(),
             var:'checked',
-            'show_btn':show_btn,
         })
         return context
 
@@ -1216,7 +1199,7 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
         paginator = Paginator(context['rejectedbycandidate_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
-        var=self.sel_opt
+        var = self.sel_opt
         max_limit_draft = settings.DRAFT_MAX_LIMIT
         initial = {
             "modified": self.modified,
@@ -1224,8 +1207,6 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
             "delivery_type": self.delivery_type,
             "draft_level": self.draft_level, }
         filter_form = OIFilterForm(initial)
-        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
-        show_btn = True if has_permission else False
         context.update({
             "messages": alert,
             "max_limit_draft": max_limit_draft,
@@ -1235,7 +1216,6 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
             "query": self.query,
             "action_form": OIActionForm(),
             var:'checked',
-            'show_btn':show_btn,
         })
         return context
 
@@ -1359,8 +1339,6 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
         context.update(self.pagination(paginator, self.page))
         var = self.sel_opt
         alert = messages.get_messages(self.request)
-        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
-        show_btn = True if has_permission else False
         initial = {
             "created": self.created,
             "writer": self.writer,
@@ -1373,7 +1351,6 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
             "query": self.query,
             "filter_form": filter_form,
             var: 'checked',
-            'show_btn':show_btn,
         })
 
         return context
@@ -1496,15 +1473,11 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
             "created": self.created,
             "payment_date": self.payment_date, }
         filter_form = OIFilterForm(initial)
-        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
-        show_btn = True if has_permission else False
-
         context.update({
             "messages": alert,
             "query": self.query,
             "filter_form": filter_form,
             var:'checked',
-            'show_btn':show_btn,
         })
 
         return context
@@ -1615,9 +1588,6 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
             "payment_date": self.payment_date,
             "modified": self.modified, }
         filter_form = OIFilterForm(initial)
-        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
-        show_btn = True if has_permission else False
-
         context.update({
             "assignment_form": AssignmentActionForm(),
             "messages": alert,
@@ -1626,7 +1596,6 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
             "filter_form": filter_form,
             "action_form": OIActionForm(queue_name="domesticprofileupdate"),
             var:'checked',
-            "show_btn":show_btn,
         })
 
         return context
@@ -1761,14 +1730,11 @@ class DomesticProfileInitiatedQueueView(ListView, PaginationMixin):
             "payment_date": self.payment_date,
             "modified": self.modified, }
         filter_form = OIFilterForm(initial)
-        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
-        show_btn = True if has_permission else False
         context.update({
             "messages": alert,
             "query": self.query,
             "filter_form": filter_form,
             var: 'checked',
-            'show_btn':show_btn,
         })
 
         return context
@@ -1901,8 +1867,6 @@ class DomesticProfileApprovalQueue(ListView, PaginationMixin):
         context.update(self.pagination(paginator, self.page))
         var =self.sel_opt
         alert = messages.get_messages(self.request)
-        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
-        show_btn = True if has_permission else False
         initial = {
             "payment_date": self.payment_date,
             "modified": self.modified, }
@@ -1914,7 +1878,6 @@ class DomesticProfileApprovalQueue(ListView, PaginationMixin):
             "filter_form": filter_form,
             "action_form": OIActionForm(queue_name="domesticprofileapproval"),
              var:'checked',
-            'show_btn':show_btn,
         })
 
         return context
@@ -2013,8 +1976,6 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
         initial = {
             "payment_date": self.payment_date, }
         filter_form = OIFilterForm(initial)
-        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
-        show_btn = True if has_permission else False
 
         context.update({
             "action_form": OIActionForm(queue_name='booster'),
@@ -2024,7 +1985,6 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
             "filter_form": filter_form,
             "form": ResumeUploadForm(),
             var: 'checked',
-            'show_btn':show_btn,
         })
 
         return context
@@ -2924,14 +2884,11 @@ class WhatsappListQueueView(ListView, PaginationMixin):
         var = self.sel_opt
         alert = messages.get_messages(self.request)
         initial = {"oi_status": self.oi_status}
-        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
-        show_btn = True if has_permission else False
 
         filter_form = OIFilterForm(initial, queue_name='queue-whatsappjoblist')
         context.update({"assignment_form": AssignmentActionForm(), "messages": alert, "query": self.query,
             "message_form": MessageForm(), "filter_form": filter_form,
-            "action_form": OIActionForm(queue_name="queue-whatsappjoblist"), var: 'checked',
-             'show_btn':show_btn,})
+            "action_form": OIActionForm(queue_name="queue-whatsappjoblist"), var: 'checked'})
 
         return context
 
@@ -3085,15 +3042,12 @@ class ReplacedOrderListView(PaginationMixin, ListView):
         var = self.sel_opt
         alert = messages.get_messages(self.request)
         filter_form = OIFilterForm()
-        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
-        show_btn = True if has_permission else False
 
         context.update({
             "messages": alert,
             "query": self.query,
             "filter_form": filter_form,
             var: "checked",
-            'show_btn':show_btn,
         })
         return context
 

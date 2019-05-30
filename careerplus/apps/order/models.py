@@ -195,6 +195,13 @@ class Order(AbstractAutoDate):
         mobile = str(self.mobile)
         return mobile[:2] + "".join(["*" for i in list(mobile[2:len(mobile)-2])]) + mobile[-2:]
 
+    @property
+    def masked_altmobile(self):
+        if not self.alt_mobile:
+            return ""
+        mobile = str(self.alt_mobile)
+        return mobile[:2] + "".join(["*" for i in list(mobile[2:len(mobile)-2])]) + mobile[-2:]
+
     def get_currency_code(self):
         return CURRENCY_SYMBOL_CODE_MAPPING.get(self.currency)
 

@@ -46,9 +46,6 @@ class PartnerInboxQueueView(ListView, PaginationMixin):
         var = self.sel_opt
         initial = {"modified": self.modified, "payment_date": self.payment_date}
         filter_form = OIFilterForm(initial)
-        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
-        show_btn = True if has_permission else False
-
         context.update({
             "messages": alert,
             "message_form": MessageForm(),
@@ -57,7 +54,6 @@ class PartnerInboxQueueView(ListView, PaginationMixin):
             "draft_form": VendorFileUploadForm(),
             "action_form": OIActionForm(queue_name="partnerinbox"),
             var: 'checked',
-            'show_btn': show_btn,
         })
         return context
 
@@ -160,10 +156,7 @@ class PartnerHoldQueueView(ListView, PaginationMixin):
         alert = messages.get_messages(self.request)
         initial = {"modified": self.modified, "payment_date": self.payment_date}
         filter_form = OIFilterForm(initial)
-        var=self.sel_opt
-        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
-        show_btn = True if has_permission else False
-
+        var = self.sel_opt
         context.update({
             "messages": alert,
             "message_form": MessageForm(),
@@ -171,7 +164,6 @@ class PartnerHoldQueueView(ListView, PaginationMixin):
             "query": self.query,
             "action_form": OIActionForm(queue_name="partnerholdqueue"),
             var:'checked',
-            'show_btn':show_btn,
         })
         return context
 
@@ -276,9 +268,6 @@ class PartnerVarificationQueueView(ListView, PaginationMixin):
         var=self.sel_opt
         initial = {"modified": self.modified, "payment_date": self.payment_date}
         filter_form = OIFilterForm(initial)
-        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
-        show_btn = True if has_permission else False
-
         context.update({
             "messages": alert,
             "message_form": MessageForm(),
@@ -287,7 +276,6 @@ class PartnerVarificationQueueView(ListView, PaginationMixin):
             "draft_form": VendorFileUploadForm(),
             "action_form": OIActionForm(queue_name="partnerinbox"),
              var: 'checked',
-            'show_btn':show_btn,
         })
         return context
 
