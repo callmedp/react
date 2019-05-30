@@ -280,6 +280,7 @@ class PersonalInfo extends Component {
 export const PersonalInfoForm = reduxForm({
     form: 'personalInfo',
     enableReinitialize: true,
+    // onSubmitFail: (errors) => scrollOnErrors(errors,'award',-100),
     validate
 })(PersonalInfo);
 

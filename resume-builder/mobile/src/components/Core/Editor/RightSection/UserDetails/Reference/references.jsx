@@ -6,6 +6,7 @@ import renderReferences from "./renderReference"
 import validate from "../../../../../FormHandler/validtaions/reference/validate"
 import PreviewModal from "../../../Preview/changeTemplateModal";
 import {siteDomain} from "../../../../../../Utils/domains";
+import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 
 class References extends Component {
     constructor(props) {
@@ -164,6 +165,7 @@ class References extends Component {
 export const ReferenceForm = reduxForm({
     form: 'reference',
     enableReinitialize: true,
+    onSubmitFail: (errors) => scrollOnErrors(errors,'references',-100),
     validate
 })(References);
 

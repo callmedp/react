@@ -162,6 +162,7 @@ class Summary extends Component {
 export const SummaryForm = reduxForm({
     form: 'summary',
     enableReinitialize: true,
+    // onSubmitFail: (errors) => scrollOnErrors(errors,'award',-100),
     validate
 })(Summary);
 

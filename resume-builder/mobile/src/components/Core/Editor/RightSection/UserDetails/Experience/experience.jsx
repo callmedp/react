@@ -9,6 +9,7 @@ import PreviewModal from "../../../Preview/changeTemplateModal";
 import renderExperiences from "./renderExperience"
 import {siteDomain} from "../../../../../../Utils/domains";
 import AddSuggesion from '../../../../../Common/AddSuggestion/addSuggesion';
+import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 
 class Experience extends Component {
 
@@ -205,6 +206,7 @@ class Experience extends Component {
 export const ExperienceForm = reduxForm({
     form: 'experience',
     enableReinitialize: true,
+    onSubmitFail: (errors) => scrollOnErrors(errors,'experience',-100),
     validate
 })(Experience);
 

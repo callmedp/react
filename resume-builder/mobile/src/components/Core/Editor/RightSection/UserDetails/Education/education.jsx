@@ -7,6 +7,7 @@ import moment from "moment";
 import PreviewModal from "../../../Preview/changeTemplateModal";
 import renderEducation from "./renderEducation"
 import {siteDomain} from "../../../../../../Utils/domains";
+import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 
 class Education extends Component {
 
@@ -188,6 +189,7 @@ class Education extends Component {
 export const EducationForm = reduxForm({
     form: 'education',
     enableReinitialize: true,
+    onSubmitFail: (errors) => scrollOnErrors(errors,'education',-100),
     validate
 })(Education);
 

@@ -7,6 +7,7 @@ import PreviewModal from "../../../Preview/changeTemplateModal";
 import renderCourse from "./renderCourse";
 import validate from "../../../../../FormHandler/validtaions/course/validate"
 import {siteDomain} from "../../../../../../Utils/domains";
+import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 
 
 class Course extends Component {
@@ -165,6 +166,7 @@ class Course extends Component {
 export const CourseForm = reduxForm({
     form: 'course',
     enableReinitialize: true,
+    onSubmitFail: (errors) => scrollOnErrors(errors,'course',-100),
     validate
 })(Course);
 

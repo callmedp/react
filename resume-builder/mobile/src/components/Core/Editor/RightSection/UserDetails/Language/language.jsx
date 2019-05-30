@@ -7,6 +7,7 @@ import PreviewModal from "../../../Preview/changeTemplateModal";
 import renderLanguage from "./renderLanguage";
 import validate from "../../../../../FormHandler/validtaions/language/validate"
 import {siteDomain} from "../../../../../../Utils/domains";
+import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 
 class Language extends Component {
     constructor(props) {
@@ -165,6 +166,7 @@ class Language extends Component {
 export const LanguageForm = reduxForm({
     form: 'language',
     enableReinitialize: true,
+    onSubmitFail: (errors) => scrollOnErrors(errors,'language',-100),
     validate
 })(Language);
 

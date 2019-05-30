@@ -7,6 +7,7 @@ import validate from "../../../../../FormHandler/validtaions/skill/validate"
 import PreviewModal from "../../../Preview/changeTemplateModal";
 import renderSkills from "./renderSkill"
 import {siteDomain} from "../../../../../../Utils/domains";
+import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 
 class Skill extends Component {
 
@@ -169,7 +170,8 @@ class Skill extends Component {
 export const SkillForm = reduxForm({
     form: 'skill',
     validate,
-    enableReinitialize: true
+    enableReinitialize: true,
+    onSubmitFail: (errors) => scrollOnErrors(errors,'skill',-100),
 })(Skill);
 
 

@@ -7,7 +7,7 @@ import moment from "moment";
 import PreviewModal from "../../../Preview/changeTemplateModal";
 import renderAwards from "./renderAwards"
 import {siteDomain} from "../../../../../../Utils/domains";
-
+import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 
 
 class Award extends Component {
@@ -167,7 +167,8 @@ class Award extends Component {
 export const AwardForm = reduxForm({
     form: 'award',
     validate,
-    enableReinitialize: true
+    enableReinitialize: true,
+    onSubmitFail: (errors) => scrollOnErrors(errors,'award',-100),
 })(Award);
 
 

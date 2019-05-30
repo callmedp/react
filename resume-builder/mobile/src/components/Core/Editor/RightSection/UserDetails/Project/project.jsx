@@ -7,6 +7,7 @@ import PreviewModal from "../../../Preview/changeTemplateModal";
 import validate from "../../../../../FormHandler/validtaions/project/validate"
 import renderProjects from "./renderProject"
 import {siteDomain} from "../../../../../../Utils/domains";
+import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 
 class Project extends Component {
     constructor(props) {
@@ -187,6 +188,7 @@ class Project extends Component {
 export const ProjectForm = reduxForm({
     form: 'project',
     enableReinitialize: true,
+    onSubmitFail: (errors) => scrollOnErrors(errors,'project',-100),
     validate
 })(Project);
 
