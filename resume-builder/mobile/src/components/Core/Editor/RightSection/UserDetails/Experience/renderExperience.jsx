@@ -122,7 +122,7 @@ const renderExperiences = ({
                             <Field component={renderTextArea} type={"textarea"} name={`${member}.work_description`}
                                 className="form__input h-150" rows="5" 
                             />
-                            <p className="add-suggested"onClick={event => {event.preventDefault();openModal(fields.get(index))}}>
+                            <p className="add-suggested"onClick={event => {event.preventDefault();openModal(fields,index)}}>
                                 <span>+</span>Add suggested Description
                             </p>
                         </li>

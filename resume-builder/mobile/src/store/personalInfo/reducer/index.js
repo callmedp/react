@@ -1,4 +1,4 @@
-import {SAVE_USER_INFO,SAVE_INTEREST_LIST} from "../actions/actionTypes";
+import {SAVE_USER_INFO,SAVE_INTEREST_LIST,UPDATE_SUMMARY_WITH_SUGGESTION} from "../actions/actionTypes";
 
 const initialState = {
     first_name: '',
@@ -31,6 +31,15 @@ export const personalInfoReducer = (state = initialState, action) => {
                 ...state,
                 ...{
                     interest_list:action.data
+                }
+            }
+        }
+        case UPDATE_SUMMARY_WITH_SUGGESTION:{
+            console.log(action)
+            return {
+                ...state,
+                ...{
+                    extra_info:action.payload
                 }
             }
         }

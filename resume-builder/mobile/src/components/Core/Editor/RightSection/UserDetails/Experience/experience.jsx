@@ -139,13 +139,26 @@ class Experience extends Component {
         }
     }
 
-    async openModal(experience){
-        const {job_profile:{label}} = experience
+    async openModal(fields,index){
+
+        const {job_profile:{label}} = fields.get(index)
         await this.props.fetchJobTitles(label,'experience')
-        this.setState({modal_status:true,scrollpos:window.scrollY})
+        this.setState({modal_status:true,scrollpos:window.scrollY,fields,currentIndex:index})
     }
 
-    closeModal(){
+    closeModal(suggestions){
+        console.log(suggestions)
+        const {fields,currentIndex} = this.state
+        const currentField = fields.get(currentIndex)
+        if(Object.keys(suggestions).length){
+            let suggestionsList = (currentField.work_description ? currentField.work_description + "\n" : '');
+            Object.keys(suggestions).map((el,index) => {
+                suggestionsList += suggestions[el] + (index+1 === Object.keys(suggestions).length ? "" : '\n')
+            })
+            currentField['work_description'] = suggestionsList;
+            fields.remove(currentIndex);
+            fields.insert(currentIndex, currentField)
+        }
         this.setState({modal_status:false},()=>{ window.scrollTo(0, this.state.scrollpos)})
     }
 

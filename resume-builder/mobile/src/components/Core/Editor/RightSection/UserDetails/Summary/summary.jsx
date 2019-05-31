@@ -3,8 +3,7 @@ import {connect} from "react-redux";
 import * as actions from '../../../../../../store/personalInfo/actions/index';
 import {Field, reduxForm} from 'redux-form';
 import './summary.scss';
-
-
+import {fetchJobTitles,fetchUserExperience} from '../../../../../../store/experience/actions/index';
 
 import {
     renderTextArea
@@ -13,6 +12,7 @@ import PreviewModal from "../../../Preview/changeTemplateModal";
 import moment from 'moment'
 import validate from "../../../../../FormHandler/validtaions/summary/validate"
 import {siteDomain} from "../../../../../../Utils/domains";
+import AddSuggesion from '../../../../../Common/AddSuggestion/addSuggesion';
 
 
 class Summary extends Component {
@@ -23,13 +23,18 @@ class Summary extends Component {
         this.state = {
             'editHeading': false,
             'heading' : '',
-            'submit' : false
+            'submit' : false,
+            'modal_status':false,
+            'summary' :''
         }
         this.updateInputValue =this.updateInputValue.bind(this);
         this.updateInfoBeforeLoss = this.updateInfoBeforeLoss.bind(this);
+        this.openModal = this.openModal.bind(this);
+        this.closeModal = this.closeModal.bind(this);
     }
 
     componentDidMount() {
+        this.props.fetchUserExperience()
         if (this.props.personalInfo.entity_preference_data.length) {
             this.setState({heading : this.props.personalInfo.entity_preference_data[5].entity_text})
         }
@@ -85,6 +90,46 @@ class Summary extends Component {
         
     }
 
+    async openModal(){
+        const {experience} = this.props;
+        let latest_experience = ''
+        let  latest_end_date = 'None'
+        for (let exp of experience.list){
+            if (exp.is_working){
+                latest_experience = exp.job_profile
+                break
+            }
+            else if(latest_end_date === 'None'){
+                latest_end_date = exp.end_date
+                latest_experience = exp.job_profile
+            }
+            else{
+                if( latest_end_date < exp.end_date){
+                    latest_end_date = exp.end_date
+                    latest_experience = exp.job_profile
+                }
+                    
+            }
+                
+        }
+            
+        let label = latest_experience && latest_experience.label
+        await this.props.fetchJobTitles(label,'summary')
+        this.setState({modal_status:true})
+    }
+
+    closeModal(suggestions){
+        const {personalInfo:{extra_info},upateSummaryWithSuggestion} = this.props
+        if(Object.keys(suggestions).length){
+            let suggestionsList = (extra_info ? extra_info + "\n" : '');
+            Object.keys(suggestions).map((el,index) => {
+                suggestionsList += suggestions[el] + (index+1 === Object.keys(suggestions).length ? "" : '\n')
+            })
+            upateSummaryWithSuggestion(suggestionsList)
+        }
+        this.setState({modal_status:false})
+    }
+
     async updateInfoBeforeLoss(){
 
         if(!this.state.submit){
@@ -111,12 +156,12 @@ class Summary extends Component {
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {personalInfo: {subscription_status}, handleSubmit,submitting,history,previewHandling} = this.props;
-        const {editHeading,heading} =this.state;
+        const {personalInfo: {subscription_status}, handleSubmit,submitting,history,previewHandling,ui:{suggestions}} = this.props;
+        const {editHeading,heading,modal_status} =this.state;
         return (
         <div className="buildResume">
             <PreviewModal {...this.props}/>
-            
+            <AddSuggesion label={'Summary'} modal_status={modal_status} closeModal={this.closeModal} suggestions={suggestions}/>
             <div className="buildResume__wrap pb-0">
                 <div className="buildResume__heading">
                 {!editHeading ?
@@ -138,9 +183,9 @@ class Summary extends Component {
                         <li className="form__group">
                             <Field component={renderTextArea} label={"Summary"}  type={"text"} name="extra_info" 
                                 id="extra_info" prepend={false} className="form__input h-150"/>
-                            {/* <p className="add-suggested" onClick={this.handleOpenModal}>
+                            <p className="add-suggested" onClick={()=>{this.openModal()}}>
                                 <span>+</span>Add suggested summary
-                            </p> */}
+                            </p>
                         </li>
                     </ul>
                     <div className="btn-wrap">
@@ -162,7 +207,6 @@ class Summary extends Component {
 export const SummaryForm = reduxForm({
     form: 'summary',
     enableReinitialize: true,
-    // onSubmitFail: (errors) => scrollOnErrors(errors,'award',-100),
     validate
 })(Summary);
 
@@ -170,7 +214,9 @@ export const SummaryForm = reduxForm({
 const mapStateToProps = (state) => {
     return {
         initialValues: state.personalInfo,
-        personalInfo: state.personalInfo
+        personalInfo: state.personalInfo,
+        ui: state.ui,
+        experience: state.experience
     }
 };
 
@@ -178,6 +224,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         "fetchPersonalInfo": () => {
             return dispatch(actions.fetchPersonalInfo())
+        },
+        "upateSummaryWithSuggestion": (data) => {
+            return dispatch(actions.upateSummaryWithSuggestion(data))
         },
         "onSubmit": (personalDetails) => {
             let { date_of_birth, extracurricular,gender,image} = personalDetails;
@@ -195,6 +244,15 @@ const mapDispatchToProps = (dispatch) => {
             return new Promise((resolve, reject) => {
                 dispatch(actions.updatePersonalInfo({personalDetails, resolve, reject}));
             })
+        },
+        "fetchJobTitles": (inputValue, suggestionType) => {
+            if (inputValue.length < 3) return new Promise(resolve => resolve([]));
+            return new Promise((resolve, reject) => {
+                return dispatch(fetchJobTitles({inputValue, suggestionType, resolve, reject}))
+            })
+        },
+        "fetchUserExperience": () => {
+            return dispatch(fetchUserExperience())
         },
     }
 };
