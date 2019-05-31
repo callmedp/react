@@ -6,6 +6,7 @@ import moment from "moment";
 import {EducationRenderer} from "./educationRenderer";
 import validate from '../../../../../FormHandler/validations/education/validate';
 import {scroller} from "react-scroll/modules";
+import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 
 
 class Education extends Component {
@@ -155,6 +156,7 @@ class Education extends Component {
 export const EducationForm = reduxForm({
     form: 'education',
     enableReinitialize: true,
+    onSubmitFail: (errors) => scrollOnErrors(errors,'education',-100),
     validate
 })(Education);
 

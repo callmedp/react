@@ -9,6 +9,7 @@ styles
 * */
 import 'react-accessible-accordion/dist/fancy-example.css';
 import {scroller} from "react-scroll/modules";
+import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 
 class Language extends Component {
     constructor(props) {
@@ -128,6 +129,7 @@ class Language extends Component {
 export const LanguageForm = reduxForm({
     form: 'Language',
     enableReinitialize: true,
+    onSubmitFail: (errors) => scrollOnErrors(errors,'language',-100),
     validate,
 
 

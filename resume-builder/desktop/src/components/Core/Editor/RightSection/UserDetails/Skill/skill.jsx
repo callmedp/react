@@ -5,6 +5,7 @@ import {connect} from "react-redux";
 import validate from '../../../../../FormHandler/validations/skill/validate'
 import {SkillRenderer} from "./skillRenderer";
 import {scroller} from "react-scroll/modules";
+import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 
 
 /*
@@ -134,6 +135,7 @@ class Skill extends Component {
 export const SkillForm = reduxForm({
     form: 'skill',
     enableReinitialize: true,
+    onSubmitFail: (errors) => scrollOnErrors(errors,'skill',-100),
     validate
 
 })(Skill);

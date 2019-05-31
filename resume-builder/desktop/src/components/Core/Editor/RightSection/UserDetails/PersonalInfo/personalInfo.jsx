@@ -15,7 +15,6 @@ import {
 import validate from '../../../../../FormHandler/validations/personalInfo/validate'
 
 import moment from 'moment';
-import LoaderSection from "../../../../../Loader/loaderSection.jsx";
 
 const filterValues = (inputValue, values) => {
     return values.filter(i =>
@@ -142,12 +141,12 @@ export class PersonalInfo extends Component {
                                     <label>First Name</label>
 
                                     <Field component={renderField} type={"text"} iconClass={'icon-name'}
-                                           name="first_name"/>
+                                           name="first_name" id="first_name"/>
                                 </fieldset>
                                 <fieldset>
                                     <label>Last Name</label>
                                     <Field component={renderField}
-                                           iconClass={'icon-surname'}
+                                           iconClass={'icon-surname'} id="last_name"
                                            type={"text"} name="last_name"/>
                                 </fieldset>
                             </div>
@@ -157,6 +156,7 @@ export class PersonalInfo extends Component {
                                     <label>Gender</label>
                                     <Field
                                         name="gender"
+                                        id="gender"
                                         iconClass={'icon-gender'}
                                         component={renderSelect}
                                         label="Gender"
@@ -172,7 +172,7 @@ export class PersonalInfo extends Component {
                                 <fieldset>
                                     <label>Date Of Birth</label>
                                     <Field yearDropDownItemNumber={50}
-                                           iconClass={'icon-date'}
+                                           iconClass={'icon-date'} id="date_of_birth"
                                            component={datepicker} name="date_of_birth"
                                            className={"input-control"}/>
                                 </fieldset>
@@ -182,6 +182,7 @@ export class PersonalInfo extends Component {
                                     <label>Mobile</label>
                                     <Field component={renderField}
                                            type={"text"}
+                                           id="number"
                                            name="number"
                                            iconClass={'icon-mobile'}
                                            className={"input-control"}/>
@@ -190,6 +191,7 @@ export class PersonalInfo extends Component {
                                     <label>Email</label>
                                     <Field component={renderField} type={"text"}
                                            name="email"
+                                           id="email"
                                            iconClass={'icon-email'}
                                            className={"input-control"}/>
                                 </fieldset>
@@ -202,6 +204,7 @@ export class PersonalInfo extends Component {
                                            iconClass={'icon-address'}
                                            type={"textarea"}
                                            name="location"
+                                           id="location"
                                            className={"input-control"} rows="3"/>
                                 </fieldset>
                             </div>
@@ -209,7 +212,7 @@ export class PersonalInfo extends Component {
                             <div className="flex-container">
                                 <fieldset id="interest-select" className="">
                                     <label>Interest</label>
-                                    <Field name="extracurricular" component={renderDynamicSelect}
+                                    <Field name="extracurricular"  id="extracurricular" component={renderDynamicSelect}
                                         // loadOptions={this.fetchInterestList.bind(this)}
                                            defaultOptions={Object.keys(personalInfo.interest_list).map(key => personalInfo.interest_list[key])}
                                            value={personalInfo.extracurricular}
@@ -219,28 +222,6 @@ export class PersonalInfo extends Component {
                                            label="Select Interest"/>
                                 </fieldset>
                             </div>
-                            {/*<div className="flex-container">*/}
-                            {/*<fieldset>*/}
-                            {/*<label>Linkedin</label>*/}
-                            {/*<div className="input-group">*/}
-                            {/*<div className="input-group--input-group-icon">*/}
-                            {/*<span className="icon-linkedin"></span>*/}
-                            {/*</div>*/}
-                            {/*<Field component={renderField} type={"text"} name="linkedIn"*/}
-                            {/*className={"input-control"}/>*/}
-                            {/*</div>*/}
-                            {/*</fieldset>*/}
-                            {/*<fieldset>*/}
-                            {/*<label>Facebook</label>*/}
-                            {/*<div className="input-group">*/}
-                            {/*<div className="input-group--input-group-icon">*/}
-                            {/*<span className="icon-facebook"></span>*/}
-                            {/*</div>*/}
-                            {/*<Field component={renderField} type={"text"} name="facebook"*/}
-                            {/*className={"input-control"}/>*/}
-                            {/*</div>*/}
-                            {/*</fieldset>*/}
-                            {/*</div>*/}
 
                         </section>
                         <section className="pic-section mt-30">

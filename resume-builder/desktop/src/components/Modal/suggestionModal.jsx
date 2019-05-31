@@ -56,24 +56,34 @@ export default class SuggestionModal extends React.Component {
                     contentLabel="Suggestion Modal"
                 >
                     <div className="pr suggested-summary">
-                        <i onClick={()=>{this.handleSuggestion({})}} className='icon-close icon-close--position'></i>
-                        <h2>Add from suggested {label}</h2>
-                        <ul>
-                            {(suggestions || []).map((el, index) => {
-                                return (
-                                <li key={index}>
-                                <span className={suggestion_selected[index]  ? 'selected' : ''}  
-                                   onClick={(event)=>{suggestion_selected[index] 
-                                    ? this.removeSuggesion(index,event): this.addSuggesion(el,index,event) }} htmlFor={`add${index}`} >
-                                    <input type="checkbox" readOnly checked={suggestion_selected[index] ? true : false} id={`add${index}`} /> Add
-                                </span>
-                                    <p>{el}</p>
-                                </li>)
-                            })}
-                        </ul>
-                        <button className="orange-button"
-                                type={'submit'} onClick={()=>{this.handleSuggestion(suggestion_selected)}}>Save and Continue
-                        </button>
+                        {suggestions.length ? 
+                            <React.Fragment>
+                                <i onClick={()=>{this.handleSuggestion({})}} className='icon-close icon-close--position'></i>
+                                <h2>Add from suggested {label}</h2>
+                                <ul>
+                                    {(suggestions || []).map((el, index) => {
+                                        return (
+                                        <li key={index}>
+                                        <span className={suggestion_selected[index]  ? 'selected' : ''}  
+                                        onClick={(event)=>{suggestion_selected[index] 
+                                            ? this.removeSuggesion(index,event): this.addSuggesion(el,index,event) }} htmlFor={`add${index}`} >
+                                            <input type="checkbox" readOnly checked={suggestion_selected[index] ? true : false} id={`add${index}`} /> Add
+                                        </span>
+                                            <p>{el}</p>
+                                        </li>)
+                                    })}
+                                </ul>
+                                <button className="orange-button"
+                                        type={'submit'} onClick={()=>{this.handleSuggestion(suggestion_selected)}}>Save and Continue
+                                </button>
+                            </React.Fragment>:
+                            <React.Fragment>
+                                <h2>Sorry Suggestions not available for this Job Title</h2>
+                                <button className="orange-button"
+                                    type={'submit'} onClick={()=>{this.handleSuggestion({})}}>Close
+                            </button>
+                            </React.Fragment>
+                        }
                     </div>
                 </Modal>
             </div>

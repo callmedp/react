@@ -57,7 +57,7 @@ export const CourseRenderer = ({
 
 
             </section>
-            <section className="right-sidebar-scroll">
+            <section className="right-sidebar-scroll" id="course">
                 <ul>
                     <Accordion
                         onChange={(value) => handleAccordionClick(value)}
@@ -70,7 +70,7 @@ export const CourseRenderer = ({
                                 return (
                                     <li key={index}>
                                         <section className="info-section">
-                                            <AccordionItem uuid={index}>
+                                            <AccordionItem uuid={index}  id={`course${index}`}>
                                                 <AccordionItemHeading>
                                                     <AccordionItemButton>
                                                         <div className="flex-container">

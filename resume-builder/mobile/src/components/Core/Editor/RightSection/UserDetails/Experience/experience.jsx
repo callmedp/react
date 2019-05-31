@@ -141,7 +141,7 @@ class Experience extends Component {
     async openModal(fields,index){
 
         const {job_profile:{label}} = fields.get(index)
-        await this.props.fetchJobTitles(label,'experience')
+        await this.props.fetchJobTitles(label || '','experience')
         this.setState({modal_status:true,scrollpos:window.scrollY,fields,currentIndex:index})
     }
 

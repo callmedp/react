@@ -54,7 +54,7 @@ export const AwardRenderer = ({
                 </button>
 
             </section>
-            <section className="right-sidebar-scroll">
+            <section className="right-sidebar-scroll" id="award">
                 <ul>
                     <Accordion
                         onChange={(value) => handleAccordionClick(value)}
@@ -67,7 +67,7 @@ export const AwardRenderer = ({
                                 return (
                                     <li key={index}>
                                         <section className="info-section">
-                                            <AccordionItem uuid={index}>
+                                            <AccordionItem uuid={index} id={`award${index}`}>
                                                 <AccordionItemHeading>
                                                     <AccordionItemButton>
                                                         <div className="flex-container">

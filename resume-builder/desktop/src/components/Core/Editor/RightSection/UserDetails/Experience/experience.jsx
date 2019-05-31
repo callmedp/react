@@ -9,6 +9,7 @@ import validate from '../../../../../FormHandler/validations/experience/validate
 import {scroller} from "react-scroll/modules";
 import SuggestionModal from '../../../../../Modal/suggestionModal'
 import {hideSuggestionModal, showSuggestionModal, setSuggestionType} from "../../../../../../store/ui/actions";
+import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 
 
 class Experience extends Component {
@@ -116,7 +117,7 @@ class Experience extends Component {
     async openModal(fields,index){
 
         const {job_profile:{label}} = fields.get(index)
-        await this.props.fetchJobTitles(label,'experience')
+        await this.props.fetchJobTitles(label || '','experience')
         this.setState({modal_status:true,scrollpos:window.scrollY,fields,currentIndex:index})
     }
 
@@ -228,6 +229,7 @@ class Experience extends Component {
 export const ExperienceForm = reduxForm({
     form: 'experience',
     enableReinitialize: true,
+    onSubmitFail: (errors) => scrollOnErrors(errors,'experience',-100),
     validate
 })(Experience);
 

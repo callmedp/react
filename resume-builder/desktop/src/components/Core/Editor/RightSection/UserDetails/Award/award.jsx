@@ -5,6 +5,8 @@ import {connect} from "react-redux";
 import moment from "moment";
 import validate from "../../../../../FormHandler/validations/award/validate";
 import {AwardRenderer} from "./awardRenderer";
+import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
+import {scroller} from "react-scroll/modules";
 
 class Award extends Component {
     constructor(props) {
@@ -57,6 +59,14 @@ class Award extends Component {
             "date": '',
             "summary": '',
             order: listLength
+        })
+
+        scroller.scrollTo(`award${fields.length - 1}`, {
+            duration: 800,
+            delay: 0,
+            smooth: 'easeInOutQuad',
+            offset: 200,
+            containerId: 'award'
         })
     }
 
@@ -114,7 +124,8 @@ class Award extends Component {
 export const AwardForm = reduxForm({
     form: 'award',
     validate,
-    enableReinitialize: true
+    enableReinitialize: true,
+    onSubmitFail: (errors) => scrollOnErrors(errors,'award',-100),
 })(Award);
 
 

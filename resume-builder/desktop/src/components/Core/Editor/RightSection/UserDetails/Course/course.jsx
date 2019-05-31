@@ -5,6 +5,8 @@ import {connect} from "react-redux";
 import validate from "../../../../../FormHandler/validations/course/validate"
 import moment from "moment";
 import {CourseRenderer} from "./courseRenderer";
+import {scroller} from "react-scroll/modules";
+import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 
 class Course extends Component {
     constructor(props) {
@@ -58,6 +60,14 @@ class Course extends Component {
             "name_of_certification": '',
             "year_of_certification": '',
             order: listLength
+        })
+
+        scroller.scrollTo(`course${fields.length - 1}`, {
+            duration: 800,
+            delay: 0,
+            smooth: 'easeInOutQuad',
+            offset: 200,
+            containerId: 'course'
         })
     }
 
@@ -116,6 +126,7 @@ export const
     CourseForm = reduxForm({
         form: 'course',
         enableReinitialize: true,
+        onSubmitFail: (errors) => scrollOnErrors(errors,'course',-100),
         validate
     })(Course);
 

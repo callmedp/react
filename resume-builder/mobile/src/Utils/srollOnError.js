@@ -23,7 +23,6 @@ export const scrollOnErrors = (errors,type,offset) =>{
         }
         id =`${type}${pos}`
     }
-    console.log(id)
     scroller.scrollTo(`${id}`, {
         duration: 800,
         delay: 0,

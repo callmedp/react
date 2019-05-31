@@ -5,6 +5,7 @@ import {connect} from "react-redux";
 import {ReferenceRenderer} from "./referenceRenderer";
 import validate from '../../../../../FormHandler/validations/reference/validate'
 import {scroller} from "react-scroll/modules";
+import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 
 
 class Reference extends Component {
@@ -129,6 +130,7 @@ class Reference extends Component {
 export const ReferenceForm = reduxForm({
     form: 'reference',
     enableReinitialize: true,
+    onSubmitFail: (errors) => scrollOnErrors(errors,'reference',-100),
     validate
 })(Reference);
 

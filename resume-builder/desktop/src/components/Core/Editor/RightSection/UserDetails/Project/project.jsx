@@ -6,6 +6,7 @@ import moment from "moment";
 import validate from "../../../../../FormHandler/validations/project/validate"
 import {ProjectRenderer} from "./projectRenderer";
 import {scroller} from "react-scroll/modules";
+import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 
 class Project extends Component {
     constructor(props) {
@@ -158,6 +159,7 @@ class Project extends Component {
 export const ProjectForm = reduxForm({
     form: 'project',
     enableReinitialize: true,
+    onSubmitFail: (errors) => scrollOnErrors(errors,'project',-100),
     validate
 })(Project);
 
