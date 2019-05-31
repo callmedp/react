@@ -181,7 +181,7 @@ class Experience extends Component {
             <div className="buildResume">
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <PreviewModal {...this.props}/>
-                    <AddSuggesion label={'Description'} modal_status={modal_status} closeModal={this.closeModal} suggestions={suggestions}  />
+                    <AddSuggesion label={'Job Description'} modal_status={modal_status} closeModal={this.closeModal} suggestions={suggestions}  />
                     <FieldArray name="list" 
                                 handleSubmit={handleSubmit}
                                 handleAddition={this.props.handleAddition}

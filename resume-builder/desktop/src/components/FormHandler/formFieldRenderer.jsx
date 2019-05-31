@@ -157,7 +157,6 @@ export const renderDynamicSelect = ({
                                         closeMenuOnSelect,
                                         meta: {touched, error, warning}
                                     }) => {
-    console.log('0---', input);
     return (
         <div className={"input-group " + (touched && error ? 'errormsg' : '')}>
             <div className="input-group--input-group-icon">
@@ -198,7 +197,6 @@ export const renderAsyncCreatableSelect = ({
                                                closeMenuOnSelect,
                                                meta: {touched, error, warning}
                                            }) => {
-    console.log('0---', input);
     return (
         <div className={"input-group " + (touched && error ? 'errormsg' : '')}>
             <div className="input-group--input-group-icon">

@@ -4,52 +4,41 @@ import './suggestionModal.scss'
 
 Modal.setAppElement(document.getElementById('react-app'));
 
-
-// Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
-
 export default class SuggestionModal extends React.Component {
     constructor(props) {
         super(props);
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
-        this.closeModal = this.closeModal.bind(this);
-        this.handleClick = this.handleClick.bind(this);
-        this.handleSuggestion = this.handleSuggestion.bind(this);
+        this.addSuggesion = this.addSuggesion.bind(this);
+        this.removeSuggesion =this.removeSuggesion.bind(this)
         this.state = {
-            selectedArray: []
+            suggestion_selected: {}
         }
+        this.handleSuggestion = this.handleSuggestion.bind(this)
     }
 
-    handleClick(index) {
-        let {selectedArray} = this.state;
-        const ind = selectedArray.indexOf(index);
-        if (ind > -1) {
-            selectedArray = selectedArray.filter(el => el !== index)
-        } else {
-            selectedArray.push(index)
-        }
-        this.setState({
-            selectedArray: selectedArray
-        })
+    addSuggesion(el,index,event){
+        // event.preventDefault()
+        let {suggestion_selected} = this.state
+        suggestion_selected[`${index}`] = el
+        this.setState({suggestion_selected})
 
     }
 
-    handleSuggestion() {
-        const {selectedArray} = this.state;
-        this.props.handleSuggestionSubmit(selectedArray);
-        this.setState({
-            selectedArray: []
-        })
-
+    removeSuggesion(index,event){
+        // event.preventDefault()
+        let {suggestion_selected} = this.state
+        delete suggestion_selected[`${index}`]
+        this.setState({suggestion_selected})
     }
 
-    closeModal() {
-        this.props.hideSuggestionModal()
+    handleSuggestion(suggestion_selected){
+        this.props.closeModal(suggestion_selected); 
+        this.setState({suggestion_selected:{}})
     }
 
     render() {
-        const {ui: {suggestionModal, suggestions, suggestionType}, handleSuggestionSubmit} = this.props;
-        const {selectedArray} = this.state;
-        console.log('---', selectedArray);
+        const {label,modal_status,closeModal,suggestions} = this.props
+        const {suggestion_selected} = this.state
 
         return (
             <div className="pr">
@@ -62,25 +51,28 @@ export default class SuggestionModal extends React.Component {
                             bottom: '0',
                         }
                     }}
-                    isOpen={suggestionModal}
-                    onRequestClose={this.closeModal}
-                    contentLabel="Example Modal"
+                    isOpen={modal_status} 
+                    onRequestClose={closeModal}
+                    contentLabel="Suggestion Modal"
                 >
                     <div className="pr suggested-summary">
                         <i onClick={this.closeModal} className='icon-close icon-close--position'></i>
-                        <h2>Add from suggested {suggestionType}</h2>
+                        <h2>Add from suggested {label}</h2>
                         <ul>
                             {(suggestions || []).map((el, index) => {
-                                return (<li>
-                                <span className={selectedArray.indexOf(index) > '-1' ? 'selected' : ''}>
-                                    <input onClick={() => this.handleClick(index)} type="checkbox" name=""/> Add
+                                return (
+                                <li key={index}>
+                                <span className={suggestion_selected[index]  ? 'selected' : ''}  
+                                   onClick={(event)=>{suggestion_selected[index] 
+                                    ? this.removeSuggesion(index,event): this.addSuggesion(el,index,event) }} htmlFor={`add${index}`} >
+                                    <input type="checkbox" readOnly checked={suggestion_selected[index] ? true : false} id={`add${index}`} /> Add
                                 </span>
                                     <p>{el}</p>
                                 </li>)
                             })}
                         </ul>
                         <button className="orange-button"
-                                type={'submit'} onClick={this.handleSuggestion}>Save and Continue
+                                type={'submit'} onClick={()=>{this.handleSuggestion(suggestion_selected)}}>Save and Continue
                         </button>
                     </div>
                 </Modal>

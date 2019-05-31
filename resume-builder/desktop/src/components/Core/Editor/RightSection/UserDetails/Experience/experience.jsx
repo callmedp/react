@@ -19,15 +19,18 @@ class Experience extends Component {
         this.handleAddition = this.handleAddition.bind(this);
         this.deleteExperience = this.deleteExperience.bind(this);
         this.tillTodayDisable = this.tillTodayDisable.bind(this);
-        this.handleSuggestion = this.handleSuggestion.bind(this);
-        this.handleSuggestionSubmit = this.handleSuggestionSubmit.bind(this);
+        this.openModal = this.openModal.bind(this);
+        this.closeModal = this.closeModal.bind(this);
+        // this.handleSuggestion = this.handleSuggestion.bind(this);
+        // this.handleSuggestionSubmit = this.handleSuggestionSubmit.bind(this);
 
         this.state = {
             active: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             submit: false,
             till_today: [],
             fieldArray: [],
-            currentIndex: null
+            currentIndex: null,
+            modal_status:false
 
         };
         this.props.currentForm('experience');
@@ -83,31 +86,54 @@ class Experience extends Component {
     }
 
 
-    handleSuggestion(currentField, fields, index) {
-        // console.log('---', currentField, fields);
-        this.setState({
-            fieldArray: fields,
-            currentIndex: index
+    // handleSuggestion(currentField, fields, index) {
+    //     // console.log('---', currentField, fields);
+    //     this.setState({
+    //         fieldArray: fields,
+    //         currentIndex: index
 
-        })
-        this.props.fetchJobTitles(currentField.job_profile && currentField.job_profile.value || '', 'experience');
-        this.props.setSuggestionType('experience')
-        this.props.showSuggestionModal();
+    //     })
+    //     this.props.fetchJobTitles(currentField.job_profile && currentField.job_profile.value || '', 'experience');
+    //     this.props.setSuggestionType('experience')
+    //     this.props.showSuggestionModal();
+    // }
+
+    // handleSuggestionSubmit(suggestionsArray) {
+    //     const {ui: {suggestions}} = this.props;
+    //     let suggestionsList = "";
+    //     (suggestions || []).filter((el, index) => suggestionsArray.indexOf(index) > -1).map((el, index) =>
+    //         suggestionsList += (index !== 0 ? "\n" : '') + el
+    //     )
+    //     let {fieldArray, currentIndex} = this.state;
+    //     let currentField = fieldArray && fieldArray.get(currentIndex)
+    //     console.log("dfdfdfdfdfd", currentField);
+    //     currentField['work_description'] = suggestionsList;
+    //     fieldArray.remove(currentIndex);
+    //     fieldArray.insert(currentIndex, currentField)
+    //     this.props.hideSuggestionModal()
+    // }
+
+    async openModal(fields,index){
+
+        const {job_profile:{label}} = fields.get(index)
+        await this.props.fetchJobTitles(label,'experience')
+        this.setState({modal_status:true,scrollpos:window.scrollY,fields,currentIndex:index})
     }
 
-    handleSuggestionSubmit(suggestionsArray) {
-        const {ui: {suggestions}} = this.props;
-        let suggestionsList = "";
-        (suggestions || []).filter((el, index) => suggestionsArray.indexOf(index) > -1).map((el, index) =>
-            suggestionsList += (index !== 0 ? "\n" : '') + el
-        )
-        let {fieldArray, currentIndex} = this.state;
-        let currentField = fieldArray && fieldArray.get(currentIndex)
-        console.log("dfdfdfdfdfd", currentField);
-        currentField['work_description'] = suggestionsList;
-        fieldArray.remove(currentIndex);
-        fieldArray.insert(currentIndex, currentField)
-        this.props.hideSuggestionModal()
+    closeModal(suggestions){
+        console.log(suggestions)
+        const {fields,currentIndex} = this.state
+        const currentField = fields.get(currentIndex)
+        if(Object.keys(suggestions).length){
+            let suggestionsList = (currentField.work_description ? currentField.work_description + "\n" : '');
+            Object.keys(suggestions).map((el,index) => {
+                suggestionsList += suggestions[el] + (index+1 === Object.keys(suggestions).length ? "" : '\n')
+            })
+            currentField['work_description'] = suggestionsList;
+            fields.remove(currentIndex);
+            fields.insert(currentIndex, currentField)
+        }
+        this.setState({modal_status:false},()=>{ window.scrollTo(0, this.state.scrollpos)})
     }
 
     handleAddition(fields, error) {
@@ -154,15 +180,15 @@ class Experience extends Component {
 
     render() {
         const {
-            handleSubmit, ui: {loader}, isEditable,
+            handleSubmit, ui: {loader,suggestions}, isEditable,
             editHeading, saveTitle, entityName, nextEntity, handlePreview,
-            changeOrderingDown, changeOrderingUp, handleInputValue, currentFields, fetchJobTitles, showSuggestionModal
+            changeOrderingDown, changeOrderingUp, handleInputValue, currentFields, fetchJobTitles
         } = this.props;
-        const {till_today} = this.state;
+        const {till_today,modal_status} = this.state;
 
         return (
             <React.Fragment>
-                <SuggestionModal {...this.props} handleSuggestionSubmit={this.handleSuggestionSubmit}/>
+                <SuggestionModal label={'Job Description'} modal_status={modal_status} closeModal={this.closeModal} suggestions={suggestions}/>
                 <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity, currentFields))}>
                     <FieldArray name={"list"}
                                 loader={loader}
@@ -182,7 +208,8 @@ class Experience extends Component {
                                 till_today={till_today}
                                 tillTodayDisable={this.tillTodayDisable}
                                 handleInputValue={handleInputValue}
-                                showSuggestionModal={(currentField, fields, index) => this.handleSuggestion(currentField, fields, index)}
+                                openModal={this.openModal}
+                                
 
 
                     />
