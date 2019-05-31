@@ -15,7 +15,7 @@
     display: block;
     flex: 1 1 auto;
     overflow-y: auto;
-    height: 450px;
+    height: 420px;
 
     li {
       color: $blue1;
@@ -181,6 +181,64 @@
   opacity: 0.3;
   color: $blue1 !important;
   pointer-events: none !important;
+}
+
+.menu-btm-button {
+  justify-content: center;
+
+  button {
+    width: 100px;
+  }
+}
+
+.edit-section-menu {
+  padding: 20px 0;
+  font-weight: 600;
+  color: $txt1;
+
+  strong {
+    margin: 0 20px;
+  }
+
+  ul {
+    margin: 20px 0 0 0;
+    display: block;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    height: 420px;
+
+    li {
+      color: $blue1;
+      display: block;
+      padding: 0 20px;
+      border-bottom: 1px solid $white;
+
+      a {
+        display: inline-block;
+        width: 90%;
+        color: $blue1;
+        padding: 15px 0;
+        line-height: 30px;
+      }
+
+      .non-link {
+     display: inline-block;
+        width: 90%;
+        padding: 15px 0;
+        line-height: 30px;
+      }
+    }
+  }
+
+  &--addmore {
+    font-weight: 400;
+    text-align: center;
+
+    &:hover {
+      background-color: $white !important;
+      color: $blue1 !important;
+    }
+  }
 }
 
 

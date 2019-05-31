@@ -202,6 +202,10 @@
     @include icon-inblock (10px, 10px, -412px -110px);
 }
 
+.icon-closemenu {
+    @include icon-inblock (12px, 12px, -230px -179px);
+}
+
 .icon-name {
     @include icon-inblock (24px, 19px, -85px -139px);
 }
