@@ -62,25 +62,28 @@ function* customizeTemplate(action) {
 }
 
 
-function* fetchTemplateImages(action) {
+function* fetchSelectedTemplateImage(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
         yield put({type: UPDATE_UI, data: {loader: true}});
+        const {payload:{templateId,resolve,reject,isModal}} = action;
+        console.log(templateId)
+        const result = yield call(Api.fetchTemplateImages, candidateId, templateId)
 
-        const result = yield all([
-            call(Api.fetchTemplateImages, candidateId, 1),
-            call(Api.fetchTemplateImages, candidateId, 2),
-            call(Api.fetchTemplateImages, candidateId, 3),
-            call(Api.fetchTemplateImages, candidateId, 4),
-            call(Api.fetchTemplateImages, candidateId, 5),
-        ]);
         if (result['error']) {
-            console.log('error');
+            return reject("API request Failed")
+
         }
-        const images = result.map(el => el.data);
-        yield  put({type: SAVE_TEMPLATE_IMAGES, data: {templateImages: images}});
+        if(isModal){
+            yield  put({type: SAVE_TEMPLATE_IMAGES, data: {modalTemplateImage: result['data']}});
+            yield put({type: UPDATE_UI, data: {loader: false}});
+            return resolve("Got the Modal Template Selected")
+        }
+        // const images = result.map(el => el.data);
+        yield  put({type: SAVE_TEMPLATE_IMAGES, data: {templateImage: result['data']}});
 
         yield put({type: UPDATE_UI, data: {loader: false}});
+        return resolve("Got the Template Selected")
 
         // yield call(fetchTemplate)
 
@@ -191,9 +194,8 @@ function* reorderSection(action) {
 export default function* watchTemplate() {
     yield  takeLatest(Actions.FETCH_TEMPLATE, fetchTemplate)
     yield  takeLatest(Actions.CUSTOMIZE_TEMPLATE, customizeTemplate)
-    yield  takeLatest(Actions.FETCH_TEMPLATE_IMAGES, fetchTemplateImages)
     yield  takeLatest(Actions.FETCH_DEFAULT_CUSTOMIZATION, fetchDefaultCustomization)
-    yield  takeLatest(Actions.FETCH_SELECTED_TEMPLATE_IMAGE, fetchTemplateImages)
+    yield  takeLatest(Actions.FETCH_SELECTED_TEMPLATE_IMAGE, fetchSelectedTemplateImage)
     yield  takeLatest(Actions.FETCH_THUMBNAIL_IMAGES, fetchThumbnailImages)
     yield  takeLatest(Actions.REORDER_SECTION, reorderSection)
 

@@ -51,10 +51,10 @@ export const fetchThumbNailImages = () => {
     }
 }
 
-export const fetchSelectedTemplateImage = (templateId) => {
+export const fetchSelectedTemplateImage = (payload) => {
     return {
         type: FETCH_SELECTED_TEMPLATE_IMAGE,
-        templateId
+        payload
     }
 }
 export const reorderSection = (payload) => {

@@ -15,7 +15,8 @@ const initialState = {
     'heading_font_size': 1,
     'color': 1,
     'entity_position': [],
-    'templateImages': [],
+    'templateImage': '',
+    'modalTemplateImage':'',
     'thumbnailImages': []
 
 };

@@ -22,28 +22,6 @@ import {
 } from "../../../../store/template/actions";
 
 
-function SampleNextArrow(props) {
-    const {className, style, onClick} = props;
-    return (
-        <div
-            className={className}
-            style={{...style, display: "block", background: "red"}}
-            onClick={onClick}
-        />
-    );
-}
-
-function SamplePrevArrow(props) {
-    const {className, style, onClick} = props;
-    return (
-        <div
-            className={className}
-            style={{...style, display: "block", background: "green"}}
-            onClick={onClick}
-        />
-    );
-}
-
 export class Buy extends Component {
 
     constructor(props) {
@@ -55,8 +33,8 @@ export class Buy extends Component {
         this.showEnlargedTemplate = this.showEnlargedTemplate.bind(this)
     }
 
-    showEnlargedTemplate(templateId) {
-        this.props.displaySelectedTemplate(templateId);
+    async showEnlargedTemplate(templateId) {
+        await this.props.fetchSelectedTemplateImage(templateId,true);
         this.props.showModal()
     }
 
@@ -85,7 +63,7 @@ export class Buy extends Component {
 
     componentDidMount() {
         this.props.fetchThumbNailImages();
-        this.props.fetchTemplateImages();
+        this.props.fetchSelectedTemplateImage(localStorage.getItem('selected_template') || 1);
         this.props.getProductIds();
         this.props.fetchUserInfo();
     }
@@ -111,10 +89,9 @@ export class Buy extends Component {
             slidesToScroll: 3,
             variableWidth: true
         };
-        const {userInfo: {first_name, selected_template}, ui: {loader}, template: {templateImages, thumbnailImages}} = this.props;
+        const {userInfo: {first_name, selected_template}, ui: {loader}, template: {templateImage, thumbnailImages}} = this.props;
         const {userInfo} = this.props;
         const {checked} = this.state;
-        console.log('--template imag---', templateImages, thumbnailImages, selected_template);
         return (
             /*
             * @desc Top Bar component
@@ -135,9 +112,9 @@ export class Buy extends Component {
                             <span onClick={() => this.showEnlargedTemplate(selected_template)} className="zoom"/>
                             <div className="right-sidebar-scroll-main">
                                 {
-                                    !!(thumbnailImages && thumbnailImages.length) ?
+                                    !!(templateImage) ?
                                         <img
-                                            src={`data:image/png;base64,${templateImages[selected_template - 1]}`}
+                                            src={`data:image/png;base64,${templateImage}`}
                                             className="img-responsive" alt=""/>
                                         :
                                         <img
@@ -284,17 +261,17 @@ const mapDispatchToProps = (dispatch) => {
                 dispatch(updatePersonalInfo({personalDetails, resolve, reject}));
             })
         },
-        displaySelectedTemplate(templateId) {
+        'displaySelectedTemplate' :(templateId) => {
             return dispatch(displaySelectedTemplate(templateId))
         },
-        fetchTemplateImages() {
-            return dispatch(fetchTemplateImages())
-        },
-        fetchThumbNailImages() {
+        'fetchThumbNailImages' : () => {
             return dispatch(fetchThumbNailImages())
         },
-        fetchSelectedTemplateImage(templateId) {
-            return dispatch(fetchSelectedTemplateImage(templateId))
+        'fetchSelectedTemplateImage' : (templateId,isModal) => {
+
+            return new Promise((resolve, reject) => {
+                return dispatch(fetchSelectedTemplateImage({templateId,isModal,resolve,reject}))
+            })
         }
     }
 };

@@ -16,18 +16,6 @@ import validate from '../../../../../FormHandler/validations/personalInfo/valida
 
 import moment from 'moment';
 
-const filterValues = (inputValue, values) => {
-    return values.filter(i =>
-        i.label.toLowerCase().includes(inputValue.toLowerCase())
-    );
-};
-
-const promiseOptions = (inputValue, values) =>
-    new Promise(resolve => {
-        setTimeout(() => {
-            resolve(filterValues(inputValue, values));
-        }, 1000);
-    });
 
 export class PersonalInfo extends Component {
     constructor(props) {
@@ -141,12 +129,12 @@ export class PersonalInfo extends Component {
                                     <label>First Name</label>
 
                                     <Field component={renderField} type={"text"} iconClass={'icon-name'}
-                                           name="first_name" id="first_name"/>
+                                           name="first_name"/>
                                 </fieldset>
                                 <fieldset>
                                     <label>Last Name</label>
                                     <Field component={renderField}
-                                           iconClass={'icon-surname'} id="last_name"
+                                           iconClass={'icon-surname'}
                                            type={"text"} name="last_name"/>
                                 </fieldset>
                             </div>
@@ -156,7 +144,6 @@ export class PersonalInfo extends Component {
                                     <label>Gender</label>
                                     <Field
                                         name="gender"
-                                        id="gender"
                                         iconClass={'icon-gender'}
                                         component={renderSelect}
                                         label="Gender"
@@ -172,7 +159,7 @@ export class PersonalInfo extends Component {
                                 <fieldset>
                                     <label>Date Of Birth</label>
                                     <Field yearDropDownItemNumber={50}
-                                           iconClass={'icon-date'} id="date_of_birth"
+                                           iconClass={'icon-date'}
                                            component={datepicker} name="date_of_birth"
                                            className={"input-control"}/>
                                 </fieldset>
@@ -182,7 +169,6 @@ export class PersonalInfo extends Component {
                                     <label>Mobile</label>
                                     <Field component={renderField}
                                            type={"text"}
-                                           id="number"
                                            name="number"
                                            iconClass={'icon-mobile'}
                                            className={"input-control"}/>
@@ -191,7 +177,6 @@ export class PersonalInfo extends Component {
                                     <label>Email</label>
                                     <Field component={renderField} type={"text"}
                                            name="email"
-                                           id="email"
                                            iconClass={'icon-email'}
                                            className={"input-control"}/>
                                 </fieldset>
@@ -204,7 +189,6 @@ export class PersonalInfo extends Component {
                                            iconClass={'icon-address'}
                                            type={"textarea"}
                                            name="location"
-                                           id="location"
                                            className={"input-control"} rows="3"/>
                                 </fieldset>
                             </div>
@@ -212,7 +196,7 @@ export class PersonalInfo extends Component {
                             <div className="flex-container">
                                 <fieldset id="interest-select" className="">
                                     <label>Interest</label>
-                                    <Field name="extracurricular"  id="extracurricular" component={renderDynamicSelect}
+                                    <Field name="extracurricular" component={renderDynamicSelect}
                                         // loadOptions={this.fetchInterestList.bind(this)}
                                            defaultOptions={Object.keys(personalInfo.interest_list).map(key => personalInfo.interest_list[key])}
                                            value={personalInfo.extracurricular}
