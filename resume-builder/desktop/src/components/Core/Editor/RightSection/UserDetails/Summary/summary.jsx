@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import * as actions from '../../../../../../store/personalInfo/actions/index';
+import {fetchUserExperience,fetchJobTitles} from '../../../../../../store/experience/actions/index';
 import {hideSuggestionModal, showSuggestionModal} from '../../../../../../store/ui/actions/index';
 import SuggestionModal from '../../../../../Modal/suggestionModal'
 
@@ -18,15 +19,19 @@ class Summary extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.openModal = this.openModal.bind(this);
+        this.closeModal = this.closeModal.bind(this);
         this.state = {
-            submit: false
+            submit: false,
+            modal_status: false
         };
         this.props.currentForm('summary');
 
     }
 
     componentDidMount() {
-        this.props.fetchPersonalInfo()
+        this.props.fetchPersonalInfo();
+        this.props.fetchUserExperience();
 
     }
 
@@ -45,6 +50,46 @@ class Summary extends Component {
         if (!this.state.submit) this.props.onSubmit(values)
     }
 
+    async openModal(){
+        const {experience} = this.props;
+        let latest_experience = ''
+        let  latest_end_date = 'None'
+        for (let exp of experience.list){
+            if (exp.is_working){
+                latest_experience = exp.job_profile
+                break
+            }
+            else if(latest_end_date === 'None'){
+                latest_end_date = exp.end_date
+                latest_experience = exp.job_profile
+            }
+            else{
+                if( latest_end_date < exp.end_date){
+                    latest_end_date = exp.end_date
+                    latest_experience = exp.job_profile
+                }
+                    
+            }
+                
+        }
+            
+        let label = (latest_experience && latest_experience.label) || ''
+        await this.props.fetchJobTitles(label,'summary')
+        this.setState({modal_status:true})
+    }
+
+    closeModal(suggestions){
+        const {personalInfo:{extra_info},upateSummaryWithSuggestion} = this.props
+        if(Object.keys(suggestions).length){
+            let suggestionsList = (extra_info ? extra_info + "\n" : '');
+            Object.keys(suggestions).map((el,index) => {
+                suggestionsList += suggestions[el] + (index+1 === Object.keys(suggestions).length ? "" : '\n')
+            })
+            upateSummaryWithSuggestion(suggestionsList)
+        }
+        this.setState({modal_status:false})
+    }
+
 
     shouldComponentUpdate(nextProps, nextState, nextContext) {
         return true;
@@ -52,10 +97,11 @@ class Summary extends Component {
 
 
     render() {
-        const {personalInfo: {extra_info}, ui: {loader, suggestionModal}, handleInputValue, handleSubmit, handlePreview, isEditable, editHeading, saveTitle, entityName, nextEntity, showSuggestionModal} = this.props;
+        const {personalInfo: {extra_info}, ui: { suggestions}, handleInputValue, handleSubmit, handlePreview, isEditable, editHeading, saveTitle, entityName, nextEntity, showSuggestionModal} = this.props;
+        const {modal_status} =this.state;
         return (
             <div>
-                <SuggestionModal {...this.props} />
+                <SuggestionModal label={'Summary'} modal_status={modal_status} closeModal={this.closeModal} suggestions={suggestions} />
                 <section className="head-section">
                     <span className="icon-box"><i className="icon-summary1"/></span>
                     {!!(!isEditable) ?
@@ -79,7 +125,7 @@ class Summary extends Component {
                                 component={renderTextArea} type={"textarea"} name="extra_info"
                                 className="summary-box--summary-txt" rows="10" value={extra_info}/>
                         </div>
-                        {/* <span className="add-suggested" onClick={showSuggestionModal}>Add suggested summary</span> */}
+                        <span className="add-suggested" onClick={()=>{this.openModal()}}>Add suggested summary</span>
 
                     </section>
 
@@ -106,7 +152,8 @@ const mapStateToProps = (state) => {
     return {
         initialValues: state.personalInfo,
         personalInfo: state.personalInfo,
-        ui: state.ui
+        ui: state.ui,
+        experience: state.experience
     }
 };
 
@@ -114,6 +161,18 @@ const mapDispatchToProps = (dispatch) => {
     return {
         "fetchPersonalInfo": () => {
             return dispatch(actions.fetchPersonalInfo())
+        },
+        "upateSummaryWithSuggestion": (data) => {
+            return dispatch(actions.upateSummaryWithSuggestion(data))
+        },
+        "fetchUserExperience": () => {
+            return dispatch(fetchUserExperience())
+        },
+        "fetchJobTitles": (inputValue, suggestionType) => {
+            if (inputValue.length < 3) return new Promise(res => res([]));
+            return new Promise((res, rej) => {
+                return dispatch(fetchJobTitles({inputValue, suggestionType, res, rej}))
+            })
         },
         "onSubmit": (personalDetails) => {
             const {gender, date_of_birth, extracurricular} = personalDetails;

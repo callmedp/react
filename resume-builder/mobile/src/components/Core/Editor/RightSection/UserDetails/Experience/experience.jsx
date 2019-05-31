@@ -78,11 +78,10 @@ class Experience extends Component {
     }
 
     async handleSubmit(values) {
-        values = this.state.fields ? this.state.fields : values.list
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         this.setState({submit:true})
         currentLinkPos++
-        await this.props.bulkUpdateUserExperience(values);
+        await this.props.bulkUpdateUserExperience(values.list);
          if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
             if(this.props.personalInfo.subscription_status){

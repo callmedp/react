@@ -35,7 +35,6 @@ export const personalInfoReducer = (state = initialState, action) => {
             }
         }
         case UPDATE_SUMMARY_WITH_SUGGESTION:{
-            console.log(action)
             return {
                 ...state,
                 ...{

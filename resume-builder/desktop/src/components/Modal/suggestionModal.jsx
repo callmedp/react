@@ -56,7 +56,7 @@ export default class SuggestionModal extends React.Component {
                     contentLabel="Suggestion Modal"
                 >
                     <div className="pr suggested-summary">
-                        <i onClick={this.closeModal} className='icon-close icon-close--position'></i>
+                        <i onClick={()=>{this.handleSuggestion({})}} className='icon-close icon-close--position'></i>
                         <h2>Add from suggested {label}</h2>
                         <ul>
                             {(suggestions || []).map((el, index) => {
