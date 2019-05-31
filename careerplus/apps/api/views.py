@@ -14,6 +14,7 @@ from rest_framework import status
 from rest_framework.permissions import (
     IsAuthenticated,
     IsAdminUser, )
+from rest_framework.authentication import SessionAuthentication
 from haystack import connections
 from haystack.query import SearchQuerySet
 from core.library.haystack.query import SQS
@@ -811,7 +812,7 @@ class TalentEconomyApiView(FieldFilterMixin,ListAPIView):
 class OrderDetailApiView(FieldFilterMixin,RetrieveAPIView):
 
     permission_classes = []
-    authentication_classes = []
+    authentication_classes = [SessionAuthentication]
     serializer_class = OrderDetailSerializer
     queryset = Order.objects.all()
 

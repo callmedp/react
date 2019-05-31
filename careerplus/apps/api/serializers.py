@@ -1,3 +1,4 @@
+import datetime
 from rest_framework.serializers import (
     ModelSerializer,
     SerializerMethodField,
@@ -348,9 +349,20 @@ class OrderDetailSerializer(SerializerFieldsMixin,ModelSerializer):
     #                            'assigned_to': ['name'], 'country': ['name'], }
     # field_model_mapping = {'crm_sales_id': User, 'paid_by': User, 'assigned_to': User,'country':Country}
 
-
-    # def to_representation(self,instance):
-    #     ret = super(OrderDetailSerializer,self).to_representation(instance)
-    #     asked_fields = self.context.get('asked_fields',[])
-    #     [ret.pop(field,"") for field in asked_fields]
-    #     return ret
+    def to_representation(self,instance):
+        ret = super(OrderDetailSerializer,self).to_representation(instance)
+        asked_fields = self.context.get('asked_fields',[])
+        user = self.context.get('request').user
+        [ret.pop(field,"") for field in asked_fields]
+        if not user:
+            logging.getLogger('info_log').info("Unable to retrieve user for Order Detail Api ")
+            return ret
+        current_time = datetime.datetime.now().strftime("%d %B %Y %I:%M:%S %p")
+        fields_to_check = asked_fields.split(',')
+        fields_to_log = ['email','alt_email','mobile','alt_mobile']
+        for field in fields_to_log:
+            if field not in fields_to_check:
+                continue
+            logging.getLogger('info_log').info('{} => {} => {} => {} =>{} => {}'.format(current_time,\
+        user.id, user.get_full_name(), getattr(instance, 'number', 'None'), field, getattr(instance, field, 'None')))
+        return ret
