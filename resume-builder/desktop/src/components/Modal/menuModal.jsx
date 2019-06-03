@@ -22,7 +22,7 @@ export default class MenuModal extends React.Component {
                             height: '570px',
                         }
                     }}
-                    isOpen={true} 
+                    isOpen={false} 
                     contentLabel="Menu Modal"
                 >
                     <div class="edit-section-menu">
