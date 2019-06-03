@@ -269,6 +269,9 @@ MAPPING_VENDOR_MAX_SCORE = {
     'amcat': 900,
 }
 
+MAPPING_VENDOR_MAX_SCORE_MODULE_WISE = {
+    'amcat': 100,
+}
 
 MULTIPLE_VALUES_1 = {
     'amcat': {
@@ -340,6 +343,9 @@ class CertiticateParser:
 
     def get_max_score_as_per_vendor(self, vendor):
         return MAPPING_VENDOR_MAX_SCORE.get(vendor, 100)
+
+    def get_max_score_as_per_vendor_module_wise(self, vendor):
+        return MAPPING_VENDOR_MAX_SCORE_MODULE_WISE.get(vendor, 100)
 
 
     def get_key_for_field(self, vendor_type, key, field):
@@ -627,6 +633,8 @@ class CertiticateParser:
         for certificate in parsed_data.certificates:
             current_certificate_id = certificate.amcatID
             for score in all_scores:
+                max_score = self.get_max_score_as_per_vendor_module_wise(vendor=data['vendor'])
+                setattr(certificate, 'max_score', max_score)
                 if str(current_certificate_id) == str(score['amcatID']):
                     overallScore = score.get('overallScore', None)
                     if overallScore != 'NA':

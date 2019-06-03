@@ -363,6 +363,7 @@ class ImportCertificateSerializer(Serializer):
     expiry = serializers.CharField()
     vendor_provider = serializers.SerializerMethodField()
     overallScore = serializers.CharField()
+    max_score = serializers.CharField()
 
     def get_vendor_provider(self, obj):
         return self.vendor_provider
