@@ -353,6 +353,9 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             else:
                 CERT.append(obj.get_cert())
             return list(set(CERT))
+        elif obj.is_assesment and obj.sub_type_flow == 1602:
+                return ["true"]
+
         return [0]
 
     def prepare_pStM(self, obj):
