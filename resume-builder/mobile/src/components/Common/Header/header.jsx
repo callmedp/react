@@ -48,17 +48,26 @@ class Header extends Component {
     
                         <a className="btn btn__round btn--outline" onClick={()=>{updateModalStatus({modal_status:true})}}>Change template</a>
                     </React.Fragment>:
+                    
+                    page === 'sidenav' ?
+                    <React.Fragment>
+                        <div className="header__left">
+                            <button role="button" className="header__menu" onClick={()=>{history.goBack()}}>
+                                <i className="sprite icon--back-white"></i>
+                            </button>
+    
+                            {<span>Add / Remove</span>}
+                        </div>
+    
+                    </React.Fragment>:
+
+
                     <React.Fragment>
                         <div className="header--logo">
                             <img src={`${this.staticUrl}react/assets/images/mobile/logo.png`} alt=""/>
                         </div>
                         <div className="header--logo"></div>
                     </React.Fragment>}
-
-                
-                
-
-
             </header>
         )
     }

@@ -72,6 +72,14 @@
     background-position: -25px -345px;
   }
 
+  &--add-remove {
+    @include size(17px, 17px, block);
+    background-position: -136px -186px;
+    position: relative;
+    top: 5px;
+    margin-bottom: 7px;
+  }
+
   &--edit {
     @include size(20px, 20px, block);
     background-position: 5px -13px;
@@ -145,8 +153,15 @@
   }
 
   &--delete {
-    @include size(14px, 18px, block);
-    background-position: 0 -327px;
+    @include size(12px, 12px, flex);
+    background-position: -139px -211px;
+    flex: 0 0 12px;
+  }
+  
+  &--add-element {
+    @include size(13px, 13px, flex);
+    background-position: -139px -229px;
+    flex: 0 0 13px;
   }
 
   &--upArrow {
@@ -165,8 +180,8 @@
   }
 
   &--close {
-    @include size(14px, 14px, block);
-    background-position: -134px -182px;
+    @include size(12px, 12px, block);
+    background-position: -139px -211px;
     margin: 8px 0 0 8px;
   }
  
@@ -489,6 +504,10 @@
 
     &--add-more {
       background-position: -26px -154px;
+    }
+    
+    &--add-remove {
+      background-position: -136px -186px;
     }
 
     &--language {

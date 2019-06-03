@@ -1,0 +1,43 @@
+@import '../../../../styles/variables/vars.scss';
+@import '../../../../styles/variables/mixins.scss';
+
+.addMore {
+    padding-top: 7rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+
+    &__items {
+        
+    }
+
+    &__anchor {
+        @include size(100%, 55px, flex);
+
+        align-items: center;
+
+        &__wrap {
+            display: flex;
+            width: 100%;
+
+            &--icon {
+                width: 23px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            &--link {
+                font-size: 1.4rem;
+                margin-left: 1rem;
+                color: $blue;
+            }
+        }
+    }
+}
+
+.add-reamove {
+    position: fixed;
+    bottom: 60px;
+    border-top: 1px solid $border1;
+    background-color: $white;
+}

@@ -53,13 +53,11 @@ input::placeholder {
 }
 
 .close-wrap {
-    width: 30px;
-    height: 30px;
-    display: block;
+    @include size(25px, 25px, block);
     border-radius: 50%;
     box-shadow: 0 0 10px rgba($black, .2);
     position: absolute;
-    right: 0;
-    top: 0;
+    right: -4px;
+    top: -4px;
     background-color: $white;
 }

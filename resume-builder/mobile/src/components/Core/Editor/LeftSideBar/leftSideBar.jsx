@@ -231,28 +231,24 @@ class LeftSideBar extends Component {
                                         
                                     )}
 
-                                    <li className={"sidebar__item " + (sidenavStatus ? "hide" : "")}>
+                                    <li className={"sidebar__item add-reamove" + (sidenavStatus ? "hide" : "")}>
                                         <a href="#" className="sidebar__anchor">
                                             <div className="sidebar__wrap">
-                                                <i className="sprite icon--add-more"></i>
-                                                <span className="sidebar__link" onClick={!error ?this.addMore:this.showErrorMessage.bind(this,'addMore')}>Add more</span>
-                                            </div>
-
-                                            <div className="sidebar-open__wrap">
-                                                <span className="sidebar-open__link" href="#">Add more sections</span>
+                                                <i className="sprite icon--add-remove"></i>
+                                                <span className="sidebar__link">Add/<br/>Remove</span>
                                             </div>
                                         </a>
                                     </li>
                                 </ul>
                             </div>
 
-                            <ul className="companyMenu">
+                            {/*<ul className="companyMenu">
                                 <li className="companyMenu__link"><a href="#">About us</a></li>
                                 <li className="companyMenu__link"><a href="#">Privacy Policy</a></li>
                                 <li className="companyMenu__link"><a href="#">Terms & Conditions</a></li>
                                 <li className="companyMenu__link"><a href="#">Contact Us</a></li>
                                 <li className="companyMenu__link mt-20">Copyright © 2019 HT Media Limited.</li>
-                            </ul>
+                            </ul>*/}
                         </section>
                     </div> : ""
                 }

@@ -66,6 +66,17 @@
     color: #333;
 }
 
+
+.link-color {
+    color: $blue;
+}
+
+
+.bg-white {
+    background-color: $white;
+}
+
+
 .d-flex {
     display: flex;
 }
@@ -106,4 +117,12 @@
 
 .overlay-hidden {
     overflow: hidden;
+}
+
+.ml-auto {
+    margin-left: auto;
+}
+
+.mr-auto {
+    margin-right: auto;
 }

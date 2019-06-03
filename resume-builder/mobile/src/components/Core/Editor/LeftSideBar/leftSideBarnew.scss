@@ -4,14 +4,9 @@
 
 .left-sidebar {
     width: 55px;
-    background-color: $white;
     position: fixed;
-    top: 50px;
     height: 100vh;
     box-shadow: 0 0 15px $box-shadow-light;
-
-    z-index: 2;
-    overflow: hidden;
 }
 
 .user {
@@ -41,37 +36,38 @@
 .sidebar {
 
     &__item {
-        @include size(55px, 50px, flex);
+        height: 50px;
+
+        display: flex;
         align-items: center;
     }
     
     &__anchor {
-        color:none;
-        display: flex;
+        @include size(100%, 50px, flex);
         align-items: center;
         flex-direction: row;
         width: 100%;
+        height: 50px;
     }
 
     &__wrap {
-        height: 50px;
-        text-align: center;
+        width: 100%;
 
-        flex: 0 0 55px;
         display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
+        flex-direction: row;
     }
 
-    &__link {
+    &--link {
         color: $blue;
-        font-size: 0.9rem;
+        font-size: 1.4rem;
+        margin-left: 1.5rem;
     }
 
-    .sidebar-open__wrap {
-        opacity: 0;
+    &__icon {
+        width: 23px;
+        position: relative;
     }
+
 
     .user,
     .companyMenu {
@@ -96,7 +92,6 @@
         font-size: 1.6rem;
         color: $blue;
         height: 50px;
-        padding-right: 15px;
         
 
         flex: 1;
@@ -171,4 +166,13 @@
     .user {
         opacity: 1;
     }
+}
+
+.sidebar-close{
+    background-color: $white;
+    width: 55px;
+    z-index: 2;
+    top: 50px;
+    height: 100%;
+    overflow: hidden;
 }
