@@ -756,6 +756,13 @@ class UpdateCertificateAndAssesment(APIView):
             "Incoming Data in request is %s" %
             str(data)
         )
+        if not data:
+            return Response({
+                "status": 0,
+                "msg": "Provide Data for Certificate"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         data['vendor'] = vendor_name.lower()
         parser = CertiticateParser(parse_type=0)
         parsed_data = parser.parse_data(data)

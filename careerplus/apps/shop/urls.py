@@ -27,7 +27,7 @@ urlpatterns = [
     url(r'^reviews/product/create/$',
         views.ProductReviewCreateView.as_view(), name='product-review-create'),
 
-    url(r'^product/(?P<skill_name>[\w\-]+)/$',
+    url(r'^product/(?P<skill_name>[\w|\W]+)/$',
         views.SkillToProductRedirectView.as_view(), name="skill-to-product-redirect")
 
     # url(r'^crm/lead/$',
