@@ -752,6 +752,7 @@ class UpdateCertificateAndAssesment(APIView):
 
     def post(self, request, *args, **kwargs):
         certificate_updated = False
+        subject = "You have not cleared the test"
         vendor_name = self.kwargs.get('vendor_name')
         data = request.data
         logging.getLogger('info_log').error(
@@ -769,6 +770,7 @@ class UpdateCertificateAndAssesment(APIView):
         parser = CertiticateParser(parse_type=0)
         parsed_data = parser.parse_data(data)
         certificates, user_certificates = parser.save_parsed_data(parsed_data, vendor=data['vendor'])
+        print(user_certificates)
         if user_certificates:
             for user_certificate in user_certificates:
                 certificate = user_certificate.certificate
@@ -815,20 +817,24 @@ class UpdateCertificateAndAssesment(APIView):
                         last_oi_status=last_oi_status,
                         assigned_to=oi.assigned_to
                     )
-                    to_emails = [oi.order.get_email()]
-                    mail_type = "CERTIFICATE_AND_ASSESMENT"
-                    data = {}
-                    data.update({
-                        "username": oi.order.first_name,
-                        "subject": "{} on completing the certification on {}>".format(
-                            oi.order.first_name, oi.product.name
-                        ),
-                        "product_name": oi.product.name,
-                        "skill_name": ', '.join(
-                            list(ProductSkill.objects.filter(product=oi.product).values_list('skill__name', flat=True))
-                        )
-                    })
-                    send_email_task(to_emails, mail_type, data, oi=oi.pk)
+                    subject = "{} on completing the certification on {}>".format(
+                        oi.order.first_name, oi.product.name
+                    )
+            to_emails = [oi.order.get_email()]
+            mail_type = "CERTIFICATE_AND_ASSESMENT"
+            data = {}
+
+            data.update({
+                "username": oi.order.first_name,
+                "subject": subject,
+                "product_name": oi.product.name,
+                "skill_name": ', '.join(
+                    list(ProductSkill.objects.filter(product=oi.product).values_list('skill__name', flat=True))
+                ),
+                "certificate_updated": certificate_updated
+            })
+            print(to_emails)
+            send_email_task(to_emails, mail_type, data, oi=oi.pk)
             oi.orderitemoperation_set.create(
                 oi_status=oi.oi_status,
                 last_oi_status=oi.last_oi_status,

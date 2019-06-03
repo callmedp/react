@@ -19,6 +19,7 @@
       </td>
     </tr>
     <tr>
+    	{% if certificate_updated %}
       <td style="padding: 10px">
       	<strong style="font-size: 14px; display: block; font-weight: normal; color: #333333; padding-bottom: 5px; padding-top: 2px;">Dear {% if username %}{{username}}{% else %}Candidate{% endif %},</strong>
       	<span style="fon">
@@ -30,14 +31,18 @@
 			<ol>
 				<li>  Badged your Shine profile</li>
 				<li> Marked {{ skill_name }} as validated.</li>
-			<ol>
+			</ol>
 			<br>
 			<br>
 			Badged profiles and validated skills are highly valued by our recruiters
 			<br>
+			<br>
 			Once again, congratulations on a job well done. Look out for more Certificate Courses at Shine Learning
         </span>
       </td>
+      {% else %}
+       	Sorry you are not passed
+      {% endif %}
     </tr>
     <tr>
     	<td style="padding: 10px;">

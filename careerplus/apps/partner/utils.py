@@ -538,16 +538,15 @@ class CertiticateParser:
                 user_certificate_data['expiry_date'] = expiry
             if assesment:
                 user_certificate_data['assesment'] = assesment
-            user_certificate, created = UserCertificate.objects.get_or_create(
+            user_certificate = UserCertificate.objects.create(
                 **user_certificate_data
             )
-            if created:
-                last_op_type = user_certificate.status
-                UserCertificateOperations.objects.create(
-                    user_certificate=user_certificate,
-                    op_type=0,
-                    last_op_type=last_op_type)
-                user_certificates.append(user_certificate)
+            last_op_type = user_certificate.status
+            UserCertificateOperations.objects.create(
+                user_certificate=user_certificate,
+                op_type=0,
+                last_op_type=last_op_type)
+            user_certificates.append(user_certificate)
         return (certificates, user_certificates)
 
 
