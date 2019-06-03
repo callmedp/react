@@ -378,8 +378,7 @@ class CandidateResumePreview(APIView):
                 if latest_end_date < i.end_date:
                     latest_end_date = i.end_date
                     latest_experience = i.job_profile
-
-        # latest_experience = experience and experience[0].job_profile or 'FULL STACK DEVELOPER'
+        
 
         template = get_template('resume{}_preview.html'.format(template_id))
         rendered_template = template.render(
