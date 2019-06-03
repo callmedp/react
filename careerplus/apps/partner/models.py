@@ -1,5 +1,6 @@
 # inbuilt imports
 from datetime import datetime
+from decimal import Decimal
 
 # framework imports
 from django.db import models
@@ -147,7 +148,11 @@ class Assesment(AbstractAutoDate):
         _('Extra Info'), blank=True,
         default='', help_text=_('Extra Info'))
     report = models.TextField(blank=True)
-    overallScore = models.IntegerField(default=0, null=True, blank=True)
+    overallScore = models.DecimalField(
+        default=Decimal('0.00'), decimal_places=2,
+        max_digits=12, null=True, blank=True
+    )
+
 
 
 

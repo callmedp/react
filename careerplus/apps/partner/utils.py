@@ -579,7 +579,7 @@ class CertiticateParser:
                     last_op_type=last_op_type)
                 return True
         logging.getLogger('error_log').error(
-            "Error Occured for Certificate %s, Candidate Id Does not Exist for email %" %
+            "Error Occured for Certificate %s, Candidate Id Does not Exist for email %s" %
             (str(user_certificate.certificate.name), str(user_certificate.candidate_email))
         )
         return False
