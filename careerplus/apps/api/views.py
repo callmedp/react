@@ -18,6 +18,7 @@ from haystack import connections
 from haystack.query import SearchQuerySet
 from core.library.haystack.query import SQS
 from partner.utils import CertiticateParser
+from partner.models import ProductSkill
 from rest_framework.generics import ListAPIView
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 
@@ -37,6 +38,7 @@ from order.tasks import (
 )
 from shop.models import Skill, DeliveryService, ShineProfileData
 from blog.models import Blog
+from emailers.tasks import send_email_task
 
 from .serializers import (
     OrderListHistorySerializer,
@@ -813,6 +815,20 @@ class UpdateCertificateAndAssesment(APIView):
                         last_oi_status=last_oi_status,
                         assigned_to=oi.assigned_to
                     )
+                    to_emails = [oi.order.get_email()]
+                    mail_type = "CERTIFICATE_AND_ASSESMENT"
+                    data = {}
+                    data.update({
+                        "username": oi.order.first_name,
+                        "subject": "{} on completing the certification on {}>".format(
+                            oi.order.first_name, oi.product.name
+                        ),
+                        "product_name": oi.product.name,
+                        "skill_name": ', '.join(
+                            list(ProductSkill.objects.filter(product=oi.product).values_list('skill__name', flat=True))
+                        )
+                    })
+                    send_email_task(to_emails, mail_type, data, oi=oi.pk)
             oi.orderitemoperation_set.create(
                 oi_status=oi.oi_status,
                 last_oi_status=oi.last_oi_status,
