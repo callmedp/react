@@ -2713,6 +2713,7 @@ class AssignmentOrderItemView(View):
 class ConsoleResumeDownloadView(View):
 
     def get(self, request, *args, **kwargs):
+        current_time = datetime.datetime.now().strftime("%d %B %Y %I:%M:%S %p")
         try:
             file = request.GET.get('path', None)
             next_url = request.GET.get('next', None)
@@ -2731,7 +2732,9 @@ class ConsoleResumeDownloadView(View):
                 return response
         except Exception as e:
             logging.getLogger('error_log').error("%s" % str(e))
-                       
+        logging.getLogger('info_log').info(
+            '{},{},{},{}'.format(current_time, self.request.user.id, self.request.user.get_full_name(),
+                                 'resume download'))
         return HttpResponseRedirect(next_url)
 
 

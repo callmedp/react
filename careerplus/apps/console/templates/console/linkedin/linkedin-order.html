@@ -60,35 +60,24 @@
                   <tbody>
                     <tr>
                       <td>{{order.id}}</td>
-                      <td>
-                         {% if not exoitel_status%}
-                          {{order.email}}
-                          {%if order.alt_email%}<br/>
-                          <span style=" white-space: nowrap;">
-                         <b>Alt-</b>  {{order.alt_email}}</span>
-                          {%endif%}
-
-                          {% else %}
-                            {{order.masked_email}}
-
-                           {% endif %}</td>
-                      <td>
-                           {% if not exoitel_status%}
-                          {{obj.country_code}}-
-                          {{obj.mobile}}
-                          {%if obj.alt_mobile%}
-                          <span style=" white-space: nowrap;"> <b>Alt-</b>
-                              {{obj.country_code}}-{{obj.alt_mobile}}</span>
-                          {%endif%}
-                           {% else %}
-                           {% if show_btn %}
-                            <button id="{{order.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{order.id}});"></button>
-                            <span style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{order.id}}callingbtn-error"></span>
-                                {% endif %}
-                            {{order.masked_mobile}}
-
-                           {% endif %}
-                      </td>
+                       <td>
+                    <div id="email{{obj.id}}">
+                      <div id="email_field{{obj.id}}"></div>
+                    </div>
+                    <div>
+                      <button type="button" class="btn btn-primary btn-xs" onclick="order_get_details('{{obj.id}}','email,alt_email','email');"><i class="fa fa-search" aria-hidden="true"></i>ClickToView</button>
+                    </div>
+                  </td>
+                  <td>
+                    <div id="mobile{{obj.id}}" style="display: -moz-inline-stack;">
+                      <div id="mobile_field{{obj.id}}"></div>
+                    </div>
+                      {% if exoitel_status%}
+                      <button id="{{obj.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{obj.id}});"></button>
+                      <span style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{obj.id}}callingbtn-error"></span>
+                      {% endif %}
+                    <button type="button" onclick="order_get_details('{{obj.id}}','mobile,alt_mobile','mobile');" class="btn btn-primary btn-xs"><i class="fa fa-phone-square" aria-hidden="true"></i> ClickToView</button>
+                  </td>
                       <td>{{order.first_name}} {{order.last_name}}</td>
                       <td>{{order.get_status}}</td>
                       <td>{{order.get_payment_mode}}</td>
@@ -257,6 +246,9 @@
   <script type="text/javascript" src="{% static 'console/js/order/exotelCall.js' %}"></script>
   <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/order/draft-upload.js' %}"></script>
+   <script type="text/javascript" src = "{% static 'console/js/order-info.js' %}"></script>
+
   {% endcompress %}
 
 {% endblock js_block %}
+

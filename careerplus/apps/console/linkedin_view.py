@@ -253,8 +253,6 @@ class LinkedinOrderDetailVeiw(DetailView):
         obj = self.get_object()
         max_limit_draft = settings.DRAFT_MAX_LIMIT
         order = self.get_object()
-        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
-        show_btn = True if has_permission else False
         order_items = order.orderitems.all().select_related('product', 'partner')
         context.update({
             "order": order,
@@ -262,7 +260,6 @@ class LinkedinOrderDetailVeiw(DetailView):
             "max_limit_draft": max_limit_draft,
             "messages": alert,
             "message_form": MessageForm(),
-            'show_btn':show_btn,
         })
         return context
 

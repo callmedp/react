@@ -816,6 +816,19 @@ class OrderDetailApiView(FieldFilterMixin,RetrieveAPIView):
     serializer_class = OrderDetailSerializer
     queryset = Order.objects.all()
 
+    def get(self, request, *args, **kwargs):
+        instance = self.get_object()
+        user = self.request.user
+        current_time = datetime.datetime.now().strftime("%d %B %Y %I:%M:%S %p")
+        fields_to_check = self.get_required_fields()
+        fields_to_log = ['email', 'alt_email', 'mobile', 'alt_mobile']
+        for field in fields_to_log:
+            if field not in fields_to_check:
+                continue
+            logging.getLogger('error_log').error('{},{},{},{},{},{}'.format(current_time,\
+        user.id, user.get_full_name(), getattr(instance, 'number', 'None'), field, getattr(instance, field, 'None')))
+        return self.retrieve(request, *args, **kwargs)
+
 
 
 
