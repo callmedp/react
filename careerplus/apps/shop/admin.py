@@ -140,6 +140,10 @@ class ShineProfileDataAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         return False
 
+class SkillAdmin(admin.ModelAdmin):
+    search_fields = ('name',)
+
+
 admin.site.register(models.Category, CategoryAdmin)
 admin.site.register(models.Attribute, AttributeAdmin)
 admin.site.register(models.Keyword)
@@ -149,5 +153,5 @@ admin.site.register(models.Product, ProductAdmin)
 admin.site.register(models.AttributeOptionGroup, OptionGroupAdmin)
 admin.site.register(models.DeliveryService, DeliveryServiceAdmin)
 admin.site.register(models.ShineProfileData, ShineProfileDataAdmin)
-admin.site.register(models.Skill)
+admin.site.register(models.Skill, SkillAdmin)
 # admin.site.register(models.ProductExtraInfo, ProductExtraInfoAdmin)
