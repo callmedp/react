@@ -651,19 +651,6 @@ class CertiticateParser:
                 logging.getLogger('info_log').info(
                     'Badging After parsing data is done for OrderItem  %s is %s' % (str(oi.id), str(data))
                 )
-                last_oi_status = oi.oi_status
-                oi.oi_status = 4
-                oi.closed_on = timezone.now()
-                oi.last_oi_status = 6
-                oi.save()
-                oi.orderitemoperation_set.create(
-                    oi_status=6,
-                    last_oi_status=last_oi_status,
-                    assigned_to=oi.assigned_to)
-                oi.orderitemoperation_set.create(
-                    oi_status=oi.oi_status,
-                    last_oi_status=oi.last_oi_status,
-                    assigned_to=oi.assigned_to)
 
                 # Send mail and sms with subject line as Your Profile updated
                 try:

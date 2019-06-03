@@ -749,6 +749,7 @@ class UpdateCertificateAndAssesment(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
+        certificate_updated = False
         vendor_name = self.kwargs.get('vendor_name')
         data = request.data
         logging.getLogger('info_log').error(
@@ -765,6 +766,7 @@ class UpdateCertificateAndAssesment(APIView):
                 flag = parser.update_certificate_on_shine(user_certificate)
 
                 if flag:
+                    certificate_updated = True
                     logging.getLogger('info_log').error(
                         "Certificate %s parsed, saved, updated for Candidate Id %s" %
                         (str(certificate.name), str(user_certificate.candidate_id))
@@ -781,21 +783,33 @@ class UpdateCertificateAndAssesment(APIView):
                 logging.getLogger('error_log').error(
                     "Order Item id present , Certificate not available, badging not done" % (data)
                 )
-                orderitem_id = int(parsed_data.user_certificate.order_item_id)
-                oi = OrderItem.objects.filter(id=orderitem_id).first()
-                last_oi_status = oi.oi_status
-                oi.oi_status = 4
-                oi.closed_on = timezone.now()
-                oi.last_oi_status = 6
-                oi.save()
+            orderitem_id = int(parsed_data.user_certificate.order_item_id)
+            oi = OrderItem.objects.filter(id=orderitem_id).first()
+            last_oi_status = oi.oi_status
+            oi.oi_status = 4
+            oi.closed_on = timezone.now()
+            oi.last_oi_status = 6
+            oi.save()
+            oi.orderitemoperation_set.create(
+                oi_status=6,
+                last_oi_status=last_oi_status,
+                assigned_to=oi.assigned_to)
+            if certificate_updated:
                 oi.orderitemoperation_set.create(
-                    oi_status=6,
+                    oi_status=191,
                     last_oi_status=last_oi_status,
-                    assigned_to=oi.assigned_to)
-                oi.orderitemoperation_set.create(
-                    oi_status=oi.oi_status,
-                    last_oi_status=oi.last_oi_status,
-                    assigned_to=oi.assigned_to)
+                    assigned_to=oi.assigned_to
+                )
+                if flag:
+                    oi.orderitemoperation_set.create(
+                        oi_status=192,
+                        last_oi_status=last_oi_status,
+                        assigned_to=oi.assigned_to
+                    )
+            oi.orderitemoperation_set.create(
+                oi_status=oi.oi_status,
+                last_oi_status=oi.last_oi_status,
+                assigned_to=oi.assigned_to)
         else:
             logging.getLogger('error_log').error(
                 "Order Item id not present , so unable close item related to this data ( %s ) " % (data)

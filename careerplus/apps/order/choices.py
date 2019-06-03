@@ -91,7 +91,11 @@ OI_OPS_STATUS = (
     (164, 'Replaced'),
 
     # extra operation 181 - 190
-    (181, "Waiting for input")
+    (181, "Waiting for input"),
+
+    # flow 16
+    (191, 'Certificate Updated on Shine'),
+    (192, 'Badgind Done for Assesment')
 )
 
 OI_USER_STATUS = (
