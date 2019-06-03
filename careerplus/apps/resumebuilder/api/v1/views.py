@@ -379,7 +379,6 @@ class CandidateResumePreview(APIView):
                     latest_end_date = i.end_date
                     latest_experience = i.job_profile
         
-
         template = get_template('resume{}_preview.html'.format(template_id))
         rendered_template = template.render(
             {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,

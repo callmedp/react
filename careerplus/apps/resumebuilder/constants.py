@@ -394,8 +394,7 @@ TEMPLATE_DEFAULT_ENTITY_POSITION = {
         {"pos": 5, "entity_id": 4, "alignment": "right", "entity_text": "Projects", "active": True},  # Projects
         {"pos": 6, "entity_id": 5, "alignment": "left", "entity_text": "Skills", "active": True},  # Skills
         {"pos": 7, "entity_id": 9, "alignment": "right", "entity_text": "Languages", "active": True},  # Languages
-        {"pos": 8, "entity_id": 8, "alignment": "left", "entity_text": "Certifications", "active": True},
-        # Certifications
+        {"pos": 8, "entity_id": 8, "alignment": "left", "entity_text": "Certifications", "active": True},# Certifications
         {"pos": 9, "entity_id": 10, "alignment": "right", "entity_text": "References", "active": True},  # References
         {"pos": 10, "entity_id": 7, "alignment": "left", "entity_text": "Awards", "active": True}  # Awards
     ],
@@ -414,9 +413,50 @@ TEMPLATE_DEFAULT_ENTITY_POSITION = {
         {"pos": 11, "entity_id": 10, "alignment": "right", "entity_text": "References", "active": True},  # References
         
     ],
-    3: [],
-    4: [],
-    5: []
+    3: [
+        {"pos": 1, "entity_id": 1, "alignment": "left", "entity_text": "Personal Info", "active": True},  # Personal
+        {"pos": 2, "entity_id": 5, "alignment": "left", "entity_text": "Skills", "active": True},  # Skills
+        {"pos": 3, "entity_id": 8, "alignment": "left", "entity_text": "Certifications", "active": True},# Certifications
+        {"pos": 4, "entity_id": 9, "alignment": "left", "entity_text": "Languages", "active": True},  # Languages
+        {"pos": 5, "entity_id": 11, "alignment": "left", "entity_text": "Interest", "active": True},  # Interest
+        {"pos": 6, "entity_id": 6, "alignment": "right", "entity_text": "Summary", "active": True},  # Summary
+        {"pos": 7, "entity_id": 3, "alignment": "right", "entity_text": "Experience", "active": True},  # Experience
+        {"pos": 8, "entity_id": 2, "alignment": "right", "entity_text": "Education", "active": True},  # Education
+        {"pos": 9, "entity_id": 4, "alignment": "right", "entity_text": "Projects", "active": True},  # Projects
+        {"pos": 10, "entity_id": 7, "alignment": "right", "entity_text": "Awards", "active": True},  # Awards
+        {"pos": 11, "entity_id": 10, "alignment": "right", "entity_text": "References", "active": True},  # References
+    ],
+    4: [
+        {"pos": 1, "entity_id": 1, "alignment": "right", "entity_text": "Personal Info", "active": True},  # Personal
+        {"pos": 2, "entity_id": 6, "alignment": "left", "entity_text": "Summary", "active": True},  # Summary
+        {"pos": 3, "entity_id": 5, "alignment": "left", "entity_text": "Skills", "active": True},  # Skills
+        {"pos": 4, "entity_id": 8, "alignment": "left", "entity_text": "Certifications", "active": True},# Certifications
+        {"pos": 5, "entity_id": 9, "alignment": "left", "entity_text": "Languages", "active": True},  # Languages
+        {"pos": 6, "entity_id": 11, "alignment": "left", "entity_text": "Interest", "active": True},  # Interest
+        {"pos": 7, "entity_id": 10, "alignment": "left", "entity_text": "References", "active": True},  # References
+        {"pos": 8, "entity_id": 3, "alignment": "right", "entity_text": "Experience", "active": True},  # Experience
+        {"pos": 9, "entity_id": 4, "alignment": "right", "entity_text": "Projects", "active": True},  # Projects
+        {"pos": 10, "entity_id": 2, "alignment": "right", "entity_text": "Education", "active": True},  # Education
+        {"pos": 11, "entity_id": 7, "alignment": "right", "entity_text": "Awards", "active": True},  # Awards
+        
+    ],
+    5: [
+        {"pos": 1, "entity_id": 6, "alignment": "left", "entity_text": "Summary", "active": True},  # Summary
+        {"pos": 2, "entity_id": 1, "alignment": "left", "entity_text": "Personal Info", "active": True},  # Personal
+        {"pos": 3, "entity_id": 5, "alignment": "left", "entity_text": "Skills", "active": True},  # Skills
+        {"pos": 4, "entity_id": 9, "alignment": "left", "entity_text": "Languages", "active": True},  # Languages
+        {"pos": 5, "entity_id": 11, "alignment": "left", "entity_text": "Interest", "active": True},  # Interest
+        {"pos": 6, "entity_id": 3, "alignment": "right", "entity_text": "Experience", "active": True},  # Experience
+        {"pos": 7, "entity_id": 4, "alignment": "right", "entity_text": "Projects", "active": True},  # Projects
+        {"pos": 8, "entity_id": 2, "alignment": "right", "entity_text": "Education", "active": True},  # Education
+        {"pos": 9, "entity_id": 8, "alignment": "right", "entity_text": "Certifications", "active": True},# Certifications
+        {"pos": 10, "entity_id": 7, "alignment": "right", "entity_text": "Awards", "active": True},  # Awards
+        {"pos": 11, "entity_id": 10, "alignment": "right", "entity_text": "References", "active": True},  # References
+        
+        
+        
+        
+    ]
 }
 
 TEMPLATE_ALLOW_LEFT_RIGHT_SWITCH = {1: True,

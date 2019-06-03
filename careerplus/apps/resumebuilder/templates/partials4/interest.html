@@ -1,0 +1,14 @@
+{% load static compress resume_tags %}
+<div style="display: block; vertical-align: top; margin-bottom: 30px;">
+  <strong style="display: block; text-transform: uppercase; color: #000000; font-weight: normal; font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px; margin-top: 0">Interest</strong>
+  <p style="color: #333333; margin-top: 15px;">
+  {% for interest in extracurricular %}
+    {{interest}} 
+    {% if extracurricular|length == forloop.counter %}
+    
+    {% else %}
+    |
+    {% endif %}
+  {% endfor %}
+  </p>
+</div>

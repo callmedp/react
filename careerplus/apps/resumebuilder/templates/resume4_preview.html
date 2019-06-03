@@ -1,216 +1,110 @@
-{% load static compress %}
+{% load static compress resume_tags %}
 <!doctype html>
 <html lang="en">
-<head>
+  <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Resume</title>
-</head>
-<body style="margin: 0; padding: 0; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif';">
-<div style="max-width: 1536px; width: 100%; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777; float: left;">
+  </head>
+  <body style="margin: 0; padding: 0; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif';">
+    <div style="max-width: 1536px; width: 100%; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777; float: left; line-height: 20px; word-break: break-word;">
 
-    <!--top column-->
-    <div style="display: table; width: 100%; vertical-align: top; background: #5a8d50; overflow: hidden;">
+      <!--top column-->
+      <div style="display: table-row; width: 100%; vertical-align: top; background: #5a8d50; overflow: hidden;">
         <!--top left column-->
         <div style="width: 44%; background: #649f58; padding: 3%; display: table-cell; vertical-align: top; min-height: 275px;">
-            <img src={{ candidate.image }} alt="Resume" width="150" height="150"
-                 style="border-radius: 100%; margin-bottom: 10px; width: 150px; height: 150px;">
-            <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: bold; text-transform: uppercase; display: block;">{{ candidate.first_name }} {{ candidate.last_name }}</h1>
-            <span style="display: block; width: 15%; border-top: 1px solid #a2c59b; margin: 10px 0 15px 0;"></span>
-            <strong style="display: block; font-size: 18px; color: #ffffff; font-weight: normal; text-transform: uppercase; margin-bottom: 1px;">
-                {{ latest_exp }}</strong>
+          {% if candidate.image %}
+          <img src="{{candidate.image}}" alt="Resume" width="150" height="150" style="border-radius: 100%; margin-bottom: 10px; width: 150px; height: 150px;">
+          {% endif %}
+          <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: bold; text-transform: uppercase; display: block;">{{ candidate.first_name }} {{ candidate.last_name }}</h1>
+          <span style="display: block; width: 15%; border-top: 1px solid #a2c59b; margin: 10px 0 15px 0;"></span>
+          <strong style="display: block; font-size: 18px; color: #ffffff; font-weight: normal; text-transform: uppercase; margin-bottom: 1px;">{{ latest_exp }}</strong>
+          {% comment %} <span style="display: block; font-size: 14px; color: #ffffff; font-weight: normal; text-transform: uppercase;">Compnay Name</span> {% endcomment %}
         </div>
 
         <!--top right column-->
         <div style="width: 44%; background: #5a8d50; padding: 3%; display: table-cell; vertical-align: top; min-height: 275px;">
-            <!--Contact-->
-            <div style="display: block; vertical-align: top; padding-left: 3%;">
-                <strong style="font-size: 18px; display: block; font-weight: normal; color: #ffffff; text-transform: uppercase; margin-bottom: 15px;">Contact</strong>
-                <ul style="margin: 20px 0 0 0; padding: 0; font-size: 14px; color: #ffffff; list-style-type: none;">
-                    <li style="display: table; margin-bottom: 15px;"><span
-                            style="display: table-cell; padding-right: 10px;"><img
-                            src="{% static 'resumebuilder/images/resume4/mobile-icon.png' %}" alt="Mobile"
-                            style="vertical-align: middle;"></span>+91
-                        {{ candidate.number }}
-                    </li>
-                    <li style="display: table; margin-bottom: 15px;"><span
-                            style="display: table-cell; padding-right: 10px;"><img
-                            src="{% static 'resumebuilder/images/resume4/email-icon.png' %}" alt="Email"
-                            style="vertical-align: middle;"></span>{{ candidate.email }}
-                    </li>
-                    <li style="display: table; margin-bottom: 15px;"><span
-                            style="display: table-cell; padding-right: 10px;"><img
-                            src="{% static 'resumebuilder/images/resume4/location-icon.png' %}" alt="Location"
-                            style="vertical-align: middle;"></span>{{ candidate.location }}
-                    </li>
-                </ul>
-            </div>
+          <!--Contact-->
+          {% if entity_position.0.active %}
+            {% include entity_position.0.entity_id|render_section:"partials3/" %}
+          {% endif %}
+          
         </div>
-    </div>
-
-    <!--bottom column-->
-    <div style="display: table; width: 100%; margin-top: 3%; float: left;">
+      </div>
+      
+      <!--bottom column-->
+      <div style="display: table-row; width: 100%; margin-top: 3%;">
         <!--bottom left column-->
-        <div style="width: 43.9%; padding: 0 3% 3% 3%; display: table-cell; vertical-align: top;">
-            <!--Professional profile-->
-            <div style="vertical-align: top; font-size: 13px; color: #999999; margin-bottom: 30px;">
-                <strong style="display: block; text-transform: uppercase; color: #000000; font-weight: normal; font-size: 18px; margin: 0">Professional
-                    profile</strong>
-                <p style="color: #555555">{{ candidate.extra_info }}</p>
-            </div>
+        <div style="width: 43.9%; padding: 3%; display: table-cell; vertical-align: top;">
+          <!--Summary-->
+          {% if entity_position.1.active %}
+            {% include entity_position.1.entity_id|render_section:"partials4/" %}
+          {% endif %}
+          
 
-            <!--Skills-->
-            <div style="display: block; vertical-align: top; margin-bottom: 30px;">
-                <strong style="display: block; text-transform: uppercase; color: #000000; font-weight: normal; font-size: 18px; margin-top: 0">Skills</strong>
-                {% for skill in skills|slice:":5" %}
-                    <div style="display: block; margin: 20px 0 15px 0;">
-                    <span style="float: right; display: inline-block; margin: 0 10% 8px 0; font-size: 12px; color: #333333;"><b
-                            style="font-size: 16px; color: #333333; font-weight: normal;">{{ skill.proficiency }}/</b>10</span>
-                        <strong style="font-size: 14px; display: block; color: #333333; font-weight: normal; margin-bottom: 5px;">{{ skill.name }}</strong>
-                        <div style="background: #e0e0e0; height: 8px; border-radius: 5px; overflow: hidden; width: 90%; position: relative; font-size: 12px; color: #333333;">
-                            <div role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
-                                 style="width: 80%; background-color: #649f58; line-height: 8px; height: 8px;">
-                                <span style="position: absolute; right: 0; width: 1px; height: 1px; overflow: hidden;"></span>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-                <p style="color: #333333; margin-top: 25px;">{% for skill in skills|slice:"5:" %} {{ skill }}
-                    | {% endfor %}</p>
-            </div>
+          <!--Skills-->
+          {% if entity_position.2.active %}
+            {% include entity_position.2.entity_id|render_section:"partials4/" %}
+          {% endif %}
+          
 
-            <!--Courses done-->
-            <div style="display: block; vertical-align: top; margin-bottom: 30px;">
-                <strong style="display: block; text-transform: uppercase; color: #000000; font-weight: normal; font-size: 18px; margin-top: 0">Courses
-                    done</strong>
-                <ul style="padding: 0; margin: 0; list-style-type: none;">
-                    {% for certi in certifications %}
-                        <li style="vertical-align: top; margin: 5px 0; width: 49.3%; display: inline-block;">
-                            <span style="width: 9px; height: 9px; border-radius: 100%; background: #5a8d50; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
-                            <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top; width: 86%;">{{ certi.name_of_certification }}</span>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
+          <!--Courses done-->
+          {% if entity_position.3.active %}
+            {% include entity_position.3.entity_id|render_section:"partials4/" %}
+          {% endif %}
+         
 
-            <!--Languages-->
-            <div style="display: block; vertical-align: top; margin-bottom: 30px;">
-                <strong style="display: block; text-transform: uppercase; color: #000000; font-weight: normal; font-size: 18px; margin-top: 0">Languages</strong>
-                {% for language in languages %}
-                    <div style="display: block; margin: 20px 0 15px 0;">
-                    <span style="float: right; display: inline-block; margin: 0 10% 8px 0; font-size: 12px; color: #333333;"><b
-                            style="font-size: 16px; color: #333333; font-weight: normal;">{{ language.proficiency }}/</b>10</span>
-                        <strong style="font-size: 14px; display: block; color: #333333; font-weight: normal; margin-bottom: 5px;">{{ language.name }}</strong>
-                        <div style="background: #e0e0e0; height: 8px; border-radius: 5px; overflow: hidden; width: 90%; position: relative; font-size: 12px; color: #333333;">
-                            <div role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
-                                 style="width: 80%; background-color: #649f58; line-height: 8px; height: 8px;">
-                                <span style="position: absolute; right: 0; width: 1px; height: 1px; overflow: hidden;"></span>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
+          <!--Languages-->
+          {% if entity_position.4.active %}
+            {% include entity_position.4.entity_id|render_section:"partials4/" %}
+          {% endif %}
+          
 
-            <!--Interest-->
-            <div style="display: block; vertical-align: top; margin-bottom: 30px;">
-                <strong style="display: block; text-transform: uppercase; color: #000000; font-weight: normal; font-size: 18px; margin-top: 0">Interest</strong>
-                <p style="color: #333333; margin-top: 15px;">{% for interest in extracurricular %}
-                    {{ interest }} |
-                {% endfor %}</p>
-            </div>
+          <!--Interest-->
+          {% if entity_position.5.active and extracurricular %}
+            {% include entity_position.5.entity_id|render_section:"partials4/" %}
+          {% endif %}
+          
+
+          <!--Reference-->
+          {% if entity_position.6.active %}
+            {% include entity_position.6.entity_id|render_section:"partials4/" %}
+          {% endif %}
+          
 
         </div>
 
         <!--bottom right column-->
-        <div style="width: 43.9%; border-left: 1px solid #649f58; padding: 0 3% 3% 3%; display: table-cell; vertical-align: top;">
-            <!--Work Experience-->
-            <div style="vertical-align: top; font-size: 13px; color: #999999; margin-bottom: 30px;">
-                <strong style="display: block; text-transform: uppercase; color: #000000; font-weight: normal; font-size: 18px; margin-top: 0">Work
-                    Experience</strong>
-                <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
-                    {% for exp in experience %}
-                        <li style="vertical-align: top; margin: 10px 0;">
-                            <span style="width: 9px; height: 9px; border-radius: 100%; background: #5a8d50; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
-                            <span style="display: inline-block; width: 93%; vertical-align: top;">
-                  <strong style="display: block; font-size: 16px; color: #333333;">{{ exp.job_profile }}</strong>
-                  {{ exp.company_name }}
-                  <span style="font-style: italic; color: #333333; display: block; font-weight: normal; font-size: 14px;">({{ exp.start_date|date:"M Y" }}- Current)</span>
-                  <p style="font-size: 14px; color: #777777; margin-top: 5px;">{{ exp.work_description }}</p>
-                </span>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
+        <div style="width: 43.9%; border-left: 1px solid #649f58; padding: 3%; display: table-cell; vertical-align: top;">
+          <!--Work Experience-->
+          {% if entity_position.7.active %}
+            {% include entity_position.7.entity_id|render_section:"partials4/" %}
+          {% endif %}
+          
 
-            <!--Project-->
-            <div style="vertical-align: top; font-size: 13px; color: #999999; margin-bottom: 30px;">
-                <strong style="display: block; text-transform: uppercase; color: #000000; font-weight: normal; font-size: 18px; margin-top: 0">Project</strong>
-                <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
-                    {% for proj in projects %}
-                        <li style="vertical-align: top; margin: 10px 0;">
-                            <span style="width: 9px; height: 9px; border-radius: 100%; background: #5a8d50; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
-                            <span style="display: inline-block; width: 93%; vertical-align: top;">
-                  <strong style="display: block; font-size: 16px; color: #333333;">{{ proj.project_name }}</strong>
-                  <p style="font-size: 14px; color: #777777; margin-top: 5px;">{{ proj.description }}</p>
-                </span>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
+          <!--Project-->
+          {% if entity_position.8.active %}
+            {% include entity_position.8.entity_id|render_section:"partials4/" %}
+          {% endif %}
+          
 
-            <!--Education-->
-            <div style="vertical-align: top; font-size: 13px; color: #999999; margin-bottom: 30px;">
-                <strong style="display: block; text-transform: uppercase; color: #000000; font-weight: normal; font-size: 18px; margin-top: 0">Education</strong>
-                <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
-                    {% for edu in education %}
-                        <li style="vertical-align: top; margin: 10px 0;">
-                            <span style="width: 9px; height: 9px; border-radius: 100%; background: #5a8d50; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
-                            <span style="display: inline-block; width: 93%; vertical-align: top;">
-                  <strong style="display: block; font-size: 16px; color: #333333;">{{ edu.specialization }} <span
-                          style="font-style: italic; color: #333333; display: inline-block; font-weight: normal; font-size: 14px;">({{ edu.start_date|date:"Y" }} - {{ edu.end_date|date:"Y" }})</span> </strong>
-                  {{ edu.institution_name }}
-                </span>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
+          <!--Education-->
+          {% if entity_position.9.active %}
+            {% include entity_position.9.entity_id|render_section:"partials4/" %}
+          {% endif %}
+          
 
-            <!--Achievements/Awards-->
-            <div style="vertical-align: top; font-size: 13px; color: #999999; margin-bottom: 30px;">
-                <strong style="display: block; text-transform: uppercase; color: #000000; font-weight: normal; font-size: 18px; margin-top: 0">Achievements/Awards</strong>
-                <ul style="padding: 5px 0 0 0; margin: 0; list-style-type: none;">
-                    {% for achievement in achievements %}
-                        <li style="vertical-align: top; margin: 10px 0;">
-                            <span style="width: 9px; height: 9px; border-radius: 100%; background: #5a8d50; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
-                            <span style="display: inline-block; width: 93%; vertical-align: top;">
-                  <p style="font-size: 14px; color: #555555; margin: 0;">{{ achievement.summary }}</p>
-                </span>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
+          <!--Achievements/Awards-->
+          {% if entity_position.10.active %}
+            {% include entity_position.10.entity_id|render_section:"partials4/" %}
+          {% endif %}
+         
 
-            <!--Personal Details -->
-            <div style="vertical-align: top; font-size: 13px; color: #999999; margin-bottom: 30px;">
-                <strong style="display: block; text-transform: uppercase; color: #000000; font-weight: normal; font-size: 18px; margin-top: 0">Personal
-                    Details </strong>
-                <ul style="padding: 0; margin: 0; list-style-type: none;">
-                    <li style="vertical-align: top; margin: 5px 0; display: block; font-size: 14px; color: #333333;">
-                        <span style="width: 9px; height: 9px; border-radius: 100%; background: #5a8d50; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
-                        <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top; width: 40%;">Data Marital Status </span>
-                        Married
-                    </li>
-                    <li style="vertical-align: top; margin: 5px 0; display: block; font-size: 14px; color: #333333;">
-                        <span style="width: 9px; height: 9px; border-radius: 100%; background: #5a8d50; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
-                        <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top; width: 40%;">DOB</span>
-                        {{ candidate.date_of_birth|date:"d-m-Y" }}
-                    </li>
-                </ul>
-            </div>
+          
         </div>
-    </div>
+      </div>
 
-</div>
-</body>
+    </div>
+  </body>
 </html>

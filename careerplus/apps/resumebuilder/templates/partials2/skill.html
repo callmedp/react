@@ -1,6 +1,6 @@
 {% load static compress resume_tags %}
 <div style="display: block; vertical-align: top; margin-bottom: 30px;">
-    <strong style="display: block; font-size: {{ current_config.text_font_size|heading_font_size_choice }}px; font-weight: normal; color: #ffffff; background: #3083c3; padding: 12px 10px 12px 13%; margin: 0 10% 0 -13%; border-top-right-radius: 20px; border-bottom-right-radius: 20px; text-transform: uppercase;">{{preference_list.4.entity_text}}</strong>
+    <strong style="display: block; font-size: {{ current_config.text_font_size|heading_font_size_choice }}px; font-weight: normal; color: #ffffff; background: #3083c3; padding: 12px 10px 12px 13%; margin: 0 10% 0 -13%; border-top-right-radius: 20px; border-bottom-right-radius: 20px; text-transform: uppercase;"> {{preference_list.4.entity_text}}</strong>
     {% for skill in skills|slice:":5" %}
         <div style="display: block; margin: 20px 0 15px 0;">
         <span style="float: right; display: inline-block; margin: 0 10% 8px 0; font-size: 12px; color: #c5e6ff;"><b style="font-size: 16px; color: #c5e6ff; font-weight: normal;">{{skill.proficiency}}/</b>10</span>

@@ -1,9 +1,10 @@
 {% load static compress resume_tags %}
 <div style="display: block; vertical-align: top; margin-bottom: 30px;">
-    <strong style="display: block; font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px; font-weight: normal; color: #ffffff; background: #3083c3; padding: 12px 10px 12px 13%; margin: 0 10% 0 -13%; border-top-right-radius: 20px; border-bottom-right-radius: 20px; text-transform: uppercase;">{{preference_list.8.entity_text}}</strong>
+    <strong style="display: block; font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px; font-weight: normal; color: #ffffff; background: #3083c3; padding: 12px 10px 12px 13%; margin: 0 10% 0 -13%; border-top-right-radius: 20px; border-bottom-right-radius: 20px; text-transform: uppercase;">
+    {{preference_list.8.entity_text}}</strong>
     {% for language in languages %}
         <div style="display: block; margin: 20px 0 15px 0;">
-            <span style="float: right; display: inline-block; margin: 0 10% 8px 0; font-size: 12px; color: #c5e6ff;"><b style="font-size: 16px; color: #c5e6ff; font-weight: normal;">{{language.proficiency}}/</b>10</span>
+            <span style="float: right; display: inline-block; margin: 0 10% 8px 0; font-size: 12px; color: #c5e6ff;"><b style="font-size: {{ current_config.heading_font_size|sub_heading_font_size }}px; color: #c5e6ff; font-weight: normal;">{{language.proficiency}}/</b>10</span>
             <strong style="font-size: {{ current_config.heading_font_size|text_font_size }}px; display: block; color: #c5e6ff; font-weight: normal; margin-bottom: 5px;">{{language.name}}</strong>
             <div style="background: #6cb7f0; height: 8px; border-radius: 5px; overflow: hidden; width: 90%; position: relative; font-size: 12px; color: #333333;">
                 <div role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="80" style="width: {{language.proficiency}}0%; background-color: #c5e6ff; line-height: 8px; height: 8px;">

@@ -1,0 +1,12 @@
+ {% load static compress resume_tags %}
+ <div style="display: block; vertical-align: top; margin-bottom: 30px;">
+  <strong style="display: block; text-transform: uppercase; color: #000000; font-weight: normal; font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px; margin-top: 0">{{preference_list.7.entity_text}}</strong>
+  <ul style="padding: 0; margin: 0; list-style-type: none;">
+    {% for course in certifications %}
+      <li style="vertical-align: top; margin: 5px 0; width: 49.3%; display: inline-block;">
+        <span style="width: 9px; height: 9px; border-radius: 100%; background: #5a8d50; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
+        <span style="font-size: {{ current_config.text_font_size|text_font_size }}px; color: #333333; display: inline-block; vertical-align: top; width: 86%;">{{ course.name_of_certification }} /span> 
+      </li>
+    {% endfor %}
+  </ul>
+</div>

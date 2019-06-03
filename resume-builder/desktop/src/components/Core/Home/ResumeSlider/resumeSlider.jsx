@@ -40,7 +40,8 @@ export default class ResumeSlider extends Component {
             infinite: true,
             slidesToShow: 3,
             arrow: true,
-            speed: 500
+            speed: 500,
+            initialSlide: (localStorage.getItem('selected_template') -1) || 0
         };
         const {ui: {select_template_modal}, page} = this.props;
         return (
