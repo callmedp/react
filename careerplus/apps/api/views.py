@@ -825,7 +825,7 @@ class OrderDetailApiView(FieldFilterMixin,RetrieveAPIView):
         for field in fields_to_log:
             if field not in fields_to_check:
                 continue
-            logging.getLogger('error_log').error('{},{},{},{},{},{}'.format(current_time,\
+            logging.getLogger('info_log').info('{},{},{},{},{},{}'.format(current_time,\
         user.id, user.get_full_name(), getattr(instance, 'number', 'None'), field, getattr(instance, field, 'None')))
         return self.retrieve(request, *args, **kwargs)
 
