@@ -762,11 +762,12 @@ header {
 }
 
 .enrol-cart {
-	padding: 20px 0 20px 0;
+	padding: 20px 0 65px 0;
 	text-align: center;
 	display: block;
 	box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
 	margin: 20px 0 20px 0;
+	position: relative;
 
 	/*@media (min-width: 1190px) {
 		margin: 0 20px;
@@ -809,7 +810,7 @@ header {
 		color: $primary-color;
 		display: inline-block;
 		font-weight: $font-weight+300;
-		margin-top: 20px;
+		margin-top: 10px;
 		padding: 10px 20px;
 		border: 1px solid #ffcf26;
 
@@ -857,6 +858,31 @@ header {
 			}
 		}
 
+	}
+
+	.e-payLatter {
+		background-color: #f2f2f2;
+		position: absolute;
+		bottom: 0;
+		padding: 10px;
+		width: 100%;
+		font-size: 12px;
+		text-align: left;
+
+		display: flex;
+		align-items: center;
+
+		.bold {
+			font-weight: bold;
+		}
+
+		p {
+			margin-bottom: 0;
+		}
+		
+		.mr-15 {
+			margin-right: 15px;
+		}
 	}
 }
 
@@ -1907,3 +1933,5 @@ footer {
 	background: $sprite -542px -424px;
 	display: inline-block; 
 }
+
+

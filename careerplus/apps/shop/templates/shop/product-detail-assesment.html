@@ -19,7 +19,7 @@
               {% endblock breadcrumbs %}
             
             {% block product_header %}
-              <div class="course-caption col-sm-8 no-pad" itemscope itemtype="http://schema.org/Product">
+              <div class="course-caption col-sm-8 no-pad mt-30" itemscope itemtype="http://schema.org/Product">
                 <div class="course-caption-img">
                   <figure style="background-color:#fff;">
                     <img itemprop="image" src="{{prd_img}}" alt="{{prd_img_alt}}" class="img-responsive" >
@@ -45,9 +45,8 @@
 
             {% endblock product_header %}
 
-                     <!-- query-price-box-scroll start -->
+            <!-- query-price-box-scroll start -->
             <div class="query-price-box-scroll">
-
               {% block product_cart %}
                 {% include "shop/partials/prd_cart.html" %}
               {% endblock product_cart %}
