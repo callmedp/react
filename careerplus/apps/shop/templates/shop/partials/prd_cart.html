@@ -54,13 +54,14 @@
         <figure class="calling-icon"></figure> {{ggn_contact}}
       </a>
     </div-->
-
+    {% if product.is_assesment %}
     <div class="e-payLatter">
       <span class="mr-15">
         <img src="{% static "shinelearn/images/epaylatter.png" %}"/>
       </span>
       <p>Buy test now and <span class="bold">make payment within 14 days</span> using ePayLater </p>
     </div><!-- ./ e-payLatter -->
+    {% endif %}
   </div>
 
   <!-- check free sample start -->
