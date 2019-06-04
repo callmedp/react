@@ -153,10 +153,17 @@ class PersonalInfo extends Component {
             'imageURL': url
         })
     }
+
+    savePreview(){
+        const {history,previewHandling} = this.props
+        previewHandling(this.updateInfoBeforeLoss,history)
+        this.setState({submit:true})
+    }
+
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {handleSubmit, personalInfo,submitting,previewHandling,history} = this.props;
+        const {handleSubmit, personalInfo,submitting,previewHandling} = this.props;
         const {editHeading,heading} =this.state;
         const {subscription_status} = this.props.personalInfo;
         return (
@@ -263,16 +270,8 @@ class PersonalInfo extends Component {
                             </span>
                         </li>
                     </ul>
-                    <div className="bottom-ctc">
-                        <button className="btn link-color bg-white" 
-                            onClick={async()=>{previewHandling(this.updateInfoBeforeLoss,history);this.setState({submit:true}) }}
-                            type={'button'}>Preview
-                        </button>
-                        
-                        <button className="btn btn__primary" disabled={submitting} type={'submit'}>
-                            {(length === pos +1) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}
-                        </button>
-                    </div>
+                    <BottomCTC savePreview={this.savePreview} disabled={submitting}
+                                length={length} pos={pos+1} subscription_status={subscription_status}/>
                 </form>
             </div>
             

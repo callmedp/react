@@ -8,6 +8,7 @@ import PreviewModal from "../../../Preview/changeTemplateModal";
 import renderAwards from "./renderAwards"
 import {siteDomain} from "../../../../../../Utils/domains";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
+import BottomCTC from '../../../../../Common/BottomCTC/bottom-ctc';
 
 
 class Award extends Component {
@@ -147,14 +148,8 @@ class Award extends Component {
                                 heading ={heading}/>
                     <ul className="form">
                         <li className="form__group">
-                            <div className="btn-wrap">
-                                 <button className="btn btn__round btn--outline" 
-                                    onClick={async()=>{previewHandling(this.updateInfoBeforeLoss,history);this.setState({submit:true}) }}
-                                    type={'button'}>Preview</button>
-                                <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
-                                    {(length === pos +1) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}
-                                </button>
-                            </div>
+                            <BottomCTC savePreview={this.savePreview} disabled={submitting}
+                                length={length} pos={pos+1} subscription_status={subscription_status}/>
                         </li>
                     </ul>
                 </form>

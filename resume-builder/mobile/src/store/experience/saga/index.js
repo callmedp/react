@@ -84,12 +84,10 @@ function* bulkUserExperienceUpdate(action) {
     try {
         yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
         let {payload: {list,resolve,reject}} = action;
-        console.log(list)
         list.map((el) => {
             let label =  el.job_profile && el.job_profile.label
             el.job_profile = label
          })
-         console.log(list)
         const candidateId = localStorage.getItem('candidateId') || '';
 
 

@@ -25,7 +25,7 @@ class Header extends Component {
                     <React.Fragment>
                         <div className="header__left">
                             <button role="button" className="menu">
-                                <i className="sprite icon--back-white" onClick={()=>{history.goBack()}}></i>
+                                <i className="sprite icon--back-white" onClick={()=>{history.push('/resume-builder')}}></i>
                             </button>
                         </div>
                         <Link to={'/resume-builder'} className="btn btn__round btn--outline">Back to home</Link>

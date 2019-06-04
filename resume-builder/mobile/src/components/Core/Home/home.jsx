@@ -22,7 +22,7 @@ class Home extends Component {
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
     }
     componentDidMount() {
-        // this.props.loginCandidate(this.state.token);
+        this.props.loginCandidate(this.state.token);
     }
     
     render() {

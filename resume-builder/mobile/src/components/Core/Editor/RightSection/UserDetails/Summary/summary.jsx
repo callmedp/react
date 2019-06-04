@@ -13,6 +13,7 @@ import moment from 'moment'
 import validate from "../../../../../FormHandler/validtaions/summary/validate"
 import {siteDomain} from "../../../../../../Utils/domains";
 import AddSuggesion from '../../../../../Common/AddSuggestion/addSuggesion';
+import BottomCTC from '../../../../../Common/BottomCTC/bottom-ctc';
 
 
 class Summary extends Component {
@@ -188,14 +189,8 @@ class Summary extends Component {
                             </p>
                         </li>
                     </ul>
-                    <div className="btn-wrap">
-                        <button className="btn btn__round btn--outline" 
-                            onClick={async()=>{previewHandling(this.updateInfoBeforeLoss,history);this.setState({submit:true}) }}
-                            type={'button'}>Preview</button>
-                        <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
-                            {(length === pos +1) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}
-                        </button>
-                    </div>
+                    <BottomCTC savePreview={this.savePreview} disabled={submitting}
+                                length={length} pos={pos+1} subscription_status={subscription_status}/>
                 </form>
                 
             </div>
