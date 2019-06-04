@@ -147,6 +147,28 @@
 			}
 		}
 	}
+
+	.e-payLatter {
+		padding: 10px;
+		width: 100%;
+		font-size: 12px;
+		text-align: left;
+
+		display: flex;
+		align-items: center;
+
+		.bold {
+			font-weight: bold;
+		}
+
+		p {
+			line-height: 18px;
+		}
+		
+		.mr-15 {
+			margin-right: 15px;
+		}
+	}
 }
 
 .countries {
