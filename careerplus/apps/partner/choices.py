@@ -6,8 +6,8 @@ SCORE_TYPE_CHOICES = (
 )
 
 USER_CERTITIFICATE_STATUS = (
-    (0, 'Certificate Added'),
-    (1, 'Certificate Updated On Shine'),
+    (0, 'User Certificate Added'),
+    (1, 'User Certificate Updated On Shine'),
     (2, 'Badging Done on Shine'),
     (3, 'Certificate Expired')
 )

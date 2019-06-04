@@ -264,6 +264,12 @@ class UserCertificateOperations(AbstractAutoDate):
     op_type = models.IntegerField(choices=USER_CERTITIFICATE_STATUS, default=0)
     last_op_type = models.IntegerField(choices=USER_CERTITIFICATE_STATUS, default=0)
 
+        
+    def __str__(self):
+        return ' {} - ({}) for {} '.format(
+            self.user_certificate.certificate.name, self.get_op_type_display(),
+            self.user_certificate.candidate_email)
+
 
 class ProductSkill(AbstractAutoDate):
 
