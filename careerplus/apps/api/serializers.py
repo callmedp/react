@@ -319,7 +319,7 @@ class CertificateSerializer(ModelSerializer):
 
     class Meta:
         model = Certificate
-        fields = ('id', 'name', 'skill', 'vendor_certificate_id', 'vendor_provider')
+        fields = ('name', 'skill',)
 
 
     def get_skill(self, obj):
