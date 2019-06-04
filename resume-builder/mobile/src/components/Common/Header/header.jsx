@@ -8,13 +8,8 @@ import {Link} from 'react-router-dom';
 class Header extends Component {
     constructor(props) {
         super(props)
-        this.openMenu = this.openMenu.bind(this);
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
 
-    }
-
-    openMenu() {
-        this.props.updateSidenavStatus(true)
     }
 
     componentDidMount() {
@@ -22,7 +17,7 @@ class Header extends Component {
     }
 
     render() {
-        const {page,history,updateModalStatus} = this.props;
+        const {page,history,updateModalStatus,backPage} = this.props;
         return (
             <header className="header">
 
@@ -30,7 +25,7 @@ class Header extends Component {
                     <React.Fragment>
                         <div className="header__left">
                             <button role="button" className="menu">
-                                <i className="sprite icon--menu-bar" onClick={this.openMenu}></i>
+                                <i className="sprite icon--back-white" onClick={()=>{history.goBack()}}></i>
                             </button>
                         </div>
                         <Link to={'/resume-builder'} className="btn btn__round btn--outline">Back to home</Link>
@@ -49,10 +44,11 @@ class Header extends Component {
                         <a className="btn btn__round btn--outline" onClick={()=>{updateModalStatus({modal_status:true})}}>Change template</a>
                     </React.Fragment>:
                     
-                    page === 'sidenav' ?
+                    page === 'menu' ?
                     <React.Fragment>
                         <div className="header__left">
-                            <button role="button" className="header__menu" onClick={()=>{history.goBack()}}>
+                            <button role="button" className="header__menu" 
+                                onClick={()=>{history.push(`/resume-builder/edit/?type=${backPage}}`)}}>
                                 <i className="sprite icon--back-white"></i>
                             </button>
     

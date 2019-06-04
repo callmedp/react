@@ -27,10 +27,11 @@ class EditPreview extends Component {
     }
 
     render() {
+        const {history,ui:{mainloader}} = this.props;
         return (
             <div className="edit-section">
-                {this.props.ui.mainloader ? <Loader/> :""}
-                <Header page={'edit'}/>
+                {mainloader ? <Loader/> :""}
+                <Header page={'edit'} history={history}/>
                 <LeftSideBar {...this.props}/>
                 <RightSection {...this.props} changeLink={this.changeLink}/>
             </div>

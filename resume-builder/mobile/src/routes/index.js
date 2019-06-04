@@ -4,7 +4,7 @@ import EditPreviewContainer from '../components/Core/Editor/editPreview.jsx';
 import HomeContainer from '../components/Core/Home/home.jsx';
 import BuyContainer from '../components/Core/Payment/Buy/buy.jsx';
 import Preview from "../components/Core/Editor/Preview/preview.jsx";
-import SideNav from "../components/Core/Editor/SideNav/sidenav.jsx";
+import Menu from "../components/Core/Editor/Menu/menu.jsx";
 
 export const RouteWithSubRoutes = route => (
     <Route
@@ -47,8 +47,8 @@ const routes = [
         component: BuyContainer
     },
     {
-        path: '/resume-builder/sidenav',
-        component: SideNav
+        path: '/resume-builder/menu',
+        component: Menu
     }
 
 ]
