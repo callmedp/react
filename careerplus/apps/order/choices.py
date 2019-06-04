@@ -270,6 +270,8 @@ OI_EMAIL_STATUS = (
     # flow14 :191 - 200
     (191, 'Sent Flow14 Process Mailer'),
     (192, 'Sent Flow14 Service Initiation Mailer'),
+    # flow16 :201-210
+    (201, 'Certification Mail')
 )
 
 OI_SMS_STATUS = (
