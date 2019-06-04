@@ -334,13 +334,6 @@ class VendorCertificateSerializer(ModelSerializer):
         model = Vendor
         fields = ("name", "certificate_set")
 
-    def to_representation(self, obj):
-        response = super(VendorCertificateSerializer, self).to_representation(obj)
-        if response['certificate_set']:
-            return {
-                response['name']: response['certificate_set']
-            }
-
 
 class ImportCertificateSerializer(Serializer):
 

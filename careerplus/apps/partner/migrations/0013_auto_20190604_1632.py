@@ -10,7 +10,6 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('order', '0069_auto_20190604_1632'),
         ('shop', '0046_auto_20190516_1324'),
         ('partner', '0012_pixeltracker'),
     ]
