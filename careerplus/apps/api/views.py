@@ -778,7 +778,7 @@ class UpdateCertificateAndAssesment(APIView):
 
                 if flag:
                     certificate_updated = True
-                    logging.getLogger('info_log').error(
+                    logging.getLogger('info_log').info(
                         "Certificate %s parsed, saved, updated for Candidate Id %s" %
                         (str(certificate.name), str(user_certificate.candidate_id))
                     )
@@ -834,7 +834,7 @@ class UpdateCertificateAndAssesment(APIView):
                 "certificate_updated": certificate_updated
             })
             print(to_emails)
-            send_email_task(to_emails, mail_type, data, status=201, oi=oi.pk)
+            send_email_task.delay(to_emails, mail_type, data, status=201, oi=oi.pk)
             oi.orderitemoperation_set.create(
                 oi_status=oi.oi_status,
                 last_oi_status=oi.last_oi_status,
