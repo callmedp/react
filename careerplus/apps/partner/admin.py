@@ -30,11 +30,17 @@ class PixelTrackerAdmin(admin.ModelAdmin):
     model = models.PixelTracker
 
 
+class UserCertificateOperationsInline(admin.TabularInline):
+    model = models.UserCertificateOperations
+    extra = 0
+
+
 class UserCertificateAdmin(admin.ModelAdmin):
     list_display = (
         'id', 'year', 'candidate_email',
         'candidate_mobile', 'certificate', "get_vendor")
     model = models.UserCertificate
+    inlines = [UserCertificateOperationsInline]
 
     def get_vendor(self, obj):
         return obj.certificate.vendor_provider
@@ -121,8 +127,7 @@ class ScoreAdmin(admin.ModelAdmin):
     list_display = ('assesment', 'subject', "score_obtained")
     model = models.Score
 
-class UserCertificateOperationsAdmin(admin.ModelAdmin):
-    model = models.UserCertificateOperations
+
 
 class ProductSkillAdmin(admin.ModelAdmin):
     model = models.ProductSkill
@@ -134,6 +139,5 @@ admin.site.register(models.UserCertificate, UserCertificateAdmin)
 admin.site.register(models.BoosterRecruiter, BoosterRecruiterAdmin)
 admin.site.register(models.Assesment, AssesmentAdmin)
 admin.site.register(models.Score, ScoreAdmin)
-admin.site.register(models.UserCertificateOperations, UserCertificateOperationsAdmin)
 admin.site.register(models.ProductSkill, ProductSkillAdmin)
 admin.site.register(models.PixelTracker, PixelTrackerAdmin)
