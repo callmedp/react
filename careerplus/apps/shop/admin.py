@@ -97,6 +97,7 @@ class ProductAdmin(admin.ModelAdmin):
     inlines = [CategoryInline, RelatedProductInline, ChildProductInline, VariationProductInline,
         FAQuestionInline, AttributeInline, ProductExtraInfoInline]
     prepopulated_fields = {"slug": ("name",)}
+    search_fields = ('name',)
 
 # class ProductAdmin(admin.ModelAdmin):
 #     list_display = ['id', 'name']
