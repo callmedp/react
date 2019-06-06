@@ -16,7 +16,7 @@
 
       <div style="display: table-row; width: 97%; vertical-align: top; margin: 3% 0 0 3%; float: left;">
         <!--left column-->
-        <div style="width: 24%; background: #f2cc79; padding: 3%; display: table-cell; vertical-align: top; position:relative;">
+        <div style="width: 24%; background: {{ current_config.color|background_color_choice }}; padding: 3%; display: table-cell; vertical-align: top; position:relative;">
           {% if candidate.image %}
             <span style="display: block; text-align: center; margin-bottom: 10%;">
               <img src="{{candidate.image}}" width="205" height="205" alt="Resume" style="border-radius: 100%; margin: 0 auto; text-align: center; width: 205px; height: 205px;">

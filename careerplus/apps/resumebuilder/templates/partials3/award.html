@@ -4,7 +4,7 @@
   <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
     {% for award in achievements %}
       <li style="vertical-align: top; margin: 10px 0;">
-        <span style="width: 13px; height: 13px; border-radius: 100%; background: #f2cc79; display: inline-block; margin-right: 10px; vertical-align: middle;"></span> 
+        <span style="width: 13px; height: 13px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: middle;"></span> 
         <span style="display: inline-block; width: 94%; vertical-align: top;">
           <strong style="display: block; font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #333333;">{{ award.title }}</strong>
           <p style="font-size: {{ current_config.heading_font_size|text_font_size }}px; color: #777777; margin-top: 5px;">{{ award.summary }}</p>
