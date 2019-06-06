@@ -1,6 +1,6 @@
 {% load static compress resume_tags %}
 <div style="display: block; vertical-align: top;">
-    <strong style="display: block; font-size: {{ current_config.text_font_size|heading_font_size_choice }}px; font-weight: normal; color: #ffffff; background: #3083c3; padding: 12px 10px 12px 13%; margin: 0 10% 0 -13%; border-top-right-radius: 20px; border-bottom-right-radius: 20px; text-transform: uppercase;">{{preference_list.0.entity_text}}</strong>
+    <strong style="display: block; font-size: {{ current_config.text_font_size|heading_font_size_choice }}px; font-weight: normal; color: #000; background: #ffffff; padding: 12px 10px 12px 13%; margin: 0 10% 0 -13%; border-top-right-radius: 20px; border-bottom-right-radius: 20px; text-transform: uppercase;">{{preference_list.0.entity_text}}</strong>
     <ul style="margin: 20px 0 30px 0; padding: 0; font-size: 14px; color: #c5e6ff; list-style-type: none;">
     <li style="display: table; margin-bottom: 15px;"><strong style="display: block; font-size: {{ current_config.text_font_size|text_font_size }}px; font-weight: normal; color: #ffffff;">Address</strong>{{ candidate.location }}</li>
     <li style="display: table; margin-bottom: 15px;"><strong style="display: block; font-size: {{ current_config.text_font_size|text_font_size }}px; font-weight: normal; color: #ffffff;">Phone</strong>+91 {{ candidate.number }}</li>
