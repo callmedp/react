@@ -4,7 +4,7 @@
   <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
     {% for edu in education %}
       <li style="vertical-align: top; margin: 10px 0;">
-        <span style="width: 9px; height: 9px; border-radius: 100%; background: #5a8d50; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
+        <span style="width: 9px; height: 9px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
         <span style="display: inline-block; width: 93%; vertical-align: top;">
           <span style="font-size: 16px; color: #333333; font-weight: bold; float: right;">{{ edu.percentage_cgpa }}%</span>
           <strong style="display: block; font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #333333;">{{ edu.specialization }} <span style="font-style: italic; color: #333333; display: inline-block; font-weight: normal; font-size: {{ current_config.heading_font_size|text_font_size }}px;">({{ edu.start_date|date:"Y" }} - {{ edu.end_date|date:"Y" }})</span> </strong>

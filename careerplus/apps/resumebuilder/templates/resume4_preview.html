@@ -12,9 +12,9 @@
     <div style="max-width: 1536px; width: 100%; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777; float: left; line-height: 20px; word-break: break-word;">
 
       <!--top column-->
-      <div style="display: table-row; width: 100%; vertical-align: top; background: #5a8d50; overflow: hidden;">
+      <div style="display: table-row; width: 100%; vertical-align: top; overflow: hidden;">
         <!--top left column-->
-        <div style="width: 44%; background: #649f58; padding: 3%; display: table-cell; vertical-align: top; min-height: 275px;">
+        <div style="width: 44%; background: {{ current_config.color|background_color_choice }}; padding: 3%; display: table-cell; vertical-align: top; min-height: 275px;">
           {% if candidate.image %}
           <img src="{{candidate.image}}" alt="Resume" width="150" height="150" style="border-radius: 100%; margin-bottom: 10px; width: 150px; height: 150px;">
           {% endif %}
@@ -25,7 +25,7 @@
         </div>
 
         <!--top right column-->
-        <div style="width: 44%; background: #5a8d50; padding: 3%; display: table-cell; vertical-align: top; min-height: 275px;">
+        <div style="width: 44%; background: {{ current_config.color|background_color_choice }}; padding: 3%; display: table-cell; vertical-align: top; min-height: 275px;">
           <!--Contact-->
           {% if entity_position.0.active %}
             {% include entity_position.0.entity_id|render_section:"partials3/" %}
@@ -77,7 +77,7 @@
         </div>
 
         <!--bottom right column-->
-        <div style="width: 43.9%; border-left: 1px solid #649f58; padding: 3%; display: table-cell; vertical-align: top;">
+        <div style="width: 43.9%; border-left: 1px solid {{ current_config.color|background_color_choice }}; padding: 3%; display: table-cell; vertical-align: top;">
           <!--Work Experience-->
           {% if entity_position.7.active %}
             {% include entity_position.7.entity_id|render_section:"partials4/" %}
