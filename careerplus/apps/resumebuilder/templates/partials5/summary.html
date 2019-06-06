@@ -1,5 +1,5 @@
  {% load static compress resume_tags %}
  <div style="display: block; vertical-align: top; margin-bottom: 30px;">
-  <strong style="font-size: 18px; display: block; color: {{ current_config.color|background_color_choice }}; text-transform: uppercase; margin-bottom: 15px; border-bottom: 1px solid #cac8c9; padding-bottom: 10px;">{{preference_list.5.entity_text}}</strong>
+  <strong style="font-size: font-size: {{ current_config.text_font_size|heading_font_size_choice }}px;px; display: block; color: {{ current_config.color|background_color_choice }}; text-transform: uppercase; margin-bottom: 15px; border-bottom: 1px solid #cac8c9; padding-bottom: 10px;">{{preference_list.5.entity_text}}</strong>
   <p>{{ candidate.extra_info }}</p>
 </div>

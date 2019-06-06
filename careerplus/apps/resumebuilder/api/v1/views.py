@@ -364,7 +364,7 @@ class CandidateResumePreview(APIView):
         current_exp = experience.filter(is_working=True).order_by('-start_date').first()
         current_config = candidate.ordercustomisation_set.filter(template_no=template_id).first()
         entity_position = current_config.entity_position_eval
-
+        print(current_config.__dict__)
 
         latest_experience, latest_end_date = '', None
         for i in experience:

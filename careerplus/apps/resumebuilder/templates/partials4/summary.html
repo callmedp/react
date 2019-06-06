@@ -1,4 +1,5 @@
+{% load static compress resume_tags %}
 <div style="vertical-align: top; font-size: 13px; color: #999999; margin-bottom: 30px;">
-  <strong style="display: block; text-transform: uppercase; color: #000000; font-weight: normal; font-size: 18px; margin: 0">{{preference_list.5.entity_text}}</strong>
+  <strong style="display: block; text-transform: uppercase; color: #000000; font-weight: normal; font-size: font-size: {{ current_config.heading_font_size|heading_font_size }}pxpx; margin: 0">{{preference_list.5.entity_text}}</strong>
   <p style="color: #555555">{{ candidate.extra_info }}</p>
 </div>

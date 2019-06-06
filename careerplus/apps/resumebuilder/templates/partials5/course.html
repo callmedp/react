@@ -4,7 +4,7 @@
   <ul style="padding: 0; margin: 0; list-style-type: none;">
     {% for course in certifications %}
       <li style="vertical-align: top; margin: 5px 0; width: 49.3%; display: inline-block;">
-        <span style="font-size: {{ current_config.heading_font_size|sub_heading_font_size }}px; color: #777777; display: inline-block; vertical-align: top;">{{ course.name_of_certification }}</span> 
+        <span style="font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #777777; display: inline-block; vertical-align: top;">{{ course.name_of_certification }}</span> 
       </li>
     {% endfor %}
   </ul>

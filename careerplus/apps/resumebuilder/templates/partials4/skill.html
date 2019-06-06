@@ -1,6 +1,6 @@
 {% load static compress resume_tags %}
 <div style="display: block; vertical-align: top; margin-bottom: 30px;">
-  <strong style="display: block; text-transform: uppercase; color: #000000; font-weight: normal; font-size: {{ current_config.text_font_size|heading_font_size_choice }}; margin-top: 0">Skills</strong>
+  <strong style="display: block; text-transform: uppercase; color: #000000; font-weight: normal; font-size: {{ current_config.heading_font_size|heading_font_size_choice }}; margin-top: 0">Skills</strong>
   {% for skill in skills|slice:":5" %}
     <div style="display: block; margin: 20px 0 15px 0;">
       <span style="float: right; display: inline-block; margin: 0 10% 8px 0; font-size: 12px; color: #333333;"><b style="font-size: {{ current_config.text_font_size|text_font_size }}px; color: #333333; font-weight: normal;">{{skill.proficiency}}/</b>10</span>
@@ -12,7 +12,7 @@
       </div>
     </div>
   {% endfor %}
-  <p style="color: #333333; margin-top: 25px;">
+  <p style="color: #333333; margin-top: 25px; font-size: {{ current_config.text_font_size|text_font_size }}px;">
   {% for skill in skills|slice:"5:" %}
         {{skill}} 
         {% if skills.count == forloop.counter0|add:"6" %}

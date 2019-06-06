@@ -1,6 +1,6 @@
 {% load static compress resume_tags %}
 <div style="display: block; vertical-align: top;">
-  <strong style="font-size: {{ current_config.text_font_size|heading_font_size_choice }}px; display: block; color: {{ current_config.color|background_color_choice }}; text-transform: uppercase; margin-bottom: 15px; border-bottom: 1px solid #cac8c9; padding-bottom: 10px;">{{preference_list.4.entity_text}}</strong>
+  <strong style="font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px; display: block; color: {{ current_config.color|background_color_choice }}; text-transform: uppercase; margin-bottom: 15px; border-bottom: 1px solid #cac8c9; padding-bottom: 10px;">{{preference_list.4.entity_text}}</strong>
   <ul style="margin: 20px 0 10px 0; padding: 0; font-size: 14px; color: #c5e6ff; list-style-type: none;">
     {% for skill in skills|slice:":5" %}
       <li style="vertical-align: top; display: inline-block; margin-bottom: 15px; width: 46.3%;">
@@ -15,7 +15,7 @@
       </li>
     {% endfor %}
   </ul>
-  <p style="margin-top: 0; margin-bottom: 30px; padding: 0; color: #000000; line-height: 20px;">
+  <p style="margin-top: 0; margin-bottom: 30px; padding: 0; color: #000000; line-height: 20px; font-size: {{ current_config.text_font_size|text_font_size }}px;">
     {% for skill in skills|slice:"5:" %}
         {{skill}} 
         {% if skills.count == forloop.counter0|add:"6" %}

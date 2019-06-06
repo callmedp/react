@@ -1,6 +1,6 @@
 {% load static compress resume_tags %}
 <div style="display: block; vertical-align: top; padding-left: 3%;">
-  <strong style="font-size: {{ current_config.text_font_size|heading_font_size_choice }}px; display: block; font-weight: normal; color: #ffffff; text-transform: uppercase; margin-bottom: 15px;">{{preference_list.0.entity_text}}</strong>
+  <strong style="font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px; display: block; font-weight: normal; color: #ffffff; text-transform: uppercase; margin-bottom: 15px;">{{preference_list.0.entity_text}}</strong>
   <ul style="margin: 20px 0 0 0; padding: 0; font-size: {{ current_config.text_font_size|text_font_size }}px; color: #ffffff; list-style-type: none;">
     <li style="display: table; margin-bottom: 15px;"><span style="display: table-cell; padding-right: 10px;"><i style="font-size: 20px; vertical-align: middle; width: 20px;" class="fas fa-mobile-alt"></i></span>+91 {{ candidate.number }}</li>
     <li style="display: table; margin-bottom: 15px;"><span style="display: table-cell; padding-right: 10px;"><i style="font-size: 16px; vertical-align: middle; width: 20px;" class="fas fa-envelope"></i></span>{{ candidate.email }}</li>
