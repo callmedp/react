@@ -185,11 +185,12 @@
 
 .menu-btm-button {
     justify-content: center;
-    position: fixed;
-    bottom: 55px;
-    padding: 20px 0;
+    position: absolute;
+    bottom: 0;
+    padding: 18px 0;
     background-color: $white;
-    width: 385px;
+    width: 100%;
+    box-shadow: 0 0 10px rgba($black, .1);
 
     button {
         width: 100px;
@@ -197,14 +198,18 @@
 }
 
 .edit-section-menu {
-    padding: 20px 0;
+    padding: 0;
     font-weight: 600;
     color: $txt1;
+    overflow-x: scroll;
+    height: 90%;
 
     strong {
         margin: 0 20px;
         font-size: 17px;
         padding-left: 12px;
+        padding-top: 20px;
+        display: block;
     }
 
     ul {

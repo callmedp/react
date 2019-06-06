@@ -63,44 +63,26 @@ export default class MenuModal extends React.Component {
             <div className="pr scrollynone">
                 <Modal
                 style={{
-                        content: {
+                            content: {
                             left: '0',
                             right: '0',
                             top: '3%',
                             bottom: '0',
-                            width: '400px',
+                            width: '415px',
                             margin: 'auto',
                             height: '570px',
                             padding:'0',
+                            overflow:'none'
                         }
                     }}
                     isOpen={menu_modal_status} 
                     contentLabel="Menu Modal"
                 >
-                    <div className="edit-section-menu">
-                        <strong>Add / remove sections in your resume</strong>
-                        <ul className="enable">
-                            {preferenceList.filter(item =>item.active ===true).map((item, key) =>
-                                {   const {link, icon} = formCategoryList[item['entity_id']];
-                                    return(
-                                        <li key={key}>
-                                            <Link to={link}>
-                                                <span className={`mr-20 ${icon}`}></span>
-                                                {item.entity_text}
-                                            </Link>
-                                            {!!(item['entity_id'] !== 1 && item['entity_id'] !== 6) ?
-                                                <span className="icon-closemenu pull-right mt-20" 
-                                                        onClick={this.removeItem.bind(this,item.entity_id)}
-                                                        style={{"backgroundColor":"red"}}></span>:''
-                                            }
-                                        </li>
-                                    )
-                                }
-                            
-                            )}
-                        </ul>
-                         <ul className="disable">
-                            {preferenceList.filter(item =>item.active ===false).map((item, key) =>
+                    <div className="menu-wrap">
+                        <div className="edit-section-menu">
+                            <strong>Add / remove sections in your resume</strong>
+                            <ul className="enable">
+                                {preferenceList.filter(item =>item.active ===true).map((item, key) =>
                                     {   const {link, icon} = formCategoryList[item['entity_id']];
                                         return(
                                             <li key={key}>
@@ -108,26 +90,46 @@ export default class MenuModal extends React.Component {
                                                     <span className={`mr-20 ${icon}`}></span>
                                                     {item.entity_text}
                                                 </Link>
-                                                <span className="icon-add pull-right mt-20" 
-                                                    onClick={this.addItem.bind(this,item.entity_id)}
-                                                    style={{"backgroundColor":"yellow"}}></span>
+                                                {!!(item['entity_id'] !== 1 && item['entity_id'] !== 6) ?
+                                                    <span className="icon-closemenu pull-right mt-20" 
+                                                            onClick={this.removeItem.bind(this,item.entity_id)}></span>:''
+                                                }
                                             </li>
                                         )
                                     }
                                 
-                            )}
-                       </ul >
-                    </div>
-                    <div className="flex-container menu-btm-button">
-                        <button className="blue-button mr-10" type="button" onClick={closeMenuModal}>Cancel</button>
-                        <button className="orange-button" type="submit"onClick={this.saveMenuItems}>
-                            Done
-                            {loader ?
-                                <img alt={"Menu Loading"} className="menu-loading" src={`${this.staticUrl}react/assets/images/menu-loading.gif`}/>:''
-                            }
+                                )}
+                            </ul>
+                            <ul className="disable">
+                                {preferenceList.filter(item =>item.active ===false).map((item, key) =>
+                                        {   const {link, icon} = formCategoryList[item['entity_id']];
+                                            return(
+                                                <li key={key}>
+                                                    <Link to={link}>
+                                                        <span className={`mr-20 ${icon}`}></span>
+                                                        {item.entity_text}
+                                                    </Link>
+                                                    <span className="icon-add pull-right mt-20" 
+                                                        onClick={this.addItem.bind(this,item.entity_id)}></span>
+                                                </li>
+                                            )
+                                        }
+                                    
+                                )}
+                            </ul>
+                        </div>
 
-                        </button>
+                        <div className="flex-container menu-btm-button">
+                            <button className="blue-button mr-10" type="button" onClick={closeMenuModal}>Cancel</button>
+                            <button className="orange-button" type="submit"onClick={this.saveMenuItems}>
+                                Done
+                                {loader ?
+                                    <img alt={"Menu Loading"} className="menu-loading" src={`${this.staticUrl}react/assets/images/menu-loading.gif`}/>:''
+                                }
+                            </button>
+                        </div>
                     </div>
+
                 </Modal>
             </div>
         );
