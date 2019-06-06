@@ -47,6 +47,7 @@ from .serializers import (
     OrderDetailSerializer)
 from shared.rest_addons.pagination import LearningCustomPagination
 from shared.rest_addons.mixins import (SerializerFieldsMixin,FieldFilterMixin)
+from shared.rest_addons.permissions import OrderAccessPermission
 
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
@@ -811,11 +812,10 @@ class TalentEconomyApiView(FieldFilterMixin,ListAPIView):
 
 class OrderDetailApiView(FieldFilterMixin,RetrieveAPIView):
 
-    permission_classes = []
+    permission_classes = [IsAuthenticated,OrderAccessPermission]
     authentication_classes = [SessionAuthentication]
     serializer_class = OrderDetailSerializer
     queryset = Order.objects.all()
-
     def get(self, request, *args, **kwargs):
         instance = self.get_object()
         user = self.request.user
