@@ -188,6 +188,16 @@
 
                 {% endif %}
 
+            {% elif obj.product.type_flow == 16 and obj.product.sub_type_flow == 1602 %}
+                 {% if obj.oi_status == 5 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a target="_blank" href="{{obj.autologin_url}}">Take Test</a></p>
+                    
+                {% elif obj.oi_status == 4 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
+
+                {% endif %}
+
+
             {% endif %}
         </div><!-- /.blue box -->
         {% if obj.oi_status == 24 or obj.oi_status == 46 %}
