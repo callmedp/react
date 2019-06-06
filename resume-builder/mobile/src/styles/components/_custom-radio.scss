@@ -115,4 +115,8 @@
     &__radio-input:checked ~ &__radio-label &__radio-button::after {
         opacity: 1;
     }
+
+    [type="checkbox"]:checked + label:after {
+        opacity: 0;
+    }
 }

@@ -16,7 +16,8 @@ import moment from 'moment';
 import PreviewModal from "../../../Preview/changeTemplateModal";
 import validate from "../../../../../FormHandler/validtaions/profile/validate"
 import {siteDomain} from "../../../../../../Utils/domains";
-import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
+import {scrollOnErrors} from "../../../../../../Utils/srollOnError";
+import AreYouSure from '../../../../../Common/AlertModal/areYouSure';
 
 class PersonalInfo extends Component {
     constructor(props) {

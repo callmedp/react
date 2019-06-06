@@ -474,6 +474,11 @@
     background-position: -133px -264px;
   }
 
+  &--alert {
+    @include size(70px, 65px, block);
+    background-position: -141px -254px;
+  }
+
 
 }
 

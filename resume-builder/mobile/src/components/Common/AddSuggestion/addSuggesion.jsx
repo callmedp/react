@@ -60,7 +60,7 @@ export default class AddSuggesion extends Component{
                                     }
                                     )
                                 }
-                                <div className="text-center mb-15">
+                                <div className="text-center mb-15 bottom-ctc">
                                     <a className="btn btn__round btn__primary" onClick={()=>{closeModal(suggestion_selected); this.setState({suggestion_selected:{}})}}>Save & Continue</a>
                                 </div>
                             </div>
