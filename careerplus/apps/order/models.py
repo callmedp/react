@@ -378,8 +378,9 @@ class OrderItem(AbstractAutoDate):
         _("Replacement Order number"), null=True, blank=True, max_length=20)
 
     # autologin url for assesment
-    autologin_url = models.TextField(
-        _("Auto Login Url"), null=True, blank=True)
+    autologin_url = models.CharField(
+        _("Auto Login Url"), null=True, blank=True, max_length=2000,
+    )
 
 
     class Meta:
