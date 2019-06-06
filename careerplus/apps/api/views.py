@@ -7,7 +7,7 @@ from django.db.models import Sum, Count
 from django.utils import timezone
 from django.conf import settings
 from django.http import JsonResponse
-
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -17,16 +17,18 @@ from rest_framework.permissions import (
 from haystack import connections
 from haystack.query import SearchQuerySet
 from core.library.haystack.query import SQS
-
+from partner.utils import CertiticateParser
+from partner.models import ProductSkill
 from rest_framework.generics import ListAPIView
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
+from django_filters.rest_framework import DjangoFilterBackend
 
 from users.tasks import user_register
 from order.models import Order, OrderItem, RefundRequest
 from shop.views import ProductInformationMixin
 from shop.models import Product,Category
 from coupon.models import Coupon, CouponUser
-from core.api_mixin import ShineCandidateDetail
+from core.api_mixin import ShineCandidateDetail, AmcatApiMixin
 from payment.tasks import add_reward_point_in_wallet
 from order.functions import update_initiat_orderitem_sataus
 from geolocation.models import Country
@@ -37,15 +39,20 @@ from order.tasks import (
 )
 from shop.models import Skill, DeliveryService, ShineProfileData
 from blog.models import Blog
+from emailers.tasks import send_email_task
 
 from .serializers import (
     OrderListHistorySerializer,
     RecommendedProductSerializer,
     RecommendedProductSerializerSolr,
-    ShineDataFlowDataSerializer,TalentEconomySerializer)
+    VendorCertificateSerializer,
+    ImportCertificateSerializer,
+    ShineDataFlowDataSerializer,
+    CertificateSerializer,TalentEconomySerializer)
+
+from partner.models import Certificate, Vendor
 from shared.rest_addons.pagination import LearningCustomPagination
 from shared.rest_addons.mixins import (SerializerFieldsMixin,FieldFilterMixin)
-
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
     authentication_classes = [OAuth2Authentication]
@@ -738,6 +745,112 @@ class RemoveCookieFromHeader(APIView):
 
         return response
 
+
+class UpdateCertificateAndAssesment(APIView):
+
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        certificate_updated = False
+        subject = "You have not cleared the test"
+        vendor_name = self.kwargs.get('vendor_name')
+        data = request.data
+        logging.getLogger('info_log').error(
+            "Incoming Data in request is %s" %
+            str(data)
+        )
+        if not data:
+            return Response({
+                "status": 0,
+                "msg": "Provide Data for Certificate"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        data['vendor'] = vendor_name.lower()
+        parser = CertiticateParser(parse_type=0)
+        parsed_data = parser.parse_data(data)
+        certificates, user_certificates = parser.save_parsed_data(parsed_data, vendor=data['vendor'])
+        print(user_certificates)
+        if user_certificates:
+            for user_certificate in user_certificates:
+                certificate = user_certificate.certificate
+                flag = parser.update_certificate_on_shine(user_certificate)
+
+                if flag:
+                    certificate_updated = True
+                    logging.getLogger('info_log').info(
+                        "Certificate %s parsed, saved, updated for Candidate Id %s" %
+                        (str(certificate.name), str(user_certificate.candidate_id))
+                    )
+                else:
+                    logging.getLogger('error_log').error(
+                        "Error Occured for Certificate %s for Candidate Id %s" %
+                        (str(certificate.name), str(user_certificate.candidate_id))
+                    )
+        if getattr(parsed_data.user_certificate, 'order_item_id'):
+            if user_certificates:
+                flag = parser.update_order_and_badge_user(parsed_data, vendor=data['vendor'])
+            else:
+                logging.getLogger('error_log').error(
+                    "Order Item id present , Certificate not available, badging not done" % (data)
+                )
+            orderitem_id = int(parsed_data.user_certificate.order_item_id)
+            oi = OrderItem.objects.filter(id=orderitem_id).first()
+            last_oi_status = oi.oi_status
+            oi.oi_status = 4
+            oi.closed_on = timezone.now()
+            oi.last_oi_status = 6
+            oi.save()
+            oi.orderitemoperation_set.create(
+                oi_status=6,
+                last_oi_status=last_oi_status,
+                assigned_to=oi.assigned_to)
+            if certificate_updated:
+                oi.orderitemoperation_set.create(
+                    oi_status=191,
+                    last_oi_status=last_oi_status,
+                    assigned_to=oi.assigned_to
+                )
+                if flag:
+                    oi.orderitemoperation_set.create(
+                        oi_status=192,
+                        last_oi_status=last_oi_status,
+                        assigned_to=oi.assigned_to
+                    )
+                    subject = "{} on completing the certification on {}>".format(
+                        oi.order.first_name, oi.product.name
+                    )
+            to_emails = [oi.order.get_email()]
+            mail_type = "CERTIFICATE_AND_ASSESMENT"
+            data = {}
+
+            data.update({
+                "username": oi.order.first_name,
+                "subject": subject,
+                "product_name": oi.product.name,
+                "skill_name": ', '.join(
+                    list(ProductSkill.objects.filter(product=oi.product).values_list('skill__name', flat=True))
+                ),
+                "certificate_updated": certificate_updated
+            })
+            print(to_emails)
+            send_email_task.delay(to_emails, mail_type, data, status=201, oi=oi.pk)
+            oi.orderitemoperation_set.create(
+                oi_status=oi.oi_status,
+                last_oi_status=oi.last_oi_status,
+                assigned_to=oi.assigned_to)
+        else:
+            logging.getLogger('error_log').error(
+                "Order Item id not present , so unable close item related to this data ( %s ) " % (data)
+            )
+
+        return Response({
+            "status": 1,
+            "msg": "Certificate Updated"},
+            status=status.HTTP_201_CREATED
+        )
+
 class ShineDataFlowDataApiView(ListAPIView):
     permission_classes = []
     authentication_classes = []
@@ -745,6 +858,73 @@ class ShineDataFlowDataApiView(ListAPIView):
     serializer_class = ShineDataFlowDataSerializer
     pagination_class = None
 
+
+class VendorCertificateMappingApiView(ListAPIView):
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated]
+    queryset = Vendor.objects.all()
+    serializer_class = VendorCertificateSerializer
+    pagination_class = None
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('name',)
+
+    def get_queryset(self):
+        queryset = super(self.__class__, self).get_queryset()
+        return queryset.exclude(certificate=None)
+
+    def get(self, request, *args, **kwargs):
+        response = self.list(request, *args, **kwargs)
+
+        return response
+
+class ImportCertificateApiView(APIView, AmcatApiMixin):
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated]
+    allowed_vendors = settings.IMPORT_CERTIFICATE_ALLOWED_VEDOR
+
+    def post(self, request, *args, **kwargs):
+        email = request.data.get('email', '')
+        vendor_name = self.kwargs.get('vendor_name')
+        if vendor_name not in self.allowed_vendors:
+            return Response({
+                "status": 1,
+                "msg": "This vendor is not allowed for importing certificate"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        if not email:
+            return Response({
+                "status": 1,
+                "msg": "Email is required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        parser = CertiticateParser(parse_type=1)
+        data = {
+            'check_type': 'certificate',
+            'candidate_email': email
+        }
+        success, data = self.get_all_certiticate_data(data)
+        if success:
+            if not data:
+                data = {'certificates': []}
+            print(data)
+            logging.getLogger('info_log').error(
+                "Certificate data for email %s is %s" % (str(email), str(data))
+            )
+            data['vendor'] = vendor_name.lower()
+
+            parsed_data = parser.parse_data(data)
+            resp = {}
+            certificates = ImportCertificateSerializer(
+                parsed_data.certificates,
+                many=True,
+                context={'vendor_provider': vendor_name}
+            )
+            resp['count'] = len(certificates.data)
+            resp['results'] = certificates.data
+            return Response(resp, status=status.HTTP_200_OK)
+        else:
+            return Response(data, status=data['code'])
 
 class TalentEconomyApiView(FieldFilterMixin,ListAPIView):
     """
@@ -805,14 +985,4 @@ class TalentEconomyApiView(FieldFilterMixin,ListAPIView):
         if visibility:
             filter_dict.update({'visibility': visibility})
         return Blog.objects.filter(**filter_dict)
-
-
-
-
-
-
-
-
-
-
 

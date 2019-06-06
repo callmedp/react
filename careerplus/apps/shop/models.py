@@ -1166,6 +1166,13 @@ class Product(AbstractProduct, ModelMeta):
             return False
 
     @property
+    def is_assesment(self):
+        if self.product_class and self.product_class.slug in settings.ASSESSMENT_SLUG:
+            return True
+        else:
+            return False
+
+    @property
     def get_name(self):
         # display name
         return self.heading if self.heading else self.name
@@ -1245,7 +1252,7 @@ class Product(AbstractProduct, ModelMeta):
                 cat_slug = cat_slug1[0] if cat_slug1 else None
         cat_slug = cat_slug.slug if cat_slug else None
         if cat_slug:
-            if self.is_course:
+            if self.is_course or self.type_flow == 16:
                 url_to_return = reverse('course-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
             else:
                 url_to_return = reverse('service-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
@@ -1877,6 +1884,13 @@ class ProductScreen(AbstractProduct):
     @property
     def is_service(self):
         if self.product_class and self.product_class.slug in settings.SERVICE_SLUG:
+            return True
+        else:
+            return False
+
+    @property
+    def is_assesment(self):
+        if self.product_class and self.product_class.slug in settings.ASSESSMENT_SLUG:
             return True
         else:
             return False
@@ -3138,6 +3152,15 @@ class ShineProfileData(AbstractAutoDate):
         blank=True, null=True)
     type_flow = models.PositiveSmallIntegerField(
         _('Flow'), choices=FLOW_CHOICES)
-    sub_type_flow = models.IntegerField(choices=SUB_FLOW_CHOICES, unique=True)
+    sub_type_flow = models.IntegerField(choices=SUB_FLOW_CHOICES)
     priority_value = models.PositiveIntegerField(default=1)
     action = models.IntegerField(choices=SHINE_FLOW_ACTION, default=-1)
+    vendor = models.ForeignKey(
+        Vendor,
+        blank=True,
+        null=True,
+        verbose_name=_('Vendor'),
+        related_name='vendor'
+    )
+    class Meta:
+        unique_together = ('type_flow', 'sub_type_flow', 'vendor')

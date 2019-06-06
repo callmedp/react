@@ -21,7 +21,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         
-        queryset_list = Product.browsable.filter(product_class__slug='course')
+        queryset_list = Product.browsable.filter(product_class__slug__in=['course', 'assessment'])
         count = 0
         for prod in queryset_list:
             data_dict = {}

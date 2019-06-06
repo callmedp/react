@@ -37,6 +37,14 @@
                 {% endif %}
 
             </ul>
+            {% if product.is_assesment %}
+            <div class="e-payLatter mt-15">
+                <span class="mr-15">
+                  <img class="img-responsive" src="{% static "shinelearn/images/mobile/shop/epaylatter.png" %}"/>
+                </span>
+                <p class="pb-0">Buy test now and <span class="bold">make payment within 14 days</span> using ePayLater </p>
+            </div><!-- ./ e-payLatter -->
+            {% endif %}
         </div>
     </div>
 

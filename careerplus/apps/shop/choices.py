@@ -21,7 +21,8 @@ SERVICE_CHOICES = (
     (1, 'Writing Services'),
     (2, 'Job Assistance Services'),
     (3, 'Courses'),
-    (4, 'Other Services'),)
+    (4, 'Other Services'),
+    (5, 'Assesment/Certification'))
 
 CATEGORY_CHOICES = (
     (0, 'Default'),
@@ -56,7 +57,9 @@ FLOW_CHOICES = (
     (12, 'Country Specific Resume'),  # flow 12
     (13, 'Executive Bio,Portfolio,Visual Resume,Cover Letter,Second Regular Resume'),  # flow 13
     (14, 'University Courses'),
-    (15, 'Resume Booster International')
+    (15, 'Resume Booster International'),
+    (16, 'Assessment and Certifications'),
+
 )
 
 SUB_FLOWS = {
@@ -65,6 +68,11 @@ SUB_FLOWS = {
         (502, "Jobs on the Move"),
         (503, "Priority Applicant")
     ),
+    16: (
+        (1601, "Free Test"),
+        (1602, "Paid Test")
+    )
+
 }
 
 SUB_FLOW_CHOICES = ()
@@ -137,6 +145,10 @@ S_ATTR_DICT = {
     'FD': 'featured_duration',
     'SD': 'service_doc',
     'SI': 'service_im',
+}
+
+A_ATTR_DICT = {
+    'AD': 'assesment_duration'
 }
 
 ##DO NOT CHANGE#

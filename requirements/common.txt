@@ -3,7 +3,7 @@ bs4==0.0.1
 cairocffi==0.8.0
 CairoSVG
 cffi==1.10.0
-
+jsmin==2.2.2
 cssselect==1.0.1
 Django==1.11.8
 celery==4.1.0

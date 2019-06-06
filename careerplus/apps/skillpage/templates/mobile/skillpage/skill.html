@@ -191,7 +191,24 @@
 
                 <div class="container" id="product_list">
                     <h2>{{category_obj.name}} Programs</h2>
-                    {% include 'mobile/include/load_product.html' %}
+
+                    <div class="skill-tabWrap row">
+                        <ul class="tabs">
+                            <li class="tab-link current" data-tab="tab-1">
+                                Courses
+                            </li>
+                            <li class="tab-link" data-tab="tab-2">
+                                Assesments <span class="new">New</span>
+                            </li>
+                        </ul>
+    
+                        <div id="tab-1" class="tab-content current">
+                            {% include 'mobile/include/load_product.html' %}
+                        </div>
+                        <div id="tab-2" class="tab-content">
+                            {% include 'mobile/include/load_product.html' %}
+                        </div>
+                    </div>
                 </div><!-- end of container -->
 
                 <!-- Revew Slide widget -->
@@ -357,6 +374,7 @@ CenterCropImage($('.cropcenterimg li a'));
     {% compress js %}
     <script src="{% static 'shinelearn/js/skill/skillpage.js' %}"></script>
     <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
+    <script src="{% static 'shinelearn/js/mobile/common/base.js' %}"></script>
     {% endcompress %}
 {% endblock js_section %}
 

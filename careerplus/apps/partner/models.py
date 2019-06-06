@@ -1,9 +1,18 @@
-from django.db import models
+# inbuilt imports
 from datetime import datetime
+from decimal import Decimal
+
+# framework imports
+from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from seo.models import AbstractSEO, AbstractAutoDate
 from django.conf import settings
 from django.forms import ValidationError
+
+# local imports
+from .choices import USER_CERTITIFICATE_STATUS
+
+# inter apps imports
+from seo.models import AbstractSEO, AbstractAutoDate
 from meta.models import ModelMeta
 from shop.functions import (
     get_upload_path_vendor,
@@ -13,7 +22,7 @@ from geolocation.models import (
     State,
     City,)
 from order.choices import BOOSTER_RECRUITER_TYPE
-
+from .choices import SCORE_TYPE_CHOICES
 
 class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
     name = models.CharField(
@@ -125,11 +134,47 @@ class VendorHierarchy(AbstractAutoDate):
             'employee': self.employee}
 
 
+class Assesment(AbstractAutoDate):
+    vendor_text = models.CharField(max_length=255, blank=True, null=True)
+    vendor_provider = models.ForeignKey(Vendor, null=True, blank=True)
+    assesment_name = models.CharField(max_length=255, blank=True, null=True)
+    candidate_id = models.CharField(
+        _('Candidate_id'), blank=True,
+        max_length=60, help_text=_('Candidate_id'))
+    candidate_email = models.EmailField(
+        _('Email'),
+        max_length=255, help_text=_('Candidate Email Address'))
+    extra_info = models.TextField(
+        _('Extra Info'), blank=True,
+        default='', help_text=_('Extra Info'))
+    report = models.TextField(blank=True)
+    overallScore = models.DecimalField(
+        default=Decimal('0.00'), decimal_places=2,
+        max_digits=12, null=True, blank=True
+    )
+
+
+
+
 class Certificate(AbstractAutoDate):
     name = models.CharField(
         max_length=255, null=False, blank=False, db_index=True)
     skill = models.CharField(max_length=128, null=False, blank=False)
     vendor_provider = models.ForeignKey(Vendor, null=True, blank=True)
+    vendor_text = models.CharField(max_length=255, null=True, blank=True)
+    certificate_file_url = models.URLField(max_length=500, blank=True, null=True)
+    vendor_image_url = models.URLField(max_length=500, blank=True, null=True)
+    vendor_certificate_id = models.CharField(max_length=255, null=True, blank=True)
+    product = models.PositiveIntegerField(null=True, blank=True)
+
+
+    @property
+    def provider(self):
+        if self.vendor_provider:
+            return self.vendor_provider.name
+        else:
+            return self.vendor_text
+    
 
     def __str__(self):
         return self.name
@@ -156,6 +201,14 @@ class UserCertificate(models.Model):
     candidate_id = models.CharField(
         _('Candidate ID'), blank=True,
         max_length=30, help_text=_('Candidate ID'))
+    certificate_file_url = models.URLField(max_length=500, blank=True, null=True)
+    expiry_date = models.DateTimeField(null=True, blank=True)
+    order_item = models.ForeignKey(
+        'order.OrderItem', related_name='user_certificate_orderitem',
+        verbose_name=_("Order Item"), blank=True, null=True)
+    status = models.IntegerField(choices=USER_CERTITIFICATE_STATUS, default=0)
+    extra_info = models.TextField(null=True, blank=True)
+    assesment = models.ForeignKey('Assesment', null=True, blank=True)
 
     def __str__(self):
         return '{}'.format(self.certificate.name)
@@ -175,3 +228,81 @@ class BoosterRecruiter(AbstractAutoDate):
 
     def __str__(self):
         return '<' + self.get_type_recruiter_display() + '>'
+
+class Report(models.Model):
+
+    assessment_id = models.IntegerField()
+    url = models.URLField(max_length=500, blank=True, null=True)
+    name = models.CharField(max_length=255)
+
+    class Meta:
+        abstract = True
+
+
+class Score(AbstractAutoDate):
+    subject = models.CharField(max_length=255)
+    assesment = models.ForeignKey('Assesment', null=True, blank=True)
+    score_type = models.PositiveSmallIntegerField(choices=SCORE_TYPE_CHOICES, default=0)
+    max_score = models.CharField(max_length=255)
+    score_obtained = models.IntegerField(default=0)
+
+
+class ParsedAssesmentData:
+
+    def __init__(self):
+        self.score = Score()
+        self.scores = []
+        self.assesment = Assesment()
+        self.certificate = Certificate()
+        self.user_certificate = UserCertificate()
+        self.report = Report()
+        self.reports = []
+        self.certificates = []
+
+class UserCertificateOperations(AbstractAutoDate):
+    user_certificate = models.ForeignKey(UserCertificate)
+    op_type = models.IntegerField(choices=USER_CERTITIFICATE_STATUS, default=0)
+    last_op_type = models.IntegerField(choices=USER_CERTITIFICATE_STATUS, default=0)
+
+        
+    def __str__(self):
+        return ' {} - ({}) for {} '.format(
+            self.user_certificate.certificate.name, self.get_op_type_display(),
+            self.user_certificate.candidate_email)
+
+
+class ProductSkill(AbstractAutoDate):
+
+    skill = models.ForeignKey(
+        'shop.Skill',
+        verbose_name=_('Skill'),
+        related_name='new_productskills',
+        on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        'shop.Product',
+        verbose_name=_('Product'),
+        related_name='new_productskills',
+        on_delete=models.CASCADE)
+    third_party_skill_id = models.PositiveIntegerField(default=0)
+    primary = models.BooleanField(default=False)
+
+    def __str__(self):
+        name = '{} - ({}) to {} - ({})'.format(
+            self.skill.name, self.skill_id,
+            self.product.get_name, self.product_id)
+        return name
+
+    class Meta:
+        unique_together = ('product', 'skill')
+        verbose_name = _('Product Skill')
+        verbose_name_plural = _('Product Skills')
+
+class PixelTracker(AbstractAutoDate):
+    pixel_slug = models.CharField(
+        max_length=255, help_text=('Pixel Slug')
+    )
+    conversion_urls = models.TextField(help_text='conversion_page_url')
+    landing_urls = models.TextField(help_text='landing_page_urls')
+    days = models.IntegerField(help_text='No. of days for tracking', blank=True, null=True)
+
+
