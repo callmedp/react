@@ -17,7 +17,6 @@ import PreviewModal from "../../../Preview/changeTemplateModal";
 import validate from "../../../../../FormHandler/validtaions/profile/validate"
 import {siteDomain} from "../../../../../../Utils/domains";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError";
-import AreYouSure from '../../../../../Common/AlertModal/areYouSure';
 
 class PersonalInfo extends Component {
     constructor(props) {
@@ -171,11 +170,11 @@ class PersonalInfo extends Component {
                         <React.Fragment>
                             <h1>{heading}</h1>
                             <i className="sprite icon--edit" onClick={()=>{this.setState({editHeading:true})}}></i>
-                            <div className="toolTip">
+                            {/* <div className="toolTip">
                                 <span className="toolTip--arrow-up"></span>
                                 <span className="toolTip--close">+</span>
                                 You can always edit the section title
-                            </div>
+                            </div> */}
                         </React.Fragment>:
                         <React.Fragment>
                             <input type="text" autoFocus defaultValue={heading} onBlur={(e)=>this.updateInputValue('blur',e)}

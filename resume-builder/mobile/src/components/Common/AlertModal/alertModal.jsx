@@ -5,18 +5,26 @@ import './alert.scss'
 
 Modal.setAppElement(document.getElementById('react-app'));
 
-export default class AreYouSure extends Component{
+export default class AlertModal extends Component{
 
     constructor(props){
         super(props);
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
+        this.goToNewLink = this.goToNewLink.bind(this);
+
+    }
+
+    goToNewLink(){
+        const {history,link,closeModal} = this.props;
+        history.push(`/resume-builder/edit/?type=${link}`)
+        closeModal()
 
     }
     render(){
-        const {modal_status,templateImage} = this.props;
+        const {modal_status,link,history,closeModal} = this.props;
         return(
             <Modal 
-                isOpen={true} 
+                isOpen={modal_status} 
                 contentLabel="onRequestClose Preview"
                 onRequestClose={this.handleCloseModal}
                 className="alertModal"
@@ -28,8 +36,8 @@ export default class AreYouSure extends Component{
                         <p>Some information may be lost as required fields are not filled.</p>
                     </div>
                     <div className="alertModal__wrap__btn-wrap">
-                        <span className="btn btn-sm btn__primary btn__round w-150">Yes, change it!</span>
-                        <span className="btn btn-sm btn--outline btn__round w-150">Cancel</span>
+                        <span className="btn btn-sm btn__primary btn__round w-150" onClick={this.goToNewLink}>Yes, change it!</span>
+                        <span className="btn btn-sm btn--outline btn__round w-150" onClick={closeModal}>Cancel</span>
                     </div>
                 </div>
             </Modal>

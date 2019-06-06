@@ -4,9 +4,8 @@ import * as actions from "../../../../store/sidenav/actions";
 import {connect} from "react-redux";
 import queryString from "query-string";
 import RenderNavItem from './renderNavItem';
-import {entityLinkNameLink ,iconClassList,delete_icon} from '../../../../Utils/entitydata.js'
-import moment from 'moment'
-import Swal from 'sweetalert2'
+import {entityLinkNameLink ,iconClassList} from '../../../../Utils/entitydata.js'
+import AlertModal from '../../../Common/AlertModal/alertModal';
 
 class LeftSideBar extends Component {
 
@@ -17,11 +16,14 @@ class LeftSideBar extends Component {
         this.updateLink = this.updateLink.bind(this);
         this.openMenu = this.openMenu.bind(this);
         this.showErrorMessage = this.showErrorMessage.bind(this);
+        this.closeModal = this.closeModal.bind(this);
         const values = queryString.parse(this.props.location.search);
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
         this.state = {
             type: (values && values.type) || '',
             addmore: [],
+            modal_status: false,
+            link:''
         };
         if (!(values && values.type)) {
             this.props.history.push(`/resume-builder/edit/?type=profile`)
@@ -56,26 +58,13 @@ class LeftSideBar extends Component {
         }
     }
 
+    closeModal(){
+        console.log("here")
+        this.setState({modal_status:false,link:''})
+    }
+
     showErrorMessage(link) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: `Some information may be lost as required fields are not filled.`,
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, change it!'
-        }).then((result) => {
-            if(link === 'addMore'){
-                this.addMore();
-            }
-            else{
-                if (result.value) {
-                    this.props.history.push(`/resume-builder/edit/?type=${link}`)  
-                }
-            }
-            
-        })
+        this.setState({modal_status:true,link})
     }
 
     componentDidUpdate(prevProps) {
@@ -114,8 +103,8 @@ class LeftSideBar extends Component {
     }
 
     render() {
-        const {type,sidenav_active_pos} = this.state;
-        const {formData,ui:{formName},personalInfo:{first_name,entity_preference_data}} = this.props
+        const {type,sidenav_active_pos,modal_status,link} = this.state;
+        const {formData,ui:{formName},personalInfo:{first_name,entity_preference_data},history} = this.props
         let error = false;
         const obj = formData && formData[formName] || {};
         let syncErrors = obj['syncErrors'] || {};
@@ -125,6 +114,7 @@ class LeftSideBar extends Component {
         }
         return (
             <React.Fragment>
+                <AlertModal modal_status={modal_status} link={link} history={history} closeModal={this.closeModal}/>
                 {(entity_preference_data.length) ?
                     <div>
                         <div className={"overlay-sidenav"}></div>
