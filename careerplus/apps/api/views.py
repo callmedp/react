@@ -907,7 +907,6 @@ class ImportCertificateApiView(APIView, AmcatApiMixin):
         if success:
             if not data:
                 data = {'certificates': []}
-            print(data)
             logging.getLogger('info_log').error(
                 "Certificate data for email %s is %s" % (str(email), str(data))
             )

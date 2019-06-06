@@ -503,13 +503,16 @@ class CertiticateParser:
 
             if vendor_field == 'vendor_text':
                 certificate_data['vendor_text'] = vendor
-
+            else:
+                certificate_data['vendor_provider'] = vendor
             certificate, created = Certificate.objects.get_or_create(
-                **certificate_data
+                name=certificate_data['name'],
+                skill=certificate_data['skill']
             )
-            setattr(certificate, vendor_field, vendor)
             certificates.append(certificate)
             try:
+                for key, data in certificate_data.items():
+                    setattr(certificate, key, data)
                 certificate.save()
             except IntegrityError:
                 pass
