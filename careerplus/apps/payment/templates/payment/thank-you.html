@@ -33,11 +33,14 @@
     <div class="col-sm-7">
 
         <div class="text-center payment-done">
-            <figure class="waiting-icon"></figure>
+            
 
-            <h1>{% if order.status == 1 %}
-                    Your payment has been made successfully!
+            <h1>
+                {% if order.status == 1 %}
+                    <figure class="greenTick-icon"></figure>
+                    You have made the payment <br />successfully!
                 {% else %}
+                    <figure class="waiting-icon"></figure>
                     Waiting for payment to be made, meanwhile order has been created!
                 {% endif %}
             </h1>
@@ -93,6 +96,17 @@
                             {% endif %}
                         </ul>
                     </div>
+
+
+                {% elif oi.product.is_assesment and oi.product.sub_type_flow == 1602 %}
+
+                    <div class="subcribe-services">
+                        <div class="new-test">
+                            <strong>{{oi.product.get_name}}</strong>
+                            {% if oi.order.status == 1 %}<a target='_blank' href="{{ oi.autologin_url }}">Take Test</a>{% endif %}
+                        </div>
+                    </div>
+
                 {% else %}
                     <div class="subcribe-services">
                         <strong>{{oi.product.get_name}}</strong>
@@ -132,6 +146,9 @@
     {% compress js %}
     <script src="{% static 'shinelearn/js/payment/thank-you.js' %}"></script>
     {% endcompress %}
+    <script>
+
+    </script>
 {% endblock js_section %}
 
 {% block johukum %}

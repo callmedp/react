@@ -1,0 +1,129 @@
+{% extends "basic/base1.html" %}
+{% load static meta compress %}
+
+{% block title %}
+  {% if meta.title %}{{ meta.title }}{% else %}{{prd_H1}}{% endif %}
+{% endblock title %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
+  <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{request.path}}">
+{% endblock canonical_url %}
+
+        {% block django_meta %}
+            {% include 'meta/meta.html' %}
+        {% endblock django_meta %}
+ 
+{% block css_section %}
+    {{block.super}}
+    {% compress css %}
+    <link type="text/scss" href="{% static 'shinelearn/css/product/detail.scss' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'shinelearn/css/skill/extra.css' %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+
+
+{% block navigation %}
+{% if not navigation %}
+    <!-- navigation bar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <a class="navbar-brand" href=""></a>
+          </div>
+
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            
+            <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown have-query">
+                <a href="tel:{{ggn_contact}}">Have a query? Call us at <strong>{{ggn_contact}}</strong></a>
+              </li>
+            </ul>
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+  </nav>
+{% else %}
+   {{block.super}}
+{% endif %}
+
+  {% endblock navigation %}
+
+
+{% block main_container %}
+
+    <div id="id-detail-body">
+
+      {{product_detail|safe}}
+        <input id="skill" type="hidden" value=" {{skill}} ">
+
+   </div>
+{% endblock main_container %}
+
+
+{% block js_section %}
+    {{block.super}}
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/common/plugin.activeOnScroll.js' %}"></script>
+    <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
+    <script src="{% static 'shinelearn/js/shop/detail.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/scroller.js' %}" type="text/javascript"></script>
+    <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
+    {% endcompress %}
+    
+<script type="text/javascript">
+var authen=false;
+var prod_id = {{product.id}};
+var skill =document.getElementById("skill").value;
+var display_info = " ";
+
+function toggle_review(text_to_display) {
+  display_info = text_to_display;
+  var review_display = $('#review').children('h2').text();
+  if (review_display == " ") {
+
+    $('#review').children('h2').text('Reviews');
+    $('#review').children('a').text(text_to_display);
+    $('#review').children('a').css({
+      'right': '15px',
+      'left': '',
+      'margin-top': '0px'
+    });
+    if ($('#collapseExampleform').hasClass('in')) {
+      $('#review').children('a').before('<input type="button" class="review-close" id="close" onclick="close_review()" value="X"></input>');
+    }
+  } else {
+    $('#review').children('h2').text($('#review').children('a').text());
+    $('#review').children('a').before('<input type="button" id="close" class="review-close" onclick="close_review()" value="X"></input>');
+    $('#review').children('a').css({
+      'display': 'none'
+    });
+  }
+}
+
+function close_review() {
+  $('#close').remove();
+  $('#review').children('h2').text("Reviews");
+  $('#review').children('a').css({
+    'display': 'block'
+  });
+  $('#collapseExampleform').removeClass('in');
+  $('#collapseExampleform').css({
+    'height': ''
+  });
+}
+
+$(document).ready(function() {
+{% if request.session.candidate_id %}
+    authen=true;
+{%else%}
+    authen =false;
+{%endif%}
+ ajax_call(authen,prod_id);
+});
+
+
+
+</script>
+
+{% endblock js_section %}

@@ -18,6 +18,7 @@ from .choices import STATUS_CHOICES, SITE_CHOICES,\
     TYPE_REFUND, OI_SMS_STATUS, WC_CATEGORY, WC_SUB_CATEGORY,\
     WC_FLOW_STATUS
 from .functions import get_upload_path_order_invoice
+from payment.utils import manually_generate_autologin_url
 
 #Global Constants
 CURRENCY_SYMBOL_CODE_MAPPING = {0:"INR",1:"USD",2:"AED",3:"GBP"}
@@ -233,6 +234,17 @@ class Order(AbstractAutoDate):
                 return 'pink'
         return ''
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.status == 1:
+            assesment_items = self.orderitems.filter(
+                order__status__in=[0, 1],
+                product__type_flow=16,
+                product__sub_type_flow=1602,
+                autologin_url=None
+            )
+            manually_generate_autologin_url(assesment_items=assesment_items)
+
 
 class OrderItem(AbstractAutoDate):
     coi_id = models.IntegerField(
@@ -364,6 +376,11 @@ class OrderItem(AbstractAutoDate):
     # replacement_order_id
     replacement_order_id = models.CharField(
         _("Replacement Order number"), null=True, blank=True, max_length=20)
+
+    # autologin url for assesment
+    autologin_url = models.TextField(
+        _("Auto Login Url"), null=True, blank=True)
+
 
     class Meta:
         app_label = 'order'

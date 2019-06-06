@@ -143,6 +143,9 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     # university_courses_detail
     pUncdl = indexes.MultiValueField(null=True, indexed=False)
 
+    # Assesment attributes
+    pAsft = indexes.MultiValueField(null=True, indexed=False)
+
     def get_model(self):
         return Product
 
@@ -350,6 +353,9 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             else:
                 CERT.append(obj.get_cert())
             return list(set(CERT))
+        elif obj.is_assesment and obj.sub_type_flow == 1602:
+                return ["true"]
+
         return [0]
 
     def prepare_pStM(self, obj):
@@ -929,3 +935,11 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             detail['payment'] = payment_list
             return json.dumps(detail)
         return ''
+
+    def prepare_pAsft(self, obj):
+        detail = {}
+        if obj.product_class.name == 'assessment':
+            objs = obj.productattributes.all()
+            for obj in objs:
+                detail[obj.attribute.name] = obj.value
+            return detail

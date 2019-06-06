@@ -122,6 +122,39 @@ def update_initiat_orderitem_sataus(order=None):
                     last_oi_status=last_oi_status,
                     assigned_to=oi.assigned_to)
 
+            elif oi.product.type_flow == 16:
+                last_oi_status = oi.oi_status
+                oi.oi_status = 5
+                oi.wc_cat = 21
+                oi.wc_sub_cat = 41
+                oi.wc_status = 41
+                oi.last_oi_status = last_oi_status
+                oi.save()
+                oi.orderitemoperation_set.create(
+                    oi_status=oi.oi_status,
+                    last_oi_status=last_oi_status,
+                    assigned_to=oi.assigned_to)
+
+        # for assesment if no orderitems other than assesment present
+        # then make welcome call done and update welcome call statuses.
+        oi = order.orderitems.exclude(product__type_flow=16)
+
+        if not oi.exists():
+            order.wc_cat = 21
+            order.wc_sub_cat = 41
+            order.wc_status = 41
+            order.welcome_call_done = True
+            order.save()
+            order.welcomecalloperation_set.create(
+                wc_cat=order.wc_cat,
+                wc_sub_cat=order.wc_sub_cat,
+                message='Done automatically, Only Assesment items present',
+                wc_status=order.wc_status,
+                assigned_to=order.assigned_to
+            )
+
+
+
 
 def get_upload_path_order_invoice(instance, filename):
     return "invoice/order/{order_id}/{filename}".format(

@@ -13,6 +13,9 @@ function clickMarkPaidButton(order_id){
 function markPaidOrder(order_id){
     if (order_id){
         var formData = $('#order-paid-form' + order_id).serialize();
+        if($("#loader").length) {
+            $("#loader").show()
+        }
         $.ajax({
             url: '/ajax/order/markedpaid/',
             type: "POST",
@@ -20,6 +23,9 @@ function markPaidOrder(order_id){
             dataType: 'json',
             success: function(json) {
                 var msg = json.display_message;
+                if($("#loader").length) {
+                    $("#loader").hide()
+                }
                 if (json.status == 1){
                     alert(msg);
                     window.location.reload();

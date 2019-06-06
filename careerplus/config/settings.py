@@ -350,6 +350,18 @@ FEATURE_PROFILE_EXCLUDE=[49]
 TEST_EMAIL = False
 
 
+VENDOR_URLS = {
+    'amcat': {
+        'all_certificates': 'https://www.myamcat.com/api/3p/assessment-results',
+        'get_autologin_url': 'https://www.myamcat.com/api/3p/schedule-skill-test'
+    }
+}
+
+
+AMCAT_API_TOKEN = '7347D18D79F6431CB9ACADBE704B2389'
+AMCAT_API_SECRET = '7B348DF7F1A4EBED5DCBC0A1E4AC6B67'
+
+IMPORT_CERTIFICATE_ALLOWED_VEDOR = ('amcat',)
 
 EXOTEL_DICT = {
            'token': '9e4df38c0c3bd1009ca142da306d827e71e74737',
