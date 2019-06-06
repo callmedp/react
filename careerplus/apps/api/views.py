@@ -7,7 +7,7 @@ from django.db.models import Sum, Count
 from django.utils import timezone
 from django.conf import settings
 from django.http import JsonResponse
-
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -21,6 +21,7 @@ from partner.utils import CertiticateParser
 from partner.models import ProductSkill
 from rest_framework.generics import ListAPIView
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
+from django_filters.rest_framework import DjangoFilterBackend
 
 from users.tasks import user_register
 from order.models import Order, OrderItem, RefundRequest
@@ -864,7 +865,8 @@ class VendorCertificateMappingApiView(ListAPIView):
     queryset = Vendor.objects.all()
     serializer_class = VendorCertificateSerializer
     pagination_class = None
-
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('name',)
 
     def get_queryset(self):
         queryset = super(self.__class__, self).get_queryset()
