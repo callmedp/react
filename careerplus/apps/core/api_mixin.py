@@ -391,7 +391,7 @@ class AmcatApiMixin(object):
         if resp.status_code == 200:
             resp = resp.json()
             autologin_url = resp['data']['autoLoginUrl']
-            logging.getLogger('info_log').error(
+            logging.getLogger('info_log').info(
                 "AutoLogin url for data %s successfully retrieved" % (str(data))
             )
             return autologin_url
