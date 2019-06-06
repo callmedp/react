@@ -14,13 +14,8 @@ import {customizeTemplate, fetchDefaultCustomization, reorderSection} from "../.
 import * as profileActions from "../../../store/personalInfo/actions"
 import SelectTemplateModal from '../../Modal/selectTemplateModal';
 import moment from 'moment'
-import MenuModal from '../../Modal/menuModal';
 
 class EditPreview extends Component {
-
-    constructor(props) {
-        super(props);
-    }
 
     componentDidMount() {
         this.props.fetchEntityInfo();
@@ -38,7 +33,6 @@ class EditPreview extends Component {
                     !!(loader) &&
                     <LoaderPage/>
                 }
-                <MenuModal/>
                 <Header userName={first_name}/>
                 <div className="page-container">
                     <SelectTemplateModal {...this.props}/>

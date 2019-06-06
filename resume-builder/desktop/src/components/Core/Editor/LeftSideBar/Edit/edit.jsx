@@ -5,29 +5,23 @@ import queryString from "query-string";
 import {formCategoryList, entityList} from "../../../../../Utils/formCategoryList";
 import {connect} from 'react-redux'
 import * as actions from '../../../../../store/personalInfo/actions/index'
-import {showMoreSection, showAlertModal, hideAlertModal} from '../../../../../store/ui/actions/index'
-import Swal from 'sweetalert2'
+import {showAlertModal, hideAlertModal} from '../../../../../store/ui/actions/index'
 import AlertModal from '../../../../Modal/alertModal.jsx'
+import MenuModal from '../../../../Modal/menuModal';
 
 class Edit extends Component {
     constructor(props) {
         super(props);
-        this.handleSpanClick = this.handleSpanClick.bind(this);
-        this.addMoreClick = this.addMoreClick.bind(this);
-        this.deleteFromVisibleList = this.deleteFromVisibleList.bind(this);
-        this.addIntoVisibleList = this.addIntoVisibleList.bind(this);
         this.showErrorMessage = this.showErrorMessage.bind(this);
-        this.handleDeleteClick = this.handleDeleteClick.bind(this);
+        this.openMenuModal = this.openMenuModal.bind(this);
+        this.closeMenuModal = this.closeMenuModal.bind(this);
         this.state = {
             preferenceList: this.props.entityList,
             nextLink: '',
-            elementToDelete: null
+            elementToDelete: null,
+            menu_modal_status: false
         };
-    }
-
-
-    handleSpanClick(e) {
-        e.stopPropagation();
+        
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
@@ -43,82 +37,12 @@ class Edit extends Component {
         })
     }
 
-    addMoreClick() {
-        this.props.showMoreSection()
-    }
-
-    addIntoVisibleList(addedElem) {
-        const updatedList = (this.state.preferenceList || []).map(elem => {
-            if (elem['entity_id'] === addedElem['entity_id']) {
-                return {
-                    ...elem,
-                    ...{active: true}
-                }
-            }
-            return elem;
-        });
-        this.props.updateCategoryEntity(updatedList);
-        this.setState({
-            preferenceList: updatedList
-        })
-    }
-
-    deleteFromVisibleList(deletedElem) {
-        const updatedList = (this.state.preferenceList || []).map(elem => {
-            if (elem['entity_id'] === deletedElem['entity_id']) {
-                return {
-                    ...elem,
-                    ...{active: false}
-                }
-            }
-            return elem;
-        })
-        this.props.updateCategoryEntity(updatedList);
-        this.setState({
-            preferenceList: updatedList
-        })
-    }
 
     showErrorMessage(link) {
         this.setState({
             nextLink: link
         })
         this.props.showAlertModal('error');
-        const {ui: {formName}} = this.props;
-        // Swal.fire({
-        //     title: 'Are you sure?',
-        //     text: `Some information may be lost as required fields are not filled.`,
-        //     type: 'warning',
-        //     showCancelButton: true,
-        //     confirmButtonColor: '#3085d6',
-        //     cancelButtonColor: '#d33',
-        //     confirmButtonText: 'Yes, change it!'
-        // }).then((result) => {
-        //     if (result.value) {
-        //         this.props.history.push(link)
-        //     }
-        // })
-    }
-
-    handleDeleteClick(elem) {
-        this.setState({
-            elemToDelete: elem
-        })
-        this.props.showAlertModal('delete');
-
-        // Swal.fire({
-        //     text: "Do you really want to remove this section?",
-        //     type: 'warning',
-        //     showCancelButton: true,
-        //     confirmButtonColor: '#3085d6',
-        //     cancelButtonColor: '#d33',
-        //     confirmButtonText: 'Confirm'
-        // }).then((result) => {
-        //     if (result.value) {
-        //         this.deleteFromVisibleList(elem);
-        //     }
-        // })
-
     }
 
     componentDidUpdate(prevProps) {
@@ -136,9 +60,16 @@ class Edit extends Component {
         }
     }
 
+    openMenuModal(){
+        this.setState({menu_modal_status:true})
+    }
+    closeMenuModal(){
+        this.setState({menu_modal_status:false})
+    }
+
     render() {
-        const {type, preferenceList, nextLink, elemToDelete} = this.state;
-        let {formData, ui: {formName, showMoreSection}} = this.props;
+        const {type, preferenceList, nextLink, elemToDelete,menu_modal_status} = this.state;
+        let {formData, ui: {formName, showMoreSection},updateCategoryEntity} = this.props;
         let error = false;
         const obj = formData && formData[formName] || {};
         let syncErrors = obj['syncErrors'] || {};
@@ -148,10 +79,17 @@ class Edit extends Component {
         }
         return (
             <div className="edit-section">
+                <MenuModal 
+                    menu_modal_status={menu_modal_status}
+                    closeMenuModal={this.closeMenuModal}
+                    preferenceList={preferenceList}
+                    formCategoryList={formCategoryList}
+                    updateCategoryEntity={updateCategoryEntity}
+                />
                 <AlertModal {...this.props}
                             nextLink={nextLink}
                             elemToDelete={elemToDelete}
-                            deleteFromVisibleList={this.deleteFromVisibleList}
+                            // deleteFromVisibleList={this.deleteFromVisibleList}
                 />
                 <strong>Complete your information</strong>
                 <ul>
@@ -160,9 +98,9 @@ class Edit extends Component {
                             const {link, icon, itemType} = formCategoryList[elem['entity_id']];
                             return (
                                 <li key={index}
-                                    className={showMoreSection ? 'disabled' : '' + (type === itemType ? ' edit-section--active' : '')}>
+                                    className={(type === itemType ? ' edit-section--active' : '')}>
                                     {
-                                        !!(error || showMoreSection) ?
+                                        !!(error) ?
                                             <div onClick={() => this.showErrorMessage(link)} className={"non-link"}>
                                                 <span className={'mr-20 ' + icon}></span>
                                                 {elem['entity_text']}
@@ -173,36 +111,14 @@ class Edit extends Component {
                                                 {elem['entity_text']}
                                             </Link>
                                     }
-                                    {
-                                        !!(elem['entity_id'] !== 1 && elem['entity_id'] !== 6) ?
-                                            <span onClick={() => this.handleDeleteClick(elem)}
-                                                  className="icon-delete pull-right mt-20"/> : ''
-                                    }
                                 </li>
                             )
                         })
                     }
-                    {
-                        !!(!showMoreSection) && !!(preferenceList.filter(elem => elem.active !== true).length) &&
-                        <li className="edit-section--addmore mt-30" onClick={this.addMoreClick}>
-                            + Add more sections
-                        </li>
-                    }
-                    {!!(showMoreSection) &&
-                    (preferenceList || []).filter(elem => elem.active !== true).map((elem, index) => {
-                        const {link, icon, itemType} = formCategoryList[elem['entity_id']];
-                        return (
-                            <li key={index} className={type === itemType ? 'edit-section--active' : ''}>
-                                <div className={"non-link"}>
-                                    <span className={'mr-20 ' + icon}></span>
-                                    {elem['entity_text']}
-                                </div>
-                                <span onClick={() => this.addIntoVisibleList(elem)}
-                                      className="icon-add pull-right mt-20"/>
-                            </li>
-                        )
-                    })
-                    }
+                    
+                    <li className="edit-section--addmore mt-30" onClick={this.openMenuModal}>
+                        + Add/Remove sections
+                    </li>
                 </ul>
             </div>
         )
@@ -221,10 +137,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         'updateCategoryEntity': (entity) => {
-            return dispatch(actions.updateEntityPreference({"entity_preference_data": entity}))
-        },
-        'showMoreSection': () => {
-            return dispatch(showMoreSection())
+            return new Promise((resolve, reject) => {
+                return dispatch(actions.updateEntityPreference({"entity_preference_data": entity,resolve,reject}))
+            })
         },
         'showAlertModal': (alertType) => {
             return dispatch(showAlertModal(alertType))

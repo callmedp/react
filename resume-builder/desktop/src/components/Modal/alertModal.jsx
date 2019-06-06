@@ -89,7 +89,7 @@ export default class AlertModal extends React.Component {
                                         <div className="flex-container">
                                             <button
                                                 onClick={() => {
-                                                    deleteFromVisibleList(elemToDelete)
+                                                    // deleteFromVisibleList(elemToDelete)
                                                     this.closeModal();
                                                 }}
                                                 className="orange-button mr-10">Confirm

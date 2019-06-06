@@ -167,11 +167,17 @@ function* fetchImageUrl(action) {
 
 function* updateEntityPreference(action) {
     try {
-        const {payload} = action;
+        const {payload:{entity_preference_data,resolve,reject}} = action;
+        console.log(action)
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        const result = yield call(Api.updateEntityPreference, payload, candidateId);
+        const result = yield call(Api.updateEntityPreference, {entity_preference_data}, candidateId);
+        if (result['error']) {
+            return reject(new SubmissionError({_error: result['errorMessage']}));
+        }
+
         yield put({type: Actions.SAVE_USER_INFO, data: result['data']});
+        return resolve("ENtity Updated")
 
     } catch (e) {
         console.log('error', e);

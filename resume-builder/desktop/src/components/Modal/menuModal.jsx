@@ -1,13 +1,64 @@
 import React from 'react';
 import Modal from 'react-modal';
+import {Link} from 'react-router-dom';
+import "./menuModal.scss"
 
 Modal.setAppElement(document.getElementById('react-app'));
 
 export default class MenuModal extends React.Component {
 
+    constructor(props){
+        super(props)
+        this.state ={
+            preferenceList:[],
+            loader:false
+        }
+        this.addItem = this.addItem.bind(this)
+        this.removeItem = this.removeItem.bind(this)
+        this.saveMenuItems = this.saveMenuItems.bind(this)
+        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
+    }
+    componentDidMount(){
+        const {preferenceList} = this.props;
+        if(preferenceList.length){
+            this.setState({preferenceList})
+        }
+    }
+    componentDidUpdate(prevProps){
+        const {preferenceList} = this.props;
+        if(preferenceList !== prevProps.preferenceList){
+            console.log("Did Update")
+            this.setState({preferenceList})
+        }
+    }
+
+    addItem(pos) {
+        console.log("here")
+        let {preferenceList} = this.state;
+        preferenceList[pos -1].active = true;
+        this.setState({preferenceList})
+    }
+
+    removeItem(pos) {
+        let {preferenceList} = this.state;
+        preferenceList[pos -1].active = false
+        this.setState({preferenceList})
+    }
+
+    async saveMenuItems(){
+        this.setState({loader:true})
+        const {updateCategoryEntity,closeMenuModal} = this.props
+        const {preferenceList} = this.state
+        await updateCategoryEntity(preferenceList)
+        this.setState({loader:false})
+        closeMenuModal()
+    }
+
 
     render() {
-
+        const {menu_modal_status,closeMenuModal,formCategoryList} = this.props;
+        const {preferenceList,loader} = this.state
+        console.log(preferenceList)
         return (
             <div className="pr scrollynone">
                 <Modal
@@ -23,25 +74,60 @@ export default class MenuModal extends React.Component {
                             padding:'0',
                         }
                     }}
-                    isOpen={false} 
+                    isOpen={menu_modal_status} 
                     contentLabel="Menu Modal"
                 >
-                    <div class="edit-section-menu">
+                    <div className="edit-section-menu">
                         <strong>Add / remove sections in your resume</strong>
                         <ul className="enable">
-                            <li><a href="/resume-builder/edit/?type=profile"><span className="mr-20 icon-info"></span>Personal Info</a></li>
-                            <li><a href="/resume-builder/edit/?type=education"><span className="mr-20 icon-education"></span>Education</a><span className="icon-closemenu pull-right mt-20"></span></li>
-                            <li><a href="/resume-builder/edit/?type=experience"><span className="mr-20 icon-experience"></span>Experience</a><span className="icon-closemenu pull-right mt-20"></span></li>
-                            <li><a href="/resume-builder/edit/?type=project"><span className="mr-20 icon-projects"></span>Projects</a><span className="icon-closemenu pull-right mt-20"></span></li>
-                            <li><a href="/resume-builder/edit/?type=skill"><span className="mr-20 icon-skills"></span>Skill</a><span className="icon-closemenu pull-right mt-20"></span></li>
-                            <li><a href="/resume-builder/edit/?type=summary"><span className="mr-20 icon-summary"></span>Summary</a></li></ul>
-                         <ul className="disable">  <li><a href="/resume-builder/edit/?type=award"><span className="mr-20 icon-awards"></span>Achievements</a><span className="icon-add pull-right mt-20"></span></li>
-                            <li ><a href="/resume-builder/edit/?type=course"><span className="mr-20 icon-courses"></span>Certifications</a><span className="icon-add pull-right mt-20"></span></li>
-                            <li><a href="/resume-builder/edit/?type=language"><span className="mr-20 icon-languages"></span>Languages</a><span className="icon-add pull-right mt-20"></span></li>
-                            <li><a href="/resume-builder/edit/?type=reference"><span className="mr-20 icon-references"></span>References</a><span className="icon-add pull-right mt-20"></span></li>
+                            {preferenceList.filter(item =>item.active ===true).map((item, key) =>
+                                {   const {link, icon} = formCategoryList[item['entity_id']];
+                                    return(
+                                        <li key={key}>
+                                            <Link to={link}>
+                                                <span className={`mr-20 ${icon}`}></span>
+                                                {item.entity_text}
+                                            </Link>
+                                            {!!(item['entity_id'] !== 1 && item['entity_id'] !== 6) ?
+                                                <span className="icon-closemenu pull-right mt-20" 
+                                                        onClick={this.removeItem.bind(this,item.entity_id)}
+                                                        style={{"backgroundColor":"red"}}></span>:''
+                                            }
+                                        </li>
+                                    )
+                                }
+                            
+                            )}
+                        </ul>
+                         <ul className="disable">
+                            {preferenceList.filter(item =>item.active ===false).map((item, key) =>
+                                    {   const {link, icon} = formCategoryList[item['entity_id']];
+                                        return(
+                                            <li key={key}>
+                                                <Link to={link}>
+                                                    <span className={`mr-20 ${icon}`}></span>
+                                                    {item.entity_text}
+                                                </Link>
+                                                <span className="icon-add pull-right mt-20" 
+                                                    onClick={this.addItem.bind(this,item.entity_id)}
+                                                    style={{"backgroundColor":"yellow"}}></span>
+                                            </li>
+                                        )
+                                    }
+                                
+                            )}
                        </ul >
                     </div>
-                    <div className="flex-container menu-btm-button"><button className="blue-button mr-10" type="button">Cancel</button><button className="orange-button" type="submit">Done</button></div>
+                    <div className="flex-container menu-btm-button">
+                        <button className="blue-button mr-10" type="button" onClick={closeMenuModal}>Cancel</button>
+                        <button className="orange-button" type="submit"onClick={this.saveMenuItems}>
+                            Done
+                            {loader ?
+                                <img alt={"Menu Loading"} className="menu-loading" src={`${this.staticUrl}react/assets/images/menu-loading.gif`}/>:''
+                            }
+
+                        </button>
+                    </div>
                 </Modal>
             </div>
         );

@@ -71,13 +71,13 @@ class Menu extends Component {
     addItem(pos) {
         let {addmore} = this.state;
         addmore[pos -1].active = true;
-        this.setState({addmore,sidenav_active_pos:pos})
+        this.setState({addmore})
     }
 
     removeItem(pos) {
         let {addmore} = this.state;
         addmore[pos -1].active = false
-        this.setState({addmore,sidenav_active_pos:pos})
+        this.setState({addmore})
     }
 
     render() {
