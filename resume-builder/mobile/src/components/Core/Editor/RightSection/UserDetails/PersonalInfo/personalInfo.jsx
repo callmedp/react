@@ -69,6 +69,7 @@ class PersonalInfo extends Component {
     }
 
     async updateInfoBeforeLoss(){
+        console.log("Here")
         if(!this.state.submit){
             const form_data = this.props.info.form.personalInfo;
             let error = false
@@ -96,8 +97,8 @@ class PersonalInfo extends Component {
 
     
 
-    handlePreview() {
-        this.props.history.push('/resume-builder/preview/');
+    async handlePreview() {
+        
     }
 
     removeImage() {
@@ -155,18 +156,11 @@ class PersonalInfo extends Component {
         })
     }
 
-    savePreview(){
-        const {history,previewHandling} = this.props
-        previewHandling(this.updateInfoBeforeLoss,history)
-        this.setState({submit:true})
-    }
-
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {handleSubmit, personalInfo,submitting,previewHandling} = this.props;
+        const {handleSubmit, personalInfo,submitting,personalInfo:{subscription_status},previewHandling,history} = this.props;
         const {editHeading,heading} =this.state;
-        const {subscription_status} = this.props.personalInfo;
         return (
             
         <div className="buildResume">
@@ -274,8 +268,9 @@ class PersonalInfo extends Component {
                             </span>
                         </li>
                     </ul>
-                    <BottomCTC savePreview={this.savePreview} disabled={submitting}
-                                length={length} pos={pos+1} subscription_status={subscription_status}/>
+                    <BottomCTC  disabled={submitting} context={this} history={history}
+                                length={length} pos={pos+1} updateInfoBeforeLoss={this.updateInfoBeforeLoss} 
+                                subscription_status={subscription_status}/>
                 </form>
             </div>
             

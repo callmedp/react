@@ -95,15 +95,14 @@ def remove_transparency(im,bg_colour=(255, 255, 255)):
 @task
 def update_customisations_for_all_templates(candidate_id):
     from resumebuilder.models import Candidate, OrderCustomisation
-
     candidate_obj = Candidate.objects.get(id=candidate_id)
     customisation_objects = OrderCustomisation.objects.filter(candidate_id=candidate_id)
     entity_id_data_mapping = candidate_obj.entity_id_data_mapping
+    entity_id_data_mapping[11] = {'active': True, 'entity_id': 11,'entity_text': "Interest",'priority': 11}
 
     for obj in customisation_objects:
         existing_data = obj.entity_position_eval
         data = []
-
         for item in existing_data:
             d = {key:value for key,value in item.items()}
             d['active'] = entity_id_data_mapping[d['entity_id']]['active']

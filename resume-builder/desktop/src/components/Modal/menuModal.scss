@@ -8,3 +8,10 @@
     position: relative;
     height: 100%;
 }
+.menu-anchor{
+    cursor: default;
+}
+
+.menu-add, .menu-delete{
+    cursor: pointer
+}

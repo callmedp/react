@@ -148,7 +148,7 @@ class Project extends Component {
     render () {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {handleSubmit,submitting,personalInfo:{subscription_status},history,previewHandling,changeOrderingUp,changeOrderingDown} = this.props;
+        const {handleSubmit,submitting,personalInfo:{subscription_status},history,changeOrderingUp,changeOrderingDown} = this.props;
         const {editHeading,heading,till_today} =this.state;
         return(
             <div className="buildResume">
@@ -170,8 +170,9 @@ class Project extends Component {
                                 tillTodayDisable={this.tillTodayDisable}/>
                     <ul className="form">
                         <li className="form__group">
-                            <BottomCTC savePreview={this.savePreview} disabled={submitting}
-                                length={length} pos={pos+1} subscription_status={subscription_status}/>
+                            <BottomCTC  disabled={submitting} context={this} history={history}
+                                length={length} pos={pos+1} updateInfoBeforeLoss={this.updateInfoBeforeLoss} 
+                                subscription_status={subscription_status}/>
                         </li>
                     </ul>
                 </form>

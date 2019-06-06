@@ -513,19 +513,24 @@ export default class Preview extends Component {
                                                     els['alignment'] === 'center') &&
                                                 (els['entity_id'] !== 6 && els['entity_id'] !== 1) &&
                                                 (els['active'])
-                                            ).map((el, index) => {
+                                            ).map((el, index,arr) => {
 
                                                 const entityValue = el;
+                                                {console.log(arr.length)}
                                                 return (
+                                                    
                                                     <li key={index} onClick={() => this.selectSection(entityValue)}
                                                         className={"reorder-content--select-box " + (!!(entityValue['entity_text'] === sectionEntityName) ? " reorder-content--select-box__select" : '')}>
                                                         {entityValue['entity_text']}
                                                         {
                                                             !!(entityValue['entity_text'] === sectionEntityName || (!sectionEntityName) && index === 0) ?
                                                                 < span className="addon-buttons">
-                                                            <span
+                                                            {index !== 0 ?
+                                                            <span 
                                                                 onClick={() => this.moveUpSection(selectedEntity || currentEntity, selected_template)}
-                                                                className="icon-ascend1 mr-5 ml-0"/>
+                                                                className="icon-ascend1 mr-5 ml-0"/>:''
+                                                            }
+                                                            {index !==100 }
                                                             <span
                                                                 onClick={() => this.moveDownSection(selectedEntity || currentEntity, selected_template)}
                                                                 className="icon-descend1 ml-0"/>

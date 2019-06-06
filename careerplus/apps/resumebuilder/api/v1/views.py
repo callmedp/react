@@ -365,6 +365,7 @@ class CandidateResumePreview(APIView):
         current_config = candidate.ordercustomisation_set.filter(template_no=template_id).first()
         entity_position = current_config.entity_position_eval
 
+
         latest_experience, latest_end_date = '', None
         for i in experience:
             if i.is_working:

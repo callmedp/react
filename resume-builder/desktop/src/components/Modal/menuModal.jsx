@@ -83,16 +83,17 @@ export default class MenuModal extends React.Component {
                             <strong>Add / remove sections in your resume</strong>
                             <ul className="enable">
                                 {preferenceList.filter(item =>item.active ===true).map((item, key) =>
-                                    {   const {link, icon} = formCategoryList[item['entity_id']];
+                                    {   const {icon} = formCategoryList[item['entity_id']];
                                         return(
                                             <li key={key}>
-                                                <Link to={link}>
+                                                <a className={'menu-anchor'}>
                                                     <span className={`mr-20 ${icon}`}></span>
                                                     {item.entity_text}
-                                                </Link>
+                                                </a>
                                                 {!!(item['entity_id'] !== 1 && item['entity_id'] !== 6) ?
-                                                    <span className="icon-closemenu pull-right mt-20" 
-                                                            onClick={this.removeItem.bind(this,item.entity_id)}></span>:''
+                                                    <span className="icon-closemenu pull-right mt-20 menu-delete"  
+                                                            onClick={this.removeItem.bind(this,item.entity_id)}
+                                                    ></span>:''
                                                 }
                                             </li>
                                         )
@@ -102,20 +103,20 @@ export default class MenuModal extends React.Component {
                             </ul>
                             <ul className="disable">
                                 {preferenceList.filter(item =>item.active ===false).map((item, key) =>
-                                        {   const {link, icon} = formCategoryList[item['entity_id']];
+                                        {   const {icon} = formCategoryList[item['entity_id']];
                                             return(
                                                 <li key={key}>
-                                                    <Link to={link}>
+                                                    <a className={'menu-anchor'}>
                                                         <span className={`mr-20 ${icon}`}></span>
                                                         {item.entity_text}
-                                                    </Link>
-                                                    <span className="icon-add pull-right mt-20" 
+                                                    </a>
+                                                    <span className="icon-add pull-right mt-20 menu-add" 
                                                         onClick={this.addItem.bind(this,item.entity_id)}></span>
                                                 </li>
                                             )
                                         }
-                                    
-                                )}
+                                
+                                    )}
                             </ul>
                         </div>
 
@@ -124,7 +125,7 @@ export default class MenuModal extends React.Component {
                             <button className="orange-button" type="submit"onClick={this.saveMenuItems}>
                                 Done
                                 {loader ?
-                                    <img alt={"Menu Loading"} className="menu-loading" src={`${this.staticUrl}react/assets/images/menu-loading.gif`}/>:''
+                                    <img alt={"Menu Loading"} className="menu-loading" src={`${this.staticUrl}react/assets/images/loading-button.gif`}/>:''
                                 }
                             </button>
                         </div>

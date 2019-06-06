@@ -124,7 +124,7 @@ class Award extends Component {
     }
 
     render () {
-        const {handleSubmit,submitting,history,previewHandling,personalInfo:{subscription_status},changeOrderingUp,changeOrderingDown} = this.props;
+        const {handleSubmit,submitting,history,personalInfo:{subscription_status},changeOrderingUp,changeOrderingDown} = this.props;
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
         const {editHeading,heading} =this.state;
@@ -148,8 +148,9 @@ class Award extends Component {
                                 heading ={heading}/>
                     <ul className="form">
                         <li className="form__group">
-                            <BottomCTC savePreview={this.savePreview} disabled={submitting}
-                                length={length} pos={pos+1} subscription_status={subscription_status}/>
+                            <BottomCTC  disabled={submitting} context={this} history={history}
+                                length={length} pos={pos+1} updateInfoBeforeLoss={this.updateInfoBeforeLoss} 
+                                subscription_status={subscription_status}/>
                         </li>
                     </ul>
                 </form>

@@ -157,7 +157,7 @@ class Summary extends Component {
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {personalInfo: {subscription_status}, handleSubmit,submitting,history,previewHandling,ui:{suggestions}} = this.props;
+        const {personalInfo: {subscription_status}, handleSubmit,submitting,history,ui:{suggestions}} = this.props;
         const {editHeading,heading,modal_status} =this.state;
         return (
         <div className="buildResume">
@@ -189,8 +189,9 @@ class Summary extends Component {
                             </p>
                         </li>
                     </ul>
-                    <BottomCTC savePreview={this.savePreview} disabled={submitting}
-                                length={length} pos={pos+1} subscription_status={subscription_status}/>
+                    <BottomCTC  disabled={submitting} context={this} history={history}
+                                length={length} pos={pos+1} updateInfoBeforeLoss={this.updateInfoBeforeLoss} 
+                                subscription_status={subscription_status}/>
                 </form>
                 
             </div>

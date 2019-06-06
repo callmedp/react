@@ -28,7 +28,8 @@ export default class ResumeSlider extends Component {
             infinite: true,
             speed: 500,
             slidesToShow: 1,
-            slidesToScroll: 1
+            slidesToScroll: 1,
+            initialSlide: (localStorage.getItem('template') -1) || 0
         };
         const {showtext} = this.props
 
