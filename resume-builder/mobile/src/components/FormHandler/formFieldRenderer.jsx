@@ -97,6 +97,7 @@ export const datepicker =
                             showMonthDropdown
                             disabledKeyboardNavigation
                             disabled={disabled}
+                            disabledNavigation
                             minDate={minDate ? addDays(new Date(minDate),1) : null}
                             
 

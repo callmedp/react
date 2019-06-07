@@ -2,6 +2,7 @@ import {scroller} from "react-scroll/modules";
 
 
 export const scrollOnErrors = (errors,type,offset) =>{
+    console.log(errors)
     let id,pos
     if(type === 'profile'){
         for(let key in errors){

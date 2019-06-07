@@ -158,8 +158,9 @@ class PersonalInfo extends Component {
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {handleSubmit, personalInfo,submitting,personalInfo:{subscription_status},previewHandling,history} = this.props;
+        const {handleSubmit, personalInfo,submitting,personalInfo:{subscription_status},history} = this.props;
         const {editHeading,heading} =this.state;
+        const focus = true
         return (
             
         <div className="buildResume">
@@ -167,6 +168,7 @@ class PersonalInfo extends Component {
             <div className="buildResume__wrap">
                 <div className="buildResume__heading">
                     {!editHeading ?
+                        
                         <React.Fragment>
                             <h1>{heading}</h1>
                             <i className="sprite icon--edit" onClick={()=>{this.setState({editHeading:true})}}></i>

@@ -8,6 +8,7 @@ import Banner from './Banner/banner.jsx';
 import ResumeSlider from './ResumeSlider/resumeSlider.jsx';
 import Testimonial from './Testimonial/testimonial.jsx';
 import queryString from "query-string";
+import {Events, animateScroll as scroll, scrollSpy, scroller} from 'react-scroll'
 
 class Home extends Component {
     
@@ -17,12 +18,22 @@ class Home extends Component {
             'token': ''
         }
         const values = queryString.parse(this.props.location.search);
+        this.scrollTo = this.scrollTo.bind(this);
         const token = (values && values.token) || '';
         this.state.token = token;
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
     }
     componentDidMount() {
         this.props.loginCandidate(this.state.token);
+    }
+
+    scrollTo(elem) {
+        scroller.scrollTo(elem, {
+            duration: 800,
+            delay: 0,
+            smooth: 'easeInOutQuad',
+            offset: -50
+        })
     }
     
     render() {
@@ -127,7 +138,7 @@ class Home extends Component {
                     </div>
 
                     <div className="text-center mt-30">
-                        <a href="#" className="btn btn__medium btn__shadow btn__round btn__primary">Build your resume</a>
+                        <a className="btn btn__medium btn__shadow btn__round btn__primary" onClick={() => this.scrollTo('templates')}>Build your resume</a>
                     </div>
                
                     </section>
