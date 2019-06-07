@@ -5,10 +5,10 @@ export default class  RenderNavItem extends Component {
 
     render(){
         const {label,type,sidenavStatus,title,exist,listOfLinks,changeLink,iconClass,
-            error,showErrorMessage} = this.props
+            error,showErrorMessage,newUser} = this.props
         return( 
             <React.Fragment>
-               {error ?
+               {error || newUser ?
                     <li className={"sidebar__item " + (type === title ? 'sidebar--active' : '') 
                         + (exist || sidenavStatus ? '' : 'hide')} onClick={()=>{showErrorMessage(title)}}>
                             <div 

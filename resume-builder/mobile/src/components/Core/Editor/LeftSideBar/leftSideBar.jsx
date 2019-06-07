@@ -136,6 +136,7 @@ class LeftSideBar extends Component {
                                         {
                                             return(<RenderNavItem label={item.entity_text}
                                                         key={key}
+                                                        newUser={newUser}
                                                         pos={item.entity_id}
                                                         type={type}
                                                         title={entityLinkNameLink[item.entity_id]}
