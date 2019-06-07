@@ -139,12 +139,13 @@ class AddScreenProductForm(forms.ModelForm):
         model = ProductScreen
         fields = [
             'name', 'product_class',
-            'type_product', 'upc', 'inr_price', 'type_flow', 'sub_type_flow']
+            'type_product', 'upc', 'inr_price', 'type_flow','vendor', 'sub_type_flow']
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
         super(AddScreenProductForm, self).__init__(*args, **kwargs)
         form_class = 'form-control col-md-7 col-xs-12'
+        associated_vendor = self.user.vendor_set.all()
         vendor = self.user.get_vendor()
         self.fields['product_class'].widget.attrs['class'] = form_class
         self.fields['product_class'].empty_label = 'Select Product Class'
@@ -182,7 +183,7 @@ class AddScreenProductForm(forms.ModelForm):
         self.fields['name'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
         self.fields['name'].widget.attrs['data-parsley-length'] = "[2, 100]"
         self.fields['name'].widget.attrs['data-parsley-length-message'] = 'Length should be between 2-100 characters.'
-        
+
         self.fields['upc'].widget.attrs['class'] = form_class
         self.fields['upc'].widget.attrs['maxlength'] = 100
         self.fields['upc'].widget.attrs['placeholder'] = 'Add Universal Product Code'
@@ -191,8 +192,25 @@ class AddScreenProductForm(forms.ModelForm):
         self.fields['upc'].widget.attrs['data-parsley-length'] = "[2, 100]"
         self.fields['upc'].widget.attrs['data-parsley-length-message'] = 'Length should be between 2-100 characters.'
 
+        self.fields['vendor'].widget.attrs['class'] = form_class
+        self.fields['vendor'].required = True
+
+        if len(associated_vendor) >1:
+            self.fields['vendor'].queryset = associated_vendor
+        elif len(associated_vendor) == 1:
+            self.fields['vendor'].widget.attrs['disabled'] = True
+        self.fields['vendor'].initial = vendor
         if self.data and int(self.data['type_flow']) not in list(SUB_FLOWS.keys()):
             self.fields.pop('sub_type_flow')
+
+
+    def clean_vendor(self):
+        vendor = self.cleaned_data.get('vendor','')
+
+        if not vendor:
+            raise forms.ValidationError("Please Select the Vendor")
+
+        return vendor
 
 
     def clean_name(self):

@@ -451,7 +451,7 @@ class AddScreenProductView(FormView):
                 return super(
                     AddScreenProductView, self).form_invalid(form)
             productscreen = form.save()
-            productscreen.vendor = vendor
+            # productscreen.vendor = vendor
             productscreen.save()
             productscreen.create_product()
             messages.success(
