@@ -108,13 +108,14 @@ class LeftSideBar extends Component {
         let error = false;
         const obj = formData && formData[formName] || {};
         let syncErrors = obj['syncErrors'] || {};
+        const newUser = localStorage.getItem('newUser')
         if ('fields' in obj) {
             if ('list' in syncErrors) (syncErrors && syncErrors['list'] || []).map(el => (el ? Object.keys(el) : []).map(key => (!!el[key] ? error = true : false)))
             else Object.keys(syncErrors || {}).map(key => (!!syncErrors[key] ? error = true : false));
         }
         return (
             <React.Fragment>
-                <AlertModal modal_status={modal_status} link={link} history={history} closeModal={this.closeModal}/>
+                <AlertModal modal_status={modal_status} link={link} history={history} newUser={newUser} closeModal={this.closeModal}/>
                 {(entity_preference_data.length) ?
                     <div>
                         <div className={"overlay-sidenav"}></div>

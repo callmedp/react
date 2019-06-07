@@ -21,7 +21,7 @@ export default class AlertModal extends Component{
 
     }
     render(){
-        const {modal_status,link,history,closeModal} = this.props;
+        const {modal_status,closeModal,newUser} = this.props;
         return(
             <Modal 
                 isOpen={modal_status} 
@@ -29,17 +29,30 @@ export default class AlertModal extends Component{
                 onRequestClose={this.handleCloseModal}
                 className="alertModal"
                 overlayClassName="Overlay">
-                <div className="alertModal__wrap">
-                    <i className="alertModal__wrap--alert m-auto"></i>
-                    <div className="alertModal__wrap--title text-center mb-15">Are you sure?</div>
-                    <div className="alertModal__wrap--content text-center mb-15">
-                        <p>Some information may be lost as required fields are not filled.</p>
+                {newUser ?
+                    <div className="alertModal__wrap">
+                        <i className="alertModal__wrap--alert m-auto"></i>
+                        <div className="alertModal__wrap--title text-center mb-15">Please save your profile info to continue</div>
+                        {/* <div className="alertModal__wrap--content text-center mb-15">
+                            <p>Some information may be lost as required fields are not filled.</p>
+                        </div> */}
+                        <div className="alertModal__wrap__btn-wrap">
+                            {/* <span className="btn btn-sm btn__primary btn__round w-150" onClick={this.goToNewLink}>Yes, change it!</span> */}
+                            <span className="btn btn-sm btn--outline btn__round w-150" onClick={closeModal}>Ok</span>
+                        </div>
+                    </div>:
+                    <div className="alertModal__wrap">
+                        <i className="alertModal__wrap--alert m-auto"></i>
+                        <div className="alertModal__wrap--title text-center mb-15">Are you sure?</div>
+                        <div className="alertModal__wrap--content text-center mb-15">
+                            <p>Some information may be lost as required fields are not filled.</p>
+                        </div>
+                        <div className="alertModal__wrap__btn-wrap">
+                            <span className="btn btn-sm btn__primary btn__round w-150" onClick={this.goToNewLink}>Yes, change it!</span>
+                            <span className="btn btn-sm btn--outline btn__round w-150" onClick={closeModal}>Cancel</span>
+                        </div>
                     </div>
-                    <div className="alertModal__wrap__btn-wrap">
-                        <span className="btn btn-sm btn__primary btn__round w-150" onClick={this.goToNewLink}>Yes, change it!</span>
-                        <span className="btn btn-sm btn--outline btn__round w-150" onClick={closeModal}>Cancel</span>
-                    </div>
-                </div>
+                }
             </Modal>
         )
     }

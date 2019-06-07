@@ -20,6 +20,10 @@ class EditPreview extends Component {
 
     componentDidMount() {
         this.props.fetchLoaderStatus()
+        if(localStorage.getItem('personalInfo')){
+            localStorage.setItem('newUser',true)
+        }
+
     }
 
     changeLink(id,heading){

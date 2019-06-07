@@ -59,6 +59,9 @@ function* updatePersonalDetails(action) {
     try {
         let {payload: {personalDetails, resolve, reject}} = action;
         delete personalDetails['subscription_status']
+        if(localStorage.getItem('newUSer')){
+            localStorage.removeItem('newUser')
+        }
         if(localStorage.getItem('template')){
             personalDetails = {
                 ...personalDetails,
