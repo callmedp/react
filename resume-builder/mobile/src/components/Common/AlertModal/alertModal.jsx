@@ -30,7 +30,7 @@ export default class AlertModal extends Component{
                 className="alertModal"
                 overlayClassName="Overlay">
                 <div className="alertModal__wrap">
-                    <i className="sprite icon--alert m-auto"></i>
+                    <i className="alertModal__wrap--alert m-auto"></i>
                     <div className="alertModal__wrap--title text-center mb-15">Are you sure?</div>
                     <div className="alertModal__wrap--content text-center mb-15">
                         <p>Some information may be lost as required fields are not filled.</p>

@@ -7,7 +7,8 @@
   	@extend %shadow;
   	flex-direction: column;
   	@include border-radius(4px);
-  	height: 570px;
+	  height: 570px;
+	  overflow: hidden;
 }
 
 .tab-heading {

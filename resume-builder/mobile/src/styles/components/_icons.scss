@@ -73,8 +73,8 @@
   }
 
   &--add-remove {
-    @include size(17px, 17px, block);
-    background-position: -136px -186px;
+    @include size(18px, 17px, block);
+    background-position: -134px -320px;
     position: relative;
     top: 5px;
     margin-bottom: 7px;
@@ -154,13 +154,13 @@
 
   &--delete {
     @include size(12px, 12px, flex);
-    background-position: -139px -211px;
+    background-position: -138px -345px;
     flex: 0 0 12px;
   }
   
   &--add-element {
     @include size(13px, 13px, flex);
-    background-position: -139px -229px;
+    background-position: -138px -362px;
     flex: 0 0 13px;
   }
 
@@ -181,8 +181,8 @@
 
   &--close {
     @include size(12px, 12px, block);
-    background-position: -139px -211px;
-    margin: 8px 0 0 8px;
+    background-position: -138px -345px;
+    margin: 7px 0 0 7px;
   }
  
   &--editTick {
@@ -473,13 +473,6 @@
     @include size(20px, 16px, block);
     background-position: -133px -264px;
   }
-
-  &--alert {
-    @include size(70px, 65px, block);
-    background-position: -141px -254px;
-  }
-
-
 }
 
 

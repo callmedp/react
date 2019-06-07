@@ -2,9 +2,11 @@
 @import '../../../../../styles/variables/mixins.scss';
 
 .edit-section {
-    padding: 20px 0;
+    padding: 20px 0 50px;
     font-weight: 600;
     color: $txt1;
+    position: relative;
+    overflow: hidden;
 
     strong {
         margin: 0 20px;
@@ -15,7 +17,7 @@
         display: block;
         flex: 1 1 auto;
         overflow-y: auto;
-        height: 420px;
+        height: 406px;
 
         li {
             color: $blue1;
@@ -163,11 +165,18 @@
     &--addmore {
         font-weight: 400;
         text-align: center;
+        position: absolute;
+        width: 100%;
+        height: 50px;
+        bottom: 0;
+        color: $blue1;
+        background-color: $white;
+        cursor: pointer;
+        box-shadow: 0 0 10px rgba($black, .1);
 
-        &:hover {
-            background-color: $white !important;
-            color: $blue1 !important;
-        }
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     /*.icon-add {
@@ -260,6 +269,8 @@
     &--addmore {
         font-weight: 400;
         text-align: center;
+        color: $blue1;
+       
 
         &:hover {
             background-color: $white !important;

@@ -115,12 +115,12 @@ class Edit extends Component {
                             )
                         })
                     }
-                    
-                    <li className="edit-section--addmore mt-30" onClick={this.openMenuModal}>
-                        + Add/Remove sections
-                    </li>
                 </ul>
-            </div>
+
+                <div className="edit-section--addmore" onClick={this.openMenuModal}>
+                    + Add/Remove sections
+                </div>
+        </div>
         )
     }
 
