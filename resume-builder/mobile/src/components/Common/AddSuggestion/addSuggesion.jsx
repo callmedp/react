@@ -48,21 +48,22 @@ export default class AddSuggesion extends Component{
                             <div className="Modal--summary--white-box">
                                 {suggestions.map((el,index)=>{
                                         return(
-                                            <div className="Modal--summary--add" key={index}>
-                                                <p>{el}</p>
-                                                <div className="btn btn__blue" onClick={(event)=>{suggestion_selected[index] 
-                                                    ? this.removeSuggesion(index,event): this.addSuggesion(el,index,event) }}>
-                                                    <input type="checkbox" readOnly checked={suggestion_selected[index] ? true : false} id={`add${index}`} />
-                                                    <label htmlFor={`add${index}`}>ADD</label>
+                                                <div className="Modal--summary--add" key={index}>
+                                                    <p>{el}</p>
+                                                    <div className="btn btn__blue" onClick={(event)=>{suggestion_selected[index] 
+                                                        ? this.removeSuggesion(index,event): this.addSuggesion(el,index,event) }}>
+                                                        <input type="checkbox" readOnly checked={suggestion_selected[index] ? true : false} id={`add${index}`} />
+                                                        <label htmlFor={`add${index}`}>ADD</label>
+                                                    </div>
                                                 </div>
-                                            </div>
                                         )
                                     }
                                     )
                                 }
-                                <div className="text-center mb-15 bottom-ctc">
-                                    <a className="btn btn__round btn__primary" onClick={()=>{closeModal(suggestion_selected); this.setState({suggestion_selected:{}})}}>Save & Continue</a>
-                                </div>
+                            </div>
+
+                            <div className="text-center bottom-ctc">
+                                <a className="btn btn__round btn__primary" onClick={()=>{closeModal(suggestion_selected); this.setState({suggestion_selected:{}})}}>Save & Continue</a>
                             </div>
                         </React.Fragment> :
                         <div className="Modal--summary--white-box">
