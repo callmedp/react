@@ -4,7 +4,7 @@
 .bottom-ctc,
 .btn-wrap {
     @include size(100%, 55px, flex);
-    position: absolute;
+    position: fixed;
     bottom: 0;
     box-shadow: 0 0 10px $box-shadow-light;
     z-index: 2;
@@ -21,6 +21,5 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        align-self: center;
     }
 } 

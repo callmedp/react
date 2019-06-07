@@ -62,7 +62,7 @@ export default class AddSuggesion extends Component{
                                 }
                             </div>
 
-                            <div className="text-center bottom-ctc">
+                            <div className="text-center Modal--summary--bottom-ctc">
                                 <a className="btn btn__round btn__primary" onClick={()=>{closeModal(suggestion_selected); this.setState({suggestion_selected:{}})}}>Save & Continue</a>
                             </div>
                         </React.Fragment> :
