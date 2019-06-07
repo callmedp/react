@@ -19,6 +19,9 @@ class EditPreview extends Component {
 
     componentDidMount() {
         this.props.fetchEntityInfo();
+        if(localStorage.getItem('personalInfo')){
+            localStorage.setItem('newUser',true)
+        }
     }
 
 

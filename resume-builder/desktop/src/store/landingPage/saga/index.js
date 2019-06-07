@@ -36,7 +36,6 @@ function* loginCandidate(action) {
         }
 
         if (result['error']) {
-            console.log('error here and now returning');
             window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
             return;
             //redirect code here

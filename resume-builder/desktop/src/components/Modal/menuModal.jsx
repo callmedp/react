@@ -27,13 +27,11 @@ export default class MenuModal extends React.Component {
     componentDidUpdate(prevProps){
         const {preferenceList} = this.props;
         if(preferenceList !== prevProps.preferenceList){
-            console.log("Did Update")
             this.setState({preferenceList})
         }
     }
 
     addItem(pos) {
-        console.log("here")
         let {preferenceList} = this.state;
         preferenceList[pos -1].active = true;
         this.setState({preferenceList})
@@ -58,7 +56,6 @@ export default class MenuModal extends React.Component {
     render() {
         const {menu_modal_status,closeMenuModal,formCategoryList} = this.props;
         const {preferenceList,loader} = this.state
-        console.log(preferenceList)
         return (
             <div className="pr scrollynone">
                 <Modal
@@ -82,7 +79,7 @@ export default class MenuModal extends React.Component {
                         <div className="edit-section-menu">
                             <strong>Add / remove sections in your resume</strong>
                             <ul className="enable">
-                                {preferenceList.filter(item =>item.active ===true).map((item, key) =>
+                                {preferenceList.filter(item =>item.active ===true && item.entity_id !==11).map((item, key) =>
                                     {   const {icon} = formCategoryList[item['entity_id']];
                                         return(
                                             <li key={key}>
@@ -102,7 +99,7 @@ export default class MenuModal extends React.Component {
                                 )}
                             </ul>
                             <ul className="disable">
-                                {preferenceList.filter(item =>item.active ===false).map((item, key) =>
+                                {preferenceList.filter(item =>item.active ===false && item.entity_id !==11).map((item, key) =>
                                         {   const {icon} = formCategoryList[item['entity_id']];
                                             return(
                                                 <li key={key}>

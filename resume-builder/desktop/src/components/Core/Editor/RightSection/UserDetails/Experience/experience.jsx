@@ -60,7 +60,6 @@ class Experience extends Component {
 
     componentWillUnmount() {
         let {formData: {experience: {values, syncErrors}}} = this.props;
-        console.log('-syncErrors-   -', syncErrors, values);
         let error = false;
         (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el || {}).map(key => (!!el[key] ? error = true : false)))
         if (!error && !this.state.submit) this.props.bulkUpdateOrCreate(values && values['list'])
@@ -86,34 +85,6 @@ class Experience extends Component {
 
     }
 
-
-    // handleSuggestion(currentField, fields, index) {
-    //     // console.log('---', currentField, fields);
-    //     this.setState({
-    //         fieldArray: fields,
-    //         currentIndex: index
-
-    //     })
-    //     this.props.fetchJobTitles(currentField.job_profile && currentField.job_profile.value || '', 'experience');
-    //     this.props.setSuggestionType('experience')
-    //     this.props.showSuggestionModal();
-    // }
-
-    // handleSuggestionSubmit(suggestionsArray) {
-    //     const {ui: {suggestions}} = this.props;
-    //     let suggestionsList = "";
-    //     (suggestions || []).filter((el, index) => suggestionsArray.indexOf(index) > -1).map((el, index) =>
-    //         suggestionsList += (index !== 0 ? "\n" : '') + el
-    //     )
-    //     let {fieldArray, currentIndex} = this.state;
-    //     let currentField = fieldArray && fieldArray.get(currentIndex)
-    //     console.log("dfdfdfdfdfd", currentField);
-    //     currentField['work_description'] = suggestionsList;
-    //     fieldArray.remove(currentIndex);
-    //     fieldArray.insert(currentIndex, currentField)
-    //     this.props.hideSuggestionModal()
-    // }
-
     async openModal(fields,index){
 
         const {job_profile:{label}} = fields.get(index)
@@ -122,7 +93,6 @@ class Experience extends Component {
     }
 
     closeModal(suggestions){
-        console.log(suggestions)
         const {fields,currentIndex} = this.state
         const currentField = fields.get(currentIndex)
         if(Object.keys(suggestions).length){

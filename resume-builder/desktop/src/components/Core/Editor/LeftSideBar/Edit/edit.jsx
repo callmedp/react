@@ -69,7 +69,7 @@ class Edit extends Component {
 
     render() {
         const {type, preferenceList, nextLink, elemToDelete,menu_modal_status} = this.state;
-        let {formData, ui: {formName, showMoreSection},updateCategoryEntity} = this.props;
+        let {formData, ui: {formName},updateCategoryEntity} = this.props;
         let error = false;
         const obj = formData && formData[formName] || {};
         let syncErrors = obj['syncErrors'] || {};

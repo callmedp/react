@@ -25,7 +25,6 @@ class Reference extends Component {
     }
 
     async handleSubmit(values, entityLink) {
-        console.log('-entitty--', entityLink);
 
         const {list} = values;
         if (list.length) {

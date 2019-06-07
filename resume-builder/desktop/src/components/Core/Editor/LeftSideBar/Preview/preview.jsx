@@ -516,7 +516,6 @@ export default class Preview extends Component {
                                             ).map((el, index,arr) => {
 
                                                 const entityValue = el;
-                                                {console.log(arr.length)}
                                                 return (
                                                     
                                                     <li key={index} onClick={() => this.selectSection(entityValue)}

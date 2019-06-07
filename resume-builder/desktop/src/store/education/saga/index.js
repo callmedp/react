@@ -72,7 +72,6 @@ function* updateUserEducation(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
 
         const {id} = userEducation;
-        console.log('--user Education-');
 
         yield put({type: UPDATE_UI, data: {loader: true}})
 

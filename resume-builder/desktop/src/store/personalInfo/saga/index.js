@@ -72,7 +72,6 @@ function* getPersonalDetails(action) {
 function* getInterestList(action){
     try{
         const result = yield call(Api.fetchInterestList);
-        console.log(result)
         if (result['error']) {
             console.log('error');
         }
@@ -83,7 +82,6 @@ function* getInterestList(action){
             updated_data[key] = {'value':key,'label':data[el]}
         })
 
-        console.log(updated_data)
         yield put({type: Actions.SAVE_INTEREST_LIST,data:updated_data})
 
     }catch (e) {
@@ -168,7 +166,6 @@ function* fetchImageUrl(action) {
 function* updateEntityPreference(action) {
     try {
         const {payload:{entity_preference_data,resolve,reject}} = action;
-        console.log(action)
         const candidateId = localStorage.getItem('candidateId') || '';
 
         const result = yield call(Api.updateEntityPreference, {entity_preference_data}, candidateId);

@@ -67,7 +67,6 @@ function* fetchSelectedTemplateImage(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
         yield put({type: UPDATE_UI, data: {loader: true}});
         const {payload:{templateId,resolve,reject,isModal}} = action;
-        console.log(templateId)
         const result = yield call(Api.fetchTemplateImages, candidateId, templateId)
 
         if (result['error']) {
@@ -168,7 +167,6 @@ function* reorderSection(action) {
             console.log('error');
         }
         let {data: {data}} = result;
-        // console.log('order ----', JSON.parse(data));
         data = {
             entity_position: data
         }

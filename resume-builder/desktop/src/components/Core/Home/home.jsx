@@ -279,7 +279,7 @@ class Home extends Component {
                         </ul>
                     </div>
                     <form id="feedback">
-                        <div class="reachout-tous">
+                        <div className="reachout-tous">
                             <h2>Reach out to us</h2>
                             <strong>Feel free to share your feedback with us</strong>
                             

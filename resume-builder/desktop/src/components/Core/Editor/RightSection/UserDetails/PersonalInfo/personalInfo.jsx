@@ -23,9 +23,6 @@ export class PersonalInfo extends Component {
         this.getImageURI = this.getImageURI.bind(this);
         this.removeImage = this.removeImage.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.fetchInterestList = this.fetchInterestList.bind(this);
-
-
         this.state = {
             'imageURI': '',
             'imageURL': '',
@@ -66,17 +63,6 @@ export class PersonalInfo extends Component {
         let error = false;
         Object.keys(syncErrors || {}).map(key => (!!syncErrors[key] ? error = true : false));
         if (!error && !this.state.submit) this.props.onSubmit(values, this.state.imageURL, this.state.flag)
-    }
-
-    async fetchInterestList(inputValue, callback) {
-        // try {
-        //     const interests = await this.props.fetchInterest(inputValue);
-        //     const listData = (skills && skills.results || []).map(skill => ({value: skill.id, label: skill.name}))
-        //     callback(listData);
-        // } catch (e) {
-        //     console.log('--error-', e);
-        // }
-        return [];
     }
 
 

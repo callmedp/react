@@ -21,7 +21,6 @@ export default class AlertModal extends React.Component {
 
     render() {
         const {ui: {alertModal, alertType}, nextLink, deleteFromVisibleList, elemToDelete} = this.props;
-        console.log('--next Link-', nextLink, elemToDelete);
         return (
             <React.Fragment>
                 {

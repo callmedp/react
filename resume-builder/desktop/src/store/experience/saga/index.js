@@ -119,8 +119,6 @@ function* handleExperienceSwap(action) {
 
         data = {list: data};
 
-        console.log('--data in the ---', data);
-
         yield put({type: Actions.SAVE_USER_EXPERIENCE, data: data})
 
         return resolve('User Experience  Info saved successfully.');

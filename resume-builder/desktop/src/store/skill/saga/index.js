@@ -50,7 +50,6 @@ function* fetchUserSkill(action) {
 
         let {data: {results}} = result;
 
-        console.log('--results---', results)
         if (!results.length) {
             const state = yield select();
             let {skill: {list}} = state;

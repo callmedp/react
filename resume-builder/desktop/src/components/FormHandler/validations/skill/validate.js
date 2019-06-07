@@ -1,5 +1,4 @@
 const validate = values => {
-    ////console.log('--valid1--', values);
     const errors = {};
 
     const listErrors = []
@@ -12,7 +11,6 @@ const validate = values => {
     });
     if (listErrors.length) {
         errors.list = listErrors;
-        ////console.log(errors);
         return errors;
     }
     return errors;
