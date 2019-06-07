@@ -305,3 +305,19 @@ class SendMail():
 
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             self.process(to, send_dict, data)
+
+        elif mail_type == "CERTIFICATE_AND_ASSESMENT":
+            send_dict['subject'] = data['subject']
+            send_dict['template'] = 'emailers/candidate/assesment_completed.html'
+            send_dict['from_email'] = settings.CONSULTANTS_EMAIL
+            headers_dict = {'Reply-To': settings.REPLY_TO}
+            send_dict['header'] = headers_dict
+            self.process(to, send_dict, data)
+
+        elif mail_type == "CERTIFICATE_AND_ASSESMENT":
+            send_dict['subject'] = data['subject']
+            send_dict['template'] = 'emailers/candidate/assesment_completed.html'
+            send_dict['from_email'] = settings.CONSULTANTS_EMAIL
+            headers_dict = {'Reply-To': settings.REPLY_TO}
+            send_dict['header'] = headers_dict
+            self.process(to, send_dict, data)

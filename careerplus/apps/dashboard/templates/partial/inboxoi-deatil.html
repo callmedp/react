@@ -307,6 +307,25 @@
                         </datalist>
                     </li>
                 {% endfor %}
+          
+          {% elif oi.product.type_flow == 16 %}
+                {% for op in ops %}
+                    <li>
+                        <datalist class="col-sm-3">
+                          {{op.created.date}}
+                        </datalist>
+                        <datalist class="col-sm-6">
+                            {{op.get_user_oi_status}}
+                        </datalist>
+                        <datalist class="col-sm-3 text-right">
+                          {% if op.oi_status == 101 %}
+                              <a href="#" target="_blank">Take Test</a>
+                          {% elif op.oi_draft %}
+                              <a href="{% url "dashboard:dashboard-resumedownload" oi.order.pk %}?path={{op.oi_draft.name}}">Download</a>
+                          {% endif %}
+                        </datalist>
+                    </li>
+                {% endfor %}
 
             {% endif %}
           

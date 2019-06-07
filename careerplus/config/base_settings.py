@@ -413,6 +413,7 @@ CLICK_TRACKING = 'https://www3.shine.com/click-tracking/'
 COURSE_SLUG = ['course', ]
 WRITING_SLUG = ['writing', 'resume']
 SERVICE_SLUG = ['service', ]
+ASSESSMENT_SLUG = ['assessment']
 # delivery slug
 NORMAL_DELIVERY_SLUG = ['normal', ]
 EXPRESS_DELIVERY_SLUG = ['express', ]
@@ -483,11 +484,10 @@ CCAVENUE_URL = 'https://secure.ccavenue.com/transaction/transaction.do?command=i
 SESSION_CACHE_ALIAS = 'session'
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
-
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = PROJECT_DIR + '/careerplus/config/code-learning-key.json'
 
-
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 365  # 1 year
+CONSOLE_SESSION_TIMEOUT = 60 * 60 * 24
 
 CMS_STATIC_TEMP_DICT = {
     1: 'cms_static.html',

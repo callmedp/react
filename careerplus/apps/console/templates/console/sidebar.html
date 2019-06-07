@@ -77,6 +77,7 @@
         <li><a><i class="fa fa-list-alt"></i> Task <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
               <li><a href="{% url 'console:tasks:generate-autologintoken' %}">Generate AutoLogin</a></li>
+              <li><a href="{% url 'console:tasks:generate-pixel-tracker' %}">Generate Pixel Tracker</a></li>
               <li><a href="{% url 'console:tasks:generate-encrypted-urls' %}">Generate Encoded URL</a></li>
               <li><a href="{% url 'console:tasks:tasklist' %}">Task List</a></li>
               {% if perms.scheduler.can_download_product_list%}
@@ -407,6 +408,9 @@
                 <li><a href="{% url "console:queue-whatsappjoblist" %}">Whatsapp Jobs</a></li>
             {% endif %}
 
+            {% if perms.order.can_show_certification_queue %}
+                <li><a href="{% url "console:queue-certification" %}">Certifications/Asessment Queue</a></li>
+            {% endif %}
             {% if perms.order.can_show_domestic_profile_update_queue %}
                 <li><a href="{% url "console:queue-domesticprofileupdate" %}">Domestic Profile Update</a></li>
             {% endif %}

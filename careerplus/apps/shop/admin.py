@@ -97,6 +97,7 @@ class ProductAdmin(admin.ModelAdmin):
     inlines = [CategoryInline, RelatedProductInline, ChildProductInline, VariationProductInline,
         FAQuestionInline, AttributeInline, ProductExtraInfoInline]
     prepopulated_fields = {"slug": ("name",)}
+    search_fields = ('name',)
 
 # class ProductAdmin(admin.ModelAdmin):
 #     list_display = ['id', 'name']
@@ -123,7 +124,7 @@ class DeliveryServiceAdmin(admin.ModelAdmin):
 
 
 class ShineProfileDataAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'type_flow', 'sub_type_flow', 'priority_value']
+    list_display = ['id', 'name', 'type_flow', 'sub_type_flow', 'priority_value', 'vendor']
 
     def save_model(self, request, obj, form, change):
         resp = ShineProfileDataUpdate().update_shine_profile_data()
@@ -140,6 +141,10 @@ class ShineProfileDataAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         return False
 
+class SkillAdmin(admin.ModelAdmin):
+    search_fields = ('name',)
+
+
 admin.site.register(models.Category, CategoryAdmin)
 admin.site.register(models.Attribute, AttributeAdmin)
 admin.site.register(models.Keyword)
@@ -149,4 +154,5 @@ admin.site.register(models.Product, ProductAdmin)
 admin.site.register(models.AttributeOptionGroup, OptionGroupAdmin)
 admin.site.register(models.DeliveryService, DeliveryServiceAdmin)
 admin.site.register(models.ShineProfileData, ShineProfileDataAdmin)
+admin.site.register(models.Skill, SkillAdmin)
 # admin.site.register(models.ProductExtraInfo, ProductExtraInfoAdmin)

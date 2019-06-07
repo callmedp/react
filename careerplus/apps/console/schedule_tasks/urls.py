@@ -23,4 +23,9 @@ urlpatterns = [
     url(r'^download-product-list/$',
         views.DownloadProductListView.as_view(),
         name='download-product-list'),
+
+    url(r'^generate-pixel-tracker/$',
+        views.GeneratePixelTracker.as_view(),
+        name='generate-pixel-tracker'),
+
 ]

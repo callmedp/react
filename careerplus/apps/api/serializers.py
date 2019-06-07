@@ -10,6 +10,7 @@ from rest_framework import serializers
 from order.models import Order, OrderItem
 from shop.models import Product, ShineProfileData,Category
 from payment.models import PaymentTxn
+from partner.models import Certificate, Vendor
 from blog.models import *
 from users.models import User
 
@@ -315,6 +316,53 @@ class ShineDataFlowDataSerializer(ModelSerializer):
         if obj.image:
             return obj.image.url
 
+
+class CertificateSerializer(ModelSerializer):
+    skill = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Certificate
+        fields = ('name', 'skill',)
+
+
+    def get_skill(self, obj):
+        if obj.skill:
+            k = list(map(lambda x: x.lower(), obj.skill.split(',')))
+            return k
+
+class VendorCertificateSerializer(ModelSerializer):
+    certificate_set = CertificateSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Vendor
+        fields = ("name", "certificate_set")
+
+
+class ImportCertificateSerializer(Serializer):
+
+    class Meta:
+        fields = (
+            'name', 'skill', 'vendor_certificate_id', 'active_from',
+            'expiry'
+        )
+
+    def __init__(self, *args, **kwargs):
+        super(ImportCertificateSerializer, self).__init__(*args, **kwargs)
+        context = kwargs.get('context', None)
+        if context:
+            self.vendor_provider = context.get('vendor_provider', None)
+
+    name = serializers.CharField()
+    skill = serializers.CharField()
+    vendor_certificate_id = serializers.CharField()
+    active_from = serializers.CharField()
+    expiry = serializers.CharField()
+    vendor_provider = serializers.SerializerMethodField()
+    overallScore = serializers.CharField()
+    max_score = serializers.CharField()
+
+    def get_vendor_provider(self, obj):
+        return self.vendor_provider
 
 class TalentEconomySerializer(SerializerFieldsMixin, ListSerializerContextMixin, ListSerializerDataMixin,ModelSerializer):
 

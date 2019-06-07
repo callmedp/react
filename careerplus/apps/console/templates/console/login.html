@@ -36,18 +36,20 @@
 
       <div class="login_wrapper">
         <div class="animate form login_form">
-          <section class="login_content">
+          
+          {% if messages %}
+            {% for message in messages %}
+
+              <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              {{ message }}</div>
+
+            {% endfor %}
+          {% endif %}
+
+          <section class="login_content" id="login-section">
             <form id="loginform" method="post" ".">
               <h1>Console Login </h1>
-              {% if messages %}
-                    {% for message in messages %}
-
-                    <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-
-                    {{ message }}</div>
-                    {% endfor %}
-                {% endif %}
 
               {% csrf_token %}
               <div>
@@ -62,7 +64,7 @@
               <div class="clearfix"></div>
               <div>
                 <button class="btn btn-default submit" type="submit" >Log in</button>
-                <!--a class="reset_pass" href="{% url "console:forgot-password" %}">Forgot your password?</a-->
+                <button class="btn btn-default submit" id="forgot-password-button" type="button" onclick="swapVisibleSection();">Forgot Password</button>
               </div>
 
               
@@ -80,6 +82,26 @@
         
             </form>
           </section>
+
+          <section id="forgot-password-section" style="display: none;">
+            <center><h3>Forgot Password</h3></center>
+            <br><br>
+            <form id="forgot-password-form" method="post" ".">
+              {% csrf_token %}
+              <div>
+                <input type="email" required class="form-control formfield" placeholder="Email / Username"  name="username" 
+                maxlength="60"/>
+                <input type="hidden" class="form-control formfield" name="forgot_password_flow" value="true"/>
+                <p class="js-error"></p>
+              </div>
+              <br><br>
+              <center>
+                <button class="btn btn-default submit" type="submit">Submit</button>
+                <button class="btn btn-default submit" type="button" onclick="swapVisibleSection();">Cancel</button>
+              </center>
+            </form>
+          </section>
+
         </div>
       
       </div>

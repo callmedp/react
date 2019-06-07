@@ -92,8 +92,11 @@ class SkillPageView(DetailView, SkillPageMixin):
         prd_text = None
         meta_desc = None
         prod_id_list = []
+
         try:
-            products = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=self.pk)
+            products = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=self.pk).exclude(pTF=16)
+            certifications = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=self.pk, pTF=16)
+
             for prd in products:
                 if prd.pTP == 1:
                     prd_vars = json.loads(prd.pVrs)
@@ -177,6 +180,7 @@ class SkillPageView(DetailView, SkillPageMixin):
             "top_3_prod": top_3_prod,
             "top_4_vendors": top_4_vendors,
             "products": products,
+            "certifications": certifications,
             'site': settings.SITE_PROTOCOL + "://" + settings.SITE_DOMAIN,
             "page_reviews": prod_reviews[0:4] if self.request.flavour else page_reviews,
             'url': settings.SITE_PROTOCOL + "://" + self.object.video_link,

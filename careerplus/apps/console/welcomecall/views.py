@@ -50,6 +50,9 @@ class WelcomeCallInfo(object):
         for data in order_items:
             data_dict = {}
             oi = data.get('oi')
+            # Do not consider assesment items in welcome call
+            if oi.product.type_flow == 16:
+                continue
             addons = data.get('addons')
             variations = data.get('variations')
             combos = data.get('combos')

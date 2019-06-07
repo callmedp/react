@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 
 from .views import ConsoleLoginView, ConsoleDashboardView, ConsoleLogoutView, \
-    ConsoleForgotPasswordView, ConsolePasswordResetView, ConsoleAutoLoginView
+    ConsoleResetPasswordView, ConsoleAutoLoginView
 from . import (
     shop_view, vendor_view, blog_view, order_view,
     refund_view, wallet_view, university_views, product_skill_view)
@@ -31,9 +31,8 @@ urlpatterns = [
 urlpatterns += [
     url(r'^$', ConsoleDashboardView.as_view(), name='dashboard'),
     url(r'^login/$', ConsoleLoginView.as_view(), name='login'),
+    url(r'^reset-password/$', ConsoleResetPasswordView.as_view(), name='reset-password'),
     url(r'^logout/$', ConsoleLogoutView.as_view(), name='logout'),
-    url(r'^forgot-password/$', ConsoleForgotPasswordView.as_view(), name='forgot-password'),
-    url(r'^reset_password/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', ConsolePasswordResetView.as_view(),name='reset_password'),
     url(r'^autologin/$', ConsoleAutoLoginView.as_view(), name='autologin')
 ]
 
@@ -302,6 +301,9 @@ urlpatterns += [
         order_view.WhatsappListQueueView.as_view(),
         name='queue-whatsappjoblist'),
 
+    url(r'^queue/certification-queue/$',
+        order_view.CertficationProductQueueView.as_view(),
+        name='queue-certification'),
 
     url(r'^queue/domesticprofileupdate/$',
         order_view.DomesticProfileUpdateQueueView.as_view(),

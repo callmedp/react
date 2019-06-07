@@ -79,3 +79,55 @@
 
 
 
+.skill-tabWrap {
+  .tabs {
+    border-bottom: 1px solid $border-grey-c1;
+    padding: 0 15px;
+
+    .tab-link {
+      display: inline-block;
+      border: 1px solid transparent;
+      border-bottom: 1px solid transparent;
+      border-top: 3px solid transparent;
+      background-color: $bg-blue;
+      color: $txt-white;
+      position: relative;
+      top: 1px;
+      padding: 10px 20px;
+      display: inline-block;
+      font-size: 100%;
+      color: $txt-white;
+
+      &:not(:last-child) {
+        margin-right: 15px;
+      }
+
+      .new {
+        @include border-radius(3px);
+        background-color: $bg-yellow;
+        padding: 0 5px 1px;
+        color: $txt-grey-333;
+        font-size: $font-size-xs;
+      }
+    }
+
+    .current {
+      color: $txt-grey-666;
+      border: 1px solid $border-grey-c1;
+      border-top: 3px solid $bg-blue;
+      background-color: $bg-white;
+      border-bottom: 1px solid $bg-white;
+      top: 2px;
+      color: $txt-grey-333;
+    }
+  }
+
+  .tab-content{
+    display: none;
+    padding: 0 15px 15px;
+  }
+
+  .tab-content.current{
+    display: inherit;
+  }
+}
