@@ -228,6 +228,25 @@ export const renderTextArea = ({
 
 )
 
+const dropdownStyles = {
+    container: styles => ({
+                         ...styles, 
+                         borderTopLeftRadius: 0,
+                         borderBottomLeftRadius: 0, 
+                         position: 'relative', 
+                         flex: '1 1 auto',
+                         width: '1%',
+                         marginBottom: 0,
+                         border: '1px solid #eaeaea',
+                         padding: '1rem 1.2rem',
+                         borderRadius: '.5rem',
+                         backgroundColor: '#fff',
+                         fontFamily: 'inherit',
+                         fontSize: '1.4rem',
+                         '-webkit-appearance': 'none',
+                         padding:0 }),
+}
+
 export const renderAsyncCreatableSelect = ({
     input,
     loadOptions,
@@ -260,6 +279,7 @@ export const renderAsyncCreatableSelect = ({
                                 // placeholder={input.value}
                                 // value={input.value}
                                 // isMulti={isMulti}
+                                styles={dropdownStyles}
                                 autoComplete="off"
                                 // closeMenuOnSelect={closeMenuOnSelect}
                                 onBlur={event => event.preventDefault()}
