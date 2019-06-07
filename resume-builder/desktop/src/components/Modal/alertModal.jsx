@@ -20,11 +20,43 @@ export default class AlertModal extends React.Component {
     }
 
     render() {
-        const {ui: {alertModal, alertType}, nextLink, deleteFromVisibleList, elemToDelete} = this.props;
+        const {ui: {alertModal}, nextLink, newUser} = this.props;
+        console.log(newUser)
         return (
             <React.Fragment>
                 {
-                    alertType === 'error' ? <div className="pr alert-modal">
+                    newUser  ? 
+                    <div className="pr alert-modal">
+
+                            <Modal
+                                style={{
+                                    content: {
+                                        left: '0',
+                                        right: '0',
+                                        top: '10%',
+                                        bottom: '0',
+                                        width: '450px',
+                                        margin: 'auto',
+                                        height: '280px',
+                                    }
+                                }}
+                                isOpen={alertModal}
+                                onRequestClose={this.closeModal}
+                                contentLabel="Example Modal"
+                                shouldCloseOnOverlayClick={false}
+                            >
+                                <div className="pr">
+                                    <div className="alert-modal">
+                                        <span className="icon-alert"></span>
+                                        <p className="mb-3"><strong>Please save your profile info to continue</strong>  </p>
+                                        <div className="flex-container">
+                                            <button className="blue-button" onClick={this.closeModal}>OK</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Modal>
+                        </div>:
+                        <div className="pr alert-modal">
 
                             <Modal
                                 style={{
@@ -61,44 +93,8 @@ export default class AlertModal extends React.Component {
                                     </div>
                                 </div>
                             </Modal>
-                        </div> :
-                        <div className="pr alert-modal">
-
-                            <Modal
-                                style={{
-                                    content: {
-                                        left: '0',
-                                        right: '0',
-                                        top: '10%',
-                                        bottom: '0',
-                                        width: '450px',
-                                        margin: 'auto',
-                                        height: '280px',
-                                    }
-                                }}
-                                isOpen={alertModal}
-                                onRequestClose={this.closeModal}
-                                contentLabel="Example Modal"
-                                shouldCloseOnOverlayClick={false}
-                            >
-                                <div className="pr">
-                                    <div className="alert-modal">
-                                        <span className="icon-alert"></span>
-                                        <p>Do you really want to <strong>remove this section?</strong></p>
-                                        <div className="flex-container">
-                                            <button
-                                                onClick={() => {
-                                                    // deleteFromVisibleList(elemToDelete)
-                                                    this.closeModal();
-                                                }}
-                                                className="orange-button mr-10">Confirm
-                                            </button>
-                                            <button className="blue-button" onClick={this.closeModal}>Cancel</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </Modal>
-                        </div>
+                        </div> 
+                        
                 }
             </React.Fragment>
         )

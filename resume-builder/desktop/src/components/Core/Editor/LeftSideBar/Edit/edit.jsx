@@ -73,6 +73,7 @@ class Edit extends Component {
         let error = false;
         const obj = formData && formData[formName] || {};
         let syncErrors = obj['syncErrors'] || {};
+        const newUser = localStorage.getItem('newUser')
         if ('fields' in obj) {
             if ('list' in syncErrors) (syncErrors && syncErrors['list'] || []).map(el => (el ? Object.keys(el) : []).map(key => (!!el[key] ? error = true : false)))
             else Object.keys(syncErrors || {}).map(key => (!!syncErrors[key] ? error = true : false));
@@ -89,7 +90,7 @@ class Edit extends Component {
                 <AlertModal {...this.props}
                             nextLink={nextLink}
                             elemToDelete={elemToDelete}
-                            // deleteFromVisibleList={this.deleteFromVisibleList}
+                            newUser={newUser}
                 />
                 <strong>Complete your information</strong>
                 <ul>
@@ -100,13 +101,13 @@ class Edit extends Component {
                                 <li key={index}
                                     className={(type === itemType ? ' edit-section--active' : '')}>
                                     {
-                                        !!(error) ?
+                                        !!(error || newUser) ?
                                             <div onClick={() => this.showErrorMessage(link)} className={"non-link"}>
                                                 <span className={'mr-20 ' + icon}></span>
                                                 {elem['entity_text']}
                                             </div>
                                             :
-                                            <Link to={link}>
+                                            <Link to={link} >
                                                 <span className={'mr-20 ' + icon}></span>
                                                 {elem['entity_text']}
                                             </Link>

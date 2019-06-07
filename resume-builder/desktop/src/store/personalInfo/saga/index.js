@@ -95,6 +95,9 @@ function* updatePersonalDetails(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
         delete personalDetails['subscription_status']
+        if(localStorage.getItem('newUser')){
+            localStorage.removeItem('newUser')
+        }
         if(localStorage.getItem('selected_template')){
             personalDetails = {
                 ...personalDetails,
