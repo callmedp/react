@@ -24,11 +24,12 @@ class Header extends Component {
                 {page === 'edit' ?
                     <React.Fragment>
                         <div className="header__left">
-                            <button role="button" className="menu">
+                            <button role="button" className="menu mr-10">
                                 <i className="sprite icon--back-white" onClick={()=>{history.push('/resume-builder')}}></i>
                             </button>
+                            <span>Customise your resume</span>
                         </div>
-                        <Link to={'/resume-builder'} className="btn btn__round btn--outline">Back to home</Link>
+                        
                     </React.Fragment>
                     : 
                     page === 'preview' ?
