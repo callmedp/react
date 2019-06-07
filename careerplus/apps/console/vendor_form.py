@@ -37,6 +37,7 @@ from shop.utils import FIELD_FACTORIES, PRODUCT_TYPE_FLOW_FIELD_ATTRS
 class AddScreenFaqForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
         super(AddScreenFaqForm, self).__init__(*args, **kwargs)
         form_class = 'form-control col-md-7 col-xs-12'
         self.fields['text'].widget.attrs['class'] = form_class
@@ -51,10 +52,21 @@ class AddScreenFaqForm(forms.ModelForm):
 
         self.fields['answer'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
 
+        self.fields['vendor'].widget.attrs['class'] = form_class
+        self.fields['vendor'].queryset = user.vendor_set.all()
+        self.fields['vendor'].initial = user.vendor_set.first()
+        self.fields['vendor'].required = True
         
     class Meta:
         model = ScreenFAQ
-        fields = ('text', 'answer')
+        fields = ('text', 'answer','vendor')
+
+
+    def clean_vendor(self):
+        vendor = self.cleaned_data.get('vendor','')
+        if not vendor:
+            raise forms.ValidationError("Select the Vendor")
+        return vendor
 
         
     def clean_text(self):
