@@ -1,5 +1,6 @@
 
 function order_get_details(o_id,key,element){
+
     btn = event.target;
      btn.setAttribute('disabled',true);
     if(o_id != "undefined"){
@@ -10,7 +11,7 @@ function order_get_details(o_id,key,element){
            "fl":key
     },
     dataType: "json",
-    success: function(data) {
+    success: function(data,textStatus, jqXHR) {
      btn.setAttribute('disabled',true);
     $('#'+element+'_field'+ o_id).text("");
     for (key in data){
@@ -18,15 +19,19 @@ function order_get_details(o_id,key,element){
     }
     },
     error: function(xhr, ajaxOptions, thrownError) {
-        alert("Something went wrong. Try again later");
-         btn.removeAttr('disabled');
+        if (xhr.status !=200){
+      $('#'+element+'_field'+ o_id).text("N.A");
+       btn.removeAttr('disabled');
+
+
+        }
     }
 
     });
     }
     else{
         alert("Something went wrong");
-                 btn.removeAttr('disabled');
+        btn.removeAttr('disabled');
 
     }
 }
