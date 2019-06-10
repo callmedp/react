@@ -219,7 +219,7 @@ class PersonalInfo extends Component {
                         </li>
 
                         <li className="form__group">
-                            <Field component={renderField} label={"Mobile"}  type={"text"} name="number" id="number" prepend={true}
+                            <Field component={renderField} label={"Mobile"}  type={"number"} name="number" id="number" prepend={true}
                                 iconClass={"sprite icon--mobile"} className="form__input" pattern="\d*"/>
                         </li>
 
