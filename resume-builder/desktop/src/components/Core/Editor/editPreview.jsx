@@ -78,7 +78,6 @@ const mapDispatchToProps = (dispatch) => {
         },
         "fetchDefaultCustomization": (templateId) => {
             return new Promise((resolve, reject) => {
-
                 return dispatch(fetchDefaultCustomization({templateId, resolve,reject}))
             })
         },

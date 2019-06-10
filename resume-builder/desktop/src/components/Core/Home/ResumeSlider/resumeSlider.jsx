@@ -12,10 +12,15 @@ export default class ResumeSlider extends Component {
     }
 
     selectTemplate() {
-        localStorage.setItem('selected_template', (parseInt(document.getElementsByClassName('slick-current slick-center')[0].getAttribute('data-index')) + 1))
+        const templateId = parseInt(document.getElementsByClassName('slick-current slick-center')[0].getAttribute('data-index')) + 1;
+        const {page} = this.props;
+        localStorage.setItem('selected_template', (templateId))
         const select_template_modal = this.props.ui ? this.props.ui.select_template_modal : false
         if (select_template_modal) {
             this.props.hideSelectTemplateModal();
+            if (page === 'edit') {
+                this.props.fetchDefaultCustomization(templateId);
+            }
             this.props.updateSelectedTemplate(this.props.userInfo)
         } else {
 
@@ -42,8 +47,8 @@ export default class ResumeSlider extends Component {
             arrow: true,
             speed: 500,
         };
-        if (localStorage.getItem('selected_template')){
-            settings['initialSlide'] = (localStorage.getItem('selected_template') -1)
+        if (localStorage.getItem('selected_template')) {
+            settings['initialSlide'] = (localStorage.getItem('selected_template') - 1)
         }
         const {ui: {select_template_modal}, page} = this.props;
         return (
