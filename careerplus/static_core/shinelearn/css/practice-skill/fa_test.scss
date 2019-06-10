@@ -1,0 +1,150 @@
+.functional_test {
+
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+
+
+
+    .functional_test_inside {
+        display: flex;
+        width: 22%;
+        box-shadow: $box-shadow;
+        border-radius: 4px;
+        font-size: 16px;
+        font-weight: $font-weight + 300;
+        border-top: solid 4px $green;
+        margin: 50px 0 20px;
+        position: relative;
+        justify-content: center;
+        align-content: center;
+
+
+        &.border-purple {
+            border-top: solid 4px $purple;
+        }
+
+        &.border-orange {
+            border-top: solid 4px $orange;
+        }
+
+        &.border-olive {
+            border-top: solid 4px $olive;
+        }
+
+        &.border-beige {
+            border-top: solid 4px $beige;
+        }
+
+        &.border-pink {
+            border-top: solid 4px $pink;
+        }
+
+        &.border-mint {
+            border-top: solid 4px $mint;
+        }
+
+        &.border-grey {
+            border-top: solid 4px $grey;
+        }
+
+
+
+
+        a {
+            display: flex;
+            width: 100%;
+            align-content: center;
+            justify-content: center;
+            color: $text-333;
+              padding: 50px 15px  30px;
+               overflow-wrap:break-word;
+
+
+
+
+
+
+
+
+            &:hover {
+                box-shadow: 0 3px 24px 0 #DEE7F3;
+                background: $white-bg;
+                color: $p-blue;
+            }
+
+
+        }
+    }
+
+    span {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        margin: 5px 0;
+        align-items: center;
+        position: absolute;
+        top: -37%;
+        left: 35%;
+        box-shadow: 0 3px 14px 0 rgba(213, 213, 213, 0.50);
+        background: $sprite-freeskill $white-bg;
+
+        &.sales {
+            background-position: 0px -161px;
+        }
+
+        &.info {
+            background-position: 2px -214px;
+        }
+
+        &.bank {
+            background-position: -2px -281px;
+        }
+
+        &.ops {
+            background-position: -3px -343px;
+        }
+
+        &.law {
+            background-position: -7px -408px;
+        }
+
+        &.hr {
+            background-position: -6px -651px;
+        }
+
+        &.mgmt {
+            background-position: -11px -461px;
+        }
+
+        &.pdev {
+            background-position: -14px -520px;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        &:hover {
+
+            box-shadow: 0 3px 14px 0 #BAD5F6, inset 0 1px 3px 0 #BAD5F6;
+
+        }
+
+    }
+
+
+
+
+}

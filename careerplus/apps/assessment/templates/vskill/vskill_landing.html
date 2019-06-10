@@ -16,34 +16,204 @@
     {{block.super}}
     {% if request.session.candidate_id %}
     {% compress css %}
-    <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/homepage/home1.scss' %}" rel="stylesheet">
+    <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/practice-skill/practice-skill.scss' %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
     {% endcompress %}
     {% else %}
     {% compress css %}
-    <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/homepage/home.scss' %}" rel="stylesheet">
+    <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/practice-skill/practice-skill.scss' %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
     {% endcompress %}
     {% endif %}
 
-    <style type="text/css">
-        .searchNavBar{
-            display: none;
-        }
-    </style>
 {% endblock css_section %}
 
 {% block main_container %}
-  <div>
+  <div class="  practice-skill__wrap">
+    <div class="left_base"></div>
+    <div class="right_base">
+        
+        <div class="container">
+
+<ol class="breadcrumb  black " itemscope="" itemtype="http://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem"><a itemprop="item" href="/"><span itemprop="name">Home</span></a></li><li class="active">Free Test</li></ol>
+<div class="row">
+<div class="col-sm-6 col-lg-6 col-md-6">
+
+<h1>Take free practice tests</h1>
+<em><strong>Start preparing</strong> for competitive exams and job interviews</em>
+
+<ul class="practice_test">
+    
+<li>
+<div class="round"> <span class="icon-skill specialized"></span></div>
+   
+<strong>500+ Specialized</strong>  Tests</li>
+<li>
+    <div class="round"> <span class="icon-skill custom"></span></div>Strength & Weakness <strong>analysis</strong>
+</li>
+
+<li>
+    <div class="round"> <span class="icon-skill weaker "></span></div>Custom course 
+<strong>Recommendations</strong></li>
+
+</ul>
+
+
+
+<div class="search_content">
+    
+<div class="form-inline">
+    
+    <input type="text" class="form-control" placeholder="Search popular tests">
+
+    <button type="submit" class=" skill-jobs-btn btn  "></button>
+</div>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+</div>
+
+
+<!-- Most popular tests starts -->
+<div class="col-sm-12 col-lg-12 col-md-12">
+    
+<h2>Most popular tests</h2>
+
+<div class="popular_test">
+<div class="testinside"><span class="border-left"></span><a href= "#">
+
+
+    Email Marketing Master
+<div class="white_hover"></div>
+    <span class="taketest" >Take Free Test</span>
+</a>
+
+</div>
+<div class="testinside"><span class="border-left purple"></span><a href= "#">Search Engine Optimisation Optimisation
+    <div class="white_hover"></div>
+
+    <span class="taketest" >Take Free Test</span>
+</a>
+
+</div><div class="testinside"><span class="border-left green"></span><a href= "#">Digital Marketing Scientist Digital Marketing Scientist Digital Marketing Scientist
+<div class="white_hover"></div>
+    <span class="taketest" >Take Free Test</span>
+
+</a>
+
+</div>
+
+<div class="testinside"><span class="border-left olive"></span><a href= "#">Product Brand Manager 
+
+<div class="white_hover"></div> 
+    <span class="taketest" >Take Free Test</span>
+</a>
+
+</div>
+
+</div>
+
+
+
+</div>
+
+
+<!-- Most popular tests starts -->
+
+
+<!-- Tests by functional area starts -->
+<div class="col-sm-12 col-lg-12 col-md-12">
+    
+
+<h2>Tests by functional area</h2>
+
+
+
+<div class="functional_test">
+<div class="functional_test_inside">
+
+    <a href="#">
+
+<span class="sales"></span>
+
+Sales and Marketing
+</a>
+
+</div>
+<div class="functional_test_inside border-purple">
+     <a href="#">
+<span class="info"></span>
+Information Technology
+</a>
+</div>
+<div class="functional_test_inside border-orange">
+     <a href="#">
+<span class="bank"></span>
+Banking & Finance</a>
+</div>
+<div class="functional_test_inside border-olive">
+     <a href="#">
+    <span class="ops"></span>
+Operation Management
+</a>
+</div>
+<div class="functional_test_inside border-grey">
+     <a href="#">
+    <span class="law"></span>
+Law
+</a>
+</div>
+<div class="functional_test_inside border-mint">
+     <a href="#">
+    <span class="hr"></span>
+
+HR - Human Resource
+</a>
+</div>
+<div class="functional_test_inside border-pink">
+    <a href="#"> <span class="mgmt"></span>
+
+Management
+</a>
+</div>
+
+<div class="functional_test_inside border-beige"> <a href="#">
+    <span class="pdev"></span>
+
+Personal Development</a>
+</div>
+
+
+<div class="btn_white loadmore"><a href="#">Load more</a></div>
+</div>
+</div>
+
+<!-- Tests by functional area ends -->
+
+
+
+
+
+    </div>
 
 
 
   </div>
 
+</div>
 {% endblock main_container %}
 {% block js_section %}
     {{block.super}}
-
+<!-- 
     <script type="text/javascript">
     function firstLoad(){
             $.ajax({
@@ -52,8 +222,8 @@
                 data : tl=2,
                 dataType: 'json',
                 success: function(json) {
-                    debugger;
-                    alert(json.message);
+                    // debugger;
+                    // alert(json.message);
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
                     alert("Something went wrong. Try again later");
@@ -66,7 +236,7 @@
             firstLoad();
 
 });
-    </script>
+    </script> -->
 
 
 {% endblock js_section %}
