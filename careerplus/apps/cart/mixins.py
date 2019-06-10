@@ -112,7 +112,7 @@ class CartMixin(object):
                 if is_resume_template == 'true':
                     cart_obj.lineitems.filter().delete()
                 else:
-                    cart_obj.lineitems.filter(Q(product=product) | Q(product__type_flow=16)).delete()
+                    cart_obj.lineitems.filter(Q(product=product) | Q(product__type_flow=17)).delete()
 
                 if product.is_course or product.type_flow == 17 and cv_id:
                     # courses
@@ -503,7 +503,7 @@ class CartMixin(object):
         return cart_items, total_amount
 
     # use local db not solar for fetching items in case of resume builder
-    def get_local_cart_items(self, cart_obj: object = None) -> object:
+    def get_local_cart_items(self, cart_obj=None):
         cart_items = []
         total_amount = Decimal(0)
         if not cart_obj:
@@ -514,13 +514,9 @@ class CartMixin(object):
             return {"cart_items": cart_items, "total_amount": round(total_amount, 2)}
 
         main_products = cart_obj.lineitems.filter(parent=None)
-
         main_product_pks = list(main_products.values_list('product__id', flat=True))
-
         products = Product.objects.filter(id__in=main_product_pks).select_related('product_class', 'vendor')
-
         cart_items, total_amount = self.add_item_to_cart(main_products, products, cart_obj, cart_items, total_amount)
-
         return {"cart_items": cart_items, "total_amount": round(total_amount, 2)}
 
     def getTotalAmount(self, cart_obj=None):
