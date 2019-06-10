@@ -31,7 +31,7 @@ const renderProjects = ({
                         </React.Fragment>:
                         <React.Fragment>
                             <input type="text" autoFocus defaultValue={heading} onBlur={(e)=>updateInputValue('blur',e)}
-                                onKeyDown={(e)=>updateInputValue('keyPress',e)}/>
+                                onKeyDown={(e)=>updateInputValue('keyPress',e)} maxLength="20"/>
                             <i className="sprite icon--editTick"></i>
                         </React.Fragment>
                     }

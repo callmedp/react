@@ -180,7 +180,7 @@ class PersonalInfo extends Component {
                         </React.Fragment>:
                         <React.Fragment>
                             <input type="text" autoFocus defaultValue={heading} onBlur={(e)=>this.updateInputValue('blur',e)}
-                                onKeyDown={(e)=>this.updateInputValue('keyPress',e)}/>
+                                onKeyDown={(e)=>this.updateInputValue('keyPress',e)} maxLength="20"/>
                             <i className="sprite icon--editTick"></i>
                         </React.Fragment>
                          
@@ -215,12 +215,12 @@ class PersonalInfo extends Component {
                         
                         <li className="form__group">
                             <Field component={datepicker} label={"Date Of Birth"}  type={"date"} name="date_of_birth" id="date_of_birth"
-                             yearDropDownItemNumber={50}/>
+                             yearDropDownItemNumber={50} pattern="\d*"  readOnly/>
                         </li>
 
                         <li className="form__group">
                             <Field component={renderField} label={"Mobile"}  type={"number"} name="number" id="number" prepend={true}
-                                iconClass={"sprite icon--mobile"} className="form__input" pattern="\d*"/>
+                                iconClass={"sprite icon--mobile"} className="form__input" pattern="\d*" maxLength="10"/>
                         </li>
 
                         <li className="form__group">

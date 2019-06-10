@@ -172,7 +172,7 @@ class Summary extends Component {
                         </React.Fragment>:
                         <React.Fragment>
                             <input type="text" autoFocus defaultValue={heading} onBlur={(e)=>this.updateInputValue('blur',e)}
-                                onKeyDown={(e)=>this.updateInputValue('keyPress',e)}/>
+                                onKeyDown={(e)=>this.updateInputValue('keyPress',e)} maxLength="20"/>
                             <i className="sprite icon--editTick"></i>
                         </React.Fragment>
                          
@@ -183,7 +183,7 @@ class Summary extends Component {
                     
                         <li className="form__group">
                             <Field component={renderTextArea} label={"Summary"}  type={"text"} name="extra_info" 
-                                id="extra_info" prepend={false} className="form__input h-150"/>
+                                id="extra_info" prepend={false} className="form__input h-150" maxLength="200"/>
                             <p className="add-suggested" onClick={()=>{this.openModal()}}>
                                 <span>+</span>Add suggested summary
                             </p>
