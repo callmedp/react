@@ -1,8 +1,10 @@
-    import {Api} from './Api';
+import {Api} from './Api';
 import {takeLatest, call, put} from "redux-saga/effects";
 import {siteDomain} from "../../../Utils/domains";
 import * as Actions from '../actions/actionTypes';
 import {LOGIN_CANDIDATE} from "../actions/actionTypes";
+import {UPDATE_UI} from '../../ui/actions/actionTypes'
+
 import {entityList} from "../../../Utils/formCategoryList";
 import {SAVE_USER_INFO} from "../../personalInfo/actions/actionTypes";
 
@@ -29,6 +31,9 @@ function* loginCandidate(action) {
         localStorage.clear();
 
 
+        yield put({type: UPDATE_UI, data: {loader: true}});
+
+
         let result = yield call(Api.loginCandidate, payload);
 
         if (result['error']) {
@@ -37,6 +42,7 @@ function* loginCandidate(action) {
 
         if (result['error']) {
             window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
+            yield put({type: UPDATE_UI, data: {loader: false}})
             return;
             //redirect code here
         }
@@ -65,6 +71,9 @@ function* loginCandidate(action) {
             }
         }
         localStorage.setItem('token', (token) || '');
+
+        yield put({type: UPDATE_UI, data: {loader: false}})
+
 
     } catch (e) {
         console.log(e);

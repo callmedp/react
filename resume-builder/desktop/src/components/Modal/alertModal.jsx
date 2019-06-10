@@ -21,12 +21,11 @@ export default class AlertModal extends React.Component {
 
     render() {
         const {ui: {alertModal}, nextLink, newUser} = this.props;
-        console.log(newUser)
         return (
             <React.Fragment>
                 {
-                    newUser  ? 
-                    <div className="pr alert-modal">
+                    newUser ?
+                        <div className="pr alert-modal">
 
                             <Modal
                                 style={{
@@ -48,14 +47,15 @@ export default class AlertModal extends React.Component {
                                 <div className="pr">
                                     <div className="alert-modal">
                                         <span className="icon-alert"></span>
-                                        <p className="mb-3"><strong>Please save your profile info to continue</strong>  </p>
+                                        <p className="mb-3"><strong>Please save your profile info to continue</strong>
+                                        </p>
                                         <div className="flex-container">
                                             <button className="blue-button" onClick={this.closeModal}>OK</button>
                                         </div>
                                     </div>
                                 </div>
                             </Modal>
-                        </div>:
+                        </div> :
                         <div className="pr alert-modal">
 
                             <Modal
@@ -93,8 +93,8 @@ export default class AlertModal extends React.Component {
                                     </div>
                                 </div>
                             </Modal>
-                        </div> 
-                        
+                        </div>
+
                 }
             </React.Fragment>
         )
