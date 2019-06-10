@@ -123,7 +123,7 @@ class ResumeEntityReorderUtility:
             if not pos_item:
                 continue
 
-            if pos_item['alignment'] == alignment:
+            if pos_item['alignment'] == alignment and pos_item['active']:
                 swap_dict.update({pos:[entity_pos,alignment,True],entity_pos:[pos,alignment,True]})
                 break
 
