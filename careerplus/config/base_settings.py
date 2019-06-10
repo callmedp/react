@@ -524,7 +524,6 @@ MAINTENANCE_MESSAGE = "This site will be under maintenance from 9 pm to 12 pm on
 
 ############ MARKETING PAGES MAPPING WITH ID
 
-<<<<<<< HEAD
 URL_MAPPING_TO_PRODUCT = {"resume-writing-services-1": ([1921, 1922, 1923, 1924, 32], 1921)
     , "linkedin-1": ([1926, 1925, 1927, 1928, 33], 1926),
                           "aws-cert": ([3133], 3133),
