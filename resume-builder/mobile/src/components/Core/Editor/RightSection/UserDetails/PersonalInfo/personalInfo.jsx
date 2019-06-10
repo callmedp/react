@@ -161,7 +161,6 @@ class PersonalInfo extends Component {
         const pos = parseInt(this.props.sidenav.currentLinkPos)
         const {handleSubmit, personalInfo,submitting,personalInfo:{subscription_status},history} = this.props;
         const {editHeading,heading,flag} =this.state;
-        const focus = true
         return (
             
         <div className="buildResume">
@@ -221,7 +220,7 @@ class PersonalInfo extends Component {
 
                         <li className="form__group">
                             <Field component={renderField} label={"Mobile"}  type={"text"} name="number" id="number" prepend={true}
-                                iconClass={"sprite icon--mobile"} className="form__input"/>
+                                iconClass={"sprite icon--mobile"} className="form__input" pattern="\d*"/>
                         </li>
 
                         <li className="form__group">
