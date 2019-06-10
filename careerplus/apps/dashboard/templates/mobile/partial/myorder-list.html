@@ -58,7 +58,7 @@
                             <p class="c6 fs-12 pb-0">Total amount</p>
                             <p class="price">{% if order.currency %}{{order.currency}}{% else %}Rs.{% endif %}{{order.total_incl_tax}}/-</p>
                         </td>
-                        {% if product_type_flow == 16 %}
+                        {% if product_type_flow == 17 %}
                             <td class="text-right">
                                 <form role="form" id="download-resume-form{{order.pk}}" method="POST" action="{% url "dashboard:dashboard-resumetemplatedownload" %}">
                                     <div style="display:none">

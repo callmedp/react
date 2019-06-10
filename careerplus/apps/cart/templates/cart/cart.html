@@ -61,7 +61,7 @@
                 <!-- item 1 -->
                 {% with addons=item.addons variations=item.variations delivery_types=item.delivery_types %}
 
-                    {% if item.product_class == 'course' or item.type_flow == 16 and variations %}
+                    {% if item.product_class == 'course' or item.type_flow == 17 and variations %}
 
                         <ul {% if forloop.counter > 1 %} class="bdr-tp" {% endif %}>
                             <li class="col-sm-5 col-md-6{% if not item.is_available %} disabled{% endif %}">

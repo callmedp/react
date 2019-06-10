@@ -50,7 +50,7 @@
                 <strong>{{order.get_currency}} {{order.total_incl_tax}}/-</strong>
               </datalist>
               <datalist class="col-sm-2">
-               {% if product_type_flow == 16 %}
+               {% if product_type_flow == 17 %}
                     <form role="form" id="download-resume-form{{order.pk}}" method="POST" action="{% url "dashboard:dashboard-resumetemplatedownload" %}">
                       <div style="display:none">
                           <input type="hidden" name="csrfmiddlewaretoken"

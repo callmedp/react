@@ -802,7 +802,7 @@ def generate_resume_for_order(order_id):
     candidate_id = order_obj.candidate_id
     
     for item in order_obj.orderitems.all():
-        if item.product.type_flow == 16:
+        if item.product.type_flow == 17:
             product_id = item.product.id
             break
 
