@@ -69,22 +69,22 @@ function* getPersonalDetails(action) {
     }
 }
 
-function* getInterestList(action){
-    try{
+function* getInterestList(action) {
+    try {
         const result = yield call(Api.fetchInterestList);
         if (result['error']) {
             console.log('error');
         }
-        let {data:{data}} = result;
+        let {data: {data}} = result;
 
-        let updated_data={}; 
-        Object.keys(data).map((el,key)=>{
-            updated_data[key] = {'value':key,'label':data[el]}
+        let updated_data = {};
+        Object.keys(data).map((el, key) => {
+            updated_data[key] = {'value': key, 'label': data[el]}
         })
 
-        yield put({type: Actions.SAVE_INTEREST_LIST,data:updated_data})
+        yield put({type: Actions.SAVE_INTEREST_LIST, data: updated_data})
 
-    }catch (e) {
+    } catch (e) {
         console.log(e);
     }
 }
@@ -95,14 +95,14 @@ function* updatePersonalDetails(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
         delete personalDetails['subscription_status']
-        if(localStorage.getItem('newUser')){
+        if (localStorage.getItem('newUser')) {
             localStorage.removeItem('newUser')
         }
-        if(localStorage.getItem('selected_template')){
+        if (localStorage.getItem('selected_template')) {
             personalDetails = {
                 ...personalDetails,
                 ...{
-                    'selected_template' : localStorage.getItem('selected_template')
+                    'selected_template': localStorage.getItem('selected_template')
                 }
             }
             // localStorage.removeItem('selected_template')
@@ -168,7 +168,7 @@ function* fetchImageUrl(action) {
 
 function* updateEntityPreference(action) {
     try {
-        const {payload:{entity_preference_data,resolve,reject}} = action;
+        const {payload: {entity_preference_data, resolve, reject}} = action;
         const candidateId = localStorage.getItem('candidateId') || '';
 
         const result = yield call(Api.updateEntityPreference, {entity_preference_data}, candidateId);
@@ -176,7 +176,9 @@ function* updateEntityPreference(action) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
-        yield put({type: Actions.SAVE_USER_INFO, data: result['data']});
+        const data = modifyPersonalInfo(result['data']);
+
+        yield put({type: Actions.SAVE_USER_INFO, data: data});
         return resolve("ENtity Updated")
 
     } catch (e) {
