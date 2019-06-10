@@ -47,8 +47,8 @@ export default class SuggestionModal extends React.Component {
                         content: {
                             left: '10%',
                             right: '10%',
-                            top: '15%',
-                            bottom: '0',
+                            top: '5%',
+                            overflow: 'hidden'
                         }
                     }}
                     isOpen={modal_status} 
@@ -67,7 +67,7 @@ export default class SuggestionModal extends React.Component {
                                         <span className={suggestion_selected[index]  ? 'selected' : ''}  
                                         onClick={(event)=>{suggestion_selected[index] 
                                             ? this.removeSuggesion(index,event): this.addSuggesion(el,index,event) }} htmlFor={`add${index}`} >
-                                            <input type="checkbox" readOnly checked={suggestion_selected[index] ? true : false} id={`add${index}`} /> Add
+                                            <input class="styled-checkbox" type="checkbox" readOnly checked={suggestion_selected[index] ? true : false} id={`add${index}`} /> <label for="styled-checkbox-1">Add</label>
                                         </span>
                                             <p>{el}</p>
                                         </li>)

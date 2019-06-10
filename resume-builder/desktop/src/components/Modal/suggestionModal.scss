@@ -12,6 +12,10 @@
 	ul {
 		font-size: 1.4rem;
 		margin: 0 10% 40px 10%;
+		height: 400px;
+		overflow: auto;
+		padding: 10px 10px 0 0;
+
 		li {
 			@include flexbox();
 			margin-bottom: 15px;
@@ -19,6 +23,7 @@
 			line-height: 20px;
 			color: $txt1;
 			min-height: 75px;
+			cursor: pointer;
 
 			span {
 				flex: 0 0 100px;
@@ -29,6 +34,76 @@
 				@include flexbox();
 				text-transform: uppercase;
 				color: $white;
+
+				.styled-checkbox {
+				  position: absolute; // take it out of document flow
+				  opacity: 0; // hide it
+
+				  & + label {
+				    position: relative;
+				    cursor: pointer;
+				    padding: 0;
+				    color: $white;
+				  }
+
+				  // Box.
+				  & + label:before {
+				    content: '';
+				    margin-right: 10px;
+				    display: inline-block;
+				    vertical-align: text-top;
+				    width: 15px;
+				    height: 15px;
+				    background: white;
+				    @include border-radius(2px);
+				  }
+
+				  // Box hover
+				  &:hover + label:before {
+				    background: $white;
+				  }
+				  
+				  // Box focus
+				  &:focus + label:before {
+				    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12);
+				  }
+
+				  // Box checked
+				  &:checked + label:before {
+				    background: $white;
+				  }
+				  
+				  // Disabled state label.
+				  &:disabled + label {
+				    color: $white;
+				    cursor: auto;
+				  }
+
+				  // Disabled box.
+				  &:disabled + label:before {
+				    box-shadow: none;
+				    background: #ddd;
+				  }
+
+				  // Checkmark. Could be replaced with an image
+				  &:checked + label:after {
+				    content: '';
+				    position: absolute;
+				    left: 3px;
+				    top: 8px;
+				    background: #5CB12F;
+				    width: 2px;
+				    height: 2px;
+				    box-shadow: 
+				      2px 0 0 #5CB12F,
+				      4px 0 0 #5CB12F,
+				      4px -2px 0 #5CB12F,
+				      4px -4px 0 #5CB12F,
+				      4px -6px 0 #5CB12F,
+				      4px -8px 0 #5CB12F;
+				    transform: rotate(45deg);
+				  }
+				}
 
 				input {
 					margin-right: 10px;
@@ -43,10 +118,10 @@
 			}
 
 			p {
-				display: table-cell;
+				@include flexbox();
 				padding: 20px;
 				flex: 1;
-				justify-content: center;
+				justify-content: flex-start;
 				align-items: center;
 			}
 		}
