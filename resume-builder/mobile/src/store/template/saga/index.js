@@ -47,11 +47,15 @@ function* fetchTemplate(action) {
         }
         
         
-        let  newhtml = html.splice(pos + 5, 0, ` style ="transform-origin: top left;
+        let  zoomOut = html.splice(pos + 5, 0, ` style ="transform-origin: top left;
                                                     transform: scale(${scale});
                                                     width: 1236px;
                                                     max-height: 105vh;"`)
-        yield put({type: Actions.SAVE_TEMPLATE, data:{html : newhtml}})
+
+        let zoomIn = html.splice(pos + 5, 0, ` style ="transform-origin: top left;
+                                                width: 1236px;
+                                                max-height: 105vh;"`)
+        yield put({type: Actions.SAVE_TEMPLATE, data:{html : zoomOut,zoomInHtml:zoomIn}})
         yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
         console.log(e);

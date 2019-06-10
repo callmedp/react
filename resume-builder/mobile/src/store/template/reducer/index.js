@@ -2,6 +2,7 @@ import {SAVE_TEMPLATE,UPDATE_MODAL_STATUS, SET_CUSTOMIZATION,SAVE_TEMPLATE_IMAGE
 
 const initialState = {
     'html': '',
+    'zoomInHtml':'',
     'modal_status': false,
     'text_font_size': 1,
     'heading_font_size': 1,

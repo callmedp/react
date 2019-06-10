@@ -29,13 +29,15 @@ class Preview extends Component {
             activeSection: 'left',
             sectionEntityName: '',
             selectedEntity: '',
-            startingReorderUpDowmIndex : 0
+            startingReorderUpDowmIndex : 0,
+            zoomIn: false
         }
         this.handleCustomization = this.handleCustomization.bind(this);
         this.selectSection = this.selectSection.bind(this);
         this.moveUpSection = this.moveUpSection.bind(this);
         this.moveDownSection = this.moveDownSection.bind(this);
         this.handleActiveSection = this.handleActiveSection.bind(this);
+        this.handleZoomTemplate = this.handleZoomTemplate.bind(this);
 
     }
 
@@ -75,6 +77,11 @@ class Preview extends Component {
         })
     }
 
+    handleZoomTemplate(){
+        const {zoomIn} = this.state;
+        zoomIn ? this.setState({zoomIn:false}): this.setState({zoomIn:true})
+    }
+
     moveUpSection(selectedEntity, selectedTemplate) {
 
         this.props.reorderSection({
@@ -97,22 +104,21 @@ class Preview extends Component {
     }
 
     render(){
-        const {customize,currentTab,selectedColor,headingFontSize,textFontSize,sectionEntityName,activeSection,startingReorderUpDowmIndex} = this.state
-        const {initialValues:{html,entity_position},ui:{mainloader},personalInfo:{selected_template}} = this.props
+        const {customize,currentTab,selectedColor,headingFontSize,textFontSize,sectionEntityName,activeSection,startingReorderUpDowmIndex,zoomIn} = this.state
+        const {initialValues:{html,zoomInHtml,entity_position},ui:{mainloader},personalInfo:{selected_template}} = this.props
         return(
             <div className="preview">
                <Header page={'preview'} {...this.props}/>
                <ChangeTemplateModal {...this.props}/>
                {mainloader ? <Loader/> :""}
 
-               {/* <div className="preview__resume"
-                 dangerouslySetInnerHTML={{
-                     __html: html
-                 }}/> */}
 
                  <div className="iframe__wrap">
-                    <span className="sprite icon--zoom"></span>
-                    <iframe srcDoc={html} className={"iframe-new"}></iframe>
+                    <span className="sprite icon--zoom" onClick={this.handleZoomTemplate}></span>
+                    {zoomIn ? 
+                        <iframe srcDoc={zoomInHtml} className={"iframe-new"}></iframe>:
+                        <iframe srcDoc={html} className={"iframe-new"}></iframe>
+                    }
                 </div>
 
                <div className="preview__bottom-btns pos-fixed">
