@@ -2,7 +2,7 @@
 {% if extracurricular %}
     <div style="display: block; vertical-align: top;">
         <strong style="display: block; font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px; font-weight: normal; color: #000; background: #ffffff; padding: 12px 10px 12px 13%; margin: 0 10% 0 -13%; border-top-right-radius: 20px; border-bottom-right-radius: 20px; text-transform: uppercase;">Interest</strong>
-        <ul style="margin: 20px 0 30px 0; padding: 0;  color: #c5e6ff; list-style-type: none;">
+        <ul style="margin: 20px 0 30px 0; padding: 0;  color: #ffffff; list-style-type: none;">
             {% for interest in extracurricular %}
                 <li style="display: table; margin-bottom: 15px; font-size: {{ current_config.text_font_size|text_font_size }}px;">{{interest}}</li>
             {% endfor %}

@@ -141,7 +141,12 @@
           </div>
           <p style="margin-bottom: 0; padding: 0; color: #000000; line-height: 20px; text-align: left;">
             {% for skill in skills|slice:"5:" %}
-                  {{ skill.name }}
+              {{skill}} 
+              {% if skills.count == forloop.counter0|add:"6" %}
+              
+              {% else %}
+              |
+              {% endif %}
             {% endfor %}
           </p>
         </div>

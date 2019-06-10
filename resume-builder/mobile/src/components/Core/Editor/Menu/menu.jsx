@@ -89,7 +89,7 @@ class Menu extends Component {
                 <Header page={'menu'} backPage={entityLinkNameLink[parseInt(currentLinkPos)+ 1]} history={history}/>
                 <p className="fs-14">Add / remove sections in your resume</p>
                 <ul className="addMore__items">
-                    {addmore.filter(item =>(item.active ===true && item.entity_id !== 1 && item.entity_id !==6)).map((item, key) =>
+                    {addmore.filter(item =>(item.active ===true && item.entity_id !== 1 && item.entity_id !==6 && item.entity_id !==11)).map((item, key) =>
                         {
                             return(
                                     <Menuitem 
@@ -108,7 +108,7 @@ class Menu extends Component {
                 </ul>
                 {addmore.filter(item =>item.active ===false).length ?
                     <ul className="addMore__items grey-bg pt-0 pb-0">
-                        {addmore.filter(item =>item.active ===false).map((item, key) =>
+                        {addmore.filter(item =>item.active ===false && item.entity_id !==11).map((item, key) =>
                             {
                                 return(
                                         <Menuitem 

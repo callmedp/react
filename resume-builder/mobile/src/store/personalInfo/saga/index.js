@@ -62,11 +62,11 @@ function* updatePersonalDetails(action) {
         if(localStorage.getItem('newUser')){
             localStorage.removeItem('newUser')
         }
-        if(localStorage.getItem('template')){
+        if(localStorage.getItem('selected_template')){
             personalDetails = {
                 ...personalDetails,
                 ...{
-                    'selected_template' : localStorage.getItem('template')
+                    'selected_template' : localStorage.getItem('selected_template')
                 }
             }
         }

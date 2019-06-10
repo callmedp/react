@@ -84,7 +84,7 @@ class Buy extends Component {
             slidesToShow: 2,
           };
           const {ui:{mainloader},template:{thumbnailImages,templateImage}} = this.props
-          const template = localStorage.getItem('template') || 1;
+          const template = localStorage.getItem('selected_template') || 1;
           const {checked,pay_button_clicked,modal_status} = this.state
           
         return (

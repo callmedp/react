@@ -11,7 +11,7 @@ export default class ResumeSlider extends Component {
     }
 
     async customise() {
-        localStorage.setItem('template',(parseInt(document.getElementsByClassName('slick-current')[0].getAttribute('data-index')) + 1))
+        localStorage.setItem('selected_template',(parseInt(document.getElementsByClassName('slick-current')[0].getAttribute('data-index')) + 1))
         if (!this.props.showtext){
             await this.props.updateSelectedTemplate(this.props.personalInfo)
             this.props.updateModalStatus({modal_status:false})
@@ -23,14 +23,16 @@ export default class ResumeSlider extends Component {
     }
 
     render() {
-        const settings = {
+        let settings = {
             dots: false,
             infinite: true,
             speed: 500,
             slidesToShow: 1,
             slidesToScroll: 1,
-            initialSlide: (localStorage.getItem('template') -1) || 0
         };
+        if(localStorage.getItem('selected_template')){
+            settings['initialSlide'] = localStorage.getItem('selected_template') -1
+        }
         const {showtext} = this.props
 
         return (
