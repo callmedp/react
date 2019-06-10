@@ -110,7 +110,10 @@ class Preview extends Component {
                      __html: html
                  }}/> */}
 
-                <iframe srcDoc={html} className={"iframe-new"}></iframe>
+                 <div className="iframe__wrap">
+                    <span className="sprite icon--zoom"></span>
+                    <iframe srcDoc={html} className={"iframe-new"}></iframe>
+                </div>
 
                <div className="preview__bottom-btns pos-fixed">
                     <span className="btn btn__round btn--outline" onClick={()=>{this.setState({customize:true})}}>Customize template</span>

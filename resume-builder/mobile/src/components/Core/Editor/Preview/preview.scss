@@ -201,3 +201,20 @@
     width: 2rem;
     transform: translateY(-20%);
 }
+
+
+.iframe {
+    &__wrap {
+        position: relative;
+
+        .icon--zoom {
+            position: absolute;
+            top: 2px;
+            right: 0;
+        }
+
+        iframe {
+            border: 0;
+        }
+    }
+}

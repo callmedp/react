@@ -13,12 +13,12 @@ export default class ChangeTemplateModal extends Component{
                 isOpen={this.props.initialValues.modal_status} 
                 contentLabel="onRequestClose Preview"
                 onRequestClose={this.handleCloseModal}
-                className="Modal"
+                className="Modal overflow-visible"
                 overlayClassName="Overlay">
-                <div className="Modal--iframe">
+                <div className="">
                     <ResumeSlider showtext={false} {...this.props}/>
                 </div>
-                <span className="close-wrap" onClick={()=>{this.props.updateModalStatus({modal_status:false})}}>
+                <span className="close-wrap preview-close" onClick={()=>{this.props.updateModalStatus({modal_status:false})}}>
                     <i class="sprite icon--close"></i>
                 </span>
             </Modal>

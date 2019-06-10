@@ -57,7 +57,12 @@ input::placeholder {
     border-radius: 50%;
     box-shadow: 0 0 10px rgba($black, .2);
     position: absolute;
-    right: -4px;
-    top: -4px;
+    right: 5px;
+    top: 5px;
     background-color: $white;
+
+    &.preview-close {
+        top: 25px;
+        right: -9px;
+    }
 }

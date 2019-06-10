@@ -44,7 +44,7 @@ export default class ResumeSlider extends Component {
                 </div>:''
             }
 
-                <div className="proven-resume__slideWrap mt-0">
+                <div className="proven-resume__slideWrap">
                     <Slider {...settings}>
                         <div className="proven-resume__imageWrap">
                             <img src={`${this.staticUrl}react/assets/images/mobile/resume-1.jpg`} alt=""/>

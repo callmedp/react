@@ -19,7 +19,7 @@
 
         .slick-slide {
             height: auto;
-            padding: 1.5rem;
+            // padding: 1.5rem;
         }
 
         .slick-arrow {
@@ -73,8 +73,12 @@
         @include border-radius(8px);
         overflow: hidden;
         border: 3px solid $white;
-        box-shadow: 0 0 10px rgba($black, .3);
-        margin-right: 15px;
+        margin-right: 10px;
+        margin-left: 10px;
         width: auto !important;
+
+        img {
+            width: 100%;
+        }
     }
 }
