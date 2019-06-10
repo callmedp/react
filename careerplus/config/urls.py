@@ -79,6 +79,9 @@ talent_sitemap = {
    'author': TalentAuthorSitemap
 }
 
+#Library Patches
+from .startup_script import apply_patch
+apply_patch()
 
 urlpatterns = [url(r'^services/%s/%s/$' %(cat_slug,cat_id),
         ServiceDetailPage.as_view())  for cat_id,cat_slug in settings.SERVICE_PAGE_ID_SLUG_MAPPING.items()]
