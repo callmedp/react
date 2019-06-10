@@ -78,7 +78,7 @@ const renderEducation = ({
 
                             <li className="form__group">
                                 <Field component={renderField} label={"Specialization"}  type={"text"} name={`${member}.specialization`} prepend={true} 
-                                    id={`${member}.specialization`} iconClass={"sprite icon--date"} className="form__input"/>
+                                    id={`${member}.specialization`} iconClass={"sprite icon--designation"} className="form__input"/>
                             </li>
                             
                             <li className="form__group">

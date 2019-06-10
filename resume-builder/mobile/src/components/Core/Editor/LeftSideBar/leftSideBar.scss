@@ -11,7 +11,6 @@
     box-shadow: 0 0 15px $box-shadow-light;
 
     z-index: 2;
-    overflow: hidden;
 }
 
 .user {
@@ -40,13 +39,17 @@
 
 .sidebar {
 
+    &__menuWrap {
+        height: calc(100vh - 160px);
+        overflow-x: scroll;
+    }
+
     &__item {
         @include size(55px, 50px, flex);
         align-items: center;
     }
     
     &__anchor {
-        color:none;
         display: flex;
         align-items: center;
         flex-direction: row;
@@ -54,7 +57,7 @@
     }
 
     &__wrap {
-        height: 50px;
+        height: 55px;
         text-align: center;
 
         flex: 0 0 55px;
@@ -67,6 +70,10 @@
     &__link {
         color: $blue;
         font-size: 0.9rem;
+        width: 55px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .sidebar-open__wrap {

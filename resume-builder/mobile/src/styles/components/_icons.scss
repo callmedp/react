@@ -153,9 +153,9 @@
   }
 
   &--delete {
-    @include size(12px, 12px, flex);
-    background-position: -138px -345px;
-    flex: 0 0 12px;
+    @include size(14px, 18px, flex);
+    background-position: 0 -327px;
+    flex: 0 0 14px;
   }
   
   &--add-element {
@@ -186,7 +186,7 @@
   }
  
   &--editTick {
-    @include size(19px, 14px, block);
+    @include size(22px, 14px, block);
     background-position: -133px -202px;
     margin-left: 8px;
   }

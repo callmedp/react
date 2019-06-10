@@ -98,7 +98,7 @@ class Buy extends Component {
 
                 <div className="pay-now">
                     <div className="pay-now__price">
-                        <span className="fs-14 pay-now__price--pay">You pay</span>
+                        <span className="fs-12 pay-now__price--pay">You pay</span>
                         <span
                             className="fs-26 color-333 semi-bold">Rs. {checked === 'product1' ? 999 : 1249}/-</span>
                     </div>
@@ -111,7 +111,7 @@ class Buy extends Component {
                 <div className="buy">
                     <div className="buy__wrap">
                         <div className="buy__item">
-                            <div className="buy__item--left form__radio-group">
+                            <div className="buy__item--left">
                                 <input className="buy__item--input form__radio-input" type="radio" id="your-resume"
                                        name="product-1"
                                        checked={checked === 'product1' ? true : false}
@@ -153,7 +153,7 @@ class Buy extends Component {
                             </div>
 
                             <div className="buy__item--right">
-                                <div className="buy__item--right__sliderWrap mt-20">
+                                <div className="buy__item--right__sliderWrap">
                                     <Slider {...settings}>
                                     { thumbnailImages.length === 5 ?
                                         thumbnailImages.map((el,index) =>{
