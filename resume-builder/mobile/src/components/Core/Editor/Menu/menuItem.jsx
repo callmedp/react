@@ -14,7 +14,7 @@ export default class Menuitem extends Component {
                 </div>
                 <div className="delete-wrap" onClick={exist ? removeItem.bind(this,pos) : addItem.bind(this,pos) }>
                     {deleteIconExist ? 
-                        <i className={"sprite ml-auto " + (exist ? "icon--delete":"icon--add-element")}></i>:''
+                        <i className={"sprite ml-auto " + (exist ? "icon--close":"icon--add-element")}></i>:''
                     }
                 </div>
             </li>
