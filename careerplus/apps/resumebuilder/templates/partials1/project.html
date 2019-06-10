@@ -7,7 +7,7 @@
                 <span style="width: 9px; height: 9px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
                 <span style="display: inline-block; width: 93%; vertical-align: top; color: #999999; font-size: 14px;">
                     <strong style="display: block; font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #333333; margin-bottom: 5px;">{{ project.project_name }}</strong>
-                    <pre style="font-size:  {{ current_config.text_font_size|text_font_size }}px;">{{ project.description }}</pre>
+                    <pre style="font-size:  {{ current_config.text_font_size|text_font_size }}px;white-space: normal;">{{ project.description }}</pre>
                 </span>
             </li>
         {% endfor %}

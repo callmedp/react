@@ -8,7 +8,7 @@
         <span style="display: inline-block; width: 73%; vertical-align: top; font-size: 14px;">
           <strong style="display: block; font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #777777;">{{ exp.job_profile }}</strong>
           {{ exp.company_name }}
-          <p style="font-size: {{ current_config.text_font_size|text_font_size }}px; color: #777777; margin-top: 5px;">{{ exp.work_description }}</p>
+          <p style="font-size: {{ current_config.text_font_size|text_font_size }}px; color: #777777; margin-top: 5px;white-space: normal;">{{ exp.work_description }}</p>
         </span>
         <span style="color: #999999; width: 19%; display: inline-block; vertical-align: top;">
           {% if exp.is_working %}
