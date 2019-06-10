@@ -78,6 +78,7 @@ export default class SuggestionModal extends React.Component {
                                 </button>
                             </React.Fragment>:
                             <React.Fragment>
+                                    
                                 <h2>Sorry Suggestions not available for this Job Title</h2>
                                 <button className="orange-button"
                                     type={'submit'} onClick={()=>{this.handleSuggestion({})}}>Close

@@ -101,6 +101,16 @@
     justify-content:center;
 }
 
+.align-items-center {
+    align-items: center;
+}
+
+.sorry-popup {
+    border-bottom-right-radius: .5rem;
+    border-bottom-left-radius: .5rem;
+    height: 32%;
+}
+
 .text-center {
     text-align: center;
 }

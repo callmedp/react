@@ -41,7 +41,7 @@ export default class AddSuggesion extends Component{
                 onRequestClose={closeModal}
                 overlayClassName="Overlay">
                 
-                <div className="Modal--summary">
+                <div className={"Modal--summary " + (suggestions.length ? '': "d-flex align-items-center")}>
                     { suggestions.length ?
                         <React.Fragment>
                             <p className="add text-center">Add from suggested {label}</p>
@@ -66,13 +66,12 @@ export default class AddSuggesion extends Component{
                                 <a className="btn btn__round btn__primary" onClick={()=>{closeModal(suggestion_selected); this.setState({suggestion_selected:{}})}}>Save & Continue</a>
                             </div>
                         </React.Fragment> :
-                        <div className="Modal--summary--white-box">
+                        <div className="Modal--summary--white-box sorry-popup">
                             <p className=" text-center no-suggestion">Sorry Suggestion not Available for this Job Title</p>
                             <div className="text-center mb-15">
-                                <a className="btn btn__round btn__primary" onClick={()=>{closeModal(suggestion_selected); this.setState({suggestion_selected:{}})}}>Close</a>
+                                <a className="btn btn__medium btn__round btn__primary" onClick={()=>{closeModal(suggestion_selected); this.setState({suggestion_selected:{}})}}>Close</a>
                             </div>
                         </div>
-
                     }
                     
                 </div>
