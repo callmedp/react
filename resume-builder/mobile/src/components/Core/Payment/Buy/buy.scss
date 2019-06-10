@@ -69,7 +69,7 @@
                 display: block;
                 overflow: hidden;
                 width: 100%;
-                padding-bottom: 10px;
+                // padding-bottom: 10px;
                 position: relative;
 
                 .slick-slide {
@@ -140,6 +140,7 @@
             display: flex;
             width: 100%;
             align-items: center;
+            margin-left: 2.5rem;
 
             span {
                 &:not(:last-child) {
@@ -198,11 +199,12 @@
 
         &__item {
             margin-right: 1.0rem;
-            padding: 1.0rem  0.3rem ;
+            // padding: 1.0rem  0.3rem ;
+            padding: 0  0.3rem ;
         }
 
         &__image {
-            @include size(144px, 149px, block);
+            @include size(130px, 149px, block);
             overflow: hidden;
             border-radius: .3rem;
             box-shadow: 0 0 10px rgba($black, .2);
@@ -232,7 +234,7 @@
 
         &--pay {
             position: relative;
-            top: 10px;
+            top: 8px;
         }
     }
 }
