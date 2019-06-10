@@ -43,17 +43,10 @@ export default class SuggestionModal extends React.Component {
         return (
             <div className="pr">
                 <Modal
-                    style={{
-                        content: {
-                            left: '10%',
-                            right: '10%',
-                            top: '5%',
-                            overflow: 'hidden'
-                        }
-                    }}
                     isOpen={modal_status} 
                     onRequestClose={closeModal}
                     contentLabel="Suggestion Modal"
+                    className="suggestion-modal"
                 >
                     <div className="pr suggested-summary">
                         {suggestions.length ? 

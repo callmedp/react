@@ -39,6 +39,10 @@
     box-shadow: 0 0 10px rgba($black, .2);
     margin: 10px;
     height: 375px;
+
+    @media (min-width: 1400px){
+      height: 520px;
+    }
   }
 
 

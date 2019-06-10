@@ -141,3 +141,10 @@
 	right: 12.5% !important;
 	top: 19%;
 }
+
+.suggestion-modal {
+    overflow: hidden;
+    background: $white;
+    margin: 5% 10% 0 10%;
+    @include border-radius(5px);
+}
