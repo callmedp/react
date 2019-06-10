@@ -364,6 +364,7 @@ class CandidateResumePreview(APIView):
         current_exp = experience.filter(is_working=True).order_by('-start_date').first()
         current_config = candidate.ordercustomisation_set.filter(template_no=template_id).first()
         entity_position = current_config.entity_position_eval
+        print("===========+++++=========", current_config)
 
         latest_experience, latest_end_date = '', None
         for i in experience:
@@ -378,7 +379,7 @@ class CandidateResumePreview(APIView):
                 if latest_end_date < i.end_date:
                     latest_end_date = i.end_date
                     latest_experience = i.job_profile
-        
+
         template = get_template('resume{}_preview.html'.format(template_id))
         rendered_template = template.render(
             {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,

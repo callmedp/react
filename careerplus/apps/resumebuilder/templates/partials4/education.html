@@ -1,21 +1,24 @@
 {% load static compress resume_tags %}
 <div style="vertical-align: top; font-size: 13px; color: #999999; margin-bottom: 30px;">
-  <strong style="display: block; text-transform: uppercase; color: #000000; font-weight: normal; font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px; margin-top: 0">{{preference_list.1.entity_text}}</strong>
-  <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
-    {% for edu in education %}
-      <li style="vertical-align: top; margin: 10px 0;">
-        <span style="width: 9px; height: 9px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span> 
-        <span style="display: inline-block; width: 93%; vertical-align: top;">
-          <span style="font-size: 16px; color: #333333; font-weight: bold; float: right;">{{ edu.percentage_cgpa }}%</span>
-          <strong style="display: block; font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #333333;">{{ edu.specialization }} <span style="font-style: italic; color: #333333; display: inline-block; font-weight: normal; font-size: {{ current_config.text_font_size|text_font_size }}px;">
+    <strong style="display: block; text-transform: uppercase; color: #000000; font-weight: normal; font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px; margin-top: 0">{{ preference_list.1.entity_text }}</strong>
+    <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
+        {% for edu in education %}
+            <li style="vertical-align: top; margin: 10px 0;">
+                <span style="width: 9px; height: 9px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
+                <span style="display: inline-block; width: 93%; vertical-align: top;">
+          {% if edu.percentage_cgpa %}
+              <span style="font-size: 16px; color: #333333; font-weight: bold; float: right;">{{ edu.percentage_cgpa }}%</span>
+          {% endif %}
+                    <strong style="display: block; font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #333333;">{{ edu.specialization }} <span
+                            style="font-style: italic; color: #333333; display: inline-block; font-weight: normal; font-size: {{ current_config.text_font_size|text_font_size }}px;">
             {% if edu.is_pursuing %}
-                    ({{ edu.start_date|date:"M Y" }} - Current)
+                ({{ edu.start_date|date:"M Y" }} - Current)
             {% else %}
-                    ({{ edu.start_date|date:"M Y" }} - {{ edu.end_date|date:"M Y" }})
+                ({{ edu.start_date|date:"M Y" }} - {{ edu.end_date|date:"M Y" }})
             {% endif %}</span> </strong>
           {{ edu.institution_name }}
         </span>
-      </li>
-    {% endfor %}
-  </ul>
+            </li>
+        {% endfor %}
+    </ul>
 </div>
