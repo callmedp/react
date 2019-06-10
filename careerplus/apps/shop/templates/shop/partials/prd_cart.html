@@ -8,7 +8,7 @@
     </form>
 </div>
 
-  <div class="box-panel enrol-cart no-pad">
+  <div class="box-panel enrol-cart{% if product.is_assesment %} pb-65 {% endif %}  ">
      <strong id="total-price" class="total-price" name="price_total" sum-price="{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}" >Rs. {% if selected_var %}
      {{var_list.0.inr_price|floatformat}}{% else %}
      {{sqs.pPinb|floatformat}}{% endif %}/- <small>(+taxes)</small></strong>
@@ -54,6 +54,14 @@
         <figure class="calling-icon"></figure> {{ggn_contact}}
       </a>
     </div-->
+    {% if product.is_assesment %}
+    <div class="e-payLatter">
+      <span class="mr-15">
+        <img src="{% static "shinelearn/images/epaylatter.png" %}"/>
+      </span>
+      <p>Buy test now and <span class="bold">make payment within 14 days</span> using ePayLater </p>
+    </div><!-- ./ e-payLatter -->
+    {% endif %}
   </div>
 
   <!-- check free sample start -->
@@ -61,7 +69,7 @@
       <!-- Interested in this course? -->
       <div class="course-query box-panel mb-40 cleafix">
           <h2 class="heading-right">
-            {% if product.is_course %}
+            {% if product.is_course or product.is_assesment %}
               Interested in this course?
             {% else %}
               Interested in this service?

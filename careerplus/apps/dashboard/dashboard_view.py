@@ -268,6 +268,8 @@ class DashboardDetailView(TemplateView):
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=oi_status_list)
             elif self.oi.product.type_flow == 10:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 6, 101, 161, 162, 163, 164])
+            elif self.oi.product.type_flow == 16:
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 6, 4])
             context.update({
                 "oi": self.oi,
                 "max_draft_limit": settings.DRAFT_MAX_LIMIT,

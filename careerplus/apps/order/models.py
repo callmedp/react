@@ -25,6 +25,7 @@ from seo.models import AbstractAutoDate
 from geolocation.models import Country, CURRENCY_SYMBOL
 
 #third party imports
+from payment.utils import manually_generate_autologin_url
 
 #Global Constants
 CURRENCY_SYMBOL_CODE_MAPPING = {0:"INR",1:"USD",2:"AED",3:"GBP"}
@@ -250,6 +251,16 @@ class Order(AbstractAutoDate):
             return super(Order,self).save(**kwargs)
 
         existing_obj = Order.objects.get(id=self.id)
+        
+        if self.status == 1:
+            assesment_items = self.orderitems.filter(
+                order__status__in=[0, 1],
+                product__type_flow=16,
+                product__sub_type_flow=1602,
+                autologin_url=None
+            )
+            manually_generate_autologin_url(assesment_items=assesment_items)
+        
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_resume_builder:
             generate_resume_for_order.delay(self.id)
             logging.getLogger('info_log').info("Generating resume for order {}".format(self.id))
@@ -387,6 +398,12 @@ class OrderItem(AbstractAutoDate):
     # replacement_order_id
     replacement_order_id = models.CharField(
         _("Replacement Order number"), null=True, blank=True, max_length=20)
+
+    # autologin url for assesment
+    autologin_url = models.CharField(
+        _("Auto Login Url"), null=True, blank=True, max_length=2000,
+    )
+
 
     class Meta:
         app_label = 'order'

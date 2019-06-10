@@ -1,0 +1,189 @@
+{% extends "console/base_console.html" %}
+{% load static compress %}
+{% load console_tags %}
+{% load humanize %}
+{% load thumbnail %}
+
+{% block title %}
+  <title>Product Listing</title>
+{% endblock title %}
+
+{% block pagecontent %}
+<!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>Pixel Tracker Generator</h3>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        {% if messages %}
+            {% for message in messages %}
+
+              <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+              {{ message }}
+              </div>
+            {% endfor %}
+        {% endif %}
+
+      </div>
+    </div>
+    <div class="clearfix"></div>
+    
+    <div class="row">
+
+      <div class="col-md-6 col-sm-6 col-xs-6">
+        <div class="x_panel">
+
+
+          <div class="x_content">
+          <form action="." method="post" novalidate>
+            {% csrf_token %}
+            {{form}}
+            <br>
+            <button type="submit" class="btn btn-primary">Submit </button>
+          </form>
+                
+          </div>
+        </div>
+      </div>
+      {% if pixel_tracker %}
+        <div class="col-md-6">
+          <h5>Code</h5>
+          <textarea style="resize: none; width: 500px;" rows="20" cols="500" disabled readonly>{{pixel_tracker}}</textarea>
+                    </div>
+        {% endif %}
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <div class="title_left">
+        <h3>Pixel Tracker List</h3>
+
+        <div class="row">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+              <table class="table">
+                <thead>
+                <tr>
+                  <th>Pixel Slug</th>
+                  <th>Landing Urls</th>
+                  <th>Conversion Urls</th>
+                  <th>Days</th>
+                  <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                  {% for pix in page.object_list %}
+                    <tr>
+                      <td id="pixel_slug">{{ pix.pixel_slug }}</td>
+                      <td id="landing_url">{{ pix.landing_urls }}</td>
+                      <td id="conversion_url">{{ pix.conversion_urls }}</td>
+                      <td id="days">{{ pix.days }}</td>
+                      <td><button class="btn btn-primary edit_pixel">Change</button></td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+                {% block main_pagination %}
+                <div class="main_pagination">
+                  {% if page %}
+                  <div class="col-sm-4">
+                       <div class="pull-left" style="display: inline-block;adding-left: 0;margin: 20px 0;">
+                        {% with current_page=page.number total_page=page.paginator.num_pages %}Page {{ current_page }} of {{ total_page }}
+                        {% endwith %}
+                      </div>
+                  </div>
+
+                <div class="col-sm-8">
+                    <div class="pull-right">
+                        <ul class="pagination">
+                        {% if page.has_previous %}
+                            <li class="paginate_button previous">
+                                <a href="?page={{ page.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >&laquo;</a>
+                            </li>
+                        {% endif %}
+
+                        {% for page_number in begin %}
+                            <li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %} ">
+                                <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
+                            </li>
+                        {% endfor %}
+
+                        {% if middle %}
+                            <li class="paginate_button disable"><a href="javascript:void(0);">&hellip;</a></li>
+                            {% for page_number in middle %}
+                                <li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %}">
+                                    <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
+                                    
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if page_end %}
+                            <li class="paginate_button disable"><a href="javascript:void(0);">&hellip;</a></li>
+                            {% for page_number in page_end %}
+                                <li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %}">
+                                    <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if page.has_next %}
+                            <li class="paginate_button next">
+                                <a href="?page={{ page.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >&raquo;</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                  </div>
+                </div>
+                {% endif %}
+
+
+      </div><!-- main_pagination end here -->
+      {% endblock main_pagination %}
+     
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /page content -->
+
+
+{% endblock pagecontent %}
+
+        
+{% block js_block %}
+  {{ block.super }}
+  <script type="text/javascript" src="{% static 'packages/jquery.tagsinput/src/jquery.tagsinput.js' %}"></script>
+  <script>
+    $('#id_conversion_urls').tagsInput({
+      width: 'auto'
+    });
+    $('#id_landing_urls').tagsInput({
+      width: 'auto'
+    });
+  </script>
+  <script type="text/javascript">
+    $(".edit_pixel").click(function(){
+      var parent = $(this).parent()
+      var pixel_slug = parent.siblings("#pixel_slug").text()
+      var landing_url = parent.siblings("#landing_url").text()
+      var conversion_url = parent.siblings("#conversion_url").text()
+      var days = parent.siblings("#days").text()
+      $("#id_pixel_slug").val(pixel_slug)
+      $("#id_conversion_urls").importTags(conversion_url)
+      $("#id_landing_urls").importTags(landing_url)
+      $("#id_days").val(days)
+      $("html, body").animate({ scrollTop: 0 }, "slow");
+    })
+  </script>
+
+
+{% endblock js_block %}

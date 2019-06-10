@@ -45,7 +45,7 @@ from console.decorators import Decorate, stop_browser_cache
 from core.utils import get_client_ip,get_client_device_type
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 
-#third party imports
+# third party imports
 
 
 @Decorate(stop_browser_cache())
@@ -263,8 +263,16 @@ class ThankYouView(TemplateView):
                 pending_resume_items = order.orderitems.filter(
                     order__status__in=[0, 1],
                     no_process=False, oi_status=2)
+
+                assesment_items = order.orderitems.filter(
+                    order__status__in=[0],
+                    product__type_flow=16,
+                    product__sub_type_flow=1602
+                )
+
                 context.update({
                     "pending_resume_items": pending_resume_items,
+                    "assesment_items": assesment_items
                 })
 
                 if not self.request.session.get('resume_id', None):

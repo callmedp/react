@@ -439,6 +439,7 @@ CORS_ORIGIN_WHITELIST = ('*',)
 COURSE_SLUG = ['course', ]
 WRITING_SLUG = ['writing', 'resume']
 SERVICE_SLUG = ['service', ]
+ASSESSMENT_SLUG = ['assessment']
 # delivery slug
 NORMAL_DELIVERY_SLUG = ['normal', ]
 EXPRESS_DELIVERY_SLUG = ['express', ]
@@ -469,6 +470,7 @@ LEARNING_BLOGGER = ['LEARNING_BLOGGER']
 TALENT_BLOGGER = ['TALENT_BLOGGER']
 HR_INSIDER = ['HR_INSIDER']
 BLOGGER_GROUP_LIST = [LEARNING_BLOGGER, TALENT_BLOGGER, HR_INSIDER, PRODUCT_GROUP_LIST]
+
 # Refund Application level
 OPS_GROUP_LIST = ['OPERATION']
 OPS_HEAD_GROUP_LIST = ['OPS_HEAD']
@@ -510,6 +512,7 @@ SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = PROJECT_DIR + '/careerplus/config/code-learning-key.json'
 
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 365  # 1 year
+CONSOLE_SESSION_TIMEOUT = 60 * 60 * 24
 
 CMS_STATIC_TEMP_DICT = {
     1: 'cms_static.html',
@@ -521,6 +524,7 @@ MAINTENANCE_MESSAGE = "This site will be under maintenance from 9 pm to 12 pm on
 
 ############ MARKETING PAGES MAPPING WITH ID
 
+<<<<<<< HEAD
 URL_MAPPING_TO_PRODUCT = {"resume-writing-services-1": ([1921, 1922, 1923, 1924, 32], 1921)
     , "linkedin-1": ([1926, 1925, 1927, 1928, 33], 1926),
                           "aws-cert": ([3133], 3133),
@@ -557,3 +561,7 @@ MEDIA_ALLOWED_CONTENT_TYPES = ['image/jpeg', 'image/jpg', 'image/gif', 'image/pn
 
 
 RESUME_TEMPLATE_DIR = "resume-builder"
+
+#Haystack Settings
+HAYSTACK_ROUTERS = ['careerplus.config.haystack_routers.MasterSlaveRouter', 'haystack.routers.DefaultRouter']
+

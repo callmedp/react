@@ -33,6 +33,8 @@ class RefundInfoMixin(object):
                 parent=None).select_related('product', 'partner').exclude(oi_status=163)
             for p_oi in parent_ois:
                 data = {}
+                if p_oi.product.type_flow == 16:
+                    continue
                 data['oi'] = p_oi
                 data['addons'] = order.orderitems.filter(
                     parent=p_oi,

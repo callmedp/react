@@ -112,6 +112,10 @@
   @include icon-inblock (10px, 7px, -37px -96px);
 }
 
+.icon-tickBig {
+  @include icon-inblock (50px, 37px, -319px -140px);
+}
+
 .icon-file {
  @include icon-inblock (34px, 32px, 0 -110px); 
 }
@@ -382,6 +386,21 @@
   @extend %absolute-margin-0;
 }
 
+.icon-link-df {
+  @include icon-inblock (32px, 32px, -276px -406px);
+  @extend %absolute-margin-0;
+}
+
+.icon-test-df {
+  @include icon-inblock (41px, 32px, -311px -406px);
+  @extend %absolute-margin-0;
+}
+
+.icon-report-df {
+  @include icon-inblock (33px, 39px, -357px -406px);
+  @extend %absolute-margin-0;
+}
+
 .icon-loc {
   @include icon-inblock (12px, 17px, -2px -306px);
   position: absolute;
@@ -626,4 +645,36 @@
   @include icon-inblock (16px, 18px, -535px 0);
   vertical-align: middle;
   margin-right: 10px;
+}
+
+.icon-question {
+  @include size(27px, 29px);
+  display: inline-block;
+  background-position: 0 -406px;
+}
+
+.icon-time {
+  @include size(27px, 33px);
+  display: inline-block;
+  background-position: -32px -406px;
+}
+
+.icon-industry {
+  background-position: -62px -405px;
+}
+
+.icon-verified {
+  background-position: -105px -405px;
+}
+
+.icon-certificate {
+  background-position: -146px -405px;
+}
+
+.icon-badge {
+  background-position: -188px -405px;
+}
+
+.icon-receive {
+  background-position: -230px -405px;
 }

@@ -247,7 +247,7 @@ class ProductModeration(object):
                         messages.error(request, "INR Price is negetive")
                         return test_pass
                     if product.type_product in [0,1,3,5]:
-                        if product.is_course:
+                        if product.is_course or product.is_assesment:
                             if not product.chapter_product.filter(status=True):
                                 messages.error(request, "Product has no active chapter")
                                 return test_pass
@@ -260,7 +260,7 @@ class ProductModeration(object):
                     else:
                         messages.error(request, "Invalid Product Choice")
                         return test_pass
-                    if product.type_product in [0, 1, 3, 4]:
+                    if product.type_product in [0, 1, 3, 4] and product.type_flow != 16:
                         if not product.description:
                             messages.error(request, "Description is required")
                             return test_pass
@@ -371,6 +371,8 @@ class ProductModeration(object):
                 product.upc = screen.upc
                 product.product_class = screen.product_class
                 product.type_product = screen.type_product
+                product.type_flow = screen.type_flow
+                product.sub_type_flow = screen.sub_type_flow
                 
                 product.about = screen.about
                 product.description = screen.description
@@ -460,7 +462,7 @@ class ProductModeration(object):
                         vproduct.upc = vscreen.upc
                         vproduct.product_class = vscreen.product_class
                         vproduct.type_product = vscreen.type_product
-                        
+                        vproduct.type_flow = vscreen.type_flow
                         vproduct.inr_price = vscreen.inr_price
                         vproduct.fake_inr_price = vscreen.fake_inr_price
                         vproduct.usd_price = vscreen.usd_price
@@ -1062,15 +1064,19 @@ class ProductValidation(object):
                         return test_pass
                     
                     if product.type_product in [0,1,3,5]:
-                        if product.is_course:
+                        if product.is_course or product.is_assesment:
                             if not product.chapter_product.filter(status=True):
                                 messages.error(request, "Product has no active chapter")
                                 return test_pass
                     
 
-                    if product.type_product in [0, 1, 3, 4]:
+                    if product.type_product in [0, 1, 3, 4] and product.type_flow != 16:
                         if not product.description:
                             messages.error(request, "Description is required")
+                            return test_pass
+                    if product.type_flow == 16:
+                        if not product.about:
+                            messages.error(request, "About is Required")
                             return test_pass
                     if not product.countries.all().exists():
                         messages.error(request, "Available Country is required")
@@ -1221,11 +1227,10 @@ def get_days_month_year(days_value=0):
     if not days_value or not isinstance(days_value, int):
         return ""
 
-    DAYS_IN_YEAR = 365
-    DAYS_IN_MONTH = 30
-    years, remain = divmod(days_value, DAYS_IN_YEAR)
-    months, days = divmod(remain, DAYS_IN_MONTH)
-    return get_attr_repr(years,"year") + "-" + get_attr_repr(months,"month") + "-"+ get_attr_repr(days,'day')
+    years, remain = divmod(days_value, 365)
+    months, days = divmod(remain, 30)
+    return "-".join(filter(None,[get_attr_repr(years,"year"),\
+                                 get_attr_repr(months,"month"),get_attr_repr(days,'day')]))
 
 
 

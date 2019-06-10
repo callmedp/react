@@ -6,7 +6,7 @@
     {% include 'meta/meta.html' %}
 {%  endblock django_meta %}
 {% block canonical_url %}
-  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ object.get_absolute_url }}">
+  <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ object.get_absolute_url }}">
   <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{ request.path }}?type=amp">
 {% endblock canonical_url %}
 
@@ -109,12 +109,15 @@
 {% block js_section %}
     {{block.super}}
     <script type="text/javascript" src="{% static 'shinelearn/js/mobile/talenteconomy/article.js' %}"></script>
+       <script type="text/javascript" src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
+
     <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
     <script>
         $(function() {
             Article.init();
         });
     </script>
+
 {% endblock js_section %}
 
 {% block johukum %}

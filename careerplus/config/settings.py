@@ -257,6 +257,12 @@ HAYSTACK_CONNECTIONS = {
         'URL': 'http://172.22.65.33:8983/solr/prdt',  # prdt(staging learning1) # live_prod(staging learing2)
         'INCLUDE_SPELLING': False,
     },
+
+    'index': {
+        'ENGINE': 'core.library.haystack.custom_solr_backend.CustomSolrEngine',
+        'URL': 'http://172.22.65.33:8983/solr/prdt',  # prdt(staging learning1) # live_prod(staging learing2)
+        'INCLUDE_SPELLING': False,
+    }
 }
 
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
@@ -353,6 +359,18 @@ FEATURE_PROFILE_EXCLUDE=[49]
 TEST_EMAIL = False
 
 
+VENDOR_URLS = {
+    'amcat': {
+        'all_certificates': 'https://www.myamcat.com/api/3p/assessment-results',
+        'get_autologin_url': 'https://www.myamcat.com/api/3p/schedule-skill-test'
+    }
+}
+
+
+AMCAT_API_TOKEN = '7347D18D79F6431CB9ACADBE704B2389'
+AMCAT_API_SECRET = '7B348DF7F1A4EBED5DCBC0A1E4AC6B67'
+
+IMPORT_CERTIFICATE_ALLOWED_VEDOR = ('amcat',)
 
 EXOTEL_DICT = {
            'token': '9e4df38c0c3bd1009ca142da306d827e71e74737',
@@ -363,8 +381,10 @@ EXOTEL_DICT = {
            'check_dnd_url': 'https://{sid}:{token}@api.exotel.com/v1/Accounts/{sid}/Numbers/{number}.json',
             }
 
-
 RESUME_BUILDER_NON_COMBO_PID = 3092
+URL_SHORTENER_AUTH_DICT = {"access_token":"29d325106d379436d7fbe9dc76844350859d24c1",
+                        "end_point":"https://u.shine.com/api/generate-url/"
+                        }
 
 try:
     from .settings_local import *

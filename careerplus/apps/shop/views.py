@@ -56,6 +56,7 @@ from review.forms import ReviewForm
 from .models import Skill
 from homepage.config import UNIVERSITY_COURSE
 from crmapi.models import UNIVERSITY_LEAD_SOURCE
+from partner.models import ProductSkill
 
 redis_conn = get_redis_connection("search_lookup")
 
@@ -139,18 +140,25 @@ class ProductInformationMixin(object):
         info['prd_rating_star'] = product.pStar
         info['prd_video'] = product.pvurl
         info['start_price'] = product.pPinb
+
         if product.pPc == 'course':
             info['prd_service'] = 'course'
         elif product.pPc == 'writing':
             info['prd_service'] = 'resume'
         elif product.pPc == 'service':
             info['prd_service'] = 'service'
+        elif product.pPc == 'assessment':
+            info['prd_service'] = 'assessment'
         else:
             info['prd_service'] = 'other'
         info['prd_product'] = product.pTP
         info['prd_exp'] = product.pEX
+
         if product.pTF == 5:
             info['prd_dur'] = product.pDM[0] if product.pDM else ''
+
+        if product.pTF == 16 and product.pAsft:
+            info['prd_asft'] = eval(product.pAsft[0])
         return info
 
     def get_program_structure(self, product):
@@ -352,10 +360,11 @@ class ProductInformationMixin(object):
         ctx = {}
         ctx['product'] = product
         ctx['num_jobs_url'] = self.get_jobs_url(product)
+
         if product:
             ctx.update(self.get_breadcrumbs(product, product.category_main))
         ctx.update(self.solar_info(sqs))
-        if product.is_course:
+        if product.is_course or product.is_assesment:
             ctx.update(self.solar_program_structure(sqs))
         ctx.update(self.solar_faq(sqs))
 
@@ -616,8 +625,10 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         super(ProductDetailView, self).__init__(*args, **kwargs)
 
     def get_template_names(self):
-        if self.product_obj.type_flow==14:
+        if self.product_obj.type_flow == 14:
             return['shop/university.html']
+        elif self.product_obj.type_flow == 16:
+            return ['shop/assesment.html']
         if not self.request.amp:
             return ['shop/detail1.html']
         if not settings.DEBUG:
@@ -636,9 +647,14 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         product_data = self.get_product_detail_context(
             self.product_obj, self.sqs,
             self.product_obj, self.sqs)
-        product_detail_content = render_to_string(
-            'shop/product-detail.html', product_data,
-            request=self.request)
+        if self.product_obj.type_flow == 16:
+            product_detail_content = render_to_string(
+                'shop/product-detail-assesment.html', product_data,
+                request=self.request)
+        else:
+            product_detail_content = render_to_string(
+                'shop/product-detail.html', product_data,
+                request=self.request)
         ctx.update({
             'product_detail': product_detail_content,
             "ggn_contact_full": settings.GGN_CONTACT_FULL,
@@ -1196,3 +1212,15 @@ class ProductDetailContent(View, ProductInformationMixin, CartMixin):
 
             return HttpResponse(json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()
+
+
+class SkillToProductRedirectView(View):
+
+    def get(self, request, *args, **kwargs):
+        skill_name = self.kwargs.get('skill_name', '')
+        pkskl = ProductSkill.objects.filter(skill__name=skill_name).first()
+        if not pkskl:
+            pkskl = ProductSkill.objects.all().first()
+        url_ro_rirect = pkskl.product.get_absolute_url()
+        return HttpResponseRedirect(url_ro_rirect)
+

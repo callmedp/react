@@ -50,6 +50,9 @@ class WelcomeCallInfo(object):
         for data in order_items:
             data_dict = {}
             oi = data.get('oi')
+            # Do not consider assesment items in welcome call
+            if oi.product.type_flow == 16:
+                continue
             addons = data.get('addons')
             variations = data.get('variations')
             combos = data.get('combos')
@@ -835,6 +838,7 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
                 for oi_data in wc_items:
                     oi = oi_data.get('oi')
                     name = 'subcategory' + str(oi.pk)
+
                     oi_category = int(data.get(name))
                     oi.wc_cat = cat
                     oi.wc_sub_cat = oi_category

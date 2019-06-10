@@ -117,9 +117,15 @@ META_FB_PROFILE_ID = '282244838633660'
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'core.library.haystack.custom_solr_backend.CustomSolrEngine',
-        'URL': 'http://172.22.65.33:8983/solr/prdt',
+        'URL': 'http://172.22.65.33:8983/solr/prdt',  # prdt(staging learning1) # live_prod(staging learing2)
         'INCLUDE_SPELLING': False,
     },
+
+    'index': {
+        'ENGINE': 'core.library.haystack.custom_solr_backend.CustomSolrEngine',
+        'URL': 'http://172.22.65.33:8983/solr/prdt',  # prdt(staging learning1) # live_prod(staging learing2)
+        'INCLUDE_SPELLING': False,
+    }
 }
 
 ###### SHINE SETTINGS ###########
@@ -382,13 +388,7 @@ MAINTENANCE_MESSAGE = "This site will be under maintenance from 9 pm to 12 pm on
 
 ############### VIRTUAL_ENV PATH
 VENV_PATH = "/root/virtualenvs/careerplus3.6/bin/python3"
-
 CODE_PATH = "/code/careerplus/"
-
-try:
-    from .settings_local import *
-except:
-    pass
 
 EXOTEL_DICT = {
     'token': '9e4df38c0c3bd1009ca142da306d827e71e74737',
@@ -400,8 +400,12 @@ EXOTEL_DICT = {
 }
 
 RESUME_BUILDER_NON_COMBO_PID = 3092
+URL_SHORTENER_ACCESS_TOKEN = "29d325106d379436d7fbe9dc76844350859d24c1"
 
 try:
     from .settings_local import *
 except:
     pass
+##for testing purpose using live working key
+
+# CCAVENUE_WORKING_KEY = 'BB84397177B2D640744BA272627C2A61'
