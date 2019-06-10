@@ -107,7 +107,7 @@ class Menu extends Component {
                     )}
                 </ul>
                 {addmore.filter(item =>item.active ===false).length ?
-                    <ul className="addMore__items grey-bg pt-0">
+                    <ul className="addMore__items grey-bg pt-0 pb-0">
                         {addmore.filter(item =>item.active ===false).map((item, key) =>
                             {
                                 return(

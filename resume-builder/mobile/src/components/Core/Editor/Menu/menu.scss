@@ -5,6 +5,9 @@
     padding-top: 7rem;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+    height: 100vh;
+    padding-bottom: 5.5rem;
+    overflow-x: auto;
 
     &__items {
         
@@ -37,7 +40,8 @@
 
 .add-reamove {
     position: fixed;
-    bottom: 60px;
+    bottom: 55px;
     border-top: 1px solid $border1;
     background-color: $white;
+    height: 55px;
 }
