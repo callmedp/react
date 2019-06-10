@@ -138,7 +138,7 @@ class Home extends Component {
                     </div>
 
                     <div className="text-center mt-30">
-                        <a className="btn btn__medium btn__shadow btn__round btn__primary" onClick={() => this.scrollTo('templates')}>Build your resume</a>
+                        <a className="btn btn__shadow btn__round btn__primary" onClick={() => this.scrollTo('templates')}>Build your resume</a>
                     </div>
                
                     </section>

@@ -41,8 +41,7 @@ export default class Banner extends Component {
                 <img src={`${this.staticUrl}react/assets/images/mobile/resume-bundel.png`} alt=""
                      className="img-fluid"/>
                 <p className="text-center mt-5">
-                    <a className="btn pt-10 pb-10 btn__round btn__primary" onClick={() => this.scrollTo('templates')}>Build
-                        your resume</a>
+                    <a className="btn pt-10 pb-10 btn__round btn__primary btn__shadow" onClick={() => this.scrollTo('templates')}>Build your resume</a>
                 </p>
                 <ul className="resume-pointer">
                     <li>

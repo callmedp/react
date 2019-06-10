@@ -35,7 +35,7 @@ export default class ResumeSlider extends Component {
 
         return (
             
-            <section className="section proven-resume" id="templates">
+            <section className="section proven-resume mt-30 home-slider" id="templates">
             {showtext ?
                 <div className="text-center">
                     <h2 className="section__head">Proven resume templates</h2>
