@@ -28,7 +28,8 @@ class Preview extends Component {
             textFontSize: 1,
             activeSection: 'left',
             sectionEntityName: '',
-            selectedEntity: ''
+            selectedEntity: '',
+            startingReorderUpDowmIndex : 0
         }
         this.handleCustomization = this.handleCustomization.bind(this);
         this.selectSection = this.selectSection.bind(this);
@@ -60,14 +61,17 @@ class Preview extends Component {
 
         this.setState({
             sectionEntityName: section['entity_text'],
-            selectedEntity: section
+            selectedEntity: section,
+            startingReorderUpDowmIndex: -1
         })
 
     }
 
     handleActiveSection(section) {
         this.setState({
-            activeSection: section
+            activeSection: section,
+            startingReorderUpDowmIndex: 0,
+            sectionEntityName:''
         })
     }
 
@@ -93,7 +97,7 @@ class Preview extends Component {
     }
 
     render(){
-        const {customize,currentTab,selectedColor,headingFontSize,textFontSize,sectionEntityName,activeSection} = this.state
+        const {customize,currentTab,selectedColor,headingFontSize,textFontSize,sectionEntityName,activeSection,startingReorderUpDowmIndex} = this.state
         const {initialValues:{html,entity_position},ui:{mainloader},personalInfo:{selected_template}} = this.props
         return(
             <div className="preview">
@@ -276,7 +280,7 @@ class Preview extends Component {
                                                                     (item.entity_id!==1 && item.entity_id!==6)
                                                                     && (item['active'])).map((el,index)=>{
                                                                 return(
-                                                                        <li className={"reorder__item " + (!!(el['entity_text'] === sectionEntityName)? " reorder--select":"")}
+                                                                        <li key={index} className={"reorder__item " + ((el['entity_text'] === sectionEntityName || startingReorderUpDowmIndex===index)? " reorder--select":"")}
                                                                             onClick={() => this.selectSection(el)} >
                                                                             <span className="reorder__title">{el.entity_text}</span>
                                                                             <div className="reorder__nav">

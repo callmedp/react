@@ -151,7 +151,8 @@ class PersonalInfo extends Component {
         let url = await this.props.fetchImageUrl(event.target.files[0]);
 
         this.setState({
-            'imageURL': url
+            'imageURL': url,
+            flag:true
         })
     }
 
@@ -159,7 +160,7 @@ class PersonalInfo extends Component {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
         const {handleSubmit, personalInfo,submitting,personalInfo:{subscription_status},history} = this.props;
-        const {editHeading,heading} =this.state;
+        const {editHeading,heading,flag} =this.state;
         const focus = true
         return (
             
@@ -255,10 +256,10 @@ class PersonalInfo extends Component {
                         <li className="form__group">
                             <span className="upload--image">
                             {
-                                this.state.imageURI || personalInfo.image ?
+                                (this.state.imageURI || personalInfo.image) && flag ?
                                     <React.Fragment>
                                         <span className="close-wrap">
-                                            <i className="sprite icon--close" onClick={()=>{this.setState({imageURL:'',imageURI:''})}}></i>
+                                            <i className="sprite icon--close" onClick={()=>{this.setState({imageURL:'',imageURI:'',flag:false})}}></i>
                                         </span>
                                         <img alt={"User Profile"}
                                                 src={this.state.imageURI || personalInfo.image}/> 
