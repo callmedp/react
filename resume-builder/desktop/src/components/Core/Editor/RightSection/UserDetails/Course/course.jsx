@@ -107,8 +107,6 @@ class Course extends Component {
                             entityName={entityName}
                             expanded={this.state.active}
                             handleInputValue={handleInputValue}
-
-
                 />
                 <div className="flex-container items-right mr-20 mb-30">
                     <button className="blue-button mr-10" type={'button'} onClick={handlePreview}>Preview</button>
