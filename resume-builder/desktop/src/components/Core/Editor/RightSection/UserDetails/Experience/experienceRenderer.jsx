@@ -193,6 +193,7 @@ export const ExperienceRenderer = ({
 
                                                     < div className="flex-container">
                                                         <fieldset>
+                                                        <span className="word-counter">0 - 500</span>
                                                         <span className="add-suggested"
                                                               onClick={() =>  openModal(fields, index)}>Add suggested experience</span>
 

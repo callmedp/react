@@ -38,4 +38,5 @@ modal {
 
 .ReactModal__Overlay--after-open {
   background: rgba(0, 0, 0, 0.5) !important; 
+  z-index: 9;
 }
