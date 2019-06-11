@@ -69,7 +69,7 @@ export const renderAwards = ({
 
                         <li className="form__group">
                             <Field component={renderField} label={"Title"}  type={"text"} name={`${member}.title`} prepend={true}
-                                id={`${member}.title`} iconClass={"sprite icon--education-grey"} className="form__input"/>
+                                id={`${member}.title`} iconClass={"sprite icon--education-grey"} maxLength={'50'} className="form__input"/>
                         </li>
 
                         <li className="form__group dob">
@@ -78,16 +78,9 @@ export const renderAwards = ({
                         </li>
 
                         <li className="form__group">
-                            <label className="form__label" htmlFor="summary">Summary</label>
-                            <div className="input-group">
-                                <div className="input-group__prepend">
-                                    <span className="input-group__text">
-                                        <i className="sprite icon--course-type"></i>
-                                    </span>
-                                </div>
-                                <Field component={renderTextArea} type={"textarea"} className={'form__input'}
-                                    className="form__input" name={`${member}.summary`}/>
-                            </div>
+                            <Field component={renderTextArea} type={"textarea"} className={'form__input'} label={'Summary'}
+                                name={`${member}.summary`} maxLength={'300'} prepend={true} iconClass={"sprite icon--course-type"}
+                                id={`${member}.summary`}/>
                         </li>
                     </ul>
                 </div>

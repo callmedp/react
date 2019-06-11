@@ -9,30 +9,56 @@ export default class AddSuggesion extends Component{
     constructor(props){
         super(props);
         this.state={
-            suggestion_selected:{}
+            suggestion_selected:{},
+            error:false,
+            length:0
         }
         this.addSuggesion = this.addSuggesion.bind(this);
         this.removeSuggesion =this.removeSuggesion.bind(this)
+        this.handleSuggestion = this.handleSuggestion.bind(this)
     }
 
     addSuggesion(el,index,event){
         event.preventDefault()
         let {suggestion_selected} = this.state
+        const {maxLength} = this.props
+        const {length} = this.state
+        if(length + el.length >maxLength){
+            this.setState({error:true})
+            return
+        }
         suggestion_selected[`${index}`] = el
-        this.setState({suggestion_selected})
+        this.setState({suggestion_selected,error:false,length:length+el.length})
 
+    }
+
+    componentDidMount(){
+        const {length} = this.props
+        this.setState({length})
+    }
+    componentDidUpdate(prevProps){
+        const {length} = this.props
+        if(length!==prevProps.length){
+            this.setState({length})
+        }
     }
 
     removeSuggesion(index,event){
         event.preventDefault()
-        let {suggestion_selected} = this.state
+        let {suggestion_selected,length} = this.state
+        this.setState({error:false,length:length-suggestion_selected[`${index}`]})
         delete suggestion_selected[`${index}`]
         this.setState({suggestion_selected})
     }
 
+    handleSuggestion(suggestion_selected){
+        this.props.closeModal(suggestion_selected); 
+        this.setState({suggestion_selected:{},error:false})
+    }
+
     render(){
-        const {label,modal_status,closeModal,suggestions} = this.props
-        const {suggestion_selected} = this.state
+        const {label,modal_status,closeModal,suggestions,maxLength} = this.props
+        const {suggestion_selected,error} = this.state
         return(
             <Modal 
                 isOpen={modal_status} 
@@ -61,15 +87,16 @@ export default class AddSuggesion extends Component{
                                     )
                                 }
                             </div>
+                            {error ?<p className="suggestion-error">Sorry this Suggestion cannot be added.It exceeds the maximum {maxLength} characters length of summary</p>:''}
 
                             <div className="text-center Modal--summary--bottom-ctc">
-                                <a className="btn btn__round btn__primary" onClick={()=>{closeModal(suggestion_selected); this.setState({suggestion_selected:{}})}}>Save & Continue</a>
+                                <a className="btn btn__round btn__primary" onClick={()=>{this.handleSuggestion(suggestion_selected)}}>Save & Continue</a>
                             </div>
                         </React.Fragment> :
                         <div className="Modal--summary--white-box sorry-popup">
                             <p className=" text-center no-suggestion">Sorry Suggestion not Available for this Job Title</p>
                             <div className="text-center mb-15">
-                                <a className="btn btn__medium btn__round btn__primary" onClick={()=>{closeModal(suggestion_selected); this.setState({suggestion_selected:{}})}}>Close</a>
+                                <a className="btn btn__medium btn__round btn__primary" onClick={()=>{this.handleSuggestion(suggestion_selected)}}>Close</a>
                             </div>
                         </div>
                     }

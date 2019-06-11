@@ -157,12 +157,12 @@ class Summary extends Component {
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {personalInfo: {subscription_status}, handleSubmit,submitting,history,ui:{suggestions}} = this.props;
+        const {personalInfo: {subscription_status},extra_info, handleSubmit,submitting,history,ui:{suggestions}} = this.props;
         const {editHeading,heading,modal_status} =this.state;
         return (
         <div className="buildResume">
             <PreviewModal {...this.props}/>
-            <AddSuggesion label={'Summary'} modal_status={modal_status} closeModal={this.closeModal} suggestions={suggestions}/>
+            <AddSuggesion label={'Summary'} modal_status={modal_status} length={extra_info.length} maxLength="500" closeModal={this.closeModal} suggestions={suggestions}/>
             <div className="buildResume__wrap pb-0">
                 <div className="buildResume__heading">
                 {!editHeading ?
@@ -183,7 +183,7 @@ class Summary extends Component {
                     
                         <li className="form__group">
                             <Field component={renderTextArea} label={"Summary"}  type={"text"} name="extra_info" 
-                                id="extra_info" prepend={false} className="form__input h-150" maxLength="200"/>
+                                id="extra_info" prepend={false} className="form__input h-150" maxLength={"500"}/>
                             <p className="add-suggested" onClick={()=>{this.openModal()}}>
                                 <span>+</span>Add suggested summary
                             </p>
@@ -212,7 +212,8 @@ const mapStateToProps = (state) => {
         initialValues: state.personalInfo,
         personalInfo: state.personalInfo,
         ui: state.ui,
-        experience: state.experience
+        experience: state.experience,
+        extra_info: state.form && state.form.summary &&  state.form.summary.values &&  state.form.summary.values.extra_info || ''
     }
 };
 

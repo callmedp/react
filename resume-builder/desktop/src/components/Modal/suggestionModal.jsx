@@ -38,8 +38,7 @@ export default class SuggestionModal extends React.Component {
             return
         }
         suggestion_selected[`${index}`] = el
-        this.setState({suggestion_selected})
-        this.setState({error:false,length:length+el.length})
+        this.setState({suggestion_selected,error:false,length:length+el.length})
 
     }
 

@@ -15,6 +15,7 @@ export const renderField = ({
                                 iconClass,
                                 id,
                                 prepend,
+                                maxLength,
                                 meta: {touched, error, warning}
                             }) => (
 
@@ -23,7 +24,7 @@ export const renderField = ({
             <label className="form__label" htmlFor={input.name}>{label}</label>
             {!prepend ?
                 <React.Fragment>
-                    <input {...input} className={className +(touched && error ? " error" : "")} id={id} type={type} autoComplete="off"/>
+                    <input {...input} className={className +(touched && error ? " error" : "")} maxLength={maxLength} id={id} type={type} autoComplete="off"/>
                     {touched &&
                         ((<span className={'error-message'}>{error}</span>) ||
                             (warning && <span className={'warn-Message'}>{warning}</span>))
@@ -36,7 +37,7 @@ export const renderField = ({
                     <i className={iconClass}></i>
                 </span>
                 </div>
-                <input {...input} className={className} id={id} type={type} autoComplete="off"/>
+                <input {...input} className={className} id={id} type={type} maxLength={maxLength} autoComplete="off"/>
                 {touched &&
                     ((<span className={'error-message'}>{error}</span>) ||
                         (warning && <span className={'warn-Message'}>{warning}</span>))
@@ -62,18 +63,17 @@ export const renderCheckboxField = ({
     </React.Fragment>
 );
 
-const Input = ({onChange, placeholder, value, isSecure, id, onClick,name,disabled}) => (
+const Input = ({onChange, placeholder, value, id, onClick,name,disabled}) => (
     <input
         onChange={onChange}
         placeholder={placeholder}
         value={value}
-        isSecure={isSecure}
         name={name}
         id={id}
         onClick={onClick}
         disabled={disabled}
         autoComplete="off"
-        readonly="true"
+        readOnly={true}
     />
 );
 
@@ -208,32 +208,37 @@ export const renderTextArea = ({
                                    className,
                                    iconClass,
                                    prepend,
+                                   maxLength,
                                    meta: {touched, error, warning}
 
                                }) => (
     <React.Fragment>
         <label className="form__label" htmlFor={input.name}>{label}</label>
         {prepend ?
-        <div className="input-group">
-            <div className="input-group__prepend">
-                <span className="input-group__text">
-                    <i className={iconClass}></i>
-                </span>
-            </div>
-            <textarea {...input} placeholder={label} type={type} className={className} rows={rows}/>
-            <div>
-                {touched &&
-                ((error && <span className={'error-message'}>{error}</span>) ||
-                    (warning && <span className={'warn-Message'}>{warning}</span>))}
-            </div>
-        </div>:
         <React.Fragment>
-            <textarea {...input} placeholder={label} type={type} className={className} rows={rows}/>
+            <div className="input-group">
+                <div className="input-group__prepend">
+                    <span className="input-group__text">
+                        <i className={iconClass}></i>
+                    </span>
+                </div>
+                <textarea {...input} placeholder={label} type={type} className={className} maxLength={maxLength} rows={rows}/>
+                <div>
+                    {touched &&
+                    ((error && <span className={'error-message'}>{error}</span>) ||
+                        (warning && <span className={'warn-Message'}>{warning}</span>))}
+                </div>
+            </div>
+            <p className="text-length">{input.value.length ? input.value.length : 0}- {maxLength}</p>
+        </React.Fragment>:
+        <React.Fragment>
+            <textarea {...input} placeholder={label} type={type} className={className} maxLength={maxLength} rows={rows}/>
             <div>
                 {touched &&
                 ((error && <span className={'error-message'}>{error}</span>) ||
                     (warning && <span className={'warn-Message'}>{warning}</span>))}
             </div>
+            <p className="text-length">{input.value.length ? input.value.length : 0}- {maxLength}</p>
         </React.Fragment>
         }
         

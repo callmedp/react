@@ -69,7 +69,7 @@ const renderLanguage = ({
                         <ul className="form pb-0">
                             <li className="form__group">
                                 <Field component={renderField} label={"Language name"}  type={"text"} name={`${member}.name`}
-                                    id={`${member}.name`} prepend={false} className="form__input"/>
+                                    id={`${member}.name`} prepend={false} className="form__input" maxLength={'50'}/>
                             </li>
                             
                             <li className="form__group">

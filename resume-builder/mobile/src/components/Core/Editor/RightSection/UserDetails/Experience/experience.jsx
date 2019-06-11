@@ -147,7 +147,6 @@ class Experience extends Component {
     }
 
     closeModal(suggestions){
-        console.log(suggestions)
         const {fields,currentIndex} = this.state
         const currentField = fields.get(currentIndex)
         if(Object.keys(suggestions).length){
@@ -181,7 +180,7 @@ class Experience extends Component {
             <div className="buildResume">
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <PreviewModal {...this.props}/>
-                    <AddSuggesion label={'Job Description'} modal_status={modal_status} closeModal={this.closeModal} suggestions={suggestions}  />
+                    <AddSuggesion label={'Job Description'} modal_status={modal_status} maxLength="300" length={length} closeModal={this.closeModal} suggestions={suggestions}  />
                     <FieldArray name="list" 
                                 handleSubmit={handleSubmit}
                                 handleAddition={this.props.handleAddition}

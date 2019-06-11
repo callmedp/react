@@ -69,19 +69,18 @@ const renderReferences = ({
 
                             <li className="form__group">
                                 <Field component={renderField} label={"Reference name"}  type={"text"} name={`${member}.reference_name`} prepend={true}
-                                    id={`${member}.reference_name`} iconClass={"sprite icon--project-gray"} className="form__input"/>
+                                    id={`${member}.reference_name`} iconClass={"sprite icon--project-gray"} className="form__input" maxLength={'50'}/>
                             </li>
 
                             <li className="form__group">
                                 <Field component={renderField} label={"Designation"}  type={"text"} name={`${member}.reference_designation`} prepend={true}
-                                    id={`${member}.reference_designation`} iconClass={"sprite icon--designation"} className="form__input"/>
+                                    id={`${member}.reference_designation`} iconClass={"sprite icon--designation"} className="form__input" maxLength={'50'}/>
                             </li>
                             
 
                             <li className="form__group">
-                                <label className="form__label" htmlFor="about_candidate">Description</label>
-                                <Field component={renderTextArea} rows="3" type={"textarea"}
-                                    className="form__input" name={`${member}.about_candidate`}/>
+                                <Field component={renderTextArea} rows="3" type={"textarea"} label={'Description'} id={`${member}.about_candidate`}
+                                    className="form__input" name={`${member}.about_candidate`} maxLength={'300'}/>
                             </li>
                             
                         </ul>

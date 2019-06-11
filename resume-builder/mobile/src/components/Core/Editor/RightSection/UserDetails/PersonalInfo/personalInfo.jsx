@@ -195,12 +195,12 @@ class PersonalInfo extends Component {
 
                         <li className="form__group">
                             <Field component={renderField} label={"First Name"}  type={"text"} name="first_name" id="first_name"
-                                iconClass={"sprite icon--firstName"}  className="form__input" prepend={true}/>
+                                iconClass={"sprite icon--firstName"}  className="form__input" prepend={true} maxLength={"20"}/>
                         </li>
 
                         <li className="form__group">
                             <Field component={renderField} label={"Last Name"}  type={"text"} name="last_name" id="last_name"
-                                iconClass={"sprite icon--lastName"} className="form__input" prepend={true}/>
+                                iconClass={"sprite icon--lastName"} className="form__input" prepend={true} maxLength={"20"}/>
                         </li>
 
                         <li className="form__group">
@@ -220,7 +220,7 @@ class PersonalInfo extends Component {
 
                         <li className="form__group">
                             <Field component={renderField} label={"Mobile"}  type={"number"} name="number" id="number" prepend={true}
-                                iconClass={"sprite icon--mobile"} className="form__input" pattern="\d*" maxLength="10"/>
+                                iconClass={"sprite icon--mobile"} className="form__input" pattern="\d*" maxLength={"10"}/>
                         </li>
 
                         <li className="form__group">
@@ -230,7 +230,7 @@ class PersonalInfo extends Component {
 
                         <li className="form__group">
                             <Field component={renderTextArea} label={"Address"}  type={"text"} name="location" id="location" 
-                                prepend={true} iconClass={"sprite icon--address"} className="form__input" rows="4"/>
+                                prepend={true} iconClass={"sprite icon--address"} className="form__input" rows="4" maxLength={'300'}/>
                         </li>
 
                         <li className="form__group">

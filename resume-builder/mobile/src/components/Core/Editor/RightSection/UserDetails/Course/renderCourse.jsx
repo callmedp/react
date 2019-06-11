@@ -70,7 +70,7 @@ const renderCourse = ({
                             
                         <li className="form__group">
                             <Field component={renderField} label={"Course name"}  type={"text"} name={`${member}.name_of_certification`} prepend={true}
-                                id={`${member}.name_of_certification`} iconClass={"sprite icon--course-grey"} className="form__input"/>
+                                id={`${member}.name_of_certification`} iconClass={"sprite icon--course-grey"} className="form__input" maxLength={'50'}/>
                         </li>
 
                         <li className="form__group dob">

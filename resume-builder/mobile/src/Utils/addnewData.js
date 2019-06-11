@@ -55,7 +55,7 @@ export const languageNewData = (fields) => {
             "candidate_id": '',
             "id": '',
             "name": '',
-            "proficiency": '',
+            "proficiency": 5,
             order: fields.length  
     }
 }
@@ -89,7 +89,7 @@ export const skillNewData = (fields) => {
             "candidate_id": '',
             "id": '',
             "name": '',
-            "proficiency": '',
+            "proficiency": 5,
             "order": fields.length  
     }
 }

@@ -72,7 +72,7 @@ const renderProjects = ({
                             
                             <li className="form__group">
                                 <Field component={renderField} label={"Project name"}  type={"text"} name={`${member}.project_name`} prepend={true} 
-                                    id={`${member}.project_name`} iconClass={"sprite icon--project-gray"} className="form__input"/>
+                                    id={`${member}.project_name`} iconClass={"sprite icon--project-gray"} className="form__input" maxLength={'50'}/>
                             </li>
     
                             <li className="form__group dob">
@@ -97,17 +97,10 @@ const renderProjects = ({
                             </li>
 
                             <li className="form__group">
-                                <label className="form__label" htmlFor="description">Description</label>
-                                <div className="input-group">
-                                    <div className="input-group__prepend">
-                                        <span className="input-group__text">
-                                            <i className="sprite icon--description"></i>
-                                        </span>
-                                    </div>
-                                    <Field component={renderTextArea} rows={"3"} type={"textarea"}
-                                        className="form__input" name={`${member}.description`}
-                                        value={`${member}.description`}/>
-                                </div>
+                                <Field component={renderTextArea} rows={"3"} type={"textarea"}
+                                    className="form__input" name={`${member}.description`}
+                                    prepend={true} iconClass={"sprite icon--description"} label={'Description'}
+                                    value={`${member}.description`} maxLength={'300'}/>
                             </li>
                         </ul>
                     </div>

@@ -69,7 +69,7 @@ const renderSkills = ({
                         <ul className="form pb-0">
 
                             <li className="form__group">
-                                <Field component={renderField} label={"Skill name"}  type={"text"} name={`${member}.name`}
+                                <Field component={renderField} label={"Skill name"}  type={"text"} name={`${member}.name`} maxLength={'50'}
                                     id={`${member}.name`} iconClass={"sprite icon--skills-grey"} className="form__input" prepend={true}/>
                             </li>
 

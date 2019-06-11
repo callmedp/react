@@ -87,8 +87,8 @@ const renderExperiences = ({
                         </li>
 
                         <li className="form__group">
-                            <Field component={renderField} label={"Company name"}  type={"text"} name={`${member}.company_name`} 
-                                id={`${member}.company_name`} iconClass={"sprite icon--company"} className="form__input" prepend={true}/>
+                            <Field component={renderField} label={"Company name"} maxLength={'50'}  type={"text"} name={`${member}.company_name`} 
+                                id={`${member}.company_name`} iconClass={"sprite icon--company"} className="form__input" prepend={true} maxLength={'50'}/>
                         </li>
 
                         <li className="form__group dob">
@@ -113,14 +113,13 @@ const renderExperiences = ({
                         </li>
                         
                         <li className="form__group">
-                            <Field component={renderField} label={"Job Location"}  type={"text"} name={`${member}.job_location`} 
-                                id={`${member}.job_location`} iconClass={"sprite icon--location"} className="form__input" prepend={true}/>
+                            <Field component={renderField} maxLength={'50'} label={"Job Location"}  type={"text"} name={`${member}.job_location`} 
+                                id={`${member}.job_location`}  iconClass={"sprite icon--location"} className="form__input" prepend={true}/>
                         </li>
 
                         <li className="form__group">
-                            <label className="form__label" htmlFor="work_description">Description</label>
-                            <Field component={renderTextArea} type={"textarea"} name={`${member}.work_description`}
-                                className="form__input h-150" rows="5" 
+                            <Field component={renderTextArea} type={"textarea"} name={`${member}.work_description`} label={'Description'}
+                                className="form__input h-150" rows="5" maxLength={'300'}  id={`${member}.work_description`}
                             />
                             <p className="add-suggested"onClick={event => {event.preventDefault();openModal(fields,index)}}>
                                 <span>+</span>Add suggested Description
