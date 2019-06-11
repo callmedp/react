@@ -89,8 +89,6 @@ export const datepicker =
          meta: {touched, error, warning}
      }) => (
         <React.Fragment>
-            {input['readonly'] = true}
-            {console.log(input)}
             <label className="form__label" htmlFor={input.name}>{label}</label>
             <div className={"input-group " + (touched && error ? "error" : "")}>
                 <div className="input-group__prepend">
@@ -114,6 +112,7 @@ export const datepicker =
                             disabledKeyboardNavigation={true}
                             disabled={disabled}
                             disabledNavigation
+                            withPortal
                             minDate={minDate ? addDays(new Date(minDate),1) : null}
                             
 

@@ -39,7 +39,7 @@ export const CourseRenderer = ({
                     </h2> :
                     <React.Fragment>
                         <input autoFocus type="text" name="" defaultValue={entityName}
-                               onChange={(event) => handleInputValue(event.target.value || entityName)}/>
+                               onChange={(event) => handleInputValue(event.target.value || entityName)} maxLength="20"/>
                         <span onClick={(event) => saveTitle(event)} className="icon-tick"/>
                     </React.Fragment>
                 }

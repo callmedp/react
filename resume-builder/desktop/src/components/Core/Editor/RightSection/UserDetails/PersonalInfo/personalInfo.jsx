@@ -99,7 +99,7 @@ export class PersonalInfo extends Component {
                         </h2> :
                         <React.Fragment>
                             <input autoFocus type="text" name="" defaultValue={entityName}
-                                   onChange={(event) => handleInputValue(event.target.value || entityName)}/>
+                                   onChange={(event) => handleInputValue(event.target.value || entityName)} maxLength="20"/>
                             <span onClick={(event) => saveTitle(event, 1)} className="icon-tick"/>
                         </React.Fragment>
                     }
@@ -115,13 +115,13 @@ export class PersonalInfo extends Component {
                                     <label>First Name</label>
 
                                     <Field component={renderField} type={"text"} iconClass={'icon-name'}
-                                           name="first_name"/>
+                                           name="first_name" maxLength={"20"}/>
                                 </fieldset>
                                 <fieldset>
                                     <label>Last Name</label>
                                     <Field component={renderField}
                                            iconClass={'icon-surname'}
-                                           type={"text"} name="last_name"/>
+                                           type={"text"} name="last_name" maxLength={"20"}/>
                                 </fieldset>
                             </div>
 
@@ -175,6 +175,7 @@ export class PersonalInfo extends Component {
                                            iconClass={'icon-address'}
                                            type={"textarea"}
                                            name="location"
+                                           maxLength={'300'}
                                            className={"input-control"} rows="3"/>
                                 </fieldset>
                             </div>

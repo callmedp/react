@@ -95,7 +95,6 @@ function* handleExperienceSwap(action) {
     try {
         let {payload: {list, resolve, reject}} = action;
 
-
         const candidateId = localStorage.getItem('candidateId') || '';
 
 
@@ -115,7 +114,13 @@ function* handleExperienceSwap(action) {
         let {data} = result;
 
         data.sort((a, b) => a.order <= b.order);
-
+        data = (data || []).map(el => {
+            el['job_profile'] = {
+                value: el['job_profile'],
+                label: el['job_profile']
+            }
+            return el;
+        })
 
         data = {list: data};
 

@@ -148,3 +148,9 @@
     margin: 5% 10% 0 10%;
     @include border-radius(5px);
 }
+
+.suggestion-error{
+	text-align: center;
+	color: red;
+	margin-bottom: 20px;
+}

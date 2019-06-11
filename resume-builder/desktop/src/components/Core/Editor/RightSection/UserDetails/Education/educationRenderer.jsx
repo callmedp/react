@@ -166,7 +166,7 @@ export const EducationRenderer = ({
                                                                 className="input-control"/>
                                                         </fieldset>
                                                         <fieldset>
-                                                            <label>Percentage/CGPA</label>
+                                                            <label>Percentage</label>
                                                             <Field
                                                                 iconClass={'icon-percentage'}
                                                                 component={renderField} type={"text"}

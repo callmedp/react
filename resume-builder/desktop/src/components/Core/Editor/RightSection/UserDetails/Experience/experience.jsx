@@ -30,6 +30,7 @@ class Experience extends Component {
             submit: false,
             till_today: [],
             fieldArray: [],
+            length:0,
             currentIndex: null,
             modal_status:false
 
@@ -87,7 +88,8 @@ class Experience extends Component {
 
     async openModal(fields,index){
 
-        const {job_profile:{label}} = fields.get(index)
+        const {job_profile:{label},work_description} = fields.get(index)
+        this.setState({length:work_description.length})
         await this.props.fetchJobTitles(label || '','experience')
         this.setState({modal_status:true,scrollpos:window.scrollY,fields,currentIndex:index})
     }
@@ -155,11 +157,11 @@ class Experience extends Component {
             editHeading, saveTitle, entityName, nextEntity, handlePreview,
             changeOrderingDown, changeOrderingUp, handleInputValue, currentFields, fetchJobTitles
         } = this.props;
-        const {till_today,modal_status} = this.state;
+        const {till_today,modal_status,length} = this.state;
 
         return (
             <React.Fragment>
-                <SuggestionModal label={'Job Description'} modal_status={modal_status} closeModal={this.closeModal} suggestions={suggestions}/>
+                <SuggestionModal label={'Job Description'} modal_status={modal_status} maxLength="300" length={length} closeModal={this.closeModal} suggestions={suggestions}/>
                 <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity, currentFields))}>
                     <FieldArray name={"list"}
                                 loader={loader}

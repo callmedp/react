@@ -79,7 +79,7 @@ class Summary extends Component {
     }
 
     closeModal(suggestions){
-        const {personalInfo:{extra_info},upateSummaryWithSuggestion} = this.props
+        const {extra_info,upateSummaryWithSuggestion} = this.props
         if(Object.keys(suggestions).length){
             let suggestionsList = (extra_info ? extra_info + "\n" : '');
             Object.keys(suggestions).map((el,index) => {
@@ -97,11 +97,11 @@ class Summary extends Component {
 
 
     render() {
-        const {personalInfo: {extra_info}, ui: { suggestions}, handleInputValue, handleSubmit, handlePreview, isEditable, editHeading, saveTitle, entityName, nextEntity, showSuggestionModal} = this.props;
+        const {extra_info, ui: { suggestions}, handleInputValue, handleSubmit, handlePreview, isEditable, editHeading, saveTitle, entityName, nextEntity, showSuggestionModal} = this.props;
         const {modal_status} =this.state;
         return (
             <div>
-                <SuggestionModal label={'Summary'} modal_status={modal_status} closeModal={this.closeModal} suggestions={suggestions} />
+                <SuggestionModal label={'Summary'} length={extra_info.length} maxLength="500" modal_status={modal_status} closeModal={this.closeModal} suggestions={suggestions} />
                 <section className="head-section">
                     <span className="icon-box"><i className="icon-summary1"/></span>
                     {!!(!isEditable) ?
@@ -109,7 +109,7 @@ class Summary extends Component {
                         </h2> :
                         <React.Fragment>
                             <input autoFocus type="text" name="" defaultValue={entityName}
-                                   onChange={(event) => handleInputValue(event.target.value || entityName)}/>
+                                   onChange={(event) => handleInputValue(event.target.value || entityName)} maxLength="20"/>
                             <span onClick={(event) => saveTitle(event, 6)} className="icon-tick"/>
                         </React.Fragment>
                     }
@@ -122,7 +122,7 @@ class Summary extends Component {
                             <h3>Summary</h3>
                             <Field
                                 noIcon={true}
-                                component={renderTextArea} type={"textarea"} name="extra_info"
+                                component={renderTextArea} type={"textarea"} name="extra_info" maxLength={"500"}
                                 className="summary-box--summary-txt" rows="10" value={extra_info}/>
                         </div>
                         <span className="word-counter mt-15">0 - 500</span>
@@ -154,7 +154,8 @@ const mapStateToProps = (state) => {
         initialValues: state.personalInfo,
         personalInfo: state.personalInfo,
         ui: state.ui,
-        experience: state.experience
+        experience: state.experience,
+        extra_info: state.form && state.form.summary &&  state.form.summary.values &&  state.form.summary.values.extra_info || ''
     }
 };
 

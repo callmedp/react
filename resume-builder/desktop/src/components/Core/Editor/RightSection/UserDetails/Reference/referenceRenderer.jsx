@@ -40,7 +40,7 @@ export const ReferenceRenderer = ({
                     </h2> :
                     <React.Fragment>
                         <input autoFocus type="text" name="" defaultValue={entityName}
-                               onChange={(event) => handleInputValue(event.target.value || entityName)}/>
+                               onChange={(event) => handleInputValue(event.target.value || entityName)} maxLength="20"/>
                         <span onClick={(event) => saveTitle(event)} className="icon-tick"/>
                     </React.Fragment>
                 }
@@ -126,6 +126,7 @@ export const ReferenceRenderer = ({
                                                                 <label>Description</label>
                                                                 <Field component={renderTextArea}
                                                                        noIcon={true}
+                                                                       maxLength={'300'}
                                                                        type={"textarea"}
                                                                        name={`${member}.about_candidate`}/>
                                                             </fieldset>

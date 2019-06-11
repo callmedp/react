@@ -19,6 +19,7 @@ export const renderField = ({
                                 text,
                                 iconClass,
                                 autoFocus,
+                                maxLength,
                                 meta: {touched, error, warning}
                             }) => {
     return (
@@ -29,6 +30,7 @@ export const renderField = ({
                 <div className={"Error " + (touched && error ? 'errormsg' : '')}>
                     <input {...input} className={className}
                            onClick={(e) => tillTodayDisable(index, !input.checked, e)}
+                           maxLength={maxLength}
                            autoComplete="off" placeholder={label} type={type}/>
                     {
                         !!(text) && <span>{text}</span>
@@ -44,7 +46,7 @@ export const renderField = ({
                     </div>
                     <div className={"Error " + (touched && error ? 'errormsg' : '')}>
                         <input {...input}
-                               autoFocus={autoFocus}
+                               autoFocus={autoFocus} maxLength={maxLength}
                                className={className} autoComplete="off" placeholder={label} type={type}/>
                         {touched &&
                         ((error && <span className={'errormsg-txt'}>{error}</span>) ||
@@ -235,6 +237,7 @@ export const renderTextArea = ({
                                    rows,
                                    iconClass,
                                    noIcon,
+                                   maxLength,
                                    meta: {touched, error, warning}
 
                                }) => (
@@ -244,6 +247,7 @@ export const renderTextArea = ({
         <textarea {...input}
                   autoComplete="off"
                   placeholder={label}
+                  maxLength={maxLength}
                   rows={rows} type={type}/>
                 {touched &&
                 ((error && <span className={'errormsg-txt'}>{error}</span>) ||
@@ -258,6 +262,7 @@ export const renderTextArea = ({
         <textarea {...input}
                   autoComplete="off"
                   placeholder={label}
+                  maxLength={maxLength}
                   rows={rows} type={type}/>
                     {touched &&
                     ((error && <span className={'errormsg-txt'}>{error}</span>) ||

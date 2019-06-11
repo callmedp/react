@@ -40,7 +40,7 @@ export const AwardRenderer = ({
                     </h2> :
                     <React.Fragment>
                         <input autoFocus type="text" name="" defaultValue={entityName}
-                               onChange={(event) => handleInputValue(event.target.value || entityName)}/>
+                               onChange={(event) => handleInputValue(event.target.value || entityName)} maxLength="20"/>
                         <span onClick={(event) => saveTitle(event)} className="icon-tick"/>
                     </React.Fragment>
                 }
@@ -121,6 +121,7 @@ export const AwardRenderer = ({
                                                             <label>Summary</label>
                                                             <Field
                                                                 noIcon={true}
+                                                                maxLength={'300'}
                                                                 component={renderTextArea} type={"textarea"}
                                                                 name={`${member}.summary`}
                                                                 className="input-control"/>
