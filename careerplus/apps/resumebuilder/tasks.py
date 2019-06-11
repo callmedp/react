@@ -57,17 +57,22 @@ def generate_image_for_resume(candidate_id):
 
     #latest_experience = experience and experience[0].job_profile or 'FULL STACK DEVELOPER'
     for i in range(1,6):
-        template = get_template('resume{}.html'.format(i))
+        template = get_template('resume{}_preview.html'.format(i))
+        current_config = candidate.ordercustomisation_set.filter(template_no=i).first()
+        entity_position = current_config.entity_position_eval
+
         rendered_template = template.render(
             {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,
             'achievements': achievements, 'references': references, 'projects': projects,
             'certifications': certifications, 'extracurricular': extracurricular, 'languages': languages,
             'current_exp': current_exp, 'latest_exp': latest_experience,
-            'preference_list': entity_preference,
+            'preference_list': entity_preference,'current_config': current_config,
+            'entity_position': entity_position, 'width': 100,
             }).encode(encoding='UTF-8')
 
         file_name = 'resumetemplate-' + str(i) + '.png'
-        file = HTML(string=rendered_template).write_png(stylesheets=[CSS(string='@page {size:A3; margin:0px}')])
+        file = HTML(string=rendered_template).write_png(stylesheets=[CSS(\
+            string='@page {size:Letter; margin:0} @page:first {size:Letter; margin:0;}')])
         in_mem_file = BytesIO(file)
         in_mem_file_to_upload = BytesIO()
         img = Image.open(in_mem_file)
