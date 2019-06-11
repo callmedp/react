@@ -5,9 +5,11 @@
 <link rel="canonical" href="//{{ SITE_DOMAIN }}/">
 <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}/">
 {% endblock canonical_url %}
+
 {% block django_meta %}
 {% include 'meta/meta.html' %}
 {% endblock django_meta %}
+
 {% block css_section %}
 {{block.super}}
 {% compress css %}
@@ -15,6 +17,7 @@
 <link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
 {% endcompress %}
 {% endblock css_section %}
+
 {% block main_container %}
 <div class="  practice-skill__wrap">
    <div class="left_base"></div>
@@ -102,60 +105,19 @@
             <h2>Tests by functional area</h2>
 
 
-            <div class="functional_test" id="funcDiv">
-                  {% for fa in func_area %}
+            <div class="functional_test">
+                  {% for cat in category %}
 
                <div class="functional_test_inside border-{{forloop.counter}}">
-                  <a href="/">
+                  <a href="#">
                   <span class="sales"></span>
                   {{fa.heading}}
                   </a>
                </div>
                   {%endfor%}
 
-               <!--<div class="functional_test_inside border-purple">-->
-                  <!--<a href="#">-->
-                  <!--<span class="info"></span>-->
-                  <!--Information Technology-->
-                  <!--</a>-->
-               <!--</div>-->
-               <!--<div class="functional_test_inside border-orange">-->
-                  <!--<a href="#">-->
-                  <!--<span class="bank"></span>-->
-                  <!--Banking & Finance</a>-->
-               <!--</div>-->
-               <!--<div class="functional_test_inside border-olive">-->
-                  <!--<a href="#">-->
-                  <!--<span class="ops"></span>-->
-                  <!--Operation Management-->
-                  <!--</a>-->
-               <!--</div>-->
-               <!--<div class="functional_test_inside border-grey">-->
-                  <!--<a href="#">-->
-                  <!--<span class="law"></span>-->
-                  <!--Law-->
-                  <!--</a>-->
-               <!--</div>-->
-               <!--<div class="functional_test_inside border-mint">-->
-                  <!--<a href="#">-->
-                  <!--<span class="hr"></span>-->
-                  <!--HR - Human Resource-->
-                  <!--</a>-->
-               <!--</div>-->
-               <!--<div class="functional_test_inside border-pink">-->
-                  <!--<a href="#"> <span class="mgmt"></span>-->
-                  <!--Management-->
-                  <!--</a>-->
-               <!--</div>-->
-               <!--<div class="functional_test_inside border-beige"> <a href="#">-->
-                  <!--<span class="pdev"></span>-->
-                  <!--Personal Development</a>-->
+
                </div>
-
-            <button class="btn_white loadmore" id="loadmorebtn" onclick="loadmore();">Load more</button>
-
-
-
 
             </div>
          </div>
@@ -166,38 +128,7 @@
 {% endblock main_container %}
 {% block js_section %}
 {{block.super}}
-   <script type="text/javascript">
-   var page_number= 2;
-   function loadmore(){
-            page_number = page_number+1;
-             element = document.getElementById('funcDiv');
-           $.ajax({
-               url: '/api/get-category-level-products',
-               type: "GET",
-               data : {'tl': 2, 'page_size' : 4, 'page':page_number},
-               dataType: 'json',
-               success: function(json) {
-               if (json.next == null){
-                 $('#loadmorebtn').hide();
-               }
-               for (fa in json.results){
-                element.innerHTML= element.innerHTML +'<div class="functional_test_inside border-'+fa+'"><a href="#"><span class="sales"></span>'+ json.results[fa].heading +'</a></div>'
 
-               }
-               },
-               error: function(xhr, ajaxOptions, thrownError) {
-               if(xhr.status == 404){
-                     alert("No more Categories to show ");
-                     $('#loadmorebtn').hide();
-                     }
-                     else{
-
-                   alert("Something went wrong. Try again later");
-                   }
-               }
-           });
-   }
-   </script>
 {% endblock js_section %}
 {% block johukum %}
 {% endblock johukum %}

@@ -3,40 +3,103 @@ import logging
 import json
 
 from django.conf import settings
-from django.views.generic import (DetailView,ListView,View)
+from django.views.generic import (DetailView,ListView,TemplateView)
 from django.shortcuts import redirect,reverse,render
 
-from .utils import VskillTest
+#local imports
+
+from .models import Question, Test
 from shop.models import Category
+from blog.mixins import PaginationMixin,LoadCommentMixin
+from django.core.paginator import Paginator
+
 
 
 class VskillTestView(DetailView):
     template_name = 'vskill/vskill_test.html'
 
-    def get(self,request, *args, **kwargs):
-        test_id = self.request.GET.get('test_id','')
 
-        vskill_object = VskillTest()
-
-        token = vskill_object.get_token()
-        if not token:
-            return redirect(reverse('homepage'))
-
-        # all_test = self.get_all_test(token)
-        # if not all_test:
-        #     redirect(reverse('homepage'))
-
-        single_test = vskill_object.get_test_by_id(token,test_id)
-        if not single_test:
-            return redirect(reverse('homepage'))
-        return render(request,self.template_name,{'single_test': single_test})
+    def get_object(self, queryset=None):
+        tst = self.request.GET.get('test')
 
 
-class AssessmentLandingPage(View):
+    def get(self, request, *args, **kwargs):
+
+        test_id = self.request.GET.get('test', '')
+        if not test_id:
+            return redirect(reverse('assessment:vskill-landing'))
+
+        return super(VskillTestView,self).get(request, args, **kwargs)
+
+
+    def get_context_data(self, **kwargs):
+        context = super(VskillTestView, self).get_context_data(**kwargs)
+        test_id = self.get_object()
+        questions_list = Question.objects.filter(test_id=test_id.pk)
+        if not questions_list:
+            return redirect(reverse('assessment:vskill-landing'))
+
+        test_list = self.request.session.get('vskill_appeared') if\
+            self.request.session.get('vskill_appeared') else []
+        test_list.append(test_id)
+        self.request.session.update({'vskill_appeared': test_list})
+        context.update({'questions_list': questions_list})
+        return context
+
+
+
+
+class AssessmentLandingPage(TemplateView):
     template_name = 'vskill/vskill_landing.html'
 
-    def get(self,request,*args,**kwargs):
-        return render(request,self.template_name)
+    def __init__(self):
+        self.page = 1
+        self.paginated_by = 8
+
+    def get_breadcrumbs(self):
+        breadcrumbs = []
+        breadcrumbs.append({"url": '/', "name": "Home"})
+        breadcrumbs.append({"url": None, "name": 'practice-test'})
+        # data = {"breadcrumbs": breadcrumbs}
+        return breadcrumbs
+
+    def get_func_areas(self,filter_dict):
+        category = Category.objects.filter(**filter_dict)[:8]
+        return category
+
+
+    def get_context_data(self, **kwargs):
+        filter_dict = {'active': 'True', 'type_level':2 }
+        context = super(AssessmentLandingPage, self).get_context_data(**kwargs)
+        context.update({'breadcrumbs': self.get_breadcrumbs()})
+        context.update({'func_area': self.get_func_areas(filter_dict)})
+        return context
+
+
+class AssessmentCategoryPage(DetailView):
+    template_name = 'vskill/vskill_category.html'
+    model = Category
+    slug_url_kwarg = 'slug'
+
+    def get_breadcrumbs(self):
+        breadcrumbs = []
+        breadcrumbs.append({"url": '/', "name": "Home"})
+        breadcrumbs.append({"url": None, "name": 'practice-test'})
+        parent = self.object.get_parent() if self.object.type_level == 3 else None
+        if parent:
+            breadcrumbs.append({
+                "url": parent[0].get_absolute_url(), "name": parent[0].name,
+            })
+        breadcrumbs.append({"url": '', "name": self.object.name})
+        return breadcrumbs
+
+
+    def get_context_data(self, **kwargs):
+        context = super(AssessmentCategoryPage, self).get_context_data(**kwargs)
+        context.update({'breadcrumbs': self.get_breadcrumbs()})
+
+        return context
+
 
 
 

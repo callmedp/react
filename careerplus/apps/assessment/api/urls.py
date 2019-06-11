@@ -1,9 +1,9 @@
 from django.conf.urls import url, include
-from .views import AssessmentTestView
+from .views import CategoryApiView
 
 
 
 urlpatterns = [
 
-url(r'^get-category-level-products',AssessmentTestView.as_view(), name='category-level-product'),
+url(r'^get-category-level-products',CategoryApiView.as_view(), name='category-level-product'),
 ]

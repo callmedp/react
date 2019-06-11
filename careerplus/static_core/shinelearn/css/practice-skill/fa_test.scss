@@ -23,34 +23,40 @@
         align-content: center;
 
 
-        &.border-purple {
+        &.border-0 {
             border-top: solid 4px $purple;
         }
 
-        &.border-orange {
+        &.border-1 {
             border-top: solid 4px $orange;
         }
 
-        &.border-olive {
+        &.border-2 {
             border-top: solid 4px $olive;
         }
 
-        &.border-beige {
+        &.border-3 {
             border-top: solid 4px $beige;
         }
 
-        &.border-pink {
+        &.border-4 {
             border-top: solid 4px $pink;
         }
 
-        &.border-mint {
+        &.border-5 {
             border-top: solid 4px $mint;
         }
 
-        &.border-grey {
+        &.border-6 {
             border-top: solid 4px $grey;
         }
+           &.border-7 {
+            border-top: solid 4px $purple;
+        }
 
+   &.border-8 {
+         border-top: solid 4px $olive;
+            }
 
 
 

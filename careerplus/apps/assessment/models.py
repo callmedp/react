@@ -80,5 +80,9 @@ class Question(AbstractAutoDate):
         return [option.get('option_id') for option in self.question_options\
                 if option.get('is_correct') and bool(eval(option.get('is_correct'))\
                 if isinstance(option.get('is_correct'), str) else option.get('is_correct'))]
+    #
+    # @property
+    # def get_option_list(self):
+
 
 
