@@ -62,6 +62,20 @@ export const renderCheckboxField = ({
     </React.Fragment>
 );
 
+const Input = ({onChange, placeholder, value, isSecure, id, onClick,name,disabled}) => (
+    <input
+        onChange={onChange}
+        placeholder={placeholder}
+        value={value}
+        isSecure={isSecure}
+        name={name}
+        id={id}
+        onClick={onClick}
+        disabled={disabled}
+        autoComplete="off"
+        readonly="true"
+    />
+);
 
 export const datepicker =
     ({
@@ -75,6 +89,8 @@ export const datepicker =
          meta: {touched, error, warning}
      }) => (
         <React.Fragment>
+            {input['readonly'] = true}
+            {console.log(input)}
             <label className="form__label" htmlFor={input.name}>{label}</label>
             <div className={"input-group " + (touched && error ? "error" : "")}>
                 <div className="input-group__prepend">
@@ -82,7 +98,7 @@ export const datepicker =
                         <i className="sprite icon--date"></i>
                     </span>
                 </div>
-                <DatePicker {...input}
+                <DatePicker customInput={<Input id={id} name={input.name} disabled={disabled} />}
                             value={disabled ? moment().format('YYYY-MM-DD').toString() : input.value}
                             className={className}
                             dateFormat="yyyy-MM-dd"
