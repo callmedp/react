@@ -218,3 +218,16 @@
         }
     }
 }
+
+.input-range__label-container {
+    display: none;
+}
+.heading-size{
+    display: flex
+}
+
+.heading-size-item{
+    -webkit-flex: 1; 
+    -ms-flex: 1; 
+    flex: 1;
+}

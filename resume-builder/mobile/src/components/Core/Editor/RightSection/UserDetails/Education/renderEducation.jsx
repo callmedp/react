@@ -111,7 +111,7 @@ const renderEducation = ({
                             </li>
                             
                             <li className="form__group">
-                                <Field component={renderField} label={"Percentage/CGPA"}  type={"text"} name={`${member}.percentage_cgpa`} 
+                                <Field component={renderField} label={"Percentage"}  type={"text"} name={`${member}.percentage_cgpa`} 
                                     id={`${member}.percentage_cgpa`} iconClass={"sprite icon--percentage"} className="form__input" prepend={true}/>
                             </li>
 

@@ -242,17 +242,25 @@ class Preview extends Component {
                                                         name = "heading_font_size"
                                                         maxValue={2}
                                                         minValue={0}
-                                                        formatLabel={value => value===0 ? 's' : value===1?'m' :'l'}
                                                         value={headingFontSize}
                                                         onChange={value => this.setState({ headingFontSize: value })} />
+                                                    <div className="heading-size">
+                                                        <div className="heading-size-item">S</div>
+                                                        <div className="heading-size-item">M</div>
+                                                        <div>L</div>
+                                                    </div>
                                                     <h3>Section Text</h3>
                                                     <InputRange
                                                         name="text_font_size"
                                                         maxValue={2}
                                                         minValue={0}
-                                                        formatLabel={value => value===0 ? 's' : value===1?'m' :'l'}
                                                         value={textFontSize}
                                                         onChange={value => this.setState({ textFontSize: value })} />
+                                                    <div className="heading-size">
+                                                        <div className="heading-size-item">S</div>
+                                                        <div className="heading-size-item">M</div>
+                                                        <div>L</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             </AccordionItemPanel>
@@ -287,18 +295,22 @@ class Preview extends Component {
                                                         <ul className="reorder__items">
                                                             {entity_position.filter(item =>(item.alignment ===activeSection  || item.alignment === 'center') && 
                                                                     (item.entity_id!==1 && item.entity_id!==6)
-                                                                    && (item['active'])).map((el,index)=>{
+                                                                    && (item['active'])).map((el,index,arr)=>{
                                                                 return(
                                                                         <li key={index} className={"reorder__item " + ((el['entity_text'] === sectionEntityName || startingReorderUpDowmIndex===index)? " reorder--select":"")}
                                                                             onClick={() => this.selectSection(el)} >
                                                                             <span className="reorder__title">{el.entity_text}</span>
                                                                             <div className="reorder__nav">
-                                                                                <span className="reorder__nav--item">
-                                                                                    <i className="sprite icon--upArrow" onClick={()=>{this.moveUpSection(el,selected_template);}}></i>
-                                                                                </span>
-                                                                                <span className="reorder__nav--item">
-                                                                                    <i className="sprite icon--downArrow" onClick={()=>{this.moveDownSection(el,selected_template);}}></i>
-                                                                                </span>
+                                                                                {index !==0 ?
+                                                                                    <span className="reorder__nav--item">
+                                                                                        <i className="sprite icon--upArrow" onClick={()=>{this.moveUpSection(el,selected_template);}}></i>
+                                                                                    </span>:''
+                                                                                }
+                                                                                {index+1 !== arr.length ? 
+                                                                                    <span className="reorder__nav--item">
+                                                                                        <i className="sprite icon--downArrow" onClick={()=>{this.moveDownSection(el,selected_template);}}></i>
+                                                                                    </span>:''
+                                                                                }
                                                                             </div>
                                                                         </li>
                                                                 )
