@@ -17,7 +17,7 @@
                 ({{ exp.start_date|date:"M Y" }} - {{ exp.end_date|date:"M Y" }})
             {% endif %}
           </span>
-          <p style="font-size: 14px; color: #777777; margin-top: 5px;white-space: normal;">{{ exp.work_description }}</p>
+          <pre style="font-size: 14px; color: #777777; margin-top: 5px;white-space: pre-line;">{{ exp.work_description }}</pre>
         </span>
       </li>
     {% endfor %}

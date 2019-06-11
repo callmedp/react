@@ -7,7 +7,7 @@
             <li style="vertical-align: top; margin: 5px 0 10px 0; display: block;">
                 <span style="width: 9px; height: 9px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
                 <span style="font-size: 14px; color: #555555; display: inline-block; vertical-align: top; width: 93%;">{{ award.title }}</span>
-                <span style="font-size: 14px; color: #555555; display: inline-block; vertical-align: top; width: 93%;white-space: normal;">{{ award.summary }}</span>
+                <pre style="font-size: 14px; color: #555555; display: inline-block; vertical-align: top; width: 93%;white-space: pre-line;">{{ award.summary }}</pre>
             </li>
         {% endfor %}
     </ul>

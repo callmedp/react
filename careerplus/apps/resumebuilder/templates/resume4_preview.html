@@ -18,7 +18,7 @@
           {% if candidate.image %}
           <img src="{{candidate.image}}" alt="Resume" width="150" height="150" style="border-radius: 100%; margin-bottom: 10px; width: 150px; height: 150px;">
           {% endif %}
-          <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: bold; text-transform: uppercase; display: block;">{{ candidate.first_name }} {{ candidate.last_name }}</h1>
+          <h1 style="margin: 0; color: #ffffff; font-size: 32px; line-height: 32px; font-weight: bold; text-transform: uppercase; display: block;">{{ candidate.first_name }} {{ candidate.last_name }}</h1>
           <span style="display: block; width: 15%; border-top: 1px solid #a2c59b; margin: 10px 0 15px 0;"></span>
           <strong style="display: block; font-size: 18px; color: #ffffff; font-weight: normal; text-transform: uppercase; margin-bottom: 1px;">{{ latest_exp }}</strong>
           {% comment %} <span style="display: block; font-size: 14px; color: #ffffff; font-weight: normal; text-transform: uppercase;">Compnay Name</span> {% endcomment %}
