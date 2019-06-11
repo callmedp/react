@@ -223,11 +223,17 @@
     display: none;
 }
 .heading-size{
-    display: flex
+    margin-top: 8px;
+    display: flex;
+    font-size: 13px;
 }
 
 .heading-size-item{
     -webkit-flex: 1; 
     -ms-flex: 1; 
     flex: 1;
+}
+
+.input-range__track {
+    height: 70%;
 }
