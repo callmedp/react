@@ -33,7 +33,10 @@ function modifyPersonalInfo(data) {
         ...{
             date_of_birth: (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
             gender: (gender && genderDict[gender]) || '',
-            extracurricular: (extracurricular && extracurricular.split(',').map(key => interestList[key])) || ''
+            extracurricular: (extracurricular && extracurricular.split(',').map(key => ({
+                'value': key,
+                'label': key
+            }))) || ''
         }
     }
     return data;
@@ -71,18 +74,24 @@ function* getPersonalDetails(action) {
 
 function* getInterestList(action) {
     try {
-        const result = yield call(Api.fetchInterestList);
+        const {payload: {value, res, rej}} = action;
+
+
+        const result = yield call(Api.fetchInterestList, value);
+        console.log('result', result);
         if (result['error']) {
-            console.log('error');
+            return rej(new SubmissionError({_error: result['errorMessage']}));
         }
         let {data: {data}} = result;
 
         let updated_data = {};
-        Object.keys(data).map((el, key) => {
-            updated_data[key] = {'value': key, 'label': data[el]}
+
+        const newResult = Object.keys(data).map((el, key) => {
+            return {'value': data[el], 'label': data[el]}
         })
 
-        yield put({type: Actions.SAVE_INTEREST_LIST, data: updated_data})
+        return res(newResult)
+
 
     } catch (e) {
         console.log(e);

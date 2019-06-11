@@ -8,8 +8,8 @@ const fetchPersonalInfo = (candidateId) => {
     return BaseApiService.get(`${siteDomain}/api/v1/resume/${url}`);
 };
 
-const fetchInterestList = () => {
-    return BaseApiService.get(`${siteDomain}/api/v1/resume/interest-list/`);
+const fetchInterestList = (searchText) => {
+    return BaseApiService.get(`${siteDomain}/api/v1/resume/interest-list/?search=${searchText}`);
 };
 
 const createPersonalInfo = (data) => {

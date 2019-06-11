@@ -104,6 +104,7 @@ export const datepicker =
                             selected={input.value ? new Date(input.value) : null}
                             maxDate={new Date()}
                             id={id}
+                            withPortal
                             onChange={date => input.onChange(date)}
                             showYearDropdown
                             yearDropdownItemNumber={yearDropDownItemNumber}
@@ -112,8 +113,9 @@ export const datepicker =
                             disabledKeyboardNavigation={true}
                             disabled={disabled}
                             disabledNavigation
-                            withPortal
                             minDate={minDate ? addDays(new Date(minDate),1) : null}
+                            
+
                 />
                 {touched &&  ((error && <span className={'error-message'}>{error}</span>) ||
                 (warning && <span className={'warn-Message'}>{warning}</span>))}

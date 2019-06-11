@@ -27,6 +27,8 @@ export const fetchInterestList = (payload) => ({
     payload
 });
 
+
+
 export const upateSummaryWithSuggestion = (payload) => ({
     type: UPDATE_SUMMARY_WITH_SUGGESTION ,
     payload

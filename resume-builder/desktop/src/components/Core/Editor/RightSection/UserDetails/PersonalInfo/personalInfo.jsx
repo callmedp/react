@@ -15,6 +15,7 @@ import {
 import validate from '../../../../../FormHandler/validations/personalInfo/validate'
 
 import moment from 'moment';
+import {renderAsyncCreatableSelect} from "../../../../../FormHandler/formFieldRenderer";
 
 
 export class PersonalInfo extends Component {
@@ -37,7 +38,6 @@ export class PersonalInfo extends Component {
 
     componentDidMount() {
         this.props.fetchPersonalInfo();
-        this.props.fetchInterestList();
     }
 
     async handleSubmit(values, entityLink) {
@@ -84,9 +84,10 @@ export class PersonalInfo extends Component {
         })
     }
 
+
     render() {
         const {
-            handleSubmit, personalInfo, ui: {loader}, isEditable,
+            handleSubmit, personalInfo, ui: {loader}, isEditable, fetchInterests,
             editHeading, saveTitle, entityName, nextEntity, handlePreview, handleInputValue
         } = this.props;
         let elem = null;
@@ -184,9 +185,13 @@ export class PersonalInfo extends Component {
                             <div className="flex-container">
                                 <fieldset id="interest-select" className="">
                                     <label>Interest</label>
-                                    <Field name="extracurricular" component={renderDynamicSelect}
-                                        // loadOptions={this.fetchInterestList.bind(this)}
-                                           defaultOptions={Object.keys(personalInfo.interest_list).map(key => personalInfo.interest_list[key])}
+                                    <Field name="extracurricular" component={renderAsyncCreatableSelect}
+                                           defaultOptions={[{
+                                               'value': 'Enter at least 3 characters to search.',
+                                               'label': 'Enter at least 3 characters to search.',
+                                               isDisabled: true
+                                           }]}
+                                           loadOptions={(inputValue) => fetchInterests(inputValue)}
                                            value={personalInfo.extracurricular}
                                            isMulti={true}
                                            closeMenuOnSelect={false}
@@ -286,6 +291,13 @@ const mapDispatchToProps = (dispatch) => {
             return new Promise((resolve, reject) => {
                 dispatch(actions.fetchImageUrl({imageFile, resolve, reject}));
             })
+        },
+        "fetchInterests": (value) => {
+            if (value.length < 3) return new Promise(res => res([]));
+            return new Promise((res, rej) => {
+                return dispatch(actions.fetchInterestList({value, res, rej}))
+            })
+
         }
     }
 };

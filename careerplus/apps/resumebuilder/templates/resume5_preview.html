@@ -11,9 +11,9 @@
   <body style="margin: 0; padding: 0; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif';">
     <div style="max-width: 1536px; width: 100%; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777; float: left; line-height: 20px; word-break: break-word;">
 
-      <div style="display: table-row; width: 100%;">
+      <div style="display: block; width: 100%;">
         <!--left column-->
-        <div style="width: 44%; background: #ffffff; padding: 3%; display: table-cell; vertical-align: top;">
+        <div style="width: 44%; background: #ffffff; padding: 3%; vertical-align: top;float:left;">
           <div style="display: block; text-align: center; margin-bottom: 10%;">
             <h1 style="margin: 0; color:{{ current_config.color|background_color_choice }}; font-size: 32px; line-height: 32px; font-weight: bold; text-transform: uppercase;">{{ candidate.first_name }} {{ candidate.last_name }}</h1>
             <strong style="display: block; font-style: italic; font-size: 18px; color: #777777; font-weight: normal; text-transform: uppercase; margin: 10px 0 20px 0;">{{ latest_exp }}</strong>
@@ -57,7 +57,7 @@
         </div>
 
         <!--right column-->
-        <div style="width: 44%; background: #ffffff; padding: 3%; display: table-cell; vertical-align: top;">
+        <div style="width: 44%; background: #ffffff; padding: 3%; vertical-align: top;float:right;">
 
           <!--Work experience-->
           {% if entity_position.5.active %}

@@ -18,7 +18,7 @@ from resumebuilder.api.core.serializers import (CandidateSerializer, SkillSerial
                                                 CandidateProjectSerializer, CandidateAchievementSerializer,
                                                 CandidateReferenceSerializer, CandidateSocialLinkSerializer,
                                                 CandidateLanguageSerializer, OrderCustomisationSerializer)
-
+from resumebuilder.choices import (INTEREST_LIST)
 from resumebuilder.mixins import (SessionManagerMixin)
 from resumebuilder.constants import EDUCATION_PARENT_CHILD_HEIRARCHY_LIST, JOB_TITLES
 from resumebuilder.utils import ResumeEntityReorderUtility
@@ -38,7 +38,6 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from weasyprint import HTML, CSS
-from resumebuilder.models import interest_dict
 from weasyprint import HTML, CSS
 
 
@@ -667,7 +666,10 @@ class InterestView(ListAPIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
-        return Response({"data": interest_dict})
+        search_text = request.GET.get('search', '')
+        print('dfdff<<><><>>', dict([i for i in INTEREST_LIST if 'am' in i[1]]))
+        return Response(
+            {"data": dict([i for i in INTEREST_LIST if search_text in i[1]])})
 
 
 class OrderCustomisationListView(ListAPIView):
