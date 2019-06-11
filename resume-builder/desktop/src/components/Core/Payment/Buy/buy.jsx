@@ -83,11 +83,10 @@ export class Buy extends Component {
 
     render() {
         const settings = {
-            infinite: false,
+            infinite: true,
             speed: 500,
             slidesToShow: 3,
             slidesToScroll: 3,
-            variableWidth: true
         };
         const {userInfo: {first_name, selected_template}, ui: {loader}, template: {templateImage, thumbnailImages}} = this.props;
         const {userInfo} = this.props;
@@ -172,7 +171,11 @@ export class Buy extends Component {
                                                             !!(thumbnailImages && thumbnailImages.length) ?
                                                                 <img
                                                                     src={`data:image/png;base64,${thumbnailImages[key]}`}
-                                                                    className="img-responsive" alt=""/> :
+                                                                    className="img-responsive" alt=""/> 
+                                                                // <img
+                                                                //     src={`${this.staticUrl}react/assets/images/resume-thumb-${selected_template || el}.jpg`}
+                                                                //     className="img-responsive" alt=""/>
+                                                                :
                                                                 <img
                                                                     src={`${this.staticUrl}react/assets/images/resume-thumb-${selected_template || el}.jpg`}
                                                                     className="img-responsive" alt=""/>

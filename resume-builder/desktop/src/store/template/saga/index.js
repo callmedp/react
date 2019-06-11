@@ -124,7 +124,7 @@ function* fetchThumbnailImages(action) {
 function* fetchDefaultCustomization(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
-        yield put({type: UPDATE_UI, data: {loader: true}});
+        // yield put({type: UPDATE_UI, data: {loader: true}});
         const {payload: {templateId, resolve, reject}} = action;
         const result = yield call(Api.fetchDefaultCustomization, candidateId, templateId);
 
@@ -143,7 +143,7 @@ function* fetchDefaultCustomization(action) {
         yield put({type: SET_CUSTOMIZATION, data: data});
 
 
-        yield put({type: UPDATE_UI, data: {loader: false}});
+        // yield put({type: UPDATE_UI, data: {loader: false}});
 
 
         resolve(data)
