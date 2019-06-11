@@ -103,6 +103,7 @@ export const ProjectRenderer = ({
                                                             <label>Project Name</label>
                                                             <Field component={renderField}
                                                                    autoFocus={true}
+                                                                   maxLength={'50'}
                                                                    iconClass={'icon-projects-gr'}
                                                                    type={"text"}
                                                                    name={`${member}.project_name`}

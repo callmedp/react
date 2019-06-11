@@ -104,6 +104,7 @@ export const CourseRenderer = ({
                                                                 autoFocus={true}
                                                                 iconClass={'icon-courses-gr'}
                                                                 component={renderField}
+                                                                maxLength={'50'}
                                                                 type={"text"}
                                                                 name={`${member}.name_of_certification`}
                                                                 className={"input-control"}/>

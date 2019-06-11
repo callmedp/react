@@ -106,6 +106,7 @@ export const EducationRenderer = ({
                                                             <Field
                                                                 autoFocus={true}
                                                                 iconClass={'icon-company'}
+                                                                maxLength={'50'}
                                                                 component={renderField} type={"text"}
                                                                 name={`${member}.institution_name`}/>
                                                         </fieldset>
@@ -114,6 +115,7 @@ export const EducationRenderer = ({
                                                             <Field
                                                                 iconClass={'icon-designation'}
                                                                 component={renderField}
+                                                                maxLength={'50'}
                                                                 type={"text"}
                                                                 name={`${member}.specialization`}/>
                                                         </fieldset>

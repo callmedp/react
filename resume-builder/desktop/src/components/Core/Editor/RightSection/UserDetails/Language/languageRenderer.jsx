@@ -99,6 +99,7 @@ export const LanguageRenderer = ({
                                                             <label>Language name</label>
                                                             <Field
                                                                 autoFocus={true}
+                                                                maxLength={'50'}
                                                                 iconClass={'icon-language-gr'}
                                                                 component={renderField} type={"text"}
                                                                 name={`${member}.name`}

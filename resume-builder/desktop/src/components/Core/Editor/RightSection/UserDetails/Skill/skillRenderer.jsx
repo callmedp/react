@@ -104,6 +104,7 @@ export const SkillRenderer = ({
                                                         <label>Skill name</label>
                                                         <Field
                                                             autoFocus={true}
+                                                            maxLength={'50'}
                                                             iconClass={'icon-skills-gr'}
                                                             component={renderField}
                                                             type={"text"} name={`${member}.name`}

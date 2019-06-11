@@ -133,6 +133,7 @@ export const ExperienceRenderer = ({
                                                             <Field
                                                                 iconClass={'icon-company'}
                                                                 component={renderField}
+                                                                maxLength={'50'}
                                                                 type={"text"}
                                                                 name={`${member}.company_name`}/>
 
@@ -177,6 +178,7 @@ export const ExperienceRenderer = ({
                                                             <label>Job Location</label>
                                                             <Field
                                                                 iconClass={'icon-address'}
+                                                                maxLength={'50'}
                                                                 component={renderField} type={"text"}
                                                                 name={`${member}.job_location`}
                                                                 className={"input-control"}/>
@@ -199,7 +201,7 @@ export const ExperienceRenderer = ({
 
                                                     < div className="flex-container">
                                                         <fieldset>
-                                                        <span className="word-counter">0 - 500</span>
+                                                        
                                                         <span className="add-suggested"
                                                               onClick={() =>  openModal(fields, index)}>Add suggested experience</span>
 

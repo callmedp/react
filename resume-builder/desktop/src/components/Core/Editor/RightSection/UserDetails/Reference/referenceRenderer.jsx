@@ -104,6 +104,7 @@ export const ReferenceRenderer = ({
 
                                                                 <Field
                                                                     autoFocus={true}
+                                                                    maxLength={'50'}
                                                                     iconClass={'icon-refrences-gr'}
                                                                     component={renderField} type={"text"}
                                                                     name={`${member}.reference_name`}
@@ -114,6 +115,7 @@ export const ReferenceRenderer = ({
                                                                 <label>Designation</label>
                                                                 <Field
                                                                     iconClass={'icon-designation'}
+                                                                    maxLength={'50'}
                                                                     component={renderField} type={"text"}
                                                                     name={`${member}.reference_designation`}
                                                                     className={"input-control"}

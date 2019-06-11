@@ -99,6 +99,7 @@ export const AwardRenderer = ({
                                                             <label>Title</label>
                                                             <Field
                                                                 autoFocus={true}
+                                                                maxLength={'50'}
                                                                 iconClass={'icon-awards-gr'}
                                                                 component={renderField} type={"text"}
                                                                 name={`${member}.title`}

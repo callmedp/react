@@ -244,11 +244,12 @@ export const renderTextArea = ({
     <React.Fragment>
         {noIcon ?
             <div className={"Error " + (touched && error ? 'errormsg' : '')}>
-        <textarea {...input}
-                  autoComplete="off"
-                  placeholder={label}
-                  maxLength={maxLength}
-                  rows={rows} type={type}/>
+                <textarea {...input}
+                        autoComplete="off"
+                        placeholder={label}
+                        maxLength={maxLength}
+                        rows={rows} type={type}/>
+                <span className="word-counter">{input.value.length ? input.value.length : 0}- {maxLength}</span>
                 {touched &&
                 ((error && <span className={'errormsg-txt'}>{error}</span>) ||
                     (warning && <span className={'Warn-Message'}>{warning}</span>))}
@@ -259,11 +260,12 @@ export const renderTextArea = ({
                     <span className={iconClass}></span>
                 </div>
                 <div className={"Error " + (touched && error ? 'errormsg' : '')}>
-        <textarea {...input}
-                  autoComplete="off"
-                  placeholder={label}
-                  maxLength={maxLength}
-                  rows={rows} type={type}/>
+                    <textarea {...input}
+                            autoComplete="off"
+                            placeholder={label}
+                            maxLength={maxLength}
+                            rows={rows} type={type}/>
+                    <span className="word-counter">{input.value.length ? input.value.length : 0}- {maxLength}</span>
                     {touched &&
                     ((error && <span className={'errormsg-txt'}>{error}</span>) ||
                         (warning && <span className={'Warn-Message'}>{warning}</span>))}

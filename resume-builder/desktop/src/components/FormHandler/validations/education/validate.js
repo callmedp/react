@@ -9,6 +9,7 @@ const validate = values => {
         objErrors.start_date = !obj || !obj.start_date ? 'Required' : undefined;
         objErrors.end_date = !obj || (!obj.end_date && !obj.is_pursuing) ? 'Required' : undefined;
         objErrors.course_type = !obj || !obj.course_type ? 'Required' : undefined;
+        objErrors.percentage_cgpa = obj && obj.percentage_cgpa && isNaN(Number(obj.percentage_cgpa)) ? 'Must be a number' : obj.percentage_cgpa >100 ? 'Must be less than 100': undefined
         listErrors[objIndex] = objErrors
     });
     if (listErrors.length) {
