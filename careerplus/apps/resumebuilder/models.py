@@ -108,7 +108,7 @@ class Candidate(PreviewImageCreationMixin, CandidateProfile):
             self.create_template_customisations(self.id)
 
         if not created:
-            update_customisations_for_all_templates.delay(self.id)
+            update_customisations_for_all_templates(self.id)
 
         return obj
 
