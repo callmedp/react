@@ -114,8 +114,6 @@ export const datepicker =
                             disabledNavigation
                             withPortal
                             minDate={minDate ? addDays(new Date(minDate),1) : null}
-                            
-
                 />
                 {touched &&  ((error && <span className={'error-message'}>{error}</span>) ||
                 (warning && <span className={'warn-Message'}>{warning}</span>))}

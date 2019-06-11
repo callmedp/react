@@ -73,7 +73,7 @@ const renderCourse = ({
                                 id={`${member}.name_of_certification`} iconClass={"sprite icon--course-grey"} className="form__input"/>
                         </li>
 
-                        <li className="form__group">
+                        <li className="form__group dob">
                             <Field component={datepicker} label={"Completion Year"}  type={"date"} 
                                 name={`${member}.year_of_certification`} id={`${member}.year_of_certification`}/>
                         </li>

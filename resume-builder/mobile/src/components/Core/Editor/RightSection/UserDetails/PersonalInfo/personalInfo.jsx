@@ -213,7 +213,7 @@ class PersonalInfo extends Component {
                             </Field>
                         </li>
                         
-                        <li className="form__group">
+                        <li className="form__group dob">
                             <Field component={datepicker} label={"Date Of Birth"}  type={"date"} name="date_of_birth" id="date_of_birth"
                              yearDropDownItemNumber={50}/>
                         </li>

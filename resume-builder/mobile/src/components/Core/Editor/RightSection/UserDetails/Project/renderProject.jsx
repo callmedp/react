@@ -75,12 +75,12 @@ const renderProjects = ({
                                     id={`${member}.project_name`} iconClass={"sprite icon--project-gray"} className="form__input"/>
                             </li>
     
-                            <li className="form__group">
+                            <li className="form__group dob">
                                 <Field component={datepicker} label={"Date from"}  type={"date"} yearDropDownItemNumber={15}
                                     name={`${member}.start_date`} id={`${member}.start_date`}/>
                             </li>
 
-                            <li className="form__group">
+                            <li className="form__group dob">
                                 <Field component={datepicker} label={"Date to"}  type={"date"} minDate={fields.get(index).start_date}
                                    yearDropDownItemNumber={15} name={`${member}.end_date`} id={`${member}.end_date`} disabled={till_today[index]}/>
                             </li>

@@ -72,7 +72,7 @@ export const renderAwards = ({
                                 id={`${member}.title`} iconClass={"sprite icon--education-grey"} className="form__input"/>
                         </li>
 
-                        <li className="form__group">
+                        <li className="form__group dob">
                             <Field component={datepicker} label={"Date"}  type={"date"} 
                                 name={`${member}.date`} id={`${member}.date`}/>
                         </li>
