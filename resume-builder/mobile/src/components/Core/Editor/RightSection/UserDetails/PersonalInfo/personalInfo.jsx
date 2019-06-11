@@ -205,7 +205,7 @@ class PersonalInfo extends Component {
 
                         <li className="form__group">
                             <Field component={renderSelect} label={"Gender"} name="gender" name="gender" prepend={true}
-                                iconClass={"sprite icon--designation"}  className="form__input form__select">
+                                iconClass={"sprite icon--gender"}  className="form__input form__select">
                                 <option value="">Gender</option>
                                 <option value="1" >Male</option>
                                 <option value="2" >Female</option>
@@ -253,7 +253,7 @@ class PersonalInfo extends Component {
                         </li>
 
                         <li className="form__group">
-                            <span className="upload--image">
+                            <span className="upload--image overflow-hidden">
                             {
                                 (this.state.imageURI || personalInfo.image) && flag ?
                                     <React.Fragment>

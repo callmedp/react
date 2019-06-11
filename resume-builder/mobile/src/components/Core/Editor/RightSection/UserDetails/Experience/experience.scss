@@ -1,3 +1,15 @@
 .async-select{
-    width:86%;
+
+    &.css-1r6akg3-container {
+        border: 1px solid #eaeaea;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+
+    .css-yk16xz-control {
+        border-radius: 0;
+        border: 0 none;
+        background-color: transparent;
+    }
 }
+
