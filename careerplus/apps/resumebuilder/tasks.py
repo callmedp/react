@@ -71,8 +71,12 @@ def generate_image_for_resume(candidate_id):
             }).encode(encoding='UTF-8')
 
         file_name = 'resumetemplate-' + str(i) + '.png'
-        file = HTML(string=rendered_template).write_png(stylesheets=[CSS(\
-            string='@page {size:Letter; margin:0} @page:first {size:Letter; margin:0;}')])
+        rendered_template = rendered_template.decode()
+        rendered_template = rendered_template.replace("\n","")
+        if i == 5:
+            print(rendered_template)
+        file = HTML(string=rendered_template.encode()).write_png(stylesheets=[CSS(\
+            string='@page {size:A3; margin:0;} @page:first {size:A3; margin:0;} @page:second {size:A3; margin:0;}')])
         in_mem_file = BytesIO(file)
         in_mem_file_to_upload = BytesIO()
         img = Image.open(in_mem_file)
