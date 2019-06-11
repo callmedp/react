@@ -79,7 +79,7 @@ export default class MenuModal extends React.Component {
                         <div className="edit-section-menu">
                             <strong>Add / remove sections in your resume</strong>
                             <ul className="enable">
-                                {preferenceList.filter(item =>item.active ===true && item.entity_id !==11).map((item, key) =>
+                                {preferenceList.filter(item =>item.active ===true && item.entity_id !==11 && item.entity_id !==6 && item.entity_id !==1).map((item, key) =>
                                     {   const {icon} = formCategoryList[item['entity_id']];
                                         return(
                                             <li key={key}>

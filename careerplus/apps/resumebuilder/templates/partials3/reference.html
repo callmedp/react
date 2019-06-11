@@ -9,7 +9,9 @@
                     <span style="display: inline-block; width: 73%; vertical-align: top;">
           <strong style="display: block; font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #333333;">{{ ref.reference_name }}  <span
                   style="font-size: {{ current_config.text_font_size|text_font_size }}px; color: #777777; display: inline-block; font-weight: normal;">({{ ref.reference_designation }})</span> </strong>
-          {{ ref.about_candidate }}
+                        {% if ref.about_candidate %}
+                            {{ ref.about_candidate }}
+                        {% endif %}
         </span>
                 </li>
             {% endfor %}

@@ -297,10 +297,11 @@ export default class Preview extends Component {
     getEntityName(entity_position, activeSection) {
         const entityElements = entity_position && eval(entity_position) || [];
         const entityElementSectionList = (entityElements || []).filter(els =>
-            (els['alignment'] === activeSection ||
-                els['alignment'] === 'center') &&
-            (els['entity_id'] !== 6 && els['entity_id'] !== 1) && els['active']
-            )
+                (
+                    /*els['alignment'] === activeSection ||
+                    els['alignment'] === 'center') &&*/
+                    (els['entity_id'] !== 6 && els['entity_id'] !== 1) && els['active']
+                ))
             || [];
         const currentEntity = entityElementSectionList && entityElementSectionList.length && entityElementSectionList[0]
         const entityName = currentEntity && currentEntity['entity_text'] || 'Personal Info'
@@ -495,29 +496,25 @@ export default class Preview extends Component {
                                     </AccordionItemButton>
                                 </AccordionItemHeading>
                                 <AccordionItemPanel>
-                                    <ul className="reorder-tab-heading">
-                                        <li
-                                            onClick={() => this.handleActiveSection('left')}
-                                            className={"tab-heading--top-left-right-radius no-shadow " + (activeSection === 'left' ? 'active shadow2' : '')}>
-                                            <span>Left</span>
-                                        </li>
-                                        <li
-                                            onClick={() => this.handleActiveSection('right')}
-                                            className={"tab-heading--top-left-right-radius no-shadow " + (activeSection === 'right' ? 'active shadow2' : ' ')}>
-                                            <span>Right</span></li>
-                                    </ul>
+                                    {/*<ul className="reorder-tab-heading">*/}
+                                        {/*<li*/}
+                                            {/*onClick={() => this.handleActiveSection('left')}*/}
+                                            {/*className={"tab-heading--top-left-right-radius no-shadow " + (activeSection === 'left' ? 'active shadow2' : '')}>*/}
+                                            {/*<span>Left</span>*/}
+                                        {/*</li>*/}
+                                        {/*<li*/}
+                                            {/*onClick={() => this.handleActiveSection('right')}*/}
+                                            {/*className={"tab-heading--top-left-right-radius no-shadow " + (activeSection === 'right' ? 'active shadow2' : ' ')}>*/}
+                                            {/*<span>Right</span></li>*/}
+                                    {/*</ul>*/}
                                     <ul className="reorder-content">
                                         {
-                                            (entity_position && eval(entity_position) || []).filter(els =>
-                                                (els['alignment'] === activeSection ||
-                                                    els['alignment'] === 'center') &&
-                                                (els['entity_id'] !== 6 && els['entity_id'] !== 1) &&
-                                                (els['active'])
-                                            ).map((el, index,arr) => {
+                                            (entity_position && eval(entity_position) || []).filter(els => (
+                                                els['entity_id'] !== 6 && els['entity_id'] !== 1 && els['active']
+                                            )).map((el, index, arr) => {
 
                                                 const entityValue = el;
                                                 return (
-                                                    
                                                     <li key={index} onClick={() => this.selectSection(entityValue)}
                                                         className={"reorder-content--select-box " + (!!(entityValue['entity_text'] === sectionEntityName) ? " reorder-content--select-box__select" : '')}>
                                                         {entityValue['entity_text']}
@@ -525,14 +522,14 @@ export default class Preview extends Component {
                                                             !!(entityValue['entity_text'] === sectionEntityName || (!sectionEntityName) && index === 0) ?
                                                                 < span className="addon-buttons">
                                                             {index !== 0 ?
-                                                            <span 
-                                                                onClick={() => this.moveUpSection(selectedEntity || currentEntity, selected_template)}
-                                                                className="icon-ascend1 mr-5 ml-0"/>:''
+                                                                <span
+                                                                    onClick={() => this.moveUpSection(selectedEntity || currentEntity, selected_template)}
+                                                                    className="icon-ascend1 mr-5 ml-0"/> : ''
                                                             }
-                                                            {index !==100 }
-                                                            <span
-                                                                onClick={() => this.moveDownSection(selectedEntity || currentEntity, selected_template)}
-                                                                className="icon-descend1 ml-0"/>
+                                                                    {index !== 100}
+                                                                    <span
+                                                                        onClick={() => this.moveDownSection(selectedEntity || currentEntity, selected_template)}
+                                                                        className="icon-descend1 ml-0"/>
                                                             </span> : ''
                                                         }
                                                     </li>
@@ -541,6 +538,7 @@ export default class Preview extends Component {
 
                                             })
                                         }
+
                                     </ul>
                                 </AccordionItemPanel>
                             </div>

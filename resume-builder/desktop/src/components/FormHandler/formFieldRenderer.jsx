@@ -84,6 +84,7 @@ export const datepicker =
                     // minDate={dateValue !== ''  ? moment(dateValue).add(1, 'days') : null}
                             onChange={date => input.onChange(date)}
                             showYearDropdown
+                            withPortal
                             yearDropdownItemNumber={yearDropDownItemNumber}
                             scrollableYearDropdown
                             showMonthDropdown

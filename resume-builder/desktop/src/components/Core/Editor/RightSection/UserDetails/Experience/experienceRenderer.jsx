@@ -115,11 +115,16 @@ export const ExperienceRenderer = ({
                                                             <Field
                                                                 // autoFocus={true}
                                                                 iconClass={'icon-designation'}
+                                                                label={'Select...'}
                                                                 component={renderAsyncCreatableSelect}
                                                                 closeMenuOnSelect={true}
                                                                 isMulti={false}
                                                                 loadOptions={(inputValue) => fetchJobTitles(inputValue, '')}
-                                                                defaultOptions={jobTitles}
+                                                                defaultOptions={[{
+                                                                    'value': 'Enter at least 3 characters to search.',
+                                                                    'label': 'Enter at least 3 characters to search.',
+                                                                    isDisabled: true
+                                                                }]}
                                                                 name={`${member}.job_profile`}/>
 
                                                         </fieldset>
@@ -189,7 +194,7 @@ export const ExperienceRenderer = ({
                                                         </fieldset>
                                                     </div>
                                                     {
-                                                            fields.get(index).job_profile.value &&
+                                                        fields.get(index).job_profile.value &&
 
                                                     < div className="flex-container">
                                                         <fieldset>
