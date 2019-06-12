@@ -73,6 +73,7 @@ class Award extends Component {
     deleteAward(index, fields, event) {
         event.stopPropagation();
         const award = fields.get(index);
+        console.log('---award---', award);
         fields.remove(index);
         if (award && award.id) {
             this.props.removeAward(award.id)
@@ -155,6 +156,7 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(actions.fetchUserAward())
         },
         "removeAward": (awardId) => {
+
             return dispatch(actions.deleteAward(awardId))
         },
 

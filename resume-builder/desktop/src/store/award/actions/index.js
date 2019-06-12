@@ -19,10 +19,10 @@ export const updateUserAward = (payload) => {
     }
 }
 
-export const deleteAward = (languageId) => {
+export const deleteAward = (awardId) => {
     return {
         type: DELETE_USER_AWARD,
-        languageId
+        awardId
     }
 }
 
