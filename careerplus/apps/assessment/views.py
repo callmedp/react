@@ -17,18 +17,13 @@ from django.core.paginator import Paginator
 
 class VskillTestView(DetailView):
     template_name = 'vskill/vskill_test.html'
-
-
-    def get_object(self, queryset=None):
-        tst = self.request.GET.get('test')
-
+    model =Test
 
     def get(self, request, *args, **kwargs):
 
         test_id = self.request.GET.get('test', '')
         if not test_id:
             return redirect(reverse('assessment:vskill-landing'))
-
         return super(VskillTestView,self).get(request, args, **kwargs)
 
 
@@ -43,7 +38,8 @@ class VskillTestView(DetailView):
             self.request.session.get('vskill_appeared') else []
         test_list.append(test_id)
         self.request.session.update({'vskill_appeared': test_list})
-        context.update({'questions_list': questions_list})
+        lead_created = self.request.session.get('is_lead_created')
+        context.update({'questions_list': questions_list,'lead_created':lead_created})
         return context
 
 
@@ -67,12 +63,17 @@ class AssessmentLandingPage(TemplateView):
         category = Category.objects.filter(**filter_dict)[:8]
         return category
 
+    def get_test(self):
+        test = Test.objects.filter(is_active=True)[:4]
+        return test
+
 
     def get_context_data(self, **kwargs):
         filter_dict = {'active': 'True', 'type_level':2 }
         context = super(AssessmentLandingPage, self).get_context_data(**kwargs)
         context.update({'breadcrumbs': self.get_breadcrumbs()})
         context.update({'func_area': self.get_func_areas(filter_dict)})
+        context.update({'test_list': self.get_test()})
         return context
 
 
@@ -97,7 +98,8 @@ class AssessmentCategoryPage(DetailView):
     def get_context_data(self, **kwargs):
         context = super(AssessmentCategoryPage, self).get_context_data(**kwargs)
         context.update({'breadcrumbs': self.get_breadcrumbs()})
-
+        category = self.object.get_childrens()[:4]
+        context.update({'category':category})
         return context
 
 

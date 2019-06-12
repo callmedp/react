@@ -25,7 +25,6 @@ class VskillTest(object):
             logging.getLogger('info_log').info('Unable to get status 200 in login ')
         return token
 
-
     def get_all_test(self, token):
         response = None
         headers = {

@@ -62,38 +62,18 @@
          <div class="col-sm-12 col-lg-12 col-md-12">
             <h2>Most popular tests</h2>
             <div class="popular_test">
+         {% for test in test_list %}
                <div class="testinside">
                   <span class="border-left"></span>
                   <a href= "#">
-                     Email Marketing Master
+                     {{test.title}}
                      <div class="white_hover"></div>
                      <span class="taketest" >Take Free Test</span>
                   </a>
                </div>
-               <div class="testinside">
-                  <span class="border-left purple"></span>
-                  <a href= "#">
-                     Search Engine Optimisation Optimisation
-                     <div class="white_hover"></div>
-                     <span class="taketest" >Take Free Test</span>
-                  </a>
-               </div>
-               <div class="testinside">
-                  <span class="border-left green"></span>
-                  <a href= "#">
-                     Digital Marketing Scientist Digital Marketing Scientist Digital Marketing Scientist
-                     <div class="white_hover"></div>
-                     <span class="taketest" >Take Free Test</span>
-                  </a>
-               </div>
-               <div class="testinside">
-                  <span class="border-left olive"></span>
-                  <a href= "#">
-                     Product Brand Manager
-                     <div class="white_hover"></div>
-                     <span class="taketest" >Take Free Test</span>
-                  </a>
-               </div>
+
+               {% endfor %}
+
             </div>
          </div>
          <!-- Most popular tests starts -->
