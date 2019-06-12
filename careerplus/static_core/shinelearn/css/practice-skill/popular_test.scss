@@ -8,26 +8,31 @@ h2 {
 .popular_test {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    margin: 40px 0 40px;
+    justify-content: flex-start;
+    margin-top: 40px;
+    margin-bottom: 40px;
 
 
     .testinside {
 
         border: 1px solid $border;
-
+        background: $white-bg;
         border-radius: $border-radius;
         padding: 10px 10px 10px 0;
         font-size: 16px;
         position: relative;
         box-shadow: $box-shadow;
         align-items: center;
-        width: 22%;
+        width: 22.4%;
         min-height: 75px;
         display: flex;
         position: relative;
         font-weight: $font-weight + 100;
-        ;
+        margin: 0 15px;
+
+        @media(max-width: 1191px) {
+            width: 22%;
+        }
 
         .border-left {
             background: #BCF5E8;
@@ -81,7 +86,6 @@ h2 {
                 z-index: 3;
                 left: 0px;
                 box-shadow: 0 3px 24px 0 #DEE7F3;
- 
             }
 
 
@@ -104,7 +108,12 @@ h2 {
 
             }
 
-    
+            .test {
+
+                color: $primary-color;
+                font-size: 13px;
+                display: block;
+            }
 
             &:hover .taketest,
             &:hover .white_hover {
@@ -114,5 +123,22 @@ h2 {
 
         }
 
+        .test-box {
+            &:hover {
+                box-shadow: none;
+                color: $p-blue;
+            }
+        }
+
+    }
+
+    .testinside-inner {
+        box-shadow: $box-shadow;
+        
+        &:hover {
+            box-shadow: 0 3px 20px 0 #DEE7F3;
+            background: $white-bg;
+            color: $p-blue;
+        }
     }
 }

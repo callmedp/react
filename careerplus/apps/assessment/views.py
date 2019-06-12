@@ -19,6 +19,7 @@ class VskillTestView(DetailView):
     template_name = 'vskill/vskill_test.html'
     model =Test
 
+
     def get(self, request, *args, **kwargs):
 
         test_id = self.request.GET.get('test', '')
@@ -78,7 +79,7 @@ class AssessmentLandingPage(TemplateView):
 
 
 class AssessmentCategoryPage(DetailView):
-    template_name = 'vskill/vskill_category.html'
+    template_name = 'vskill/brand-manager-test.html'
     model = Category
     slug_url_kwarg = 'slug'
 
