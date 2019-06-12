@@ -58,19 +58,8 @@
                             <p class="c6 fs-12 pb-0">Total amount</p>
                             <p class="price">{% if order.currency %}{{order.currency}}{% else %}Rs.{% endif %}{{order.total_incl_tax}}/-</p>
                         </td>
-                        {% if product_type_flow == 17 %}
-                            <td class="text-right">
-                                <form role="form" id="download-resume-form{{order.pk}}" method="POST" action="{% url "dashboard:dashboard-resumetemplatedownload" %}">
-                                    <div style="display:none">
-                                        <input type="hidden" name="csrfmiddlewaretoken" 
-                                        value="{{csrf_token}}" />
-                                        <input type="hidden" name="order_pk" value="{{order.pk}}" />
-                                        <input type="hidden" name="product_id" value="{{product_id}}"/>
-                                   </div>
-                                   <a role="button" class="btn btn-outline" onclick="downloadOrderTemplate('{{order.pk}}');event.stopPropagation()" id="download-order-invoice{{order.pk}}">Download Template</a>
-                                </form>
-                            </td>
-                        {% elif order.status == 1 or order.status == 3 %}
+                        
+                        {% if order.status == 1 or order.status == 3 %}
                             <td class="text-right">
                                 <form role="form" id="download-invoice-form{{order.pk}}" method="POST" action="{% url "dashboard:dashboard-invoicedownload" %}">
                                     <div style="display:none">

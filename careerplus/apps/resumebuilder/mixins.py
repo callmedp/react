@@ -8,7 +8,6 @@ from .tasks import generate_image_for_resume
 # python imports
 import json
 
-
 class SessionManagerMixin(object):
     
     def dispatch(self, request, *args, **kwargs):

@@ -7,6 +7,7 @@ from random import random
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.conf import settings
+from django.template.context import RequestContext
 from django.middleware.csrf import get_token
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -52,14 +53,16 @@ class DashboardInfo(object):
                 orderitems = paginator.page(1)
             except EmptyPage:
                 orderitems = paginator.page(paginator.num_pages)
-            data = {
+            
+            context = {
                 "orderitems": orderitems,
                 "max_draft_limit": settings.DRAFT_MAX_LIMIT,
                 "csrf_token_value": get_token(request),
                 "last_month_from": last_month_from,
                 "select_type": select_type,
             }
-            return render_to_string('partial/user-inboxlist.html', data)
+
+            return render_to_string('partial/user-inboxlist.html',context)
 
     def get_myorder_list(self, candidate_id=None, request=None):
         if not candidate_id:
