@@ -4,7 +4,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     {% block css_section %}
-        <link type="text/css" href="{% static 'shinelearn/css/resume-builder/resume6.css' %}" rel="stylesheet">
+        <!-- <link type="text/css" href="{% static 'shinelearn/css/resume-builder/resume6.css' %}" rel="stylesheet"> -->
     {% endblock css_section %}
     <script src="https://kit.fontawesome.com/85df0f75f9.js"></script>
 
@@ -14,7 +14,7 @@
 For Mobile case
  <div style=" width: 1536px; transform-origin: top left; transform : scale(0.32); font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777; line-height: 20px;">
  {% endcomment %}
-<div style="max-width: 1536px; word-break: break-word; width: 100%; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777; line-height: 20px;">
+<div style="max-width: 1536px; word-wrap: break-word; width: 100%; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777; line-height: 20px;">
 
     <div style="width: {{ width }}%; background: {{ current_config.color|background_color_choice }}; padding: 3%;">
 
