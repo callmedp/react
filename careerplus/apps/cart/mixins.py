@@ -58,8 +58,7 @@ class CartMixin(object):
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
 
-    def updateCart(self, product: object, addons: object, cv_id: object, add_type: object,
-                   req_options: object, is_resume_template) -> object:
+    def updateCart(self,product,addons,cv_id,add_type,req_options,is_resume_template):
         flag = -1
         try:
             flag = 1
@@ -187,7 +186,7 @@ class CartMixin(object):
             logging.getLogger('error_log').error(str(e))
         return flag
 
-    def getCartObject(self, request: object = None) -> object:
+    def getCartObject(self, request: object = None):
         try:
             cart_obj = None
             if not request:
@@ -448,9 +447,7 @@ class CartMixin(object):
         return total_amount, var_list
 
     # add the product to the cart in case of resume builder
-    def add_item_to_cart(self, main_products: object, products: object, cart_obj: object, cart_items: object,
-                         total_amount: object) -> object:
-        # import ipdb ; ipdb.set_trace()
+    def add_item_to_cart(self, main_products, products, cart_obj, cart_items,total_amount):
 
         for m_prod in main_products:
             addon_list = []
