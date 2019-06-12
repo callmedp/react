@@ -7,17 +7,16 @@
             {% for project in projects %}
                 <li style="vertical-align: top; margin: 10px 0; display: block;">
                     <span style="width: 9px; height: 9px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
-                    <span style="display: inline-block; width: 58%; vertical-align: top; color: #999999; font-size: 14px;">
-                    <strong style="display: block; font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #333333; margin-bottom: 5px;">{{ project.project_name }}</strong>
-                    <pre style="font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', 'Arial', 'sans-serif'; font-size:  {{ current_config.text_font_size|text_font_size }}px;white-space: pre-line;color: #777777;">{{ project.description }}</pre>
-                </span>
-
-                 <span style="font-size: 14px; font-style: italic; color: #333333; width: 35%; display: inline-block; vertical-align: top;">
+                    <span style="display: inline-block; width: 93%; vertical-align: top; color: #999999; font-size: 14px;">
+                    <strong style="display: block; font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #333333; margin-bottom: 5px;">{{ project.project_name }}
+                       <span style="font-size:  {{ current_config.text_font_size|text_font_size }}px; font-style: italic; color: #333333; width: 50%; display: inline-block; vertical-align: top;">
                 {% if project.is_working %}
                     ({{ project.start_date|date:"M Y" }} - Current)
                 {% else %}
                     ({{ project.start_date|date:"M Y" }} - {{ project.end_date|date:"M Y" }})
                 {% endif %}
+                </span></strong>
+                    <pre style="font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', 'Arial', 'sans-serif'; font-size:  {{ current_config.text_font_size|text_font_size }}px;white-space: pre-line;color: #777777;">{{ project.description }}</pre>
                 </span>
                 </li>
             {% endfor %}

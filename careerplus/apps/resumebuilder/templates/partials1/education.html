@@ -13,7 +13,7 @@
                                 style="font-size:  {{ current_config.text_font_size|text_font_size }}px; color: #333333; font-weight: bold;">- {{ edu.percentage_cgpa }}%</span>{% endif %}</strong>
                     {{ edu.institution_name }}
                 </span>
-                    <span style="font-size: 14px; font-style: italic; color: #333333; width: 35%; display: inline-block; vertical-align: top;">
+                    <span style="font-size:  {{ current_config.text_font_size|text_font_size }}px; font-style: italic; color: #333333; width: 35%; display: inline-block; vertical-align: top;">
                 {% if edu.is_pursuing %}
                     ({{ edu.start_date|date:"M Y" }} - Current)
                 {% else %}
