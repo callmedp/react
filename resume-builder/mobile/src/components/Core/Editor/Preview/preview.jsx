@@ -285,15 +285,15 @@ class Preview extends Component {
                                             <AccordionItemPanel>
                                                 <div className="filter__accordion__card--content">
 
-                                                    <ul className="tabs">
+                                                    {/* <ul className="tabs">
                                                         <li className={activeSection ==='left' ? "active":""} 
                                                             onClick={() => this.handleActiveSection('left')}>Left</li>
                                                         <li className={activeSection ==='right' ? "active":""}
                                                             onClick={() => this.handleActiveSection('right')}>Right</li>
-                                                    </ul>
+                                                    </ul> */}
                                                     <div className="reorder">
                                                         <ul className="reorder__items">
-                                                            {entity_position.filter(item =>(item.alignment ===activeSection  || item.alignment === 'center') && 
+                                                            {entity_position.filter(item => 
                                                                     (item.entity_id!==1 && item.entity_id!==6)
                                                                     && (item['active'])).map((el,index,arr)=>{
                                                                 return(
