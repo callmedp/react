@@ -506,7 +506,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
             line_item = line_item_list[0]
             type_flow = int(line_item.product.type_flow)
         # resume builder flow handle
-        if type_flow == 16:
+        if type_flow == 17:
             cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
         else:
             cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
