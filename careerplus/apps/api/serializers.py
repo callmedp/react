@@ -356,6 +356,9 @@ class ResumeBuilderProductSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     parent = serializers.IntegerField()
     name = serializers.CharField()
+    inr_price = serializers.FloatField()
+    usd_price = serializers.FloatField()
+    aed_price = serializers.FloatField()
 
 class  ShineDataFlowDataSerializer(ModelSerializer):
 

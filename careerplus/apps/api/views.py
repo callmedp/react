@@ -775,7 +775,8 @@ class ResumeBuilderProductView(ListAPIView):
     def get_queryset(self):
         type_flow = self.request.query_params.get('type_flow')
         return Product.objects.filter(type_flow=type_flow, type_product=2,active=True).annotate(
-            parent=F('siblingproduct__main')).values('id', 'parent', 'name')
+            parent=F('siblingproduct__main')).values(\
+            'id', 'parent', 'name','inr_price','usd_price','aed_price').order_by('inr_price')
 
 
 class ShineDataFlowDataApiView(ListAPIView):
