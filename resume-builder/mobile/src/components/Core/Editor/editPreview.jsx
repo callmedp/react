@@ -63,28 +63,10 @@ const mapDispatchToProps = (dispatch) => {
         "fetchPersonalInfo": () => {
             return dispatch(profileActions.fetchPersonalInfo())
         },
-        "headingChange": (personalInfo,id,heading) => {
-
-            let { date_of_birth, extracurricular,image,gender} = personalInfo;
-            let interest = extracurricular
-            interest =  ((interest|| []).filter((item)=>item !==null).map((item)=>item.value)).join(",")
-            let personalDetails = {
-                ...personalInfo,
-                ...{
-                    entity_preference_data:(personalInfo.entity_preference_data).map((item,key)=>{
-                        if(key === id){
-                            item.entity_text = heading
-                        }
-                        return item
-                    }),
-                    'date_of_birth': (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
-                    'extracurricular': interest,
-                    'image':image,
-                    'gender':gender
-                }
-            }
+        'headingChange': (entity,heading,pos) => {
+            entity[pos].entity_text = heading
             return new Promise((resolve, reject) => {
-                dispatch(profileActions.updatePersonalInfo({personalDetails, resolve, reject}));
+                return dispatch(profileActions.updateEntityPreference({"entity_preference_data": entity,resolve,reject}))
             })
         },
         "fetchLoaderStatus": () => {

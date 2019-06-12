@@ -22,7 +22,6 @@ class Award extends Component {
             'heading' : '',
             'submit'  : false
         }
-        this.updateInputValue =this.updateInputValue.bind(this);
         this.editHeadingClick = this.editHeadingClick.bind(this);
         this.updateInfoBeforeLoss = this.updateInfoBeforeLoss.bind(this)
     }
@@ -91,27 +90,6 @@ class Award extends Component {
         }
     }
 
-    updateInputValue(key,e) {
-        if(e.keyCode === 13){
-            if(e.target.value.length){
-                this.props.headingChange(this.props.personalInfo,6,e.target.value)
-                this.setState({editHeading:false,heading:e.target.value})
-            }
-            else{
-                this.setState({editHeading:false})
-            }
-        }
-        if(key === 'blur'){
-            if(e.target.value.length){
-                this.props.headingChange(this.props.personalInfo,6,e.target.value)
-                this.setState({editHeading:false,heading:e.target.value})
-            }
-            else{
-                this.setState({editHeading:false})
-            }
-        }
-        
-    }
 
     editHeadingClick(){
         this.setState({editHeading:true})
@@ -124,7 +102,7 @@ class Award extends Component {
     }
 
     render () {
-        const {handleSubmit,submitting,history,personalInfo:{subscription_status},changeOrderingUp,changeOrderingDown} = this.props;
+        const {handleSubmit,submitting,history,personalInfo:{subscription_status,entity_preference_data},changeOrderingUp,changeOrderingDown,headingChange} = this.props;
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
         const {editHeading,heading} =this.state;
@@ -140,10 +118,10 @@ class Award extends Component {
                                 changeOrderingUp={changeOrderingUp}
                                 changeOrderingDown={changeOrderingDown}
                                 component={renderAwards}
-                                updateInputValue={this.updateInputValue}
+                                headingChange={headingChange}
                                 editHeading={editHeading}
                                 editHeadingClick={this.editHeadingClick}
-                                
+                                entity_preference_data={entity_preference_data}
                                 context={this}
                                 heading ={heading}/>
                     <ul className="form">

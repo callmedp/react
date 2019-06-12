@@ -27,10 +27,16 @@ const fetchImageUrl = (data) => {
 const fetchInterestList = (searchText) => {
     return BaseApiService.get(`${siteDomain}/api/v1/resume/interest-list/?search=${searchText}`);
 };
+
+const updateEntityPreference = (data, candidateId) => {
+    const url = `candidates/${candidateId}/`;
+    return BaseApiService.patch(`${siteDomain}/api/v1/resume/${url}`, data);
+};
 export const Api = {
     fetchPersonalInfo,
     updatePersonalData,
     fetchImageUrl,
     createPersonalInfo,
-    fetchInterestList
+    fetchInterestList,
+    updateEntityPreference
 }

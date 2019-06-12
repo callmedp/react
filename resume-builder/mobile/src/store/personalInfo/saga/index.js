@@ -152,11 +152,33 @@ function* fetchImageUrl(action) {
     }
 }
 
+function* updateEntityPreference(action) {
+    try {
+        const {payload: {entity_preference_data, resolve, reject}} = action;
+        const candidateId = localStorage.getItem('candidateId') || '';
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+        const result = yield call(Api.updateEntityPreference, {entity_preference_data}, candidateId);
+        if (result['error']) {
+            return reject(new SubmissionError({_error: result['errorMessage']}));
+        }
+
+        const data = modifyPersonalInfo(result['data']);
+
+        yield put({type: Actions.SAVE_USER_INFO, data: data});
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+        return resolve("ENtity Updated")
+
+    } catch (e) {
+        console.log('error', e);
+    }
+}
+
 
 export default function* watchPersonalInfo() {
     yield takeLatest(Actions.FETCH_PERSONAL_INFO, getPersonalDetails)
     yield takeLatest(Actions.UPDATE_PERSONAL_INFO, updatePersonalDetails)
     yield takeLatest(Actions.FETCH_IMAGE_URL, fetchImageUrl)
     yield takeLatest(Actions.FETCH_INTEREST_LIST, getInterestList);
+    yield takeLatest(Actions.UPDATE_ENTITY_PREFERENCE, updateEntityPreference);
 
 }

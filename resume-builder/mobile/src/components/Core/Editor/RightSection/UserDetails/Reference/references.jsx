@@ -19,7 +19,6 @@ class References extends Component {
             'heading' : '',
             'submit':false
         }
-        this.updateInputValue =this.updateInputValue.bind(this);
         this.editHeadingClick = this.editHeadingClick.bind(this);
         this.updateInfoBeforeLoss = this.updateInfoBeforeLoss.bind(this)
     }
@@ -80,28 +79,6 @@ class References extends Component {
         }
     }
 
-    updateInputValue(key,e) {
-        if(e.keyCode === 13){
-            if(e.target.value.length){
-                this.props.headingChange(this.props.personalInfo,9,e.target.value)
-                this.setState({editHeading:false,heading:e.target.value})
-            }
-            else{
-                this.setState({editHeading:false})
-            }
-        }
-        if(key === 'blur'){
-            if(e.target.value.length){
-                this.props.headingChange(this.props.personalInfo,9,e.target.value)
-                this.setState({editHeading:false,heading:e.target.value})
-            }
-            else{
-                this.setState({editHeading:false})
-            }
-        }
-        
-    }
-
     componentDidUpdate(prevProps) {
         if (this.props.personalInfo.entity_preference_data !== prevProps.personalInfo.entity_preference_data) {
             this.setState({heading : this.props.personalInfo.entity_preference_data[9].entity_text})
@@ -126,7 +103,7 @@ class References extends Component {
     render () {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const { handleSubmit,history,personalInfo:{subscription_status},submitting,changeOrderingUp,changeOrderingDown} = this.props;
+        const { handleSubmit,history,personalInfo:{subscription_status,entity_preference_data},headingChange,submitting,changeOrderingUp,changeOrderingDown} = this.props;
         const {editHeading,heading} =this.state;
         return(
             <div className="buildResume">
@@ -139,7 +116,8 @@ class References extends Component {
                                 changeOrderingUp={changeOrderingUp}
                                 changeOrderingDown={changeOrderingDown}
                                 component={renderReferences}
-                                updateInputValue={this.updateInputValue}
+                                headingChange={headingChange}
+                                entity_preference_data={entity_preference_data}
                                 editHeading={editHeading}
                                 editHeadingClick={this.editHeadingClick}
                                 context={this}

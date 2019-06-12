@@ -28,7 +28,6 @@ class Summary extends Component {
             'modal_status':false,
             'summary' :''
         }
-        this.updateInputValue =this.updateInputValue.bind(this);
         this.updateInfoBeforeLoss = this.updateInfoBeforeLoss.bind(this);
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
@@ -40,28 +39,6 @@ class Summary extends Component {
             this.setState({heading : this.props.personalInfo.entity_preference_data[5].entity_text})
         }
 
-    }
-
-    updateInputValue(key,e) {
-        if(e.keyCode === 13){
-            if(e.target.value.length){
-                this.props.headingChange(this.props.personalInfo,5,e.target.value)
-                this.setState({editHeading:false,heading:e.target.value})
-            }
-            else{
-                this.setState({editHeading:false})
-            }
-        }
-        if(key === 'blur'){
-            if(e.target.value.length){
-                this.props.headingChange(this.props.personalInfo,5,e.target.value)
-                this.setState({editHeading:false,heading:e.target.value})
-            }
-            else{
-                this.setState({editHeading:false})
-            }
-        }
-        
     }
 
     componentDidUpdate(prevProps) {
@@ -157,7 +134,7 @@ class Summary extends Component {
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {personalInfo: {subscription_status},extra_info, handleSubmit,submitting,history,ui:{suggestions}} = this.props;
+        const {personalInfo: {subscription_status,entity_preference_data},extra_info,headingChange, handleSubmit,submitting,history,ui:{suggestions}} = this.props;
         const {editHeading,heading,modal_status} =this.state;
         return (
         <div className="buildResume">
@@ -167,13 +144,14 @@ class Summary extends Component {
                 <div className="buildResume__heading">
                 {!editHeading ?
                         <React.Fragment>
-                            <h1>{heading}</h1>
+                            <h1 className="heading-style">{heading}</h1>
                             <i className="sprite icon--edit" onClick={()=>{this.setState({editHeading:true})}}></i>
                         </React.Fragment>:
                         <React.Fragment>
-                            <input type="text" autoFocus defaultValue={heading} onBlur={(e)=>this.updateInputValue('blur',e)}
-                                onKeyDown={(e)=>this.updateInputValue('keyPress',e)} maxLength="20"/>
-                            <i className="sprite icon--editTick"></i>
+                            <input type="text" autoFocus defaultValue={heading} maxLength={'20'}
+                                    onChange={(event) => this.setState({heading:event.target.value})} />
+                            <i className="sprite icon--editTick" 
+                                onClick={()=>{headingChange(entity_preference_data,heading,5);this.setState({editHeading:false})}}></i>
                         </React.Fragment>
                          
                     }

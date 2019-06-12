@@ -22,7 +22,6 @@ class Education extends Component {
             'submit' : false,
             'till_today': [],
         }
-        this.updateInputValue =this.updateInputValue.bind(this);
         this.editHeadingClick = this.editHeadingClick.bind(this);
         this.tillTodayDisable = this.tillTodayDisable.bind(this);
         this.updateInfoBeforeLoss = this.updateInfoBeforeLoss.bind(this)
@@ -84,28 +83,6 @@ class Education extends Component {
         this.updateInfoBeforeLoss()
     }
 
-    updateInputValue(key,e) {
-        if(e.keyCode === 13){
-            if(e.target.value.length){
-                this.props.headingChange(this.props.personalInfo,1,e.target.value)
-                this.setState({editHeading:false,heading:e.target.value})
-            }
-            else{
-                this.setState({editHeading:false})
-            }
-        }
-        if(key === 'blur'){
-            if(e.target.value.length){
-                this.props.headingChange(this.props.personalInfo,1,e.target.value)
-                this.setState({editHeading:false,heading:e.target.value})
-            }
-            else{
-                this.setState({editHeading:false})
-            }
-        }
-        
-    }
-
     editHeadingClick(){
         this.setState({editHeading:true})
     }
@@ -149,7 +126,7 @@ class Education extends Component {
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {handleSubmit,submitting,personalInfo:{subscription_status},history,changeOrderingUp,changeOrderingDown} = this.props;
+        const {handleSubmit,submitting,personalInfo:{subscription_status,entity_preference_data},headingChange,history,changeOrderingUp,changeOrderingDown} = this.props;
         const {editHeading,heading,till_today} =this.state;
         return(
             <div className="buildResume">
@@ -162,7 +139,8 @@ class Education extends Component {
                                 changeOrderingUp={changeOrderingUp}
                                 changeOrderingDown={changeOrderingDown}
                                 component={renderEducation}
-                                updateInputValue={this.updateInputValue}
+                                headingChange={headingChange}
+                                entity_preference_data={entity_preference_data}
                                 editHeading={editHeading}
                                 editHeadingClick={this.editHeadingClick}
                                 heading ={heading}

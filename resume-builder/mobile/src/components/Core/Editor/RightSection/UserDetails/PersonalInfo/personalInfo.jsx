@@ -33,7 +33,6 @@ class PersonalInfo extends Component {
             'heading' : '',
             'submit': false
         }
-        this.updateInputValue =this.updateInputValue.bind(this);
         this.updateInfoBeforeLoss = this.updateInfoBeforeLoss.bind(this)
 
 
@@ -114,28 +113,6 @@ class PersonalInfo extends Component {
         }
     }
 
-    updateInputValue(key,e) {
-        if(e.keyCode === 13){
-            if(e.target.value.length){
-                this.props.headingChange(this.props.personalInfo,0,e.target.value)
-                this.setState({editHeading:false,heading:e.target.value})
-            }
-            else{
-                this.setState({editHeading:false})
-            }
-        }
-        if(key === 'blur'){
-            if(e.target.value.length){
-                this.props.headingChange(this.props.personalInfo,0,e.target.value)
-                this.setState({editHeading:false,heading:e.target.value})
-            }
-            else{
-                this.setState({editHeading:false})
-            }
-        }
-        
-    }
-
 
     async getImageURI(event) {
         let reader = new FileReader();
@@ -159,7 +136,7 @@ class PersonalInfo extends Component {
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {handleSubmit, personalInfo,submitting,personalInfo:{subscription_status},history,fetchInterestList} = this.props;
+        const {handleSubmit, profile,headingChange,submitting,personalInfo:{subscription_status},history,fetchInterestList} = this.props;
         const {editHeading,heading,flag} =this.state;
         return (
             
@@ -170,7 +147,7 @@ class PersonalInfo extends Component {
                     {!editHeading ?
                         
                         <React.Fragment>
-                            <h1>{heading}</h1>
+                            <h1 className="heading-style">{heading}</h1>
                             <i className="sprite icon--edit" onClick={()=>{this.setState({editHeading:true})}}></i>
                             {/* <div className="toolTip">
                                 <span className="toolTip--arrow-up"></span>
@@ -179,9 +156,9 @@ class PersonalInfo extends Component {
                             </div> */}
                         </React.Fragment>:
                         <React.Fragment>
-                            <input type="text" autoFocus defaultValue={heading} onBlur={(e)=>this.updateInputValue('blur',e)}
-                                onKeyDown={(e)=>this.updateInputValue('keyPress',e)} maxLength="20"/>
-                            <i className="sprite icon--editTick"></i>
+                            <input type="text" autoFocus defaultValue={heading} maxLength={'20'}
+                                    onChange={(event) => this.setState({heading:event.target.value})} />
+                            <i className="sprite icon--editTick" onClick={()=>{headingChange(profile.entity_preference_data,heading,0);this.setState({editHeading:false})}}></i>
                         </React.Fragment>
                          
                     }
@@ -245,7 +222,7 @@ class PersonalInfo extends Component {
                                             }]}
                                             label={'Interest'}
                                             loadOptions={(inputValue) => fetchInterestList(inputValue)}
-                                            value={personalInfo.extracurricular}
+                                            value={profile.extracurricular}
                                             isMulti={true}
                                             closeMenuOnSelect={false}
                                             />
@@ -269,13 +246,13 @@ class PersonalInfo extends Component {
                         <li className="form__group">
                             <span className="upload--image overflow-hidden">
                             {
-                                (this.state.imageURI || personalInfo.image) && flag ?
+                                (this.state.imageURI || profile.image) && flag ?
                                     <React.Fragment>
                                         <span className="close-wrap">
                                             <i className="sprite icon--close" onClick={()=>{this.setState({imageURL:'',imageURI:'',flag:false})}}></i>
                                         </span>
                                         <img alt={"User Profile"}
-                                                src={this.state.imageURI || personalInfo.image}/> 
+                                                src={this.state.imageURI || profile.image}/> 
                                     </React.Fragment>:
                                     <img alt={"User Profile"}
                                             src="/media/static/react/assets/images/mobile/default-user.jpg"/>
@@ -304,7 +281,8 @@ export const PersonalInfoForm = reduxForm({
 
 const mapStateToProps = (state) => {
     return {
-        initialValues: state.personalInfo
+        initialValues: state.personalInfo,
+        profile: state.form && state.form.personalInfo && state.form.personalInfo.values || {}
     }
 };
 

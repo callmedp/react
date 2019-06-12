@@ -13,11 +13,12 @@ const renderProjects = ({
                             changeOrderingDown,
                             editHeading,
                             heading,
-                            updateInputValue,
+                            headingChange,
                             editHeadingClick,
                             context,
                             till_today,
                             tillTodayDisable,
+                            entity_preference_data
                         }) => {
     return (
         
@@ -26,13 +27,14 @@ const renderProjects = ({
                 <div className="heading__info">
                 {!editHeading ?
                         <React.Fragment>
-                            <h1>{heading}</h1>
+                            <h1 className="heading-style">{heading}</h1>
                             <i className="sprite icon--edit" onClick={editHeadingClick.bind(true)}></i>
                         </React.Fragment>:
                         <React.Fragment>
-                            <input type="text" autoFocus defaultValue={heading} onBlur={(e)=>updateInputValue('blur',e)}
-                                onKeyDown={(e)=>updateInputValue('keyPress',e)} maxLength="20"/>
-                            <i className="sprite icon--editTick"></i>
+                            <input type="text" autoFocus defaultValue={heading} maxLength={'20'}
+                                    onChange={(event) => context.setState({heading:event.target.value})} />
+                            <i className="sprite icon--editTick" 
+                                onClick={()=>{headingChange(entity_preference_data,heading,3);context.setState({editHeading:false})}}></i>
                         </React.Fragment>
                     }
                 </div>
