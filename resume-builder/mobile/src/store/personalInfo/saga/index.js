@@ -13,12 +13,14 @@ import {interestList} from '../../../Utils/interestList'
 
 function modifyPersonalInfo(data) {
     let {date_of_birth, gender, extracurricular,image} = data;
-    extracurricular = extracurricular ?(extracurricular).split(',').map(key => interestList[key]):[]
     let newData = {
             ...data,
             ...{
                 "date_of_birth": (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
-                extracurricular,
+                extracurricular: (extracurricular && extracurricular.split(',').map(key => ({
+                    'value': key,
+                    'label': key
+                }))) || '',
                 gender,
                 image
                 }
@@ -97,17 +99,19 @@ function* updatePersonalDetails(action) {
 
 function* getInterestList(action){
     try{
-        const result = yield call(Api.fetchInterestList);
+        const {payload: {value, resolve, reject}} = action;
+        const result = yield call(Api.fetchInterestList,value);
+
         if (result['error']) {
-            console.log('error');
+            return reject(new SubmissionError({_error: result['errorMessage']}));
         }
         let {data:{data}} = result;
 
-        let updated_data={}; 
-        Object.keys(data).map((el,key)=>{
-            updated_data[key] = {'value':key,'label':data[el]}
+        const newResult = Object.keys(data).map((el, key) => {
+            return {'value': data[el], 'label': data[el]}
         })
-        yield put({type: Actions.SAVE_INTEREST_LIST,data:updated_data})
+
+        return resolve(newResult)
 
     }catch (e) {
         console.log(e);

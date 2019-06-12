@@ -84,8 +84,6 @@ function* getInterestList(action) {
         }
         let {data: {data}} = result;
 
-        let updated_data = {};
-
         const newResult = Object.keys(data).map((el, key) => {
             return {'value': data[el], 'label': data[el]}
         })

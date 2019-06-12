@@ -9,7 +9,8 @@ import {
     datepicker,
     renderSelect,
     renderTextArea,
-    renderMultiselect
+    renderMultiselect,
+    renderAsyncCreatableSelect
 } from "../../../../../FormHandler/formFieldRenderer.jsx";
 
 import moment from 'moment';
@@ -39,7 +40,6 @@ class PersonalInfo extends Component {
     }
 
     componentDidMount() {
-        this.props.fetchInterestList();
         if (this.props.personalInfo.entity_preference_data.length) {
             this.setState({heading : this.props.personalInfo.entity_preference_data[0].entity_text})
         }
@@ -159,7 +159,7 @@ class PersonalInfo extends Component {
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {handleSubmit, personalInfo,submitting,personalInfo:{subscription_status},history} = this.props;
+        const {handleSubmit, personalInfo,submitting,personalInfo:{subscription_status},history,fetchInterestList} = this.props;
         const {editHeading,heading,flag} =this.state;
         return (
             
@@ -234,10 +234,23 @@ class PersonalInfo extends Component {
                         </li>
 
                         <li className="form__group">
-                            <Field name="extracurricular" component={renderMultiselect} data={Object.values(personalInfo.interest_list)}
+                            <Field name="extracurricular" 
+
+                                            component={renderAsyncCreatableSelect}
+                                            className={'multi-select'}
+                                            defaultOptions={[{
+                                                'value': 'Enter at least 3 characters to search.',
+                                                'label': 'Enter at least 3 characters to search.',
+                                                isDisabled: true
+                                            }]}
+                                            loadOptions={(inputValue) => fetchInterestList(inputValue)}
+                                            value={personalInfo.extracurricular}
+                                            isMulti={true}
+                                            closeMenuOnSelect={false}
+                                            />
+                            {/* <Field name="extracurricular" component={renderMultiselect} data={Object.values(personalInfo.interest_list)}
                                     valueField='value' textField='label' className={'multi-select'}
-                                    defaultValue={personalInfo.extracurricular}
-                            />
+                                    defaultValue={personalInfo.extracurricular} */}
                         </li>
 
                         <li className="form__group">
@@ -318,8 +331,11 @@ const mapDispatchToProps = (dispatch) => {
                 dispatch(actions.fetchImageUrl({imageFile, resolve, reject}));
             })
         },
-        "fetchInterestList": () => {
-                dispatch(actions.fetchInterestList());
+        "fetchInterestList": (value) => {
+            if (value.length < 3) return new Promise(resolve => resolve([]));
+            return new Promise((resolve, reject) => {
+                return dispatch(actions.fetchInterestList({value, resolve, reject}))
+            })
         }
     }
 };
