@@ -52,7 +52,11 @@
           {% if entity_position.4.active %}
             {% include entity_position.4.entity_id|render_section:"partials5/" %}
           {% endif %}
-          
+
+
+          {% if entity_position.5.active %}
+            {% include entity_position.5.entity_id|render_section:"partials5/" %}
+          {% endif %}
 
         </div>
 
@@ -60,40 +64,39 @@
         <div style="width: 44%; background: #ffffff; padding: 3%; vertical-align: top;float:right;">
 
           <!--Work experience-->
-          {% if entity_position.5.active %}
-            {% include entity_position.5.entity_id|render_section:"partials5/" %}
-          {% endif %}
-          
-
-          <!--Project-->
           {% if entity_position.6.active %}
             {% include entity_position.6.entity_id|render_section:"partials5/" %}
           {% endif %}
           
 
-          <!--Education-->
+          <!--Project-->
           {% if entity_position.7.active %}
             {% include entity_position.7.entity_id|render_section:"partials5/" %}
           {% endif %}
           
 
-          <!--Courses-->
+          <!--Education-->
           {% if entity_position.8.active %}
             {% include entity_position.8.entity_id|render_section:"partials5/" %}
           {% endif %}
           
 
-          <!--Achievements/Awards-->
+          <!--Courses-->
           {% if entity_position.9.active %}
             {% include entity_position.9.entity_id|render_section:"partials5/" %}
           {% endif %}
           
 
-          <!--Reference-->
+          <!--Achievements/Awards-->
           {% if entity_position.10.active %}
             {% include entity_position.10.entity_id|render_section:"partials5/" %}
           {% endif %}
-         
+          
+
+          <!--Reference-->
+          {% if entity_position.11.active %}
+            {% include entity_position.11.entity_id|render_section:"partials5/" %}
+          {% endif %}
         </div>
 
     
