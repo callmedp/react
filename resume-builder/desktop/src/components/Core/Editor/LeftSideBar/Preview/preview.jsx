@@ -280,7 +280,7 @@ export default class Preview extends Component {
     }
 
     moveUpSection(selectedEntity, selectedTemplate) {
-
+        console.log(selectedEntity)
         this.props.reorderSection({
             templateId: selectedTemplate,
             info: {entity_id: selectedEntity['entity_id'], step: -1}
@@ -288,6 +288,7 @@ export default class Preview extends Component {
     }
 
     moveDownSection(selectedEntity, selectedTemplate) {
+        console.log(selectedEntity)
         this.props.reorderSection({
             templateId: selectedTemplate,
             info: {entity_id: selectedEntity['entity_id'], step: 1}
@@ -521,16 +522,18 @@ export default class Preview extends Component {
                                                         {
                                                             !!(entityValue['entity_text'] === sectionEntityName || (!sectionEntityName) && index === 0) ?
                                                                 < span className="addon-buttons">
-                                                            {index !== 0 ?
-                                                                <span
-                                                                    onClick={() => this.moveUpSection(selectedEntity || currentEntity, selected_template)}
-                                                                    className="icon-ascend1 mr-5 ml-0"/> : ''
-                                                            }
-                                                                    {index !== 100}
-                                                                    <span
-                                                                        onClick={() => this.moveDownSection(selectedEntity || currentEntity, selected_template)}
-                                                                        className="icon-descend1 ml-0"/>
-                                                            </span> : ''
+                                                                    {index !== 0 ?
+                                                                        <span
+                                                                            onClick={() => this.moveUpSection(selectedEntity || currentEntity, selected_template)}
+                                                                            className="icon-ascend1 mr-5 ml-0"/> : ''
+                                                                    }
+                                                                    {arr.length !== index+1 ?
+                                                                            <span
+                                                                                onClick={() => this.moveDownSection(selectedEntity || currentEntity, selected_template)}
+                                                                                className="icon-descend1 ml-0"/>
+                                                                            :''
+                                                                    }
+                                                                </span> : ''
                                                         }
                                                     </li>
                                                 )

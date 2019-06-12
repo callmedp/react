@@ -16,7 +16,7 @@ import SelectTemplateModal from '../../../Modal/selectTemplateModal';
 import LoaderPage from '../../../Loader/loaderPage';
 import {
     displaySelectedTemplate,
-    fetchTemplateImages,
+    fetchDefaultCustomization,
     fetchSelectedTemplateImage,
     fetchThumbNailImages
 } from "../../../../store/template/actions";
@@ -91,6 +91,7 @@ export class Buy extends Component {
         const {userInfo: {first_name, selected_template}, ui: {loader}, template: {templateImage, thumbnailImages}} = this.props;
         const {userInfo} = this.props;
         const {checked} = this.state;
+        console.log(localStorage.getItem('selected_template'))
         return (
             /*
             * @desc Top Bar component
@@ -98,7 +99,7 @@ export class Buy extends Component {
             <div>
                 <Header userName={first_name}/>
                 <TemplateModal {...this.props}  page={'buy'}/>
-                <SelectTemplateModal {...this.props}/>
+                <SelectTemplateModal {...this.props} page={"buy"} />
                 {
                     !!(loader) &&
                     <LoaderPage/>
@@ -275,7 +276,12 @@ const mapDispatchToProps = (dispatch) => {
             return new Promise((resolve, reject) => {
                 return dispatch(fetchSelectedTemplateImage({templateId,isModal,resolve,reject}))
             })
-        }
+        },
+        "fetchDefaultCustomization": (templateId) => {
+            return new Promise((resolve, reject) => {
+                return dispatch(fetchDefaultCustomization({templateId, resolve,reject}))
+            })
+        },
     }
 };
 

@@ -141,3 +141,14 @@ def render_section(choice, template_partial):
         11: "interest"
     }
     return template_partial + section_choice[choice] + ".html"
+
+@register.filter
+def isDual(index,skill_value):
+    if index*2 == skill_value + 1:
+        return {'dual':True}
+    elif index*2 >skill_value:
+        return {'dual':False,'background':"ffffff"}
+    else:
+        return {'dual':False,'background':"d8d8d8"}
+    
+

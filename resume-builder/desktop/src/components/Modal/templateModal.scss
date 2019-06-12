@@ -21,6 +21,7 @@ modal {
 .icon-close--position {
 	position: fixed;
 	right: 11.5%;
+    cursor: pointer;
 
 	&:before {
 		background: $white;

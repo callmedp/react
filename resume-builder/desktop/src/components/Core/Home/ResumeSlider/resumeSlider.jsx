@@ -3,6 +3,7 @@ import './resumeSlider.scss'
 import Slider from "react-slick";
 import TemplateModal from "../../../Modal/tempateModal";
 
+
 export default class ResumeSlider extends Component {
     constructor(props) {
         super(props);
@@ -22,6 +23,9 @@ export default class ResumeSlider extends Component {
                 this.props.fetchDefaultCustomization(templateId);
             }
             this.props.updateSelectedTemplate(this.props.userInfo)
+            if (page === 'buy'){
+                this.props.fetchSelectedTemplateImage(templateId,false)
+            }
         } else {
 
             window.location = '/resume-builder/edit/?type=profile'

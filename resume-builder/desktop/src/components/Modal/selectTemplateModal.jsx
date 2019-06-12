@@ -8,6 +8,7 @@ Modal.setAppElement(document.getElementById('react-app'));
 export default class SelectTemplateModal extends Component {
 
     render() {
+        const {page} = this.props
         return (
             <Modal
                 isOpen={this.props.ui.select_template_modal}
@@ -15,7 +16,7 @@ export default class SelectTemplateModal extends Component {
                 onRequestClose={this.handleCloseModal}
                 className="Modal"
                 overlayClassName="Overlay">
-                <ResumeSlider   {...this.props} page={'edit'}/>
+                <ResumeSlider   {...this.props} page={page}/>
                 <button className="Modal--close" onClick={() => {
                     this.props.hideSelectTemplateModal()
                 }}>+

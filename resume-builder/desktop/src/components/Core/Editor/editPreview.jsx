@@ -38,7 +38,7 @@ class EditPreview extends Component {
                 }
                 <Header userName={first_name}/>
                 <div className="page-container">
-                    <SelectTemplateModal {...this.props}/>
+                    <SelectTemplateModal {...this.props} page={'buy'}/>
                     <TopBar {...this.props}/>
                     <section className={'flex-container mt-30'}>
                         <LeftSideBar {...this.props}/>

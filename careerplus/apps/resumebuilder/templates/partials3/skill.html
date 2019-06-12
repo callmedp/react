@@ -1,26 +1,32 @@
 {% load static compress resume_tags %}
 {% if skills|length >= 1 %}
 
-    <div style="display: block; vertical-align: top;">
-        <strong style="font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px; display: block; font-weight: normal; color: #ffffff; text-transform: uppercase; margin-bottom: 15px; border-bottom: 1px solid #bd9f5e; padding-bottom: 5px;">{{ preference_list.4.entity_text }}</strong>
-        <ul style="margin: 20px 0 20px 0; padding: 0; font-size: 14px; color: #c5e6ff; list-style-type: none;">
-            {% for skill in skills %}
-                <li style="vertical-align: top; display: inline-block; margin-bottom: 15px; width: 46.3%;">
-                    <span style="font-size: {{ current_config.text_font_size|text_font_size }}px; color: #ffffff; display: inline-block; vertical-align: top;">{{ skill.name }}</span>
-                </li>
-                <li style="vertical-align: top; display: inline-block; margin-bottom: 15px; width: 51.3%; text-align: right;">
+ <div style="display: block; vertical-align: top;">
+  <strong style="font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px; display: block; font-weight: normal; color: #ffffff; text-transform: uppercase; margin-bottom: 15px; border-bottom: 1px solid #bd9f5e; padding-bottom: 5px;">{{preference_list.4.entity_text}}</strong>
+  <ul style="margin: 20px 0 20px 0; padding: 0; font-size: 14px; color: #c5e6ff; list-style-type: none;">
+    {% for skill in skills %}
+      <li style="vertical-align: top; display: inline-block; margin-bottom: 15px; width: 46.3%;">
+        <span style="font-size: {{ current_config.text_font_size|text_font_size }}px; color: #ffffff; display: inline-block; vertical-align: top;">{{ skill.name}}</span> 
+      </li>
+      <li style="vertical-align: top; display: inline-block; margin-bottom: 15px; width: 51.3%; text-align: right;">
+        
         <span style="color: #333333; display: block; vertical-align: top; text-align: right;">
-            {% for ind in ""|rjust:5 %}
-                <span style="width: 10px; height: 10px; border-radius: 100%; background: #ffffff; display: inline-block; vertical-align: baseline; margin-left: 5px; position: relative; overflow: hidden;">
-           
-            <span style="width: 10px; height: 10px; border-top-left-radius: 100%; border-bottom-left-radius: 100%; background: #000; display: inline-block; margin-left: 5px; position: absolute; top: 0; left: -10px;"></span>
-          </span>
-            {% endfor %}
-          </span>
-                </li>
-            {% endfor %}
-        </ul>
-        {% comment %} <p style="margin-top: 0; margin-bottom: 30px; padding: 0; color: #ffffff; line-height: 20px;">
+          {% for i in i|rjust:5  %}
+            {% with skill_item=forloop.counter|isDual:skill.proficiency%}
+            {% if skill_item.dual %}
+              <span style="width: 10px; height: 10px; border-radius: 100%; background: #ffffff; display: inline-block; vertical-align: baseline; margin-left: 5px; position: relative; overflow: hidden;">
+                <span style="width: 10px; height: 10px; border-top-left-radius: 100%; border-bottom-left-radius: 100%; background: #d8d8d8; display: inline-block; margin-left: 5px; position: absolute; top: 0; left: -10px;"></span>
+              </span> 
+            {% else %}
+                <span style="width: 10px; height: 10px; border-radius: 100%; background: #{{skill_item.background}}; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
+            {% endif %}
+            {% endwith %}
+          {% endfor %}
+        </span>
+      </li>
+    {% endfor %}
+  </ul>
+  {% comment %} <p style="margin-top: 0; margin-bottom: 30px; padding: 0; color: #ffffff; line-height: 20px;">
     {% for skill in skills|slice:"5:" %}
         {{skill}} 
         {% if skills.count == forloop.counter0|add:"6" %}
@@ -29,6 +35,6 @@
         |
         {% endif %}
     {% endfor %}
-  </p>{% endcomment %}
-    </div>
+  </p> {% endcomment %}
+</div>
 {% endif %}
