@@ -3,7 +3,7 @@
 
 <div style="display: block; vertical-align: top; margin-bottom: 30px;">
     <strong style="display: block; font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px; font-weight: normal; color: #000; background: #ffffff; padding: 12px 10px 12px 13%; margin: 0 10% 0 -13%; border-top-right-radius: 20px; border-bottom-right-radius: 20px; text-transform: uppercase;"> {{preference_list.4.entity_text}}</strong>
-    {% for skill in skills|slice:":5" %}
+    {% for skill in skills %}
         <div style="display: block; margin: 20px 0 15px 0;">
         <span style="float: right; display: inline-block; margin: 0 10% 8px 0; font-size: 12px; color: #ffffff;"><b style="font-size: 16px; color: #ffffff; font-weight: normal;">{{skill.proficiency}}/</b>10</span>
         <strong style="font-size: {{ current_config.text_font_size|text_font_size }}px; display: block; color: #ffffff; font-weight: normal; margin-bottom: 5px;">{{ skill.name}}</strong>
@@ -14,16 +14,5 @@
         </div>
         </div>
     {% endfor %}
-    
-    <p style="margin-top: 0; margin-bottom: 30px; padding: 0; color: #ffffff; line-height: 20px;">
-    {% for skill in skills|slice:"5:" %}
-        {{skill}} 
-        {% if skills.count == forloop.counter0|add:"6" %}
-        
-        {% else %}
-        |
-        {% endif %}
-    {% endfor %}
-    </p>
 </div>
 {% endif %}

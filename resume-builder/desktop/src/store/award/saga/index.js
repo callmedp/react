@@ -55,7 +55,7 @@ function* updateUserAward(action) {
 
         const result = yield call(id ? Api.updateUserAward : Api.createUserAward, userAward, candidateId, id);
 
-        yield put({type: UPDATE_UI, data: {loader: false}})
+        yield put({type: UPDATE_UI, data: {loader: false}});
 
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));

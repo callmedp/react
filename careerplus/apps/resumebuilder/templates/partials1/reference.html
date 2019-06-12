@@ -6,7 +6,7 @@
             {% for ref in references %}
                 <li style="vertical-align: top; margin: 10px 0;">
                     <span style="width: 9px;  height: 9px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
-                    <span style="display: inline-block;font-size:  {{ current_config.text_font_size|text_font_size }}px; width: 75%; vertical-align: top;">
+                    <span style=" font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', 'Arial', 'sans-serif'; display: inline-block;font-size:  {{ current_config.text_font_size|text_font_size }}px; width: 75%;color: #777777; vertical-align: top;">
                     <strong style="display: block; font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #333333;">{{ ref.reference_name }} <pre
                             style="font-size:  {{ current_config.text_font_size|text_font_size }}px; font-weight: normal; color: #777777; display: inline-block;">({{ ref.reference_designation }})</pre> </strong>
                         {% if ref.about_candidate %}
