@@ -332,7 +332,7 @@ class ResumeGenerate(object):
 
         html_template = get_template(template_src)
         rendered_html = html_template.render(context_dict).encode(encoding='UTF-8')
-
+        print("><<><><><><><", rendered_html, "<><><><><><<>")
         if file_type == 'pdf':
             file = HTML(string=rendered_html).write_pdf(stylesheets=[
                 CSS(string='@page {size:Letter; margin:0cm; margin-top:1cm} @page:first {size:Letter; margin-top:0cm}')])
