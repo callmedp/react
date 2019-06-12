@@ -60,7 +60,6 @@ tinycss2==0.5
 Unidecode==0.4.21
 urllib3==1.21.1
 uWSGI==2.0.17
-WeasyPrint==0.39
 webencodings==0.5.1
 # prefix in css
 #pip install django-compressor-postcss
