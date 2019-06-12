@@ -1,7 +1,5 @@
 # python imports
-import datetime
-import base64
-import os
+import os,base64,datetime
 import logging, gzip, shutil
 from io import BytesIO
 from pathlib import Path
@@ -23,6 +21,7 @@ from resumebuilder.models import Candidate
 from core.library.gcloud.custom_cloud_storage import (GCPInvoiceStorage, GCPPrivateMediaStorage)
 
 # third party imports
+import pdfkit
 import zipfile
 from PIL import Image
 from Crypto.Cipher import XOR
@@ -65,7 +64,6 @@ class TokenGeneration(object):
             settings.LOGIN_TOKEN_EXPIRY if not days else days)
         inp_str = '{salt}|{email}|{type}|{dt}'.format(**{'salt': settings.ENCODE_SALT, 'email': email, 'type': type,
                                                          'dt': key_expires.strftime(settings.TOKEN_DT_FORMAT)})
-        print(inp_str)
         ciph = XOR.new(settings.ENCODE_SALT)
         token = base64.urlsafe_b64encode(ciph.encrypt(inp_str))
         return token.decode()
@@ -332,10 +330,20 @@ class ResumeGenerate(object):
 
         html_template = get_template(template_src)
         rendered_html = html_template.render(context_dict).encode(encoding='UTF-8')
-        print("><<><><><><><", rendered_html, "<><><><><><<>")
         if file_type == 'pdf':
-            file = HTML(string=rendered_html).write_pdf(stylesheets=[
-                CSS(string='@page {size:Letter; margin:0cm; margin-top:1cm} @page:first {size:Letter; margin-top:0cm}')])
+            options = {
+                        'page-size': 'Letter',
+                        'encoding': "UTF-8",
+                        'no-outline': None,
+                        'margin-top': '0.3in',
+                        'margin-right': '0.2in',
+                        'margin-bottom': '0.2in',
+                        'margin-left': '0.2in',
+                        'quiet': ''
+                    }
+            rendered_html = rendered_html.decode().replace("\n","")
+            file = pdfkit.from_string(rendered_html,False,options=options)
+
         elif file_type == 'png':
             file = HTML(string=rendered_html).write_png()
 

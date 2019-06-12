@@ -12,6 +12,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 #inter app imports
 
 #third party imports
+import imgkit
 from PIL import Image
 from weasyprint import HTML, CSS
 from celery.decorators import task
@@ -26,6 +27,16 @@ def generate_image_for_resume(candidate_id):
         return
 
     thumbnail_sizes = [(151,249),(144,149)]
+    pdf_options = {
+                'page-size': 'Letter',
+                'encoding': "UTF-8",
+                'no-outline': None,
+                'margin-top': '0.3in',
+                'margin-right': '0.2in',
+                'margin-bottom': '0.2in',
+                'margin-left': '0.2in',
+                'quiet': ''
+            }
 
     entity_preference = eval(candidate.entity_preference_data)
     extracurricular = candidate.extracurricular_list
@@ -73,8 +84,8 @@ def generate_image_for_resume(candidate_id):
         file_name = 'resumetemplate-' + str(i) + '.png'
         rendered_template = rendered_template.decode()
         rendered_template = rendered_template.replace("\n","")
-        file = HTML(string=rendered_template.encode()).write_png(stylesheets=[CSS(\
-            string='@page {size:A3; margin:0cm; margin-top:1cm;} @page:first {size:A3; margin-top:0;}')])
+
+        file = imgkit.from_string(rendered_template,False,{'quiet':''})
         in_mem_file = BytesIO(file)
         in_mem_file_to_upload = BytesIO()
         img = Image.open(in_mem_file)
