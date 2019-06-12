@@ -2,7 +2,6 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Resume</title>
@@ -11,11 +10,9 @@
   <body style="margin: 0; padding: 0; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif';">
     <div style="position:relative; max-width: 1536px; width: 100%; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777; float: left; line-height: 20px; word-break: break-word">
 
-      <!--top column-->
       <div style="position: absolute;  top: 0; left: 0; right: 0; background: #484848; min-height: 185px;"></div>
 
       <div style="display: table-row; width: 97%; vertical-align: top; margin: 3% 0 0 3%; float: left;">
-        <!--left column-->
         <div style="width: 24%; background: {{ current_config.color|background_color_choice }}; padding: 3%; display: table-cell; vertical-align: top; position:relative;">
           {% if candidate.image %}
             <span style="display: block; text-align: center; margin-bottom: 10%;">
@@ -23,31 +20,26 @@
             </span>
           {% endif %}
 
-          <!--Profile-->
           {% if entity_position.0.active %}
             {% include entity_position.0.entity_id|render_section:"partials3/" %}
           {% endif %}
           
 
-          <!--Skills-->
           {% if entity_position.1.active %}
             {% include entity_position.1.entity_id|render_section:"partials3/" %}
           {% endif %}
          
 
-          <!--Courses-->
           {% if entity_position.2.active %}
             {% include entity_position.2.entity_id|render_section:"partials3/" %}
           {% endif %}
           
 
-          <!--Languages-->
           {% if entity_position.3.active %}
             {% include entity_position.3.entity_id|render_section:"partials3/" %}
           {% endif %}
           
 
-          <!--Interest-->
           {% if entity_position.4.active %}
             {% include entity_position.4.entity_id|render_section:"partials3/" %}
           {% endif %}
@@ -55,7 +47,6 @@
 
         </div>
 
-        <!--right column-->
         <div style="width: 63.5%; padding: 3%; display: table-cell; vertical-align: top; position:relative;">
           <div style="margin-bottom: 10%;">
             <h1 style="margin: 0; color: #ffffff; font-size: 32px; line-height: 32px; font-weight: bold; text-transform: uppercase;">{{ candidate.first_name }} {{ candidate.last_name }}</h1>
@@ -64,37 +55,31 @@
             {% comment %} <span style="display: block; font-size: 14px; color: #ffffff; font-weight: normal; text-transform: uppercase;">Compnay Name</span> {% endcomment %}
           </div>
 
-          <!--Summary-->
           {% if entity_position.5.active %}
             {% include entity_position.5.entity_id|render_section:"partials3/" %}
           {% endif %}
           
 
-          <!--Work experience-->
           {% if entity_position.6.active %}
             {% include entity_position.6.entity_id|render_section:"partials3/" %}
           {% endif %}
           
 
-          <!--Education-->
           {% if entity_position.7.active %}
             {% include entity_position.7.entity_id|render_section:"partials3/" %}
           {% endif %}
           
 
-          <!--Project-->
           {% if entity_position.8.active %}
             {% include entity_position.8.entity_id|render_section:"partials3/" %}
           {% endif %}
           
 
-          <!--Achievements/Awards-->
           {% if entity_position.9.active %}
             {% include entity_position.9.entity_id|render_section:"partials3/" %}
           {% endif %}
           
 
-          <!--Reference-->
           {% if entity_position.10.active %}
             {% include entity_position.10.entity_id|render_section:"partials3/" %}
           {% endif %}
