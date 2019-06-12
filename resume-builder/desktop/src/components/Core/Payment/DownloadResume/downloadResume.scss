@@ -72,11 +72,12 @@
 
 		&__content {
 			width: 144px;
-			height: 149px;
+			height: 200px;
 			display: inline-block;
 			@include border-radius(5px);
 			box-shadow: 1px 4px 9px 0 rgba(172,172,172,0.50);
 			margin-top: 25px;
+			overflow: hidden;
 		}
 	}
 }

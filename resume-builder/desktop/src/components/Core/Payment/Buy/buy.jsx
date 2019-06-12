@@ -88,7 +88,7 @@ export class Buy extends Component {
             slidesToShow: 3,
             slidesToScroll: 3,
         };
-        const {userInfo: {first_name, selected_template}, ui: {loader}, template: {templateImage, thumbnailImages}} = this.props;
+        const {userInfo: {first_name, selected_template}, ui: {loader}, template: {templateImage, thumbnailImages},productIds} = this.props;
         const {userInfo} = this.props;
         const {checked} = this.state;
         console.log(localStorage.getItem('selected_template'))
@@ -139,7 +139,8 @@ export class Buy extends Component {
                                             </span>
                                             <span className="choose-plan--price">
                                             <p>Buy your customised resume</p>
-                                            Rs. <strong>999/-</strong>
+                                            Rs. <strong>{productIds[0] && productIds[0].name==='Multiple Templates' ? productIds[0].inr_price :
+                                                            productIds[1] ?productIds[1].inr_price: 999}/-</strong>
                                             </span>
                                         </div>
                                     </li>
@@ -153,7 +154,8 @@ export class Buy extends Component {
                                             </span>
                                             <span className="choose-plan--price">
                                             <p>Buy all 5 customised resumes</p>
-                                            Rs. <strong>1249/-</strong>
+                                            Rs. <strong>{productIds[1] && productIds[1].name==='Single Template' ? productIds[1].inr_price :
+                                                            productIds[0] ?productIds[0].inr_price: 1248}/-</strong>
                                             <strike className="ml-10">Rs. 3499</strike>
                                             <span className="choose-plan--off ml-10">63% off</span>
                                             </span>

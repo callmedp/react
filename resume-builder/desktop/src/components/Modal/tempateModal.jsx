@@ -34,7 +34,7 @@ export default class TemplateModal extends React.Component {
                         content: {
                             left: '10%',
                             right: '10%',
-                            top: '15%',
+                            top: '10%',
                             bottom: '0',
                         }
                     }}
