@@ -280,7 +280,6 @@ export default class Preview extends Component {
     }
 
     moveUpSection(selectedEntity, selectedTemplate) {
-        console.log(selectedEntity)
         this.props.reorderSection({
             templateId: selectedTemplate,
             info: {entity_id: selectedEntity['entity_id'], step: -1}
@@ -288,7 +287,6 @@ export default class Preview extends Component {
     }
 
     moveDownSection(selectedEntity, selectedTemplate) {
-        console.log(selectedEntity)
         this.props.reorderSection({
             templateId: selectedTemplate,
             info: {entity_id: selectedEntity['entity_id'], step: 1}
@@ -306,7 +304,7 @@ export default class Preview extends Component {
             || [];
         const currentEntity = entityElementSectionList && entityElementSectionList.length && entityElementSectionList[0]
         const entityName = currentEntity && currentEntity['entity_text'] || 'Personal Info'
-        return [entityName, currentEntity];
+        return [currentEntity,entityName ];
 
     }
 
@@ -314,7 +312,7 @@ export default class Preview extends Component {
         if (this.state.activeSection !== prevState.activeSection) {
             const {template: {entity_position}} = this.props;
             const {activeSection} = this.state;
-            const [entityName, currentEntity] = this.getEntityName(entity_position, activeSection)
+            const [currentEntity,entityName ] = this.getEntityName(entity_position, activeSection)
             this.setState({
                 sectionEntityName: entityName,
                 selectedEntity: currentEntity

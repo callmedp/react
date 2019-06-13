@@ -25,15 +25,10 @@
           {% endif %}
           
 
-          {% if entity_position.1.active %}
-            {% include entity_position.1.entity_id|render_section:"partials3/" %}
-          {% endif %}
-         
-
           {% if entity_position.2.active %}
             {% include entity_position.2.entity_id|render_section:"partials3/" %}
           {% endif %}
-          
+         
 
           {% if entity_position.3.active %}
             {% include entity_position.3.entity_id|render_section:"partials3/" %}
@@ -42,6 +37,11 @@
 
           {% if entity_position.4.active %}
             {% include entity_position.4.entity_id|render_section:"partials3/" %}
+          {% endif %}
+          
+
+          {% if entity_position.5.active %}
+            {% include entity_position.5.entity_id|render_section:"partials3/" %}
           {% endif %}
           
 
@@ -55,8 +55,8 @@
             {% comment %} <span style="display: block; font-size: 14px; color: #ffffff; font-weight: normal; text-transform: uppercase;">Compnay Name</span> {% endcomment %}
           </div>
 
-          {% if entity_position.5.active %}
-            {% include entity_position.5.entity_id|render_section:"partials3/" %}
+          {% if entity_position.1.active %}
+            {% include entity_position.1.entity_id|render_section:"partials3/" %}
           {% endif %}
           
 

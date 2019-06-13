@@ -265,6 +265,7 @@ export const renderTextArea = ({
                             placeholder={label}
                             maxLength={maxLength}
                             rows={rows} type={type}/>
+                    <span className="word-counter mt-5">{input.value.length ? input.value.length : 0}/{maxLength}</span>
                     
                     {touched &&
                     ((error && <span className={'errormsg-txt'}>{error}</span>) ||

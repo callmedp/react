@@ -183,9 +183,9 @@ export class PersonalInfo extends Component {
                                            iconClass={'icon-address'}
                                            type={"textarea"}
                                            name="location"
-                                           maxLength={'300'}
+                                           maxLength={'100'}
                                            className={"input-control"} rows="3"/>
-                                           <span className="word-counter mt-5">0-300</span>
+                                           {/* <span className="word-counter mt-5">0-300</span> */}
                                 </fieldset>
                             </div>
 

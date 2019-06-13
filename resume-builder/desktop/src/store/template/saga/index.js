@@ -170,8 +170,9 @@ function* reorderSection(action) {
         data = {
             entity_position: data
         }
-
+        console.log(data)
         yield put({type: SET_CUSTOMIZATION, data: data});
+
 
 
         yield call(fetchTemplate, {payload: {template: templateId}})

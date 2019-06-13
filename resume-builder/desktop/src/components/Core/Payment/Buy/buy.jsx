@@ -91,7 +91,8 @@ export class Buy extends Component {
         const {userInfo: {first_name, selected_template}, ui: {loader}, template: {templateImage, thumbnailImages},productIds} = this.props;
         const {userInfo} = this.props;
         const {checked} = this.state;
-        console.log(localStorage.getItem('selected_template'))
+        const price1 = productIds[1] && productIds[1].name==='Single Template' ? productIds[1].inr_price :productIds[0] ?productIds[0].inr_price: 999
+        const price2 = productIds[0] && productIds[0].name==='Multiple Templates' ? productIds[0].inr_price : productIds[1] ?productIds[1].inr_price: 1248
         return (
             /*
             * @desc Top Bar component
@@ -139,8 +140,7 @@ export class Buy extends Component {
                                             </span>
                                             <span className="choose-plan--price">
                                             <p>Buy your customised resume</p>
-                                            Rs. <strong>{productIds[1] && productIds[1].name==='Single Template' ? productIds[1].inr_price :
-                                                            productIds[0] ?productIds[0].inr_price: 999}/-</strong>
+                                            Rs. <strong>{price1}/-</strong>
                                             </span>
                                         </div>
                                     </li>
@@ -154,8 +154,7 @@ export class Buy extends Component {
                                             </span>
                                             <span className="choose-plan--price">
                                             <p>Buy all 5 customised resumes</p>
-                                            Rs. <strong>{productIds[0] && productIds[0].name==='Multiple Templates' ? productIds[0].inr_price :
-                                                            productIds[1] ?productIds[1].inr_price: 1248}
+                                            Rs. <strong>{price2}
                                             /-</strong>
                                             <strike className="ml-10">Rs. 3499</strike>
                                             <span className="choose-plan--off ml-10">63% off</span>
@@ -193,7 +192,7 @@ export class Buy extends Component {
                                 <div className="">
                                     <div className="choose-plan--pay-price">
                                         You pay
-                                        <span>Rs. <strong>{checked === 'product1' ? "999" : "1249"}/-</strong></span>
+                                        <span>Rs. <strong>{checked === 'product1' ? price1 : price2}/-</strong></span>
                                     </div>
                                     <button
                                         className="choose-plan--orange-button-change orange-button items-right pull-right mt-10"

@@ -201,7 +201,7 @@ class PersonalInfo extends Component {
 
                         <li className="form__group">
                             <Field component={renderTextArea} label={"Address"}  type={"text"} name="location" id="location" 
-                                prepend={true} iconClass={"sprite icon--address"} className="form__input" rows="4" maxLength={'300'}/>
+                                prepend={true} iconClass={"sprite icon--address"} className="form__input" rows="4" maxLength={'100'}/>
                         </li>
 
                         <li className="form__group">
