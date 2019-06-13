@@ -5,7 +5,7 @@ import {siteDomain} from "../../../Utils/domains";
 const fetchProductIds = () => {
 
     const url = `resume-product-id`;
-    return BaseApiService.get(`${siteDomain}/api/v1/${url}/?type_flow=${16}`);
+    return BaseApiService.get(`${siteDomain}/api/v1/${url}/?type_flow=${17}`);
 };
 
 const addToCart= (data) => {

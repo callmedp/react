@@ -83,10 +83,11 @@ class Buy extends Component {
             speed: 500,
             slidesToShow: 2,
           };
-          const {ui:{mainloader},template:{thumbnailImages,templateImage}} = this.props
+          const {ui:{mainloader},template:{thumbnailImages,templateImage},productIds} = this.props
           const template = localStorage.getItem('selected_template') || 1;
           const {checked,pay_button_clicked,modal_status} = this.state
-          
+          const price1 = productIds[1] && productIds[1].name==='Single Template' ? productIds[1].inr_price :productIds[0] ?productIds[0].inr_price: 999
+          const price2 = productIds[0] && productIds[0].name==='Multiple Templates' ? productIds[0].inr_price : productIds[1] ?productIds[1].inr_price: 1248
         return (
 
             <div className="buy-container">
@@ -100,7 +101,7 @@ class Buy extends Component {
                     <div className="pay-now__price">
                         <span className="fs-12 pay-now__price--pay">You pay</span>
                         <span
-                            className="fs-26 color-333 semi-bold">Rs. {checked === 'product1' ? 999 : 1249}/-</span>
+                            className="fs-26 color-333 semi-bold">Rs. {checked === 'product1' ? price1 : price2}/-</span>
                     </div>
 
                     <button className="btn btn__round btn__primary fs-" disabled={pay_button_clicked}
@@ -119,7 +120,7 @@ class Buy extends Component {
                                 <label className="buy__item--label form__radio-label" htmlFor="your-resume">
                                     <span className="form__radio-button"></span>
                                     Buy your <br/>customised resume
-                                    <strong>Rs. 999/-</strong>
+                                    <strong>Rs. {price1}/-</strong>
                                 </label>
                             </div>
                             <div className="buy__item--right">
@@ -145,7 +146,7 @@ class Buy extends Component {
                                     <span className="form__radio-button"></span>
                                     Buy all 5 customised resumes
                                     <div className="buy__item--price">
-                                        <span className="fs-22 color-333 semi-bold">Rs. 1249/-</span>
+                                        <span className="fs-22 color-333 semi-bold">Rs. {price2}/-</span>
                                         <span className="fs-14 line-through">Rs. 3499</span>
                                         <span className="fs-14 bold">63% off</span>
                                     </div>
