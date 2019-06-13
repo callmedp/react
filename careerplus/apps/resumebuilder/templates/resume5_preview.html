@@ -85,10 +85,12 @@ For Mobile case
     </div>
 
 </div>
-{% comment %} <div style="position: fixed; left: 0; right: 0; top: 2%; margin: 0 auto;"><img src="images/watermark.png"
-                                                                               alt="shinelearning.com"
-                                                                               style="width: 100%;"></div> {% endcomment %}
-
-
+{% if is_img %}
+    <div style="position: fixed; left: 0; right: 0; top: 2%; margin: 0 auto;">
+        <img src="{% static 'resumebuilder/images/watermark.png' %}"
+             alt="shinelearning.com"
+             style="width: 100%;">
+    </div>
+{% endif %}
 </body>
 </html>
