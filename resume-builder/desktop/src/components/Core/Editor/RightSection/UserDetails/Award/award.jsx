@@ -125,7 +125,7 @@ export const AwardForm = reduxForm({
     form: 'award',
     validate,
     enableReinitialize: true,
-    onSubmitFail: (errors) => scrollOnErrors(errors,'award',-100),
+    onSubmitFail: (errors) => scrollOnErrors(errors, 'award', -100),
 })(Award);
 
 
@@ -166,7 +166,7 @@ const mapDispatchToProps = (dispatch) => {
                 userAward = {
                     ...userAward,
                     ...{
-                        date: (date && moment(date).format('YYYY-MM-DD')) || '',
+                        date: (date && date.value && Number(date.value)) || null,
                         order: index
                     }
                 };

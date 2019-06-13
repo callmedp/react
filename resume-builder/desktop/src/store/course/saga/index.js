@@ -9,6 +9,21 @@ import {SubmissionError} from 'redux-form'
 import {UPDATE_UI} from '../../ui/actions/actionTypes'
 import {initialState} from "../reducer/index"
 
+
+function modifyCourses(courses) {
+    return (courses || []).map(el => {
+        return {
+            ...el,
+            ...{
+                year_of_certification: (el && el.year_of_certification && {
+                    value: el.year_of_certification,
+                    label: el.year_of_certification
+                }) || ''
+            }
+        }
+    })
+}
+
 function* fetchUserCourse(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
@@ -38,7 +53,10 @@ function* fetchUserCourse(action) {
             let {course: {list}} = state;
             results = list
         }
-        let data = results.length ? {list: results} : initialState
+        let data = results.length ? {list: results} : initialState;
+
+        data = {list: modifyCourses(data.list)};
+
         yield put({type: Actions.SAVE_USER_COURSE, data: data})
     } catch (e) {
         console.log(e);
@@ -98,8 +116,8 @@ function* handleCourseSwap(action) {
 
         data.sort((a, b) => a.order <= b.order);
 
-        data = {list: data};
-        console.log('data---',data);
+        data = {list: modifyCourses(data.list)};
+
         yield put({type: Actions.SAVE_USER_COURSE, data: data})
 
         return resolve('User Course  Info saved successfully.');

@@ -26,7 +26,7 @@ export default class Preview extends Component {
 
 
         this.state = {
-            currentTab: 1,
+            currentTab: 0,
             selectedColor: 1,
             headingFontSize: 1,
             textFontSize: 1,
@@ -58,8 +58,10 @@ export default class Preview extends Component {
 
 
     static getDerivedStateFromProps(nextProp, prevState) {
+
         const {template: {color, heading_font_size, text_font_size}} = nextProp;
         let obj = prevState;
+
         if (color !== prevState['selectedColor']) {
             obj['selectedColor'] = color;
         }
@@ -116,11 +118,16 @@ export default class Preview extends Component {
 
     async componentDidMount() {
 
+        this.setState({
+            currentTab: 1
+        })
+
         let {heading_font_size: headingFontSize, text_font_size: textFontSize} = await this.props.fetchDefaultCustomization(localStorage.getItem('selected_template'));
         let elem1 = this.refs.bar1, slider1 = this.refs.slider1, elem2 = this.refs.bar2, slider2 = this.refs.slider2;
 
         const self = this;
 
+        console.log('--refssss---', this.refs.slider1)
 
         function handleElemEvent(event, element, sliderElement, section) {
 
@@ -327,6 +334,7 @@ export default class Preview extends Component {
         }
     }
 
+
     render() {
         const {userInfo: {selected_template}, template: {entity_position}} = this.props;
         const {currentTab, selectedColor, activeSection, sectionEntityName, selectedEntity} = this.state;
@@ -500,15 +508,15 @@ export default class Preview extends Component {
                                 </AccordionItemHeading>
                                 <AccordionItemPanel>
                                     {/*<ul className="reorder-tab-heading">*/}
-                                        {/*<li*/}
-                                            {/*onClick={() => this.handleActiveSection('left')}*/}
-                                            {/*className={"tab-heading--top-left-right-radius no-shadow " + (activeSection === 'left' ? 'active shadow2' : '')}>*/}
-                                            {/*<span>Left</span>*/}
-                                        {/*</li>*/}
-                                        {/*<li*/}
-                                            {/*onClick={() => this.handleActiveSection('right')}*/}
-                                            {/*className={"tab-heading--top-left-right-radius no-shadow " + (activeSection === 'right' ? 'active shadow2' : ' ')}>*/}
-                                            {/*<span>Right</span></li>*/}
+                                    {/*<li*/}
+                                    {/*onClick={() => this.handleActiveSection('left')}*/}
+                                    {/*className={"tab-heading--top-left-right-radius no-shadow " + (activeSection === 'left' ? 'active shadow2' : '')}>*/}
+                                    {/*<span>Left</span>*/}
+                                    {/*</li>*/}
+                                    {/*<li*/}
+                                    {/*onClick={() => this.handleActiveSection('right')}*/}
+                                    {/*className={"tab-heading--top-left-right-radius no-shadow " + (activeSection === 'right' ? 'active shadow2' : ' ')}>*/}
+                                    {/*<span>Right</span></li>*/}
                                     {/*</ul>*/}
                                     <ul className="reorder-content">
                                         {
@@ -529,11 +537,11 @@ export default class Preview extends Component {
                                                                             onClick={() => this.moveUpSection(selectedEntity || currentEntity, selected_template)}
                                                                             className="icon-ascend1 mr-5 ml-0"/> : ''
                                                                     }
-                                                                    {arr.length !== index+1 ?
-                                                                            <span
-                                                                                onClick={() => this.moveDownSection(selectedEntity || currentEntity, selected_template)}
-                                                                                className="icon-descend1 ml-0"/>
-                                                                            :''
+                                                                    {arr.length !== index + 1 ?
+                                                                        <span
+                                                                            onClick={() => this.moveDownSection(selectedEntity || currentEntity, selected_template)}
+                                                                            className="icon-descend1 ml-0"/>
+                                                                        : ''
                                                                     }
                                                                 </span> : ''
                                                         }

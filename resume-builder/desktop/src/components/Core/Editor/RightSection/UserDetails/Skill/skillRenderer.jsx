@@ -117,6 +117,7 @@ export const SkillRenderer = ({
                                                         <Field name={`${member}.proficiency`}
                                                                component={renderSelect}
                                                                isMulti={false}
+                                                               selectBody={true}
                                                                iconClass={'icon-rating'}
                                                                closeMenuOnSelect={true}
                                                                options={[

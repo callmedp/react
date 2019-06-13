@@ -120,7 +120,10 @@ export const renderSelect = ({
                                  options,
                                  isMulti,
                                  iconClass,
-                                 closeMenuOnSelect
+                                 closeMenuOnSelect,
+                                 selectBody = true,
+                                 isSearchable=false
+
                              }) => (
     <div className={"input-group " + (touched && error ? 'errormsg' : '')}>
         <div className="input-group--input-group-icon">
@@ -130,11 +133,12 @@ export const renderSelect = ({
             <Select {...input}
                     placeholder={label}
                     styles={{menuPortal: base => ({...base, zIndex: 9999})}}
-                    menuPortalTarget={document.body}
+                    menuPortalTarget={selectBody ? document.body : document.getElementById('right-panel-section')}
                     options={options}
                     isMulti={isMulti}
                     closeMenuOnSelect={closeMenuOnSelect}
                     autoComplete="off"
+                    isSearchable={isSearchable}
                     menuPosition={'absolute'}
                     menuPlacement={'auto'}
                     components={makeAnimated()}
@@ -199,7 +203,7 @@ export const renderAsyncCreatableSelect = ({
                                                isMulti,
                                                closeMenuOnSelect,
                                                meta: {touched, error, warning},
-                                                selectBody
+                                               selectBody
                                            }) => {
     return (
         <div className={"input-group " + (touched && error ? 'errormsg' : '')}>
@@ -211,7 +215,7 @@ export const renderAsyncCreatableSelect = ({
                                       cacheOptions
                                       loadOptions={loadOptions}
                                       styles={{menuPortal: base => ({...base, zIndex: 9999})}}
-                                      menuPortalTarget={selectBody ?document.body: document.getElementById('right-panel-section')}
+                                      menuPortalTarget={selectBody ? document.body : document.getElementById('right-panel-section')}
                                       menuPosition={'absolute'}
                                       menuPlacement={'auto'}
                                       defaultOptions={defaultOptions}
@@ -247,10 +251,10 @@ export const renderTextArea = ({
         {noIcon ?
             <div className={"Error " + (touched && error ? 'errormsg' : '')}>
                 <textarea {...input}
-                        autoComplete="off"
-                        placeholder={label}
-                        maxLength={maxLength}
-                        rows={rows} type={type}/>
+                          autoComplete="off"
+                          placeholder={label}
+                          maxLength={maxLength}
+                          rows={rows} type={type}/>
                 <span className="word-counter mt-5">{input.value.length ? input.value.length : 0}/{maxLength}</span>
                 {touched &&
                 ((error && <span className={'errormsg-txt'}>{error}</span>) ||
@@ -268,7 +272,7 @@ export const renderTextArea = ({
                             maxLength={maxLength}
                             rows={rows} type={type}/>
                     <span className="word-counter mt-5">{input.value.length ? input.value.length : 0}/{maxLength}</span>
-                    
+
                     {touched &&
                     ((error && <span className={'errormsg-txt'}>{error}</span>) ||
                         (warning && <span className={'Warn-Message'}>{warning}</span>))}

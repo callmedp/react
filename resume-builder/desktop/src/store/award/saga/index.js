@@ -9,6 +9,17 @@ import {SubmissionError} from 'redux-form'
 import {initialState} from '../reducer/index'
 
 
+function modifyAwards(awards) {
+    return (awards || []).map(el => {
+        return {
+            ...el,
+        ...{
+            date: (el && el.date && {value: el.date, label: el.date}) || ''
+        }
+    }
+    })
+}
+
 function* fetchUserAward(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
@@ -37,6 +48,8 @@ function* fetchUserAward(action) {
         }
         let data = results.length ? {list: results} : initialState
 
+        console.log('---', data);
+        data = {list: modifyAwards(data.list)}
         yield put({type: Actions.SAVE_USER_AWARD, data: data})
     } catch (e) {
         console.log(e);
@@ -102,6 +115,8 @@ function* handleAwardSwap(action) {
 
         data = {list: data};
 
+        console.log('data ---', data);
+        data = {list: modifyAwards(data.list)}
         yield put({type: Actions.SAVE_USER_AWARD, data: data})
 
         return resolve('User Award  Info saved successfully.');

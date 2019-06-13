@@ -230,7 +230,7 @@ class CandidateSocialLink(PreviewImageCreationMixin, models.Model):
 class CandidateAchievement(PreviewImageCreationMixin, models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     title = models.CharField('Title', max_length=300)
-    date = models.DateField('Date',blank=True,null=True)
+    date = models.IntegerField('Date',blank=True,null=True)
     summary = models.TextField('Summary', null=True, blank=True)
     order = models.IntegerField('Order', default=0)
 

@@ -3,7 +3,7 @@ import styles from './personalInfo.scss'
 import {connect} from "react-redux";
 import * as actions from '../../../../../../store/personalInfo/actions/index';
 import {Field, reduxForm} from 'redux-form';
-import {interestList} from '../../../../../../Utils/interestList'
+import {defaultInterests} from '../../../../../../Utils/defaultInterests'
 import {
     renderField,
     datepicker,
@@ -153,6 +153,7 @@ export class PersonalInfo extends Component {
                                     <Field yearDropDownItemNumber={50}
                                            iconClass={'icon-date'}
                                            component={datepicker} name="date_of_birth"
+                                           maxDateAllowed={'true'}
                                            className={"input-control"}/>
                                 </fieldset>
                             </div>
@@ -194,15 +195,10 @@ export class PersonalInfo extends Component {
                                 <fieldset id="interest-select" className="">
                                     <label>Interest</label>
                                     <Field name="extracurricular" component={renderAsyncCreatableSelect}
-                                           defaultOptions={[{
-                                               'value': 'Enter at least 3 characters to search.',
-                                               'label': 'Enter at least 3 characters to search.',
-                                               isDisabled: true
-                                           }]}
+                                           defaultOptions={defaultInterests}
                                            loadOptions={(inputValue) => fetchInterests(inputValue)}
                                            value={personalInfo.extracurricular}
                                            isMulti={true}
-                                           selectBody={true}
                                            closeMenuOnSelect={false}
                                            iconClass={'icon-interest'}
                                            label="Select Interest"/>

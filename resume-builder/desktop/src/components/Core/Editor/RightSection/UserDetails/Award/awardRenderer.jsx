@@ -7,8 +7,9 @@ import {
 } from "react-accessible-accordion";
 import styles from './award.scss'
 import {Field} from "redux-form";
-import {datepicker, renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer";
+import {renderField, renderTextArea, renderSelect} from "../../../../../FormHandler/formFieldRenderer";
 import React from "react";
+import {yearList} from "../../../../../../Utils/yearList";
 
 export const AwardRenderer = ({
                                   fields,
@@ -101,17 +102,18 @@ export const AwardRenderer = ({
                                                                 autoFocus={true}
                                                                 maxLength={'50'}
                                                                 iconClass={'icon-awards-gr'}
-                                                                component={renderField} type={"text"}
+                                                                component={renderField}
+                                                                type={"text"}
                                                                 name={`${member}.title`}
                                                                 className="input-control"/>
                                                         </fieldset>
                                                         <fieldset>
-                                                            <label>Date</label>
+                                                            <label>Year</label>
                                                             <Field
                                                                 iconClass={'icon-date'}
-                                                                component={datepicker}
+                                                                component={renderSelect}
                                                                 maxDateAllowed={true}
-                                                                yearDropDownItemNumber={30}
+                                                                options={yearList}
                                                                 type={"date"}
                                                                 className={'input-control'}
                                                                 name={`${member}.date`}/>

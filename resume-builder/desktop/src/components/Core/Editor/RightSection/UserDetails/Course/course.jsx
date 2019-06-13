@@ -124,7 +124,7 @@ export const
     CourseForm = reduxForm({
         form: 'course',
         enableReinitialize: true,
-        onSubmitFail: (errors) => scrollOnErrors(errors,'course',-100),
+        onSubmitFail: (errors) => scrollOnErrors(errors, 'course', -100),
         validate
     })(Course);
 
@@ -166,7 +166,7 @@ const
                     userCourse = {
                         ...userCourse,
                         ...{
-                            year_of_certification: (year_of_certification && moment(year_of_certification).format('YYYY')) || '',
+                            year_of_certification: (year_of_certification && year_of_certification.value && Number(year_of_certification.value)) || null,
                             order: index
                         }
                     };

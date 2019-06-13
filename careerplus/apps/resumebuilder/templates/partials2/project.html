@@ -10,7 +10,7 @@
                     <span style="display: inline-block; width: 95%; vertical-align: top;">
                 <strong style="display: block; font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #333333;">{{ project.project_name }}
                    <span style="font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', 'Arial', 'sans-serif'; font-size: {{ current_config.text_font_size|text_font_size }}px; font-style: italic; color: #333333; width: 35%; display: inline-block; vertical-align: top;">
-                {% if project.is_working %}
+                {% if project.currently_working %}
                     ({{ project.start_date|date:"M Y" }} - Current)
                 {% else %}
                     ({{ project.start_date|date:"M Y" }} - {{ project.end_date|date:"M Y" }})
