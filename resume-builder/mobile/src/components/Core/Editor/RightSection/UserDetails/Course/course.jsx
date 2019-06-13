@@ -104,7 +104,7 @@ class Course extends Component {
     render () {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {handleSubmit, history,submitting,personalInfo:{subscription_status,entity_preference_data},headingChange,changeOrderingUp,changeOrderingDown} = this.props;
+        const {updateAlertModalStatus,handleSubmit, history,submitting,personalInfo:{subscription_status,entity_preference_data},headingChange,changeOrderingUp,changeOrderingDown} = this.props;
         const {editHeading,heading} =this.state;
         return(
 
@@ -126,7 +126,7 @@ class Course extends Component {
                                 heading ={heading}/>
                     <ul className="form">
                         <li className="form__group">
-                            <BottomCTC  disabled={submitting} context={this} history={history}
+                            <BottomCTC  disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
                                 length={length} pos={pos+1} updateInfoBeforeLoss={this.updateInfoBeforeLoss} 
                                 subscription_status={subscription_status}/>
                         </li>

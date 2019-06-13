@@ -1,4 +1,4 @@
-import {UPDATE_MAIN_PAGE_LOADER,UPDATE_DATA_LOADER,FETCH_LOADER_STATUS,CHANGE_FORM_NAME,SET_SUGGESTION_TYPE} from './actionTypes'
+import {UPDATE_MAIN_PAGE_LOADER,UPDATE_DATA_LOADER,FETCH_LOADER_STATUS,CHANGE_FORM_NAME,SET_SUGGESTION_TYPE,FETCH_ALERT_MODAL_STATUS,UPDATE_ALERT_MODAL_STATUS} from './actionTypes'
 
 
 export const updateMainLoader = (payload) => {
@@ -32,5 +32,18 @@ export const setSuggestionType = (type) => {
     return {
         type: SET_SUGGESTION_TYPE,
         data: {suggestionType: type}
+    }
+}
+
+export const fetchAlertModalStatus = () =>{
+    return {
+        type: FETCH_ALERT_MODAL_STATUS
+    }
+}
+
+export const updateAlertModalStatus = (payload) =>{
+    return {
+        type: UPDATE_ALERT_MODAL_STATUS,
+        payload
     }
 }

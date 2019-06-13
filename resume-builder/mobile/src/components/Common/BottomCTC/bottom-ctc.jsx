@@ -16,12 +16,13 @@ export default class BottomCTC extends Component {
     }
 
     render (){
-        const {disabled,length,pos,subscription_status} = this.props
+        const {disabled,length,pos,subscription_status,updateAlertModalStatus} = this.props
+        const newUser = localStorage.getItem('newUser')
         return (
             <div>
                 <div className="bottom-ctc">
                     <button className="btn link-color bg-white" 
-                        onClick={this.preview}
+                        onClick={ newUser ? ()=>{updateAlertModalStatus(true)}:this.preview}
                         type={'button'}>Preview
                     </button>
                     

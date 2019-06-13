@@ -103,7 +103,7 @@ class References extends Component {
     render () {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const { handleSubmit,history,personalInfo:{subscription_status,entity_preference_data},headingChange,submitting,changeOrderingUp,changeOrderingDown} = this.props;
+        const {updateAlertModalStatus, handleSubmit,history,personalInfo:{subscription_status,entity_preference_data},headingChange,submitting,changeOrderingUp,changeOrderingDown} = this.props;
         const {editHeading,heading} =this.state;
         return(
             <div className="buildResume">
@@ -124,7 +124,7 @@ class References extends Component {
                                 heading ={heading}/>
                     <ul className="form">
                         <li className="form__group">
-                        <BottomCTC  disabled={submitting} context={this} history={history}
+                        <BottomCTC  disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
                                 length={length} pos={pos+1} updateInfoBeforeLoss={this.updateInfoBeforeLoss} 
                                 subscription_status={subscription_status}/>
                         </li>

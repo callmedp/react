@@ -102,7 +102,7 @@ class Award extends Component {
     }
 
     render () {
-        const {handleSubmit,submitting,history,personalInfo:{subscription_status,entity_preference_data},changeOrderingUp,changeOrderingDown,headingChange} = this.props;
+        const {handleSubmit,submitting,history,personalInfo:{subscription_status,entity_preference_data},changeOrderingUp,changeOrderingDown,headingChange,updateAlertModalStatus} = this.props;
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
         const {editHeading,heading} =this.state;
@@ -126,7 +126,7 @@ class Award extends Component {
                                 heading ={heading}/>
                     <ul className="form">
                         <li className="form__group">
-                            <BottomCTC  disabled={submitting} context={this} history={history}
+                            <BottomCTC  disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
                                 length={length} pos={pos+1} updateInfoBeforeLoss={this.updateInfoBeforeLoss} 
                                 subscription_status={subscription_status}/>
                         </li>

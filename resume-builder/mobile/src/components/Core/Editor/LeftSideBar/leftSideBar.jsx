@@ -47,8 +47,9 @@ class LeftSideBar extends Component {
 
 
     componentDidMount() {
-        const {fetchPersonalInfo,fetchSideNavStatus,location:{search},sidenav:{listOfLinks},updateCurrentLinkPos} = this.props;
+        const {fetchPersonalInfo,fetchSideNavStatus,location:{search},sidenav:{listOfLinks},updateCurrentLinkPos,fetchAlertModalStatus} = this.props;
         fetchPersonalInfo()
+        fetchAlertModalStatus()
         let current_page = search.split('=')[1]
         fetchSideNavStatus()
         for (let i in listOfLinks) {
@@ -59,12 +60,13 @@ class LeftSideBar extends Component {
     }
 
     closeModal(){
-        console.log("here")
-        this.setState({modal_status:false,link:''})
+        this.props.updateAlertModalStatus(false)
+        this.setState({link:''})
     }
 
     showErrorMessage(link) {
-        this.setState({modal_status:true,link})
+        this.props.updateAlertModalStatus(true)
+        this.setState({link})
     }
 
     componentDidUpdate(prevProps) {
@@ -103,8 +105,8 @@ class LeftSideBar extends Component {
     }
 
     render() {
-        const {type,sidenav_active_pos,modal_status,link} = this.state;
-        const {formData,ui:{formName},personalInfo:{first_name,entity_preference_data},history} = this.props
+        const {type,sidenav_active_pos,link} = this.state;
+        const {formData,ui:{formName,alertModalStatus},personalInfo:{first_name,entity_preference_data},history,updateAlertModalStatus} = this.props
         let error = false;
         const obj = formData && formData[formName] || {};
         let syncErrors = obj['syncErrors'] || {};
@@ -115,7 +117,7 @@ class LeftSideBar extends Component {
         }
         return (
             <React.Fragment>
-                <AlertModal modal_status={modal_status} link={link} history={history} newUser={newUser} closeModal={this.closeModal}/>
+                <AlertModal modal_status={alertModalStatus} link={link} history={history} newUser={newUser} closeModal={this.closeModal}/>
                 {(entity_preference_data.length) ?
                     <div>
                         <div className={"overlay-sidenav"}></div>
@@ -152,7 +154,7 @@ class LeftSideBar extends Component {
                                     )}
 
                                     <li className={"sidebar__item add-reamove"}>
-                                        <a className="sidebar__anchor" onClick={this.openMenu}>
+                                        <a className="sidebar__anchor" onClick={ newUser ? ()=>{updateAlertModalStatus(true)}:this.openMenu}>
                                             <div className="sidebar__wrap">
                                                 <i className="sprite icon--add-remove"></i>
                                                 <span className="sidebar__link">Add/<br/>Remove</span>

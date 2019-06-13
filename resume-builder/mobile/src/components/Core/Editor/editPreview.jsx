@@ -72,6 +72,12 @@ const mapDispatchToProps = (dispatch) => {
         "fetchLoaderStatus": () => {
             return dispatch(uiActions.fetchLoaderStatus())
         },
+        "fetchAlertModalStatus": () => {
+            return dispatch(uiActions.fetchAlertModalStatus())
+        },
+        "updateAlertModalStatus": (data) => {
+            return dispatch(uiActions.updateAlertModalStatus(data))
+        },
     }
 };
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditPreview))

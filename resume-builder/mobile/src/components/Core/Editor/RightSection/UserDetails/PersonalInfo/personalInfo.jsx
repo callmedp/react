@@ -130,8 +130,9 @@ class PersonalInfo extends Component {
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {handleSubmit, personalInfo,headingChange,submitting,personalInfo:{subscription_status},history,fetchInterestList} = this.props;
+        const {handleSubmit, personalInfo,headingChange,submitting,personalInfo:{subscription_status},history,fetchInterestList,updateAlertModalStatus} = this.props;
         const {editHeading,heading,flag} =this.state;
+        const newUser = localStorage.getItem('newUser')
         return (
             
         <div className="buildResume">
@@ -142,7 +143,7 @@ class PersonalInfo extends Component {
                         
                         <React.Fragment>
                             <h1 className="heading-style">{heading}</h1>
-                            <i className="sprite icon--edit" onClick={()=>{this.setState({editHeading:true})}}></i>
+                            <i className="sprite icon--edit" onClick={()=>{newUser ? updateAlertModalStatus(true):  this.setState({editHeading:true})}}></i>
                             {/* <div className="toolTip">
                                 <span className="toolTip--arrow-up"></span>
                                 <span className="toolTip--close">+</span>
@@ -255,7 +256,7 @@ class PersonalInfo extends Component {
                             </span>
                         </li>
                     </ul>
-                    <BottomCTC  disabled={submitting} context={this} history={history}
+                    <BottomCTC  disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
                                 length={length} pos={pos+1} updateInfoBeforeLoss={this.updateInfoBeforeLoss} 
                                 subscription_status={subscription_status}/>
                 </form>

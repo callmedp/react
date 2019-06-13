@@ -1,11 +1,12 @@
-import {UPDATE_MAIN_PAGE_LOADER,UPDATE_DATA_LOADER,CHANGE_FORM_NAME,SAVE_SUGGESTIONS,SET_SUGGESTION_TYPE} from "../actions/actionTypes";
+import {UPDATE_MAIN_PAGE_LOADER,UPDATE_DATA_LOADER,CHANGE_FORM_NAME,SAVE_SUGGESTIONS,SET_SUGGESTION_TYPE,UPDATE_ALERT_MODAL_STATUS} from "../actions/actionTypes";
 
 const initialState = {
     'mainloader': true,
     'dataloader': false,
     'formName' : '',
     'suggestions': [],
-    'suggestionType': 'experience'
+    'suggestionType': 'experience',
+    'alertModalStatus': false
 };
 
 export const uiReducer = (state = initialState, action) => {
@@ -38,6 +39,14 @@ export const uiReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action.data
+            }
+        }
+        case UPDATE_ALERT_MODAL_STATUS: {
+            return {
+                ...state,
+                ...{
+                    alertModalStatus:action.payload
+                }
             }
         }
         default: {

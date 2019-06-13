@@ -151,7 +151,7 @@ class Experience extends Component {
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {handleSubmit,submitting,personalInfo:{subscription_status,entity_preference_data},history,
+        const {updateAlertModalStatus,handleSubmit,submitting,personalInfo:{subscription_status,entity_preference_data},history,
                 changeOrderingUp,changeOrderingDown,fetchJobTitles,ui:{suggestions},headingChange} = this.props;
         const {editHeading,heading,till_today,modal_status} =this.state;
         return(
@@ -178,7 +178,7 @@ class Experience extends Component {
                                 tillTodayDisable={this.tillTodayDisable}/>
                     <ul className="form mt-15">
                         <li className="form__group">
-                            <BottomCTC  disabled={submitting} context={this} history={history}
+                            <BottomCTC  disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
                                 length={length} pos={pos+1} updateInfoBeforeLoss={this.updateInfoBeforeLoss} 
                                 subscription_status={subscription_status}/>
                         </li>
