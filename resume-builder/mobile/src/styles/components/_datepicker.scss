@@ -701,7 +701,7 @@
   justify-content: center;
   align-items: center;
   display: flex;
-  z-index: 2147483647;
+  z-index: 999999;
 }
 
 .react-datepicker__portal .react-datepicker__day-name,
@@ -715,8 +715,8 @@
   .react-datepicker__portal .react-datepicker__day-name,
   .react-datepicker__portal .react-datepicker__day,
   .react-datepicker__portal .react-datepicker__time-name {
-    width: 3.5rem;
-    height: 3.5rem;
+    width: 3.2rem;
+    height: 3.2rem;
     border-radius: 50%;
     display: inline-flex;
     justify-content: center;

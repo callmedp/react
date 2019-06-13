@@ -220,6 +220,7 @@ class PersonalInfo extends Component {
                                                 'label': 'Enter at least 3 characters to search.',
                                                 isDisabled: true
                                             }]}
+                                            iconClass={'sprite icon--interest'}
                                             label={'Interest'}
                                             loadOptions={(inputValue) => fetchInterestList(inputValue)}
                                             value={profile.extracurricular}
