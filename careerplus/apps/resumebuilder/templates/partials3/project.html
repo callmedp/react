@@ -1,7 +1,7 @@
 {% load static compress resume_tags %}
 {% if projects|length >= 1 %}
 
-    <div style="vertical-align: top; font-size: 13px; color: #999999; margin-bottom: 30px;">
+    <div style="vertical-align: top; font-size: 13px; color: #999999; margin-bottom: 30px; word-break: break-all;">
         <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px;">{{ preference_list.3.entity_text }}</strong>
         <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
             {% for project in projects %}

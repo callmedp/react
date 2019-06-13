@@ -1,7 +1,7 @@
 {% load static compress resume_tags %}
 {% if skills|length >= 1 %}
 
-    <div style="display: block; vertical-align: top; margin-bottom: 30px;">
+    <div style="display: block; vertical-align: top; margin-bottom: 30px; word-break: break-all;">
         <strong style="display: block; text-transform: uppercase; color: #000000; font-weight: normal; font-size: {{ current_config.heading_font_size|heading_font_size_choice }}; margin-top: 0">Skills</strong>
         {% for skill in skills %}
             <div style="display: block; margin: 20px 0 15px 0;">

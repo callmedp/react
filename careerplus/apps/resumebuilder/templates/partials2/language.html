@@ -1,7 +1,7 @@
 {% load static compress resume_tags %}
 {% if languages|length >= 1 %}
 
-    <div style="display: block; vertical-align: top; margin-bottom: 30px;">
+    <div style="display: block; vertical-align: top; margin-bottom: 30px; word-break: break-all;">
         <strong style="display: block; font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px; font-weight: normal; color: #000; background: #ffffff; padding: 12px 10px 12px 13%; margin: 0 10% 0 -13%; border-top-right-radius: 20px; border-bottom-right-radius: 20px; text-transform: uppercase;">
             {{ preference_list.8.entity_text }}</strong>
         {% for language in languages %}

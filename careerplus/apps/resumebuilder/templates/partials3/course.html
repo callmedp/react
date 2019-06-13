@@ -1,7 +1,7 @@
 {% load static compress resume_tags %}
 {% if certifications|length >= 1 %}
 
-    <div style="display: block; vertical-align: top;">
+    <div style="display: block; vertical-align: top; word-break: break-all;">
         <strong style="font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px; display: block; font-weight: normal; color: #ffffff; text-transform: uppercase; margin-bottom: 15px; border-bottom: 1px solid #bd9f5e; padding-bottom: 5px;">{{ preference_list.7.entity_text }}</strong>
         <ul style="margin: 20px 0 30px 0; padding: 0; font-size: {{ current_config.text_font_size|text_font_size }}px; color: #ffffff; list-style-type: none;">
             {% for course in certifications %}
