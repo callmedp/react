@@ -9,6 +9,7 @@ import ResumeSlider from './ResumeSlider/resumeSlider.jsx';
 import Testimonial from './Testimonial/testimonial.jsx';
 import queryString from "query-string";
 import {Events, animateScroll as scroll, scrollSpy, scroller} from 'react-scroll'
+import Loader from '../../Common/Loader/loader.jsx';
 
 class Home extends Component {
     
@@ -37,11 +38,12 @@ class Home extends Component {
     }
     
     render() {
-
+        const {ui:{mainloader}} = this.props;
         return (
             <div className="home">
                 <Header />
                 <Banner/>
+                {mainloader ? <Loader/> :""}
                 
 
                 <section className="section professional">
@@ -217,7 +219,9 @@ class Home extends Component {
 }
 
 const mapStateToProps = (state) => {
-    return {}
+    return {
+        ui: state.ui
+    }
 };
 
 const mapDispatchToProps = (dispatch) => {

@@ -78,3 +78,9 @@ ul, li {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+@media (min-width: 450px) { 
+    .heading-style{
+        max-width: 200px;
+    }
+ }

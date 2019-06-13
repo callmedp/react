@@ -25,13 +25,13 @@ class PersonalInfo extends Component {
         this.getImageURI = this.getImageURI.bind(this);
         this.removeImage = this.removeImage.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handlePreview = this.handlePreview.bind(this);
         this.state = {
             'imageURI': '',
             'imageURL': '',
             'editHeading': false,
             'heading' : '',
-            'submit': false
+            'submit': false,
+            'flag' : true
         }
         this.updateInfoBeforeLoss = this.updateInfoBeforeLoss.bind(this)
 
@@ -46,28 +46,29 @@ class PersonalInfo extends Component {
     }
 
     async handleSubmit(values) {
-        let {listOfLinks,currentLinkPos} = this.props.sidenav
+        console.log("Here")
+        let {sidenav:{listOfLinks,currentLinkPos},personalInfo:{subscription_status},history,updateCurrentLinkPos,onSubmit} = this.props
+        const {imageURL,flag} = this.state
         currentLinkPos++
         this.setState({submit:true})
-        await this.props.onSubmit(values, this.state.imageURL);
+        await onSubmit(values,imageURL,flag);
          if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
-            if(this.props.personalInfo.subscription_status){
+            if(subscription_status){
                 window.location.href = `${siteDomain}/dashboard/myorder`
             }
             else{
-                this.props.history.push(`/resume-builder/buy`) 
+                history.push(`/resume-builder/buy`) 
             }
         }
         else{
-            this.props.updateCurrentLinkPos({currentLinkPos})
-            this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)    
+            updateCurrentLinkPos({currentLinkPos})
+            history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)    
         }
         
     }
 
     async updateInfoBeforeLoss(){
-        console.log("Here")
         if(!this.state.submit){
             const form_data = this.props.info.form.personalInfo;
             let error = false
@@ -91,13 +92,6 @@ class PersonalInfo extends Component {
         this.updateInfoBeforeLoss();
     }
 
-    
-
-    
-
-    async handlePreview() {
-        
-    }
 
     removeImage() {
         this.setState({
@@ -136,7 +130,7 @@ class PersonalInfo extends Component {
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {handleSubmit, profile,headingChange,submitting,personalInfo:{subscription_status},history,fetchInterestList} = this.props;
+        const {handleSubmit, personalInfo,headingChange,submitting,personalInfo:{subscription_status},history,fetchInterestList} = this.props;
         const {editHeading,heading,flag} =this.state;
         return (
             
@@ -158,7 +152,7 @@ class PersonalInfo extends Component {
                         <React.Fragment>
                             <input type="text" autoFocus defaultValue={heading} maxLength={'20'}
                                     onChange={(event) => this.setState({heading:event.target.value})} />
-                            <i className="sprite icon--editTick" onClick={()=>{headingChange(profile.entity_preference_data,heading,0);this.setState({editHeading:false})}}></i>
+                            <i className="sprite icon--editTick" onClick={()=>{headingChange(personalInfo.entity_preference_data,heading,0);this.setState({editHeading:false})}}></i>
                         </React.Fragment>
                          
                     }
@@ -223,7 +217,7 @@ class PersonalInfo extends Component {
                                             iconClass={'sprite icon--interest'}
                                             label={'Interest'}
                                             loadOptions={(inputValue) => fetchInterestList(inputValue)}
-                                            value={profile.extracurricular}
+                                            value={personalInfo.extracurricular}
                                             isMulti={true}
                                             closeMenuOnSelect={false}
                                             />
@@ -247,13 +241,13 @@ class PersonalInfo extends Component {
                         <li className="form__group">
                             <span className="upload--image overflow-hidden">
                             {
-                                (this.state.imageURI || profile.image) && flag ?
+                                (this.state.imageURI || personalInfo.image) && flag ?
                                     <React.Fragment>
                                         <span className="close-wrap">
                                             <i className="sprite icon--close" onClick={()=>{this.setState({imageURL:'',imageURI:'',flag:false})}}></i>
                                         </span>
                                         <img alt={"User Profile"}
-                                                src={this.state.imageURI || profile.image}/> 
+                                                src={this.state.imageURI || personalInfo.image}/> 
                                     </React.Fragment>:
                                     <img alt={"User Profile"}
                                             src="/media/static/react/assets/images/mobile/default-user.jpg"/>
@@ -289,15 +283,16 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        "onSubmit": (personalDetails, imageURL) => {
-            let { date_of_birth, extracurricular,gender} = personalDetails;
+        "onSubmit": (personalDetails, imageURL,flag) => {
+            let { date_of_birth, extracurricular,gender,image} = personalDetails;
+            image = !flag ? imageURL : image
             let interest = extracurricular
             interest =  ((interest|| []).filter((item)=>item !==null).map((item)=>item.value)).join(",")
             personalDetails = {
                 ...personalDetails,
                 ...{
                     'date_of_birth': (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
-                    'image': imageURL || personalDetails['image'],
+                    'image': image ,
                     'extracurricular':interest,
                     'gender' : gender
                 }

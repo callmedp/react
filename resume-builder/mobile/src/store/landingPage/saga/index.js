@@ -2,9 +2,9 @@ import {Api} from './Api';
 import {takeLatest, call, put} from "redux-saga/effects";
 import {siteDomain} from "../../../Utils/domains";
 import * as Actions from '../actions/actionTypes';
-import {LOGIN_CANDIDATE} from "../actions/actionTypes";
 import {entityList} from "../../../Utils/formCategoryList";
 import {SAVE_USER_INFO} from "../../personalInfo/actions/actionTypes";
+import * as uiAction from '../../ui/actions/actionTypes';
 
 
 function* getCandidateId() {
@@ -27,7 +27,7 @@ function* loginCandidate(action) {
         let {payload} = action;
         localStorage.clear();
 
-
+        yield put({type:uiAction.UPDATE_MAIN_PAGE_LOADER,payload:{mainloader: true}})
         let result = yield call(Api.loginCandidate, payload);
 
         if (result['error']) {
@@ -61,6 +61,7 @@ function* loginCandidate(action) {
             }
         }
         localStorage.setItem('token', (token) || '');
+        yield put({type:uiAction.UPDATE_MAIN_PAGE_LOADER,payload:{mainloader: false}})
     } catch (e) {
         console.log(e);
     }
