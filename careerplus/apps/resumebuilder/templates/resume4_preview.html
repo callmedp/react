@@ -1,111 +1,109 @@
 {% load static compress resume_tags %}
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Resume</title>
     <script src="https://kit.fontawesome.com/85df0f75f9.js"></script>
-  </head>
-  <body style="margin: 0; padding: 0; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif';">
-    <div style="max-width: 1536px; width: 100%; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777; float: left; line-height: 20px; word-wrap: break-word;">
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif';">
+<div style="max-width: 1536px; width: 100%; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777; float: left; line-height: 20px; word-wrap: break-word;">
 
-      <!--top column-->
-      <div style="display: table-row; width: 100%; vertical-align: top; overflow: hidden;">
+    <!--top column-->
+    <div style="display: table-row; width: 100%; vertical-align: top; overflow: hidden;">
         <!--top left column-->
         <div style="width: 44%; background: {{ current_config.color|background_color_choice }}; padding: 3%; display: table-cell; vertical-align: top; min-height: 275px;">
-          {% if candidate.image %}
-          <img src="{{candidate.image}}" alt="Resume" width="150" height="150" style="border-radius: 100%; margin-bottom: 10px; width: 150px; height: 150px;">
-          {% endif %}
-          <h1 style="margin: 0; color: #ffffff; font-size: 32px; line-height: 32px; font-weight: bold; text-transform: uppercase; display: block;">{{ candidate.first_name }} {{ candidate.last_name }}</h1>
-          <span style="display: block; width: 15%; border-top: 1px solid #a2c59b; margin: 10px 0 15px 0;"></span>
-          <strong style="display: block; font-size: 18px; color: #ffffff; font-weight: normal; text-transform: uppercase; margin-bottom: 1px;">{{ latest_exp }}</strong>
-          {% comment %} <span style="display: block; font-size: 14px; color: #ffffff; font-weight: normal; text-transform: uppercase;">Compnay Name</span> {% endcomment %}
+            {% if candidate.image %}
+                <img src="{{ candidate.image }}" alt="Resume" width="150" height="150"
+                     style="border-radius: 100%; margin-bottom: 10px; width: 150px; height: 150px;">
+            {% endif %}
+            <h1 style="margin: 0; color: #ffffff; font-size: 32px; line-height: 32px; font-weight: bold; text-transform: uppercase; display: block;">{{ candidate.first_name }} {{ candidate.last_name }}</h1>
+            <span style="display: block; width: 15%; border-top: 1px solid #a2c59b; margin: 10px 0 15px 0;"></span>
+            <strong style="display: block; font-size: 18px; color: #ffffff; font-weight: normal; text-transform: uppercase; margin-bottom: 1px;">{{ latest_exp }}</strong>
+            {% comment %} <span style="display: block; font-size: 14px; color: #ffffff; font-weight: normal; text-transform: uppercase;">Compnay Name</span> {% endcomment %}
         </div>
 
         <!--top right column-->
         <div style="width: 44%; background: {{ current_config.color|background_color_choice }}; padding: 3%; display: table-cell; vertical-align: top; min-height: 275px;">
-          <!--Contact-->
-          {% if entity_position.0.active %}
-            {% include entity_position.0.entity_id|render_section:"partials4/" %}
-          {% endif %}
-          
+            <!--Contact-->
+            {% if entity_position.0.active %}
+                {% include entity_position.0.entity_id|render_section:"partials4/" %}
+            {% endif %}
+
         </div>
-      </div>
-      
-      <!--bottom column-->
-      <div style="display: table-row; width: 100%; margin-top: 3%;">
+    </div>
+
+    <!--bottom column-->
+    <div style="display: table-row; width: 100%; margin-top: 3%;">
         <!--bottom left column-->
         <div style="width: 43.9%; padding: 3%; display: table-cell; vertical-align: top;">
-          <!--Summary-->
-          {% if entity_position.1.active %}
-            {% include entity_position.1.entity_id|render_section:"partials4/" %}
-          {% endif %}
-          
+            <!--Summary-->
+            {% if entity_position.1.active %}
+                {% include entity_position.1.entity_id|render_section:"partials4/" %}
+            {% endif %}
 
-          <!--Skills-->
-          {% if entity_position.2.active %}
-            {% include entity_position.2.entity_id|render_section:"partials4/" %}
-          {% endif %}
-          
 
-          <!--Courses done-->
-          {% if entity_position.3.active %}
-            {% include entity_position.3.entity_id|render_section:"partials4/" %}
-          {% endif %}
-         
+            <!--Skills-->
+            {% if entity_position.2.active %}
+                {% include entity_position.2.entity_id|render_section:"partials4/" %}
+            {% endif %}
 
-          <!--Languages-->
-          {% if entity_position.4.active %}
-            {% include entity_position.4.entity_id|render_section:"partials4/" %}
-          {% endif %}
-          
 
-          <!--Interest-->
-          {% if entity_position.5.active %}
-            {% include entity_position.5.entity_id|render_section:"partials4/" %}
-          {% endif %}
-          
+            <!--Courses done-->
+            {% if entity_position.3.active %}
+                {% include entity_position.3.entity_id|render_section:"partials4/" %}
+            {% endif %}
 
-          <!--Reference-->
-          {% if entity_position.6.active %}
-            {% include entity_position.6.entity_id|render_section:"partials4/" %}
-          {% endif %}
-          
+
+            <!--Languages-->
+            {% if entity_position.4.active %}
+                {% include entity_position.4.entity_id|render_section:"partials4/" %}
+            {% endif %}
+
+
+            <!--Interest-->
+            {% if entity_position.5.active %}
+                {% include entity_position.5.entity_id|render_section:"partials4/" %}
+            {% endif %}
+
+
+            <!--Reference-->
+            {% if entity_position.6.active %}
+                {% include entity_position.6.entity_id|render_section:"partials4/" %}
+            {% endif %}
+
 
         </div>
 
         <!--bottom right column-->
         <div style="width: 43.9%; border-left: 1px solid {{ current_config.color|background_color_choice }}; padding: 3%; display: table-cell; vertical-align: top;">
-          <!--Work Experience-->
-          {% if entity_position.7.active %}
-            {% include entity_position.7.entity_id|render_section:"partials4/" %}
-          {% endif %}
-          
+            <!--Reference-->
+            {% if entity_position.7.active %}
+                {% include entity_position.7.entity_id|render_section:"partials4/" %}
+            {% endif %}
 
-          <!--Project-->
-          {% if entity_position.8.active %}
-            {% include entity_position.8.entity_id|render_section:"partials4/" %}
-          {% endif %}
-          
+            <!--Reference-->
+            {% if entity_position.8.active %}
+                {% include entity_position.8.entity_id|render_section:"partials4/" %}
+            {% endif %}
 
-          <!--Education-->
-          {% if entity_position.9.active %}
-            {% include entity_position.9.entity_id|render_section:"partials4/" %}
-          {% endif %}
-          
+            <!--Work Experience-->
+            {% if entity_position.9.active %}
+                {% include entity_position.9.entity_id|render_section:"partials4/" %}
+            {% endif %}
 
-          <!--Achievements/Awards-->
-          {% if entity_position.10.active %}
-            {% include entity_position.10.entity_id|render_section:"partials4/" %}
-          {% endif %}
-         
 
-          
+            <!--Project-->
+            {% if entity_position.10.active %}
+                {% include entity_position.10.entity_id|render_section:"partials4/" %}
+            {% endif %}
+
+
         </div>
-      </div>
-
     </div>
-  </body>
+
+</div>
+</body>
 </html>
