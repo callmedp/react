@@ -462,7 +462,7 @@ TEMPLATE_DEFAULT_ENTITY_POSITION = {
 TEMPLATE_ALLOW_LEFT_RIGHT_SWITCH = {1: False,
                                     2: False,
                                     3: False,
-                                    4: False,
+                                    4: True,
                                     5: True
                                     }
 JOB_TITLES = (
