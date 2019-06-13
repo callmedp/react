@@ -21,9 +21,8 @@ class VskillTestView(DetailView):
 
 
     def get(self, request, *args, **kwargs):
-
-        test_id = self.request.GET.get('test', '')
-        if not test_id:
+        test = self.get_object()
+        if not test:
             return redirect(reverse('assessment:vskill-landing'))
         return super(VskillTestView,self).get(request, args, **kwargs)
 
@@ -33,7 +32,7 @@ class VskillTestView(DetailView):
         test_id = self.get_object()
         questions_list = Question.objects.filter(test_id=test_id.pk)
         if not questions_list:
-            return redirect(reverse('assessment:vskill-landing'))
+            return context
 
         test_list = self.request.session.get('vskill_appeared') if\
             self.request.session.get('vskill_appeared') else []
@@ -42,8 +41,6 @@ class VskillTestView(DetailView):
         lead_created = self.request.session.get('is_lead_created')
         context.update({'questions_list': questions_list,'lead_created':lead_created})
         return context
-
-
 
 
 class AssessmentLandingPage(TemplateView):
@@ -79,14 +76,15 @@ class AssessmentLandingPage(TemplateView):
 
 
 class AssessmentCategoryPage(DetailView):
-    template_name = 'vskill/brand-manager-test.html'
+    template_name = 'vskill/sales-marketing-test.html'
     model = Category
     slug_url_kwarg = 'slug'
+    context_object_name = 'Category'
 
     def get_breadcrumbs(self):
         breadcrumbs = []
         breadcrumbs.append({"url": '/', "name": "Home"})
-        breadcrumbs.append({"url": None, "name": 'practice-test'})
+        breadcrumbs.append({"url": '/practice-tests/', "name": 'practice-test'})
         parent = self.object.get_parent() if self.object.type_level == 3 else None
         if parent:
             breadcrumbs.append({

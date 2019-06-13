@@ -102,35 +102,35 @@
         box-shadow: 0 3px 14px 0 rgba(213, 213, 213, 0.50);
         background: $sprite-freeskill $white-bg;
 
-        &.sales {
+        &.span-0 {
             background-position: 0px -161px;
         }
 
-        &.info {
+        &.span-1 {
             background-position: 2px -214px;
         }
 
-        &.bank {
+        &.span-2 {
             background-position: -2px -281px;
         }
 
-        &.ops {
+        &.span-3 {
             background-position: -3px -343px;
         }
 
-        &.law {
+        &.span-4 {
             background-position: -7px -408px;
         }
 
-        &.hr {
+        &.span-5 {
             background-position: -6px -651px;
         }
 
-        &.mgmt {
+        &.span-6 {
             background-position: -11px -461px;
         }
 
-        &.pdev {
+        &.span-7 {
             background-position: -14px -520px;
         }
 

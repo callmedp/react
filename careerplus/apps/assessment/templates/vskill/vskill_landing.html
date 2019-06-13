@@ -1,6 +1,7 @@
+
 {% extends "basic/base1.html" %}
 {% load static meta thumbnail compress %}
-{% block title %}Job Assistance Services | Online Courses - Shine Learning {% endblock title %}
+{% block title %}Practice test | online mock test – Shine Learning	 {% endblock title %}
 {% block canonical_url %}
 <link rel="canonical" href="//{{ SITE_DOMAIN }}/">
 <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}/">
@@ -15,6 +16,7 @@
 <link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
 {% endcompress %}
 {% endblock css_section %}
+{% spaceless %}
 {% block main_container %}
 <div class="  practice-skill__wrap">
    <div class="left_base"></div>
@@ -65,7 +67,7 @@
          {% for test in test_list %}
                <div class="testinside">
                   <span class="border-left"></span>
-                  <a href= "#">
+                  <a id="{{test.id}}" href="#testModal" data-toggle="modal" data-target="#testModal">
                      {{test.title}}
                      <div class="white_hover"></div>
                      <span class="taketest" >Take Free Test</span>
@@ -73,7 +75,6 @@
                </div>
 
                {% endfor %}
-
             </div>
          </div>
          <!-- Most popular tests starts -->
@@ -86,8 +87,8 @@
                   {% for fa in func_area %}
 
                <div class="functional_test_inside border-{{forloop.counter}}">
-                  <a href="/">
-                  <span class="sales"></span>
+                  <a href="{% url 'assessment:vskill-category' slug=fa.slug %}">
+                  <span class="span-{{forloop.counter}}"></span>
                   {{fa.heading}}
                   </a>
                </div>
@@ -133,22 +134,41 @@
                </div>
 
             <button class="btn_white loadmore" id="loadmorebtn" onclick="loadmore();">Load more</button>
-
-
-
-
             </div>
          </div>
          <!-- Tests by functional area ends -->
       </div>
+   <!------  Modal ---------->
+
+
+   <div class="modal fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <a id="startTest" >start free test</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+      <!------  EndModal ---------->
       </div>
    </div>
 </div>
 {% endblock main_container %}
+{% endspaceless %}
 {% block js_section %}
 {{block.super}}
    <script type="text/javascript">
    var page_number= 2;
+   var facolor = 0;
    function loadmore(){
             page_number = page_number+1;
              element = document.getElementById('funcDiv');
@@ -162,8 +182,10 @@
                  $('#loadmorebtn').hide();
                }
                for (fa in json.results){
-                element.innerHTML= element.innerHTML +'<div class="functional_test_inside border-'+fa+'"><a href="#"><span class="sales"></span>'+ json.results[fa].heading +'</a></div>'
-
+                color = counter(facolor)
+                element.innerHTML= element.innerHTML +'<div class="functional_test_inside border-'+color+
+               '"><a href="/practice-tests/'+ json.results[fa].slug+ '"><span class= "span-'+ color+ '"></span>'+ json.results[fa].heading +'</a></div>'
+                facolor+=1 ;
                }
                },
                error: function(xhr, ajaxOptions, thrownError) {
@@ -178,9 +200,21 @@
                }
            });
    }
+
+   function counter(facolor){
+    return facolor%8;
+
+   }
+
+   $('#testModal').on('show.bs.modal', function(e) {
+      test_id = e.relatedTarget.id ;
+      $('#startTest').attr('href','/online-exam/'+test_id);
+});
+
    </script>
 {% endblock js_section %}
 {% block johukum %}
 {% endblock johukum %}
 {% block zendesk %}
 {% endblock zendesk %}
+

@@ -1,6 +1,6 @@
 {% extends "basic/base1.html" %}
 {% load static meta thumbnail compress %}
-{% block title %}Job Assistance Services | Online Courses - Shine Learning {% endblock title %}
+{% block title %}Practice test | online mock test – Shine Learning	{% endblock title %}
 {% block canonical_url %}
 <link rel="canonical" href="//{{ SITE_DOMAIN }}/">
 <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}/">
@@ -39,7 +39,7 @@
                   <button type="submit" class=" skill-jobs-btn btn no-bgcol"></button>
                </div>
             </div>
-            <h1>Sales and Marketing Tests</h1>
+            <h1>{{Category.heading}}</h1>
          </div>
          <!-- Most popular tests starts -->
          <div class="col-sm-12 col-lg-12 col-md-12">
@@ -150,7 +150,7 @@
            $.ajax({
                url: '/api/get-category-level-products',
                type: "GET",
-               data : {'tl': 2, 'page_size' : 4, 'page':page_number},
+               data : {'tl': 3, 'page_size' : 4, 'page':page_number},
                dataType: 'json',
                success: function(json) {
                if (json.next == null){
