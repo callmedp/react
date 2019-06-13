@@ -32,6 +32,7 @@ function* fetchUserCourse(action) {
 
         let {data: {results}} = result;
 
+        console.log('')
         if (!results.length) {
             const state = yield select();
             let {course: {list}} = state;
@@ -98,6 +99,7 @@ function* handleCourseSwap(action) {
         data.sort((a, b) => a.order <= b.order);
 
         data = {list: data};
+        console.log('data---',data);
         yield put({type: Actions.SAVE_USER_COURSE, data: data})
 
         return resolve('User Course  Info saved successfully.');

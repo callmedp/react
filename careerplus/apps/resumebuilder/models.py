@@ -31,11 +31,11 @@ class CandidateProfile(AbstractAutoDate):
     email = models.CharField('Candidate Email', max_length=100, unique=True, blank=True, null=True)
     number = models.CharField('Candidate Contact Number', max_length=15, blank=True, null=True)
     date_of_birth = models.DateField('DOB', blank=True, null=True)
-    location = models.CharField('Candidate Location', max_length=100, blank=True, null=True)
+    location = models.CharField('Candidate Location', max_length=300, blank=True, null=True)
     image = models.CharField('Candidate Image Url', max_length=200, blank=True, null=True)
     gender = models.CharField('Gender', choices=(('1', 'Male'), ('2', 'Female'), ('3', 'Others')), max_length=1,
                               blank=True, null=True)
-    extracurricular = models.CharField('Extra Curricular', max_length=200, blank=True, null=True)
+    extracurricular = models.CharField('Extra Curricular', max_length=300, blank=True, null=True)
     selected_template = models.CharField('Selected Template', max_length=20, blank=True, null=True)
     extra_info = models.TextField('Extra Information', blank=True, null=True)
     entity_preference_data = models.TextField(blank=True, null=True)
@@ -129,7 +129,7 @@ class CandidateExperience(PreviewImageCreationMixin, models.Model):
     start_date = models.DateField('Start Date', blank=True, null=True)
     end_date = models.DateField('End Date', blank=True, null=True)
     is_working = models.BooleanField('Present', default=False)
-    job_location = models.CharField('Job Location', max_length=100, blank=True, null=True)
+    job_location = models.CharField('Job Location', max_length=300, blank=True, null=True)
     work_description = models.TextField('Job Description', blank=True, null=True)
     order = models.IntegerField('Order', default=0)
 
@@ -229,7 +229,7 @@ class CandidateSocialLink(PreviewImageCreationMixin, models.Model):
 
 class CandidateAchievement(PreviewImageCreationMixin, models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
-    title = models.CharField('Title', max_length=100)
+    title = models.CharField('Title', max_length=300)
     date = models.DateField('Date',blank=True,null=True)
     summary = models.TextField('Summary', null=True, blank=True)
     order = models.IntegerField('Order', default=0)

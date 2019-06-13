@@ -7,7 +7,8 @@ import {
 } from "react-accessible-accordion";
 import {Field} from "redux-form";
 import styles from './course.scss'
-import {datepicker, renderField} from "../../../../../FormHandler/formFieldRenderer";
+import {yearList} from '../../../../../../Utils/yearList'
+import {datepicker, renderField, renderSelect} from "../../../../../FormHandler/formFieldRenderer";
 import React from "react";
 
 export const CourseRenderer = ({
@@ -70,7 +71,7 @@ export const CourseRenderer = ({
                                 return (
                                     <li key={index}>
                                         <section className="info-section">
-                                            <AccordionItem uuid={index}  id={`course${index}`}>
+                                            <AccordionItem uuid={index} id={`course${index}`}>
                                                 <AccordionItemHeading>
                                                     <AccordionItemButton>
                                                         <div className="flex-container">
@@ -113,11 +114,12 @@ export const CourseRenderer = ({
                                                             <label>Completion Year</label>
                                                             <Field
                                                                 iconClass={'icon-date'}
-                                                                component={datepicker}
-                                                                type={"date"}
-                                                                yearDropDownItemNumber={15}
+                                                                component={renderSelect}
+                                                                options={yearList}
+                                                                isMulti={false}
                                                                 name={`${member}.year_of_certification`}
                                                                 className="input-control"/>
+
 
                                                         </fieldset>
                                                     </div>

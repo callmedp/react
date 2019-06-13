@@ -184,7 +184,9 @@ export class PersonalInfo extends Component {
                                            name="location"
                                            maxLength={'100'}
                                            className={"input-control"} rows="3"/>
-                                           {/* <span className="word-counter mt-5">0-300</span> */}
+                                    <span className="word-counter mt-5">{currentAddress && currentAddress.length ?
+
+                                        currentAddress.length : '0'}/300</span>
                                 </fieldset>
                             </div>
 
@@ -200,6 +202,7 @@ export class PersonalInfo extends Component {
                                            loadOptions={(inputValue) => fetchInterests(inputValue)}
                                            value={personalInfo.extracurricular}
                                            isMulti={true}
+                                           selectBody={true}
                                            closeMenuOnSelect={false}
                                            iconClass={'icon-interest'}
                                            label="Select Interest"/>
@@ -258,8 +261,8 @@ const mapStateToProps = (state) => {
         initialValues: state.personalInfo,
         personalInfo: state.personalInfo,
         ui: state.ui,
-        current_address: state.form && state.form.profile && state.form.profile && state.form.profile.values 
-        && state.form.profile.values.location || ''
+        currentAddress: state.form && state.form.profile && state.form.profile && state.form.profile.values
+            && state.form.profile.values.location || ''
     }
 };
 

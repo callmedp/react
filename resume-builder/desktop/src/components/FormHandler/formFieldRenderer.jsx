@@ -198,7 +198,8 @@ export const renderAsyncCreatableSelect = ({
                                                iconClass,
                                                isMulti,
                                                closeMenuOnSelect,
-                                               meta: {touched, error, warning}
+                                               meta: {touched, error, warning},
+                                                selectBody
                                            }) => {
     return (
         <div className={"input-group " + (touched && error ? 'errormsg' : '')}>
@@ -210,7 +211,7 @@ export const renderAsyncCreatableSelect = ({
                                       cacheOptions
                                       loadOptions={loadOptions}
                                       styles={{menuPortal: base => ({...base, zIndex: 9999})}}
-                                      menuPortalTarget={document.getElementById('right-panel-section')}
+                                      menuPortalTarget={selectBody ?document.body: document.getElementById('right-panel-section')}
                                       menuPosition={'absolute'}
                                       menuPlacement={'auto'}
                                       defaultOptions={defaultOptions}
@@ -218,6 +219,7 @@ export const renderAsyncCreatableSelect = ({
                                       isMulti={isMulti}
                                       autoComplete="off"
                                       closeMenuOnSelect={closeMenuOnSelect}
+
                                       onBlur={() => {
                                           input.onBlur(input.value)
                                       }}

@@ -159,10 +159,14 @@ function* fetchImageUrl(action) {
         for (const key in imageInfo) {
             data.append(key, imageInfo[key]);
         }
+        yield put({type: UPDATE_UI, data: {loader: true}});
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
+
         const result = yield call(Api.fetchImageUrl, data, candidateId);
+
+        yield put({type: UPDATE_UI, data: {loader: false}})
 
         return resolve(result['data']['path'])
 

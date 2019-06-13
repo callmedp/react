@@ -669,7 +669,7 @@ class InterestView(ListAPIView):
         search_text = request.GET.get('search', '')
         print('dfdff<<><><>>', dict([i for i in INTEREST_LIST if 'am' in i[1]]))
         return Response(
-            {"data": dict([i for i in INTEREST_LIST if search_text in i[1]])})
+            {"data": dict([i for i in INTEREST_LIST if search_text.lower() in i[1].lower()])})
 
 
 class OrderCustomisationListView(ListAPIView):
