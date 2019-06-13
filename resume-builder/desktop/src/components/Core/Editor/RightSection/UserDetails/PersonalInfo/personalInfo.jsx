@@ -88,9 +88,10 @@ export class PersonalInfo extends Component {
     render() {
         const {
             handleSubmit, personalInfo, ui: {loader}, isEditable, fetchInterests,
-            editHeading, saveTitle, entityName, nextEntity, handlePreview, handleInputValue
+            editHeading,currentAddress, saveTitle, entityName, nextEntity, handlePreview, handleInputValue
         } = this.props;
         let elem = null;
+        console.log('---c', currentAddress);
         return (
             <div>
                 <section className="head-section">
@@ -171,7 +172,7 @@ export class PersonalInfo extends Component {
                             </div>
 
                             <div className="flex-container">
-                                <fieldset>
+                                <fieldset className="pr">
                                     <label>Address</label>
                                     <Field component={renderTextArea}
                                            iconClass={'icon-address'}
@@ -179,6 +180,7 @@ export class PersonalInfo extends Component {
                                            name="location"
                                            maxLength={'300'}
                                            className={"input-control"} rows="3"/>
+                                           <span className="word-counter mt-5">0-300</span>
                                 </fieldset>
                             </div>
 
@@ -252,6 +254,8 @@ const mapStateToProps = (state) => {
         initialValues: state.personalInfo,
         personalInfo: state.personalInfo,
         ui: state.ui,
+        current_address: state.form && state.form.profile && state.form.profile && state.form.profile.values 
+        && state.form.profile.values.location || ''
     }
 };
 
