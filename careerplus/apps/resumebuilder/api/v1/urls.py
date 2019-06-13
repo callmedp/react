@@ -4,7 +4,7 @@
 from django.conf.urls import url
 
 # local imports
-from .views import (CandidateListCreateView, CandidateRetrieveUpdateView, SkillRetrieveUpdateView, SkillListCreateView,
+from .views import (CandidateCreateView, CandidateRetrieveUpdateView, SkillRetrieveUpdateView, SkillListCreateView,
                     CandidateShineProfileRetrieveUpdateView,
                     CandidateExperienceListCreateView, CandidateExperienceRetrieveUpdateView,
                     CandidateEducationListCreateView,
@@ -29,7 +29,7 @@ router = routers.DefaultRouter()
 
 urlpatterns = [
     url(r'^candidates/(?P<pk>.+)/$', CandidateRetrieveUpdateView.as_view()),
-    url(r'^candidates/$', CandidateListCreateView.as_view()),
+    url(r'^candidates/$', CandidateCreateView.as_view()),
     url(r'^candidate/(?P<candidate_id>[0-9a-z]+)/skills/(?P<pk>\d+)/$', SkillRetrieveUpdateView.as_view()),
     url(r'^candidate/(?P<candidate_id>[0-9a-z]+)/skills/$', SkillListCreateView.as_view()),
     url(r'^user-profile/$', CandidateShineProfileRetrieveUpdateView.as_view()),

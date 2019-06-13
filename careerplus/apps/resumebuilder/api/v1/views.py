@@ -27,11 +27,11 @@ from resumebuilder.utils import ResumeEntityReorderUtility
 from shine.core import ShineCandidateDetail
 from shared.rest_addons.authentication import ShineUserAuthentication
 from shared.permissions import IsObjectOwner
-from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
+from core.library.gcloud.custom_cloud_storage import GCPResumeBuilderStorage
 
 # third party imports
 from rest_framework import status
-from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView)
+from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView,CreateAPIView)
 from rest_framework.views import APIView
 from rest_framework.parsers import (FormParser, MultiPartParser)
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -41,7 +41,7 @@ from weasyprint import HTML, CSS
 from weasyprint import HTML, CSS
 
 
-class CandidateListCreateView(ListCreateAPIView):
+class CandidateCreateView(CreateAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsAuthenticated,)
     queryset = Candidate.objects.all()
@@ -772,7 +772,7 @@ class ResumeImagePreviewView(APIView):
 
         else:
             try:
-                file_obj = GCPPrivateMediaStorage().open("{}/{}/images/resumetemplate-{}.png". \
+                file_obj = GCPResumeBuilderStorage().open("{}/{}/images/resumetemplate-{}.png". \
                                                          format(settings.RESUME_TEMPLATE_DIR, candidate_obj.id,
                                                                 name_suffix), "rb")
             except Exception as e:
