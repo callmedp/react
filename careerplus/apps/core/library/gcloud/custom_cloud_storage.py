@@ -90,3 +90,7 @@ class GCPInvoiceStorage(GCPPrivateMediaStorage):
     cache_control = "no-store"
 
 
+@deconstructible
+class GCPResumeBuilderStorage(GCPPrivateMediaStorage):
+    bucket_name = settings.GCP_RESUME_BUILDER_BUCKET
+    cache_control = "no-store"

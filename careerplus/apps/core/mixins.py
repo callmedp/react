@@ -18,7 +18,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 
 # inter app imports
 from resumebuilder.models import Candidate
-from core.library.gcloud.custom_cloud_storage import (GCPInvoiceStorage, GCPPrivateMediaStorage)
+from core.library.gcloud.custom_cloud_storage import (GCPInvoiceStorage, GCPResumeBuilderStorage)
 
 # third party imports
 import pdfkit
@@ -352,7 +352,7 @@ class ResumeGenerate(object):
     def store_file(self, file_dir, file_name, file_content):
         directory_path = "{}/{}".format(settings.RESUME_TEMPLATE_DIR, file_dir)
         if settings.IS_GCP:
-            gcp_file = GCPPrivateMediaStorage().open("{}/{}".format(directory_path, file_name), 'wb')
+            gcp_file = GCPResumeBuilderStorage().open("{}/{}".format(directory_path, file_name), 'wb')
             gcp_file.write(file_content)
             gcp_file.close()
             return
@@ -377,7 +377,7 @@ class ResumeGenerate(object):
             current_file = "{}_{}-{}.{}".format(order.first_name, order.last_name, i, "pdf")
             pdf_file_path = "{}/{}/pdf/{}.pdf".format(settings.RESUME_TEMPLATE_DIR, candidate.id, i)
             try:
-                file_obj = GCPPrivateMediaStorage().open(pdf_file_path)
+                file_obj = GCPResumeBuilderStorage().open(pdf_file_path)
             except:
                 logging.getLogger('error_log').error("Unable to open file - {}".format(pdf_file_path))
 

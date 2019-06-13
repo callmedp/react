@@ -300,6 +300,7 @@ GS_BUCKET_NAME = 'learning-media-staging-189607'
 
 PRIVATE_MEDIA_FILE_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPPrivateMediaStorage'
 GCP_PRIVATE_MEDIA_BUCKET = 'learning--misc-staging-189607'
+GCP_RESUME_BUILDER_BUCKET = 'learning--misc-staging-189607'
 CRM_PRIVATE_MEDIA_BUCKET = 'learningcrm-misc-staging-189607'
 
 COMPRESS_STORAGE = STATICFILES_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPStaticStorage'

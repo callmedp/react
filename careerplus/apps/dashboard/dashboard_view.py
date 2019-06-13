@@ -22,7 +22,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.files.base import ContentFile
 
 # from console.decorators import Decorate, stop_browser_cache
-from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage, GCPInvoiceStorage, GCPMediaStorage
 from order.models import Order, OrderItem
 from resumebuilder.models import Candidate
 from order.choices import CANCELLED, OI_CANCELLED
@@ -38,7 +37,8 @@ from console.decorators import Decorate, stop_browser_cache
 from search.helpers import get_recommendations
 from .dashboard_mixin import DashboardInfo
 from linkedin.autologin import AutoLogin
-
+from core.library.gcloud.custom_cloud_storage import \
+GCPPrivateMediaStorage, GCPInvoiceStorage, GCPMediaStorage,GCPResumeBuilderStorage
 
 @Decorate(stop_browser_cache())
 class DashboardView(TemplateView):
@@ -868,7 +868,7 @@ class DashboardResumeTemplateDownload(View):
                 file_path = "{}/{}".format(settings.MEDIA_ROOT,file_path)
                 fsock = FileWrapper(open(file_path, 'rb'))
             else:
-                fsock = GCPPrivateMediaStorage().open(file_path)
+                fsock = GCPResumeBuilderStorage().open(file_path)
             
             filename = filename_prefix + filename_suffix
             response = HttpResponse(fsock, content_type=content_type)
