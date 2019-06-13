@@ -459,11 +459,11 @@ TEMPLATE_DEFAULT_ENTITY_POSITION = {
         ],
     }
 
-TEMPLATE_ALLOW_LEFT_RIGHT_SWITCH = {1: True,
+TEMPLATE_ALLOW_LEFT_RIGHT_SWITCH = {1: False,
                                     2: False,
                                     3: False,
                                     4: False,
-                                    5: False
+                                    5: True
                                     }
 JOB_TITLES = (
     'customer-service-executive',

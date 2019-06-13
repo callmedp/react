@@ -123,6 +123,9 @@ class ResumeEntityReorderUtility:
             if not pos_item:
                 continue
 
+            if pos > MAX_DEPTH or pos <= MIN_DEPTH:
+                return swap_dict
+
             if pos_item['alignment'] == alignment and pos_item['active']:
                 swap_dict.update({pos:[entity_pos,alignment,True],entity_pos:[pos,alignment,True]})
                 break
