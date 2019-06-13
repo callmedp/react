@@ -127,8 +127,8 @@ class ResumeEntityReorderUtility:
             if pos > MAX_DEPTH or pos <= MIN_DEPTH:
                 return swap_dict
 
-            allow_switch = TEMPLATE_ALLOW_LEFT_RIGHT_SWITCH.get(self.template_no) or \
-                pos_item['alignment'] == alignment
+            allow_switch = (TEMPLATE_ALLOW_LEFT_RIGHT_SWITCH.get(self.template_no) or \
+                pos_item['alignment'] == alignment) and pos_item['alignment'] != 'center'
             
             if allow_switch and pos_item['active']:
                 swap_dict.update({pos:[entity_pos,alignment,True],entity_pos:[pos,alignment,True]})

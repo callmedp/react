@@ -14,79 +14,74 @@ For Mobile case
     <div style="width: {{ width }}%; background: {{ current_config.color|background_color_choice }}; padding: 3%;">
 
         <!--top left 1-->
-        {% if entity_position.0.active %}
-            {% include entity_position.0.entity_id|render_section:"partials5/" %}
+        {% if entity_position.1.active %}
+            {% include entity_position.1.entity_id|render_section:"partials5/" %}
         {% endif %}
 
 
         <!--top right  2-->
-        {% if entity_position.1.active %}
-            {% include entity_position.1.entity_id|render_section:"partials5/" %}
+        {% if entity_position.0.active %}
+            {% include entity_position.0.entity_id|render_section:"partials5/" %}
         {% endif %}
 
 
     </div>
 
     <div style="width: {{ width }}%; border-bottom: 13px solid {{ current_config.color|background_color_choice }}; padding: 3% 3% 0 3%;">
-
-        <!--bottom left column-->
-        <div style="width: 43.9%; padding: 0 1.5% 0 0; display: table-cell; vertical-align: top;">
-
-        <!--Experience 3-->
-        {% if entity_position.2.active %}
-            {% include entity_position.2.entity_id|render_section:"partials5/" %}
-        {% endif %}
+        {% with experience_pos=entity_position|experiencePosFind  %}
+        
+            <!--Experience 3-->
+            {% if entity_position.2.active %}
+                {% include entity_position.2.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:1  %}
+            {% endif %}
 
 
-        <!--Skills 4-->
-        {% if entity_position.3.active %}
-            {% include entity_position.3.entity_id|render_section:"partials5/" %}
-        {% endif %}
+            <!--Skills 4-->
+            {% if entity_position.3.active %}
+                {% include entity_position.3.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:2   %}
+            {% endif %}
 
 
-        <!--Project  5-->
-        {% if entity_position.4.active %}
-            {% include entity_position.4.entity_id|render_section:"partials5/" %}
-        {% endif %}
+            <!--Project  5-->
+            {% if entity_position.4.active %}
+                {% include entity_position.4.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:3  %}
+            {% endif %}
 
 
-        <!--Courses done  6-->
-        {% if entity_position.5.active %}
-            {% include entity_position.5.entity_id|render_section:"partials5/" %}
-        {% endif %}
-    </div>
-
-    <!--bottom right column-->
-        <div style="width: 43.9%; padding: 0 0 0 1.5%; display: table-cell; vertical-align: top;">
+            <!--Courses done  6-->
+            {% if entity_position.5.active %}
+                {% include entity_position.5.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:4  %}
+            {% endif %}
 
 
-        <!--Education  7-->
-        {% if entity_position.6.active %}
-            {% include entity_position.6.entity_id|render_section:"partials5/" %}
-        {% endif %}
+            <!--Education  7-->
+            {% if entity_position.6.active %}
+                {% include entity_position.6.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:5  %}
+            {% endif %}
 
 
-        <!--Interest  8-->
-        {% if entity_position.7.active %}
-            {% include entity_position.7.entity_id|render_section:"partials5/" %}
-        {% endif %}
+            <!--Interest  8-->
+            {% if entity_position.7.active %}
+                {% include entity_position.7.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:6  %}
+            {% endif %}
 
 
-        <!--Achievement  9-->
-        {% if entity_position.8.active %}
-            {% include entity_position.8.entity_id|render_section:"partials5/" %}
-        {% endif %}
+            <!--Achievement  9-->
+            {% if entity_position.8.active %}
+                {% include entity_position.8.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:7  %}
+            {% endif %}
 
 
-        <!--Reference  10-->
-        {% if entity_position.9.active %}
-            {% include entity_position.9.entity_id|render_section:"partials5/" %}
-        {% endif %}
+            <!--Reference  10-->
+            {% if entity_position.9.active %}
+                {% include entity_position.9.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:8  %}
+            {% endif %}
 
-        <!--Language  11-->
-        {% if entity_position.10.active %}
-            {% include entity_position.10.entity_id|render_section:"partials5/" %}
-        {% endif %}
+            <!--Language  11-->
+            {% if entity_position.10.active %}
+                {% include entity_position.10.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:9  %}
+            {% endif %}
+        {% endwith %}
     </div>
 
 

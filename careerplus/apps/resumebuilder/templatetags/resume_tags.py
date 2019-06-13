@@ -150,5 +150,33 @@ def isDual(index,skill_value):
         return {'dual':False,'background':"ffffff"}
     else:
         return {'dual':False,'background':"d8d8d8"}
+
+@register.filter
+def experiencePosFind(entity_position):
+    print(entity_position)
+    pos = 0
+    for i in entity_position:
+        if i['entity_id'] == 3:
+            pos = i['pos']
+            return pos - 2
+    return -1
+
+@register.filter
+def marginSide(experiencePos,pos):
+    value = experiencePos - pos
+    print(value)
+    if value < 0:
+        if value % 2 == 0 :
+            print('left')
+            return 'left'
+        print('right')
+        return 'right'
+    else:
+        if value % 2 == 0 :
+            print('left')
+            return 'right'
+        print('right')
+        return 'left'
+
     
 
