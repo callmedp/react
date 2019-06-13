@@ -371,7 +371,7 @@ class ResumeGenerate(object):
         file_name = "{}.{}".format("combo", content_type)
 
         zip_stream = BytesIO()
-        zf = zipfile.ZipFile(zip_stream, "w",zipfile.ZIP_DEFLATED)
+        zf = zipfile.ZipFile(zip_stream, "w")
 
         for i in range(1, 6):
             current_file = "{}_{}-{}.{}".format(order.first_name, order.last_name, i, "pdf")
@@ -390,10 +390,10 @@ class ResumeGenerate(object):
                     continue
 
             open(current_file, 'wb').write(file_obj.read())
-
             zf.write(current_file)
             os.unlink(current_file)
 
+        zf.close()
         self.store_file(file_dir, file_name, zip_stream.getvalue())
 
     def generate_pdf_for_template(self, order=None, index='1'):
