@@ -35,7 +35,6 @@ export default class LeftSideBar extends Component {
         const isEdit = this.state.edit;
         const newUser = localStorage.getItem('newUser')
         const {showAlertModal} = this.props
-        console.log(this.props)
         return (
 
             <section className="left-sidebar">

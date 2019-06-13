@@ -46,7 +46,6 @@ class PersonalInfo extends Component {
     }
 
     async handleSubmit(values) {
-        console.log("Here")
         let {sidenav:{listOfLinks,currentLinkPos},personalInfo:{subscription_status},history,updateCurrentLinkPos,onSubmit} = this.props
         const {imageURL,flag} = this.state
         currentLinkPos++
