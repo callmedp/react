@@ -9,10 +9,11 @@ export default class TopBar extends Component {
     }
 
     render() {
-        let {page, userInfo: {selected_template}} = this.props;
+        let {page, userInfo: {selected_template},showAlertModal,showSelectTemplateModal} = this.props;
         if (localStorage.getItem('selected_template')) {
             selected_template = localStorage.getItem('selected_template')
         }
+        const newUser = localStorage.getItem('newUser')
         return (
             <section className="flex-container">
                 <div className="top-banner">
@@ -44,7 +45,7 @@ export default class TopBar extends Component {
                                 '' :
                                 <div className="top-banner--banner-right">
                                     <div>
-                                        <button className="white-button mr-20" onClick={()=>{this.props.showSelectTemplateModal()}}>Change template</button>
+                                        <button className="white-button mr-20" onClick={()=>{newUser ? showAlertModal() : showSelectTemplateModal()}}>Change template</button>
                                     </div>
                                     <span className="top-banner--banner-right--banner-thumb">
                                     <img

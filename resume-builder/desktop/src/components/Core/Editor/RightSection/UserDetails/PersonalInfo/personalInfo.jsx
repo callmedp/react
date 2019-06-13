@@ -88,8 +88,9 @@ export class PersonalInfo extends Component {
     render() {
         const {
             handleSubmit, personalInfo, ui: {loader}, isEditable, fetchInterests,
-            editHeading,currentAddress, saveTitle, entityName, nextEntity, handlePreview, handleInputValue
+            editHeading,currentAddress, saveTitle, entityName, nextEntity, handlePreview, handleInputValue,showAlertModal
         } = this.props;
+        const newUser = localStorage.getItem('newUser')
         let elem = null;
         console.log('---c', currentAddress);
         return (
@@ -105,8 +106,12 @@ export class PersonalInfo extends Component {
                             <span onClick={(event) => saveTitle(event, 1)} className="icon-tick"/>
                         </React.Fragment>
                     }
-                    <span onClick={() => editHeading(elem)}
-                          className={!!(!isEditable) ? "icon-edit " + styles['icon-edit__cursor'] : ''}/>
+                    {newUser ? 
+                    <span onClick={() => editHeading(elem)} onClick={showAlertModal}
+                        className={"icon-edit " + styles['icon-edit__cursor']}/> :
+                        <span onClick={() => editHeading(elem)}
+                            className={!!(!isEditable) ? "icon-edit " + styles['icon-edit__cursor'] : ''}/>
+                    }
 
                 </section>
                 <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
@@ -172,7 +177,7 @@ export class PersonalInfo extends Component {
                             </div>
 
                             <div className="flex-container">
-                                <fieldset className="pr">
+                                <fieldset>
                                     <label>Address</label>
                                     <Field component={renderTextArea}
                                            iconClass={'icon-address'}

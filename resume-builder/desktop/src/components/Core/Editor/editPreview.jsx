@@ -13,6 +13,7 @@ import * as actions from "../../../store/ui/actions"
 import {customizeTemplate, fetchDefaultCustomization, reorderSection} from "../../../store/template/actions"
 import * as profileActions from "../../../store/personalInfo/actions"
 import SelectTemplateModal from '../../Modal/selectTemplateModal';
+import {showAlertModal, hideAlertModal} from '../../../store/ui/actions/index'
 import moment from 'moment'
 
 class EditPreview extends Component {
@@ -98,6 +99,12 @@ const mapDispatchToProps = (dispatch) => {
         },
         "reorderSection": (payload) => {
             return dispatch(reorderSection(payload))
+        },
+        'showAlertModal': (alertType) => {
+            return dispatch(showAlertModal(alertType))
+        },
+        'hideAlertModal': () => {
+            return dispatch(hideAlertModal())
         }
     }
 }

@@ -69,7 +69,7 @@ class Edit extends Component {
 
     render() {
         const {type, preferenceList, nextLink, elemToDelete,menu_modal_status} = this.state;
-        let {formData, ui: {formName},updateCategoryEntity} = this.props;
+        let {formData, ui: {formName},updateCategoryEntity,showAlertModal} = this.props;
         let error = false;
         const obj = formData && formData[formName] || {};
         let syncErrors = obj['syncErrors'] || {};
@@ -118,7 +118,7 @@ class Edit extends Component {
                     }
                 </ul>
 
-                <div className="edit-section--addmore" onClick={this.openMenuModal}>
+                <div className="edit-section--addmore" onClick={()=>{newUser ? showAlertModal('error') : this.openMenuModal()}}>
                     + Add/Remove sections
                 </div>
         </div>
