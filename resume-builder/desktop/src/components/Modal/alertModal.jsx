@@ -20,30 +20,29 @@ export default class AlertModal extends React.Component {
     }
 
     render() {
-        const {ui: {alertModal}, nextLink, newUser} = this.props;
+        const {ui: {alertModal}, nextLink, newUser,isPreview} = this.props;
         return (
             <React.Fragment>
-                {
-                    newUser ?
-                        <div className="pr alert-modal">
+                <div className="pr alert-modal">
 
-                            <Modal
-                                style={{
-                                    content: {
-                                        left: '0',
-                                        right: '0',
-                                        top: '10%',
-                                        bottom: '0',
-                                        width: '450px',
-                                        margin: 'auto',
-                                        height: '280px',
-                                    }
-                                }}
-                                isOpen={alertModal}
-                                onRequestClose={this.closeModal}
-                                contentLabel="Example Modal"
-                                shouldCloseOnOverlayClick={false}
-                            >
+                    <Modal
+                        style={{
+                            content: {
+                                left: '0',
+                                right: '0',
+                                top: '10%',
+                                bottom: '0',
+                                width: '450px',
+                                margin: 'auto',
+                                height: '280px',
+                            }
+                        }}
+                        isOpen={alertModal}
+                        onRequestClose={this.closeModal}
+                        contentLabel="Example Modal"
+                        shouldCloseOnOverlayClick={false}
+                    >
+                            {newUser ?
                                 <div className="pr">
                                     <div className="alert-modal">
                                         <span className="icon-alert"></span>
@@ -53,28 +52,24 @@ export default class AlertModal extends React.Component {
                                             <button className="blue-button" onClick={this.closeModal}>OK</button>
                                         </div>
                                     </div>
+                                </div> :
+                            isPreview ?
+                                <div className="pr">
+                                    <div className="alert-modal">
+                                        <span className="icon-alert"></span>
+                                        <strong>You Cannot Move this Section</strong>
+                                        <p>Moving this section will render bad resume.</p>
+                                        <div className="flex-container">
+                                            <button className="orange-button mr-10"
+                                                    onClick={() => {
+                                                        this.closeModal();
+                                                    }
+                                                    }>Ok
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                            </Modal>
-                        </div> :
-                        <div className="pr alert-modal">
-
-                            <Modal
-                                style={{
-                                    content: {
-                                        left: '0',
-                                        right: '0',
-                                        top: '10%',
-                                        bottom: '0',
-                                        width: '450px',
-                                        margin: 'auto',
-                                        height: '280px',
-                                    }
-                                }}
-                                isOpen={alertModal}
-                                onRequestClose={this.closeModal}
-                                contentLabel="Example Modal"
-                                shouldCloseOnOverlayClick={false}
-                            >
+                                :
                                 <div className="pr">
                                     <div className="alert-modal">
                                         <span className="icon-alert"></span>
@@ -92,10 +87,11 @@ export default class AlertModal extends React.Component {
                                         </div>
                                     </div>
                                 </div>
-                            </Modal>
-                        </div>
+                            }
+                    </Modal>
+                </div>
 
-                }
+
             </React.Fragment>
         )
             ;

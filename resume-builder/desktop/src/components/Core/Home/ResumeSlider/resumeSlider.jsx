@@ -20,6 +20,7 @@ export default class ResumeSlider extends Component {
         if (select_template_modal) {
             this.props.hideSelectTemplateModal();
             if (page === 'edit') {
+
                 this.props.fetchDefaultCustomization(templateId);
             }
             this.props.updateSelectedTemplate(this.props.userInfo)

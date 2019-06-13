@@ -9,6 +9,7 @@ import {
     AccordionItemHeading,
     AccordionItemPanel
 } from "react-accessible-accordion";
+import AlertModal from '../../../../Modal/alertModal';
 
 export default class Preview extends Component {
     constructor(props) {
@@ -280,16 +281,18 @@ export default class Preview extends Component {
     }
 
     moveUpSection(selectedEntity, selectedTemplate) {
+        // const {showAlertModal} = this.props
+        // showAlertModal()
         this.props.reorderSection({
             templateId: selectedTemplate,
-            info: {entity_id: selectedEntity['entity_id'], step: -1}
+            info: {entity_id: selectedEntity['entity_id'], step: -1,pos:selectedEntity['pos']}
         })
     }
 
     moveDownSection(selectedEntity, selectedTemplate) {
         this.props.reorderSection({
             templateId: selectedTemplate,
-            info: {entity_id: selectedEntity['entity_id'], step: 1}
+            info: {entity_id: selectedEntity['entity_id'], step: 1,pos:selectedEntity['pos']}
         })
     }
 
@@ -331,6 +334,7 @@ export default class Preview extends Component {
 
         return (
             <div className="preview-section">
+                <AlertModal {...this.props} isPreview={true} />
                 <strong>Complete your customisation</strong>
                 <Accordion
                     preExpanded={[0]}>

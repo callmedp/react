@@ -110,6 +110,7 @@ class Preview extends Component {
             <div className="preview">
                <Header page={'preview'} {...this.props}/>
                <ChangeTemplateModal {...this.props}/>
+               
                {mainloader ? <Loader/> :""}
 
 

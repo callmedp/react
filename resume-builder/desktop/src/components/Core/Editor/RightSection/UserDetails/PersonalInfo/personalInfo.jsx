@@ -92,7 +92,6 @@ export class PersonalInfo extends Component {
         } = this.props;
         const newUser = localStorage.getItem('newUser')
         let elem = null;
-        console.log('---c', currentAddress);
         return (
             <div>
                 <section className="head-section">

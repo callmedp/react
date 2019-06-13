@@ -1,5 +1,4 @@
 const validate = values => {
-    console.log(values)
         const errors = {};
         const listErrors = []
         values = values && values.list || [];

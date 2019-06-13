@@ -4,12 +4,11 @@ import * as Actions from '../actions/actionTypes'
 import {Api} from "./Api";
 import {UPDATE_UI} from "../../ui/actions/actionTypes";
 import {
-    FETCH_TEMPLATE_IMAGES,
     SET_CUSTOMIZATION,
     SAVE_TEMPLATE_IMAGES,
     SAVE_THUMBNAIL_IMAGES
 } from "../actions/actionTypes";
-import {FETCH_THUMBNAIL_IMAGES} from "../actions/actionTypes";
+import {SHOW_ALERT_MODAL} from "../../ui/actions/actionTypes"
 
 
 function* fetchTemplate(action) {
@@ -167,10 +166,14 @@ function* reorderSection(action) {
             console.log('error');
         }
         let {data: {data}} = result;
+        let entity_position = data && eval(data) || []
+        if(entity_position[info.pos-1].entity_id === info.entity_id){
+            yield  put({type: SHOW_ALERT_MODAL, data: {alertModal: true, alertType:'error'}});
+        } 
+           
         data = {
             entity_position: data
         }
-        console.log(data)
         yield put({type: SET_CUSTOMIZATION, data: data});
 
 

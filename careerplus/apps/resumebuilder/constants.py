@@ -461,7 +461,7 @@ TEMPLATE_DEFAULT_ENTITY_POSITION = {
         ],
     }
 
-TEMPLATE_ALLOW_LEFT_RIGHT_SWITCH = {1: False,
+TEMPLATE_ALLOW_LEFT_RIGHT_SWITCH = {1: True,
                                     2: False,
                                     3: False,
                                     4: True,

@@ -325,6 +325,7 @@ GS_BUCKET_NAME = 'learning-media-staging-189607'
 GCP_PRIVATE_MEDIA_BUCKET = 'learning--misc-staging-189607'
 GCP_STATIC_BUCKET = 'learning-static-staging-189607'
 GCP_INVOICE_BUCKET = 'learning-invoices-staging-189607'
+GCP_RESUME_BUILDER_BUCKET = 'learning--misc-staging-189607'
 
 # Addon List For writer Invoice
 VISUAL_RESUME_PRODUCT_LIST = [305, 306, 307, 308, 309]
