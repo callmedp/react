@@ -107,6 +107,32 @@ class OrderCustomisation(PreviewImageCreationMixin, models.Model):
         except:
             return []
 
+    @property
+    def entity_id_count_mapping(self):
+        extracurricular = self.candidate.extracurricular_list
+        education = self.candidate.candidateeducation_set.all().order_by('order')
+        experience = self.candidate.candidateexperience_set.all().order_by('order')
+        skills = self.candidate.skill_set.all().order_by('order')
+        achievements = self.candidate.candidateachievement_set.all().order_by('order')
+        references = self.candidate.candidatereference_set.all().order_by('order')
+        projects = self.candidate.candidateproject_set.all().order_by('order')
+        certifications = self.candidate.candidatecertification_set.all().order_by('order')
+        languages = self.candidate.candidatelanguage_set.all().order_by('order')
+
+        entity_id_count_mapping = {
+                2:bool(education.count()),
+                3:bool(experience.count()),
+                4:bool(projects.count()),
+                5:bool(skills.count()),
+                7:bool(achievements.count()),
+                8:bool(certifications.count()),
+                9:bool(languages.count()),
+                10:bool(references.count()),
+                11:bool(len(extracurricular)),
+            }
+
+        return entity_id_count_mapping
+
 
 class Skill(PreviewImageCreationMixin, AbstractAutoDate):
     name = models.CharField('Skill Name', max_length=100)

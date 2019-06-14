@@ -257,6 +257,7 @@ class CandidateAchievementSerializer(serializers.ModelSerializer):
 
 class OrderCustomisationSerializer(serializers.ModelSerializer):
     candidate_id = serializers.CharField(allow_blank=True, allow_null=True)
+    entity_id_count_mapping = serializers.DictField(read_only=True)
 
     def validate_candidate_id(self, candidate_id):
         if not self.instance:
