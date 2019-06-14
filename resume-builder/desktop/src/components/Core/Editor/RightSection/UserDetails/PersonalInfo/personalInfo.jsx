@@ -184,6 +184,7 @@ export class PersonalInfo extends Component {
                                            type={"textarea"}
                                            name="location"
                                            maxLength={'100'}
+                                           showWordCounter={false}
                                            className={"input-control"} rows="3"/>
                                     <span className="word-counter mt-5">{currentAddress && currentAddress.length ?
 

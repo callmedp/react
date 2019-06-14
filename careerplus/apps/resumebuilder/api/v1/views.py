@@ -50,7 +50,7 @@ class CandidateCreateView(CreateAPIView):
     def get_serializer(self, *args, **kwargs):
         if isinstance(kwargs.get('data', {}), list):
             kwargs['many'] = True
-        return super(CandidateListCreateView, self).get_serializer(*args, **kwargs)
+        return super(CandidateCreateView, self).get_serializer(*args, **kwargs)
 
 
 class CandidateRetrieveUpdateView(RetrieveUpdateDestroyAPIView):

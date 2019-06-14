@@ -122,7 +122,7 @@ export const renderSelect = ({
                                  iconClass,
                                  closeMenuOnSelect,
                                  selectBody = true,
-                                 isSearchable=false
+                                 isSearchable = false
 
                              }) => (
     <div className={"input-group " + (touched && error ? 'errormsg' : '')}>
@@ -243,6 +243,7 @@ export const renderTextArea = ({
                                    rows,
                                    iconClass,
                                    noIcon,
+                                   showWordCounter = true,
                                    maxLength,
                                    meta: {touched, error, warning}
 
@@ -255,7 +256,10 @@ export const renderTextArea = ({
                           placeholder={label}
                           maxLength={maxLength}
                           rows={rows} type={type}/>
-                <span className="word-counter mt-5">{input.value.length ? input.value.length : 0}/{maxLength}</span>
+                {
+                    showWordCounter &&
+                    <span className="word-counter mt-5">{input.value.length ? input.value.length : 0}/{maxLength}</span>
+                }
                 {touched &&
                 ((error && <span className={'errormsg-txt'}>{error}</span>) ||
                     (warning && <span className={'Warn-Message'}>{warning}</span>))}
@@ -266,12 +270,15 @@ export const renderTextArea = ({
                     <span className={iconClass}></span>
                 </div>
                 <div className={"Error " + (touched && error ? 'errormsg' : '')}>
-                    <textarea {...input}
-                            autoComplete="off"
-                            placeholder={label}
-                            maxLength={maxLength}
-                            rows={rows} type={type}/>
-                    <span className="word-counter mt-5">{input.value.length ? input.value.length : 0}/{maxLength}</span>
+                        <textarea {...input}
+                                  autoComplete="off"
+                                  placeholder={label}
+                                  maxLength={maxLength}
+                                  rows={rows} type={type}/>
+                    {
+
+                        showWordCounter && <span className="word-counter mt-5">{input.value.length ? input.value.length : 0}/{maxLength}</span>
+                    }
 
                     {touched &&
                     ((error && <span className={'errormsg-txt'}>{error}</span>) ||
