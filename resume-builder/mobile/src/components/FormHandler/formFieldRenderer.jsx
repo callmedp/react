@@ -24,7 +24,7 @@ export const renderField = ({
             <label className="form__label" htmlFor={input.name}>{label}</label>
             {!prepend ?
                 <React.Fragment>
-                    <input {...input} className={className +(touched && error ? " error" : "")} maxLength={maxLength} id={id} type={type} autoComplete="off"/>
+                    <input {...input} className={className +(touched && error ? " error error-field" : "")} maxLength={maxLength} id={id} type={type} autoComplete="off"/>
                     {touched &&
                         ((<span className={'error-message'}>{error}</span>) ||
                             (warning && <span className={'warn-Message'}>{warning}</span>))
@@ -160,7 +160,7 @@ export const renderSelect = ({
 
 
 
-            <select {...input} className={className +(touched && error ? " error" : "")}
+            <select {...input} className={className +(touched && error ? " error error-field" : "")}
                 onBlur={() => {
                     input.onBlur(input.value)
                 }}

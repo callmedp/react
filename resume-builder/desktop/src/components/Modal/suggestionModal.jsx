@@ -45,7 +45,7 @@ export default class SuggestionModal extends React.Component {
     removeSuggestion(index,event){
         // event.preventDefault()
         let {suggestion_selected,length} = this.state
-        this.setState({error:false,length:length-suggestion_selected[`${index}`]})
+        this.setState({error:false,length:length-suggestion_selected[`${index}`].length})
         delete suggestion_selected[`${index}`]
         this.setState({suggestion_selected})
         
@@ -77,10 +77,10 @@ export default class SuggestionModal extends React.Component {
                                 <ul>
                                     {(suggestions || []).map((el, index) => {
                                         return (
-                                        <li key={index}>
+                                        <li key={index} onClick={(event)=>{suggestion_selected[index] 
+                                            ? this.removeSuggestion(index,event): this.addSuggestion(el,index,event) }} htmlFor={`add${index}`}>
                                         <span className={suggestion_selected[index]  ? 'selected' : ''}  
-                                        onClick={(event)=>{suggestion_selected[index] 
-                                            ? this.removeSuggestion(index,event): this.addSuggestion(el,index,event) }} htmlFor={`add${index}`} >
+                                         >
                                             <input className="styled-checkbox" type="checkbox" readOnly checked={suggestion_selected[index] ? true : false} id={`add${index}`} /> <label htmlFor="styled-checkbox-1">Add</label>
                                         </span>
                                             <p>{el}</p>

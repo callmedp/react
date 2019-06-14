@@ -46,8 +46,6 @@ function* fetchUserCourse(action) {
 
 
         let {data: {results}} = result;
-
-        console.log('')
         if (!results.length) {
             const state = yield select();
             let {course: {list}} = state;

@@ -142,7 +142,7 @@ class Preview extends Component {
 
     render(){
         const {customize,currentTab,selectedColor,headingFontSize,textFontSize,sectionEntityName,startingReorderUpDowmIndex,zoomIn} = this.state
-        const {template:{html,zoomInHtml,entity_position},ui:{mainloader},personalInfo:{selected_template}} = this.props
+        const {template:{html,zoomInHtml,entity_position,entity_id_count_mapping},ui:{mainloader},personalInfo:{selected_template}} = this.props
         return(
             <div className="preview">
                <Header page={'preview'} {...this.props}/>
@@ -333,7 +333,7 @@ class Preview extends Component {
                                                         <ul className="reorder__items">
                                                             {entity_position.filter(item => 
                                                                     (item.entity_id!==1 && item.entity_id!==6)
-                                                                    && (item['active'])).map((el,index,arr)=>{
+                                                                    && (item['active']) && entity_id_count_mapping[item['entity_id']]).map((el,index,arr)=>{
                                                                 return(
                                                                         <li key={index} className={"reorder__item " + ((el['entity_text'] === sectionEntityName || startingReorderUpDowmIndex===index)? " reorder--select":"")}
                                                                             onClick={() => this.selectSection(el)} >

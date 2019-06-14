@@ -290,7 +290,6 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(actions.fetchInterestList())
         },
         "onSubmit": (personalDetails, imageURL, flag) => {
-            console.log("HERO")
             const {gender, date_of_birth, extracurricular, image} = personalDetails;
             personalDetails = {
                 ...personalDetails,

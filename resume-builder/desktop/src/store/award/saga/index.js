@@ -47,8 +47,6 @@ function* fetchUserAward(action) {
             results = list
         }
         let data = results.length ? {list: results} : initialState
-
-        console.log('---', data);
         data = {list: modifyAwards(data.list)}
         yield put({type: Actions.SAVE_USER_AWARD, data: data})
     } catch (e) {
@@ -114,8 +112,6 @@ function* handleAwardSwap(action) {
         data.sort((a, b) => a.order <= b.order);
 
         data = {list: data};
-
-        console.log('data ---', data);
         data = {list: modifyAwards(data.list)}
         yield put({type: Actions.SAVE_USER_AWARD, data: data})
 

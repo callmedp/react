@@ -127,8 +127,6 @@ export default class Preview extends Component {
 
         const self = this;
 
-        console.log('--refssss---', this.refs.slider1)
-
         function handleElemEvent(event, element, sliderElement, section) {
 
             let shiftX = event.clientX - element.getBoundingClientRect().left;
@@ -345,7 +343,7 @@ export default class Preview extends Component {
 
 
     render() {
-        const {userInfo: {selected_template}, template: {entity_position}} = this.props;
+        const {userInfo: {selected_template}, template: {entity_position,entity_id_count_mapping}} = this.props;
         const {currentTab, selectedColor, activeSection, sectionEntityName, selectedEntity} = this.state;
         const [currentEntity] = this.getEntityName(entity_position, activeSection);
 
@@ -530,7 +528,7 @@ export default class Preview extends Component {
                                     <ul className="reorder-content">
                                         {
                                             (entity_position && eval(entity_position) || []).filter(els => (
-                                                els['entity_id'] !== 6 && els['entity_id'] !== 1 && els['active']
+                                                els['entity_id'] !== 6 && els['entity_id'] !== 1 && els['active'] && entity_id_count_mapping[els['entity_id']]
                                             )).map((el, index, arr) => {
 
                                                 const entityValue = el;

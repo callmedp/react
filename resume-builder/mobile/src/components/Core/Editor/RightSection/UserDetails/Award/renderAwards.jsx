@@ -1,7 +1,8 @@
 import React from 'react';
-import {datepicker, renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer.jsx";
+import {renderSelect, renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import {Field} from "redux-form";
 import {awardNewData} from "../../../../../../Utils/addnewData"
+import {yearList} from "../../../../../../Utils/yearList"
 
 export const renderAwards = ({
                                 fields, 
@@ -75,9 +76,18 @@ export const renderAwards = ({
                                 id={`${member}.title`} iconClass={"sprite icon--education-grey"} maxLength={'50'} className="form__input"/>
                         </li>
 
-                        <li className="form__group dob">
-                            <Field component={datepicker} label={"Date"}  type={"date"} 
-                                name={`${member}.date`} id={`${member}.date`}/>
+                        <li className="form__group">
+                            <Field component={renderSelect} label={"Year"} name={`${member}.date`} prepend={true} 
+                                    id={`${member}.date`}  className="form__input" iconClass={"sprite icon--date"}>
+                                    <option value="">Choose</option>
+                                    {yearList.map((el)=>{
+                                        return(
+                                        <option value={el.value}>{el.label}</option>
+                                        )
+                                    })}
+                                </Field>
+                            {/* <Field component={datepicker} label={"Date"}  type={"date"} 
+                                name={`${member}.date`} id={`${member}.date`}/> */}
                         </li>
 
                         <li className="form__group">

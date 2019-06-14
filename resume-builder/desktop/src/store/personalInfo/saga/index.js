@@ -78,7 +78,6 @@ function* getInterestList(action) {
 
 
         const result = yield call(Api.fetchInterestList, value);
-        console.log('result', result);
         if (result['error']) {
             return rej(new SubmissionError({_error: result['errorMessage']}));
         }
