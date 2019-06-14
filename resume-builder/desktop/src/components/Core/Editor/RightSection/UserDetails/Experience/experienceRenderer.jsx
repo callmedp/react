@@ -145,7 +145,7 @@ export const ExperienceRenderer = ({
 
                                                             <Field component={datepicker}
                                                                    type={"date"}
-                                                                   yearDropDownItemNumber={10}
+                                                                   yearDropDownItemNumber={30}
                                                                    maxDateAllowed={true}
                                                                    iconClass={'icon-date'}
                                                                    maxDateAllowed={true}
@@ -159,7 +159,7 @@ export const ExperienceRenderer = ({
                                                             <Field component={datepicker}
                                                                    disabled={till_today[index]}
                                                                    type={"date"}
-                                                                   yearDropDownItemNumber={10}
+                                                                   yearDropDownItemNumber={30}
                                                                    maxDateAllowed={true}
                                                                    startDate={fields.get(index).start_date || null}
                                                                    iconClass={'icon-date'}

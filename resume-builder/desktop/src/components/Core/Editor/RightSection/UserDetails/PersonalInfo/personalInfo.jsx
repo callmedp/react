@@ -150,7 +150,7 @@ export class PersonalInfo extends Component {
                                 </fieldset>
                                 <fieldset>
                                     <label>Date Of Birth</label>
-                                    <Field yearDropDownItemNumber={50}
+                                    <Field yearDropDownItemNumber={60}
                                            iconClass={'icon-date'}
                                            component={datepicker} name="date_of_birth"
                                            maxDateAllowed={'true'}

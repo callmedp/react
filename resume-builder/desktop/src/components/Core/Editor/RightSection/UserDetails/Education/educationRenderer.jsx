@@ -127,7 +127,7 @@ export const EducationRenderer = ({
                                                             <Field maxDateAllowed={true} component={datepicker}
                                                                    type={"date"}
                                                                    iconClass={'icon-date'}
-                                                                   yearDropDownItemNumber={10}
+                                                                   yearDropDownItemNumber={40}
                                                                    maxDateAllowed={true}
                                                                    endDate={fields.get(index).end_date || null}
                                                                    name={`${member}.start_date`}
@@ -143,7 +143,7 @@ export const EducationRenderer = ({
                                                                    educationEndDate={true}
                                                                    startDate={fields.get(index).start_date || null}
                                                                    disabled={till_today[index]}
-                                                                   yearDropDownItemNumber={10}
+                                                                   yearDropDownItemNumber={40}
                                                                    className="input-control"/>
 
                                                             <span className={styles["till-today"]}>

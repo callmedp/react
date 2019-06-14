@@ -118,7 +118,7 @@ export const ProjectRenderer = ({
                                                             <Field component={datepicker}
                                                                    type={"date"}
                                                                    iconClass={'icon-date'}
-                                                                   yearDropDownItemNumber={10}
+                                                                   yearDropDownItemNumber={30}
                                                                    maxDateAllowed={true}
                                                                    endDate={fields.get(index).end_date || null}
                                                                    className={'input-control'}
@@ -130,7 +130,7 @@ export const ProjectRenderer = ({
                                                             <Field component={datepicker} type={"date"}
                                                                    className={'input-control'}
                                                                    disabled={till_today[index]}
-                                                                   yearDropDownItemNumber={10}
+                                                                   yearDropDownItemNumber={30}
                                                                    iconClass={'icon-date'}
                                                                    maxDateAllowed={true}
                                                                    dateFromName={`${member}.start_date`}
