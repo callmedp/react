@@ -176,7 +176,9 @@ export const EducationRenderer = ({
                                                             <label>Percentage</label>
                                                             <Field
                                                                 iconClass={'icon-percentage'}
-                                                                component={renderField} type={"text"}
+                                                                max={100}
+                                                                component={renderField}
+                                                                type={"number"}
                                                                 name={`${member}.percentage_cgpa`}
                                                                 className="input-control"/>
 

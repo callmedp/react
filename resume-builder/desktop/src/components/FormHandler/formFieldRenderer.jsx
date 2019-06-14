@@ -29,6 +29,7 @@ export const renderField = ({
 
                 <div className={"Error " + (touched && error ? 'errormsg' : '')}>
                     <input {...input} className={className}
+
                            onClick={(e) => tillTodayDisable(index, !input.checked, e)}
                            maxLength={maxLength}
                            autoComplete="off" placeholder={label} type={type}/>
@@ -45,9 +46,10 @@ export const renderField = ({
                         <span className={iconClass}></span>
                     </div>
                     <div className={"Error " + (touched && error ? 'errormsg' : '')}>
-                        <input {...input}
-                               autoFocus={autoFocus} maxLength={maxLength}
-                               className={className} autoComplete="off" placeholder={label} type={type}/>
+                        <input
+                            {...input}
+                            autoFocus={autoFocus} maxLength={maxLength}
+                            className={className} autoComplete="off" placeholder={label} type={type}/>
                         {touched &&
                         ((error && <span className={'errormsg-txt'}>{error}</span>) ||
                             (warning && <span className={'Warn-Message'}>{warning}</span>))}
@@ -278,7 +280,8 @@ export const renderTextArea = ({
                           rows={rows} type={type}/>
                 {
                     showWordCounter &&
-                    <span className="word-counter mt-5">{input.value.length ? input.value.length : 0}/{maxLength}</span>
+                    <span
+                        className="word-counter mt-5">{input.value.length ? input.value.length : 0}/{maxLength}</span>
                 }
                 {touched &&
                 ((error && <span className={'errormsg-txt'}>{error}</span>) ||

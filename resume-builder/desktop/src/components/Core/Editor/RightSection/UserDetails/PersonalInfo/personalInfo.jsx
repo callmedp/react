@@ -217,6 +217,7 @@ export class PersonalInfo extends Component {
                                            isMulti={true}
                                            closeMenuOnSelect={false}
                                            iconClass={'icon-interest'}
+                                           maxItems={5}
                                            label="Select Interest"/>
                                 </fieldset>
                             </div>
