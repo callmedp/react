@@ -181,10 +181,16 @@ function* updateEntityPreference(action) {
         const {payload: {entity_preference_data, resolve, reject}} = action;
         const candidateId = localStorage.getItem('candidateId') || '';
 
+        yield put({type: UPDATE_UI, data: {loader: true}});
+
         const result = yield call(Api.updateEntityPreference, {entity_preference_data}, candidateId);
+
+        yield put({type: UPDATE_UI, data: {loader: false}})
+
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
+
 
         const data = modifyPersonalInfo(result['data']);
 

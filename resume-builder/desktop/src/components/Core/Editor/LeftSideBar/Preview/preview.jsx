@@ -352,10 +352,10 @@ export default class Preview extends Component {
                 <AlertModal {...this.props} isPreview={true} />
                 <strong>Complete your customisation</strong>
                 <Accordion
-                    preExpanded={[0]}>
+                    preExpanded={["1"]}>
                     <div className="preivew-scroll">
-                        <AccordionItem>
-                            <div className="change-theme">
+                        <AccordionItem uuid={"1"}>
+                            <div class Name="change-theme">
                                 <AccordionItemHeading>
                                     <AccordionItemButton>
                                         <div
