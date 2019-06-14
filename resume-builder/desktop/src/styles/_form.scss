@@ -28,6 +28,17 @@ input[type='text'] {
   font-weight: 400;
 }
 
+/* Text Input */
+input[type='number'] {
+  width: 100%;
+  border: 1px solid $border1;
+  height: 45px;
+  @include border-radius(3px);
+  @extend %inner-shadow;
+  padding: 0 10px;
+  font-weight: 400;
+}
+
 .input-group {
   @include flexbox();
   border-top-left-radius: 3px;
