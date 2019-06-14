@@ -120,11 +120,7 @@ export const ExperienceRenderer = ({
                                                                 closeMenuOnSelect={true}
                                                                 isMulti={false}
                                                                 loadOptions={(inputValue) => fetchJobTitles(inputValue, '')}
-                                                                defaultOptions={[{
-                                                                    'value': 'Enter at least 3 characters to search.',
-                                                                    'label': 'Enter at least 3 characters to search.',
-                                                                    isDisabled: true
-                                                                }]}
+                                                                defaultOptions ={jobTitles}
                                                                 name={`${member}.job_profile`}/>
 
                                                         </fieldset>

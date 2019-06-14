@@ -14,18 +14,18 @@ export default class ResumeSlider extends Component {
 
     selectTemplate() {
         const templateId = parseInt(document.getElementsByClassName('slick-current slick-center')[0].getAttribute('data-index')) + 1;
-        const {page,fetchSelectedTemplateImage} = this.props;
+        const {page, fetchSelectedTemplateImage} = this.props;
         localStorage.setItem('selected_template', (templateId))
         const select_template_modal = this.props.ui ? this.props.ui.select_template_modal : false
+        console.log('in heee ', this.props.page);
         if (select_template_modal) {
             this.props.hideSelectTemplateModal();
             if (page === 'edit') {
-
                 this.props.fetchDefaultCustomization(templateId);
             }
             this.props.updateSelectedTemplate(this.props.userInfo)
-            if (fetchSelectedTemplateImage && page === 'buy'){
-                this.props.fetchSelectedTemplateImage(templateId,false)
+            if (fetchSelectedTemplateImage && page === 'buy') {
+                this.props.fetchSelectedTemplateImage(templateId, false)
             }
         } else {
 
