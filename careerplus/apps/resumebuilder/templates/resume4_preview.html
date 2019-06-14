@@ -36,9 +36,9 @@
     </div>
 
     <!--bottom column-->
-    <div style="display: table-row; width: 100%; margin-top: 3%;">
+    <div style="display: flex; display: -webkit-box; display: -ms-flexbox; width: 100%; margin-top: 3%;">
         <!--bottom left column-->
-        <div style="width: 43.9%; padding: 3%; display: table-cell; vertical-align: top;">
+        <div style="width: 50%; padding: 3%; flex: 50%; -webkit-box-flex: 50%; -ms-flex: 50%; vertical-align: top;">
             <!--Summary-->
             {% if entity_position.1.active %}
                 {% include entity_position.1.entity_id|render_section:"partials4/" %}
@@ -78,7 +78,7 @@
         </div>
 
         <!--bottom right column-->
-        <div style="width: 43.9%; border-left: 1px solid {{ current_config.color|background_color_choice }}; padding: 3%; display: table-cell; vertical-align: top;">
+        <div style="width: 50%; border-left: 1px solid {{ current_config.color|background_color_choice }}; padding: 3%; flex: 50%; -webkit-box-flex: 50%; -ms-flex: 50%; vertical-align: top;">
             <!--Reference-->
             {% if entity_position.7.active %}
                 {% include entity_position.7.entity_id|render_section:"partials4/" %}
