@@ -10,14 +10,14 @@
     
   </head>
   <body style="margin: 0; padding: 0; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif';">
-    <div style="max-width: 1536px; width: 100%; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777; float: left; display: table-row; line-height: 20px; word-break: break-all;">
+    <div style="max-width: 1536px; width: 100%; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777; float: left; display: table-row; line-height: 20px; word-break: break-word;">
 
       <!--left column-->
       <div style="width: 24%; background: {{ current_config.color|background_color_choice }}; padding: 3% 3% 6% 3%; display: table-cell; vertical-align: top;">
         {% if candidate.image %}
           <img src="{{candidate.image}}" alt="Resume" style="border-radius: 100%; margin-bottom: 10px; width: 150px; height: 150px;" width="150" height="150"/>
         {% endif %}
-        <h1 style="margin: 0 0 10px 0; color: #ffffff; font-size: 32px; line-height: 32px; font-weight: bold;">{{ candidate.first_name }} {{ candidate.last_name }}</h1>
+        <h1 style="margin: 0 0 10px 0; color: #ffffff; font-size: 32px; line-height: 32px; font-weight: bold; ">{{ candidate.first_name }} {{ candidate.last_name }}</h1>
           <strong style="display: block; font-size: 16px; color: #c5e6ff; font-weight: normal; margin-bottom: 30px;">{{ latest_exp }}</strong>
 
         <!--Personal info-->

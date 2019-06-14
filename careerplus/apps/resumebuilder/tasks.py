@@ -27,17 +27,7 @@ def generate_image_for_resume(candidate_id):
         return
 
     thumbnail_sizes = [(151,249),(144,149)]
-    pdf_options = {
-                'page-size': 'Letter',
-                'encoding': "UTF-8",
-                'no-outline': None,
-                'margin-top': '0.3in',
-                'margin-right': '0.2in',
-                'margin-bottom': '0.2in',
-                'margin-left': '0.2in',
-                'quiet': ''
-            }
-
+    
     entity_preference = eval(candidate.entity_preference_data)
     extracurricular = candidate.extracurricular_list
     education = candidate.candidateeducation_set.all().order_by('order')

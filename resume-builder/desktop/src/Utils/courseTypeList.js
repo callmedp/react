@@ -1,8 +1,8 @@
 export const courseTypeList = {
     'FT': {
-        value: 'FT', label: 'Full Time',
+        value: 'FT', label: 'FULL TIME',
     },
     'PT': {
-        value: 'PT', label: 'Part Time'
+        value: 'PT', label: 'PART TIME'
     },
 }

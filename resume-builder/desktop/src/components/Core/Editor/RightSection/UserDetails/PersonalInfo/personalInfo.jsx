@@ -161,7 +161,7 @@ export class PersonalInfo extends Component {
                                 <fieldset>
                                     <label>Mobile</label>
                                     <Field component={renderField}
-                                           type={"text"}
+                                           type={"number"}
                                            name="number"
                                            maxLength={"10"}
                                            iconClass={'icon-mobile'}

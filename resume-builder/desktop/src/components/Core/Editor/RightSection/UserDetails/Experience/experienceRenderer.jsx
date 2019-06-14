@@ -145,7 +145,7 @@ export const ExperienceRenderer = ({
 
                                                             <Field component={datepicker}
                                                                    type={"date"}
-                                                                   yearDropDownItemNumber={15}
+                                                                   yearDropDownItemNumber={10}
                                                                    maxDateAllowed={true}
                                                                    iconClass={'icon-date'}
                                                                    className={'input-control'}
@@ -157,6 +157,7 @@ export const ExperienceRenderer = ({
                                                             <Field component={datepicker}
                                                                    disabled={till_today[index]}
                                                                    type={"date"}
+                                                                   yearDropDownItemNumber={10}
                                                                    iconClass={'icon-date'}
                                                                    name={`${member}.end_date`}
                                                                    className={'input-control'}/>
@@ -199,14 +200,14 @@ export const ExperienceRenderer = ({
                                                     {
                                                         fields.get(index).job_profile.value &&
 
-                                                    < div className="flex-container">
-                                                        <fieldset>
+                                                        < div className="flex-container">
+                                                            <fieldset>
                                                         
                                                         <span className="add-suggested"
-                                                              onClick={() =>  openModal(fields, index)}>Add suggested experience</span>
+                                                              onClick={() => openModal(fields, index)}>Add suggested experience</span>
 
-                                                        </fieldset>
-                                                    </div>
+                                                            </fieldset>
+                                                        </div>
                                                     }
 
 

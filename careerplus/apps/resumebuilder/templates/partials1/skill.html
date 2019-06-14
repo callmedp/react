@@ -1,7 +1,7 @@
 {% load static compress resume_tags %}
 {% if skills|length >= 1 %}
 
-    <div style="display: block; vertical-align: top; word-break: break-all;">
+    <div style="display: block; vertical-align: top; word-break: break-word;">
         <strong style="font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px; display: block; color: {{ current_config.color|background_color_choice }}; text-transform: uppercase; margin-bottom: 15px; border-bottom: 1px solid #cac8c9; padding-bottom: 10px;">{{ preference_list.4.entity_text }}</strong>
         <ul style="margin: 20px 0 10px 0; padding: 0; font-size: 14px; color: #c5e6ff; list-style-type: none;">
             {% for skill in skills %}

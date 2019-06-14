@@ -587,6 +587,7 @@
 .react-datepicker__month-year-dropdown {
   left: 15% ;
   width: 130px;
+  height:255px;
 }
 
 .react-datepicker__year-dropdown:hover,
@@ -600,6 +601,14 @@
 .react-datepicker__month-year-dropdown--scrollable {
   height: 150px;
   overflow-y: scroll;
+}
+
+.react-datepicker__year-dropdown--scrollable,
+.react-datepicker__month-dropdown--scrollable,
+.react-datepicker__month-year-dropdown--scrollable{
+  height:255px !important;
+  width: 85px !important;
+
 }
 
 .react-datepicker__year-option,

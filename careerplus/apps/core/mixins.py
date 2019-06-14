@@ -332,7 +332,7 @@ class ResumeGenerate(object):
         rendered_html = html_template.render(context_dict).encode(encoding='UTF-8')
         if file_type == 'pdf':
             options = {
-                        'page-size': 'Letter',
+                        'page-size': 'A3',
                         'encoding': "UTF-8",
                         'no-outline': None,
                         'margin-top': '0.3in',
