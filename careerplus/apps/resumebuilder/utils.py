@@ -22,7 +22,7 @@ from celery import group
 
 #Global Constants
 MIN_DEPTH = 2 # Assuming Personal and Summary always come on top
-MAX_DEPTH = 10 # Max entities catered by Builder till date
+MAX_DEPTH = 11 # Max entities catered by Builder till date
 
 class ResumeEntityReorderUtility:
     """
