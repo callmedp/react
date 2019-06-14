@@ -85,7 +85,7 @@ def generate_image_for_resume(candidate_id,template_no):
     store_resume_file(str(candidate.id)+"/images",file_name,in_mem_file_to_upload.getvalue())
 
     for tsize in thumbnail_sizes:
-        tname = "resumetemplate-{}-{}x{}.png".format(i,tsize[0],tsize[1])
+        tname = "resumetemplate-{}-{}x{}.png".format(template_no,tsize[0],tsize[1])
         in_mem_file_to_upload = BytesIO()
         img.thumbnail(tsize,Image.ANTIALIAS)
         img.save(in_mem_file_to_upload, "PNG")
