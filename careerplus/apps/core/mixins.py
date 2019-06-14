@@ -1,7 +1,6 @@
 # python imports
 import os,base64,datetime
 import logging, gzip, shutil
-from io import BytesIO
 from pathlib import Path
 from datetime import date
 
@@ -17,13 +16,9 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 # local imports
 
 # inter app imports
-from resumebuilder.models import Candidate
 from core.library.gcloud.custom_cloud_storage import (GCPInvoiceStorage, GCPResumeBuilderStorage)
 
 # third party imports
-import pdfkit
-import zipfile
-from PIL import Image
 from Crypto.Cipher import XOR
 from weasyprint import HTML, CSS
 
@@ -321,145 +316,3 @@ class InvoiceGenerate(object):
             logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
         return None, None
 
-
-class ResumeGenerate(object):
-
-    def generate_file(self, context_dict={}, template_src= None,file_type='pdf'):
-        if not template_src:
-            return None
-
-        html_template = get_template(template_src)
-        rendered_html = html_template.render(context_dict).encode(encoding='UTF-8')
-        if file_type == 'pdf':
-            options = {
-                        'page-size': 'A3',
-                        'encoding': "UTF-8",
-                        'no-outline': None,
-                        'margin-top': '0.3in',
-                        'margin-right': '0.2in',
-                        'margin-bottom': '0.2in',
-                        'margin-left': '0.2in',
-                        'quiet': ''
-                    }
-            rendered_html = rendered_html.decode().replace("\n","")
-            file = pdfkit.from_string(rendered_html,False,options=options)
-
-        elif file_type == 'png':
-            file = HTML(string=rendered_html).write_png()
-
-        return file
-
-    def store_file(self, file_dir, file_name, file_content):
-        directory_path = "{}/{}".format(settings.RESUME_TEMPLATE_DIR, file_dir)
-        if settings.IS_GCP:
-            gcp_file = GCPResumeBuilderStorage().open("{}/{}".format(directory_path, file_name), 'wb')
-            gcp_file.write(file_content)
-            gcp_file.close()
-            return
-
-        directory_path = "{}/{}".format(settings.MEDIA_ROOT, directory_path)
-        if not os.path.exists(directory_path):
-            os.makedirs(directory_path)
-        dest = open("{}/{}".format(directory_path, file_name), 'wb')
-        dest.write(file_content)
-        dest.close()
-
-    def zip_all_resume_pdfs(self, order):
-        content_type = "zip"
-        candidate = Candidate.objects.get(candidate_id=order.candidate_id)
-        file_dir = "{}/{}".format(candidate.id, content_type)
-        file_name = "{}.{}".format("combo", content_type)
-
-        zip_stream = BytesIO()
-        zf = zipfile.ZipFile(zip_stream, "w")
-
-        for i in range(1, 6):
-            current_file = "{}_{}-{}.{}".format(order.first_name, order.last_name, i, "pdf")
-            pdf_file_path = "{}/{}/pdf/{}.pdf".format(settings.RESUME_TEMPLATE_DIR, candidate.id, i)
-            try:
-                file_obj = GCPResumeBuilderStorage().open(pdf_file_path)
-            except:
-                logging.getLogger('error_log').error("Unable to open file - {}".format(pdf_file_path))
-
-            if not settings.IS_GCP:
-                pdf_file_path = "{}/{}".format(settings.MEDIA_ROOT, pdf_file_path)
-                try:
-                    file_obj = open(pdf_file_path, "rb")
-                except:
-                    logging.getLogger('error_log').error("Unable to open file - {}".format(pdf_file_path))
-                    continue
-
-            open(current_file, 'wb').write(file_obj.read())
-            zf.write(current_file)
-            os.unlink(current_file)
-
-        zf.close()
-        self.store_file(file_dir, file_name, zip_stream.getvalue())
-
-    def generate_pdf_for_template(self, order=None, index='1'):
-        content_type = "pdf"
-        candidate_id = order.candidate_id
-        template_id = int(index)
-        candidate = Candidate.objects.filter(candidate_id=candidate_id).first()
-        if not candidate:
-            return {}
-
-        file_dir = "{}/{}".format(candidate.id, content_type)
-        file_name = "{}.{}".format(index, content_type)
-        entity_preference = eval(candidate.entity_preference_data)
-        extracurricular = candidate.extracurricular_list
-        education = candidate.candidateeducation_set.all().order_by('order')
-        experience = candidate.candidateexperience_set.all().order_by('order')
-        skills = candidate.skill_set.all().order_by('order')
-        achievements = candidate.candidateachievement_set.all().order_by('order')
-        references = candidate.candidatereference_set.all().order_by('order')
-        projects = candidate.candidateproject_set.all().order_by('order')
-        certifications = candidate.candidatecertification_set.all().order_by('order')
-        languages = candidate.candidatelanguage_set.all().order_by('order')
-        current_exp = experience.filter(is_working=True).order_by('-start_date').first()
-        current_config = candidate.ordercustomisation_set.filter(template_no=template_id).first()
-        entity_position = current_config.entity_position_eval
-
-        latest_experience, latest_end_date = '', None
-        for exp in experience:
-            if exp.is_working:
-                latest_end_date = date.today()
-                latest_experience = exp.job_profile
-                break
-            elif latest_end_date is None:
-                latest_end_date = exp.end_date
-                latest_experience = exp.job_profile
-            else:
-                if latest_end_date < exp.end_date:
-                    latest_end_date = exp.end_date
-                    latest_experience = exp.job_profile
-
-        # latest_experience = experience and experience[0].job_profile or 'FULL STACK DEVELOPER'
-
-        template = get_template('resume{}_preview.html'.format(template_id))
-        context_dict = {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,
-                        'achievements': achievements, 'references': references, 'projects': projects,
-                        'certifications': certifications, 'extracurricular': extracurricular, 'languages': languages,
-                        'current_exp': current_exp, 'latest_exp': latest_experience,
-                        'preference_list': entity_preference, 'current_config': current_config,
-                        'entity_position': entity_position, "width": 93.7
-                        }
-
-        pdf_file = self.generate_file(
-            context_dict=context_dict,
-            template_src='resume{}_preview.html'.format(index),
-            file_type='pdf')
-
-        self.store_file(file_dir, file_name, pdf_file)
-
-    def save_order_resume_pdf(self, order=None, is_combo=False, index=None):
-        if not order:
-            return None, None
-
-        if not is_combo:
-            return self.generate_pdf_for_template(order, index=str(index))
-
-        for i in range(1, 6):
-            self.generate_pdf_for_template(order, index=str(i))
-
-        return self.zip_all_resume_pdfs(order)

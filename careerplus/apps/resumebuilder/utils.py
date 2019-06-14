@@ -1,15 +1,24 @@
 #python imports
-import json
+import os,json,logging
+from io import BytesIO
 
 #django imports
+from django.conf import settings
+from django.template.loader import get_template
 
 #local imports
-from .models import OrderCustomisation
+from .tasks import generate_and_upload_resume_pdf
+from .models import OrderCustomisation,Candidate
 from .constants import TEMPLATE_ALLOW_LEFT_RIGHT_SWITCH
 
 #inter app imports
+from core.library.gcloud.custom_cloud_storage import GCPResumeBuilderStorage
 
 #third party imports
+import pdfkit
+import zipfile
+from PIL import Image
+from celery import group
 
 #Global Constants
 MIN_DEPTH = 2 # Assuming Personal and Summary always come on top
@@ -162,3 +171,38 @@ class ResumeEntityReorderUtility:
                                     for x in self.saved_entity_data]
         return sorted(swapped_entity_data,key=lambda x:x['pos'])
 
+
+
+class ResumeGenerator(object):
+
+    def save_order_resume_pdf(self, order=None, is_combo=False, index=None):
+        if not order:
+            return None, None
+
+        data_to_send = {"order_id":order.id,"template_no":index}
+
+        if not is_combo:
+            generate_and_upload_resume_pdf.delay(json.dumps(data_to_send))
+            return
+
+        for i in range(1,6):
+            data_to_send.update({"template_no":i})
+            generate_and_upload_resume_pdf.delay(json.dumps(data_to_send))
+
+
+#Uplod byte stream to cloud
+def store_resume_file(file_dir,file_name,file_content):
+    directory_path = "{}/{}".format(settings.RESUME_TEMPLATE_DIR, file_dir)
+    if settings.IS_GCP:
+        gcp_file = GCPResumeBuilderStorage().open("{}/{}".format(directory_path, file_name), 'wb')
+        gcp_file.write(file_content)
+        gcp_file.close()
+        return
+
+    directory_path = "{}/{}".format(settings.MEDIA_ROOT, directory_path)
+    if not os.path.exists(directory_path):
+        os.makedirs(directory_path)
+    
+    dest = open("{}/{}".format(directory_path, file_name), 'wb')
+    dest.write(file_content)
+    dest.close()

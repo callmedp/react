@@ -24,6 +24,7 @@ from django.core.files.base import ContentFile
 # from console.decorators import Decorate, stop_browser_cache
 from order.models import Order, OrderItem
 from resumebuilder.models import Candidate
+from resumebuilder.utils import ResumeGenerator
 from order.choices import CANCELLED, OI_CANCELLED
 from review.models import Review
 from emailers.email import SendMail
@@ -32,7 +33,7 @@ from emailers.sms import SendSMS
 from wallet.models import Wallet
 from core.tasks import upload_resume_to_shine
 from core.api_mixin import ShineCandidateDetail
-from core.mixins import (InvoiceGenerate, ResumeGenerate)
+from core.mixins import InvoiceGenerate
 from console.decorators import Decorate, stop_browser_cache
 from search.helpers import get_recommendations
 from .dashboard_mixin import DashboardInfo

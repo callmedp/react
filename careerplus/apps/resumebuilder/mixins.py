@@ -40,7 +40,8 @@ class PreviewImageCreationMixin(object):
         parent_object_key = getattr(self,"parent_object_key","candidate_id")
         candidate_id = getattr(instance,parent_object_key)
         if kwargs.get('created') or self.initiate_image_upload_task:
-            generate_image_for_resume.delay(candidate_id)
+            for template_index in range(1,6):
+                generate_image_for_resume.delay(candidate_id,template_index)
 
         
 

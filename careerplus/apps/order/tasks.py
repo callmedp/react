@@ -796,7 +796,7 @@ def service_initiation(pk=None):
 def generate_resume_for_order(order_id):
     from resumebuilder.models import Candidate
     from order.models import Order
-    from core.mixins import ResumeGenerate
+    from resumebuilder.utils import ResumeGenerator
 
     order_obj = Order.objects.get(id=order_id)
     candidate_id = order_obj.candidate_id
@@ -808,7 +808,7 @@ def generate_resume_for_order(order_id):
 
     is_combo = True if product_id != settings.RESUME_BUILDER_NON_COMBO_PID else False
     selected_template = Candidate.objects.filter(candidate_id = candidate_id).first().selected_template
-    builder_obj = ResumeGenerate()
+    builder_obj = ResumeGenerator()
     builder_obj.save_order_resume_pdf(order=order_obj,is_combo=is_combo,index=selected_template)
 
 
