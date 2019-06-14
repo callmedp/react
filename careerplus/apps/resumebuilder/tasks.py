@@ -30,7 +30,7 @@ def generate_image_for_resume(candidate_id,template_no):
         return
 
     thumbnail_sizes = [(151,249),(144,149)]
-    
+
     entity_preference = eval(candidate.entity_preference_data)
     extracurricular = candidate.extracurricular_list
     education = candidate.candidateeducation_set.all().order_by('order')

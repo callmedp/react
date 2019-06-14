@@ -118,8 +118,9 @@ export const ProjectRenderer = ({
                                                             <Field component={datepicker}
                                                                    type={"date"}
                                                                    iconClass={'icon-date'}
-                                                                   yearDropDownItemNumber={15}
+                                                                   yearDropDownItemNumber={10}
                                                                    maxDateAllowed={true}
+                                                                   endDate={fields.get(index).end_date || null}
                                                                    className={'input-control'}
                                                                    name={`${member}.start_date`}/>
                                                         </fieldset>
@@ -129,9 +130,12 @@ export const ProjectRenderer = ({
                                                             <Field component={datepicker} type={"date"}
                                                                    className={'input-control'}
                                                                    disabled={till_today[index]}
+                                                                   yearDropDownItemNumber={10}
                                                                    iconClass={'icon-date'}
+                                                                   maxDateAllowed={true}
                                                                    dateFromName={`${member}.start_date`}
                                                                    formValues={formValues}
+                                                                   startDate={fields.get(index).start_date || null}
                                                                    name={`${member}.end_date`}/>
 
                                                             <span className={styles['till-today']}>

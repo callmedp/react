@@ -60,6 +60,23 @@ export const renderField = ({
 };
 
 
+function handleMaxDate(maxDateAllowed, endDate, startDate, educationEndDate) {
+    if (!maxDateAllowed) {
+        return null;
+    }
+    if (!endDate) {
+        if (educationEndDate && startDate) {
+            const d1 = new Date(moment(startDate).add(5, 'years'))
+            const d2 = new Date()
+            return d1.getTime() >= d2.getTime() ? d1 : d2
+        }
+        return new Date()
+    }
+    return new Date(endDate)
+
+
+}
+
 export const datepicker =
     ({
          input,
@@ -69,8 +86,11 @@ export const datepicker =
          disabled,
          iconClass,
          maxDateAllowed,
+         endDate = null,
          yearDropDownItemNumber,
-         meta: {touched, error, warning}
+         startDate = null,
+         meta: {touched, error, warning},
+         educationEndDate = false
      }) => (
         <div className={"input-group " + (touched && error ? 'errormsg' : '')}>
             <div className="input-group--input-group-icon">
@@ -78,12 +98,12 @@ export const datepicker =
             </div>
             <div className={"Error " + (touched && error ? 'errormsg' : '')}>
                 <DatePicker {...input}
-                            value={disabled ? moment().format('YYYY-MM-DD').toString() : input.value}
+                            value={disabled ? moment().format('YYYY-MM-DD').toString() : input.value ? moment(input.value).format('YYYY-MM-DD').toString() : null}
                             dateFormat="yyyy-MM-dd"
                             autoComplete="off"
                             selected={input.value ? new Date(input.value) : null}
-                            maxDate={maxDateAllowed ? new Date() : null}
-                    // minDate={dateValue !== ''  ? moment(dateValue).add(1, 'days') : null}
+                            maxDate={handleMaxDate(maxDateAllowed, endDate, startDate, educationEndDate)}
+                            minDate={startDate ? new Date((startDate)) : null}
                             onChange={date => input.onChange(date)}
                             showYearDropdown
                             withPortal
@@ -277,7 +297,8 @@ export const renderTextArea = ({
                                   rows={rows} type={type}/>
                     {
 
-                        showWordCounter && <span className="word-counter mt-5">{input.value.length ? input.value.length : 0}/{maxLength}</span>
+                        showWordCounter && <span
+                            className="word-counter mt-5">{input.value.length ? input.value.length : 0}/{maxLength}</span>
                     }
 
                     {touched &&

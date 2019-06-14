@@ -34,7 +34,7 @@ export const EducationRenderer = ({
             {/*{<LoaderSection/>}*/}
             <section className="head-section">
                 <span className="icon-box"><i className="icon-education1"></i></span>
-               {!!(!isEditable) ?
+                {!!(!isEditable) ?
                     <h2>{entityName}
                     </h2> :
                     <React.Fragment>
@@ -128,6 +128,8 @@ export const EducationRenderer = ({
                                                                    type={"date"}
                                                                    iconClass={'icon-date'}
                                                                    yearDropDownItemNumber={10}
+                                                                   maxDateAllowed={true}
+                                                                   endDate={fields.get(index).end_date || null}
                                                                    name={`${member}.start_date`}
                                                                    className="input-control"/>
                                                         </fieldset>
@@ -137,6 +139,9 @@ export const EducationRenderer = ({
                                                                    type={"date"}
                                                                    iconClass={'icon-date'}
                                                                    name={`${member}.end_date`}
+                                                                   maxDateAllowed={true}
+                                                                   educationEndDate={true}
+                                                                   startDate={fields.get(index).start_date || null}
                                                                    disabled={till_today[index]}
                                                                    yearDropDownItemNumber={10}
                                                                    className="input-control"/>

@@ -148,6 +148,8 @@ export const ExperienceRenderer = ({
                                                                    yearDropDownItemNumber={10}
                                                                    maxDateAllowed={true}
                                                                    iconClass={'icon-date'}
+                                                                   maxDateAllowed={true}
+                                                                   endDate={fields.get(index).end_date || null}
                                                                    className={'input-control'}
                                                                    name={`${member}.start_date`}/>
 
@@ -158,6 +160,8 @@ export const ExperienceRenderer = ({
                                                                    disabled={till_today[index]}
                                                                    type={"date"}
                                                                    yearDropDownItemNumber={10}
+                                                                   maxDateAllowed={true}
+                                                                   startDate={fields.get(index).start_date || null}
                                                                    iconClass={'icon-date'}
                                                                    name={`${member}.end_date`}
                                                                    className={'input-control'}/>
