@@ -62,7 +62,7 @@
          </div>
          <!-- Most popular tests starts -->
          <div class="col-sm-12 col-lg-12 col-md-12">
-            <h2>Most popular tests</h2>
+            <h2 class="text-center">Most popular tests</h2>
             <div class="popular_test row">
          {% for test in test_list %}
                <div class="testinside">
@@ -80,7 +80,7 @@
          <!-- Most popular tests starts -->
          <!-- Tests by functional area starts -->
          <div class="col-sm-12 col-lg-12 col-md-12">
-            <h2>Tests by functional area</h2>
+            <h2 class="text-center">Tests by functional area</h2>
 
 
             <div class="functional_test row" id="funcDiv">
@@ -142,16 +142,88 @@
 
 
    <div class="modal fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content vskill-modal-box">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
+        <h2 class="text-center" id="exampleModalLongTitle">Digital Marketing Scientist</h2>
+        <strong class="text-center">Make your choice and go ahead</strong>
       </div>
       <div class="modal-body">
-        <a id="startTest" >start free test</a>
+        <!-- <a id="startTest" >start free test</a> -->
+        <div class="col-sm-4">
+           <div class="vskill-modal">
+            <i>
+               <img src="{% static 'shinelearn/images/free_skill/free-test-bg.jpg' %}" class="img-responsive">
+            </i>
+            <span class="pad-15">
+               <h3>Free Test</h3>
+               <ul>
+                  <li>
+                     Test Format <strong>Practice Exam</strong>
+                  </li>
+                  <li>
+                     No. of Questions <strong>25 Questions</strong>
+                  </li>
+               </ul>
+               <span>
+               <button class="blue_btn pull-right">Start test</button>
+               <h4 class="mt-10">FREE</h4>
+               </span>
+            </span>
+           </div>
+        </div>
+
+        <div class="col-sm-4">
+         <div class="recommended-head">Recommended</div>
+           <div class="vskill-modal recommended">
+            <i>
+               <img src="{% static 'shinelearn/images/free_skill/practice-test-bg.jpg' %}" class="img-responsive">
+            </i>
+            <span class="pad-15">
+               <h3>Practice Tests</h3>
+               <ul>
+                  <li>
+                     Test Format <strong>Practice Exam</strong>
+                  </li>
+                  <li>
+                     No. of Questions <strong>500+ Questions</strong>
+                  </li>
+               </ul>
+               <p>Real exam & Practice environment</p>
+               <p class="pb-30">Explanation to every questions</p>
+
+               <button class="yellow_btn pull-right">Add to cart</button>
+               <strike>Rs. 999</strike>
+               <h4 class="mt-0">Rs. 699</h4>
+            </span>
+           </div>
+        </div>
+
+        <div class="col-sm-4">
+           <div class="vskill-modal">
+            <i>
+               <img src="{% static 'shinelearn/images/free_skill/online-course-bg.jpg' %}" class="img-responsive">
+            </i>
+            <span class="pad-15">
+               <h3>Online Course</h3>
+               <ul>
+                  <li>
+                     Duration <strong>8 Days</strong>
+                  </li>
+                  <li>
+                     Availability <strong>Unlimited</strong>
+                  </li>
+               </ul>
+               <button class="blue_btn pull-right">Add to cart</button>
+               <strike>Rs. 1999</strike>
+               <h4 class="mt-0">Rs. 1699</h4>
+            </span>
+           </div>
+        </div>
+
       </div>
 
     </div>
