@@ -10,7 +10,7 @@ export default class ChangeTemplateModal extends Component{
     render(){
         return(
             <Modal 
-                isOpen={this.props.initialValues.modal_status} 
+                isOpen={this.props.template.modal_status} 
                 contentLabel="onRequestClose Preview"
                 onRequestClose={this.handleCloseModal}
                 className="Modal overflow-visible"
@@ -19,7 +19,7 @@ export default class ChangeTemplateModal extends Component{
                     <ResumeSlider showtext={false} {...this.props}/>
                 </div>
                 <span className="close-wrap preview-close" onClick={()=>{this.props.updateModalStatus({modal_status:false})}}>
-                    <i class="sprite icon--close"></i>
+                    <i className="sprite icon--close"></i>
                 </span>
             </Modal>
         )

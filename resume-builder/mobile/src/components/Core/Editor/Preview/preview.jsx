@@ -15,6 +15,7 @@ import {
     AccordionItemPanel
 } from "react-accessible-accordion";
 import InputRange from 'react-input-range';
+import Swal from 'sweetalert2'
 
 class Preview extends Component {
 
@@ -38,25 +39,61 @@ class Preview extends Component {
         this.moveDownSection = this.moveDownSection.bind(this);
         this.handleActiveSection = this.handleActiveSection.bind(this);
         this.handleZoomTemplate = this.handleZoomTemplate.bind(this);
+        this.showReorderErrorToast = this.showReorderErrorToast.bind(this);
 
     }
 
     componentWillUpdate(prevProps){
-        const {initialValues} = this.props
-        if(initialValues !== prevProps.initialValues){
+        const {template} = this.props
+        if(template !== prevProps.template){
 
             this.setState({
-                selectedColor:initialValues.color,
-                headingFontSize:initialValues.heading_font_size -1,
-                textFontSize:initialValues.text_font_size -1 
+                selectedColor:template.color,
+                headingFontSize:template.heading_font_size -1,
+                textFontSize:template.text_font_size -1 
             })
         }
     }
 
+    componentDidUpdate(prevProps){
+        const {template: {entity_position,reorderFailToast},personalInfo:{selected_template}} = this.props;
+        const {selectedEntity} = this.state
+        if(entity_position !== prevProps.template.entity_position){
+            (entity_position && eval(entity_position) || []).map((el)=>{
+                if(selectedEntity && selectedEntity['entity_id'] === el.entity_id){
+                    this.setState({selectedEntity:el})
+                } 
+            })
+        }
+        if(selected_template !==prevProps.personalInfo.selected_template){
+            this.props.fetchTemplate();
+            this.props.fetchDefaultCustomization(selected_template);
+        }
+        if(reorderFailToast !== prevProps.template.reorderFailToast){
+            this.showReorderErrorToast()
+        }
+    }
+
+    showReorderErrorToast(){
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+          });
+          
+          Toast.fire({
+            type: 'error',
+            title: 'Sorry, this section cannot be moved.'
+          })
+    }
+
+
     async componentDidMount(){
         await this.props.fetchPersonalInfo();
         this.props.fetchTemplate();
-        this.props.fetchDefaultCustomization();
+        const {personalInfo:{selected_template}} = this.props
+        this.props.fetchDefaultCustomization(selected_template || 1);
     }
 
     selectSection(section) {
@@ -86,14 +123,14 @@ class Preview extends Component {
 
         this.props.reorderSection({
             templateId: selectedTemplate,
-            info: {entity_id: selectedEntity['entity_id'], step: -1}
+            info: {entity_id: selectedEntity['entity_id'], step: -1,pos:selectedEntity['pos']}
         })
     }
 
     moveDownSection(selectedEntity, selectedTemplate) {
         this.props.reorderSection({
             templateId: selectedTemplate,
-            info: {entity_id: selectedEntity['entity_id'], step: 1}
+            info: {entity_id: selectedEntity['entity_id'], step: 1,pos:selectedEntity['pos']}
         })
     }
 
@@ -104,8 +141,8 @@ class Preview extends Component {
     }
 
     render(){
-        const {customize,currentTab,selectedColor,headingFontSize,textFontSize,sectionEntityName,activeSection,startingReorderUpDowmIndex,zoomIn} = this.state
-        const {initialValues:{html,zoomInHtml,entity_position},ui:{mainloader},personalInfo:{selected_template}} = this.props
+        const {customize,currentTab,selectedColor,headingFontSize,textFontSize,sectionEntityName,startingReorderUpDowmIndex,zoomIn} = this.state
+        const {template:{html,zoomInHtml,entity_position},ui:{mainloader},personalInfo:{selected_template}} = this.props
         return(
             <div className="preview">
                <Header page={'preview'} {...this.props}/>
@@ -353,7 +390,7 @@ class Preview extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        initialValues: state.template,
+        template: state.template,
         ui: state.ui,
         personalInfo: state.personalInfo,
         allinfo:state
@@ -376,8 +413,8 @@ const mapDispatchToProps = (dispatch) => {
                 return dispatch(customizeTemplate({template_data,resolve,reject}))
             })
         },
-        "fetchDefaultCustomization": () => {
-            return dispatch(fetchDefaultCustomization(1))
+        "fetchDefaultCustomization": (templateId) => {
+            return dispatch(fetchDefaultCustomization(templateId))
         },
         "reorderSection": (data) => {
             return dispatch(reorderSection(data))

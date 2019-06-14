@@ -153,30 +153,34 @@ def isDual(index,skill_value):
 
 @register.filter
 def experiencePosFind(entity_position):
-    print(entity_position)
-    pos = 0
-    for i in entity_position:
-        if i['entity_id'] == 3:
-            pos = i['pos']
-            return pos - 2
-    return -1
+    active_pos =0
+    exp_pos = -1
+    for i in range(2,len(entity_position)):
+        if entity_position[i]['active']:
+            active_pos += 1
+            if entity_position[i]['entity_id'] == 3:
+                exp_pos = active_pos
+    return exp_pos
+    # for i in entity_position:
+    #     if i['entity_id'] == 3:
+    #         pos = i['pos']
+    #         return pos - 2
 
 @register.filter
 def marginSide(experiencePos,pos):
     value = experiencePos - pos
-    print(value)
     if value < 0:
         if value % 2 == 0 :
-            print('left')
             return 'left'
-        print('right')
         return 'right'
     else:
         if value % 2 == 0 :
-            print('left')
             return 'right'
-        print('right')
         return 'left'
+
+@register.simple_tag
+def incrementPos(pos):
+    return pos+1
 
     
 

@@ -9,7 +9,8 @@ const initialState = {
     'color': 1,
     'entity_position': [],
     'templateImage': '',
-    'thumbnailImages': []
+    'thumbnailImages': [],
+    'reorderFailToast': false
 };
 
 

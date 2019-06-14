@@ -349,7 +349,8 @@ class CandidateResumePreview(APIView):
         candidate = Candidate.objects.filter(candidate_id=candidate_id).first()
         if not candidate:
             return {}
-
+        current_config = candidate.ordercustomisation_set.filter(template_no=template_id).first()
+        entity_position = current_config.entity_position_eval
         entity_preference = eval(candidate.entity_preference_data)
         extracurricular = candidate.extracurricular_list
         education = candidate.candidateeducation_set.all().order_by('order')
@@ -361,8 +362,23 @@ class CandidateResumePreview(APIView):
         certifications = candidate.candidatecertification_set.all().order_by('order')
         languages = candidate.candidatelanguage_set.all().order_by('order')
         current_exp = experience.filter(is_working=True).order_by('-start_date').first()
-        current_config = candidate.ordercustomisation_set.filter(template_no=template_id).first()
-        entity_position = current_config.entity_position_eval
+
+        entity_id_count_mapping = {
+                2:bool(education.count()),
+                3:bool(experience.count()),
+                4:bool(projects.count()),
+                5:bool(skills.count()),
+                7:bool(achievements.count()),
+                8:bool(certifications.count()),
+                9:bool(languages.count()),
+                10:bool(references.count()),
+                11:bool(len(extracurricular)),
+            }
+        updated_entity_position = []
+
+        for item in entity_position:
+            item.update({"count":entity_id_count_mapping.get(item['entity_id'])})
+            updated_entity_position.append(item)
 
         latest_experience, latest_end_date = '', None
         for i in experience:
@@ -385,7 +401,7 @@ class CandidateResumePreview(APIView):
              'certifications': certifications, 'extracurricular': extracurricular, 'languages': languages,
              'current_exp': current_exp, 'latest_exp': latest_experience,
              'preference_list': entity_preference, 'current_config': current_config,
-             'entity_position': entity_position, 'width': 100,
+             'entity_position': updated_entity_position, 'width': 100,
              }).encode(encoding='UTF-8')
 
         return Response({
@@ -667,7 +683,6 @@ class InterestView(ListAPIView):
 
     def get(self, request, *args, **kwargs):
         search_text = request.GET.get('search', '')
-        print('dfdff<<><><>>', dict([i for i in INTEREST_LIST if 'am' in i[1]]))
         return Response(
             {"data": dict([i for i in INTEREST_LIST if search_text.lower() in i[1].lower()])})
 

@@ -19,10 +19,8 @@ function* fetchTemplate(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
         const ui = yield select(getUIStatus)
-        const selected_template = yield select(getTemplateNo)
-        if(!ui.mainloader){
-            yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
-        }
+        const selected_template = yield select((getTemplateNo|| 1))
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
 
         const result = yield call(Api.fetchTemplate, candidateId,selected_template);
         if (result['error']) {
@@ -99,20 +97,26 @@ function* reorderSection(action) {
         yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
         const {payload: {templateId, info}} = action;
         const result = yield call(Api.reorderSection, candidateId, templateId, info);
-
         if (result['error']) {
             console.log('error');
         }
         let {data: {data}} = result;
+
+        let entity_position = data && eval(data) || []
+        let error = false
+        if(entity_position[info.pos-1].entity_id === info.entity_id){
+            error =true
+        } 
+        
         data = {
-            entity_position: JSON.parse(data)
+            entity_position: JSON.parse(data),
+            reorderFailToast: error
         }
 
         yield put({type: SET_CUSTOMIZATION, data:data});
+        yield call(fetchTemplate)
 
         yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
-
-
         // yield call(fetchTemplate)
 
     } catch

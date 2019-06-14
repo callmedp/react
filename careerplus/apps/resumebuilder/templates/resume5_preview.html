@@ -33,59 +33,69 @@ For Mobile case
 
 
     <div style="width: {{ width }}%; border-bottom: 13px solid {{ current_config.color|background_color_choice }}; padding: 3% 3% 0 3%;">
-        {% with experience_pos=entity_position|experiencePosFind  %}
+        {% with experience_pos=entity_position|experiencePosFind currentpos=0  %}
         
             <!--Experience 3-->
-            {% if entity_position.2.active %}
-                {% include entity_position.2.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:1  %}
+            {% if entity_position.2.active and entity_position.2.count %}
+                {% incrementPos currentpos as currentpos %}
+                {% include entity_position.2.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:currentpos  %}
             {% endif %}
 
 
             <!--Skills 4-->
-            {% if entity_position.3.active %}
-                {% include entity_position.3.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:2   %}
+            {% if entity_position.3.active and entity_position.3.count %}
+                {% incrementPos currentpos as currentpos %}
+                {% include entity_position.3.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:currentpos   %}
             {% endif %}
 
 
             <!--Project  5-->
-            {% if entity_position.4.active %}
-                {% include entity_position.4.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:3  %}
+            {% if entity_position.4.active and entity_position.4.count %}
+                {% incrementPos currentpos as currentpos %}
+                {% include entity_position.4.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:currentpos  %}
             {% endif %}
 
 
             <!--Courses done  6-->
-            {% if entity_position.5.active %}
-                {% include entity_position.5.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:4  %}
+            {% if entity_position.5.active and entity_position.5.count %}
+                {% incrementPos currentpos as currentpos %}
+                {% include entity_position.5.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:currentpos  %}
             {% endif %}
 
 
             <!--Education  7-->
-            {% if entity_position.6.active %}
-                {% include entity_position.6.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:5  %}
+            {% if entity_position.6.active and entity_position.6.count %}
+                {% incrementPos currentpos as currentpos %}
+                {% include entity_position.6.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:currentpos  %}
             {% endif %}
 
 
             <!--Interest  8-->
-            {% if entity_position.7.active %}
-                {% include entity_position.7.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:6  %}
+            {% if entity_position.7.active and entity_position.7.count %}
+                {% incrementPos currentpos as currentpos %}
+                {% include entity_position.7.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:currentpos  %}
             {% endif %}
 
 
             <!--Achievement  9-->
-            {% if entity_position.8.active %}
-                {% include entity_position.8.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:7  %}
+            {% if entity_position.8.active and entity_position.8.count %}
+                {% incrementPos currentpos as currentpos %}
+                {% include entity_position.8.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:currentpos  %}
             {% endif %}
 
 
             <!--Reference  10-->
-            {% if entity_position.9.active %}
-                {% include entity_position.9.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:8  %}
+            {% if entity_position.9.active and entity_position.9.count %}
+                {% incrementPos currentpos as currentpos %}
+                {% include entity_position.9.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:currentpos  %}
             {% endif %}
 
             <!--Language  11-->
-            {% if entity_position.10.active %}
-                {% include entity_position.10.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:9  %}
+            {% if entity_position.10.active and entity_position.10.count %}
+                {% incrementPos currentpos as currentpos %}
+                {% include entity_position.10.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:currentpos  %}
             {% endif %}
+
         {% endwith %}
     </div>
 

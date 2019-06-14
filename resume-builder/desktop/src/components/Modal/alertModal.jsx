@@ -57,8 +57,8 @@ export default class AlertModal extends React.Component {
                                 <div className="pr">
                                     <div className="alert-modal">
                                         <span className="icon-alert"></span>
-                                        <strong>You Cannot Move this Section</strong>
-                                        <p>Moving this section will render bad resume.</p>
+                                        <strong>Sorry, this section cannot be moved.</strong>
+                                        <p>This is to ensure the best look for your resume.</p>
                                         <div className="flex-container">
                                             <button className="orange-button mr-10"
                                                     onClick={() => {
@@ -81,7 +81,7 @@ export default class AlertModal extends React.Component {
                                                         this.props.history.push(nextLink);
                                                         this.closeModal();
                                                     }
-                                                    }>Yes, changes it!
+                                                    }>Yes, change it.
                                             </button>
                                             <button className="blue-button" onClick={this.closeModal}>Cancel</button>
                                         </div>

@@ -319,6 +319,8 @@ export default class Preview extends Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
+        const {template: {entity_position}} = this.props;
+        const {selectedEntity} = this.state
         if (this.state.activeSection !== prevState.activeSection) {
             const {template: {entity_position}} = this.props;
             const {activeSection} = this.state;
@@ -331,6 +333,13 @@ export default class Preview extends Component {
         if (this.state.currentTab === 2 && prevState.currentTab !== this.state.currentTab) {
 
             this.handleFontSize()
+        }
+        if(entity_position !== prevProps.template.entity_position){
+            (entity_position && eval(entity_position) || []).map((el)=>{
+                if(selectedEntity && selectedEntity['entity_id'] === el.entity_id){
+                    this.setState({selectedEntity:el})
+                } 
+            })
         }
     }
 
