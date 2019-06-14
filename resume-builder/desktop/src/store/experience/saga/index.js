@@ -10,6 +10,18 @@ import {UPDATE_UI, SAVE_SUGGESTIONS} from '../../ui/actions/actionTypes'
 import {initialState} from '../reducer/index'
 
 
+function modifyExperiences(experiences) {
+    return (experiences || []).map(el => {
+        const {job_profile} = el;
+        return {
+            ...el,
+            ...{
+                job_profile: (job_profile && {value: job_profile, label: job_profile}) || ''
+            }
+        }
+    })
+}
+
 function* fetchUserExperience(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
@@ -39,20 +51,10 @@ function* fetchUserExperience(action) {
             let {experience: {list}} = state;
             results = list
         }
-        let data = results.length ? {list: results} : initialState
+        let data = results.length ? {list: results} : initialState;
 
-        data = {
-            ...data,
-            ...{
-                list: (data.list || []).map(el => {
-                    el['job_profile'] = {
-                        value: el['job_profile'],
-                        label: el['job_profile']
-                    }
-                    return el;
-                })
-            }
-        }
+        data = {list: modifyExperiences(data.list)};
+
         yield put({type: Actions.SAVE_USER_EXPERIENCE, data: data})
     } catch (e) {
         console.log(e);
@@ -114,15 +116,8 @@ function* handleExperienceSwap(action) {
         let {data} = result;
 
         data.sort((a, b) => a.order <= b.order);
-        data = (data || []).map(el => {
-            el['job_profile'] = {
-                value: el['job_profile'],
-                label: el['job_profile']
-            }
-            return el;
-        })
 
-        data = {list: data};
+        data = {list: modifyExperiences(data.list)};
 
         yield put({type: Actions.SAVE_USER_EXPERIENCE, data: data})
 
