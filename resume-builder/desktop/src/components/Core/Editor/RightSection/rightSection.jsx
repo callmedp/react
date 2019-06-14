@@ -16,6 +16,7 @@ import queryString from 'query-string';
 import * as actions from '../../../../store/personalInfo/actions';
 import {currentForm, hideMoreSection} from '../../../../store/ui/actions';
 import {formCategoryList} from "../../../../Utils/formCategoryList";
+import { callbackify } from 'util';
 
 
 class RightSection extends Component {
@@ -51,7 +52,7 @@ class RightSection extends Component {
     }
 
 
-    handlePreview() {
+    async handlePreview() {
         this.props.history.push('/resume-builder/preview/');
     }
 

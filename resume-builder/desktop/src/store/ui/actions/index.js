@@ -9,7 +9,8 @@ import {
     HIDE_SUGGESTION_MODAL,
     SHOW_ALERT_MODAL,
     HIDE_ALERT_MODAL,
-    SET_SUGGESTION_TYPE
+    SET_SUGGESTION_TYPE,
+    UPDATE_PREVIEW_CLICK_STATUS
 } from "./actionTypes";
 
 
@@ -95,5 +96,12 @@ export const setSuggestionType = (type) => {
     return {
         type: SET_SUGGESTION_TYPE,
         data: {suggestionType: type}
+    }
+}
+
+export const previewButtonClicked = (payload) => {
+    return {
+        type: UPDATE_PREVIEW_CLICK_STATUS,
+        data: {previewClicked: payload}
     }
 }

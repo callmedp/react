@@ -12,6 +12,7 @@ import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 styles
 * */
 import 'react-accessible-accordion/dist/fancy-example.css';
+import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
 
 class Skill extends Component {
     constructor(props) {
@@ -20,7 +21,7 @@ class Skill extends Component {
         this.handleAccordionClick = this.handleAccordionClick.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
         this.deleteSkill = this.deleteSkill.bind(this);
-
+        this.updateInfoBeforeLoss = this.updateInfoBeforeLoss.bind(this);
         this.state = {
             active: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             submit: false
@@ -35,10 +36,7 @@ class Skill extends Component {
 
 
     componentWillUnmount() {
-        let {formData: {skill: {values, syncErrors}}} = this.props;
-        let error = false;
-        (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el || {}).map(key => (!!el[key] ? error = true : false)))
-        if (!error && !this.state.submit) this.props.bulkUpdateOrCreate(values && values['list'])
+        this.updateInfoBeforeLoss()
     }
 
     async handleSubmit(values, entityLink) {
@@ -51,6 +49,23 @@ class Skill extends Component {
             if (entityLink) this.props.history.push(entityLink);
             else this.props.history.push('/resume-builder/buy/')
         }
+    }
+
+    async componentDidUpdate(prevProps){
+        const {ui:{previewClicked},previewButtonClicked,history} = this.props;
+        if(previewClicked !== prevProps.ui.previewClicked && previewClicked){
+            await this.updateInfoBeforeLoss()
+            this.setState({submit:true})
+            previewButtonClicked(false)
+            history.push('/resume-builder/preview/')
+        }
+    }
+
+    async updateInfoBeforeLoss(){
+        let {formData: {skill: {values, syncErrors}},bulkUpdateOrCreate} = this.props;
+        let error = false;
+        (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el || {}).map(key => (!!el[key] ? error = true : false)))
+        if (!error && !this.state.submit) await bulkUpdateOrCreate(values && values['list'])
     }
 
     handleAddition(fields) {
@@ -93,7 +108,7 @@ class Skill extends Component {
 
     render() {
         const {
-            error, handleSubmit, pristine, reset, submitting, handlePreview,
+            handleSubmit, history, showAlertModal,
             ui: {loader}, isEditable, editHeading, saveTitle, entityName, nextEntity,
             changeOrderingUp, changeOrderingDown, handleInputValue
         } = this.props;
@@ -119,11 +134,10 @@ class Skill extends Component {
 
                 />
 
-                <div className="flex-container items-right mr-20 mb-30">
-                    <button className="blue-button mr-10" type={'button'} onClick={handlePreview}>Preview</button>
-                    <button className="orange-button"
-                            type={'submit'}>{!nextEntity ? "Download" : 'Save and Continue'}</button>
-                </div>
+                <SavePreviewButtons 
+                        showAlertModal={showAlertModal} context={this} history={history}
+                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                    />
 
 
             </form>

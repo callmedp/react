@@ -13,6 +13,7 @@ import {
     renderTextArea
 } from "../../../../../FormHandler/formFieldRenderer.jsx";
 import LoaderSection from "../../../../../Loader/loaderSection.jsx";
+import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
 
 
 class Summary extends Component {
@@ -21,6 +22,7 @@ class Summary extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
+        this.updateInfoBeforeLoss = this.updateInfoBeforeLoss.bind(this);
         this.state = {
             submit: false,
             modal_status: false
@@ -35,6 +37,21 @@ class Summary extends Component {
 
     }
 
+    async componentDidUpdate(prevProps){
+        const {ui:{previewClicked},previewButtonClicked,history} = this.props;
+        if(previewClicked !== prevProps.ui.previewClicked && previewClicked){
+            await this.updateInfoBeforeLoss()
+            this.setState({submit:true})
+            previewButtonClicked(false)
+            history.push('/resume-builder/preview/')
+        }
+    }
+
+    async updateInfoBeforeLoss(){
+        let {formData: {summary: {values}}} = this.props;
+        if (!this.state.submit) await this.props.onSubmit(values)
+    }
+
     async handleSubmit(values, entityLink) {
         await this.props.onSubmit(values);
         this.setState({
@@ -46,8 +63,7 @@ class Summary extends Component {
 
 
     componentWillUnmount() {
-        let {formData: {summary: {values}}} = this.props;
-        if (!this.state.submit) this.props.onSubmit(values)
+        this.updateInfoBeforeLoss()
     }
 
     async openModal(){
@@ -97,7 +113,7 @@ class Summary extends Component {
 
 
     render() {
-        const {extra_info, ui: { suggestions}, handleInputValue, handleSubmit, handlePreview, isEditable, editHeading, saveTitle, entityName, nextEntity, showSuggestionModal} = this.props;
+        const {extra_info, ui: { suggestions}, handleInputValue, handleSubmit, showAlertModal,history, isEditable, editHeading, saveTitle, entityName, nextEntity} = this.props;
         const {modal_status} =this.state;
         return (
             <div>
@@ -130,11 +146,10 @@ class Summary extends Component {
                     </section>
 
 
-                    <div className="flex-container items-right mr-20 mb-30">
-                        <button className="blue-button mr-20" type={'button'} onClick={handlePreview}>Preview</button>
-                        <button className="orange-button"
-                                type={'submit'}>{!nextEntity ? "Download" : 'Save and Continue'}</button>
-                    </div>
+                    <SavePreviewButtons 
+                        showAlertModal={showAlertModal} context={this} history={history}
+                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                    />
                 </form>
             </div>
         )

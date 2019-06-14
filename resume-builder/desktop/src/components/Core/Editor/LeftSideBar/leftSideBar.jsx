@@ -34,7 +34,7 @@ export default class LeftSideBar extends Component {
     render() {
         const isEdit = this.state.edit;
         const newUser = localStorage.getItem('newUser')
-        const {showAlertModal} = this.props;
+        const {showAlertModal,previewButtonClicked} = this.props;
         return (
 
             <section className="left-sidebar">
@@ -49,7 +49,8 @@ export default class LeftSideBar extends Component {
                     (!isEdit ? "active" : 'no-shadow')}>
                         <span className="icon-preview"></span>
                         {newUser ? <a onClick={showAlertModal}>Preview</a> :
-                            <Link to="/resume-builder/preview">Preview</Link>
+                        <a onClick={isEdit ? previewButtonClicked.bind(this,true):()=>{}}>Preview</a>
+                            // <Link to="/resume-builder/preview">Preview</Link>
                         }
                     </li>
                 </ul>

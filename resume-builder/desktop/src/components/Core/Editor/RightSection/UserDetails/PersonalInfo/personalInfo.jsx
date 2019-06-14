@@ -16,6 +16,7 @@ import validate from '../../../../../FormHandler/validations/personalInfo/valida
 
 import moment from 'moment';
 import {renderAsyncCreatableSelect} from "../../../../../FormHandler/formFieldRenderer";
+import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
 
 
 export class PersonalInfo extends Component {
@@ -24,6 +25,7 @@ export class PersonalInfo extends Component {
         this.getImageURI = this.getImageURI.bind(this);
         this.removeImage = this.removeImage.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.updateInfoBeforeLoss = this.updateInfoBeforeLoss.bind(this);
         this.state = {
             'imageURI': '',
             'imageURL': '',
@@ -36,8 +38,25 @@ export class PersonalInfo extends Component {
     }
 
 
-    componentDidMount() {
-        this.props.fetchPersonalInfo();
+    // componentDidMount() {
+    //     this.props.fetchPersonalInfo();
+    // }
+
+    async componentDidUpdate(prevProps){
+        const {ui:{previewClicked},previewButtonClicked,history} = this.props;
+        if(previewClicked !== prevProps.ui.previewClicked && previewClicked){
+            await this.updateInfoBeforeLoss()
+            this.setState({submit:true})
+            previewButtonClicked(false)
+            history.push('/resume-builder/preview/')
+        }
+    }
+
+    async updateInfoBeforeLoss(){
+        let {formData: {profile: {values, syncErrors}}} = this.props;
+        let error = false;
+        Object.keys(syncErrors || {}).map(key => (!!syncErrors[key] ? error = true : false));
+        if (!error && !this.state.submit) await this.props.onSubmit(values, this.state.imageURL, this.state.flag)
     }
 
     async handleSubmit(values, entityLink) {
@@ -59,12 +78,8 @@ export class PersonalInfo extends Component {
 
 
     componentWillUnmount() {
-        let {formData: {profile: {values, syncErrors}}} = this.props;
-        let error = false;
-        Object.keys(syncErrors || {}).map(key => (!!syncErrors[key] ? error = true : false));
-        if (!error && !this.state.submit) this.props.onSubmit(values, this.state.imageURL, this.state.flag)
+       this.updateInfoBeforeLoss()
     }
-
 
     async getImageURI(event) {
         let reader = new FileReader();
@@ -88,7 +103,7 @@ export class PersonalInfo extends Component {
     render() {
         const {
             handleSubmit, personalInfo, ui: {loader}, isEditable, fetchInterests,
-            editHeading,currentAddress, saveTitle, entityName, nextEntity, handlePreview, handleInputValue,showAlertModal
+            editHeading,currentAddress, saveTitle, entityName, nextEntity, history, handleInputValue,showAlertModal
         } = this.props;
         const newUser = localStorage.getItem('newUser')
         let elem = null;
@@ -233,13 +248,16 @@ export class PersonalInfo extends Component {
 
                         </section>
                     </section>
+                    <SavePreviewButtons 
+                        showAlertModal={showAlertModal} context={this} history={history}
+                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                    />
 
-
-                    <div className="flex-container items-right mr-20 mb-30">
-                        <button className="blue-button mr-10" type={"button"} onClick={handlePreview}>Preview</button>
+                    {/* <div className="flex-container items-right mr-20 mb-30">
+                        <button className="blue-button mr-10" type={"button"} onClick={newUser ? showAlertModal: handlePreview.bind(this,handleSubmit)}>Preview</button>
                         <button className="orange-button" type="submit">{!nextEntity ? "Download" : 'Save and Continue'}
                         </button>
-                    </div>
+                    </div> */}
                 </form>
             </div>
         )
@@ -272,6 +290,7 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(actions.fetchInterestList())
         },
         "onSubmit": (personalDetails, imageURL, flag) => {
+            console.log("HERO")
             const {gender, date_of_birth, extracurricular, image} = personalDetails;
             personalDetails = {
                 ...personalDetails,

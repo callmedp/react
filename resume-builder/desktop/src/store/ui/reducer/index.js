@@ -11,7 +11,8 @@ import {
     SHOW_ALERT_MODAL,
     HIDE_ALERT_MODAL,
     SAVE_SUGGESTIONS,
-    SET_SUGGESTION_TYPE
+    SET_SUGGESTION_TYPE,
+    UPDATE_PREVIEW_CLICK_STATUS
 
 } from "../actions/actionTypes";
 
@@ -25,7 +26,8 @@ const initialState = {
     'alertModal': false,
     'alertType': 'error',
     'suggestions': [],
-    'suggestionType': 'experience'
+    'suggestionType': 'experience',
+    'previewClicked' : false
 };
 
 export const uiReducer = (state = initialState, action) => {
@@ -109,6 +111,12 @@ export const uiReducer = (state = initialState, action) => {
             }
         }
         case SET_SUGGESTION_TYPE: {
+            return {
+                ...state,
+                ...action.data
+            }
+        }
+        case UPDATE_PREVIEW_CLICK_STATUS: {
             return {
                 ...state,
                 ...action.data

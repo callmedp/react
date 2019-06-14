@@ -7,6 +7,7 @@ import validate from "../../../../../FormHandler/validations/project/validate"
 import {ProjectRenderer} from "./projectRenderer";
 import {scroller} from "react-scroll/modules";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
+import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
 
 class Project extends Component {
     constructor(props) {
@@ -16,6 +17,7 @@ class Project extends Component {
         this.deleteProject = this.deleteProject.bind(this);
         this.handleAccordionClick = this.handleAccordionClick.bind(this);
         this.tillTodayDisable = this.tillTodayDisable.bind(this);
+        this.updateInfoBeforeLoss = this.updateInfoBeforeLoss.bind(this);
         this.state = {
             active: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             submit: false,
@@ -38,10 +40,17 @@ class Project extends Component {
 
     }
 
-    componentDidUpdate(prevProps) {
-        if (this.props.initialValues.list !== prevProps.initialValues.list) {
+    async componentDidUpdate(prevProps){
+        const {ui:{previewClicked},previewButtonClicked,history,initialValues} = this.props;
+        if(previewClicked !== prevProps.ui.previewClicked && previewClicked){
+            await this.updateInfoBeforeLoss()
+            this.setState({submit:true})
+            previewButtonClicked(false)
+            history.push('/resume-builder/preview/')
+        }
+        if (initialValues.list !== prevProps.initialValues.list) {
             let till_today = []
-            for (let i of this.props.initialValues.list) {
+            for (let i of initialValues.list) {
                 till_today.push(i.currently_working)
             }
             this.setState({till_today})
@@ -50,11 +59,7 @@ class Project extends Component {
 
 
     componentWillUnmount() {
-        let {formData: {project: {values, syncErrors}}} = this.props;
-        let error = false;
-        (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el || {}     ).map(key => (!!el[key] ? error = true : false)))
-        if (!error && !this.state.submit) this.props.bulkUpdateOrCreate(values && values['list'])
-
+        this.updateInfoBeforeLoss()
     }
 
     async handleSubmit(values, entityLink) {
@@ -68,6 +73,15 @@ class Project extends Component {
             else this.props.history.push('/resume-builder/buy/')
         }
 
+    }
+
+    
+
+    async updateInfoBeforeLoss(){
+        let {formData: {project: {values, syncErrors}}} = this.props;
+        let error = false;
+        (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el || {}     ).map(key => (!!el[key] ? error = true : false)))
+        if (!error && !this.state.submit) await this.props.bulkUpdateOrCreate(values && values['list'])
     }
 
     handleAddition(fields, error) {
@@ -117,7 +131,7 @@ class Project extends Component {
         const {
             handleSubmit, ui: {loader}, saveTitle,
             editHeading, isEditable, entityName, nextEntity,
-            handlePreview, changeOrderingDown, changeOrderingUp, handleInputValue, formData: {project}
+            showAlertModal,history, changeOrderingDown, changeOrderingUp, handleInputValue, formData: {project}
         } = this.props;
         const {till_today} = this.state
         return (
@@ -144,11 +158,10 @@ class Project extends Component {
 
                 />
 
-                <div className="flex-container items-right mr-20 mb-30">
-                    <button className="blue-button mr-10" type={'button'} onClick={handlePreview}>Preview</button>
-                    <button className="orange-button"
-                            type={'submit'}>{!nextEntity ? "Download" : 'Save and Continue'}</button>
-                </div>
+                <SavePreviewButtons 
+                        showAlertModal={showAlertModal} context={this} history={history}
+                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                    />
             </form>
 
         )

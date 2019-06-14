@@ -7,6 +7,7 @@ import validate from "../../../../../FormHandler/validations/award/validate";
 import {AwardRenderer} from "./awardRenderer";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 import {scroller} from "react-scroll/modules";
+import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
 
 class Award extends Component {
     constructor(props) {
@@ -15,7 +16,7 @@ class Award extends Component {
         this.handleAccordionClick = this.handleAccordionClick.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
         this.deleteAward = this.deleteAward.bind(this);
-
+        this.updateInfoBeforeLoss = this.updateInfoBeforeLoss.bind(this);
         this.state = {
             active: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             submit: false
@@ -28,13 +29,26 @@ class Award extends Component {
         this.props.fetchUserAward()
     }
 
+    async componentDidUpdate(prevProps){
+        const {ui:{previewClicked},previewButtonClicked,history} = this.props;
+        if(previewClicked !== prevProps.ui.previewClicked && previewClicked){
+            await this.updateInfoBeforeLoss()
+            this.setState({submit:true})
+            previewButtonClicked(false)
+            history.push('/resume-builder/preview/')
+        }
+    }
 
-    componentWillUnmount() {
+    async updateInfoBeforeLoss(){
         let {formData: {award: {values, syncErrors}}} = this.props;
         let error = false;
         (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el || {}).map(key => (!!el[key] ? error = true : false)));
-        if (!error && !this.state.submit) this.props.bulkUpdateOrCreate(values && values['list'])
+        if (!error && !this.state.submit) await this.props.bulkUpdateOrCreate(values && values['list'])
+    }
 
+
+    componentWillUnmount() {
+        this.updateInfoBeforeLoss()
     }
 
     async handleSubmit(values, entityLink) {
@@ -86,7 +100,7 @@ class Award extends Component {
     render() {
         const {
             handleSubmit, ui: {loader}, saveTitle, editHeading,
-            isEditable, entityName, handleInputValue, nextEntity, handlePreview, changeOrderingDown, changeOrderingUp
+            isEditable, entityName, handleInputValue, nextEntity, showAlertModal,history, changeOrderingDown, changeOrderingUp
         } = this.props;
 
         return (
@@ -107,13 +121,10 @@ class Award extends Component {
                             handleInputValue={handleInputValue}
                             expanded={this.state.active}
                 />
-                <div className={'flex-container items-right mr-20 mb-30'}>
-                    <button className={'blue-button mr-10'} type={'button'}
-                            onClick={handlePreview}>Preview
-                    </button>
-                    <button className={'orange-button'}
-                            type={'submit'}>{!nextEntity ? "Download" : 'Save and Continue'}</button>
-                </div>
+                <SavePreviewButtons 
+                        showAlertModal={showAlertModal} context={this} history={history}
+                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                    />
 
             </form>
         )

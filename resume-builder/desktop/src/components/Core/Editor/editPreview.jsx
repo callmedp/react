@@ -13,7 +13,7 @@ import * as actions from "../../../store/ui/actions"
 import {customizeTemplate, fetchDefaultCustomization, reorderSection} from "../../../store/template/actions"
 import * as profileActions from "../../../store/personalInfo/actions"
 import SelectTemplateModal from '../../Modal/selectTemplateModal';
-import {showAlertModal, hideAlertModal} from '../../../store/ui/actions/index'
+import {showAlertModal, hideAlertModal,previewButtonClicked} from '../../../store/ui/actions/index'
 import moment from 'moment'
 
 class EditPreview extends Component {
@@ -105,6 +105,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         'hideAlertModal': () => {
             return dispatch(hideAlertModal())
+        },
+        'previewButtonClicked': (data) => {
+            return dispatch(previewButtonClicked(data))
         }
     }
 }
