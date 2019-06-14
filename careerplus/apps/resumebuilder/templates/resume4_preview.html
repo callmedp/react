@@ -12,9 +12,9 @@
 <div style="max-width: 1536px; width: 100%; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777; float: left; line-height: 20px; word-break: break-word;">
 
     <!--top column-->
-    <div style="display: table-row; width: 100%; vertical-align: top; overflow: hidden;">
+    <div style="display: flex; display: -webkit-box; display: -ms-flexbox; width: 100%; vertical-align: top; overflow: hidden;">
         <!--top left column-->
-        <div style="width: 44%; background: {{ current_config.color|background_color_choice }}; padding: 3%; display: table-cell; vertical-align: top; min-height: 275px;">
+        <div style="width: 50%; background: {{ current_config.color|background_color_choice }}; padding: 3%; flex: 50%; -webkit-box-flex: 50%; -ms-flex: 50%; vertical-align: top; vertical-align: top; min-height: 275px;">
             {% if candidate.image %}
                 <img src="{{ candidate.image }}" alt="Resume" width="150" height="150"
                      style="border-radius: 100%; margin-bottom: 10px; width: 150px; height: 150px;">
@@ -26,7 +26,7 @@
         </div>
 
         <!--top right column-->
-        <div style="width: 44%; background: {{ current_config.color|background_color_choice }}; padding: 3%; display: table-cell; vertical-align: top; min-height: 275px;">
+        <div style="width: 50%; background: {{ current_config.color|background_color_choice }}; padding: 3%; flex: 50%; -webkit-box-flex: 50%; -ms-flex: 50%; vertical-align: top; vertical-align: top; min-height: 275px;">
             <!--Contact-->
             {% if entity_position.0.active %}
                 {% include entity_position.0.entity_id|render_section:"partials4/" %}
