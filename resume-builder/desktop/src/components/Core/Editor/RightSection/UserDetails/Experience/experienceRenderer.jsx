@@ -144,7 +144,6 @@ export const ExperienceRenderer = ({
                                                                    yearDropDownItemNumber={30}
                                                                    maxDateAllowed={true}
                                                                    iconClass={'icon-date'}
-                                                                   maxDateAllowed={true}
                                                                    endDate={fields.get(index).end_date || null}
                                                                    className={'input-control'}
                                                                    name={`${member}.start_date`}/>

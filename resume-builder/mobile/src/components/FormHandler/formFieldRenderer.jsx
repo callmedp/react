@@ -19,19 +19,20 @@ export const renderField = ({
                                 meta: {touched, error, warning}
                             }) => (
 
-        
-        <React.Fragment>
-            <label className="form__label" htmlFor={input.name}>{label}</label>
-            {!prepend ?
-                <React.Fragment>
-                    <input {...input} className={className +(touched && error ? " error error-field" : "")} maxLength={maxLength} id={id} type={type} autoComplete="off"/>
-                    {touched &&
-                        ((<span className={'error-message'}>{error}</span>) ||
-                            (warning && <span className={'warn-Message'}>{warning}</span>))
-                    }
-                </React.Fragment> :
-                
-            <div className={"input-group " + (touched && error ? "error" : "")} >
+
+    <React.Fragment>
+        <label className="form__label" htmlFor={input.name}>{label}</label>
+        {!prepend ?
+            <React.Fragment>
+                <input {...input} className={className + (touched && error ? " error error-field" : "")}
+                       maxLength={maxLength} id={id} type={type} autoComplete="off"/>
+                {touched &&
+                ((<span className={'error-message'}>{error}</span>) ||
+                    (warning && <span className={'warn-Message'}>{warning}</span>))
+                }
+            </React.Fragment> :
+
+            <div className={"input-group " + (touched && error ? "error" : "")}>
                 <div className="input-group__prepend">
                 <span className="input-group__text">
                     <i className={iconClass}></i>
@@ -39,31 +40,32 @@ export const renderField = ({
                 </div>
                 <input {...input} className={className} id={id} type={type} maxLength={maxLength} autoComplete="off"/>
                 {touched &&
-                    ((<span className={'error-message'}>{error}</span>) ||
-                        (warning && <span className={'warn-Message'}>{warning}</span>))
+                ((<span className={'error-message'}>{error}</span>) ||
+                    (warning && <span className={'warn-Message'}>{warning}</span>))
                 }
-            
+
             </div>
-            }
-        </React.Fragment>
-);
-
-export const renderCheckboxField = ({
-        input,
-        type,
-        className,
-        id,
-        tillTodayDisable,
-        index
-    }) => (
-
-
-    <React.Fragment>
-        <input {...input} className={className} onClick={(e) => tillTodayDisable(index, !input.checked, e)} id={id} type={type}/>
+        }
     </React.Fragment>
 );
 
-const Input = ({onChange, placeholder, value, id, onClick,name,disabled}) => (
+export const renderCheckboxField = ({
+                                        input,
+                                        type,
+                                        className,
+                                        id,
+                                        tillTodayDisable,
+                                        index
+                                    }) => (
+
+
+    <React.Fragment>
+        <input {...input} className={className} onClick={(e) => tillTodayDisable(index, !input.checked, e)} id={id}
+               type={type}/>
+    </React.Fragment>
+);
+
+const Input = ({onChange, placeholder, value, id, onClick, name, disabled}) => (
     <input
         onChange={onChange}
         placeholder={placeholder}
@@ -77,6 +79,25 @@ const Input = ({onChange, placeholder, value, id, onClick,name,disabled}) => (
     />
 );
 
+
+function handleMaxDate(maxDateAllowed, endDate, startDate, educationEndDate) {
+    if (!maxDateAllowed) {
+        return null;
+    }
+    if (!endDate) {
+        if (educationEndDate && startDate) {
+            const d1 = new Date(moment(startDate).add(5, 'years'))
+            const d2 = new Date()
+            return d1.getTime() >= d2.getTime() ? d1 : d2
+        }
+        return new Date()
+    }
+    return new Date(endDate)
+
+
+}
+
+
 export const datepicker =
     ({
          input,
@@ -86,7 +107,12 @@ export const datepicker =
          disabled,
          minDate,
          yearDropDownItemNumber,
-         meta: {touched, error, warning}
+         meta: {touched, error, warning},
+         maxDateAllowed,
+         educationEndDate = false,
+         startDate = null,
+         endDate = null,
+
      }) => (
         <React.Fragment>
             <label className="form__label" htmlFor={input.name}>{label}</label>
@@ -96,13 +122,12 @@ export const datepicker =
                         <i className="sprite icon--date"></i>
                     </span>
                 </div>
-                <DatePicker customInput={<Input id={id} name={input.name} disabled={disabled} />}
-                            value={disabled ? moment().format('YYYY-MM-DD').toString() : input.value}
+                <DatePicker customInput={<Input id={id} name={input.name} disabled={disabled}/>}
+                            value={disabled ? moment().format('YYYY-MM-DD').toString() : input.value ? moment(input.value).format('YYYY-MM-DD').toString() : null}
                             className={className}
                             dateFormat="yyyy-MM-dd"
                             autoComplete="off"
                             selected={input.value ? new Date(input.value) : null}
-                            maxDate={new Date()}
                             id={id}
                             withPortal
                             onChange={date => input.onChange(date)}
@@ -113,14 +138,15 @@ export const datepicker =
                             disabledKeyboardNavigation={true}
                             disabled={disabled}
                             disabledNavigation
-                            minDate={minDate ? addDays(new Date(minDate),1) : null}
-                            
+                            maxDate={handleMaxDate(maxDateAllowed, endDate, startDate, educationEndDate)}
+                            minDate={startDate ? new Date((startDate)) : null}
+
 
                 />
-                {touched &&  ((error && <span className={'error-message'}>{error}</span>) ||
-                (warning && <span className={'warn-Message'}>{warning}</span>))}
+                {touched && ((error && <span className={'error-message'}>{error}</span>) ||
+                    (warning && <span className={'warn-Message'}>{warning}</span>))}
             </div>
-            
+
         </React.Fragment>
     )
 
@@ -137,69 +163,67 @@ export const renderSelect = ({
     <React.Fragment>
         <label className="form__label" htmlFor={input.name}>{label}</label>
         {prepend ?
-        <div className={"input-group " +(touched && error ? "error" : "")}>
-            <div className="input-group__prepend">
+            <div className={"input-group " + (touched && error ? "error" : "")}>
+                <div className="input-group__prepend">
                 <span className="input-group__text">
                     <i className={iconClass}></i>
                 </span>
-            </div>
-            <select {...input} className={className}
-                onBlur={() => {
-                    input.onBlur(input.value)
-                }}
+                </div>
+                <select {...input} className={className}
+                        onBlur={() => {
+                            input.onBlur(input.value)
+                        }}
                 >
-                {children}
-            </select>
-            <div className="select-error">
+                    {children}
+                </select>
+                <div className="select-error">
+                    {touched &&
+                    ((error && <span className={'error-message'}>{error}</span>) ||
+                        (warning && <span className={'warn-Message'}>{warning}</span>))}
+                </div>
+            </div> :
+            <React.Fragment>
+
+
+                <select {...input} className={className + (touched && error ? " error error-field" : "")}
+                        onBlur={() => {
+                            input.onBlur(input.value)
+                        }}
+                >
+                    {children}
+                </select>
                 {touched &&
                 ((error && <span className={'error-message'}>{error}</span>) ||
                     (warning && <span className={'warn-Message'}>{warning}</span>))}
-            </div>
-        </div> :
-        <React.Fragment>
-
-
-
-            <select {...input} className={className +(touched && error ? " error error-field" : "")}
-                onBlur={() => {
-                    input.onBlur(input.value)
-                }}
-                >
-                {children}
-            </select>
-                {touched &&
-                ((error && <span className={'error-message'}>{error}</span>) ||
-                    (warning && <span className={'warn-Message'}>{warning}</span>))}
-        </React.Fragment>
+            </React.Fragment>
         }
-        
+
     </React.Fragment>
 );
 
 
-export const renderMultiselect = ({ input,className, data, valueField, textField,defaultValue }) =>(
-    
+export const renderMultiselect = ({input, className, data, valueField, textField, defaultValue}) => (
+
     <React.Fragment>
         <label className="form__label" htmlFor="extracurricular">Interest</label>
         <div className="input-group">
 
             <Multiselect {...input}
-                onBlur={() => input.onBlur()}
-                value={input.value.length ? input.value :defaultValue}
-                defaultValue={defaultValue}
-                data={data}
-                className={className}
-                valueField={valueField}
-                textField={textField}
-                placeholder={'Select Interest'}
+                         onBlur={() => input.onBlur()}
+                         value={input.value.length ? input.value : defaultValue}
+                         defaultValue={defaultValue}
+                         data={data}
+                         className={className}
+                         valueField={valueField}
+                         textField={textField}
+                         placeholder={'Select Interest'}
             />
-            
+
         </div>
 
-        
+
     </React.Fragment>
 )
- 
 
 
 export const renderTextArea = ({
@@ -217,33 +241,35 @@ export const renderTextArea = ({
     <React.Fragment>
         <label className="form__label" htmlFor={input.name}>{label}</label>
         {prepend ?
-        <React.Fragment>
-            <div className="input-group">
-                <div className="input-group__prepend">
+            <React.Fragment>
+                <div className="input-group">
+                    <div className="input-group__prepend">
                     <span className="input-group__text">
                         <i className={iconClass}></i>
                     </span>
+                    </div>
+                    <textarea {...input} placeholder={label} type={type} className={className} maxLength={maxLength}
+                              rows={rows}/>
+                    <div>
+                        {touched &&
+                        ((error && <span className={'error-message'}>{error}</span>) ||
+                            (warning && <span className={'warn-Message'}>{warning}</span>))}
+                    </div>
                 </div>
-                <textarea {...input} placeholder={label} type={type} className={className} maxLength={maxLength} rows={rows}/>
+                <p className="text-length">{input.value.length ? input.value.length : 0}- {maxLength}</p>
+            </React.Fragment> :
+            <React.Fragment>
+                <textarea {...input} placeholder={label} type={type} className={className} maxLength={maxLength}
+                          rows={rows}/>
                 <div>
                     {touched &&
                     ((error && <span className={'error-message'}>{error}</span>) ||
                         (warning && <span className={'warn-Message'}>{warning}</span>))}
                 </div>
-            </div>
-            <p className="text-length">{input.value.length ? input.value.length : 0}- {maxLength}</p>
-        </React.Fragment>:
-        <React.Fragment>
-            <textarea {...input} placeholder={label} type={type} className={className} maxLength={maxLength} rows={rows}/>
-            <div>
-                {touched &&
-                ((error && <span className={'error-message'}>{error}</span>) ||
-                    (warning && <span className={'warn-Message'}>{warning}</span>))}
-            </div>
-            <p className="text-length">{input.value.length ? input.value.length : 0}- {maxLength}</p>
-        </React.Fragment>
+                <p className="text-length">{input.value.length ? input.value.length : 0}- {maxLength}</p>
+            </React.Fragment>
         }
-        
+
     </React.Fragment>
 
 
@@ -251,66 +277,66 @@ export const renderTextArea = ({
 
 const dropdownStyles = {
     container: styles => ({
-                         ...styles, 
-                         borderTopLeftRadius: 0,
-                         borderBottomLeftRadius: 0, 
-                         position: 'relative', 
-                         flex: '1 1 auto',
-                         width: '1%',
-                         marginBottom: 0,
-                         border: '1px solid #eaeaea',
-                         padding: '1rem 1.2rem',
-                         borderRadius: '.5rem',
-                         backgroundColor: '#fff',
-                         fontFamily: 'inherit',
-                         fontSize: '1.4rem',
-                         '-webkit-appearance': 'none',
-                         padding:0 }),
+        ...styles,
+        borderTopLeftRadius: 0,
+        borderBottomLeftRadius: 0,
+        position: 'relative',
+        flex: '1 1 auto',
+        width: '1%',
+        marginBottom: 0,
+        border: '1px solid #eaeaea',
+        padding: '1rem 1.2rem',
+        borderRadius: '.5rem',
+        backgroundColor: '#fff',
+        fontFamily: 'inherit',
+        fontSize: '1.4rem',
+        '-webkit-appearance': 'none',
+        padding: 0
+    }),
 }
 
 export const renderAsyncCreatableSelect = ({
-    input,
-    loadOptions,
-    label,
-    defaultOptions,
-    iconClass,
-    className,
-    isMulti,
-    closeMenuOnSelect,
-    meta: {touched, error, warning}
-}) => {
-        return (
-            <React.Fragment>
-                <label className="form__label" htmlFor={input.name}>{label}</label>
-                <div className={"input-group " + (touched && error ? "error" : "")} >
-                    <div className="input-group__prepend">
+                                               input,
+                                               loadOptions,
+                                               label,
+                                               defaultOptions,
+                                               iconClass,
+                                               className,
+                                               isMulti,
+                                               closeMenuOnSelect,
+                                               meta: {touched, error, warning}
+                                           }) => {
+    return (
+        <React.Fragment>
+            <label className="form__label" htmlFor={input.name}>{label}</label>
+            <div className={"input-group " + (touched && error ? "error" : "")}>
+                <div className="input-group__prepend">
                     <span className="input-group__text">
                         <i className={iconClass}></i>
                     </span>
-                    </div>
-                    <AsyncCreatableSelect {...input} className={className}
-                                cacheOptions
-                                loadOptions={loadOptions}
-                                // styles={{menuPortal: base => ({...base, zIndex: 9999})}}
-                                // menuPortalTarget={document.getElementById('right-panel-section')}
-                                // menuPosition={'absolute'}
-                                // menuPlacement={'auto'}
-                                // value={'New Value'}
-                                defaultOptions={[{value:'Enter atleast 3 characters to search',label:'Enter atleast 3 characters to search'}]}
-                                // placeholder={input.value}
-                                // value={input.value}
-                                isMulti={isMulti}
-                                styles={dropdownStyles}
-                                autoComplete="off"
-                                // closeMenuOnSelect={closeMenuOnSelect}
-                                onBlur={event => event.preventDefault()}
-                        />
-                    {touched &&
-                        ((<span className={'error-message'}>{error}</span>) ||
-                            (warning && <span className={'warn-Message'}>{warning}</span>))
-                    }
-                
                 </div>
-            </React.Fragment>
-        )
+                <AsyncCreatableSelect {...input} className={className}
+                                      cacheOptions
+                                      loadOptions={loadOptions}
+                    // styles={{menuPortal: base => ({...base, zIndex: 9999})}}
+                    // menuPortalTarget={document.getElementById('right-panel-section')}
+                    // menuPosition={'absolute'}
+                    // menuPlacement={'auto'}
+                    // value={'New Value'}
+                    // placeholder={input.value}
+                    // value={input.value}
+                                      isMulti={isMulti}
+                                      styles={dropdownStyles}
+                                      autoComplete="off"
+                    // closeMenuOnSelect={closeMenuOnSelect}
+                                      onBlur={event => event.preventDefault()}
+                />
+                {touched &&
+                ((<span className={'error-message'}>{error}</span>) ||
+                    (warning && <span className={'warn-Message'}>{warning}</span>))
+                }
+
+            </div>
+        </React.Fragment>
+    )
 }

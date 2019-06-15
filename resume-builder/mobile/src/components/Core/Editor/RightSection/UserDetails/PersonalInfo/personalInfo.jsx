@@ -18,6 +18,7 @@ import PreviewModal from "../../../Preview/changeTemplateModal";
 import validate from "../../../../../FormHandler/validtaions/profile/validate"
 import {siteDomain} from "../../../../../../Utils/domains";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError";
+import {defaultInterests} from "../../../../../../Utils/defaultInterests";
 
 class PersonalInfo extends Component {
     constructor(props) {
@@ -209,11 +210,7 @@ class PersonalInfo extends Component {
 
                                             component={renderAsyncCreatableSelect}
                                             className={'multi-select'}
-                                            defaultOptions={[{
-                                                'value': 'Enter at least 3 characters to search.',
-                                                'label': 'Enter at least 3 characters to search.',
-                                                isDisabled: true
-                                            }]}
+                                            defaultOptions={defaultInterests}
                                             iconClass={'sprite icon--interest'}
                                             label={'Interest'}
                                             loadOptions={(inputValue) => fetchInterestList(inputValue)}
