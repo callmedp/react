@@ -26,7 +26,7 @@ function* fetchUserSkill(action) {
                                     "candidate_id": '',
                                     "id": '',
                                     "name": '',
-                                    "proficiency": '',
+                                    "proficiency": 5,
                                     "order": 0
                                 }
                             ]
