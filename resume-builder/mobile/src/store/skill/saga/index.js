@@ -31,6 +31,16 @@ function* fetchUserSkill(action) {
                                 }
                             ]
 
+            local_data = (local_data || []).map(el => {
+                const {proficiency} = el;
+                el = {
+                    ...el,
+                    ...{
+                        proficiency: proficiency && proficiency.value || 5
+                    }
+                };
+                return el;
+            })
             yield put({type: Actions.SAVE_USER_SKILL, data: {list:local_data}})
             yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
             return;
