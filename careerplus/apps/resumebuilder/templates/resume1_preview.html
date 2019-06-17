@@ -16,7 +16,7 @@
         <div style="width: 44%; background: #ffffff; padding: 3%; vertical-align: top;float:left;">
           <div style="display: block; text-align: center; margin-bottom: 10%;">
             <h1 style="margin: 0; color:{{ current_config.color|background_color_choice }}; font-size: 32px; line-height: 32px; font-weight: bold; text-transform: uppercase;">{{ candidate.first_name }} {{ candidate.last_name }}</h1>
-            <strong style="display: block; font-style: italic; font-size: 18px; color: #777777; font-weight: normal; text-transform: uppercase; margin: 10px 0 20px 0;">{{ latest_exp }}</strong>
+            <strong style="display: block; font-style: italic; font-size: 18px; color: #777777; font-weight: normal; margin: 10px 0 20px 0;">{{ latest_exp }}</strong>
             <span style="display: block; text-align: center;">
               {% if candidate.image %}
                 <img src="{{candidate.image }}" width="205" height="205" alt="Resume" style="border-radius: 100%; margin: 0 auto; text-align: center; width: 205px; height: 205px;">

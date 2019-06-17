@@ -6,21 +6,21 @@
         <ul style="padding: 0; margin: 0; list-style-type: none;">
             {% for edu in education %}
                 <li style="vertical-align: top; margin: 10px 0;">
-                    <span style="width: 9px; height: 9px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: middle;"></span>
-                    <span style="display: inline-block; width: 93%; vertical-align: top;">
+                    <span style="width: 8px; height: 8px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: middle;"></span>
+                    <span style="display: inline-block; width: 73%; vertical-align: top;">
           <strong style="display: block; font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #777777;">{{ edu.specialization }}
               {% if edu.percentage_cgpa %}
                   <span style="font-size: 16px; color: #777777; font-weight: bold;">- {{ edu.percentage_cgpa }}%</span>
               {% endif %}
-              <span style=" font-size: {{ current_config.text_font_size|text_font_size }}px; color: #999999; width: 53%; display: inline-block; vertical-align: top;">
+          </strong>
+          {{ edu.institution_name }}
+        </span>
+        <span style=" font-size: {{ current_config.text_font_size|text_font_size }}px; color: #999999; width: 19%; display: inline-block; vertical-align: top;">
             {% if edu.is_pursuing %}
                 ({{ edu.start_date|date:"M Y" }} - Current)
             {% else %}
                 ({{ edu.start_date|date:"M Y" }} - {{ edu.end_date|date:"M Y" }})
             {% endif %}</span>
-          </strong>
-          {{ edu.institution_name }}
-        </span>
 
                 </li>
             {% endfor %}

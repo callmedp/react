@@ -5,7 +5,7 @@
         <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
             {% for interest in extracurricular %}
                 <li style="vertical-align: top; margin: 5px 0; width: 49.3%; display: inline-block;">
-                    <span style="width: 9px; height: 9px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
+                    <span style="width: 8px; height: 8px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
                     <span style="font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #333333; display: inline-block; vertical-align: top; width: 86%;">{{ interest }}</span>
                 </li>
             {% endfor %}

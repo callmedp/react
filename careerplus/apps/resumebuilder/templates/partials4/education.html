@@ -6,7 +6,7 @@
     <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
         {% for edu in education %}
             <li style="vertical-align: top; margin: 10px 0;">
-                <span style="width: 9px; height: 9px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
+                <span style="width: 8px; height: 8px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
                 <span style="display: inline-block; width: 93%; vertical-align: top;">
           {% if edu.percentage_cgpa %}
               <span style="font-size: 16px; color: #333333; font-weight: bold; float: right;">{{ edu.percentage_cgpa }}%</span>
