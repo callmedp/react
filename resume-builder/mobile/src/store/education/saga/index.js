@@ -1,4 +1,5 @@
 import {Api} from './Api';
+import {apiError} from '../../../Utils/apiError';
 
 import {takeLatest, put, call,select} from "redux-saga/effects";
 
@@ -41,7 +42,7 @@ function* fetchUserEducation(action) {
 
         const result = yield call(Api.fetchUserEducation, candidateId);
         if (result['error']) {
-            console.log('error');
+            apiError();
         }
         const {data: {results}} = result;
         results.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
@@ -77,7 +78,7 @@ function* fetchUserEducation(action) {
         yield put({type: Actions.SAVE_USER_EDUCATION, data: data})
         yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
-        console.log(e);
+        apiError();
     }
 }
 
@@ -90,13 +91,14 @@ function* updateUserEducation(action) {
         const {id} = userEducation;
         const result = yield call(id ? Api.updateUserEducation : Api.createUserEducation, userEducation, candidateId, id);
         if (result['error']) {
+            apiError();
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
         return resolve('User Education  Info saved successfully.');
 
     } catch (e) {
-        console.log('error', e);
+        apiError();
     }
 }
 
@@ -113,6 +115,7 @@ function* bulkUpdateUserEducation(action) {
         const result = yield call(Api.bulkUpdateUserEducation, list, candidateId);
 
         if (result['error']) {
+            apiError();
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
         else{
@@ -126,7 +129,7 @@ function* bulkUpdateUserEducation(action) {
         }
 
     } catch (e) {
-        console.log('error', e);
+        apiError();
     }
 }
 
@@ -143,7 +146,7 @@ function* deleteUserEducation(action) {
 
 
         if (result['error']) {
-            console.log(result['error'])
+            apiError();
         }
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_EDUCATION, id: educationId});
@@ -152,7 +155,7 @@ function* deleteUserEducation(action) {
         
 
     } catch (e) {
-        console.log('error', e);
+        apiError();
     }
 }
 

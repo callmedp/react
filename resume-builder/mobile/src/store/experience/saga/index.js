@@ -1,4 +1,5 @@
 import {Api} from './Api';
+import {apiError} from '../../../Utils/apiError';
 
 import {takeLatest, put, call,select} from "redux-saga/effects";
 
@@ -41,7 +42,7 @@ function* fetchUserExperience(action) {
 
         const result = yield call(Api.fetchUserExperience, candidateId);
         if (result['error']) {
-            console.log('error');
+            apiError();
         }
         let {data: {results}} = result;
         results.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
@@ -75,7 +76,7 @@ function* fetchUserExperience(action) {
         yield put({type: Actions.SAVE_USER_EXPERIENCE, data: data})
         yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
-        console.log(e);
+        apiError();
     }
 }
 
@@ -94,6 +95,7 @@ function* bulkUserExperienceUpdate(action) {
         const result = yield call(Api.bulkUpdateUserExperience, list, candidateId);
 
         if (result['error']) {
+            apiError();
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
         else{
@@ -108,7 +110,7 @@ function* bulkUserExperienceUpdate(action) {
         }
 
     } catch (e) {
-        console.log('error', e);
+        apiError();
     }
 }
 
@@ -125,7 +127,7 @@ function* deleteUserExperience(action) {
 
 
         if (result['error']) {
-            console.log(result['error'])
+            apiError();
         }
         yield put({type: Actions.REMOVE_EXPERIENCE, id: experienceId});
         yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
@@ -133,7 +135,7 @@ function* deleteUserExperience(action) {
         
 
     } catch (e) {
-        console.log('error', e);
+        apiError();
     }
 }
 
@@ -146,6 +148,7 @@ function* fetchJobTitlesAndSuggestions(action) {
 
 
         if (apiResult['error']) {
+            apiError();
             return reject(new SubmissionError({_error: apiResult['errorMessage']}));
         }
 
@@ -161,7 +164,7 @@ function* fetchJobTitlesAndSuggestions(action) {
         yield  put({type:uiAction.SAVE_SUGGESTIONS, data: {suggestions: result}});
         resolve([])
     } catch (e) {
-        console.log('error', e);
+        apiError();
     }
 }
 

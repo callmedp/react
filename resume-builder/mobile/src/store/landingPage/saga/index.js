@@ -1,4 +1,5 @@
 import {Api} from './Api';
+import {apiError} from '../../../Utils/apiError';
 import {takeLatest, call, put} from "redux-saga/effects";
 import {siteDomain} from "../../../Utils/domains";
 import * as Actions from '../actions/actionTypes';
@@ -11,14 +12,14 @@ function* getCandidateId() {
     try {
         const result = yield call(Api.getCandidateId);
         if (result['error']) {
-            console.log('error');
+            apiError();
 
         }
 
         localStorage.setItem('candidateId', JSON.parse((result.data && result.data['candidate_id'])) || '');
 
     } catch (e) {
-        console.log(e);
+        apiError();
     }
 }
 
@@ -34,7 +35,7 @@ function* loginCandidate(action) {
             result = yield call(Api.getInformation)
         }
         if (result['error']) {
-            console.log('error here and now returning');
+            apiError('login')
             window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
             return;
             //redirect code here
@@ -63,7 +64,7 @@ function* loginCandidate(action) {
         localStorage.setItem('token', (token) || '');
         yield put({type:uiAction.UPDATE_MAIN_PAGE_LOADER,payload:{mainloader: false}})
     } catch (e) {
-        console.log(e);
+        apiError();
     }
 }
 

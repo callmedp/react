@@ -1,4 +1,5 @@
 import {Api} from './Api';
+import {apiError} from '../../../Utils/apiError';
 
 import {takeLatest, put, call,select} from "redux-saga/effects";
 
@@ -38,7 +39,7 @@ function* fetchUserCourse(action) {
 
         const result = yield call(Api.fetchUserCourse, candidateId);
         if (result['error']) {
-            console.log('error');
+            apiError();
         }
         const {data: {results}} = result;
         results.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
@@ -65,7 +66,7 @@ function* fetchUserCourse(action) {
         yield put({type: Actions.SAVE_USER_COURSE, data: data})
         yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
-        console.log(e);
+        apiError();
     }
 }
 
@@ -80,6 +81,7 @@ function* updateUserCourse(action) {
 
         const result = yield call(id ? Api.updateUserCourse : Api.createUserCourse, userCourse, candidateId, id);
         if (result['error']) {
+            apiError();
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
         
@@ -89,7 +91,7 @@ function* updateUserCourse(action) {
         return resolve('User Course  Info saved successfully.');
 
     } catch (e) {
-        console.log('error', e);
+        apiError();
     }
 }
 
@@ -106,6 +108,7 @@ function* bulkUpdateUserCourse(action) {
         const result = yield call(Api.bulkUpdateUserCourse, list, candidateId);
 
         if (result['error']) {
+            apiError();
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
         else{
@@ -119,7 +122,7 @@ function* bulkUpdateUserCourse(action) {
         }
 
     } catch (e) {
-        console.log('error', e);
+        apiError();
     }
 }
 
@@ -136,7 +139,7 @@ function* deleteUserCourse(action) {
 
 
         if (result['error']) {
-            console.log(result['error'])
+            apiError();
         }
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_COURSE, id: courseId});
@@ -144,7 +147,7 @@ function* deleteUserCourse(action) {
         yield call(fetchUserCourse)
 
     } catch (e) {
-        console.log('error', e);
+        apiError();
     }
 }
 

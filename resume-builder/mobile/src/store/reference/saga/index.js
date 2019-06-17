@@ -1,4 +1,5 @@
 import {Api} from './Api';
+import {apiError} from '../../../Utils/apiError';
 
 import {takeLatest, put, call,select} from "redux-saga/effects";
 
@@ -39,7 +40,7 @@ function* fetchUserReference(action) {
 
         const result = yield call(Api.fetchUserReference, candidateId);
         if (result['error']) {
-            console.log('error');
+            apiError();
         }
         const {data: {results}} = result;
         results.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
@@ -64,7 +65,7 @@ function* fetchUserReference(action) {
         yield put({type: Actions.SAVE_USER_REFERENCE, data: data})
         yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
-        console.log(e);
+        apiError();
     }
 }
 
@@ -88,7 +89,7 @@ function* updateUserReference(action) {
         return resolve('User Reference have saved successfully.');
 
     } catch (e) {
-        console.log('error', e);
+        apiError();
     }
 }
 
@@ -105,6 +106,7 @@ function* bulkUpdateUserReference(action) {
         const result = yield call(Api.bulkUpdateUserReference, list, candidateId);
 
         if (result['error']) {
+            apiError();
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
         else{
@@ -119,7 +121,7 @@ function* bulkUpdateUserReference(action) {
         }
 
     } catch (e) {
-        console.log('error', e);
+        apiError();
     }
 }
 
@@ -136,14 +138,14 @@ function* deleteUserReference(action) {
 
 
         if (result['error']) {
-            console.log(result['error'])
+            apiError();
         }
         yield put({type: Actions.REMOVE_REFERENCE, id: referenceId});
         yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
         yield call(fetchUserReference)
 
     } catch (e) {
-        console.log('error', e);
+        apiError();
     }
 }
 

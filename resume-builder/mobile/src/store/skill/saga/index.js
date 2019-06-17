@@ -1,4 +1,5 @@
 import {Api} from './Api';
+import {apiError} from '../../../Utils/apiError';
 
 import {takeLatest, put, call,select} from "redux-saga/effects";
 
@@ -37,7 +38,7 @@ function* fetchUserSkill(action) {
 
         const result = yield call(Api.fetchUserSkill, candidateId);
         if (result['error']) {
-            console.log('error');
+            apiError();
         }
         const {data: {results}} = result;
         results.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
@@ -67,7 +68,7 @@ function* fetchUserSkill(action) {
         yield put({type: Actions.SAVE_USER_SKILL, data: data})
         yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
-        console.log(e);
+        apiError();
     }
 }
 
@@ -92,7 +93,7 @@ function* fetchUserSkill(action) {
 //         return resolve('User Skill  Info saved successfully.');
 
 //     } catch (e) {
-//         ////console.log('error', e);
+//         ////apiError();
 //     }
 // }
 
@@ -123,7 +124,7 @@ function* bulkSaveUserSkill(action) {
         }
 
     } catch (e) {
-        console.log('error', e);
+        apiError();
     }
 }
 
@@ -138,7 +139,7 @@ function* deleteUserSkill(action) {
 
         const result = yield call(Api.deleteUserSkill, candidateId, skillId);
         if (result['error']) {
-            console.log(result['error'])
+            apiError();
         }
         else{
             yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
@@ -151,7 +152,7 @@ function* deleteUserSkill(action) {
         
 
     } catch (e) {
-        console.log('error', e);
+        apiError();
     }
 }
 

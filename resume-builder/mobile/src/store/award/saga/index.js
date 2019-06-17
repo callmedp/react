@@ -1,4 +1,5 @@
 import {Api} from './Api';
+import {apiError} from '../../../Utils/apiError';
 
 import {takeLatest, put, call,select} from "redux-saga/effects";
 
@@ -94,7 +95,7 @@ function* bulkUpdateUserAward(action) {
         }
 
     } catch (e) {
-        console.log('error', e);
+        apiError() 
     }
 }
 
@@ -111,7 +112,7 @@ function* deleteUserAward(action) {
 
 
         if (result['error']) {
-            console.log(result['error'])
+            apiError();
         }
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_AWARD, id: awardId});
@@ -120,7 +121,7 @@ function* deleteUserAward(action) {
         
 
     } catch (e) {
-        console.log('error', e);
+        apiError();
     }
 }
 

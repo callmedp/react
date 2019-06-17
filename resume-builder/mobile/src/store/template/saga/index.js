@@ -1,7 +1,8 @@
 import {call, takeLatest, put,select,all} from 'redux-saga/effects'
 
 import * as Actions from '../actions/actionTypes'
-import {Api} from "./Api";
+import {Api} from './Api';
+import {apiError} from '../../../Utils/apiError';
 import * as uiAction from '../../ui/actions/actionTypes';
 import {SAVE_THUMBNAIL_IMAGES, SET_CUSTOMIZATION,SAVE_TEMPLATE_IMAGES} from "../actions/actionTypes";
 import {SubmissionError} from 'redux-form'
@@ -24,7 +25,7 @@ function* fetchTemplate(action) {
 
         const result = yield call(Api.fetchTemplate, candidateId,selected_template);
         if (result['error']) {
-            console.log('error');
+            apiError();
         }
         let w = window,
             d = document,
@@ -56,7 +57,7 @@ function* fetchTemplate(action) {
         yield put({type: Actions.SAVE_TEMPLATE, data:{html : zoomOut,zoomInHtml:zoomIn}})
         yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
-        console.log(e);
+        apiError();
     }
 }
 
@@ -67,6 +68,7 @@ function* customizeTemplate(action) {
         const {payload:{resolve,reject,template_data}} = action;
         const result = yield call(Api.customizeTemplate, candidateId, template_data.template, template_data);
         if (result['error']) {
+            apiError();
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
@@ -87,7 +89,7 @@ function* customizeTemplate(action) {
         return resolve("Customize Done")
 
     } catch (e) {
-        console.log(e);
+        apiError();
     }
 }
 
@@ -98,7 +100,7 @@ function* reorderSection(action) {
         const {payload: {templateId, info}} = action;
         const result = yield call(Api.reorderSection, candidateId, templateId, info);
         if (result['error']) {
-            console.log('error');
+            apiError();
         }
         let {data: {data}} = result;
 
@@ -121,7 +123,7 @@ function* reorderSection(action) {
 
     } catch
         (e) {
-        console.log(e);
+        apiError();
     }
 }
 
@@ -139,7 +141,7 @@ function* fetchThumbnailImages(action) {
             call(Api.fetchTemplateImages, candidateId, 5, query),
         ]);
         if (result['error']) {
-            console.log('error');
+            apiError();
         }
         const images = result.map(el => el.data);
         yield  put({type: SAVE_THUMBNAIL_IMAGES, data: {thumbnailImages: images}});
@@ -149,7 +151,7 @@ function* fetchThumbnailImages(action) {
         // yield call(fetchTemplate)
 
     } catch (e) {
-        console.log(e);
+        apiError();
     }
 }
 
@@ -162,6 +164,7 @@ function* fetchTemplateImages(action) {
 
         const result = yield call(Api.fetchTemplateImages, candidateId, template_id);
         if (result['error']) {
+            apiError();
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
         const images = result['data']
@@ -171,7 +174,7 @@ function* fetchTemplateImages(action) {
         return resolve("Image Received")
 
     } catch (e) {
-        console.log(e);
+        apiError();
     }
 }
 
@@ -183,7 +186,7 @@ function* fetchDefaultCustomization(action) {
         const result = yield call(Api.fetchDefaultCustomization, candidateId, templateId);
 
         if (result['error']) {
-            console.log('error');
+            apiError();
         }
         let {data} = result;
         let {entity_position,template_no} = data
@@ -199,7 +202,7 @@ function* fetchDefaultCustomization(action) {
         yield put({type: SET_CUSTOMIZATION, data: data});
 
     } catch (e) {
-        console.log(e);
+        apiError();
     }
 }
 

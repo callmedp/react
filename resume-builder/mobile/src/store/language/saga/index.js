@@ -1,4 +1,5 @@
 import {Api} from './Api';
+import {apiError} from '../../../Utils/apiError';
 
 import {takeLatest, put, call,select} from "redux-saga/effects";
 
@@ -37,7 +38,7 @@ function* fetchUserLanguage(action) {
 
         const result = yield call(Api.fetchUserLanguage, candidateId);
         if (result['error']) {
-            console.log('error');
+            apiError();
         }
         let {data: {results}} = result;
         results.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
@@ -68,7 +69,7 @@ function* fetchUserLanguage(action) {
         yield put({type: Actions.SAVE_USER_LANGUAGE, data: data})
         yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
-        console.log(e);
+        apiError();
     }
 }
 
@@ -90,7 +91,7 @@ function* updateUserLanguage(action) {
         return resolve('User Language  Info saved successfully.');
 
     } catch (e) {
-        console.log('error', e);
+        apiError();
     }
 }
 
@@ -107,6 +108,7 @@ function* bulkUpdateUserLanguage(action) {
         const result = yield call(Api.bulkUpdateUserLanguage, list, candidateId);
 
         if (result['error']) {
+            apiError();
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
         else{
@@ -120,7 +122,7 @@ function* bulkUpdateUserLanguage(action) {
         }
 
     } catch (e) {
-        console.log('error', e);
+        apiError();
     }
 }
 
@@ -136,7 +138,7 @@ function* deleteUserLanguage(action) {
 
 
         if (result['error']) {
-            console.log(result['error'])
+            apiError();
         }
         
         yield put({type: Actions.REMOVE_LANGUAGE, id: languageId});
@@ -144,7 +146,7 @@ function* deleteUserLanguage(action) {
         yield call(fetchUserLanguage)
 
     } catch (e) {
-        console.log('error', e);
+        apiError();
     }
 }
 

@@ -1,4 +1,5 @@
 import {Api} from './Api';
+import {apiError} from '../../../Utils/apiError';
 
 import {takeLatest, put, call, select} from "redux-saga/effects";
 
@@ -9,7 +10,7 @@ import moment from 'moment'
 
 import {SubmissionError} from 'redux-form'
 
-import {interestList} from '../../../Utils/interestList'
+
 
 function modifyPersonalInfo(data) {
     let {date_of_birth, gender, extracurricular,image} = data;
@@ -41,10 +42,11 @@ function* getPersonalDetails(action) {
             yield put({type:uiAction.UPDATE_MAIN_PAGE_LOADER,payload:{mainloader: false}})
             return;
         }
+        
 
         const result = yield call(Api.fetchPersonalInfo, candidateId);
         if (result['error']) {
-            console.log('error');
+            apiError();
         }
         let {data} = result;
         data =modifyPersonalInfo(data)
@@ -53,7 +55,7 @@ function* getPersonalDetails(action) {
         yield put({type:uiAction.UPDATE_MAIN_PAGE_LOADER,payload:{mainloader: false}})
 
     } catch (e) {
-        console.log(e);
+        apiError();
     }
 }
 
@@ -80,6 +82,7 @@ function* updatePersonalDetails(action) {
         else result = yield call(Api.updatePersonalData, personalDetails, candidateId);
         
         if (result['error']) {
+            apiError()
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
@@ -93,7 +96,7 @@ function* updatePersonalDetails(action) {
 
     } catch (e) {
 
-        console.log('error', e);
+        apiError();
     }
 }
 
@@ -114,7 +117,7 @@ function* getInterestList(action){
         return resolve(newResult)
 
     }catch (e) {
-        console.log(e);
+        apiError();
     }
 }
 
@@ -147,8 +150,7 @@ function* fetchImageUrl(action) {
 
 
     } catch (e) {
-
-        console.log('error', e);
+        apiError();
     }
 }
 
@@ -159,6 +161,7 @@ function* updateEntityPreference(action) {
         yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
         const result = yield call(Api.updateEntityPreference, {entity_preference_data}, candidateId);
         if (result['error']) {
+            apiError();
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
@@ -169,7 +172,7 @@ function* updateEntityPreference(action) {
         return resolve("ENtity Updated")
 
     } catch (e) {
-        console.log('error', e);
+        apiError();
     }
 }
 

@@ -1,4 +1,5 @@
 import {Api} from './Api';
+import {apiError} from '../../../Utils/apiError';
 
 import {takeLatest, put, call,select} from "redux-saga/effects";
 
@@ -41,7 +42,7 @@ function* fetchUserProject(action) {
 
         const result = yield call(Api.fetchUserProject, candidateId);
         if (result['error']) {
-            console.log('error');
+            apiError();
         }
         const {data: {results}} = result;
         results.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
@@ -69,7 +70,7 @@ function* fetchUserProject(action) {
         yield put({type: Actions.SAVE_USER_PROJECT, data: data})
         yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
     } catch (e) {
-        console.log(e);
+        apiError();
     }
 }
 
@@ -85,6 +86,7 @@ function* fetchUserProject(action) {
 
         const result = yield call(id ? Api.updateUserProject : Api.createUserProject, userProject, candidateId, id);
         if (result['error']) {
+            apiError();
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
@@ -93,7 +95,7 @@ function* fetchUserProject(action) {
         return resolve('User Project have saved successfully.');
 
     } catch (e) {
-        console.log('error', e);
+        apiError();
     }
 }
 
@@ -110,6 +112,7 @@ function* bulkUpdateUserProject(action) {
         const result = yield call(Api.bulkUpdateUserProject, list, candidateId);
 
         if (result['error']) {
+            apiError();
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
         else{
@@ -123,7 +126,7 @@ function* bulkUpdateUserProject(action) {
         }
 
     } catch (e) {
-        console.log('error', e);
+        apiError();
     }
 }
 
@@ -140,7 +143,7 @@ function* deleteUserProject(action) {
 
 
         if (result['error']) {
-            console.log(result['error'])
+            apiError();
         }
         yield put({type: Actions.REMOVE_PROJECT, id: projectId});
         yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
@@ -148,7 +151,7 @@ function* deleteUserProject(action) {
         yield call(fetchUserProject)
 
     } catch (e) {
-        console.log('error', e);
+        apiError();
     }
 }
 

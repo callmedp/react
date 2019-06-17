@@ -1,4 +1,5 @@
 import {Api} from './Api';
+import {apiError} from '../../../Utils/apiError';
 
 import {takeLatest, put, call, select} from "redux-saga/effects";
 
@@ -14,13 +15,13 @@ function* fetchProductIds(action) {
         yield put({type:uiAction.UPDATE_MAIN_PAGE_LOADER,payload:{mainloader: true}})
         const result = yield call(Api.fetchProductIds);
         if (result['error']) {
-            console.log('error');
+            apiError();
         }
         const {data: {results}} = result;
         yield put({type: Actions.SAVE_PRODUCT_IDS, data: results})
         yield put({type:uiAction.UPDATE_MAIN_PAGE_LOADER,payload:{mainloader: false}})
     } catch (e) {
-        console.log(e);
+        apiError();
     }
 }
 
@@ -30,6 +31,7 @@ function* addToCart(action) {
         const {payload: {data, resolve, reject}} = action
         const result = yield call(Api.addToCart, data);
         if (result['error']) {
+            apiError();
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
         else{
@@ -40,7 +42,7 @@ function* addToCart(action) {
 
 
     } catch (e) {
-        console.log(e);
+        apiError();
     }
 }
 
