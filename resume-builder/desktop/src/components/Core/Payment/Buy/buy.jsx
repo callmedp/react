@@ -86,7 +86,7 @@ export class Buy extends Component {
             infinite: true,
             speed: 500,
             slidesToShow: 3,
-            slidesToScroll: 3,
+            slidesToScroll: 1,
         };
         const {userInfo: {first_name, selected_template}, ui: {loader}, template: {templateImage, thumbnailImages},productIds} = this.props;
         const {userInfo} = this.props;

@@ -58,6 +58,12 @@ function* loginCandidate(action) {
             const entityObj = entity_status.find(el => el['display_value'] === key);
 
             if (key === 'personalInfo') {
+                candidate_profile[key] = {
+                    ...candidate_profile[key],
+                    ...{
+                        "location": ''
+                    }
+                }
                 yield put({type: SAVE_USER_INFO, data: candidate_profile[key]})
             }
 
@@ -70,7 +76,7 @@ function* loginCandidate(action) {
                             "entity_preference_data": entityList
                         }
                     };
-                    localStorage.setItem(key, (JSON.stringify(candidate_profile[key])) || '')
+                    localStorage.setItem(key, (JSON.stringify(candidate_profile[key])) || '');
                     localStorage.setItem('summary', '')
                 } else localStorage.setItem(key, (JSON.stringify(candidate_profile[key])) || '');
             }
