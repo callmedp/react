@@ -3,18 +3,23 @@ import {takeLatest, call, put} from "redux-saga/effects";
 import {siteDomain} from "../../../Utils/domains";
 import * as Actions from '../actions/actionTypes';
 import {LOGIN_CANDIDATE} from "../actions/actionTypes";
+
 import {UPDATE_UI} from '../../ui/actions/actionTypes'
 
 import {entityList} from "../../../Utils/formCategoryList";
 import {SAVE_USER_INFO} from "../../personalInfo/actions/actionTypes";
+
+import {Toast} from "../../../services/ErrorToast";
 
 
 function* getCandidateId() {
     try {
         const result = yield call(Api.getCandidateId);
         if (result['error']) {
-            console.log('error');
-
+            Toast.fire({
+                type: 'error',
+                title: result['errorMessage']
+            });
         }
 
         localStorage.setItem('candidateId', JSON.parse((result.data && result.data['candidate_id'])) || '');

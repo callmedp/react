@@ -9,7 +9,7 @@ import {
     SAVE_THUMBNAIL_IMAGES
 } from "../actions/actionTypes";
 import {SHOW_ALERT_MODAL} from "../../ui/actions/actionTypes"
-
+import {Toast} from "../../../services/ErrorToast";
 
 function* fetchTemplate(action) {
     try {
@@ -17,7 +17,10 @@ function* fetchTemplate(action) {
         yield put({type: UPDATE_UI, data: {loader: true}});
         const result = yield call(Api.fetchTemplate, candidateId, action.payload.template);
         if (result['error']) {
-            console.log('error');
+            Toast.fire({
+                type: 'error',
+                title: result['errorMessage']
+            });
         }
         yield put({type: UPDATE_UI, data: {loader: false}});
 
@@ -34,7 +37,10 @@ function* customizeTemplate(action) {
         const {payload} = action;
         const result = yield call(Api.customizeTemplate, candidateId, payload.template, payload);
         if (result['error']) {
-            console.log('error');
+            Toast.fire({
+                type: 'error',
+                title: result['errorMessage']
+            });
         }
 
 
@@ -65,14 +71,14 @@ function* fetchSelectedTemplateImage(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
         yield put({type: UPDATE_UI, data: {loader: true}});
-        const {payload:{templateId,resolve,reject,isModal}} = action;
+        const {payload: {templateId, resolve, reject, isModal}} = action;
         const result = yield call(Api.fetchTemplateImages, candidateId, templateId)
 
         if (result['error']) {
             return reject("API request Failed")
 
         }
-        if(isModal){
+        if (isModal) {
             yield  put({type: SAVE_TEMPLATE_IMAGES, data: {modalTemplateImage: result['data']}});
             yield put({type: UPDATE_UI, data: {loader: false}});
             return resolve("Got the Modal Template Selected")
@@ -105,7 +111,10 @@ function* fetchThumbnailImages(action) {
             call(Api.fetchTemplateImages, candidateId, 5, query),
         ]);
         if (result['error']) {
-            console.log('error');
+            Toast.fire({
+                type: 'error',
+                title: result['errorMessage']
+            });
         }
         const images = result.map(el => el.data);
         yield  put({type: SAVE_THUMBNAIL_IMAGES, data: {thumbnailImages: images}});
@@ -128,7 +137,10 @@ function* fetchDefaultCustomization(action) {
         const result = yield call(Api.fetchDefaultCustomization, candidateId, templateId);
 
         if (result['error']) {
-            console.log('error');
+            Toast.fire({
+                type: 'error',
+                title: result['errorMessage']
+            });
         }
         let {data} = result;
 
@@ -163,19 +175,20 @@ function* reorderSection(action) {
         const result = yield call(Api.reorderSection, candidateId, templateId, info);
 
         if (result['error']) {
-            console.log('error');
-        }
+  Toast.fire({
+                type: 'error',
+                title: result['errorMessage']
+            });        }
         let {data: {data}} = result;
         let entity_position = data && eval(data) || []
-        if(entity_position[info.pos-1].entity_id === info.entity_id){
-            yield  put({type: SHOW_ALERT_MODAL, data: {alertModal: true, alertType:'error'}});
-        } 
-           
+        if (entity_position[info.pos - 1].entity_id === info.entity_id) {
+            yield  put({type: SHOW_ALERT_MODAL, data: {alertModal: true, alertType: 'error'}});
+        }
+
         data = {
             entity_position: data
         }
         yield put({type: SET_CUSTOMIZATION, data: data});
-
 
 
         yield call(fetchTemplate, {payload: {template: templateId}})

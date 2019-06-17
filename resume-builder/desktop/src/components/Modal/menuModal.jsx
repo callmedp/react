@@ -118,7 +118,6 @@ export default class MenuModal extends React.Component {
                         </div>
 
                         <div className="flex-container menu-btm-button">
-                            <button className="blue-button mr-10" type="button" disabled={loader ? true : false} onClick={closeMenuModal}>Cancel</button>
                             <button className="orange-button" type="submit"onClick={this.saveMenuItems}>
                                 Done
                                 {loader ?

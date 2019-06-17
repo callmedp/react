@@ -6,12 +6,16 @@ import * as Actions from '../actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
 
+import {Toast} from "../../../services/ErrorToast";
 
 function* fetchProductIds(action) {
     try {
         const result = yield call(Api.fetchProductIds);
         if (result['error']) {
-            console.log('error');
+            Toast.fire({
+                type: 'error',
+                title: result['errorMessage']
+            });
         }
         const {data: {results}} = result;
         yield put({type: Actions.SAVE_PRODUCT_IDS, data: results})

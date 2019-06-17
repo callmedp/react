@@ -4,19 +4,20 @@ import {takeLatest, put, call, select} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
 import {UPDATE_UI} from '../../ui/actions/actionTypes'
-
+import {Toast} from '../../../services/ErrorToast'
 import {SubmissionError} from 'redux-form'
 import {initialState} from '../reducer/index'
+
 
 
 function modifyAwards(awards) {
     return (awards || []).map(el => {
         return {
             ...el,
-        ...{
-            date: (el && el.date && {value: el.date, label: el.date}) || ''
+            ...{
+                date: (el && el.date && {value: el.date, label: el.date}) || ''
+            }
         }
-    }
     })
 }
 
@@ -34,11 +35,16 @@ function* fetchUserAward(action) {
 
         yield put({type: UPDATE_UI, data: {loader: true}});
 
+
         const result = yield call(Api.fetchUserAward, candidateId);
-        if (result['error']) {
-            console.log('error');
-        }
+
         yield put({type: UPDATE_UI, data: {loader: false}})
+
+
+        if (result['error']) {
+          console.log(result['error'])
+        }
+
 
         let {data: {results}} = result;
         if (!results.length) {
@@ -100,6 +106,10 @@ function* handleAwardSwap(action) {
         yield put({type: UPDATE_UI, data: {loader: false}});
 
         if (result['error']) {
+            Toast.fire({
+                type: 'error',
+                title: result['errorMessage']
+            });
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
@@ -136,7 +146,10 @@ function* deleteUserAward(action) {
 
 
         if (result['error']) {
-            console.log(result['error'])
+            Toast.fire({
+                type: 'error',
+                title: result['errorMessage']
+            });
         }
         // yield call(fetchUserLanguage)
         localStorage.removeItem('award');

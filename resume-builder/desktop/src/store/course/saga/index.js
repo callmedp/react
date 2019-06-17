@@ -9,6 +9,8 @@ import {SubmissionError} from 'redux-form'
 import {UPDATE_UI} from '../../ui/actions/actionTypes'
 import {initialState} from "../reducer/index"
 
+import {Toast} from "../../../services/ErrorToast";
+
 
 function modifyCourses(courses) {
     return (courses || []).map(el => {
@@ -40,7 +42,10 @@ function* fetchUserCourse(action) {
 
         const result = yield call(Api.fetchUserCourse, candidateId);
         if (result['error']) {
-            console.log('error');
+            Toast.fire({
+                type: 'error',
+                title: result['errorMessage']
+            });
         }
         yield put({type: UPDATE_UI, data: {loader: false}});
 
@@ -139,7 +144,10 @@ function* deleteUserCourse(action) {
 
 
         if (result['error']) {
-            console.log(result['error'])
+            Toast.fire({
+                type: 'error',
+                title: result['errorMessage']
+            });
         }
         // yield call(fetchUserLanguage)
         localStorage.removeItem('course');

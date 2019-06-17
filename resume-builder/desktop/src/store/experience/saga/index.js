@@ -4,11 +4,12 @@ import {takeLatest, put, call, select} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
 
+
 import {SubmissionError} from 'redux-form'
 
 import {UPDATE_UI, SAVE_SUGGESTIONS} from '../../ui/actions/actionTypes'
 import {initialState} from '../reducer/index'
-
+import {Toast} from "../../../services/ErrorToast";
 
 function modifyExperiences(experiences) {
     return (experiences || []).map(el => {
@@ -40,7 +41,10 @@ function* fetchUserExperience(action) {
 
         const result = yield call(Api.fetchUserExperience, candidateId);
         if (result['error']) {
-            console.log('error');
+            Toast.fire({
+                type: 'error',
+                title: result['errorMessage']
+            });
         }
         yield put({type: UPDATE_UI, data: {loader: false}});
 
@@ -141,7 +145,10 @@ function* deleteUserExperience(action) {
 
 
         if (result['error']) {
-            console.log(result['error'])
+            Toast.fire({
+                type: 'error',
+                title: result['errorMessage']
+            });
         }
         localStorage.removeItem('experience');
 

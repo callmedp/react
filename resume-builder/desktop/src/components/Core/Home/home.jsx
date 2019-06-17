@@ -108,7 +108,7 @@ class Home extends Component {
                     <LoaderPage/>
                 }
                 <Header page={'home'} userName={first_name} getclass={this.state.scrolled ? 'color-change' : ''}/>
-                <Banner/>
+                <Banner userName={first_name}/>
                 <section className="section-container">
                     <h2>Resume builder advantages</h2>
                     <strong className="section-container--sub-head">Resume builder advantages which will make your

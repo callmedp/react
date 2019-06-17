@@ -7,7 +7,7 @@ import * as Actions from '../actions/actionTypes';
 import moment from 'moment'
 
 import {SubmissionError} from 'redux-form'
-
+import {Toast} from "../../../services/ErrorToast";
 import {interestList} from '../../../Utils/interestList'
 import {UPDATE_UI} from "../../ui/actions/actionTypes";
 
@@ -60,7 +60,10 @@ function* getPersonalDetails(action) {
 
         const result = yield call(Api.fetchPersonalInfo, candidateId);
         if (result['error']) {
-            console.log('error');
+            Toast.fire({
+                type: 'error',
+                title: result['errorMessage']
+            });
         }
         yield put({type: UPDATE_UI, data: {loader: false}})
 

@@ -11,6 +11,7 @@ import {proficiencyList} from "../../../Utils/proficiencyList";
 
 import {UPDATE_UI} from '../../ui/actions/actionTypes'
 import {initialState} from "../reducer/index"
+import  {Toast} from "../../../services/ErrorToast";
 
 function modifyEducation(data) {
     data = {
@@ -24,7 +25,7 @@ function modifyEducation(data) {
             })
         }
     };
-    return data.list.length ? data : initialState 
+    return data.list.length ? data : initialState
 }
 
 function* fetchUserEducation(action) {
@@ -44,7 +45,10 @@ function* fetchUserEducation(action) {
 
         const result = yield call(Api.fetchUserEducation, candidateId);
         if (result['error']) {
-            console.log('error');
+            Toast.fire({
+                type: 'error',
+                title: result['errorMessage']
+            });
         }
 
         yield put({type: UPDATE_UI, data: {loader: false}})
@@ -141,7 +145,10 @@ function* deleteUserEducation(action) {
 
 
         if (result['error']) {
-            console.log(result['error'])
+            Toast.fire({
+                type: 'error',
+                title: result['errorMessage']
+            });
         }
         localStorage.removeItem('education');
 

@@ -8,7 +8,7 @@ import {SubmissionError} from 'redux-form'
 import {UPDATE_UI} from "../../ui/actions/actionTypes";
 import {courseTypeList} from "../../../Utils/courseTypeList";
 import {initialState} from '../reducer';
-
+import {Toast} from "../../../services/ErrorToast";
 
 function modifyLanguage(data) {
     data = {
@@ -41,7 +41,10 @@ function* fetchUserLanguage(action) {
 
         const result = yield call(Api.fetchUserLanguage, candidateId);
         if (result['error']) {
-            console.log('error');
+            Toast.fire({
+                type: 'error',
+                title: result['errorMessage']
+            });
         }
 
         yield put({type: UPDATE_UI, data: {loader: false}})
@@ -149,7 +152,10 @@ function* deleteUserLanguage(action) {
 
 
         if (result['error']) {
-            console.log(result['error'])
+            Toast.fire({
+                type: 'error',
+                title: result['errorMessage']
+            });
         }
 
         localStorage.removeItem('language');

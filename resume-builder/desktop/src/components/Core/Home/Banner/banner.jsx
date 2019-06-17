@@ -37,12 +37,14 @@ export default class Banner extends Component {
 
 
     render() {
+        const {userName} = this.props;
         return (
+
             <div className="banner-bg">
                 <div className="banner-content">
                     <h1>Resume Builder <strong>by Experts</strong></h1>
                     <p className="banner-content--txt">
-                        <strong>Amit,</strong> secure the job you want with our resume builder
+                        <strong>{userName || 'Hello'},</strong> secure the job you want with our resume builder
                     </p>
                     <ul>
                         <li> <span className="icon-builderexpert1"></span><strong>33% higher</strong> chances of shortlisting</li>
@@ -55,7 +57,7 @@ export default class Banner extends Component {
                 </div>
                 <div className="banner-slider">
                     <img alt={"Banner"}
-                         src={`${this.staticUrl}react/assets/images/home-banner-slider.png`}
+                         src={`${this.staticUrlstaticUrl}react/assets/images/home-banner-slider.png`}
                          className="img-responsive"/>
                 </div>
             </div>

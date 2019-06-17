@@ -4,6 +4,7 @@ import {takeLatest, put, call, select} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
 
+import {Toast} from "../../../services/ErrorToast";
 import {SubmissionError} from 'redux-form'
 import {UPDATE_UI} from "../../ui/actions/actionTypes";
 import {initialState} from '../reducer';
@@ -26,7 +27,10 @@ function* fetchUserProject(action) {
 
         const result = yield call(Api.fetchUserProject, candidateId);
         if (result['error']) {
-            console.log('error');
+            Toast.fire({
+                type: 'error',
+                title: result['errorMessage']
+            });
         }
 
         yield put({type: UPDATE_UI, data: {loader: false}});
@@ -131,7 +135,10 @@ function* deleteUserProject(action) {
 
 
         if (result['error']) {
-            console.log(result['error'])
+            Toast.fire({
+                type: 'error',
+                title: result['errorMessage']
+            });
         }
         localStorage.removeItem('project');
 

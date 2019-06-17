@@ -2,7 +2,7 @@ const rewire = require('rewire');
 var sass = require("node-sass");
 var sassUtils = require("node-sass-utils")(sass);
 const defaults = rewire('react-scripts/scripts/build.js');
-
+var BundleTracker = require('webpack-bundle-tracker');
 
 let config = defaults.__get__('config');
 
@@ -14,11 +14,16 @@ config.optimization.splitChunks = {
 // Move runtime into bundle instead of separate file
 config.optimization.runtimeChunk = false;
 
-// JS
-config.output.filename = '../../../careerplus/static_core/react/dist/mobile/main.js';
-// CSS. "5" is MiniCssPlugin
-config.plugins[5].options.filename = '../../../careerplus/static_core/react/dist/mobile/main.css';
+const currentTimeStamp = +new Date();
 
+// JS
+config.output.filename = `../../../careerplus/static_core/react/dist/mobile/main-${currentTimeStamp}.js`;
+// CSS. "5" is MiniCssPlugin
+config.plugins[5].options.filename = `../../../careerplus/static_core/react/dist/mobile/main-${currentTimeStamp}.css`;
+config.plugins.push(new BundleTracker({
+    path: __dirname,
+    filename: '../../../webpack-mobile-stats.json'
+}))
 
 const result = {
     'staticUrl': process.env.REACT_APP_ENV === 'staging' ?

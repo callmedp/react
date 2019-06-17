@@ -9,7 +9,7 @@ import {proficiencyList} from "../../../Utils/proficiencyList";
 import {UPDATE_UI} from "../../ui/actions/actionTypes";
 import {courseTypeList} from "../../../Utils/courseTypeList";
 import {initialState} from '../reducer';
-
+import {Toast} from "../../../services/ErrorToast";
 
 function modifySkill(data) {
     data = {
@@ -43,7 +43,10 @@ function* fetchUserSkill(action) {
         const result = yield call(Api.fetchUserSkill, candidateId);
 
         if (result['error']) {
-            console.log('error');
+            Toast.fire({
+                type: 'error',
+                title: result['errorMessage']
+            });
         }
 
         yield put({type: UPDATE_UI, data: {loader: false}})
@@ -144,7 +147,10 @@ function* deleteUserSkill(action) {
 
 
         if (result['error']) {
-            console.log(result['error'])
+            Toast.fire({
+                type: 'error',
+                title: result['errorMessage']
+            });
         }
 
 
