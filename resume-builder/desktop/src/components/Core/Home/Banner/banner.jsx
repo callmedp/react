@@ -57,7 +57,7 @@ export default class Banner extends Component {
                 </div>
                 <div className="banner-slider">
                     <img alt={"Banner"}
-                         src={`${this.staticUrlstaticUrl}react/assets/images/home-banner-slider.png`}
+                         src={`${this.staticUrl}react/assets/images/home-banner-slider.png`}
                          className="img-responsive"/>
                 </div>
             </div>
