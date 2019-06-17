@@ -1,7 +1,7 @@
 {% load static compress resume_tags %}
 {% if extracurricular|length >= 1 %}
   <div style="display: block; vertical-align: top; margin-bottom: 30px; word-break: break-word;">
-    <strong style="display: block; text-transform: uppercase; color: #000000; font-weight: normal; font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px; margin-top: 0">Interest</strong>
+    <strong style="display: block; text-transform: uppercase; color: #000000; font-weight: normal; font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px; margin-top: 0">Interests/Hobbies</strong>
     <p style="color: #333333; margin-top: 15px; font-size:{{ current_config.text_font_size|text_font_size }}px ;">
     {% for interest in extracurricular %}
       {{interest}} 
