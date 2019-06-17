@@ -19,7 +19,7 @@ function* fetchUserSkill(action) {
         }
 
         if (localStorage.getItem('skill')) {
-            let local_data = JSON.parse(localStorage.getItem('skill')).length ? 
+            let local_data =  JSON.parse(localStorage.getItem('skill')) && JSON.parse(localStorage.getItem('skill')).length ? 
                             JSON.parse(localStorage.getItem('skill')) :
                             [
                                 {

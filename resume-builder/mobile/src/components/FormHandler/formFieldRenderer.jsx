@@ -180,7 +180,9 @@ export const renderSelect = ({
                     <i className={iconClass}></i>
                 </span>
                 </div>
-                <select {...input} className={className}
+                <select {...input}
+                         className={className}
+                         value={input.value}
                         onBlur={() => {
                             input.onBlur(input.value)
                         }}

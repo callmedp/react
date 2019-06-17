@@ -20,7 +20,7 @@ function* fetchUserReference(action) {
 
         if (localStorage.getItem('reference')) {
 
-            let local_data = JSON.parse(localStorage.getItem('reference')).length ? 
+            let local_data =JSON.parse(localStorage.getItem('reference')) && JSON.parse(localStorage.getItem('reference')).length ? 
                             JSON.parse(localStorage.getItem('reference')) :
                             [
                                 {

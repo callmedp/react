@@ -20,7 +20,7 @@ function* fetchUserProject(action) {
         
 
         if (localStorage.getItem('project')) {
-            let local_data = JSON.parse(localStorage.getItem('project')).length ? 
+            let local_data = JSON.parse(localStorage.getItem('project')) && JSON.parse(localStorage.getItem('project')).length ? 
                             JSON.parse(localStorage.getItem('project')) :
                             [
                                 {

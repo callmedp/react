@@ -20,7 +20,7 @@ function* fetchUserExperience(action) {
 
         if (localStorage.getItem('experience')) {
 
-            let local_data = JSON.parse(localStorage.getItem('experience')).length ? 
+            let local_data = JSON.parse(localStorage.getItem('experience')) && JSON.parse(localStorage.getItem('experience')).length ? 
                             JSON.parse(localStorage.getItem('experience')) :
                             [{
                                 "candidate_id": '',

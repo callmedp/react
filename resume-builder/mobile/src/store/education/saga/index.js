@@ -19,7 +19,7 @@ function* fetchUserEducation(action) {
         }
         if (localStorage.getItem('education')) {
 
-            let local_data = JSON.parse(localStorage.getItem('education')).length ? 
+            let local_data = JSON.parse(localStorage.getItem('education')) && JSON.parse(localStorage.getItem('education')).length ? 
                             JSON.parse(localStorage.getItem('education')) :
                             [
                                 {

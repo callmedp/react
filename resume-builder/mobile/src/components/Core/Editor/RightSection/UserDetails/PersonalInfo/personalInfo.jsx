@@ -278,14 +278,13 @@ const mapDispatchToProps = (dispatch) => {
     return {
         "onSubmit": (personalDetails, imageURL,flag) => {
             let { date_of_birth, extracurricular,gender,image} = personalDetails;
-            image = !flag ? imageURL : image
             let interest = extracurricular
             interest =  ((interest|| []).filter((item)=>item !==null).map((item)=>item.value)).join(",")
             personalDetails = {
                 ...personalDetails,
                 ...{
                     'date_of_birth': (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
-                    'image': image ,
+                    'image': imageURL || (flag ? image : ''),
                     'extracurricular':interest,
                     'gender' : gender
                 }

@@ -19,7 +19,7 @@ function* fetchUserLanguage(action) {
 
         if (localStorage.getItem('language')) {
 
-            let local_data = JSON.parse(localStorage.getItem('language')).length ? 
+            let local_data =JSON.parse(localStorage.getItem('language')) && JSON.parse(localStorage.getItem('language')).length ? 
                             JSON.parse(localStorage.getItem('language')) :
                             [
                                 {

@@ -20,7 +20,7 @@ function* fetchUserAward(action) {
         }
 
         if (localStorage.getItem('award')) {
-            let local_data = JSON.parse(localStorage.getItem('award')).length ? 
+            let local_data = JSON.parse(localStorage.getItem('award')) && JSON.parse(localStorage.getItem('award')).length ? 
                             JSON.parse(localStorage.getItem('award')) :
                             [
                                 {

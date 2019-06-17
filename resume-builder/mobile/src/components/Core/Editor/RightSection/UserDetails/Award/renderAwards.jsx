@@ -80,9 +80,9 @@ export const renderAwards = ({
                             <Field component={renderSelect} label={"Year"} name={`${member}.date`} prepend={true} 
                                     id={`${member}.date`}  className="form__input" iconClass={"sprite icon--date"}>
                                     <option value="">Choose</option>
-                                    {yearList.map((el)=>{
+                                    {yearList.map((el,index)=>{
                                         return(
-                                        <option value={el.value}>{el.label}</option>
+                                        <option key={index} value={el.value}>{el.label}</option>
                                         )
                                     })}
                                 </Field>

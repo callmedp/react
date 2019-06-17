@@ -80,9 +80,9 @@ const renderCourse = ({
                             <Field component={renderSelect} label={"Year"} name={`${member}.year_of_certification`} prepend={true} 
                                     id={`${member}.year_of_certification`}  className="form__input" iconClass={"sprite icon--date"}>
                                     <option value="">Choose</option>
-                                    {yearList.map((el)=>{
+                                    {yearList.map((el,index)=>{
                                         return(
-                                        <option value={el.value}>{el.label}</option>
+                                        <option key={index} value={el.value}>{el.label}</option>
                                         )
                                     })}
                                 </Field>

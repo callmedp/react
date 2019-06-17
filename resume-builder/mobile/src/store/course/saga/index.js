@@ -19,7 +19,7 @@ function* fetchUserCourse(action) {
         }
 
         if (localStorage.getItem('course')) {
-            let local_data = JSON.parse(localStorage.getItem('course')).length ? 
+            let local_data =JSON.parse(localStorage.getItem('course')) && JSON.parse(localStorage.getItem('course')).length ? 
                             JSON.parse(localStorage.getItem('course')) :
                             [
                                 {
@@ -43,9 +43,6 @@ function* fetchUserCourse(action) {
         }
         const {data: {results}} = result;
         results.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
-        results.map((data)=>{
-            data.year_of_certification =`${data.year_of_certification}-01-01`
-        })
         let data = {list: results}
         if(! data.list.length){
             data = {
