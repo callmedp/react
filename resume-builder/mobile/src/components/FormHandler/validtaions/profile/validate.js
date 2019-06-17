@@ -15,8 +15,9 @@ const validate = values => {
     if(values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)){
         errors.email = 'Invalid email address'
     }
-    return errors
-    
+    errors.location = values && values.location && values.location.length >100 ? 'Address limited to 100 characters' : undefined
+    errors.extracurricular = values && values.extracurricular && values.extracurricular.length >5 ? 'We recommend to add 5 interest' : undefined
+    return errors;
 };
 
 

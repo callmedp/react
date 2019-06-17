@@ -231,6 +231,7 @@ export const renderTextArea = ({
                                    label,
                                    type,
                                    rows,
+                                   id,
                                    className,
                                    iconClass,
                                    prepend,
@@ -242,25 +243,26 @@ export const renderTextArea = ({
         <label className="form__label" htmlFor={input.name}>{label}</label>
         {prepend ?
             <React.Fragment>
-                <div className="input-group">
+                <div className={"input-group " + (error ? "error" : "")}>
                     <div className="input-group__prepend">
                     <span className="input-group__text">
                         <i className={iconClass}></i>
                     </span>
                     </div>
                     <textarea {...input} placeholder={label} type={type} className={className} maxLength={maxLength}
-                              rows={rows}/>
-                    <div>
-                        {touched &&
+                              rows={rows} id={id}/>
+                    
+                </div>
+                <div>
+                        {
                         ((error && <span className={'error-message'}>{error}</span>) ||
                             (warning && <span className={'warn-Message'}>{warning}</span>))}
                     </div>
-                </div>
                 <p className="text-length">{input.value.length ? input.value.length : 0}- {maxLength}</p>
             </React.Fragment> :
             <React.Fragment>
                 <textarea {...input} placeholder={label} type={type} className={className} maxLength={maxLength}
-                          rows={rows}/>
+                          rows={rows} id={id}/>
                 <div>
                     {touched &&
                     ((error && <span className={'error-message'}>{error}</span>) ||
@@ -303,13 +305,14 @@ export const renderAsyncCreatableSelect = ({
                                                iconClass,
                                                className,
                                                isMulti,
+                                               id,
                                                closeMenuOnSelect,
                                                meta: {touched, error, warning}
                                            }) => {
     return (
         <React.Fragment>
             <label className="form__label" htmlFor={input.name}>{label}</label>
-            <div className={"input-group " + (touched && error ? "error" : "")}>
+            <div className={"input-group " + (error ? "error" : "")}>
                 <div className="input-group__prepend">
                     <span className="input-group__text">
                         <i className={iconClass}></i>
@@ -317,6 +320,7 @@ export const renderAsyncCreatableSelect = ({
                 </div>
                 <AsyncCreatableSelect {...input} className={className}
                                       cacheOptions
+                                      id={id}
                                       loadOptions={loadOptions}
                     // styles={{menuPortal: base => ({...base, zIndex: 9999})}}
                     // menuPortalTarget={document.getElementById('right-panel-section')}
@@ -331,8 +335,7 @@ export const renderAsyncCreatableSelect = ({
                     // closeMenuOnSelect={closeMenuOnSelect}
                                       onBlur={event => event.preventDefault()}
                 />
-                {touched &&
-                ((<span className={'error-message'}>{error}</span>) ||
+                {   ((<span className={'error-message'}>{error}</span>) ||
                     (warning && <span className={'warn-Message'}>{warning}</span>))
                 }
 

@@ -176,7 +176,7 @@ class PersonalInfo extends Component {
                         </li>
 
                         <li className="form__group">
-                            <Field component={renderSelect} label={"Gender"} name="gender" name="gender" prepend={true}
+                            <Field component={renderSelect} label={"Gender"} name="gender" prepend={true}
                                 iconClass={"sprite icon--gender"}  className="form__input form__select">
                                 <option value="">Gender</option>
                                 <option value="1" >Male</option>
@@ -206,7 +206,7 @@ class PersonalInfo extends Component {
                         </li>
 
                         <li className="form__group">
-                            <Field name="extracurricular" 
+                            <Field name="extracurricular"  id="extracurricular"
 
                                             component={renderAsyncCreatableSelect}
                                             className={'multi-select'}
@@ -218,9 +218,6 @@ class PersonalInfo extends Component {
                                             isMulti={true}
                                             closeMenuOnSelect={false}
                                             />
-                            {/* <Field name="extracurricular" component={renderMultiselect} data={Object.values(personalInfo.interest_list)}
-                                    valueField='value' textField='label' className={'multi-select'}
-                                    defaultValue={personalInfo.extracurricular} */}
                         </li>
 
                         <li className="form__group">
@@ -266,15 +263,14 @@ class PersonalInfo extends Component {
 export const PersonalInfoForm = reduxForm({
     form: 'personalInfo',
     enableReinitialize: true,
+    validate,
     onSubmitFail: (errors) => scrollOnErrors(errors,'profile',-100),
-    validate
 })(PersonalInfo);
 
 
 const mapStateToProps = (state) => {
     return {
         initialValues: state.personalInfo,
-        profile: state.form && state.form.personalInfo && state.form.personalInfo.values || {}
     }
 };
 
