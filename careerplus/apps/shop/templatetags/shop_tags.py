@@ -39,4 +39,4 @@ def get_value_from_dict(value, key):
     if value:
         value = value[0]
         value = eval(value)
-        return value[key]
+        return value.get(key,'')

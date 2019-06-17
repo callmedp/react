@@ -127,7 +127,10 @@ class ProductInformationMixin(object):
         info['prd_img_alt'] = product.pImA
         info['prd_img_bg'] = product.pIBg
         info['prd_H1'] = product.pHd if product.pHd else product.pNm
-        info['prd_about'] = product.pAb
+        if product.pTF == 16:
+            info['prd_about'] = product.pAbx
+        else:
+            info['prd_about'] = product.pAb
         info['prd_desc'] = product.pDsc
         info['prd_uget'] = product.pBS
         info['prd_rating'] = round(float(product.pARx), 1)
