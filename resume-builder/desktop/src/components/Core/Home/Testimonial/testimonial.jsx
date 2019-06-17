@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import './testimonial.scss'
 import Slider from "react-slick";
+import {testimonials} from "../../../../Utils/testimonials";
 
-
-
+console.log('---', testimonials);
 export default class Testimonial extends Component {
     constructor(props) {
         super(props);
@@ -29,30 +29,31 @@ export default class Testimonial extends Component {
                     builder</strong>
                 <Slider {...settings}>
                     {
-                        [1, 2, 3, 4, 5, 6, 7].map((el,key) => (
-                            <div className="testimonials--list" key={key}>
-                                <div className="testimonials--wrap">
-                                
-                                    <div className="testimonials--image">
+                        (testimonials || []).map((el, key) => {
+                            return(
+                                <div className="testimonials--list" key={key}>
+                                    <div className="testimonials--wrap">
+
+                                        <div className="testimonials--image">
                                         <span className="mr-20">
                                             <img alt={"Testimonial 1"}
-                                            src={`${this.staticUrl}react/assets/images/testimonial1.jpg`}/>
+                                                 src={`${this.staticUrl}react/assets/images/user-${key+1}.jpg`}/>
                                         </span>
-                                        <span>
-                                            <strong>Sumit Sharma</strong>
-                                            Project Manager, Sapient
+                                            <span>
+                                            <strong>{el.name}</strong>
                                         </span>
-                                    </div>
-                                    <div className="testimonials--content">
-                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley.</p>
+                                        </div>
+                                        <div className="testimonials--content">
+                                        </div>
+                                        <p>{el.review}</p>
                                     </div>
                                 </div>
-                            </div>
-                        ))
+                            )
+                        })
                     }
                 </Slider>
                 {/*<div className="testimonials--indicators">*/}
-                    {/*<span></span> <span className="active"></span> <span></span>*/}
+                {/*<span></span> <span className="active"></span> <span></span>*/}
                 {/*</div>*/}
             </section>
         )

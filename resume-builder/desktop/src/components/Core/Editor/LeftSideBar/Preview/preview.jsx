@@ -318,7 +318,7 @@ export default class Preview extends Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         const {template: {entity_position}} = this.props;
-        const {selectedEntity} = this.state
+        const {selectedEntity} = this.state;
         if (this.state.activeSection !== prevState.activeSection) {
             const {template: {entity_position}} = this.props;
             const {activeSection} = this.state;
@@ -352,10 +352,10 @@ export default class Preview extends Component {
                 <AlertModal {...this.props} isPreview={true} />
                 <strong>Complete your customisation</strong>
                 <Accordion
-                    preExpanded={["1"]}>
+                    preExpanded={["0"]}>
                     <div className="preivew-scroll">
                         <AccordionItem uuid={"1"}>
-                            <div class Name="change-theme">
+                            <div className="change-theme">
                                 <AccordionItemHeading>
                                     <AccordionItemButton>
                                         <div
