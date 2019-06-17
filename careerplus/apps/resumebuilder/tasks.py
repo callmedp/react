@@ -30,7 +30,9 @@ def generate_image_for_resume(candidate_id,template_no):
         return
 
     thumbnail_sizes = [(151,249),(144,149)]
-
+    
+    current_config = candidate.ordercustomisation_set.filter(template_no=template_no).first()
+    entity_position = current_config.entity_position_eval
     entity_preference = eval(candidate.entity_preference_data)
     extracurricular = candidate.extracurricular_list
     education = candidate.candidateeducation_set.all().order_by('order')
@@ -42,6 +44,23 @@ def generate_image_for_resume(candidate_id,template_no):
     certifications = candidate.candidatecertification_set.all().order_by('order')
     languages = candidate.candidatelanguage_set.all().order_by('order')
     current_exp = experience.filter(is_working=True).order_by('-start_date').first()
+
+    entity_id_count_mapping = {
+                2:bool(education.count()),
+                3:bool(experience.count()),
+                4:bool(projects.count()),
+                5:bool(skills.count()),
+                7:bool(achievements.count()),
+                8:bool(certifications.count()),
+                9:bool(languages.count()),
+                10:bool(references.count()),
+                11:bool(len(extracurricular)),
+            }
+    updated_entity_position = []
+
+    for item in entity_position:
+        item.update({"count":entity_id_count_mapping.get(item['entity_id'])})
+        updated_entity_position.append(item)
 
     generator_obj = ResumeGenerator()
 
@@ -69,7 +88,7 @@ def generate_image_for_resume(candidate_id,template_no):
         'certifications': certifications, 'extracurricular': extracurricular, 'languages': languages,
         'current_exp': current_exp, 'latest_exp': latest_experience,
         'preference_list': entity_preference,'current_config': current_config,
-        'entity_position': entity_position, 'width': 93.7, 'is_img': True
+        'entity_position': updated_entity_position, 'width': 93.7, 'is_img': True
         }).encode(encoding='UTF-8')
 
     file_name = 'resumetemplate-' + str(template_no) + '.png'
@@ -222,6 +241,23 @@ def generate_and_upload_resume_pdf(data):
     current_config = candidate.ordercustomisation_set.filter(template_no=template_id).first()
     entity_position = current_config.entity_position_eval
 
+    entity_id_count_mapping = {
+                2:bool(education.count()),
+                3:bool(experience.count()),
+                4:bool(projects.count()),
+                5:bool(skills.count()),
+                7:bool(achievements.count()),
+                8:bool(certifications.count()),
+                9:bool(languages.count()),
+                10:bool(references.count()),
+                11:bool(len(extracurricular)),
+            }
+    updated_entity_position = []
+
+    for item in entity_position:
+        item.update({"count":entity_id_count_mapping.get(item['entity_id'])})
+        updated_entity_position.append(item)
+
     latest_experience,latest_end_date = '', None
     for exp in experience:
         if exp.is_working:
@@ -242,7 +278,7 @@ def generate_and_upload_resume_pdf(data):
                     'certifications': certifications, 'extracurricular': extracurricular, 'languages': languages,
                     'current_exp': current_exp, 'latest_exp': latest_experience,
                     'preference_list': entity_preference, 'current_config': current_config,
-                    'entity_position': entity_position, "width": 93.7
+                    'entity_position': updated_entity_position, "width": 93.7
                     }
 
     pdf_file = generate_file(context_dict=context_dict,\
