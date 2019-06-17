@@ -24,53 +24,33 @@ export default class Testimonial extends Component {
                             <div className="success-stories__infoWrap">
                                 <div className="success-stories__userInfo">
                                         <span className="success-stories__user">
-                                            <img src={`${this.staticUrl}react/assets/images/mobile/user-1.jpg`} alt=""/>
-                                        </span>
-
-                                    <div className="success-stories__nameInfo">
-                                        <h3>Sumit Sharma</h3>
-                                        <p>Project Manager, Sapient</p>
-                                    </div>
-                                </div>
-
-                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                                    Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-                            </div>
-                        </li>
-
-                        <li className="success-stories__item white-box pt-30 pb-30">
-                            <div className="success-stories__infoWrap">
-                                <div className="success-stories__userInfo">
-                                        <span className="success-stories__user">
-                                            <img src={`${this.staticUrl}react/assets/images/mobile/user-2.jpg`} alt=""/>
-                                        </span>
-
-                                    <div className="success-stories__nameInfo">
-                                        <h3>Rakesh Kumar</h3>
-                                        <p>Project Manager, Sapient</p>
-                                    </div>
-                                </div>
-
-                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                                    Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-                            </div>
-                        </li>
-
-                        <li className="success-stories__item white-box pt-30 pb-30">
-                            <div className="success-stories__infoWrap">
-                                <div className="success-stories__userInfo">
-                                        <span className="success-stories__user">
                                             <img src={`${this.staticUrl}react/assets/images/mobile/user-3.jpg`} alt=""/>
                                         </span>
 
                                     <div className="success-stories__nameInfo">
-                                        <h3>Vihaan Kumar</h3>
-                                        <p>Project Manager, Sapient</p>
+                                        <h3>Sumit Sharma</h3>
+                                        {/* <p>Project Manager, Sapient</p> */}
                                     </div>
                                 </div>
 
-                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                                    Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+                                <p>I am really grateful to have found this resume builder. Its intuitive and structured flow helped me build the resume in no time. It has definitely played a pivotal role in getting my dream job</p>
+                            </div>
+                        </li>
+
+                        <li className="success-stories__item white-box pt-30 pb-30">
+                            <div className="success-stories__infoWrap">
+                                <div className="success-stories__userInfo">
+                                        <span className="success-stories__user">
+                                            <img src={`${this.staticUrl}react/assets/images/mobile/user-1.jpg`} alt=""/>
+                                        </span>
+
+                                    <div className="success-stories__nameInfo">
+                                        <h3>Shreya Verma</h3>
+                                        {/* <p>Project Manager, Sapient</p> */}
+                                    </div>
+                                </div>
+
+                                <p>This system for writing a resume was extremely helpful and really made the process a more thoughtful one and it made my resume look extremely sharp and professional. Kudos</p>
                             </div>
                         </li>
 
@@ -82,31 +62,12 @@ export default class Testimonial extends Component {
                                         </span>
 
                                     <div className="success-stories__nameInfo">
-                                        <h3>Reyansh Kumar</h3>
-                                        <p>Project Manager, Sapient</p>
+                                        <h3>Amit Sinha</h3>
+                                        {/* <p>Project Manager, Sapient</p> */}
                                     </div>
                                 </div>
 
-                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                                    Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-                            </div>
-                        </li>
-
-                        <li className="success-stories__item white-box pt-30 pb-30">
-                            <div className="success-stories__infoWrap">
-                                <div className="success-stories__userInfo">
-                                        <span className="success-stories__user">
-                                            <img src={`${this.staticUrl}react/assets/images/mobile/user-5.jpg`} alt=""/>
-                                        </span>
-
-                                    <div className="success-stories__nameInfo">
-                                        <h3>Muhammad Akmal</h3>
-                                        <p>Project Manager, Sapient</p>
-                                    </div>
-                                </div>
-
-                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                                    Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+                                <p>It is one of the best resume builder I have ever seen. You can prepare your resume within no time. The attractive and decent templates are designed in such a way that you will end up getting calls for interview</p>
                             </div>
                         </li>
                     </ul>
