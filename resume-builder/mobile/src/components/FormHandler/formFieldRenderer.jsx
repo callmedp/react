@@ -140,6 +140,17 @@ export const datepicker =
                             disabledNavigation
                             maxDate={handleMaxDate(maxDateAllowed, endDate, startDate, educationEndDate)}
                             minDate={startDate ? new Date((startDate)) : null}
+                            popperModifiers={{
+                                offset: {
+                                    enabled: true,
+                                    offset: '5px, 10px'
+                                },
+                                preventOverflow: {
+                                    enabled: true,
+                                    escapeWithReference: false, // force popper to stay in viewport (even when input is scrolled out of view)
+                                    boundariesElement: 'viewport'
+                                }
+                            }}
 
 
                 />

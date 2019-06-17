@@ -32,7 +32,6 @@ function* fetchUserProject(action) {
         yield put({type: UPDATE_UI, data: {loader: false}});
 
         let {data: {results}} = result;
-        console.log('00=', results.length);
         if (!results.length) {
             const state = yield select();
             let {project: {list}} = state;

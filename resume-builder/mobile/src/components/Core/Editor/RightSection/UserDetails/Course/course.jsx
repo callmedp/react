@@ -159,7 +159,7 @@ const mapDispatchToProps = (dispatch) => {
             userCourse = {
                 ...userCourse,
                 ...{
-                    year_of_certification: (year_of_certification && moment(year_of_certification).format('YYYY')) || '',
+                    year_of_certification:parseInt(year_of_certification)
                 }
             };
             return new Promise((resolve, reject) => {

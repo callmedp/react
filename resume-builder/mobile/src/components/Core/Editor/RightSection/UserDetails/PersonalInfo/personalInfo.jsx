@@ -187,7 +187,7 @@ class PersonalInfo extends Component {
                         
                         <li className="form__group dob">
                             <Field component={datepicker} label={"Date Of Birth"}  type={"date"} name="date_of_birth" id="date_of_birth"
-                             yearDropDownItemNumber={50}/>
+                             yearDropDownItemNumber={50} maxDateAllowed={'true'}/>
                         </li>
 
                         <li className="form__group">

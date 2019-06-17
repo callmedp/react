@@ -1,7 +1,8 @@
 import React from 'react';
 import {Field} from "redux-form";
-import {renderField, datepicker} from "../../../../../FormHandler/formFieldRenderer.jsx";
+import {renderField, renderSelect} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import {courseNewData} from "../../../../../../Utils/addnewData"
+import { yearList } from '../../../../../../Utils/yearList.js';
 
 const renderCourse = ({
                         fields, 
@@ -76,8 +77,15 @@ const renderCourse = ({
                         </li>
 
                         <li className="form__group dob">
-                            <Field component={datepicker} label={"Completion Year"}  type={"date"} 
-                                name={`${member}.year_of_certification`} id={`${member}.year_of_certification`}/>
+                            <Field component={renderSelect} label={"Year"} name={`${member}.year_of_certification`} prepend={true} 
+                                    id={`${member}.year_of_certification`}  className="form__input" iconClass={"sprite icon--date"}>
+                                    <option value="">Choose</option>
+                                    {yearList.map((el)=>{
+                                        return(
+                                        <option value={el.value}>{el.label}</option>
+                                        )
+                                    })}
+                                </Field>
                         </li>
 
                     </ul>

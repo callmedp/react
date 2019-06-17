@@ -163,6 +163,17 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(actions.deleteAward(awardId))
         },
         "bulkUpdateUserAward": (listItems) => {
+            listItems = (listItems || []).map((userAward, index) => {
+                const {date} = userAward;
+                if (!userAward['id']) delete userAward['id'];
+                userAward = {
+                    ...userAward,
+                    ...{
+                        date: parseInt(date)
+                    }
+                };
+                return userAward;
+            });
             return new Promise((resolve, reject) => {
                 return dispatch(actions.bulkUpdateUserAward({list: listItems,resolve,reject}))
             })

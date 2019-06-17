@@ -17,7 +17,6 @@ export default class ResumeSlider extends Component {
         const {page, fetchSelectedTemplateImage} = this.props;
         localStorage.setItem('selected_template', (templateId))
         const select_template_modal = this.props.ui ? this.props.ui.select_template_modal : false
-        console.log('in heee ', this.props.page);
         if (select_template_modal) {
             this.props.hideSelectTemplateModal();
             if (page === 'edit') {
