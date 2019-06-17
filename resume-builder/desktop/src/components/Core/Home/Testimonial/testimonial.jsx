@@ -3,7 +3,6 @@ import './testimonial.scss'
 import Slider from "react-slick";
 import {testimonials} from "../../../../Utils/testimonials";
 
-console.log('---', testimonials);
 export default class Testimonial extends Component {
     constructor(props) {
         super(props);

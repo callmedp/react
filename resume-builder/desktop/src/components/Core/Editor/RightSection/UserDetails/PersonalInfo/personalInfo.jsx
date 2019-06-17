@@ -202,8 +202,7 @@ export class PersonalInfo extends Component {
                                            showWordCounter={false}
                                            className={"input-control"} rows="3"/>
                                     <span className="word-counter mt-5">{currentAddress && currentAddress.length ?
-
-                                        currentAddress.length : '0'}/300</span>
+                                        currentAddress.length : '0'}/100</span>
                                 </fieldset>
                             </div>
 
