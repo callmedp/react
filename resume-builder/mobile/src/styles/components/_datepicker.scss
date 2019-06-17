@@ -598,7 +598,7 @@
 .react-datepicker__year-option,
 .react-datepicker__month-option,
 .react-datepicker__month-year-option {
-  line-height: 20px;
+  line-height: 30px;
   width: 100%;
   display: block;
   margin-left: auto;
@@ -759,4 +759,12 @@
 .react-datepicker__portal .react-datepicker__navigation--next--disabled, .react-datepicker__portal .react-datepicker__navigation--next--disabled:hover {
   border-left-color: #e6e6e6;
   cursor: default;
+}
+
+
+.react-datepicker__year-option {
+
+  a {
+    border-top-color: #666 !important;
+  }
 }
