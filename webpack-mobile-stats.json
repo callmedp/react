@@ -1,22 +1,18 @@
 {
     "status":"done",
-    "publicPath":"/",
     "chunks":{
        "main":[
           {
-             "name":"../../../careerplus/static_core/react/dist/mobile/main-1560850475714.css",
-             "publicPath":"/../../../careerplus/static_core/react/dist/mobile/main-1560850475714.css",
-             "path":"/home/hiteshrexwal/Documents/careerplus/careerplus/static_core/react/dist/mobile/main-1560850475714.css"
+             "name":"main-1560858754629.css",
+             "path":"/home/hiteshrexwal/Documents/careerplus/careerplus/static_core/react/dist/mobile/main-1560858754629.css"
           },
           {
-             "name":"../../../careerplus/static_core/react/dist/mobile/main-1560850475714.js",
-             "publicPath":"/../../../careerplus/static_core/react/dist/mobile/main-1560850475714.js",
-             "path":"/home/hiteshrexwal/Documents/careerplus/careerplus/static_core/react/dist/mobile/main-1560850475714.js"
+             "name":"main-1560858754629.js",
+             "path":"/home/hiteshrexwal/Documents/careerplus/careerplus/static_core/react/dist/mobile/main-1560858754629.js"
           },
           {
-             "name":"../../../careerplus/static_core/react/dist/mobile/main-1560850475714.js.map",
-             "publicPath":"/../../../careerplus/static_core/react/dist/mobile/main-1560850475714.js.map",
-             "path":"/home/hiteshrexwal/Documents/careerplus/careerplus/static_core/react/dist/mobile/main-1560850475714.js.map"
+             "name":"main-1560858754629.js.map",
+             "path":"/home/hiteshrexwal/Documents/careerplus/careerplus/static_core/react/dist/mobile/main-1560858754629.js.map"
           }
        ]
     }
