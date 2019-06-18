@@ -163,6 +163,22 @@ h2 {
     padding-bottom: 30px;
 }
 
+.white_btn {
+    border-radius: 30px;
+    background-color: $white-bg;
+    border: 1px solid $p-blue;
+    font-size: $font-size+3;
+    color: $p-blue;
+    text-align: center;
+    padding: 12px 25px;
+
+    &:hover {
+        background-color: $p-blue;
+        border: 1px solid $p-blue;
+        color: $white-bg;
+    }
+}
+
 .blue_btn {
     border-radius: 30px;
     background-color: $p-blue;
@@ -171,6 +187,12 @@ h2 {
     color: $white-color;
     text-align: center;
     padding: 12px 25px;
+
+    /*&:hover {
+        background-color: $white-bg;
+        border: 1px solid $p-blue;
+        color: $p-blue;
+    }*/
 }
 
 .yellow_btn {
@@ -297,4 +319,287 @@ h2 {
     padding: 10px;
     text-align: center;
     text-transform: uppercase;
+}
+
+
+.flexbox {
+    display: flex;
+    align-content: center;
+    flex-direction: row;
+}
+
+.align-items-center {
+    justify-content: center;
+}
+
+.align-self-mla {
+    margin-left: auto;
+}
+
+.align-self-right {
+    align-self: flex-end;
+}
+
+.white-box {
+    border: 1px solid $border;
+    border-radius: $border-radius;
+    background: $white-bg;
+    box-shadow: $box-shadow;
+    overflow: hidden;
+}
+
+.test-paper-box {
+    border: 1px solid $border;
+    border-radius: $border-radius;
+    background: $white-bg;
+    box-shadow: $box-shadow;
+    font-size: $font-size+3;
+    font-weight: $font-weight + 100;
+    padding-bottom: 30px;
+
+    .pagination-box {
+        padding: 20px 20px 5px 20px;
+        span {
+            display: inline-block;
+            height: 34px;
+            width: 34px;
+            text-align: center;
+            vertical-align: middle;
+            border-radius: 5px;
+            border: 1px solid $border;
+            line-height: 34px;
+            margin: 0 15px 15px 0;
+            cursor: pointer;
+            color: $grey-color;
+
+            &.marked {
+                background: $border;
+            }
+        }
+
+        .paper-pagination {
+            flex: 1;
+        }
+
+        .pagination-more {
+            align-self: flex-start;
+        }
+    }
+}
+
+.test-paper {
+    border-top: 1px solid $border;
+    padding: 35px 15px 15px 15px;
+    margin: 0 0 10px 0;
+
+    h2 {
+        font-size: $font-size+9;
+        color: $primary-color;
+        margin: 0;
+        flex: 1;
+    }
+
+    strong {
+        font-size: $font-size+9;
+        color: $secondary-color;
+        font-weight: $font-weight+300;
+        align-self: flex-start;
+        margin-left: 20px;
+    }
+
+    &__question {
+        display: block;
+        font-size: $font-size+4;
+        color: $secondary-color;
+        font-weight: $font-weight+100;
+        margin-bottom: 22px;
+
+        li {
+            margin-top: 20px;
+            display: block;
+            padding: 0 10px;
+
+            label {
+                font-size: $font-size+4;
+                color: $secondary-color;
+                font-weight: $font-weight+100;
+            }
+        }
+    }
+}
+
+.bdr-bottom {
+    border-bottom: 3px solid $p-blue;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+
+.time {
+    padding: 10px 20px;
+
+    strong {
+        font-size: $font-size+5;
+        color: $secondary-color;
+        margin-top: 10px;
+    }
+
+    span {
+        display: inline-block;
+        font-size: $font-size+9;
+        font-weight: $font-weight+300;
+        color: $grey-color;
+        text-align: center;
+        margin-left: 10px;
+        position: relative;
+
+        span {
+            display: block;
+            font-size: $font-size;
+            font-weight: $font-weight;
+        }
+    }
+
+    .time-dot {
+        &:after {
+            content: ':';
+            position: absolute;
+            top: -10px;
+            right: -9px;
+            font-size: $font-size+18;
+            color: $border;
+        }
+    }
+}
+
+.test-benefits {
+    box-shadow: 0 3px 30px 0 rgba(213,213,213,0.50);
+    padding-bottom: 10px;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+
+    h3 {
+        font-size: $font-size+9;
+        font-weight: $font-weight+300;
+        color: $anchor-color;
+        margin-top: 10px;
+        line-height: 24px;
+    }
+
+    strong {
+        font-size: $font-size+3;
+        font-weight: $font-weight+300;
+        color: $primary-color;
+        display: block;
+        margin: 10px 0;
+    }
+
+    p {
+        margin: 0;
+        padding-left: 10px;
+        position: relative;
+
+        &:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 7px;
+            width: 5px;
+            height: 5px;
+            border-radius: 100%;
+            background: $p-blue;
+        }
+    }
+
+    strike {
+        color: $secondary-color;
+        font-size: $font-size+3;
+        display: inline-block;
+        margin-left: 10px;
+    }
+
+    h4 {
+        font-size: $font-size+13;
+        font-weight: $font-weight+300;
+        color: $black-color;
+        display: inline-block;
+        margin-bottom: 0;
+    }
+
+    .grey-border {
+        border-top: 1px solid $border;
+        display: block;
+    }
+}
+
+.custom-radio {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.custom-radio input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  margin: auto;
+  height: 14px;
+  width: 14px;
+  background-color: $white-bg;
+  border: 1px solid $p-blue;
+  border-radius: 100%;
+}
+
+/* On mouse-over, add a grey background color 
+.custom-radio:hover input ~ .checkmark {
+  background-color: #ccc;
+}*/
+
+/* When the radio button is checked, add a blue background */
+.custom-radio input:checked ~ .checkmark {
+  background-color: rgba(39, 95, 169, 0.2);
+  border: 1px solid $primary-color;
+  width: 14px;
+  height: 14px;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.custom-radio input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.custom-radio .checkmark:after {
+    top: 0;
+    left: -6px;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    width: 24px;
+    height: 24px;
+    border-radius: 100%;
+    background: $p-blue;
+    border: 5px solid #d0dce5;
 }
