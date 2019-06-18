@@ -50,7 +50,7 @@ urlpatterns = [
     url(r'^v1/candidate-login/$', views.ShineCandidateLoginAPIView.as_view(), name='v1.api-login'),
     url(r'^v1/update-certificate-assesment/(?P<vendor_name>[\w\-]+)/$',
         views.UpdateCertificateAndAssesment.as_view(),
-        name='remove-cookie-from-header')
+        name='remove-cookie-from-header'),
     url(r'^v1/candidate-insights/$',
         views.CandidateInsight.as_view(),
         name='candidate-insights')
