@@ -82,7 +82,8 @@ class PersonalInfo extends Component {
                 }
             }
             if(!error){
-                await this.props.onSubmit(form_data['values']);
+                const {imageURL,flag} = this.state
+                await this.props.onSubmit(form_data['values'],imageURL,flag);
             }
         }
         
