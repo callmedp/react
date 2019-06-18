@@ -1,19 +1,19 @@
 {
-    "status": "done",
-    "chunks": {
-      "main": [
-        {
-          "name": "main-1560779516001.css",
-          "path": "/home/hiteshrexwal/Documents/careerplus/careerplus/static_core/react/dist/desktop/main-1560779516001.css"
-        },
-        {
-          "name": "main-1560779516001.js",
-          "path": "/home/hiteshrexwal/Documents/careerplus/careerplus/static_core/react/dist/desktop/main-1560779516001.js"
-        },
-        {
-          "name": "main-1560779516001.js.map",
-          "path": "/home/hiteshrexwal/Documents/careerplus/careerplus/static_core/react/dist/desktop/main-1560779516001.js.map"
-        }
-      ]
+    "status":"done",
+    "chunks":{
+       "main":[
+          {
+             "name":"main-1560835658501.css",
+             "path":"/home/hiteshrexwal/Documents/careerplus/careerplus/static_core/react/dist/desktop/main-1560835658501.css"
+          },
+          {
+             "name":"main-1560835658501.js",
+             "path":"/home/hiteshrexwal/Documents/careerplus/careerplus/static_core/react/dist/desktop/main-1560835658501.js"
+          },
+          {
+             "name":"main-1560835658501.js.map",
+             "path":"/home/hiteshrexwal/Documents/careerplus/careerplus/static_core/react/dist/desktop/main-1560835658501.js.map"
+          }
+       ]
     }
-  }
+ }
