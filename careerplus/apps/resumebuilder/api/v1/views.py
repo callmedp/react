@@ -31,7 +31,7 @@ from core.library.gcloud.custom_cloud_storage import GCPResumeBuilderStorage
 
 # third party imports
 from rest_framework import status
-from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView,CreateAPIView)
+from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView, CreateAPIView)
 from rest_framework.views import APIView
 from rest_framework.parsers import (FormParser, MultiPartParser)
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -364,20 +364,20 @@ class CandidateResumePreview(APIView):
         current_exp = experience.filter(is_working=True).order_by('-start_date').first()
 
         entity_id_count_mapping = {
-                2:bool(education.count()),
-                3:bool(experience.count()),
-                4:bool(projects.count()),
-                5:bool(skills.count()),
-                7:bool(achievements.count()),
-                8:bool(certifications.count()),
-                9:bool(languages.count()),
-                10:bool(references.count()),
-                11:bool(len(extracurricular)),
-            }
+            2: bool(education.count()),
+            3: bool(experience.count()),
+            4: bool(projects.count()),
+            5: bool(skills.count()),
+            7: bool(achievements.count()),
+            8: bool(certifications.count()),
+            9: bool(languages.count()),
+            10: bool(references.count()),
+            11: bool(len(extracurricular)),
+        }
         updated_entity_position = []
 
         for item in entity_position:
-            item.update({"count":entity_id_count_mapping.get(item['entity_id'])})
+            item.update({"count": entity_id_count_mapping.get(item['entity_id'])})
             updated_entity_position.append(item)
 
         latest_experience, latest_end_date = '', None
@@ -401,7 +401,7 @@ class CandidateResumePreview(APIView):
              'certifications': certifications, 'extracurricular': extracurricular, 'languages': languages,
              'current_exp': current_exp, 'latest_exp': latest_experience,
              'preference_list': entity_preference, 'current_config': current_config,
-             'entity_position': updated_entity_position, 'width': 100,
+             'entity_position': updated_entity_position, 'width': 100, "watermark_in_preview": True
              }).encode(encoding='UTF-8')
 
         return Response({
@@ -788,8 +788,8 @@ class ResumeImagePreviewView(APIView):
         else:
             try:
                 file_obj = GCPResumeBuilderStorage().open("{}/{}/images/resumetemplate-{}.png". \
-                                                         format(settings.RESUME_TEMPLATE_DIR, candidate_obj.id,
-                                                                name_suffix), "rb")
+                                                          format(settings.RESUME_TEMPLATE_DIR, candidate_obj.id,
+                                                                 name_suffix), "rb")
             except Exception as e:
                 logging.getLogger('error_log').error("Not Found - {}/{}/images/resumetemplate-{}.png". \
                                                      format(settings.RESUME_TEMPLATE_DIR, candidate_obj.id,

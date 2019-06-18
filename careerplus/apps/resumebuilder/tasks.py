@@ -88,7 +88,7 @@ def generate_image_for_resume(candidate_id,template_no):
         'certifications': certifications, 'extracurricular': extracurricular, 'languages': languages,
         'current_exp': current_exp, 'latest_exp': latest_experience,
         'preference_list': entity_preference,'current_config': current_config,
-        'entity_position': updated_entity_position, 'width': 93.7, 'is_img': True
+        'entity_position': entity_position, 'width': 93.7, 'activate_water_mark': True
         }).encode(encoding='UTF-8')
 
     file_name = 'resumetemplate-' + str(template_no) + '.png'
