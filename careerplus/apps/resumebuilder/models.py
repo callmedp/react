@@ -67,6 +67,7 @@ class CandidateProfile(AbstractAutoDate):
 
 class Candidate(PreviewImageCreationMixin, CandidateProfile):
     parent_object_key = "id"
+    initiate_image_upload_task = True
 
     def create_template_customisations(self, candidate_id):
         for i in range(1, 6):
@@ -99,6 +100,8 @@ class OrderCustomisation(PreviewImageCreationMixin, models.Model):
     heading_font_size = models.SmallIntegerField(choices=RESUME_FONT_SIZE_CHOICES, default=1)
     text_font_size = models.SmallIntegerField(choices=RESUME_FONT_SIZE_CHOICES, default=1)
     entity_position = JSONField(blank=True, null=True)
+
+    initiate_image_upload_task = True
 
     @property
     def entity_position_eval(self):
