@@ -7,7 +7,7 @@ export default class Loader extends Component {
             <div className="loader">
                 <div className="loader__wrap">
                 <img src={`/media/static/react/assets/images/mobile/loader.png`} width="64" height="64" alt=""/>
-                <p>Processing <br/>please wait....</p>
+                Please wait...</p>
                 </div>
             </div>
         )

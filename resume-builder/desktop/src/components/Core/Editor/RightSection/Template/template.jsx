@@ -9,11 +9,11 @@ class Template extends Component {
     }
 
     componentDidMount() {
-        let {userInfo:{selected_template}} = this.props;
-        if(selected_template){
+        let {userInfo: {selected_template}} = this.props;
+        if (selected_template) {
             this.props.fetchTemplate(selected_template)
         }
-        
+
     }
 
     componentDidUpdate(prevProps) {
@@ -25,10 +25,13 @@ class Template extends Component {
     render() {
         const {template: {html}} = this.props;
         return (
-            <div className="right-sidebar-scroll-main"
-                 dangerouslySetInnerHTML={{
-                     __html: html
-                 }}/>
+            <div>
+                <div className="right-sidebar-scroll-main"
+                     dangerouslySetInnerHTML={{
+                         __html: html
+                     }}>
+                </div>
+            </div>
         )
     }
 
