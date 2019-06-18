@@ -51,6 +51,9 @@ urlpatterns = [
     url(r'^v1/update-certificate-assesment/(?P<vendor_name>[\w\-]+)/$',
         views.UpdateCertificateAndAssesment.as_view(),
         name='remove-cookie-from-header')
+    url(r'^v1/candidate-insights/$',
+        views.CandidateInsight.as_view(),
+        name='candidate-insights')
 ]
 
 if settings.DEBUG:
