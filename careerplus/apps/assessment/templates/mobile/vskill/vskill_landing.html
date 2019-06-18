@@ -1,0 +1,35 @@
+{% extends "mobile/basic/base.html" %}
+{% load static compress %}
+{% load static thumbnail compress %}
+{% block title %}Shine learning{% endblock %}
+
+{% block css_section %}
+    {{ block.super }}
+    {% compress css %}
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/vskill/vskill-home.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'shinelearn/css/common/mobile/typeaheadjs.css' %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}/">
+{% endblock canonical_url %}
+
+{% block django_meta %}
+    {% include 'meta/meta.html' %}
+{% endblock django_meta %}
+
+{% block container %}
+    
+<div class="body-wrapper">
+   Content goes here
+</div>
+
+{% endblock container %}
+
+{% block johukum %}
+{% endblock johukum %}
+
+{% block zendesk %}
+{% endblock zendesk %}
