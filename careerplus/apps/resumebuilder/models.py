@@ -287,7 +287,7 @@ class CandidateLanguage(PreviewImageCreationMixin, models.Model):
 
 senders = [Candidate, Skill, CandidateExperience, CandidateEducation, \
            CandidateCertification, CandidateProject, CandidateReference, \
-           CandidateAchievement, CandidateLanguage]
+           CandidateAchievement, CandidateLanguage,OrderCustomisation]
 
 for model_name in senders:
     post_save.connect(model_name.preview_image_task_call, sender=model_name)
