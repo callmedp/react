@@ -175,7 +175,7 @@ if __name__=="__main__":
                     EXP_DICT.get(item.product.get_exp(),"N/A"), \
                     DURATION_DICT.get(item.product.get_duration(),"N/A"),order.get_status,\
                     item_cost_price,order_discount,price_without_wallet_discount,order.total_incl_tax,\
-                    item_selling_price+item.delivery_price_incl_tax,item_delivery_service,item.delivery_price_incl_tax,\
+                    float(item_selling_price)+float(item.delivery_price_incl_tax),item_delivery_service,item.delivery_price_incl_tax,\
                     item.delivery_price_excl_tax,item_cost_price,order.total_incl_tax,\
                     coupon_code,txn_obj.get_payment_mode(),item.is_combo, combo_parent,item.is_variation,\
                     bool(item_refund_request_list),refund_amount,item.no_process, replaced, replacement_id,\
