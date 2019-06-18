@@ -20,7 +20,7 @@ export default class LoaderPage extends Component {
             <div className="">
                 <div className="loader-page">
                     <span className="loader-img">
-                        <img className="" src={`${this.staticUrl}react/assets/images/loader.png`}/><br/>
+                        <img className="" src={`${this.staticUrl}react/assets/images/loader.png`}/>
                         Please wait...
                     </span>
                 </div>

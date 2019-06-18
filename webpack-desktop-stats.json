@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "status":"done",
     "chunks":{
        "main":[
@@ -17,3 +18,23 @@
        ]
     }
  }
+=======
+  "status": "done",
+  "chunks": {
+    "main": [
+      {
+        "name": "main-1560837998833.css",
+        "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/react/dist/desktop/main-1560837998833.css"
+      },
+      {
+        "name": "main-1560837998833.js",
+        "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/react/dist/desktop/main-1560837998833.js"
+      },
+      {
+        "name": "main-1560837998833.js.map",
+        "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/react/dist/desktop/main-1560837998833.js.map"
+      }
+    ]
+  }
+}
+>>>>>>> build created from mobile and desk
