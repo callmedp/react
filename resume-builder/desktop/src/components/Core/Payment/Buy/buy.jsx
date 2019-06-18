@@ -44,9 +44,9 @@ export class Buy extends Component {
             return;
         let product;
         if (this.state.checked === 'product1') {
-            product = this.props.productIds[1]
-        } else {
             product = this.props.productIds[0]
+        } else {
+            product = this.props.productIds[1]
         }
         const data = {
             "prod_id": product.parent,
@@ -91,8 +91,8 @@ export class Buy extends Component {
         const {userInfo: {first_name, selected_template}, ui: {loader}, template: {templateImage, thumbnailImages},productIds} = this.props;
         const {userInfo} = this.props;
         const {checked} = this.state;
-        const price1 = productIds[1] && productIds[1].name==='Single Template' ? productIds[1].inr_price :productIds[0] ?productIds[0].inr_price: 999
-        const price2 = productIds[0] && productIds[0].name==='Multiple Templates' ? productIds[0].inr_price : productIds[1] ?productIds[1].inr_price: 1248
+        const price1 = productIds[0] ?  productIds[0].inr_price: 999
+        const price2 = productIds[1] ?  productIds[1].inr_price: 1248
         return (
             /*
             * @desc Top Bar component
