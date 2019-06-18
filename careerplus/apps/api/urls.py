@@ -42,6 +42,9 @@ urlpatterns = [
     url(r'^v1/talent-economy-blogs/$',
         views.TalentEconomyApiView.as_view(),
         name='talent-economy-blogs'),
+    url(r'^v1/candidate-insights/$',
+        views.CandidateInsight.as_view(),
+        name='candidate-insights')
 ]
 
 if settings.DEBUG:

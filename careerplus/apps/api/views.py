@@ -985,3 +985,15 @@ class TalentEconomyApiView(FieldFilterMixin,ListAPIView):
             filter_dict.update({'visibility': visibility})
         return Blog.objects.filter(**filter_dict)
 
+
+class CandidateInsight(APIView):
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        logging.getLogger('info_log').info("Candidate Insight:- {}".format(str(data)) )
+        return Response({
+            "msg": "Data has been noted."},
+            status=status.HTTP_201_CREATED
+        )
