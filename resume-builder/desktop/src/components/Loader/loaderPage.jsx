@@ -21,7 +21,10 @@ export default class LoaderPage extends Component {
                 <div className="loader-page">
                     <span className="loader-img">
                         <img className="" src={`${this.staticUrl}react/assets/images/loader.png`}/>
-                        Please wait...
+                        <div className="please-wait">
+                            Please wait...
+                        </div>
+                        
                     </span>
                 </div>
             </div>
