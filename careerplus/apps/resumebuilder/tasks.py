@@ -79,8 +79,6 @@ def generate_image_for_resume(candidate_id,template_no):
                 latest_experience = i.job_profile
 
     template = get_template('resume{}_preview.html'.format(template_no))
-    current_config = candidate.ordercustomisation_set.filter(template_no=template_no).first()
-    entity_position = current_config.entity_position_eval
 
     rendered_template = template.render(
         {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,
@@ -88,7 +86,7 @@ def generate_image_for_resume(candidate_id,template_no):
         'certifications': certifications, 'extracurricular': extracurricular, 'languages': languages,
         'current_exp': current_exp, 'latest_exp': latest_experience,
         'preference_list': entity_preference,'current_config': current_config,
-        'entity_position': entity_position, 'width': 93.7, 'activate_water_mark': True
+        'entity_position': updated_entity_position, 'width': 93.7, 'activate_water_mark': True
         }).encode(encoding='UTF-8')
 
     file_name = 'resumetemplate-' + str(template_no) + '.png'
