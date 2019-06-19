@@ -111,6 +111,7 @@ class Summary extends Component {
     async updateInfoBeforeLoss(){
 
         if(!this.state.submit){
+            const {initialValues} =this.props
             const form_data = this.props.info.form.summary;
             let error = false
             let error_values =form_data["syncErrors"]
@@ -122,7 +123,8 @@ class Summary extends Component {
                     }
                 }
             }
-            if(!error){
+            if(!error && JSON.stringify(initialValues)!==JSON.stringify(form_data['values'])){
+                
                 await this.props.onSubmit(form_data['values']);
             }
         }

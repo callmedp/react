@@ -90,10 +90,10 @@ class Experience extends Component {
     }
 
     async updateInfoBeforeLoss(){
-        let {formData: {experience: {values, syncErrors}}} = this.props;
+        let { initialValues, formData: {experience: {values, syncErrors}}} = this.props;
         let error = false;
         (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el || {}).map(key => (!!el[key] ? error = true : false)))
-        if (!error && !this.state.submit) await this.props.bulkUpdateOrCreate(values && values['list'])
+        if (!error && !this.state.submit && JSON.stringify(initialValues)!==JSON.stringify(values)) await this.props.bulkUpdateOrCreate(values && values['list'])
     }
 
     async openModal(fields,index){

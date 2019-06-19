@@ -69,6 +69,7 @@ class Language extends Component {
     async updateInfoBeforeLoss(){
 
         if(!this.state.submit){
+            const {initialValues} =this.props
             const form_data = this.props.info.form.language;
             let error = false
             let error_values =form_data["syncErrors"]
@@ -83,7 +84,8 @@ class Language extends Component {
                 }
             }
             
-            if(!error){
+            if(!error && JSON.stringify(initialValues)!==JSON.stringify(form_data['values'])){
+                
                 const values = this.props.handleOrdering(form_data['values'])
                 await this.props.bulkUpdateUserLanguage(values.list)
             }

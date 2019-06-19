@@ -78,10 +78,10 @@ class Project extends Component {
     
 
     async updateInfoBeforeLoss(){
-        let {formData: {project: {values, syncErrors}}} = this.props;
+        let { initialValues, formData: {project: {values, syncErrors}}} = this.props;
         let error = false;
         (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el || {}     ).map(key => (!!el[key] ? error = true : false)))
-        if (!error && !this.state.submit) await this.props.bulkUpdateOrCreate(values && values['list'])
+        if (!error && !this.state.submit && JSON.stringify(initialValues)!==JSON.stringify(values)) await this.props.bulkUpdateOrCreate(values && values['list'])
     }
 
     handleAddition(fields, error) {
