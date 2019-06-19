@@ -53,7 +53,7 @@ function* fetchUserAward(action) {
             results = list
         }
         let data = results.length ? {list: results} : initialState
-        data = {list: modifyAwards(data.list)}
+        data = {list: modifyAwards(data.list)};
         yield put({type: Actions.SAVE_USER_AWARD, data: data})
     } catch (e) {
         console.log(e);

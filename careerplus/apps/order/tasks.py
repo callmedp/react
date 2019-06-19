@@ -798,7 +798,6 @@ def generate_resume_for_order(order_id):
     from resumebuilder.models import Candidate
     from order.models import Order
     from resumebuilder.utils import ResumeGenerator
-
     order_obj = Order.objects.get(id=order_id)
     candidate_id = order_obj.candidate_id
     
