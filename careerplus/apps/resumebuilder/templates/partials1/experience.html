@@ -13,7 +13,7 @@
           {{ exp.company_name }}
           <pre style="font-size: {{ current_config.text_font_size|text_font_size }}px; color: #333333; margin-top: 5px;white-space: pre-line;">{{ exp.work_description }}</pre>
         </span>
-        <span style="font-size: {{ current_config.text_font_size|text_font_size }}px; color: #999999; display: inline-block; margin-left: auto; vertical-align: top;">
+        <span style="font-size: {{ current_config.text_font_size|text_font_size }}px; color: #999999; margin-left: auto; vertical-align: top;">
           {% if exp.is_working %}
               ({{ exp.start_date|date:"M Y" }} - Current)
           {% else %}
