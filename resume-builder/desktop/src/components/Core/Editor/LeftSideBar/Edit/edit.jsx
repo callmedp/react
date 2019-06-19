@@ -21,12 +21,20 @@ class Edit extends Component {
             elementToDelete: null,
             menu_modal_status: false
         };
-        
+
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
         const values = queryString.parse(nextProps.location.search);
         const {ui: {formName}} = nextProps;
+        let getCurrentEntityDetail = Object.values(formCategoryList).map((item, index) => {
+            if (item['itemType'] === formName) {
+                return {entity: item, index: index + 1}
+            }
+            return null;
+        }).filter(elem => elem !== null);
+        getCurrentEntityDetail = getCurrentEntityDetail && getCurrentEntityDetail.length ? getCurrentEntityDetail[0] : {};
+
         if (!(values && values.type)) {
             if (formName) {
                 nextProps.history.push(`/resume-builder/edit/?type=${formName}`);
@@ -60,16 +68,17 @@ class Edit extends Component {
         }
     }
 
-    openMenuModal(){
-        this.setState({menu_modal_status:true})
+    openMenuModal() {
+        this.setState({menu_modal_status: true})
     }
-    closeMenuModal(){
-        this.setState({menu_modal_status:false})
+
+    closeMenuModal() {
+        this.setState({menu_modal_status: false})
     }
 
     render() {
-        const {type, preferenceList, nextLink, elemToDelete,menu_modal_status} = this.state;
-        let {formData, ui: {formName},updateCategoryEntity,showAlertModal} = this.props;
+        const {type, preferenceList, nextLink, elemToDelete, menu_modal_status} = this.state;
+        let {formData, ui: {formName}, updateCategoryEntity, showAlertModal} = this.props;
         let error = false;
         const obj = formData && formData[formName] || {};
         let syncErrors = obj['syncErrors'] || {};
@@ -80,7 +89,7 @@ class Edit extends Component {
         }
         return (
             <div className="edit-section">
-                <MenuModal 
+                <MenuModal
                     menu_modal_status={menu_modal_status}
                     closeMenuModal={this.closeMenuModal}
                     preferenceList={preferenceList}
@@ -107,7 +116,7 @@ class Edit extends Component {
                                                 {elem['entity_text']}
                                             </div>
                                             :
-                                            <Link to={link} >
+                                            <Link to={link}>
                                                 <span className={'mr-20 ' + icon}></span>
                                                 {elem['entity_text']}
                                             </Link>
@@ -118,10 +127,12 @@ class Edit extends Component {
                     }
                 </ul>
 
-                <div className="edit-section--addmore" onClick={()=>{newUser ? showAlertModal('error') : this.openMenuModal()}}>
+                <div className="edit-section--addmore" onClick={() => {
+                    newUser ? showAlertModal('error') : this.openMenuModal()
+                }}>
                     + Add/Remove sections
                 </div>
-        </div>
+            </div>
         )
     }
 
@@ -139,7 +150,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         'updateCategoryEntity': (entity) => {
             return new Promise((resolve, reject) => {
-                return dispatch(actions.updateEntityPreference({"entity_preference_data": entity,resolve,reject}))
+                return dispatch(actions.updateEntityPreference({"entity_preference_data": entity, resolve, reject}))
             })
         },
         'showAlertModal': (alertType) => {
