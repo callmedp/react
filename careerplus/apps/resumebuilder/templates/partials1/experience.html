@@ -6,14 +6,14 @@
         <ul style="padding: 0; margin: 0; list-style-type: none;">
             {% for exp in experience %}
                 <li style="vertical-align: top; margin: 10px 0; display: flex; flex-direction: row; align-items: baseline;">
-                    <span style="width: 8px; height: 8px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; flex: 0 1 8px; margin-right: 10px; vertical-align: middle;"></span>
-                    <span style="flex: 1 1 auto; vertical-align: top; font-size: 14px;">
+                    <span style="width: 8px; height: 8px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: middle;"></span>
+                    <span style="display: inline-block; vertical-align: top; font-size: 14px;">
           <strong style="display: block; font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #777777;">{{ exp.job_profile }}
            </strong>
           {{ exp.company_name }}
           <pre style="font-size: {{ current_config.text_font_size|text_font_size }}px; color: #333333; margin-top: 5px;white-space: pre-line;">{{ exp.work_description }}</pre>
         </span>
-        <span style="font-size: {{ current_config.text_font_size|text_font_size }}px; color: #999999; margin-left: auto; vertical-align: top;">
+        <span style="font-size: {{ current_config.text_font_size|text_font_size }}px; color: #999999; display: inline-block; vertical-align: top; margin-left: auto">
           {% if exp.is_working %}
               ({{ exp.start_date|date:"M Y" }} - Current)
           {% else %}
