@@ -53,10 +53,10 @@ export class PersonalInfo extends Component {
     }
 
     async updateInfoBeforeLoss(){
-        let {formData: {profile: {values, syncErrors}}} = this.props;
+        let { initialValues, formData: {profile: {values, syncErrors}}} = this.props;
         let error = false;
         Object.keys(syncErrors || {}).map(key => (!!syncErrors[key] ? error = true : false));
-        if (!error && !this.state.submit) await this.props.onSubmit(values, this.state.imageURL, this.state.flag)
+        if (!error && !this.state.submit && JSON.stringify(initialValues)!==JSON.stringify(values)) await this.props.onSubmit(values, this.state.imageURL, this.state.flag)
     }
 
     async handleSubmit(values, entityLink) {

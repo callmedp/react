@@ -80,6 +80,7 @@ class Experience extends Component {
     async updateInfoBeforeLoss(){
 
         if(!this.state.submit){
+            const {initialValues} =this.props
             const form_data = this.props.info.form.experience;
             let error = false
             let error_values =form_data["syncErrors"]
@@ -93,7 +94,8 @@ class Experience extends Component {
                     }
                 }
             }
-            if(!error){
+            if(!error && JSON.stringify(initialValues)!==JSON.stringify(form_data['values'])){
+                
                 const values = this.props.handleOrdering(form_data['values'])
                 await this.props.bulkUpdateUserExperience(values.list)
             }

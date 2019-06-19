@@ -70,6 +70,7 @@ class PersonalInfo extends Component {
 
     async updateInfoBeforeLoss(){
         if(!this.state.submit){
+            const {initialValues} =this.props
             const form_data = this.props.info.form.personalInfo;
             let error = false
             let error_values =form_data["syncErrors"]
@@ -81,7 +82,8 @@ class PersonalInfo extends Component {
                     }
                 }
             }
-            if(!error){
+            if(!error && JSON.stringify(initialValues)!==JSON.stringify(form_data['values'])){
+                
                 const {imageURL,flag} = this.state
                 await this.props.onSubmit(form_data['values'],imageURL,flag);
             }

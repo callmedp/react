@@ -126,7 +126,7 @@ class Buy extends Component {
                             <div className="buy__item--right">
                                 <span className="buy__item--image">
                                     { thumbnailImages.length === 5 ?
-                                        <img  src={`data:image/png;base64, ${thumbnailImages[template]}`} alt="Resume"/>:
+                                        <img  src={`data:image/png;base64, ${thumbnailImages[template -1]}`} alt="Resume"/>:
                                         <img src={`${this.staticUrl}react/assets/images/mobile/small-resume-${template}.jpg`} alt="Custom resume" />
                                     }
                                 </span>

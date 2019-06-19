@@ -48,8 +48,8 @@ class Summary extends Component {
     }
 
     async updateInfoBeforeLoss(){
-        let {formData: {summary: {values}}} = this.props;
-        if (!this.state.submit) await this.props.onSubmit(values)
+        let {initialValues, formData: {summary: {values}}} = this.props;
+        if (!this.state.submit && JSON.stringify(initialValues)!==JSON.stringify(values)) await this.props.onSubmit(values)
     }
 
     async handleSubmit(values, entityLink) {
