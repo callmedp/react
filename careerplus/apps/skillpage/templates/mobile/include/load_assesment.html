@@ -1,5 +1,7 @@
 {% load static %}
-{% for product in products %}
+{% load shop_tags %}
+
+{% for product in certifications %}
     <div class="box row mb-15">
         <div class="media">
             <div class="media-left">
@@ -46,6 +48,10 @@
                     {{product.pPvn}}
                     </a>
                 </p>
+
+                <p class="pb-5 fs-11">
+                {% if product.pAsft|get_value_from_dict:'number_of_questions' %}   No. of questions : <strong>{{ product.pAsft|get_value_from_dict:'number_of_questions' }}</strong> {% endif %}{% if product.pAsft|get_value_from_dict:'test_duration' %} <span class="pl-5 pr-5">|</span> Duration: <strong>{{ product.pAsft|get_value_from_dict:'test_duration' }} mins</strong> {% endif %}
+                </p>
                 <p class="pb-0 fs-12">
                     Starting at <strong>Rs. {{ product.pPin |floatformat:'0' }}/-</strong>{% if product.pPfin|floatformat:0|add:"0" %}<strike>Rs. {{ product.pPfin|floatformat:"0" }}/-</strike> <span class="discount">{{ product.discount }}% OFF</span>{% endif %}
                 </p>
@@ -53,17 +59,3 @@
         </div><!-- end of media -->
     </div><!-- end of box -->
 {% endfor %}
-{% if products.has_next %}
-    <p class="text-center pb-0">
-        <a role="button" id="product_load_more"
-        class="load-more loadmore">
-        <strong>Load More</strong></a>
-    </p>
-    <div id="prod_load_more">
-        {% if products.has_next %}
-            <input type="hidden" name="page"
-            value="{{products.next_page_number}}" id="page_id">
-            <input type="hidden" name="slug" value="{{category_obj.pk}}" id="slug_id">
-        {% endif %}
-    </div>
-{% endif %}
