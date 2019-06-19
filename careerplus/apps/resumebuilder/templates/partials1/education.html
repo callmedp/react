@@ -15,7 +15,7 @@
                     </strong>
                     {{ edu.institution_name }}
                   </span>
-                  <span style=" font-size: {{ current_config.text_font_size|text_font_size }}px; color: #999999; width: 19%; display: inline-block; vertical-align: top;">
+                  <span style=" font-size: {{ current_config.text_font_size|text_font_size }}px; color: #999999; display: inline-block; vertical-align: top; margin-left: auto;">
                       {% if edu.is_pursuing %}
                           ({{ edu.start_date|date:"M Y" }} - Current)
                       {% else %}
