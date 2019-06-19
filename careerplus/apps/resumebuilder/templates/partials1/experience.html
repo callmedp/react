@@ -5,8 +5,7 @@
         <strong style="font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px; display: block; color: {{ current_config.color|background_color_choice }}; text-transform: uppercase; margin-bottom: 15px; border-bottom: 1px solid #cac8c9; padding-bottom: 10px;">{{ preference_list.2.entity_text }}</strong>
         <ul style="padding: 0; margin: 0; list-style-type: none;">
             {% for exp in experience %}
-                <li style="vertical-align: top; margin: 10px 0;">
-                    <div style="display: flex; flex-direction: row; align-items: baseline;">
+                <li style="vertical-align: top; margin: 10px 0; display: flex; flex-direction: row; align-items: baseline;">
                       <span style="width: 8px; height: 8px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: middle;"></span>
                       <span style="display: inline-block; vertical-align: top; font-size: 14px;">
                         <strong style="display: block; font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #777777;">{{ exp.job_profile }}
@@ -20,8 +19,9 @@
                             ({{ exp.start_date|date:"M Y" }} - {{ exp.end_date|date:"M Y" }})
                         {% endif %}
                       </span> 
+                    <div style="display: flex; flex-direction: column;">
+                      <pre style="font-size: {{ current_config.text_font_size|text_font_size }}px; color: #333333; margin-top: 5px;white-space: pre-line; margin-left: 20px;">{{ exp.work_description }}</pre>
                     </div>
-                    <pre style="font-size: {{ current_config.text_font_size|text_font_size }}px; color: #333333; margin-top: 5px;white-space: pre-line; margin-left: 20px;">{{ exp.work_description }}</pre>
                 </li>
             {% endfor %}
         </ul>
