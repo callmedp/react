@@ -359,6 +359,7 @@ def process_mailer(pk=None):
                     'subject': 'Your service details related to order <' + str(oi.order.id) + '>',
                     'username': oi.order.first_name,
                     'type_flow': oi.product.type_flow,
+                    'sub_type_flow': oi.product.sub_type_flow,
                     'pk': oi.pk,
                     'oi': oi,
                     'product_name': oi.product.name,
