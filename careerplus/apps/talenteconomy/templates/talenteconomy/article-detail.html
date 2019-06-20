@@ -71,47 +71,47 @@
 			{% endif %}
       <br>
       <!-- Looks interesting? -->
-      <div id="sticker" class="request-call query-form-right box-panel col-sm-6 col-md-12 cleafix">
-        <h2 class="heading-right">Looks interesting?</h2>
-          <p>Know more about our services, just fill the details below!</p>
-          <form class="mt-20" role="form" id="queryform" >
-            <div style='display:none'>
-                <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'/>
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-control" name="name" placeholder="Name" 
-              maxlength="100" value="{{request.session.full_name}}">
-              <span class="error-txt position-error"></span>
-            </div>
-            <div class="form-group">
-                <div class="country-code">
-                    <div class="custom-select">
-                      <select class="form-control" name="country">
-                        {% for country in country_choices %}
-                           <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.0}}&nbsp;&nbsp;&nbsp;&nbsp; -- &nbsp;&nbsp;&nbsp;&nbsp;{{country.1}}</option>
-                      {% endfor %}
-                      </select>
-                    </div>
-                    <input type="text" class="form-control" name="number" 
-                    placeholder="Mobile" maxlength="15" value="{{request.session.mobile_no}}">
-                    <span class="error-txt position-error"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <textarea class="form-control" rows="1" name="msg" placeholder="Message" maxlength="500"></textarea>
-                <span class="error-txt position-error"></span>
-            </div>
-            <input type="hidden" name="lsource" value="1">
-            <input type="hidden" name="product" value="{{category_obj.pk}}">
-            <input type="hidden" name="prd" value="{{category_obj.heading}}">
-            <input type="hidden" name="path" value="{{request.build_absolute_uri}}">
-            
-            <button type="button" id="id_query"  class="submit-button">
-            Submit
-            </button>
-          </form>
+      <!--<div id="sticker" class="request-call query-form-right box-panel col-sm-6 col-md-12 cleafix">-->
+        <!--<h2 class="heading-right">Looks interesting?</h2>-->
+          <!--<p>Know more about our services, just fill the details below!</p>-->
+          <!--<form class="mt-20" role="form" id="queryform" >-->
+            <!--<div style='display:none'>-->
+                <!--<input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'/>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+              <!--<input type="text" class="form-control" name="name" placeholder="Name"-->
+              <!--maxlength="100" value="{{request.session.full_name}}">-->
+              <!--<span class="error-txt position-error"></span>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<div class="country-code">-->
+                    <!--<div class="custom-select">-->
+                      <!--<select class="form-control" name="country">-->
+                        <!--{% for country in country_choices %}-->
+                           <!--<option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.0}}&nbsp;&nbsp;&nbsp;&nbsp; &#45;&#45; &nbsp;&nbsp;&nbsp;&nbsp;{{country.1}}</option>-->
+                      <!--{% endfor %}-->
+                      <!--</select>-->
+                    <!--</div>-->
+                    <!--<input type="text" class="form-control" name="number"-->
+                    <!--placeholder="Mobile" maxlength="15" value="{{request.session.mobile_no}}">-->
+                    <!--<span class="error-txt position-error"></span>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<textarea class="form-control" rows="1" name="msg" placeholder="Message" maxlength="500"></textarea>-->
+                <!--<span class="error-txt position-error"></span>-->
+            <!--</div>-->
+            <!--<input type="hidden" name="lsource" value="1">-->
+            <!--<input type="hidden" name="product" value="{{category_obj.pk}}">-->
+            <!--<input type="hidden" name="prd" value="{{category_obj.heading}}">-->
+            <!--<input type="hidden" name="path" value="{{request.build_absolute_uri}}">-->
 
-      </div> 
+            <!--<button type="button" id="id_query"  class="submit-button">-->
+            <!--Submit-->
+            <!--</button>-->
+          <!--</form>-->
+
+      <!--</div>-->
       <!-- Looks interesting? --> 
               <div id="snackbar"></div>
 
