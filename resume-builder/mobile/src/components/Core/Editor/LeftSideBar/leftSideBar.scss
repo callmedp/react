@@ -1,0 +1,181 @@
+@import '../../../../styles/variables/vars.scss';
+@import '../../../../styles/variables/mixins.scss';
+
+
+.left-sidebar {
+    width: 55px;
+    background-color: $white;
+    position: fixed;
+    top: 50px;
+    height: 100vh;
+    box-shadow: 0 0 15px $box-shadow-light;
+
+    z-index: 2;
+}
+
+.user {
+	display: flex;
+	align-items: center;
+	flex: 1;
+
+	&__image {
+		@include border-radius(50%);
+		@include square(25px);
+		background-color: $grey-light;
+		display: block;
+		margin-right: 1.0rem;
+		margin-left: 1.5rem;
+		overflow: hidden;
+
+		img {
+			@include square(100%); 
+		}
+	}
+
+	&__name {
+		font-size: 1.4rem;
+	}
+}
+
+.sidebar {
+
+    &__menuWrap {
+        height: calc(100vh - 160px);
+        overflow-x: scroll;
+    }
+
+    &__item {
+        @include size(55px, 50px, flex);
+        align-items: center;
+    }
+    
+    &__anchor {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        width: 100%;
+    }
+
+    &__wrap {
+        height: 55px;
+        text-align: center;
+
+        flex: 0 0 55px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    &__link {
+        color: $blue;
+        font-size: 0.9rem;
+        width: 55px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .sidebar-open__wrap {
+        opacity: 0;
+    }
+
+    .user,
+    .companyMenu {
+        visibility: hidden;
+        display: none;
+    }
+}
+
+.sidebar-open {
+    background-color: $white;
+    width: 290px;
+    z-index: 2;
+    top: 0;
+    height: 100%;
+    overflow: auto;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    &__wrap {
+        font-size: 1.6rem;
+        color: $blue;
+        height: 50px;
+        padding-right: 15px;
+        
+
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &__link {
+        font-size: 1.4rem;
+    }
+
+    .sidebar__link {
+        display: none;
+    }
+
+    .sidebar-open__wrap {
+        opacity: 1;
+    }
+
+    .user,
+    .companyMenu {
+        visibility: visible;
+        display: flex;
+    }
+}
+
+
+.sidebar--active {
+    background-color: $blue; 
+
+    .sidebar {
+        &__link {
+            color: $white;  
+        }
+    }
+
+    .sidebar-open {
+        &__link {
+            color: $white;
+        }
+    }
+
+    .icon--delete {
+        background-position: 0 -305px;   
+    }
+}
+
+.companyMenu {
+    border-top: 1px solid $grey-lightest;
+    padding-top: 30px;
+    font-size: 1.2rem;
+    width: 100%;
+    padding: 1.5rem;
+
+    flex-direction: column;
+
+    &__link {
+        color: $blue;
+        
+        &:not(:last-child) {
+            margin-bottom: 0.5rem;
+        }
+    }
+}
+
+.disable {
+    .sidebar__item {
+        opacity: .5;
+    }
+
+    .user {
+        opacity: 1;
+    }
+}

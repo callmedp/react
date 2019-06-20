@@ -10,7 +10,8 @@ from core.mixins import TokenGeneration
 
 class SendMail():
 
-    def base_send_mail(self, subject, body, to=None, from_email=settings.CONSULTANTS_EMAIL, headers=None, cc=None, bcc=None, fail_silently=False, attachments=[], mimetype='application/pdf'):
+    def base_send_mail(self, subject, body, to=None, from_email=settings.CONSULTANTS_EMAIL, headers=None, cc=None,
+                       bcc=None, fail_silently=False, attachments=[], mimetype='application/pdf'):
         '''
             Base function to send email. If debug_mode is true the cc will be shinecp@hindustantimes.com
         '''
@@ -20,7 +21,8 @@ class SendMail():
             cc = []
         else:
             bcc = [settings.DEFAULT_FROM_EMAIL]
-        emsg = EmailMessage(subject, body=body, to=to, from_email=from_email, headers=headers, cc=cc, bcc=bcc, attachments=[])
+        emsg = EmailMessage(subject, body=body, to=to, from_email=from_email, headers=headers, cc=cc, bcc=bcc,
+                            attachments=[])
         emsg.content_subtype = "html"
         if attachments:
             try:
@@ -41,7 +43,10 @@ class SendMail():
         except Exception as e:
             logging.getLogger('error_log').error("%s - %s" % (str(to), str(e)))
 
-        self.base_send_mail(subject=send_dict.get('subject', 'Shinelearning'), body=body, to=to, from_email=send_dict.get('from_email', settings.DEFAULT_FROM_EMAIL), headers=send_dict.get('header', None), cc=send_dict.get('cc_list', None), bcc=send_dict.get('bcc_list', None), fail_silently=False, attachments=[])
+        self.base_send_mail(subject=send_dict.get('subject', 'Shinelearning'), body=body, to=to,
+                            from_email=send_dict.get('from_email', settings.DEFAULT_FROM_EMAIL),
+                            headers=send_dict.get('header', None), cc=send_dict.get('cc_list', None),
+                            bcc=send_dict.get('bcc_list', None), fail_silently=False, attachments=[])
 
     def send(self, to=None, mail_type=None, data={}):
         send_dict = {}
@@ -277,7 +282,8 @@ class SendMail():
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             token = TokenGeneration().encode(data.get("email", ''), '1', 1)
-            data['reset_url'] = "%s://%s/user/update/password/?token=%s" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token)
+            data['reset_url'] = "%s://%s/user/update/password/?token=%s" % (
+            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token)
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             self.process(to, send_dict, data)
 
@@ -304,4 +310,27 @@ class SendMail():
             send_dict['header'] = headers_dict
 
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
+            self.process(to, send_dict, data)
+
+        elif mail_type == "RESUME_BUILDER_INVITE":
+            send_dict['subject'] = "Build Your Resume"
+            send_dict['template'] = 'emailers/candidate/resume_builder_invite.html'
+            send_dict['from_email'] = settings.CONSULTANTS_EMAIL
+            send_dict['header'] = {'Reply-To': settings.REPLY_TO}
+            send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
+
+        elif mail_type == "CERTIFICATE_AND_ASSESMENT":
+            send_dict['subject'] = data['subject']
+            send_dict['template'] = 'emailers/candidate/assesment_completed.html'
+            send_dict['from_email'] = settings.CONSULTANTS_EMAIL
+            headers_dict = {'Reply-To': settings.REPLY_TO}
+            send_dict['header'] = headers_dict
+            self.process(to, send_dict, data)
+
+        elif mail_type == "CERTIFICATE_AND_ASSESMENT":
+            send_dict['subject'] = data['subject']
+            send_dict['template'] = 'emailers/candidate/assesment_completed.html'
+            send_dict['from_email'] = settings.CONSULTANTS_EMAIL
+            headers_dict = {'Reply-To': settings.REPLY_TO}
+            send_dict['header'] = headers_dict
             self.process(to, send_dict, data)

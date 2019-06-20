@@ -1,7 +1,7 @@
 {% load static %}
 <!-- Section 1 -->
 {% for data in order_list %}
-    {% with order=data.order orderitems=data.orderitems item_count=data.item_count %}
+    {% with order=data.order orderitems=data.orderitems item_count=data.item_count product_type_flow=data.product_type_flow product_id=data.product_id %}
         <div class="accordion_in {% if forloop.counter == 1 %}acc_active {% endif %}box mb-20">
             <div class="acc_head">{{order.number}}
                 <div class="sub-head"><span>{{order.date_placed.date}}</span>  <span>Status <strong>
@@ -58,6 +58,7 @@
                             <p class="c6 fs-12 pb-0">Total amount</p>
                             <p class="price">{% if order.currency %}{{order.currency}}{% else %}Rs.{% endif %}{{order.total_incl_tax}}/-</p>
                         </td>
+                        
                         {% if order.status == 1 or order.status == 3 %}
                             <td class="text-right">
                                 <form role="form" id="download-invoice-form{{order.pk}}" method="POST" action="{% url "dashboard:dashboard-invoicedownload" %}">

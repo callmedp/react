@@ -13,7 +13,7 @@ from django.http import (
     HttpResponseRedirect,HttpResponseForbidden)
 from django.contrib import messages
 from django.views.generic import FormView, TemplateView, View
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.conf import settings
 from django.utils import timezone
 from django.db.models import Q

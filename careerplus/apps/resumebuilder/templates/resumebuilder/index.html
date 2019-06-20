@@ -1,0 +1,54 @@
+{% load render_bundle from webpack_loader %}
+{% load static humanize compress %}
+
+{% block head %}
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    {% block css_section %}
+
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+              integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+              crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" charset="UTF-8"
+              href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"/>
+        <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"/>
+        {% render_bundle 'main' 'css' 'DEFAULT' %}
+        <link type="text/css" href="{% static 'shinelearn/css/resume-builder/resume6.css' %}" rel="stylesheet">
+
+
+    {% endblock css_section %}
+    <script>
+        window.config = {}
+        config.staticUrl = "{{STATIC_URL}}" 
+        config.siteDomain ="{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN }}"
+        config.msiteDomain = "{{ SITE_PROTOCOL }}://{{ MOBILE_SITE_DOMAIN }}"
+        document.onkeydown = function(e) {
+            if(event.keyCode == 123) {
+                return false;
+            }
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)){
+                return false;
+            }
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)){
+                return false;
+            }
+            if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)){
+                return false;
+            }
+        }
+    </script>
+
+{% endblock head %}
+
+
+{% block container %}
+    <div id="react-app" oncontextmenu="return false;"></div>
+    <!-- Webpack rendered JS -->
+{% endblock container %}
+
+{% block js_section %}
+    {% render_bundle 'main' 'js' 'DEFAULT' %}
+{% endblock js_section %}

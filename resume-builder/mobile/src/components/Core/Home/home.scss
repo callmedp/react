@@ -1,0 +1,210 @@
+@import '../../../styles/variables/vars.scss';
+@import '../../../styles/variables/mixins.scss';
+
+.home {
+    padding: 5rem 1.5rem 0;
+}
+
+//  .info {
+//     background-color: $white;
+//     box-shadow: 0 0 10px $box-shadow-light;
+//     padding: 3rem 1.5rem;
+//     border-radius: 8px;
+//     margin-top: -4rem;
+
+//     &__items {
+//         padding: 0;
+//         font-size: 1.4rem;
+//         color: $grey-333;
+
+//         li {
+//             padding-left: 2.5rem;
+
+//             &:not(:last-child) {
+//                 margin-bottom: 1.5rem;
+//             }
+//         }
+//     }
+// }
+
+.professional {
+    padding: 3rem 0 3rem 1.5rem;
+
+    &__items {
+        padding: 0;
+        margin: 3rem 0 0;
+    }
+
+    &__item {
+        @include border-radius(.8rem);
+        box-shadow: 0 0 1.0rem $box-shadow-light;
+        background-color: $white;
+        padding: 1.5rem;
+        color: $grey-333;
+        font-size: 1.4rem;
+        position: relative;
+        padding-left: 7.0rem;
+        height: 8.0rem;
+        font-weight: 600;
+
+        display: flex;
+        align-items: center;
+
+        &:not(:last-child) {
+            margin-bottom: 1.5rem;
+        }
+
+        span {
+            @include square(6.0rem);
+            @include border-radius(100%);
+            display: block;
+            background-color: $blue;
+            position: absolute;
+            left: -1.5rem;
+            box-shadow: 0 5px 10px rgba($black, .2);
+
+            i {
+                @include size(16px, 16px, block);
+                position: absolute;
+                transform: scale(1.6);
+                top: 21px;
+                left: 21px;
+            }
+        }
+    }
+}
+
+
+.how-works {
+
+    &__items {
+        margin: 1.5rem 0;
+        padding: 0 0 0 1.0rem;
+    }
+
+    &__item {
+        color: $grey-333;
+        font-size: 1.4rem;
+        font-weight: 600;
+
+        &:not(:last-child) {
+            margin-bottom: 1.5rem;
+        }
+
+        display: flex;
+        align-items: center;
+
+        span {
+            @include size(80px, 83px, block);
+            background-image: url('#{$path}/how-it-works.png');
+            background-repeat: no-repeat;
+            position: relative;
+
+            flex: 0 0 80px;
+        }
+    }
+
+    &--count {
+        @include size(27px, 27px, flex);
+        @include border-radius(50%);
+        background-color: $white;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 1.4rem;
+        position: absolute;
+        top: -5px;
+        left: -5px;
+        box-shadow: 0 0 10px rgba($black, .3);
+
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+
+.resume-builder {
+    &__items {
+        display: flex;
+        align-content: center;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    &__item {
+        @include border-radius(4px);
+        background-color: $white;
+        padding: 1.5rem 1rem 1.5rem 1.0rem;
+        font-size: 1.4rem;
+        box-shadow: 0 0 10px rgba($black, .2);
+        position: relative;
+        margin: 1.0rem 0;
+        text-align: center;
+        flex: 0 0 48%;
+
+        i {
+            color: $grey-333;
+            transform: translateY(-50%) scale(1.5);
+            margin: 10px auto 0 auto;
+        }
+    }
+}
+
+
+.shine-learning {
+    &--logo {
+        @include size(200px, 47px, block);
+        background: url('#{$path}/shine-logo-big.jpg');
+        margin: 0 auto 2.0rem;
+    }
+
+    &__items {
+        margin-top: 2.0rem;
+
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    &__item {
+        @include border-radius(4px);
+        background-color: $grey-f2;
+        padding: 1rem 1.5rem 1rem 3rem;
+        margin: .5rem 0;
+        font-size: 1.4rem;
+        position: relative;
+
+        flex: 0 0 48%;
+
+        &::before {
+            @include square(8px);
+            @include border-radius(50%);
+            content: '';
+            background-color: $blue;
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    }
+}
+
+
+.section {
+    &__head {
+        color: $grey-333;
+        font-size: 2.4rem;
+        font-weight: 600;
+    }
+
+    &__subHead {
+        font-size: 1.4rem;
+        color: $grey-999;
+    }
+}
+
+
+.grey-bg {
+    background-color: $grey-f2;
+    margin: 0 -1.5rem;
+    padding: 2.5rem 1.5rem;
+}

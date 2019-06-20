@@ -1,0 +1,17 @@
+{% load static compress resume_tags %}
+{% if certifications|length >= 1 %}
+
+    <div style="display: block; vertical-align: top; margin-bottom: 30px; word-break: break-word;">
+        <strong style="display: block; text-transform: uppercase; color: #000000; font-weight: normal; font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px; margin-top: 0">{{ preference_list.7.entity_text }}</strong>
+        <ul style="padding: 0; margin: 0; list-style-type: none;">
+            {% for course in certifications %}
+                <li style="vertical-align: top; margin: 5px 0; width: 49.3%; display: inline-block;">
+                    <span style="width: 8px; height: 8px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
+                    <span style="font-size: {{ current_config.text_font_size|text_font_size }}px; color: #333333; display: inline-block; vertical-align: top; width: 86%;">{{ course.name_of_certification }}
+        <span style="font-style: italic; color: #999999; display: inline-block; font-weight: normal; font-size: {{ current_config.text_font_size|text_font_size }}px;">({{ course.year_of_certification }})</span>
+        </span>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}

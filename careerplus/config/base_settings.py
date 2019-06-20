@@ -12,15 +12,14 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 import sys
+
 # import redis
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_DIR = os.path.dirname(BASE_DIR)
 
-
 sys.path.append(os.path.join(BASE_DIR, 'apps'))
-
 
 GEOIP_PATH = BASE_DIR + '/apps/users/GeoIP.dat'
 
@@ -65,7 +64,9 @@ THIRD_PARTY_APPS = [
     'celery',
     'compressor',
     'storages',
-    'django_filters'
+    'django_filters',
+    'webpack_loader',
+    'corsheaders'
 ]
 
 # Apps specific for this project go here.
@@ -102,6 +103,7 @@ LOCAL_APPS = [
     'talenteconomy',
     'hrinsider',
     'scheduler',
+    'resumebuilder'
     'assessment',
 ]
 
@@ -119,6 +121,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'core.middleware.UpgradedMobileDetectionMiddleware',
     'core.middleware.UpgradedSetFlavourMiddleware',
     'core.middleware.LearningShineMiddleware',
@@ -126,7 +129,6 @@ MIDDLEWARE = [
     'core.middleware.TrackingMiddleware',
     'core.middleware.AmpMiddleware',
     'core.middleware.LocalIPDetectionMiddleware',
-
 ]
 
 ROOT_URLCONF = 'careerplus.config.urls'
@@ -140,6 +142,7 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.static',
                 'django.contrib.messages.context_processors.messages',
                 'core.context_processors.common_context_processor',
                 'django_mobile.context_processors.flavour',
@@ -150,10 +153,10 @@ TEMPLATES = [
             ],
             'loaders': ([
                 # ('django_mobile.loader.CachedLoader', [
-                    'django_mobile.loader.Loader',
-                    'django.template.loaders.filesystem.Loader',
-                    'django.template.loaders.app_directories.Loader'
-                ]),
+                'django_mobile.loader.Loader',
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
+            ]),
         },
     },
 ]
@@ -164,6 +167,18 @@ DEFAULT_MOBILE_FLAVOUR = 'mobile'
 FLAVOURS = ('full', 'mobile')
 
 WSGI_APPLICATION = 'careerplus.wsgi.application'
+
+# Webpack loader is used to load webpack generated files
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': 'react/dist/desktop/',
+        'STATS_FILE': os.path.join(BASE_DIR, '..', 'webpack-desktop-stats.json'),
+    },
+    'MOBILE': {
+        'BUNDLE_DIR_NAME': 'react/dist/mobile/',
+        'STATS_FILE': os.path.join(BASE_DIR, '..', 'webpack-mobile-stats.json'),
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -208,7 +223,7 @@ COMPRESS_CSS_FILTERS = (
 )
 
 COMPRESS_PRECOMPILERS = (
-   ('text/scss', 'sass --scss {infile} {outfile}'),
+    ('text/scss', 'sass --scss {infile} {outfile}'),
 )
 
 # Static files (CSS, JavaScript, Images)
@@ -226,7 +241,6 @@ DOWNLOAD_URL = '/download/'
 
 INVOICE_DIR = os.path.join(BASE_DIR, 'media/invoice/')
 RESUME_DIR = os.path.join(BASE_DIR, 'media/resume/')
-
 
 REST_FRAMEWORK = {
     # authentication permission
@@ -252,7 +266,7 @@ OAUTH2_PROVIDER = {
 
 # ckeditor settings...
 CKEDITOR_UPLOAD_PATH = "uploads/ck_editor/"
-CKEDITOR_JQUERY_URL = 'shinelearn/js/common/jquery.min.js'  #'https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'
+CKEDITOR_JQUERY_URL = 'shinelearn/js/common/jquery.min.js'  # 'https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'full',
@@ -291,7 +305,6 @@ HTMSL_PASS = 'Firefly@456'
 HTMSL_URL = 'https://alerts.solutionsinfini.com/api/v4/'
 ACCESSKEY = 'Af7fa4f7dacdc996393c18071b57d0a6f'
 
-
 ########## DOMAIN SETTINGS ######################
 SITE_DOMAIN = 'learning.shine.com'
 SITE_PROTOCOL = 'https'
@@ -317,7 +330,8 @@ HAYSTACK_LIMIT_TO_REGISTERED_MODELS = False
 ##################################################
 
 CITIES_LIGHT_TRANSLATION_LANGUAGES = ['en']
-CITIES_LIGHT_INCLUDE_CITY_TYPES = ['PPL', 'PPLA', 'PPLA2', 'PPLA3', 'PPLA4', 'PPLC', 'PPLF', 'PPLG', 'PPLL', 'PPLR', 'PPLS', 'STLMT',]
+CITIES_LIGHT_INCLUDE_CITY_TYPES = ['PPL', 'PPLA', 'PPLA2', 'PPLA3', 'PPLA4', 'PPLC', 'PPLF', 'PPLG', 'PPLL', 'PPLR',
+                                   'PPLS', 'STLMT', ]
 CITIES_LIGHT_APP_NAME = 'geolocation'
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static_core')]
@@ -401,26 +415,39 @@ LOGGING = {
     },
 }
 
-
-PRODUCT_ALTERNATE_SEARCH_TERMS = []     # TODO: Enter commonly search terms
-
+PRODUCT_ALTERNATE_SEARCH_TERMS = []  # TODO: Enter commonly search terms
 
 ###### CLICK TRACKING #######################
 CLICK_TRACKING = 'https://www3.shine.com/click-tracking/'
 
+CORS_ORIGIN_ALLOW_ALL = True
+
+# CORS_ALLOW_CREDENTIALS = False
+
+CORS_ORIGIN_WHITELIST = ('*',)
+#
+# CORS_ALLOW_METHODS = (
+#     'DELETE',
+#     'GET',
+#     'OPTIONS',
+#     'PATCH',
+#     'POST',
+#     'PUT',
+# )
 
 ####### PRODUCT SETTINGS ####################
 # Do Not Change #
 COURSE_SLUG = ['course', ]
 WRITING_SLUG = ['writing', 'resume']
 SERVICE_SLUG = ['service', ]
+ASSESSMENT_SLUG = ['assessment']
 # delivery slug
 NORMAL_DELIVERY_SLUG = ['normal', ]
 EXPRESS_DELIVERY_SLUG = ['express', ]
 SUPER_EXPRESS_DELIVERY_SLUG = ['super-express', ]
 DELIVERY_SLUG = NORMAL_DELIVERY_SLUG + EXPRESS_DELIVERY_SLUG + SUPER_EXPRESS_DELIVERY_SLUG
 
-CHARS_TO_REMOVE = ['/', "'", "(", ")", "!", "~", "`", "@", "#", "$", "%", "&" ]
+CHARS_TO_REMOVE = ['/', "'", "(", ")", "!", "~", "`", "@", "#", "$", "%", "&"]
 ############################################
 
 # google captcha settings
@@ -444,6 +471,7 @@ LEARNING_BLOGGER = ['LEARNING_BLOGGER']
 TALENT_BLOGGER = ['TALENT_BLOGGER']
 HR_INSIDER = ['HR_INSIDER']
 BLOGGER_GROUP_LIST = [LEARNING_BLOGGER, TALENT_BLOGGER, HR_INSIDER, PRODUCT_GROUP_LIST]
+
 # Refund Application level
 OPS_GROUP_LIST = ['OPERATION']
 OPS_HEAD_GROUP_LIST = ['OPS_HEAD']
@@ -468,7 +496,6 @@ WELCOMECALL_GROUP_LIST = ['WELCOME_CALL']
 
 REFUND_GROUP_LIST += WELCOMECALL_GROUP_LIST
 
-
 # Course catalogoue cache time
 COURSE_CATALOGUE_CASH_TIME = 24 * 60 * 60  # in seconds
 
@@ -483,11 +510,10 @@ CCAVENUE_URL = 'https://secure.ccavenue.com/transaction/transaction.do?command=i
 SESSION_CACHE_ALIAS = 'session'
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
-
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = PROJECT_DIR + '/careerplus/config/code-learning-key.json'
 
-
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 365  # 1 year
+CONSOLE_SESSION_TIMEOUT = 60 * 60 * 24
 
 CMS_STATIC_TEMP_DICT = {
     1: 'cms_static.html',
@@ -510,8 +536,7 @@ URL_MAPPING_TO_PRODUCT = {"resume-writing-services-1": ([1921,1922,1923,1924,32]
                             "six-sigma":([3400],3400),
                             "linkedin":([1926],1926)
 
-
-}
+                          }
 
 LOCAL_NETWORK_IPS_RANGE =[ "59.160.104.0/24", "220.227.160.128/25", "122.177.0.0/16", "172.22.65.0/24",
     "125.23.128.20/30", "59.144.72.128/28", "203.145.175.0/28", "103.248.118.192/28"]
@@ -524,4 +549,19 @@ LOCAL_NETWORK_IPS = [ "172.16.64.80","125.19.44.195","124.124.86.138","115.112.3
     "202.164.38.195","122.162.129.43","192.168.1.5","223.179.134.80","223.179.151.72",
     "122.162.42.142","171.79.76.124"]
 
+MEDIA_ALLOWED_CONTENT_TYPES = ['image/jpeg', 'image/jpg', 'image/gif', 'image/png', 'image/svg', 'image/svg+xml', \
+                               'video/x-flv', 'video/mp4', 'application/x-mpegURL', 'video/MP2T', 'video/3gpp', \
+                               'video/quicktime', ' video/x-msvideo', 'video/x-ms-wmv', 'video/webm', 'application/pdf', \
+                               'application/msword',
+                               'application/vnd.openxmlformats-officedocument.wordprocessingml.document', \
+                               'application/vnd.ms-excel',
+                               'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', \
+                               'application/vnd.ms-powerpoint',
+                               'application/vnd.openxmlformats-officedocument.presentationml.presentation']
+
+
+RESUME_TEMPLATE_DIR = "resume-builder"
+
+#Haystack Settings
+HAYSTACK_ROUTERS = ['careerplus.config.haystack_routers.MasterSlaveRouter', 'haystack.routers.DefaultRouter']
 

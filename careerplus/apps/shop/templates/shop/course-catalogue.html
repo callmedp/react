@@ -12,8 +12,9 @@
         <meta name="twitter:description" content="{{meta_desc}}" />
     {%  endblock django_meta %}
     {% block canonical_url %}
-      <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ request.path }}">
-      <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ request.path }}">
+      <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
+      <link rel="alternate" media="only screen and (maxwidth:640px)" href="https://{{ MOBILE_SITE_DOMAIN }}{{ request.path }}">
+      <link rel="alternate" media="handheld" href="https://{{ MOBILE_SITE_DOMAIN }}{{ request.path }}">
     {% endblock canonical_url %}
 
     

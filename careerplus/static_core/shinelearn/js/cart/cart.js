@@ -621,8 +621,6 @@ $(document).ready(function(){
                     cv_id = $(this).attr('data-id');
                 }
             });
-
-
             data = {
                 "prod_id": prod_id,
                 "addons": fbt,
@@ -638,6 +636,7 @@ $(document).ready(function(){
                 dataType: 'json',
                 success: function(json) {
                     if (json.status == 1){
+                        console.log('----here', json);
                         var info = 'Added to cart. You have '+ json.cart_count + ' products in cart.'
                         // $('#id-cart-message').text(info);
                         $('#cart-counter-id').addClass('cart-counter');

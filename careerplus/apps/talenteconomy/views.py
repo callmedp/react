@@ -44,6 +44,15 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
         context = super(self.__class__, self).get(request, args, **kwargs)
         return context
 
+
+    def get_countries(self):
+        country_choices = [(m.phone, m.name) for m in
+            Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+        initial_country = Country.objects.filter(phone='91')[0].phone
+        return country_choices,initial_country
+
+
+
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
 
@@ -90,6 +99,8 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
         skills = [sk.name for sk in skills]
 
         popular_courses = self.get_product(top_cats, skills)
+        country_choices, initial_country = self.get_countries()
+        context.update({'country_choices': country_choices, 'initial_country': initial_country, })
 
         context.update({
             'top_article_list': [
@@ -179,6 +190,14 @@ class TETagArticleView(TemplateView, BlogMixin):
         context = super(TETagArticleView, self).get(request, args, **kwargs)
         return context
 
+    def get_countries(self):
+        country_choices = [(m.phone, m.name) for m in
+            Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+        initial_country = Country.objects.filter(phone='91')[0].phone
+        return country_choices,initial_country
+
+
+
     def get_context_data(self, **kwargs):
         context = super(
             TETagArticleView, self).get_context_data(**kwargs)
@@ -235,6 +254,8 @@ class TETagArticleView(TemplateView, BlogMixin):
             "popular_courses": popular_courses,
             "show_chat": True
         })
+        country_choices, initial_country = self.get_countries()
+        context.update({'country_choices': country_choices, 'initial_country': initial_country, })
         context.update(self.get_breadcrumb_data())
         context['meta'] = tag_obj.as_meta(self.request)
         context.update(self.get_meta_details())
@@ -482,6 +503,7 @@ class TEBlogDetailView(DetailView, BlogMixin):
             raise Http404
         return obj
 
+
     def get_countries(self):
         country_choices = [(m.phone, m.name) for m in
             Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
@@ -546,11 +568,7 @@ class TEBlogDetailView(DetailView, BlogMixin):
         article_list = list(article_list)
 
         object_list = main_obj_list + article_list
-        country_choices = [(m.phone, m.name) for m in
-                           Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
-        country_choices, initial_country = self.get_countries()
-        context.update({'country_choices': country_choices, 'initial_country': initial_country, })
-
+        country_choices,initial_country = self.get_countries()
         detail_obj = self.scrollPagination(
             paginated_by=self.paginated_by, page=self.page,
             object_list=object_list)
@@ -575,6 +593,7 @@ class TEBlogDetailView(DetailView, BlogMixin):
             "detail_article": detail_article,
             "main_article": main_obj[0],
             'country_choices': country_choices,
+            'initial_country':initial_country,
         })
 
         context.update({
@@ -656,6 +675,8 @@ class AuthorListingView(TemplateView):
 
         popular_courses = BlogMixin().get_product(
             top_cats, skills)
+        country_choices, initial_country = self.get_countries()
+        context.update({'country_choices': country_choices, 'initial_country': initial_country, })
 
         context.update({
             'authors': authors,
@@ -668,6 +689,14 @@ class AuthorListingView(TemplateView):
         context.update(self.get_breadcrumb_data())
         context.update(self.get_meta_details())
         return context
+
+
+    def get_countries(self):
+        country_choices = [(m.phone, m.name) for m in
+            Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+        initial_country = Country.objects.filter(phone='91')[0].phone
+        return country_choices,initial_country
+
 
     def get_breadcrumb_data(self):
         breadcrumbs = []
@@ -726,6 +755,13 @@ class AuthorDetailView(DetailView):
             raise Http404
         return obj
 
+    def get_countries(self):
+        country_choices = [(m.phone, m.name) for m in
+            Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+        initial_country = Country.objects.filter(phone='91')[0].phone
+        return country_choices,initial_country
+
+
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
         author = self.object
@@ -753,6 +789,8 @@ class AuthorDetailView(DetailView):
             no_of_blog=Count('blog')).order_by('-no_of_blog').exclude(
             id=author.id)
         author_list = zip_longest(*[iter(authors)] * 5, fillvalue=None)
+        country_choices, initial_country = self.get_countries()
+        context.update({'country_choices': country_choices, 'initial_country': initial_country, })
 
         context.update({
             "author": author,

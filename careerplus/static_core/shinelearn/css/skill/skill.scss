@@ -213,7 +213,7 @@
 .listing1 {
 	list-style-type: none;
 	padding: 0;
-	margin: 0;	
+	margin: 30px 0 0;	
 
 	li {
 		display: block;
@@ -224,6 +224,8 @@
 			box-shadow: 0 0 40px rgba(0, 0, 0, 0.10);
 		}
 	}
+
+	
 
 	.media {
 		margin-top: 0;
@@ -336,6 +338,27 @@
 		.discount {
 			color: #45b34e;
 		}
+
+		&__lists {
+			width: 43%;
+			text-align: right;
+			margin-top: 8px;
+			
+			li {
+				display: inline-block;
+				margin: 0 15px 0 0;
+				padding: 0;
+
+				&:not(:last-child) {
+					border-right: 1px solid #ddd;
+					padding-right: 15px;
+				}
+
+				span {
+					font-weight: 700;
+				}
+			}
+		}
 	}
 }
 
@@ -388,5 +411,61 @@
 		display: inline-block;
 		float: right;
 		margin: 5px -10px 0 0;
+	}
+}
+
+/*assessments tab css start here*/
+.assessments-box {
+	.nav-tabs {
+		border-bottom: 1px solid #cecdcd;
+		line-height: 55px;
+
+		li {
+			background-color: #245aa4;
+			margin-right: 15px;
+			text-align: center;
+			line-height: 55px;
+			border-top: 3px solid transparent;
+			position: relative;
+
+			h2 {
+				margin: 0;
+				font-size: $font-size+9;
+				font-weight: $font-weight+100;
+				padding: 0 30px;
+
+				a {
+					padding: 0 30px;
+					color: $white-color;
+					line-height: 55px;
+					position: relative;
+				}
+			}
+
+			&.active {
+				background-color: $white-color;
+				border-top: 3px solid #245aa4;
+				border-left: 1px solid #cecdcd;
+				border-right: 1px solid #cecdcd;
+
+				h2 {
+					a {
+						color: $primary-color;
+					}
+				}
+			}
+
+			span {
+				background: #ffca08;
+				font-size: $font-size;
+				color: $primary-color;
+				position: absolute;
+				right: 30px;
+				top: 7px;
+				line-height: 12px;
+				padding: 0 2px;
+				border-radius: 3px;
+			}
+		}		
 	}
 }

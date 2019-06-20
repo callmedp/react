@@ -18,6 +18,7 @@ from django.core.urlresolvers import reverse_lazy, resolve, reverse
 from django.http import HttpResponse, Http404
 from django.conf import settings
 from django.utils.http import urlencode, urlquote_plus
+from django.db.models import Q
 
 # third party imports
 # from haystack.views import SearchView
@@ -29,6 +30,7 @@ from django_redis import get_redis_connection
 from .forms import SearchForm, SearchRecommendedForm
 from .classes import SimpleSearch, SimpleParams, FuncAreaSearch, FuncAreaParams, RecommendedSearch, RecommendedParams
 from shop.models import FunctionalArea, Skill, Category
+from geolocation.models import Country
 RESULTS_PER_PAGE = getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
 
 error_log = logging.getLogger('error_log')
@@ -405,7 +407,7 @@ class RecommendedSearchView(SearchBaseView, FormView):
             func_area = self.request.session.get('func_area')
             func_area = FunctionalArea.objects.filter(pk=func_area)
             func_area = func_area[0].name if func_area else ''
-            skills = self.request.session.get('skills').split(",")
+            skills = self.request.session.get('mid_skills').split(",")
             skills_found = Skill.objects.filter(pk__in=skills).values_list('name', flat=True)
         else:
             func_area = ''
@@ -437,7 +439,7 @@ class RecommendedSearchView(SearchBaseView, FormView):
             func_area = FunctionalArea.objects.filter(pk=func_area)
             func_area = func_area[0].name if func_area else ''
         context.update({'recmnd_func_area': func_area})
-        skills = self.request.session.get('skills')
+        skills = self.request.session.get('mid_skills')
         skills_found = Skill.objects.filter(pk__in=skills).values_list('name', flat=True)
         context.update({'recmnd_skills': ','.join(skills_found)})
         
@@ -491,6 +493,12 @@ class FuncAreaPageView(SearchBaseView):
                     'active': None}))
         return breadcrumbs
 
+    def get_countries(self):
+        country_choices = [(m.phone, m.name) for m in
+                           Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+        initial_country = Country.objects.filter(phone='91')[0].phone
+        return country_choices, initial_country
+
     def get_extra_context(self):
         request_get = self.search_params.copy()
         request_get.update(self.request.GET)
@@ -499,6 +507,9 @@ class FuncAreaPageView(SearchBaseView):
         self.func_area = Category.objects.filter(
             id=self.kwargs['pk'], type_level__in=[2, 3])
         context = super(FuncAreaPageView, self).get_extra_context()
+
+        country_choices, initial_country = self.get_countries()
+        context.update({'country_choices': country_choices, 'initial_country': initial_country, })
         if self.func_area.exists():
             meta_desc = "Online {} services. Get expert advice & tips for {} at Shine Learning".format(
                 self.func_area[0].name, self.func_area[0].name)

@@ -150,7 +150,7 @@ class ProductFactory(factory.django.DjangoModelFactory):
     search_keywords = ''
     slug = 'test-product_priya'
     title = 'Test Product priya'
-    type_flow = 1
+    Ttype_flow = 1
     type_product = 0
     upc = '74836'
     url = ''

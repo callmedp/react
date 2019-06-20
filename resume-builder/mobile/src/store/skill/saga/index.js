@@ -1,0 +1,175 @@
+import {Api} from './Api';
+import {apiError} from '../../../Utils/apiError';
+
+import {takeLatest, put, call,select} from "redux-saga/effects";
+
+import * as Actions from '../actions/actionTypes';
+import * as uiAction from '../../ui/actions/actionTypes';
+
+import {SubmissionError} from 'redux-form'
+
+const getUIStatus = state => state.ui;
+
+function* fetchUserSkill(action) {
+    try {
+        const candidateId = localStorage.getItem('candidateId') || '';
+        const ui = yield select(getUIStatus)
+        if(!ui.mainloader){
+            yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+        }
+
+        if (localStorage.getItem('skill')) {
+            let local_data =  JSON.parse(localStorage.getItem('skill')) && JSON.parse(localStorage.getItem('skill')).length ? 
+                            JSON.parse(localStorage.getItem('skill')) :
+                            [
+                                {
+                                    "candidate_id": '',
+                                    "id": '',
+                                    "name": '',
+                                    "proficiency": 5,
+                                    "order": 0
+                                }
+                            ]
+
+            local_data = (local_data || []).map(el => {
+                const {proficiency} = el;
+                el = {
+                    ...el,
+                    ...{
+                        proficiency: proficiency && proficiency.value || 5
+                    }
+                };
+                return el;
+            })
+            yield put({type: Actions.SAVE_USER_SKILL, data: {list:local_data}})
+            yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+            return;
+        }
+
+        const result = yield call(Api.fetchUserSkill, candidateId);
+        if (result['error']) {
+            apiError();
+        }
+        const {data: {results}} = result;
+        results.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
+        let data = {list: results};
+        data = {
+            ...data,
+            ...{
+                list: data['list']
+            }
+        }
+        if(! data.list.length){
+            data = {
+                ...data,
+                ...{
+                    list: [
+                            {
+                                "candidate_id": '',
+                                "id": '',
+                                "name": '',
+                                "proficiency": '',
+                                "order": 0
+                            }
+                        ]
+                }
+            };
+        }
+        yield put({type: Actions.SAVE_USER_SKILL, data: data})
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+    } catch (e) {
+        apiError();
+    }
+}
+
+
+// function* updateUserSkill(action) {
+//     try {
+//         let {payload: {userSkill, resolve, reject}} = action;
+
+
+//         const candidateId = localStorage.getItem('candidateId') || '';
+
+//         const {id} = userSkill;
+
+//         const result = yield call(id ? Api.updateUserSkill : Api.createUserSkill, userSkill, candidateId, id);
+//         if (result['error']) {
+//             return reject(new SubmissionError({_error: result['errorMessage']}));
+//         }
+//         localStorage.removeItem('skill');
+
+//         yield put({type: Actions.SAVE_USER_SKILL, data: result['data']});
+
+//         return resolve('User Skill  Info saved successfully.');
+
+//     } catch (e) {
+//         ////apiError();
+//     }
+// }
+
+
+function* bulkSaveUserSkill(action) {
+    try {
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+        let {payload: {list,resolve,reject}} = action;
+
+
+        const candidateId = localStorage.getItem('candidateId') || '';
+
+
+        const result = yield call(Api.bulkSaveUserSkill, list, candidateId);
+
+        if (result['error']) {
+            return reject(new SubmissionError({_error: result['errorMessage']}));
+        }
+        else{
+            if (localStorage.getItem('skill')){
+                localStorage.removeItem('skill')
+                yield call(fetchUserSkill)
+                return resolve('Bulk Update Done.');
+            }
+            yield put({type: Actions.SAVE_USER_SKILL, data: {list: result['data']}})
+            yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+            return resolve('Bulk Update Done.');
+        }
+
+    } catch (e) {
+        apiError();
+    }
+}
+
+
+function* deleteUserSkill(action) {
+    try {
+
+        const candidateId = localStorage.getItem('candidateId') || '';
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
+
+        const {skillId} = action;
+
+        const result = yield call(Api.deleteUserSkill, candidateId, skillId);
+        if (result['error']) {
+            apiError();
+        }
+        else{
+            yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
+            if(localStorage.getItem('skill'))
+                localStorage.deleteItem('skill');
+            yield put({type: Actions.REMOVE_SKILL, id: skillId});
+            
+            yield call(fetchUserSkill)
+        }
+        
+
+    } catch (e) {
+        apiError();
+    }
+}
+
+
+export default function* watchSkill() {
+    yield takeLatest(Actions.FETCH_USER_SKILL, fetchUserSkill);
+    // yield takeLatest(Actions.UPDATE_USER_SKILL, updateUserSkill);
+    yield takeLatest(Actions.DELETE_USER_SKILL, deleteUserSkill);
+    yield takeLatest(Actions.BULK_SAVE_USER_SKILL, bulkSaveUserSkill);
+}

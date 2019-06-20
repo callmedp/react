@@ -385,7 +385,7 @@ def generate_compliance_report(task_id=None,start_date=None,end_date=None):
             total_rows = len(oi_list)
 
             header_fields = [
-                'OrderID', 'CandidateEmail', 'ItemId', 'ItemCategory',
+                'OrderID', 'CandidateId', 'ItemId', 'ItemCategory',
                 'ItemName', 'ItemLevel', 'AllocatedTo', 'ResumeUploadDate',
                 'AssignedDate', 'FirstDraftDate', 'TAT', 'WriterBased', 'ClosedDate',\
                 'WelcomeCallDate'
@@ -414,9 +414,11 @@ def generate_compliance_report(task_id=None,start_date=None,end_date=None):
                 oi_filter_kwargs = {}
                 order_info = orderitem.order
                 oi_row['OrderID'] = order_info.id if order_info else 'NA'
-                oi_row['CandidateEmail'] = order_info.email if order_info else 'NA'
+                oi_row['CandidateId'] = orderitem.order.candidate_id
                 oi_row['ItemId'] = orderitem.id
                 orderitem_product = orderitem.product
+                if not orderitem_product:
+                    continue
                 category_list = orderitem_product.categories.all().values_list('name',flat=True)
                 category_name = ", ".join(category_list) if category_list else None
                 oi_row['ItemCategory'] = category_name if category_name else "N.A"

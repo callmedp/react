@@ -1,0 +1,114 @@
+@import './variables/vars.scss';
+@import './variables/mixins.scss';
+
+.btn{
+    font-size: 1.6rem;
+    cursor: pointer;
+    border: 0;
+    padding: .7rem 1.5rem;
+    text-decoration: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    @media only screen and (max-width : 360px) {
+        font-size: 1.4rem;
+    }
+    
+    @media only screen and (max-width : 320px) {
+        font-size: 1.2rem;
+        padding: .7rem 1.5rem;
+    }
+
+    &__round {
+        border-radius: 4.0rem;
+    }
+    
+    &__big {
+        height: 50px;
+    }
+
+    &__large {
+        padding: 1.0rem 6.0rem;
+        font-size: 3.0rem;
+    }
+    
+    &__medium {
+        padding: 1.0rem 3.0rem;
+        font-size: 1.8rem;
+    }
+
+    &--outline {
+        border: .1rem solid $blue;
+        background-color: transparent;
+        color: $blue;
+    }
+
+    &__primary {
+        border: .1rem solid $orange;
+        background-color: $orange;
+        color: $white;
+    }
+
+    &__shadow {
+        box-shadow: 0 0 10px rgba($black, .3);
+    }
+
+    &__blue {
+        background-color: $blue;
+        color: $white;
+        display: flex;
+        justify-content: center;
+    }
+    
+}
+
+.btn-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+
+
+.upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+
+    &__btn {
+        border: 1px dashed $grey-ec;
+        color: $blue;
+        background-color: $white;
+        padding: 8px 20px;
+        border-radius: .5rem;
+        width: 100%;
+        font-size: 1.4rem;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        input[type=file] {
+        font-size: 100px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+    }
+}
+  
+.upload--image {
+    @include size (100%, 270px, block);
+    border: 1px dashed $grey-ec;
+    padding: 1.0rem 1.0rem 0.3rem;
+    // overflow: hidden;
+    position: relative;
+
+    img {
+        width: 100%;
+        display: block;
+    }
+}

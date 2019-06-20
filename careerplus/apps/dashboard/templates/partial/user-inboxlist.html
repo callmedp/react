@@ -19,8 +19,17 @@
                 {% endif %}
             </h2>
             <span class="transaction">Order ID : {{obj.order.number}}</span>
+           {% if obj.product.type_flow == 17 %}
+                <form role="form" id="download-resume-form{{obj.order.pk}}" method="POST" action="{% url "dashboard:dashboard-resumetemplatedownload" %}" >
+                    <div style="display:none">
+                        <input type="hidden" name="csrfmiddlewaretoken" value="{{csrf_token_value}}" />
+                        <input type="hidden" name="order_pk" value="{{obj.order.pk}}" />
+                        <input type="hidden" name="product_id" value="{{obj.product_id}}"/>
+                    </div>
+                   <p><a role="button" onclick="downloadOrderTemplate('{{obj.order.pk}}');event.stopPropagation()" id="download-order-invoice{{obj.order.pk}}">Download</a></p>
+                </form>
 
-            {% if obj.product.type_flow == 1 or obj.product.type_flow == 12 or obj.product.type_flow == 13 %}
+            {% elif obj.product.type_flow == 1 or obj.product.type_flow == 12 or obj.product.type_flow == 13 %}
 
                 {% if obj.oi_status == 2 %}
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a role="button" class="upload-resume">Upload Resume</a></p>
@@ -195,6 +204,15 @@
                     <p><strong>Status:</strong> Service has been processed - <a href="{% url "dashboard:dashboard-resumedownload" obj.order.pk %}?path={{obj.oi_draft.name}}">Download</a></p>
                     
                 {% elif obj.oi_status == 161 or obj.oi_status == 162 or obj.oi_status == 163 or obj.oi_status == 164 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
+
+                {% endif %}
+
+            {% elif obj.product.type_flow == 16 and  obj.product.sub_type_flow == 1602 %}
+                {% if obj.oi_status == 5 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a target="_blank" href="{{obj.autologin_url}}">Take Test</a></p>
+
+                {% elif obj.oi_status == 4 %}
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
 
                 {% endif %}

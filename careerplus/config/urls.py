@@ -39,6 +39,8 @@ from skillpage.views import (
     ServiceDetailPage, UniversityPageView,
     UniversityFacultyView, LocationSkillPageView)
 
+from resumebuilder.views import (WriteResumeView)
+
 from django.conf.urls import (
     handler400, handler403, handler404, handler500
 )
@@ -77,6 +79,9 @@ talent_sitemap = {
    'author': TalentAuthorSitemap
 }
 
+#Library Patches
+from .startup_script import apply_patch
+apply_patch()
 
 urlpatterns = [url(r'^services/%s/%s/$' %(cat_slug,cat_id),
         ServiceDetailPage.as_view())  for cat_id,cat_slug in settings.SERVICE_PAGE_ID_SLUG_MAPPING.items()]
@@ -103,7 +108,7 @@ urlpatterns += [
 
     url(r'^course/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='course-detail'),
-    
+
     url(r'^services/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='service-detail'),
     url(r'^courses/', include('skillpage.urls', namespace='skillpage')),
@@ -129,7 +134,7 @@ urlpatterns += [
     #     ProductDetailView.as_view(), name='job-assist-detail'),
     # url(r'^product/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
     #     ProductDetailView.as_view(), name='other-detail'),
-    
+
 ]
 
 # Additional admin urls
@@ -181,6 +186,7 @@ urlpatterns += [
                    url(r'^autologin/(?P<token>.+)/$', AutoLoginView.as_view(), name='autologin'),
                    url(r'^linkedin/login/$',
                        LinkedinCallbackView.as_view(), name='linkedin-login'),
+    url(r'^api/v1/resume/', include('resumebuilder.api.v1.urls', namespace='resume_builder')),
 
                    url(r'^api/', include('api.urls', namespace='api')),
 
@@ -210,7 +216,10 @@ urlpatterns += [
                    # django-oauth-toolkit
                    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 
-               ] + static(
+                   # entry point for react template
+                   url(r'^resume-builder/', WriteResumeView.as_view())
+
+] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
 ) + static(
     settings.STATIC_URL, document_root=settings.STATIC_ROOT
@@ -242,9 +251,9 @@ if settings.DEBUG:
 
 
     urlpatterns = [
-        url(r'^__debug__/', include(debug_toolbar.urls)),
-        url(r'^api-docs/', SwaggerSchemaView.as_view()),
-    ] + urlpatterns
+                      url(r'^__debug__/', include(debug_toolbar.urls)),
+                      url(r'^api-docs/', SwaggerSchemaView.as_view()),
+                  ] + urlpatterns
 
 
 import logging

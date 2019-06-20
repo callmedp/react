@@ -77,14 +77,13 @@
                             </div>
                         {% else %}
                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ field.label }}</label> 
-
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                    {{ field }}
-                                    {% if field.help_text %}
-                                        <p class="text-muted"><small>{{ field.help_text }}</small></p>
-                                    {% endif %}
-                                </div>
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ field.label }}</label> 
+                                  <div class="col-md-6 col-sm-6 col-xs-12">
+                                      {{ field }}
+                                      {% if field.help_text %}
+                                          <p class="text-muted"><small>{{ field.help_text }}</small></p>
+                                      {% endif %}
+                                  </div>
                             </div>
                         {% endif %}
                         <br/>
@@ -111,11 +110,14 @@
                       {% if upload_type == "upload-certificate" %}
                         <th class="column-title">name</th>
                         <th class="column-title">skill</th>
+                        <th class="column-title">certificate_file_url</th>
+                        <th class="column-title">vendor_image_url</th>
                       {% elif upload_type == "upload-candidate-certificate" %}
                         <th class="column-title">year</th>
                         <th class="column-title">candidate_email</th>
                         <th class="column-title">candidate_mobile</th>
                         <th class="column-title">certificate_name</th>
+                        <th class="column-title">certificate_file_url</th>
                       {% endif %}
                     </tr>
                   </thead>

@@ -6,6 +6,11 @@ from celery import Celery
 # set the default Django settings module for the 'celery' program.
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'careerplus.config.settings_live')
+
+#Library Patches
+from .startup_script import apply_patch
+apply_patch()
+
 try:
     from .celery_local import *
 except ImportError:

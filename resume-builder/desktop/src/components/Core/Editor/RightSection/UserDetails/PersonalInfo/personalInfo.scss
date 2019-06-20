@@ -1,0 +1,24 @@
+@import '../../../../../../styles/variables/vars.scss';
+@import '../../../../../../styles/variables/mixins.scss';
+
+:local(h2) {
+  margin: 0 10px !important;
+}
+
+:local(.icon-edit__cursor) {
+  cursor: pointer;
+}
+
+:local(.zero-opacity) {
+  opacity: 0;
+}
+
+:local(.upper-cross) {
+	position: relative;
+
+	.icon-close {
+		position: absolute;
+		right: 20px;
+		top: 0px;
+	}
+}

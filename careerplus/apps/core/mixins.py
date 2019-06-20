@@ -1,21 +1,26 @@
-import datetime
-import base64
-import os
-import logging
+# python imports
+import os,base64,datetime
+import logging, gzip, shutil
+from pathlib import Path
+from datetime import date
 
+# django imports
 from django.conf import settings
 from decimal import Decimal, ROUND_HALF_DOWN
-from Crypto.Cipher import XOR
-
 from django.conf import settings
 from django.template import Context
 from django.template.loader import get_template
 from django.utils import timezone
 from django.core.files.uploadedfile import SimpleUploadedFile
-# from django.http import HttpResponse
-from core.library.gcloud.custom_cloud_storage import GCPInvoiceStorage
 
-from weasyprint import HTML
+# local imports
+
+# inter app imports
+from core.library.gcloud.custom_cloud_storage import (GCPInvoiceStorage, GCPResumeBuilderStorage)
+
+# third party imports
+from Crypto.Cipher import XOR
+from weasyprint import HTML, CSS
 
 
 class TokenExpiry(object):
@@ -25,9 +30,11 @@ class TokenExpiry(object):
           used for booster resume donload from link
 
         """
-        key_expires = datetime.datetime.today() + datetime.timedelta(settings.EMAIL_SMS_TOKEN_EXPIRY if not days else days)
+        key_expires = datetime.datetime.today() + datetime.timedelta(
+            settings.EMAIL_SMS_TOKEN_EXPIRY if not days else days)
 
-        inp_str = '{salt}|{email}|{oi_pk}|{dt}'.format(**{'salt': settings.ENCODE_SALT, 'email': email, 'oi_pk': oi_pk, 'dt': key_expires.strftime(settings.TOKEN_DT_FORMAT)})
+        inp_str = '{salt}|{email}|{oi_pk}|{dt}'.format(**{'salt': settings.ENCODE_SALT, 'email': email, 'oi_pk': oi_pk,
+                                                          'dt': key_expires.strftime(settings.TOKEN_DT_FORMAT)})
 
         ciph = XOR.new(settings.ENCODE_SALT)
         token = base64.urlsafe_b64encode(ciph.encrypt(inp_str))
@@ -50,7 +57,8 @@ class TokenGeneration(object):
     def encode(self, email, type, days=None):
         key_expires = datetime.datetime.today() + datetime.timedelta(
             settings.LOGIN_TOKEN_EXPIRY if not days else days)
-        inp_str = '{salt}|{email}|{type}|{dt}'.format(**{'salt': settings.ENCODE_SALT, 'email': email, 'type': type, 'dt': key_expires.strftime(settings.TOKEN_DT_FORMAT)})
+        inp_str = '{salt}|{email}|{type}|{dt}'.format(**{'salt': settings.ENCODE_SALT, 'email': email, 'type': type,
+                                                         'dt': key_expires.strftime(settings.TOKEN_DT_FORMAT)})
         ciph = XOR.new(settings.ENCODE_SALT)
         token = base64.urlsafe_b64encode(ciph.encrypt(inp_str))
         return token.decode()
@@ -65,12 +73,13 @@ class TokenGeneration(object):
         dt = datetime.datetime.strptime(inp_list[3], settings.TOKEN_DT_FORMAT)
         return email, type, (dt >= datetime.datetime.now())
 
+
 class EncodeDecodeUserData(object):
 
     def encode(self, email, name, contact):
-        inp_str = '{salt}|{email}|{name}|{contact}|{dt}'.format(\
-                **{'salt': settings.ENCODE_SALT, 'email': email, \
-                'name': name, 'contact': contact,'dt':timezone.now()})
+        inp_str = '{salt}|{email}|{name}|{contact}|{dt}'.format( \
+            **{'salt': settings.ENCODE_SALT, 'email': email, \
+               'name': name, 'contact': contact, 'dt': timezone.now()})
 
         ciph = XOR.new(settings.ENCODE_SALT)
         token = base64.urlsafe_b64encode(ciph.encrypt(inp_str))
@@ -81,15 +90,15 @@ class EncodeDecodeUserData(object):
             token = base64.urlsafe_b64decode(str(token))
             ciph = XOR.new(settings.ENCODE_SALT)
             inp_str = ciph.decrypt(token).decode()
-        
+
         except Exception as e:
             logging.getLogger('error_log').error("%(msg)s : %(err)s" % \
-                    {'msg': 'Invalid Token for Decryption', 'err': e})
+                                                 {'msg': 'Invalid Token for Decryption', 'err': e})
             return None
-        
+
         inp_list = inp_str.split('|')
         if len(inp_list) < 3:
-            return None 
+            return None
         email = inp_list[1]
         name = inp_list[2]
         contact = inp_list[3]
@@ -260,18 +269,19 @@ class InvoiceGenerate(object):
                 "coupon_amount": coupon_amount,
                 "redeemed_reward_point": redeemed_reward_point,
                 "tax_rate_per": tax_rate_per,
-                
+
             })
 
         return invoice_data
 
-    def generate_pdf(self, context_dict={}, template_src=None):
+    def generate_pdf(self, context_dict: object = {}, template_src: object = None) -> object:
         if template_src:
             html_template = get_template(template_src)
 
             rendered_html = html_template.render(context_dict).encode(encoding='UTF-8')
 
             pdf_file = HTML(string=rendered_html).write_pdf()
+
             return pdf_file
 
     def save_order_invoice_pdf(self, order=None):
@@ -282,8 +292,8 @@ class InvoiceGenerate(object):
                     context_dict=context_dict,
                     template_src='invoice/invoice-product.html')
                 full_path = 'order/%s/' % str(order.pk)
-                file_name = 'invoice-' + str(order.number) + '-'\
-                    + timezone.now().strftime('%Y%m%d') + '.pdf'
+                file_name = 'invoice-' + str(order.number) + '-' \
+                            + timezone.now().strftime('%Y%m%d') + '.pdf'
 
                 pdf_file = SimpleUploadedFile(
                     file_name, pdf_file,
@@ -291,7 +301,7 @@ class InvoiceGenerate(object):
 
                 if not settings.IS_GCP:
                     if not os.path.exists(settings.INVOICE_DIR + full_path):
-                        os.makedirs(settings.INVOICE_DIR +  full_path)
+                        os.makedirs(settings.INVOICE_DIR + full_path)
                     dest = open(
                         settings.INVOICE_DIR + full_path + file_name, 'wb')
                     for chunk in pdf_file.chunks():
@@ -305,3 +315,4 @@ class InvoiceGenerate(object):
         except Exception as e:
             logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
         return None, None
+

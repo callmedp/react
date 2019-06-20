@@ -1,0 +1,116 @@
+{% load static compress resume_tags %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+{% if watermark_in_preview %}
+    <div class="pr">
+        <div style="position: absolute; left: 0; right: 0; top: 94px; margin: 0 auto; transform: rotate(-9deg)">
+            <img src="/media/static/resumebuilder/images/watermark.png" alt="shinelearning.com" style="width: 100%;"/>
+        </div>
+    </div>
+{% endif %}
+{% comment %}
+For Mobile case
+ <div style=" width: 1536px; transform-origin: top left; transform : scale(0.32); font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777; line-height: 20px;">
+ {% endcomment %}
+<div style="max-width: 1536px; word-break: break-word; width: 100%; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777; line-height: 20px;">
+
+    <div style="width: {{ width }}%; background: {{ current_config.color|background_color_choice }}; padding: 3%;">
+
+        <!--top left 1-->
+        {% if entity_position.1.active %}
+            {% include entity_position.1.entity_id|render_section:"partials5/" %}
+        {% endif %}
+
+
+        <!--top right  2-->
+        {% if entity_position.0.active %}
+            {% include entity_position.0.entity_id|render_section:"partials5/" %}
+        {% endif %}
+
+
+    </div>
+
+    {#    <div style="width: {{ width }}%; padding: 3% 3% 0 3%;">#}
+    {#    </div>#}
+
+
+    <div style="width: {{ width }}%; border-bottom: 13px solid {{ current_config.color|background_color_choice }}; padding: 3% 3% 0 3%;">
+        {% with experience_pos=entity_position|experiencePosFind currentpos=0 %}
+
+            <!--Experience 3-->
+            {% if entity_position.2.active and entity_position.2.count %}
+                {% incrementPos currentpos as currentpos %}
+                {% include entity_position.2.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:currentpos %}
+            {% endif %}
+
+
+            <!--Skills 4-->
+            {% if entity_position.3.active and entity_position.3.count %}
+                {% incrementPos currentpos as currentpos %}
+                {% include entity_position.3.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:currentpos %}
+            {% endif %}
+
+
+            <!--Project  5-->
+            {% if entity_position.4.active and entity_position.4.count %}
+                {% incrementPos currentpos as currentpos %}
+                {% include entity_position.4.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:currentpos %}
+            {% endif %}
+
+
+            <!--Courses done  6-->
+            {% if entity_position.5.active and entity_position.5.count %}
+                {% incrementPos currentpos as currentpos %}
+                {% include entity_position.5.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:currentpos %}
+            {% endif %}
+
+
+            <!--Education  7-->
+            {% if entity_position.6.active and entity_position.6.count %}
+                {% incrementPos currentpos as currentpos %}
+                {% include entity_position.6.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:currentpos %}
+            {% endif %}
+
+
+            <!--Interest  8-->
+            {% if entity_position.7.active and entity_position.7.count %}
+                {% incrementPos currentpos as currentpos %}
+                {% include entity_position.7.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:currentpos %}
+            {% endif %}
+
+
+            <!--Achievement  9-->
+            {% if entity_position.8.active and entity_position.8.count %}
+                {% incrementPos currentpos as currentpos %}
+                {% include entity_position.8.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:currentpos %}
+            {% endif %}
+
+
+            <!--Reference  10-->
+            {% if entity_position.9.active and entity_position.9.count %}
+                {% incrementPos currentpos as currentpos %}
+                {% include entity_position.9.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:currentpos %}
+            {% endif %}
+
+            <!--Language  11-->
+            {% if entity_position.10.active and entity_position.10.count %}
+                {% incrementPos currentpos as currentpos %}
+                {% include entity_position.10.entity_id|render_section:"partials5/" with side=experience_pos|marginSide:currentpos %}
+            {% endif %}
+
+        {% endwith %}
+    </div>
+</div>
+{% if activate_water_mark %}
+    <div style="position: fixed; left: 0; right: 0; top: 2%; margin: 0 auto;">
+        <img src="{% static 'resumebuilder/images/watermark.png' %}"
+             alt="shinelearning.com"
+             style="width: 100%;">
+    </div>
+{% endif %}
+</body>
+</html>

@@ -4,7 +4,7 @@ import os, sys, django, re
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "careerplus.config.settings_live")
 ROOT_FOLDER = os.path.realpath(os.path.dirname(__file__))
 ROOT_FOLDER = ROOT_FOLDER[:ROOT_FOLDER.rindex('/')]
-print(ROOT_FOLDER)
+
 if ROOT_FOLDER not in sys.path:
     sys.path.insert(1, ROOT_FOLDER + '/')
 

@@ -50,7 +50,7 @@ if __name__=="__main__":
     file_obj = get_file_obj(file_name_suffix)
 
     csv_writer = csv.writer(file_obj, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    csv_writer.writerow(["order_id","Lead Type","CRM Lead Id","Item_Id","Email",\
+    csv_writer.writerow(["order_id","Lead Type","CRM Lead Id","Item_Id","Candidate Id",\
                 "Owner_name","Order_Date","Payment_Date","Payment Time",\
                 "Last Payment Date","Last Payment Time","Sales_executive","Sales_TL",\
                 "Branch_Head","Transaction_ID","item_id","Product_Name",\
@@ -162,7 +162,7 @@ if __name__=="__main__":
 
             try:
                 row_data = [
-                    order.id,order.site,order.crm_lead_id,item.product.id,order.email,\
+                    order.id,order.site,order.crm_lead_id,item.product.id,order.candidate_id,\
                     item.partner.name,order.date_placed.date(),\
                     txn_obj.payment_date.date(),txn_obj.payment_date.time(),\
                     last_txn_obj.payment_date.date(),last_txn_obj.payment_date.time(),\

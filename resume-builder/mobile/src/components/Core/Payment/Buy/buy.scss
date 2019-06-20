@@ -1,0 +1,281 @@
+@import '../../../../styles/variables/vars';
+@import '../../../../styles/variables/mixins';
+
+.buy-container {
+    padding-top: 60px;
+    height: 100%;
+}
+
+.buy {
+    @extend %touch-scroll;
+    padding: 15px 15px 150px;
+    height: 100%;
+    
+    
+    &__wrap {
+        border: 1px solid $border1;
+        border-radius: 5px;
+        background-color: $white;
+    }
+
+    &__item {
+        position: relative;
+
+        display: flex;
+        padding: 15px;
+        
+        &:not(:first-child) {
+            border-top: 1px solid $border1;
+        }
+
+        &--left {
+            display: flex;
+            align-items: start;
+            justify-content: start;
+
+            margin-right: auto;
+        }
+
+        &--input {
+            position: relative;
+            top: 6px;
+            margin-right: 5px;
+        }
+
+        &--label {
+            font-size: 1.6rem;
+            line-height: 1.4;
+            width: 100%;
+            font-weight: 600;
+
+            strong {
+                display: block;
+                color: $grey-333;
+                font-size: 2.2rem;
+                font-weight: 600;
+            }
+        }
+
+        &--right {
+            margin-right: -15px;
+            margin-left: -15px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+
+            &__sliderWrap {
+                display: block;
+                overflow: hidden;
+                width: 100%;
+                // padding-bottom: 10px;
+                position: relative;
+
+                .slick-slide {
+                    padding: 1rem;
+                }
+        
+                .slick-arrow {
+                    @include size(30px, 40px);
+                    box-shadow: 0 0 15px rgba($black, .1);
+                    border: 0 none;
+                    background-color: $white;
+                    position: absolute;
+                    top: 50%;
+                    margin-top: -25px;
+                    z-index: 1;
+                    text-indent: -99999px;
+        
+                    &::after {
+                        content: '';
+                        @include size(8px, 14px);
+                        background-image: url($sprite);
+                        display: block;
+                        position: absolute;
+                        top: 50%;
+                        margin-top: -7px;
+                    }
+                }
+        
+                .slick-prev {
+                    left: 0;
+                    @include border-radius(0 4px 4px 0);
+                    
+                    &::after {
+                        content: '';
+                        background-position: -61px -288px;
+                        transform: rotateY(180deg);
+                        left: 10px;
+                    }
+                    
+                }
+        
+                .slick-next {
+                    right: 0;
+                    @include border-radius(4px 0 0 4px);
+                    
+        
+                    &::after {
+                        content: '';
+                        background-position: -61px -288px;
+                        right: 10px;
+                    }
+                }
+
+
+            }
+        }
+
+        &--image {
+            display: block;
+            border-radius: 3px;
+            overflow: hidden;
+            width: 98px;
+            height:98px;
+            box-shadow: 0 0 10px $box-shadow-light;
+        }
+
+        &--price {
+            display: flex;
+            width: 100%;
+            align-items: center;
+            margin-left: 2.5rem;
+
+            span {
+                &:not(:last-child) {
+                    margin-right: 1.0rem;
+                }
+            }
+            
+        }
+    }
+
+    
+
+    &__recommended {
+        flex-direction: column;
+        padding-top: 5.0rem !important;
+
+        &--tag {
+            position: absolute;
+            right: -11px;
+            top: 18px;
+            background-color:$purple;
+            color: $white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            height: 20px;
+            text-transform: uppercase;
+            box-shadow: -6px 6px 10px rgba(0, 0, 0, 0.3);
+            line-height: 19px;
+            padding-right: .5rem;
+
+            &::before {
+                @include size(12px, 20px, block);
+                content: '';
+                background-position: -82px -287px;
+                background-image: url($sprite);
+                position: absolute;
+                left: -11px;
+            }
+            
+            &::after {
+                content: '';
+                width: 0;
+                height: 0;
+                border-top: 10px solid $black;
+                border-right: 10px solid transparent;
+                position: absolute;
+                right: 0px;
+                top: 20px;
+            }
+        }
+
+        &__items {
+            display: flex;
+            flex-direction: row;
+        }
+
+        &__item {
+            margin-right: 1.0rem;
+            // padding: 1.0rem  0.3rem ;
+            padding: 0  0.3rem ;
+        }
+
+        &__image {
+            @include size(130px, 149px, block);
+            overflow: hidden;
+            border-radius: .3rem;
+            box-shadow: 0 0 10px rgba($black, .2);
+            position: relative;
+        }
+    }
+}
+
+.pay-now {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding: 0 15px;
+    width: 100%;
+    box-shadow: 0 0 10px rgba($black, .1);
+    z-index:8;
+    background-color: $white;
+
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &__price {
+        display: flex;
+        flex-direction: column;
+
+        &--pay {
+            position: relative;
+            top: 8px;
+        }
+    }
+}
+
+.slide-container {
+    width: 70%;
+    margin: auto; }
+  
+  h3 {
+    text-align: center; }
+  
+  .each-slide > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    height: 300px;
+  }
+  
+
+  
+  .each-fade {
+    display: flex;
+  }
+  
+  .each-fade .image-container {
+    width: 75%;
+    overflow: hidden;
+  }
+  
+  .each-fade .image-container img {
+    width: 100%;
+  }
+  
+  .each-fade h2 {
+    width: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+  }
+
+
+

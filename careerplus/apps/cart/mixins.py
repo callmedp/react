@@ -1,5 +1,6 @@
 import logging
 import json
+import operator
 
 from decimal import Decimal
 
@@ -9,15 +10,17 @@ from django.conf import settings
 from haystack.query import SearchQuerySet
 
 from shop.models import Product, ProductClass
+from partner.models import Vendor
 from core.mixins import InvoiceGenerate
 from geolocation.models import Country
 
 from .models import Cart, LineItem
 
+from django.db.models import Q
+
 
 class CartMixin(object):
     def mergeCart(self, fromcart, tocart):
-
         try:
             from_parent_lines = fromcart.lineitems.filter(parent=None).select_related('product')
             to_parent_pks = tocart.lineitems.filter(parent=None).values_list('product__pk', flat=True)
@@ -55,7 +58,7 @@ class CartMixin(object):
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
 
-    def updateCart(self, product, addons, cv_id, add_type, req_options):
+    def updateCart(self,product,addons,cv_id,add_type,req_options,is_resume_template):
         flag = -1
         try:
             flag = 1
@@ -94,7 +97,7 @@ class CartMixin(object):
                     try:
                         country_obj = Country.objects.get(phone=country_code, active=True)
                     except Exception as e:
-                        logging.getLogger('error_log').error('unable to get country object%s'%str(e))
+                        logging.getLogger('error_log').error('unable to get country object%s' % str(e))
                         country_obj = Country.objects.get(phone='91', active=True)
 
                     cart_obj.country_code = country_obj.phone
@@ -104,12 +107,20 @@ class CartMixin(object):
                     cart_obj.mobile = mobile
                     cart_obj.save()
 
-                cart_obj.lineitems.filter(product=product).delete()
+                # todo update it for resume builder only
+                if is_resume_template == 'true':
+                    cart_obj.lineitems.filter().delete()
+                else:
+                    cart_obj.lineitems.filter(Q(product=product) | Q(product__type_flow=17)).delete()
 
-                if product.is_course and cv_id:
+                if product.is_course or product.type_flow == 17 and cv_id:
                     # courses
                     try:
-                        cv_prod = Product.objects.get(id=cv_id, active=True)
+                        # for resume builder type_flow todo create new type flow
+                        if product.type_flow == 17:
+                            cv_prod = Product.objects.get(id=cv_id)
+                        else:
+                            cv_prod = Product.objects.get(id=cv_id, active=True)
                         parent = cart_obj.lineitems.create(product=product, no_process=True)
                         parent.reference = str(cart_obj.pk) + '_' + str(parent.pk)
                         parent.price_excl_tax = product.get_price()
@@ -175,7 +186,7 @@ class CartMixin(object):
             logging.getLogger('error_log').error(str(e))
         return flag
 
-    def getCartObject(self, request=None):
+    def getCartObject(self, request: object = None):
         try:
             cart_obj = None
             if not request:
@@ -187,7 +198,7 @@ class CartMixin(object):
             cart_users = []
             if candidate_id:
                 cart_users = Cart.objects.filter(owner_id=candidate_id, status=2)
-                
+
             cart_sessions = Cart.objects.filter(session_id=sessionid, status=0)
             cart_user, cart_session = None, None
             if cart_users:
@@ -220,7 +231,7 @@ class CartMixin(object):
             elif candidate_id:
                 cart_obj = Cart.objects.create(owner_id=candidate_id, session_id=sessionid, status=2)
             elif sessionid:
-                    cart_obj = Cart.objects.create(session_id=sessionid, status=0)
+                cart_obj = Cart.objects.create(session_id=sessionid, status=0)
 
             # update cart_obj in session
             if cart_obj:
@@ -252,15 +263,17 @@ class CartMixin(object):
                 for m_prod in main_products:
                     data = {}
                     data['li'] = m_prod
-                    data['addons'] = cart_obj.lineitems.filter(parent=m_prod, parent_deleted=False).select_related('product')
-                    data['variations'] = cart_obj.lineitems.filter(parent=m_prod, parent_deleted=True).select_related('product')
+                    data['addons'] = cart_obj.lineitems.filter(parent=m_prod, parent_deleted=False).select_related(
+                        'product')
+                    data['variations'] = cart_obj.lineitems.filter(parent=m_prod, parent_deleted=True).select_related(
+                        'product')
                     cart_items.append(data)
             return cart_items
         except Exception as e:
-            logging.getLogger('error_log').error('unable to fetch cart items  %s' %str(e))
+            logging.getLogger('error_log').error('unable to fetch cart items  %s' % str(e))
         return cart_items
 
-    def get_solr_cart_items(self, cart_obj=None):
+    def get_solr_cart_items(self, cart_obj: object = None) -> object:
         cart_items = []
         total_amount = Decimal(0)
         if not cart_obj:
@@ -286,7 +299,7 @@ class CartMixin(object):
                     product_class = sqs.pPc
                     name = sqs.pHd if sqs.pHd else sqs.pNm
                     vendor_name = sqs.pPvn
-                    price = round(Decimal(sqs.pPinb),2)
+                    price = round(Decimal(sqs.pPinb), 2)
                     delivery_obj = m_prod.delivery_service
                     is_available = True
                     experience = sqs.pEX
@@ -311,7 +324,7 @@ class CartMixin(object):
                             if sqs_var.get('id') == var.product.id:
                                 var_id = var.id
                                 var_name = sqs_var.get('label')
-                                var_price = round(Decimal(sqs_var.get('inr_price')),2)
+                                var_price = round(Decimal(sqs_var.get('inr_price')), 2)
                                 var_available = True if is_available else False
                                 var_exp = sqs_var.get('experience')
                                 var_delivery_obj = var.delivery_service
@@ -352,7 +365,7 @@ class CartMixin(object):
                             if sqs_addon.get('id') == addon.product.id:
                                 addon_id = addon.id
                                 addon_name = sqs_addon.get('label')
-                                addon_price = round(Decimal(sqs_addon.get('inr_price')),2)
+                                addon_price = round(Decimal(sqs_addon.get('inr_price')), 2)
                                 addon_available = True if is_available else False
                                 addon_exp = sqs_addon.get('experience')
                                 addon_reference = addon.reference
@@ -376,7 +389,6 @@ class CartMixin(object):
                             addon.delete()
 
                     combo_list = json.loads(sqs.pCmbs).get('combo_list', [])
-                    
 
                     data = {
                         "id": main_id,
@@ -400,7 +412,109 @@ class CartMixin(object):
                     logging.getLogger('error_log').error("Unable to add item on cart %s " % str(e))
                     m_prod.delete()
 
-        return {"cart_items": cart_items, "total_amount": round(total_amount,2)}
+        return {"cart_items": cart_items, "total_amount": round(total_amount, 2)}
+
+    #  get the child variants of a product in case of resume builder
+    def get_variant_list(self, variations, total_amount, is_available, var_list):
+        for var in variations:
+            var_id = var.id
+            var_name = var.product.name
+            var_price = round(Decimal(var.price_excl_tax), 2)
+            var_available = True if is_available else False
+            var_exp = ''
+            var_delivery_obj = var.delivery_service
+            var_reference = var.reference
+
+            if var_available:
+                total_amount += var_price
+
+            if is_available and var.delivery_service:
+                total_amount += var.delivery_service.get_price()
+
+            var_data = {
+                "id": var_id,
+                "li": var,
+                "name": var_name,
+                "price": var_price,
+                "is_available": var_available,
+                "experience": var_exp,
+                "delivery_obj": var_delivery_obj,
+                "reference": var_reference,
+            }
+
+            var_list.append(var_data)
+
+        return total_amount, var_list
+
+    # add the product to the cart in case of resume builder
+    def add_item_to_cart(self, main_products, products, cart_obj, cart_items,total_amount):
+
+        for m_prod in main_products:
+            addon_list = []
+            combo_list = []
+            var_list = []
+            sqs = products.filter(id=m_prod.product.pk).first()
+            if not (sqs):
+                continue
+            main_id = m_prod.id
+            product_class = sqs.product_class.name
+            name = sqs.name
+            vendor_name = sqs.vendor.name
+            price = round(Decimal(sqs.get_price()), 2)
+            delivery_obj = m_prod.delivery_service
+            experience = ''
+            is_available = True
+            reference = m_prod.reference
+
+            variations = cart_obj.lineitems.filter(parent=m_prod, parent_deleted=True).select_related('product')
+
+            if m_prod.no_process and product_class == 'course' and variations:
+                pass
+            elif is_available:
+                total_amount += price
+
+            if m_prod.delivery_service and is_available:
+                total_amount += m_prod.delivery_service.get_price()
+
+            total_amount, var_list = self.get_variant_list(variations, total_amount, is_available, var_list)
+
+            data = {
+                "id": main_id,
+                "li": m_prod,
+                "product_class": product_class,
+                'type_flow': m_prod.product.type_flow,
+                "vendor": vendor_name,
+                "name": name,
+                "price": price,
+                "experience": experience,
+                "reference": reference,
+                "delivery_obj": delivery_obj,
+                "addons": addon_list,
+                "variations": var_list,
+                "combos": combo_list,
+                "is_available": is_available,
+                "delivery_types": m_prod.product.get_delivery_types(),
+            }
+            cart_items.append(data)
+
+        return cart_items, total_amount
+
+    # use local db not solar for fetching items in case of resume builder
+    def get_local_cart_items(self, cart_obj=None):
+        cart_items = []
+        total_amount = Decimal(0)
+        if not cart_obj:
+            if not self.request.session.get('cart_pk'):
+                self.getCartObject()
+            cart_pk = self.request.session.get('cart_pk')
+            cart_obj = Cart.objects.filter(pk=cart_pk).first()
+            return {"cart_items": cart_items, "total_amount": round(total_amount, 2)}
+
+        main_products = cart_obj.lineitems.filter(parent=None)
+        main_product_pks = list(main_products.values_list('product__id', flat=True))
+        products = Product.objects.filter(id__in=main_product_pks).select_related('product_class', 'vendor')
+        cart_items, total_amount = self.add_item_to_cart(main_products, products, cart_obj, cart_items, total_amount)
+        return {"cart_items": cart_items, "total_amount": round(total_amount, 2)}
 
     def getTotalAmount(self, cart_obj=None):
         total = Decimal(0)
@@ -445,7 +559,15 @@ class CartMixin(object):
                 cart_obj = Cart.objects.get(pk=cart_pk)
             if cart_obj:
                 if not total_amount:
-                    cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
+
+                    # cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
+                    line_item = cart_obj.lineitems.filter(parent=None)[0]
+                    type_flow = int(line_item.product.type_flow)
+                    # resume builder flow handle
+                    if type_flow == 17:
+                        cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
+                    else:
+                        cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
                     total_amount = cart_dict.get('total_amount', Decimal(0))
 
                 total_amount = InvoiceGenerate().get_quantize(total_amount)
@@ -650,11 +772,10 @@ class CartMixin(object):
                 cart_obj = Cart.objects.filter(pk=cart_pk).first()
                 if cart_obj and cart_obj.status in [0, 2]:
                     total_count += cart_obj.lineitems.all().count()
-                    total_count -= cart_obj.lineitems.filter(
-                        parent=None,
-                        product__product_class__in=course_classes,
-                        no_process=True).count()
-
+                    total_count -= cart_obj.lineitems.filter(Q(parent=None, product__product_class__in=course_classes,
+                                                               no_process=True) |
+                                                             Q(parent=None, product__type_flow=17,
+                                                               no_process=True)).count()
         except Exception as e:
             logging.getLogger('error_log').error("{},{}".format(str(e), cart_pk))
         return total_count

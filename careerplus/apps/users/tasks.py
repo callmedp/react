@@ -1,15 +1,21 @@
+#python imports
 import string
 import random
 import logging
 
-from celery.decorators import task
-
+#django imports
 from django.conf import settings
 
+#local imports
+
+#inter app imports
 from order.models import Order
 from users.mixins import RegistrationLoginApi
 from core.api_mixin import ShineCandidateDetail
 from emailers.email import SendMail
+
+#third party imports
+from celery.decorators import task
 
 
 def randompassword():
@@ -68,3 +74,24 @@ def user_register(data={}, order=None):
         logging.getLogger('task_log').error(
             "%s error in user_registration task" % str(e))
         print (str(e))
+
+@task
+def send_forgot_password_mail_to_user(user_id):
+    from users.models import User
+    user_obj = User.objects.get(id=user_id)
+    to_emails = [user_obj.email]
+    mail_type = "CONSOLE_FORGOT_PASSWORD"
+    
+    email_data = {
+                "subject": "Reset your Shine Learning Console Password",
+                "body": "This mail is regarding your request to reset your Shine learning Console Password.",
+                "user_name": user_obj.get_full_name(),
+                "email": user_obj.email,
+                "reset_password_url":user_obj.get_console_reset_password_endpoint()
+                }
+
+    try:
+        SendMail().send(to_emails, mail_type, email_data)
+    except Exception as e:
+        logging.getLogger('error_log').error("CONSOLE_FORGOT_PASSWORD - {} / {}".format(user_obj.email,e))
+

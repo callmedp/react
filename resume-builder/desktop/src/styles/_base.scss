@@ -1,0 +1,180 @@
+/*
+Application Settings Go Here
+------------------------------------
+This file acts as a bundler for all variables/mixins/themes, so they
+can easily be swapped out without `core.scss` ever having to know.
+
+For example:
+
+@import './variables/colors';
+@import './variables/components';
+@import './themes/default';
+*/
+
+.mt-5 {
+	margin-top: 5px;
+} 
+
+.mt-10 {
+	margin-top: 10px;
+} 
+
+.mt-15 {
+	margin-top: 15px;
+} 
+
+.mt-20 {
+	margin-top: 20px;
+} 
+
+.mt-30 {
+	margin-top: 30px;
+} 
+
+.mt-40 {
+	margin-top: 40px;
+} 
+
+.mt-70 {
+	margin-top: 70px;
+} 
+
+.mr-5 {
+	margin-right: 5px;
+} 
+
+.mr-10 {
+	margin-right: 10px;
+} 
+
+.mr-15 {
+	margin-right: 15px;
+}
+
+.mr-20 {
+	margin-right: 20px;
+}
+
+.mr-30 {
+	margin-right: 30px;
+}
+
+.mb-30 {
+	margin-bottom: 30px;
+} 
+
+.mb-20 {
+	margin-bottom: 20px;
+} 
+
+.ml-10 {
+	margin-left: 10px; 
+}
+
+.ml-0 {
+	margin-left: auto; 
+}
+
+.pt-20 {
+	padding-top: 20px;
+}
+
+.pb-0 {
+	padding-bottom: 0;
+}
+
+.pull-left {
+	float: left;
+}
+
+.pull-right {
+	float: right;
+}
+
+.clearfix {
+  clear: both;
+}
+
+.db {
+	display: block;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.hidden {
+	display: none !important;
+}
+
+.pos-rel {
+	position: relative;
+}
+
+.img-responsive {
+  display: block;
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+}
+
+.bdr {
+	display: block;
+	border-top: 1px solid $grey2;
+}
+
+.page-container {
+	margin: 3% 5%;
+	/*height: calc(100vh - 63px);*/
+	@include flexbox();
+	flex-flow: column;
+	font-size: 1.4rem;
+}
+
+.flex-container {
+	@include flexbox();
+}
+
+.container {
+	margin: 0 5%;
+}
+
+body, html {
+	height: 100%;
+}
+
+.wrap {
+  height: 100vh;
+  @include flexbox();
+}
+
+h2 {
+	font-weight: 700;
+	font-size: 1.8rem;
+}
+
+.comp-heading {
+    margin: 0 10px !important;
+    font-weight: 1.8rem;
+    font-weight: 700;
+  }
+
+.icon-box {
+	background: $blue1;
+	width: 60px;
+	height: 60px;
+	@include flexbox();
+	align-items: center;
+	justify-content: center;
+	border-top-left-radius: 4px;
+}
+
+.items-right {
+	justify-content: flex-end;
+	padding-top: 10px;
+}
+
+
+.slick-slide {
+	height: auto !important;
+}

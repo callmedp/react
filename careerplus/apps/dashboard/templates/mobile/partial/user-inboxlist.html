@@ -19,7 +19,17 @@
         <p class="fs-12 c9">Order ID : {{obj.order.number}}</p>
 
         <div class="light-blue">
-            {% if obj.product.type_flow == 1 or obj.product.type_flow == 12 or obj.product.type_flow == 13 %}
+            {% if obj.product.type_flow == 17 %}
+                <form role="form" id="download-resume-form{{obj.order.pk}}" method="POST" action="{% url "dashboard:dashboard-resumetemplatedownload" %}" >
+                    <div style="display:none">
+                        <input type="hidden" name="csrfmiddlewaretoken" value="{{csrf_token_value}}" />
+                        <input type="hidden" name="order_pk" value="{{obj.order.pk}}" />
+                        <input type="hidden" name="product_id" value="{{obj.product_id}}"/>
+                    </div>
+                   <p><a role="button" onclick="downloadOrderTemplate('{{obj.order.pk}}');event.stopPropagation()" id="download-order-invoice{{obj.order.pk}}">Download</a></p>
+                </form>
+
+            {% elif obj.product.type_flow == 1 or obj.product.type_flow == 12 or obj.product.type_flow == 13 %}
                 {% if obj.oi_status == 2 %}
                     <p><strong>Status</strong>: {{obj.get_user_oi_status}}
                     </p>
@@ -187,6 +197,16 @@
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
 
                 {% endif %}
+
+            {% elif obj.product.type_flow == 16 and obj.product.sub_type_flow == 1602 %}
+                 {% if obj.oi_status == 5 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a target="_blank" href="{{obj.autologin_url}}">Take Test</a></p>
+                    
+                {% elif obj.oi_status == 4 %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
+
+                {% endif %}
+
 
             {% endif %}
         </div><!-- /.blue box -->

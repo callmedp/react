@@ -1,0 +1,256 @@
+{% load static %}
+ {% block page_heading %}
+
+      <!-- header -->
+      <header>
+        
+        <div class="detail-course-header">
+          <div class="container pr">
+
+              <!-- breadcrums -->
+              {% block breadcrumbs %}
+                  {% if sqs.id in linkedin_resume_services %}
+                    <ol class="breadcrumb mt-30" itemscope itemtype="http://schema.org/BreadcrumbList">
+                        <li class="active" ></li>
+                    </ol>
+                  {% else %}
+                    {% include "shop/partials/breadcrumb.html" %}
+                  {% endif %}
+              {% endblock breadcrumbs %}
+            
+            {% block product_header %}
+              <div class="course-caption col-sm-8 no-pad mt-30" itemscope itemtype="http://schema.org/Product">
+                <div class="course-caption-img">
+                  <figure style="background-color:#fff;">
+                    <img itemprop="image" src="{{prd_img}}" alt="{{prd_img_alt}}" class="img-responsive" >
+                  </figure>
+                </div>
+
+                <div class="course-caption-content">
+                  <h1 itemprop="name">{{prd_H1}}</h1>
+                  <div itemprop="aggregateRating"
+                        itemscope itemtype="http://schema.org/AggregateRating">
+                        <meta itemprop="ratingValue" content="{{prd_rating}}">
+                        <meta itemprop="reviewCount" content="{% if prd_num_rating > 0 %}
+                        {{prd_num_rating}}
+                        {% else %}
+                          1      
+                        {% endif %}">
+
+                  </div>
+                  {% include "shop/partials/packagediv.html" %}
+                </div>
+                
+              </div>
+
+            {% endblock product_header %}
+
+            <!-- query-price-box-scroll start -->
+            <div class="query-price-box-scroll">
+              {% block product_cart %}
+                {% include "shop/partials/prd_cart.html" %}
+              {% endblock product_cart %}
+
+            </div>
+
+
+          </div>
+        </div>
+        
+      </header>
+
+      
+    {% endblock page_heading %}
+
+    {% block section1 %}
+      <!-- main parent1 section start -->
+      <section class="container-fluid cls_sticky_scroller_p pr">
+          <div class="row detail-box bt-none">
+
+            <!-- sticky sub header 1 -->
+            <div class="course-caption-bottom cls_sticky_scroller" >
+              <div class="container">
+                <div class="visible-onscroll hidden cls_scroller_hiddenDiv">
+                  <strong>{{prd_H1}}</strong> by <small>{{prd_vendor}}</small>
+
+                  <div class="enrol-cart-scroll pull-right">
+                    <strong id="id-scroll-price" class="total-price" name="price_total" sum-price="{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}" >Rs. {% if selected_var %}
+                      {{var_list.0.inr_price|floatformat}}{% else %}
+                    {{sqs.pPinb|floatformat}}{% endif %}/-</strong>
+
+                    {% if sqs.id not in linkedin_resume_services %}
+                      <a role="button" class="enrol-now" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
+                    {% endif %}
+
+                    <!--a href="#" class="enrol-now" data-toggle="modal" data-target=".bs-example-modal-sm">Enroll now</a-->
+                  </div>
+
+                </div>
+
+                  <ul >
+                    {% if prd_num_rating %}
+                    <li>
+                      <div class="rating-review-box">
+
+                        {% for star in prd_rating_star %}
+                          {% if star == '*' %}
+                            <figure class="full-star"></figure>
+                          {% elif star == '+' %}
+                            <figure class="half-star"></figure>
+                          {% else %}
+                            <figure class="blank-star"></figure>
+                          {% endif %}
+                        {% endfor %}  
+                        <strong>{{prd_rating}}/5</strong>ratings
+                      </div> 
+                    </li>
+                    {% endif %}
+                    <li>
+                     <a href="#review" class="cls_review">
+                      <figure class="review-icon"></figure>
+                      <span>{% if prd_num_rating %}&nbsp;<strong class="anchor-color" >{{prd_num_rating}}</strong>&nbsp;{% if prd_num_rating == 1 %}review {% else %}reviews {% endif %}{% else %}Be the first to review{% endif %}</span>
+                     </a> 
+                    </li>
+                    <li>
+                    <figure class="bought-icon"></figure>
+                    <span>
+                    {% if prd_num_bought %}<strong>&nbsp;{{prd_num_bought}}</strong>{% else %}<strong>&nbsp;10</strong>{% endif %}&nbsp;people bought</span>
+                    </li>
+                    {% if prd_service == 'course' or prd_service == 'assessment'  %}
+                  
+                    {% if prd_num_jobs %}
+                      <li>
+                       <a href="{% if num_jobs_url %}{{num_jobs_url}}{% else %}javascript:void(0);{% endif %}" target="_blank">
+                        <figure class="course-jobs-icon"></figure>
+                        <span><strong class="anchor-color">&nbsp;{{prd_num_jobs}}</strong>&nbsp;Jobs available</span>
+                       </a> 
+                      </li>
+                    {% endif %}
+                    
+                    {% if prd_cert %}
+                      <li>
+                        <figure class="certification-icon"></figure>
+                        <span>&nbsp;Certification</span>
+                      </li>
+                    {% endif %}
+                  {% endif %}
+                </ul>
+
+              </div>
+            </div>
+
+            
+            <div class="container">
+            <!-- About course -->
+              <div class="row">
+                <div class="col-sm-12 col-md-8 mt-40">
+                {% if prd_about %}
+                  <h2 class="detail-heading">About{% if prd_service == 'assessment' %} Test {% elif prd_service == 'course' %}course{% else %}service{% endif %}</h2>
+                 {{prd_about|safe}}
+                 {% if prd_asft %}
+                  <div class="test-wrap mt-30">
+                    <div class="test-wrap__item">
+                      <span class="icon-question"></span>
+                      <div class="test-wrap__item--content">
+                        <strong class="fs-18">{{ prd_asft.number_of_questions }}</strong>
+                        <p>No. of questions</p>
+                      </div>
+                    </div>
+
+                    <div class="test-wrap__item">
+                        <span class="icon-time"></span>
+                        <div class="test-wrap__item--content">
+                          <strong class="fs-18">{{ prd_asft.test_duration }} mins</strong>
+                          <p>Test duration</p>
+                        </div>
+                    </div>
+                  </div>
+                  </span>
+                  {% endif%}
+                {% endif %}
+                </div>
+              </div>
+          </div>
+      </section>
+      <!-- main parent1 section end -->
+
+
+    {% endblock section1 %}
+
+    {% block section2 %}
+      <!-- main parent2 section start -->
+      <section class="container-fluid cls_scroller_parent pr">
+        <div class="row">
+          <section class="detail-box" style="padding:0;"></section>
+            <section class="container-fluid detail-box">
+            <div class="container">
+              <div class="row">
+                <div id="course" class="col-sm-12 col-md-8">
+                  <h2>What you get if you pass??</h2>                     
+                    <ul class="what-get row">
+                      <li class="col-md-6">
+                        <span class="icon-industry"></span>
+                        <p>Industry recognized certification after clearing the test</p>
+                      </li>
+
+                      <li class="col-md-6">
+                        <span class="icon-badge"></span>
+                        <p>Get badge on shine.com and showcase your knowledge to the recruiters</p>
+                      </li>
+
+                      <li class="col-md-6">
+                          <span class="icon-skills"></span>
+                        <p>Shine shows your skills as validated and certification as verified which build high trust among recruiters</p>
+                      </li>
+                      <li class="col-md-6">
+                          <span class="icon-receive"></span>
+                        <p>Receive valuable feedback on your strong and weak areas to improve yourself</p>
+                      </li>
+                      <li class="col-md-6">
+                          <span class="icon-certified"></span>
+                        <p>Certified candidates gets higher salary as compared to non certified candidate</p>
+                      </li>
+                    </ul>
+                  </div>
+              </div>
+            </div>
+            </section>
+
+            {% if chapter_list %}
+              <section class="container-fluid detail-box">
+                <div class="container">
+                  <div class="career-outcomes mb-40">
+                    <h2>Topics Covered</h2>
+                      <ul class="list-tick-item">
+                          {% for chapter in chapter_list %}
+                            <li class="col-md-6">{{ chapter.heading }}</li>
+                          {% endfor %}
+                      </ul>
+                  </div>
+                </div>
+              </section>
+            {% endif %}
+
+            {% include "shop/partials/delivery_flow.html" %}
+
+            {% include "shop/partials/reviews.html" %}
+            {% include "shop/partials/faq.html" %}
+
+            {% if sqs.id not in linkedin_resume_services %}
+              {% block prdrecommended %}
+              <section class="container-fluid detail-box cls_hide_sticky_panel" id="heads">
+                <div class="container">
+                    <div class="row">
+                      <div class="col-sm-12"></div>
+                        <div id="recommended_product" style="display:block">
+                          <img id="loadingimg" src="{% static 'shinelearn/images/loader.gif' %}" > 
+                        </div>
+                    </div>
+                </div>
+              </section>
+              {% endblock prdrecommended %}
+            {% endif %}
+        </div><!-- ./ row -->
+      </section><!-- main parent2 section end -->      
+    {% endblock section2 %}
+

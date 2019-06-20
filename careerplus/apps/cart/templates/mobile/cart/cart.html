@@ -4,7 +4,7 @@
 
 
 {% block canonical_url %}
-    <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ request.path }}">
+    <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
 {% endblock canonical_url %}
 
 {% block title %}Cart | Shine learning{% endblock %}
@@ -54,7 +54,7 @@
                 {% for item in cart_items %}
                     <!-- item 1 -->
                     {% with addons=item.addons variations=item.variations delivery_types=item.delivery_types %}
-                        {% if item.product_class == 'course' and variations %}
+                        {% if item.product_class == 'course' or item.type_flow == 17 and variations %}
                             <li class="box row">
                                 <form role="form" method="post" id="cart_remove_form{{item.id}}">{% csrf_token %}
                                 <div class="table{% if not item.is_available %} disbale{% endif %}">
@@ -70,7 +70,6 @@
                                         {% endif %}
                                     </div><!-- /.table cell -->
                                 </div><!-- /.table -->
-
                                 {% if addons %}
                                     <div class="addons">
                                         <h4>Addons</h4>
@@ -132,7 +131,6 @@
 
                             </li><!-- /.li -->
                         {% else %}
-
                             <li class="box row">
                                 <form role="form" method="post" id="cart_remove_form{{item.id}}">{% csrf_token %}
                                

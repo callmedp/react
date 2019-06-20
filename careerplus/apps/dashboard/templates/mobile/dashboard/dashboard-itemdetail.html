@@ -253,6 +253,17 @@
                     </li><!-- /.li -->
                 {% endfor %}
 
+            {% elif oi.product.type_flow == 16 %}
+            
+                {% for op in ops %}
+                    <li class="box row">
+                        <div class="rel status-item">
+                            {{op.get_user_oi_status}}
+                            <span>{{op.created.date}}</span>
+                        </div>
+                    </li><!-- /.li -->
+                {% endfor %}
+
 
             {% endif %}
 

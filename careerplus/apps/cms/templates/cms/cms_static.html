@@ -4,7 +4,8 @@
 {% block head %}
  {% block canonical_url %}
       <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
-      <link rel="alternate" href="https://{{ MOBILE_SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
+      <link rel="alternate" media="only screen and (maxwidth:640px)" href="https://{{ MOBILE_SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
+      <link rel="alternate" media="handheld" href="https://{{ MOBILE_SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
     {% endblock canonical_url %}
 {% block css_section %}
         <!-- Bootstrap -->
@@ -696,7 +697,7 @@
         }
        $(document).on('click', '.icon-downlod', function () {
 
-    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms resume Enquiry', 'success');
+    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms Resume Enquiry', 'success');
 });
     </script>
  {% endblock js_section %}

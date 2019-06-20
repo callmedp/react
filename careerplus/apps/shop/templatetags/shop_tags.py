@@ -33,3 +33,10 @@ def convert_to_month(val):
         else:
             return str(year) + ' years'
     return str(month) + ' months'
+
+@register.filter(name='get_value_from_dict')
+def get_value_from_dict(value, key):
+    if value:
+        value = value[0]
+        value = eval(value)
+        return value.get(key,'')

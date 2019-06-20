@@ -1,0 +1,25 @@
+@import '../../../styles/variables/vars.scss';
+@import '../../../styles/variables/mixins.scss';
+
+.bottom-ctc,
+.btn-wrap {
+    @include size(100%, 55px, flex);
+    position: fixed;
+    bottom: 0;
+    box-shadow: 0 0 10px $box-shadow-light;
+    z-index: 2;
+    left: 0;
+    background-color: $white;
+
+    justify-content: space-evenly;
+
+    span,
+    .btn {
+        width: 50%;
+        border: 0 none;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+} 

@@ -1,6 +1,11 @@
+#python imports
 from __future__ import unicode_literals
+import logging,os
+from base64 import b64encode
+
+#django imports
+from django.conf import settings
 from django.db import models
-import logging
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import (
     AbstractBaseUser, PermissionsMixin, BaseUserManager)
@@ -8,8 +13,14 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save
 
+
+#local imports
 from .choices import WRITER_TYPE
 from .functions import get_upload_path_user_invoice
+
+#inter app imports
+
+#third party imports
 
 
 class UserManager(BaseUserManager):
@@ -72,6 +83,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+    alt = models.CharField(max_length=128,null=True,blank=True)
 
     objects = UserManager()
 
@@ -97,6 +109,16 @@ class User(AbstractBaseUser, PermissionsMixin):
         if vendor_list:
             return vendor_list[0]
         return None
+
+    def generate_alt(self):
+        return b64encode(os.urandom(64)).decode('utf-8')
+
+    def get_console_reset_password_endpoint(self):
+        if not self.alt:
+            return ""
+        
+        return "{}://{}/console/reset-password/?alt={}".format(\
+            settings.SITE_PROTOCOL,settings.SITE_DOMAIN,self.alt)
 
 
 class UserProfile(models.Model):

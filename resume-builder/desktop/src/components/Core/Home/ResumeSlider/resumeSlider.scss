@@ -1,0 +1,174 @@
+@import '../../../../styles/variables/vars.scss';
+@import '../../../../styles/variables/mixins.scss';
+
+.slider {
+  margin: 20px 0 0 0 !important;
+}
+
+.orange-button--custom {
+  position: relative;
+  left: 0;
+  right: 0;
+  bottom: 150px;
+
+}
+
+.resume-slider {
+	border: solid red 1px;
+    margin: 10px;
+}
+
+.home-slider {
+  display: flex;
+}
+
+.proven-resume {
+  .slick-slider {
+    margin: 0px 20px 0 20px;
+    transition: all .3s ease;
+  }
+
+  .slick-list {
+    padding: 50px !important;
+  }
+
+  &--slide {
+    border-radius: 5px;
+    overflow: hidden;
+    border: 8px solid $white;
+    box-shadow: 0 0 10px rgba($black, .2);
+    margin: 10px;
+    height: 375px;
+
+    @media (min-width: 1400px){
+      height: 520px;
+    }
+  }
+
+
+  .slick-slide {
+    transform: scale(.9);
+    transition: all .3s ease-out;
+
+    img {
+      width: 100%;
+    }
+
+    &::before {
+      content: '';
+      width: 95%;
+      height: 96%;
+      background-color: rgba($black, .5);
+      display: block;
+      position: absolute;
+      top: 9px;
+      left: 9px;
+      border-radius: 8px;
+
+      transition: all .3s ease-out;
+    }
+
+    .zoom {
+      display: none;
+    }
+  }
+
+  .slick-active {
+    transform: scale(1);
+    transition: all .3s ease-out;
+  }
+  
+  .slick-center {
+    transform: scale(1.2);
+    position: relative;
+    z-index: 8;
+
+    &::before {
+      content: '';
+      width: 95%;
+      height: 95%;
+      background-color: rgba($black, 0);
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .zoom {
+      display: block;
+      transform: scale(0.7);
+    }
+  }
+
+
+
+  .slick-arrow {
+    background-color: $white;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    box-shadow: 0 0 15px rgba($black, .2);
+    z-index: 9;
+    position: absolute;
+
+    &::after {
+      content: '';
+      @include size(20px, 14px);
+      background-image: $sprite;
+      display: block;
+      position: absolute;
+      top: 50%;
+      margin-top: -6px;
+  }
+
+
+  }
+
+  .slick-prev {
+    left: 358px;
+
+    @media only screen  and (min-width : 1224px) {
+      left: 358px;
+    }
+
+    @media only screen  and (min-width : 1824px) {
+      left: 522px;
+    }
+
+    &::after {
+        content: '';
+        background-position: -293px -243px;
+        left: 15px;
+    }
+  }
+  
+  .slick-next {
+    right: 358px;
+
+    @media only screen  and (min-width : 1224px) {
+      right: 358px;
+    }
+
+    @media only screen  and (min-width : 1824px) {
+      right: 515px;
+    }
+
+      
+
+    &::after {
+        content: '';
+        background-position: -294px -268px;
+        right: 15px;
+    }
+  }
+
+  &--customise {
+    position: absolute;
+    bottom: 120px;
+    z-index: 9;
+    left: 50%;
+    box-shadow: 0 0 10px rgba($black, .4);
+
+    transform: translateX(-50%);
+  }
+}
