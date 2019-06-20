@@ -737,7 +737,6 @@ class ResumeImagePreviewView(APIView):
                 'quality':self.request.GET.get('quality',40),
                 'format':'JPG',
                 'disable-smart-width': '',
-                'disable-smart-height': '',
                 }
 
         file_obj = imgkit.from_string(rendered_template,False,options=options)
