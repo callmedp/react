@@ -24,17 +24,22 @@ class Edit extends Component {
 
     }
 
+
     static getDerivedStateFromProps(nextProps, prevState) {
         const values = queryString.parse(nextProps.location.search);
+        const entityPreferenceList = nextProps.entityList;
         const {ui: {formName}} = nextProps;
-        let getCurrentEntityDetail = Object.values(formCategoryList).map((item, index) => {
-            if (item['itemType'] === formName) {
-                return {entity: item, index: index + 1}
+        let currentEntityIndex = Object.values(formCategoryList).findIndex(item => item['itemType'] === formName);
+        if (entityPreferenceList && entityPreferenceList.length) {
+            if (!(entityPreferenceList[currentEntityIndex] && entityPreferenceList[currentEntityIndex].active)) {
+                for (let ind = currentEntityIndex - 1; ind >= 0; ind--) {
+                    if (entityPreferenceList[ind].active) {
+                        nextProps.history.push(formCategoryList[ind + 1].link);
+                        return null;
+                    }
+                }
             }
-            return null;
-        }).filter(elem => elem !== null);
-        getCurrentEntityDetail = getCurrentEntityDetail && getCurrentEntityDetail.length ? getCurrentEntityDetail[0] : {};
-
+        }
         if (!(values && values.type)) {
             if (formName) {
                 nextProps.history.push(`/resume-builder/edit/?type=${formName}`);
