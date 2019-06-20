@@ -10,7 +10,7 @@ Modal.setAppElement(document.getElementById('react-app'));
 export default class AlertModal extends React.Component {
     constructor(props) {
         super(props);
-        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
+        this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
         this.closeModal = this.closeModal.bind(this);
     }
 
@@ -20,7 +20,7 @@ export default class AlertModal extends React.Component {
     }
 
     render() {
-        const {ui: {alertModal}, nextLink, newUser,isPreview} = this.props;
+        const {ui: {alertModal}, nextLink, newUser, isPreview} = this.props;
         return (
             <React.Fragment>
                 <div className="pr alert-modal">
@@ -42,17 +42,17 @@ export default class AlertModal extends React.Component {
                         contentLabel="Example Modal"
                         shouldCloseOnOverlayClick={false}
                     >
-                            {newUser ?
-                                <div className="pr">
-                                    <div className="alert-modal">
-                                        <span className="icon-alert"></span>
-                                        <p className="mb-3"><strong>Please save your profile info to continue</strong>
-                                        </p>
-                                        <div className="flex-container">
-                                            <button className="blue-button" onClick={this.closeModal}>OK</button>
-                                        </div>
+                        {newUser ?
+                            <div className="pr">
+                                <div className="alert-modal">
+                                    <span className="icon-alert"></span>
+                                    <p className="mb-3"><strong>Please save your profile info to continue</strong>
+                                    </p>
+                                    <div className="flex-container">
+                                        <button className="blue-button" onClick={this.closeModal}>OK</button>
                                     </div>
-                                </div> :
+                                </div>
+                            </div> :
                             isPreview ?
                                 <div className="pr">
                                     <div className="alert-modal">
@@ -87,7 +87,7 @@ export default class AlertModal extends React.Component {
                                         </div>
                                     </div>
                                 </div>
-                            }
+                        }
                     </Modal>
                 </div>
 

@@ -8,7 +8,7 @@ import {
 import {Field} from "redux-form";
 import styles from './course.scss'
 import {yearList} from '../../../../../../Utils/yearList'
-import {datepicker, renderField, renderSelect} from "../../../../../FormHandler/formFieldRenderer";
+import {renderField, renderSelect} from "../../../../../FormHandler/formFieldRenderer";
 import React from "react";
 
 export const CourseRenderer = ({

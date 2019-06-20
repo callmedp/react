@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './header.scss'
-import {Events, animateScroll as scroll, scrollSpy, scroller} from 'react-scroll'
+import {Events, scroller} from 'react-scroll'
 import {Link} from "react-router-dom";
 
 export default class Header extends Component {
@@ -8,7 +8,7 @@ export default class Header extends Component {
     constructor(props) {
         super(props);
         this.scrollTo = this.scrollTo.bind(this);
-        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
+        this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
     }
 
     scrollTo(elem,offset) {
@@ -45,10 +45,10 @@ export default class Header extends Component {
                     {!!(page === 'home') &&
                     <ul className="home-links">
                         <li>
-                            <a onClick={() => this.scrollTo('works',-63)}>How it Works</a>
+                            <a href="#work" onClick={() => this.scrollTo('works',-63)}>How it Works</a>
                         </li>
                         <li>
-                            <a onClick={() => this.scrollTo('templates',-50)}>Templates</a>
+                            <a href='#template'onClick={() => this.scrollTo('templates',-50)}>Templates</a>
                         </li>
                     </ul>
                     }
@@ -59,7 +59,7 @@ export default class Header extends Component {
                         </button>
                         }
                         <span className="signin--user-pic">
-            				<img src={`${this.staticUrl}react/assets/images/user-pic.jpg`}/>
+            				<img alt="user info" src={`${this.staticUrl}react/assets/images/user-pic.jpg`}/>
             			</span>
                         Hello {userName || 'User'}
                     </div>

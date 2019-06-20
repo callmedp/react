@@ -2,13 +2,9 @@ import {Api} from './Api';
 import {takeLatest, call, put} from "redux-saga/effects";
 import {siteDomain} from "../../../Utils/domains";
 import * as Actions from '../actions/actionTypes';
-import {LOGIN_CANDIDATE} from "../actions/actionTypes";
-
 import {UPDATE_UI} from '../../ui/actions/actionTypes'
-
 import {entityList} from "../../../Utils/formCategoryList";
 import {SAVE_USER_INFO} from "../../personalInfo/actions/actionTypes";
-
 import {Toast} from "../../../services/ErrorToast";
 
 
@@ -68,7 +64,7 @@ function* loginCandidate(action) {
             }
 
             if (!entityObj.set) {
-                if (key == 'personalInfo') {
+                if (key === 'personalInfo') {
 
                     candidate_profile[key] = {
                         ...candidate_profile[key],

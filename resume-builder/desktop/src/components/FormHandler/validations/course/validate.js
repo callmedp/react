@@ -1,7 +1,7 @@
 const validate = values => {
     const errors = {};
     const listErrors = [];
-    values = values && values.list || [];
+    values = (values && values.list) || [];
     values.forEach((obj, objIndex) => {
         const objErrors = {}
         objErrors.name_of_certification = !obj || !obj.name_of_certification ? 'Required' : undefined;

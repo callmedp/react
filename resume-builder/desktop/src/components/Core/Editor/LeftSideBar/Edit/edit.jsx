@@ -1,8 +1,8 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import './edit.scss'
 import queryString from "query-string";
-import {formCategoryList, entityList} from "../../../../../Utils/formCategoryList";
+import {formCategoryList} from "../../../../../Utils/formCategoryList";
 import {connect} from 'react-redux'
 import * as actions from '../../../../../store/personalInfo/actions/index'
 import {showAlertModal, hideAlertModal} from '../../../../../store/ui/actions/index'
@@ -46,7 +46,7 @@ class Edit extends Component {
             } else nextProps.history.push('/resume-builder/edit/?type=profile');
         }
         return ({
-            type: values && values.type || ''
+            type: (values && values.type) || ''
         })
     }
 
@@ -85,12 +85,13 @@ class Edit extends Component {
         const {type, preferenceList, nextLink, elemToDelete, menu_modal_status} = this.state;
         let {formData, ui: {formName}, updateCategoryEntity, showAlertModal} = this.props;
         let error = false;
-        const obj = formData && formData[formName] || {};
+        const obj = (formData && formData[formName]) || {};
         let syncErrors = obj['syncErrors'] || {};
-        const newUser = localStorage.getItem('newUser')
+        const newUser = localStorage.getItem('newUser');
         if ('fields' in obj) {
-            if ('list' in syncErrors) (syncErrors && syncErrors['list'] || []).map(el => (el ? Object.keys(el) : []).map(key => (!!el[key] ? error = true : false)))
-            else Object.keys(syncErrors || {}).map(key => (!!syncErrors[key] ? error = true : false));
+            if ('list' in syncErrors) ((syncErrors && syncErrors['list']) || []).map(el => (el ? Object.values(el)
+                : []).map(value => (!!value ? error = true : false)))
+            else Object.values(syncErrors || {}).map(value => (!!value ? error = true : false));
         }
         return (
             <div className="edit-section">
@@ -116,15 +117,16 @@ class Edit extends Component {
                                     className={(type === itemType ? ' edit-section--active' : '')}>
                                     {
                                         !!(error || newUser) ?
-                                            <div onClick={() => this.showErrorMessage(link)} className={"non-link"}>
+                                            (<div onClick={() => this.showErrorMessage(link)} className={"non-link"}>
                                                 <span className={'mr-20 ' + icon}></span>
                                                 {elem['entity_text']}
-                                            </div>
+                                            </div>)
                                             :
-                                            <Link to={link}>
-                                                <span className={'mr-20 ' + icon}></span>
-                                                {elem['entity_text']}
-                                            </Link>
+                                            (<Link to={link}>
+                                                    <span className={'mr-20 ' + icon}></span>
+                                                    {elem['entity_text']}
+                                                </Link>
+                                            )
                                     }
                                 </li>
                             )
@@ -145,7 +147,7 @@ class Edit extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        entityList: state.personalInfo && state.personalInfo.entity_preference_data || [],
+        entityList: (state.personalInfo && state.personalInfo.entity_preference_data) || [],
         ui: state.ui,
         formData: state && state.form
     }

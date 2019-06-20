@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 import './preview.scss'
-import queryString from "query-string";
-import {entityList} from '../../../../../Utils/formCategoryList'
 import {
     Accordion,
     AccordionItem,
@@ -122,7 +120,6 @@ export default class Preview extends Component {
             currentTab: 1
         })
 
-        let {heading_font_size: headingFontSize, text_font_size: textFontSize} = await this.props.fetchDefaultCustomization(localStorage.getItem('selected_template'));
         let elem1 = this.refs.bar1, slider1 = this.refs.slider1, elem2 = this.refs.bar2, slider2 = this.refs.slider2;
 
         const self = this;

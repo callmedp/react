@@ -7,7 +7,6 @@ import * as Actions from '../actions/actionTypes';
 import {SubmissionError} from 'redux-form'
 import {proficiencyList} from "../../../Utils/proficiencyList";
 import {UPDATE_UI} from "../../ui/actions/actionTypes";
-import {courseTypeList} from "../../../Utils/courseTypeList";
 import {initialState} from '../reducer';
 import {Toast} from "../../../services/ErrorToast";
 

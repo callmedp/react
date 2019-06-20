@@ -10,7 +10,7 @@ Modal.setAppElement(document.getElementById('react-app'));
 export default class TemplateModal extends React.Component {
     constructor(props) {
         super(props);
-        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
+        this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
         this.disableScroll = this.disableScroll.bind(this);
         this.closeModal = this.closeModal.bind(this);
     }
@@ -45,9 +45,9 @@ export default class TemplateModal extends React.Component {
                     <div className="pr">
                         <i onClick={this.closeModal} className='icon-close icon-close--position'></i>
                         {page === 'buy' ?
-                            < img className="img-responsive"
+                            < img alt="template" className="img-responsive"
                                   src={`data:image/png;base64,${modalTemplateImage}`}/> :
-                            < img className="img-responsive"
+                            < img alt="static template" className="img-responsive"
                                   src={`${this.staticUrl}react/assets/images/resume${templateId || '1'}_preview.jpg`}/>
                         }
                     </div>

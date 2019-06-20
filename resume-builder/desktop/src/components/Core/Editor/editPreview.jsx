@@ -7,7 +7,6 @@ import Footer from '../../Common/Footer/footer.jsx'
 import {connect} from 'react-redux';
 import RightSection from './RightSection/rightSection.jsx'
 import {withRouter} from "react-router-dom";
-import {siteDomain} from "../../../Utils/domains";
 import LoaderPage from "../../Loader/loaderPage.jsx";
 import * as actions from "../../../store/ui/actions"
 import {customizeTemplate, fetchDefaultCustomization, reorderSection} from "../../../store/template/actions"

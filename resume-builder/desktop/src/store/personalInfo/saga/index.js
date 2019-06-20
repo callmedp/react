@@ -1,6 +1,6 @@
 import {Api} from './Api';
 
-import {takeLatest, put, call, select} from "redux-saga/effects";
+import {takeLatest, put, call} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
 
@@ -8,7 +8,6 @@ import moment from 'moment'
 
 import {SubmissionError} from 'redux-form'
 import {Toast} from "../../../services/ErrorToast";
-import {interestList} from '../../../Utils/interestList'
 import {UPDATE_UI} from "../../ui/actions/actionTypes";
 
 const genderDict = {

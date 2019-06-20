@@ -1,14 +1,8 @@
 import {Api} from './Api';
-
 import {takeLatest, put, call, select} from "redux-saga/effects";
-
 import * as Actions from '../actions/actionTypes';
-
 import {SubmissionError} from 'redux-form'
-
 import {courseTypeList} from "../../../Utils/courseTypeList";
-import {proficiencyList} from "../../../Utils/proficiencyList";
-
 import {UPDATE_UI} from '../../ui/actions/actionTypes'
 import {initialState} from "../reducer/index"
 import  {Toast} from "../../../services/ErrorToast";

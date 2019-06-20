@@ -141,7 +141,7 @@ class Language extends Component {
 
 
 export const LanguageForm = reduxForm({
-    form: 'Language',
+    form: 'language',
     enableReinitialize: true,
     onSubmitFail: (errors) => scrollOnErrors(errors,'language',-100),
     validate,

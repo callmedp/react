@@ -9,7 +9,6 @@ import {
     datepicker,
     renderSelect,
     renderTextArea,
-    renderDynamicSelect
 } from "../../../../../FormHandler/formFieldRenderer.jsx";
 
 import validate from '../../../../../FormHandler/validations/personalInfo/validate'
@@ -32,7 +31,7 @@ export class PersonalInfo extends Component {
             flag: true,
             submit: false
         }
-        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
+        this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
         this.props.currentForm('profile');
 
     }
@@ -102,7 +101,7 @@ export class PersonalInfo extends Component {
 
     render() {
         const {
-            handleSubmit, personalInfo, ui: {loader}, isEditable, fetchInterests,
+            handleSubmit, personalInfo, isEditable, fetchInterests,
             editHeading,currentAddress, saveTitle, entityName, nextEntity, history, handleInputValue,showAlertModal
         } = this.props;
         const newUser = localStorage.getItem('newUser')
@@ -224,7 +223,7 @@ export class PersonalInfo extends Component {
                         </section>
                         <section className="pic-section mt-30">
                             {
-                                this.state.imageURI || personalInfo.image && this.state.flag ?
+                                (this.state.imageURI) || (personalInfo.image && this.state.flag) ?
                                     <div className={styles['upper-cross']} onClick={this.removeImage.bind(this)}>
                                         <i className='icon-close'></i>
                                     </div> : ''
@@ -233,7 +232,7 @@ export class PersonalInfo extends Component {
                             <label>
 
                                 {
-                                    this.state.imageURI || personalInfo.image && this.state.flag ?
+                                    (this.state.imageURI) || (personalInfo.image && this.state.flag) ?
                                         <img alt={"User Profile"} className='img-responsive'
                                              src={this.state.imageURI || personalInfo.image}/> :
                                         <img alt={"User Profile"} className="img-responsive"
@@ -276,8 +275,8 @@ const mapStateToProps = (state) => {
         initialValues: state.personalInfo,
         personalInfo: state.personalInfo,
         ui: state.ui,
-        currentAddress: state.form && state.form.profile && state.form.profile && state.form.profile.values
-            && state.form.profile.values.location || ''
+        currentAddress: (state.form && state.form.profile && state.form.profile && state.form.profile.values
+            && state.form.profile.values.location) || ''
     }
 };
 

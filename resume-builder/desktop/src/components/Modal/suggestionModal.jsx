@@ -7,7 +7,7 @@ Modal.setAppElement(document.getElementById('react-app'));
 export default class SuggestionModal extends React.Component {
     constructor(props) {
         super(props);
-        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
+        this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
         this.addSuggestion = this.addSuggestion.bind(this);
         this.removeSuggestion =this.removeSuggestion.bind(this)
         this.state = {

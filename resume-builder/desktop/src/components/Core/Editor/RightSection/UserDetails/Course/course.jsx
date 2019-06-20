@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Field, reduxForm, FieldArray} from "redux-form";
+import {reduxForm, FieldArray} from "redux-form";
 import * as actions from "../../../../../../store/course/actions";
 import {connect} from "react-redux";
 import validate from "../../../../../FormHandler/validations/course/validate"
@@ -43,11 +43,11 @@ class Course extends Component {
 
     }
 
-    async componentDidUpdate(prevProps){
-        const {ui:{previewClicked},previewButtonClicked,history} = this.props;
-        if(previewClicked !== prevProps.ui.previewClicked && previewClicked){
+    async componentDidUpdate(prevProps) {
+        const {ui: {previewClicked}, previewButtonClicked, history} = this.props;
+        if (previewClicked !== prevProps.ui.previewClicked && previewClicked) {
             await this.updateInfoBeforeLoss()
-            this.setState({submit:true})
+            this.setState({submit: true})
             previewButtonClicked(false)
             history.push('/resume-builder/preview/')
         }
@@ -56,10 +56,9 @@ class Course extends Component {
     async updateInfoBeforeLoss(){
         let { initialValues, formData: {course: {values, syncErrors}}} = this.props;
         let error = false;
-        (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el || {}).map(key => (!!el[key] ? error = true : false)))
-        if (!error && !this.state.submit && JSON.stringify(initialValues)!==JSON.stringify(values)) await this.props.bulkUpdateOrCreate(values && values['list'])
+        ((syncErrors && syncErrors['list']) || []).map(el => Object.keys(el || {}).map(key => (!!el[key] ? error = true : false)))
+        if (!error && !this.state.submit) await this.props.bulkUpdateOrCreate(values && values['list'])
     }
-    
 
 
     componentWillUnmount() {
@@ -102,7 +101,7 @@ class Course extends Component {
     render() {
         const {
             handleSubmit, ui: {loader}, editHeading, saveTitle, isEditable,
-            entityName, nextEntity, showAlertModal,history, handleInputValue, changeOrderingUp, changeOrderingDown
+            entityName, nextEntity, showAlertModal, history, handleInputValue, changeOrderingUp, changeOrderingDown
         } = this.props;
 
         return (
@@ -123,10 +122,10 @@ class Course extends Component {
                             expanded={this.state.active}
                             handleInputValue={handleInputValue}
                 />
-                <SavePreviewButtons 
-                        showAlertModal={showAlertModal} context={this} history={history}
-                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
-                    />
+                <SavePreviewButtons
+                    showAlertModal={showAlertModal} context={this} history={history}
+                    nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                />
             </form>
 
         )
@@ -194,9 +193,5 @@ const
         }
     };
 
-export default connect(mapStateToProps, mapDispatchToProps)
-
-(
-    CourseForm
-)
+export default connect(mapStateToProps, mapDispatchToProps)(CourseForm)
 ;

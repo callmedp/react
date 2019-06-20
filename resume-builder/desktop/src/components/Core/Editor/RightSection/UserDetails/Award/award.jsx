@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Field, FieldArray, reduxForm} from "redux-form";
+import {FieldArray, reduxForm} from "redux-form";
 import * as actions from "../../../../../../store/award/actions";
 import {connect} from "react-redux";
 import moment from "moment";
@@ -42,7 +42,7 @@ class Award extends Component {
     async updateInfoBeforeLoss(){
         let { initialValues, formData: {award: {values, syncErrors}}} = this.props;
         let error = false;
-        (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el || {}).map(key => (!!el[key] ? error = true : false)));
+        ((syncErrors && syncErrors['list']) || []).map(el => Object.keys(el || {}).map(key => (!!el[key] ? error = true : false)));
         if (!error && !this.state.submit && JSON.stringify(initialValues)!==JSON.stringify(values)) await this.props.bulkUpdateOrCreate(values && values['list'])
     }
 

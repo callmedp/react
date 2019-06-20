@@ -141,6 +141,8 @@ function* fetchDefaultCustomization(action) {
                 type: 'error',
                 title: result['errorMessage']
             });
+            return reject(result['errorMessage'])
+
         }
         let {data} = result;
 
@@ -175,12 +177,13 @@ function* reorderSection(action) {
         const result = yield call(Api.reorderSection, candidateId, templateId, info);
 
         if (result['error']) {
-  Toast.fire({
+            Toast.fire({
                 type: 'error',
                 title: result['errorMessage']
-            });        }
+            });
+        }
         let {data: {data}} = result;
-        let entity_position = data && eval(data) || []
+        let entity_position = (data && eval(data)) || [];
         if (entity_position[info.pos - 1].entity_id === info.entity_id) {
             yield  put({type: SHOW_ALERT_MODAL, data: {alertModal: true, alertType: 'error'}});
         }

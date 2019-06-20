@@ -1,6 +1,5 @@
 import React from 'react';
 import Modal from 'react-modal';
-import {Link} from 'react-router-dom';
 import "./menuModal.scss"
 
 Modal.setAppElement(document.getElementById('react-app'));
@@ -16,7 +15,7 @@ export default class MenuModal extends React.Component {
         this.addItem = this.addItem.bind(this)
         this.removeItem = this.removeItem.bind(this)
         this.saveMenuItems = this.saveMenuItems.bind(this)
-        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
+        this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
     }
     componentDidMount(){
         const {preferenceList} = this.props;
@@ -54,7 +53,7 @@ export default class MenuModal extends React.Component {
 
 
     render() {
-        const {menu_modal_status,closeMenuModal,formCategoryList} = this.props;
+        const {menu_modal_status,formCategoryList} = this.props;
         const {preferenceList,loader} = this.state
         return (
             <div className="pr scrollynone">

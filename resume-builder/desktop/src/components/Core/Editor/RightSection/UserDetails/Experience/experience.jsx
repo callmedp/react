@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {renderField, renderTextArea, datepicker} from '../../../../../FormHandler/formFieldRenderer.jsx'
-import {Field, reduxForm, FieldArray} from 'redux-form';
+import {reduxForm, FieldArray} from 'redux-form';
 import * as actions from '../../../../../../store/experience/actions/index';
 import {connect} from "react-redux";
 import moment from 'moment';

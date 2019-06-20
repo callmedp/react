@@ -163,11 +163,11 @@ export const EducationRenderer = ({
                                                     <div className="flex-container">
                                                         <fieldset>
                                                             <label>Date from</label>
-                                                            <Field maxDateAllowed={true} component={datepicker}
+                                                            <Field maxDateAllowed={true}
+                                                                   component={datepicker}
                                                                    type={"date"}
                                                                    iconClass={'icon-date'}
                                                                    yearDropDownItemNumber={40}
-                                                                   maxDateAllowed={true}
                                                                    endDate={fields.get(index).end_date || null}
                                                                    name={`${member}.start_date`}
                                                                    className="input-control"/>

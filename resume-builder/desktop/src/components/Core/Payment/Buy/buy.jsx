@@ -7,7 +7,6 @@ import Footer from '../../../Common/Footer/footer.jsx'
 import * as action from '../../../../store/buy/actions'
 import {showModal, hideModal, showSelectTemplateModal, hideSelectTemplateModal} from "../../../../store/ui/actions"
 import {connect} from "react-redux";
-import {siteDomain} from "../../../../Utils/domains";
 import TemplateModal from '../../../Modal/tempateModal'
 import Slider from "react-slick";
 import moment from "moment"
@@ -29,7 +28,7 @@ export class Buy extends Component {
         this.state = {
             'checked': 'product1'
         }
-        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
+        this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
         this.showEnlargedTemplate = this.showEnlargedTemplate.bind(this)
     }
 
@@ -205,9 +204,9 @@ export class Buy extends Component {
                     </section>
 
                     <div className="bottom-links">
-                        <a onClick={() => {
+                        <div onClick={() => {
                             this.props.showSelectTemplateModal()
-                        }}>Change template</a> | <Link to={'/resume-builder/edit'}>Edit template</Link>
+                        }}>Change template</div> | <Link to={'/resume-builder/edit'}>Edit template</Link>
                     </div>
                 </div>
                 <Footer/>

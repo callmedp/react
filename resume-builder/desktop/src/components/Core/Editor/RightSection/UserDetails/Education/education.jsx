@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Field, reduxForm, FieldArray} from "redux-form";
+import {reduxForm, FieldArray} from "redux-form";
 import * as actions from "../../../../../../store/education/actions";
 import {connect} from "react-redux";
 import moment from "moment";

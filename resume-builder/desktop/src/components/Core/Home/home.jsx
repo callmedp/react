@@ -7,9 +7,8 @@ import ResumeSlider from "./ResumeSlider/resumeSlider.jsx";
 import Testimonial from "./Testimonial/testimonial.jsx";
 import Footer from "../../Common/Footer/footer.jsx";
 import Header from "../../Common/Header/header.jsx";
-import {Link} from 'react-router-dom'
 import LoaderPage from '../../Loader/loaderPage.jsx'
-import {Events, animateScroll as scroll, scrollSpy, scroller} from 'react-scroll';
+import {Events, scroller} from 'react-scroll';
 import queryString from "query-string";
 import {hideModal, showModal} from "../../../store/ui/actions";
 import {displaySelectedTemplate} from '../../../store/template/actions'
@@ -33,7 +32,7 @@ class Home extends Component {
         const token = (values && values.token) || '';
         this.state.token = token;
         this.feedbackForm = this.feedbackForm.bind(this);
-        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
+        this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
     }
 
     scrollTo(elem) {
