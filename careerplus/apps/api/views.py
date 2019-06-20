@@ -1100,7 +1100,7 @@ class UpdateCertificateAndAssesment(APIView):
 
     def post(self, request, *args, **kwargs):
         certificate_updated = False
-        subject = "You have not cleared the test"
+        subject = "Sorry, You have not cleared the test."
         vendor_name = self.kwargs.get('vendor_name')
         data = request.data
         logging.getLogger('info_log').error(
@@ -1165,13 +1165,12 @@ class UpdateCertificateAndAssesment(APIView):
                         last_oi_status=last_oi_status,
                         assigned_to=oi.assigned_to
                     )
-                    subject = "{} on completing the certification on {}>".format(
+                    subject = "Congrats, {} on completing the certification on {}".format(
                         oi.order.first_name, oi.product.name
                     )
             to_emails = [oi.order.get_email()]
             mail_type = "CERTIFICATE_AND_ASSESMENT"
             data = {}
-
             data.update({
                 "username": oi.order.first_name,
                 "subject": subject,
@@ -1179,9 +1178,10 @@ class UpdateCertificateAndAssesment(APIView):
                 "skill_name": ', '.join(
                     list(ProductSkill.objects.filter(product=oi.product).values_list('skill__name', flat=True))
                 ),
-                "certificate_updated": certificate_updated
+                "certificate_updated": certificate_updated,
+                "score": parsed_data.assesment.overallScore,
+
             })
-            print(to_emails)
             send_email_task.delay(to_emails, mail_type, data, status=201, oi=oi.pk)
             oi.orderitemoperation_set.create(
                 oi_status=oi.oi_status,

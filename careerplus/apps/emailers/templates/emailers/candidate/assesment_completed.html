@@ -1,70 +1,385 @@
 {% load static %}
 {% spaceless %}
+{% if certificate_updated %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Shine Learning</title>
-</head>
-
-<body style="margin: 0; padding: 0;">
-<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" style="max-width: 600px; border: 1px solid #efefef; font-family: arial; font-size: 13px; color: #666666; line-height: 20px;">
-  <tbody>
-    <tr>
-      <td bgcolor="#f9e590">
-      	<img src="{% static 'shinelearn/images/emailers/feature_profile.jpg' %}" alt="Shine Learning" style="display: block; border: 0; max-width: 100%">
-      	<strong style="text-align: center; display: block; font-size: 19px; font-weight: bold; color: #002d66; padding: 5px 10px 15px 10px;">
-      		{{subject}}
-      	</strong>
-      </td>
-    </tr>
-    <tr>
-    	{% if certificate_updated %}
-      <td style="padding: 10px">
-      	<strong style="font-size: 14px; display: block; font-weight: normal; color: #333333; padding-bottom: 5px; padding-top: 2px;">Dear {% if username %}{{username}}{% else %}Candidate{% endif %},</strong>
-      	<span style="fon">
-        Congratulations! You did it. You ‘ve successfully completed {{ product_name }} <br><br>
-			We have shared your success<br>
-
-			To showcase your knowledge to the recruiters at Shine, we have
-
-			<ol>
-				<li>  Badged your Shine profile</li>
-				<li> Marked {{ skill_name }} as validated.</li>
-			</ol>
-			<br>
-			<br>
-			Badged profiles and validated skills are highly valued by our recruiters
-			<br>
-			<br>
-			Once again, congratulations on a job well done. Look out for more Certificate Courses at Shine Learning
-        </span>
-      </td>
-      {% else %}
-       	Sorry you are not passed
-      {% endif %}
-    </tr>
-    <tr>
-    	<td style="padding: 10px;">
-    		<strong style="display: block; font-weight: normal; font-size: 12px; color: #333333; padding-top: 10px;">
-    		 Warm Regards, <br>
-    		 Shine Learning Team
-    		</strong>
-    	</td>
-    </tr>
-    <tr>
-    	<td style="padding: 10px; border-top: 1px solid #f4f4f4">
-    		<span style="color: #999999; padding-bottom: 5px; display: block; font-size: 11px; line-height: 16px;">
-	    		Please add <a href="mailto:alert@shinelearning.com" style="color: #2196f3; text-decoration: none;">alert@shinelearning.com</a> to your Address Book or Safe List to prevent future Shine Updates from being classified as Junk/Bulk Mail.
-	    	</span>
-	    	<span style="color: #999999; padding-bottom: 10px; display: block; font-size: 11px; line-height: 16px;">
-	    		<strong style="color: #525252; font-weight: normal;">Security Alert</strong> - In case you receive a suspicious mail from anyone claiming to be a client of Shine, asking for your personal information or some money by pretending to offer you a job please do not respond to such mails and bring it to the immediate notice of <a href="#" style="color: #2196f3; text-decoration: none;">Shinelearning.com</a> by writing to us at <a href="mailto:contactus@shinelearning.com" style="color: #2196f3; text-decoration: none;">contactus@shinelearning.com</a>. Please note that such offers / emails are a violation of our Terms and Conditions, and Shine.com does not endorse such communication with candidates. Please <a href="#" style="color: #2196f3; text-decoration: none;">click here</a> if you do not want to receive any further communication from us.
-	    	</span>
-    	</td>
-    </tr>
-  </tbody>
-</table>
-
-</body>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" style="background:#f3f3f3!important">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      <meta name="viewport" content="width=device-width">
+      <title>Shinelearning</title>
+      <style>@media only screen{html{min-height:100%;background:#f3f3f3}}@media only screen and (max-width:596px){.small-float-center{margin:0 auto!important;float:none!important;text-align:center!important}}@media only screen and (max-width:596px){table.body img{width:auto;height:auto}table.body center{min-width:0!important}table.body .container{width:95%!important}table.body .columns{height:auto!important;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;padding-left:16px!important;padding-right:16px!important}table.body .columns .columns{padding-left:0!important;padding-right:0!important}table.body .collapse .columns{padding-left:0!important;padding-right:0!important}th.small-6{display:inline-block!important;width:50%!important}th.small-12{display:inline-block!important;width:100%!important}.columns th.small-12{display:block!important;width:100%!important}table.menu{width:100%!important}table.menu td,table.menu th{width:auto!important;display:inline-block!important}table.menu.vertical td,table.menu.vertical th{display:block!important}table.menu[align=center]{width:auto!important}}</style>
+   </head>
+   <body style="-moz-box-sizing:border-box;-ms-text-size-adjust:100%;-webkit-box-sizing:border-box;-webkit-text-size-adjust:100%;Margin:0;background:#f3f3f3!important;box-sizing:border-box;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0;min-width:100%;padding:0;text-align:left;width:100%!important">
+      <span class="preheader" style="color:#f3f3f3;display:none!important;font-size:1px;line-height:1px;max-height:0;max-width:0;mso-hide:all!important;opacity:0;overflow:hidden;visibility:hidden"></span>
+      <table class="body" style="Margin:0;background:#f3f3f3!important;border-collapse:collapse;border-spacing:0;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;height:100%;line-height:1.3;margin:0;padding:0;text-align:left;vertical-align:top;width:100%">
+         <tr style="padding:0;text-align:left;vertical-align:top">
+            <td class="center" align="center" valign="top" style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;hyphens:auto;line-height:1.3;margin:0;padding:0;text-align:left;vertical-align:top;word-wrap:break-word">
+               <center data-parsed style="min-width:580px;width:100%">
+                  <table align="center" class="wrapper float-center" style="Margin:0 auto;border-collapse:collapse;border-spacing:0;float:none;margin:0 auto;padding:0;text-align:center;vertical-align:top;width:100%">
+                     <tr style="padding:0;text-align:left;vertical-align:top">
+                        <td class="wrapper-inner" style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;hyphens:auto;line-height:1.3;margin:0;padding:0;padding-bottom:10px;padding-top:10px;text-align:left;vertical-align:top;word-wrap:break-word">
+                           <table align="center" class="container" style="Margin:0 auto;background:#fefefe;border-collapse:collapse;border-spacing:0;margin:0 auto;padding:0;text-align:inherit;vertical-align:top;width:580px">
+                              <tbody>
+                                 <tr style="padding:0;text-align:left;vertical-align:top">
+                                    <td style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;hyphens:auto;line-height:1.3;margin:0;padding:0;text-align:left;vertical-align:top;word-wrap:break-word">
+                                       <table class="row header collapse" style="background:#f7f9fc;background-size:cover;border-collapse:collapse;border-spacing:0;clear:both;display:table;padding:0;position:relative;text-align:left;vertical-align:top;width:100%">
+                                          <tbody>
+                                             <tr style="padding:0;text-align:left;vertical-align:top">
+                                                <th class="float-left small-12 large-12 columns first last" style="Margin:0 auto;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0 auto;padding:0;padding-bottom:0!important;padding-left:0;padding-right:0;text-align:left;width:588px">
+                                                   <table style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                      <tr style="padding:0;text-align:left;vertical-align:top">
+                                                         <th style="Margin:0;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0;padding:0;text-align:left"><img src="{% static 'shinelearn/images/emailers/logo1.png' %}"  alt style="-ms-interpolation-mode:bicubic;clear:both;display:block;max-width:100%;outline:0;text-decoration:none;width:auto"></th>
+                                                         <th class="expander" style="Margin:0;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0;padding:0!important;text-align:left;visibility:hidden;width:0"></th>
+                                                      </tr>
+                                                   </table>
+                                                </th>
+                                             </tr>
+                                          </tbody>
+                                       </table>
+                                       <table class="row header" style="background:#f7f9fc;background-size:cover;border-collapse:collapse;border-spacing:0;clear:both;display:table;padding:0;position:relative;text-align:left;vertical-align:top;width:100%">
+                                          <tbody>
+                                             <tr style="padding:0;text-align:left;vertical-align:top">
+                                                <th class="small-12 large-12 columns first last" style="Margin:0 auto;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0 auto;padding:0;padding-bottom:0!important;padding-left:16px;padding-right:16px;text-align:left;width:564px">
+                                                   <table style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                      <tr style="padding:0;text-align:left;vertical-align:top">
+                                                         <th style="Margin:0;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0;padding:0;text-align:left">
+                                                            <center class="text-center" data-parsed style="min-width:532px;width:100%"><img src="{% static 'shinelearn/images/emailers/successicon.png' %}" align="center" class="float-center" style="-ms-interpolation-mode:bicubic;Margin:0 auto;clear:both;display:block;float:none;margin:0 auto;max-width:100%;outline:0;text-align:center;text-decoration:none;width:auto"></center>
+                                                            <table class="spacer" style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                               <tbody>
+                                                                  <tr style="padding:0;text-align:left;vertical-align:top">
+                                                                     <td height="20px" style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:20px;font-weight:400;hyphens:auto;line-height:20px;margin:0;mso-line-height-rule:exactly;padding:0;text-align:left;vertical-align:top;word-wrap:break-word">&#xA0;</td>
+                                                                  </tr>
+                                                               </tbody>
+                                                            </table>
+                                                            <h4 class="text-center congratulations" style="Margin:0;Margin-bottom:10px;color:#333;font-family:Helvetica,Arial,sans-serif;font-size:18px;font-weight:700;line-height:1.3;margin:0;margin-bottom:10px;padding:0;text-align:center;word-wrap:normal">Congratulations!  {% if username %}{{username}}{% else %}Candidate{% endif %},</h4>
+                                                            <p class="text-center completed" style="Margin:0;Margin-bottom:10px;color:#666!important;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:300;line-height:1.3;margin:0;margin-bottom:0;margin-top:0;padding:0;padding-bottom:3px;padding-top:5px!important;text-align:center">You have successfully completed</p>
+                                                            <h5 class="text-center advanced" style="Margin:0;Margin-bottom:10px;color:#333;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:700;line-height:1.3;margin:0;margin-bottom:0;margin-top:0;padding:0;padding-bottom:20px;padding-top:0;text-align:center;word-wrap:normal">{{ product_name }}</h5>
+                                                            <center class="yourscore_btn" data-parsed style="background:#6994dd!important;border-radius:4px;color:#fff!important;display:block;font-size:16px;font-weight:700;margin:0 auto;min-width:532px;padding:16px 0;text-align:center;width:100%"><small class="small_btn float-center" align="center" style="border-radius:4px;color:#fff!important;font-size:16px;font-weight:300">Your score:</small> {{ score }}%</center>
+                                                            <table class="spacer" style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                               <tbody>
+                                                                  <tr style="padding:0;text-align:left;vertical-align:top">
+                                                                     <td height="20px" style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:20px;font-weight:400;hyphens:auto;line-height:20px;margin:0;mso-line-height-rule:exactly;padding:0;text-align:left;vertical-align:top;word-wrap:break-word">&#xA0;</td>
+                                                                  </tr>
+                                                               </tbody>
+                                                            </table>
+                                                         </th>
+                                                         <th class="expander" style="Margin:0;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0;padding:0!important;text-align:left;visibility:hidden;width:0"></th>
+                                                      </tr>
+                                                   </table>
+                                                </th>
+                                             </tr>
+                                          </tbody>
+                                       </table>
+                                       <table class="row" style="border-collapse:collapse;border-spacing:0;display:table;padding:0;position:relative;text-align:left;vertical-align:top;width:100%">
+                                          <tbody>
+                                             <tr style="padding:0;text-align:left;vertical-align:top">
+                                                <th class="shared small-12 large-12 columns first last" style="Margin:0 auto;background:#fff;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0 auto;padding:0;padding-bottom:0!important;padding-left:16px;padding-right:16px;text-align:left;width:564px">
+                                                   <table style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                      <tr style="padding:0;text-align:left;vertical-align:top">
+                                                         <th style="Margin:0;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0;padding:0;text-align:left">
+                                                            <table class="spacer" style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                               <tbody>
+                                                                  <tr style="padding:0;text-align:left;vertical-align:top">
+                                                                     <td height="25px" style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:25px;font-weight:400;hyphens:auto;line-height:25px;margin:0;mso-line-height-rule:exactly;padding:0;text-align:left;vertical-align:top;word-wrap:break-word">&#xA0;</td>
+                                                                  </tr>
+                                                               </tbody>
+                                                            </table>
+                                                            <p class="float-left success" style="Margin:0;Margin-bottom:10px;color:#666;font-family:Helvetica,Arial,sans-serif;font-size:14px;font-weight:300;line-height:22px;margin:0;margin-bottom:0;margin-top:0;padding:0;padding-bottom:5px;padding-top:5px;text-align:left">We have shared your success</p>
+                                                            <p class="float-left success" style="Margin:0;Margin-bottom:10px;color:#666;font-family:Helvetica,Arial,sans-serif;font-size:14px;font-weight:300;line-height:22px;margin:0;margin-bottom:0;margin-top:0;padding:0;padding-bottom:5px;padding-top:5px;text-align:left">To showcase your knowledge to the recruiters at Shine, we have</p>
+                                                            <table class="spacer" style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                               <tbody>
+                                                                  <tr style="padding:0;text-align:left;vertical-align:top">
+                                                                     <td height="10px" style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:10px;font-weight:400;hyphens:auto;line-height:10px;margin:0;mso-line-height-rule:exactly;padding:0;text-align:left;vertical-align:top;word-wrap:break-word">&#xA0;</td>
+                                                                  </tr>
+                                                               </tbody>
+                                                            </table>
+                                                         </th>
+                                                         <th class="expander" style="Margin:0;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0;padding:0!important;text-align:left;visibility:hidden;width:0"></th>
+                                                      </tr>
+                                                   </table>
+                                                </th>
+                                             </tr>
+                                          </tbody>
+                                       </table>
+                                       <table class="row" style="border-collapse:collapse;border-spacing:0;display:table;padding:0;position:relative;text-align:left;vertical-align:top;width:100%">
+                                          <tbody>
+                                             <tr style="padding:0;text-align:left;vertical-align:top">
+                                                <th class="small-12 large-12 columns first last" style="Margin:0 auto;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0 auto;padding:0;padding-bottom:0!important;padding-left:16px;padding-right:16px;text-align:left;width:564px">
+                                                   <table style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                      <tr style="padding:0;text-align:left;vertical-align:top">
+                                                         <th style="Margin:0;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0;padding:0;text-align:left">
+                                                            <center class="badged" data-parsed style="background:#faf7dc!important;border-radius:4px;display:table;height:50px;min-width:532px;padding:0;width:100%"><small class="icon float-center" align="center" style="color:#cacaca;display:table-cell;font-size:80%;padding-left:20px;padding-right:10px;padding-top:6px;vertical-align:top;width:40px"><img  src="{% static 'shinelearn/images/emailers/icon1.png' %}" alt="icon" style="-ms-interpolation-mode:bicubic;clear:both;display:block;max-width:100%;outline:0;text-decoration:none;width:auto"> </small><small class="validated float-center" align="center" style="color:#666;display:table-cell;font-size:14px;font-weight:700;padding-right:20px;text-align:left;vertical-align:middle">Badged your Shine profile</small></center>
+                                                            <table class="spacer" style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                               <tbody>
+                                                                  <tr style="padding:0;text-align:left;vertical-align:top">
+                                                                     <td height="10px" style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:10px;font-weight:400;hyphens:auto;line-height:10px;margin:0;mso-line-height-rule:exactly;padding:0;text-align:left;vertical-align:top;word-wrap:break-word">&#xA0;</td>
+                                                                  </tr>
+                                                               </tbody>
+                                                            </table>
+                                                         </th>
+                                                         <th class="expander" style="Margin:0;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0;padding:0!important;text-align:left;visibility:hidden;width:0"></th>
+                                                      </tr>
+                                                   </table>
+                                                </th>
+                                             </tr>
+                                          </tbody>
+                                       </table>
+                                       <table class="row" style="border-collapse:collapse;border-spacing:0;display:table;padding:0;position:relative;text-align:left;vertical-align:top;width:100%">
+                                          <tbody>
+                                             <tr style="padding:0;text-align:left;vertical-align:top">
+                                                <th class="small-12 large-12 columns first last" style="Margin:0 auto;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0 auto;padding:0;padding-bottom:0!important;padding-left:16px;padding-right:16px;text-align:left;width:564px">
+                                                   <table style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                      <tr style="padding:0;text-align:left;vertical-align:top">
+                                                         <th style="Margin:0;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0;padding:0;text-align:left">
+                                                            <center class="badged1" data-parsed style="background:#faf7dc!important;border-radius:4px;display:table;height:50px;min-width:532px;padding:0;width:100%"><small class="icon1 float-center" align="center" style="color:#cacaca;display:table-cell;font-size:80%;height:auto;padding-left:20px;padding-right:10px;padding-top:6px;vertical-align:top;width:40px"><img src="{% static 'shinelearn/images/emailers/icon2.png' %}" alt="icon" style="-ms-interpolation-mode:bicubic;clear:both;display:block;max-width:100%;outline:0;text-decoration:none;width:auto"> </small><small class="validated1 float-center" align="center" style="color:#666;display:table-cell;font-size:14px;font-weight:700;padding-right:20px;text-align:left;vertical-align:middle">{{ skill_name }} marked as validated</small></center>
+                                                         </th>
+                                                         <th class="expander" style="Margin:0;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0;padding:0!important;text-align:left;visibility:hidden;width:0"></th>
+                                                      </tr>
+                                                   </table>
+                                                </th>
+                                             </tr>
+                                          </tbody>
+                                       </table>
+                                       <table class="row" style="border-collapse:collapse;border-spacing:0;display:table;padding:0;position:relative;text-align:left;vertical-align:top;width:100%">
+                                          <tbody>
+                                             <tr style="padding:0;text-align:left;vertical-align:top">
+                                                <th class="small-12 large-12 columns first last" style="Margin:0 auto;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0 auto;padding:0;padding-bottom:0!important;padding-left:16px;padding-right:16px;text-align:left;width:564px">
+                                                   <table style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                      <tr style="padding:0;text-align:left;vertical-align:top">
+                                                         <th style="Margin:0;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0;padding:0;text-align:left">
+                                                            <table class="spacer" style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                               <tbody>
+                                                                  <tr style="padding:0;text-align:left;vertical-align:top">
+                                                                     <td height="20px" style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:20px;font-weight:400;hyphens:auto;line-height:20px;margin:0;mso-line-height-rule:exactly;padding:0;text-align:left;vertical-align:top;word-wrap:break-word">&#xA0;</td>
+                                                                  </tr>
+                                                               </tbody>
+                                                            </table>
+                                                            <p class="float-left profiles" style="Margin:0;Margin-bottom:10px;color:#666;font-family:Helvetica,Arial,sans-serif;font-size:14px;font-weight:300;line-height:22px;margin:0;margin-bottom:0;margin-top:0;padding:0;padding-bottom:5px;padding-top:5px;text-align:left">Badged profiles and validated skills are highly valued by our recruiters</p>
+                                                            <p class="float-left profiles" style="Margin:0;Margin-bottom:10px;color:#666;font-family:Helvetica,Arial,sans-serif;font-size:14px;font-weight:300;line-height:22px;margin:0;margin-bottom:0;margin-top:0;padding:0;padding-bottom:5px;padding-top:5px;text-align:left">Once again, congratulations on a job well done. Look out for more <a href="#" target="_blank" style="Margin:0;color:#2196F3;font-family:Helvetica,Arial,sans-serif;font-weight:400;line-height:1.3;margin:0;padding:0;text-align:left;text-decoration:none">Certificate Courses</a> at Shine Learning</p>
+                                                            <table class="spacer" style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                               <tbody>
+                                                                  <tr style="padding:0;text-align:left;vertical-align:top">
+                                                                     <td height="20px" style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:20px;font-weight:400;hyphens:auto;line-height:20px;margin:0;mso-line-height-rule:exactly;padding:0;text-align:left;vertical-align:top;word-wrap:break-word">&#xA0;</td>
+                                                                  </tr>
+                                                               </tbody>
+                                                            </table>
+                                                            <p class="float-left profiles" style="Margin:0;Margin-bottom:10px;color:#666;font-family:Helvetica,Arial,sans-serif;font-size:14px;font-weight:300;line-height:22px;margin:0;margin-bottom:0;margin-top:0;padding:0;padding-bottom:5px;padding-top:5px;text-align:left">Warm Regards,<br>Shine Learning Team</p>
+                                                            <table class="spacer" style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                               <tbody>
+                                                                  <tr style="padding:0;text-align:left;vertical-align:top">
+                                                                     <td height="20px" style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:20px;font-weight:400;hyphens:auto;line-height:20px;margin:0;mso-line-height-rule:exactly;padding:0;text-align:left;vertical-align:top;word-wrap:break-word">&#xA0;</td>
+                                                                  </tr>
+                                                               </tbody>
+                                                            </table>
+                                                         </th>
+                                                         <th class="expander" style="Margin:0;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0;padding:0!important;text-align:left;visibility:hidden;width:0"></th>
+                                                      </tr>
+                                                   </table>
+                                                </th>
+                                             </tr>
+                                          </tbody>
+                                       </table>
+                                       <table class="row footer" style="background:#fafafa;border-collapse:collapse;border-spacing:0;display:table;margin-bottom:0;margin-top:0;padding:0;padding-bottom:0;padding-top:0;position:relative;text-align:left;vertical-align:top;width:100%">
+                                          <tbody>
+                                             <tr style="padding:0;text-align:left;vertical-align:top">
+                                                <th class="small-12 large-12 columns first last" style="Margin:0 auto;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0 auto;padding:0;padding-bottom:0!important;padding-left:16px;padding-right:16px;text-align:left;width:564px">
+                                                   <table style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                      <tr style="padding:0;text-align:left;vertical-align:top">
+                                                         <th style="Margin:0;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0;padding:0;text-align:left">
+                                                            <table class="spacer" style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                               <tbody>
+                                                                  <tr style="padding:0;text-align:left;vertical-align:top">
+                                                                     <td height="20px" style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:20px;font-weight:400;hyphens:auto;line-height:20px;margin:0;mso-line-height-rule:exactly;padding:0;text-align:left;vertical-align:top;word-wrap:break-word">&#xA0;</td>
+                                                                  </tr>
+                                                               </tbody>
+                                                            </table>
+                                                            <p class="float-left safe" style="Margin:0;Margin-bottom:10px;color:#979696;font-family:Helvetica,Arial,sans-serif;font-size:12px;font-weight:300;line-height:1.3;margin:0;margin-bottom:0;margin-top:0;padding:0;padding-bottom:5px;padding-top:5px;text-align:justify">Please add <a href="mailto:alert@shinelearning.com"style="Margin:0;color:#2196F3;font-family:Helvetica,Arial,sans-serif;font-weight:400;line-height:1.3;margin:0;padding:0;text-align:left;text-decoration:none">alert@shinelearning.com</a> to your Address Book or Safe List to prevent future Shine Updates from being classified as Junk/Bulk Mail.</p>
+                                                            <p class="float-left safe" style="Margin:0;Margin-bottom:10px;color:#979696;font-family:Helvetica,Arial,sans-serif;font-size:12px;font-weight:300;line-height:1.3;margin:0;margin-bottom:0;margin-top:0;padding:0;padding-bottom:5px;padding-top:5px;text-align:justify"><small class="security" style="color:#666;font-size:12px">Security Alert</small> <small class="safe1" style="color:#979696!important;font-size:12px!important;font-weight:300;margin-bottom:0;margin-top:0;padding-bottom:5px;padding-top:5px;text-align:justify">- In case you receive a suspicious mail from anyone claiming to be a client of Shine, asking</small></p>
+                                                            <p class="float-left safe" style="Margin:0;Margin-bottom:10px;color:#979696;font-family:Helvetica,Arial,sans-serif;font-size:12px;font-weight:300;line-height:1.3;margin:0;margin-bottom:0;margin-top:0;padding:0;padding-bottom:5px;padding-top:5px;text-align:justify">for your personal information or some money by pretending to offer you a job please do not respond to such mails and bring it to the immediate notice of <a href="https://learning.shine.com" target="_blank" style="Margin:0;color:#2196F3;font-family:Helvetica,Arial,sans-serif;font-weight:400;line-height:1.3;margin:0;padding:0;text-align:left;text-decoration:none">Shinelearning.com</a> by writing to us at <a href="#" target="_blank" href="mailto:contactus@shinelearning.com" style="Margin:0;color:#2196F3;font-family:Helvetica,Arial,sans-serif;font-weight:400;line-height:1.3;margin:0;padding:0;text-align:left;text-decoration:none">contactus@shinelearning.com</a>. Please note that such offers / emails are a violation of our Terms and Conditions</a>, and Shine.com does not endorse such communication with candidates.
+                                                            <table class="spacer" style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                               <tbody>
+                                                                  <tr style="padding:0;text-align:left;vertical-align:top">
+                                                                     <td height="20px" style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:20px;font-weight:400;hyphens:auto;line-height:20px;margin:0;mso-line-height-rule:exactly;padding:0;text-align:left;vertical-align:top;word-wrap:break-word">&#xA0;</td>
+                                                                  </tr>
+                                                               </tbody>
+                                                            </table>
+                                                         </th>
+                                                         <th class="expander" style="Margin:0;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0;padding:0!important;text-align:left;visibility:hidden;width:0"></th>
+                                                      </tr>
+                                                   </table>
+                                                </th>
+                                             </tr>
+                                          </tbody>
+                                       </table>
+                                    </td>
+                                 </tr>
+                              </tbody>
+                           </table>
+                        </td>
+                     </tr>
+                  </table>
+               </center>
+            </td>
+         </tr>
+      </table>
+      <!-- prevent Gmail on iOS font size manipulation -->
+      <div style="display:none;white-space:nowrap;font:15px courier;line-height:0">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</div>
+   </body>
 </html>
+{% else %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" style="background:#f3f3f3!important">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      <meta name="viewport" content="width=device-width">
+      <title>My Drip Email Template Subject</title>
+      <style>@media only screen{html{min-height:100%;background:#f3f3f3}}@media only screen and (max-width:596px){.small-float-center{margin:0 auto!important;float:none!important;text-align:center!important}}@media only screen and (max-width:596px){table.body img{width:auto;height:auto}table.body center{min-width:0!important}table.body .container{width:95%!important}table.body .columns{height:auto!important;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;padding-left:16px!important;padding-right:16px!important}table.body .columns .columns{padding-left:0!important;padding-right:0!important}table.body .collapse .columns{padding-left:0!important;padding-right:0!important}th.small-6{display:inline-block!important;width:50%!important}th.small-12{display:inline-block!important;width:100%!important}.columns th.small-12{display:block!important;width:100%!important}table.menu{width:100%!important}table.menu td,table.menu th{width:auto!important;display:inline-block!important}table.menu.vertical td,table.menu.vertical th{display:block!important}table.menu[align=center]{width:auto!important}}</style>
+   </head>
+   <body style="-moz-box-sizing:border-box;-ms-text-size-adjust:100%;-webkit-box-sizing:border-box;-webkit-text-size-adjust:100%;Margin:0;background:#f3f3f3!important;box-sizing:border-box;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0;min-width:100%;padding:0;text-align:left;width:100%!important">
+      <span class="preheader" style="color:#f3f3f3;display:none!important;font-size:1px;line-height:1px;max-height:0;max-width:0;mso-hide:all!important;opacity:0;overflow:hidden;visibility:hidden"></span>
+      <table class="body" style="Margin:0;background:#f3f3f3!important;border-collapse:collapse;border-spacing:0;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;height:100%;line-height:1.3;margin:0;padding:0;text-align:left;vertical-align:top;width:100%">
+         <tr style="padding:0;text-align:left;vertical-align:top">
+            <td class="center" align="center" valign="top" style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;hyphens:auto;line-height:1.3;margin:0;padding:0;text-align:left;vertical-align:top;word-wrap:break-word">
+               <center data-parsed style="min-width:580px;width:100%">
+                  <table align="center" class="wrapper float-center" style="Margin:0 auto;border-collapse:collapse;border-spacing:0;float:none;margin:0 auto;padding:0;text-align:center;vertical-align:top;width:100%">
+                     <tr style="padding:0;text-align:left;vertical-align:top">
+                        <td class="wrapper-inner" style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;hyphens:auto;line-height:1.3;margin:0;padding:0;padding-bottom:10px;padding-top:10px;text-align:left;vertical-align:top;word-wrap:break-word">
+                           <table align="center" class="container" style="Margin:0 auto;background:#fefefe;border-collapse:collapse;border-spacing:0;margin:0 auto;padding:0;text-align:inherit;vertical-align:top;width:580px">
+                              <tbody>
+                                 <tr style="padding:0;text-align:left;vertical-align:top">
+                                    <td style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;hyphens:auto;line-height:1.3;margin:0;padding:0;text-align:left;vertical-align:top;word-wrap:break-word">
+                                       <table class="row header collapse" style="background:#f7f9fc;background-size:cover;border-collapse:collapse;border-spacing:0;clear:both;display:table;padding:0;position:relative;text-align:left;vertical-align:top;width:100%">
+                                          <tbody>
+                                             <tr style="padding:0;text-align:left;vertical-align:top">
+                                                <th class="float-left small-12 large-12 columns first last" style="Margin:0 auto;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0 auto;padding:0;padding-bottom:0!important;padding-left:0;padding-right:0;text-align:left;width:588px">
+                                                   <table style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                      <tr style="padding:0;text-align:left;vertical-align:top">
+                                                         <th style="Margin:0;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0;padding:0;text-align:left"><img src="{% static 'shinelearn/images/emailers/logo1.png' %}" alt style="-ms-interpolation-mode:bicubic;clear:both;display:block;max-width:100%;outline:0;text-decoration:none;width:auto"></th>
+                                                         <th class="expander" style="Margin:0;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0;padding:0!important;text-align:left;visibility:hidden;width:0"></th>
+                                                      </tr>
+                                                   </table>
+                                                </th>
+                                             </tr>
+                                          </tbody>
+                                       </table>
+                                       <table class="row header" style="background:#f7f9fc;background-size:cover;border-collapse:collapse;border-spacing:0;clear:both;display:table;padding:0;position:relative;text-align:left;vertical-align:top;width:100%">
+                                          <tbody>
+                                             <tr style="padding:0;text-align:left;vertical-align:top">
+                                                <th class="small-12 large-12 columns first last" style="Margin:0 auto;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0 auto;padding:0;padding-bottom:0!important;padding-left:16px;padding-right:16px;text-align:left;width:564px">
+                                                   <table style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                      <tr style="padding:0;text-align:left;vertical-align:top">
+                                                         <th style="Margin:0;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0;padding:0;text-align:left">
+                                                            <center class="text-center" data-parsed style="min-width:532px;width:100%"><img  src="{% static 'shinelearn/images/emailers/unsuccessicon.png' %}" alt align="center" class="float-center" style="-ms-interpolation-mode:bicubic;Margin:0 auto;clear:both;display:block;float:none;margin:0 auto;max-width:100%;outline:0;text-align:center;text-decoration:none;width:auto"></center>
+                                                            <table class="spacer" style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                               <tbody>
+                                                                  <tr style="padding:0;text-align:left;vertical-align:top">
+                                                                     <td height="20px" style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:20px;font-weight:400;hyphens:auto;line-height:20px;margin:0;mso-line-height-rule:exactly;padding:0;text-align:left;vertical-align:top;word-wrap:break-word">&#xA0;</td>
+                                                                  </tr>
+                                                               </tbody>
+                                                            </table>
+                                                            <h4 class="text-center congratulations" style="Margin:0;Margin-bottom:10px;color:#333;font-family:Helvetica,Arial,sans-serif;font-size:18px;font-weight:700;line-height:1.3;margin:0;margin-bottom:10px;padding:0;text-align:center;word-wrap:normal">Dear {% if username %}{{username}}{% else %}Candidate{% endif %},</h4>
+                                                            <p class="text-center completed" style="Margin:0;Margin-bottom:10px;color:#666!important;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:300;line-height:1.3;margin:0;margin-bottom:0;margin-top:0;padding:0;padding-bottom:3px;padding-top:5px!important;text-align:center">You could not completed</p>
+                                                            <h5 class="text-center advanced" style="Margin:0;Margin-bottom:10px;color:#333;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:700;line-height:1.3;margin:0;margin-bottom:0;margin-top:0;padding:0;padding-bottom:20px;padding-top:0;text-align:center;word-wrap:normal">{{ product_name }}</h5>
+                                                            <center class="yourscore_btn" data-parsed style="background:#6994dd!important;border-radius:4px;color:#fff!important;display:block;font-size:16px;font-weight:700;margin:0 auto;min-width:532px;padding:16px 0;text-align:center;width:100%"><small class="small_btn float-center" align="center" style="border-radius:4px;color:#fff!important;font-size:16px;font-weight:300">Your score:</small> {{ score }}%</center>
+                                                            <table class="spacer" style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                               <tbody>
+                                                                  <tr style="padding:0;text-align:left;vertical-align:top">
+                                                                     <td height="20px" style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:20px;font-weight:400;hyphens:auto;line-height:20px;margin:0;mso-line-height-rule:exactly;padding:0;text-align:left;vertical-align:top;word-wrap:break-word">&#xA0;</td>
+                                                                  </tr>
+                                                               </tbody>
+                                                            </table>
+                                                         </th>
+                                                         <th class="expander" style="Margin:0;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0;padding:0!important;text-align:left;visibility:hidden;width:0"></th>
+                                                      </tr>
+                                                   </table>
+                                                </th>
+                                             </tr>
+                                          </tbody>
+                                       </table>
+                                       <table class="row" style="border-collapse:collapse;border-spacing:0;display:table;padding:0;position:relative;text-align:left;vertical-align:top;width:100%">
+                                          <tbody>
+                                             <tr style="padding:0;text-align:left;vertical-align:top">
+                                                <th class="small-12 large-12 columns first last" style="Margin:0 auto;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0 auto;padding:0;padding-bottom:0!important;padding-left:16px;padding-right:16px;text-align:left;width:564px">
+                                                   <table style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                      <tr style="padding:0;text-align:left;vertical-align:top">
+                                                         <th style="Margin:0;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0;padding:0;text-align:left">
+                                                            <table class="spacer" style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                               <tbody>
+                                                                  <tr style="padding:0;text-align:left;vertical-align:top">
+                                                                     <td height="20px" style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:20px;font-weight:400;hyphens:auto;line-height:20px;margin:0;mso-line-height-rule:exactly;padding:0;text-align:left;vertical-align:top;word-wrap:break-word">&#xA0;</td>
+                                                                  </tr>
+                                                               </tbody>
+                                                            </table>
+                                                            <p class="float-left profiles" style="Margin:0;Margin-bottom:10px;color:#666;font-family:Helvetica,Arial,sans-serif;font-size:14px;font-weight:300;line-height:22px;margin:0;margin-bottom:0;margin-top:0;padding:0;padding-bottom:5px;padding-top:5px;text-align:left">Shine Learning wishes you all the best for your learning ahead. Explore more <a href="#" target="_blank" style="Margin:0;color:#2196F3;font-family:Helvetica,Arial,sans-serif;font-weight:400;line-height:1.3;margin:0;padding:0;text-align:left;text-decoration:none">Certificate Courses</a></p>
+                                                            <table class="spacer" style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                               <tbody>
+                                                                  <tr style="padding:0;text-align:left;vertical-align:top">
+                                                                     <td height="20px" style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:20px;font-weight:400;hyphens:auto;line-height:20px;margin:0;mso-line-height-rule:exactly;padding:0;text-align:left;vertical-align:top;word-wrap:break-word">&#xA0;</td>
+                                                                  </tr>
+                                                               </tbody>
+                                                            </table>
+                                                            <p class="float-left profiles" style="Margin:0;Margin-bottom:10px;color:#666;font-family:Helvetica,Arial,sans-serif;font-size:14px;font-weight:300;line-height:22px;margin:0;margin-bottom:0;margin-top:0;padding:0;padding-bottom:5px;padding-top:5px;text-align:left">Warm Regards,<br>Shine Learning Team</p>
+                                                            <table class="spacer" style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                               <tbody>
+                                                                  <tr style="padding:0;text-align:left;vertical-align:top">
+                                                                     <td height="20px" style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:20px;font-weight:400;hyphens:auto;line-height:20px;margin:0;mso-line-height-rule:exactly;padding:0;text-align:left;vertical-align:top;word-wrap:break-word">&#xA0;</td>
+                                                                  </tr>
+                                                               </tbody>
+                                                            </table>
+                                                         </th>
+                                                         <th class="expander" style="Margin:0;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0;padding:0!important;text-align:left;visibility:hidden;width:0"></th>
+                                                      </tr>
+                                                   </table>
+                                                </th>
+                                             </tr>
+                                          </tbody>
+                                       </table>
+                                        <table class="row footer" style="background:#fafafa;border-collapse:collapse;border-spacing:0;display:table;margin-bottom:0;margin-top:0;padding:0;padding-bottom:0;padding-top:0;position:relative;text-align:left;vertical-align:top;width:100%">
+                                          <tbody>
+                                             <tr style="padding:0;text-align:left;vertical-align:top">
+                                                <th class="small-12 large-12 columns first last" style="Margin:0 auto;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0 auto;padding:0;padding-bottom:0!important;padding-left:16px;padding-right:16px;text-align:left;width:564px">
+                                                   <table style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                      <tr style="padding:0;text-align:left;vertical-align:top">
+                                                         <th style="Margin:0;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0;padding:0;text-align:left">
+                                                            <table class="spacer" style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                               <tbody>
+                                                                  <tr style="padding:0;text-align:left;vertical-align:top">
+                                                                     <td height="20px" style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:20px;font-weight:400;hyphens:auto;line-height:20px;margin:0;mso-line-height-rule:exactly;padding:0;text-align:left;vertical-align:top;word-wrap:break-word">&#xA0;</td>
+                                                                  </tr>
+                                                               </tbody>
+                                                            </table>
+                                                            <p class="float-left safe" style="Margin:0;Margin-bottom:10px;color:#979696;font-family:Helvetica,Arial,sans-serif;font-size:12px;font-weight:300;line-height:1.3;margin:0;margin-bottom:0;margin-top:0;padding:0;padding-bottom:5px;padding-top:5px;text-align:justify">Please add <a href="mailto:alert@shinelearning.com"style="Margin:0;color:#2196F3;font-family:Helvetica,Arial,sans-serif;font-weight:400;line-height:1.3;margin:0;padding:0;text-align:left;text-decoration:none">alert@shinelearning.com</a> to your Address Book or Safe List to prevent future Shine Updates from being classified as Junk/Bulk Mail.</p>
+                                                            <p class="float-left safe" style="Margin:0;Margin-bottom:10px;color:#979696;font-family:Helvetica,Arial,sans-serif;font-size:12px;font-weight:300;line-height:1.3;margin:0;margin-bottom:0;margin-top:0;padding:0;padding-bottom:5px;padding-top:5px;text-align:justify"><small class="security" style="color:#666;font-size:12px">Security Alert</small> <small class="safe1" style="color:#979696!important;font-size:12px!important;font-weight:300;margin-bottom:0;margin-top:0;padding-bottom:5px;padding-top:5px;text-align:justify">- In case you receive a suspicious mail from anyone claiming to be a client of Shine, asking</small></p>
+                                                            <p class="float-left safe" style="Margin:0;Margin-bottom:10px;color:#979696;font-family:Helvetica,Arial,sans-serif;font-size:12px;font-weight:300;line-height:1.3;margin:0;margin-bottom:0;margin-top:0;padding:0;padding-bottom:5px;padding-top:5px;text-align:justify">for your personal information or some money by pretending to offer you a job please do not respond to such mails and bring it to the immediate notice of <a href="https://learning.shine.com" target="_blank" style="Margin:0;color:#2196F3;font-family:Helvetica,Arial,sans-serif;font-weight:400;line-height:1.3;margin:0;padding:0;text-align:left;text-decoration:none">Shinelearning.com</a> by writing to us at <a href="#" target="_blank" href="mailto:contactus@shinelearning.com" style="Margin:0;color:#2196F3;font-family:Helvetica,Arial,sans-serif;font-weight:400;line-height:1.3;margin:0;padding:0;text-align:left;text-decoration:none">contactus@shinelearning.com</a>. Please note that such offers / emails are a violation of our Terms and Conditions</a>, and Shine.com does not endorse such communication with candidates.
+                                                            <table class="spacer" style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                                                               <tbody>
+                                                                  <tr style="padding:0;text-align:left;vertical-align:top">
+                                                                     <td height="20px" style="-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collapse:collapse!important;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:20px;font-weight:400;hyphens:auto;line-height:20px;margin:0;mso-line-height-rule:exactly;padding:0;text-align:left;vertical-align:top;word-wrap:break-word">&#xA0;</td>
+                                                                  </tr>
+                                                               </tbody>
+                                                            </table>
+                                                         </th>
+                                                         <th class="expander" style="Margin:0;color:#0a0a0a;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.3;margin:0;padding:0!important;text-align:left;visibility:hidden;width:0"></th>
+                                                      </tr>
+                                                   </table>
+                                                </th>
+                                             </tr>
+                                          </tbody>
+                                       </table>
+                                    </td>
+                                 </tr>
+                              </tbody>
+                           </table>
+                        </td>
+                     </tr>
+                  </table>
+               </center>
+            </td>
+         </tr>
+      </table>
+      <!-- prevent Gmail on iOS font size manipulation -->
+      <div style="display:none;white-space:nowrap;font:15px courier;line-height:0">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</div>
+   </body>
+</html>
+{% endif %}
 {% endspaceless %}
