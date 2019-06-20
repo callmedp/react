@@ -23,11 +23,13 @@ class Template extends Component {
     }
 
     render() {
-        const {template: {templateToPreview}} = this.props;
+        const {template: {html}} = this.props;
         return (
             <div>
-                <div className="right-sidebar-scroll-main">
-                    <img src={`data:image/png;base64,${templateToPreview}`}/>
+                <div className="right-sidebar-scroll-main"
+                     dangerouslySetInnerHTML={{
+                         __html: html
+                     }}>
                 </div>
             </div>
         )

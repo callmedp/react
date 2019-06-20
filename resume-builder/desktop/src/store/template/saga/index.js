@@ -16,7 +16,7 @@ function* fetchTemplate(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
         yield put({type: UPDATE_UI, data: {loader: true}});
         const {template} = action.payload;
-        const result = yield call(Api.fetchTemplateImages, candidateId, template);
+        const result = yield call(Api.fetchTemplate, candidateId, template);
 
         yield put({type: UPDATE_UI, data: {loader: false}});
 
@@ -28,7 +28,7 @@ function* fetchTemplate(action) {
         }
 
         let {data} = result;
-        yield put({type: Actions.SAVE_TEMPLATE, data: {"templateToPreview": data}});
+        yield put({type: Actions.SAVE_TEMPLATE, data: data});
     } catch (e) {
         console.log(e);
     }
