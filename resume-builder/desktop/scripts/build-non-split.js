@@ -49,6 +49,3 @@ config.module.rules[2]['oneOf'][5]['use'][3]['options'] = {
     }
 }
 
-console.log(JSON.stringify(config))
-
-
