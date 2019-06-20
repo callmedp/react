@@ -566,48 +566,6 @@ class CandidateShineProfileRetrieveUpdateView(APIView):
         if candidate[1]:
             candidate.save()
 
-        #
-        # request.session['candidate_id'] = candidate_profile['candidate_id']
-        #
-        # request.session['personal_info'] = candidate_profile
-
-        #
-        # # update candidate education
-        # candidate_education_keys = ['candidate', 'specialization', 'institution_name', 'course_type', 'percentage_cgpa',
-        #                        'start_date',
-        #                        'end_date', 'is_pursuing']
-        # education = shine_profile and shine_profile['education']
-        # candidate_education = []
-        # for edu in education:
-        #     course_type = ""
-        #     if edu['course_type'] == 1:
-        #         course_type = "FT"
-        #     elif edu['course_type'] == 2:
-        #         course_type = "PT"
-        #     else:
-        #         course_type = "CR"
-        #
-        #     degree_index = next((index for (index, d) in enumerate(educ_list) if d["pid"] == edu['education_level']),
-        #                         None)
-        #
-        #     degree_name = educ_list[degree_index]['pdesc'];
-        #
-        #     child = educ_list[degree_index]['child']
-        #
-        #     specialization_index = next((index for (index, d) in enumerate(child)
-        #                                  if d['cid'] == edu['education_specialization']), None)
-        #     specialization_name = child[specialization_index]['cdesc']
-        #
-        #     candidate_education_values = [candidate, '{}({})'.format(degree_name, specialization_name), edu['institute_name'],
-        #                              course_type,
-        #                              '',
-        #                              None, None, True]
-        #     education_dict = dict(zip(candidate_education_keys, candidate_education_values))
-        #     candidate_education.append(CandidateEducation(**education_dict))
-        #
-        # # bulk candidate eudcation create
-        # CandidateEducation.objects.bulk_create(candidate_education)
-        #
         # # update candidate experience
         candidate_experience_keys = ['job_profile', 'company_name', 'start_date', 'end_date', 'is_working',
                                      'job_location',
@@ -629,47 +587,6 @@ class CandidateShineProfileRetrieveUpdateView(APIView):
             experience_dict = dict(zip(candidate_experience_keys, candidate_experience_values))
             candidate_experience.append(CandidateExperience(**experience_dict))
             request.session['candidate_experience'] = candidate_experience
-        #
-        # CandidateExperience.objects.bulk_create(candidate_experience)
-        #
-        # # update candidate skills
-        # skill_keys = ['candidate', 'name', 'proficiency']
-        # skills = shine_profile and shine_profile['skills']
-        #
-        # candidate_skill = []
-        #
-        # for skill in skills:
-        #     candidate_skill_values = [candidate, skill['value'], 5]
-        #     skill_dict = dict(zip(skill_keys, candidate_skill_values))
-        #     candidate_skill.append(Skill(**skill_dict))
-        #
-        # Skill.objects.bulk_create(candidate_skill)
-        #
-        # # update candidate languages
-        # candidate_language = []
-        #
-        # # update candidate achievements
-        #
-        # # update candidate certification
-        # candidate_certification_keys = ['candidate', 'name_of_certification', 'year_of_certification']
-        # certifications = shine_profile and shine_profile['certifications']
-        # candidate_certification = []
-        #
-        # for certi in certifications:
-        #     candidate_certificaiton_values = [candidate, certi['certification_name'], certi['certification_year']]
-        #     certification_dict = dict(zip(candidate_certification_keys, candidate_certificaiton_values))
-        #     candidate_certification.append(CandidateCertification(**certification_dict))
-        #
-        # CandidateCertification.objects.bulk_create(candidate_certification)
-        #
-        # # update candidate social links
-        # candidate_social_links = []
-        #
-        # # update candidate reference
-        # candidate_references = []
-        #
-        # # update candidate projects
-        # candidate_projects = []
 
         return Response({
             "candidate_id": candidate_profile['candidate_id']
@@ -944,3 +861,42 @@ class SuggestionApiView(APIView):
             data={'result': suggestion},
             status=status.HTTP_200_OK
         )
+
+
+class PDFRefreshAPIView(APIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = None
+
+    def post(self,request,*args,**kwargs):
+        from order.models import Order
+        from order.tasks import generate_resume_for_order
+
+        order_id = kwargs.get('order_id')
+        candidate_id = request.user.id
+        product_found = False
+        order_obj_list = Order.objects.filter(id=order_id,candidate_id=candidate_id,status__in=[1,3])
+
+        if not order_obj_list:
+            return Response({"detail":"Invalid Order id"},status=status.HTTP_400_BAD_REQUEST)
+
+        for order_obj in order_obj_list: 
+            if product_found:
+                break
+                
+            for item in order_obj.orderitems.all():
+                if item.product.type_flow == 17 and item.product.type_product == 2:
+                    product_found = True
+                    break
+
+        if not product_found:
+            return Response({"detail":"Invalid Order id"},status=status.HTTP_400_BAD_REQUEST)
+
+        generate_resume_for_order.delay(order_obj.id)
+        return Response({"detail":"Resume successfully Updated"},status=status.HTTP_200_OK)
+
+
+
+
+
+

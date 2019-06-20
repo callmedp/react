@@ -845,6 +845,30 @@ class ShineCandidateLoginAPIView(APIView):
 
         return data
 
+    def get_existing_order_data(self,candidate_id):
+        from order.models import Order
+
+        product_found = False
+        order_data = {}
+        order_obj_list = Order.objects.filter(candidate_id=candidate_id,status__in=[1,3])
+
+        if not order_obj_list:
+            return order_data
+
+        for order_obj in order_obj_list: 
+            if product_found:
+                break
+                
+            for item in order_obj.orderitems.all():
+                if item.product.type_flow == 17 and item.product.type_product == 2:
+                    order_data = {"id":order_obj.id,
+                    "combo":True if item.product.id != settings.RESUME_BUILDER_NON_COMBO_PID else False
+                    }
+                    product_found = True
+                    break
+
+        return order_data
+
     def get_response_for_successful_login(self, candidate_id, login_response):
         candidate_obj = ShineCandidate(**login_response)
         candidate_obj.id = candidate_id
@@ -854,7 +878,8 @@ class ShineCandidateLoginAPIView(APIView):
         data_to_send = {"token": token,
                         "candidate_id": candidate_id,
                         "candidate_profile": self.customize_user_profile(login_response),
-                        "entity_status": self.get_entity_status_for_candidate(candidate_id)
+                        "entity_status": self.get_entity_status_for_candidate(candidate_id),
+                        "order_data":self.get_existing_order_data(candidate_id)
                         # TODO make param configurable
                         }
         self.request.session.update(login_response)

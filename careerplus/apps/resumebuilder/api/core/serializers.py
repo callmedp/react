@@ -31,6 +31,7 @@ class CandidateEntityPreferenceSerializer(serializers.Serializer):
 
 class CandidateSerializer(serializers.ModelSerializer):
     entity_preference_data = serializers.JSONField(required=False, allow_null=True)
+    order_data = serializers.DictField(read_only=True)
 
     def validate_entity_preference_data(self, entity_preference_data):
         if not isinstance(entity_preference_data, list):
@@ -63,7 +64,7 @@ class CandidateSerializer(serializers.ModelSerializer):
         model = Candidate
         fields = (
             'id', 'candidate_id', 'first_name', 'last_name', 'email', \
-            'date_of_birth', 'number', 'gender', 'location', \
+            'date_of_birth', 'number', 'gender', 'location', 'order_data',\
             'extra_info', 'extracurricular', 'image', 'entity_preference_data', 'selected_template')
 
 

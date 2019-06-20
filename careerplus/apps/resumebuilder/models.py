@@ -3,6 +3,7 @@ import json,ast
 
 # django imports
 from django.db import models
+from django.conf import settings
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django_mysql.models.fields import JSONField
@@ -69,6 +70,31 @@ class Candidate(PreviewImageCreationMixin, CandidateProfile):
     parent_object_key = "id"
     initiate_image_upload_task = True
 
+    @property
+    def order_data(self):
+        from order.models import Order
+
+        product_found = False
+        order_data = {}
+        order_obj_list = Order.objects.filter(candidate_id=self.candidate_id,status__in=[1,3])
+
+        if not order_obj_list:
+            return order_data
+
+        for order_obj in order_obj_list: 
+            if product_found:
+                break
+                
+            for item in order_obj.orderitems.all():
+                if item.product.type_flow == 17 and item.product.type_product == 2:
+                    order_data = {"id":order_obj.id,
+                    "combo":True if item.product.id != settings.RESUME_BUILDER_NON_COMBO_PID else False
+                    }
+                    product_found = True
+                    break
+
+        return order_data
+            
     def create_template_customisations(self, candidate_id):
         for i in range(1, 6):
             obj = OrderCustomisation()
