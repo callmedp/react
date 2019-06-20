@@ -144,9 +144,9 @@ function* fetchJobTitlesAndSuggestions(action) {
     try {
 
         const {payload: {inputValue, suggestionType, resolve, reject}} = action;
+        if(suggestionType)
+            yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: true}})
         const apiResult = yield call(Api.fetchJobTitlesAndSuggestions, inputValue, suggestionType);
-
-
         if (apiResult['error']) {
             apiError();
             return reject(new SubmissionError({_error: apiResult['errorMessage']}));
@@ -158,10 +158,13 @@ function* fetchJobTitlesAndSuggestions(action) {
             result = (result || []).map((el) => ({
                 label: el, value: el.toString()
             }))
+            yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
             return resolve(result);
+            
         }
 
         yield  put({type:uiAction.SAVE_SUGGESTIONS, data: {suggestions: result}});
+        yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
         resolve([])
     } catch (e) {
         apiError();

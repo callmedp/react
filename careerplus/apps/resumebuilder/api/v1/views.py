@@ -361,7 +361,7 @@ class CandidateResumePreview(APIView):
         certifications = candidate.candidatecertification_set.all().order_by('order')
         languages = candidate.candidatelanguage_set.all().order_by('order')
         current_exp = experience.filter(is_working=True).order_by('-start_date').first()
-
+        
         entity_id_count_mapping = {
             2: bool(education.count()),
             3: bool(experience.count()),

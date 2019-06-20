@@ -99,7 +99,6 @@ export const EducationRenderer = ({
                                                     </AccordionItemButton>
                                                 </AccordionItemHeading>
                                                 <AccordionItemPanel>
-
                                                     <div className="flex-container">
                                                         <fieldset>
                                                             <label>Institution Name </label>
@@ -110,6 +109,18 @@ export const EducationRenderer = ({
                                                                 component={renderField} type={"text"}
                                                                 name={`${member}.institution_name`}/>
                                                         </fieldset>
+                                                    </div>
+                                                    <div className="flex-container">
+                                                        
+                                                        <fieldset>
+                                                            <label>Degree</label>
+                                                            <Field
+                                                                iconClass={'icon-designation'}
+                                                                component={renderField}
+                                                                maxLength={'50'}
+                                                                type={"text"}
+                                                                name={`${member}.degree`}/>
+                                                        </fieldset>
                                                         <fieldset>
                                                             <label>Specialization</label>
                                                             <Field
@@ -119,8 +130,36 @@ export const EducationRenderer = ({
                                                                 type={"text"}
                                                                 name={`${member}.specialization`}/>
                                                         </fieldset>
+                                                        
                                                     </div>
+                                                    <div className="flex-container">
+                                                        <fieldset className="custom">
+                                                            <label>Course Type</label>
+                                                            <Field
+                                                                iconClass={'icon-course-type'}
+                                                                component={renderSelect} type={"text"}
+                                                                name={`${member}.course_type`}
+                                                                options={[
+                                                                    {value: 'FT', label: 'FULL TIME'},
+                                                                    {value: 'PT', label: 'PART TIME'},
+                                                                    {value: 'NA', label: 'NA'}
+                                                                ]}
+                                                                closeMenuOnSelect={true}
+                                                                className="input-control"/>
+                                                        </fieldset>
+                                                        <fieldset>
+                                                            <label>Percentage</label>
+                                                            <Field
+                                                                iconClass={'icon-percentage'}
+                                                                max={100}
+                                                                component={renderField}
+                                                                type={"number"}
+                                                                name={`${member}.percentage_cgpa`}
+                                                                className="input-control width-half"/>
 
+                                                        </fieldset>
+                                                        
+                                                    </div>
                                                     <div className="flex-container">
                                                         <fieldset>
                                                             <label>Date from</label>
@@ -156,34 +195,7 @@ export const EducationRenderer = ({
                                                             </span>
                                                         </fieldset>
                                                     </div>
-
-                                                    <div className="flex-container">
-
-                                                        <fieldset className="custom">
-                                                            <label>Course Type</label>
-                                                            <Field
-                                                                iconClass={'icon-course-type'}
-                                                                component={renderSelect} type={"text"}
-                                                                name={`${member}.course_type`}
-                                                                options={[
-                                                                    {value: 'FT', label: 'FULL TIME'},
-                                                                    {value: 'PT', label: 'PART TIME'},
-                                                                ]}
-                                                                closeMenuOnSelect={true}
-                                                                className="input-control"/>
-                                                        </fieldset>
-                                                        <fieldset>
-                                                            <label>Percentage</label>
-                                                            <Field
-                                                                iconClass={'icon-percentage'}
-                                                                max={100}
-                                                                component={renderField}
-                                                                type={"number"}
-                                                                name={`${member}.percentage_cgpa`}
-                                                                className="input-control"/>
-
-                                                        </fieldset>
-                                                    </div>
+                                                    
                                                 </AccordionItemPanel>
                                             </AccordionItem>
                                         </section>

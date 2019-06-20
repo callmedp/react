@@ -11,8 +11,8 @@
           {% if edu.percentage_cgpa %}
               <span style="font-size: 16px; color: #333333; font-weight: bold; float: right;">{{ edu.percentage_cgpa }}%</span>
           {% endif %}
-                    <strong style="display: block; font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #333333;">{{ edu.specialization }} <span
-                            style="font-style: italic; color: #333333; display: inline-block; font-weight: normal; font-size: {{ current_config.text_font_size|text_font_size }}px;">
+                    <strong style="display: block; font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #333333;">{{edu.degree}}({{ edu.specialization }})<span
+                            style="font-style: italic; color: #333333; display: block; font-weight: normal; font-size: {{ current_config.text_font_size|text_font_size }}px;">
             {% if edu.is_pursuing %}
                 ({{ edu.start_date|date:"M Y" }} - Current)
             {% else %}

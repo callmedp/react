@@ -192,7 +192,7 @@ export const ExperienceRenderer = ({
                                                             <Field component={renderTextArea} rows={"3"}
                                                                    type={"text"}
                                                                    noIcon={true}
-                                                                   maxLength={'300'}
+                                                                   maxLength={'400'}
                                                                    name={`${member}.work_description`}/>
                                                         </fieldset>
                                                     </div>

@@ -7,7 +7,7 @@
                 <li style="vertical-align: top; margin: 10px 0;">
                     <span style="width: 9px; height: 9px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
                     <span style="display: inline-block; width: 57%; vertical-align: top; color: #999999;">
-                    <strong style="display: block; font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #333333;">{{ edu.specialization }}
+                    <strong style="display: block; font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #333333;">{{edu.degree}}({{ edu.specialization }})
                         {% if edu.percentage_cgpa %} <span
                                 style="font-size:  {{ current_config.text_font_size|text_font_size }}px; color: #333333; font-weight: bold;">- {{ edu.percentage_cgpa }}%</span>{% endif %}</strong>
                     {{ edu.institution_name }}
