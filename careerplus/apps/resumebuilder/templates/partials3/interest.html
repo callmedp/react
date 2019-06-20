@@ -2,7 +2,7 @@
 
 {% if extracurricular|length >= 1 %}
   <div style="display: block; vertical-align: top; word-break: break-word;">
-    <strong style="font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px; display: block; font-weight: normal; color: #ffffff; text-transform: uppercase; margin-bottom: 15px; border-bottom: 1px solid #bd9f5e; padding-bottom: 5px;">Interests</strong>
+    <strong style="font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px; display: block; font-weight: normal; color: #ffffff; text-transform: uppercase; margin-bottom: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.5); padding-bottom: 5px;">Interests</strong>
     <ul style="margin: 20px 0 30px 0; padding: 0; font-size: {{ current_config.text_font_size|text_font_size }}px; color: #ffffff; list-style-type: disc;">
       {% for interest in extracurricular %}
         <li style="display: table; margin-bottom: 15px;"><span style="width: 8px; height: 8px; border-radius: 100%; background: #ffffff; display: inline-block; vertical-align: baseline; margin-right: 10px;"></span>{{interest}}</li>

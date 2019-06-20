@@ -11,7 +11,7 @@
           <strong style="display: block; font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #333333;">{{ exp.job_profile }}
              </strong>
           {{ exp.company_name }}
-          <pre style="font-size: {{ current_config.text_font_size|text_font_size }}px; color: #777777; margin-top: 5px; white-space: pre-line;">{{ exp.work_description }}</pre>
+          
         </span>
         <span style="font-size: {{ current_config.text_font_size|text_font_size }}px;font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', 'Arial', 'sans-serif';font-style: italic; color: #333333; width: 20%; display: inline-block; vertical-align: top;">
           {% if exp.is_working %}
@@ -20,6 +20,7 @@
               ({{ exp.start_date|date:"M Y" }} - {{ exp.end_date|date:"M Y" }})
           {% endif %}
         </span>
+        <pre style="font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: {{ current_config.text_font_size|text_font_size }}px; color: #777777; margin-top: 5px; margin-left: 20px; white-space: pre-line;">{{ exp.work_description }}</pre>
 
                 </li>
             {% endfor %}

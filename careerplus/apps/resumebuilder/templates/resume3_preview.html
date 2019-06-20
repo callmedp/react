@@ -20,7 +20,7 @@
     <div style="position: absolute;  top: 0; left: 0; right: 0; background: #484848; min-height: 185px;"></div>
 
     <div style="display: table-row; width: 97%; vertical-align: top; margin: 3% 0 0 3%; float: left;">
-        <div style="width: 24%; background: {{ current_config.color|background_color_choice }}; padding: 3%; display: table-cell; vertical-align: top; position:relative;">
+        <div style="width: 26.5%; background: {{ current_config.color|background_color_choice }}; padding: 3%; display: table-cell; vertical-align: top; position:relative;">
             {% if candidate.image %}
                 <span style="display: block; text-align: center; margin-bottom: 10%;">
               <img src="{{ candidate.image }}" width="205" height="205" alt="Resume"
@@ -55,11 +55,11 @@
 
         </div>
 
-        <div style="width: 63.5%; padding: 3%; display: table-cell; vertical-align: top; position:relative;">
+        <div style="width: 61%; padding: 3%; display: table-cell; vertical-align: top; position:relative;">
             <div style="margin-bottom: 10%;">
                 <h1 style="margin: 0; color: #ffffff; font-size: 32px; line-height: 32px; font-weight: bold; text-transform: uppercase;">{{ candidate.first_name }} {{ candidate.last_name }}</h1>
                 <span style="display: block; width: 15%; border-top: 1px solid #919191; margin: 10px 0 15px 0;"></span>
-                <strong style="display: block; font-size: 18px; color: #ffffff; font-weight: normal; text-transform: uppercase; margin-bottom: 1px;">{{ latest_exp }}</strong>
+                <strong style="display: block; font-size: 18px; color: #ffffff; font-weight: normal; text-transform: capitalize; margin-bottom: 1px;">{{ latest_exp }}</strong>
                 {% comment %} <span style="display: block; font-size: 14px; color: #ffffff; font-weight: normal; text-transform: uppercase;">Compnay Name</span> {% endcomment %}
             </div>
 
