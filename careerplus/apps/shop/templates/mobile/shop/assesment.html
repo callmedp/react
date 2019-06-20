@@ -341,38 +341,6 @@ $(function() {
 
 
 
-$('#enquire_form').click(function(event) {
-    event.preventDefault();
-        $('#enquire_form').attr("disabled", true);
-    var $enquireform = $("#enquireform");
-        var typeOfProduct = document.getElementsByName("lsource")[0].value;
-
-    var flag = $enquireform.valid();
-    if (flag) {
-        var formData = $enquireform.serialize();
-        $.ajax({
-            url: "/lead/lead-management/",
-            type: "POST",
-            data: formData,
-            success: function(data, textStatus, jqXHR) {
-                gaEventFunc(typeOfProduct,'success');
-            pop('Your Query Submitted Successfully.');
-               $('#enquire_form').removeAttr("disabled");
-
-                $('#enquireform')[0].reset();
-
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                gaEventFunc(typeOfProduct,'failure');
-                  $('#enquire_form').removeAttr("disabled");
-
-
-                pop('Something went wrong. Try again later.');
-            }
-        });
-    }
-});
-
 
 function pop(param) {
     // Get the snackbar DIV

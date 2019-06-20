@@ -1,18 +1,23 @@
 <div class="stick_bottom call-us">
     <div class="ui-grid-a block-3 text-center">
+        {% if not product.is_assesment %}
         <div class="ui-block-a">
+
             <a href="javascript:void(0)" id="enquire_btn"><span></span>Enquire</a>
         </div>
-        <div class="ui-block-b">
+        {% endif %}
+        <div class="ui-block-b" {% if product.is_assesment %} style="width:100%;"{% endif %}>
             <a href="tel:{{ggn_contact_full}}"><span></span>Call Us</a>
         </div>
+        {% if not product.is_assesment %}
         {% if not request.amp %}
         <div class="ui-block-c"><a href="JavaScript:void(0);"> <span></span>Chat </a></div>
+        {% endif %}
         {% endif %}
     </div><!-- call us and chat widget ends here -->
 </div>
 
-
+{% if not product.is_assesment %}
 <div class="enquire" id="enquire">
     <header>
         <a class="icon-back pull-left" id="back_btn"></a>
@@ -62,3 +67,4 @@
         </div>
     </div>
 </div>
+{% endif %}
