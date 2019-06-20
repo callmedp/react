@@ -7,7 +7,7 @@
             {% for edu in education %}
                 <li style="vertical-align: top; margin: 10px 0; display: flex; flex-direction: row; align-items: baseline;">
                     <span style="width: 8px; height: 8px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: middle;"></span>
-                    <span style="display: inline-block; width: 73%; vertical-align: top;">
+                    <span style="display: inline-block; width: 63%; vertical-align: top;">
                     <strong style="display: block; font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #777777;">{{ edu.specialization }}
                         {% if edu.percentage_cgpa %}
                             <span style="font-size: 16px; color: #777777; font-weight: bold;">- {{ edu.percentage_cgpa }}%</span>

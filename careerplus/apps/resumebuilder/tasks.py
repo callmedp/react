@@ -86,33 +86,33 @@ def generate_image_for_resume(candidate_id,template_no):
         'certifications': certifications, 'extracurricular': extracurricular, 'languages': languages,
         'current_exp': current_exp, 'latest_exp': latest_experience,
         'preference_list': entity_preference,'current_config': current_config,
-        'entity_position': updated_entity_position, 'width': 93.7, 'activate_water_mark': True
+        'entity_position': updated_entity_position, 'width': 100, 'activate_water_mark': True
         }).encode(encoding='UTF-8')
 
-    file_name = 'resumetemplate-' + str(template_no) + '.png'
+    file_name = 'resumetemplate-' + str(template_no) + '.jpg'
     rendered_template = rendered_template.decode()
     rendered_template = rendered_template.replace("\n","")
 
-    file = imgkit.from_string(rendered_template,False,{'quiet':''})
+    file = imgkit.from_string(rendered_template,False,{'quiet':'','quality':'80','format':'JPG'})
     in_mem_file = BytesIO(file)
     in_mem_file_to_upload = BytesIO()
     img = Image.open(in_mem_file)
     img = remove_transparency(img)
-    img.save(in_mem_file_to_upload,"PNG")
+    img.save(in_mem_file_to_upload,"JPEG",quality=80)
     store_resume_file(str(candidate.id)+"/images",file_name,in_mem_file_to_upload.getvalue())
 
     for tsize in thumbnail_sizes:
-        tname = "resumetemplate-{}-{}x{}.png".format(template_no,tsize[0],tsize[1])
+        tname = "resumetemplate-{}-{}x{}.jpg".format(template_no,tsize[0],tsize[1])
         in_mem_file_to_upload = BytesIO()
         img.thumbnail(tsize,Image.ANTIALIAS)
-        img.save(in_mem_file_to_upload, "PNG")
+        img.save(in_mem_file_to_upload, "JPEG",quality=80)
         store_resume_file(str(candidate.id)+"/images",tname,in_mem_file_to_upload.getvalue())
 
 
 def remove_transparency(im,bg_colour=(255, 255, 255)):
     if im.mode in ('RGBA', 'LA') or (im.mode == 'P' and 'transparency' in im.info):
         alpha = im.convert('RGBA').split()[-1]
-        bg = Image.new("RGBA", im.size, bg_colour + (255,))
+        bg = Image.new("RGBA", im.size, bg_colour + (255,),quality=80)
         bg.paste(im, mask=alpha)
         return bg
 
@@ -200,12 +200,13 @@ def generate_and_upload_resume_pdf(data):
             options = {
                         'page-size': 'Letter',
                         'encoding': "UTF-8",
-                        'no-outline': None,
-                        'margin-top': '0.3in',
-                        'margin-right': '0.2in',
-                        'margin-bottom': '0.2in',
-                        'margin-left': '0.2in',
-                        'quiet': ''
+                        # 'no-outline': None,
+                        # 'margin-top': '0in',
+                        # 'margin-right': '0in',
+                        # 'margin-bottom': '0in',
+                        # 'margin-left': '0in',
+                        'image-dpi':135,
+                        'quiet': '',
                     }
             rendered_html = rendered_html.decode().replace("\n","")
             file = pdfkit.from_string(rendered_html,False,options=options)

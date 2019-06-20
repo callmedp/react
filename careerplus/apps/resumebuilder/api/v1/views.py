@@ -776,22 +776,22 @@ class ResumeImagePreviewView(APIView):
 
         if not settings.IS_GCP:
             try:
-                file_obj = open("{}/{}/{}/images/resumetemplate-{}.png". \
+                file_obj = open("{}/{}/{}/images/resumetemplate-{}.jpg". \
                                 format(settings.MEDIA_ROOT, settings.RESUME_TEMPLATE_DIR, candidate_obj.id,
                                        name_suffix), "rb")
             except Exception as e:
-                logging.getLogger('error_log').error("Not Found - {}/{}/{}/images/resumetemplate-{}.png". \
+                logging.getLogger('error_log').error("Not Found - {}/{}/{}/images/resumetemplate-{}.jpg". \
                                                      format(settings.MEDIA_ROOT, settings.RESUME_TEMPLATE_DIR,
                                                             candidate_obj.id, template_no))
                 return Response(status=status.HTTP_404_NOT_FOUND)
 
         else:
             try:
-                file_obj = GCPResumeBuilderStorage().open("{}/{}/images/resumetemplate-{}.png". \
+                file_obj = GCPResumeBuilderStorage().open("{}/{}/images/resumetemplate-{}.jpg". \
                                                           format(settings.RESUME_TEMPLATE_DIR, candidate_obj.id,
                                                                  name_suffix), "rb")
             except Exception as e:
-                logging.getLogger('error_log').error("Not Found - {}/{}/images/resumetemplate-{}.png". \
+                logging.getLogger('error_log').error("Not Found - {}/{}/images/resumetemplate-{}.jpg". \
                                                      format(settings.RESUME_TEMPLATE_DIR, candidate_obj.id,
                                                             template_no))
                 return Response(status=status.HTTP_404_NOT_FOUND)
