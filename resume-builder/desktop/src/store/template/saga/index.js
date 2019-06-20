@@ -15,16 +15,20 @@ function* fetchTemplate(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
         yield put({type: UPDATE_UI, data: {loader: true}});
-        const result = yield call(Api.fetchTemplate, candidateId, action.payload.template);
+        const {template} = action.payload;
+        const result = yield call(Api.fetchTemplateImages, candidateId, template);
+
+        yield put({type: UPDATE_UI, data: {loader: false}});
+
         if (result['error']) {
             Toast.fire({
                 type: 'error',
                 title: result['errorMessage']
             });
         }
-        yield put({type: UPDATE_UI, data: {loader: false}});
 
-        yield put({type: Actions.SAVE_TEMPLATE, data: result['data']})
+        let {data} = result;
+        yield put({type: Actions.SAVE_TEMPLATE, data: {"templateToPreview": data}});
     } catch (e) {
         console.log(e);
     }
@@ -42,7 +46,6 @@ function* customizeTemplate(action) {
                 title: result['errorMessage']
             });
         }
-
 
         let {data} = result;
 

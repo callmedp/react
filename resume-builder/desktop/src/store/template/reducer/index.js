@@ -16,8 +16,9 @@ const initialState = {
     'color': 1,
     'entity_position': [],
     'templateImage': '',
-    'modalTemplateImage':'',
-    'thumbnailImages': []
+    'modalTemplateImage': '',
+    'thumbnailImages': [],
+    'templateToPreview': ''
 
 };
 
