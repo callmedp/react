@@ -1,5 +1,5 @@
 {% load static compress resume_tags %}
-<div style="width: 46%; padding-right: 2%; display: table-cell; vertical-align: top; border-right: 1px solid #de8080; word-break: break-word;">
+<div style="width: 46%; padding-right: 2%; display: table-cell; vertical-align: top; border-right: 1px solid rgba(255, 255, 255, 0.3); word-break: break-word;">
     {% if candidate.image %}
         <img src="{{ candidate.image }}" alt="Resume"
              style="border-radius: 100%; margin-bottom: 10px; width: 150px; height: 150px;" width="150" height="150">
@@ -7,6 +7,6 @@
 
 
     <h1 style="margin: 0 0 10px 0; color: #ffffff; font-size: 32px; line-height: 32px;">{{ candidate.first_name }} {{ candidate.last_name }}</h1>
-    <strong style="display: block; font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px; color: #ffd7d7; font-weight: normal; margin-bottom: 20px;">{{ latest_exp }}</strong>
+    <strong style="display: block; font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px; color: #ffffff; text-transform: capitalize; font-weight: normal; margin-bottom: 20px;">{{ latest_exp }}</strong>
     <pre style="page-break-inside: auto; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', 'Arial', 'sans-serif'; color: #ffffff; display: block; font-size: {{ current_config.text_font_size|text_font_size }}px;white-space: pre-line;">{{ candidate.extra_info }}</pre>
 </div>
