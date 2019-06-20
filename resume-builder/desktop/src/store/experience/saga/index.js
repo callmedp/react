@@ -164,7 +164,6 @@ function* fetchJobTitlesAndSuggestions(action) {
     try {
 
         const {payload: {inputValue, suggestionType, res, rej}} = action;
-        yield put({type: UPDATE_UI, data: {loader: true}});
         const apiResult = yield call(Api.fetchJobTitlesAndSuggestions, inputValue, suggestionType);
 
 
@@ -178,7 +177,6 @@ function* fetchJobTitlesAndSuggestions(action) {
             result = (result || []).map((el) => ({
                 label: el, value: el.toString()
             }))
-            yield put({type: UPDATE_UI, data: {loader: false}});
             return res(result);
         }
 

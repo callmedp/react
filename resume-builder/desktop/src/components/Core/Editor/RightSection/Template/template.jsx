@@ -26,10 +26,8 @@ class Template extends Component {
         const {template: {html}} = this.props;
         return (
             <div>
-                <div className="right-sidebar-scroll-main"
-                     dangerouslySetInnerHTML={{
-                         __html: html
-                     }}>
+                <div className="right-sidebar-scroll-main">
+                    <img src={`data:image/png;base64,${html}`}/>
                 </div>
             </div>
         )
