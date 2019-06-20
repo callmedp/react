@@ -158,7 +158,7 @@ const renderExperiences = ({
                             <li className="form__group">
                                 <Field component={renderTextArea} type={"textarea"} name={`${member}.work_description`}
                                        label={'Description'}
-                                       className="form__input h-150" rows="5" maxLength={'300'}
+                                       className="form__input h-150" rows="5" maxLength={'400'}
                                        id={`${member}.work_description`}
                                 />
                                 <p className="add-suggested" onClick={event => {

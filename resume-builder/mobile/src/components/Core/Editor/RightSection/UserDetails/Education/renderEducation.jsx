@@ -94,6 +94,12 @@ const renderEducation = ({
                                        id={`${member}.institution_name`} iconClass={"sprite icon--education-grey"}
                                        className="form__input" maxLength={'50'}/>
                             </li>
+                            <li className="form__group">
+                                <Field component={renderField} label={"Degree"} type={"text"}
+                                       name={`${member}.degree`} prepend={true}
+                                       id={`${member}.degree`} iconClass={"sprite icon--designation"}
+                                       className="form__input" maxLength={'50'}/>
+                            </li>
 
                             <li className="form__group">
                                 <Field component={renderField} label={"Specialization"} type={"text"}
@@ -139,6 +145,7 @@ const renderEducation = ({
                                     <option value="">Choose</option>
                                     <option value="FT">FULL TIME</option>
                                     <option value="PT">PART TIME</option>
+                                    <option value="NA">NA</option>
                                 </Field>
                             </li>
 

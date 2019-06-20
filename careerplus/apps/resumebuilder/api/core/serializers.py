@@ -124,7 +124,7 @@ class CandidateEducationSerializer(serializers.ModelSerializer):
     class Meta:
         model = CandidateEducation
         fields = (
-            'id', 'candidate_id', 'specialization', 'institution_name', 'course_type', 'percentage_cgpa',
+            'id', 'candidate_id','degree', 'specialization', 'institution_name', 'course_type', 'percentage_cgpa',
             'start_date',
             'end_date', 'is_pursuing', 'order')
 

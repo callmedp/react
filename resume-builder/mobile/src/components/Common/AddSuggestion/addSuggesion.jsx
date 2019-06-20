@@ -94,7 +94,7 @@ export default class AddSuggesion extends Component{
                             </div>
                         </React.Fragment> :
                         <div className="Modal--summary--white-box sorry-popup">
-                            <p className=" text-center no-suggestion">Sorry Suggestion not Available for this Job Title</p>
+                            <p className=" text-center no-suggestion">Sorry suggestion not available for this job title</p>
                             <div className="text-center mb-15">
                                 <a className="btn btn__medium btn__round btn__primary" onClick={()=>{this.handleSuggestion(suggestion_selected)}}>Close</a>
                             </div>

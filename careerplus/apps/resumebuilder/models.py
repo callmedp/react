@@ -172,10 +172,11 @@ class CandidateExperience(PreviewImageCreationMixin, models.Model):
 
 class CandidateEducation(PreviewImageCreationMixin, models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
+    degree = models.CharField('Degree', max_length=200,blank=True, null=True)
     specialization = models.CharField('Specialization', max_length=200)
     institution_name = models.CharField('Institution Name', max_length=250)
     course_type = models.CharField('Institution Name', choices=(('FT', 'Full Time'), ('PT', 'Part Time'),
-                                                                ('CR', 'Correspondence')), max_length=2)
+                                                                ('CR', 'Correspondence'),('NA','NA')), max_length=2)
     percentage_cgpa = models.CharField('Percentage Or CGPA', max_length=250, null=True, blank=True)
     start_date = models.DateField('Start Date', blank=True, null=True)
     end_date = models.DateField('End Date', blank=True, null=True)

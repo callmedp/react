@@ -122,7 +122,8 @@ export const datepicker =
                         <i className="sprite icon--date"></i>
                     </span>
                 </div>
-                <DatePicker customInput={<Input id={id} name={input.name} disabled={disabled}/>}
+                <DatePicker 
+                            customInput={<Input id={id} name={input.name} disabled={disabled}/>}
                             value={disabled ? moment().format('YYYY-MM-DD').toString() : input.value ? moment(input.value).format('YYYY-MM-DD').toString() : null}
                             className={className}
                             dateFormat="yyyy-MM-dd"
@@ -335,13 +336,7 @@ export const renderAsyncCreatableSelect = ({
                                       cacheOptions
                                       id={id}
                                       loadOptions={loadOptions}
-                    // styles={{menuPortal: base => ({...base, zIndex: 9999})}}
-                    // menuPortalTarget={document.getElementById('right-panel-section')}
-                    // menuPosition={'absolute'}
-                    // menuPlacement={'auto'}
-                    // value={'New Value'}
-                    // placeholder={input.value}
-                    // value={input.value}
+                                      defaultOptions={defaultOptions}
                                       isMulti={isMulti}
                                       styles={dropdownStyles}
                                       autoComplete="off"
