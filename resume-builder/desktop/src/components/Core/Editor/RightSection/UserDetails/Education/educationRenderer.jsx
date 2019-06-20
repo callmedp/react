@@ -117,7 +117,7 @@ export const EducationRenderer = ({
                                                             <Field
                                                                 iconClass={'icon-designation'}
                                                                 component={renderField}
-                                                                maxLength={'50'}
+                                                                maxLength={'100'}
                                                                 type={"text"}
                                                                 name={`${member}.degree`}/>
                                                         </fieldset>

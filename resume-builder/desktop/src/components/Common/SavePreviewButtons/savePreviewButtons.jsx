@@ -15,12 +15,12 @@ export default class SavePreviewButtons extends Component {
     }
 
     render (){
-        const {showAlertModal,nextEntity} = this.props
+        const {showAlertModal,nextEntity,order_data} = this.props
         const newUser = localStorage.getItem('newUser')
         return (
             <div className="flex-container items-right mr-20 mb-30">
                 <button className="blue-button mr-10" type={"button"} onClick={newUser ? showAlertModal: this.preview}>Preview</button>
-                <button className="orange-button" type="submit">{!nextEntity ? "Download" : 'Save and Continue'}
+                <button className="orange-button" type="submit">{ order_data && order_data.id ? 'Save Changes' : !nextEntity ? "Download" :'Save and Continue'}
                 </button>
             </div>
         )

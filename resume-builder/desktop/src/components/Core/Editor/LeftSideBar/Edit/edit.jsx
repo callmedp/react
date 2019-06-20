@@ -83,7 +83,7 @@ class Edit extends Component {
 
     render() {
         const {type, preferenceList, nextLink, elemToDelete, menu_modal_status} = this.state;
-        let {formData, ui: {formName}, updateCategoryEntity, showAlertModal} = this.props;
+        let {formData, ui: {formName}, updateCategoryEntity, showAlertModal,userInfo:{order_data}} = this.props;
         let error = false;
         const obj = (formData && formData[formName]) || {};
         let syncErrors = obj['syncErrors'] || {};
@@ -106,6 +106,7 @@ class Edit extends Component {
                             nextLink={nextLink}
                             elemToDelete={elemToDelete}
                             newUser={newUser}
+                            order_data={order_data}
                 />
                 <strong>Complete your information</strong>
                 <ul>

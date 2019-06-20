@@ -8,6 +8,7 @@ import {ProjectRenderer} from "./projectRenderer";
 import {scroller} from "react-scroll/modules";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
+import {siteDomain} from '../../../../../../Utils/domains'
 
 class Project extends Component {
     constructor(props) {
@@ -63,6 +64,7 @@ class Project extends Component {
     }
 
     async handleSubmit(values, entityLink) {
+         const {personalInfo:{order_data},showAlertModal,hideAlertModal,history} = this.props
         const {list} = values;
         if (list.length) {
             await this.props.bulkUpdateOrCreate(list);
@@ -70,7 +72,16 @@ class Project extends Component {
                 submit: true
             })
             if (entityLink) this.props.history.push(entityLink);
-            else this.props.history.push('/resume-builder/buy/')
+            else if(order_data && order_data.id){
+            showAlertModal(true)
+            setTimeout(function() {
+                window.location.href = `${siteDomain}/dashboard`
+                hideAlertModal(false)
+            }, 10000);
+        }
+        else{
+            history.push(`/resume-builder/buy`) 
+        }
         }
 
     }
@@ -129,7 +140,7 @@ class Project extends Component {
 
     render() {
         const {
-            handleSubmit, ui: {loader}, saveTitle,
+            handleSubmit,personalInfo:{order_data}, ui: {loader}, saveTitle,
             editHeading, isEditable, entityName, nextEntity,
             showAlertModal,history, changeOrderingDown, changeOrderingUp, handleInputValue, formData: {project}
         } = this.props;
@@ -159,7 +170,7 @@ class Project extends Component {
                 />
 
                 <SavePreviewButtons 
-                        showAlertModal={showAlertModal} context={this} history={history}
+                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data}
                         nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
                     />
             </form>

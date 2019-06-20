@@ -1864,3 +1864,7 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
 		z-index: 9;
 	}
 }
+
+.inline-block{
+	display: inline-block!important;
+}

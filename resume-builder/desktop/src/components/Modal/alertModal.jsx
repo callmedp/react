@@ -20,8 +20,9 @@ export default class AlertModal extends React.Component {
     }
 
     render() {
-        const {ui: {alertModal}, nextLink, newUser, isPreview} = this.props;
+        const {ui: {alertModal}, nextLink, newUser,isPreview,order_data} = this.props;
         return (
+
             <React.Fragment>
                 <div className="pr alert-modal">
 
@@ -70,6 +71,16 @@ export default class AlertModal extends React.Component {
                                     </div>
                                 </div>
                                 :
+                            order_data && order_data.id ?
+                                <div className="pr">
+                                    <div className="alert-modal margin-top-alert">
+                                        <strong>Generating Resume</strong>
+                                        <p>Please wait a for some time till we generate your resume.</p>
+                                        <div className="logo-center">
+                                            <img src={`${this.staticUrl}react/assets/images/blue-loader.png`}/>
+                                        </div> 
+                                    </div>
+                                </div>:
                                 <div className="pr">
                                     <div className="alert-modal">
                                         <span className="icon-alert"></span>

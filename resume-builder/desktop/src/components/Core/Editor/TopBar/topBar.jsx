@@ -8,7 +8,7 @@ export default class TopBar extends Component {
     }
 
     render() {
-        let {page, userInfo: {selected_template},showAlertModal,showSelectTemplateModal} = this.props;
+        let {page, userInfo: {selected_template,order_data},showAlertModal,showSelectTemplateModal} = this.props;
         if (localStorage.getItem('selected_template')) {
             selected_template = localStorage.getItem('selected_template')
         }
@@ -40,7 +40,7 @@ export default class TopBar extends Component {
                 			    
                 		        </span>
                             </div> :
-                            page === 'buy' ?
+                            page === 'buy' || order_data && !order_data.combo ?
                                 '' :
                                 <div className="top-banner--banner-right">
                                     <div>

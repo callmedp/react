@@ -87,7 +87,7 @@ export class Buy extends Component {
             slidesToShow: 3,
             slidesToScroll: 1,
         };
-        const {userInfo: {first_name, selected_template}, ui: {loader}, template: {templateImage, thumbnailImages},productIds} = this.props;
+        const {userInfo: {first_name, selected_template,order_data}, ui: {loader}, template: {templateImage, thumbnailImages},productIds} = this.props;
         const {userInfo} = this.props;
         const {checked} = this.state;
         const price1 = productIds[0] ?  productIds[0].inr_price: 999
@@ -204,9 +204,14 @@ export class Buy extends Component {
                     </section>
 
                     <div className="bottom-links">
-                        <div onClick={() => {
-                            this.props.showSelectTemplateModal()
-                        }}>Change template</div> | <Link to={'/resume-builder/edit'}>Edit template</Link>
+                        {order_data && !order_data.combo ? '':
+                            <React.Fragment>
+                                <a onClick={() => {
+                                    this.props.showSelectTemplateModal()
+                                }}>Change template</a> |
+                            </React.Fragment>
+                        } 
+                        <Link to={'/resume-builder/edit'}>Edit template</Link>
                     </div>
                 </div>
                 <Footer/>

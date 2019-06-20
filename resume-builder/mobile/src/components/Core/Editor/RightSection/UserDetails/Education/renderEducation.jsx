@@ -98,7 +98,7 @@ const renderEducation = ({
                                 <Field component={renderField} label={"Degree"} type={"text"}
                                        name={`${member}.degree`} prepend={true}
                                        id={`${member}.degree`} iconClass={"sprite icon--designation"}
-                                       className="form__input" maxLength={'50'}/>
+                                       className="form__input" maxLength={'100'}/>
                             </li>
 
                             <li className="form__group">

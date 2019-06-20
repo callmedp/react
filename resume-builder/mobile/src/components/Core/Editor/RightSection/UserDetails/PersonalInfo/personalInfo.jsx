@@ -47,15 +47,19 @@ class PersonalInfo extends Component {
     }
 
     async handleSubmit(values) {
-        let {sidenav:{listOfLinks,currentLinkPos},personalInfo:{subscription_status},history,updateCurrentLinkPos,onSubmit} = this.props
+        let {sidenav:{listOfLinks,currentLinkPos},personalInfo:{order_data},history,updateCurrentLinkPos,onSubmit,updateAlertModalStatus} = this.props
         const {imageURL,flag} = this.state
         currentLinkPos++
         this.setState({submit:true})
         await onSubmit(values,imageURL,flag);
          if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
-            if(subscription_status){
-                window.location.href = `${siteDomain}/dashboard/myorder`
+            if(order_data && order_data.id){
+                updateAlertModalStatus(true)
+                setTimeout(function() {
+                    window.location.href = `${siteDomain}/dashboard`
+                    updateAlertModalStatus(false)
+                }, 10000);
             }
             else{
                 history.push(`/resume-builder/buy`) 
@@ -133,7 +137,7 @@ class PersonalInfo extends Component {
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {handleSubmit, personalInfo,headingChange,submitting,personalInfo:{subscription_status},history,fetchInterestList,updateAlertModalStatus} = this.props;
+        const {handleSubmit, personalInfo,headingChange,submitting,personalInfo:{order_data},history,fetchInterestList,updateAlertModalStatus} = this.props;
         const {editHeading,heading,flag} =this.state;
         const newUser = localStorage.getItem('newUser')
         return (
@@ -254,7 +258,7 @@ class PersonalInfo extends Component {
                     </ul>
                     <BottomCTC  disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
                                 length={length} pos={pos+1} updateInfoBeforeLoss={this.updateInfoBeforeLoss} 
-                                subscription_status={subscription_status}/>
+                                order_data={order_data}/>
                 </form>
             </div>
             

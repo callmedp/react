@@ -57,22 +57,26 @@ class Experience extends Component {
     }
 
     async handleSubmit(values) {
-        let {listOfLinks,currentLinkPos} = this.props.sidenav
+        let {sidenav:{listOfLinks,currentLinkPos},bulkUpdateUserExperience,personalInfo:{order_data},updateCurrentLinkPos,history,updateAlertModalStatus} = this.props
         this.setState({submit:true})
         currentLinkPos++
-        await this.props.bulkUpdateUserExperience(values.list);
+        await bulkUpdateUserExperience(values.list);
          if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
-            if(this.props.personalInfo.subscription_status){
-                window.location.href = `${siteDomain}/dashboard/myorder`
+            if(order_data && order_data.id){
+                updateAlertModalStatus(true)
+                setTimeout(function() {
+                    window.location.href = `${siteDomain}/dashboard`
+                    updateAlertModalStatus(false)
+                }, 10000);
             }
             else{
-                this.props.history.push(`/resume-builder/buy`) 
+                history.push(`/resume-builder/buy`) 
             }
         }
         else{
-            this.props.updateCurrentLinkPos({currentLinkPos})
-            this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)    
+            updateCurrentLinkPos({currentLinkPos})
+            history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)    
         }
         
     }
@@ -153,7 +157,7 @@ class Experience extends Component {
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {updateAlertModalStatus,handleSubmit,submitting,personalInfo:{subscription_status,entity_preference_data},history,
+        const {updateAlertModalStatus,handleSubmit,submitting,personalInfo:{order_data,entity_preference_data},history,
                 changeOrderingUp,changeOrderingDown,fetchJobTitles,ui:{suggestions},headingChange} = this.props;
         const {editHeading,heading,till_today,modal_status} =this.state;
         return(
@@ -182,7 +186,7 @@ class Experience extends Component {
                         <li className="form__group">
                             <BottomCTC  disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
                                 length={length} pos={pos+1} updateInfoBeforeLoss={this.updateInfoBeforeLoss} 
-                                subscription_status={subscription_status}/>
+                                order_data={order_data}/>
                         </li>
                     </ul>
                 </form>

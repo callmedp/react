@@ -16,6 +16,8 @@ import validate from '../../../../../FormHandler/validations/personalInfo/valida
 import moment from 'moment';
 import {renderAsyncCreatableSelect} from "../../../../../FormHandler/formFieldRenderer";
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
+import {siteDomain} from '../../../../../../Utils/domains'
+
 
 
 export class PersonalInfo extends Component {
@@ -59,12 +61,22 @@ export class PersonalInfo extends Component {
     }
 
     async handleSubmit(values, entityLink) {
+         const {personalInfo:{order_data},showAlertModal,hideAlertModal,history} = this.props
         await this.props.onSubmit(values, this.state.imageURL, this.state.flag);
         this.setState({
             submit: true
         })
         if (entityLink) this.props.history.push(entityLink);
-        else this.props.history.push('/resume-builder/buy/')
+        else if(order_data && order_data.id){
+            showAlertModal(true)
+            setTimeout(function() {
+                window.location.href = `${siteDomain}/dashboard`
+                hideAlertModal(false)
+            }, 10000);
+        }
+        else{
+            history.push(`/resume-builder/buy`) 
+        }
     }
 
     removeImage() {
@@ -101,7 +113,7 @@ export class PersonalInfo extends Component {
 
     render() {
         const {
-            handleSubmit, personalInfo, isEditable, fetchInterests,
+            handleSubmit,personalInfo:{order_data}, personalInfo, ui: {loader}, isEditable, fetchInterests,
             editHeading,currentAddress, saveTitle, entityName, nextEntity, history, handleInputValue,showAlertModal
         } = this.props;
         const newUser = localStorage.getItem('newUser')
@@ -248,15 +260,9 @@ export class PersonalInfo extends Component {
                         </section>
                     </section>
                     <SavePreviewButtons 
-                        showAlertModal={showAlertModal} context={this} history={history}
+                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data}
                         nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
                     />
-
-                    {/* <div className="flex-container items-right mr-20 mb-30">
-                        <button className="blue-button mr-10" type={"button"} onClick={newUser ? showAlertModal: handlePreview.bind(this,handleSubmit)}>Preview</button>
-                        <button className="orange-button" type="submit">{!nextEntity ? "Download" : 'Save and Continue'}
-                        </button>
-                    </div> */}
                 </form>
             </div>
         )

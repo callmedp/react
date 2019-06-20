@@ -64,22 +64,26 @@ class Award extends Component {
 
     async handleSubmit(values) {
         values = this.state.fields ? this.state.fields : values.list
-        let {listOfLinks,currentLinkPos} = this.props.sidenav
+        let {sidenav:{listOfLinks,currentLinkPos},bulkUpdateUserAward,personalInfo:{order_data},updateCurrentLinkPos,history,updateAlertModalStatus} = this.props
         currentLinkPos++
         this.setState({submit:true})
-        await this.props.bulkUpdateUserAward(values);
-         if(currentLinkPos === listOfLinks.length){
+        await bulkUpdateUserAward(values);
+        if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
-            if(this.props.personalInfo.subscription_status){
-                window.location.href = `${siteDomain}/dashboard/myorder`
+            if(order_data && order_data.id){
+                updateAlertModalStatus(true)
+                setTimeout(function() {
+                    window.location.href = `${siteDomain}/dashboard`
+                    updateAlertModalStatus(false)
+                }, 10000);
             }
             else{
-                this.props.history.push(`/resume-builder/buy`) 
+                history.push(`/resume-builder/buy`) 
             }
         }
         else{
-            this.props.updateCurrentLinkPos({currentLinkPos})
-            this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)    
+            updateCurrentLinkPos({currentLinkPos})
+            history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)    
         }
     }
 
@@ -104,7 +108,7 @@ class Award extends Component {
     }
 
     render () {
-        const {handleSubmit,submitting,history,personalInfo:{subscription_status,entity_preference_data},changeOrderingUp,changeOrderingDown,headingChange,updateAlertModalStatus} = this.props;
+        const {handleSubmit,submitting,history,personalInfo:{order_data,entity_preference_data},changeOrderingUp,changeOrderingDown,headingChange,updateAlertModalStatus} = this.props;
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
         const {editHeading,heading} =this.state;
@@ -130,7 +134,7 @@ class Award extends Component {
                         <li className="form__group">
                             <BottomCTC  disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
                                 length={length} pos={pos+1} updateInfoBeforeLoss={this.updateInfoBeforeLoss} 
-                                subscription_status={subscription_status}/>
+                                order_data={order_data}/>
                         </li>
                     </ul>
                 </form>

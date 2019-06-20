@@ -13,6 +13,7 @@ import {
     renderTextArea
 } from "../../../../../FormHandler/formFieldRenderer.jsx";
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
+import {siteDomain} from '../../../../../../Utils/domains'
 
 
 class Summary extends Component {
@@ -52,12 +53,24 @@ class Summary extends Component {
     }
 
     async handleSubmit(values, entityLink) {
+        const {personalInfo:{order_data},showAlertModal,hideAlertModal,history} = this.props
         await this.props.onSubmit(values);
         this.setState({
             submit: true
         })
-        if (entityLink) this.props.history.push(entityLink);
-        else this.props.history.push('/resume-builder/buy/')
+        if (entityLink) {
+            this.props.history.push(entityLink)
+        }
+        else if(order_data && order_data.id){
+            showAlertModal(true)
+            setTimeout(function() {
+                window.location.href = `${siteDomain}/dashboard`
+                hideAlertModal(false)
+            }, 10000);
+        }
+        else{
+            history.push(`/resume-builder/buy`) 
+        }
     }
 
 
@@ -111,8 +124,8 @@ class Summary extends Component {
 
 
     render() {
-        const {extra_info, ui: {suggestions}, handleInputValue, handleSubmit, showAlertModal, history, isEditable, editHeading, saveTitle, entityName, nextEntity} = this.props;
-        const {modal_status} = this.state;
+        const {extra_info, ui: { suggestions}, handleInputValue, handleSubmit, showAlertModal,history, isEditable, editHeading, saveTitle, entityName, nextEntity,personalInfo:{order_data}} = this.props;
+        const {modal_status} =this.state;
         return (
             <div>
                 <SuggestionModal label={'Summary'} length={extra_info.length} maxLength="500"
@@ -148,8 +161,8 @@ class Summary extends Component {
                     </section>
 
 
-                    <SavePreviewButtons
-                        showAlertModal={showAlertModal} context={this} history={history}
+                    <SavePreviewButtons 
+                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data}
                         nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
                     />
                 </form>

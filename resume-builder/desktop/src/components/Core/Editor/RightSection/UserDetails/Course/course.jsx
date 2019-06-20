@@ -8,6 +8,7 @@ import {CourseRenderer} from "./courseRenderer";
 import {scroller} from "react-scroll/modules";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
+import {siteDomain} from '../../../../../../Utils/domains'
 
 class Course extends Component {
     constructor(props) {
@@ -31,6 +32,7 @@ class Course extends Component {
     }
 
     async handleSubmit(values, entityLink) {
+         const {personalInfo:{order_data},showAlertModal,hideAlertModal,history} = this.props
         const {list} = values;
         if (list.length) {
             await this.props.bulkUpdateOrCreate(list);
@@ -38,7 +40,16 @@ class Course extends Component {
                 submit: true
             })
             if (entityLink) this.props.history.push(entityLink);
-            else this.props.history.push('/resume-builder/buy/')
+            else if(order_data && order_data.id){
+            showAlertModal(true)
+            setTimeout(function() {
+                window.location.href = `${siteDomain}/dashboard`
+                hideAlertModal(false)
+            }, 10000);
+        }
+        else{
+            history.push(`/resume-builder/buy`) 
+        }
         }
 
     }
@@ -100,8 +111,8 @@ class Course extends Component {
 
     render() {
         const {
-            handleSubmit, ui: {loader}, editHeading, saveTitle, isEditable,
-            entityName, nextEntity, showAlertModal, history, handleInputValue, changeOrderingUp, changeOrderingDown
+            handleSubmit,personalInfo:{order_data}, ui: {loader}, editHeading, saveTitle, isEditable,
+            entityName, nextEntity, showAlertModal,history, handleInputValue, changeOrderingUp, changeOrderingDown
         } = this.props;
 
         return (
@@ -122,10 +133,10 @@ class Course extends Component {
                             expanded={this.state.active}
                             handleInputValue={handleInputValue}
                 />
-                <SavePreviewButtons
-                    showAlertModal={showAlertModal} context={this} history={history}
-                    nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
-                />
+                <SavePreviewButtons 
+                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data}
+                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                    />
             </form>
 
         )

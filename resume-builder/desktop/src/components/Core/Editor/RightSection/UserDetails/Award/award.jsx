@@ -8,6 +8,7 @@ import {AwardRenderer} from "./awardRenderer";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 import {scroller} from "react-scroll/modules";
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
+import {siteDomain} from '../../../../../../Utils/domains'
 
 class Award extends Component {
     constructor(props) {
@@ -52,6 +53,7 @@ class Award extends Component {
     }
 
     async handleSubmit(values, entityLink) {
+         const {personalInfo:{order_data},showAlertModal,hideAlertModal,history} = this.props
         const {list} = values;
         if (list.length) {
             await this.props.bulkUpdateOrCreate(list);
@@ -59,7 +61,16 @@ class Award extends Component {
                 submit: true
             })
             if (entityLink) this.props.history.push(entityLink);
-            else this.props.history.push('/resume-builder/buy/')
+            else if(order_data && order_data.id){
+            showAlertModal(true)
+            setTimeout(function() {
+                window.location.href = `${siteDomain}/dashboard`
+                hideAlertModal(false)
+            }, 10000);
+        }
+        else{
+            history.push(`/resume-builder/buy`) 
+        }
         }
     }
 
@@ -99,7 +110,7 @@ class Award extends Component {
 
     render() {
         const {
-            handleSubmit, ui: {loader}, saveTitle, editHeading,
+            handleSubmit,personalInfo:{order_data}, ui: {loader}, saveTitle, editHeading,
             isEditable, entityName, handleInputValue, nextEntity, showAlertModal,history, changeOrderingDown, changeOrderingUp
         } = this.props;
 
@@ -122,7 +133,7 @@ class Award extends Component {
                             expanded={this.state.active}
                 />
                 <SavePreviewButtons 
-                        showAlertModal={showAlertModal} context={this} history={history}
+                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data}
                         nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
                     />
 

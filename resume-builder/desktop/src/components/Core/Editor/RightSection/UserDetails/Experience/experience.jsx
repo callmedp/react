@@ -10,6 +10,7 @@ import SuggestionModal from '../../../../../Modal/suggestionModal'
 import {hideSuggestionModal, showSuggestionModal, setSuggestionType} from "../../../../../../store/ui/actions";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons.jsx';
+import {siteDomain} from '../../../../../../Utils/domains'
 
 
 class Experience extends Component {
@@ -76,6 +77,7 @@ class Experience extends Component {
     }
 
     async handleSubmit(values, entityLink, currentFields) {
+         const {personalInfo:{order_data},showAlertModal,hideAlertModal,history} = this.props
         const {list} = values;
         if (list.length) {
             await this.props.bulkUpdateOrCreate(list);
@@ -83,7 +85,16 @@ class Experience extends Component {
                 submit: true
             })
             if (entityLink) this.props.history.push(entityLink);
-            else this.props.history.push('/resume-builder/buy/')
+            else if(order_data && order_data.id){
+            showAlertModal(true)
+            setTimeout(function() {
+                window.location.href = `${siteDomain}/dashboard`
+                hideAlertModal(false)
+            }, 10000);
+        }
+        else{
+            history.push(`/resume-builder/buy`) 
+        }
         }
 
     }
@@ -162,7 +173,7 @@ class Experience extends Component {
 
     render() {
         const {
-            handleSubmit, ui: {loader,suggestions}, isEditable,
+            handleSubmit,personalInfo:{order_data}, ui: {loader,suggestions}, isEditable,
             editHeading, saveTitle, entityName, nextEntity, showAlertModal,history,
             changeOrderingDown, changeOrderingUp, handleInputValue, currentFields, fetchJobTitles
         } = this.props;
@@ -197,7 +208,7 @@ class Experience extends Component {
                     />
 
                     <SavePreviewButtons 
-                        showAlertModal={showAlertModal} context={this} history={history}
+                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data}
                         nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
                     />
                 </form>
