@@ -2,7 +2,7 @@
 {% if skills|length >= 1 %}
 
  <div style="display: block; vertical-align: top; word-break: break-word;">
-  <strong style="font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px; display: block; font-weight: normal; color: #ffffff; text-transform: uppercase; margin-bottom: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.5); padding-bottom: 5px;">{{preference_list.4.entity_text}}</strong>
+  <strong style="font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px; display: block; font-weight: normal; color: #ffffff; text-transform: uppercase; margin-bottom: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.5); overflow: hidden; padding-bottom: 5px;">{{preference_list.4.entity_text}}</strong>
   <ul style="margin: 20px 0 20px 0; padding: 0; font-size: 14px; color: #c5e6ff; list-style-type: none;">
     {% for skill in skills %}
       <li style="vertical-align: top; display: inline-block; margin-bottom: 15px; width: 46.3%;">
