@@ -155,10 +155,7 @@
         <article class="mt-20">
         {% if prd_about %}
             <h2>Overview</h2>
-            <p>Multi choice test that measures the knowledge on the concepts of need SEO, SEO planning, SEO strategies, SEO software, tools, exchanging links etc.</p>
-
-            <p class="pb-0"><strong>About Aspiring MInd</strong></p>
-            <p>Aspiring Minds ia a leader in scientific, automated, AI-powered pre-employment assessments and video interview analytics including technology coding test,call...<a href="#">know more</a></p>
+            {{prd_about|safe}}
             <style>
                 .morecontent span {
                       display: none;
@@ -237,7 +234,6 @@
                           <li>{{ chapter.heading }}</li>
                         {% endfor %}
                     	</ul>
-                    {{prd_uget|safe}}
                		 </div>
                 </div>
 
