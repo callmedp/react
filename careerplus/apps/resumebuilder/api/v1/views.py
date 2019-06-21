@@ -882,7 +882,7 @@ class PDFRefreshAPIView(APIView):
                 break
                 
             for item in order_obj.orderitems.all():
-                if item.product.type_flow == 17 and item.product.type_product == 2:
+                if item.product and item.product.type_flow == 17 and item.product.type_product == 2:
                     product_found = True
                     break
 
