@@ -261,7 +261,7 @@
 
     ul {
         list-style-type: none;
-        margin: 0;
+        margin: 0 auto;
         padding-left: 0;
         line-height: 20px;
 
@@ -286,6 +286,10 @@
                 background: $blue1;
             }
         }
+    }
+
+    .icon-shinelearning {
+        margin: 0 auto;
     }
 }
 

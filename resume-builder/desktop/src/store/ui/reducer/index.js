@@ -14,8 +14,9 @@ import {
     SET_SUGGESTION_TYPE,
     UPDATE_PREVIEW_CLICK_STATUS,
     SHOW_GENERATE_RESUME_MODAL,
-    HIDE_GENERATE_RESUME_MODAL
-
+    HIDE_GENERATE_RESUME_MODAL,
+    HIDE_HELP_MODAL,
+    SHOW_HELP_MODAL
 } from "../actions/actionTypes";
 
 const initialState = {
@@ -30,7 +31,8 @@ const initialState = {
     'generateResumeModal':false,
     'suggestions': [],
     'suggestionType': 'experience',
-    'previewClicked' : false
+    'previewClicked' : false,
+    'helpModal': false,
 };
 
 export const uiReducer = (state = initialState, action) => {
@@ -132,6 +134,18 @@ export const uiReducer = (state = initialState, action) => {
             }
         }
         case UPDATE_PREVIEW_CLICK_STATUS: {
+            return {
+                ...state,
+                ...action.data
+            }
+        }
+         case SHOW_HELP_MODAL: {
+            return {
+                ...state,
+                ...action.data
+            }
+        }
+        case HIDE_HELP_MODAL: {
             return {
                 ...state,
                 ...action.data

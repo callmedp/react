@@ -12,7 +12,9 @@ import {
     SET_SUGGESTION_TYPE,
     UPDATE_PREVIEW_CLICK_STATUS,
     SHOW_GENERATE_RESUME_MODAL,
-    HIDE_GENERATE_RESUME_MODAL
+    HIDE_GENERATE_RESUME_MODAL,
+    HIDE_HELP_MODAL,
+    SHOW_HELP_MODAL
 } from "./actionTypes";
 
 
@@ -119,5 +121,19 @@ export const previewButtonClicked = (payload) => {
     return {
         type: UPDATE_PREVIEW_CLICK_STATUS,
         data: {previewClicked: payload}
+    }
+}
+
+export const showHelpModal = () => {
+    return {
+        type: SHOW_HELP_MODAL,
+        data: {helpModal: true}
+    }
+}
+
+export const hideHelpModal = () => {
+    return {
+        type: HIDE_HELP_MODAL,
+        data: {helpModal: false}
     }
 }

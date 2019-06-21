@@ -575,7 +575,7 @@ export default class Preview extends Component {
                     </div>
                 </Accordion>
                 < button
-                    className="orange-button preview-section__orange-button mt-40"
+                    className="orange-button preview-section__orange-button mt-20 mb-20"
                     onClick={this.goToBuyPage}> Get your resume
                 </button>
             </div>
