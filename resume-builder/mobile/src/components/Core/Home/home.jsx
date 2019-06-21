@@ -42,7 +42,7 @@ class Home extends Component {
         const {ui:{mainloader}} = this.props;
         return (
             <div className="home">
-                <NeedHelpModal/>
+                <!-- <NeedHelpModal/> -->
                 <Header />
                 <Banner/>
                 {mainloader ? <Loader/> :""}
@@ -158,7 +158,7 @@ class Home extends Component {
                     </div>
                 </section>
                 <Testimonial/>
-                <section className="section shine-learning mt-30">
+                <section className="section shine-learning mt-30 mb-40">
                     <div className="text-center">
                         <div className="shine-learning--logo"></div>
                         <p  className="section__subHead">Shine Learning is India’s largest professional courses and career skills portal. Launched by Shine.com, Shine Learning has a vision to up-skill the Indian talent pool to adapt to the changing job market.</p>
@@ -172,47 +172,7 @@ class Home extends Component {
                     </ul>
                 </section>
 
-                <section className="section mt-30 grey-bg">
-                    <div className="text-center">
-                        <h2 className="section__head">Reach out to us</h2>
-                        <p  className="section__subHead">Feel free to share your feedback with us</p>
-                    </div>
-
-                    <div className="white-box mt-30 mb-30 relative">
-                        <ul className="line-form p-0 mt-10">
-                            <li className="line-form__group">
-                                <input type="text" id="name" className="line-form__input" placeholder="Full name" />
-                                <label htmlFor="name" className="line-form__label">Full name</label>
-                            </li>
-
-                            <li>
-                                <ul className="d-flex line-form__mobile">
-                                    <li className="line-form__group code">
-                                        <select className="line-form__select" id="skillRating">
-                                            <option>+91</option>
-                                            <option>+92</option>
-                                            <option>+93</option>
-                                        </select>
-                                    </li>
-
-                                    <li className="line-form__group number">
-                                        <input type="text" id="name" className="line-form__input" placeholder="Mobile" />
-                                        <label htmlFor="name" className="line-form__label">Mobile</label>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li className="line-form__group">
-                                <input type="text" id="name" className="line-form__input" placeholder="Message" />
-                                <label htmlFor="name" className="line-form__label">Message</label>
-                            </li>
-
-                            <li className="d-flex justify-content-center">
-                                <button className="btn btn__medium btn__round btn__primary">Submit</button>
-                            </li>
-                        </ul>
-                    </div>
-                </section>
+                
                 <Footer/>
             </div>
         )

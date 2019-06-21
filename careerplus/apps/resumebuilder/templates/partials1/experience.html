@@ -6,24 +6,20 @@
         <ul style="padding: 0; margin: 0; list-style-type: none;">
             {% for exp in experience %}
                 <li style="vertical-align: top; margin: 10px 0; ">
-                  <div style="display: flex; flex-direction: row; align-items: baseline;">
                       <span style="width: 8px; height: 8px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: middle;"></span>
-                      <span style="display: inline-block; vertical-align: top; width: 63%; font-size: 14px;">
+                      <span style="display: inline-block; vertical-align: top; width: 73%; font-size: 14px;">
                         <strong style="display: block; font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #777777;">{{ exp.job_profile }}
                          </strong>
                         {{ exp.company_name }}
                       </span>
-                      <span style="font-size: {{ current_config.text_font_size|text_font_size }}px; color: #999999; display: inline-block; vertical-align: top; margin-left: auto;">
+                      <span style="font-size: {{ current_config.text_font_size|text_font_size }}px; color: #999999; display: inline-block; vertical-align: top; margin-left: auto; width: 19%">
                         {% if exp.is_working %}
                             ({{ exp.start_date|date:"M Y" }} - Current)
                         {% else %}
                             ({{ exp.start_date|date:"M Y" }} - {{ exp.end_date|date:"M Y" }})
                         {% endif %}
                       </span> 
-                    </div>
-                    <div style="display: flex; flex-direction: column;">
-                      <pre style="font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: {{ current_config.text_font_size|text_font_size }}px; color: #333333; margin-top: 5px;white-space: pre-line; margin-left: 20px;">{{ exp.work_description }}</pre>
-                    </div>
+                      <pre style="font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: {{ current_config.text_font_size|text_font_size }}px; color: #333333; margin-top: 5px;white-space: pre-line; display: block; margin-left: 20px;">{{ exp.work_description }}</pre>
                 </li>
             {% endfor %}
         </ul>
