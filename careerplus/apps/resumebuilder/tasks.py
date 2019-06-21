@@ -78,7 +78,10 @@ def generate_image_for_resume(candidate_id,template_no):
                 latest_end_date = i.end_date
                 latest_experience = i.job_profile
 
-    template = get_template('resume{}_preview.html'.format(template_no))
+
+    template_id_suffix_mapping = {1:"pdf",4:"pdf"}
+    template = get_template('resume{}_{}.html'.format(\
+        template_no,template_id_suffix_mapping.get(int(template_no),"preview")))
 
     rendered_template = template.render(
         {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,
@@ -271,7 +274,9 @@ def generate_and_upload_resume_pdf(data):
                 latest_end_date = exp.end_date
                 latest_experience = exp.job_profile
 
-    template = get_template('resume{}_preview.html'.format(template_id))
+    template_id_suffix_mapping = {1:"pdf",4:"pdf"}
+    template_src = 'resume{}_{}.html'.format(template_id,template_id_suffix_mapping.get(template_id,"preview"))
+    
     context_dict = {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,
                     'achievements': achievements, 'references': references, 'projects': projects,
                     'certifications': certifications, 'extracurricular': extracurricular, 'languages': languages,
@@ -280,8 +285,7 @@ def generate_and_upload_resume_pdf(data):
                     'entity_position': updated_entity_position, "width": 93.7
                     }
 
-    pdf_file = generate_file(context_dict=context_dict,\
-        template_src='resume{}_preview.html'.format(template_no),file_type='pdf')
+    pdf_file = generate_file(context_dict=context_dict,template_src=template_src,file_type='pdf')
 
     store_resume_file(file_dir,file_name,pdf_file)
     

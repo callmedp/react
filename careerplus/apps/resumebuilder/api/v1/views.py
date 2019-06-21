@@ -754,8 +754,6 @@ class ResumeImagePreviewView(APIView):
         if candidate_obj.candidate_id != request.user.id:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        return self.get_image_base_64_encoded_data(candidate_obj,template_no)
-
         name_suffix = template_no
         split_tsize = tsize.split("x")
         if tsize and len(split_tsize) > 1:
