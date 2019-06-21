@@ -19,7 +19,7 @@ class Edit extends Component {
             preferenceList: this.props.entityList,
             nextLink: '',
             elementToDelete: null,
-            menu_modal_status: false
+            menu_modal_status: false,
         };
 
     }
@@ -166,7 +166,7 @@ const mapDispatchToProps = (dispatch) => {
         },
         'hideAlertModal': () => {
             return dispatch(hideAlertModal())
-        }
+        },
     }
 };
 

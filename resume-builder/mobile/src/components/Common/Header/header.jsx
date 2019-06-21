@@ -41,7 +41,7 @@ class Header extends Component {
     
                             {<span>Resume Preview</span>}
                         </div>
-                        {order_data && !order_data.combo ? '':
+                        {order_data && order_data.id && !order_data.combo ? '':
                             <a className="btn btn__round btn--outline" onClick={()=>{updateModalStatus({modal_status:true})}}>Change template</a>
                         }
                     </React.Fragment>:

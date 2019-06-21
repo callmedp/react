@@ -7,6 +7,7 @@ import {
     AccordionItemHeading,
     AccordionItemPanel
 } from "react-accessible-accordion";
+import {siteDomain} from '../../../../../Utils/domains'
 import AlertModal from '../../../../Modal/alertModal';
 
 export default class Preview extends Component {
@@ -30,7 +31,7 @@ export default class Preview extends Component {
             textFontSize: 1,
             activeSection: 'left',
             sectionEntityName: '',
-            selectedEntity: ''
+            selectedEntity: '',
 
         }
     }
@@ -51,7 +52,19 @@ export default class Preview extends Component {
 
 
     goToBuyPage() {
-        this.props.history.push('/resume-builder/buy')
+        const {userInfo:{order_data},history,showGenerateResumeModal,reGeneratePDF,hideGenerateResumeModal} = this.props;
+        if(order_data && order_data.id){
+            showGenerateResumeModal()
+            reGeneratePDF(order_data.id)
+            setTimeout(function() {
+                window.location.href = `${siteDomain}/dashboard`
+                hideGenerateResumeModal()
+            }, 10000);
+        }
+        else{
+            history.push('/resume-builder/buy')
+        }
+        
     }
 
 
@@ -115,7 +128,6 @@ export default class Preview extends Component {
     }
 
     async componentDidMount() {
-
         this.setState({
             currentTab: 1
         })
@@ -346,7 +358,7 @@ export default class Preview extends Component {
 
         return (
             <div className="preview-section">
-                <AlertModal {...this.props} isPreview={true} />
+                <AlertModal {...this.props} isPreview={true}  />
                 <strong>Complete your customisation</strong>
                 <Accordion
                     preExpanded={["1"]}>

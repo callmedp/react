@@ -40,7 +40,7 @@ export default class TopBar extends Component {
                 			    
                 		        </span>
                             </div> :
-                            page === 'buy' || order_data && !order_data.combo ?
+                            page === 'buy' || order_data && order_data.id && !order_data.combo ?
                                 '' :
                                 <div className="top-banner--banner-right">
                                     <div>

@@ -60,6 +60,12 @@ const mapDispatchToProps = (dispatch) => {
         "updateModalStatus": (data) => {
             return dispatch(actions.updateModalStatus(data))
         },
+        'showGenerateResumeModal': () => {
+            return dispatch(uiActions.showGenerateResumeModal())
+        },
+        'hideGenerateResumeModal': () => {
+            return dispatch(uiActions.hideGenerateResumeModal())
+        },
         "fetchPersonalInfo": () => {
             return dispatch(profileActions.fetchPersonalInfo())
         },

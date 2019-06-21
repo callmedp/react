@@ -64,7 +64,7 @@ class Project extends Component {
     }
 
     async handleSubmit(values, entityLink) {
-         const {personalInfo:{order_data},showAlertModal,hideAlertModal,history,reGeneratePDF} = this.props
+         const {userInfo:{order_data},hideGenerateResumeModal,showGenerateResumeModal,history,reGeneratePDF} = this.props
         const {list} = values;
         if (list.length) {
             await this.props.bulkUpdateOrCreate(list);
@@ -73,11 +73,11 @@ class Project extends Component {
             })
             if (entityLink) this.props.history.push(entityLink);
             else if(order_data && order_data.id){
-            showAlertModal(true)
+            showGenerateResumeModal()
             reGeneratePDF(order_data.id)
             setTimeout(function() {
                 window.location.href = `${siteDomain}/dashboard`
-                hideAlertModal(false)
+                hideGenerateResumeModal()
             }, 10000);
         }
         else{

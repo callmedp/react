@@ -12,7 +12,7 @@ import * as actions from "../../../store/ui/actions"
 import {customizeTemplate, fetchDefaultCustomization, reorderSection,reGeneratePDF} from "../../../store/template/actions"
 import * as profileActions from "../../../store/personalInfo/actions"
 import SelectTemplateModal from '../../Modal/selectTemplateModal';
-import {showAlertModal, hideAlertModal,previewButtonClicked} from '../../../store/ui/actions/index'
+import {showAlertModal, hideAlertModal,previewButtonClicked,showGenerateResumeModal,hideGenerateResumeModal} from '../../../store/ui/actions/index'
 import moment from 'moment'
 
 class EditPreview extends Component {
@@ -110,6 +110,12 @@ const mapDispatchToProps = (dispatch) => {
         },
         'reGeneratePDF': (data) => {
             return dispatch(reGeneratePDF(data))
+        },
+        'showGenerateResumeModal': () => {
+            return dispatch(showGenerateResumeModal())
+        },
+        'hideGenerateResumeModal': () => {
+            return dispatch(hideGenerateResumeModal())
         }
     }
 }

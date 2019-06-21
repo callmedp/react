@@ -52,6 +52,7 @@ class CandidateSerializer(serializers.ModelSerializer):
         # rendered_data['subscription_status'] = {True: True, False: False}[
         #     OrderItem.objects.filter(order__candidate_id=rendered_data['candidate_id'], product__id=3093,
         #                              order__payment_date__gte=timezone.now() - timedelta(180)).count() > 0]
+        # rendered_data['order_data'] = {}
         try:
             rendered_data['entity_preference_data'] = ast.literal_eval(instance.entity_preference_data)
         except Exception as e:

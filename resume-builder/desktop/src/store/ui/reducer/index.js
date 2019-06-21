@@ -12,7 +12,9 @@ import {
     HIDE_ALERT_MODAL,
     SAVE_SUGGESTIONS,
     SET_SUGGESTION_TYPE,
-    UPDATE_PREVIEW_CLICK_STATUS
+    UPDATE_PREVIEW_CLICK_STATUS,
+    SHOW_GENERATE_RESUME_MODAL,
+    HIDE_GENERATE_RESUME_MODAL
 
 } from "../actions/actionTypes";
 
@@ -25,6 +27,7 @@ const initialState = {
     'suggestionModal': false,
     'alertModal': false,
     'alertType': 'error',
+    'generateResumeModal':false,
     'suggestions': [],
     'suggestionType': 'experience',
     'previewClicked' : false
@@ -99,6 +102,18 @@ export const uiReducer = (state = initialState, action) => {
             }
         }
         case HIDE_ALERT_MODAL: {
+            return {
+                ...state,
+                ...action.data
+            }
+        }
+        case SHOW_GENERATE_RESUME_MODAL: {
+            return {
+                ...state,
+                ...action.data
+            }
+        }
+        case HIDE_GENERATE_RESUME_MODAL: {
             return {
                 ...state,
                 ...action.data

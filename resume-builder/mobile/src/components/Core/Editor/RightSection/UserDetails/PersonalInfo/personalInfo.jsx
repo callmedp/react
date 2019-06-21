@@ -47,7 +47,7 @@ class PersonalInfo extends Component {
     }
 
     async handleSubmit(values) {
-        let {sidenav:{listOfLinks,currentLinkPos},personalInfo:{order_data},history,updateCurrentLinkPos,onSubmit,updateAlertModalStatus,reGeneratePDF} = this.props
+        let {sidenav:{listOfLinks,currentLinkPos},personalInfo:{order_data},history,updateCurrentLinkPos,onSubmit,showGenerateResumeModal,hideGenerateResumeModal,reGeneratePDF} = this.props
         const {imageURL,flag} = this.state
         currentLinkPos++
         this.setState({submit:true})
@@ -55,11 +55,11 @@ class PersonalInfo extends Component {
          if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
             if(order_data && order_data.id){
-                updateAlertModalStatus(true)
+                showGenerateResumeModal()
                 reGeneratePDF(order_data.id)
                 setTimeout(function() {
                     window.location.href = `${siteDomain}/dashboard`
-                    updateAlertModalStatus(false)
+                    hideGenerateResumeModal()
                 }, 10000);
             }
             else{

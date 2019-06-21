@@ -21,7 +21,7 @@ export default class AlertModal extends Component{
 
     }
     render(){
-        const {modal_status,closeModal,newUser,order_data} = this.props;
+        const {modal_status,closeModal,newUser,generateResumeModal} = this.props;
         return(
             <Modal 
                 isOpen={modal_status} 
@@ -41,7 +41,7 @@ export default class AlertModal extends Component{
                             <span className="btn btn-sm btn--outline btn__round w-150" onClick={closeModal}>Ok</span>
                         </div>
                     </div>:
-                    order_data && order_data.id ?
+                    generateResumeModal ?
                     <div className="alertModal__wrap">
                         <div className="alertModal__wrap--title text-center mb-15">Generating Resume</div>
                         <div className="alertModal__wrap--content text-center mb-15">

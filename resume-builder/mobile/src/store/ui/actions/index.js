@@ -1,4 +1,4 @@
-import {UPDATE_MAIN_PAGE_LOADER,UPDATE_DATA_LOADER,FETCH_LOADER_STATUS,CHANGE_FORM_NAME,SET_SUGGESTION_TYPE,FETCH_ALERT_MODAL_STATUS,UPDATE_ALERT_MODAL_STATUS} from './actionTypes'
+import {UPDATE_MAIN_PAGE_LOADER,UPDATE_DATA_LOADER,FETCH_LOADER_STATUS,CHANGE_FORM_NAME,SET_SUGGESTION_TYPE,FETCH_ALERT_MODAL_STATUS,UPDATE_ALERT_MODAL_STATUS,SHOW_GENERATE_RESUME_MODAL,HIDE_GENERATE_RESUME_MODAL} from './actionTypes'
 
 
 export const updateMainLoader = (payload) => {
@@ -45,5 +45,18 @@ export const updateAlertModalStatus = (payload) =>{
     return {
         type: UPDATE_ALERT_MODAL_STATUS,
         payload
+    }
+}
+export const showGenerateResumeModal = () => {
+    return {
+        type: SHOW_GENERATE_RESUME_MODAL,
+        data: {'generateResumeModal': true}
+    }
+}
+
+export const hideGenerateResumeModal = () => {
+    return {
+        type: HIDE_GENERATE_RESUME_MODAL,
+        data: {'generateResumeModal': true}
     }
 }

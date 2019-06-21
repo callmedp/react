@@ -18,7 +18,6 @@ const validate = values => {
         return errors;
 
     }
-
     return errors;
 
 };

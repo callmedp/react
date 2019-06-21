@@ -25,18 +25,18 @@ class References extends Component {
 
     async handleSubmit(values) {
         values = this.state.fields ? this.state.fields : values.list
-        let {sidenav:{listOfLinks,currentLinkPos},bulkUpdateUserReference,personalInfo:{order_data},updateCurrentLinkPos,history,updateAlertModalStatus,reGeneratePDF} = this.props
+        let {sidenav:{listOfLinks,currentLinkPos},bulkUpdateUserReference,personalInfo:{order_data},updateCurrentLinkPos,history,showGenerateResumeModal,hideGenerateResumeModal,reGeneratePDF} = this.props
         currentLinkPos++
         this.setState({submit:true})
         await bulkUpdateUserReference(values);
         if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
             if(order_data && order_data.id){
-                updateAlertModalStatus(true)
+                showGenerateResumeModal()
                 reGeneratePDF(order_data.id)
                 setTimeout(function() {
                     window.location.href = `${siteDomain}/dashboard`
-                    updateAlertModalStatus(false)
+                    hideGenerateResumeModal()
                 }, 10000);
             }
             else{
