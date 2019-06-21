@@ -27,7 +27,7 @@ class Reference extends Component {
     }
 
     async handleSubmit(values, entityLink) {
-         const {personalInfo:{order_data},showAlertModal,hideAlertModal,history} = this.props
+         const {personalInfo:{order_data},showAlertModal,hideAlertModal,history,reGeneratePDF} = this.props
 
         const {list} = values;
         if (list.length) {
@@ -38,6 +38,7 @@ class Reference extends Component {
             if (entityLink) this.props.history.push(entityLink);
             else if(order_data && order_data.id){
             showAlertModal(true)
+            reGeneratePDF(order_data.id)
             setTimeout(function() {
                 window.location.href = `${siteDomain}/dashboard`
                 hideAlertModal(false)
@@ -115,7 +116,7 @@ class Reference extends Component {
 
     render() {
         const {
-            handleSubmit,personalInfo:{order_data}, ui: {loader}, isEditable, changeOrderingDown,
+            handleSubmit,userInfo:{order_data}, ui: {loader}, isEditable, changeOrderingDown,
             editHeading, saveTitle, entityName, nextEntity, showAlertModal,history, handleInputValue,changeOrderingUp
         } = this.props;
         return (

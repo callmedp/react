@@ -64,7 +64,7 @@ class Project extends Component {
     }
 
     async handleSubmit(values, entityLink) {
-         const {personalInfo:{order_data},showAlertModal,hideAlertModal,history} = this.props
+         const {personalInfo:{order_data},showAlertModal,hideAlertModal,history,reGeneratePDF} = this.props
         const {list} = values;
         if (list.length) {
             await this.props.bulkUpdateOrCreate(list);
@@ -74,6 +74,7 @@ class Project extends Component {
             if (entityLink) this.props.history.push(entityLink);
             else if(order_data && order_data.id){
             showAlertModal(true)
+            reGeneratePDF(order_data.id)
             setTimeout(function() {
                 window.location.href = `${siteDomain}/dashboard`
                 hideAlertModal(false)
@@ -140,7 +141,7 @@ class Project extends Component {
 
     render() {
         const {
-            handleSubmit,personalInfo:{order_data}, ui: {loader}, saveTitle,
+            handleSubmit,userInfo:{order_data}, ui: {loader}, saveTitle,
             editHeading, isEditable, entityName, nextEntity,
             showAlertModal,history, changeOrderingDown, changeOrderingUp, handleInputValue, formData: {project}
         } = this.props;

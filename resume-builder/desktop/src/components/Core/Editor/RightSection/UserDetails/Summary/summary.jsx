@@ -53,7 +53,7 @@ class Summary extends Component {
     }
 
     async handleSubmit(values, entityLink) {
-        const {personalInfo:{order_data},showAlertModal,hideAlertModal,history} = this.props
+        const {personalInfo:{order_data},showAlertModal,hideAlertModal,history,reGeneratePDF} = this.props
         await this.props.onSubmit(values);
         this.setState({
             submit: true
@@ -63,6 +63,7 @@ class Summary extends Component {
         }
         else if(order_data && order_data.id){
             showAlertModal(true)
+            reGeneratePDF(order_data.id)
             setTimeout(function() {
                 window.location.href = `${siteDomain}/dashboard`
                 hideAlertModal(false)

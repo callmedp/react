@@ -6,7 +6,8 @@ import {
     FETCH_THUMBNAIL_IMAGES,
     FETCH_DEFAULT_CUSTOMIZATION,
     FETCH_SELECTED_TEMPLATE_IMAGE,
-    REORDER_SECTION
+    REORDER_SECTION,
+    RE_GENERATE_PDF
 } from './actionTypes'
 
 
@@ -60,6 +61,13 @@ export const fetchSelectedTemplateImage = (payload) => {
 export const reorderSection = (payload) => {
     return {
         type: REORDER_SECTION,
+        payload
+    }
+}
+
+export const reGeneratePDF = (payload) => {
+    return {
+        type: RE_GENERATE_PDF,
         payload
     }
 }

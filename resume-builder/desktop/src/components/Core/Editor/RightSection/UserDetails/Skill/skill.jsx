@@ -41,7 +41,7 @@ class Skill extends Component {
     }
 
     async handleSubmit(values, entityLink) {
-         const {personalInfo:{order_data},showAlertModal,hideAlertModal,history} = this.props
+         const {personalInfo:{order_data},showAlertModal,hideAlertModal,history,reGeneratePDF} = this.props
         const {list} = values;
         if (list.length) {
             await this.props.bulkUpdateOrCreate(list);
@@ -51,6 +51,7 @@ class Skill extends Component {
             if (entityLink) this.props.history.push(entityLink);
             else if(order_data && order_data.id){
             showAlertModal(true)
+            reGeneratePDF(order_data.id)
             setTimeout(function() {
                 window.location.href = `${siteDomain}/dashboard`
                 hideAlertModal(false)
@@ -119,7 +120,7 @@ class Skill extends Component {
 
     render() {
         const {
-            handleSubmit,personalInfo:{order_data}, history, showAlertModal,
+            handleSubmit,userInfo:{order_data}, history, showAlertModal,
             ui: {loader}, isEditable, editHeading, saveTitle, entityName, nextEntity,
             changeOrderingUp, changeOrderingDown, handleInputValue
         } = this.props;

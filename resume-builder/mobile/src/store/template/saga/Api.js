@@ -29,11 +29,15 @@ const reorderSection = (candidateId, templateId, data) => {
     return BaseApiService.post(`${siteDomain}/api/v1/resume/${url}`, data)
 }
 
+const reGeneratePDF = (candidateId,order_id) => {
+    const url = `candidate/${candidateId}/refresh-order/${order_id}/`;
+    return BaseApiService.post(`${siteDomain}/api/v1/resume/${url}`)
+}
 export const Api = {
     fetchTemplate,
     customizeTemplate,
     fetchTemplateImages,
     fetchDefaultCustomization,
-    reorderSection
-
+    reorderSection,
+    reGeneratePDF
 }

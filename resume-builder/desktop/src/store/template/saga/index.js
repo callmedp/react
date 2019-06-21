@@ -171,6 +171,23 @@ function* fetchDefaultCustomization(action) {
     }
 }
 
+function* reGeneratePDF(action) {
+    try {
+        const candidateId = localStorage.getItem('candidateId') || '';
+        const {payload} = action;
+
+        const result = yield call(Api.reGeneratePDF,candidateId, payload)
+            
+        if (result['error']) {
+            console.log(result['error'])
+        }
+        console.log(result)
+
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 
 function* reorderSection(action) {
     try {
@@ -219,5 +236,6 @@ export default function* watchTemplate() {
     yield  takeLatest(Actions.FETCH_SELECTED_TEMPLATE_IMAGE, fetchSelectedTemplateImage)
     yield  takeLatest(Actions.FETCH_THUMBNAIL_IMAGES, fetchThumbnailImages)
     yield  takeLatest(Actions.REORDER_SECTION, reorderSection)
+    yield  takeLatest(Actions.RE_GENERATE_PDF, reGeneratePDF)
 
 }

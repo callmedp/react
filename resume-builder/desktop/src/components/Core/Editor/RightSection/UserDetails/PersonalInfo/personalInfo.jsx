@@ -61,7 +61,7 @@ export class PersonalInfo extends Component {
     }
 
     async handleSubmit(values, entityLink) {
-         const {personalInfo:{order_data},showAlertModal,hideAlertModal,history} = this.props
+        const {personalInfo:{order_data},showAlertModal,hideAlertModal,history,reGeneratePDF} = this.props
         await this.props.onSubmit(values, this.state.imageURL, this.state.flag);
         this.setState({
             submit: true
@@ -69,6 +69,7 @@ export class PersonalInfo extends Component {
         if (entityLink) this.props.history.push(entityLink);
         else if(order_data && order_data.id){
             showAlertModal(true)
+            reGeneratePDF(order_data.id)
             setTimeout(function() {
                 window.location.href = `${siteDomain}/dashboard`
                 hideAlertModal(false)
@@ -113,7 +114,7 @@ export class PersonalInfo extends Component {
 
     render() {
         const {
-            handleSubmit,personalInfo:{order_data}, personalInfo, ui: {loader}, isEditable, fetchInterests,
+            handleSubmit,userInfo:{order_data}, personalInfo, ui: {loader}, isEditable, fetchInterests,
             editHeading,currentAddress, saveTitle, entityName, nextEntity, history, handleInputValue,showAlertModal
         } = this.props;
         const newUser = localStorage.getItem('newUser')

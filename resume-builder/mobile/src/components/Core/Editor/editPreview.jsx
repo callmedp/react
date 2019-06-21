@@ -78,6 +78,9 @@ const mapDispatchToProps = (dispatch) => {
         "updateAlertModalStatus": (data) => {
             return dispatch(uiActions.updateAlertModalStatus(data))
         },
+        'reGeneratePDF': (data) => {
+            return dispatch(actions.reGeneratePDF(data))
+        }
     }
 };
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditPreview))
