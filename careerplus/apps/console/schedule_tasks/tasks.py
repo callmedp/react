@@ -505,7 +505,7 @@ def generate_pixel_report(task=None, url_slug=None, days=None):
         bucket_name = ''
 
         if settings.DEBUG:
-            file_name = 'nginx-access-learning_access.log-20190604.gz'
+            file_name = 'uploads/celery-learningcrm/worker.log-' + yesterday_as_str + '.gz'
             bucket_name = 'learningcrm-misc-staging-189607'
         else:
             file_name = 'nginx-access-learning/access.log-' + yesterday_as_str + '.gz'
