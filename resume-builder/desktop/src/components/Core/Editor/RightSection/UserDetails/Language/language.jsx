@@ -50,7 +50,7 @@ class Language extends Component {
     }
 
     async updateInfoBeforeLoss(){
-        let { initialValues, formData: {Language: {values, syncErrors}}} = this.props;
+        let { initialValues, formData: {language: {values, syncErrors}}} = this.props;
         let error = false;
         (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el || {}).map(key => (!!el[key] ? error = true : false)))
         if (!error && !this.state.submit && JSON.stringify(initialValues)!==JSON.stringify(values)) await this.props.bulkUpdateOrCreate(values && values['list']);
