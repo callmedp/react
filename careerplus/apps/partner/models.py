@@ -91,6 +91,10 @@ class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
         blank=True)
 
     priority = models.IntegerField(default=0)
+    url_slug_fix = "fix_field"
+    fix_field = False
+
+    recursive_call = True
 
     class Meta:
         verbose_name = _('Vendor')
@@ -100,6 +104,15 @@ class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        recieved_slug = self.slug
+        super(Vendor, self).save(*args, **kwargs)
+        if getattr(self, 'recursive_call', True):
+            setattr(self, 'slug', recieved_slug)
+            self.recursive_call = False
+            self.fix_field = True
+            self.save()
 
     def clean(self):
 
