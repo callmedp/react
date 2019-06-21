@@ -1143,7 +1143,6 @@ class UpdateCertificateAndAssesment(APIView):
         parser = CertiticateParser(parse_type=0)
         parsed_data = parser.parse_data(data)
         certificates, user_certificates = parser.save_parsed_data(parsed_data, vendor=data['vendor'])
-        print(user_certificates)
         if user_certificates:
             for user_certificate in user_certificates:
                 certificate = user_certificate.certificate
