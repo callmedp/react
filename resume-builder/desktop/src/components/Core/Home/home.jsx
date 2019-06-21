@@ -288,7 +288,7 @@ class Home extends Component {
 
                 <Testimonial/>
 
-                <section className="section-container flex-container text-center">
+                <section className="section-container flex-container">
                     <div className="shinelearning">
                         <span className="icon-shinelearning"></span>
                         <p>Shine Learning is India’s largest professional courses and career skills portal. Launched by
@@ -302,7 +302,7 @@ class Home extends Component {
                         </ul>
                     </div>
                     <form id="feedback" onSubmit={handleSubmit((values) => this.handleSubmit(values))}>
-                        <div className="reachout-tous hidden">
+                        <div className="reachout-tous">
 
                             <h2>Reach out to us</h2>
                             <strong>Feel free to share your feedback with us</strong>
