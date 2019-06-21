@@ -4,6 +4,7 @@
   "chunks": {
     "main": [
       {
+<<<<<<< HEAD
         "name": "main-1561109239268.css",
         "path": "/home/hiteshrexwal/Documents/careerplus/careerplus/static_core/react/dist/desktop/main-1561109239268.css"
       },
@@ -14,6 +15,18 @@
       {
         "name": "main-1561109239268.js.map",
         "path": "/home/hiteshrexwal/Documents/careerplus/careerplus/static_core/react/dist/desktop/main-1561109239268.js.map"
+=======
+        "name": "../../../careerplus/static_core/react/dist/desktop/main-1561112039758.css",
+        "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/react/dist/desktop/main-1561112039758.css"
+      },
+      {
+        "name": "../../../careerplus/static_core/react/dist/desktop/main-1561112039758.js",
+        "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/react/dist/desktop/main-1561112039758.js"
+      },
+      {
+        "name": "../../../careerplus/static_core/react/dist/desktop/main-1561112039758.js.map",
+        "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/react/dist/desktop/main-1561112039758.js.map"
+>>>>>>> webpack conf changes
       }
     ]
   }

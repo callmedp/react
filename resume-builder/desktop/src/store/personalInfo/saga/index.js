@@ -26,7 +26,7 @@ const genderDict = {
 }
 
 function modifyPersonalInfo(data) {
-    const {date_of_birth, gender, extracurricular} = data;
+    const {date_of_birth, gender, extracurricular, entity_preference_data} = data;
     data = {
         ...data,
         ...{
@@ -35,9 +35,9 @@ function modifyPersonalInfo(data) {
             extracurricular: (extracurricular && extracurricular.split(',').map(key => ({
                 'value': key,
                 'label': key
-            }))) || ''
+            }))) || '',
         }
-    }
+    };
     return data;
 }
 

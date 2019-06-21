@@ -47,30 +47,28 @@ class Summary extends Component {
         }
     }
 
-    async updateInfoBeforeLoss(){
-        let {initialValues, formData: {summary: {values}}} = this.props;
-        if (!this.state.submit && JSON.stringify(initialValues)!==JSON.stringify(values)) await this.props.onSubmit(values)
+    async updateInfoBeforeLoss() {
+        let {initialValues, formData: {summary: {values}}, personalInfo} = this.props;
+        if (!this.state.submit && JSON.stringify(initialValues) !== JSON.stringify(values)) await this.props.onSubmit(values, personalInfo)
     }
 
     async handleSubmit(values, entityLink) {
-        const {userInfo:{order_data},hideGenerateResumeModal,showGenerateResumeModal,history,reGeneratePDF} = this.props
-        await this.props.onSubmit(values);
+        const {userInfo: {order_data}, hideGenerateResumeModal, showGenerateResumeModal, history, reGeneratePDF, personalInfo} = this.props;
+        await this.props.onSubmit(values, personalInfo);
         this.setState({
             submit: true
         })
         if (entityLink) {
             this.props.history.push(entityLink)
-        }
-        else if(order_data && order_data.id){
+        } else if (order_data && order_data.id) {
             showGenerateResumeModal()
             reGeneratePDF(order_data.id)
-            setTimeout(function() {
+            setTimeout(function () {
                 window.location.href = `${siteDomain}/dashboard`
                 hideGenerateResumeModal()
             }, 10000);
-        }
-        else{
-            history.push(`/resume-builder/buy`) 
+        } else {
+            history.push(`/resume-builder/buy`)
         }
     }
 
@@ -125,8 +123,8 @@ class Summary extends Component {
 
 
     render() {
-        const {extra_info, ui: { suggestions}, handleInputValue, handleSubmit, showAlertModal,history, isEditable, editHeading, saveTitle, entityName, nextEntity,personalInfo:{order_data}} = this.props;
-        const {modal_status} =this.state;
+        const {extra_info, ui: {suggestions}, handleInputValue, handleSubmit, showAlertModal, history, isEditable, editHeading, saveTitle, entityName, nextEntity, personalInfo: {order_data}} = this.props;
+        const {modal_status} = this.state;
         return (
             <div>
                 <SuggestionModal label={'Summary'} length={extra_info.length} maxLength="500"
@@ -162,7 +160,7 @@ class Summary extends Component {
                     </section>
 
 
-                    <SavePreviewButtons 
+                    <SavePreviewButtons
                         showAlertModal={showAlertModal} context={this} history={history} order_data={order_data}
                         nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
                     />
@@ -206,14 +204,16 @@ const mapDispatchToProps = (dispatch) => {
                 return dispatch(fetchJobTitles({inputValue, suggestionType, res, rej}))
             })
         },
-        "onSubmit": (personalDetails) => {
+        "onSubmit": (personalDetails, storeInformation) => {
             const {gender, extracurricular} = personalDetails;
+            const {entity_preference_data} = storeInformation;
             personalDetails = {
                 ...personalDetails,
                 ...{
                     'gender': (gender && gender['value']) || '',
                     'extracurricular': extracurricular instanceof Array ?
-                        (extracurricular || []).filter(el => el !== undefined).map(el => el.value).join(',') : ''
+                        (extracurricular || []).filter(el => el !== undefined).map(el => el.value).join(',') : '',
+                    'entity_preference_data': (entity_preference_data || []).map(el => el)
                 }
             };
 

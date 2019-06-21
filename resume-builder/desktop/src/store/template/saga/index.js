@@ -181,7 +181,6 @@ function* reGeneratePDF(action) {
         if (result['error']) {
             console.log(result['error'])
         }
-        console.log(result)
 
     } catch (e) {
         console.log(e);
