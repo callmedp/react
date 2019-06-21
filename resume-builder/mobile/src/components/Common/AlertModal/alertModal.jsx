@@ -45,7 +45,7 @@ export default class AlertModal extends Component{
                     <div className="alertModal__wrap">
                         <div className="alertModal__wrap--title text-center mb-15">Generating Resume</div>
                         <div className="alertModal__wrap--content text-center mb-15">
-                            <p>Please wait a for some time till we generate your resume.</p>
+                            <p>Your resume is being generated. Please wait..</p>
                         </div>
                         <div className="logo-center">
                             <img src={`${this.staticUrl}react/assets/images/mobile/blue-loader.png`}/>

@@ -58,7 +58,7 @@ export default class AlertModal extends React.Component {
                             <div className="pr">
                                 <div className="alert-modal margin-top-alert">
                                     <strong>Generating Resume</strong>
-                                    <p>Please wait a for some time till we generate your resume.</p>
+                                    <p>Your resume is being generated. Please wait..</p>
                                     <div className="logo-center">
                                         <img src={`${this.staticUrl}react/assets/images/blue-loader.png`}/>
                                     </div> 
