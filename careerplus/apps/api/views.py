@@ -1239,7 +1239,7 @@ class VendorCertificateMappingApiView(ListAPIView):
 
     def get_queryset(self):
         queryset = super(self.__class__, self).get_queryset()
-        name = self.request.GET.get('name')
+        name = self.request.GET.get('name', '')
         queryset = queryset.filter(slug=name)
         return queryset.exclude(certificate=None)
 
