@@ -16,7 +16,10 @@ const loginCandidate = (data) => {
 
 const getInformation = (data) => {
     const url = 'candidate-login/';
-    return BaseApiService.get(`${siteDomain}/api/v1/${url}`)
+    return BaseApiService.get(`${siteDomain}/api/v1/${url}`, {
+        "Content-Type": "application/json",
+        'Authorization': ''
+    })
 }
 
 const feedbackSubmit = (data) => {
