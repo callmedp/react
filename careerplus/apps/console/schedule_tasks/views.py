@@ -24,7 +24,8 @@ from scheduler.models import Scheduler
 from .tasks import (
     gen_auto_login_token_task,
     gen_product_list_task,
-    generate_encrypted_urls_for_mailer_task
+    generate_encrypted_urls_for_mailer_task,
+    generate_pixel_report
 )
 from . import forms
 
@@ -190,7 +191,7 @@ class TaskListView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(TaskListView, self).get_queryset()
-        queryset = queryset.filter(task_type__in=[1, 4, 5, 6])
+        queryset = queryset.filter(task_type__in=[1, 4, 5, 6, 7])
         return queryset.order_by('-modified')
 
 
@@ -318,23 +319,35 @@ class GeneratePixelTracker(FormView, PaginationMixin):
         return super(GeneratePixelTracker, self).get(request, args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        form = self.get_form()
-        if form.is_valid():
-            obj, created = PixelTracker.objects.get_or_create(pixel_slug=form.cleaned_data.get('pixel_slug'))
-            obj.landing_urls = form.cleaned_data.get('landing_urls')
-            obj.conversion_urls = form.cleaned_data.get('conversion_urls')
-            obj.days = form.cleaned_data.get('days')
-            obj.save()
-            content = self.generate_pixel_code(
-                obj.pixel_slug,
-                obj.landing_urls.split(','),
-                obj.conversion_urls.split(','),
-                obj.days
+        action_type = int(request.POST.get('type', 0))
+        task_type = 7
+        if action_type == 1:
+            slug = request.POST.get('slug')
+            days = request.POST.get('days')
+            task = Scheduler.objects.create(
+                task_type=task_type,
+                created_by=request.user,
             )
-            context = self.get_context_data()
-            context.update({'pixel_tracker': content})
-            return self.render_to_response(context) 
-        return self.form_invalid(form)
+            generate_pixel_report.delay(task=task.pk, url_slug=slug, days=str(days))
+            return HttpResponseRedirect(reverse('console:tasks:tasklist'))
+        else:
+            form = self.get_form()
+            if form.is_valid():
+                obj, created = PixelTracker.objects.get_or_create(pixel_slug=form.cleaned_data.get('pixel_slug'))
+                obj.landing_urls = form.cleaned_data.get('landing_urls')
+                obj.conversion_urls = form.cleaned_data.get('conversion_urls')
+                obj.days = form.cleaned_data.get('days')
+                obj.save()
+                content = self.generate_pixel_code(
+                    obj.pixel_slug,
+                    obj.landing_urls.split(','),
+                    obj.conversion_urls.split(','),
+                    obj.days
+                )
+                context = self.get_context_data()
+                context.update({'pixel_tracker': content})
+                return self.render_to_response(context) 
+            return self.form_invalid(form)
 
     def get_context_data(self, **kwargs):
         context = super(GeneratePixelTracker, self).get_context_data(**kwargs)
