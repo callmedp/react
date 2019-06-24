@@ -180,10 +180,10 @@ function* fetchImageUrl(action) {
 
 function* updateEntityPreference(action) {
     try {
-        const {payload: {entity_preference_data, resolve, reject}} = action;
+        const {payload: {entity_preference_data, resolve, reject, showLoader}} = action;
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        yield put({type: UPDATE_UI, data: {loader: true}});
+        if (showLoader) yield put({type: UPDATE_UI, data: {loader: true}});
 
         const result = yield call(Api.updateEntityPreference, {entity_preference_data}, candidateId);
 
