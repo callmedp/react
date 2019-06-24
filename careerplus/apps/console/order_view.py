@@ -705,18 +705,18 @@ class SearchOrderView(ListView, PaginationMixin):
 
 @Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_view_order_detail', login_url='/console/login/'), name='dispatch')
-class OrderDetailVeiw(DetailView):
+class OrderDetailView(DetailView):
     model = Order
     template_name = "console/order/order-detail.html"
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        context = super(OrderDetailVeiw, self).get(request, *args, **kwargs)
+        context = super(OrderDetailView, self).get(request, *args, **kwargs)
         return context
 
     def get_context_data(self, **kwargs):
         last_status = ""
-        context = super(OrderDetailVeiw, self).get_context_data(**kwargs)
+        context = super(OrderDetailView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
         order = self.get_object()
         max_limit_draft = settings.DRAFT_MAX_LIMIT
