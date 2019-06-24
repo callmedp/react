@@ -707,39 +707,61 @@ class SearchOrderView(ListView, PaginationMixin):
 
 @Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_view_order_detail', login_url='/console/login/'), name='dispatch')
-class OrderDetailVeiw(DetailView):
+class OrderDetailView(DetailView):
     model = Order
     template_name = "console/order/order-detail.html"
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        context = super(OrderDetailVeiw, self).get(request, *args, **kwargs)
-        return context
+        response = super(OrderDetailView, self).get(request, *args, **kwargs)
+
+        #Redirect user if none of the items are visible
+        if not self.context.get('orderitems'):
+            return HttpResponseRedirect("/console/")
+        
+        return response
+
+    def _get_visible_order_items_for_order(self,order):
+        order_items = order.orderitems.all().select_related('product', 'partner').order_by('id')
+        
+        #Handle vendor users
+        user_vendor_list = self.request.user.vendor_set.all()
+        if user_vendor_list:
+            vendor_ids = list(user_vendor_list.values_list('id',flat=True))
+            order_items = order_items.filter(Q(partner_id__in=vendor_ids) | \
+                    Q(product__vendor_id__in=vendor_ids))
+
+        #Handle Writers
+        if self.request.user.is_writer:
+            order_items = order_items.filter(assigned_to=self.request.user)
+
+        return order_items
 
     def get_context_data(self, **kwargs):
         last_status = ""
-        context = super(OrderDetailVeiw, self).get_context_data(**kwargs)
+        context = super(OrderDetailView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
         order = self.get_object()
         max_limit_draft = settings.DRAFT_MAX_LIMIT
         last_status_object = order.welcomecalloperation_set.exclude(wc_status__in=[0, 1, 2])\
             .order_by('id').last()
+
         # has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
         # show_btn = True if has_permission else False
         email_form = emailupdateform()
         mobil_form = mobileupdateform()
+        
         if not last_status_object:
             last_status = "Not Done"
         else:
             timestamp = '\n' + date_timezone_convert(last_status_object.created).strftime('%b. %d, %Y, %I:%M %P ')
             last_status = last_status_object.get_wc_status()
             last_status += timestamp
-        order_items = order.orderitems.all().select_related('product', 'partner').order_by('id')
-
+        
         context.update({
             "order": order,
             "order_wc_status": last_status,
-            'orderitems': list(order_items),
+            'orderitems': list(self._get_visible_order_items_for_order(order)),
             "max_limit_draft": max_limit_draft,
             "messages": alert,
             "message_form": MessageForm(),
@@ -749,6 +771,7 @@ class OrderDetailVeiw(DetailView):
             'mobil_form': mobil_form,
 
         })
+        self.context = context
         return context
 
 
