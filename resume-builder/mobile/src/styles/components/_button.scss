@@ -60,6 +60,14 @@
         display: flex;
         justify-content: center;
     }
+
+    &__transparent {
+        background-color: transparent;
+        color: $white;
+        display: flex;
+        justify-content: center;
+        border: .1rem solid $white;
+    }
     
 }
 
