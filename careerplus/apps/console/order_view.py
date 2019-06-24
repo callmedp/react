@@ -711,8 +711,29 @@ class OrderDetailView(DetailView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        context = super(OrderDetailView, self).get(request, *args, **kwargs)
-        return context
+        response = super(OrderDetailView, self).get(request, *args, **kwargs)
+
+        #Redirect user if none of the items are visible
+        if not self.context.get('orderitems'):
+            return HttpResponseRedirect("/console/")
+        
+        return response
+
+    def _get_visible_order_items_for_order(self,order):
+        order_items = order.orderitems.all().select_related('product', 'partner').order_by('id')
+        
+        #Handle vendor users
+        user_vendor_list = self.request.user.vendor_set.all()
+        if user_vendor_list:
+            vendor_ids = list(user_vendor_list.values_list('id',flat=True))
+            order_items = order_items.filter(Q(partner_id__in=vendor_ids) | \
+                    Q(product__vendor_id__in=vendor_ids))
+
+        #Handle Writers
+        if self.request.user.is_writer:
+            order_items = order_items.filter(assigned_to=self.request.user)
+
+        return order_items
 
     def get_context_data(self, **kwargs):
         last_status = ""
@@ -724,24 +745,25 @@ class OrderDetailView(DetailView):
             .order_by('id').last()
         has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
         show_btn = True if has_permission else False
+        
         if not last_status_object:
             last_status = "Not Done"
         else:
             timestamp = '\n' + date_timezone_convert(last_status_object.created).strftime('%b. %d, %Y, %I:%M %P ')
             last_status = last_status_object.get_wc_status()
             last_status += timestamp
-        order_items = order.orderitems.all().select_related('product', 'partner').order_by('id')
-
+        
         context.update({
             "order": order,
             "order_wc_status": last_status,
-            'orderitems': list(order_items),
+            'orderitems': list(self._get_visible_order_items_for_order(order)),
             "max_limit_draft": max_limit_draft,
             "messages": alert,
             "message_form": MessageForm(),
             "draft_form": FileUploadForm(),
             "show_btn": show_btn,
         })
+        self.context = context
         return context
 
 
