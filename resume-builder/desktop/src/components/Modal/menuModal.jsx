@@ -45,11 +45,11 @@ export default class MenuModal extends React.Component {
     }
 
     async saveMenuItems() {
-        this.setState({loader: true})
+        this.setState({loader: true});
         const {updateCategoryEntity, closeMenuModal} = this.props;
         const {preferenceList} = this.state
-        await updateCategoryEntity(preferenceList, false)
-        this.setState({loader: false})
+        await updateCategoryEntity(preferenceList, false);
+        this.setState({loader: false});
         closeMenuModal()
     }
 
