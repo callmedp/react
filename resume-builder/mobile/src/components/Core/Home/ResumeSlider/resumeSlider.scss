@@ -1,0 +1,92 @@
+@import '../../../../styles/variables/vars.scss';
+@import '../../../../styles/variables/mixins.scss';
+
+.proven-resume {
+
+    &__slideWrap {
+        margin: 3.0rem -1.5rem 0;
+        position: relative;
+
+        .btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .slick-list {
+            text-align: center;
+        }
+
+        .slick-slide {
+            height: auto;
+            // padding: 1.5rem;
+        }
+
+        .slick-arrow {
+            @include size(50px, 60px);
+            box-shadow: 0 0 15px rgba($black, .1);
+            border: 0 none;
+            background-color: $white;
+            position: absolute;
+            top: 50%;
+            margin-top: -25px;
+            z-index: 1;
+            text-indent: -99999px;
+
+            &::after {
+                content: '';
+                @include size(18px, 17px);
+                background-image: url($sprite);
+                display: block;
+                position: absolute;
+                top: 50%;
+                margin-top: -6px;
+            }
+        }
+
+        .slick-prev {
+            left: 0;
+            @include border-radius(0 50px 50px 0);
+            
+            &::after {
+                content: '';
+                background-position: -12px 0;
+                left: 14px;
+            }
+            
+        }
+
+        .slick-next {
+            right: 0;
+            @include border-radius(50px 0 0 50px);
+            
+
+            &::after {
+                content: '';
+                background-position: -32px 0;
+                right: 14px;
+            }
+        }
+    }
+
+    &__imageWrap {
+        @include border-radius(8px);
+        overflow: hidden;
+        border: 3px solid $white;
+        margin-right: 10px;
+        margin-left: 10px;
+        width: auto !important;
+
+        img {
+            width: 100%;
+        }
+    }
+}
+
+.home-slider {
+    .proven-resume__imageWrap {
+        box-shadow: 0 0 10px $box-shadow-light;
+        margin-bottom: 1rem;
+        margin-top: 1rem;
+    }
+}

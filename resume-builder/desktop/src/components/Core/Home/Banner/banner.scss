@@ -1,0 +1,96 @@
+@import '../../../../styles/variables/vars.scss';
+@import '../../../../styles/variables/mixins.scss';
+
+.banner-bg {
+	background: url(#{$static-url}react/assets/images/home-bg.jpg);
+	background-size: cover;
+	/*min-height: 549px;*/
+	margin-bottom: 40px;
+	padding: 0 5%;
+	@include flexbox();
+}
+
+.banner-content {
+	flex: 0 0 50%;
+	padding: 12% 0 3% 0;
+
+	h1 {
+		font-weight: 700;
+		font-size: 3.8rem;
+		color: $white;
+
+		strong {
+			font-weight: 400;
+		}
+	}
+
+	ul {
+		list-style-type: none;
+		color: #c7cad6;
+		margin: 8% 0;
+		padding-left: 0;
+		line-height: 20px;
+
+		li {
+			display: table;
+			margin-bottom: 15px;
+			background: #1c2b58;
+			padding: 10px 20px 10px 20px;
+			@include border-radius(8px);
+			position: relative;
+			color: $white;
+			font-size: 1.6rem;
+
+			&:before {
+				content: '';
+				background-color: #9c8a34;
+				height: 40px;
+				width: 5px;
+				left: 0;
+				top: 0;
+				position: absolute;
+				border-bottom-left-radius: 8px;
+				border-top-left-radius: 8px;
+			}
+
+			strong {
+				font-weight: 700;
+				color: $white;
+			}
+
+			span {
+				margin-right: 15px;
+			}
+		}
+	}
+
+	&--txt {
+		font-size: 1.8rem;
+		color: #c7cad6;
+		margin-top: 10px;
+		line-height: 20px;
+
+		strong {
+			font-weight: 700;
+		}
+	}
+
+	&--button {
+		padding: 18px 25px !important;
+		margin-bottom: 10px;
+		font-size: 1.6rem;
+		font-weight: 700;
+		border-radius: 35px !important;
+		box-shadow: 0px 3px 9px 0px rgba(0, 0, 0, 0.65);
+	}
+}
+
+.banner-slider {
+	flex: 1;
+	margin: 0 -20px -50px 0;
+
+	img {
+		margin: 110px 0 0 0;
+	}
+	
+}

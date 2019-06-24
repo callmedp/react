@@ -9,15 +9,24 @@ from random import random
 from datetime import datetime
 
 #django imports
+from django.views.generic import TemplateView
+from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.urls import reverse
 from django.conf import settings
-from django.utils import timezone
 from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.conf import settings
+from cart.models import Cart
+from order.mixins import OrderMixin
+from order.models import Order
+from console.decorators import Decorate, stop_browser_cache
+from dashboard.dashboard_mixin import DashboardInfo
 from django.core.files.base import ContentFile
+from django.utils import timezone
 from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 
+
 #local imports
+from core.api_mixin import ShineCandidateDetail
 from .models import PaymentTxn
 from .mixin import PaymentMixin
 from .forms import StateForm, PayByCheckForm
@@ -206,11 +215,16 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
     def get_context_data(self, **kwargs):
         context = super(PaymentOptionView, self).get_context_data(**kwargs)
         payment_dict = self.getPayableAmount(cart_obj=self.cart_obj)
+        line_item = self.cart_obj.lineitems.filter(parent=None)[0]
+        type_flow = int(line_item.product.type_flow)
+        print(type_flow)
         context.update({
             "state_form": StateForm(),
             "check_form": PayByCheckForm(),
             "total_amount": payment_dict.get('total_payable_amount'),
             "cart_id": self.request.session.get('cart_pk'),
+            "type_flow": type_flow
+
         })
         return context
 
@@ -275,21 +289,21 @@ class ThankYouView(TemplateView):
         try:
             order = Order.objects.get(pk=order_pk)
         except Exception as e:
-            logging.getLogger('error_log').error('unable to get order object %s'%str(e))
+            logging.getLogger('error_log').error('unable to get order object %s' % str(e))
             return HttpResponseRedirect(reverse('payment:thank-you'))
         file = request.FILES.get('resume_file', '')
-                
+
         if action_type == 'upload_resume' and order_pk and file:
             try:
                 filename = os.path.splitext(file.name)
-                extention = filename[len(filename)-1] if len(
+                extention = filename[len(filename) - 1] if len(
                     filename) > 1 else ''
-                file_name = 'resumeupload_' + str(order.pk) + '_' + str(int(random()*9999)) \
-                    + '_' + timezone.now().strftime('%Y%m%d') + extention
+                file_name = 'resumeupload_' + str(order.pk) + '_' + str(int(random() * 9999)) \
+                            + '_' + timezone.now().strftime('%Y%m%d') + extention
                 full_path = '%s/' % str(order.pk)
                 if not settings.IS_GCP:
                     if not os.path.exists(settings.RESUME_DIR + full_path):
-                        os.makedirs(settings.RESUME_DIR +  full_path)
+                        os.makedirs(settings.RESUME_DIR + full_path)
                     dest = open(
                         settings.RESUME_DIR + full_path + file_name, 'wb')
                     for chunk in file.chunks():
@@ -300,11 +314,10 @@ class ThankYouView(TemplateView):
             except Exception as e:
                 logging.getLogger('error_log').error("unable to save resume %s-%s" % ('resume_upload', str(e)))
                 return HttpResponseRedirect(reverse('payment:thank-you'))
-            
+
             order = Order.objects.get(pk=order_pk)
             pending_resumes = order.orderitems.filter(order__status__in=[0, 1], no_process=False, oi_status=2)
             for obj in pending_resumes:
-
                 obj.oi_resume = full_path + file_name
                 last_oi_status = obj.oi_status
                 obj.oi_status = 5
@@ -394,7 +407,7 @@ class EPayLaterRequestView(OrderMixin,TemplateView):
 
     def _get_order_history_list(self,order):
         order_history = []
-        
+
         for past_order in order.get_past_orders_for_email_and_mobile():
             past_txn = past_order.ordertxns.filter(status=1).first()
             if not past_txn:
@@ -413,11 +426,11 @@ class EPayLaterRequestView(OrderMixin,TemplateView):
         cart_obj = Cart.objects.filter(id=cart_id).first()
         if not cart_obj:
             return HttpResponseRedirect("/")
-        
+
         site_domain = settings.SITE_DOMAIN
         if self.request.flavour == 'mobile':
             site_domain = settings.MOBILE_SITE_DOMAIN
-        
+
         order = self.createOrder(cart_obj)
         txn_id = 'CP%d%s' % (order.pk, int(time.time()))
         pay_txn = PaymentTxn.objects.create(
@@ -426,7 +439,7 @@ class EPayLaterRequestView(OrderMixin,TemplateView):
             payment_mode=11,currency=order.currency,
             txn_amount=order.total_incl_tax,
             )
-        
+
         current_utc_string = datetime.utcnow().isoformat().split(".")[0] + "Z"
         initial_dict = {
             "redirectType": "WEBPAGE","marketplaceOrderId": txn_id,
@@ -522,11 +535,11 @@ class EPayLaterResponseView(PaymentMixin,CartMixin,TemplateView):
         if not txn_obj:
             logging.getLogger('error_log').error("PayLater No txn obj - {}".format(decrypted_data))
             return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure&txn_id='+txn_id)
-        
+
         order = txn_obj.order
 
         if transaction_status == "SUCCESS":
-            
+
             if txn_obj.status == 1:
                 logging.getLogger('info_log').info('EPAY - Updating successful transaction {}'.format(txn_id))
                 put_epay_for_successful_payment.delay(order_id,txn_id)
@@ -535,7 +548,7 @@ class EPayLaterResponseView(PaymentMixin,CartMixin,TemplateView):
             return_url = self._handle_successful_transaction(txn_obj,txn_id,order)
             put_epay_for_successful_payment.delay(order_id,txn_id)
             return HttpResponseRedirect(return_url)
-        
+
         else:
             self._handle_failed_transaction(txn_obj,decrypted_data.get('statusDesc'))
             return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure&txn_id='+txn_id)

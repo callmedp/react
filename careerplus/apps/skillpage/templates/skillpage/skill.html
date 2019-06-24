@@ -190,7 +190,7 @@
 		    <div id="programs" class="listing-box assessments-box mb-40" itemscope itemtype="http://schema.org/ItemList">
 		    	<ul class="nav nav-tabs" role="tablist">
 				    {% if products %}
-				    <li role="presentation" class="active"><h2 itemprop="name"><a href="#courses-tab" aria-controls="courses-tab" role="tab" data-toggle="tab">{{category_obj.name}} Programs</a></h2></li>
+				    <li role="presentation" class="active"><h2 itemprop="name"><a href="#courses-tab" aria-controls="courses-tab" role="tab" data-toggle="tab">Programs</a></h2></li>
 				    {% endif %}
 				    {% if certifications %}
 				    <li role="presentation" {% if not products %} class="active" {% endif %}><h2 itemprop="name"><a href="#assessments-tab" aria-controls="assessments-tab" role="tab" data-toggle="tab">Assessments</a></h2><span>New</span></li>
@@ -355,8 +355,8 @@
 													</div>
 													
 													<ul class="pull-right pricing-box__lists">
-													{% if product.pAsft %}	<li>No. of questions : <span>{{ product.pAsft|get_value_from_dict:'number_of_questions' }}</span></li> {% endif %}
-													{% if product.pAsft %}	<li>Duration: <span>{{ product.pAsft|get_value_from_dict:'test_duration' }} min</span></li> {% endif %}
+													{% if product.pAsft|get_value_from_dict:'number_of_questions' %}	<li>No. of questions : <span>{{ product.pAsft|get_value_from_dict:'number_of_questions' }}</span></li> {% endif %}
+													{% if product.pAsft|get_value_from_dict:'test_duration' %}	<li>Duration: <span>{{ product.pAsft|get_value_from_dict:'test_duration' }} mins</span></li> {% endif %}
 													</ul>
 								                </div>
 

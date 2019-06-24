@@ -107,7 +107,7 @@ class HomePageView(TemplateView, MetadataMixin):
         candidate_id = self.request.session.get('candidate_id')
         candidate_detail = None
         session_fa = self.request.session.get('func_area')
-        session_skills = self.request.session.get('skills')
+        session_skills = self.request.session.get('mid_skills')
 
         if session_fa:
             fa = FunctionalArea.objects.filter(

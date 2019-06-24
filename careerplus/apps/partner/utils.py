@@ -445,7 +445,7 @@ class CertiticateParser:
         expiry = None
 
         try:
-            vendor = Vendor.objects.get(name=vendor_key)
+            vendor = Vendor.objects.get(slug=vendor_key)
             vendor_field = 'vendor_provider'
         except Vendor.DoesNotExist:
             pass

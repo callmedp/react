@@ -4,9 +4,10 @@ from rest_framework.serializers import (
     SerializerMethodField,
     Serializer
 )
-from django.conf import settings
+from datetime import datetime
+from .choices import MEDIA_PRIVACY_CHOICES
 from rest_framework import serializers
-
+from django.conf import settings
 from order.models import Order, OrderItem
 from shop.models import Product, ShineProfileData,Category
 from payment.models import PaymentTxn
@@ -18,6 +19,9 @@ from geolocation.models import Country
 
 from shared.rest_addons.mixins import (SerializerFieldsMixin,
 ListSerializerContextMixin, ListSerializerDataMixin)
+
+from django.utils.text import slugify
+from core.library.gcloud.custom_cloud_storage import GCPMediaStorage,GCPPrivateMediaStorage
 
 import logging
 
@@ -304,7 +308,62 @@ class RecommendedProductSerializerSolr(Serializer):
     #     child=serializers.CharField())
 
 
-class ShineDataFlowDataSerializer(ModelSerializer):
+
+class MediaObject:
+    pass
+
+
+class MediaUploadSerializer(serializers.Serializer):
+    privacy = serializers.ChoiceField(choices=MEDIA_PRIVACY_CHOICES,default=1)
+    prefix = serializers.CharField(max_length=100)
+    media = serializers.FileField(required=True)
+
+    def validate_media(self,media):
+        content_type = media.content_type
+        if content_type not in settings.MEDIA_ALLOWED_CONTENT_TYPES:
+            raise serializers.ValidationError('Unsupported media type.')
+
+        return media
+
+    def to_representation(self,instance):
+        return {"path":instance.path}
+
+    def create(self,validated_data):
+        file_obj = validated_data.get('media')
+        privacy = validated_data.get('privacy')
+        prefix = validated_data.get('prefix','').strip()
+
+        file_name = file_obj.name
+        file_name_parts = file_name.split(".")
+        extension = file_name_parts[-1]
+        file_name = ".".join(file_name_parts[:-1])
+        timestamp = datetime.now().strftime("%Y%m%dT%H%M%S")
+        file_name_with_timestamp = slugify(file_name)+"-"+timestamp
+        file_name_with_extension = slugify(file_name)+"-"+timestamp+"."+extension
+
+        if prefix:
+            #Handle client error with /
+            file_name_with_extension = (prefix + "/" +file_name_with_extension).replace("//","/")
+
+        privacy_storage_class_mapping = {1:GCPPrivateMediaStorage,
+                                        2:GCPMediaStorage}
+
+        storage_class_obj = privacy_storage_class_mapping.get(privacy)()
+        saved_file_path = storage_class_obj._save(file_name_with_extension,file_obj)
+        entity_object = MediaObject()
+        media_object_path = storage_class_obj.url(file_name_with_extension)
+        setattr(entity_object,"path",media_object_path)
+        return entity_object
+
+class ResumeBuilderProductSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    parent = serializers.IntegerField()
+    name = serializers.CharField()
+    inr_price = serializers.FloatField()
+    usd_price = serializers.FloatField()
+    aed_price = serializers.FloatField()
+
+class  ShineDataFlowDataSerializer(ModelSerializer):
 
     image_url = serializers.SerializerMethodField()
 
@@ -315,7 +374,6 @@ class ShineDataFlowDataSerializer(ModelSerializer):
     def get_image_url(self, obj):
         if obj.image:
             return obj.image.url
-
 
 class CertificateSerializer(ModelSerializer):
     skill = serializers.SerializerMethodField()

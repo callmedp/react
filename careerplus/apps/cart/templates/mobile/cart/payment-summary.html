@@ -57,7 +57,8 @@
         {% for item in cart_items %}
         {% with addons=item.addons variations=item.variations %}
             <!-- Item wrap -->
-            {% if item.product_class == 'course' and variations and item.is_available and variations.0.is_available %}
+            {% if variations and item.is_available and variations.0.is_available %}
+              {% if item.product_class == 'course' or item.type_flow == 17%}
                 <div class="w100fl item-wrap c6">
                     <div class="w100fl">
                       <span class="item">
@@ -88,6 +89,7 @@
 
                     </ul>
                 </div><!-- /.Item wrap -->
+              {% endif %}
             {% elif item.is_available %}
                 <div class="w100fl item-wrap c6">
                     <div class="w100fl">

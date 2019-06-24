@@ -1,0 +1,27 @@
+{% load static compress resume_tags %}
+{% if experience|length >= 1 %}
+
+    <div style="vertical-align: top; font-size: 13px; color: #999999; margin-bottom: 30px; word-break: break-word;">
+        <strong style="font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px; display: block; color: {{ current_config.color|background_color_choice }}; text-transform: uppercase; margin-bottom: 15px; border-bottom: 1px solid #cac8c9; padding-bottom: 10px;">{{ preference_list.2.entity_text }}</strong>
+        <ul style="padding: 0; margin: 0; list-style-type: none;">
+            {% for exp in experience %}
+                <li style="vertical-align: top; margin: 10px 0; ">
+                      <span style="width: 8px; height: 8px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: middle;"></span>
+                      <span style="display: inline-block; vertical-align: top; width: 73%; font-size: 14px;">
+                        <strong style="display: block; font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #777777;">{{ exp.job_profile }}
+                         </strong>
+                        {{ exp.company_name }}
+                      </span>
+                      <span style="font-size: {{ current_config.text_font_size|text_font_size }}px; color: #999999; display: inline-block; vertical-align: top; margin-left: auto; width: 19%">
+                        {% if exp.is_working %}
+                            ({{ exp.start_date|date:"M Y" }} - Current)
+                        {% else %}
+                            ({{ exp.start_date|date:"M Y" }} - {{ exp.end_date|date:"M Y" }})
+                        {% endif %}
+                      </span> 
+                      <pre style="font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: {{ current_config.text_font_size|text_font_size }}px; color: #333333; margin-top: 5px;white-space: pre-line; display: block; margin-left: 20px;">{{ exp.work_description }}</pre>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}

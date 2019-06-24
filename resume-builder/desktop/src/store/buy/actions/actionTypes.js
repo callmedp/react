@@ -1,0 +1,3 @@
+export const ADD_TO_CART = 'ADD_TO_CART';
+export const GET_PRODUCT_IDS = 'GET_PRODUCT_IDS'
+export const SAVE_PRODUCT_IDS = 'SAVE_PRODUCT_IDS'

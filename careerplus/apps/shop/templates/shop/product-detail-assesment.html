@@ -146,7 +146,7 @@
                 <div class="col-sm-12 col-md-8 mt-40">
                 {% if prd_about %}
                   <h2 class="detail-heading">About{% if prd_service == 'assessment' %} Test {% elif prd_service == 'course' %}course{% else %}service{% endif %}</h2>
-                 {{prd_about}}
+                 {{prd_about|safe}}
                  {% if prd_asft %}
                   <div class="test-wrap mt-30">
                     <div class="test-wrap__item">
@@ -160,7 +160,7 @@
                     <div class="test-wrap__item">
                         <span class="icon-time"></span>
                         <div class="test-wrap__item--content">
-                          <strong class="fs-18">{{ prd_asft.test_duration }} min</strong>
+                          <strong class="fs-18">{{ prd_asft.test_duration }} mins</strong>
                           <p>Test duration</p>
                         </div>
                     </div>

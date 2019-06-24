@@ -1,0 +1,52 @@
+@import '../../../../styles/variables/vars.scss';
+@import '../../../../styles/variables/mixins.scss';
+
+.addMore {
+    padding-top: 7rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    height: 100vh;
+    padding-bottom: 5.5rem;
+    overflow-x: auto;
+
+    &__items {
+        
+    }
+
+    &__anchor {
+        @include size(100%, 55px, flex);
+
+        align-items: center;
+
+        &__wrap {
+            display: flex;
+            width: 100%;
+
+            &--icon {
+                width: 23px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            &--link {
+                font-size: 1.4rem;
+                margin-left: 1rem;
+                color: $blue;
+            }
+        }
+    }
+}
+
+.add-reamove {
+    position: fixed;
+    bottom: 55px;
+    border-top: 1px solid $border1;
+    background-color: $white;
+    height: 55px;
+}
+
+.delete-wrap {
+    @include size (50px, 50px, flex);
+    align-items: center;
+}

@@ -1,0 +1,239 @@
+@import '../../../../styles/variables/vars';
+@import '../../../../styles/variables/mixins';
+@import '../../../../styles/layout/filters';
+@import '~react-input-range/lib/css/index.css';
+
+.preview {
+    height: 100%;
+    padding-top: 60px;
+
+    &__resume {
+        padding: 15px;
+        height: calc(100vh - 130px);
+        overflow: scroll;
+
+        img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+    }
+
+    &__bottom-btns {
+        @include size(100%, auto, flex);
+        background-color: $white;
+        box-shadow: 0 0 10px rgba($black, .2);
+        padding: 15px;
+
+        align-items: center;
+        justify-content: space-evenly;
+    }
+}
+
+.Modal {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    right: 1.5rem;
+    bottom: 1.5rem;
+    background-color: transparent;
+    border-radius: 8px;
+    overflow: hidden;
+
+    &:focus {
+        outline: 0;
+    }
+    
+
+    &--close {
+        @include square(30px);
+        border-radius: 50%;
+        position: absolute;
+        top: 0;
+        right: 0;
+        border: 0 none;
+        transform: rotateZ(45deg);
+        font-size: 28px;
+        font-weight: 300;
+        background-color: $white;
+        box-shadow: $box-shadow-light;
+        color: $black;
+
+        &:focus {
+            outline: 0;
+        }
+    }
+
+    &--iframe {
+        overflow-x: scroll;
+        overflow-y: scroll;
+        // padding: 15px;
+
+        &:focus {
+            outline: 0;
+        }
+    }
+
+    &--summary {
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+        padding-bottom: 4rem;
+
+        &--bottom-ctc {
+            position: absolute;
+            width: 100%;
+            background-color: $white;
+            height: 6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0 0 .5rem .5rem;
+        }
+
+        .add {
+            color: $white;
+            margin-bottom: 1.5rem;
+        }
+
+        &--white-box {
+            @include border-radius(.5rem .5rem 0 0);
+            background-color: $white;
+            padding: 1.2rem 1.2rem 2rem;
+            overflow: auto;
+            height: 84%;
+
+            .bottom-ctc {
+                position: absolute;
+                width: 100%;
+                left: 0;
+                bottom: -15px;
+                padding: 10px 0;
+                background-color: $white;
+                box-shadow: 0 0 10px $box-shadow-light;
+            }
+        }
+
+        &--add {
+            background-color: $white;
+            box-shadow: 0 0 10px rgba($black, .1);
+            padding: 1.5rem;
+            font-size: 1.4rem;
+
+            &:not(:last-child) {
+                margin-bottom: 3rem;
+            }
+
+            .btn__blue {
+                margin: 1.5rem -1.5rem -1.5rem;
+            }
+
+            .form-check-label {
+                font-size: 1.6rem;
+            }
+        }
+    }
+  }
+
+  .Overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba($black, .7);
+    z-index: 9;
+
+    iframe {
+        width: 100vh;
+        height: 100vh;
+        border: 0 none;
+    }
+  }
+
+.iframe-new{
+    width:100%;
+    height:100%;
+    min-height:85vh;
+}
+
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 1px solid $border1;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+     
+    li {
+        flex: 0 0 50%;
+        text-align: center;
+        text-transform: uppercase;
+
+        &.active {
+            color: $blue;
+            border-bottom: 3px solid $blue;
+        }
+    }
+}
+
+.input-range__label--min, .input-range__label--max {
+    bottom: -2rem;
+}
+
+.input-range__label {
+    font-size: 1.4rem;
+}
+
+.input-range__label--value {
+    top: -2.5rem;
+}
+
+.pos-fixed {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.input-range__slider {
+    height: 2rem;
+    width: 2rem;
+    transform: translateY(-20%);
+}
+
+
+.iframe {
+    &__wrap {
+        position: relative;
+
+        .icon--zoom {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        iframe {
+            border: 0;
+        }
+    }
+}
+
+.input-range__label-container {
+    display: none;
+}
+.heading-size{
+    margin-top: 8px;
+    display: flex;
+    font-size: 13px;
+}
+
+.heading-size-item{
+    -webkit-flex: 1; 
+    -ms-flex: 1; 
+    flex: 1;
+}
+
+.input-range__track {
+    height: 70%;
+}

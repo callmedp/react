@@ -63,13 +63,13 @@
     </div><!-- ./ e-payLatter -->
     {% endif %}
   </div>
-
+  {%if not product.is_assesment %}
   <!-- check free sample start -->
   <div class="cls_samples_enquiry samples_enquiry">
       <!-- Interested in this course? -->
       <div class="course-query box-panel mb-40 cleafix">
           <h2 class="heading-right">
-            {% if product.is_course or product.is_assesment %}
+            {% if product.is_course %}
               Interested in this course?
             {% else %}
               Interested in this service?
@@ -116,7 +116,7 @@
             Submit
           </button-->
       </div>
-
+  {% endif %}
       {% if widget_objs %}
       <div class="box-panel free-sample">
           <span class="sample-pic"></span>

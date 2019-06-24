@@ -1,0 +1,3 @@
+export const GET_CANDIDATE_ID = 'GET_CANDIDATE_ID';
+export const LOGIN_CANDIDATE = 'LOGIN_CANDIDATE';
+

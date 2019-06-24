@@ -27,7 +27,7 @@
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          
+
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown have-query">
 
@@ -60,7 +60,8 @@
             {% for item in cart_items %}
                 <!-- item 1 -->
                 {% with addons=item.addons variations=item.variations delivery_types=item.delivery_types %}
-                    {% if item.product_class == 'course' and variations %}
+
+                    {% if item.product_class == 'course' or item.type_flow == 17 and variations %}
 
                         <ul {% if forloop.counter > 1 %} class="bdr-tp" {% endif %}>
                             <li class="col-sm-5 col-md-6{% if not item.is_available %} disabled{% endif %}">
@@ -156,7 +157,7 @@
                                     </span>
                                 </li>
                             {% endif %}
-                            
+
                             <li class="col-sm-2{% if not item.is_available %} disabled{% endif %}">
                                 <strong>Rs. {{item.price}}/-</strong>
                                 {% if item.delivery_obj and item.delivery_obj.get_price %}
@@ -187,7 +188,7 @@
                                   <li class="col-sm-2{% if not var.is_available %} disabled{% endif %}">
                                     <strong>Rs. {{var.price}}/-</strong>
                                   </li>
-                                  
+
                                   <form role="form" id="cart_remove_form{{var.id}}">{% csrf_token %}
                                     <input type="hidden" name="reference_id" value="{{var.reference}}">
                                     <li class="col-sm-2 col-md-1">
@@ -227,7 +228,7 @@
 
         </div>
         <!-- left content end -->
-        
+
 
         <!-- right content start -->
           <div class="col-sm-3 payment-summary-tab cls_scroller_parent">
@@ -245,7 +246,7 @@
             <figure class="cards-payment-icon mt-20"></figure>
           </div>
 
-          </div>  
+          </div>
         <!-- right content end -->
 
         </div>
@@ -274,7 +275,7 @@
         </section>
     {% endif %}
 {% endblock container %}
-  
+
 
 {% block js_section %}
     {{ block.super }}

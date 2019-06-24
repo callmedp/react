@@ -123,3 +123,16 @@ careerplus/config/settings_live.py
 # ignore dupm.rdb
 
 dump.rdb
+# Node modules
+node_modules/
+
+# Package-lock
+package-lock.json
+
+
+# Webpack Stats
+
+# webpack-mobile-stats.json
+# webpack-desktop-stats.json
+
+dump.rdb

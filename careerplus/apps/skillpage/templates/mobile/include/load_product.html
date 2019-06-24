@@ -46,10 +46,6 @@
                     {{product.pPvn}}
                     </a>
                 </p>
-
-                <p class="pb-5 fs-11">
-                    No. of questions : <strong>120</strong> <span class="pl-5 pr-5">|</span> Duration: <strong>60 min</strong>
-                </p>
                 <p class="pb-0 fs-12">
                     Starting at <strong>Rs. {{ product.pPin |floatformat:'0' }}/-</strong>{% if product.pPfin|floatformat:0|add:"0" %}<strike>Rs. {{ product.pPfin|floatformat:"0" }}/-</strike> <span class="discount">{{ product.discount }}% OFF</span>{% endif %}
                 </p>

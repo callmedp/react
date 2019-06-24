@@ -7,7 +7,7 @@ IS_LIVE = False
 IS_GCP = True
 ALLOWED_HOSTS = ['*']
 
-######## DATABASE SETTINGS ###########
+####### DATABASE SETTINGS ###########
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -42,6 +42,7 @@ DATABASES = {
         'PORT': '',
     },
 }
+
 DATABASE_ROUTERS = ['careerplus.config.db_routers.MasterSlaveRouter']
 
 DEBUG_TOOLBAR_PANELS = [
@@ -59,7 +60,6 @@ DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.redirects.RedirectsPanel',
 ]
 
-
 ####### APPS SETTIMGS #################
 DJANGO_APPS = [
     'dal',
@@ -70,7 +70,7 @@ DJANGO_APPS = [
     'django.contrib.sites',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'collectfaster',       # Needed here before staticfiles
+    'collectfaster',  # Needed here before staticfiles
     'django.contrib.staticfiles',
     'django.contrib.humanize',
 ]
@@ -90,7 +90,7 @@ if DEBUG:
     MIDDLEWARE = MIDDLEWARE + DEV_MIDDLEWARE
 
 DEBUG_TOOLBAR_CONFIG = {
-    "SHOW_TOOLBAR_CALLBACK" : lambda request: DEBUG and not request.GET.get('nodebug'),
+    "SHOW_TOOLBAR_CALLBACK": lambda request: DEBUG and not request.GET.get('nodebug'),
 }
 
 #### CELERY SETTINGS ########
@@ -99,19 +99,19 @@ BROKER_URL = 'redis://localhost:6379/0'
 ########## WSGI SETTINGS #################
 WSGI_APPLICATION = 'careerplus.config.wsgi.application'
 
-INVOICE_DIR = 'invoice/'   # Cloud path
+INVOICE_DIR = 'invoice/'  # Cloud path
 RESUME_DIR = 'resume/'  # Cloud path
+RESUME_TEMPLATE_DIR = 'careerplus/media/resume-template/'  # Cloud path
 
 ########## DOMAIN SETTINGS ######################
 SITE_DOMAIN = 'learning1.shine.com'
 MOBILE_SITE_DOMAIN = 'mlearning1.shine.com'
 SITE_PROTOCOL = 'https'
-MAIN_DOMAIN_PREFIX = '{}://{}'.format(SITE_PROTOCOL, SITE_DOMAIN)  #'http://learning.shine.com'
+MAIN_DOMAIN_PREFIX = '{}://{}'.format(SITE_PROTOCOL, SITE_DOMAIN)  # 'http://learning.shine.com'
 MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
 META_SITE_PROTOCOL = SITE_DOMAIN
 META_SITE_DOMAIN = SITE_PROTOCOL
 META_FB_PROFILE_ID = '282244838633660'
-
 
 ######### SOLR SETTINGS #############
 HAYSTACK_CONNECTIONS = {
@@ -148,7 +148,6 @@ SHINE_API_TIMEOUT = 5
 
 CELERY_ALWAYS_EAGER = False
 
-
 ####### CCAVENUE SETTINGS ###########################
 CCAVENUE_ACCESS_CODE = 'AVEX73EI34CC49XECC'
 CCAVENUE_WORKING_KEY = 'DE002F3C615C11E7FB7D333050103230'
@@ -156,16 +155,14 @@ CCAVENUE_MOBILE_ACCESS_CODE = 'AVYX74EK04AB50XYBA'
 CCAVENUE_MOBILE_WORKING_KEY = 'A081DDE3B5B50F269F8980EB2ADEC9F3'
 CCAVENUE_URL = 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction'
 
-
 ####### EPAYLATER SETTINGS ###########################
-EPAYLATER_INFO = {"payment_url":"https://payment-sandbox.epaylater.in/web/process-transaction",
-                "apiKey": "secret_31f23758-6325-442c-a98c-9eaf1d41a188",
-                "aeskey": "698042ECAE38D843A166AEFADD109687",
-                "iv": "D58C8D87960088FF",
-                "mCode": "SHINELEARNING",
-                "category" : "LEARNING",
-                "base_url":"https://api-sandbox.epaylater.in/"}
-
+EPAYLATER_INFO = {"payment_url": "https://payment-sandbox.epaylater.in/web/process-transaction",
+                  "apiKey": "secret_31f23758-6325-442c-a98c-9eaf1d41a188",
+                  "aeskey": "698042ECAE38D843A166AEFADD109687",
+                  "iv": "D58C8D87960088FF",
+                  "mCode": "SHINELEARNING",
+                  "category": "LEARNING",
+                  "base_url": "https://api-sandbox.epaylater.in/"}
 
 ###### CACHE SETTINGS #################
 SITEMAP_CACHING_TIME = 86400
@@ -175,7 +172,7 @@ CACHES = {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": [
             "redis://127.0.0.1:6379/1",
-            ],
+        ],
         "TIMEOUT": 86400,
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.ShardClient",
@@ -186,7 +183,7 @@ CACHES = {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": [
             "redis://127.0.0.1:6379/2",
-            ],
+        ],
         "TIMEOUT": 86400,
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.ShardClient",
@@ -201,8 +198,20 @@ CACHES = {
             'CONNECTION_POOL_KWARGS': {'max_connections': 50},
         }
     },
+    'job_title_lookup': {
+        "BACKEND": "django_red.cache.RedisCache",
+        "LOCATION": "redis://172.22.67.223:6379/13",
+    },
+    'token': {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/12",
+        "TIMEOUT": 30 * 86400,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            'CONNECTION_POOL_KWARGS': {'max_connections': 100},
+        }
+    }
 }
-
 
 ###### LOGGING SETTINGS #############
 SYSLOG_ADDRESS = '/dev/log'
@@ -277,7 +286,7 @@ STATE = "9899002507upender"
 SCOPE = 'r_emailaddress r_basicprofile'
 TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken"
 OAUTH_URL = "https://www.linkedin.com/oauth/v2/authorization?"
-LINKEDIN_INFO_API="https://api.linkedin.com/v1/people/~:(id,first-name,last-name,picture-url,public-profile-url,email-address)?oauth2_access_token="
+LINKEDIN_INFO_API = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,picture-url,public-profile-url,email-address)?oauth2_access_token="
 LINKEDIN_DICT = {
     "CLIENT_ID": "81fbxkgs5558q0",
     "CLIENT_SECRET": "ECioffWZKBbXhkbu",
@@ -291,8 +300,8 @@ GS_BUCKET_NAME = 'learning-media-staging-189607'
 
 PRIVATE_MEDIA_FILE_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPPrivateMediaStorage'
 GCP_PRIVATE_MEDIA_BUCKET = 'learning--misc-staging-189607'
+GCP_RESUME_BUILDER_BUCKET = 'learning--misc-staging-189607'
 CRM_PRIVATE_MEDIA_BUCKET = 'learningcrm-misc-staging-189607'
-
 
 COMPRESS_STORAGE = STATICFILES_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPStaticStorage'
 GS_PROJECT_ID = 'shine-staging-189607'
@@ -317,7 +326,6 @@ LINKEDIN_RESUME_FREE = [2684, 2685]
 LINKEDIN_RESUME_COST = [2682, 2683]
 LINKEDIN_RESUME_PRODUCTS = LINKEDIN_RESUME_FREE + LINKEDIN_RESUME_COST
 
-
 ######## EMAIL SETTINGS ############
 EMAIL_HOST = '172.22.65.228'
 EMAIL_PORT = 25
@@ -334,23 +342,23 @@ EXCLUDE_SEARCH_PRODUCTS = LINKEDIN_RESUME_PRODUCTS
 # used for coupon generation for free feature product on payment realization
 FEATURE_PROFILE_PRODUCTS = [1939]
 
-
 for conn, attrs in MONGO_SETTINGS.items():
     try:
         if attrs.get('REPSET'):
-            connect(attrs['DB_NAME'], 
-                    host="mongodb://" + attrs['USERNAME'] + ":" + attrs['PASSWORD']  + "@" + attrs['HOST'],
+            connect(attrs['DB_NAME'],
+                    host="mongodb://" + attrs['USERNAME'] + ":" + attrs['PASSWORD'] + "@" + attrs['HOST'],
                     maxPoolSize=attrs['MAX_POOL_SIZE'],
                     read_preference=ReadPreference.SECONDARY_PREFERRED,
                     replicaSet=attrs['REPSET'],
                     )
         else:
-            connect(attrs['DB_NAME'], 
-                    host="mongodb://" + attrs['USERNAME'] + ":" + attrs['PASSWORD']  + "@" + attrs['HOST'] + "/?authSource=admin",
+            connect(attrs['DB_NAME'],
+                    host="mongodb://" + attrs['USERNAME'] + ":" + attrs['PASSWORD'] + "@" + attrs[
+                        'HOST'] + "/?authSource=admin",
                     maxPoolSize=attrs['MAX_POOL_SIZE']
-                    )    
+                    )
     except Exception as e:
-        logging.getLogger('error_log').error(" unable to connect to mongo %s" %repr(e))
+        logging.getLogger('error_log').error(" unable to connect to mongo %s" % repr(e))
         continue
 
 
@@ -374,35 +382,31 @@ if 'test' in sys.argv[1:]:
 ########### CMS STATIC PAGE RENDERING ID#########
 
 CMS_ID = [1]
-FEATURE_PROFILE_EXCLUDE=[1941]
-SERVICE_PAGE_ID_SLUG_MAPPING = {"45":"resume-writing"}
+FEATURE_PROFILE_EXCLUDE = [1941]
+SERVICE_PAGE_ID_SLUG_MAPPING = {"45": "resume-writing"}
 IS_MAINTENANCE = False
 MAINTENANCE_MESSAGE = "This site will be under maintenance from 9 pm to 12 pm on Friday, 11 Jan, 2019."
 
-
 ############### VIRTUAL_ENV PATH
 VENV_PATH = "/root/virtualenvs/careerplus3.6/bin/python3"
-
-CODE_PATH ="/code/careerplus/"
+CODE_PATH = "/code/careerplus/"
 
 EXOTEL_DICT = {
-           'token': '9e4df38c0c3bd1009ca142da306d827e71e74737',
-           'sid': 'hindustantimes3',
-           'callerid': '08047105151',
-           'url': 'https://{sid}:{token}@api.exotel.com/v1/Accounts/{sid}/Calls/connect.json',
-           'record_url': 'https://{sid}:{token}@api.exotel.com/v1/Accounts/{sid}/Calls/{callid}.json',
-           'check_dnd_url': 'https://{sid}:{token}@api.exotel.com/v1/Accounts/{sid}/Numbers/{number}.json',
-            }
+    'token': '9e4df38c0c3bd1009ca142da306d827e71e74737',
+    'sid': 'hindustantimes3',
+    'callerid': '08047105151',
+    'url': 'https://{sid}:{token}@api.exotel.com/v1/Accounts/{sid}/Calls/connect.json',
+    'record_url': 'https://{sid}:{token}@api.exotel.com/v1/Accounts/{sid}/Calls/{callid}.json',
+    'check_dnd_url': 'https://{sid}:{token}@api.exotel.com/v1/Accounts/{sid}/Numbers/{number}.json',
+}
 
-
+RESUME_BUILDER_NON_COMBO_PID = 3092
 URL_SHORTENER_ACCESS_TOKEN = "29d325106d379436d7fbe9dc76844350859d24c1"
 
 try:
     from .settings_local import *
 except:
     pass
-
-
 ##for testing purpose using live working key
 
 # CCAVENUE_WORKING_KEY = 'BB84397177B2D640744BA272627C2A61'

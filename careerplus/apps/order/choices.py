@@ -28,7 +28,6 @@ PAYMENT_MODE = (
     (10, 'Net Banking'),
     (11, "PayLater"))
 
-
 OI_OPS_STATUS = (
     # common status 1 - 20
     (0, 'Default'),
@@ -111,7 +110,6 @@ OI_USER_STATUS = (
     (11, 'Archived'),
     (12, 'Service is initiated'),
     (13, 'Shine Resume'),
-
 
     # flow1, flow12, flow13, flow3, and flow 5 status 21 - 40
     (21, 'Upload Draft'),
@@ -303,7 +301,7 @@ OI_SMS_STATUS = (
     # flow4 :61 - 70
     (61, 'Sent International Profile Pending Resume Sms'),
     (62, 'Sent Flow4 Online Payment Sms'),
-    
+
     # flow5 :71 - 80
     (71, 'Sent Feature Profile Pending Resume Sms'),
     (72, 'Sent Flow5 Online Payment Sms'),
@@ -313,7 +311,7 @@ OI_SMS_STATUS = (
     (92, 'Sent Resume Booster consultant/Recruiter Sms'),
     (93, 'Sent Resume Booster Candidate Sms'),
     (94, 'Sent Flow7 Online Payment Sms'),
-    
+
     # linkedin flow 8:101-120
     (101, 'Sent Allocated To Writer Sms For Linkedin'),
     (102, 'Sent Linkedin First Draft Sms'),
@@ -323,7 +321,7 @@ OI_SMS_STATUS = (
     (106, 'Sent Linkedin Draft1 Reminder Sms'),
     (107, 'Sent Linkedin Draft2 Reminder Sms'),
     (108, 'Sent Pending Counselling Form Sms'),
-    
+
     # flow9 :121 - 130
     (121, 'Sent RoundOne Incomplete Profile Sms'),
     (122, 'Sent Flow9 Online Payment Sms'),
@@ -354,7 +352,6 @@ OI_SMS_STATUS = (
     # flow6 :171 - 180
     (171, 'Sent Flow6 Process Sms'),
     (172, 'Sent Flow6 Service Initiation Sms'),
-
 
     # flow14 :191 - 200
     (191, 'Sent Flow14 Process Sms'),
@@ -423,7 +420,6 @@ WC_SUB_CATEGORY3 = (
     (83, 'User is busy'),
 )
 
-
 WC_SUB_CATEGORY = WC_SUB_CATEGORY1 + WC_SUB_CATEGORY2 + WC_SUB_CATEGORY3 + WC_SUB_CAT2
 
 WC_FLOW_STATUS = (
@@ -451,9 +447,8 @@ WC_FLOW_STATUS = (
     (83, 'User is busy'),
 )
 
-
 SMS_DRAFT_OI_MAPPING = {
-    1:'102',
+    1: '102',
     2: '103',
     3: '104',
 

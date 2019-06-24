@@ -1,0 +1,44 @@
+@import '../../../../styles/variables/vars.scss';
+@import '../../../../styles/variables/mixins.scss';
+
+.banner {
+    background-image: url(#{$path}/home-banner-image.jpg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    padding: 1.5rem 1.5rem 4rem;
+    margin: 0 -1.5rem;
+    background-color: #f3f8ec;
+
+    h1 {
+     color: #333333;
+     font-size: 3.5rem;
+     line-height: 1.2;
+     margin-bottom: 1rem;
+
+     strong {
+        font-size: 3.5rem;
+        font-weight: 400;
+     }
+    }
+ }
+
+ .resume-pointer {
+     margin-top: 4rem;
+     li {
+         border-radius: .5rem;
+         background-color: $white;
+         padding: 1rem;
+         box-shadow:0 0 10px $box-shadow-light;
+         border-left: 4px solid $orange;
+         overflow: hidden;
+         font-size: 1.4rem;
+         color: $grey-333;
+
+        display: flex;
+
+         &:not(:last-child) {
+            margin-bottom: 1rem;
+         }
+         
+     }
+ }

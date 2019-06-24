@@ -1,0 +1,117 @@
+@import '../../../../../../styles/variables/vars.scss';
+@import '../../../../../../styles/variables/mixins.scss';
+@import '~react-widgets/dist/css/react-widgets.css';
+
+
+.react-datepicker-wrapper {
+    @extend %input;
+
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    position: relative;
+    flex: 1 1 auto;
+    width: 1%;
+    margin-bottom: 0;
+
+    .react-datepicker__input-container {
+        width: 100%;
+
+        input {
+            width: 100%;
+            border: 0;
+        }
+    }
+}
+
+.flex-auto {
+    flex: 1 1 auto;
+
+    .css-bg1rzq-control {
+        border-left: 0 none;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        border-color: $grey-light;
+    }
+}
+
+input:focus {
+    outline: 0;
+}
+
+input:disabled,
+input::placeholder {
+    color: $grey-333 !important;
+}
+
+.react-datepicker-wrapper .react-datepicker__input-container input {
+    color: $grey-333;
+    font-size: 14px;
+}
+
+.multi-select{
+    width: 100%;
+}
+
+.close-wrap {
+    @include size(25px, 25px, block);
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba($black, .2);
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    background-color: $white;
+
+    &.preview-close {
+        top: 25px;
+        right: -9px;
+    }
+}
+
+.rw-multiselect-tag {
+    margin: 5px;
+    font-size: 1.2rem;
+    vertical-align: middle;
+}
+
+.dob {
+    .input-group  {
+        &> div + div {
+            position: relative;
+            box-sizing: border-box;
+            -webkit-flex: 1 1 auto;
+            -ms-flex: 1 1 auto;
+            flex: 1 1 auto;
+            width: 1%;
+            margin-bottom: 0;
+            border: 1px solid #eaeaea;
+            padding: 0;
+            border-radius: .5rem;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            background-color: #fff;
+            font-family: inherit;
+            font-size: 1.4rem;
+            -webkit-appearance: none;
+            padding: 1.0rem 1.2rem;  
+        }
+    }
+}
+
+.react-datepicker__input-container input {
+    font-size: 1.4rem;
+    border: none;
+}
+
+.css-yk16xz-control {
+    background-color: transparent !important;
+    border-radius: 0 !important;
+    border-style: none !important;
+    border-width: 0 !important;
+    border-color: transparent !important;
+}
+
+.css-1r6akg3-container {
+    border: 1px solid #eaeaea;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}

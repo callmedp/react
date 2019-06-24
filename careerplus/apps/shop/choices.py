@@ -1,4 +1,5 @@
 from decimal import Decimal
+from typing import Tuple
 
 FACULTY_DEFAULT = 0
 FACULTY_TEACHER = 1
@@ -59,7 +60,7 @@ FLOW_CHOICES = (
     (14, 'University Courses'),
     (15, 'Resume Booster International'),
     (16, 'Assessment and Certifications'),
-
+    (17, 'Resume Builder'),
 )
 
 SUB_FLOWS = {

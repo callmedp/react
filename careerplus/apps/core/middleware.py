@@ -63,7 +63,8 @@ class LoginMiddleware(object):
         self.get_response = get_response
 
     def __call__(self, request):
-        if request.path.startswith('/console/'):
+        paths_to_avoid = ["/console/","/api/","/resume-builder/"]
+        if any([request.path.startswith(path) for path in paths_to_avoid]):
             response = self.get_response(request)
             return response
 
@@ -114,8 +115,8 @@ class LoginMiddleware(object):
                 skills_obj = Skill.objects.filter(name__in=skills_in_ascii)[:15]
                 skills_ids = [str(s.id) for s in skills_obj]
                 request.session.update({
-                    'skills': skills_ids,
-                    'skills_name': skills[:15],
+                    'mid_skills': skills_ids,
+                    'mid_skills_name': skills[:15],
                 })
         response = self.get_response(request)
         return response

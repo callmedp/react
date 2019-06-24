@@ -1,0 +1,160 @@
+.App {
+    text-align: center;
+}
+
+.App-logo {
+    animation: App-logo-spin infinite 20s linear;
+    height: 40vmin;
+}
+
+.App-header {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+
+.Text-spacing {
+    margin: 10px;
+}
+
+.App-link {
+    color: #61dafb;
+}
+
+.Authentication-page {
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    align-items: center;
+    flex-direction: column;
+}
+
+.Button-parent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.Submit-button {
+    font-size: 12px;
+    padding: 10px;
+}
+
+.Error-message {
+    font-size: 14px;
+    display: block;
+    color: #ff000057;
+    padding-top: 5px;
+}
+
+.Warn-message {
+    font-size: 14px;
+    display: block;
+    color: #ff000057;
+    padding-top: 5px;
+}
+
+.Api-error {
+    margin-top: 15px;
+    color: #ff00007a;
+}
+
+.Button-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+.Main-page {
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    align-items: center;
+}
+
+.Field-spacing {
+    width: 100%;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.Top-space {
+    margin-top: 5px;
+}
+
+.react-datepicker-wrapper {
+    width: 100%;
+}
+
+.react-datepicker__input-container {
+    width: 100%;
+}
+
+.Project-heading {
+    display: block;
+    margin: 5px;
+}
+
+.Project-list {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.Row-navigation {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: 25px;
+
+}
+
+
+.Plan-modal {
+    display: flex;
+}
+
+.Choose-plan {
+    margin-top: 100px;
+    flex-direction: column;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.Template-images {
+    min-width: 200px;
+    min-height: 200px;
+    border: 1px solid black;
+}
+
+.Go-to-pricing {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+}
+
+.Highlight {
+    color: red;
+
+}
+
+.Highlight:focus {
+    color: red;
+}
+
+
+@keyframes App-logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
