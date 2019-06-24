@@ -42,7 +42,6 @@ class Home extends Component {
         const {ui:{mainloader}} = this.props;
         return (
             <div className="home">
-                <!-- <NeedHelpModal/> -->
                 <Header />
                 <Banner/>
                 {mainloader ? <Loader/> :""}
