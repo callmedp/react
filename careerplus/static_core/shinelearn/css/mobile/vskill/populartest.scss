@@ -1,0 +1,133 @@
+.popular_test {
+
+    display: flex;
+    flex-direction: column;
+    margin: 0 5%;
+
+
+
+
+
+
+    .popular_test_inside {
+        background: $bg-white;
+        box-shadow: $box-shadow-test;
+        border-radius: 4px;
+        display: flex;
+        flex-direction: row;
+        min-height: 80px;
+        margin: 10px 0;
+
+
+
+
+
+        a {
+            padding: 10px 10px 10px 0;
+            align-items: center;
+            display: flex;
+            flex-basis: 100%;
+            color: $txt-grey-333;
+
+
+        }
+
+        &.category {
+            flex-direction: column;
+            position: relative;
+            justify-content: center;
+            align-items: flex-start;
+
+            a {
+                flex-direction: column;
+            }
+
+            .border {
+                position: absolute;
+                left: 0;
+                top:25%;
+
+            }
+
+            .test {
+                color: $txt-grey-666;
+                align-self: flex-start;
+                font-size: $font-size - 1;
+                padding: 5px 0 0 15px;
+
+            }
+
+            .name {
+
+            }
+        }
+
+
+        .border {
+            width: 5px;
+            height: 36px;
+            display: flex;
+
+
+            &.border0 {
+                background: $purple;
+            }
+
+            &.border1 {
+                background: $sky;
+            }
+
+            &.border2 {
+                background: $light_green;
+            }
+
+            &.border3 {
+                background: $blue;
+            }
+
+            &.border4 {
+                background: $indigo;
+            }
+
+
+
+            &.border5 {
+                background: $pink;
+            }
+
+            &.border6 {
+                background: $sky;
+            }
+
+            &.border7 {
+                background: $light_green;
+            }
+
+            &.border8 {
+                background: $teal;
+            }
+
+            &.border9 {
+                background: $cyan;
+            }
+
+
+        }
+
+        .name {
+            font-size: $font-size + 3;
+            font-weight: $font-weight;
+            display: flex;
+            flex-basis: 60%;
+            line-height: $font-size + 8;
+            padding-left: 15px;
+
+        }
+
+
+
+
+    }
+
+
+}
