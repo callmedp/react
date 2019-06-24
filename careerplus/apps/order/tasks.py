@@ -811,5 +811,16 @@ def generate_resume_for_order(order_id):
     builder_obj = ResumeGenerator()
     builder_obj.save_order_resume_pdf(order=order_obj,is_combo=is_combo,index=selected_template)
 
+@task
+def send_resume_in_mail_resume_builder(attachment,data):
+    to_email = [data.get('email')]
+    mail_type = "SEND_RESUME_IN_MAIL_RESUME_BUILDER"
+    try:
+        SendMail().send(to_email, mail_type, data,attachment=attachment)
+    except Exception as e:
+        logging.getLogger('error_log').error(
+            "%s" % (str(e)))
+
+
 
 
