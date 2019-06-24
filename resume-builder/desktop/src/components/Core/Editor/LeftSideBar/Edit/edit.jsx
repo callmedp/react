@@ -83,7 +83,7 @@ class Edit extends Component {
 
     render() {
         const {type, preferenceList, nextLink, elemToDelete, menu_modal_status} = this.state;
-        let {formData, ui: {formName}, updateCategoryEntity, showAlertModal,userInfo:{order_data}} = this.props;
+        let {formData, ui: {formName}, updateCategoryEntity, showAlertModal, userInfo: {order_data}} = this.props;
         let error = false;
         const obj = (formData && formData[formName]) || {};
         let syncErrors = obj['syncErrors'] || {};
@@ -156,9 +156,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        'updateCategoryEntity': (entity) => {
+        'updateCategoryEntity': (entity, showLoader = true) => {
             return new Promise((resolve, reject) => {
-                return dispatch(actions.updateEntityPreference({"entity_preference_data": entity, resolve, reject}))
+                return dispatch(actions.updateEntityPreference({
+                    "entity_preference_data": entity, showLoader,
+                    resolve, reject
+                }))
             })
         },
         'showAlertModal': (alertType) => {

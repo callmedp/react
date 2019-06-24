@@ -29,9 +29,6 @@ function* loginCandidate(action) {
     try {
         let {payload} = action;
 
-        localStorage.clear();
-
-
         yield put({type: UPDATE_UI, data: {loader: true}});
 
 
