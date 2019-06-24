@@ -61,7 +61,7 @@ class Header extends Component {
                         <button className="white-button mr-15" onClick={() => {
                             showHelpModal()
                         }}>
-                            Need help?
+                            Reach us
                         </button>
                         {!!(page === 'home') &&
                         <button className="white-button mr-30" onClick={() => this.scrollTo('templates',-60)}>Build your
