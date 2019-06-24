@@ -21,7 +21,6 @@ const getInformation = (data) => {
             "Content-Type": "application/json",
             'Authorization': ''
         })
-)
 }
 
 
