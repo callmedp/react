@@ -5,13 +5,14 @@ import json
 from django.conf import settings
 from django.views.generic import (DetailView,ListView,TemplateView)
 from django.shortcuts import redirect,reverse,render
+from django.core.cache import cache
 
 #local imports
 
 from .models import Question, Test
+
 from shop.models import Category
-from blog.mixins import PaginationMixin,LoadCommentMixin
-from django.core.paginator import Paginator
+
 
 
 
@@ -46,31 +47,36 @@ class VskillTestView(DetailView):
 class AssessmentLandingPage(TemplateView):
     template_name = 'vskill/vskill_landing.html'
 
-    def __init__(self):
-        self.page = 1
-        self.paginated_by = 8
 
     def get_breadcrumbs(self):
         breadcrumbs = []
         breadcrumbs.append({"url": '/', "name": "Home"})
         breadcrumbs.append({"url": None, "name": 'practice-test'})
-        # data = {"breadcrumbs": breadcrumbs}
         return breadcrumbs
 
-    def get_func_areas(self,filter_dict):
-        category = Category.objects.filter(**filter_dict)[:8]
-        return category
+    def get_func_area_ids(self):
+        if cache.get('TestCategory'):
+            pass
+        category_ids = list(set(Test.objects.filter(category__categoryproducts__type_flow=16,category__active=True)\
+            .values_list('category__id', flat=True)))
+        return category_ids
 
     def get_test(self):
         test = Test.objects.filter(is_active=True)[:4]
         return test
 
-
     def get_context_data(self, **kwargs):
-        filter_dict = {'active': 'True', 'type_level':2 }
+
         context = super(AssessmentLandingPage, self).get_context_data(**kwargs)
         context.update({'breadcrumbs': self.get_breadcrumbs()})
-        context.update({'func_area': self.get_func_areas(filter_dict)})
+        category_ids = self.get_func_area_ids()
+        if category_ids:
+            category_ids = Category.objects.filter(id__in=category_ids, from_category__active=True,
+                                          from_category__is_main_parent=True).values_list\
+                ('from_category__related_to__id', flat=True)
+        if category_ids:
+            category_ids = Category.objects.filter(id__in=category_ids)
+        context.update({'func_area': category_ids})
         context.update({'test_list': self.get_test()})
         return context
 
@@ -85,11 +91,6 @@ class AssessmentCategoryPage(DetailView):
         breadcrumbs = []
         breadcrumbs.append({"url": '/', "name": "Home"})
         breadcrumbs.append({"url": '/practice-tests/', "name": 'practice-test'})
-        parent = self.object.get_parent() if self.object.type_level == 3 else None
-        if parent:
-            breadcrumbs.append({
-                "url": parent[0].get_absolute_url(), "name": parent[0].name,
-            })
         breadcrumbs.append({"url": '', "name": self.object.name})
         return breadcrumbs
 
@@ -97,12 +98,45 @@ class AssessmentCategoryPage(DetailView):
     def get_context_data(self, **kwargs):
         context = super(AssessmentCategoryPage, self).get_context_data(**kwargs)
         context.update({'breadcrumbs': self.get_breadcrumbs()})
-        category = self.object.get_childrens()[:4]
-        context.update({'category':category})
+        category = self.object.get_childrens()
+        cat_ids = Test.objects.exclude(category=None).values_list('category__id', flat=True)
+        category = category.filter(id__in=cat_ids)
+        context.update({'category': category})
         return context
 
 
+class AssessmentSubCategoryPage(DetailView):
+    template_name = 'vskill/brand-manager-test.html'
+    model = Category
+    slug_url_kwarg = 'slug'
+    context_object_name = 'Category'
 
+
+    def get_breadcrumbs(self):
+        breadcrumbs = []
+        breadcrumbs.append({"url": '/', "name": "Home"})
+        breadcrumbs.append({"url": '/practice-tests/', "name": 'practice-test'})
+        parent = self.object.get_parent() if self.object.type_level == 3 else None
+        if parent:
+            breadcrumbs.append({
+                "url": '/practice-tests/'+parent[0].slug + '/', "name": parent[0].name,
+            })
+
+        breadcrumbs.append({"url": '', "name": self.object.name})
+        return breadcrumbs
+
+    def get_free_test(self):
+        category = self.object
+        all_test = category.test_set.all()
+        return all_test
+
+
+    def get_context_data(self, **kwargs):
+        context = super(AssessmentSubCategoryPage, self).get_context_data(**kwargs)
+        context.update({'breadcrumbs': self.get_breadcrumbs()})
+        all_test = self.get_free_test()
+        context.update({'all_test': all_test})
+        return context
 
 
 

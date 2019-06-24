@@ -1,4 +1,3 @@
-
 {% extends "basic/base1.html" %}
 {% load static meta thumbnail compress %}
 {% block title %}Practice test | online mock test – Shine Learning	 {% endblock title %}
@@ -55,7 +54,8 @@
             </ul>
             <div class="search_content">
                <div class="form-inline">
-                  <input type="text" class="form-control" placeholder="Search popular tests">
+                  <!--<input type="text" class="form-control" placeholder="Search popular tests">-->
+                   <input class="typeahead" type="text" placeholder="Countries">
                   <button type="submit" class=" skill-jobs-btn btn no-bgcol"></button>
                </div>
             </div>
@@ -67,81 +67,14 @@
          {% for test in test_list %}
                <div class="testinside">
                   <span class="border-left"></span>
-                  <a id="{{test.id}}" href="#testModal" data-toggle="modal" data-target="#testModal">
+                  <a id="{{test.id}}" onclick="getProductDetail('{{test.vendor.id}}','{{test.category.id}}');" data-toggle="modal"  data-target="#testModal{{test.id}}">
                      {{test.title}}
                      <div class="white_hover"></div>
                      <span class="taketest" >Take Free Test</span>
                   </a>
                </div>
-
-               {% endfor %}
-            </div>
-         </div>
-         <!-- Most popular tests starts -->
-         <!-- Tests by functional area starts -->
-         <div class="col-sm-12 col-lg-12 col-md-12">
-            <h2 class="text-center">Tests by functional area</h2>
-
-
-            <div class="functional_test row" id="funcDiv">
-                  {% for fa in func_area %}
-
-               <div class="functional_test_inside border-{{forloop.counter}}">
-                  <a href="{% url 'assessment:vskill-category' slug=fa.slug %}">
-                  <span class="span-{{forloop.counter}}"></span>
-                  {{fa.heading}}
-                  </a>
-               </div>
-                  {%endfor%}
-
-               <!--<div class="functional_test_inside border-purple">-->
-                  <!--<a href="#">-->
-                  <!--<span class="info"></span>-->
-                  <!--Information Technology-->
-                  <!--</a>-->
-               <!--</div>-->
-               <!--<div class="functional_test_inside border-orange">-->
-                  <!--<a href="#">-->
-                  <!--<span class="bank"></span>-->
-                  <!--Banking & Finance</a>-->
-               <!--</div>-->
-               <!--<div class="functional_test_inside border-olive">-->
-                  <!--<a href="#">-->
-                  <!--<span class="ops"></span>-->
-                  <!--Operation Management-->
-                  <!--</a>-->
-               <!--</div>-->
-               <!--<div class="functional_test_inside border-grey">-->
-                  <!--<a href="#">-->
-                  <!--<span class="law"></span>-->
-                  <!--Law-->
-                  <!--</a>-->
-               <!--</div>-->
-               <!--<div class="functional_test_inside border-mint">-->
-                  <!--<a href="#">-->
-                  <!--<span class="hr"></span>-->
-                  <!--HR - Human Resource-->
-                  <!--</a>-->
-               <!--</div>-->
-               <!--<div class="functional_test_inside border-pink">-->
-                  <!--<a href="#"> <span class="mgmt"></span>-->
-                  <!--Management-->
-                  <!--</a>-->
-               <!--</div>-->
-               <!--<div class="functional_test_inside border-beige"> <a href="#">-->
-                  <!--<span class="pdev"></span>-->
-                  <!--Personal Development</a>-->
-               </div>
-
-            <button class="btn_white loadmore" id="loadmorebtn" onclick="loadmore();">Load more</button>
-            </div>
-         </div>
-         <!-- Tests by functional area ends -->
-      </div>
-   <!------  Modal ---------->
-
-
-   <div class="modal fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <!------  Modal ---------->
+   <div class="modal fade" id="testModal{{test.id}}" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content vskill-modal-box">
       <div class="modal-header">
@@ -152,7 +85,7 @@
         <strong class="text-center">Make your choice and go ahead</strong>
       </div>
       <div class="modal-body">
-        <!-- <a id="startTest" >start free test</a> -->
+        <!-- <a >start free test</a> -->
         <div class="col-sm-4">
            <div class="vskill-modal">
             <i>
@@ -165,11 +98,11 @@
                      Test Format <strong>Practice Exam</strong>
                   </li>
                   <li>
-                     No. of Questions <strong>25 Questions</strong>
+                     No. of Questions <strong>{{test.get_question_count}}</strong>
                   </li>
                </ul>
                <span>
-               <button class="blue_btn pull-right">Start test</button>
+               <a class="blue_btn pull-right" href="/online-exam/{{test.id}}" >Start test</a>
                <h4 class="mt-10">FREE</h4>
                </span>
             </span>
@@ -194,13 +127,14 @@
                </ul>
                <p>Real exam & Practice environment</p>
                <p class="pb-30">Explanation to every questions</p>
-
-               <button class="yellow_btn pull-right">Add to cart</button>
+               <button class="yellow_btn pull-right" onclick="addToCart('{{test.vendor.id}}','{{test.category.id}}')" >Add to cart</button>
                <strike>Rs. 999</strike>
-               <h4 class="mt-0">Rs. 699</h4>
+               <h4 class="mt-0" id="{{test.category.id}}-price">Rs.</h4>
             </span>
            </div>
         </div>
+
+
 
         <div class="col-sm-4">
            <div class="vskill-modal">
@@ -231,6 +165,36 @@
 </div>
 
       <!------  EndModal ---------->
+
+               {% endfor %}
+            </div>
+         </div>
+         <!-- Most popular tests starts -->
+         <!-- Tests by functional area starts -->
+         <div class="col-sm-12 col-lg-12 col-md-12">
+            <h2 class="text-center">Tests by functional area</h2>
+
+
+            <div class="functional_test row" id="funcDiv">
+                  {% for fa in func_area|slice:":8" %}
+
+               <div class="functional_test_inside border-{{forloop.counter}}">
+                  <a href="{% url 'assessment:vskill-category' slug=fa.slug %}">
+                  <span class="span-{{forloop.counter}}"></span>
+                  {{fa.heading}}
+                  </a>
+               </div>
+                  {%endfor%}
+
+               </div>
+                {% if  func_area.count > 8  %}
+            <button class="btn_white loadmore" id="loadmorebtn" onclick="loadmore();">Load more</button>
+                {% endif %}
+            </div>
+         </div>
+         <!-- Tests by functional area ends -->
+      </div>
+
       </div>
    </div>
 </div>
@@ -241,6 +205,7 @@
    <script type="text/javascript">
    var page_number= 2;
    var facolor = 0;
+
    function loadmore(){
             page_number = page_number+1;
              element = document.getElementById('funcDiv');
@@ -255,8 +220,7 @@
                }
                for (fa in json.results){
                 color = counter(facolor)
-                element.innerHTML= element.innerHTML +'<div class="functional_test_inside border-'+color+
-               '"><a href="/practice-tests/'+ json.results[fa].slug+ '"><span class= "span-'+ color+ '"></span>'+ json.results[fa].heading +'</a></div>'
+                element.innerHTML= element.innerHTML +'<div class="functional_test_inside border-'+color+'"><a href="/practice-tests/'+ json.results[fa].slug+ '"><span class= "span-'+ color+ '"></span>'+ json.results[fa].heading +'</a></div>';
                 facolor+=1 ;
                }
                },
@@ -274,16 +238,27 @@
    }
 
    function counter(facolor){
-    return facolor%8;
-
+    return facolor % 8;
    }
 
-   $('#testModal').on('show.bs.modal', function(e) {
-      test_id = e.relatedTarget.id ;
-      $('#startTest').attr('href','/online-exam/'+test_id);
+var countries = new Bloodhound({
+  datumTokenizer: Bloodhound.tokenizers.whitespace,
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  // url points to a json file that contains an array of country names, see
+  // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
+  prefetch: '../data/countries.json'
 });
 
+// passing in `null` for the `options` arguments will result in the default
+// options being used
+$('#prefetch .typeahead').typeahead(null, {
+  name: 'countries',
+  source: countries
+});
+
+var countries =['india','pakistan']
    </script>
+<script src="{% static 'shinelearn/js/assessment/take_test.js' %}"></script>
 {% endblock js_section %}
 {% block johukum %}
 {% endblock johukum %}

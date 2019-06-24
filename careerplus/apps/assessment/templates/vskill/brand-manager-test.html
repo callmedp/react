@@ -44,118 +44,107 @@
          <!-- Most popular tests starts -->
          <div class="col-sm-12 col-lg-12 col-md-12">
             <div class="popular_test row">
+
+               {% for test in all_test %}
                <div class="testinside">
                   <span class="border-left"></span>
-                  <a href= "#">
-                     Email Marketing Master
+              <a id="{{test.id}}" onclick="getProductDetail('{{test.vendor.id}}','{{test.category.id}}');" data-toggle="modal"  data-target="#testModal{{test.id}}">
+                     {{test.title}}
                      <div class="white_hover"></div>
                      <span class="taketest" >Take Free Test</span>
                   </a>
                </div>
-               <div class="testinside">
-                  <span class="border-left purple"></span>
-                  <a href= "#">
-                     Search Engine Optimisation Optimisation
-                     <div class="white_hover"></div>
-                     <span class="taketest" >Take Free Test</span>
-                  </a>
-               </div>
-               <div class="testinside">
-                  <span class="border-left green"></span>
-                  <a href= "#">
-                     Digital Marketing Scientist Digital Marketing Scientist Digital Marketing Scientist
-                     <div class="white_hover"></div>
-                     <span class="taketest" >Take Free Test</span>
-                  </a>
-               </div>
-               <div class="testinside">
-                  <span class="border-left olive"></span>
-                  <a href= "#">
-                     Product Brand Manager
-                     <div class="white_hover"></div>
-                     <span class="taketest" >Take Free Test</span>
-                  </a>
-               </div>
-               <div class="testinside">
-                  <span class="border-left"></span>
-                  <a href= "#">
-                     Email Marketing Master
-                     <div class="white_hover"></div>
-                     <span class="taketest" >Take Free Test</span>
-                  </a>
-               </div>
-               <div class="testinside">
-                  <span class="border-left purple"></span>
-                  <a href= "#">
-                     Search Engine Optimisation Optimisation
-                     <div class="white_hover"></div>
-                     <span class="taketest" >Take Free Test</span>
-                  </a>
-               </div>
-               <div class="testinside">
-                  <span class="border-left green"></span>
-                  <a href= "#">
-                     Digital Marketing Scientist Digital Marketing Scientist Digital Marketing Scientist
-                     <div class="white_hover"></div>
-                     <span class="taketest" >Take Free Test</span>
-                  </a>
-               </div>
-               <div class="testinside">
-                  <span class="border-left olive"></span>
-                  <a href= "#">
-                     Product Brand Manager
-                     <div class="white_hover"></div>
-                     <span class="taketest" >Take Free Test</span>
-                  </a>
-               </div>
-               <div class="testinside">
-                  <span class="border-left"></span>
-                  <a href= "#">
-                     Email Marketing Master
-                     <div class="white_hover"></div>
-                     <span class="taketest" >Take Free Test</span>
-                  </a>
-               </div>
-               <div class="testinside">
-                  <span class="border-left purple"></span>
-                  <a href= "#">
-                     Search Engine Optimisation Optimisation
-                     <div class="white_hover"></div>
-                     <span class="taketest" >Take Free Test</span>
-                  </a>
-               </div>
-               <div class="testinside">
-                  <span class="border-left green"></span>
-                  <a href= "#">
-                     Digital Marketing Scientist Digital Marketing Scientist Digital Marketing Scientist
-                     <div class="white_hover"></div>
-                     <span class="taketest" >Take Free Test</span>
-                  </a>
-               </div>
-               <div class="testinside">
-                  <span class="border-left olive"></span>
-                  <a href= "#">
-                     Product Brand Manager
-                     <div class="white_hover"></div>
-                     <span class="taketest" >Take Free Test</span>
-                  </a>
-               </div>
-               <div class="testinside">
-                  <span class="border-left green"></span>
-                  <a href= "#">
-                     Digital Marketing Scientist Digital Marketing Scientist Digital Marketing Scientist
-                     <div class="white_hover"></div>
-                     <span class="taketest" >Take Free Test</span>
-                  </a>
-               </div>
-               <div class="testinside">
-                  <span class="border-left olive"></span>
-                  <a href= "#">
-                     Product Brand Manager
-                     <div class="white_hover"></div>
-                     <span class="taketest" >Take Free Test</span>
-                  </a>
-               </div>
+                  <div class="modal fade" id="testModal{{test.id}}" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content vskill-modal-box">
+      <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h2 class="text-center" id="exampleModalLongTitle">Digital Marketing Scientist</h2>
+        <strong class="text-center">Make your choice and go ahead</strong>
+      </div>
+      <div class="modal-body">
+        <!-- <a >start free test</a> -->
+        <div class="col-sm-4">
+           <div class="vskill-modal">
+            <i>
+               <img src="{% static 'shinelearn/images/free_skill/free-test-bg.jpg' %}" class="img-responsive">
+            </i>
+            <span class="pad-15">
+               <h3>Free Test</h3>
+               <ul>
+                  <li>
+                     Test Format <strong>Practice Exam</strong>
+                  </li>
+                  <li>
+                     No. of Questions <strong>{{test.get_question_count}}</strong>
+                  </li>
+               </ul>
+               <span>
+               <a class="blue_btn pull-right" href="/online-exam/{{test.id}}" >Start test</a>
+               <h4 class="mt-10">FREE</h4>
+               </span>
+            </span>
+           </div>
+        </div>
+
+        <div class="col-sm-4">
+         <div class="recommended-head">Recommended</div>
+           <div class="vskill-modal recommended">
+            <i>
+               <img src="{% static 'shinelearn/images/free_skill/practice-test-bg.jpg' %}" class="img-responsive">
+            </i>
+            <span class="pad-15">
+               <h3>Practice Tests</h3>
+               <ul>
+                  <li>
+                     Test Format <strong>Practice Exam</strong>
+                  </li>
+                  <li>
+                     No. of Questions <strong>500+ Questions</strong>
+                  </li>
+               </ul>
+               <p>Real exam & Practice environment</p>
+               <p class="pb-30">Explanation to every questions</p>
+               <button class="yellow_btn pull-right" onclick="addToCart('{{test.vendor.id}}','{{test.category.id}}')" >Add to cart</button>
+               <strike>Rs. 999</strike>
+               <h4 class="mt-0" id="{{test.category.id}}-price">Rs.</h4>
+            </span>
+           </div>
+        </div>
+
+
+
+        <div class="col-sm-4">
+           <div class="vskill-modal">
+            <i>
+               <img src="{% static 'shinelearn/images/free_skill/online-course-bg.jpg' %}" class="img-responsive">
+            </i>
+            <span class="pad-15">
+               <h3>Online Course</h3>
+               <ul>
+                  <li>
+                     Duration <strong>8 Days</strong>
+                  </li>
+                  <li>
+                     Availability <strong>Unlimited</strong>
+                  </li>
+               </ul>
+               <button class="blue_btn pull-right">Add to cart</button>
+               <strike>Rs. 1999</strike>
+               <h4 class="mt-0">Rs. 1699</h4>
+            </span>
+           </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+             {% endfor %}
+
             </div>
             
             
@@ -167,7 +156,8 @@
 </div>
 {% endblock main_container %}
 {% block js_section %}
-{{block.super}}
+<script src="{% static 'shinelearn/js/assessment/take_test.js' %}"></script>
+   {{block.super}}
    <script type="text/javascript">
    var page_number= 2;
    function loadmore(){
@@ -199,7 +189,11 @@
                }
            });
    }
+
+
+
    </script>
+
 {% endblock js_section %}
 {% block johukum %}
 {% endblock johukum %}

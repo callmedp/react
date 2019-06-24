@@ -36,6 +36,9 @@ class Test(AbstractAutoDate):
     def __str__(self):
         return self.title + "-" + str(self.max_score)
 
+    def get_question_count(self):
+        return self.question_set.all().count()
+
 
 class Section(AbstractAutoDate):
     name = models.CharField(
@@ -80,9 +83,12 @@ class Question(AbstractAutoDate):
         return [option.get('option_id') for option in self.question_options\
                 if option.get('is_correct') and bool(eval(option.get('is_correct'))\
                 if isinstance(option.get('is_correct'), str) else option.get('is_correct'))]
-    #
-    # @property
-    # def get_option_list(self):
+
+    def __str__(self):
+        return '{}'.format(self.id)
+
+
+
 
 
 

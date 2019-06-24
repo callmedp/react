@@ -50,11 +50,10 @@ from .serializers import (
     RecommendedProductSerializerSolr,
     MediaUploadSerializer,
     ResumeBuilderProductSerializer,
-    ShineDataFlowDataSerializer,
     VendorCertificateSerializer,
     ImportCertificateSerializer,
     ShineDataFlowDataSerializer,
-    CertificateSerializer,TalentEconomySerializer)
+    CertificateSerializer,TalentEconomySerializer,QuestionAnswerSerializer)
 
 from partner.models import Certificate, Vendor
 from shared.rest_addons.pagination import LearningCustomPagination
@@ -66,6 +65,8 @@ from shared.utils import ShineCandidate
 from linkedin.autologin import AutoLogin
 from users.mixins import RegistrationLoginApi
 from .education_specialization import educ_list
+from assessment.models import Question
+
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
     authentication_classes = [OAuth2Authentication]
@@ -441,14 +442,14 @@ class EmailLTValueApiView(APIView):
             return Response(
                 {"status": "FAIL", "msg": "Email or User Doesn't Exists"},
                 status=status.HTTP_400_BAD_REQUEST)
-
+        
         ltv_pks = list(Order.objects.filter(
             candidate_id=candidate_id,
-            status__in=[1, 2, 3]).values_list('pk', flat=True))
+            status__in=[1,2,3]).values_list('pk', flat=True))
         if ltv_pks:
             ltv_order_sum = Order.objects.filter(
                 pk__in=ltv_pks).aggregate(ltv_price=Sum('total_incl_tax'))
-            last_order = OrderItem.objects.select_related('order').filter(order__in=ltv_pks) \
+            last_order = OrderItem.objects.select_related('order').filter(order__in = ltv_pks)\
                 .exclude(oi_status=163).order_by('-order__payment_date').first()
             if last_order:
                 last_order = last_order.order.payment_date.strftime('%Y-%m-%d %H:%M:%S')
@@ -1205,6 +1206,18 @@ class ShineDataFlowDataApiView(ListAPIView):
     serializer_class = ShineDataFlowDataSerializer
     pagination_class = None
 
+
+class QuestionAnswerApiView(ListAPIView):
+    permission_classes = []
+    authentication_classes = []
+    serializer_class = QuestionAnswerSerializer
+    pagination_class = None
+
+    def get_queryset(self):
+        id = self.request.GET.get('test_id')
+        if not id:
+            return Question.objects.none()
+        return Question.objects.filter(test__id=id)
 
 class VendorCertificateMappingApiView(ListAPIView):
     authentication_classes = [OAuth2Authentication]

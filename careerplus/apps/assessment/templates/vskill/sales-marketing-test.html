@@ -43,167 +43,22 @@
          </div>
          <!-- Most popular tests starts -->
          <div class="col-sm-12 col-lg-12 col-md-12">
-            <div class="popular_test row">
+            <div class="popular_test row" id="funcDiv">
+               {% for cat in category|slice:":8"  %}
                <div class="testinside testinside-inner">
                   <span class="border-left"></span>
-                  <a class="test-box" href= "#">
-                     Email Marketing Master
-                     <span class="test">22 Test</span>
+           <a class="test-box" href="{% url 'assessment:vskill-subcategory' slug=cat.slug %}">
+                     {{cat.heading}}
+                     <span class="test"> {{cat.get_assessment_test}}
+                 {% if cat.get_assessment_test < 8 %}Test {% else %}Tests{% endif %}
+                     </span>
                   </a>
                </div>
-               <div class="testinside testinside-inner">
-                  <span class="border-left purple"></span>
-                  <a class="test-box" href= "#">
-                     Search Engine Optimisation Optimisation
-                     <span class="test">11 Test</span>
-                  </a>
-               </div>
-               <div class="testinside testinside-inner">
-                  <span class="border-left green"></span>
-                  <a class="test-box" href= "#">
-                     Digital Marketing Scientist Digital Marketing Scientist Digital Marketing Scientist
-                     <span class="test">88 Test</span>
-                  </a>
-               </div>
-               <div class="testinside testinside-inner">
-                  <span class="border-left olive"></span>
-                  <a class="test-box" href= "#">
-                     Product Brand Manager
-                     <span class="test">77 Test</span>
-                  </a>
-               </div>
-               <div class="testinside testinside-inner">
-                  <span class="border-left"></span>
-                  <a class="test-box" href= "#">
-                     Email Marketing Master
-                     <span class="test">22 Test</span>
-                  </a>
-               </div>
-               <div class="testinside testinside-inner">
-                  <span class="border-left purple"></span>
-                  <a class="test-box" href= "#">
-                     Search Engine Optimisation Optimisation
-                     <span class="test">11 Test</span>
-                  </a>
-               </div>
-               <div class="testinside testinside-inner">
-                  <span class="border-left green"></span>
-                  <a class="test-box" href= "#">
-                     Digital Marketing Scientist Digital Marketing Scientist Digital Marketing Scientist
-                     <span class="test">88 Test</span>
-                  </a>
-               </div>
-               <div class="testinside testinside-inner">
-                  <span class="border-left olive"></span>
-                  <a class="test-box" href= "#">
-                     Product Brand Manager
-                     <span class="test">77 Test</span>
-                  </a>
-               </div>
-               <div class="testinside testinside-inner">
-                  <span class="border-left"></span>
-                  <a class="test-box" href= "#">
-                     Email Marketing Master
-                     <span class="test">22 Test</span>
-                  </a>
-               </div>
-               <div class="testinside testinside-inner">
-                  <span class="border-left purple"></span>
-                  <a class="test-box" href= "#">
-                     Search Engine Optimisation Optimisation
-                     <span class="test">11 Test</span>
-                  </a>
-               </div>
-               <div class="testinside testinside-inner">
-                  <span class="border-left green"></span>
-                  <a class="test-box" href= "#">
-                     Digital Marketing Scientist Digital Marketing Scientist Digital Marketing Scientist
-                     <span class="test">88 Test</span>
-                  </a>
-               </div>
-               <div class="testinside testinside-inner">
-                  <span class="border-left olive"></span>
-                  <a class="test-box" href= "#">
-                     Product Brand Manager
-                     <span class="test">77 Test</span>
-                  </a>
-               </div>
-               <div class="testinside testinside-inner">
-                  <span class="border-left green"></span>
-                  <a class="test-box" href= "#">
-                     Digital Marketing Scientist Digital Marketing Scientist Digital Marketing Scientist
-                     <span class="test">88 Test</span>
-                  </a>
-               </div>
-               <div class="testinside testinside-inner">
-                  <span class="border-left olive"></span>
-                  <a class="test-box" href= "#">
-                     Product Brand Manager
-                     <span class="test">77 Test</span>
-                  </a>
-               </div>
+               {% endfor %}
             </div>
-            <!-- <div class="popular_test row">
-               <div class="testinside testinside-inner">
-                  <span class="border-left"></span>
-                  <a class="test-box" href= "#">
-                     Email Marketing Master
-                     <span class="test">66 Test</span>
-                  </a>
-               </div>
-               <div class="testinside testinside-inner">
-                  <span class="border-left purple"></span>
-                  <a class="test-box" href= "#">
-                     Search Engine Optimisation Optimisation
-                     <span class="test">55 Test</span>
-                  </a>
-               </div>
-               <div class="testinside testinside-inner">
-                  <span class="border-left green"></span>
-                  <a class="test-box" href= "#">
-                     Digital Marketing Scientist Digital Marketing Scientist Digital Marketing Scientist
-                     <span class="test">44 Test</span>
-                  </a>
-               </div>
-               <div class="testinside testinside-inner">
-                  <span class="border-left olive"></span>
-                  <a class="test-box" href= "#">
-                     Product Brand Manager
-                     <span class="test">33 Test</span>
-                  </a>
-               </div>
-            </div>
-            <div class="popular_test row">
-               <div class="testinside testinside-inner">
-                  <span class="border-left"></span>
-                  <a class="test-box" href= "#">
-                     Email Marketing Master
-                     <span class="test">22 Test</span>
-                  </a>
-               </div>
-               <div class="testinside testinside-inner">
-                  <span class="border-left purple"></span>
-                  <a class="test-box" href= "#">
-                     Search Engine Optimisation Optimisation
-                     <span class="test">50 Test</span>
-                  </a>
-               </div>
-               <div class="testinside testinside-inner">
-                  <span class="border-left green"></span>
-                  <a class="test-box" href= "#">
-                     Digital Marketing Scientist Digital Marketing Scientist Digital Marketing Scientist
-                     <span class="test">Take Test</span>
-                  </a>
-               </div>
-               <div class="testinside testinside-inner">
-                  <span class="border-left olive"></span>
-                  <a class="test-box" href= "#">
-                     Product Brand Manager
-                     <span class="test">25 Test</span>
-                  </a>
-               </div>
-            </div> -->
+            {%if category.count > 4 %}
             <button class="btn_white loadmore" id="loadmorebtn" onclick="loadmore();">Load more</button>
+            {% endif %}
          </div>
       </div>
       </div>
@@ -220,15 +75,15 @@
            $.ajax({
                url: '/api/get-category-level-products',
                type: "GET",
-               data : {'tl': 3, 'page_size' : 4, 'page':page_number},
+               data : {'level3assessments':1, 'page_size' : 4, 'page':page_number},
                dataType: 'json',
                success: function(json) {
                if (json.next == null){
                  $('#loadmorebtn').hide();
                }
                for (fa in json.results){
-                element.innerHTML= element.innerHTML +'<div class="functional_test_inside border-'+fa+'"><a href="#"><span class="sales"></span>'+ json.results[fa].heading +'</a></div>'
-
+                element.innerHTML=
+                element.innerHTML +'<div class="testinside testinside-inner"><span class="border-left"></span><a class="test-box" a href="/practice-tests/'+ json.results[fa].slug +'">'+ json.results[fa].heading +'<span class="test">22 Test</span></a></div>'
                }
                },
                error: function(xhr, ajaxOptions, thrownError) {

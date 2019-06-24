@@ -404,6 +404,9 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
     def get_canonical_url(self):
         return self.get_absolute_url()
 
+    def get_assessment_test(self):
+        return self.test_set.count()
+
 
     @classmethod
     def post_save_category(cls, sender, instance, **kwargs):

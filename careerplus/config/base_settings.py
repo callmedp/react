@@ -103,7 +103,7 @@ LOCAL_APPS = [
     'talenteconomy',
     'hrinsider',
     'scheduler',
-    'resumebuilder'
+    'resumebuilder',
     'assessment',
 ]
 

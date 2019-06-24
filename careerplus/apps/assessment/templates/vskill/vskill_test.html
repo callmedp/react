@@ -7,10 +7,20 @@
 <body>
 
 {% for i in questions_list %}
-Q{{forloop.counter}} :-{{i.question_text}}<br>
-{% for j in i.question_options %}
-<input type="checkbox" id="{{j.option_id}}">{{j.option}}<br>
-{% endfor %}
-{% endfor %}
+
+{{i.question_text}}
+
+<br>
+{% endfor  %}
+
+
+<input type="button" id="back" onclick="nextquestion('-1');">Back
+<input type="button" id="forward" onclick="nextquestion(1);">Next
+
 </body>
+<script type="text/javascript">
+    var firstLoad =1;
+
+
+</script>
 </html>
