@@ -1381,15 +1381,6 @@ class OrderDetailApiView(FieldFilterMixin,RetrieveAPIView):
         return self.retrieve(request, *args, **kwargs)
 
 
-
-
-
-
-
-
-
-
-=======
 class CandidateInsight(APIView):
     authentication_classes = [OAuth2Authentication]
     permission_classes = [IsAuthenticated]
@@ -1401,4 +1392,3 @@ class CandidateInsight(APIView):
             "msg": "Data has been noted."},
             status=status.HTTP_201_CREATED
         )
->>>>>>> origin/resume-builder
