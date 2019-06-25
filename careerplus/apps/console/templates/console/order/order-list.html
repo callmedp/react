@@ -150,17 +150,17 @@
                   <td>{% if obj.first_name %}{{obj.first_name}}{% endif %}{% if obj.last_name %} {{obj.last_name}}{% endif %}</td>
                   <td>
                     <div id="email{{obj.id}}">
-                      <div id="email_field{{obj.id}}"></div>
+                      <div id="email_field{{obj.id}}_{{forloop.counter}}"></div>
                     </div>
                     <button type="button" class="btn btn-default btn-xs" aria-hidden="true" onclick="alt_email_update('{{obj.number}}');">
                     <i class="fa fa-envelope"> Alternate Email</i>
                     </button>
                     <div>
-                      <button type="button" class="btn btn-primary btn-xs" onclick="order_get_details('{{obj.id}}','email,alt_email','email');"><i class="fa fa-search" aria-hidden="true"></i>ClickToView</button>
+                      <button type="button" class="btn btn-primary btn-xs" onclick="order_get_details('{{obj.id}}','email,alt_email','email','{{forloop.counter}}');"><i class="fa fa-search" aria-hidden="true"></i>ClickToView</button>
                     </div>
                   </td>
                   <td>
-                    <div id="mobile{{obj.id}}" style="display: -moz-inline-stack;">
+                    <div id="mobile{{obj.id}}_{{forloop.counter}}" style="display: -moz-inline-stack;">
                       <div id="mobile_field{{obj.id}}"></div>
                     </div>
                       {% if exoitel_status%}
@@ -170,7 +170,7 @@
                     <button type="button" class="btn btn-default btn-xs" aria-hidden="true" onclick="alt_num_update('{{obj.number}}')">
                     <i class="fa fa-phone"> Alternate Number</i>
                     </button>
-                    <button type="button" onclick="order_get_details('{{obj.id}}','mobile,alt_mobile','mobile');" class="btn btn-primary btn-xs"><i class="fa fa-search" aria-hidden="true"></i>ClickToView</button>
+                    <button type="button" onclick="order_get_details('{{obj.id}}','mobile,alt_mobile','mobile','{{forloop.counter}}');" class="btn btn-primary btn-xs"><i class="fa fa-search" aria-hidden="true"></i>ClickToView</button>
                   </td>
                   <td>
                     {% for txn in obj.get_txns %}

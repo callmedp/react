@@ -61,7 +61,7 @@
                       <tbody>
                         <tr>
                           <td>{{order.number}}</td>
-                        <td><div id="{{order.id}}"><div id="email_field{{order.id}}"></div>
+                        <td><div id="{{order.id}}"><div id="email_field{{order.id}}_1"></div>
 
                             </div>
 
@@ -74,7 +74,7 @@
                             </div>
                             </td>
                          <td> <div id="{{order.number}}">
-                             <div id="mobile_field{{order.id}}"></div>
+                             <div id="mobile_field{{order.id}}_1"></div>
                             {% if exoitel_status%}
                             <button id="{{order.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{order.id}});"></button>
                             <span style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{order.id}}callingbtn-error"></span>
