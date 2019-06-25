@@ -58,11 +58,11 @@ class Header extends Component {
                     </ul>
                     }
                     <div className="signin">
-                        <button className="white-button mr-15" onClick={() => {
+                        {/* <button className="white-button mr-15" onClick={() => {
                             showHelpModal()
                         }}>
                             Reach us
-                        </button>
+                        </button> */}
                         {!!(page === 'home') &&
                         <button className="white-button mr-30" onClick={() => this.scrollTo('templates',-60)}>Build your
                             resume

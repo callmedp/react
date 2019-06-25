@@ -10,7 +10,6 @@ import * as profileActions from '../../../store/personalInfo/actions/index';
 import * as uiActions from '../../../store/ui/actions/index';
 import Loader from '../../Common/Loader/loader'
 import moment from 'moment'
-import NeedHelpModal from '../Home/NeedHelpModal/needHelpModal';
 
 class EditPreview extends Component {
 
@@ -36,7 +35,6 @@ class EditPreview extends Component {
         return (
             <div className="edit-section">
                 {mainloader ? <Loader/> :""}
-                {/* <NeedHelpModal/> */}
                 <Header page={'edit'} history={history}/>
                 <LeftSideBar {...this.props}/>
                 <RightSection {...this.props} changeLink={this.changeLink}/>

@@ -65,7 +65,7 @@ class Header extends Component {
                             <img src={`${this.staticUrl}react/assets/images/mobile/logo.png`} alt=""/>
                         </div>
                         <div className="header--logo"></div>
-                        <a className="btn btn__transparent btn__round">Reach us</a>
+                        {/* <a className="btn btn__transparent btn__round">Reach us</a> */}
                     </React.Fragment>}
             </header>
         )

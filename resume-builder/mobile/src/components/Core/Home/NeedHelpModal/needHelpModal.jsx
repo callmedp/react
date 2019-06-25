@@ -15,7 +15,7 @@ export default class NeedHelpModal extends Component{
         const {modal_status} = this.props;
         return(
             <Modal 
-                isOpen={true} 
+                isOpen={false} 
                 contentLabel="onRequestClose Preview"
                 onRequestClose={this.handleCloseModal}
                 className="alertModal"

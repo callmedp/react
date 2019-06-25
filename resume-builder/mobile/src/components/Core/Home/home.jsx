@@ -10,7 +10,6 @@ import Testimonial from './Testimonial/testimonial.jsx';
 import queryString from "query-string";
 import {Events, animateScroll as scroll, scrollSpy, scroller} from 'react-scroll'
 import Loader from '../../Common/Loader/loader.jsx';
-import NeedHelpModal from './NeedHelpModal/needHelpModal.jsx';
 
 class Home extends Component {
     
