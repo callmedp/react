@@ -9,29 +9,52 @@ export default class NeedHelpModal extends Component{
 
     constructor(props){
         super(props);
-        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
+        this.feedbackSubmit = this.feedbackSubmit.bind(this)
+        this.state = {
+            'message':''
+        }
     }
+
+    feedbackSubmit(){
+        const {feedback,personalInfo,hideHelpModal} = this.props;
+        const {message} = this.state
+        const values = {
+            'name':personalInfo.first_name,
+            'mobile':personalInfo.number,
+            'email':personalInfo.email,
+            'msg':message,
+            'lsource':"8"
+        }
+        feedback(values)
+        hideHelpModal()
+
+    }
+
+    handleChange(e){
+        this.setState({message:e.target.value})
+    }
+
     render(){
-        const {modal_status} = this.props;
+        const {modalStatus,hideHelpModal} = this.props
         return(
             <Modal 
-                isOpen={true} 
+                isOpen={modalStatus} 
                 contentLabel="onRequestClose Preview"
-                onRequestClose={this.handleCloseModal}
+                onRequestClose={hideHelpModal}
                 className="alertModal"
                 overlayClassName="Overlay">
                 <div className="modal-reachus">
                     <h2>Reach out to us</h2>
                     <p>Let us know your feedback and suggestions, so we can help you build a powerful resume.</p>
                     <div className="form__group mt-20">
-                        <textarea rows="6" maxlength="100" class="form__input"></textarea>
+                        <textarea rows="6" className="form__input" onChange={(e) => {this.handleChange(e)}}></textarea>
                     </div>
                     <div class="text-center">
-                        <button className="btn btn__round btn__primary mt-20">
+                        <button className="btn btn__round btn__primary mt-20" onClick={this.feedbackSubmit}>
                             Submit
                         </button>
                     </div>
-                    <span className="close-wrap" onClick={()=>{this.props.closeModalStatus()}}>
+                    <span className="close-wrap" onClick={()=>{hideHelpModal()}}>
                         <i className="sprite icon--close"></i>
                     </span>
                 </div>

@@ -24,27 +24,11 @@ class Header extends Component {
         })
     }
 
-
-    componentDidMount() {
-
-        Events.scrollEvent.register('begin', function () {
-        });
-
-        Events.scrollEvent.register('end', function () {
-        });
-
-    }
-
-    componentWillUnmount() {
-        Events.scrollEvent.remove('begin');
-        Events.scrollEvent.remove('end');
-    }
-
     render() {
-        const {page, userName, showHelpModal, ui:{helpModal}, hideHelpModal} = this.props;
+        const {page, userName, showHelpModal, ui:{helpModal}, hideHelpModal,feedback,userInfo} = this.props;
         return (
             <header className={this.props.getclass + " home-nav-fixed"}>
-             <HelpModal modalStatus={helpModal} hideHelpModal={hideHelpModal}/>
+             <HelpModal modalStatus={helpModal} hideHelpModal={hideHelpModal} userInfo={userInfo} feedback={feedback}/>
                 <div className="container">
                     <Link to={'/resume-builder/'} className="container--logo"/>
                     {!!(page === 'home') &&
@@ -82,18 +66,18 @@ class Header extends Component {
 const mapStateToProps =(state) =>{
     return {
     ui: state.ui
-}
+    }
 }
 
-    const mapDispatchToProps = (dispatch)=>{
-        return {
+const mapDispatchToProps = (dispatch)=>{
+    return {
         "showHelpModal": () =>{
             return dispatch(showHelpModal())
-    },
-    "hideHelpModal": ()=>{
-    return dispatch(hideHelpModal())
-}
-}
+        },
+        "hideHelpModal": ()=>{
+            return dispatch(hideHelpModal())
+        }
+    }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
 

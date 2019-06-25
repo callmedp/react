@@ -5,66 +5,39 @@ import './helpModal.scss'
 Modal.setAppElement(document.getElementById('react-app'));
 
 export default class HelpModal extends React.Component {
-    constructor(props) {
-        super(props);
-        this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
-        this.addSuggestion = this.addSuggestion.bind(this);
-        this.removeSuggestion =this.removeSuggestion.bind(this)
+
+    constructor(props){
+        super(props)
+        this.feedbackSubmit = this.feedbackSubmit.bind(this)
         this.state = {
-            suggestion_selected: {},
-            error:false,
-            length:0
-        }
-        this.handleSuggestion = this.handleSuggestion.bind(this)
-    }
-    componentDidMount(){
-        const {length} = this.props
-        this.setState({length})
-    }
-    componentDidUpdate(prevProps){
-        const {length} = this.props
-        if(length!==prevProps.length){
-            this.setState({length})
+            'message':''
         }
     }
 
-    addSuggestion(el,index,event){
-        // event.preventDefault()
-        let {suggestion_selected} = this.state
-        const {maxLength} = this.props
-        const {length} = this.state
-        if(length + el.length >maxLength){
-            this.setState({error:true})
-            return
+    feedbackSubmit(){
+        const {feedback,userInfo,hideHelpModal} = this.props;
+        const {message} = this.state
+        const values = {
+            'name':userInfo.first_name,
+            'mobile':userInfo.number,
+            'email':userInfo.email,
+            'msg':message,
+            'lsource':"8"
         }
-        suggestion_selected[`${index}`] = el
-        this.setState({suggestion_selected,error:false,length:length+el.length})
+        feedback(values)
+        hideHelpModal()
 
     }
-
-    removeSuggestion(index,event){
-        // event.preventDefault()
-        let {suggestion_selected,length} = this.state
-        this.setState({error:false,length:length-suggestion_selected[`${index}`].length})
-        delete suggestion_selected[`${index}`]
-        this.setState({suggestion_selected})
-        
-        
+    handleChange(e){
+        this.setState({message:e.target.value})
     }
-
-    handleSuggestion(suggestion_selected){
-        this.props.closeModal(suggestion_selected); 
-        this.setState({suggestion_selected:{},error:false})
-    }
-
     render() {
-        const {label,modalStatus,closeModal,suggestions,maxLength,hideHelpModal} = this.props
-        const {suggestion_selected,error} = this.state
+        const {modalStatus,hideHelpModal} = this.props
         return (
             <div className="pr">
                 <Modal
                     isOpen={modalStatus} 
-                    onRequestClose={closeModal}
+                    onRequestClose={hideHelpModal}
                     contentLabel="Help Modal"
                     className="help-modal1"
                 >
@@ -74,9 +47,9 @@ export default class HelpModal extends React.Component {
                                     <i onClick={()=>{hideHelpModal()}} className='icon-close icon-close--position1'></i>
                                     <h2>Reach out to us</h2>
                                     <p>Let us know your feedback and suggestions, so we can help you build a powerful resume. </p>
-                                    <textarea rows="10" className="mb-20" placeholder="Message"></textarea>
+                                    <textarea rows="10" className="mb-20" placeholder="Message" onChange={(e) => {this.handleChange(e)}}></textarea>
                                     <button className="orange-button"
-                                            type={'submit'} onClick={()=>{this.handleSuggestion(suggestion_selected)}}>Submit
+                                            type={'button'} onClick={this.feedbackSubmit}>Submit
                                     </button>
                                 </React.Fragment>
                         </div>

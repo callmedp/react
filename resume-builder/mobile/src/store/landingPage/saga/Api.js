@@ -23,10 +23,17 @@ const getInformation = (data) => {
         })
 }
 
+const feedbackSubmit = (data) => {
+    const url = 'lead/lead-management/';
+    return BaseApiService.post(`${siteDomain}/${url}`, data);
+}
+
+
 
 export const Api = {
     getCandidateId,
     loginCandidate,
-    getInformation
+    getInformation,
+    feedbackSubmit
 
 }

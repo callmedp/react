@@ -24,27 +24,16 @@ class Home extends Component {
         super(props);
         this.scrollTo = this.scrollTo.bind(this);
         this.addclass = this.addclass.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
         this.state = {
             'scrolled': false,
             'token': '',
-            'name_error': false,
-            'email_error': false,
-            'message_error': false
         }
 
         const values = queryString.parse(this.props.location.search);
         const token = (values && values.token) || '';
         this.state.token = token;
-        this.feedbackForm = this.feedbackForm.bind(this);
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
     }
-
-       handleSubmit(values) {
-        values = {...values,lsource:"8"};
-        this.props.feedback(values);
-    }
-
 
     scrollTo(elem) {
         scroller.scrollTo(elem, {
@@ -68,56 +57,21 @@ class Home extends Component {
         }
     }
 
-    feedbackForm(e) {
-        e.preventDefault();
-        let name = document.getElementById('name').value
-        let email = document.getElementById('email').value
-        let message = document.getElementById('message').value
-        let {name_error, email_error, message_error} = this.state;
-
-        name_error = !name ? true : false;
-        email_error = !email ? true : false;
-        // email_error = email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email) ? true : false
-        message_error = !message ? true : false;
-        this.setState({name_error, email_error, message_error})
-        if (name_error || email_error || message_error) return;
-
-        document.getElementById("feedback").reset();
-        Swal.fire(
-            'Query Submitted Successfully!',
-            '',
-            'success'
-        )
-    }
-
     componentDidMount() {
-
         this.props.loginCandidate(this.state.token);
-        Events.scrollEvent.register('begin', function () {
-        });
 
-        Events.scrollEvent.register('end', function () {
-        });
-        window.addEventListener('scroll', this.addclass);
-
-    }
-
-    componentWillUnmount() {
-        Events.scrollEvent.remove('begin');
-        Events.scrollEvent.remove('end');
     }
 
 
     render() {
-        const {handleSubmit,ui: {loader}, userInfo: {first_name}} = this.props;
-        const {name_error, email_error, message_error} = this.state;
+        const {ui: {loader},userInfo, userInfo: {first_name},feedback} = this.props;
         return (
             <div className="nav-fixed">
                 {
                     !!(loader) &&
                     <LoaderPage/>
                 }
-                <Header page={'home'} userName={first_name} getclass={this.state.scrolled ? 'color-change' : ''}/>
+                <Header page={'home'} userInfo={userInfo} feedback={feedback} getclass={this.state.scrolled ? 'color-change' : ''}/>
                 <Banner userName={first_name}/>
                 <section className="section-container">
                     <h2>Resume builder advantages</h2>
@@ -301,43 +255,6 @@ class Home extends Component {
                             <li>Talent economy</li>
                         </ul>
                     </div>
-                    <form id="feedback" onSubmit={handleSubmit((values) => this.handleSubmit(values))}>
-                        <div className="reachout-tous hidden">
-
-                            <h2>Reach out to us</h2>
-                            <strong>Feel free to share your feedback with us</strong>
-
-                            <div className={"flex-container"}>
-                                <Field  component = {feedbackRenderField}
-                                        type="text"
-                                        name="name"
-                                        label="Name"
-                                        className={(name_error ? "error" : '')}/>
-                            </div>
-                            <div className={"flex-container"}>
-                                <Field  component={feedbackRenderField}
-                                        type="number"
-                                        name="number"
-                                        label="Mobile Number" />
-                            </div>
-                            <div className={"flex-container"}>
-                                <Field  component={feedbackRenderField}
-                                        type="text"
-                                        name="email"
-                                        label="Email"
-                                        className={(email_error ? "error" : '')}/>
-                            </div>
-                            <div className={"flex-container"}>
-                                <Field  component={feedbackRenderField}
-                                        type="text"
-                                        name="msg"
-                                        label="Message"
-                                        className={(message_error ? "error" : '')}/>
-                            </div>
-                            <button className="orange-button" type="submit" >Submit
-                            </button>
-                        </div>
-                    </form>
                 </section>
 
                 <Footer/>
@@ -345,13 +262,6 @@ class Home extends Component {
         )
     }
 }
-
-
-export const FeedBackForm = reduxForm({
-    form: 'feedback',
-    enableReinitialize: true,
-    validate
-})(Home);
 
 
 const mapStateToProps = (state) => {
@@ -377,7 +287,7 @@ const mapDispatchToProps = (dispatch) => {
         'hideModal': () => {
             return dispatch(hideModal())
         },
-        displaySelectedTemplate(templateId) {
+        'displaySelectedTemplate': (templateId) => {
             return dispatch(displaySelectedTemplate(templateId))
         },
          'feedback': (values) => {
@@ -386,4 +296,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(FeedBackForm);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
