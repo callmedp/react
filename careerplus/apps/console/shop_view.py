@@ -1208,7 +1208,6 @@ class ListProductView(ListView, PaginationMixin):
     vendor_select = None
     status = None
 
-
     def dispatch(self, request, *args, **kwargs):
         self.page = 1
         self.paginated_by = 50
@@ -1224,7 +1223,6 @@ class ListProductView(ListView, PaginationMixin):
         self.vendor_list=Vendor.objects.all().values_list('name',flat=True).distinct()
         return super(ListProductView, self).get(request, args, **kwargs)
 
-
     def get_queryset(self):
         queryset = super(ListProductView, self).get_queryset()
         queryset = queryset.exclude(type_product=2)
@@ -1235,9 +1233,6 @@ class ListProductView(ListView, PaginationMixin):
                queryset=queryset.filter(vendor__name=self.vendor_select)
             if self.status:
                 queryset = queryset.filter(active=self.status)
-
-
-
 
         except Exception as e:
             logging.getLogger('error_log').error('unable to get query-set%s'%str(e))
