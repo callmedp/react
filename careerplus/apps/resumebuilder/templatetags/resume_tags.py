@@ -90,7 +90,7 @@ def background_color_choice(color_code):
         3: '#D95B5B',
         4: '#000000',
         5: '#C6A828',
-        6: '#7C39CA',
+        6: '#7d5ca5',
     }
     return code_dict.get(color_code,'#639F59')
 
