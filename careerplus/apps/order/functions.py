@@ -68,7 +68,7 @@ def update_initiat_orderitem_sataus(order=None):
                         assigned_to=oi.assigned_to)
                 else:
                     last_oi_status = oi.oi_status
-                    if oi.product.sub_type_flow == 502:
+                    if oi.product.sub_type_flow in [502, 503] :
                         oi.oi_status = 5
                     else:
                         oi.oi_status = 2
@@ -250,3 +250,27 @@ def close_resume_booster_ois(ois_to_update):
                 assigned_to=oi.assigned_to,
             )
         oi.emailorderitemoperation_set.create(email_oi_status=92)
+
+
+# Use to automate Processing for application highlighter Update/Approval.
+def process_application_highlighter(obj=None):
+    updated_orderitem_operation = obj.orderitemoperation_set.filter(oi_status=30).first()
+    if obj.wc_cat == 21 and obj.wc_sub_cat in [41, 42] and not updated_orderitem_operation:
+        last_oi_status = obj.oi_status
+        obj.orderitemoperation_set.create(
+            oi_status=23,
+            last_oi_status=last_oi_status,
+            assigned_to=obj.assigned_to
+        )
+        obj.orderitemoperation_set.create(
+            oi_status=30,
+            last_oi_status=23,
+            assigned_to=obj.assigned_to)
+
+        last_oi_status = 23
+        obj.oi_status = 30  # approved
+        obj.last_oi_status = last_oi_status
+        obj.approved_on = timezone.now()
+        obj.save()
+        
+
