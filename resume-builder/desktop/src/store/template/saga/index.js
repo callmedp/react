@@ -15,16 +15,20 @@ function* fetchTemplate(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
         yield put({type: UPDATE_UI, data: {loader: true}});
-        const result = yield call(Api.fetchTemplate, candidateId, action.payload.template);
+        const {template} = action.payload;
+        const result = yield call(Api.fetchTemplate, candidateId, template);
+
+        yield put({type: UPDATE_UI, data: {loader: false}});
+
         if (result['error']) {
             Toast.fire({
                 type: 'error',
                 title: result['errorMessage']
             });
         }
-        yield put({type: UPDATE_UI, data: {loader: false}});
 
-        yield put({type: Actions.SAVE_TEMPLATE, data: result['data']})
+        let {data} = result;
+        yield put({type: Actions.SAVE_TEMPLATE, data: data});
     } catch (e) {
         console.log(e);
     }
@@ -42,7 +46,6 @@ function* customizeTemplate(action) {
                 title: result['errorMessage']
             });
         }
-
 
         let {data} = result;
 
@@ -141,6 +144,8 @@ function* fetchDefaultCustomization(action) {
                 type: 'error',
                 title: result['errorMessage']
             });
+            return reject(result['errorMessage'])
+
         }
         let {data} = result;
 
@@ -166,6 +171,22 @@ function* fetchDefaultCustomization(action) {
     }
 }
 
+function* reGeneratePDF(action) {
+    try {
+        const candidateId = localStorage.getItem('candidateId') || '';
+        const {payload} = action;
+
+        const result = yield call(Api.reGeneratePDF,candidateId, payload)
+            
+        if (result['error']) {
+            console.log(result['error'])
+        }
+
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 
 function* reorderSection(action) {
     try {
@@ -175,12 +196,13 @@ function* reorderSection(action) {
         const result = yield call(Api.reorderSection, candidateId, templateId, info);
 
         if (result['error']) {
-  Toast.fire({
+            Toast.fire({
                 type: 'error',
                 title: result['errorMessage']
-            });        }
+            });
+        }
         let {data: {data}} = result;
-        let entity_position = data && eval(data) || []
+        let entity_position = (data && eval(data)) || [];
         if (entity_position[info.pos - 1].entity_id === info.entity_id) {
             yield  put({type: SHOW_ALERT_MODAL, data: {alertModal: true, alertType: 'error'}});
         }
@@ -213,5 +235,6 @@ export default function* watchTemplate() {
     yield  takeLatest(Actions.FETCH_SELECTED_TEMPLATE_IMAGE, fetchSelectedTemplateImage)
     yield  takeLatest(Actions.FETCH_THUMBNAIL_IMAGES, fetchThumbnailImages)
     yield  takeLatest(Actions.REORDER_SECTION, reorderSection)
+    yield  takeLatest(Actions.RE_GENERATE_PDF, reGeneratePDF)
 
 }

@@ -471,7 +471,7 @@ class mobileupdateform(forms.ModelForm):
 
     def clean(self):
         alt_number = self.cleaned_data['alt_mobile']
-        if alt_number == "":
+        if alt_number == "" or len(alt_number) < 10:
             raise ValidationError("please enter the correct mobile number")
         else:
             validate_integer(alt_number)

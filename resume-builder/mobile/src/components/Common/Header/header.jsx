@@ -17,7 +17,7 @@ class Header extends Component {
     }
 
     render() {
-        const {page,history,updateModalStatus,backPage} = this.props;
+        const {page,history,updateModalStatus,backPage,order_data} = this.props;
         return (
             <header className="header">
 
@@ -41,8 +41,9 @@ class Header extends Component {
     
                             {<span>Resume Preview</span>}
                         </div>
-    
-                        <a className="btn btn__round btn--outline" onClick={()=>{updateModalStatus({modal_status:true})}}>Change template</a>
+                        {order_data && order_data.id && !order_data.combo ? '':
+                            <a className="btn btn__round btn--outline" onClick={()=>{updateModalStatus({modal_status:true})}}>Change template</a>
+                        }
                     </React.Fragment>:
                     
                     page === 'menu' ?
@@ -64,6 +65,7 @@ class Header extends Component {
                             <img src={`${this.staticUrl}react/assets/images/mobile/logo.png`} alt=""/>
                         </div>
                         <div className="header--logo"></div>
+                        <a className="btn btn__transparent btn__round">Reach us</a>
                     </React.Fragment>}
             </header>
         )

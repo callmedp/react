@@ -24,7 +24,7 @@ export const personalInfoReducer = (state = initialState, action) => {
         case SAVE_USER_INFO: {
             return {
                 ...state,
-                ...action.data
+                ...action.data,
             };
         }
         case SAVE_INTEREST_LIST: {

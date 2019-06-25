@@ -16,7 +16,7 @@ export default class BottomCTC extends Component {
     }
 
     render (){
-        const {disabled,length,pos,subscription_status,updateAlertModalStatus} = this.props
+        const {disabled,length,pos,order_data,updateAlertModalStatus} = this.props
         const newUser = localStorage.getItem('newUser')
         return (
             <div>
@@ -27,7 +27,7 @@ export default class BottomCTC extends Component {
                     </button>
                     
                     <button className="btn btn__primary" disabled={disabled} type={'submit'}>
-                        {(length === pos) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}
+                        {(length === pos) ? order_data ? "Save Changes":"Buy" :"Save & Continue"}
                     </button>
                 </div>
             </div>

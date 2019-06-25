@@ -13,6 +13,7 @@ styles
 * */
 import 'react-accessible-accordion/dist/fancy-example.css';
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
+import {siteDomain} from '../../../../../../Utils/domains'
 
 class Skill extends Component {
     constructor(props) {
@@ -40,6 +41,7 @@ class Skill extends Component {
     }
 
     async handleSubmit(values, entityLink) {
+         const {userInfo:{order_data},hideGenerateResumeModal,showGenerateResumeModal,history,reGeneratePDF} = this.props
         const {list} = values;
         if (list.length) {
             await this.props.bulkUpdateOrCreate(list);
@@ -47,7 +49,17 @@ class Skill extends Component {
                 submit: true
             })
             if (entityLink) this.props.history.push(entityLink);
-            else this.props.history.push('/resume-builder/buy/')
+            else if(order_data && order_data.id){
+            showGenerateResumeModal()
+            reGeneratePDF(order_data.id)
+            setTimeout(function() {
+                window.location.href = `${siteDomain}/dashboard`
+                hideGenerateResumeModal()
+            }, 10000);
+        }
+        else{
+            history.push(`/resume-builder/buy`) 
+        }
         }
     }
 
@@ -108,7 +120,7 @@ class Skill extends Component {
 
     render() {
         const {
-            handleSubmit, history, showAlertModal,
+            handleSubmit,userInfo:{order_data}, history, showAlertModal,
             ui: {loader}, isEditable, editHeading, saveTitle, entityName, nextEntity,
             changeOrderingUp, changeOrderingDown, handleInputValue
         } = this.props;
@@ -135,7 +147,7 @@ class Skill extends Component {
                 />
 
                 <SavePreviewButtons 
-                        showAlertModal={showAlertModal} context={this} history={history}
+                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data}
                         nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
                     />
 

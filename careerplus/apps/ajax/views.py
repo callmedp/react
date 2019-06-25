@@ -138,7 +138,7 @@ class AjaxProductLoadMoreView(TemplateView):
         slug = self.request.GET.get('slug', '')
         page = int(self.request.GET.get('page', 1))
         try:
-            all_results = SQS().filter(pCtg=slug).exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS)
+            all_results = SQS().filter(pCtg=slug).exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).exclude(pTF=16)
             paginator = Paginator(all_results, 5)
             try:
                 products = paginator.page(page)
@@ -753,7 +753,7 @@ class OrderListModal(View):
                             alt_mobil = ""
                         else:
                             alt_mobil= str(obj.country_code)+"-"+str(obj.alt_mobile)
-                        data = {"status": "success", 'object_id': obj.number, 'obj_altnum': alt_mobil,'country':obj.country_code}
+                        data = {"status": "success", 'object_id': obj.id, 'obj_altnum': alt_mobil,'country':obj.country_code}
                     else:
                         data['error'] = form.errors['__all__']
                 else:

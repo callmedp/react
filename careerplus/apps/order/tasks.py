@@ -359,6 +359,7 @@ def process_mailer(pk=None):
                     'subject': 'Your service details related to order <' + str(oi.order.id) + '>',
                     'username': oi.order.first_name,
                     'type_flow': oi.product.type_flow,
+                    'sub_type_flow': oi.product.sub_type_flow,
                     'pk': oi.pk,
                     'oi': oi,
                     'product_name': oi.product.name,
@@ -797,12 +798,11 @@ def generate_resume_for_order(order_id):
     from resumebuilder.models import Candidate
     from order.models import Order
     from resumebuilder.utils import ResumeGenerator
-
     order_obj = Order.objects.get(id=order_id)
     candidate_id = order_obj.candidate_id
     
     for item in order_obj.orderitems.all():
-        if item.product.type_flow == 17 and item.product.type_product == 2:
+        if item.product and item.product.type_flow == 17 and item.product.type_product == 2:
             product_id = item.product.id
             break
 

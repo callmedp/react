@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 import './preview.scss'
-import queryString from "query-string";
-import {entityList} from '../../../../../Utils/formCategoryList'
 import {
     Accordion,
     AccordionItem,
@@ -9,6 +7,7 @@ import {
     AccordionItemHeading,
     AccordionItemPanel
 } from "react-accessible-accordion";
+import {siteDomain} from '../../../../../Utils/domains'
 import AlertModal from '../../../../Modal/alertModal';
 
 export default class Preview extends Component {
@@ -32,7 +31,7 @@ export default class Preview extends Component {
             textFontSize: 1,
             activeSection: 'left',
             sectionEntityName: '',
-            selectedEntity: ''
+            selectedEntity: '',
 
         }
     }
@@ -53,7 +52,19 @@ export default class Preview extends Component {
 
 
     goToBuyPage() {
-        this.props.history.push('/resume-builder/buy')
+        const {userInfo:{order_data},history,showGenerateResumeModal,reGeneratePDF,hideGenerateResumeModal} = this.props;
+        if(order_data && order_data.id){
+            showGenerateResumeModal()
+            reGeneratePDF(order_data.id)
+            setTimeout(function() {
+                window.location.href = `${siteDomain}/dashboard`
+                hideGenerateResumeModal()
+            }, 10000);
+        }
+        else{
+            history.push('/resume-builder/buy')
+        }
+        
     }
 
 
@@ -117,7 +128,6 @@ export default class Preview extends Component {
     }
 
     async componentDidMount() {
-
         this.setState({
             currentTab: 1
         })
@@ -328,8 +338,7 @@ export default class Preview extends Component {
                 selectedEntity: currentEntity
             })
         }
-        if (this.state.currentTab === 2 && prevState.currentTab !== this.state.currentTab) {
-
+        if (this.state.currentTab === 2) {
             this.handleFontSize()
         }
         if(entity_position !== prevProps.template.entity_position){
@@ -349,7 +358,7 @@ export default class Preview extends Component {
 
         return (
             <div className="preview-section">
-                <AlertModal {...this.props} isPreview={true} />
+                <AlertModal {...this.props} isPreview={true}  />
                 <strong>Complete your customisation</strong>
                 <Accordion
                     preExpanded={["1"]}>
@@ -566,7 +575,7 @@ export default class Preview extends Component {
                     </div>
                 </Accordion>
                 < button
-                    className="orange-button preview-section__orange-button mt-40"
+                    className="orange-button preview-section__orange-button mt-20 mb-20"
                     onClick={this.goToBuyPage}> Get your resume
                 </button>
             </div>

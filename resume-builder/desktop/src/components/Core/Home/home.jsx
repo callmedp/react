@@ -7,12 +7,15 @@ import ResumeSlider from "./ResumeSlider/resumeSlider.jsx";
 import Testimonial from "./Testimonial/testimonial.jsx";
 import Footer from "../../Common/Footer/footer.jsx";
 import Header from "../../Common/Header/header.jsx";
-import {Link} from 'react-router-dom'
 import LoaderPage from '../../Loader/loaderPage.jsx'
-import {Events, animateScroll as scroll, scrollSpy, scroller} from 'react-scroll';
+import {Events, scroller} from 'react-scroll';
 import queryString from "query-string";
 import {hideModal, showModal} from "../../../store/ui/actions";
 import {displaySelectedTemplate} from '../../../store/template/actions'
+import {feedbackRenderField} from "../../FormHandler/formFieldRenderer.jsx";
+import {Field,reduxForm} from "redux-form";
+import validate from '../../FormHandler/validations/landingPage/validate'
+
 import Swal from 'sweetalert2'
 
 
@@ -21,6 +24,7 @@ class Home extends Component {
         super(props);
         this.scrollTo = this.scrollTo.bind(this);
         this.addclass = this.addclass.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
         this.state = {
             'scrolled': false,
             'token': '',
@@ -33,8 +37,14 @@ class Home extends Component {
         const token = (values && values.token) || '';
         this.state.token = token;
         this.feedbackForm = this.feedbackForm.bind(this);
-        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
+        this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
     }
+
+       handleSubmit(values) {
+        values = {...values,lsource:"8"};
+        this.props.feedback(values);
+    }
+
 
     scrollTo(elem) {
         scroller.scrollTo(elem, {
@@ -99,7 +109,7 @@ class Home extends Component {
 
 
     render() {
-        const {ui: {loader}, userInfo: {first_name}} = this.props;
+        const {handleSubmit,ui: {loader}, userInfo: {first_name}} = this.props;
         const {name_error, email_error, message_error} = this.state;
         return (
             <div className="nav-fixed">
@@ -278,7 +288,7 @@ class Home extends Component {
 
                 <Testimonial/>
 
-                <section className="section-container flex-container pb-0">
+                <section className="section-container flex-container text-center">
                     <div className="shinelearning">
                         <span className="icon-shinelearning"></span>
                         <p>Shine Learning is India’s largest professional courses and career skills portal. Launched by
@@ -291,29 +301,40 @@ class Home extends Component {
                             <li>Talent economy</li>
                         </ul>
                     </div>
-                    <form id="feedback">
-                        <div className="reachout-tous">
+                    <form id="feedback" onSubmit={handleSubmit((values) => this.handleSubmit(values))}>
+                        <div className="reachout-tous hidden">
+
                             <h2>Reach out to us</h2>
                             <strong>Feel free to share your feedback with us</strong>
 
                             <div className={"flex-container"}>
-                                <input type="text" name="" placeholder="Name" id="name"
-                                       className={(name_error ? "error" : '')}/>
-                                {/* { name_error ?<p>Required</p> : ''} */}
+                                <Field  component = {feedbackRenderField}
+                                        type="text"
+                                        name="name"
+                                        label="Name"
+                                        className={(name_error ? "error" : '')}/>
                             </div>
                             <div className={"flex-container"}>
-                                <input type="text" name="" placeholder="Email" id="email"
-                                       className={(email_error ? "error" : '')}/>
-                                {/* { email_error ?<p>Required</p> : ''} */}
+                                <Field  component={feedbackRenderField}
+                                        type="number"
+                                        name="number"
+                                        label="Mobile Number" />
                             </div>
                             <div className={"flex-container"}>
-                                <input type="text" name="" placeholder="Message" id="message"
-                                       className={(message_error ? "error" : '')}/>
-                                {/* { message_error ?<p>Required</p> : ''} */}
+                                <Field  component={feedbackRenderField}
+                                        type="text"
+                                        name="email"
+                                        label="Email"
+                                        className={(email_error ? "error" : '')}/>
                             </div>
-                            <button className="orange-button" type="submit" onClick={(e) => {
-                                this.feedbackForm(e)
-                            }}>Submit
+                            <div className={"flex-container"}>
+                                <Field  component={feedbackRenderField}
+                                        type="text"
+                                        name="msg"
+                                        label="Message"
+                                        className={(message_error ? "error" : '')}/>
+                            </div>
+                            <button className="orange-button" type="submit" >Submit
                             </button>
                         </div>
                     </form>
@@ -325,6 +346,14 @@ class Home extends Component {
     }
 }
 
+
+export const FeedBackForm = reduxForm({
+    form: 'feedback',
+    enableReinitialize: true,
+    validate
+})(Home);
+
+
 const mapStateToProps = (state) => {
     return {
         userInfo: state.personalInfo,
@@ -332,6 +361,7 @@ const mapStateToProps = (state) => {
         template: state.template
     }
 };
+
 
 const mapDispatchToProps = (dispatch) => {
     return {
@@ -349,8 +379,11 @@ const mapDispatchToProps = (dispatch) => {
         },
         displaySelectedTemplate(templateId) {
             return dispatch(displaySelectedTemplate(templateId))
+        },
+         'feedback': (values) => {
+            return dispatch(actions.feedbackSubmit(values))
         }
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(FeedBackForm);

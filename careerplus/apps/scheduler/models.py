@@ -13,7 +13,8 @@ TASK_TYPE = (
     (3, 'Upload Candidate Certificate'),
     (4, 'Generate Product  List'),
     (5, 'Encrypted URLs for Mailer'),
-    (6, 'Generate Compliance Report')
+    (6, 'Generate Compliance Report'),
+    (7, 'Pixel Report Generation')
 )
 
 TASK_STATUS = (

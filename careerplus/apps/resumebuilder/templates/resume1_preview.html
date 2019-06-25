@@ -18,12 +18,12 @@
 {% endif %}
 <div style="max-width: 1536px; width: 100%; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777; float: left; line-height: 20px; word-break: break-word;">
 
-    <div style="display: flex; flex-direction: row; align-items: flex-start; width: 100%;">
+    <div style="display: flex; display: -webkit-box; display: -ms-flexbox; width: 100%; vertical-align: top;">
         <!--left column-->
-        <div style="flex: 0 1 720px; background: #ffffff; padding: 3%; vertical-align: top;">
+        <div style="width: 46%; flex: 46%; -webkit-box-flex: 46%; -ms-flex: 46%; background: #ffffff; padding: 3%; vertical-align: top;">
             <div style="display: block; text-align: center; margin-bottom: 10%;">
                 <h1 style="margin: 0; color:{{ current_config.color|background_color_choice }}; font-size: 32px; line-height: 32px; font-weight: bold; text-transform: uppercase;">{{ candidate.first_name }} {{ candidate.last_name }}</h1>
-                <strong style="display: block; font-style: italic; font-size: 18px; color: #777777; font-weight: normal; margin: 10px 0 20px 0;">{{ latest_exp }}</strong>
+                <strong style="display: block; font-style: italic; font-size: 18px; color: #777777; font-weight: normal; margin: 10px 0 20px 0; text-transform: capitalize;">{{ latest_exp }}</strong>
                 <span style="display: block; text-align: center;">
               {% if candidate.image %}
                   <img src="{{ candidate.image }}" width="205" height="205" alt="Resume"
@@ -69,7 +69,7 @@
         </div>
 
         <!--right column-->
-        <div style="flex: 1 1 auto; background: #ffffff; padding: 3%; vertical-align: top;">
+        <div style="width: 46%; flex: 46%; -webkit-box-flex: 46%; -ms-flex: 46%; background: #ffffff; padding: 3%; vertical-align: top;">
 
             <!--Work experience-->
             {% if entity_position.6.active %}

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Field, reduxForm, FieldArray} from "redux-form";
+import {reduxForm, FieldArray} from "redux-form";
 import * as actions from "../../../../../../store/education/actions";
 import {connect} from "react-redux";
 import moment from "moment";
@@ -8,6 +8,7 @@ import validate from '../../../../../FormHandler/validations/education/validate'
 import {scroller} from "react-scroll/modules";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
+import {siteDomain} from '../../../../../../Utils/domains'
 
 
 class Education extends Component {
@@ -29,6 +30,7 @@ class Education extends Component {
     }
 
     async handleSubmit(values, entityLink) {
+         const {userInfo:{order_data},hideGenerateResumeModal,showGenerateResumeModal,history,reGeneratePDF} = this.props
         const {list} = values;
         if (list.length) {
             await this.props.bulkUpdateOrCreate(list);
@@ -36,7 +38,17 @@ class Education extends Component {
                 submit: true
             })
             if (entityLink) this.props.history.push(entityLink);
-            else this.props.history.push('/resume-builder/buy/')
+            else if(order_data && order_data.id){
+            showGenerateResumeModal()
+            reGeneratePDF(order_data.id)
+            setTimeout(function() {
+                window.location.href = `${siteDomain}/dashboard`
+                hideGenerateResumeModal()
+            }, 10000);
+        }
+        else{
+            history.push(`/resume-builder/buy`) 
+        }
         }
     }
 
@@ -127,7 +139,7 @@ class Education extends Component {
 
     render() {
         const {
-            handleSubmit, ui: {loader}, saveTitle, isEditable,
+            handleSubmit,userInfo:{order_data}, ui: {loader}, saveTitle, isEditable,
             editHeading, entityName, nextEntity, handleInputValue, showAlertModal,history, changeOrderingUp
             , changeOrderingDown
         } = this.props;
@@ -156,7 +168,7 @@ class Education extends Component {
                 />
 
                     <SavePreviewButtons 
-                        showAlertModal={showAlertModal} context={this} history={history}
+                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data}
                         nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
                     />
 

@@ -7,9 +7,8 @@ class SerializerFieldsMixin(object):
     Don't return any extra fields in serializer.
     """
     def get_fields(self):
-
         all_fields = super(SerializerFieldsMixin, self).get_fields()
-        asked_fields = self.context.get('asked_fields',"").split(",")
+        asked_fields = self.context.get('asked_fields',"")
         if not asked_fields:
             return all_fields
         all_fields = OrderedDict([(k, v) for k, v in all_fields.items() if k in asked_fields])
@@ -25,9 +24,11 @@ class FieldFilterMixin(object):
 
     def get_required_fields(self):
         if self.request.GET.get("fl", None):
-            return self.request.GET.get("fl")
+            return self.request.GET.get("fl").split(',')
+
         try:
-            return self.fields
+            instance = self.get_object()
+            return [field.name for field in instance._meta.fields if field]
         except:
             return []
 
@@ -38,7 +39,6 @@ class FieldFilterMixin(object):
         if asked_fields and self.request.method in methods_to_act_on:
             context["asked_fields"] = asked_fields
         return context
-
 
 
 class ListSerializerContextMixin(object):

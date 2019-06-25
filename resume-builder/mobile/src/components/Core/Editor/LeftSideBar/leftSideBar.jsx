@@ -106,7 +106,7 @@ class LeftSideBar extends Component {
 
     render() {
         const {type,sidenav_active_pos,link} = this.state;
-        const {formData,ui:{formName,alertModalStatus},personalInfo:{first_name,entity_preference_data},history,updateAlertModalStatus} = this.props
+        const {formData,ui:{formName,alertModalStatus,generateResumeModal},personalInfo:{first_name,entity_preference_data,order_data},history,updateAlertModalStatus} = this.props
         let error = false;
         const obj = formData && formData[formName] || {};
         let syncErrors = obj['syncErrors'] || {};
@@ -117,7 +117,7 @@ class LeftSideBar extends Component {
         }
         return (
             <React.Fragment>
-                <AlertModal modal_status={alertModalStatus} link={link} history={history} newUser={newUser} closeModal={this.closeModal}/>
+                <AlertModal modal_status={alertModalStatus ||generateResumeModal} generateResumeModal={generateResumeModal} link={link} history={history} newUser={newUser} closeModal={this.closeModal}/>
                 {(entity_preference_data.length) ?
                     <div>
                         <div className={"overlay-sidenav"}></div>

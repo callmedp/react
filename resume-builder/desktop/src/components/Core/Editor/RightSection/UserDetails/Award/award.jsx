@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Field, FieldArray, reduxForm} from "redux-form";
+import {FieldArray, reduxForm} from "redux-form";
 import * as actions from "../../../../../../store/award/actions";
 import {connect} from "react-redux";
 import moment from "moment";
@@ -8,6 +8,7 @@ import {AwardRenderer} from "./awardRenderer";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 import {scroller} from "react-scroll/modules";
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
+import {siteDomain} from '../../../../../../Utils/domains'
 
 class Award extends Component {
     constructor(props) {
@@ -42,7 +43,7 @@ class Award extends Component {
     async updateInfoBeforeLoss(){
         let { initialValues, formData: {award: {values, syncErrors}}} = this.props;
         let error = false;
-        (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el || {}).map(key => (!!el[key] ? error = true : false)));
+        ((syncErrors && syncErrors['list']) || []).map(el => Object.keys(el || {}).map(key => (!!el[key] ? error = true : false)));
         if (!error && !this.state.submit && JSON.stringify(initialValues)!==JSON.stringify(values)) await this.props.bulkUpdateOrCreate(values && values['list'])
     }
 
@@ -52,6 +53,7 @@ class Award extends Component {
     }
 
     async handleSubmit(values, entityLink) {
+         const {userInfo:{order_data},hideGenerateResumeModal,showGenerateResumeModal,history,reGeneratePDF} = this.props
         const {list} = values;
         if (list.length) {
             await this.props.bulkUpdateOrCreate(list);
@@ -59,7 +61,17 @@ class Award extends Component {
                 submit: true
             })
             if (entityLink) this.props.history.push(entityLink);
-            else this.props.history.push('/resume-builder/buy/')
+            else if(order_data && order_data.id){
+            showGenerateResumeModal()
+            reGeneratePDF(order_data.id)
+            setTimeout(function() {
+                window.location.href = `${siteDomain}/dashboard`
+                hideGenerateResumeModal()
+            }, 10000);
+        }
+        else{
+            history.push(`/resume-builder/buy`) 
+        }
         }
     }
 
@@ -99,7 +111,7 @@ class Award extends Component {
 
     render() {
         const {
-            handleSubmit, ui: {loader}, saveTitle, editHeading,
+            handleSubmit,userInfo:{order_data}, ui: {loader}, saveTitle, editHeading,
             isEditable, entityName, handleInputValue, nextEntity, showAlertModal,history, changeOrderingDown, changeOrderingUp
         } = this.props;
 
@@ -122,7 +134,7 @@ class Award extends Component {
                             expanded={this.state.active}
                 />
                 <SavePreviewButtons 
-                        showAlertModal={showAlertModal} context={this} history={history}
+                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data}
                         nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
                     />
 

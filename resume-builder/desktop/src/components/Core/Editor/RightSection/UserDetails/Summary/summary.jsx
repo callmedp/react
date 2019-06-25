@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import * as actions from '../../../../../../store/personalInfo/actions/index';
-import {fetchUserExperience,fetchJobTitles} from '../../../../../../store/experience/actions/index';
+import {fetchUserExperience, fetchJobTitles} from '../../../../../../store/experience/actions/index';
 import {hideSuggestionModal, showSuggestionModal} from '../../../../../../store/ui/actions/index';
 import SuggestionModal from '../../../../../Modal/suggestionModal'
 
@@ -12,8 +12,8 @@ import styles from './summary.scss'
 import {
     renderTextArea
 } from "../../../../../FormHandler/formFieldRenderer.jsx";
-import LoaderSection from "../../../../../Loader/loaderSection.jsx";
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
+import {siteDomain} from '../../../../../../Utils/domains'
 
 
 class Summary extends Component {
@@ -37,28 +37,39 @@ class Summary extends Component {
 
     }
 
-    async componentDidUpdate(prevProps){
-        const {ui:{previewClicked},previewButtonClicked,history} = this.props;
-        if(previewClicked !== prevProps.ui.previewClicked && previewClicked){
+    async componentDidUpdate(prevProps) {
+        const {ui: {previewClicked}, previewButtonClicked, history} = this.props;
+        if (previewClicked !== prevProps.ui.previewClicked && previewClicked) {
             await this.updateInfoBeforeLoss()
-            this.setState({submit:true})
+            this.setState({submit: true})
             previewButtonClicked(false)
             history.push('/resume-builder/preview/')
         }
     }
 
-    async updateInfoBeforeLoss(){
-        let {initialValues, formData: {summary: {values}}} = this.props;
-        if (!this.state.submit && JSON.stringify(initialValues)!==JSON.stringify(values)) await this.props.onSubmit(values)
+    async updateInfoBeforeLoss() {
+        let {initialValues, formData: {summary: {values}}, personalInfo} = this.props;
+        if (!this.state.submit && JSON.stringify(initialValues) !== JSON.stringify(values)) await this.props.onSubmit(values, personalInfo)
     }
 
     async handleSubmit(values, entityLink) {
-        await this.props.onSubmit(values);
+        const {userInfo: {order_data}, hideGenerateResumeModal, showGenerateResumeModal, history, reGeneratePDF, personalInfo} = this.props;
+        await this.props.onSubmit(values, personalInfo);
         this.setState({
             submit: true
         })
-        if (entityLink) this.props.history.push(entityLink);
-        else this.props.history.push('/resume-builder/buy/')
+        if (entityLink) {
+            this.props.history.push(entityLink)
+        } else if (order_data && order_data.id) {
+            showGenerateResumeModal()
+            reGeneratePDF(order_data.id)
+            setTimeout(function () {
+                window.location.href = `${siteDomain}/dashboard`
+                hideGenerateResumeModal()
+            }, 10000);
+        } else {
+            history.push(`/resume-builder/buy`)
+        }
     }
 
 
@@ -66,44 +77,43 @@ class Summary extends Component {
         this.updateInfoBeforeLoss()
     }
 
-    async openModal(){
+    async openModal() {
         const {experience} = this.props;
         let latest_experience = ''
-        let  latest_end_date = 'None'
-        for (let exp of experience.list){
-            if (exp.is_working){
+        let latest_end_date = 'None'
+        for (let exp of experience.list) {
+            if (exp.is_working) {
                 latest_experience = exp.job_profile
                 break
-            }
-            else if(latest_end_date === 'None'){
+            } else if (latest_end_date === 'None') {
                 latest_end_date = exp.end_date
                 latest_experience = exp.job_profile
-            }
-            else{
-                if( latest_end_date < exp.end_date){
+            } else {
+                if (latest_end_date < exp.end_date) {
                     latest_end_date = exp.end_date
                     latest_experience = exp.job_profile
                 }
-                    
+
             }
-                
+
         }
-            
+
         let label = (latest_experience && latest_experience.label) || ''
-        await this.props.fetchJobTitles(label,'summary')
-        this.setState({modal_status:true})
+        await this.props.fetchJobTitles(label, 'summary')
+        this.setState({modal_status: true})
     }
 
-    closeModal(suggestions){
-        const {extra_info,upateSummaryWithSuggestion} = this.props
-        if(Object.keys(suggestions).length){
+    closeModal(suggestions) {
+        const {extra_info, upateSummaryWithSuggestion} = this.props
+        if (Object.keys(suggestions).length) {
             let suggestionsList = (extra_info ? extra_info + "\n" : '');
-            Object.keys(suggestions).map((el,index) => {
-                suggestionsList += suggestions[el] + (index+1 === Object.keys(suggestions).length ? "" : '\n')
+            Object.keys(suggestions).map((el, index) => {
+                suggestionsList += suggestions[el] + (index + 1 === Object.keys(suggestions).length ? "" : '\n')
+                return el;
             })
             upateSummaryWithSuggestion(suggestionsList)
         }
-        this.setState({modal_status:false})
+        this.setState({modal_status: false})
     }
 
 
@@ -113,11 +123,12 @@ class Summary extends Component {
 
 
     render() {
-        const {extra_info, ui: { suggestions}, handleInputValue, handleSubmit, showAlertModal,history, isEditable, editHeading, saveTitle, entityName, nextEntity} = this.props;
-        const {modal_status} =this.state;
+        const {extra_info, ui: {suggestions}, handleInputValue, handleSubmit, showAlertModal, history, isEditable, editHeading, saveTitle, entityName, nextEntity, personalInfo: {order_data}} = this.props;
+        const {modal_status} = this.state;
         return (
             <div>
-                <SuggestionModal label={'Summary'} length={extra_info.length} maxLength="500" modal_status={modal_status} closeModal={this.closeModal} suggestions={suggestions} />
+                <SuggestionModal label={'Summary'} length={extra_info.length} maxLength="500"
+                                 modal_status={modal_status} closeModal={this.closeModal} suggestions={suggestions}/>
                 <section className="head-section">
                     <span className="icon-box"><i className="icon-summary1"/></span>
                     {!!(!isEditable) ?
@@ -125,7 +136,8 @@ class Summary extends Component {
                         </h2> :
                         <React.Fragment>
                             <input autoFocus type="text" name="" defaultValue={entityName}
-                                   onChange={(event) => handleInputValue(event.target.value || entityName)} maxLength="20"/>
+                                   onChange={(event) => handleInputValue(event.target.value || entityName)}
+                                   maxLength="20"/>
                             <span onClick={(event) => saveTitle(event, 6)} className="icon-tick"/>
                         </React.Fragment>
                     }
@@ -141,13 +153,15 @@ class Summary extends Component {
                                 component={renderTextArea} type={"textarea"} name="extra_info" maxLength={"500"}
                                 className="summary-box--summary-txt" rows="10" value={extra_info}/>
                         </div>
-                        <span className="add-suggested mt-15" onClick={()=>{this.openModal()}}>Add suggested summary</span>
+                        <span className="add-suggested mt-15" onClick={() => {
+                            this.openModal()
+                        }}>Add suggested summary</span>
 
                     </section>
 
 
-                    <SavePreviewButtons 
-                        showAlertModal={showAlertModal} context={this} history={history}
+                    <SavePreviewButtons
+                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data}
                         nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
                     />
                 </form>
@@ -169,7 +183,7 @@ const mapStateToProps = (state) => {
         personalInfo: state.personalInfo,
         ui: state.ui,
         experience: state.experience,
-        extra_info: state.form && state.form.summary &&  state.form.summary.values &&  state.form.summary.values.extra_info || ''
+        extra_info: (state.form && state.form.summary && state.form.summary.values && state.form.summary.values.extra_info) || ''
     }
 };
 
@@ -190,14 +204,16 @@ const mapDispatchToProps = (dispatch) => {
                 return dispatch(fetchJobTitles({inputValue, suggestionType, res, rej}))
             })
         },
-        "onSubmit": (personalDetails) => {
+        "onSubmit": (personalDetails, storeInformation) => {
             const {gender, extracurricular} = personalDetails;
+            const {entity_preference_data} = storeInformation;
             personalDetails = {
                 ...personalDetails,
                 ...{
-                    'gender': gender && gender['value'] || '',
+                    'gender': (gender && gender['value']) || '',
                     'extracurricular': extracurricular instanceof Array ?
-                        (extracurricular || []).filter(el => el !== undefined).map(el => el.value).join(',') : ''
+                        (extracurricular || []).filter(el => el !== undefined).map(el => el.value).join(',') : '',
+                    'entity_preference_data': (entity_preference_data || []).map(el => el)
                 }
             };
 

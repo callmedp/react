@@ -193,6 +193,27 @@ class Order(AbstractAutoDate):
             return oi.order.id
         return None
 
+    @property
+    def masked_email(self):
+        if not self.email:
+            return ""
+        email = self.email
+        return email[:2] + "".join(["*" for i in list(email[2:len(email) - 5])]) + email[-5:]
+
+    @property
+    def masked_mobile(self):
+        if not self.mobile:
+            return ""
+        mobile = str(self.mobile)
+        return mobile[:2] + "".join(["*" for i in list(mobile[2:len(mobile)-2])]) + mobile[-2:]
+
+    @property
+    def masked_altmobile(self):
+        if not self.alt_mobile:
+            return ""
+        mobile = str(self.alt_mobile)
+        return mobile[:2] + "".join(["*" for i in list(mobile[2:len(mobile)-2])]) + mobile[-2:]
+
     def get_currency_code(self):
         return CURRENCY_SYMBOL_CODE_MAPPING.get(self.currency)
 

@@ -2,8 +2,9 @@ import React ,{Component} from 'react';
 import Header from '../../../Common/Header/header.jsx';
 import './preview.scss';
 import {connect} from "react-redux";
-import {fetchTemplate,updateModalStatus,customizeTemplate,fetchDefaultCustomization,reorderSection} from "../../../../store/template/actions/index"
+import {fetchTemplate,updateModalStatus,customizeTemplate,fetchDefaultCustomization,reorderSection,reGeneratePDF,} from "../../../../store/template/actions/index"
 import {updatePersonalInfo,fetchPersonalInfo} from "../../../../store/personalInfo/actions/index"
+import {updateAlertModalStatus,showGenerateResumeModal,hideGenerateResumeModal} from "../../../../store/ui/actions/index"
 import Loader from '../../../Common/Loader/loader.jsx';
 import ChangeTemplateModal from './changeTemplateModal.jsx';
 import moment from 'moment'
@@ -16,6 +17,8 @@ import {
 } from "react-accessible-accordion";
 import InputRange from 'react-input-range';
 import Swal from 'sweetalert2'
+import {siteDomain} from "../../../../Utils/domains";
+import AlertModal from '../../../Common/AlertModal/alertModal.jsx';
 
 class Preview extends Component {
 
@@ -40,7 +43,7 @@ class Preview extends Component {
         this.handleActiveSection = this.handleActiveSection.bind(this);
         this.handleZoomTemplate = this.handleZoomTemplate.bind(this);
         this.showReorderErrorToast = this.showReorderErrorToast.bind(this);
-
+        this.getResume = this.getResume.bind(this);
     }
 
     componentWillUpdate(prevProps){
@@ -134,6 +137,21 @@ class Preview extends Component {
         })
     }
 
+    getResume(){
+        const {personalInfo:{order_data},history,reGeneratePDF,showGenerateResumeModal,hideGenerateResumeModal} = this.props;
+        if(order_data && order_data.id){
+            showGenerateResumeModal()
+            reGeneratePDF(order_data.id)
+            setTimeout(function() {
+                window.location.href = `${siteDomain}/dashboard`
+                hideGenerateResumeModal()
+            }, 10000);
+        }
+        else{
+            history.push(`/resume-builder/buy`)
+        }
+    }
+
     async handleCustomization(data) {
         await this.props.customizeTemplate(data)
         this.props.fetchTemplate();
@@ -142,10 +160,11 @@ class Preview extends Component {
 
     render(){
         const {customize,currentTab,selectedColor,headingFontSize,textFontSize,sectionEntityName,startingReorderUpDowmIndex,zoomIn} = this.state
-        const {template:{html,zoomInHtml,entity_position,entity_id_count_mapping},ui:{mainloader},personalInfo:{selected_template}} = this.props
+        const {template:{html,zoomInHtml,entity_position,entity_id_count_mapping},ui:{mainloader,alertModalStatus,generateResumeModal},personalInfo:{selected_template,order_data},history} = this.props
         return(
             <div className="preview">
-               <Header page={'preview'} {...this.props}/>
+               <Header page={'preview'} {...this.props} order_data={order_data} />
+               <AlertModal modal_status={alertModalStatus|| generateResumeModal}  history={history} generateResumeModal={generateResumeModal}/>
                <ChangeTemplateModal {...this.props}/>
                
                {mainloader ? <Loader/> :""}
@@ -161,7 +180,7 @@ class Preview extends Component {
 
                <div className="preview__bottom-btns pos-fixed">
                     <span className="btn btn__round btn--outline" onClick={()=>{this.setState({customize:true})}}>Customize template</span>
-                    <span className="btn btn__round btn__primary" onClick={()=>{this.props.history.push(`/resume-builder/buy`) }}>Get your resume</span>
+                    <span className="btn btn__round btn__primary" onClick={this.getResume }>Get your resume</span>
                </div>
 
                {customize ?
@@ -402,6 +421,9 @@ const mapDispatchToProps = (dispatch) => {
         "fetchTemplate": () => {
             return dispatch(fetchTemplate())
         },
+        'reGeneratePDF': (data) => {
+            return dispatch(reGeneratePDF(data))
+        },
         "updateModalStatus": (data) => {
             return dispatch(updateModalStatus(data))
         },
@@ -418,6 +440,15 @@ const mapDispatchToProps = (dispatch) => {
         },
         "reorderSection": (data) => {
             return dispatch(reorderSection(data))
+        },
+        "updateAlertModalStatus": (data) => {
+            return dispatch(updateAlertModalStatus(data))
+        },
+        'showGenerateResumeModal': () => {
+            return dispatch(showGenerateResumeModal())
+        },
+        'hideGenerateResumeModal': () => {
+            return dispatch(hideGenerateResumeModal())
         },
         "updateSelectedTemplate": (personalInfo) => {
             let { date_of_birth, extracurricular,image,gender} = personalInfo;

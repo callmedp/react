@@ -7,6 +7,7 @@ import validate from '../../../../../FormHandler/validations/reference/validate'
 import {scroller} from "react-scroll/modules";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
+import {siteDomain} from '../../../../../../Utils/domains'
 
 
 class Reference extends Component {
@@ -26,6 +27,7 @@ class Reference extends Component {
     }
 
     async handleSubmit(values, entityLink) {
+         const {userInfo:{order_data},hideGenerateResumeModal,showGenerateResumeModal,history,reGeneratePDF} = this.props
 
         const {list} = values;
         if (list.length) {
@@ -34,7 +36,17 @@ class Reference extends Component {
                 submit: true
             })
             if (entityLink) this.props.history.push(entityLink);
-            else this.props.history.push('/resume-builder/buy/')
+            else if(order_data && order_data.id){
+            showGenerateResumeModal()
+            reGeneratePDF(order_data.id)
+            setTimeout(function() {
+                window.location.href = `${siteDomain}/dashboard`
+                hideGenerateResumeModal()
+            }, 10000);
+        }
+        else{
+            history.push(`/resume-builder/buy`) 
+        }
         }
     }
 
@@ -104,7 +116,7 @@ class Reference extends Component {
 
     render() {
         const {
-            handleSubmit, ui: {loader}, isEditable, changeOrderingDown,
+            handleSubmit,userInfo:{order_data}, ui: {loader}, isEditable, changeOrderingDown,
             editHeading, saveTitle, entityName, nextEntity, showAlertModal,history, handleInputValue,changeOrderingUp
         } = this.props;
         return (
@@ -130,7 +142,7 @@ class Reference extends Component {
                 />
 
                 <SavePreviewButtons 
-                        showAlertModal={showAlertModal} context={this} history={history}
+                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data}
                         nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
                     />
             </form>

@@ -1,8 +1,8 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import './edit.scss'
 import queryString from "query-string";
-import {formCategoryList, entityList} from "../../../../../Utils/formCategoryList";
+import {formCategoryList} from "../../../../../Utils/formCategoryList";
 import {connect} from 'react-redux'
 import * as actions from '../../../../../store/personalInfo/actions/index'
 import {showAlertModal, hideAlertModal} from '../../../../../store/ui/actions/index'
@@ -19,21 +19,34 @@ class Edit extends Component {
             preferenceList: this.props.entityList,
             nextLink: '',
             elementToDelete: null,
-            menu_modal_status: false
+            menu_modal_status: false,
         };
-        
+
     }
+
 
     static getDerivedStateFromProps(nextProps, prevState) {
         const values = queryString.parse(nextProps.location.search);
+        const entityPreferenceList = nextProps.entityList;
         const {ui: {formName}} = nextProps;
+        let currentEntityIndex = Object.values(formCategoryList).findIndex(item => item['itemType'] === formName);
+        if (entityPreferenceList && entityPreferenceList.length) {
+            if (!(entityPreferenceList[currentEntityIndex] && entityPreferenceList[currentEntityIndex].active)) {
+                for (let ind = currentEntityIndex - 1; ind >= 0; ind--) {
+                    if (entityPreferenceList[ind].active) {
+                        nextProps.history.push(formCategoryList[ind + 1].link);
+                        return null;
+                    }
+                }
+            }
+        }
         if (!(values && values.type)) {
             if (formName) {
                 nextProps.history.push(`/resume-builder/edit/?type=${formName}`);
             } else nextProps.history.push('/resume-builder/edit/?type=profile');
         }
         return ({
-            type: values && values.type || ''
+            type: (values && values.type) || ''
         })
     }
 
@@ -60,27 +73,29 @@ class Edit extends Component {
         }
     }
 
-    openMenuModal(){
-        this.setState({menu_modal_status:true})
+    openMenuModal() {
+        this.setState({menu_modal_status: true})
     }
-    closeMenuModal(){
-        this.setState({menu_modal_status:false})
+
+    closeMenuModal() {
+        this.setState({menu_modal_status: false})
     }
 
     render() {
-        const {type, preferenceList, nextLink, elemToDelete,menu_modal_status} = this.state;
-        let {formData, ui: {formName},updateCategoryEntity,showAlertModal} = this.props;
+        const {type, preferenceList, nextLink, elemToDelete, menu_modal_status} = this.state;
+        let {formData, ui: {formName}, updateCategoryEntity, showAlertModal, userInfo: {order_data}} = this.props;
         let error = false;
-        const obj = formData && formData[formName] || {};
+        const obj = (formData && formData[formName]) || {};
         let syncErrors = obj['syncErrors'] || {};
-        const newUser = localStorage.getItem('newUser')
+        const newUser = localStorage.getItem('newUser');
         if ('fields' in obj) {
-            if ('list' in syncErrors) (syncErrors && syncErrors['list'] || []).map(el => (el ? Object.keys(el) : []).map(key => (!!el[key] ? error = true : false)))
-            else Object.keys(syncErrors || {}).map(key => (!!syncErrors[key] ? error = true : false));
+            if ('list' in syncErrors) ((syncErrors && syncErrors['list']) || []).map(el => (el ? Object.values(el)
+                : []).map(value => (!!value ? error = true : false)))
+            else Object.values(syncErrors || {}).map(value => (!!value ? error = true : false));
         }
         return (
             <div className="edit-section">
-                <MenuModal 
+                <MenuModal
                     menu_modal_status={menu_modal_status}
                     closeMenuModal={this.closeMenuModal}
                     preferenceList={preferenceList}
@@ -91,6 +106,7 @@ class Edit extends Component {
                             nextLink={nextLink}
                             elemToDelete={elemToDelete}
                             newUser={newUser}
+                            order_data={order_data}
                 />
                 <strong>Complete your information</strong>
                 <ul>
@@ -102,15 +118,16 @@ class Edit extends Component {
                                     className={(type === itemType ? ' edit-section--active' : '')}>
                                     {
                                         !!(error || newUser) ?
-                                            <div onClick={() => this.showErrorMessage(link)} className={"non-link"}>
+                                            (<div onClick={() => this.showErrorMessage(link)} className={"non-link"}>
                                                 <span className={'mr-20 ' + icon}></span>
                                                 {elem['entity_text']}
-                                            </div>
+                                            </div>)
                                             :
-                                            <Link to={link} >
-                                                <span className={'mr-20 ' + icon}></span>
-                                                {elem['entity_text']}
-                                            </Link>
+                                            (<Link to={link}>
+                                                    <span className={'mr-20 ' + icon}></span>
+                                                    {elem['entity_text']}
+                                                </Link>
+                                            )
                                     }
                                 </li>
                             )
@@ -118,10 +135,12 @@ class Edit extends Component {
                     }
                 </ul>
 
-                <div className="edit-section--addmore" onClick={()=>{newUser ? showAlertModal('error') : this.openMenuModal()}}>
+                <div className="edit-section--addmore" onClick={() => {
+                    newUser ? showAlertModal('error') : this.openMenuModal()
+                }}>
                     + Add/Remove sections
                 </div>
-        </div>
+            </div>
         )
     }
 
@@ -129,7 +148,7 @@ class Edit extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        entityList: state.personalInfo && state.personalInfo.entity_preference_data || [],
+        entityList: (state.personalInfo && state.personalInfo.entity_preference_data) || [],
         ui: state.ui,
         formData: state && state.form
     }
@@ -137,9 +156,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        'updateCategoryEntity': (entity) => {
+        'updateCategoryEntity': (entity, showLoader = true) => {
             return new Promise((resolve, reject) => {
-                return dispatch(actions.updateEntityPreference({"entity_preference_data": entity,resolve,reject}))
+                return dispatch(actions.updateEntityPreference({
+                    "entity_preference_data": entity, showLoader,
+                    resolve, reject
+                }))
             })
         },
         'showAlertModal': (alertType) => {
@@ -147,7 +169,7 @@ const mapDispatchToProps = (dispatch) => {
         },
         'hideAlertModal': () => {
             return dispatch(hideAlertModal())
-        }
+        },
     }
 };
 

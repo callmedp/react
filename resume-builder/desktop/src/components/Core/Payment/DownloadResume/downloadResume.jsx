@@ -3,12 +3,11 @@ import './downloadResume.scss'
 import TopBar from '../../Editor/TopBar/topBar.jsx'
 import Header from '../../../Common/Header/header.jsx'
 import Footer from '../../../Common/Footer/footer.jsx'
-import {withRouter} from "react-router-dom";
 
 export default class DownloadResume extends Component {
     constructor(props) {
         super(props);
-        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
+        this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
     }
 
     render() {

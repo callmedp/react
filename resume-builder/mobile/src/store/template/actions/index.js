@@ -1,4 +1,4 @@
-import {FETCH_TEMPLATE,UPDATE_MODAL_STATUS,CUSTOMIZE_TEMPLATE,FETCH_DEFAULT_CUSTOMIZATION,FETCH_THUMBNAIL_IMAGES,REORDER_SECTION,FETCH_SELECTED_TEMPLATE_IMAGE} from './actionTypes'
+import {FETCH_TEMPLATE,UPDATE_MODAL_STATUS,CUSTOMIZE_TEMPLATE,FETCH_DEFAULT_CUSTOMIZATION,FETCH_THUMBNAIL_IMAGES,REORDER_SECTION,FETCH_SELECTED_TEMPLATE_IMAGE,RE_GENERATE_PDF} from './actionTypes'
 
 
 export const fetchTemplate = () => {
@@ -45,6 +45,13 @@ export const fetchSelectedTemplateImage = (payload) => {
 export const reorderSection = (payload) => {
     return {
         type: REORDER_SECTION,
+        payload
+    }
+}
+
+export const reGeneratePDF = (payload) => {
+    return {
+        type: RE_GENERATE_PDF,
         payload
     }
 }

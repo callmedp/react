@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './banner.scss'
-import {Events, animateScroll as scroll, scrollSpy, scroller} from 'react-scroll'
+import {Events, scroller} from 'react-scroll'
 
 export default class Banner extends Component {
 
@@ -8,7 +8,7 @@ export default class Banner extends Component {
     constructor(props) {
         super(props);
         this.scrollTo = this.scrollTo.bind(this);
-        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
+        this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
 
     }
 

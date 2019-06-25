@@ -1,7 +1,7 @@
 const validate = values => {
     const errors = {};
     const listErrors = []
-    values = values && values.list || [];
+    values = (values && values.list) || [];
     values.forEach((obj, objIndex) => {
         const objErrors = {}
         objErrors.institution_name = !obj || !obj.institution_name ? 'Required' : undefined;
@@ -18,7 +18,6 @@ const validate = values => {
         return errors;
 
     }
-
     return errors;
 
 };

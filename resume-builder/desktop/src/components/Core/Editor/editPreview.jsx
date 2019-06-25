@@ -7,13 +7,12 @@ import Footer from '../../Common/Footer/footer.jsx'
 import {connect} from 'react-redux';
 import RightSection from './RightSection/rightSection.jsx'
 import {withRouter} from "react-router-dom";
-import {siteDomain} from "../../../Utils/domains";
 import LoaderPage from "../../Loader/loaderPage.jsx";
 import * as actions from "../../../store/ui/actions"
-import {customizeTemplate, fetchDefaultCustomization, reorderSection} from "../../../store/template/actions"
+import {customizeTemplate, fetchDefaultCustomization, reorderSection,reGeneratePDF} from "../../../store/template/actions"
 import * as profileActions from "../../../store/personalInfo/actions"
 import SelectTemplateModal from '../../Modal/selectTemplateModal';
-import {showAlertModal, hideAlertModal,previewButtonClicked} from '../../../store/ui/actions/index'
+import {showAlertModal, hideAlertModal,previewButtonClicked,showGenerateResumeModal,hideGenerateResumeModal} from '../../../store/ui/actions/index'
 import moment from 'moment'
 
 class EditPreview extends Component {
@@ -108,6 +107,15 @@ const mapDispatchToProps = (dispatch) => {
         },
         'previewButtonClicked': (data) => {
             return dispatch(previewButtonClicked(data))
+        },
+        'reGeneratePDF': (data) => {
+            return dispatch(reGeneratePDF(data))
+        },
+        'showGenerateResumeModal': () => {
+            return dispatch(showGenerateResumeModal())
+        },
+        'hideGenerateResumeModal': () => {
+            return dispatch(hideGenerateResumeModal())
         }
     }
 }

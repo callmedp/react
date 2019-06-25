@@ -16,7 +16,6 @@ import queryString from 'query-string';
 import * as actions from '../../../../store/personalInfo/actions';
 import {currentForm, hideMoreSection} from '../../../../store/ui/actions';
 import {formCategoryList} from "../../../../Utils/formCategoryList";
-import { callbackify } from 'util';
 
 
 class RightSection extends Component {
@@ -122,13 +121,13 @@ class RightSection extends Component {
     renderSwitch() {
         const {entityList, ui: {showMoreSection}, hideMoreSection} = this.props;
         let entity, nextEntity;
-        const {isEditable, titleValue} = this.state;
+        const {isEditable} = this.state;
 
         switch (this.state.type) {
             case 'profile': {
                 entity = entityList && entityList[0];
                 nextEntity = entityList && entityList.find(el => el['entity_id'] > entity['entity_id'] && el['active'] === true);
-                nextEntity = nextEntity && formCategoryList[nextEntity['entity_id']] || undefined;
+                nextEntity = (nextEntity && formCategoryList[nextEntity['entity_id']]) || undefined;
                 return !!((showMoreSection)) ?
                     <div className="backtoedit">
                         <p>Add more section in your resume from left panel</p>
@@ -138,8 +137,8 @@ class RightSection extends Component {
                                     isEditable={isEditable}
                                     saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
                                     handlePreview={this.handlePreview}
-                                    entityName={entity && entity['entity_text'] || 'Personal Info'}
-                                    nextEntity={nextEntity && nextEntity['link'] || nextEntity}
+                                    entityName={(entity && entity['entity_text']) || 'Personal Info'}
+                                    nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
                                     editHeading={(elem) => this.editHeading(elem)}
                                     handleInputValue={(value) => this.handleInputValue(value)}
 
@@ -149,7 +148,7 @@ class RightSection extends Component {
             case 'education': {
                 entity = entityList && entityList[1];
                 nextEntity = entityList && entityList.find(el => el['entity_id'] > entity['entity_id'] && el['active'] === true);
-                nextEntity = nextEntity && formCategoryList[nextEntity['entity_id']] || undefined;
+                nextEntity = (nextEntity && formCategoryList[nextEntity['entity_id']]) || undefined;
 
                 return !!((showMoreSection)) ?
                     <div className="backtoedit">
@@ -160,8 +159,8 @@ class RightSection extends Component {
                                  isEditable={isEditable}
                                  handlePreview={this.handlePreview}
                                  editHeading={(elem) => this.editHeading(elem)}
-                                 entityName={entity && entity['entity_text'] || 'Education'}
-                                 nextEntity={nextEntity && nextEntity['link'] || nextEntity}
+                                 entityName={(entity && entity['entity_text']) || 'Education'}
+                                 nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
                                  changeOrderingUp={this.changeOrderingUp}
                                  changeOrderingDown={this.changeOrderingDown}
                                  saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
@@ -174,7 +173,7 @@ class RightSection extends Component {
             case 'experience': {
                 entity = entityList && entityList[2];
                 nextEntity = entityList && entityList.find(el => el['entity_id'] > entity['entity_id'] && el['active'] === true);
-                nextEntity = nextEntity && formCategoryList[nextEntity['entity_id']] || undefined;
+                nextEntity = (nextEntity && formCategoryList[nextEntity['entity_id']]) || undefined;
                 return !!(showMoreSection) ?
                     <div className="backtoedit">
                         <p>Add more section in your resume from left panel</p>
@@ -183,8 +182,8 @@ class RightSection extends Component {
                     : <Experience {...this.props}
                                   isEditable={isEditable}
                                   handlePreview={this.handlePreview}
-                                  nextEntity={nextEntity && nextEntity['link'] || nextEntity}
-                                  entityName={entity && entity['entity_text'] || 'Experience'}
+                                  nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
+                                  entityName={(entity && entity['entity_text']) || 'Experience'}
                                   saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
                                   changeOrderingUp={this.changeOrderingUp}
                                   changeOrderingDown={this.changeOrderingDown}
@@ -198,7 +197,7 @@ class RightSection extends Component {
             case 'project': {
                 entity = entityList && entityList[3];
                 nextEntity = entityList && entityList.find(el => el['entity_id'] > entity['entity_id'] && el['active'] === true);
-                nextEntity = nextEntity && formCategoryList[nextEntity['entity_id']] || undefined;
+                nextEntity = (nextEntity && formCategoryList[nextEntity['entity_id']]) || undefined;
                 return !!(showMoreSection) ?
                     <div className="backtoedit">
                         <p>Add more section in your resume from left panel</p>
@@ -207,8 +206,8 @@ class RightSection extends Component {
                     : <Project {...this.props}
                                isEditable={isEditable}
                                handlePreview={this.handlePreview}
-                               nextEntity={nextEntity && nextEntity['link'] || nextEntity}
-                               entityName={entity && entity['entity_text'] || 'Project'}
+                               nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
+                               entityName={(entity && entity['entity_text']) || 'Project'}
                                saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
                                changeOrderingUp={this.changeOrderingUp}
                                changeOrderingDown={this.changeOrderingDown}
@@ -221,7 +220,7 @@ class RightSection extends Component {
             case 'skill': {
                 entity = entityList && entityList[4];
                 nextEntity = entityList && entityList.find(el => el['entity_id'] > entity['entity_id'] && el['active'] === true);
-                nextEntity = nextEntity && formCategoryList[nextEntity['entity_id']] || undefined;
+                nextEntity = (nextEntity && formCategoryList[nextEntity['entity_id']]) || undefined;
 
                 return !!(showMoreSection) ?
                     <div className="backtoedit">
@@ -231,8 +230,8 @@ class RightSection extends Component {
                     : <Skill {...this.props}
                              isEditable={isEditable}
                              handlePreview={this.handlePreview}
-                             nextEntity={nextEntity && nextEntity['link'] || nextEntity}
-                             entityName={entity && entity['entity_text'] || 'Skill'}
+                             nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
+                             entityName={(entity && entity['entity_text']) || 'Skill'}
                              saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
                              changeOrderingUp={this.changeOrderingUp}
                              changeOrderingDown={this.changeOrderingDown}
@@ -245,7 +244,7 @@ class RightSection extends Component {
             case 'summary': {
                 entity = entityList && entityList[5];
                 nextEntity = entityList && entityList.find(el => el['entity_id'] > entity['entity_id'] && el['active'] === true);
-                nextEntity = nextEntity && formCategoryList[nextEntity['entity_id']] || undefined;
+                nextEntity = (nextEntity && formCategoryList[nextEntity['entity_id']]) || undefined;
 
                 return !!(showMoreSection) ?
                     <div className="backtoedit">
@@ -255,8 +254,8 @@ class RightSection extends Component {
                     : <Summary {...this.props}
                                isEditable={isEditable}
                                handlePreview={this.handlePreview}
-                               nextEntity={nextEntity && nextEntity['link'] || nextEntity}
-                               entityName={entity && entity['entity_text'] || 'Summary'}
+                               nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
+                               entityName={(entity && entity['entity_text']) || 'Summary'}
                                saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
                                editHeading={(elem) => this.editHeading(elem)}
                                handleInputValue={this.handleInputValue}
@@ -266,7 +265,7 @@ class RightSection extends Component {
             case 'award': {
                 entity = entityList && entityList[6];
                 nextEntity = entityList && entityList.find(el => el['entity_id'] > entity['entity_id'] && el['active'] === true);
-                nextEntity = nextEntity && formCategoryList[nextEntity['entity_id']] || undefined;
+                nextEntity = (nextEntity && formCategoryList[nextEntity['entity_id']]) || undefined;
 
                 return !!(showMoreSection) ?
                     <div className="backtoedit">
@@ -276,8 +275,8 @@ class RightSection extends Component {
                     : <Award {...this.props}
                              isEditable={isEditable}
                              handlePreview={this.handlePreview}
-                             nextEntity={nextEntity && nextEntity['link'] || nextEntity}
-                             entityName={entity && entity['entity_text'] || 'Award'}
+                             nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
+                             entityName={(entity && entity['entity_text']) || 'Award'}
                              saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
                              changeOrderingUp={this.changeOrderingUp}
                              changeOrderingDown={this.changeOrderingDown}
@@ -289,7 +288,7 @@ class RightSection extends Component {
             case 'course': {
                 entity = entityList && entityList[7];
                 nextEntity = entityList && entityList.find(el => el['entity_id'] > entity['entity_id'] && el['active'] === true);
-                nextEntity = nextEntity && formCategoryList[nextEntity['entity_id']] || undefined;
+                nextEntity = (nextEntity && formCategoryList[nextEntity['entity_id']]) || undefined;
 
                 return !!(showMoreSection) ?
                     <div className="backtoedit">
@@ -299,8 +298,8 @@ class RightSection extends Component {
                     : <Course {...this.props}
                               isEditable={isEditable}
                               handlePreview={this.handlePreview}
-                              nextEntity={nextEntity && nextEntity['link'] || nextEntity}
-                              entityName={entity && entity['entity_text'] || 'Course'}
+                              nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
+                              entityName={(entity && entity['entity_text']) || 'Course'}
                               saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
                               changeOrderingUp={this.changeOrderingUp}
                               changeOrderingDown={this.changeOrderingDown}
@@ -313,7 +312,7 @@ class RightSection extends Component {
             case 'language': {
                 entity = entityList && entityList[8];
                 nextEntity = entityList && entityList.find(el => el['entity_id'] > entity['entity_id'] && el['active'] === true);
-                nextEntity = nextEntity && formCategoryList[nextEntity['entity_id']] || undefined;
+                nextEntity = (nextEntity && formCategoryList[nextEntity['entity_id']]) || undefined;
 
                 return !!(showMoreSection) ?
                     <div className="backtoedit">
@@ -323,8 +322,8 @@ class RightSection extends Component {
                     : <Language {...this.props}
                                 isEditable={isEditable}
                                 handlePreview={this.handlePreview}
-                                nextEntity={nextEntity && nextEntity['link'] || nextEntity}
-                                entityName={entity && entity['entity_text'] || 'Language'}
+                                nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
+                                entityName={(entity && entity['entity_text']) || 'Language'}
                                 saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
                                 changeOrderingUp={this.changeOrderingUp}
                                 changeOrderingDown={this.changeOrderingDown}
@@ -336,7 +335,7 @@ class RightSection extends Component {
             case 'reference': {
                 entity = entityList && entityList[9];
                 nextEntity = entityList && entityList.find(el => el['entity_id'] > entity['entity_id'] && el['active'] === true);
-                nextEntity = nextEntity && formCategoryList[nextEntity['entity_id']] || undefined;
+                nextEntity = (nextEntity && formCategoryList[nextEntity['entity_id']]) || undefined;
                 return !!(showMoreSection) ?
                     <div className="backtoedit">
                         <p>Add more section in your resume from left panel</p>
@@ -345,8 +344,8 @@ class RightSection extends Component {
                     : <Reference {...this.props}
                                  isEditable={isEditable}
                                  handlePreview={this.handlePreview}
-                                 nextEntity={nextEntity && nextEntity['link'] || nextEntity}
-                                 entityName={entity && entity['entity_text'] || 'Reference'}
+                                 nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
+                                 entityName={(entity && entity['entity_text']) || 'Reference'}
                                  saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
                                  changeOrderingUp={this.changeOrderingUp}
                                  changeOrderingDown={this.changeOrderingDown}
@@ -364,7 +363,6 @@ class RightSection extends Component {
     }
 
     render() {
-        const {type} = this.state;
         return (
             <section id='right-sidebar' className="right-sidebar">
                 {

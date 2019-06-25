@@ -7,7 +7,7 @@ import TemplateModal from "../../../Modal/tempateModal";
 export default class ResumeSlider extends Component {
     constructor(props) {
         super(props);
-        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
+        this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
         this.selectTemplate = this.selectTemplate.bind(this);
         this.showZoomedImage = this.showZoomedImage.bind(this);
     }
