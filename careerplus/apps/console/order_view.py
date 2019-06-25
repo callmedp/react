@@ -41,7 +41,7 @@ from scheduler.models import Scheduler
 
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from review.models import Review
-from partner.models import BoosterRecruiter
+from partner.models import BoosterRecruiter,VendorHierarchy
 
 from .decorators import (
     Decorate,
@@ -717,6 +717,7 @@ class OrderDetailView(DetailView):
 
         #Redirect user if none of the items are visible
         if not self.context.get('orderitems'):
+            messages.add_message(self.request,messages.ERROR,'You are not authorised to view this order.')
             return HttpResponseRedirect("/console/")
         
         return response
@@ -725,9 +726,9 @@ class OrderDetailView(DetailView):
         order_items = order.orderitems.all().select_related('product', 'partner').order_by('id')
         
         #Handle vendor users
-        user_vendor_list = self.request.user.vendor_set.all()
-        if user_vendor_list:
-            vendor_ids = list(user_vendor_list.values_list('id',flat=True))
+        vendor_ids = [x.vendee.id for x in VendorHierarchy.objects.filter(\
+            employee=self.request.user,active=True)]
+        if vendor_ids:
             order_items = order_items.filter(Q(partner_id__in=vendor_ids) | \
                     Q(product__vendor_id__in=vendor_ids))
 

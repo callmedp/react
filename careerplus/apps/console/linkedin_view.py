@@ -40,6 +40,7 @@ from .linkedin_form import (
 from .order_form import MessageForm, OIActionForm
 from blog.mixins import PaginationMixin
 from order.models import OrderItem, Order, InternationalProfileCredential
+from partner.models import VendorHierarchy
 
 from emailers.sms import SendSMS
 from django.conf import settings
@@ -244,8 +245,30 @@ class LinkedinOrderDetailVeiw(DetailView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        context = super(LinkedinOrderDetailVeiw, self).get(request, *args, **kwargs)
-        return context
+        response = super(LinkedinOrderDetailVeiw, self).get(request, *args, **kwargs)
+
+        #Redirect user if none of the items are visible
+        if not self.context.get('orderitems'):
+            messages.add_message(self.request,messages.ERROR,'You are not authorised to view this order.')
+            return HttpResponseRedirect("/console/")
+
+        return response
+
+    def _get_visible_order_items_for_order(self,order):
+        order_items = order.orderitems.all().select_related('product', 'partner').order_by('id')
+        
+        #Handle vendor users
+        vendor_ids = [x.vendee.id for x in VendorHierarchy.objects.filter(\
+            employee=self.request.user,active=True)]
+        if vendor_ids:
+            order_items = order_items.filter(Q(partner_id__in=vendor_ids) | \
+                    Q(product__vendor_id__in=vendor_ids))
+
+        #Handle Writers
+        if self.request.user.is_writer:
+            order_items = order_items.filter(assigned_to=self.request.user)
+
+        return order_items
 
     def get_context_data(self, **kwargs):
         context = super(LinkedinOrderDetailVeiw, self).get_context_data(**kwargs)
@@ -253,14 +276,16 @@ class LinkedinOrderDetailVeiw(DetailView):
         obj = self.get_object()
         max_limit_draft = settings.DRAFT_MAX_LIMIT
         order = self.get_object()
-        order_items = order.orderitems.all().select_related('product', 'partner')
+
         context.update({
             "order": order,
-            'orderitems': list(order_items),
+            'orderitems': list(self._get_visible_order_items_for_order(order)),
             "max_limit_draft": max_limit_draft,
             "messages": alert,
             "message_form": MessageForm(),
         })
+
+        self.context = context
         return context
 
 
