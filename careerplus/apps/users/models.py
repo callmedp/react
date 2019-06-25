@@ -87,10 +87,15 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
+    @property
+    def is_writer(self):
+        return bool(UserProfile.objects.filter(user_id=self.id,writer_type__gt=0))
+    
     def __str__(self):
         if self.name:
             return self.name + '  (' + str(self.email) + ')'
         return "%s" % str(self.email)
+
 
     def get_short_name(self):
         """
