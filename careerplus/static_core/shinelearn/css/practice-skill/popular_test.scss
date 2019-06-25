@@ -383,6 +383,8 @@ h2 {
 
         .pagination-more {
             align-self: flex-start;
+            margin-top: 10px;
+            cursor: pointer;
         }
     }
 }
@@ -529,6 +531,25 @@ h2 {
         border-top: 1px solid $border;
         display: block;
     }
+}
+
+.benefits-bg {
+    background: url($path + 'images/free_skill/course-cart-bg.png') left bottom no-repeat;
+
+}
+
+.pagination-up {
+    background: url($path + 'images/free_skill/free_skill_sprite.png') no-repeat -32px -707px;
+    display: inline-block;
+    width: 14px;
+    height: 8px;
+}
+
+.pagination-down {
+    background: url($path + 'images/free_skill/free_skill_sprite.png') no-repeat -7px -707px;
+    display: inline-block;
+    width: 14px;
+    height: 8px;
 }
 
 .custom-radio {
