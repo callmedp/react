@@ -961,7 +961,7 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
             "message_form": MessageForm(),
             "filter_form": filter_form,
             "action_form": OIActionForm(queue_name="internationalprofileupdate"),
-            var:'checked'
+            var:'checked',
         })
 
         return context

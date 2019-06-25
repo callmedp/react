@@ -1,3 +1,4 @@
+import datetime
 from rest_framework.serializers import (
     ModelSerializer,
     SerializerMethodField,
@@ -13,6 +14,8 @@ from payment.models import PaymentTxn
 from partner.models import Certificate, Vendor
 from blog.models import *
 from users.models import User
+
+from geolocation.models import Country
 
 from shared.rest_addons.mixins import (SerializerFieldsMixin,
 ListSerializerContextMixin, ListSerializerDataMixin)
@@ -429,13 +432,44 @@ class TalentEconomySerializer(SerializerFieldsMixin, ListSerializerContextMixin,
     field_model_mapping = {'p_cat_id': Category, 'sec_cat_id': Category, 'tags_id': Tag, 'author_id': Author,
                            'user_id': User, 'speakers_id': Author}
 
-
-    def to_representation(self,instance):
-        ret = super(TalentEconomySerializer,self).to_representation(instance)
-        asked_fields = self.context.get('asked_fields',[])
-        [ret.pop(field,"") for field in asked_fields]
-        return ret
+    #
+    # def to_representation(self,instance):
+    #     ret = super(TalentEconomySerializer,self).to_representation(instance)
+    #     asked_fields = self.context.get('asked_fields',[])
+    #     [ret.pop(field,"") for field in asked_fields]
+    #     return ret
 
     class Meta:
         model = Blog
         fields = '__all__'
+
+
+class OrderDetailSerializer(SerializerFieldsMixin,ModelSerializer):
+
+    class Meta:
+        model = Order
+        fields = '__all__'
+    # #
+    # list_lookup_fields = ['paid_by', 'assigned_to', 'country']
+    # fields_required_mapping = {'crm_sales_id': ['name'], 'paid_by': ['name'],
+    #                            'assigned_to': ['name'], 'country': ['name'], }
+    # field_model_mapping = {'crm_sales_id': User, 'paid_by': User, 'assigned_to': User,'country':Country}
+
+    # def to_representation(self,instance):
+    #     ret = super(OrderDetailSerializer,self).to_representation(instance)
+    #     asked_fields = self.context.get('asked_fields',[])
+    #     user = self.context.get('request').user
+    #     all_ret_keys = ret.keys()
+    #     [ret.pop(field,"") for field in all_ret_keys if field not in asked_fields]
+    #     if not user:
+    #         logging.getLogger('info_log').info("Unable to retrieve user for Order Detail Api ")
+    #         return ret
+    #     current_time = datetime.datetime.now().strftime("%d %B %Y %I:%M:%S %p")
+    #     fields_to_check = asked_fields
+    #     fields_to_log = ['email', 'alt_email', 'mobile', 'alt_mobile']
+    #     for field in fields_to_log:
+    #         if field not in fields_to_check:
+    #             continue
+    #         logging.getLogger('info_log').info('{},{},{},{},{},{}'.format(current_time,\
+    #     user.id, user.get_full_name(), getattr(instance, 'number', 'None'), field, getattr(instance, field, 'None')))
+    #     return ret

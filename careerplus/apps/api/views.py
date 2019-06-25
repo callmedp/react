@@ -15,6 +15,7 @@ from rest_framework import status
 from rest_framework.permissions import (
     IsAuthenticated,
     IsAdminUser, )
+
 from rest_framework.generics import ListAPIView, CreateAPIView
 from rest_framework.authentication import SessionAuthentication
 from haystack import connections
@@ -23,6 +24,8 @@ from core.library.haystack.query import SQS
 from partner.utils import CertiticateParser
 from partner.models import ProductSkill
 from rest_framework.generics import ListAPIView
+
+from rest_framework.generics import ListAPIView,RetrieveAPIView
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -54,10 +57,12 @@ from .serializers import (
     VendorCertificateSerializer,
     ImportCertificateSerializer,
     ShineDataFlowDataSerializer,
-    CertificateSerializer,TalentEconomySerializer)
+    CertificateSerializer,TalentEconomySerializer,OrderDetailSerializer)
 
 from partner.models import Certificate, Vendor
 from shared.rest_addons.pagination import LearningCustomPagination
+
+from shared.rest_addons.permissions import OrderAccessPermission
 from shared.rest_addons.authentication import ShineUserAuthentication
 from shared.rest_addons.mixins import (SerializerFieldsMixin, FieldFilterMixin)
 
@@ -1352,6 +1357,29 @@ class TalentEconomyApiView(FieldFilterMixin,ListAPIView):
         if visibility:
             filter_dict.update({'visibility': visibility})
         return Blog.objects.filter(**filter_dict)
+
+
+
+
+class OrderDetailApiView(FieldFilterMixin,RetrieveAPIView):
+
+    permission_classes = [IsAuthenticated,OrderAccessPermission]
+    authentication_classes = [SessionAuthentication]
+    serializer_class = OrderDetailSerializer
+    queryset = Order.objects.all()
+    def get(self, request, *args, **kwargs):
+        instance = self.get_object()
+        user = self.request.user
+        current_time = datetime.datetime.now().strftime("%d %B %Y %I:%M:%S %p")
+        fields_to_check = self.get_required_fields()
+        fields_to_log = ['email', 'alt_email', 'mobile', 'alt_mobile']
+        for field in fields_to_log:
+            if field not in fields_to_check:
+                continue
+            logging.getLogger('info_log').info('{},{},{},{},{},{}'.format(current_time,\
+        user.id, user.get_full_name(), getattr(instance, 'number', 'None'), field, getattr(instance, field, 'None')))
+        return self.retrieve(request, *args, **kwargs)
+
 
 class CandidateInsight(APIView):
     authentication_classes = [OAuth2Authentication]

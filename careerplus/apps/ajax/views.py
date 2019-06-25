@@ -753,7 +753,7 @@ class OrderListModal(View):
                             alt_mobil = ""
                         else:
                             alt_mobil= str(obj.country_code)+"-"+str(obj.alt_mobile)
-                        data = {"status": "success", 'object_id': obj.number, 'obj_altnum': alt_mobil,'country':obj.country_code}
+                        data = {"status": "success", 'object_id': obj.id, 'obj_altnum': alt_mobil,'country':obj.country_code}
                     else:
                         data['error'] = form.errors['__all__']
                 else:
