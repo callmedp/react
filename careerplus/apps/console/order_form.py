@@ -300,7 +300,7 @@ class OIActionForm(forms.Form):
             )
         elif queue_name == 'domesticprofileupdate':
             ACTION_CHOICES += (
-                (-4, "Send for approval to ops"),  # send domestic Profile Update for approval
+                (-4, "Update and Approve Profile"),  # send domestic Profile Update for approval
             )
         elif queue_name == 'domesticprofileapproval':
             ACTION_CHOICES += (
