@@ -17,7 +17,7 @@ from shop.models import Category
 
 
 class VskillTestView(DetailView):
-    template_name = 'vskill/test-paper.html'
+    template_name = 'vskill/test-answers.html'
     model = Test
 
 
@@ -37,8 +37,8 @@ class VskillTestView(DetailView):
 
     def get(self, request, *args, **kwargs):
         test = self.get_object()
-        if request.session.get('ongoing_test_'+test.id):
-            return 404
+        # if request.session.get('ongoing_test_'+test.id):
+        #     return 404
         if not test:
             return redirect(reverse('assessment:vskill-landing'))
         return super(VskillTestView,self).get(request, args, **kwargs)

@@ -179,6 +179,22 @@ h2 {
     }
 }
 
+.result_btn {
+    border-radius: 30px;
+    background-color: transparent;
+    border: 1px solid $white-bg;
+    font-size: $font-size+3;
+    color: $white-bg;
+    text-align: center;
+    padding: 12px 25px;
+
+    &:hover {
+        background-color: $r-blue;
+        border: 1px solid $white-bg;
+        color: $white-bg;
+    }
+}
+
 .blue_btn {
     border-radius: 30px;
     background-color: $p-blue;
@@ -391,10 +407,18 @@ h2 {
 
 .test-paper {
     border-top: 1px solid $border;
-    padding: 35px 15px 15px 15px;
+    padding: 35px 25px 15px 25px;
     margin: 0 0 10px 0;
 
     h2 {
+        font-size: $font-size+12;
+        color: $primary-color;
+        margin: 0 0 30px 0;
+        flex: 1;
+        font-weight: $font-weight+300;
+    }
+
+    h3 {
         font-size: $font-size+9;
         color: $primary-color;
         margin: 0;
@@ -535,7 +559,22 @@ h2 {
 
 .benefits-bg {
     background: url($path + 'images/free_skill/course-cart-bg.png') left bottom no-repeat;
+}
 
+.ans-right {
+    background: url($path + 'images/free_skill/free_skill_sprite.png') no-repeat -4px -727px;
+    display: inline-block;
+    width: 18px;
+    height: 13px;
+    margin-left: 10px;
+}
+
+.ans-wrong {
+    background: url($path + 'images/free_skill/free_skill_sprite.png') no-repeat -31px -729px;
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-left: 10px;
 }
 
 .pagination-up {
@@ -550,6 +589,106 @@ h2 {
     display: inline-block;
     width: 14px;
     height: 8px;
+}
+
+.improve-skills {
+    box-shadow: 0 3px 30px 0 rgba(213,213,213,0.50);
+    padding-bottom: 10px;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+
+    h3 {
+        font-size: $font-size+5;
+        font-weight: $font-weight+300;
+        color: $anchor-color;
+        margin-top: 0;
+        line-height: 24px;
+    }
+
+    p {
+        margin: 0 0 5px 0;
+        position: relative;
+        color: $secondary-color;
+        font-size: $font-size+1;
+
+        strong {
+            font-weight: $font-weight+300;
+        }
+    }
+
+    h4 {
+        font-size: $font-size+7;
+        font-weight: $font-weight+300;
+        color: $primary-color;
+        display: inline-block;
+        margin-bottom: 0;
+    }
+
+    .grey-border {
+        border-top: 1px solid $border;
+        display: block;
+    }
+
+    i {
+        width: 70px;
+    }
+
+    .tcell {
+        display: table-cell;
+        vertical-align: top;
+    }
+}
+
+.result-box {
+    background: #5A8DD3;
+    overflow: hidden;
+    padding: 20px 20px 0 30px;
+    border-radius: 4px;
+
+    h2 {
+        color: $white-bg;
+        font-size: $font-size+17;
+    }
+
+    strong {
+        color: $white-bg;
+        font-size: $font-size+7;
+        font-weight: $font-weight+300;
+    }
+}
+
+.final-result {
+    font-size: $font-size+1;
+    line-height: 20px;
+    padding: 20px;
+    background: $white-bg;
+    text-align: center;
+    vertical-align: middle;
+    width: 175px;
+    box-shadow: 0 2px 15px 0 #416493;
+    color: $secondary-color;
+    text-transform: uppercase;
+
+    strong {
+        font-size: $font-size+43;
+        color: #F9CA09;
+        line-height: 60px;
+        display: block;
+    }
+}
+
+.time-taken {
+    width: 175px;
+    font-size: $font-size+2;
+    color: $white-bg;
+    display: block;
+    text-align: center;
+    font-weight: $font-weight;
+
+    strong {
+        font-weight: $font-weight+100;
+        font-size: $font-size+2;
+    }
 }
 
 .custom-radio {
