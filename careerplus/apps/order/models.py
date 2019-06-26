@@ -607,7 +607,6 @@ class OrderItem(AbstractAutoDate):
 
         super().save(*args, **kwargs)  # Call the "real" save() method.
         # automate application highlighter/priority applicant
-        import ipdb; ipdb.set_trace();
         if self.product.sub_type_flow == 503:
             process_application_highlighter(obj=self)
 
