@@ -1,0 +1,471 @@
+{% extends "mobile/basic/base.html" %}
+{% load static compress %}
+{% load static thumbnail compress %}
+{% block title %}Shine learning{% endblock %}
+{% block css_section %}
+{{ block.super }}
+{% compress css %}
+<link type="text/scss" href="{% static 'shinelearn/css/mobile/vskill/vskill-home.scss' %}" rel="stylesheet">
+<link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
+<link type="text/css" href="{% static 'shinelearn/css/common/mobile/typeaheadjs.css' %}" rel="stylesheet">
+{% endcompress %}
+{% endblock css_section %}
+{% block canonical_url %}
+<link rel="canonical" href="//{{ SITE_DOMAIN }}/">
+{% endblock canonical_url %}
+{% block django_meta %}
+{% include 'meta/meta.html' %}
+{% endblock django_meta %}
+{% block header %}
+{% endblock header %}
+
+{% block container %}
+<div class="body-wrapper practice-test ">
+    <div class="practice-test-inside"></div>
+    <div class="back"></div>
+
+    <h1>Search Engine Optimisation Test</h1>
+    <div class="bread-crums"> 
+        <a href="#">Home</a> -  <a href="#">Free test</a> - <a href="#">Sales and marketing test</a> - SEO Test
+    </div>
+
+    <div class="row question-timer">
+        <div class="question-timer__score-wrap">
+            <span class="question-timer__score-wrap--score">6</span>
+            <span>/10</span>
+        </div>
+
+        <div class="question-timer--score-text">Time left</div>
+        <div class="question-timer__count-down">
+            <div class="question-timer__count-down--time">
+                04
+                <span>MINUTES</span>
+            </div>
+            <span>:</span>
+            <div class="question-timer__count-down--time">
+                25
+                <span>SECONDS</span>
+            </div>
+        </div>
+    </div><!-- /. question-timer -->
+
+    <div class="take-test">
+        <h2>6) SEO = 'Search Engine optimization', then SEM = ?</h2>
+        <ul>
+            <li>
+                <input type="radio" name="question" value="test" id="search_1">
+                <label for="search_1">Search Engine Manipulation</label>
+            </li>
+            <li>
+                <input type="radio" name="question" value="test" id="search_2">
+                <label for="search_2">Search Engine Marketing</label>
+            </li>
+            <li>
+                <input type="radio" name="question" value="test" id="search_3">
+                <label for="search_3">Social Ethical Marketing</label>
+            </li>
+            <li>
+                <input type="radio" name="question" value="test" id="search_4">
+                <label for="search_4">Safe Easy Marketing</label>
+            </li>
+        </ul>
+        
+        <div class="btn btn-round-30 btn-blue w-100">Next question <span class="pt-sprite icon-arrow"></span></div>
+        <div class="take-test--button-wrap mt-15">
+            <span class="btn btn-outline btn-round-30">Skip</span>
+            <span class="btn btn-outline btn-round-30">End test</span>
+        </div>
+    </div>
+
+    <div class="feature-test">
+        <h2>Advanced Search Engine Optimisation Test</h2>
+        <div class="feature-test--price">
+            <strong>Rs. 699</strong>
+            <span class="stirke-through">Rs. 999</span>
+        </div>
+
+        <div class="feature-test__benefits">
+            <p><strong>Benefits</strong></p>
+            <ul>
+                <li><span></span>500+ questions</li>
+                <li><span></span>Real exam & Practice environment
+                </li>
+                <li><span></span>Answers & Detailed Explanations</li>
+            </ul>
+
+            <div class="feature-test__btn-wrap">
+                <button class="btn btn-round-30 btn-yellow w-50">Add to cart</button>
+            </div>
+
+        </div>
+    </div><!-- /. feature-test -->
+
+
+
+    <div class="check-result">
+        <p class="fs-18">Enter your details to check the Test result</p>
+        <ul class="mt-10">
+            <li class="check-result__item input-effect">
+                <input type="text" class="form-control" id="name" aria-describedby="name" placeholder="">
+                <label for="name">Name</label>
+            </li>
+            <li class="check-result__item input-effect">
+                <input type="email" class="form-control" id="email" aria-describedby="email" placeholder="">
+                <label for="email">Email</label>
+            </li>
+            <li class="check-result__item input-effect">
+                <input type="tel" class="form-control" id="mobile" aria-describedby="mobile" placeholder="">
+                <label for="mobile">Mobile</label>
+            </li>
+            <li>
+                <button class="btn btn-round-30 btn-blue w-100">Submit</button>
+            </li>
+        </ul>
+    </div><!-- Check Result -->
+
+    <div class="test-result">
+        <span class="text-center mt-10">
+            <img src="{% static 'shinelearn/images/mobile/practice_test/cup.png' %}">
+        </span>
+        <h2>Congratulations,<br>are doing great</h2>
+        <div class="test-result__you-scored mt-15">
+            <p class="test-result__you-scored--text">You scored</p>
+            <p class="test-result__you-scored--percentage">60%</p>
+            <a href="#" class="btn btn-blue btn-lg2 btn-round-30">Check answers</a>
+            <p class="mt-15 fs-16 pb-0"><strong>6 out of 10 correct answers </strong></p>
+            <p>Time taken: 04min 55 secs</p>
+        </div>
+    </div><!-- Your Test Result -->
+
+    <div class="feature-test">
+        <h2>Advanced Search Engine Optimisation Test</h2>
+        <div class="feature-test--price">
+            <strong>Rs. 699</strong>
+            <span class="stirke-through">Rs. 999</span>
+        </div>
+
+        <div class="feature-test__benefits">
+            <p>Benefits</p>
+            <ul>
+                <li><span></span>500+ questions</li>
+                <li><span></span>Real exam & Practice environment
+                </li>
+                <li><span></span>Answers & Detailed Explanations</li>
+            </ul>
+
+            <div class="feature-test__btn-wrap">
+                <button class="btn btn-round-30 btn-yellow w-50">Add to cart</button>
+            </div>
+
+        </div>
+    </div><!-- /. feature-test -->
+
+    <div class="improve-skills">
+        <h2>Improve your skills with this course</h2>
+        <div class="media-flex">
+            <span class="media-flex--img">
+                <img src="https://static1.shine.com/l/m/product_image/3410/1539673448_4625.png" class="img-responsive" alt="...">
+            </span>
+            <div class="media-flex--body">
+                <p class="fs-16 semi-bold"><a href="#">Search Engine Optimisation Master Training Course</a></p>
+                <ul>
+                    <li class="mb-10"><strong class="mr-10">1096</strong>people bought</li>
+                    <li><strong class="mr-10">12</strong>job available</li>
+                </ul>
+            </div>
+        </div>
+    </div><!-- /. Improve your skills with this course -->
+
+    <div class="test-answers">
+        <h2>Test Answers</h2>
+        <ol>
+            <li>
+                SEO = 'Search Engine optimization' ,then SEM = ?
+                <ul>
+                    <li>
+                        <span class="pt-sprite icon-cross"></span>
+                        <input type="radio" name="question_1" value="test" id="ques_1">
+                        <label for="ques_1">Search Engine Manipulation</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="question_1" value="test" id="ques_2" checked>
+                        <label for="ques_2">Search Engine Marketing</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="question_1" value="test" id="ques_3">
+                        <label for="ques_3">Social Ethical Marketing</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="question_1" value="test" id="ques_4">
+                        <label for="ques_4">Safe Easy Marketing</label>
+                    </li>
+                </ul>
+            </li><!-- ques-1 -->
+            
+            <li>
+                What is the ideal keyword density?
+                <ul>
+                    <li>
+                        <input type="radio" name="question_2" value="test" id="ques_2_1" checked>
+                        <label for="ques_2_1">0 - 5%</label>
+                    </li>
+                    <li>
+                        <span class="pt-sprite icon-cross"></span>
+                        <input type="radio" name="question_2" value="test" id="ques_2_2">
+                        <label for="ques_2_2">5 - 10%</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="question_2" value="test" id="ques_2_3">
+                        <label for="ques_2_3">10%+</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="question_2" value="test" id="ques_2_4">
+                        <label for="ques_2_4">There's no ideal keyword density.</label>
+                    </li>
+                </ul>
+            </li><!-- ques-2 -->
+            
+            <li>
+                Placing Hidden text on web page is?
+                <ul>
+                    <li>
+                        <input type="radio" name="question_3" value="test" id="ques_3_1">
+                        <label for="ques_3_1">Black - Hat SEO technique</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="question_3" value="test" id="ques_3_2">
+                        <label for="ques_3_2">White - Hat SEO technique</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="question_3" value="test" id="ques_3_3">
+                        <label for="ques_3_3">Yellow - Hat SEO trick</label>
+                    </li>
+                    <li>
+                        <span class="pt-sprite icon-right"></span>
+                        <input type="radio" name="question_3" value="test" id="ques_3_4" checked>
+                        <label for="ques_3_4">Green - Hat SEO trick</label>
+                    </li>
+                </ul>
+            </li><!-- ques-3 -->
+            
+            <li>
+                Which query will give list of webpages indexed by a particular search engine on given domain
+                <ul>
+                    <li>
+                        <input type="radio" name="question_4" value="test" id="ques_4_1">
+                        <label for="ques_4_1">list:http://www.websitename.com</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="question_4" value="test" id="ques_4_2">
+                        <label for="ques_4_2">link:http://www.websitename.com</label>
+                    </li>
+                    <li>
+                        <span class="pt-sprite icon-right"></span>
+                        <input type="radio" name="question_4" value="test" id="ques_4_3" checked>
+                        <label for="ques_4_3">http://www.websitename.com</label>
+                    </li>
+                    <li>
+                        
+                        <input type="radio" name="question_4" value="test" id="ques_4_4">
+                        <label for="ques_4_4">site:http://www.websitename.com</label>
+                    </li>
+                </ul>
+            </li><!-- ques-4 -->
+
+            <li>
+                What is the ideal keyword density?
+                <ul>
+                    <li>
+                        <input type="radio" name="question_5" value="test" id="ques_5_1" checked>
+                        <label for="ques_5_1">0 - 5%</label>
+                    </li>
+                    <li>
+                        <span class="pt-sprite icon-cross"></span>
+                        <input type="radio" name="question_5" value="test" id="ques_5_2">
+                        <label for="ques_5_2">5 - 10%</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="question_5" value="test" id="ques_5_3">
+                        <label for="ques_5_3">10%+</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="question_5" value="test" id="ques_5_4">
+                        <label for="ques_5_4">There's no ideal keyword density.</label>
+                    </li>
+                </ul>
+            </li><!-- ques-5 -->
+
+            <li>
+                SEO = 'Search Engine optimization' ,then SEM = ?
+                <ul>
+                    <li>
+                        <span class="pt-sprite icon-cross"></span>
+                        <input type="radio" name="question_6" value="test" id="ques_6_1">
+                        <label for="ques_6_1">Search Engine Manipulation</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="question_6" value="test" id="ques_6_2" checked>
+                        <label for="ques_6_2">Search Engine Marketing</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="question_6" value="test" id="ques_6_3">
+                        <label for="ques_6_3">Social Ethical Marketing</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="question_6" value="test" id="ques_6_4">
+                        <label for="ques_6_4">Safe Easy Marketing</label>
+                    </li>
+                </ul>
+            </li><!-- ques-6 -->
+            
+            <li>
+                What is the ideal keyword density?
+                <ul>
+                    <li>
+                        <input type="radio" name="question_7" value="test" id="ques_7_1" checked>
+                        <label for="ques_7_1">0 - 5%</label>
+                    </li>
+                    <li>
+                        <span class="pt-sprite icon-cross"></span>
+                        <input type="radio" name="question_7" value="test" id="ques_7_2">
+                        <label for="ques_7_2">5 - 10%</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="question_7" value="test" id="ques_7_3">
+                        <label for="ques_7_3">10%+</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="question_7" value="test" id="ques_7_4">
+                        <label for="ques_7_4">There's no ideal keyword density.</label>
+                    </li>
+                </ul>
+            </li><!-- ques-7 -->
+            
+            <li>
+                Placing Hidden text on web page is?
+                <ul>
+                    <li>
+                        <input type="radio" name="question_8" value="test" id="ques_8_1">
+                        <label for="ques_8_1">Black - Hat SEO technique</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="question_8" value="test" id="ques_8_2">
+                        <label for="ques_8_2">White - Hat SEO technique</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="question_8" value="test" id="ques_8_3">
+                        <label for="ques_8_3">Yellow - Hat SEO trick</label>
+                    </li>
+                    <li>
+                        <span class="pt-sprite icon-right"></span>
+                        <input type="radio" name="question_8" value="test" id="ques_8_4" checked>
+                        <label for="ques_8_4">Green - Hat SEO trick</label>
+                    </li>
+                </ul>
+            </li><!-- ques-8 -->
+            
+            <li>
+                Which query will give list of webpages indexed by a particular search engine on given domain
+                <ul>
+                    <li>
+                        <input type="radio" name="question_9" value="test" id="ques_9_1">
+                        <label for="ques_9_1">list:http://www.websitename.com</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="question_9" value="test" id="ques_9_2">
+                        <label for="ques_9_2">link:http://www.websitename.com</label>
+                    </li>
+                    <li>
+                        <span class="pt-sprite icon-right"></span>
+                        <input type="radio" name="question_9" value="test" id="ques_9_3" checked>
+                        <label for="ques_9_3">http://www.websitename.com</label>
+                    </li>
+                    <li>
+                        
+                        <input type="radio" name="question_9" value="test" id="ques_9_4">
+                        <label for="ques_9_4">site:http://www.websitename.com</label>
+                    </li>
+                </ul>
+            </li><!-- ques-9 -->
+
+            <li>
+                What is the ideal keyword density?
+                <ul>
+                    <li>
+                        <input type="radio" name="question_10" value="test" id="ques_10_1" checked>
+                        <label for="ques_10_1">0 - 5%</label>
+                    </li>
+                    <li>
+                        <span class="pt-sprite icon-cross"></span>
+                        <input type="radio" name="question_10" value="test" id="ques_10_2">
+                        <label for="ques_10_2">5 - 10%</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="question_10" value="test" id="ques_10_3">
+                        <label for="ques_10_3">10%+</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="question_10" value="test" id="ques_10_4">
+                        <label for="ques_10_4">There's no ideal keyword density.</label>
+                    </li>
+                </ul>
+            </li><!-- ques-5 -->
+            
+        </ol>
+    </div><!-- /. Test Answers -->
+    <div class="mt-30 mb-30">
+        <div class="btn btn-round-30 btn-blue w-100 mb-15">Next test</div>
+        <div class="btn btn-round-30 btn-outline w-100">Explore other test</div>
+    </div>
+</div><!-- Practice test -->
+
+
+<div class="modal">
+    <span class="close-big">+</span>
+    <div class="modal-content">
+       <div class="view-test">
+           <span class="overlay"></span>
+           <div class="view-test__content">
+            <h2>Oops!  Your free test limit for this skill has been exhausted.</h2>
+            <h3>Continue your learning, with our paid practice tests</h3>
+           </div>
+        <img src="{% static 'shinelearn/images/mobile/practice_test/view-test.png' %}" class="img-responsive"/>
+       </div>
+
+       <div class="view-test-benefits">
+           <p><strong>Benefits</strong></p>
+           <ul>
+                <li><span></span>500+ questions</li>
+                <li><span></span>Real exam & Practice environment
+                </li>
+                <li><span></span>Answers & Detailed Explanations</li>
+            </ul>
+
+            <button class="btn btn-round-30 btn-blue btn-lg mt-20">View test</button>
+       </div>
+    </div>
+</div>
+
+
+
+<!-- Script here -->
+<script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+<script>
+// JavaScript for label effects only
+	$(window).load(function(){
+		$(".check-result__item input").val("");
+		
+		$(".input-effect input").focusout(function(){
+			if($(this).val() != ""){
+				$(this).addClass("has-content");
+			}else{
+				$(this).removeClass("has-content");
+			}
+		})
+	});
+</script>
+{% endblock container %}
+{% block johukum %}
+{% endblock johukum %}
+{% block zendesk %}
+{% endblock zendesk %}

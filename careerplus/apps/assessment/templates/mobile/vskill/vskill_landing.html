@@ -17,27 +17,29 @@
 {% include 'meta/meta.html' %}
 {% endblock django_meta %}
 {% block container %}
-<div class="body-wrapper practice-test">
-    <img src="{% static 'shinelearn/images/mobile/practice_test/home_banner.png' %}" class="img-responsive">
-    <div class="headband_practice">
-        <h1>Take free<br/>
-            practice tests</h1>
-        <h2><strong>Start preparing</strong> for competitive exams
-            and job interviews
-        </h2>
-        <ul>
-            <li><strong>500+ Specialized </strong> Tests
-            </li>
-            <li class="strength">Strength & Weakness <strong>analysis</strong></li>
-            <li class="recommendation">Custom course <strong>Recommendations</strong></li>
-        </ul>
+<div class="body-wrapper practice-test pt-0">
+    <div class="headband_practice row">
+        <img src="{% static 'shinelearn/images/mobile/practice_test/home_banner.png' %}" class="img-responsive">
+        <div class="pl-15 pr-15">
+            <h1>Take free practice tests</h1>
+            <h2><strong>Start preparing</strong> for competitive exams and job interviews</h2>
+            <ul>
+                <li><strong>500+ Specialized </strong> Tests
+                </li>
+                <li class="strength">Strength & Weakness <strong>analysis</strong></li>
+                <li class="recommendation">Custom course <strong>Recommendations</strong></li>
+            </ul>
+        </div>
+        
     </div>
-    <div class="search mb50">
+
+    <div class="search mb-50">
         <div class="search_base"></div>
-        <div class="searchbox mt40">
+        <div class="searchbox">
             <input type="text" name="" placeholder="Search popular tests"><span class="icon_search"></span>
         </div>
-    </div>
+    </div><!-- /. search -->
+
     <div class="popular_test">
         <h2>Most popular tests</h2>
 
@@ -50,64 +52,66 @@
             </div>
 
             <div class="popular_test_inside">
-				<a href="#">
+                <a href="#">
 
-            	<span class=" border border1"></span><span class="name">Search Engine
+                <span class=" border border1"></span><span class="name">Search Engine
                     Optimisation</span>
                     <span class="bluebutton">Take free test</span>
 
                     </a></div>
             <div class="popular_test_inside">
-				<a href="#">
+                <a href="#">
 
-            	<span class=" border border2"></span><span class="name">Brand Manager</span>
+                <span class=" border border2"></span><span class="name">Brand Manager</span>
                     <span class="bluebutton">Take free test</span>
 
                     </a></div>
-             <div class="popular_test_inside">
-				<a href="#">
-            	<span class=" border border3"></span><span class="name">Digital Marketing Digital MarketingDigital MarketingDigital MarketingDigital MarketingDigital Marketing
-                     Master</span><span class="bluebutton">Take free test</span></a></div>
-      
+            <div class="popular_test_inside">
+                <a href="#">
+                <span class=" border border3"></span><span class="name">Digital Marketing Digital MarketingDigital MarketingDigital MarketingDigital MarketingDigital Marketing
+                    Master</span><span class="bluebutton">Take free test</span></a></div>
+    
+    </div><!-- /. popular test -->
+
+    <div class="functional_area mt-40">
+
+            <h2>Tests by functional area</h2>
+            
+            
+                
+            <div class="functional_area_inside border-0">
+            <a href="#">
+            <span class="icon sales"></span>
+                <span class="fa_name">Sales and Marketing</span>
+            (23 Tests)</a> </div>
+            
+            <div class="functional_area_inside border-1">
+                <a href="#">
+            <span class="icon info"></span>
+                <span class="fa_name">Information Technology</span>
+            (45 Tests) </a></div>
+            <div class="functional_area_inside border-2">
+            <a href="#">
+            <span class="icon banking"></span>
+                <span class="fa_name">Banking & Finance</span>
+            (32 Tests) </a></div>
+            <div class="functional_area_inside border-3">
+            <a href="#">
+            <span class="icon operations"></span>
+                <span class="fa_name">Operation Management</span>
+            (25 Tests)
+            </a>
+                </div>
+            
+            <div class="load_more_button"><a href="#">Load more</a></div>
+            
+            
+            
     </div>
 
 
 
-<div class="functional_area">
 
-<h2>Tests by functional area</h2>
-
-
-	
-<div class="functional_area_inside border-0">
-<a href="#">
-<span class="icon sales"></span>
-	<span class="fa_name">Sales and Marketing</span>
-(23 Tests)</a> </div>
-
-<div class="functional_area_inside border-1">
-	<a href="#">
-<span class="icon info"></span>
-	<span class="fa_name">Information Technology</span>
-(45 Tests) </a></div>
-<div class="functional_area_inside border-2">
-<a href="#">
-<span class="icon banking"></span>
-	<span class="fa_name">Banking & Finance</span>
-(32 Tests) </a></div>
-<div class="functional_area_inside border-3">
-<a href="#">
-<span class="icon operations"></span>
-	<span class="fa_name">Operation Management</span>
-(25 Tests)
-</a>
- </div>
-
-<div class="load_more_button"><a href="#">Load more</a></div>
-
-
-
-</div>
 
 </div>
 {% endblock container %}

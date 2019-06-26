@@ -4,24 +4,26 @@
 @import 'home_band.scss';
 @import 'populartest.scss';
 @import 'functional_area.scss';
-
-
-
+@import 'take_test.scss';
 
 .practice-test {
     display: flex;
     flex-direction: column;
-    margin-top: 20px;
+    padding: 10px 15px 0;
     background: linear-gradient(-1deg, #FFFFFF 27%, #F2F2F2 89%);
+    padding-bottom: 100px;
+
+    h1 {
+        color: $txt-grey-333;
+        font-size: $font-size-xlg;
+        margin-top: 15px;
+        line-height: 35px;
+        margin-bottom: 10px;
+    }
+    
 }
 
 
-h1 {
-    color: $txt-grey-333;
-    font-size: $font-size + 13;
-    margin: 30px 0 0 5%;
-    line-height: 30px;
-}
 
 h2 {
     font-size: $font-size + 9;
@@ -33,8 +35,7 @@ h2 {
 
 
 .bread-crums {
-    margin: 20px 0 0 5%;
-    font-size: $font-size - 2;
+    font-size: $font-size-xs;
     color: $txt-grey-666;
 
     a {
@@ -46,7 +47,8 @@ h2 {
     position: relative;
     display: flex;
     width: 100%;
-    margin: 0 0 10px;
+    margin-bottom: 10px;
+
 
     .searchbox {
         background: $bg-white;
@@ -55,8 +57,8 @@ h2 {
         margin: 20px auto 0;
         display: flex;
         flex-direction: row;
-        width: 90%;
-        padding: 0 5%;
+        width: 100%;
+        padding: 0 20px;
         height: 50px;
         justify-content: center;
 
@@ -130,8 +132,7 @@ h2 {
 }
 
 .back {
-    background: url($practice-test) -10px -394px;
-    content: "";
-    width: 42px;
-    height: 26px;
+    background: url($practice-test) 0 -406px;
+    width: 35px;
+    height: 35px;
 }

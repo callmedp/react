@@ -102,6 +102,8 @@ $font-size-xs   :   .75rem;
 $font-size-base :    0.813rem;
 $font-size-md   :   1rem;
 $font-size-lg   :   1.25rem;
+$font-size-xlg  :   1.75rem;
+$font-size-14  :   .875rem;
 
 $font-weight-normal :   400;
 $font-weight-medium :   600;
@@ -120,7 +122,6 @@ $blue_bt:#5168C7;
 $purple:#D0D2F2;
 $sky:#B2E1F2;
 $light_green:#F2F4D0;
-$blue:    #D7F9F9 ;
 $indigo:  #EDC3E7 ;
 $pink:    #C9C3FF ;
 $red:     #dc3545 ;
@@ -329,4 +330,11 @@ $cyan:    #17a2b8 ;
   display: inline-block;
   background-color: #e1e1e1;
   margin-bottom: 4px;
+}
+%white-box {
+  background-color: $bg-white;
+  border-radius: 5px;
+  box-shadow: $box-shadow;
+  margin-top: 30px;
+  padding: 15px;
 }

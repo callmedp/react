@@ -1,7 +1,6 @@
 .headband_practice {
     display: flex;
     flex-direction: column;
-    margin: 0 5%;
 
     h1 {
         font-size: 34px;
@@ -78,7 +77,7 @@
     position: absolute;
     background: url($path + 'images/mobile/practice_test/base.png') -56px -1px no-repeat ;
     width: 131px;
-    left: 0;
+    left: -15px;
     height: 165px;
 
 
