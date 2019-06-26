@@ -17,19 +17,35 @@ from shop.models import Category
 
 
 class VskillTestView(DetailView):
-    template_name = 'vskill/vskill_test.html'
-    model =Test
+    template_name = 'vskill/test-paper.html'
+    model = Test
+
+
+    def get_breadcrumbs(self):
+        breadcrumbs = []
+        breadcrumbs.append({"url": '/', "name": "Home"})
+        breadcrumbs.append({"url": '/practice-test', "name": 'practice-test'})
+        test = self.get_object()
+        category = test.category
+        parent_category = category.get_parent().first() if category.get_parent() else None
+        if parent_category:
+            breadcrumbs.append({"url": '/practice-test/'+parent_category.slug, "name": parent_category.name})
+        breadcrumbs.append({"url": '/practice-test/'+ category.slug, "name": category.name})
+        breadcrumbs.append({"url": '/practice-test', "name": 'test'})
+        return breadcrumbs
 
 
     def get(self, request, *args, **kwargs):
         test = self.get_object()
+        if request.session.get('ongoing_test_'+test.id):
+            return 404
         if not test:
             return redirect(reverse('assessment:vskill-landing'))
         return super(VskillTestView,self).get(request, args, **kwargs)
 
-
     def get_context_data(self, **kwargs):
         context = super(VskillTestView, self).get_context_data(**kwargs)
+        context.update({'breadcrumbs': self.get_breadcrumbs()})
         test_id = self.get_object()
         questions_list = Question.objects.filter(test_id=test_id.pk)
         if not questions_list:

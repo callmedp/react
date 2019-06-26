@@ -5,7 +5,7 @@ from assessment.views import *
 
 urlpatterns = [
 
-url(r'^online-exam/(?P<pk>\d+)/$',VskillTestView.as_view(), name='vskill-exam'),
+url(r'^online-exam/(?P<slug>[-\w]+)-test/$',VskillTestView.as_view(), name='vskill-exam'),
 
 url(r'^practice-tests/$',AssessmentLandingPage.as_view(), name='vskill-landing'),
 

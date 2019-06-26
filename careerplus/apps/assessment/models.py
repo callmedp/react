@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django_mysql.models import JSONField
+from django.utils.text import slugify
 
 
 from shop.models import Category,Product
@@ -20,6 +21,8 @@ QUESTION_TYPE = (
 
 
 class Test(AbstractAutoDate):
+    slug = models.SlugField(
+        max_length=255, unique=True, null=True, blank=True)
     title = models.CharField(
         max_length=255, null=False, blank=False)
     is_active = models.BooleanField(default=False)
@@ -38,6 +41,13 @@ class Test(AbstractAutoDate):
 
     def get_question_count(self):
         return self.question_set.all().count()
+
+    def save(self,*args,**kwargs):
+        created = not bool(getattr(self, "id"))
+        if not created:
+            value = slugify(getattr(self, 'slug', self.title))
+            self.slug = value
+        super().save(*args, **kwargs)
 
 
 class Section(AbstractAutoDate):

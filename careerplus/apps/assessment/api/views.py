@@ -4,6 +4,8 @@ from shop.models import Category
 from shared.rest_addons.pagination import LearningCustomPagination
 from shared.rest_addons.mixins import FieldFilterMixin
 from assessment.models import Test
+from assessment.serializers import TestSerializer
+
 from rest_framework.response import Response
 
 
@@ -31,6 +33,17 @@ class CategoryApiView(FieldFilterMixin,ListAPIView):
         if self.request.GET.get('tl') and self.request.GET.get('tl').isdigit():
             filter_dict.update({'type_level': self.request.GET.get('tl')})
         return queryset.filter(**filter_dict)
+
+
+class TestApiView(FieldFilterMixin,ListAPIView):
+    permission_classes = []
+    authentication_classes = []
+    pagination_class = LearningCustomPagination
+    serializer_class = TestSerializer
+
+    def get_queryset(self):
+        test = Test.objects.exclude(category__categoryproducts__type_flow=16)
+        return test
 
 
 

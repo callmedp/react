@@ -14,6 +14,20 @@
 <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/practice-skill/practice-skill.scss' %}" rel="stylesheet">
 <link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
 {% endcompress %}
+<style>
+   .inactive{
+      display:None;
+   }
+   .dirt{
+      background:green !important;
+      color:white !important;
+   }
+   .skipped{
+      background:red !important;
+      color:white !important;
+   }
+
+</style>
 {% endblock css_section %}
 {% block main_container %}
 <div class="practice-skill__wrap-inner">
@@ -40,48 +54,39 @@
             <div class="test-paper-box white-box">
                <div class="pagination-box flexbox">
                   <div class="paper-pagination">
-                     <span class="marked">1</span> <span class="marked">2</span> <span class="marked">3</span> <span>4</span> <span class="marked">5</span> <span>6</span> <span class="marked">7</span> <span>8</span> <span>9</span> <span>10</span>
+                     {% for quest in questions_list  %}
+                     <span class="marked" id="markedquestion-{{forloop.counter}}" data-attr-value="{{forloop.counter}}">{{forloop.counter}}</span>
+                     {% endfor %}
                   </div>
                   <div class="pagination-more">
                   </div>
                </div>
                <!-- paper starts -->
-               <div class="test-paper">
+                           {% for quest in questions_list %}
+               <div class="test-paper {% if forloop.counter == 1 %} actived {% else %}inactive{% endif %}" id="question-{{forloop.counter}}">
+
+
                   <div class="flexbox">
-                     <h2>6) SEO = 'Search Engine optimization', then SEM = ?</h2>
-                     <strong>6 of 10</strong>
+                     <h2>{{forloop.counter}} {{quest.question_text}} </h2>
+                     <strong>{{forloop.counter}} of {{questions_list.count}}</strong>
                   </div>
                   <ul class="test-paper__question">
+                     {% for ans in quest.question_options %}
                      <li>
-                        <label class="custom-radio">Search Engine Manipulation
-                           <input type="radio" checked="checked" name="radio">
+                        <label class="custom-radio">{{ans.option}}
+                           <input type="radio" checked="checked" id="{{ans.option_id}}" name="radio">
                            <span class="checkmark"></span>
                         </label>
                      </li>
-                     <li>
-                        <label class="custom-radio">Search Engine Marketing
-                           <input type="radio" name="radio">
-                           <span class="checkmark"></span>
-                        </label>
-                     </li>
-                     <li>
-                        <label class="custom-radio">Social Ethical Marketing
-                           <input type="radio" name="radio">
-                           <span class="checkmark"></span>
-                        </label>
-                     </li>
-                     <li>
-                        <label class="custom-radio">Safe Easy Marketing
-                           <input type="radio" name="radio">
-                           <span class="checkmark"></span>
-                        </label>
-                     </li>
+
+                     {% endfor %}
                   </ul>
                </div>
+                {% endfor %}
                <!-- paper end -->
                <div class="flexbox ml-20">
-                  <button class="blue_btn mr-20">Next question&nbsp; &rsaquo;</button>
-                  <button class="white_btn">Skip</button>
+                  <button class="blue_btn mr-20" id="nextQuestionBtn" onclick="nextquestion('1')";>Next question&nbsp; &rsaquo;</button>
+                  <button class="white_btn"  onclick="skipQuestion()"; >Skip</button>
                   <span class="flexbox align-self-mla mr-20"><button class="white_btn">End test</button></span>
                </div>
             </div>
@@ -92,8 +97,8 @@
             <div class="white-box mb-20 bdr-bottom">
                <div class="time flexbox align-items-center">
                   <strong>Time left</strong>
-                  <span class="time-dot">0 4 <span>minutes</span></span>
-                  <span>0 4 <span>seconds</span></span>
+                  <span class="time-dot" id="testRemanMinutes" style="color:red;"> <span>minutes</span></span>
+                  <span id="testRemanSeconds" style="color:red;">04 <span>seconds</span></span>
                </div>
             </div>
 
@@ -123,36 +128,136 @@
 {% block js_section %}
 {{block.super}}
    <script type="text/javascript">
-   var page_number= 2;
-   function loadmore(){
-            page_number = page_number+1;
-             element = document.getElementById('funcDiv');
-           $.ajax({
-               url: '/api/get-category-level-products',
-               type: "GET",
-               data : {'tl': 2, 'page_size' : 4, 'page':page_number},
-               dataType: 'json',
-               success: function(json) {
-               if (json.next == null){
-                 $('#loadmorebtn').hide();
-               }
-               for (fa in json.results){
-                element.innerHTML= element.innerHTML +'<div class="functional_test_inside border-'+fa+'"><a href="#"><span class="sales"></span>'+ json.results[fa].heading +'</a></div>'
+var page_number = 2;
+var questionAttempt = {}
+var maxCounter = parseInt({{questions_list.count}});
+var activeTab = 1;
+var Minutes = {{object.duration}};
+var tKey = 'Test-' + '{{object.id}}';
+myStorage = window.localStorage;
+var appBefore ;
+var SessionTime = 0;
 
-               }
-               },
-               error: function(xhr, ajaxOptions, thrownError) {
-               if(xhr.status == 404){
-                     alert("No more Categories to show ");
-                     $('#loadmorebtn').hide();
-                     }
-                     else{
+{% for quest in questions_list %}
+questionAttempt['{{ques.id}}'] = false
+{% endfor %}
 
-                   alert("Something went wrong. Try again later");
-                   }
-               }
-           });
-   }
+function loadmore() {
+    page_number = page_number + 1;
+    element = document.getElementById('funcDiv');
+    $.ajax({
+        url: '/api/get-category-level-products',
+        type: "GET",
+        data: {
+            'tl': 2,
+            'page_size': 4,
+            'page': page_number
+        },
+        dataType: 'json',
+        success: function(json) {
+            if (json.next == null) {
+                $('#loadmorebtn').hide();
+            }
+            for (fa in json.results) {
+                element.innerHTML = element.innerHTML + '<div class="functional_test_inside border-' + fa + '"><a href="#"><span class="sales"></span>' + json.results[fa].heading + '</a></div>'
+
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            if (xhr.status == 404) {
+                alert("No more Categories to show ");
+                $('#loadmorebtn').hide();
+            } else {
+
+                alert("Something went wrong. Try again later");
+            }
+        }
+    });
+}
+
+$('.marked').click(function() {
+    let value = parseInt(this.dataset.attrValue);
+    activeTab = value;
+    if (questionAttempt['question-' + activeTab]) {
+        $('#' + questionAttempt['question-' + activeTab]).prop("checked", true);
+    }
+    $('.test-paper').addClass('inactive');
+    $('.test-paper').removeClass('actived');
+    $('#question-' + value).removeClass('inactive');
+    $('#question-' + value).addClass('actived');
+    if (activeTab >= maxCounter) {
+        $('#nextQuestionBtn').hide();
+    } else {
+        $('#nextQuestionBtn').show();
+    }
+});
+
+
+function nextquestion(number) {
+    if (activeTab < maxCounter && number > 0) {
+        console.log(activeTab);
+        $('#question-' + activeTab).removeClass("actived");
+        $('.test-paper').addClass('inactive');
+
+        activeTab = parseInt(activeTab) + parseInt(number);
+        if (questionAttempt['question-' + activeTab]) {
+            $('#' + questionAttempt['question-' + activeTab]).prop("checked", true);
+        }
+
+
+        $('#question-' + activeTab).removeClass('inactive');
+        $('#question-' + activeTab).addClass('actived');
+
+        if (activeTab >= maxCounter) {
+            $('#nextQuestionBtn').hide();
+        } else {
+            $('#nextQuestionBtn').show();
+        }
+    }
+}
+
+$('input[name="radio"]').on("click", function(e) {
+    let quest_id = $(e.target).closest(".test-paper")[0].id;
+    $('#marked' + quest_id).removeClass();
+    $('#marked' + quest_id).addClass('dirt');
+    questionAttempt[quest_id] = e.target.id;
+    nextquestion(1);
+
+});
+
+function skipQuestion() {
+    $('#markedquestion-' + activeTab).addClass('skipped');
+    let quest_id = 'question-' + activeTab;
+    $('#' + questionAttempt[quest_id]).prop("checked", false);
+    delete questionAttempt[quest_id];
+    nextquestion(1);
+}
+
+function startTimer(duration) {
+    var timer = duration,
+        minutes, seconds;
+    var interval = setInterval(function() {
+        minutes = parseInt(timer / 600, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        $('#testRemanMinutes').text(minutes);
+        $('#testRemanSeconds').text(seconds);
+
+        if (minutes <= 0 && seconds <= 0) {
+            clearInterval(interval);
+            $('#testRemanMinutes').text("Time");
+            $('#testRemanSeconds').text("Out");
+            myStorage.setItem(tKey, JSON.stringify(questionAttempt));
+        }
+        if (--timer < 0) {
+        timer= duration;
+        }
+    }, 1000);
+}
+startTimer(Minutes);
    </script>
 {% endblock js_section %}
 {% block johukum %}
