@@ -2,17 +2,15 @@
    v2.0-modified | 20110126
    License: none (public domain)
 */
-
-
 @import '../styles/variables/vars.scss';
 
 
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    -webkit-overflow-scrolling: touch;
-    -moz-overflow-scrolling: touch;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+  -moz-overflow-scrolling: touch;
 }
 
 // html, body {
@@ -21,19 +19,24 @@
 // }
 
 html {
-    font-size: 62.5%;
+  font-size: 62.5%;
 }
 
 body {
-    font-size: 1.6rem;
-    background-color: $white;
-    color: $grey-666;
-    line-height: 1.4;
-    font-family: 'Open Sans', sans-serif;
-    height: 100vh;
+  font-size: 1.6rem;
+  background-color: $white;
+  color: $grey-666;
+  line-height: 1.4;
+  font-family: 'Open Sans', sans-serif;
+  height: 100vh;
 }
 
 a {
-    color: $blue;
-    text-decoration: none;
+  color: $blue;
+  text-decoration: none;
+}
+
+
+.swal2-container {
+  z-index: 9999;
 }
