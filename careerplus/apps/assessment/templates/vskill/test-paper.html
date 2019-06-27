@@ -75,7 +75,7 @@
                      {% for ans in quest.question_options %}
                      <li>
                         <label class="custom-radio">{{ans.option}}
-                           <input type="radio" checked="checked" id="{{ans.option_id}}" name="radio">
+                           <input type="radio"  id="{{ans.option_id}}" name="radio">
                            <span class="checkmark"></span>
                         </label>
                      </li>
@@ -136,8 +136,30 @@ var activeTab = 1;
 var Minutes = {{object.duration}};
 var tKey = 'Test-' + '{{object.id}}';
 myStorage = window.localStorage;
-var appBefore ;
-var SessionTime = 0;
+<!--var appBefore = {% if deleteans %}{{deleteans}} {% else%} false {% endif %} ;-->
+
+var delAns = {% if deleteans %}true{% else%} false {% endif %} ;
+$(document).ready(function() {
+
+    if (delAns) {
+        myStorage.removeItem(tkey);
+    } else {
+        questionAttempt = JSON.parse(myStorage.getItem(tKey));
+        if (questionAttempt != null) {
+            for (var id in Object.keys(questionAttempt)) {
+                if (Object.values(questionAttempt)[id] != "") {
+                    $('#' + Object.values(questionAttempt)[id]).click();
+                    $('#marked' + Object.keys(questionAttempt)[id]).removeClass();
+                    $('#marked' + Object.keys(questionAttempt)[id]).addClass('dirt');
+                }
+            }
+           $('#' + questionAttempt['question-' + activeTab]).prop("checked", true);
+        } else {
+            questionAttempt = {};
+        }
+    }
+
+});
 
 {% for quest in questions_list %}
 questionAttempt['{{ques.id}}'] = false
@@ -196,7 +218,6 @@ $('.marked').click(function() {
 
 function nextquestion(number) {
     if (activeTab < maxCounter && number > 0) {
-        console.log(activeTab);
         $('#question-' + activeTab).removeClass("actived");
         $('.test-paper').addClass('inactive');
 
@@ -204,15 +225,13 @@ function nextquestion(number) {
         if (questionAttempt['question-' + activeTab]) {
             $('#' + questionAttempt['question-' + activeTab]).prop("checked", true);
         }
-
-
         $('#question-' + activeTab).removeClass('inactive');
         $('#question-' + activeTab).addClass('actived');
 
         if (activeTab >= maxCounter) {
-            $('#nextQuestionBtn').hide();
+        $('#nextQuestionBtn').hide();
         } else {
-            $('#nextQuestionBtn').show();
+        $('#nextQuestionBtn').show();
         }
     }
 }
@@ -222,8 +241,6 @@ $('input[name="radio"]').on("click", function(e) {
     $('#marked' + quest_id).removeClass();
     $('#marked' + quest_id).addClass('dirt');
     questionAttempt[quest_id] = e.target.id;
-    nextquestion(1);
-
 });
 
 function skipQuestion() {

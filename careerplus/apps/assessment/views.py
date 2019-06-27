@@ -1,6 +1,7 @@
 import requests
 import logging
 import json
+from datetime import datetime,timedelta
 
 from django.conf import settings
 from django.views.generic import (DetailView,ListView,TemplateView)
@@ -10,14 +11,13 @@ from django.core.cache import cache
 #local imports
 
 from .models import Question, Test
-
 from shop.models import Category
 
 
 
 
 class VskillTestView(DetailView):
-    template_name = 'vskill/test-answers.html'
+    template_name = 'vskill/test-paper.html'
     model = Test
 
 
@@ -34,13 +34,44 @@ class VskillTestView(DetailView):
         breadcrumbs.append({"url": '/practice-test', "name": 'test'})
         return breadcrumbs
 
+    def is_expired(self,id):
+        session_id = self.request.session.session_key
+        test = self.get_object()
+        test_session_key = session_id + 'test-'+ str(test.id)
+        timestamp = cache.get(test_session_key)
+
+        if not timestamp:
+            timestamp_with_tduration = datetime.timestamp(datetime.now() + timedelta(seconds=test.duration))
+            test_ids = {'ongoing_' + str(test.id): timestamp_with_tduration}
+            cache.set(test_session_key, test_ids, 60 * 60 * 24)
+            return True, False
+
+        elif timestamp and not timestamp.get('ongoing_' + str(test.id)):
+            timestamp_with_tduration = datetime.timestamp(datetime.now() + timedelta(seconds=test.duration))
+            test_ids = {'ongoing_' + str(test.id): timestamp_with_tduration}
+            cache.set(session_id, test_ids, 60 * 60 * 24)
+
+        timestamp = timestamp.get('ongoing_' + str(test.id))
+        timestamp_obj = datetime.fromtimestamp(timestamp)
+        if timestamp_obj + timedelta(days=1) > datetime.now():
+            return False, False
+        return True, True
+
 
     def get(self, request, *args, **kwargs):
+
+        print(self.request.session.session_key)
+        # context = self.get_context_data()
         test = self.get_object()
-        # if request.session.get('ongoing_test_'+test.id):
-        #     return 404
+        print('  -')
         if not test:
             return redirect(reverse('assessment:vskill-landing'))
+        show_test, delete_ans = self.is_expired(test.id)
+        print(show_test,delete_ans)
+        if not show_test:
+            pass
+        # context.update({'deleteans': delete_ans})
+
         return super(VskillTestView,self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -157,6 +188,24 @@ class AssessmentSubCategoryPage(DetailView):
 
 
 
+
+
+class AssessmentResultPage(TemplateView):
+    template_name = 'vskill/vskill_landing.html'
+
+
+    def get_breadcrumbs(self):
+        breadcrumbs = []
+        breadcrumbs.append({"url": '/', "name": "Home"})
+        breadcrumbs.append({"url": None, "name": 'practice-test'})
+        return breadcrumbs
+
+
+
+    def get_context_data(self, **kwargs):
+
+        context = super(AssessmentLandingPage, self).get_context_data(**kwargs)
+        return context
 
 
 
