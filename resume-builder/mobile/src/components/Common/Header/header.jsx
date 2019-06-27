@@ -31,6 +31,23 @@ class Header extends Component {
                         </div>
                         
                     </React.Fragment>
+                    :
+                    page === 'buy' ?
+                    <React.Fragment>
+                        <div className="header__left">
+                            <button role="button" className="menu mr-10">
+                                <i className="sprite icon--back-white" onClick={()=>{history.push('/resume-builder')}}></i>
+                            </button>
+                            <span>Choose your plan</span>
+                        </div>
+
+                        <div className="header__right">
+                            <span className="header--off">
+                                <img src={`${this.staticUrl}react/assets/images/mobile/50percentage-off.png`} alt=""/>
+                            </span>
+                        </div>
+                        
+                    </React.Fragment>
                     : 
                     page === 'preview' ?
                     <React.Fragment>

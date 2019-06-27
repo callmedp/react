@@ -56,6 +56,10 @@ export default class Banner extends Component {
                         <span className="sprite icon--profile mr-5"></span>
                         <span>Resume data fetched from <strong>Shine profile</strong></span>
                     </li>
+                    <li>
+                        <span className="sprite icon--create mr-5"></span>
+                        <span><strong>Create/edit & download</strong> multiple resume for 12 months</span>
+                    </li>
                 </ul>
             </section>
         )
