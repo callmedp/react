@@ -132,6 +132,7 @@ export class Buy extends Component {
                         <section className="right-sidebar right-sidebar-scroll-main">
                             <div className="choose-plan">
                                 <h2 className="mt-10">Choose your plan</h2>
+                                <span class="choose-plan-txt">You can <strong>create/ edit and download</strong> multiple resume for 12 months</span>
                                 <ul>
                                     <li>
                                         <div className="flex-container">
@@ -141,8 +142,10 @@ export class Buy extends Component {
                                                    onChange={this.handleOnChange.bind(this, 'product1')}/>
                                             </span>
                                             <span className="choose-plan--price">
-                                            <p>Buy your customised resume</p>
+                                            <p>Buy 1 resume template</p>
                                             Rs. <strong>{price1}/-</strong>
+                                            <strike className="ml-10">Rs. 1999</strike>
+                                            <span className="choose-plan--off ml-10">Flat 50% off</span>
                                             </span>
                                         </div>
                                     </li>
@@ -155,11 +158,11 @@ export class Buy extends Component {
                                                    onChange={this.handleOnChange.bind(this, 'product2')}/>
                                             </span>
                                             <span className="choose-plan--price">
-                                            <p>Buy all 5 customised resumes</p>
+                                            <p>Buy all resume templates</p>
                                             Rs. <strong>{price2}
-                                                /-</strong>
-                                            <strike className="ml-10">Rs. 3499</strike>
-                                            <span className="choose-plan--off ml-10">63% off</span>
+                                            /-</strong>
+                                            <strike className="ml-10">Rs. 2499</strike>
+                                            <span className="choose-plan--off ml-10">Flat 50% off</span>
                                             </span>
                                         </div>
 
