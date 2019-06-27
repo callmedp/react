@@ -717,6 +717,8 @@ class OrderDetailView(DetailView):
 
         #Redirect user if none of the items are visible
         if not self.context.get('orderitems'):
+            logging.getLogger('info_log').info("Invalid data access {},{},{}".format(\
+                request.user.id,request.user.get_full_name(),self.object.id))
             messages.add_message(self.request,messages.ERROR,'You are not authorised to view this order.')
             return HttpResponseRedirect("/console/")
         
