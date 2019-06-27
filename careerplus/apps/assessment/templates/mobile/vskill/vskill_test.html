@@ -70,7 +70,10 @@
             </li>
         </ul>
         
-        <div class="btn btn-round-30 btn-blue w-100">Next question <span class="pt-sprite icon-arrow"></span></div>
+        <div class="btn btn-round-30 btn-blue w-100" id="btn_check_result">
+            Next question 
+            <span class="pt-sprite icon-arrow"></span>
+        </div>
         <div class="take-test--button-wrap mt-15">
             <span class="btn btn-outline btn-round-30">Skip</span>
             <span class="btn btn-outline btn-round-30">End test</span>
@@ -86,7 +89,7 @@
 
         <div class="feature-test__benefits">
             <p><strong>Benefits</strong></p>
-            <ul>
+            <ul class="blue-bullet">
                 <li><span></span>500+ questions</li>
                 <li><span></span>Real exam & Practice environment
                 </li>
@@ -99,29 +102,6 @@
 
         </div>
     </div><!-- /. feature-test -->
-
-
-
-    <div class="check-result">
-        <p class="fs-18">Enter your details to check the Test result</p>
-        <ul class="mt-10">
-            <li class="check-result__item input-effect">
-                <input type="text" class="form-control" id="name" aria-describedby="name" placeholder="">
-                <label for="name">Name</label>
-            </li>
-            <li class="check-result__item input-effect">
-                <input type="email" class="form-control" id="email" aria-describedby="email" placeholder="">
-                <label for="email">Email</label>
-            </li>
-            <li class="check-result__item input-effect">
-                <input type="tel" class="form-control" id="mobile" aria-describedby="mobile" placeholder="">
-                <label for="mobile">Mobile</label>
-            </li>
-            <li>
-                <button class="btn btn-round-30 btn-blue w-100">Submit</button>
-            </li>
-        </ul>
-    </div><!-- Check Result -->
 
     <div class="test-result">
         <span class="text-center mt-10">
@@ -146,7 +126,7 @@
 
         <div class="feature-test__benefits">
             <p>Benefits</p>
-            <ul>
+            <ul class="blue-bullet">
                 <li><span></span>500+ questions</li>
                 <li><span></span>Real exam & Practice environment
                 </li>
@@ -413,10 +393,12 @@
             
         </ol>
     </div><!-- /. Test Answers -->
+
     <div class="mt-30 mb-30">
-        <div class="btn btn-round-30 btn-blue w-100 mb-15">Next test</div>
+        <div class="btn btn-round-30 btn-blue w-100 mb-15" id="btn_next-test">Next test</div>
         <div class="btn btn-round-30 btn-outline w-100">Explore other test</div>
     </div>
+
 </div><!-- Practice test -->
 
 
@@ -434,7 +416,7 @@
 
        <div class="view-test-benefits">
            <p><strong>Benefits</strong></p>
-           <ul>
+           <ul class="blue-bullet">
                 <li><span></span>500+ questions</li>
                 <li><span></span>Real exam & Practice environment
                 </li>
@@ -444,6 +426,32 @@
             <button class="btn btn-round-30 btn-blue btn-lg mt-20">View test</button>
        </div>
     </div>
+</div><!-- /. modal -->
+
+<div class="practice-test check-result-wrap" id="check_results">
+    <div class="practice-test-inside"></div>
+    <h1>Check result</h1>
+    <div class="check-result mt-15">
+        <p class="fs-18">Enter your details to check the Test result</p>
+        <ul class="mt-10">
+            <li class="check-result__item input-effect error">
+                <span class="error-message">Required</span>
+                <input type="text" class="form-control" id="name" aria-describedby="name" placeholder="">
+                <label for="name">Name</label>
+            </li>
+            <li class="check-result__item input-effect">
+                <input type="email" class="form-control" id="email" aria-describedby="email" placeholder="">
+                <label for="email">Email</label>
+            </li>
+            <li class="check-result__item input-effect">
+                <input type="tel" class="form-control" id="mobile" aria-describedby="mobile" placeholder="">
+                <label for="mobile">Mobile</label>
+            </li>
+            <li class="mt-40 mb-20">
+                <button class="btn btn-round-30 btn-blue w-100" id="close">Submit</button>
+            </li>
+        </ul>
+    </div><!-- Check Result -->
 </div>
 
 
@@ -462,7 +470,16 @@
 				$(this).removeClass("has-content");
 			}
 		})
-	});
+    });
+
+    $("#btn_check_result").click(function(){
+     $("#check_results").addClass("open");
+    });
+    
+    $("#close").click(function(){
+     $("#check_results").removeClass("open");
+    });
+    
 </script>
 {% endblock container %}
 {% block johukum %}

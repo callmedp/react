@@ -1,6 +1,7 @@
 @import '../common/checkbox.scss';
 @import '../components/buttons';
 @import '../components/popup';
+@import '../components/bullet';
 
 .question-timer {
     @extend %white-box;
@@ -122,29 +123,6 @@
         }
     }
 
-    &__benefits {
-
-        ul {
-            li {
-                position: relative;
-                padding-left: 15px;
-
-                &:not(:last-child){
-                    margin-bottom: 5px;
-                }
-
-                span {
-                    width: 5px;
-                    height: 5px;
-                    background-color: $blue;
-                    position: absolute;
-                    left: 0;
-                    top: 8px;
-                    border-radius: 50%;
-                }
-            }
-        }
-    }
 
     &__btn-wrap {
         display: flex;
@@ -165,6 +143,7 @@
 
 .check-result {
     @extend %white-box;
+    position: relative;
 
     ul {
         li {
@@ -187,6 +166,13 @@
                 }
             }
         }
+    }
+
+    .error-message {
+        position: absolute;
+        right: 15px;
+        top: 10px;
+        font-size: 12px;
     }
 }
 
@@ -420,4 +406,109 @@
     top: 10px;
     right: 10px;
     transform: rotate(45deg);
+}
+
+.check-result-wrap {
+    opacity: 0;
+    visibility: hidden;
+    position: fixed !important;
+    top: 0;
+    height: 100vh;
+    transition: all .2s;
+    z-index: 111;
+
+    &.open {
+        opacity: 1;
+        visibility: visible;
+        overflow: auto;
+        padding-bottom: 30px;
+
+        .back {
+            position: absolute;
+            top: 10px;
+        }
+    }
+}
+
+.test-option-box {
+    @extend %white-box;
+    position: relative;
+
+    &--test-wrap,
+    &--cta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &--content {
+        span {
+            color: $txt-grey-999;
+            font-size: $font-size-xs;
+        }
+
+        p {
+            padding-bottom: 0;
+        }
+    }
+
+    &--cta {
+        margin-top: 20px;
+
+        strong {
+            align-self: center;
+        }
+
+    }
+
+    &--price {
+        span {
+            color: $txt-grey-999;
+            font-size: $font-size-14;
+            display: block;
+            text-decoration: line-through;
+        }
+
+        strong {
+            font-weight: $font-weight-medium;
+            font-size: $font-size-lg + .2;
+        }
+    }
+
+    &--recommended {
+        position: absolute;
+        right: 0;
+        background-color: $yellow;
+        top: 15px;
+        color: $txt-black;
+        text-transform: uppercase;
+        padding-right: 10px;
+        padding-left: 9px;
+        font-size: $font-size-base;
+        font-weight: 600;
+
+        &::before {
+            content: '';
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 20px 20px 0;
+            border-color: transparent $yellow transparent transparent;
+
+            position: absolute;
+            left: -10px;
+        }
+
+        &::after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 0 10px 10px;
+            border-color: transparent transparent $yellow transparent;
+            position: absolute;
+            left: -10px;
+            bottom: 0;
+        }
+    }
 }

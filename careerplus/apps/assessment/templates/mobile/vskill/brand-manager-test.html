@@ -32,17 +32,19 @@ Tests</h1>
 
     <div class="search">
         <div class="searchbox">
-            <input type="text" name="" placeholder="Search popular tests"><span class="icon_search"></span>
+            <input type="text" name="" placeholder="Search popular tests">
+            <span class="icon_search"></span>
         </div>
     </div>
+
     <div class="popular_test">
-         <div class="popular_test_inside">
-                <a href="#">
-
-                <span class=" border border2"></span><span class="name">Brand Manager</span>
-                    <span class="bluebutton">Take free test</span>
-
-                    </a></div>
+        <div class="popular_test_inside">
+            <a href="#">
+                <span class=" border border2"></span>
+                <span class="name">Brand Manager</span>
+                <span class="bluebutton" id="btn_check_result">Take free test</span>
+            </a>
+        </div>
 
 
 
@@ -140,6 +142,107 @@ Master</span>
     </div>
         <div class="load_more_button"><a href="#">Load more</a></div>
     </div>
+
+
+
+    <div class="practice-test check-result-wrap pt-30" id="check_results">
+        <div class="practice-test-inside"></div>
+        <div class="back" id="close"></div>
+        <h1 class="mt-30">Digital Marketing Scientist Test</h1>
+        <p class="c6">Make your choice and go ahead</p>
+
+        <div class="test-option-box">
+            <h2 class="fs-20"><a href="#">Free Test</a></h2>
+            <div class="test-option-box--test-wrap">
+                <div class="test-option-box--content">
+                    <span>Test Format</span>
+                    <p>Practice Exam</p>
+                </div>
+                
+                <div class="test-option-box--content">
+                    <span>No. of Questions</span>
+                    <p>25 Questions</p>
+                </div>
+            </div>
+    
+            <div class="test-option-box--cta">
+                <strong class="fs-20">FREE</strong>
+                <button class="btn btn-lg btn-round-30 btn-blue semi-bold">Take free test</button>
+            </div>
+        </div><!-- option test box-->
+        
+        <div class="test-option-box">
+            <h2 class="fs-20"><a href="#">Practice Tests</a></h2>
+            <span class="test-option-box--recommended">
+                Recommended
+            </span>
+            <div class="test-option-box--test-wrap">
+                <div class="test-option-box--content">
+                    <span>Test Format</span>
+                    <p>Practice Exam</p>
+                </div>
+                
+                <div class="test-option-box--content">
+                    <span>No. of Questions</span>
+                    <p>500+ Questions</p>
+                </div>
+            </div>
+    
+            <ul class="blue-bullet mt-20">
+                <li>
+                    <span></span>
+                    Real exam & Practice environment
+                </li>
+                <li>
+                    <span></span>
+                    Answers and Detailed Explanations
+                </li>
+            </ul>
+    
+            <div class="test-option-box--cta mt-20">
+                <div class="test-option-box--price">
+                    <span>Rs. 999</span>
+                    <strong>Rs. 699</strong>
+                </div>
+                <button class="btn btn-lg btn-round-30 btn-yellow semi-bold">Add to cart</button>
+            </div>
+        </div><!-- Practice Tests box-->
+    
+        <div class="test-option-box">
+            <h2 class="fs-20"><a href="#">Online Course</a></h2>
+            <div class="test-option-box--test-wrap">
+                <div class="test-option-box--content">
+                    <span>Duration</span>
+                    <p>8 Days</p>
+                </div>
+                
+                <div class="test-option-box--content">
+                    <span>Availability</span>
+                    <p>Unlimited</p>
+                </div>
+            </div>
+    
+            <div class="test-option-box--cta mt-20">
+                <div class="test-option-box--price">
+                    <span>Rs. 1999</span>
+                    <strong>Rs. 1699</strong>
+                </div>
+                <button class="btn btn-lg btn-round-30 btn-blue semi-bold">Add to cart</button>
+            </div>
+        </div><!-- option test box-->
+    </div>
+
+    <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+    <script>
+        $("#btn_check_result").click(function(){
+            $("#check_results").addClass("open");
+        });
+        
+        $("#close").click(function(){
+            $("#check_results").removeClass("open");
+        });
+    </script>
+
 {% endblock container %}
 {% block johukum %}
 {% endblock johukum %}
