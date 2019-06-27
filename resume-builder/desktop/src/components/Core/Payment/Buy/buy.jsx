@@ -33,7 +33,7 @@ export class Buy extends Component {
     }
 
     async showEnlargedTemplate(templateId) {
-        await this.props.fetchSelectedTemplateImage(templateId,true);
+        await this.props.fetchSelectedTemplateImage(templateId, true);
         this.props.showModal()
     }
 
@@ -87,19 +87,22 @@ export class Buy extends Component {
             slidesToShow: 3,
             slidesToScroll: 1,
         };
-        const {userInfo: {first_name, selected_template,order_data}, ui: {loader}, template: {templateImage, thumbnailImages},productIds} = this.props;
+        const {userInfo: {first_name, selected_template, order_data, last_name, number, email}, ui: {loader}, template: {templateImage, thumbnailImages}, productIds} = this.props;
         const {userInfo} = this.props;
         const {checked} = this.state;
-        const price1 = productIds[0] ?  productIds[0].inr_price: 999
-        const price2 = productIds[1] ?  productIds[1].inr_price: 1248
+        const price1 = productIds[0] ? productIds[0].inr_price : 999
+        const price2 = productIds[1] ? productIds[1].inr_price : 1248
         return (
             /*
             * @desc Top Bar component
             * */
             <div>
-                <Header userName={first_name}/>
-                <TemplateModal {...this.props}  page={'buy'}/>
-                <SelectTemplateModal {...this.props} page={"buy"} />
+                <Header userName={first_name}
+                        lastName={last_name}
+                        number={number}
+                        email={email}/>
+                <TemplateModal {...this.props} page={'buy'}/>
+                <SelectTemplateModal {...this.props} page={"buy"}/>
                 {
                     !!(loader) &&
                     <LoaderPage/>
@@ -154,7 +157,7 @@ export class Buy extends Component {
                                             <span className="choose-plan--price">
                                             <p>Buy all 5 customised resumes</p>
                                             Rs. <strong>{price2}
-                                            /-</strong>
+                                                /-</strong>
                                             <strike className="ml-10">Rs. 3499</strike>
                                             <span className="choose-plan--off ml-10">63% off</span>
                                             </span>
@@ -173,7 +176,7 @@ export class Buy extends Component {
                                                             !!(thumbnailImages && thumbnailImages.length) ?
                                                                 <img
                                                                     src={`data:image/png;base64,${thumbnailImages[key]}`}
-                                                                    className="img-responsive" alt=""/> 
+                                                                    className="img-responsive" alt=""/>
                                                                 // <img
                                                                 //     src={`${this.staticUrl}react/assets/images/resume-thumb-${selected_template || el}.jpg`}
                                                                 //     className="img-responsive" alt=""/>
@@ -204,13 +207,13 @@ export class Buy extends Component {
                     </section>
 
                     <div className="bottom-links">
-                        {order_data && order_data.id && !order_data.combo ? '':
+                        {order_data && order_data.id && !order_data.combo ? '' :
                             <React.Fragment>
                                 <a onClick={() => {
                                     this.props.showSelectTemplateModal()
                                 }}>Change template</a> |
                             </React.Fragment>
-                        } 
+                        }
                         <Link to={'/resume-builder/edit'}>Edit template</Link>
                     </div>
                 </div>
@@ -271,21 +274,21 @@ const mapDispatchToProps = (dispatch) => {
                 dispatch(updatePersonalInfo({personalDetails, resolve, reject}));
             })
         },
-        'displaySelectedTemplate' :(templateId) => {
+        'displaySelectedTemplate': (templateId) => {
             return dispatch(displaySelectedTemplate(templateId))
         },
-        'fetchThumbNailImages' : () => {
+        'fetchThumbNailImages': () => {
             return dispatch(fetchThumbNailImages())
         },
-        'fetchSelectedTemplateImage' : (templateId,isModal) => {
+        'fetchSelectedTemplateImage': (templateId, isModal) => {
 
             return new Promise((resolve, reject) => {
-                return dispatch(fetchSelectedTemplateImage({templateId,isModal,resolve,reject}))
+                return dispatch(fetchSelectedTemplateImage({templateId, isModal, resolve, reject}))
             })
         },
         "fetchDefaultCustomization": (templateId) => {
             return new Promise((resolve, reject) => {
-                return dispatch(fetchDefaultCustomization({templateId, resolve,reject}))
+                return dispatch(fetchDefaultCustomization({templateId, resolve, reject}))
             })
         },
     }
