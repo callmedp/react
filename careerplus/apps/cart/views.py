@@ -77,9 +77,10 @@ class AddToCartView(View, CartMixin):
         return super(AddToCartView, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+
         data = {"status": -1}
         cart_type = request.POST.get('cart_type')
-        prod_id = request.POST.get('prod_id','')
+        prod_id = request.POST.get('prod_id', '')
         cart_pk = request.session.get('cart_pk', '')
         is_resume_template = request.POST.get('add_resume', False)
         candidate_id = request.session.get('candidate_id', '')
@@ -119,6 +120,11 @@ class AddToCartView(View, CartMixin):
 
         data['cart_count'] = str(self.get_cart_count())
         data['cart_url'] = reverse('cart:cart-product-list')
+        #
+        # if product.type_flow == 17:
+
+        # shipping example
+        # if request.session.get('candidate_id'):
 
         return HttpResponse(json.dumps(data), content_type="application/json")
 
