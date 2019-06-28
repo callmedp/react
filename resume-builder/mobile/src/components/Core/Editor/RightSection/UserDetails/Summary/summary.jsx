@@ -143,7 +143,7 @@ class Summary extends Component {
         return (
             <div className="buildResume">
                 <PreviewModal {...this.props}/>
-                <AddSuggesion label={'Summary'} modal_status={modal_status} length={extra_info.length} maxLength="500"
+                <AddSuggesion label={'Summary'} modal_status={modal_status} length={extra_info.length} maxLength="1000"
                               closeModal={this.closeModal} suggestions={suggestions}/>
                 <div className="buildResume__wrap pb-0">
                     <div className="buildResume__heading">

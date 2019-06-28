@@ -157,7 +157,7 @@ export const ProjectRenderer = ({
                                                             <Field component={renderTextArea} rows={"3"}
                                                                    type={"text"}
                                                                    noIcon={true}
-                                                                   maxLength={'300'}
+                                                                   maxLength={'1000'}
                                                                    name={`${member}.description`}
                                                                    value={`${member}.description`}/>
                                                         </fieldset>

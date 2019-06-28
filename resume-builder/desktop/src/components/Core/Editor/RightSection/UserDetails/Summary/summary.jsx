@@ -127,7 +127,7 @@ class Summary extends Component {
         const {modal_status} = this.state;
         return (
             <div>
-                <SuggestionModal label={'Summary'} length={extra_info.length} maxLength="500"
+                <SuggestionModal label={'Summary'} length={extra_info.length} maxLength="1000"
                                  modal_status={modal_status} closeModal={this.closeModal} suggestions={suggestions}/>
                 <section className="head-section">
                     <span className="icon-box"><i className="icon-summary1"/></span>

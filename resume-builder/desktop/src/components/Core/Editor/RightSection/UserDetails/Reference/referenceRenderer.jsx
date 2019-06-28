@@ -128,7 +128,7 @@ export const ReferenceRenderer = ({
                                                                 <label>Description</label>
                                                                 <Field component={renderTextArea}
                                                                        noIcon={true}
-                                                                       maxLength={'300'}
+                                                                       maxLength={'1000'}
                                                                        type={"textarea"}
                                                                        name={`${member}.about_candidate`}/>
                                                             </fieldset>
