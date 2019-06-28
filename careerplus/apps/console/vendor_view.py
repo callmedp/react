@@ -346,8 +346,6 @@ class ListScreenProductView(ListView, PaginationMixin):
                 queryset = queryset.filter(Q(name__icontains=self.query))
         except Exception as e:
             logging.getLogger('error_log').error('unable to get query set %s'%str(e))
-
-            pass
         return queryset
 
     def get_context_data(self, **kwargs):

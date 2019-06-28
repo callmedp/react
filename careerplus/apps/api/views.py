@@ -1359,14 +1359,12 @@ class TalentEconomyApiView(FieldFilterMixin,ListAPIView):
         return Blog.objects.filter(**filter_dict)
 
 
-
-
 class OrderDetailApiView(FieldFilterMixin,RetrieveAPIView):
-
     permission_classes = [IsAuthenticated,OrderAccessPermission]
     authentication_classes = [SessionAuthentication]
     serializer_class = OrderDetailSerializer
     queryset = Order.objects.all()
+    
     def get(self, request, *args, **kwargs):
         instance = self.get_object()
         user = self.request.user
@@ -1376,7 +1374,7 @@ class OrderDetailApiView(FieldFilterMixin,RetrieveAPIView):
         for field in fields_to_log:
             if field not in fields_to_check:
                 continue
-            logging.getLogger('info_log').info('{},{},{},{},{},{}'.format(current_time,\
+            logging.getLogger('info_log').info('Order Data Accessed - {},{},{},{},{},{}'.format(current_time,\
         user.id, user.get_full_name(), getattr(instance, 'number', 'None'), field, getattr(instance, field, 'None')))
         return self.retrieve(request, *args, **kwargs)
 
