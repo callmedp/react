@@ -1,10 +1,15 @@
 @import '../../path';
 @import '../library/variables';
 @import '../library/mixin';
-@import 'home_band.scss';
-@import 'populartest.scss';
-@import 'functional_area.scss';
-@import 'take_test.scss';
+
+// PAGES
+@import 'pages/home';
+@import 'pages/test_answers';
+@import 'pages/test-options';
+@import 'pages/take_test';
+
+// COMPONENTS
+@import 'components/utilities';
 
 .practice-test {
     display: flex;
@@ -20,18 +25,14 @@
         margin-top: 15px;
         line-height: 35px;
         margin-bottom: 10px;
-    }
-    
+    }    
 }
-
-
 
 h2 {
     font-size: $font-size + 9;
     font-weight: $font-weight-medium;
     color: $txt-grey-333;
     align-self: center;
-
 }
 
 
@@ -88,16 +89,6 @@ h2 {
 }
 
 
-.bluebutton {
-    background: $blue_bt;
-    border-radius: 42px;
-    font-size: $font-size - 1;
-    color: $txt-white;
-    align-content: center;
-    padding: 5px 10px;
-    font-weight: $font-weight;
-}
-
 .load_more_button {
     background: $bg-white;
     box-shadow: $box-shadow-test;
@@ -115,14 +106,6 @@ h2 {
 
 }
 
-.mb50 {
-    margin-bottom: 50px;
-}
-
-.mt40 {
-    margin-top: 40px !important;
-}
-
 .practice-test-inside {
     position: absolute;
     height: 130px;
@@ -133,7 +116,7 @@ h2 {
 }
 
 .back {
-    background: url($practice-test) 0 -406px;
+    background: url($practice-test) 0 -413px;
     width: 35px;
     height: 35px;
 }

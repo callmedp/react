@@ -1,0 +1,30 @@
+.w-100 {
+    width: 100%;
+}
+
+.w-50 {
+    width: 50%;
+}
+
+
+.pt-sprite {
+    background-image: url('#{$practice-test}');
+    background-repeat: no-repeat;
+}
+
+.icon-cross {
+    @include square(12px);
+    background-position: 0 -400px;
+}
+
+.icon-right {
+    @include size(17px, 13px, block);
+    background-position: -20px -399px;
+    left: -23px !important;
+}
+
+.icon-arrow {
+    @include size(5px, 8px, inline-block);
+    background-position: -41px -419px;
+    margin-left: 10px;
+}

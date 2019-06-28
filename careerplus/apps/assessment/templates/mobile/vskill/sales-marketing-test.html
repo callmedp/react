@@ -5,7 +5,7 @@
 {% block css_section %}
 {{ block.super }}
 {% compress css %}
-<link type="text/scss" href="{% static 'shinelearn/css/mobile/vskill/vskill-home.scss' %}" rel="stylesheet">
+<link type="text/scss" href="{% static 'shinelearn/css/mobile/vskill/practice_tests.scss' %}" rel="stylesheet">
 <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
 <link type="text/css" href="{% static 'shinelearn/css/common/mobile/typeaheadjs.css' %}" rel="stylesheet">
 {% endcompress %}
@@ -34,11 +34,15 @@ Tests</h1>
             <input type="text" name="" placeholder="Search popular tests"><span class="icon_search"></span>
         </div>
     </div>
+
     <div class="popular_test">
         <div class="popular_test_inside category">
-                <a href="#">
-                <span class=" border border0"></span><span class="name">Digital Marketing
-                     Master</span><span class="test">25 Tests</span></a></div>
+            <a href="#">
+                <span class="border border0"></span>
+                <span class="name">Digital Marketing Master</span>
+                <span class="test">25 Tests</span>
+            </a>
+        </div>
                      <div class="popular_test_inside category">
                 <a href="#">
                 <span class=" border border1"></span><span class="name">Search Engine Optimisation</span><span class="test">25 Tests</span></a></div>

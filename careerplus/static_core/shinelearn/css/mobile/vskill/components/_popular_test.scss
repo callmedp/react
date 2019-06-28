@@ -6,119 +6,107 @@
         background: $bg-white;
         box-shadow: $box-shadow-test;
         border-radius: 4px;
-        display: flex;
-        flex-direction: row;
-        min-height: 80px;
+        min-height: 95px;
         margin: 10px 0;
-
-
-
-
-
+        
+        display: flex;
+       
         a {
-            padding: 10px 10px 10px 0;
+            padding: 10px 15px 10px 20px;
+            color: $txt-grey-333;
+            width: 100%;
+            position: relative;
+
             align-items: center;
             display: flex;
-            flex-basis: 100%;
-            color: $txt-grey-333;
-
-
+            justify-content: space-between;
         }
 
         &.category {
-            flex-direction: column;
             position: relative;
-            justify-content: center;
-            align-items: flex-start;
 
             a {
                 flex-direction: column;
+                align-items: flex-start;
+                justify-content: center;
             }
 
             .border {
                 position: absolute;
                 left: 0;
-                top:25%;
 
             }
 
             .test {
                 color: $txt-grey-666;
-                align-self: flex-start;
                 font-size: $font-size - 1;
-                padding: 5px 0 0 15px;
-
+                padding-top: 5px;
             }
 
             .name {
-
+                display: block;
+                flex-basis: auto;
+                width: 100%;
             }
         }
 
 
         .border {
             width: 5px;
-            height: 36px;
-            display: flex;
-
+            height: 45px;
+            position: absolute;
+            left: 0;
 
             &.border0 {
-                background: $purple;
+                background: $prac-purple;
             }
 
             &.border1 {
-                background: $sky;
+                background: $prac-sky;
             }
 
             &.border2 {
-                background: $light_green;
+                background: $prac-light_green;
             }
 
             &.border3 {
-                background: $blue;
+                background: $prac-blue;
             }
 
             &.border4 {
-                background: $indigo;
+                background: $prac-indigo;
             }
 
-
-
             &.border5 {
-                background: $pink;
+                background: $prac-pink;
             }
 
             &.border6 {
-                background: $sky;
+                background: $prac-sky;
             }
 
             &.border7 {
-                background: $light_green;
+                background: $prac-light_green;
             }
 
             &.border8 {
-                background: $teal;
+                background: $prac-teal;
             }
 
             &.border9 {
-                background: $cyan;
+                background: $prac-cyan;
             }
 
 
         }
 
         .name {
-            font-size: $font-size + 3;
+            font-size: $font-size-md;
             font-weight: $font-weight;
+            line-height: $font-size + 8;
             display: flex;
             flex-basis: 60%;
-            line-height: $font-size + 8;
-            padding-left: 15px;
-
         }
-
-
-
 
     }
 
