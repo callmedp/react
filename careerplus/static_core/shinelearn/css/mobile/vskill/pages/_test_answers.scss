@@ -9,7 +9,7 @@
 
 
 .test-result {
-    background-color: $bg-blue;
+    background-color: #4377C5;
     border-radius: 5px;
     box-shadow: $box-shadow;
     margin-top: 20px;
@@ -45,7 +45,7 @@
         &--percentage {
             font-size: 46px;
             color: $bg-yellow;
-            margin: 15px 0;
+            margin: 15px 0 5px 0;
             padding-bottom: 0;
             line-height: 40px;
         }

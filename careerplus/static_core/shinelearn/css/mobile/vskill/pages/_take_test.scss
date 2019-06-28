@@ -65,9 +65,11 @@
     @extend %white-box;
     font-size: $font-size-md;
     color: $txt-grey-666;
+    padding: 20px 15px 30px;
 
     h2 {
         font-weight: $font-weight-medium;
+        line-height: 31px;
     }
 
     ul {
@@ -84,7 +86,7 @@
 
     &--button-wrap {
         display: flex;
-        justify-content: space-evenly;
+        justify-content: space-between;
         margin-top: 15px;
 
         span {
