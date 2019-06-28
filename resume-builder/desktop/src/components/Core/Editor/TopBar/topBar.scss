@@ -69,3 +69,13 @@
 		}
 	}
 }
+
+.launch-offer {
+	width: 145px;
+	height: 139px;
+	background: url(#{$static-url}react/assets/images/launch-offer.png);
+	display: inline-block;
+	position: absolute;
+	right: 10px;
+	top: -12px;
+}

@@ -128,7 +128,7 @@ const renderProjects = ({
                                 <Field component={renderTextArea} rows={"3"} type={"textarea"}
                                        className="form__input" name={`${member}.description`}
                                        prepend={true} iconClass={"sprite icon--description"} label={'Description'}
-                                       value={`${member}.description`} maxLength={'300'}/>
+                                       value={`${member}.description`} maxLength={'1000'}/>
                             </li>
                         </ul>
                     </div>

@@ -10,7 +10,7 @@ export const Toast = Swal.mixin({
 
 export const LandingPageToast = Swal.mixin({
   toast: true,
-  position: "bottom-end",
+  position: "top-end",
   showConfirmButton: false,
   timer: 3000,
   heightAuto: false,

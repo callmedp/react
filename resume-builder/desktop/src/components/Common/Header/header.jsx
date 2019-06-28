@@ -3,8 +3,9 @@ import './header.scss'
 import {connect} from "react-redux";
 import {Events, scroller} from 'react-scroll'
 import {Link} from "react-router-dom";
-import {showHelpModal,hideHelpModal} from '../../../store/ui/actions/index';
+import {showHelpModal, hideHelpModal} from '../../../store/ui/actions/index';
 import HelpModal from '../../Modal/helpModal';
+import * as actions from "../../../store/landingPage/actions";
 
 
 class Header extends Component {
@@ -15,7 +16,7 @@ class Header extends Component {
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
     }
 
-    scrollTo(elem,offset) {
+    scrollTo(elem, offset) {
         scroller.scrollTo(elem, {
             duration: 800,
             delay: 0,
@@ -41,19 +42,28 @@ class Header extends Component {
     }
 
     render() {
-        const {page, userName, showHelpModal, ui:{helpModal}, hideHelpModal} = this.props;
+        const {page, userName, lastName, number, email, showHelpModal, ui: {helpModal}, hideHelpModal, submitFeedback}
+
+        = this.props;
         return (
             <header className={this.props.getclass + " home-nav-fixed"}>
-             <HelpModal modalStatus={helpModal} hideHelpModal={hideHelpModal}/>
+                <HelpModal modalStatus={helpModal}
+                           firstName={userName}
+                           lastName={lastName}
+                           number={number}
+                           email={email}
+                           submitFeedback={submitFeedback}
+                           hideHelpModal={hideHelpModal}
+                />
                 <div className="container">
                     <Link to={'/resume-builder/'} className="container--logo"/>
                     {!!(page === 'home') &&
                     <ul className="home-links">
                         <li>
-                            <a href="#work" onClick={() => this.scrollTo('works',-63)}>How it Works</a>
+                            <a href="#work" onClick={() => this.scrollTo('works', -63)}>How it Works</a>
                         </li>
                         <li>
-                            <a href='#template'onClick={() => this.scrollTo('templates',-50)}>Templates</a>
+                            <a href='#template' onClick={() => this.scrollTo('templates', -50)}>Templates</a>
                         </li>
                     </ul>
                     }
@@ -64,7 +74,8 @@ class Header extends Component {
                             Reach us
                         </button> */}
                         {!!(page === 'home') &&
-                        <button className="white-button mr-30" onClick={() => this.scrollTo('templates',-60)}>Build your
+                        <button className="white-button mr-30" onClick={() => this.scrollTo('templates', -60)}>Build
+                            your
                             resume
                         </button>
                         }
@@ -79,21 +90,25 @@ class Header extends Component {
     }
 
 }
-const mapStateToProps =(state) =>{
+
+const mapStateToProps = (state) => {
     return {
-    ui: state.ui
-}
+        ui: state.ui
+    }
 }
 
-    const mapDispatchToProps = (dispatch)=>{
-        return {
-        "showHelpModal": () =>{
+const mapDispatchToProps = (dispatch) => {
+    return {
+        "showHelpModal": () => {
             return dispatch(showHelpModal())
-    },
-    "hideHelpModal": ()=>{
-    return dispatch(hideHelpModal())
-}
-}
+        },
+        "hideHelpModal": () => {
+            return dispatch(hideHelpModal())
+        },
+        'submitFeedback': (feedbackObj) => {
+            return dispatch(actions.feedbackSubmit(feedbackObj))
+        }
+    }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
 

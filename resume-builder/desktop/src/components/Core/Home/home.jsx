@@ -13,7 +13,7 @@ import queryString from "query-string";
 import {hideModal, showModal} from "../../../store/ui/actions";
 import {displaySelectedTemplate} from '../../../store/template/actions'
 import {feedbackRenderField} from "../../FormHandler/formFieldRenderer.jsx";
-import {Field,reduxForm} from "redux-form";
+import {Field, reduxForm} from "redux-form";
 import validate from '../../FormHandler/validations/landingPage/validate'
 
 import Swal from 'sweetalert2'
@@ -40,8 +40,8 @@ class Home extends Component {
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
     }
 
-       handleSubmit(values) {
-        values = {...values,lsource:"8"};
+    handleSubmit(values) {
+        values = {...values, lsource: "8"};
         this.props.feedback(values);
     }
 
@@ -109,7 +109,7 @@ class Home extends Component {
 
 
     render() {
-        const {handleSubmit,ui: {loader}, userInfo: {first_name}} = this.props;
+        const {handleSubmit, ui: {loader}, userInfo: {first_name, last_name, number, email}} = this.props;
         const {name_error, email_error, message_error} = this.state;
         return (
             <div className="nav-fixed">
@@ -117,7 +117,12 @@ class Home extends Component {
                     !!(loader) &&
                     <LoaderPage/>
                 }
-                <Header page={'home'} userName={first_name} getclass={this.state.scrolled ? 'color-change' : ''}/>
+                <Header page={'home'}
+                        userName={first_name}
+                        lastName={last_name}
+                        number={number}
+                        email={email}
+                        getclass={this.state.scrolled ? 'color-change' : ''}/>
                 <Banner userName={first_name}/>
                 <section className="section-container">
                     <h2>Resume builder advantages</h2>
@@ -301,43 +306,6 @@ class Home extends Component {
                             <li>Talent economy</li>
                         </ul>
                     </div>
-                    <form id="feedback" onSubmit={handleSubmit((values) => this.handleSubmit(values))}>
-                        <div className="reachout-tous">
-
-                            <h2>Reach out to us</h2>
-                            <strong>Feel free to share your feedback with us</strong>
-
-                            <div className={"flex-container"}>
-                                <Field  component = {feedbackRenderField}
-                                        type="text"
-                                        name="name"
-                                        label="Name"
-                                        className={(name_error ? "error" : '')}/>
-                            </div>
-                            <div className={"flex-container"}>
-                                <Field  component={feedbackRenderField}
-                                        type="number"
-                                        name="number"
-                                        label="Mobile Number" />
-                            </div>
-                            <div className={"flex-container"}>
-                                <Field  component={feedbackRenderField}
-                                        type="text"
-                                        name="email"
-                                        label="Email"
-                                        className={(email_error ? "error" : '')}/>
-                            </div>
-                            <div className={"flex-container"}>
-                                <Field  component={feedbackRenderField}
-                                        type="text"
-                                        name="msg"
-                                        label="Message"
-                                        className={(message_error ? "error" : '')}/>
-                            </div>
-                            <button className="orange-button" type="submit" >Submit
-                            </button>
-                        </div>
-                    </form>
                 </section>
 
                 <Footer/>
@@ -380,7 +348,7 @@ const mapDispatchToProps = (dispatch) => {
         displaySelectedTemplate(templateId) {
             return dispatch(displaySelectedTemplate(templateId))
         },
-         'feedback': (values) => {
+        'feedback': (values) => {
             return dispatch(actions.feedbackSubmit(values))
         }
     }

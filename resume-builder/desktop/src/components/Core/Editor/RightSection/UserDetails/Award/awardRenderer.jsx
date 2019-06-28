@@ -124,7 +124,7 @@ export const AwardRenderer = ({
                                                             <label>Summary</label>
                                                             <Field
                                                                 noIcon={true}
-                                                                maxLength={'300'}
+                                                                maxLength={'1000'}
                                                                 component={renderTextArea} type={"textarea"}
                                                                 name={`${member}.summary`}
                                                                 className="input-control"/>

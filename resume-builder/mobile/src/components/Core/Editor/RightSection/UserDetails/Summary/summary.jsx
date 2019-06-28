@@ -143,7 +143,7 @@ class Summary extends Component {
         return (
             <div className="buildResume">
                 <PreviewModal {...this.props}/>
-                <AddSuggesion label={'Summary'} modal_status={modal_status} length={extra_info.length} maxLength="500"
+                <AddSuggesion label={'Summary'} modal_status={modal_status} length={extra_info.length} maxLength="1000"
                               closeModal={this.closeModal} suggestions={suggestions}/>
                 <div className="buildResume__wrap pb-0">
                     <div className="buildResume__heading">
@@ -171,7 +171,7 @@ class Summary extends Component {
 
                             <li className="form__group">
                                 <Field component={renderTextArea} label={"Summary"} type={"text"} name="extra_info"
-                                       id="extra_info" prepend={false} className="form__input h-150" maxLength={"500"}/>
+                                       id="extra_info" prepend={false} className="form__input h-150" maxLength={"1000"}/>
                                 <p className="add-suggested" onClick={() => {
                                     this.openModal()
                                 }}>

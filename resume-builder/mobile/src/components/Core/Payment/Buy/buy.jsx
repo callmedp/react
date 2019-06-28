@@ -91,7 +91,7 @@ class Buy extends Component {
         return (
 
             <div className="buy-container">
-                <Header/>
+                <Header page={"buy"}/>
                 {mainloader ? <Loader/> :""}
                 {modal_status ? <BuyTemplateModal modal_status={modal_status} 
                     closeModalStatus={this.closeModalStatus}
@@ -109,7 +109,10 @@ class Buy extends Component {
                     </button>
                 </div>
 
+                
+
                 <div className="buy">
+                <p className="buy--create">You can <strong>create/ edit and download</strong> multiple resume for 12 months</p>
                     <div className="buy__wrap">
                         <div className="buy__item">
                             <div className="buy__item--left">

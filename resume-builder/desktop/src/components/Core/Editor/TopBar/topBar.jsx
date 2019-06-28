@@ -18,9 +18,10 @@ export default class TopBar extends Component {
                 <div className="top-banner">
                     {
                         page === 'buy' ?
-                            <div className="top-banner--banner-txt">
+                            <div className="top-banner--banner-txt pr">
                                 <h1>Your customised resume is ready!</h1>
                                 <p>Buy more templates and save more </p>
+                                <span class="launch-offer"></span>
                             </div> :
                             page === 'download' ?
                                 <div className="top-banner--banner-txt">

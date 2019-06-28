@@ -324,17 +324,17 @@ export const feedbackRenderField = ({
     return (
         <React.Fragment>
             {
-                <div className = "feedback-input">
-                <div className={(touched && error ? "fedback-input-error" : '')}>
-                    <input {...input}
-                            className={className}
-                            autoComplete="off"
-                            placeholder={label}
-                            type={type}/>
-                </div>
-                <div>
-                {touched && ((error && <span className={'error-feedback'}>{error}</span>))}
-                </div>
+                <div className="feedback-input">
+                    <div className={(touched && error ? "fedback-input-error" : '')}>
+                        <input {...input}
+                               className={className}
+                               autoComplete="off"
+                               placeholder={label}
+                               type={type}/>
+                    </div>
+                    <div>
+                        {touched && ((error && <span className={'error-feedback'}>{error}</span>))}
+                    </div>
                 </div>
             }
         </React.Fragment>
