@@ -2444,16 +2444,25 @@ class ActionOrderItemView(View):
                 approval = 0
                 for obj in orderitems:
                     last_oi_status = obj.oi_status
-                    obj.oi_status = 23  # pending Approval
-                    obj.last_oi_status = last_oi_status
-                    obj.save()
-                    approval += 1
                     obj.orderitemoperation_set.create(
                         oi_status=23,
                         last_oi_status=last_oi_status,
                         assigned_to=obj.assigned_to,
                         added_by=request.user)
-                msg = str(approval) + ' orderitems send for approval.'
+                    # Auto Approve the feature profile as per requirement from product.
+                    # action == -5 and queue_name == "domesticprofileapproval"
+                    last_oi_status = 23
+                    obj.oi_status = 30  # approved
+                    obj.last_oi_status = last_oi_status
+                    obj.approved_on = timezone.now()
+                    obj.save()
+                    approval += 1
+                    obj.orderitemoperation_set.create(
+                        oi_status=obj.oi_status,
+                        last_oi_status=last_oi_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+                msg = str(approval) + ' orderitems updated and approval done.'
                 messages.add_message(request, messages.SUCCESS, msg)
             except Exception as e:
                 messages.add_message(request, messages.ERROR, str(e))
