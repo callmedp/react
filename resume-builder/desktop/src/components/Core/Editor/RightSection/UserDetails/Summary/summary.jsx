@@ -150,7 +150,7 @@ class Summary extends Component {
                             <h3>Summary</h3>
                             <Field
                                 noIcon={true}
-                                component={renderTextArea} type={"textarea"} name="extra_info" maxLength={"500"}
+                                component={renderTextArea} type={"textarea"} name="extra_info" maxLength={"1000"}
                                 className="summary-box--summary-txt" rows="10" value={extra_info}/>
                         </div>
                         <span className="add-suggested mt-15" onClick={() => {

@@ -171,7 +171,7 @@ class Summary extends Component {
 
                             <li className="form__group">
                                 <Field component={renderTextArea} label={"Summary"} type={"text"} name="extra_info"
-                                       id="extra_info" prepend={false} className="form__input h-150" maxLength={"500"}/>
+                                       id="extra_info" prepend={false} className="form__input h-150" maxLength={"1000"}/>
                                 <p className="add-suggested" onClick={() => {
                                     this.openModal()
                                 }}>
