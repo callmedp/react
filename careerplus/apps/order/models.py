@@ -267,8 +267,6 @@ class Order(AbstractAutoDate):
         return ''
 
     def save(self,**kwargs):
-        import ipdb;
-        ipdb.set_trace();
         created = not bool(getattr(self,"id"))
         if created:
             return super(Order,self).save(**kwargs)
