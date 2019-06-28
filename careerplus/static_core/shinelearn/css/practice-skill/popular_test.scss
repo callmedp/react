@@ -391,6 +391,12 @@ h2 {
             &.marked {
                 background: $border;
             }
+
+            &.current {
+                background: $p-blue;
+                border: 1px solid $p-blue;
+                color: $white-bg;
+            }
         }
 
         .paper-pagination {
@@ -688,6 +694,164 @@ h2 {
     strong {
         font-weight: $font-weight+100;
         font-size: $font-size+2;
+    }
+}
+
+.pb-0 {
+    padding-bottom: 0;
+}
+
+.details-modal-box {
+    overflow: hidden;
+    background: $white-color;
+
+    .modal-header {
+        border-bottom: none;
+
+        h3 {
+            font-size: $font-size+7;
+            font-weight: $font-weight+300;
+            color: $primary-color;
+            margin-left: 15px;
+        }
+    }
+}
+
+.details-modal {
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+
+.details-modal .form-group{
+    position: relative;
+    margin: 0 0 20px 0;
+}
+.details-modal .form-group label{
+    position: absolute;
+    left: 10px;
+    top:8px;
+    font-weight: $font-weight+100;
+    font-size: $font-size+2;
+    background: $white-bg;
+    padding: 3px;
+
+}
+.details-modal .form-group input:focus + label,.details-modal .form-group input:not(:placeholder-shown) + label{
+    opacity:1;
+    transform: scale(.9) translateY(-100%) translateX(-10px);
+    color: $p-blue;
+}
+.details-modal .form-group input:focus{
+    border:2px solid $p-blue;
+    outline-color: $p-blue;
+}
+
+.details-modal .form-group input{
+    width:100%;
+    padding-left: 10px;
+    height: 45px;
+}
+.details-modal .form-group label,.details-modal .form-group input{
+    transition: all 0.2s;
+    transition-timing-function: ease;
+    transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    opacity:0.5;
+}
+
+.check-result {
+    text-align: center;
+
+    i {
+        width: 135px;
+        height: 135px;
+        border-radius: 100%;
+        background: #F6F6F6;
+        display: table;
+        vertical-align: middle;
+        text-align: center;
+        margin: 0 auto 10px auto;
+
+        img {
+            margin: 20px auto 0 auto;
+        }
+    }
+
+    p {
+        font-size: $font-size+5;
+        color: $primary-color;
+        line-height: 22px;
+    }
+}
+
+.test-limit-modal-box {
+    overflow: hidden;
+    background: $white-color;
+    border: none;
+
+    .modal-header {
+        border-bottom: none;
+
+        h3 {
+            font-size: $font-size+9;
+            font-weight: $font-weight+300;
+            color: $white-bg;
+            margin-top: 43%;
+            margin-left: 15px;
+            line-height: 26px;
+        }
+
+        strong {
+            font-size: $font-size+5;
+            font-weight: $font-weight+300;
+            color: $white-bg;
+            margin-bottom: 20px;
+            display: block;
+            margin-left: 15px;
+        }
+    }
+}
+
+.test-limit-modal {
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+
+    strong {
+        font-size: $font-size+5;
+        font-weight: $font-weight+300;
+        color: $primary-color;
+        display: block;
+        margin: 10px 0;
+    }
+
+    p {
+        margin: 0 0 5px 0;
+        padding-left: 15px;
+        position: relative;
+        font-size: $font-size+3;
+
+        &:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 7px;
+            width: 6px;
+            height: 6px;
+            border-radius: 100%;
+            background: $p-blue;
+        }
+    }
+
+}
+
+.test-limit-bg {
+    background: url($path + 'images/free_skill/test-limit-bg.jpg') no-repeat;
+    background-size: cover;
+
+    .close {
+        text-shadow: none;
+        opacity: 9;
+        color: $white-bg;
+        font-weight: $font-weight;
     }
 }
 

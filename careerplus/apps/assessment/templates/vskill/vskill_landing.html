@@ -76,7 +76,8 @@
                      <span class="taketest" >Take Free Test</span>
                   </a>
                </div>
-                <!------  Modal ---------->
+
+<!------  Modal ---------->
    <div class="modal fade" id="testModal{{test.id}}" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content vskill-modal-box">
@@ -166,8 +167,84 @@
     </div>
   </div>
 </div>
+<!------  EndModal ---------->
 
-      <!------  EndModal ---------->
+<!------  Modal login ---------->
+   <div class="modal fade" id="" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xs" role="document">
+    <div class="modal-content details-modal-box">
+      <div class="modal-header pb-0">
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h3 id="exampleModalLongTitle">Fill your details below</h3>
+      </div>
+      <div class="modal-body">
+        <div class="col-sm-7">
+         <form>
+            <div class="details-modal">
+               <div class="form-group">
+                  <input type="text" class="form-control" id="" name="" placeholder=" "/>
+                  <label for="">Name</label>
+               </div>
+               <div class="form-group">
+                  <input type="text" class="form-control" id="" name="" placeholder=" "/>
+                  <label for="">Email</label>
+               </div>
+               <div class="form-group">
+                  <input type="text" class="form-control" id="" name="" placeholder=" "/>
+                  <label for="">Mobile</label>
+               </div>
+               <div class="form-group">
+                  <button class="blue_btn mr-20">Submit</button>
+               </div>
+            </div>
+         </form>
+        </div>
+        <div class="col-sm-5">
+         <div class="check-result">
+            <i><img src="{% static 'shinelearn/images/free_skill/details-list.png' %}" class="img-responsive"></i>
+            <p>Enter your details to check the Test result</p>
+         </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!------  EndModal login ---------->
+
+<!------  Modal test limit ---------->
+   <div class="modal fade" id="" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xs" role="document" style="width: 500px;">
+    <div class="modal-content test-limit-modal-box">
+      <div class="modal-header pb-0 test-limit-bg">
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h3>Oops!  Your free test limit for this skill has been exhausted. </h3>
+        <strong>Continue your learning, with our paid practice tests</strong>
+      </div>
+      <div class="modal-body">
+        <div class="col-sm-12">
+         <div class="test-limit-modal">
+               <strong>Benefits</strong>
+               <p>500+ questions</p>
+               <p>Real exam & Practice environment</p>
+               <p>Answers & Detailed Explanations</p>
+               <span class="flexbox mt-20 mb-30">
+                  <button class="blue_btn">View test</button>
+               </span>
+         </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!------  EndModal test limit ---------->
 
                {% endfor %}
             </div>
