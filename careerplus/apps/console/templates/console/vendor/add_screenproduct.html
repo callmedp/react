@@ -35,6 +35,9 @@
     .clearimg a{
       margin-right: 30px;
     }
+    .vendor_hidden{
+     display: none;
+    }
 
   </style>
   {% endcompress %}
@@ -217,7 +220,11 @@
          
     });
   $("select[name='type_flow']").change()
-  </script>
+
+$('document').ready(function(){
+  $('.vendor_hidden').parent().parent().hide();
+  });
+</script>
 
   {% compress js %}
   <!-- Parsley Validate Scripts -->

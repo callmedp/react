@@ -154,6 +154,7 @@ class AddScreenProductForm(forms.ModelForm):
             'type_product', 'upc', 'inr_price', 'type_flow','vendor', 'sub_type_flow']
 
     def __init__(self, *args, **kwargs):
+
         self.user = kwargs.pop('user', None)
         super(AddScreenProductForm, self).__init__(*args, **kwargs)
         form_class = 'form-control col-md-7 col-xs-12'
@@ -207,10 +208,10 @@ class AddScreenProductForm(forms.ModelForm):
         self.fields['vendor'].widget.attrs['class'] = form_class
         self.fields['vendor'].required = True
 
-        if len(associated_vendor) >1:
+        if len(associated_vendor) > 1:
             self.fields['vendor'].queryset = associated_vendor
         elif len(associated_vendor) == 1:
-            self.fields['vendor'].widget.attrs['disabled'] = True
+            self.fields['vendor'].widget.attrs['class'] ='vendor_hidden'
         self.fields['vendor'].initial = vendor
         if self.data and int(self.data['type_flow']) not in list(SUB_FLOWS.keys()):
             self.fields.pop('sub_type_flow')
