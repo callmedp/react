@@ -50,26 +50,26 @@ class VskillTestView(DetailView):
             timestamp_with_tduration = datetime.timestamp(datetime.now() + timedelta(seconds=test.duration))
             test_ids = {'ongoing_' + str(test.id): timestamp_with_tduration}
             cache.set(session_id, test_ids, 60 * 60 * 24)
+            return True,False
 
-        timestamp = timestamp.get('ongoing_' + str(test.id))
-        timestamp_obj = datetime.fromtimestamp(timestamp)
-        if timestamp_obj + timedelta(days=1) > datetime.now():
-            return False, False
+        else:
+            timestamp = timestamp.get('ongoing_' + str(test.id))
+            timestamp_obj = datetime.fromtimestamp(timestamp)
+            if timestamp_obj + timedelta(days=1) > datetime.now():
+                return False, False
         return True, True
 
 
     def get(self, request, *args, **kwargs):
 
-        print(self.request.session.session_key)
         # context = self.get_context_data()
         test = self.get_object()
-        print('  -')
         if not test:
             return redirect(reverse('assessment:vskill-landing'))
         show_test, delete_ans = self.is_expired(test.id)
-        print(show_test,delete_ans)
         if not show_test:
             pass
+            # return redirect(reverse('assessment:vskill-result',kwargs={'slug':test.slug}))
         # context.update({'deleteans': delete_ans})
 
         return super(VskillTestView,self).get(request, args, **kwargs)
@@ -185,13 +185,8 @@ class AssessmentSubCategoryPage(DetailView):
         context.update({'all_test': all_test})
         return context
 
-
-
-
-
-
 class AssessmentResultPage(TemplateView):
-    template_name = 'vskill/vskill_landing.html'
+    template_name = 'vskill/test-answers.html'
 
 
     def get_breadcrumbs(self):
@@ -200,11 +195,11 @@ class AssessmentResultPage(TemplateView):
         breadcrumbs.append({"url": None, "name": 'practice-test'})
         return breadcrumbs
 
-
-
     def get_context_data(self, **kwargs):
+        slug = kwargs.get('slug')
+        test =Test.objects.filter(slug=slug).first()
+        context = super(AssessmentResultPage, self).get_context_data(**kwargs)
 
-        context = super(AssessmentLandingPage, self).get_context_data(**kwargs)
         return context
 
 
