@@ -182,7 +182,7 @@ class Experience extends Component {
 
         return (
             <React.Fragment>
-                <SuggestionModal label={'Job Description'} modal_status={modal_status} maxLength="300" length={length} closeModal={this.closeModal} suggestions={suggestions}/>
+                <SuggestionModal label={'Job Description'} modal_status={modal_status} maxLength="1000" length={length} closeModal={this.closeModal} suggestions={suggestions}/>
                 <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity, currentFields))}>
                     <FieldArray name={"list"}
                                 loader={loader}

@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import './helpModal.scss'
-import  {getTitleCase} from "../../services/getTitleCase";
+import {getTitleCase} from "../../services/getTitleCase";
 
 Modal.setAppElement(document.getElementById('react-app'));
 
@@ -14,13 +14,15 @@ export default class HelpModal extends React.Component {
         this.onTextChange = this.onTextChange.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.state = {
-            feedbackText: ''
+            feedbackText: '',
+            showWarning: false
         }
     }
 
     closeModal() {
         this.setState({
-            feedbackText: ''
+            feedbackText: '',
+            'showWarning': false
         });
         this.props.hideHelpModal();
     }
@@ -30,6 +32,12 @@ export default class HelpModal extends React.Component {
         event.preventDefault();
         const {firstName, lastName, number: phoneNumber, email: emailId} = this.props;
 
+        if (!this.state.feedbackText) {
+            this.setState({
+                'showWarning': true
+            });
+            return;
+        }
         const feedbackObj = {
             name: getTitleCase(firstName, lastName),
             email: emailId,
@@ -41,7 +49,9 @@ export default class HelpModal extends React.Component {
         this.props.submitFeedback(feedbackObj)
 
         this.setState({
-            feedbackText: ''
+            feedbackText: '',
+            showWarning: false
+
         })
 
         this.props.hideHelpModal();
@@ -49,12 +59,14 @@ export default class HelpModal extends React.Component {
 
     onTextChange(event) {
         this.setState({
-            feedbackText: event.target.value
+            feedbackText: event.target.value,
+            showWarning: false
         })
     }
 
     render() {
         const {modalStatus, hideHelpModal} = this.props
+        const {showWarning} = this.state
         return (
             <div className="pr">
                 <Modal
@@ -73,6 +85,9 @@ export default class HelpModal extends React.Component {
                                     resume. </p>
                                 <textarea rows="10" className="mb-20" placeholder="Message"
                                           onChange={this.onTextChange}/>
+                                 {
+                            showWarning && <span className={"warn-msg-help"}>Please provide some feedback message.</span>
+                        }
                                 <button className="orange-button"
                                         type={'submit'} onClick={this.handleFeedback}>Submit
                                 </button>

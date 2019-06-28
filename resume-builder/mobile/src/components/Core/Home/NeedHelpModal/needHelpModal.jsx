@@ -21,7 +21,8 @@ export default class NeedHelpModal extends Component {
 
     closeModal() {
         this.setState({
-            feedbackText: ''
+            feedbackText: '',
+            showWarning: false
         });
         this.props.hideHelpModal();
     }
@@ -31,6 +32,12 @@ export default class NeedHelpModal extends Component {
         event.preventDefault();
         const {firstName, lastName, number: phoneNumber, email: emailId} = this.props;
 
+        if (!this.state.feedbackText) {
+            this.setState({
+                'showWarning': true
+            });
+            return;
+        }
         const feedbackObj = {
             name: getTitleCase(firstName, lastName),
             email: emailId,
@@ -42,20 +49,24 @@ export default class NeedHelpModal extends Component {
         this.props.submitFeedback(feedbackObj)
 
         this.setState({
-            feedbackText: ''
+            feedbackText: '',
+            showWarning: false
         })
 
         this.props.hideHelpModal();
     }
 
     onTextChange(event) {
+
         this.setState({
-            feedbackText: event.target.value
+            feedbackText: event.target.value,
+            showWarning: false
         })
     }
 
     render() {
         const {modalStatus} = this.props;
+        const {showWarning} = this.state;
         return (
             <Modal
                 isOpen={modalStatus}
@@ -68,6 +79,9 @@ export default class NeedHelpModal extends Component {
                     <p>Let us know your feedback and suggestions, so we can help you build a powerful resume.</p>
                     <div className="form__group mt-20">
                         <textarea rows="6" maxlength="100" class="form__input" onChange={this.onTextChange}></textarea>
+                        {
+                            showWarning && <span className={"error-message mt-10"}>Please provide some feedback message.</span>
+                        }
                     </div>
                     <div class="text-center">
                         <button className="btn btn__round btn__primary mt-20" onClick={this.handleFeedback}>

@@ -113,7 +113,7 @@ class Buy extends Component {
                 <div className="buy">
                     <p className="buy--create">You can <strong>create/ edit and download</strong> multiple resume for 12
                         months</p>
-                    <div className="buy__wrap">
+                    <div className="buy__wrap mt-15">
                         <div className="buy__item">
                             <div className="buy__item--left">
                                 <input className="buy__item--input form__radio-input" type="radio" id="your-resume"
@@ -122,9 +122,9 @@ class Buy extends Component {
                                        onChange={this.handleOnChange.bind(this, 'product1')}></input>
                                 <label className="buy__item--label form__radio-label" htmlFor="your-resume">
                                     <span className="form__radio-button"></span>
-                                    Buy your <br/>customised resume
+                                    Buy your <br/>customised resume<br/>
                                     <strong>Rs. {price1}/-</strong>
-                                    <span className="fs-14 line-through">Rs. 1499</span>
+                                    <span className="fs-14 line-through">Rs. 1499 </span>
                                     <span className="fs-14 bold">Flat 50% off</span>
                                 </label>
                             </div>
