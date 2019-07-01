@@ -30,23 +30,57 @@
     </div>
 
     <div class="row question-timer">
-        <div class="question-timer__score-wrap">
-            <span class="question-timer__score-wrap--score">6</span>
-            <span>/10</span>
+        <div class="question-timer--wrap">
+            <div class="question-timer__score-wrap">
+                <span class="question-timer__score-wrap--score">6</span>
+                <span>/10</span>
+            </div>
+    
+            <div class="question-timer--score-text">Time left</div>
+            <div class="question-timer__count-down">
+                <div class="question-timer__count-down--time">
+                    04
+                    <span>MINUTES</span>
+                </div>
+                <span>:</span>
+                <div class="question-timer__count-down--time">
+                    25
+                    <span>SECONDS</span>
+                </div>
+            </div>
         </div>
 
-        <div class="question-timer--score-text">Time left</div>
-        <div class="question-timer__count-down">
-            <div class="question-timer__count-down--time">
-                04
-                <span>MINUTES</span>
+        <div class="question-timer__question-count">
+            <ul>
+                <li>1</li>
+                <li>2</li>
+                <li class="skip">3</li>
+                <li>4</li>
+                <li>5</li>
+                <li class="active">6</li>
+                <li>7</li>
+            </ul>
+
+            <div id="more_question">
+                <ul>
+                    <li>8</li>
+                    <li>9</li>
+                    <li>10</li>
+                    <li>11</li>
+                    <li>12</li>
+                    <li>13</li>
+                    <li>14</li>
+                    <li>15</li>
+                    <li>16</li>
+                    <li>17</li>
+                    <li>18</li>
+                    <li>19</li>
+                    <li>20</li>
+                </ul>
             </div>
-            <span>:</span>
-            <div class="question-timer__count-down--time">
-                25
-                <span>SECONDS</span>
-            </div>
+            <div class="pt-sprite icon-open-aarow" id="btn-more-question"></div>
         </div>
+
     </div><!-- /. question-timer -->
 
     <div class="take-test">
@@ -182,6 +216,28 @@
     $("#close").click(function(){
      $("#check_results").removeClass("open");
     });
+
+    // $('#btn-more-question').click(function(){
+    //     $('#more_question').toggleClass('open');
+    // });
+
+
+    $(function()
+    {
+        $("#btn-more-question").click(function()
+        {
+            $("#more_question").slideToggle();
+            return false;
+        }); 
+    });
+    
+    
+    $('#btn-more-question').click(function(){
+        $('#btn-more-question').toggleClass('icon-close-aarow');
+    });
+
+
+
     
 </script>
 {% endblock container %}
