@@ -19,6 +19,7 @@ export const renderField = ({
                                 iconClass,
                                 autoFocus,
                                 maxLength,
+                                disabled,
                                 meta: {touched, error, warning}
                             }) => {
     return (
@@ -30,7 +31,7 @@ export const renderField = ({
                     <input {...input} className={className}
 
                            onClick={(e) => tillTodayDisable(index, !input.checked, e)}
-                           maxLength={maxLength}
+                           maxLength={maxLength} disabled={disabled}
                            autoComplete="off" placeholder={label} type={type}/>
                     {
                         !!(text) && <span>{text}</span>
@@ -46,7 +47,7 @@ export const renderField = ({
                     </div>
                     <div className={"Error " + (touched && error ? 'errormsg' : '')}>
                         <input
-                            {...input}
+                            {...input} disabled={disabled}
                             autoFocus={autoFocus} maxLength={maxLength}
                             className={className} autoComplete="off" placeholder={label} type={type}/>
                         {touched &&

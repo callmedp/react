@@ -65,6 +65,7 @@ class Home extends Component {
 
     render() {
         const {ui: {loader},userInfo, userInfo: {first_name},feedback} = this.props;
+        // console.log(this.props.history)
         return (
             <div className="nav-fixed">
                 {
@@ -268,7 +269,8 @@ const mapStateToProps = (state) => {
     return {
         userInfo: state.personalInfo,
         ui: state.ui,
-        template: state.template
+        template: state.template,
+        analytics: state.analytics
     }
 };
 

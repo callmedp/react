@@ -14,23 +14,26 @@ import * as profileActions from "../../../store/personalInfo/actions"
 import SelectTemplateModal from '../../Modal/selectTemplateModal';
 import {showAlertModal, hideAlertModal,previewButtonClicked,showGenerateResumeModal,hideGenerateResumeModal} from '../../../store/ui/actions/index'
 import moment from 'moment'
+import {locationRouteChange} from '../../../store/googleAnalytics/actions/index'
 
 class EditPreview extends Component {
 
     componentDidMount() {
-        this.props.fetchEntityInfo();
+        const {analytics:{locationPath},fetchEntityInfo,history:{location:{pathname}},locationRouteChange} = this.props
+        fetchEntityInfo();
         if(localStorage.getItem('personalInfo')){
             localStorage.setItem('newUser',true)
         }
+        if(locationPath !==pathname){
+            console.log("CHange in location to",pathname)
+            locationRouteChange(pathname)
+        }
     }
-
 
     render() {
         const {ui: {loader}, userInfo: {first_name}} = this.props;
+        console.log(this.props.analytics)
         return (
-            /*
-            * @desc Top Bar component
-            * */
             <div>
                 {
                     !!(loader) &&
@@ -57,7 +60,8 @@ const mapStateToProps = (state) => {
     return {
         ui: state.ui,
         userInfo: state.personalInfo,
-        template: state.template
+        template: state.template,
+        analytics: state.analytics
     }
 }
 
@@ -116,6 +120,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         'hideGenerateResumeModal': () => {
             return dispatch(hideGenerateResumeModal())
+        },
+        'locationRouteChange': (path) => {
+            return dispatch(locationRouteChange(path))
         }
     }
 }

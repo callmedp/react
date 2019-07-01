@@ -147,12 +147,12 @@ export class PersonalInfo extends Component {
                                     <label>First Name</label>
 
                                     <Field component={renderField} type={"text"} iconClass={'icon-name'}
-                                           name="first_name" maxLength={"20"}/>
+                                           name="first_name" maxLength={"20"} disabled={order_data && order_data.id ? true: false}/>
                                 </fieldset>
                                 <fieldset>
                                     <label>Last Name</label>
                                     <Field component={renderField}
-                                           iconClass={'icon-surname'}
+                                           iconClass={'icon-surname'} disabled={order_data && order_data.id ? true: false}
                                            type={"text"} name="last_name" maxLength={"20"}/>
                                 </fieldset>
                             </div>

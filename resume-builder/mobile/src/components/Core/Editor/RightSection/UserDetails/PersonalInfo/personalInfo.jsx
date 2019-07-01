@@ -178,14 +178,14 @@ class PersonalInfo extends Component {
 
                             <li className="form__group">
                                 <Field component={renderField} label={"First Name"} type={"text"} name="first_name"
-                                       id="first_name"
+                                       id="first_name" disabled={order_data && order_data.id ? true: false}
                                        iconClass={"sprite icon--firstName"} className="form__input" prepend={true}
                                        maxLength={"20"}/>
                             </li>
 
                             <li className="form__group">
                                 <Field component={renderField} label={"Last Name"} type={"text"} name="last_name"
-                                       id="last_name"
+                                       id="last_name" disabled={order_data && order_data.id ? true: false}
                                        iconClass={"sprite icon--lastName"} className="form__input" prepend={true}
                                        maxLength={"20"}/>
                             </li>

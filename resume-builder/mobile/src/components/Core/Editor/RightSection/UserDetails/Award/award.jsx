@@ -64,7 +64,8 @@ class Award extends Component {
 
     async handleSubmit(values) {
         values = this.state.fields ? this.state.fields : values.list
-        let {sidenav:{listOfLinks,currentLinkPos},bulkUpdateUserAward,personalInfo:{order_data},updateCurrentLinkPos,history,showGenerateResumeModal,hideGenerateResumeModal,reGeneratePDF} = this.props
+        let {sidenav:{listOfLinks,currentLinkPos},bulkUpdateUserAward,personalInfo:{order_data},
+            updateCurrentLinkPos,history,showGenerateResumeModal,hideGenerateResumeModal,reGeneratePDF} = this.props
         currentLinkPos++
         this.setState({submit:true})
         await bulkUpdateUserAward(values);
