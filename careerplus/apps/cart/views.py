@@ -70,13 +70,15 @@ class CartView(TemplateView, CartMixin, UserMixin):
         return context
 
 
-class AddToCartView(View, CartMixin):
+class AddToCartView (View, CartMixin):
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(AddToCartView, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        import ipdb;
+        ipdb.set_trace();
 
         data = {"status": -1}
         cart_type = request.POST.get('cart_type')
@@ -120,11 +122,14 @@ class AddToCartView(View, CartMixin):
 
         data['cart_count'] = str(self.get_cart_count())
         data['cart_url'] = reverse('cart:cart-product-list')
-        #
-        # if product.type_flow == 17:
 
-        # shipping example
-        # if request.session.get('candidate_id'):
+        # if type_flow is of resume-builder
+
+        if product.type_flow == 17:
+
+            if request.session.get('candidate_id'):
+
+                print(request.session.get('candidate_id'))
 
         return HttpResponse(json.dumps(data), content_type="application/json")
 
@@ -406,12 +411,14 @@ class PaymentShippingView(UpdateView, CartMixin):
             except Exception as e:
                 logging.getLogger('error_log').error('unable to get country object %s' % str(e))
                 initial_country = None
-            form.initial.update({
+                form.initial.update({
                 'country': initial_country})
 
         return context
 
     def post(self, request, *args, **kwargs):
+
+
         self.object = self.get_object()
         form = self.get_form()
 
@@ -499,6 +506,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
         return super(self.__class__, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
+
         context = super(self.__class__, self).get_context_data(**kwargs)
         cart_obj, wal_obj = self.cart_obj, None
         cart_coupon, cart_wallet = None, None

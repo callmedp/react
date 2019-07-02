@@ -22,6 +22,9 @@ class CouponRedeemView(APIView, CartMixin):
     authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
 
     def post(self, request, format=None):
+
+        import ipdb;
+        ipdb.set_trace();
         code = request.data.get('code')
         try:
             coupon = Coupon.objects.get(code=code)
@@ -208,4 +211,3 @@ class CouponRemoveView(APIView, CartMixin):
                 {'success': 0,
                  'error': 'Try after some Time'
                  }, status=400, content_type='application/json')
-
