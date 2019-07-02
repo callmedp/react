@@ -95,6 +95,10 @@ class Course extends Component {
             offset: 200,
             containerId: 'course'
         })
+        this.props.eventClicked({
+            'action':'AddNew',
+            'label':'Courses'
+        })
     }
 
     deleteCourse(index, fields, event) {
@@ -112,7 +116,7 @@ class Course extends Component {
 
     render() {
         const {
-            handleSubmit,userInfo:{order_data}, ui: {loader}, editHeading, saveTitle, isEditable,
+            handleSubmit,userInfo:{order_data}, ui: {loader}, editHeading, saveTitle, isEditable,eventClicked,
             entityName, nextEntity, showAlertModal,history, handleInputValue, changeOrderingUp, changeOrderingDown
         } = this.props;
 
@@ -128,15 +132,15 @@ class Course extends Component {
                             changeOrderingDown={changeOrderingDown}
                             component={CourseRenderer}
                             saveTitle={(event) => saveTitle(event, 8)}
-                            editHeading={(value) => editHeading(value)}
+                            editHeading={() => editHeading(8)}
                             isEditable={isEditable}
                             entityName={entityName}
                             expanded={this.state.active}
                             handleInputValue={handleInputValue}
                 />
                 <SavePreviewButtons 
-                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data}
-                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data} form_name={'Courses'}
+                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss} eventClicked={eventClicked}
                     />
             </form>
 

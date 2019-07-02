@@ -112,7 +112,7 @@ export class PersonalInfo extends Component {
 
     render() {
         const {
-            handleSubmit, userInfo: {order_data}, personalInfo, ui: {loader}, isEditable, fetchInterests,
+            handleSubmit, userInfo: {order_data}, personalInfo, ui: {loader}, isEditable, fetchInterests,eventClicked,
             editHeading, currentAddress, saveTitle, entityName, nextEntity, history, handleInputValue, showAlertModal
         } = this.props;
         const newUser = localStorage.getItem('newUser')
@@ -134,7 +134,7 @@ export class PersonalInfo extends Component {
                     {newUser ?
                         <span onClick={() => editHeading(elem)} onClick={showAlertModal}
                               className={"icon-edit " + styles['icon-edit__cursor']}/> :
-                        <span onClick={() => editHeading(elem)}
+                        <span onClick={() => editHeading(1)}
                               className={!!(!isEditable) ? "icon-edit " + styles['icon-edit__cursor'] : ''}/>
                     }
 
@@ -260,8 +260,8 @@ export class PersonalInfo extends Component {
                         </section>
                     </section>
                     <SavePreviewButtons
-                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data}
-                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data} form_name={'Personal Info'} 
+                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss} eventClicked={eventClicked}
                     />
                 </form>
             </div>

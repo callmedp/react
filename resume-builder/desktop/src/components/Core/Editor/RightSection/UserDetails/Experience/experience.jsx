@@ -156,6 +156,10 @@ class Experience extends Component {
             offset: 470,
             containerId: 'experience'
         })
+        this.props.eventClicked({
+            'action':'AddNew',
+            'label':'Experience'
+        })
     }
 
     deleteExperience(index, fields, event) {
@@ -175,7 +179,7 @@ class Experience extends Component {
     render() {
         const {
             handleSubmit,userInfo:{order_data}, ui: {loader,suggestions}, isEditable,
-            editHeading, saveTitle, entityName, nextEntity, showAlertModal,history,
+            editHeading, saveTitle, entityName, nextEntity, showAlertModal,history, eventClicked,
             changeOrderingDown, changeOrderingUp, handleInputValue, currentFields, fetchJobTitles
         } = this.props;
         const {till_today,modal_status,length} = this.state;
@@ -194,7 +198,7 @@ class Experience extends Component {
                                 changeOrderingDown={changeOrderingDown}
                                 component={ExperienceRenderer}
                                 saveTitle={(event) => saveTitle(event, 3)}
-                                editHeading={(value) => editHeading(value)}
+                                editHeading={() => editHeading(3)}
                                 isEditable={isEditable}
                                 entityName={entityName}
                                 expanded={this.state.active}
@@ -209,8 +213,8 @@ class Experience extends Component {
                     />
 
                     <SavePreviewButtons 
-                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data}
-                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data} form_name={'Experience'}
+                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss} eventClicked={eventClicked}
                     />
                 </form>
             </React.Fragment>

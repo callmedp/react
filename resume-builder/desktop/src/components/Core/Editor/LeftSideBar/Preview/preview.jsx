@@ -9,6 +9,7 @@ import {
 } from "react-accessible-accordion";
 import {siteDomain} from '../../../../../Utils/domains'
 import AlertModal from '../../../../Modal/alertModal';
+import {formCategoryList} from '../../../../../Utils/formCategoryList'
 
 export default class Preview extends Component {
     constructor(props) {
@@ -41,7 +42,12 @@ export default class Preview extends Component {
         this.setState({
             selectedColor: color
         })
-        this.props.customizeTemplate(data)
+        const {eventClicked,customizeTemplate} = this.props;
+        eventClicked({
+            'action':'ChangeTheme',
+            'label':data['color_name']
+        })
+        customizeTemplate(data)
     }
 
     selectCurrentTab(tab) {
@@ -52,7 +58,11 @@ export default class Preview extends Component {
 
 
     goToBuyPage() {
-        const {userInfo:{order_data},history,showGenerateResumeModal,reGeneratePDF,hideGenerateResumeModal} = this.props;
+        const {userInfo:{order_data},history,showGenerateResumeModal,reGeneratePDF,hideGenerateResumeModal,eventClicked} = this.props;
+        eventClicked({
+            'action':'GetYourResume',
+            'label':'Click'
+        })
         if(order_data && order_data.id){
             showGenerateResumeModal()
             reGeneratePDF(order_data.id)
@@ -207,7 +217,7 @@ export default class Preview extends Component {
 
         slider1.onmousedown = (event) => {
             event.preventDefault();
-            const {userInfo: {selected_template}} = self.props;
+            const {userInfo: {selected_template},eventClicked} = self.props;
             const elementValue = event.screenX - slider1.getBoundingClientRect().left;
             const rightEdge = slider1.offsetWidth - elem1.offsetWidth;
             let size = 1;
@@ -222,16 +232,21 @@ export default class Preview extends Component {
                 elem1.style.left = rightEdge / 2 + 'px';
                 size = 2;
             }
+            eventClicked({
+                'action':'ChangeFont',
+                'label': size===1 ? 'S' : size===2 ? 'M' : 'L'
+            })
 
             self.props.customizeTemplate({
                 'heading_font_size': size,
                 'template': selected_template
             })
 
+
         };
         slider2.onmousedown = (event) => {
             event.preventDefault();
-            const {userInfo: {selected_template}} = self.props;
+            const {userInfo: {selected_template},eventClicked} = self.props;
             let size = 1;
 
             const elementValue = event.screenX - slider2.getBoundingClientRect().left;
@@ -249,6 +264,10 @@ export default class Preview extends Component {
                 size = 2;
 
             }
+            eventClicked({
+                'action':'ChangeFont',
+                'label': size===1 ? 'S' : size===2 ? 'M' : 'L'
+            })
             self.props.customizeTemplate({
                 'text_font_size': size,
                 'template': selected_template
@@ -296,16 +315,24 @@ export default class Preview extends Component {
     }
 
     moveUpSection(selectedEntity, selectedTemplate) {
-        // const {showAlertModal} = this.props
-        // showAlertModal()
-        this.props.reorderSection({
+        const {eventClicked,reorderSection} = this.props;
+        eventClicked({
+            'action':'ReorderSection',
+            'label':formCategoryList[selectedEntity['entity_id']].name
+        })
+        reorderSection({
             templateId: selectedTemplate,
             info: {entity_id: selectedEntity['entity_id'], step: -1,pos:selectedEntity['pos']}
         })
     }
 
     moveDownSection(selectedEntity, selectedTemplate) {
-        this.props.reorderSection({
+        const {eventClicked,reorderSection} = this.props;
+        eventClicked({
+            'action':'ReorderSection',
+            'label':formCategoryList[selectedEntity['entity_id']].name
+        })
+        reorderSection({
             templateId: selectedTemplate,
             info: {entity_id: selectedEntity['entity_id'], step: 1,pos:selectedEntity['pos']}
         })
@@ -381,7 +408,8 @@ export default class Preview extends Component {
                                             <input
                                                 onClick={() => this.handleCustomization({
                                                     color: 1,
-                                                    template: selected_template
+                                                    template: selected_template,
+                                                    color_name:'Green'
                                                 }, 1)}
                                                 readOnly
                                                 type="radio"
@@ -392,7 +420,8 @@ export default class Preview extends Component {
                                         <li>
                                             <input
                                                 onClick={() => this.handleCustomization({
-                                                    color: 2, template: selected_template
+                                                    color: 2, template: selected_template,
+                                                    color_name:'Blue'
                                                 }, 2)}
                                                 type="radio"
                                                 name="radio1"
@@ -407,7 +436,8 @@ export default class Preview extends Component {
                                             <input
                                                 onClick={() => this.handleCustomization({
                                                     color: 3,
-                                                    template: selected_template
+                                                    template: selected_template,
+                                                    color_name:'Red'
                                                 }, 3)}
                                                 type="radio"
                                                 name="radio1"
@@ -422,7 +452,8 @@ export default class Preview extends Component {
                                             <input
                                                 onClick={() => this.handleCustomization({
                                                     color: 4,
-                                                    template: selected_template
+                                                    template: selected_template,
+                                                    color_name:'Black'
                                                 }, 4)}
                                                 type="radio"
                                                 readOnly
@@ -434,7 +465,8 @@ export default class Preview extends Component {
                                             <input
                                                 onClick={() => this.handleCustomization({
                                                     color: 5,
-                                                    template: selected_template
+                                                    template: selected_template,
+                                                    color_name:'Brown'
                                                 }, 5)}
                                                 type="radio"
                                                 name="radio1"
@@ -448,7 +480,8 @@ export default class Preview extends Component {
                                             <input
                                                 onClick={() => this.handleCustomization({
                                                     color: 6,
-                                                    template: selected_template
+                                                    template: selected_template,
+                                                    color_name:'Violet'
                                                 }, 6)}
                                                 type="radio"
                                                 readOnly

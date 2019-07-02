@@ -8,15 +8,11 @@ import Testimonial from "./Testimonial/testimonial.jsx";
 import Footer from "../../Common/Footer/footer.jsx";
 import Header from "../../Common/Header/header.jsx";
 import LoaderPage from '../../Loader/loaderPage.jsx'
-import {Events, scroller} from 'react-scroll';
+import {scroller} from 'react-scroll';
 import queryString from "query-string";
 import {hideModal, showModal} from "../../../store/ui/actions";
 import {displaySelectedTemplate} from '../../../store/template/actions'
-import {feedbackRenderField} from "../../FormHandler/formFieldRenderer.jsx";
-import {Field,reduxForm} from "redux-form";
-import validate from '../../FormHandler/validations/landingPage/validate'
-
-import Swal from 'sweetalert2'
+import {eventClicked} from '../../../store/googleAnalytics/actions/index'
 
 
 class Home extends Component {
@@ -35,12 +31,16 @@ class Home extends Component {
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
     }
 
-    scrollTo(elem) {
+    scrollTo(elem,action,label) {
         scroller.scrollTo(elem, {
             duration: 800,
             delay: 0,
             smooth: 'easeInOutQuad',
             offset: -10
+        })
+        this.props.eventClicked({
+            action,
+            label
         })
     }
 
@@ -58,22 +58,21 @@ class Home extends Component {
     }
 
     componentDidMount() {
-        this.props.loginCandidate(this.state.token);
+        // this.props.loginCandidate(this.state.token);
 
     }
 
 
     render() {
-        const {ui: {loader},userInfo, userInfo: {first_name},feedback} = this.props;
-        // console.log(this.props.history)
+        const {ui: {loader},userInfo, userInfo: {first_name},feedback,eventClicked} = this.props;
         return (
             <div className="nav-fixed">
                 {
                     !!(loader) &&
                     <LoaderPage/>
                 }
-                <Header page={'home'} userInfo={userInfo} feedback={feedback} getclass={this.state.scrolled ? 'color-change' : ''}/>
-                <Banner userName={first_name}/>
+                <Header page={'home'} userInfo={userInfo} eventClicked={eventClicked}  feedback={feedback} getclass={this.state.scrolled ? 'color-change' : ''}/>
+                <Banner userName={first_name} eventClicked={eventClicked}/>
                 <section className="section-container">
                     <h2>Resume builder advantages</h2>
                     <strong className="section-container--sub-head">Resume builder advantages which will make your
@@ -225,7 +224,7 @@ class Home extends Component {
                         </li>
                     </ul>
 
-                    <button className="orange-button" onClick={() => this.scrollTo('templates')}>Build your resume
+                    <button className="orange-button" onClick={() => this.scrollTo('templates','BuildResume','Features')}>Build your resume
                     </button>
 
                 </section>
@@ -294,6 +293,9 @@ const mapDispatchToProps = (dispatch) => {
         },
          'feedback': (values) => {
             return dispatch(actions.feedbackSubmit(values))
+        },
+        'eventClicked': (data) => {
+            return dispatch(eventClicked(data))
         }
     }
 };

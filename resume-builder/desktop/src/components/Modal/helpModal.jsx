@@ -15,7 +15,7 @@ export default class HelpModal extends React.Component {
     }
 
     feedbackSubmit(){
-        const {feedback,userInfo,hideHelpModal} = this.props;
+        const {feedback,userInfo,hideHelpModal,eventClicked} = this.props;
         const {message} = this.state
         const values = {
             'name':userInfo.first_name,
@@ -25,6 +25,10 @@ export default class HelpModal extends React.Component {
             'lsource':"8"
         }
         feedback(values)
+        eventClicked({
+            'action':'LeadSubmit',
+            'label':'HomePage'
+        })
         hideHelpModal()
 
     }

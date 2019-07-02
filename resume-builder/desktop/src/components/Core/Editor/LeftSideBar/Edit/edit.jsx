@@ -75,6 +75,10 @@ class Edit extends Component {
 
     openMenuModal() {
         this.setState({menu_modal_status: true})
+        this.props.eventClicked({
+            'action':'Add/Remove',
+            'label':'Click'
+        })
     }
 
     closeMenuModal() {
@@ -83,7 +87,7 @@ class Edit extends Component {
 
     render() {
         const {type, preferenceList, nextLink, elemToDelete, menu_modal_status} = this.state;
-        let {formData, ui: {formName}, updateCategoryEntity, showAlertModal, userInfo: {order_data}} = this.props;
+        let {formData, ui: {formName}, updateCategoryEntity, showAlertModal, userInfo: {order_data},eventClicked} = this.props;
         let error = false;
         const obj = (formData && formData[formName]) || {};
         let syncErrors = obj['syncErrors'] || {};
@@ -96,6 +100,7 @@ class Edit extends Component {
         return (
             <div className="edit-section">
                 <MenuModal
+                    eventClicked={eventClicked}
                     menu_modal_status={menu_modal_status}
                     closeMenuModal={this.closeMenuModal}
                     preferenceList={preferenceList}
@@ -112,7 +117,7 @@ class Edit extends Component {
                 <ul>
                     {
                         (preferenceList || []).filter(elem => elem.active === true).map((elem, index) => {
-                            const {link, icon, itemType} = formCategoryList[elem['entity_id']];
+                            const {link, icon, itemType,name} = formCategoryList[elem['entity_id']];
                             return (
                                 <li key={index}
                                     className={(type === itemType ? ' edit-section--active' : '')}>
@@ -123,7 +128,12 @@ class Edit extends Component {
                                                 {elem['entity_text']}
                                             </div>)
                                             :
-                                            (<Link to={link}>
+                                            (<Link to={link} 
+                                                onClick={()=>{
+                                                    eventClicked({
+                                                        'action':'SelectSection',
+                                                        'label':name
+                                                    })}}>
                                                     <span className={'mr-20 ' + icon}></span>
                                                     {elem['entity_text']}
                                                 </Link>

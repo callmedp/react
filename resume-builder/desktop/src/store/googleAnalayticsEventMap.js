@@ -5,6 +5,12 @@ export const eventsMap = {
     "LOCATION_ROUTE_CHANGE": trackPageView(action => ({
         page: action.payload,
         title: "Route Change"
-      }))
-    // "DOWNLOAD_CLICKED": trackEvent()
+      })),
+    "EVENT_CLICKED": trackEvent(action => {
+      return {
+        category:'Resume Builder',
+        action: action.payload.action,
+        label: action.payload.label,
+      }
+    })
 };

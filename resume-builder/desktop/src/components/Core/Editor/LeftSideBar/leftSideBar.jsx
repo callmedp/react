@@ -12,8 +12,15 @@ export default class LeftSideBar extends Component {
         };
         this.activateEditTab = this.activateEditTab.bind(this);
         this.activatePreviewTab = this.activatePreviewTab.bind(this);
+        this.previewClicked = this.previewClicked.bind(this);
         const path = this.props.match.path;
-        if (path === '/resume-builder/edit/') this.state.edit = true;
+        if (path === '/resume-builder/edit/'){ 
+            this.state.edit = true;
+            this.props.eventClicked({
+                'action':'Add/Edit',
+                'label':'Click'
+            })
+        }
         else this.state.edit = false;
     }
 
@@ -27,6 +34,15 @@ export default class LeftSideBar extends Component {
     activatePreviewTab() {
         this.setState({
             edit: false
+        })
+    }
+
+    previewClicked(){
+        const {previewButtonClicked,eventClicked} = this.props;
+        previewButtonClicked(true);
+        eventClicked({
+            'action':'Preview',
+            'label': 'SideNav'
         })
     }
 
@@ -49,7 +65,7 @@ export default class LeftSideBar extends Component {
                     (!isEdit ? "active" : 'no-shadow')}>
                         <span className="icon-preview"></span>
                         {newUser ? <a onClick={showAlertModal}>Preview</a> :
-                            <a  onClick={isEdit ? previewButtonClicked.bind(this, true) : () => {
+                            <a  onClick={isEdit ? this.previewClicked : () => {
                                 }}>Preview</a>
                             // <Link to="/resume-builder/preview">Preview</Link>
                         }

@@ -12,43 +12,56 @@ class Header extends Component {
     constructor(props) {
         super(props);
         this.scrollTo = this.scrollTo.bind(this);
+        this.reachUsButton = this.reachUsButton.bind(this);
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
     }
 
-    scrollTo(elem,offset) {
+    scrollTo(elem,offset,action,label) {
         scroller.scrollTo(elem, {
             duration: 800,
             delay: 0,
             smooth: 'easeInOutQuad',
             offset
         })
+
+        this.props.eventClicked({
+            action,
+            label
+        })
+    }
+
+    reachUsButton(){
+        const {showHelpModal,eventClicked} =this.props;
+        showHelpModal()
+        eventClicked({
+            'action':'ReachUs',
+            'label':'Header'
+        })
     }
 
     render() {
-        const {page, userName, showHelpModal, ui:{helpModal}, hideHelpModal,feedback,userInfo} = this.props;
+        const {page, userName, ui:{helpModal}, hideHelpModal,feedback,userInfo,eventClicked} = this.props;
         return (
             <header className={this.props.getclass + " home-nav-fixed"}>
-             <HelpModal modalStatus={helpModal} hideHelpModal={hideHelpModal} userInfo={userInfo} feedback={feedback}/>
+             <HelpModal modalStatus={helpModal} hideHelpModal={hideHelpModal} userInfo={userInfo} feedback={feedback} eventClicked={eventClicked}/>
                 <div className="container">
                     <Link to={'/resume-builder/'} className="container--logo"/>
                     {!!(page === 'home') &&
                     <ul className="home-links">
                         <li>
-                            <a href="#work" onClick={() => this.scrollTo('works',-63)}>How it Works</a>
+                            <a href="#work" onClick={() => this.scrollTo('works',-63,'Howitworks_Header','Header')}>How it Works</a>
                         </li>
                         <li>
-                            <a href='#template'onClick={() => this.scrollTo('templates',-50)}>Templates</a>
+                            <a href='#template'onClick={() => this.scrollTo('templates',-50,'Templates','Header')}>Templates</a>
                         </li>
                     </ul>
                     }
                     <div className="signin">
-                        <button className="white-button mr-15" onClick={() => {
-                            showHelpModal()
-                        }}>
+                        <button className="white-button mr-15" onClick={this.reachUsButton}>
                             Reach us
                         </button>
                         {!!(page === 'home') &&
-                        <button className="white-button mr-30" onClick={() => this.scrollTo('templates',-60)}>Build your
+                        <button className="white-button mr-30" onClick={()=>{this.scrollTo('templates',-60,'BuildResume','Header')}}>Build your
                             resume
                         </button>
                         }

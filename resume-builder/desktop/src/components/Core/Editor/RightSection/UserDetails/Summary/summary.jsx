@@ -123,7 +123,7 @@ class Summary extends Component {
 
 
     render() {
-        const {extra_info, ui: {suggestions}, handleInputValue, handleSubmit, showAlertModal, history, isEditable, editHeading, saveTitle, entityName, nextEntity, personalInfo: {order_data}} = this.props;
+        const {extra_info, ui: {suggestions}, eventClicked, handleInputValue, handleSubmit, showAlertModal, history, isEditable, editHeading, saveTitle, entityName, nextEntity, personalInfo: {order_data}} = this.props;
         const {modal_status} = this.state;
         return (
             <div>
@@ -141,7 +141,7 @@ class Summary extends Component {
                             <span onClick={(event) => saveTitle(event, 6)} className="icon-tick"/>
                         </React.Fragment>
                     }
-                    <span onClick={() => editHeading()}
+                    <span onClick={() => editHeading(6)}
                           className={!!(!isEditable) ? "icon-edit " + styles['icon-summary__cursor'] : ''}/>
                 </section>
                 <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
@@ -161,8 +161,8 @@ class Summary extends Component {
 
 
                     <SavePreviewButtons
-                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data}
-                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data} form_name={'Summary'}
+                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss} eventClicked={eventClicked}
                     />
                 </form>
             </div>

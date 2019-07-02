@@ -117,6 +117,10 @@ class Project extends Component {
             offset: 400,
             containerId: 'project'
         })
+        this.props.eventClicked({
+            'action':'AddNew',
+            'label':'Projects'
+        })
     }
 
     tillTodayDisable(index, checked, e) {
@@ -142,7 +146,7 @@ class Project extends Component {
     render() {
         const {
             handleSubmit,userInfo:{order_data}, ui: {loader}, saveTitle,
-            editHeading, isEditable, entityName, nextEntity,
+            editHeading, isEditable, entityName, nextEntity,eventClicked,
             showAlertModal,history, changeOrderingDown, changeOrderingUp, handleInputValue, formData: {project}
         } = this.props;
         const {till_today} = this.state
@@ -159,7 +163,7 @@ class Project extends Component {
                     loader={loader}
                     component={ProjectRenderer}
                     saveTitle={(event) => saveTitle(event, 4)}
-                    editHeading={(value) => editHeading(value)}
+                    editHeading={() => editHeading(4)}
                     isEditable={isEditable}
                     entityName={entityName}
                     expanded={this.state.active}
@@ -171,8 +175,8 @@ class Project extends Component {
                 />
 
                 <SavePreviewButtons 
-                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data}
-                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data} form_name={'Projects'}
+                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss} eventClicked={eventClicked}
                     />
             </form>
 

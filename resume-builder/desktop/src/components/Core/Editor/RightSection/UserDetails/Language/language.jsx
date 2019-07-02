@@ -98,6 +98,10 @@ class Language extends Component {
             offset: 0,
             containerId: 'language'
         })
+        this.props.eventClicked({
+            'action':'AddNew',
+            'label':'Languages'
+        })
     }
 
 
@@ -118,7 +122,7 @@ class Language extends Component {
     render() {
         const {
             handleSubmit,userInfo:{order_data}, ui: {loader}, isEditable,
-            editHeading, saveTitle, entityName, nextEntity,
+            editHeading, saveTitle, entityName, nextEntity,eventClicked,
             showAlertModal,history, changeOrderingUp, changeOrderingDown, handleInputValue
         } = this.props;
         return (
@@ -134,7 +138,7 @@ class Language extends Component {
                     changeOrderingDown={changeOrderingDown}
                     component={LanguageRenderer}
                     saveTitle={(event) => saveTitle(event, 9)}
-                    editHeading={(value) => editHeading(value)}
+                    editHeading={() => editHeading(9)}
                     isEditable={isEditable}
                     entityName={entityName}
                     expanded={this.state.active}
@@ -143,8 +147,8 @@ class Language extends Component {
                 />
 
                 <SavePreviewButtons 
-                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data}
-                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data} form_name={'Languages'}
+                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss} eventClicked={eventClicked}
                     />
             </form>
         )

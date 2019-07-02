@@ -80,6 +80,9 @@ export const formCategoryList = {
 
 
     },
+    '11': {
+        name: 'Interest'
+    }
 
 };
 

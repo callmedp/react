@@ -95,6 +95,10 @@ class Reference extends Component {
             offset: 200,
             containerId: 'reference'
         })
+        this.props.eventClicked({
+            'action':'AddNew',
+            'label':'References'
+        })
     }
 
     deleteReference(index, fields, event) {
@@ -116,7 +120,7 @@ class Reference extends Component {
 
     render() {
         const {
-            handleSubmit,userInfo:{order_data}, ui: {loader}, isEditable, changeOrderingDown,
+            handleSubmit,userInfo:{order_data}, ui: {loader}, isEditable, changeOrderingDown,eventClicked,
             editHeading, saveTitle, entityName, nextEntity, showAlertModal,history, handleInputValue,changeOrderingUp
         } = this.props;
         return (
@@ -132,7 +136,7 @@ class Reference extends Component {
                     loader={loader}
                     component={ReferenceRenderer}
                     saveTitle={(event) => saveTitle(event, 10)}
-                    editHeading={(value) => editHeading(value)}
+                    editHeading={() => editHeading(10)}
                     isEditable={isEditable}
                     entityName={entityName}
                     expanded={this.state.active}
@@ -142,8 +146,8 @@ class Reference extends Component {
                 />
 
                 <SavePreviewButtons 
-                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data}
-                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data} form_name={'References'}
+                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss} eventClicked={eventClicked}
                     />
             </form>
         )

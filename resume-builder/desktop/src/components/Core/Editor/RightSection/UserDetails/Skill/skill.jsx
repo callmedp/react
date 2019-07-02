@@ -99,6 +99,10 @@ class Skill extends Component {
             offset: 0,
             containerId: 'skill'
         })
+        this.props.eventClicked({
+            'action':'AddNew',
+            'label':'Skills'
+        })
     }
 
     deleteSkill(index, fields, event) {
@@ -120,7 +124,7 @@ class Skill extends Component {
 
     render() {
         const {
-            handleSubmit,userInfo:{order_data}, history, showAlertModal,
+            handleSubmit,userInfo:{order_data}, history, showAlertModal,eventClicked,
             ui: {loader}, isEditable, editHeading, saveTitle, entityName, nextEntity,
             changeOrderingUp, changeOrderingDown, handleInputValue
         } = this.props;
@@ -137,7 +141,7 @@ class Skill extends Component {
                     loader={loader}
                     component={SkillRenderer}
                     saveTitle={(event) => saveTitle(event, 5)}
-                    editHeading={(value) => editHeading(value)}
+                    editHeading={() => editHeading(5)}
                     isEditable={isEditable}
                     entityName={entityName}
                     expanded={this.state.active}
@@ -147,8 +151,8 @@ class Skill extends Component {
                 />
 
                 <SavePreviewButtons 
-                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data}
-                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data} form_name={'Skills'}
+                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss} eventClicked={eventClicked}
                     />
 
 

@@ -14,7 +14,7 @@ import * as profileActions from "../../../store/personalInfo/actions"
 import SelectTemplateModal from '../../Modal/selectTemplateModal';
 import {showAlertModal, hideAlertModal,previewButtonClicked,showGenerateResumeModal,hideGenerateResumeModal} from '../../../store/ui/actions/index'
 import moment from 'moment'
-import {locationRouteChange} from '../../../store/googleAnalytics/actions/index'
+import {locationRouteChange,eventClicked} from '../../../store/googleAnalytics/actions/index'
 
 class EditPreview extends Component {
 
@@ -25,14 +25,12 @@ class EditPreview extends Component {
             localStorage.setItem('newUser',true)
         }
         if(locationPath !==pathname){
-            console.log("CHange in location to",pathname)
             locationRouteChange(pathname)
         }
     }
 
     render() {
         const {ui: {loader}, userInfo: {first_name}} = this.props;
-        console.log(this.props.analytics)
         return (
             <div>
                 {
@@ -123,6 +121,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         'locationRouteChange': (path) => {
             return dispatch(locationRouteChange(path))
+        },
+        'eventClicked': (data) => {
+            return dispatch(eventClicked(data))
         }
     }
 }

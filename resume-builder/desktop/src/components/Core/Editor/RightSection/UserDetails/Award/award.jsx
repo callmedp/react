@@ -94,6 +94,10 @@ class Award extends Component {
             offset: 200,
             containerId: 'award'
         })
+        this.props.eventClicked({
+            'action':'AddNew',
+            'label':'Awards'
+        })
     }
 
     deleteAward(index, fields, event) {
@@ -111,7 +115,7 @@ class Award extends Component {
 
     render() {
         const {
-            handleSubmit,userInfo:{order_data}, ui: {loader}, saveTitle, editHeading,
+            handleSubmit,userInfo:{order_data}, ui: {loader}, saveTitle, editHeading,eventClicked,
             isEditable, entityName, handleInputValue, nextEntity, showAlertModal,history, changeOrderingDown, changeOrderingUp
         } = this.props;
 
@@ -127,15 +131,15 @@ class Award extends Component {
                             changeOrderingDown={changeOrderingDown}
                             component={AwardRenderer}
                             saveTitle={(event) => saveTitle(event, 7)}
-                            editHeading={(value) => editHeading(value)}
+                            editHeading={() => editHeading(7)}
                             entityName={entityName}
                             isEditable={isEditable}
                             handleInputValue={handleInputValue}
                             expanded={this.state.active}
                 />
                 <SavePreviewButtons 
-                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data}
-                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data} form_name={'Awards'}
+                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss} eventClicked={eventClicked}
                     />
 
             </form>

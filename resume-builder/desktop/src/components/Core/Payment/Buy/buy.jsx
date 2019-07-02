@@ -19,6 +19,7 @@ import {
     fetchSelectedTemplateImage,
     fetchThumbNailImages
 } from "../../../../store/template/actions";
+import {eventClicked} from '../../../../store/googleAnalytics/actions/index'
 
 
 export class Buy extends Component {
@@ -29,7 +30,8 @@ export class Buy extends Component {
             'checked': 'product1'
         }
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
-        this.showEnlargedTemplate = this.showEnlargedTemplate.bind(this)
+        this.showEnlargedTemplate = this.showEnlargedTemplate.bind(this);
+        this.changeTemplate = this.changeTemplate.bind(this);
     }
 
     async showEnlargedTemplate(templateId) {
@@ -37,8 +39,20 @@ export class Buy extends Component {
         this.props.showModal()
     }
 
-    async redirectToCart() {
+    changeTemplate(){
+        const {eventClicked,showSelectTemplateModal} = this.props
+        showSelectTemplateModal()
+        eventClicked({
+            'action':'ChangeTemplate',
+            'label':'PaymentPage'
+        })
+    }
 
+    async redirectToCart() {
+        eventClicked({
+            'action':'PayNow',
+            'label':'Click'
+        })
         if (!this.props.productIds[0])
             return;
         let product;
@@ -87,7 +101,7 @@ export class Buy extends Component {
             slidesToShow: 3,
             slidesToScroll: 1,
         };
-        const {userInfo: {first_name, selected_template,order_data}, ui: {loader}, template: {templateImage, thumbnailImages},productIds} = this.props;
+        const {userInfo: {first_name, selected_template,order_data}, ui: {loader}, template: {templateImage, thumbnailImages},productIds,eventClicked} = this.props;
         const {userInfo} = this.props;
         const {checked} = this.state;
         const price1 = productIds[0] ?  productIds[0].inr_price: 999
@@ -206,12 +220,12 @@ export class Buy extends Component {
                     <div className="bottom-links">
                         {order_data && order_data.id && !order_data.combo ? '':
                             <React.Fragment>
-                                <a onClick={() => {
-                                    this.props.showSelectTemplateModal()
-                                }}>Change template</a> |
+                                <a onClick={this.changeTemplate}>Change template</a> |
                             </React.Fragment>
                         } 
-                        <Link to={'/resume-builder/edit'}>Edit template</Link>
+                        <Link to={'/resume-builder/edit'} 
+                            onClick={()=>{eventClicked({'action':'EditTemplate',
+                                                        'label':'Click'})}}>Edit template</Link>
                     </div>
                 </div>
                 <Footer/>
@@ -288,6 +302,9 @@ const mapDispatchToProps = (dispatch) => {
                 return dispatch(fetchDefaultCustomization({templateId, resolve,reject}))
             })
         },
+        'eventClicked': (data) => {
+            return dispatch(eventClicked(data))
+        }
     }
 };
 
