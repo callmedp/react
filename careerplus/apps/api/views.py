@@ -3,10 +3,13 @@ import datetime
 
 import requests
 from decimal import Decimal
+from datetime import timedelta
+from datetime import  datetime
 
 from django.db.models import Sum, Count, Subquery, OuterRef, F
 from django.utils import timezone
 from django.conf import settings
+from django.core.cache import cache
 from django.http import JsonResponse
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.views import APIView
@@ -1353,3 +1356,34 @@ class CandidateInsight(APIView):
             "msg": "Data has been noted."},
             status=status.HTTP_201_CREATED
         )
+
+class TestTimer(APIView):
+    permission_classes = []
+    authentication_classes = []
+
+
+    def get(self,request, *args, **kwargs):
+        test_id = self.request.GET.get('test_id')
+        duration = self.request.GET.get('duration')
+        session_id = self.request.session.session_key
+        test_session_key = session_id + 'test-' + str(test_id)
+        timestamp = cache.get(test_session_key)
+        timeformat = "%m/%d/%Y, %H:%M:%S"
+
+        if not timestamp:
+            timestamp_with_tduration = (datetime.now() + timedelta(seconds=duration)).strftime(timeformat)
+            test_ids = {'ongoing_' + str(test_id): timestamp_with_tduration}
+            cache.set(test_session_key, test_ids, 60 * 60 * 24)
+            return True, True
+
+        elif timestamp and not timestamp.get('ongoing_' + str(test_id)):
+            timestamp_with_tduration = (datetime.now() + timedelta(seconds=duration)).strftime(
+                "%m/%d/%Y, %H:%M:%S")
+            test_ids = {'ongoing_' + str(test_id): timestamp_with_tduration}
+            cache.set(test_session_key, test_ids, 60 * 60 * 24)
+            return True, True
+
+        if not cache.get(session_id + 'startTest-' + str(test_id)):
+            cache.set(session_id + 'startTest-' + str(test_id), datetime.now().strftime(timeformat),
+                      60 * 60 * 24)
+        return Response({'testStartTime': cache.get(session_id + 'startTest-' + str(test_id))})

@@ -14,8 +14,6 @@ from .models import Question, Test
 from shop.models import Category
 
 
-
-
 class VskillTestView(DetailView):
     template_name = 'vskill/test-paper.html'
     model = Test
@@ -34,60 +32,59 @@ class VskillTestView(DetailView):
         breadcrumbs.append({"url": '/practice-test', "name": 'test'})
         return breadcrumbs
 
-    def is_expired(self,id):
+    def is_expired(self):
         session_id = self.request.session.session_key
         test = self.get_object()
-        test_session_key = session_id + 'test-'+ str(test.id)
+        test_session_key = session_id + 'test-' + str(test.id)
         timestamp = cache.get(test_session_key)
+        timeformat = "%m/%d/%Y, %H:%M:%S"
 
         if not timestamp:
-            timestamp_with_tduration = datetime.timestamp(datetime.now() + timedelta(seconds=test.duration))
+            timestamp_with_tduration = (datetime.now() + timedelta(seconds=test.duration)).strftime(timeformat)
             test_ids = {'ongoing_' + str(test.id): timestamp_with_tduration}
             cache.set(test_session_key, test_ids, 60 * 60 * 24)
-            return True, False
+            return True, True
 
         elif timestamp and not timestamp.get('ongoing_' + str(test.id)):
-            timestamp_with_tduration = datetime.timestamp(datetime.now() + timedelta(seconds=test.duration))
+            timestamp_with_tduration = (datetime.now() + timedelta(seconds=test.duration)).strftime("%m/%d/%Y, %H:%M:%S")
             test_ids = {'ongoing_' + str(test.id): timestamp_with_tduration}
-            cache.set(session_id, test_ids, 60 * 60 * 24)
-            return True,False
-
+            cache.set(test_session_key, test_ids, 60 * 60 * 24)
+            return True, True
         else:
             timestamp = timestamp.get('ongoing_' + str(test.id))
-            timestamp_obj = datetime.fromtimestamp(timestamp)
-            if timestamp_obj + timedelta(days=1) > datetime.now():
+            timestamp_obj = datetime.strptime(timestamp,timeformat)
+            if timestamp_obj < datetime.now():
                 return False, False
-        return True, True
+        return True, False
 
+    def dispatch(self,request,*args,**kwargs):
+        response = super(VskillTestView, self).dispatch(request, args, **kwargs)
+        original_context = response.context_data
+        test_object = original_context['object']
 
-    def get(self, request, *args, **kwargs):
-
-        # context = self.get_context_data()
-        test = self.get_object()
-        if not test:
-            return redirect(reverse('assessment:vskill-landing'))
-        show_test, delete_ans = self.is_expired(test.id)
-        if not show_test:
-            pass
-            # return redirect(reverse('assessment:vskill-result',kwargs={'slug':test.slug}))
-        # context.update({'deleteans': delete_ans})
-
-        return super(VskillTestView,self).get(request, args, **kwargs)
+        if original_context.get('show_test'):
+            return redirect(reverse('assessment:vskill-result', kwargs={'slug': test_object.slug}))
+        response.context_data = original_context
+        return response
 
     def get_context_data(self, **kwargs):
         context = super(VskillTestView, self).get_context_data(**kwargs)
         context.update({'breadcrumbs': self.get_breadcrumbs()})
         test_id = self.get_object()
+        show_test, delete_ans = self.is_expired()
+        if not show_test:
+            context.update({'show_test': show_test })
+        context.update({'delete_ans': delete_ans})
         questions_list = Question.objects.filter(test_id=test_id.pk)
         if not questions_list:
             return context
-
         test_list = self.request.session.get('vskill_appeared') if\
             self.request.session.get('vskill_appeared') else []
         test_list.append(test_id)
         self.request.session.update({'vskill_appeared': test_list})
         lead_created = self.request.session.get('is_lead_created')
-        context.update({'questions_list': questions_list,'lead_created':lead_created})
+        context.update({'questions_list': questions_list,'lead_created': lead_created})
+
         return context
 
 
@@ -185,21 +182,28 @@ class AssessmentSubCategoryPage(DetailView):
         context.update({'all_test': all_test})
         return context
 
+
 class AssessmentResultPage(TemplateView):
     template_name = 'vskill/test-answers.html'
 
-
-    def get_breadcrumbs(self):
+    def get_breadcrumbs(self,test):
         breadcrumbs = []
         breadcrumbs.append({"url": '/', "name": "Home"})
-        breadcrumbs.append({"url": None, "name": 'practice-test'})
+        breadcrumbs.append({"url": '/practice-tests/', "name": 'practice-test'})
+        breadcrumbs.append({"url": '/practice-tests/'+test.category.get_parent()[0].slug, "name": test.category.get_parent()[0].name})
+        breadcrumbs.append({"url": '/practice-tests/'+test.category.slug, "name": test.category.name})
+        breadcrumbs.append({"url": '', "name": test.slug + '-test'})
+
         return breadcrumbs
 
     def get_context_data(self, **kwargs):
         slug = kwargs.get('slug')
-        test =Test.objects.filter(slug=slug).first()
+        test = Test.objects.filter(slug=slug).first()
         context = super(AssessmentResultPage, self).get_context_data(**kwargs)
-
+        context.update({'breadcrumbs': self.get_breadcrumbs(test)})
+        questions_list = Question.objects.filter(test_id=test.pk)
+        context.update({'questions_list': questions_list})
+        context.update({'object':test})
         return context
 
 

@@ -56,7 +56,10 @@ urlpatterns = [
         name='remove-cookie-from-header'),
     url(r'^v1/candidate-insights/$',
         views.CandidateInsight.as_view(),
-        name='candidate-insights')
+        name='candidate-insights'),
+    url(r'^v1/get-set-time/$',
+        views.TestTimer.as_view(),
+        name='get-test-time')
 ]
 
 if settings.DEBUG:

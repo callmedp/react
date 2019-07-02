@@ -63,279 +63,31 @@
          <!-- tests starts -->
          <div class="col-sm-9 mt-30">
             <div class="test-paper-box white-box">
-               
+               <h2>Test Answers</h2>
+
                <!-- paper starts -->
+                 {% for quest in questions_list %}
                <div class="test-paper">
-                  <h2>Test Answers</h2>
+
                   <div class="flexbox">
-                     <h3>1) SEO = 'Search Engine optimization', then SEM = ?</h3>
+                     <h3>{{forloop.counter}} {{quest.question_text}}</h3>
                   </div>
                   <ul class="test-paper__question">
+                        {% for ans in quest.question_options %}
                      <li>
-                        <label class="custom-radio">Search Engine Manipulation
-                           <input type="radio" checked="checked" name="radio">
+                        <label class="custom-radio">{{ans.option}}
+                           <input type="radio" id="{{ans.option_id}}" disabled  name="radio{{ans.option_id}}">
                            <span class="checkmark"></span>
-                           <span class="ans-right"></span>
+                           <span id="check{{ans.option_id}}" class=""></span>
                         </label>
                      </li>
-                     <li>
-                        <label class="custom-radio">Search Engine Marketing
-                           <input type="radio" name="radio">
-                           <span class="checkmark"></span>
-                        </label>
-                     </li>
-                     <li>
-                        <label class="custom-radio">Social Ethical Marketing
-                           <input type="radio" name="radio">
-                           <span class="checkmark"></span>
-                        </label>
-                     </li>
-                     <li>
-                        <label class="custom-radio">Safe Easy Marketing
-                           <input type="radio" name="radio">
-                           <span class="checkmark"></span>
-                        </label>
-                     </li>
+                        {%endfor %}
                   </ul>
                </div>
-
-               <div class="test-paper">
-                  <div class="flexbox">
-                     <h3>2)  What is the ideal keyword density?</h3>
-                  </div>
-                  <ul class="test-paper__question">
-                     <li>
-                        <label class="custom-radio">0 - 5%
-                           <input type="radio" checked="checked" name="radio">
-                           <span class="checkmark"></span>
-                        </label>
-                     </li>
-                     <li>
-                        <label class="custom-radio">5 - 10%
-                           <input type="radio" name="radio">
-                           <span class="checkmark"></span>
-                           <span class="ans-right"></span>
-                        </label>
-                     </li>
-                     <li>
-                        <label class="custom-radio">10%+
-                           <input type="radio" name="radio">
-                           <span class="checkmark"></span>
-                           <span class="ans-wrong"></span>
-                        </label>
-                     </li>
-                     <li>
-                        <label class="custom-radio">There's no ideal keyword density.
-                           <input type="radio" name="radio">
-                           <span class="checkmark"></span>
-                        </label>
-                     </li>
-                  </ul>
-               </div>
-
-               <div class="test-paper">
-                  <div class="flexbox">
-                     <h3>3) Placing Hidden text on web page is?</h3>
-                  </div>
-                  <ul class="test-paper__question">
-                     <li>
-                        <label class="custom-radio">Black - Hat SEO technique
-                           <input type="radio" checked="checked" name="radio">
-                           <span class="checkmark"></span>
-                           <span class="ans-right"></span>
-                        </label>
-                     </li>
-                     <li>
-                        <label class="custom-radio">White - Hat SEO technique
-                           <input type="radio" name="radio">
-                           <span class="checkmark"></span>
-                        </label>
-                     </li>
-                     <li>
-                        <label class="custom-radio">Yellow - Hat SEO trick
-                           <input type="radio" name="radio">
-                           <span class="checkmark"></span>
-                        </label>
-                     </li>
-                     <li>
-                        <label class="custom-radio">Green - Hat SEO trick
-                           <input type="radio" name="radio">
-                           <span class="checkmark"></span>
-                        </label>
-                     </li>
-                  </ul>
-               </div>
-
-               <div class="test-paper">
-                  <div class="flexbox">
-                     <h3>4) Which query will give list of webpages indexed by a particular search engine</h3>
-                  </div>
-                  <ul class="test-paper__question">
-                     <li>
-                        <label class="custom-radio">list:http://www.websitename.com
-                           <input type="radio" checked="checked" name="radio">
-                           <span class="checkmark"></span>
-                           <span class="ans-right"></span>
-                        </label>
-                     </li>
-                     <li>
-                        <label class="custom-radio">link:http://www.websitename.com
-                           <input type="radio" name="radio">
-                           <span class="checkmark"></span>
-                        </label>
-                     </li>
-                     <li>
-                        <label class="custom-radio">webpage:http://www.websitename.com
-                           <input type="radio" name="radio">
-                           <span class="checkmark"></span>
-                           <span class="ans-wrong"></span>
-                        </label>
-                     </li>
-                     <li>
-                        <label class="custom-radio">site:http://www.websitename.com
-                           <input type="radio" name="radio">
-                           <span class="checkmark"></span>
-                        </label>
-                     </li>
-                  </ul>
-               </div>
-
-               <div class="test-paper">
-                  <div class="flexbox">
-                     <h3>5) SEO = 'Search Engine optimization', then SEM = ?</h3>
-                  </div>
-                  <ul class="test-paper__question">
-                     <li>
-                        <label class="custom-radio">Search Engine Manipulation
-                           <input type="radio" checked="checked" name="radio">
-                           <span class="checkmark"></span>
-                        </label>
-                     </li>
-                     <li>
-                        <label class="custom-radio">Search Engine Marketing
-                           <input type="radio" name="radio">
-                           <span class="checkmark"></span>
-                           <span class="ans-right"></span>
-                        </label>
-                     </li>
-                     <li>
-                        <label class="custom-radio">Social Ethical Marketing
-                           <input type="radio" name="radio">
-                           <span class="checkmark"></span>
-                        </label>
-                     </li>
-                     <li>
-                        <label class="custom-radio">Safe Easy Marketing
-                           <input type="radio" name="radio">
-                           <span class="checkmark"></span>
-                        </label>
-                     </li>
-                  </ul>
-               </div>
-
-               <div class="test-paper">
-                  <div class="flexbox">
-                     <h3>6)  What is the ideal keyword density?</h3>
-                  </div>
-                  <ul class="test-paper__question">
-                     <li>
-                        <label class="custom-radio">0 - 5%
-                           <input type="radio" checked="checked" name="radio">
-                           <span class="checkmark"></span>
-                           <span class="ans-right"></span>
-                        </label>
-                     </li>
-                     <li>
-                        <label class="custom-radio">5 - 10%
-                           <input type="radio" name="radio">
-                           <span class="checkmark"></span>
-                           <span class="ans-wrong"></span>
-                        </label>
-                     </li>
-                     <li>
-                        <label class="custom-radio">10%+
-                           <input type="radio" name="radio">
-                           <span class="checkmark"></span>
-                        </label>
-                     </li>
-                     <li>
-                        <label class="custom-radio">There's no ideal keyword density.
-                           <input type="radio" name="radio">
-                           <span class="checkmark"></span>
-                        </label>
-                     </li>
-                  </ul>
-               </div>
-
-               <div class="test-paper">
-                  <div class="flexbox">
-                     <h3>7) Placing Hidden text on web page is?</h3>
-                  </div>
-                  <ul class="test-paper__question">
-                     <li>
-                        <label class="custom-radio">Black - Hat SEO technique
-                           <input type="radio" checked="checked" name="radio">
-                           <span class="checkmark"></span>
-                        </label>
-                     </li>
-                     <li>
-                        <label class="custom-radio">White - Hat SEO technique
-                           <input type="radio" name="radio">
-                           <span class="checkmark"></span>
-                        </label>
-                     </li>
-                     <li>
-                        <label class="custom-radio">Yellow - Hat SEO trick
-                           <input type="radio" name="radio">
-                           <span class="checkmark"></span>
-                        </label>
-                     </li>
-                     <li>
-                        <label class="custom-radio">Green - Hat SEO trick
-                           <input type="radio" name="radio">
-                           <span class="checkmark"></span>
-                           <span class="ans-right"></span>
-                        </label>
-                     </li>
-                  </ul>
-               </div>
-
-               <div class="test-paper">
-                  <div class="flexbox">
-                     <h3>8) Which query will give list of webpages indexed by a particular search engine</h3>
-                  </div>
-                  <ul class="test-paper__question">
-                     <li>
-                        <label class="custom-radio">list:http://www.websitename.com
-                           <input type="radio" checked="checked" name="radio">
-                           <span class="checkmark"></span>
-                           <span class="ans-wrong"></span>
-                        </label>
-                     </li>
-                     <li>
-                        <label class="custom-radio">link:http://www.websitename.com
-                           <input type="radio" name="radio">
-                           <span class="checkmark"></span>
-                           <span class="ans-right"></span>
-                        </label>
-                     </li>
-                     <li>
-                        <label class="custom-radio">webpage:http://www.websitename.com
-                           <input type="radio" name="radio">
-                           <span class="checkmark"></span>
-                        </label>
-                     </li>
-                     <li>
-                        <label class="custom-radio">site:http://www.websitename.com
-                           <input type="radio" name="radio">
-                           <span class="checkmark"></span>
-                        </label>
-                     </li>
-                  </ul>
-               </div>
-
+                   {% endfor %}
                <!-- paper end -->
             </div>
+
             <div class="flexbox ml-20 mt-30">
                <button class="blue_btn mr-20">Next test&nbsp; &rsaquo;</button>
                <button class="white_btn">Explore other test</button>
@@ -386,38 +138,22 @@
 {% endblock main_container %}
 {% block js_section %}
 {{block.super}}
-   <script type="text/javascript">
-   var page_number= 2;
-   function loadmore(){
-            page_number = page_number+1;
-             element = document.getElementById('funcDiv');
-           $.ajax({
-               url: '/api/get-category-level-products',
-               type: "GET",
-               data : {'tl': 2, 'page_size' : 4, 'page':page_number},
-               dataType: 'json',
-               success: function(json) {
-               if (json.next == null){
-                 $('#loadmorebtn').hide();
-               }
-               for (fa in json.results){
-                element.innerHTML= element.innerHTML +'<div class="functional_test_inside border-'+fa+'"><a href="#"><span class="sales"></span>'+ json.results[fa].heading +'</a></div>'
+<script>
+var tKey = 'Test-' + '{{object.id}}',myStorage = window.localStorage,questionAttempt = null;
+$(document).ready(function() {
+        questionAttempt = JSON.parse(myStorage.getItem(tKey));
+        if (questionAttempt != null) {
+            for (var id in Object.keys(questionAttempt)) {
+                if (Object.values(questionAttempt)[id] != "") {
+                    console.log($('#' + Object.values(questionAttempt)[id]).is(":checked"))
+                    $('#' + Object.values(questionAttempt)[id]).attr('checked',true);
+                }
+            }
+         }
 
-               }
-               },
-               error: function(xhr, ajaxOptions, thrownError) {
-               if(xhr.status == 404){
-                     alert("No more Categories to show ");
-                     $('#loadmorebtn').hide();
-                     }
-                     else{
 
-                   alert("Something went wrong. Try again later");
-                   }
-               }
-           });
-   }
-   </script>
+});
+</script>
 {% endblock js_section %}
 {% block johukum %}
 {% endblock johukum %}
