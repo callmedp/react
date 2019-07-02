@@ -320,7 +320,7 @@ export const renderAsyncCreatableSelect = ({
                                                className,
                                                isMulti,
                                                id,
-                                               closeMenuOnSelect,
+                                               closeMenuOnSelect=true,
                                                meta: {touched, error, warning}
                                            }) => {
     return (
@@ -340,7 +340,8 @@ export const renderAsyncCreatableSelect = ({
                                       isMulti={isMulti}
                                       styles={dropdownStyles}
                                       autoComplete="off"
-                    // closeMenuOnSelect={closeMenuOnSelect}
+                                      closeMenuOnSelect={closeMenuOnSelect}
+                                      blurInputOnSelect={closeMenuOnSelect}
                                       onBlur={event => event.preventDefault()}
                 />
                 {   ((<span className={'error-message'}>{error}</span>) ||

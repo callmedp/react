@@ -45,6 +45,12 @@ function* loginCandidate(action) {
         for (const key in candidate_profile) {
             const entityObj = entity_status.find(el => el['display_value'] === key);
             if (key === 'personalInfo') {
+                candidate_profile[key] = {
+                    ...candidate_profile[key],
+                    ...{
+                        "location": ''
+                    }
+                }
                 yield put({type: SAVE_USER_INFO, data: candidate_profile[key]})
             }
             if (!entityObj.set) {
