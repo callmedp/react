@@ -49,7 +49,7 @@ export class Buy extends Component {
     }
 
     async redirectToCart() {
-        eventClicked({
+        this.props.eventClicked({
             'action':'PayNow',
             'label':'Click'
         })

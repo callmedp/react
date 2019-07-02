@@ -145,6 +145,7 @@ class Education extends Component {
                                 deleteEducation={this.deleteEducation}
                                 changeOrderingUp={changeOrderingUp}
                                 changeOrderingDown={changeOrderingDown}
+                                eventClicked={eventClicked}
                                 component={renderEducation}
                                 headingChange={headingChange}
                                 entity_preference_data={entity_preference_data}

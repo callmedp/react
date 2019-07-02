@@ -15,6 +15,7 @@ const renderExperiences = ({
                                meta: {touched, error, submitFailed},
                                handleSubmit,
                                handleAddition,
+                                eventClicked,
                                deleteExperience,
                                changeOrderingUp,
                                changeOrderingDown,
@@ -52,7 +53,7 @@ const renderExperiences = ({
                 </div>
                 {!editHeading ?
                     <button role="button"
-                            onClick={handleSubmit(handleAddition.bind(this, fields, experienceNewData(fields), 780, 'experience'))}
+                            onClick={handleSubmit(handleAddition.bind(this, fields, experienceNewData(fields), 780, 'experience',eventClicked,'Experience'))}
                             type={'button'} className="btn btn__round btn--outline">+ Add new</button> : ''
                 }
             </div>

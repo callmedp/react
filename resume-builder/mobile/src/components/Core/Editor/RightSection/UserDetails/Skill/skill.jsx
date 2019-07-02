@@ -126,6 +126,7 @@ class Skill extends Component {
                                 deleteSkill={this.deleteSkill}
                                 changeOrderingUp={changeOrderingUp}
                                 changeOrderingDown={changeOrderingDown}
+                                eventClicked={eventClicked}
                                 component={renderSkills}
                                 headingChange={headingChange}
                                 entity_preference_data={entity_preference_data}

@@ -8,6 +8,7 @@ import {siteDomain} from "../../../../Utils/domains";
 import Slider from "react-slick";
 import Loader from '../../../Common/Loader/loader.jsx';
 import BuyTemplateModal from '../../../Common/BuyTemplateModal/buyTemplateModal.jsx';
+import {eventClicked} from '../../../../store/googleAnalytics/actions/index'
 
 
 class Buy extends Component {
@@ -23,11 +24,15 @@ class Buy extends Component {
         }
         this.closeModalStatus = this.closeModalStatus.bind(this);
         this.openModal = this.openModal.bind(this);
+        this.editTemplate = this.editTemplate.bind(this);
     }
 
 
      redirectToCart() {
-
+        this.props.eventClicked({
+            'action':'PayNow',
+            'label':'Click'
+        })
         if (!this.props.productIds[0])
             return;
         let product;
@@ -73,6 +78,13 @@ class Buy extends Component {
                 'checked': 'product2'
             })
         }
+    }
+
+    editTemplate(){
+        const {eventClicked,history} = this.props;
+        eventClicked({'action':'EditTemplate',
+                    'label':'Click'})
+        history.push(`/resume-builder/edit/?type=profile`)
     }
 
     render() {
@@ -130,7 +142,7 @@ class Buy extends Component {
                                         <img src={`${this.staticUrl}react/assets/images/mobile/small-resume-${template}.jpg`} alt="Custom resume" />
                                     }
                                 </span>
-                                <a className="fs-12 mt-5" onClick onClick={()=>{this.props.history.push(`/resume-builder/edit/?type=profile`) }}>Edit</a>
+                                <a className="fs-12 mt-5" onClick={this.editTemplate}>Edit</a>
                             </div>
                         </div>
 
@@ -219,6 +231,9 @@ const mapDispatchToProps = (dispatch) => {
             return new Promise((resolve, reject) => {
                 dispatch(action.addToCart({data, resolve, reject}));
             })
+        },
+        'eventClicked': (data) => {
+            return dispatch(eventClicked(data))
         }
     }
 };

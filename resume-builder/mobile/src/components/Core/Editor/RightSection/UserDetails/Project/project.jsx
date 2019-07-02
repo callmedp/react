@@ -143,6 +143,7 @@ class Project extends Component {
                                 deleteProject={this.deleteProject}
                                 changeOrderingUp={changeOrderingUp}
                                 changeOrderingDown={changeOrderingDown}
+                                eventClicked={eventClicked}
                                 component={renderProjects}
                                 headingChange={headingChange}
                                 entity_preference_data={entity_preference_data}

@@ -8,6 +8,7 @@ const renderLanguage = ({
                             meta: {touched, error, submitFailed},
                             handleSubmit,
                             handleAddition,
+                                eventClicked,
                             deleteLanguage,
                             changeOrderingUp,
                             changeOrderingDown,
@@ -38,7 +39,7 @@ const renderLanguage = ({
                 </div>
                 {!editHeading ?
                     <button role="button" className="btn btn__round btn--outline"
-                        onClick={handleSubmit(handleAddition.bind(this,fields,languageNewData(fields),0,'language'))}
+                        onClick={handleSubmit(handleAddition.bind(this,fields,languageNewData(fields),0,'language',eventClicked,'Languages'))}
                         type={'button'} >+ Add new</button>:''
                 }
             </div>

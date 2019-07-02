@@ -125,6 +125,7 @@ class Award extends Component {
                                 deleteAward={this.deleteAward}
                                 changeOrderingUp={changeOrderingUp}
                                 changeOrderingDown={changeOrderingDown}
+                                eventClicked={eventClicked}
                                 component={renderAwards}
                                 headingChange={headingChange}
                                 editHeading={editHeading}

@@ -124,6 +124,7 @@ class Course extends Component {
                                 deleteCourse={this.deleteCourse}
                                 changeOrderingUp={changeOrderingUp}
                                 changeOrderingDown={changeOrderingDown}
+                                eventClicked={eventClicked}
                                 component={renderCourse}
                                 headingChange={headingChange}
                                 entity_preference_data={entity_preference_data}

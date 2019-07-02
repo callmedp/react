@@ -125,6 +125,7 @@ class Language extends Component {
                                 deleteLanguage={this.deleteLanguage}
                                 changeOrderingUp={changeOrderingUp}
                                 changeOrderingDown={changeOrderingDown}
+                                eventClicked={eventClicked}
                                 component={renderLanguage}
                                 headingChange={headingChange}
                                 entity_preference_data={entity_preference_data}

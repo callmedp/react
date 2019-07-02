@@ -13,6 +13,7 @@ const renderProjects = ({
                             meta: {touched, error, submitFailed},
                             handleSubmit,
                             handleAddition,
+                                eventClicked,
                             deleteProject,
                             changeOrderingUp,
                             changeOrderingDown,
@@ -48,7 +49,7 @@ const renderProjects = ({
                 </div>
                 {!editHeading ?
                     <button role="button" className="btn btn__round btn--outline"
-                            onClick={handleSubmit(handleAddition.bind(this, fields, projectNewData(fields), 200, 'project'))}
+                            onClick={handleSubmit(handleAddition.bind(this, fields, projectNewData(fields), 200, 'project',eventClicked,'Projects'))}
                             type={'button'}>+ Add new</button> : ''
                 }
             </div>

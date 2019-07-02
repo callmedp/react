@@ -122,6 +122,7 @@ class References extends Component {
                                 deleteReference={this.deleteReference}
                                 changeOrderingUp={changeOrderingUp}
                                 changeOrderingDown={changeOrderingDown}
+                                eventClicked={eventClicked}
                                 component={renderReferences}
                                 headingChange={headingChange}
                                 entity_preference_data={entity_preference_data}

@@ -9,6 +9,7 @@ export const renderAwards = ({
                                 meta: {touched, error, submitFailed},
                                 handleSubmit,
                                 handleAddition,
+                                eventClicked,
                                 deleteAward,
                                 changeOrderingUp,
                                 changeOrderingDown,
@@ -39,7 +40,7 @@ export const renderAwards = ({
                     }
                 </div>
                 {!editHeading ?
-                    <button role="button" onClick={handleSubmit(handleAddition.bind(this,fields,awardNewData(fields),100,'award'))}
+                    <button role="button" onClick={handleSubmit(handleAddition.bind(this,fields,awardNewData(fields),100,'award',eventClicked,'Awards'))}
                         type={'button'} className="btn btn__round btn--outline">+ Add new</button>:''
                 }
             </div>

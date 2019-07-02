@@ -172,6 +172,7 @@ class Experience extends Component {
                                 deleteExperience={this.deleteExperience}
                                 changeOrderingUp={changeOrderingUp}
                                 changeOrderingDown={changeOrderingDown}
+                                eventClicked={eventClicked}
                                 component={renderExperiences}
                                 headingChange={headingChange}
                                 entity_preference_data={entity_preference_data}

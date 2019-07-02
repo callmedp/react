@@ -104,7 +104,7 @@ class RightSection extends Component {
 
 }
 
-const handleAddition = (fields,data,offset,type,containerId,entity_name,editClicked) =>{
+const handleAddition = (fields,data,offset,type,eventClicked,entity_name) =>{
     fields.push(data)
 
     scroller.scrollTo(`${type}${fields.length -1}`, {
@@ -112,7 +112,11 @@ const handleAddition = (fields,data,offset,type,containerId,entity_name,editClic
         delay: 0,
         smooth: 'easeInOutQuad',
         offset,
-        containerId
+    })
+
+    eventClicked({
+        'action':'AddNew',
+        'label':entity_name
     })
 }
 
@@ -167,8 +171,8 @@ const mapDispatchToProps = (dispatch) => {
         "changeFormName": (data) => {
             return dispatch(changeFormName(data))
         },
-        "handleAddition":(fields,data,offset,type)=>{
-            return handleAddition(fields,data,offset,type)
+        "handleAddition":(fields,data,offset,type,eventClicked,entity_name)=>{
+            return handleAddition(fields,data,offset,type,eventClicked,entity_name)
         },
         "handleOrdering":(values)=>{
             return handleOrdering(values)
