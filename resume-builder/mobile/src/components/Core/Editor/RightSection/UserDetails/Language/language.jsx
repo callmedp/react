@@ -113,7 +113,7 @@ class Language extends Component {
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {updateAlertModalStatus,handleSubmit,submitting,personalInfo:{order_data,entity_preference_data},headingChange,history,changeOrderingUp,changeOrderingDown} = this.props;
+        const {updateAlertModalStatus,handleSubmit,submitting,personalInfo:{order_data,entity_preference_data},headingChange,history,changeOrderingUp,changeOrderingDown,eventClicked} = this.props;
         const {editHeading,heading} =this.state;
         return(
             <div className="buildResume">
@@ -136,7 +136,7 @@ class Language extends Component {
                         <li className="form__group">
                             <BottomCTC  disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
                                 length={length} pos={pos+1} updateInfoBeforeLoss={this.updateInfoBeforeLoss} 
-                                order_data={order_data}/>
+                                order_data={order_data} eventClicked={eventClicked} form_name={'Languages'}/>
                         </li>
                     </ul>
                 </form>

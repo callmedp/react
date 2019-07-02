@@ -138,7 +138,7 @@ class Summary extends Component {
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {personalInfo: {order_data, entity_preference_data}, extra_info, headingChange, handleSubmit, submitting, history, ui: {suggestions}, updateAlertModalStatus} = this.props;
+        const {personalInfo: {order_data, entity_preference_data}, extra_info, headingChange, handleSubmit, submitting, history, ui: {suggestions}, updateAlertModalStatus,eventClicked} = this.props;
         const {editHeading, heading, modal_status} = this.state;
         return (
             <div className="buildResume">
@@ -182,7 +182,7 @@ class Summary extends Component {
                         <BottomCTC disabled={submitting} context={this} history={history}
                                    updateAlertModalStatus={updateAlertModalStatus}
                                    length={length} pos={pos + 1} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
-                                   order_data={order_data}/>
+                                   order_data={order_data} eventClicked={eventClicked} form_name={'Summary'}/>
                     </form>
 
                 </div>

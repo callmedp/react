@@ -19,6 +19,7 @@ import InputRange from 'react-input-range';
 import Swal from 'sweetalert2'
 import {siteDomain} from "../../../../Utils/domains";
 import AlertModal from '../../../Common/AlertModal/alertModal.jsx';
+import {eventClicked} from '../../../../store/googleAnalytics/actions/index'
 
 class Preview extends Component {
 
@@ -160,10 +161,10 @@ class Preview extends Component {
 
     render(){
         const {customize,currentTab,selectedColor,headingFontSize,textFontSize,sectionEntityName,startingReorderUpDowmIndex,zoomIn} = this.state
-        const {template:{html,zoomInHtml,entity_position,entity_id_count_mapping},ui:{mainloader,alertModalStatus,generateResumeModal},personalInfo:{selected_template,order_data},history} = this.props
+        const {template:{html,zoomInHtml,entity_position,entity_id_count_mapping},ui:{mainloader,alertModalStatus,generateResumeModal},personalInfo:{selected_template,order_data},history,eventClicked} = this.props
         return(
             <div className="preview">
-               <Header page={'preview'} {...this.props} order_data={order_data} />
+               <Header page={'preview'} {...this.props} order_data={order_data} eventClicked={eventClicked} />
                <AlertModal modal_status={alertModalStatus|| generateResumeModal}  history={history} generateResumeModal={generateResumeModal}/>
                <ChangeTemplateModal {...this.props}/>
                
@@ -467,6 +468,9 @@ const mapDispatchToProps = (dispatch) => {
                 dispatch(updatePersonalInfo({personalDetails, resolve, reject}));
             })
         },
+        'eventClicked': (data) => {
+            return dispatch(eventClicked(data))
+        }
     }
 };
 

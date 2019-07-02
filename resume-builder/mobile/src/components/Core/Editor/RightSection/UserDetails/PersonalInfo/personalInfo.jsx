@@ -136,7 +136,7 @@ class PersonalInfo extends Component {
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {handleSubmit, personalInfo, headingChange, submitting, personalInfo: {order_data}, history, fetchInterestList, updateAlertModalStatus} = this.props;
+        const {handleSubmit, personalInfo, headingChange, submitting, personalInfo: {order_data}, history, fetchInterestList, updateAlertModalStatus,eventClicked} = this.props;
         const {editHeading, heading, flag} = this.state;
         const newUser = localStorage.getItem('newUser')
         return (
@@ -275,7 +275,7 @@ class PersonalInfo extends Component {
                         <BottomCTC disabled={submitting} context={this} history={history}
                                    updateAlertModalStatus={updateAlertModalStatus}
                                    length={length} pos={pos + 1} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
-                                   order_data={order_data}/>
+                                   order_data={order_data} eventClicked={eventClicked} form_name={'Personal Info'} />
                     </form>
                 </div>
 

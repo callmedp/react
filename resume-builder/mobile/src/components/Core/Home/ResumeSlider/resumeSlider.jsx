@@ -11,10 +11,15 @@ export default class ResumeSlider extends Component {
     }
 
     async customise() {
+        const {eventClicked,showtext,updateModalStatus,updateSelectedTemplate} = this.props
+        eventClicked({
+            'action':'SelectTemplate',
+            'label':'HomePage'
+        })
         localStorage.setItem('selected_template',(parseInt(document.getElementsByClassName('slick-current')[0].getAttribute('data-index')) + 1))
-        if (!this.props.showtext){
-            this.props.updateModalStatus({modal_status:false})
-            await this.props.updateSelectedTemplate(this.props.personalInfo)
+        if (!showtext){
+            updateModalStatus({modal_status:false})
+            await updateSelectedTemplate(this.props.personalInfo)
         }
         else{
             window.location = '/resume-builder/edit/?type=profile'

@@ -5,7 +5,7 @@ export default class  RenderNavItem extends Component {
 
     render(){
         const {label,type,sidenavStatus,title,exist,listOfLinks,changeLink,iconClass,
-            error,showErrorMessage,newUser} = this.props
+            error,showErrorMessage,newUser,pos} = this.props
         return( 
             <React.Fragment>
                {error || newUser ?
@@ -22,7 +22,7 @@ export default class  RenderNavItem extends Component {
 
                         <li className={"sidebar__item " + (type === title ? 'sidebar--active' : '')}>
                             <Link to={`/resume-builder/edit/?type=${title}`} 
-                                className="sidebar__anchor" onClick={changeLink.bind(this,title,listOfLinks)}>
+                                className="sidebar__anchor" onClick={changeLink.bind(this,title,pos)}>
                                 <div className="sidebar__wrap">
                                     <i className={iconClass}></i>
                                     <span className="sidebar__link">{label}</span>

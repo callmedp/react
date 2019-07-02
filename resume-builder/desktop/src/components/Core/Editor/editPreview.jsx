@@ -24,9 +24,6 @@ class EditPreview extends Component {
         if(localStorage.getItem('personalInfo')){
             localStorage.setItem('newUser',true)
         }
-        if(locationPath !==pathname){
-            locationRouteChange(pathname)
-        }
     }
 
     render() {

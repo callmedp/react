@@ -6,6 +6,7 @@ export default class BottomCTC extends Component {
     constructor(props){
         super(props);
         this.preview = this.preview.bind(this);
+        this.eventActionClick = this.eventActionClick.bind(this);
     }
 
     async preview(){
@@ -13,6 +14,14 @@ export default class BottomCTC extends Component {
         await updateInfoBeforeLoss()
         context.setState({submit:true})
         history.push(`/resume-builder/preview`);
+    }
+
+    eventActionClick(option){
+        const {eventClicked,form_name} = this.props;
+        eventClicked({
+            'action':option ===1 ? 'Save Changes' : option===2 ?'Download': 'Save&Continue',
+            'label':option===3 ? form_name : 'Click'
+        })
     }
 
     render (){
@@ -26,8 +35,11 @@ export default class BottomCTC extends Component {
                         type={'button'}>Preview
                     </button>
                     
-                    <button className="btn btn__primary" disabled={disabled} type={'submit'}>
-                        {(length === pos) ? order_data ? "Save Changes":"Buy" :"Save & Continue"}
+                    <button className="btn btn__primary" disabled={disabled} type={'submit'}
+                    onClick={()=>{
+                        (length === pos) ? order_data && order_data.id ? this.eventActionClick(1) :  this.eventActionClick(2) : this.eventActionClick(3)
+                    }}>
+                        {(length === pos) ? order_data && order_data.id ? "Save Changes":"Download" :"Save & Continue"}
                     </button>
                 </div>
             </div>

@@ -16,13 +16,19 @@ export default class LeftSideBar extends Component {
         const path = this.props.match.path;
         if (path === '/resume-builder/edit/'){ 
             this.state.edit = true;
-            this.props.eventClicked({
-                'action':'Add/Edit',
-                'label':'Click'
-            })
         }
         else this.state.edit = false;
     }
+
+    // componentDidMount(){
+    //     console.log(this.props)
+    //     if(this.state.edit){
+    //         this.props.eventClicked({
+    //             'action':'Add/Edit',
+    //             'label':'Click'
+    //         })
+    //     } 
+    // }
 
     activateEditTab() {
         this.setState({

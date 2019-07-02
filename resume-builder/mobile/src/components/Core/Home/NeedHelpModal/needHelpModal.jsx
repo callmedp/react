@@ -16,7 +16,7 @@ export default class NeedHelpModal extends Component{
     }
 
     feedbackSubmit(){
-        const {feedback,personalInfo,hideHelpModal} = this.props;
+        const {feedback,personalInfo,hideHelpModal,eventClicked} = this.props;
         const {message} = this.state
         const values = {
             'name':personalInfo.first_name,
@@ -26,6 +26,10 @@ export default class NeedHelpModal extends Component{
             'lsource':"8"
         }
         feedback(values)
+        eventClicked({
+            'action':'LeadSubmit',
+            'label':'Header'
+        })
         hideHelpModal()
 
     }

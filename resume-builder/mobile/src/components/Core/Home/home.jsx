@@ -8,8 +8,9 @@ import Banner from './Banner/banner.jsx';
 import ResumeSlider from './ResumeSlider/resumeSlider.jsx';
 import Testimonial from './Testimonial/testimonial.jsx';
 import queryString from "query-string";
-import {Events, animateScroll as scroll, scrollSpy, scroller} from 'react-scroll'
+import {scroller} from 'react-scroll';
 import Loader from '../../Common/Loader/loader.jsx';
+import {eventClicked} from '../../../store/googleAnalytics/actions/index'
 
 class Home extends Component {
     
@@ -28,21 +29,25 @@ class Home extends Component {
         this.props.loginCandidate(this.state.token);
     }
 
-    scrollTo(elem) {
+    scrollTo(elem,action,label) {
         scroller.scrollTo(elem, {
             duration: 800,
             delay: 0,
             smooth: 'easeInOutQuad',
             offset: -50
         })
+        this.props.eventClicked({
+            action,
+            label
+        })
     }
     
     render() {
-        const {ui:{mainloader}} = this.props;
+        const {ui:{mainloader},eventClicked} = this.props;
         return (
             <div className="home">
-                <Header />
-                <Banner/>
+                <Header eventClicked={eventClicked}/>
+                <Banner eventClicked={eventClicked}/>
                 {mainloader ? <Loader/> :""}
                 
 
@@ -115,7 +120,7 @@ class Home extends Component {
                     </div>
                 </section>
 
-                <ResumeSlider showtext={true}/>
+                <ResumeSlider showtext={true} eventClicked={eventClicked}/>
 
                 <section className="section pt-30 pb-30">
                     <div className="text-center">
@@ -140,7 +145,7 @@ class Home extends Component {
                     </div>
 
                     <div className="text-center mt-30">
-                        <a className="btn btn__shadow btn__round btn__primary" onClick={() => this.scrollTo('templates')}>Build your resume</a>
+                        <a className="btn btn__shadow btn__round btn__primary" onClick={() => this.scrollTo('templates','BuildResume','Features')}>Build your resume</a>
                     </div>
                
                     </section>
@@ -192,6 +197,9 @@ const mapDispatchToProps = (dispatch) => {
         "loginCandidate": (token) => {
             return dispatch(actions.loginCandidate({alt: token}))
         },
+        'eventClicked': (data) => {
+            return dispatch(eventClicked(data))
+        }
     }
 };
 

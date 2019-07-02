@@ -104,7 +104,7 @@ class RightSection extends Component {
 
 }
 
-const handleAddition = (fields,data,offset,type,containerId) =>{
+const handleAddition = (fields,data,offset,type,containerId,entity_name,editClicked) =>{
     fields.push(data)
 
     scroller.scrollTo(`${type}${fields.length -1}`, {

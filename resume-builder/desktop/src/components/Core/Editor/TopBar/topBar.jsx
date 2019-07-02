@@ -19,7 +19,7 @@ export default class TopBar extends Component {
     }
 
     render() {
-        let {page, userInfo: {selected_template,order_data},showAlertModal,showSelectTemplateModal} = this.props;
+        let {page, userInfo: {selected_template,order_data},showAlertModal} = this.props;
         if (localStorage.getItem('selected_template')) {
             selected_template = localStorage.getItem('selected_template')
         }

@@ -159,7 +159,7 @@ class Experience extends Component {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
         const {updateAlertModalStatus,handleSubmit,submitting,personalInfo:{order_data,entity_preference_data},history,
-                changeOrderingUp,changeOrderingDown,fetchJobTitles,ui:{suggestions},headingChange} = this.props;
+                changeOrderingUp,changeOrderingDown,fetchJobTitles,ui:{suggestions},headingChange,eventClicked} = this.props;
         const {editHeading,heading,till_today,modal_status} =this.state;
         return(
             <div className="buildResume">
@@ -187,7 +187,7 @@ class Experience extends Component {
                         <li className="form__group">
                             <BottomCTC  disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
                                 length={length} pos={pos+1} updateInfoBeforeLoss={this.updateInfoBeforeLoss} 
-                                order_data={order_data}/>
+                                order_data={order_data} eventClicked={eventClicked} form_name={'Experience'}/>
                         </li>
                     </ul>
                 </form>

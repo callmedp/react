@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './banner.scss'
-import {Events, animateScroll as scroll, scrollSpy, scroller} from 'react-scroll'
+import {scroller} from 'react-scroll';
 
 export default class Banner extends Component {
 
@@ -12,22 +12,17 @@ export default class Banner extends Component {
 
     }
 
-    scrollTo(elem) {
+    scrollTo(elem,action,label) {
         scroller.scrollTo(elem, {
             duration: 800,
             delay: 0,
             smooth: 'easeInOutQuad',
             offset: -50
         })
-    }
-
-    componentDidMount() {
-
-
-    }
-
-    componentWillUnmount() {
-
+        this.props.eventClicked({
+            action,
+            label
+        })
     }
 
 
@@ -41,7 +36,7 @@ export default class Banner extends Component {
                 <img src={`${this.staticUrl}react/assets/images/mobile/resume-bundel.png`} alt=""
                      className="img-fluid"/>
                 <p className="text-center mt-5">
-                    <a className="btn pt-10 pb-10 btn__round btn__primary btn__shadow" onClick={() => this.scrollTo('templates')}>Build your resume</a>
+                    <a className="btn pt-10 pb-10 btn__round btn__primary btn__shadow" onClick={() => this.scrollTo('templates','BuildResume','TopButton')}>Build your resume</a>
                 </p>
                 <ul className="resume-pointer">
                     <li>

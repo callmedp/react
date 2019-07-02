@@ -12,18 +12,38 @@ class Header extends Component {
     constructor(props) {
         super(props)
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
-
+        this.reachUsButton = this.reachUsButton.bind(this);
+        this.changeTemplate = this.changeTemplate.bind(this);
     }
 
     componentDidMount() {
         this.props.fetchSideNavStatus()
     }
 
+    reachUsButton(){
+        const {showHelpModal,eventClicked} =this.props;
+        showHelpModal()
+        eventClicked({
+            'action':'ReachUs',
+            'label':'Header'
+        })
+    }
+
+    changeTemplate(){
+        const {updateModalStatus,eventClicked}=this.props;
+        updateModalStatus({modal_status:true});
+        let eventData={
+            'action':'ChangeTemplate',
+            'label': 'ResumeCreation'
+        }
+        eventClicked(eventData);
+    }
+
     render() {
-        const {page,history,updateModalStatus,backPage,order_data,ui:{helpModal},showHelpModal,hideHelpModal,personalInfo,feedback} = this.props;
+        const {page,history,backPage,order_data,ui:{helpModal},hideHelpModal,personalInfo,feedback,eventClicked} = this.props;
         return (
             <header className="header">
-                <NeedHelpModal modalStatus={helpModal} personalInfo={personalInfo} hideHelpModal={hideHelpModal} feedback={feedback}/>
+                <NeedHelpModal modalStatus={helpModal} personalInfo={personalInfo} eventClicked={eventClicked} hideHelpModal={hideHelpModal} feedback={feedback}/>
                 {page === 'edit' ?
                     <React.Fragment>
                         <div className="header__left">
@@ -45,7 +65,7 @@ class Header extends Component {
                             {<span>Resume Preview</span>}
                         </div>
                         {order_data && order_data.id && !order_data.combo ? '':
-                            <a className="btn btn__round btn--outline" onClick={()=>{updateModalStatus({modal_status:true})}}>Change template</a>
+                            <a className="btn btn__round btn--outline" onClick={this.changeTemplate}>Change template</a>
                         }
                     </React.Fragment>:
                     
@@ -68,7 +88,7 @@ class Header extends Component {
                             <img src={`${this.staticUrl}react/assets/images/mobile/logo.png`} alt=""/>
                         </div>
                         <div className="header--logo"></div>
-                        <a className="btn btn__transparent btn__round" onClick={showHelpModal}>Reach us</a>
+                        <a className="btn btn__transparent btn__round" onClick={this.reachUsButton}>Reach us</a>
                     </React.Fragment>}
             </header>
         )
