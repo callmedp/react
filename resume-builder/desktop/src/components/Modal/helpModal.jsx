@@ -27,7 +27,7 @@ export default class HelpModal extends React.Component {
         feedback(values)
         eventClicked({
             'action':'LeadSubmit',
-            'label':'HomePage'
+            'label':'Header'
         })
         hideHelpModal()
 

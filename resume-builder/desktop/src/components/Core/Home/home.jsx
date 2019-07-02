@@ -58,7 +58,7 @@ class Home extends Component {
     }
 
     componentDidMount() {
-        // this.props.loginCandidate(this.state.token);
+        this.props.loginCandidate(this.state.token);
 
     }
 
