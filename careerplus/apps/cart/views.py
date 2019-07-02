@@ -26,7 +26,7 @@ from search.helpers import get_recommendations
 from cart.tasks import cart_drop_out_mail, create_lead_on_crm
 
 from .models import Cart
-from .mixins import CartMixin
+    from .mixins import CartMixin
 from .forms import ShippingDetailUpdateForm
 
 
