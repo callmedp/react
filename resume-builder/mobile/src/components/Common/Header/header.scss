@@ -30,6 +30,12 @@
 		align-items: center;
 	}
 
+	&--off {
+		position: absolute;
+		right: 5px;
+		top: 35px;
+	}
+
 	&__menu {
 		margin-right: 10px;
 		border: 0 none;

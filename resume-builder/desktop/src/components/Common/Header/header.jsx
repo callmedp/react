@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import './header.scss'
 import {connect} from "react-redux";
-import {Events, scroller} from 'react-scroll'
+import {scroller} from 'react-scroll'
 import {Link} from "react-router-dom";
-import {showHelpModal,hideHelpModal} from '../../../store/ui/actions/index';
+import {showHelpModal, hideHelpModal} from '../../../store/ui/actions/index';
 import HelpModal from '../../Modal/helpModal';
 
 
@@ -76,7 +76,8 @@ class Header extends Component {
     }
 
 }
-const mapStateToProps =(state) =>{
+
+const mapStateToProps = (state) => {
     return {
     ui: state.ui
     }

@@ -8,8 +8,13 @@
 
 .buy {
     @extend %touch-scroll;
-    padding: 15px 15px 150px;
+    padding: 5px 15px 150px;
     height: 100%;
+
+    &--create {
+        padding-right: 120px;
+        padding-bottom: 20px;
+    }
     
     
     &__wrap {

@@ -291,7 +291,7 @@ const mapDispatchToProps = (dispatch) => {
         'displaySelectedTemplate': (templateId) => {
             return dispatch(displaySelectedTemplate(templateId))
         },
-         'feedback': (values) => {
+        'feedback': (values) => {
             return dispatch(actions.feedbackSubmit(values))
         },
         'eventClicked': (data) => {

@@ -91,7 +91,7 @@ class Experience extends Component {
             setTimeout(function() {
                 window.location.href = `${siteDomain}/dashboard`
                 hideGenerateResumeModal()
-            }, 10000);
+            }, 5000);
         }
         else{
             history.push(`/resume-builder/buy`) 
@@ -109,7 +109,7 @@ class Experience extends Component {
 
     async openModal(fields,index){
 
-        const {job_profile:{label},work_description} = fields.get(index)
+        const {job_profile:{label},work_description} = fields.get(index);
         this.setState({length:work_description.length})
         await this.props.fetchJobTitles(label || '','experience')
         this.setState({modal_status:true,scrollpos:window.scrollY,fields,currentIndex:index})
@@ -123,6 +123,7 @@ class Experience extends Component {
             Object.keys(suggestions).map((el,index) => {
                 suggestionsList += suggestions[el] + (index+1 === Object.keys(suggestions).length ? "" : '\n')
             })
+            console.log('-ddi------', suggestionsList);
             currentField['work_description'] = suggestionsList;
             fields.remove(currentIndex);
             fields.insert(currentIndex, currentField)

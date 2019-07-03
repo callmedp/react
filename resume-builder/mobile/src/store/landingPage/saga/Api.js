@@ -25,10 +25,8 @@ const getInformation = (data) => {
 
 const feedbackSubmit = (data) => {
     const url = 'lead/lead-management/';
-    return BaseApiService.post(`${siteDomain}/${url}`, data);
+    return BaseApiService.post(`${siteDomain}/${url}`, data, {'Content-Type': 'application/x-www-form-urlencoded'}, false);
 }
-
-
 
 export const Api = {
     getCandidateId,

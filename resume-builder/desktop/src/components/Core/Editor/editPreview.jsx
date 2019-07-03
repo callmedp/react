@@ -9,10 +9,21 @@ import RightSection from './RightSection/rightSection.jsx'
 import {withRouter} from "react-router-dom";
 import LoaderPage from "../../Loader/loaderPage.jsx";
 import * as actions from "../../../store/ui/actions"
-import {customizeTemplate, fetchDefaultCustomization, reorderSection,reGeneratePDF} from "../../../store/template/actions"
+import {
+    customizeTemplate,
+    fetchDefaultCustomization,
+    reorderSection,
+    reGeneratePDF
+} from "../../../store/template/actions"
 import * as profileActions from "../../../store/personalInfo/actions"
 import SelectTemplateModal from '../../Modal/selectTemplateModal';
-import {showAlertModal, hideAlertModal,previewButtonClicked,showGenerateResumeModal,hideGenerateResumeModal} from '../../../store/ui/actions/index'
+import {
+    showAlertModal,
+    hideAlertModal,
+    previewButtonClicked,
+    showGenerateResumeModal,
+    hideGenerateResumeModal
+} from '../../../store/ui/actions/index'
 import moment from 'moment'
 import {locationRouteChange,eventClicked} from '../../../store/googleAnalytics/actions/index'
 
@@ -27,14 +38,18 @@ class EditPreview extends Component {
     }
 
     render() {
-        const {ui: {loader}, userInfo: {first_name}} = this.props;
+        const {ui: {loader}, userInfo: {first_name, last_name, number, email}} = this.props;
         return (
             <div>
                 {
                     !!(loader) &&
                     <LoaderPage/>
                 }
-                <Header userName={first_name}/>
+                <Header
+                        userName={first_name}
+                        lastName={last_name}
+                        number={number}
+                        email={email}/>
                 <div className="page-container">
                     <SelectTemplateModal {...this.props} page={'edit'}/>
                     <TopBar {...this.props}/>
@@ -77,7 +92,7 @@ const mapDispatchToProps = (dispatch) => {
         },
         "fetchDefaultCustomization": (templateId) => {
             return new Promise((resolve, reject) => {
-                return dispatch(fetchDefaultCustomization({templateId, resolve,reject}))
+                return dispatch(fetchDefaultCustomization({templateId, resolve, reject}))
             })
         },
         "updateSelectedTemplate": (personalDetails) => {

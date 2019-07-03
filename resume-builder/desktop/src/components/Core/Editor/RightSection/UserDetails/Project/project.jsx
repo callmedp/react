@@ -78,7 +78,7 @@ class Project extends Component {
             setTimeout(function() {
                 window.location.href = `${siteDomain}/dashboard`
                 hideGenerateResumeModal()
-            }, 10000);
+            }, 5000);
         }
         else{
             history.push(`/resume-builder/buy`) 

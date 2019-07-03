@@ -1,13 +1,14 @@
-import React,{Component} from 'react';
+import React, {Component} from 'react';
 import Modal from 'react-modal';
 import './NeedHelpModal.scss'
+import {getTitleCase} from "../../../../services/getTitleCase";
 
 
 Modal.setAppElement(document.getElementById('react-app'));
 
-export default class NeedHelpModal extends Component{
+export default class NeedHelpModal extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.feedbackSubmit = this.feedbackSubmit.bind(this)
         this.state = {
@@ -62,7 +63,7 @@ export default class NeedHelpModal extends Component{
                         <i className="sprite icon--close"></i>
                     </span>
                 </div>
-                
+
 
             </Modal>
         )

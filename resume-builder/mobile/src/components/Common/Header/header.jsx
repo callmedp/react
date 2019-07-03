@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
 import './header.scss'
+import {feedbackSubmit} from "../../../store/landingPage/actions";
 import * as actions from "../../../store/sidenav/actions";
 import {showHelpModal,hideHelpModal} from "../../../store/ui/actions/index"
-import {feedbackSubmit} from "../../../store/landingPage/actions/index"
 import {connect} from "react-redux";
-import {Link} from 'react-router-dom';
-import NeedHelpModal from '../../Core/Home/NeedHelpModal/needHelpModal';
+import NeedHelpModal from '../../Core/Home/NeedHelpModal/needHelpModal.jsx'
 
 
 class Header extends Component {
@@ -40,19 +39,33 @@ class Header extends Component {
     }
 
     render() {
-        const {page,history,backPage,order_data,ui:{helpModal},hideHelpModal,personalInfo,feedback,eventClicked} = this.props;
+        const {
+            page, history, updateModalStatus, backPage, order_data, showHelpModal, ui: {helpModal},
+            personalInfo: {first_name, last_name, number, email}, submitFeedback, hideHelpModal
+        } = this.props;
+
         return (
             <header className="header">
-                <NeedHelpModal modalStatus={helpModal} personalInfo={personalInfo} eventClicked={eventClicked} hideHelpModal={hideHelpModal} feedback={feedback}/>
+                <NeedHelpModal
+                    modalStatus={helpModal}
+                    firstName={first_name}
+                    lastName={last_name}
+                    number={number}
+                    email={email}
+                    submitFeedback={submitFeedback}
+                    hideHelpModal={hideHelpModal}
+                />
                 {page === 'edit' ?
                     <React.Fragment>
                         <div className="header__left">
                             <button role="button" className="menu mr-10">
-                                <i className="sprite icon--back-white" onClick={()=>{history.push('/resume-builder')}}></i>
+                                <i className="sprite icon--back-white" onClick={() => {
+                                    history.push('/resume-builder')
+                                }}></i>
                             </button>
                             <span>Customise your resume</span>
                         </div>
-                        
+
                     </React.Fragment>
                     : 
                     page === 'preview' ?
@@ -82,8 +95,12 @@ class Header extends Component {
     
                     </React.Fragment>:
 
-
                     <React.Fragment>
+                        <div className="header__right">
+                            <span className="header--off">
+                                <img src={`${this.staticUrl}react/assets/images/mobile/50percentage-off.png`} alt=""/>
+                            </span>
+                        </div>
                         <div className="header--logo">
                             <img src={`${this.staticUrl}react/assets/images/mobile/logo.png`} alt=""/>
                         </div>

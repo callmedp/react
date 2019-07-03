@@ -9,95 +9,109 @@ export default class SuggestionModal extends React.Component {
         super(props);
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
         this.addSuggestion = this.addSuggestion.bind(this);
-        this.removeSuggestion =this.removeSuggestion.bind(this)
+        this.removeSuggestion = this.removeSuggestion.bind(this)
         this.state = {
             suggestion_selected: {},
-            error:false,
-            length:0
+            error: false,
+            length: 0
         }
         this.handleSuggestion = this.handleSuggestion.bind(this)
     }
-    componentDidMount(){
+
+    componentDidMount() {
         const {length} = this.props
         this.setState({length})
     }
-    componentDidUpdate(prevProps){
+
+    componentDidUpdate(prevProps) {
         const {length} = this.props
-        if(length!==prevProps.length){
+        if (length !== prevProps.length) {
             this.setState({length})
         }
     }
 
-    addSuggestion(el,index,event){
+    addSuggestion(el, index, event) {
         // event.preventDefault()
         let {suggestion_selected} = this.state
         const {maxLength} = this.props
         const {length} = this.state
-        if(length + el.length >maxLength){
-            this.setState({error:true})
+        if (length + el.length > maxLength) {
+            this.setState({error: true})
             return
         }
         suggestion_selected[`${index}`] = el
-        this.setState({suggestion_selected,error:false,length:length+el.length})
+        this.setState({suggestion_selected, error: false, length: length + el.length})
 
     }
 
-    removeSuggestion(index,event){
+    removeSuggestion(index, event) {
         // event.preventDefault()
-        let {suggestion_selected,length} = this.state
-        this.setState({error:false,length:length-suggestion_selected[`${index}`].length})
+        let {suggestion_selected, length} = this.state
+        this.setState({error: false, length: length - suggestion_selected[`${index}`].length})
         delete suggestion_selected[`${index}`]
         this.setState({suggestion_selected})
-        
-        
+
+
     }
 
-    handleSuggestion(suggestion_selected){
-        this.props.closeModal(suggestion_selected); 
-        this.setState({suggestion_selected:{},error:false})
+    handleSuggestion(suggestion_selected) {
+        this.props.closeModal(suggestion_selected);
+        this.setState({suggestion_selected: {}, error: false})
     }
 
     render() {
-        const {label,modal_status,closeModal,suggestions,maxLength} = this.props
-        const {suggestion_selected,error} = this.state
+        const {label, modal_status, closeModal, suggestions, maxLength} = this.props
+        const {suggestion_selected, error} = this.state
 
         return (
             <div className="pr">
                 <Modal
-                    isOpen={modal_status} 
-                    onRequestClose={closeModal}
+                    isOpen={modal_status}
+                    onRequestClose={() => this.handleSuggestion({})}
                     contentLabel="Suggestion Modal"
                     className="suggestion-modal"
                 >
                     <div className="pr suggested-summary">
-                        {suggestions.length ? 
+                        {suggestions.length ?
                             <React.Fragment>
-                                <i onClick={()=>{this.handleSuggestion({})}} className='icon-close icon-close--position'></i>
+                                <i onClick={() => {
+                                    this.handleSuggestion({})
+                                }} className='icon-close icon-close--position'/>
                                 <h2>Add from suggested {label}</h2>
                                 <ul>
                                     {(suggestions || []).map((el, index) => {
                                         return (
-                                        <li key={index} onClick={(event)=>{suggestion_selected[index] 
-                                            ? this.removeSuggestion(index,event): this.addSuggestion(el,index,event) }} htmlFor={`add${index}`}>
-                                        <span className={suggestion_selected[index]  ? 'selected' : ''}  
-                                         >
-                                            <input className="styled-checkbox" type="checkbox" readOnly checked={suggestion_selected[index] ? true : false} id={`add${index}`} /> <label htmlFor="styled-checkbox-1">Add</label>
+                                            <li key={index} onClick={(event) => {
+                                                suggestion_selected[index]
+                                                    ? this.removeSuggestion(index, event) : this.addSuggestion(el, index, event)
+                                            }} htmlFor={`add${index}`}>
+                                        <span className={suggestion_selected[index] ? 'selected' : ''}
+                                        >
+                                            <input className="styled-checkbox" type="checkbox" readOnly
+                                                   checked={suggestion_selected[index] ? true : false}
+                                                   id={`add${index}`}/> <label htmlFor="styled-checkbox-1">Add</label>
                                         </span>
-                                            <p>{el}</p>
-                                        </li>)
+                                                <p>{el}</p>
+                                            </li>)
                                     })}
                                 </ul>
-                                {error ?<p className="suggestion-error">Sorry this Suggestion cannot be added.It exceeds the maximum {maxLength} characters length of summary</p>:''}
+                                {error ?
+                                    <p className="suggestion-error">Sorry this Suggestion cannot be added.It exceeds the
+                                        maximum {maxLength} characters length of summary</p> : ''}
                                 <button className="orange-button"
-                                        type={'submit'} onClick={()=>{this.handleSuggestion(suggestion_selected)}}>Save and Continue
+                                        type={'submit'} onClick={() => {
+                                    this.handleSuggestion(suggestion_selected)
+                                }}>Save and Continue
                                 </button>
-                            </React.Fragment>:
+                            </React.Fragment> :
                             <React.Fragment>
-                                    
+
                                 <h2>Sorry suggestions not available for this job title</h2>
                                 <button className="orange-button"
-                                    type={'submit'} onClick={()=>{this.handleSuggestion({})}}>Close
-                            </button>
+                                        type={'submit'} onClick={() => {
+                                    this.handleSuggestion({})
+                                }}>Close
+                                </button>
                             </React.Fragment>
                         }
                     </div>

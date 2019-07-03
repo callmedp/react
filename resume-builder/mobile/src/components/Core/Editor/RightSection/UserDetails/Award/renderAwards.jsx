@@ -93,7 +93,7 @@ export const renderAwards = ({
 
                         <li className="form__group">
                             <Field component={renderTextArea} type={"textarea"} className={'form__input'} label={'Summary'}
-                                name={`${member}.summary`} maxLength={'300'} prepend={true} iconClass={"sprite icon--course-type"}
+                                name={`${member}.summary`} maxLength={'1000'} prepend={true} iconClass={"sprite icon--course-type"}
                                 id={`${member}.summary`}/>
                         </li>
                     </ul>
