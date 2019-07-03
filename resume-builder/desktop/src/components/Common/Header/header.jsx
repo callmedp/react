@@ -57,13 +57,15 @@ class Header extends Component {
                     </ul>
                     }
                     <div className="signin">
-                        <button className="white-button mr-15" onClick={this.reachUsButton}>
-                            Reach us
-                        </button>
                         {!!(page === 'home') &&
-                        <button className="white-button mr-30" onClick={()=>{this.scrollTo('templates',-60,'BuildResume','Header')}}>Build your
-                            resume
-                        </button>
+                        <React.Fragment>
+                            <button className="white-button mr-15" onClick={this.reachUsButton}>
+                                Reach us
+                            </button>
+                            <button className="white-button mr-30" onClick={()=>{this.scrollTo('templates',-60,'BuildResume','Header')}}>Build your
+                                resume
+                            </button>
+                        </React.Fragment>
                         }
                         <span className="signin--user-pic">
             				<img alt="user info" src={`${this.staticUrl}react/assets/images/user-pic.jpg`}/>

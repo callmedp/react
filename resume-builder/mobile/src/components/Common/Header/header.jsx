@@ -40,20 +40,18 @@ class Header extends Component {
 
     render() {
         const {
-            page, history, updateModalStatus, backPage, order_data, showHelpModal, ui: {helpModal},
-            personalInfo: {first_name, last_name, number, email}, submitFeedback, hideHelpModal
+            page, history, backPage, order_data, ui: {helpModal},
+            personalInfo, feedback, hideHelpModal,eventClicked
         } = this.props;
 
         return (
             <header className="header">
                 <NeedHelpModal
                     modalStatus={helpModal}
-                    firstName={first_name}
-                    lastName={last_name}
-                    number={number}
-                    email={email}
-                    submitFeedback={submitFeedback}
+                    personalInfo={personalInfo}
+                    feedback={feedback}
                     hideHelpModal={hideHelpModal}
+                    eventClicked={eventClicked}
                 />
                 {page === 'edit' ?
                     <React.Fragment>
@@ -81,12 +79,31 @@ class Header extends Component {
                             <a className="btn btn__round btn--outline" onClick={this.changeTemplate}>Change template</a>
                         }
                     </React.Fragment>:
+                    page === 'buy' ?
+                    <React.Fragment>
+                        <div className="header__left">
+                            <button role="button" className="menu mr-10">
+                                <i className="sprite icon--back-white" onClick={() => {
+                                    // history.push('/resume-builder/edit')
+                                    history.goBack()
+                                }}></i>
+                            </button>
+                            <span>Choose your plan</span>
+                        </div>
+
+                        <div className="header__right">
+                        <span className="header--off">
+                            <img src={`${this.staticUrl}react/assets/images/mobile/50percentage-off.png`} alt=""/>
+                        </span>
+                        </div>
+
+                    </React.Fragment>:
                     
                     page === 'menu' ?
                     <React.Fragment>
                         <div className="header__left">
                             <button role="button" className="header__menu" 
-                                onClick={()=>{history.push(`/resume-builder/edit/?type=${backPage}}`)}}>
+                                onClick={()=>{history.push(`/resume-builder/edit/?type=${backPage}`)}}>
                                 <i className="sprite icon--back-white"></i>
                             </button>
     
@@ -96,11 +113,6 @@ class Header extends Component {
                     </React.Fragment>:
 
                     <React.Fragment>
-                        <div className="header__right">
-                            <span className="header--off">
-                                <img src={`${this.staticUrl}react/assets/images/mobile/50percentage-off.png`} alt=""/>
-                            </span>
-                        </div>
                         <div className="header--logo">
                             <img src={`${this.staticUrl}react/assets/images/mobile/logo.png`} alt=""/>
                         </div>

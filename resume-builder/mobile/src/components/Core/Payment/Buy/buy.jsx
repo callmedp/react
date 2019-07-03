@@ -95,7 +95,7 @@ class Buy extends Component {
             speed: 500,
             slidesToShow: 2,
           };
-          const {ui:{mainloader},template:{thumbnailImages,templateImage},productIds} = this.props
+          const {ui:{mainloader},template:{thumbnailImages,templateImage},productIds,history} = this.props
           const template = localStorage.getItem('selected_template') || 1;
           const {checked,pay_button_clicked,modal_status} = this.state
           const price1 = productIds[0] ?  productIds[0].inr_price: 999
@@ -103,7 +103,7 @@ class Buy extends Component {
         return (
 
             <div className="buy-container">
-                <Header page={"buy"}/>
+                <Header page={"buy"} history={history}/>
                 {mainloader ? <Loader/> :""}
                 {modal_status ? <BuyTemplateModal modal_status={modal_status} 
                     closeModalStatus={this.closeModalStatus}
