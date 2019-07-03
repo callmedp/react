@@ -24,6 +24,13 @@ class Edit extends Component {
 
     }
 
+    componentDidMount(){
+        this.props.eventClicked({
+            'action':'Add/Edit',
+            'label':'Click'
+        })
+    }
+
 
     static getDerivedStateFromProps(nextProps, prevState) {
         const values = queryString.parse(nextProps.location.search);

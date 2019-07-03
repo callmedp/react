@@ -10,7 +10,11 @@ export default class BottomCTC extends Component {
     }
 
     async preview(){
-        const {history,updateInfoBeforeLoss,context} = this.props
+        const {history,updateInfoBeforeLoss,context,eventClicked} = this.props
+        eventClicked({
+            'action':'Preview',
+            'label':'Bottom'
+        })
         await updateInfoBeforeLoss()
         context.setState({submit:true})
         history.push(`/resume-builder/preview`);

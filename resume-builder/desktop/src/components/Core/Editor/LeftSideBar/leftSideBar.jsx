@@ -20,16 +20,6 @@ export default class LeftSideBar extends Component {
         else this.state.edit = false;
     }
 
-    // componentDidMount(){
-    //     console.log(this.props)
-    //     if(this.state.edit){
-    //         this.props.eventClicked({
-    //             'action':'Add/Edit',
-    //             'label':'Click'
-    //         })
-    //     } 
-    // }
-
     activateEditTab() {
         this.setState({
             edit: true
@@ -56,7 +46,7 @@ export default class LeftSideBar extends Component {
     render() {
         const isEdit = this.state.edit;
         const newUser = localStorage.getItem('newUser')
-        const {showAlertModal, previewButtonClicked} = this.props;
+        const {showAlertModal,} = this.props;
         return (
 
             <section className="left-sidebar">
