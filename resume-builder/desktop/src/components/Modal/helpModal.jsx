@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import './helpModal.scss'
-import  {getTitleCase} from "../../services/getTitleCase";
+import {getTitleCase} from "../../services/getTitleCase";
 
 Modal.setAppElement(document.getElementById('react-app'));
 

@@ -115,6 +115,9 @@ class User(AbstractBaseUser, PermissionsMixin):
             return vendor_list[0]
         return None
 
+    def get_vendor_list(self):
+        return self.vendor_set.all() if self.vendor_set.all() else []
+
     def generate_alt(self):
         return b64encode(os.urandom(64)).decode('utf-8')
 

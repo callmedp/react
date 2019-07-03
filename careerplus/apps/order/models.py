@@ -16,7 +16,7 @@ from .choices import STATUS_CHOICES, SITE_CHOICES,\
     TYPE_REFUND, OI_SMS_STATUS, WC_CATEGORY, WC_SUB_CATEGORY,\
     WC_FLOW_STATUS
 
-from .functions import get_upload_path_order_invoice
+from .functions import get_upload_path_order_invoice, process_application_highlighter
 from .tasks import generate_resume_for_order
 
 #inter app imports
@@ -169,7 +169,7 @@ class Order(AbstractAutoDate):
 
     def order_contains_resume_builder(self):
         items = self.orderitems.all()
-        return any([item.product.type_flow == 16 for item in items])
+        return any([item.product.type_flow == 17 for item in items])
 
     @property
     def get_status(self):
@@ -282,7 +282,7 @@ class Order(AbstractAutoDate):
             )
             manually_generate_autologin_url(assesment_items=assesment_items)
         
-        if self.status == 1 and existing_obj.status != 1 and self.order_contains_resume_builder:
+        if self.status == 1 and existing_obj.status != 1 and self.order_contains_resume_builder():
             generate_resume_for_order.delay(self.id)
             logging.getLogger('info_log').info("Generating resume for order {}".format(self.id))
 
@@ -604,7 +604,11 @@ class OrderItem(AbstractAutoDate):
         created = not bool(getattr(self, "id"))
         orderitem = OrderItem.objects.filter(id=self.pk).first()
         self.oi_status = 4 if orderitem and orderitem.oi_status == 4 else self.oi_status
+
         super().save(*args, **kwargs)  # Call the "real" save() method.
+        # automate application highlighter/priority applicant
+        if self.product.sub_type_flow == 503:
+            process_application_highlighter(obj=self)
 
          # # for resume booster create orderitem
         # if self.product.type_flow in [7, 15] and obj.oi_status != last_oi_status:

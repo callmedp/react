@@ -46,7 +46,6 @@ class EditPreview extends Component {
         return (
             <div className="edit-section">
                 {mainloader ? <Loader/> :""}
-                {/* <NeedHelpModal/> */}
                 <Header page={'edit'} history={history}/>
                 <LeftSideBar {...this.props}/>
                 <RightSection {...this.props} changeLink={this.changeLink} headingChange={this.headingChange}/>

@@ -41,7 +41,7 @@ from scheduler.models import Scheduler
 
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from review.models import Review
-from partner.models import BoosterRecruiter
+from partner.models import BoosterRecruiter,VendorHierarchy
 
 from .decorators import (
     Decorate,
@@ -717,6 +717,9 @@ class OrderDetailView(DetailView):
 
         #Redirect user if none of the items are visible
         if not self.context.get('orderitems'):
+            logging.getLogger('info_log').info("Invalid data access {},{},{}".format(\
+                request.user.id,request.user.get_full_name(),self.object.id))
+            messages.add_message(self.request,messages.ERROR,'You are not authorised to view this order.')
             return HttpResponseRedirect("/console/")
         
         return response
@@ -725,9 +728,9 @@ class OrderDetailView(DetailView):
         order_items = order.orderitems.all().select_related('product', 'partner').order_by('id')
         
         #Handle vendor users
-        user_vendor_list = self.request.user.vendor_set.all()
-        if user_vendor_list:
-            vendor_ids = list(user_vendor_list.values_list('id',flat=True))
+        vendor_ids = [x.vendee.id for x in VendorHierarchy.objects.filter(\
+            employee=self.request.user,active=True)]
+        if vendor_ids:
             order_items = order_items.filter(Q(partner_id__in=vendor_ids) | \
                     Q(product__vendor_id__in=vendor_ids))
 
@@ -2441,16 +2444,25 @@ class ActionOrderItemView(View):
                 approval = 0
                 for obj in orderitems:
                     last_oi_status = obj.oi_status
-                    obj.oi_status = 23  # pending Approval
-                    obj.last_oi_status = last_oi_status
-                    obj.save()
-                    approval += 1
                     obj.orderitemoperation_set.create(
                         oi_status=23,
                         last_oi_status=last_oi_status,
                         assigned_to=obj.assigned_to,
                         added_by=request.user)
-                msg = str(approval) + ' orderitems send for approval.'
+                    # Auto Approve the feature profile as per requirement from product.
+                    # action == -5 and queue_name == "domesticprofileapproval"
+                    last_oi_status = 23
+                    obj.oi_status = 30  # approved
+                    obj.last_oi_status = last_oi_status
+                    obj.approved_on = timezone.now()
+                    obj.save()
+                    approval += 1
+                    obj.orderitemoperation_set.create(
+                        oi_status=obj.oi_status,
+                        last_oi_status=last_oi_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+                msg = str(approval) + ' orderitems updated and approval done.'
                 messages.add_message(request, messages.SUCCESS, msg)
             except Exception as e:
                 messages.add_message(request, messages.ERROR, str(e))

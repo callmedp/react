@@ -67,10 +67,10 @@ class ChangeScreenFaqView(DetailView):
         if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
             pass
         else:
-            user_vendor = self.request.user.get_vendor()
+            user_vendor = self.request.user.get_vendor_list()
             if not user_vendor:
                 return HttpResponseForbidden()
-            if user_vendor != faq.vendor:
+            if faq.vendor not in user_vendor:
                 return HttpResponseForbidden() 
         
         return super(ChangeScreenFaqView, self).get(request, args, **kwargs)
@@ -161,6 +161,11 @@ class AddScreenFaqView(FormView):
         return super(AddScreenFaqView, self).get(
             request, *args, **kwargs)
 
+    def get_form_kwargs(self):
+        kwargs = super(AddScreenFaqView, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def get_context_data(self, **kwargs):
         context = super(AddScreenFaqView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
@@ -170,14 +175,13 @@ class AddScreenFaqView(FormView):
     def form_valid(self, form):
         user = self.request.user
         if user.has_perm('faq.console_add_faq'):
-            vendor = user.get_vendor()
-            if not vendor:
-                messages.error(
-                    self.request,
-                    "You are not associated to any vendor.")
-                return super(AddScreenFaqView, self).form_invalid(form)
+            # vendor = user.get_vendor()
+            # if not vendor:
+            #     messages.error(
+            #         self.request,
+            #         "You are not associated to any vendor.")
+            #     return super(AddScreenFaqView, self).form_invalid(form)
             faq = form.save()
-            faq.vendor = vendor
             faq.save()
             faq.create_faq()
             
@@ -229,11 +233,11 @@ class ListScreenFaqView(ListView, PaginationMixin):
         if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
             pass
         else:
-            vendor = self.request.user.get_vendor()
+            vendor = self.request.user.get_vendor_list()
             if not vendor:
                 queryset = queryset.none()
             else:
-                queryset = queryset.filter(vendor=vendor)
+                queryset = queryset.filter(vendor__in=vendor)
         try:
             if self.query:
                 queryset = queryset.filter(Q(text__icontains=self.query))
@@ -332,18 +336,16 @@ class ListScreenProductView(ListView, PaginationMixin):
         if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
             pass
         else:
-            vendor = self.request.user.get_vendor()
+            vendor = self.request.user.get_vendor_list()
             if not vendor:
                 queryset = queryset.none()
             else:
-                queryset = queryset.filter(vendor=vendor, type_product__in=[0, 1])
+                queryset = queryset.filter(vendor__in=vendor, type_product__in=[0, 1])
         try:
             if self.query:
                 queryset = queryset.filter(Q(name__icontains=self.query))
         except Exception as e:
             logging.getLogger('error_log').error('unable to get query set %s'%str(e))
-
-            pass
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -443,7 +445,7 @@ class AddScreenProductView(FormView):
     def form_valid(self, form):
         user = self.request.user
         if user.has_perm('shop.console_add_product'):
-            vendor = user.get_vendor()
+            vendor = user.get_vendor_list()
             if not vendor:
                 messages.error(
                     self.request,
@@ -451,7 +453,7 @@ class AddScreenProductView(FormView):
                 return super(
                     AddScreenProductView, self).form_invalid(form)
             productscreen = form.save()
-            productscreen.vendor = vendor
+            # productscreen.vendor = vendor
             productscreen.save()
             productscreen.create_product()
             messages.success(
@@ -497,10 +499,10 @@ class ChangeScreenProductView(DetailView):
             if product.type_product == 2:
                 raise Http404
         else:
-            user_vendor = self.request.user.get_vendor()
+            user_vendor = self.request.user.get_vendor_list()
             if not user_vendor:
                 return HttpResponseForbidden()
-            if user_vendor != product.vendor:
+            if product.vendor not in user_vendor :
                 return HttpResponseForbidden()
             if not product.type_product in [0, 1]:
                 raise Http404
@@ -537,7 +539,7 @@ class ChangeScreenProductView(DetailView):
             form=ScreenProductFAQForm,
             can_delete=False,
             formset=ScreenFAQInlineFormSet, extra=1,
-            max_num=50, validate_max=True)
+            max_num=50, validate_max=True)  # type: type
         if self.object:
             prdfaq_formset = ScreenProductFAQFormSet(
                 instance=self.get_object(),

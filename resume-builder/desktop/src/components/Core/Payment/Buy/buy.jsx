@@ -158,7 +158,7 @@ export class Buy extends Component {
                                             <span className="choose-plan--price">
                                             <p>Buy 1 resume template</p>
                                             Rs. <strong>{price1}/-</strong>
-                                            <strike className="ml-10">Rs. 1999</strike>
+                                            <strike className="ml-10">Rs. 1499</strike>
                                             <span className="choose-plan--off ml-10">Flat 50% off</span>
                                             </span>
                                         </div>
@@ -175,7 +175,7 @@ export class Buy extends Component {
                                             <p>Buy all resume templates</p>
                                             Rs. <strong>{price2}
                                             /-</strong>
-                                            <strike className="ml-10">Rs. 2499</strike>
+                                            <strike className="ml-10">Rs. 1999</strike>
                                             <span className="choose-plan--off ml-10">Flat 50% off</span>
                                             </span>
                                         </div>

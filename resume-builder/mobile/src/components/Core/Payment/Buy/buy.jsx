@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Header from '../../../Common/Header/header.jsx';
 import './buy.scss';
 import * as action from '../../../../store/buy/actions';
-import {fetchThumbNailImages,fetchSelectedTemplateImage} from '../../../../store/template/actions/index'
+import {fetchThumbNailImages, fetchSelectedTemplateImage} from '../../../../store/template/actions/index'
 import {connect} from "react-redux";
 import {siteDomain} from "../../../../Utils/domains";
 import Slider from "react-slick";
@@ -51,16 +51,16 @@ class Buy extends Component {
 
         }
         this.props.addToCart(data);
-        this.setState({pay_button_clicked:true})
+        this.setState({pay_button_clicked: true})
     }
 
-    closeModalStatus(){
+    closeModalStatus() {
         this.setState({modal_status: false})
     }
 
-    async openModal(index){
-        await this.props.fetchSelectedTemplateImage(index +1 )
-        this.setState({modal_status:true,template_id:index +1 })
+    async openModal(index) {
+        await this.props.fetchSelectedTemplateImage(index + 1)
+        this.setState({modal_status: true, template_id: index + 1})
     }
 
     componentDidMount() {
@@ -121,11 +121,11 @@ class Buy extends Component {
                     </button>
                 </div>
 
-                
 
                 <div className="buy">
-                <p className="buy--create">You can <strong>create/ edit and download</strong> multiple resume for 12 months</p>
-                    <div className="buy__wrap">
+                    <p className="buy--create">You can <strong>create/ edit and download</strong> multiple resume for 12
+                        months</p>
+                    <div className="buy__wrap mt-15">
                         <div className="buy__item">
                             <div className="buy__item--left">
                                 <input className="buy__item--input form__radio-input" type="radio" id="your-resume"
@@ -134,15 +134,20 @@ class Buy extends Component {
                                        onChange={this.handleOnChange.bind(this, 'product1')}></input>
                                 <label className="buy__item--label form__radio-label" htmlFor="your-resume">
                                     <span className="form__radio-button"></span>
-                                    Buy your <br/>customised resume
+                                    Buy your <br/>customised resume<br/>
                                     <strong>Rs. {price1}/-</strong>
+                                    <span className="fs-14 line-through">Rs. 1499 </span>
+                                    <span className="fs-14 bold">Flat 50% off</span>
                                 </label>
                             </div>
                             <div className="buy__item--right">
                                 <span className="buy__item--image">
-                                    { thumbnailImages.length === 5 ?
-                                        <img  src={`data:image/png;base64, ${thumbnailImages[template -1]}`} alt="Resume"/>:
-                                        <img src={`${this.staticUrl}react/assets/images/mobile/small-resume-${template}.jpg`} alt="Custom resume" />
+                                    {thumbnailImages.length === 5 ?
+                                        <img src={`data:image/png;base64, ${thumbnailImages[template - 1]}`}
+                                             alt="Resume"/> :
+                                        <img
+                                            src={`${this.staticUrl}react/assets/images/mobile/small-resume-${template}.jpg`}
+                                            alt="Custom resume"/>
                                     }
                                 </span>
                                 <a className="fs-12 mt-5" onClick={this.editTemplate}>Edit</a>
@@ -161,8 +166,8 @@ class Buy extends Component {
                                     Buy all 5 customised resumes
                                     <div className="buy__item--price">
                                         <span className="fs-22 color-333 semi-bold">Rs. {price2}/-</span>
-                                        <span className="fs-14 line-through">Rs. 3499</span>
-                                        <span className="fs-14 bold">63% off</span>
+                                        <span className="fs-14 line-through">Rs. 1999</span>
+                                        <span className="fs-14 bold">Flat 50% off</span>
                                     </div>
                                 </label>
                             </div>
@@ -170,29 +175,33 @@ class Buy extends Component {
                             <div className="buy__item--right">
                                 <div className="buy__item--right__sliderWrap">
                                     <Slider {...settings}>
-                                    { thumbnailImages.length === 5 ?
-                                        thumbnailImages.map((el,index) =>{
-                                            return(
-                                                <div className="buy__recommended__item" key={index}>
+                                        {thumbnailImages.length === 5 ?
+                                            thumbnailImages.map((el, index) => {
+                                                return (
+                                                    <div className="buy__recommended__item" key={index}>
                                                     <span className="buy__recommended__image">
-                                                        <span className="sprite icon--zoom" 
-                                                            onClick={()=>{this.openModal(index)}}></span>
-                                                        <img src={`data:image/png;base64, ${el}`} alt="Custom resume" />
+                                                        <span className="sprite icon--zoom"
+                                                              onClick={() => {
+                                                                  this.openModal(index)
+                                                              }}></span>
+                                                        <img src={`data:image/png;base64, ${el}`} alt="Custom resume"/>
                                                     </span>
-                                                </div>
-                                            )
-                                        }):
-                                        [1,2,3,4,5].map((el,index)=>{
-                                            return(
-                                                <div className="buy__recommended__item" key={index}>
+                                                    </div>
+                                                )
+                                            }) :
+                                            [1, 2, 3, 4, 5].map((el, index) => {
+                                                return (
+                                                    <div className="buy__recommended__item" key={index}>
                                                     <span className="buy__recommended__image">
-                                                        <img src={`${this.staticUrl}react/assets/images/mobile/resumebig-${el}.jpg`} alt="Custom resume" />
+                                                        <img
+                                                            src={`${this.staticUrl}react/assets/images/mobile/resumebig-${el}.jpg`}
+                                                            alt="Custom resume"/>
                                                     </span>
-                                                </div>
-                                            )
-                                            
-                                        })
-                                    }
+                                                    </div>
+                                                )
+
+                                            })
+                                        }
                                     </Slider>
                                 </div>
                             </div>
@@ -201,7 +210,6 @@ class Buy extends Component {
                 </div>
 
 
-                                        
             </div>
 
         )
@@ -226,7 +234,7 @@ const mapDispatchToProps = (dispatch) => {
         },
         'fetchSelectedTemplateImage': (template_id) => {
             return new Promise((resolve, reject) => {
-                return dispatch(fetchSelectedTemplateImage({template_id,resolve,reject}))
+                return dispatch(fetchSelectedTemplateImage({template_id, resolve, reject}))
             })
         },
         'addToCart': (data) => {

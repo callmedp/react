@@ -4,7 +4,6 @@ from order.models import OrderItem
 from django.db.models import Q
 
 def get_featured_profile_data_for_candidate(candidate_id, curr_order_item, feature):
-
     feature_profile_items_sub_type_flow = list(ShineProfileData.objects.all().values_list('sub_type_flow',flat=True))
     if curr_order_item.product.sub_type_flow in [1602]:
         filter_kwargs = {
@@ -35,7 +34,7 @@ def get_featured_profile_data_for_candidate(candidate_id, curr_order_item, featu
             product__sub_type_flow=1602,
             product__sub_type_flow__in=feature_profile_items_sub_type_flow,
             oi_status=4)
-    ).exclude(id=curr_order_item.id).exclude(user_certificate_orderitem=None)
+    ).exclude(id=curr_order_item.id).exclude(user_certificate_orderitem=None, product__sub_type_flow=1602)
 
     if other_featured_items.exists():
         other_active_sub_type_flow = list(set(other_featured_items.values_list('product__sub_type_flow', flat=True)))

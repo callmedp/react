@@ -61,16 +61,16 @@
                     <tr>
                       <td>{{order.id}}</td>
                        <td>
-                    <div id="email{{obj.id}}">
-                      <div id="email_field{{obj.id}}"></div>
+                    <div id="email{{obj.id}}_1">
+                      <div id="email_field{{obj.id}}_1"></div>
                     </div>
                     <div>
                       <button type="button" class="btn btn-primary btn-xs" onclick="order_get_details('{{obj.id}}','email,alt_email','email');"><i class="fa fa-search" aria-hidden="true"></i>ClickToView</button>
                     </div>
                   </td>
                   <td>
-                    <div id="mobile{{obj.id}}" style="display: -moz-inline-stack;">
-                      <div id="mobile_field{{obj.id}}"></div>
+                    <div id="mobile{{obj.id}}_1" style="display: -moz-inline-stack;">
+                      <div id="mobile_field{{obj.id}}_1"></div>
                     </div>
                       {% if exoitel_status%}
                       <button id="{{obj.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{obj.id}});"></button>

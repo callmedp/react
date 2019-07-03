@@ -110,7 +110,7 @@
 
                               <td>
                     <div id="email{{order.id}}">
-                      <div id="email_field{{order.id}}"></div>
+                      <div id="email_field{{order.id}}_1"></div>
                     </div>
                     <div>
                       <button type="button" class="btn btn-primary btn-xs" onclick="order_get_details('{{order.id}}','email,alt_email','email');"><i class="fa fa-search" aria-hidden="true"></i>ClickToView</button>
@@ -118,7 +118,7 @@
                   </td>
                   <td>
                     <div id="mobile{{order.id}}" style="display: -moz-inline-stack;">
-                      <div id="mobile_field{{order.id}}"></div>
+                      <div id="mobile_field{{order.id}}_1"></div>
                     </div>
                       {% if exoitel_status%}
                       <button id="{{order.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{order.id}});"></button>
