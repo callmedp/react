@@ -26,7 +26,7 @@ from search.helpers import get_recommendations
 from cart.tasks import cart_drop_out_mail, create_lead_on_crm
 
 from .models import Cart
-    from .mixins import CartMixin
+from .mixins import CartMixin
 from .forms import ShippingDetailUpdateForm
 
 
@@ -70,7 +70,7 @@ class CartView(TemplateView, CartMixin, UserMixin):
         return context
 
 
-class AddToCartView (View, CartMixin):
+class AddToCartView(View, CartMixin):
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -128,7 +128,6 @@ class AddToCartView (View, CartMixin):
         if product.type_flow == 17:
 
             if request.session.get('candidate_id'):
-
                 print(request.session.get('candidate_id'))
 
         return HttpResponse(json.dumps(data), content_type="application/json")
@@ -412,12 +411,11 @@ class PaymentShippingView(UpdateView, CartMixin):
                 logging.getLogger('error_log').error('unable to get country object %s' % str(e))
                 initial_country = None
                 form.initial.update({
-                'country': initial_country})
+                    'country': initial_country})
 
         return context
 
     def post(self, request, *args, **kwargs):
-
 
         self.object = self.get_object()
         form = self.get_form()
