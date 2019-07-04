@@ -3241,6 +3241,8 @@ class WhatsAppScheduleView(DetailView, PaginationMixin):
                         if k.status == 2:
                             k.sent_date = timezone.now() + relativedelta.relativedelta(days=1)
                             k.last_modified_by = request.user
+                            if not k.created_by:
+                                k.created_by = request.user
                             k.save()
                             login_url = {'upload_url': k.link}
                             shorten_url = create_short_url(login_url=login_url)
@@ -3252,7 +3254,9 @@ class WhatsAppScheduleView(DetailView, PaginationMixin):
                 else:
                     for k in saved_formset:
                         k.status = 0
-                        k.created_by = request.user
+                        k.last_modified_by = request.user
+                        if not k.created_by:
+                            k.created_by = request.user
                         k.save()
                     messages.success(self.request, "Job Links are Saved")
                 context.update({'job_message': job_message})
