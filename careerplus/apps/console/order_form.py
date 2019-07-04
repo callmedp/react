@@ -525,20 +525,6 @@ class JobLinkForm(forms.ModelForm):
         if not self.instance.id:
             self.initial['status'] = ''
 
-    def clean(self):
-        cleaned_data = self.cleaned_data
-        if 'link' in cleaned_data:
-            try:
-                JobsLinks.objects.get(link=cleaned_data['link'], oi_id=int(self.data['oi']))
-            except JobsLinks.DoesNotExist:
-                pass
-            else:
-                raise ValidationError('Job Link "{}" already exist for this Order Item'.format(cleaned_data['link']))
-        cleaned_data['oi'] = OrderItem.objects.get(id=int(self.data['oi']))            
-        # Always return cleaned_data
-        return cleaned_data
-
-
 
 class ProductUserProfileForm(forms.ModelForm):
 

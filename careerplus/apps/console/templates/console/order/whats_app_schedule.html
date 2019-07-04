@@ -47,16 +47,6 @@
               </div>
             {% endfor %}
         {% endif %}
-        {% if formset.errors %}
-          {% for dict in formset.errors %}
-              {% for key, error in dict.items %}
-               <div class="alert alert-error alert-dismissable">
-                  {{key }} -{{ error }}
-                </div>
-              {% endfor %}
-          {% endfor %}
-        {% endif %}
-
       </div>
     </div>
 

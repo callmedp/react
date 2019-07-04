@@ -3197,6 +3197,21 @@ class WhatsAppScheduleView(DetailView, PaginationMixin):
         context.update({'formset': formset, 'previous_links': previous_links, 'profile_form': profile_form})
         return context
 
+    def attach_object_with_data(self, request, *args, **kwargs):
+
+        fields = ['id', 'company_name', 'location', 'experience', 'job_title', 'link','status']
+        total_forms = int(request.POST.get('form-TOTAL_FORMS', 0))
+
+        request_copy = request.POST.copy()
+        for i in range(total_forms):
+            prefix = "form-{}-".format(i)
+            form_to_consider = any([bool(request.POST.get(prefix + field)) for field in fields])
+            if not form_to_consider:
+                continue
+
+            request_copy.update({prefix + "oi": self.object.id})
+        return request_copy
+
     def post(self, request, *args, **kwargs):
         obj = self.object = self.get_object()
         joblinkformset = modelformset_factory(
@@ -3206,24 +3221,13 @@ class WhatsAppScheduleView(DetailView, PaginationMixin):
             extra=4,
             max_num=5, validate_max=True
         )
-        fields = ['id','company_name','location','experience','job_title','link','status']
-        total_forms = int(request.POST.get('form-TOTAL_FORMS',0))
-
-        request_copy = request.POST.copy()
-        for i in range(total_forms):
-            prefix = "form-{}-".format(i)
-            form_to_consider = any([bool(request.POST.get(prefix+field)) for field in fields])
-            if not form_to_consider:
-                continue
-
-            request_copy.update({prefix+"oi":obj.id})
-
         action_type = int(request.POST.get('action_type', 0))
         context = self.get_context_data()
+        post_data = self.attach_object_with_data(request, *args, **kwargs)
         if action_type != 3:
-            formset = joblinkformset(request_copy)
+            formset = joblinkformset(post_data)
             if formset.is_valid():
-                formset.save()
+                saved_formset = formset.save()
                 # for ins in formset.deleted_objects:
                 #     ins.delete()
 
@@ -3237,14 +3241,18 @@ class WhatsAppScheduleView(DetailView, PaginationMixin):
                         if k.status == 2:
                             k.sent_date = timezone.now() + relativedelta.relativedelta(days=1)
                             obj.status = 32
-                        k.save()
-                        login_url = {'upload_url': k.link}
-                        shorten_url = create_short_url(login_url=login_url)
-                        job_data += '<p>' + k.company_name + ' - ' + k.job_title + ' - '+ k.location + ' -    ' + shorten_url .get('url', '')+ '</p><br>'
-                    job_message = job_message.format(job_data)
+                            k.save()
+                            login_url = {'upload_url': k.link}
+                            shorten_url = create_short_url(login_url=login_url)
+                            job_data += '<p>' + k.company_name + ' - ' + k.job_title + ' - '+ k.location + ' -    ' + shorten_url .get('url', '')+ '</p><br>'
+                    if job_data:
+                        job_message = job_message.format(job_data)
 
                     messages.success(self.request, "Job Link marked as Sent")
                 else:
+                    for k in saved_formset:
+                        k.status = 0
+                        k.save()
                     messages.success(self.request, "Job Links are Saved")
                 context.update({'job_message': job_message})
             else:
