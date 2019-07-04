@@ -96,26 +96,49 @@
             top: 10%;
 
 
-            &.sales {
+            &.fa-17 { // Sales&Marketing
                 background-position: 3px -138px;
             }
 
-            &.info {
-                background-position: 3px -197px;
+            &.fa-19 { // Operations Management
+                background-position: 4px -324px;
             }
-
-            &.banking {
+            
+            &.fa-20 { // Banking & Finance
                 background-position: 11px -259px;
             }
 
-            &.operations {
+            &.fa-21 { // Personal Development
+                background-position: 4px -324px;
+            }
+
+            &.fa-22 {  // Information Technology
+                background-position: 3px -197px;
+            }
+
+            &.fa-23 { // Law
+                background-position: 4px -324px;
+            }
+
+            &.fa-25 { // Human Resources
+                background-position: 4px -324px;
+            }
+
+            &.fa-27 { // Management
+                background-position: 4px -324px;
+            }
+
+            &.fa-29 { // Mass Communication
+                background-position: 4px -324px;
+            }
+
+            &.fa-31 { // Others
                 background-position: 4px -324px;
             }
 
 
             &:hover {
                 box-shadow: 0 3px 14px 0 #BAD5F6, inset 0 1px 3px 0 #BAD5F6;
-
             }
         }
     }

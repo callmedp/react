@@ -97,6 +97,10 @@
     }
 }
 
+.form-inline {
+    display: flex;
+}
+
 
 .search_content {
     width: 400px;
@@ -118,9 +122,9 @@
 
     .skill-jobs-btn {
         height: 49px;
-        width: 13%;
+        flex: 0 0 50px;
         border-radius: 0 42px 42px 0;
-        background: $sprite-freeskill -5px -567px  $yellow;
+        background: $sprite-freeskill -21px -591px  $yellow;
     }
 
     .no-bgcol {
@@ -128,8 +132,6 @@
     }
 
     .twitter-typeahead {
-        width: 87% !important;
-        top: -14px !important;
         border-bottom-left-radius: 15px;
         border-top-left-radius: 15px;
     }
