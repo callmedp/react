@@ -120,11 +120,25 @@
         height: 49px;
         width: 13%;
         border-radius: 0 42px 42px 0;
-        background: $sprite-freeskill -18px -589px  $yellow;
+        background: $sprite-freeskill -5px -567px  $yellow;
     }
 
     .no-bgcol {
         background-color: transparent;
+    }
+
+    .twitter-typeahead {
+        width: 87% !important;
+        top: -14px !important;
+        border-bottom-left-radius: 15px;
+        border-top-left-radius: 15px;
+    }
+
+    .form-control {
+        top: 0 !important;
+        height: 49px !important;
+        border-bottom-left-radius: 15px;
+        border-top-left-radius: 15px;
     }
 
 }
