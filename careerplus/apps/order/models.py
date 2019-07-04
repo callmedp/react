@@ -1,9 +1,11 @@
 import datetime
-
+import math
 from decimal import Decimal
+from dateutil import relativedelta
 
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, Count, Case, When, IntegerField
+
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.utils import timezone
@@ -17,7 +19,7 @@ from .choices import STATUS_CHOICES, SITE_CHOICES,\
     OI_USER_STATUS, OI_EMAIL_STATUS, REFUND_MODE, REFUND_OPS_STATUS,\
     TYPE_REFUND, OI_SMS_STATUS, WC_CATEGORY, WC_SUB_CATEGORY,\
     WC_FLOW_STATUS
-from .functions import get_upload_path_order_invoice
+from .functions import get_upload_path_order_invoice, process_jobs_on_the_move
 from payment.utils import manually_generate_autologin_url
 
 #Global Constants
@@ -382,6 +384,12 @@ class OrderItem(AbstractAutoDate):
         _("Auto Login Url"), null=True, blank=True, max_length=2000,
     )
 
+    # field for whatsapp job
+    pending_links_count = models.IntegerField(
+        blank=True,
+        null=True,
+        default=0
+    )
 
     class Meta:
         app_label = 'order'
@@ -482,6 +490,11 @@ class OrderItem(AbstractAutoDate):
 
             # complaince generation permission
             ("can_generate_compliance_report", "can create compliance report permmission"),
+
+            # jobs on the move permission
+            ("can_view_assigned_jobs_on_the_move", "Can view jobs on the move assigned to user"),
+            ("can_assign_jobs_on_the_move", "Can assign jobs on the move"),
+            ("can_send_jobs_on_the_move", "Can send assigned jobs on the move")
         )
 
     def __str__(self):
@@ -504,6 +517,45 @@ class OrderItem(AbstractAutoDate):
             if 'CP' in replacement_order_id:
                 return replacement_order_id.replace('CP', '')
             return self.replacement_order_id
+
+    @property
+    def get_weeks(self):
+        weeks, weeks_remaining = None, None
+        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status=5).first()
+        if sevice_started_op:
+            started = sevice_started_op.created
+            day = self.product.get_duration_in_day()
+            weeks = math.floor(day / 7)
+            today = timezone.now()
+            weeks_till_now = 0
+            for i in range(0, weeks):
+                start = started + relativedelta.relativedelta(days=i * 7)
+                if start > today:
+                    break
+                weeks_till_now += 1
+            weeks_remaining = weeks - weeks_till_now
+        return weeks, weeks_remaining
+
+
+    def links_needed_till_now(self):
+        start, end = None, None
+        links_count = 0
+        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status=5).first()
+        if sevice_started_op:
+            links_count = 0
+            started = sevice_started_op.created
+            day = self.product.get_duration_in_day()
+            weeks = math.floor(day / 7)
+            today = timezone.now()
+            for i in range(0, weeks):
+                start = started + relativedelta.relativedelta(days=i * 7)
+                if start > today:
+                    break
+                links_count += 2
+        return links_count
+
+
+
 
     def get_oi_communications(self):
         communications = self.message_set.all().select_related('added_by')
@@ -561,6 +613,8 @@ class OrderItem(AbstractAutoDate):
         created = not bool(getattr(self, "id"))
         orderitem = OrderItem.objects.filter(id=self.pk).first()
         self.oi_status = 4 if orderitem and orderitem.oi_status == 4 else self.oi_status
+        if self.product.sub_type_flow == 502:
+            process_jobs_on_the_move(self)
         super().save(*args, **kwargs)  # Call the "real" save() method.
 
          # # for resume booster create orderitem

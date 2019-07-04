@@ -142,45 +142,6 @@
             </ul>
 
             <div class="col-lg-12">
-            <div class="pull-left">
-                {% if perms.order.oi_action_permission %}
-                    <form autocomplete="off" method="POST" role="form" id="action_form" action="{% url "console:action-orderitem-view" %}">{% csrf_token %}
-                    <div class="col-sm-4">
-                        <div class="input-group">
-                            {{action_form.action}}
-                            <input type="hidden" name="queue_name" value="whatsappjoblist" />
-                            <input type="hidden" id="selected-id" name="selected_id" />
-                            <span class="input-group-btn">
-                              <button type="button" class="btn btn-primary" id="action_button_go">Go!</button>
-                            </span>
-                        </div>
-                    </div>
-                    </form>
-                {% endif %}
-
-                <!-- modal action -->
-                <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="actionModal">
-                    <div class="modal-dialog modal-lg">
-                      <div class="modal-content">
-
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                          </button>
-                          <h4 class="modal-title" id="myModalLabel">Action</h4>
-                        </div>
-                        <div class="modal-body" id="myModalbody">
-                          Are You Sure???
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                          <button type="button" class="btn btn-primary" id="action_button">Yes</button>
-                        </div>
-
-                      </div>
-                    </div>
-                </div>
-
-            </div>
 
             <div class="pull-right">
                 {% if perms.order.domestic_profile_update_assigner %}
@@ -245,21 +206,18 @@
                             <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
                         </th>
                     {% endif %}
-                    <th class="column-title">#Id</th>
                     <th class="column-title">OrderId</th>
                     <th class="column-title">Name</th>
                     <th class="column-title">Email</th>
                     <th class="column-title">Mobile</th>
                     <th class="column-title">Item Name</th>
                     <th class="column-title">Flow Status</th>
-                    <th class="column-title">Candidate Doc</th>
-                    <th class="column-title">Order Deatils</th>
-                    <th class="column-title">Uploded Draft</th>
-                    <th class="column-title">Submit Message</th>
                     <th class="column-title">Payment Date</th>
-                    <th class="column-title">How Old</th>
-                    <th class="column-title">Auto Login</th>
                     <th class="column-title">Assigned To</th>
+                    <th class="column-title">Weeks</th>
+                    <th class="column-title">Remaining Weeks</th>
+                    <th class="column-title"> Sent Links</th>
+                    <th class="column-title"> Links expected till now</th>
                   </tr>
                 </thead>
 
@@ -271,8 +229,8 @@
                               <input autocomplete="off" type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
                             </td>
                       {% endif %}
-                      <td>{{obj.pk}}</td>
-                      <td>{{obj.order.number}}</td>
+                    
+                     <td><b> <a target='_blank' href="{% url 'console:queue-whatsapp-schedule' obj.pk %}">{{obj.order.number}} <p>(#{{obj.pk}})</p></a></b></td>
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
                       <td>{{obj.order.email}}</td>
                       <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
@@ -295,57 +253,18 @@
                             {% endif %}
                       </td>
                       <td>{{obj.get_oi_status}}</td>
-                      <td><a href="{% url "console:queue-resume-download" %}?path={{obj.oi_resume.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a></td>
-                      <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Order details</button></a></td>
                       <td>
-                          {% if obj.oi_draft %}
-                            <a href="{{obj.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Uploaded Draft</button></a>
-                          {% endif %}
-                      </td>
-                      <td>
-                          <form autocomplete="off" id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
-                                <fieldset>
-                                    {% for field in message_form %}
-                                        <div class="form-group"> 
-                                            <div class="col-md-8">
-                                                {{ field }}
-                                                {% if field.help_text %}
-                                                    <small class="pull-left">{{ field.help_text }}</small>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                    {% endfor %}
-                                    <div style='display:none'>
-                                        <input type="hidden" name="pk" value="{{obj.pk}}">
-                                    </div>
-                                </fieldset>
-                                <div class="form-group">
-                                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                      <center><button type="button" onclick="submitMessage('{{obj.pk}}',)" class="btn btn-success btn-xs">Submit</button></center>
-                                    </div>
-                                </div>
-                            </form>
-                      </td>
-                      <td>{{obj.order.payment_date}}</td>
-                      <td>
-                          {{obj.modified|naturaltime}}
+                          {{obj.payment_date|naturaltime}}
                           <b>Updated On: {{obj.modified}}</b>
                       </td>
-                      <td>
-                            <strong>Email:</strong></br>{{obj.order.email}}
-                            <form autocomplete="off" id="redirecShineForm{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
-                                <input type="hidden" value="{{obj.order.email}}" name="email" />
-                                <input type="hidden"  value="1" name="type"/>
-                                <input type="hidden"  value="30" name="expires" />  
-
-                                <div class="form-group">
-                                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                      <center><button type="button" onclick="redirectToShineProfile('{{obj.pk}}',)" class="btn btn-success btn-xs">Login to shine</button></center>
-                                    </div>
-                                </div>
-                            </form>
-                      </td>
+                      
                       <td>{{obj.assigned_to}}</td>
+                      {% with obj.get_weeks as weeks%}
+                      <td>{{ weeks.0 }}</td>
+                      <td>{{ weeks.1 }}</td>
+                      <td>{{ obj.sent_link }}</td>
+                      <td>{{ obj.pending_links_count }}</td>
+                      {% endwith %}
                     </tr>
                   {% endfor %}
                 </tbody>

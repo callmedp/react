@@ -26,6 +26,8 @@ from mongoengine import Document, ListField, FloatField,\
     StringField, IntField, DateTimeField
 
 from partner.models import Vendor
+from core.models import AbstractCommonModel
+
 from review.models import Review
 from faq.models import (
     FAQuestion, ScreenFAQ)
@@ -60,6 +62,7 @@ from .choices import (
     CITY_CHOICES,
     SHINE_FLOW_ACTION,
     convert_to_month,
+    LINK_STATUS_CHOICES,
     convert_inr,
     convert_usd,
     convert_aed,
@@ -3164,3 +3167,46 @@ class ShineProfileData(AbstractAutoDate):
     )
     class Meta:
         unique_together = ('type_flow', 'sub_type_flow', 'vendor')
+
+class ProductUserProfile(AbstractAutoDate):
+    order_item = models.OneToOneField(
+        'order.OrderItem', related_name='whatsapp_profile_orderitem',
+        verbose_name=_("Order Item"))
+    contact_number = models.CharField(
+        _("Contact number"), max_length=128)
+    desired_industry = models.CharField(max_length=255, blank=True, null=True)
+    desired_location = models.CharField(max_length=255, blank=True, null=True)
+    desired_position = models.CharField(max_length=255, blank=True, null=True)
+    desired_salary = models.CharField(max_length=255, blank=True, null=True)
+    current_salary = models.CharField(max_length=255, blank=True, null=True)
+
+
+class JobsLinks(AbstractCommonModel, AbstractAutoDate):
+    schedule_date = models.DateTimeField(
+        _('Date'), blank=True, null=True)
+    company_name = models.CharField(max_length=255)
+    location = models.CharField(max_length=255)
+    experience = models.CharField(max_length=255)
+    link = models.URLField(max_length=500)
+    job_title = models.CharField(max_length=255)
+    status = models.IntegerField(choices=LINK_STATUS_CHOICES, default=0)
+    oi = models.ForeignKey(
+        'order.OrderItem', related_name='jobs_link',
+        verbose_name=_("Order Item"))
+    sent_date = models.DateTimeField(
+        _('Date'), blank=True, null=True)
+
+    class Meta:
+        unique_together = [['oi', 'link']]
+
+
+    @property
+    def get_sent_date(self):
+        sent_date = self.sent_date.strftime('%d-%m-%Y') if self.sent_date else ''
+        return sent_date
+
+    def __str__(self):
+        schedule_date = self.schedule_date.strftime('%d-%m-%Y') if self.schedule_date else ''
+        return str(self.company_name) + ' - ' + str(self.get_status_display()) +' ' + schedule_date
+
+

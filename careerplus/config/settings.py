@@ -377,7 +377,26 @@ URL_SHORTENER_AUTH_DICT = {"access_token":"29d325106d379436d7fbe9dc76844350859d2
                         "end_point":"https://u.shine.com/api/generate-url/"
                         }
 
+WHATS_APP_MESSAGE_FORMAT = '''
+                        <p>Here are our job recommendations for this week.</p><br>
+
+
+                         {}
+
+                         
+                       <p> Please do not call/reply directly to this message.</p><br>
+
+                         
+
+                        <p>In case of any queries, you can call us on  08047105151 or email us at resume@shine.com</p>
+                         
+                        <p>Thanks,</p>
+
+                        <p>Team Shine</p>
+                        '''
 try:
     from .settings_local import *
 except:
     pass
+
+

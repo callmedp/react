@@ -55,6 +55,8 @@ OI_OPS_STATUS = (
     (28, 'Feature profile initiated'),
     (29, 'Feature profile expired'),
     (30, 'Feature profile updated'),
+    (31, 'Jobs Link Pending'),
+    (32, 'Jobs Link Sent'),
 
     # for linkedin flow8 41 - 60
     (42, 'Counselling Form Submitted'),
@@ -95,7 +97,9 @@ OI_OPS_STATUS = (
 
     # flow 16
     (191, 'Certificate Updated on Shine'),
-    (192, 'Badgind Done for Assesment')
+    (192, 'Badging Done for Assesment'),
+
+
 )
 
 OI_USER_STATUS = (

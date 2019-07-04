@@ -4,7 +4,8 @@ from django.conf import settings
 
 from order.models import OrderItem, Message,Order
 from order.choices import STATUS_CHOICES
-from shop.models import DeliveryService
+from shop.models import DeliveryService, JobsLinks, ProductUserProfile
+from shop.choices import LINK_STATUS_CHOICES
 # from cart.choices import DELIVERY_TYPE
 from order.choices import OI_OPS_STATUS
 from review.models import Review, STATUS_CHOICES
@@ -263,7 +264,10 @@ class OIFilterForm(forms.Form):
 
         NEW_OI_OPS_STATUS = ((-1, 'Select Status'),) + OI_OPS_STATUS
         if queue_name == 'queue-whatsappjoblist':
-            NEW_OI_OPS_STATUS = ((-1, 'Select Status'), (1, 'Allocated'), (4, 'Closed'),)
+            NEW_OI_OPS_STATUS = (
+                (-1, 'Select Status'), (31, 'Pending Links'),
+                (32, 'Sent Links'), (4, 'Closed')
+            )
 
         self.fields['oi_status'].choices = NEW_OI_OPS_STATUS
 
@@ -475,6 +479,112 @@ class mobileupdateform(forms.ModelForm):
             raise ValidationError("please enter the correct mobile number")
         else:
             validate_integer(alt_number)
+
+
+class JobLinkForm(forms.ModelForm):
+
+    class Meta:
+            model = JobsLinks
+            fields = ('company_name', 'location', 'experience', 'link', 'job_title', 'status', 'oi',)
+
+    company_name = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-7 col-xs-12'})
+    )
+    location = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-7 col-xs-12'})
+    )
+    experience = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-7 col-xs-12'})
+    )
+    link = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-7 col-xs-12'})
+    )
+    job_title = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-7 col-xs-12'})
+    )
+    status = forms.ChoiceField(
+        widget=forms.Select(attrs={
+            'class': 'form-control col-md-7 col-xs-12'}),
+        choices=(('', ''),) + LINK_STATUS_CHOICES
+    )
+
+
+    def __init__(self, *args, **kwargs):
+        super(JobLinkForm, self).__init__(*args, **kwargs)
+        self.empty_permitted = True
+        if not self.instance.id:
+            self.initial['status'] = ''
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        if 'link' in cleaned_data:
+            try:
+                JobsLinks.objects.get(link=cleaned_data['link'], oi_id=int(self.data['oi']))
+            except JobsLinks.DoesNotExist:
+                pass
+            else:
+                raise ValidationError('Job Link "{}" already exist for this Order Item'.format(cleaned_data['link']))
+        cleaned_data['oi'] = OrderItem.objects.get(id=int(self.data['oi']))            
+        # Always return cleaned_data
+        return cleaned_data
+
+
+
+class ProductUserProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = ProductUserProfile
+        fields = (
+            'contact_number', 'desired_industry', 'desired_location',
+            'desired_position', 'desired_salary', 'current_salary'
+        )
+    contact_number = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-3 col-xs-12'}),
+        required=False
+    )
+    desired_industry = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-3 col-xs-12'}),
+        required=False
+    )
+    desired_location = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-3 col-xs-12'}),
+        required=False
+    )
+    desired_position = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-3 col-xs-12'}),
+        required=False
+    )
+    desired_salary = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-3 col-xs-12'}),
+        required=False
+    )
+    current_salary = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-3 col-xs-12'}),
+        required=False
+    )
+
 
 
 
