@@ -3206,15 +3206,26 @@ class WhatsAppScheduleView(DetailView, PaginationMixin):
             extra=4,
             max_num=5, validate_max=True
         )
-        import ipdb;ipdb.set_trace();
+        fields = ['id','company_name','location','experience','job_title','link','status']
+        total_forms = int(request.POST.get('form-TOTAL_FORMS',0))
+
+        request_copy = request.POST.copy()
+        for i in range(total_forms):
+            prefix = "form-{}-".format(i)
+            form_to_consider = any([bool(request.POST.get(prefix+field)) for field in fields])
+            if not form_to_consider:
+                continue
+
+            request_copy.update({prefix+"oi":obj.id})
+
         action_type = int(request.POST.get('action_type', 0))
         context = self.get_context_data()
         if action_type != 3:
-            formset = joblinkformset(request.POST)
+            formset = joblinkformset(request_copy)
             if formset.is_valid():
                 formset.save()
-                for ins in formset.deleted_objects:
-                    ins.delete()
+                # for ins in formset.deleted_objects:
+                #     ins.delete()
 
                 # In case of send format the message and send to frontend and mark
                 # satus as sent.
