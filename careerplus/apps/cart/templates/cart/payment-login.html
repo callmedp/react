@@ -50,28 +50,28 @@
 {% block container %}
     <section class="container mt-53">
         <!-- page content body start -->
-        <div class="row">
+        <div class="row greybg2 pad-25">
 
         <!-- left content start -->
           <div class="col-sm-3 payment-summary-tab">
-          <a href="{% url "cart:payment-login" %}" class="active"><span>1</span> Login/Sign-up</a>
-          <a><span>2</span> Shipping</a>
-          <a><span>3</span> Summary</a>
-          <a><span>4</span> Payment</a>
+          <!-- <a><span>2</span> Shipping</a> -->
+          <a><span>1</span> Summary</a>
+          <a href="{% url "cart:payment-login" %}" class="active"><span>2</span> Login/Sign-up</a>
+          <a><span>3</span> Payment</a>
 
           <!-- secure payment -->
-          <div class="secure-payment">
+          <!-- <div class="secure-payment">
             <figure class="secure-icon-payment"></figure>
             <strong>100% SECURE PAYMENT</strong>
             All major Credit and Debit cards accepted
             <figure class="cards-payment-icon mt-20"></figure>
-          </div>
+          </div> -->
 
           </div>  
         <!-- left content end -->
 
         <!-- right content start -->
-        <div class="col-sm-9 bdr">
+        <div class="col-sm-9 box-shadow">
             <form role="form" method="post" id="login_form" action="" class="personal-details col-sm-6"> {% csrf_token %}
 
                 {% if email_exist %}

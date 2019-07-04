@@ -12,9 +12,10 @@
 
 .payment-summary-tab {
 	padding-right: 0;
+	padding-left: 0;
+	background-color: $grey-bg2;
 
 	a {
-		background-color: #f9f9f9;
 		display: block;
 		position: relative;
 		z-index: 9;
@@ -29,10 +30,9 @@
 
 		&.active {
 			background-color: #fff;
-			border-top: 1px solid $border-color;
-			border-bottom: 1px solid $border-color;
-			border-left: 1px solid $border-color;
-			border-right: 1px solid $white-color;
+			border-bottom-left-radius: 5px;
+			border-top-left-radius: 5px;
+			box-shadow: -20px 0.998px 29px 0px rgba(0, 0, 0, 0.07);
 			position: relative;
 			z-index: 99;
 			margin-right: -1px;
@@ -57,6 +57,26 @@
 
 			&.yellow-circle {
 				background-color: $yellow-color;
+			}
+
+			&.green-circle {
+				background-color: $green-color2;
+				text-indent: 50px;
+				overflow: hidden;
+				position: relative;
+
+				&:after {
+					content: '';
+					position: absolute;
+					width: 14px;
+					height: 11px;
+					left: 0;
+					right: 0;
+					top: 0;
+					bottom: 0;
+					margin: auto;
+					background: $sprite -236px -272px;
+				}
 			}
 		}
 	}
@@ -93,17 +113,22 @@
 .payment-summary {
 	font-size: $font-size+2;
 	color: $secondary-color;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+	padding-top: 10px;
 
 	ul {
 		list-style-type: none;
 		margin: 20px;
-		padding: 0 0 10px 0;
-		border-bottom: 1px solid $border-color;
+		padding: 0;
+		border-bottom: 1px solid $grey-bg;
 
 		li {
 			display: block;
 			margin-bottom: 10px;
 			overflow: hidden;
+			position: relative;
 
 			&.bdr-btm {
 				border-bottom: 1px solid $border-color;
@@ -126,13 +151,19 @@
 			.item-sub-heading {
 				font-size: $font-size+5;
 				color: $secondary-color;
-				margin-bottom: 10px;
 				display: block;
 
 				strong {
-					display: block;
-					font-size: $font-size+11;
+					display: inline-block;
+					font-size: $font-size+5;
 					font-weight: $font-weight+100;
+				}
+
+				figure {
+					display: inline-block;
+					width: 45px;
+					vertical-align: text-top;
+					margin-top: -5px;
 				}
 			}
 
@@ -144,13 +175,19 @@
 
 			.total-amount {
 				margin: 0 0 20px 0;
-				font-size: $font-size+7;
+				font-size: $font-size+9;
+				color: $primary-color;
+				font-weight: $font-weight+300;
+			}
+
+			.subtotal-amount {
+				margin: 0 0 20px 0;
+				font-size: $font-size+5;
 				color: $primary-color;
 			}
 
 			.hidden-div {
 				display: none;
-				margin-top: 10px;
 			}
 
 			.coupon {
@@ -206,8 +243,22 @@
 			}
 
 			&.payable-amount {
-				font-size: $font-size+14;
+				font-size: $font-size+13;
 				font-weight: $font-weight+300;
+				color: $primary-color;
+				margin-bottom: 20px;
+
+				.text-right {
+					font-size: $font-size+13;
+					font-weight: $font-weight+100;
+				}
+			}
+
+			.close-icon {
+				position: absolute;
+				right: 10px;
+				top: 5px;
+				cursor: pointer;
 			}
 		}
 	}
@@ -393,13 +444,15 @@
 
 	button {
 		display: table;
-		background-color: #ff5d00;
-		font-size: $font-size+7;
+		background-color: $orange-color2;
+		font-size: $font-size+5;
 		color: $white-color;
-		border-radius: 0;
+		font-weight: $font-weight+300;
+		border-radius: 4px;
 		border: none;
 		padding: 10px 15px;
 		margin-bottom: 5px;
+		margin-left: 20px;
 	}
 
 	figure {
@@ -1126,4 +1179,15 @@
 			}
 		}
 	}
+}
+
+.box-shadow {
+	box-shadow: $shadow;
+	background: $white-bg;
+}
+
+.greybg2 {
+	background: $grey-bg2 !important;
+	background: $white-bg;
+	border-radius: 5px;
 }
