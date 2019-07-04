@@ -21,14 +21,20 @@ class CartOrderView(APIView, CartMixin):
     serializer_class = None
 
     def post(self, request, *args, **kwargs):
-        import ipdb;
-        ipdb.set_trace();
         data = {"status": -1}
         cart_type = request.data.get('cart_type')
         prod_id = request.data.get('prod_id', '')
-        cart_pk = request.session.get('cart_pk', '')
+        cart_pk = request.session.get('cart_pk') or request.session.get('cart_count_pk', '')
         is_resume_template = request.data.get('add_resume', False)
-        candidate_id = request.data.get('candidate_id', '')
+        request.session['candidate_id'] = request.user.candidate_id
+        personal_info = request.user and len(request.user.personal_detail) and request.user.personal_detail[0]
+        request.session['email'] = personal_info['email']
+        request.session['first_name'] = personal_info['first_name']
+        request.session['last_name'] = personal_info['last_name']
+        request.session['mobile_no'] = personal_info['cell_phone']
+        request.session['country_code'] = personal_info['country_code']
+        candidate_id = request.session.get('candidate_id', '')
+
         # get product
         product = Product.objects.filter(id=int(prod_id)).first()
         # get cart obj
@@ -62,4 +68,4 @@ class CartOrderView(APIView, CartMixin):
                     (cart_obj.pk, source_type, name),
                     countdown=settings.CART_DROP_OUT_LEAD)
 
-        return Response({"detail": "Cart Successfully Created"}, status=status.HTTP_200_OK)
+        return Response({"message": "Cart Successfully Created", 'cart_id': cart_obj.pk}, status=status.HTTP_200_OK)

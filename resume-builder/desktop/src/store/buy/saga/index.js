@@ -31,7 +31,7 @@ function* addToCart(action) {
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
-        return resolve('Product added to cart successfully.');
+        return resolve(result);
 
     } catch (e) {
         console.log(e);
