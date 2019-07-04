@@ -146,13 +146,37 @@ h2 {
 
 /** vskills modal css**/
 
+.modal-open .modal {
+    display: flex !important;
+}
 
+@media (min-width: 768px) {
+    .modal-dialog {
+        max-width: 750px;
+        width: 760px;
+        margin: 15px auto;
+    }
+}
+
+@media (min-width: 992px) {
+    .modal-dialog {
+        max-width: 900px;
+    }  
+}
 
 @media (min-width: 1200px) {
     .modal-lg {
-        width: 1000px;
+        max-width: 1000px;
+        width: auto !important;
+        display: inline-block !important
+        // min-width: auto;
+        // max-width: fit-content;
     }
 }
+
+
+
+
 
 .pad-15 {
     padding: 15px;
@@ -231,9 +255,11 @@ h2 {
 .vskill-modal-box {
     overflow: hidden;
     background: $white-color;
+    // height: 670px;
 
     .modal-header {
         border-bottom: none;
+        padding-bottom: 10;
 
         strong {
             font-size: $font-size+3;

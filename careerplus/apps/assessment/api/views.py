@@ -31,7 +31,6 @@ class CategoryApiView(FieldFilterMixin,ListAPIView):
     serializer_class = CategorySerializer
 
 
-    def get(self, request: Request,):
 
     def get_queryset(self):
         queryset = Category.objects.all()

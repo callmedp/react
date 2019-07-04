@@ -117,7 +117,7 @@
         border: none;
         border-radius: 0px;
         box-shadow: none;
-        width: 87%;
+        width: 100%;
     }
 
     .skill-jobs-btn {
@@ -126,7 +126,6 @@
         border-radius: 0 42px 42px 0;
         background: $sprite-freeskill -21px -591px  $yellow;
     }
-
     .no-bgcol {
         background-color: transparent;
     }
@@ -155,3 +154,7 @@
 
 
 
+span.twitter-typeahead .tt-menu, span.twitter-typeahead .tt-dropdown-menu {
+    width: 100%;
+    min-width: auto;
+}
