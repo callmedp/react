@@ -47,6 +47,16 @@
               </div>
             {% endfor %}
         {% endif %}
+        {% if formset.errors %}
+          {% for dict in formset.errors %}
+              {% for error in dict.values %}
+               <div class="alert alert-error alert-dismissable">
+                  {{ error }}
+                </div>
+              {% endfor %}
+          {% endfor %}
+        {% endif %}
+
       </div>
     </div>
 
@@ -351,7 +361,7 @@
     $('.action_btn').click(function(){
       text = $(this).text();
       if(text=='Save'){
-        $('input[name="action_type"]').val(1)
+        $('input[name="action_type"]').val(0)
       }
       else if(text=='Send'){
         $('input[name="action_type"]').val(2)

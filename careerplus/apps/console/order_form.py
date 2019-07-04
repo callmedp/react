@@ -485,7 +485,7 @@ class JobLinkForm(forms.ModelForm):
 
     class Meta:
             model = JobsLinks
-            fields = ('company_name', 'location', 'experience', 'link', 'job_title', 'status', 'oi',)
+            fields = ('company_name', 'location', 'link', 'job_title', 'status', 'oi',)
 
     company_name = forms.CharField(
         max_length=500,
@@ -497,11 +497,7 @@ class JobLinkForm(forms.ModelForm):
         widget=forms.TextInput(attrs={
             'class': 'form-control col-md-7 col-xs-12'})
     )
-    experience = forms.CharField(
-        max_length=500,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control col-md-7 col-xs-12'})
-    )
+
     link = forms.CharField(
         max_length=500,
         widget=forms.TextInput(attrs={

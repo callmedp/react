@@ -3186,7 +3186,6 @@ class JobsLinks(AbstractCommonModel, AbstractAutoDate):
         _('Date'), blank=True, null=True)
     company_name = models.CharField(max_length=255)
     location = models.CharField(max_length=255)
-    experience = models.CharField(max_length=255)
     link = models.URLField(max_length=500)
     job_title = models.CharField(max_length=255)
     status = models.IntegerField(choices=LINK_STATUS_CHOICES, default=0)

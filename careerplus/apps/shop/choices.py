@@ -286,6 +286,5 @@ SHINE_FLOW_ACTION = (
 
 LINK_STATUS_CHOICES = (
     (0, 'Save'),
-    (1, 'Schedule'),
     (2, 'Sent'),
 )

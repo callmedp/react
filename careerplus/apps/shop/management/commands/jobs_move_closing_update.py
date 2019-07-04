@@ -37,6 +37,7 @@ class Command(BaseCommand):
             oi_status__in=[31, 32],
             product__sub_type_flow=502
         )
+        import ipdb; ipdb.set_trace();
         jobs_move_items = jobs_move_items.select_related('order')
         jobs_move_close_count = 0
 
@@ -48,7 +49,7 @@ class Command(BaseCommand):
             else:
                 user_register(data={}, order=obj.order.pk)
 
-            featured_op = obj.orderitemoperation_set.filter(oi_status=5).order_by('id').first()
+            featured_op = obj.orderitemoperation_set.filter(oi_status__in=[5,31]).order_by('id').first()
 
             try:
                 activation_date = featured_op.created
@@ -75,23 +76,20 @@ class Command(BaseCommand):
                 else:
                     start, end = None, None
                     links_count = 0
-                    sevice_started_op = obj.orderitemoperation_set.all().filter(oi_status=5).order_by('id').first()
+                    sevice_started_op = obj.orderitemoperation_set.all().filter(oi_status__in=[5,31]).order_by('id').first()
 
                     if sevice_started_op:
-                        links_count = 0
+                        links_needed_till_now = 0
                         started = sevice_started_op.created
                         day = obj.product.get_duration_in_day()
                         weeks = math.floor(day / 7)
                         # today = datetime.datetime(2019, 7, 10, 7, 16, 14, tzinfo=pytz.utc)
                         today = timezone.now()
-                        for i in range(0, weeks):
-                            start = started + relativedelta.relativedelta(days=i * 7)
-                            if start > today:
-                                break
-                            links_count += 2
 
+                        links_needed_till_now = obj.links_needed_till_now()
                         links_sent_till_now = obj.jobs_link.filter(status=2).count()
-                        links_pending = links_count - links_sent_till_now
+                        links_pending = links_needed_till_now - links_sent_till_now
+
                         if links_pending < 0:
                             links_pending = 0
                         obj.pending_links_count = links_pending
@@ -120,7 +118,8 @@ class Command(BaseCommand):
                             obj.orderitemoperation_set.create(
                                 oi_status=obj.oi_status,
                                 last_oi_status=last_oi_status,
-                                assigned_to=obj.assigned_to
+                                assigned_to=obj.assigned_to,
+                                created_by=links.first().last_modified_by
                             )
                         elif links.count() == 0 and obj.oi_status == 32:
                             last_oi_status = obj.oi_status

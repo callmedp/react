@@ -521,7 +521,7 @@ class OrderItem(AbstractAutoDate):
     @property
     def get_weeks(self):
         weeks, weeks_remaining = None, None
-        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status=5).first()
+        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5, 31]).first()
         if sevice_started_op:
             started = sevice_started_op.created
             day = self.product.get_duration_in_day()
@@ -540,7 +540,7 @@ class OrderItem(AbstractAutoDate):
     def links_needed_till_now(self):
         start, end = None, None
         links_count = 0
-        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status=5).first()
+        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5,31]).first()
         if sevice_started_op:
             links_count = 0
             started = sevice_started_op.created
