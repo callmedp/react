@@ -7,9 +7,11 @@
                dataType: 'json',
                success: function(json) {
                 if(json.count >=1 ){
+                console.log(json);
                     prod_id =json.results[0].id;
-                    $('#'+ category_id + '-price').text('');
-                    $('#'+ category_id+  '-price').text("Rs. " + json.results[0].inr_price);
+                    $('#test-price').text('');
+                    $('#test-price').text("Rs. " + json.results[0].inr_price);
+                    $('#test-product').removeAttr('style');
                 }
                },
                error: function(xhr, ajaxOptions, thrownError) {
@@ -26,7 +28,7 @@
    $.ajax({
                url: '/api/v1/get-products/',
                type: "GET",
-               data : {'type_flow': 16, 'category' : 3, 'vendor':1},
+               data : {'type_flow': 16, 'category' : category_id, 'vendor':vendor_id},
                dataType: 'json',
                success: function(json) {
                 if(json.count >=1 ){
@@ -70,3 +72,30 @@
                 }
             });
         }
+
+   function getCourseDetail(vendor_id,category_id,test_id){
+   $.ajax({
+               url: '/api/v1/get-products/',
+               type: "GET",
+               data : {'type_flow': 2, 'category' : category_id, 'vendor':15 },
+               dataType: 'json',
+               success: function(json) {
+                if(json.count >=1 ){
+                $('#courseName').text(json.results[0].name);
+                $('#coursePrice').text(json.results[0].inr_price);
+                $('#courseDuration').text(json.results[0].day_duration);
+                $('#courseCartBtn').click(function(){
+                updateToCart(json.results[0].id,'cart');
+                });
+                $('#testCourse').removeAttr('style');
+
+                }
+               },
+               error: function(xhr, ajaxOptions, thrownError) {
+                alert("Something went wrong, Please try again");
+
+               }
+           });
+
+
+   }

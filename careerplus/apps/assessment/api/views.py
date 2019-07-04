@@ -10,15 +10,34 @@ from rest_framework.response import Response
 
 
 class CategoryApiView(FieldFilterMixin,ListAPIView):
+    """
+    Field params -
+
+    fl - Takes
+
+    Include Params -
+
+    include_pid - Includes data of all parent categories
+
+
+    Filter params -
+
+    pid - Get all results for parent category. Accepts comma separated values
+    cid -
+    """
     permission_classes = []
     authentication_classes = []
     pagination_class = LearningCustomPagination
     serializer_class = CategorySerializer
 
+
+    def get(self, request: Request,):
+
     def get_queryset(self):
         queryset = Category.objects.all()
-        category_ids = Test.objects.filter(category__categoryproducts__type_flow=16, category__active=True) \
-            .values_list('category__id', flat=True)
+
+        category_ids = list(set(Test.objects.filter(category__categoryproducts__type_flow=16, category__active=True) \
+            .values_list('category__id', flat=True)))
 
         if self.request.GET.get('level3assessments'):
             return queryset.filter(id__in=category_ids)

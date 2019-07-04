@@ -1,5 +1,7 @@
 from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 from shop.models import Product,Category
+from shop.choices import  C_ATTR_DICT,S_ATTR_DICT
 from shared.rest_addons.mixins import SerializerFieldsMixin
 
 
@@ -24,8 +26,8 @@ class ProductDetailSerializer(SerializerFieldsMixin,ModelSerializer):
     #     asked_fields = self.context.get('asked_fields',[])
     #     [ret.pop(field,"") for field in asked_fields]
     #     return ret
+    day_duration = serializers.CharField(read_only=True)
 
     class Meta:
         model = Product
         fields = '__all__'
-

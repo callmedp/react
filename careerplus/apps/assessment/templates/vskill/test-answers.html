@@ -44,18 +44,18 @@
                </div>
                <div class="col-sm-8 col-md-7">
                   <h2>Congratulations, you are doing great</h2>
-                  <strong>6 out of 10 correct answers </strong>
+                  <strong id="correctMsg"></strong>
                   <div class="flexbox mt-20 mb-15">
-                     <a href="#" class="result_btn">Next test &nbsp; &rsaquo;</a>
-                     <a href="#" class="result_btn ml-20">Explore other test</a>
+                     <a data-toggle="modal"  href="#TestLimitModal" class="result_btn" >Next test &nbsp; &rsaquo;</a>
+                     <a href="/practice-tests/{{object.category.slug}}/sub" class="result_btn ml-20">Explore other test</a>
                   </div>
                </div>
                <div class="col-sm-2 col-md-3">
                   <div class="test-paper-box final-result pull-right">
                      You scored
-                     <strong>60%</strong>
+                     <strong id="scoringPercent" ></strong>
                   </div>
-                  <span class="time-taken pull-right mt-10">Time taken: <strong>04 min 55 secs</strong></span>
+                  <span class="time-taken pull-right mt-10">Time taken: <strong id="timeTaken"></strong></span>
                </div>
             </div>
          </div>
@@ -69,8 +69,8 @@
                  {% for quest in questions_list %}
                <div class="test-paper">
 
-                  <div class="flexbox">
-                     <h3>{{forloop.counter}} {{quest.question_text}}</h3>
+                  <div class="flexbox" id="{{quest.id}}">
+                     <h3 >{{forloop.counter}} {{quest.question_text}}</h3>
                   </div>
                   <ul class="test-paper__question">
                         {% for ans in quest.question_options %}
@@ -89,19 +89,19 @@
             </div>
 
             <div class="flexbox ml-20 mt-30">
-               <button class="blue_btn mr-20">Next test&nbsp; &rsaquo;</button>
-               <button class="white_btn">Explore other test</button>
+               <a class="blue_btn mr-20" data-toggle="modal"  href="#TestLimitModal">Next test&nbsp; &rsaquo;</a>
+               <a class="white_btn" href="/practice-tests/{{object.category.slug}}/sub" >Explore other test</a>
             </div>
          </div>
 
          <!-- right section starts -->
-         <div class="col-sm-3 mt-30">
+         <div class="col-sm-3 mt-30" id="test-product" style="visibility:hidden;">
 
             <div class="white-box bdr-bottom">
                <div class="test-benefits benefits-bg">
                <span class="pad-15">
                   <h3><a href="#">Advanced Search Engine Optimisation Test</a></h3>
-                  <h4 class="mt-0">Rs. 699</h4>
+                  <h4 class="mt-0" id="test-price">Rs. 699</h4>
                   <strike>Rs. 999</strike>
                   <span class="grey-border mt-15 mb-15"></span>
                   <strong>Benefits</strong>
@@ -109,7 +109,7 @@
                   <p>Real exam & Practice environment</p>
                   <p>Answers & Detailed Explanations</p>
                   <span class="flexbox align-items-center mt-20">
-                     <button class="yellow_btn">Add to cart</button>
+                     <button class="yellow_btn" onclick="=addToCart('{{object.vendor.id}}','{{object.category.id}}')">Add to cart</button>
                   </span>
                </span>
               </div>
@@ -135,25 +135,84 @@
       </div>
    </div>
 </div>
+
+<!------  Modal test limit ---------->
+   <div class="modal fade" id="TestLimitModal" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xs" role="document" style="width: 500px;">
+    <div class="modal-content test-limit-modal-box">
+      <div class="modal-header pb-0 test-limit-bg">
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h3>Oops!  Your free test limit for this skill has been exhausted. </h3>
+        <strong>Continue your learning, with our paid practice tests</strong>
+      </div>
+      <div class="modal-body">
+        <div class="col-sm-12">
+         <div class="test-limit-modal">
+               <strong>Benefits</strong>
+               <p>500+ questions</p>
+               <p>Real exam & Practice environment</p>
+               <p>Answers & Detailed Explanations</p>
+               <span class="flexbox mt-20 mb-30">
+                  <button class="blue_btn">View test</button>
+               </span>
+         </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!------  EndModal test limit ---------->
+
+
 {% endblock main_container %}
 {% block js_section %}
+<script src="{% static 'shinelearn/js/assessment/take_test.js' %}"></script>
+
 {{block.super}}
 <script>
-var tKey = 'Test-' + '{{object.id}}',myStorage = window.localStorage,questionAttempt = null;
+var tKey = 'Test-' + '{{object.id}}',myStorage = window.localStorage,
+right=0,questionAttempt = null,total = {{questions_list.count}};
 $(document).ready(function() {
+        getProductDetail('{{object.vendor.id}}','{{object.category.id}}');
         questionAttempt = JSON.parse(myStorage.getItem(tKey));
         if (questionAttempt != null) {
             for (var id in Object.keys(questionAttempt)) {
                 if (Object.values(questionAttempt)[id] != "") {
-                    console.log($('#' + Object.values(questionAttempt)[id]).is(":checked"))
                     $('#' + Object.values(questionAttempt)[id]).attr('checked',true);
                 }
             }
          }
+ $.ajax({
+         url   : '/api/v1/question/?test_id={{object.id}}',
+         type  : 'get',
+         success: function(response){
+         for(i of response){
+            $('#check'+i.question_options[0]).addClass('ans-right');
+            if(Object.values(questionAttempt).includes(i.question_options[0])){
+                  right+= 1 ;
+                     }
+                            }
+              $('#correctMsg').text( right+ ' out of '+total+' correct answers ');
+              $('#scoringPercent').text((right/total)*100 +"%");
+              $('#timeTaken').text(secondsToMinutes(questionAttempt['testTime'+{{object.id}}]));
+                                    }
+    });
 
 
 });
+
+function secondsToMinutes(time){
+    return Math.floor(time / 60)+' Min:'+Math.floor(time % 60) +" Secs";
+}
+
+
+
 </script>
+
 {% endblock js_section %}
 {% block johukum %}
 {% endblock johukum %}

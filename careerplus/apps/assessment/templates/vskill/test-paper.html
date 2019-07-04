@@ -198,7 +198,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" data-dismiss="modal" class="btn btn-default" >No</button>
-        <button type="button" class="btn btn-default" onclick="submitTest2();">Yes</button>
+        <button type="button" class="btn btn-default" onclick="submitTestFinal();">Yes</button>
 
       </div>
     </div>
@@ -241,6 +241,7 @@ delAns = {% if delete_ans %}true{% else %}false{% endif %},
 startTestTime = NaN,endTestTime = NaN;
 
 $(document).ready(function() {
+
     // removes local storage
     if (delAns) {
         myStorage.removeItem(tKey);
@@ -377,7 +378,7 @@ function startTimer(duration,) {
             clearInterval(interval);
               $('#testRemanMinutes').text("Time");
             $('#testRemanSeconds').text("Out");
-            submitTest();
+            submitTestFinal();
         }
     }, 1000);
     $('#timeTest').show();
@@ -401,12 +402,13 @@ function submitTest(){
      $("#submitPermissionModal").modal();
 }
 
-function submitTest2(){
+function submitTestFinal(){
+      submittime = new Date().getTime();
       $("#submitPermissionModal").modal('hide');
       clearInterval(interval);
       testSubmission = true;
       questionAttempt['testSubmission{{object.id}}'] = testSubmission;
-      questionAttempt['testTime'+{{object.id}}] = Math.floor((new Date().getTime() - startTestTime.getTime())/1000) ;
+      questionAttempt['testTime'+{{object.id}}] = Math.floor((submittime - startTestTime.getTime())/1000) ;
       myStorage.setItem(tKey, JSON.stringify(questionAttempt));
       {% if request.session.candidate_id %}
       $('#leadCreationSubmit').click();

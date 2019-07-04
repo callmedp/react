@@ -48,13 +48,24 @@
                {% for test in all_test %}
                <div class="testinside">
                   <span class="border-left"></span>
-              <a id="{{test.id}}" onclick="getProductDetail('{{test.vendor.id}}','{{test.category.id}}');" data-toggle="modal"  data-target="#testModal{{test.id}}">
+  <a id="{{test.id}}" onclick="getProductDetail('{{test.vendor.id}}','{{test.category.id}}');getCourseDetail('{{test.vendor.id}}','{{test.category.id}}','{{test.id}}');" class="testModal" data-toggle="modal" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}" }' data-target="#testModal">
                      {{test.title}}
                      <div class="white_hover"></div>
                      <span class="taketest" >Take Free Test</span>
                   </a>
                </div>
-                  <div class="modal fade" id="testModal{{test.id}}" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+             {% endfor %}
+
+            </div>
+             {% if all_test.count > 8 %}
+            <button class="btn_white loadmore" id="loadmorebtn" onclick="loadmore();">Load more</button>
+             {% endif %}
+         </div>
+      </div>
+      </div>
+
+
+     <div class="modal fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content vskill-modal-box">
       <div class="modal-header">
@@ -78,11 +89,11 @@
                      Test Format <strong>Practice Exam</strong>
                   </li>
                   <li>
-                     No. of Questions <strong>{{test.get_question_count}}</strong>
+                     No. of Questions <strong id="questCount">{{test.get_question_count}}</strong>
                   </li>
                </ul>
                <span>
-               <a class="blue_btn pull-right" href="/online-exam/{{test.id}}" >Start test</a>
+               <a class="blue_btn pull-right" id="startTestLink" >Start test</a>
                <h4 class="mt-10">FREE</h4>
                </span>
             </span>
@@ -107,33 +118,32 @@
                </ul>
                <p>Real exam & Practice environment</p>
                <p class="pb-30">Explanation to every questions</p>
-               <button class="yellow_btn pull-right" onclick="addToCart('{{test.vendor.id}}','{{test.category.id}}')" >Add to cart</button>
+               <button class="yellow_btn pull-right" id="testAddToCart" >Add to cart</button>
                <strike>Rs. 999</strike>
-               <h4 class="mt-0" id="{{test.category.id}}-price">Rs.</h4>
+               <h4 class="mt-0" id="test-price">Rs.</h4>
             </span>
            </div>
         </div>
 
 
-
-        <div class="col-sm-4">
+        <div class="col-sm-4" id="testCourse" style="visibility:hidden">
            <div class="vskill-modal">
             <i>
                <img src="{% static 'shinelearn/images/free_skill/online-course-bg.jpg' %}" class="img-responsive">
             </i>
             <span class="pad-15">
-               <h3>Online Course</h3>
+               <h3 id="courseName">Online Course</h3>
                <ul>
                   <li>
-                     Duration <strong>8 Days</strong>
+                     Duration <strong id="courseDuration">8 Days</strong>
                   </li>
                   <li>
                      Availability <strong>Unlimited</strong>
                   </li>
                </ul>
-               <button class="blue_btn pull-right">Add to cart</button>
+               <button class="blue_btn pull-right" id="courseCartBtn">Add to cart</button>
                <strike>Rs. 1999</strike>
-               <h4 class="mt-0">Rs. 1699</h4>
+               <h4 class="mt-0" id="coursePrice">Rs. 1699</h4>
             </span>
            </div>
         </div>
@@ -143,22 +153,32 @@
     </div>
   </div>
 </div>
-             {% endfor %}
 
-            </div>
-            
-            
-            <button class="btn_white loadmore" id="loadmorebtn" onclick="loadmore();">Load more</button>
-         </div>
-      </div>
-      </div>
+
+
    </div>
-</div>
 {% endblock main_container %}
 {% block js_section %}
 <script src="{% static 'shinelearn/js/assessment/take_test.js' %}"></script>
    {{block.super}}
    <script type="text/javascript">
+    $('#testModal').on('show.bs.modal', function(e) {
+    var modalobject = JSON.parse(e.relatedTarget.dataset.attrValue);
+    console.log(modalobject);
+
+    $('#questCount').text(modalobject.quescount);
+    $('#startTestLink').attr('href','/practice-tests/'+ modalobject.testSlug +'-test/');
+    $('#testAddToCart').click( function()
+           {
+            addToCart(modalobject.vendor,modalobject.catid);
+           }
+      );
+
+
+});
+
+
+
    var page_number= 2;
    function loadmore(){
             page_number = page_number+1;

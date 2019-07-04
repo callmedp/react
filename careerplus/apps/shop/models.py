@@ -1598,8 +1598,9 @@ class Product(AbstractProduct, ModelMeta):
             return dd
         else:
             return ''
-
-
+    @property
+    def day_duration(self):
+        return self.get_duration_in_day()
 
     def get_duration_in_ddmmyy(self):
         if self.is_course:
