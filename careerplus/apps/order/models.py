@@ -554,6 +554,13 @@ class OrderItem(AbstractAutoDate):
                 links_count += 2
         return links_count
 
+    def total_links_needs_to_sent(self):
+        day = self.product.get_duration_in_day()
+        if day:
+            weeks = math.floor(day / 7)
+            return weeks * 2
+        return None
+
 
 
 

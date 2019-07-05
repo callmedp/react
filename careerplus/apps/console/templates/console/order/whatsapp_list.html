@@ -216,8 +216,10 @@
                     <th class="column-title">Assigned To</th>
                     <th class="column-title">Weeks</th>
                     <th class="column-title">Remaining Weeks</th>
-                    <th class="column-title"> Sent Links</th>
-                    <th class="column-title"> Links expected till now</th>
+                    <th class="column-title">Total links needs to sent</th>
+                    <th class="column-title">Sent Links</th>
+                    <th class="column-title">Total Supposed to be sent</th>
+                    <th class="column-title">Pending Links Count</th>
                   </tr>
                 </thead>
 
@@ -262,7 +264,9 @@
                       {% with obj.get_weeks as weeks%}
                       <td>{{ weeks.0 }}</td>
                       <td>{{ weeks.1 }}</td>
+                      <td>{{ obj.total_links_needs_to_sent }}</td>
                       <td>{{ obj.sent_link }}</td>
+                      <td>{{ obj.links_needed_till_now }}</td>
                       <td>{{ obj.pending_links_count }}</td>
                       {% endwith %}
                     </tr>

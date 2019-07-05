@@ -2897,7 +2897,6 @@ class WhatsappListQueueView(ListView, PaginationMixin):
         query_filters_exclude.update({'wc_sub_cat__in': [64, 65]})
         user = self.request.user
         if user.is_superuser or user.has_perm('order.can_assign_jobs_on_the_move'):
-            query_filters.update({'assigned_to': None})
             pass
         elif user.has_perm('order.can_view_assigned_jobs_on_the_move'):
             query_filters.update({'assigned_to': user})
