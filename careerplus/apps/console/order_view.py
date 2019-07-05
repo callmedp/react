@@ -2871,6 +2871,7 @@ class WhatsappListQueueView(ListView, PaginationMixin):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '').strip()
         self.oi_status = request.GET.get('oi_status', '-1').strip()
+        self.day_choice = request.GET.get('day_choice', '-1').strip()
         self.sel_opt = request.GET.get('rad_search', 'number')
         return super(WhatsappListQueueView, self).get(request, args, **kwargs)
 
@@ -2945,6 +2946,15 @@ class WhatsappListQueueView(ListView, PaginationMixin):
                     output_field=IntegerField())
             ),
         )
+        if int(self.day_choice) != -1:
+            if int(self.day_choice) == 1:
+                today = timezone.now()
+                date_list = [(today - relativedelta.relativedelta(days=i * 7)).date() for i in range(0,52) ]
+            elif int(self.day_choice) == 2:
+                tommorrow = timezone.now() + relativedelta.relativedelta(days=1)
+                date_list = [(tommorrow - relativedelta.relativedelta(days=i * 7)).date() for i in range(0,52) ]
+
+            queryset = queryset.filter(order__payment_date__date__in=date_list)
 
         queryset = queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-pending_links_count')
 
@@ -3239,14 +3249,15 @@ class WhatsAppScheduleView(DetailView, PaginationMixin):
 
                 if action_type == 2:
                     for k in objects:
-                        k.sent_date = timezone.now() + relativedelta.relativedelta(days=1)
+                        k.sent_date = timezone.now()
                         k.last_modified_by = request.user
                         if not k.created_by:
                             k.created_by = request.user
+                        links_per_week = getattr(obj.product.attr, S_ATTR_DICT.get('LC'), 2)
                         k.status = 2
                         k.save()
-                        links_sent = obj.check_if_required_links_are_sent()
-                        if links_sent >= 2:
+                        links_sent = obj.get_sent_link_count_for_current_week()
+                        if links_sent >= links_per_week:
                             obj.oi_status = 32
                             obj.save()
                     messages.success(self.request, "Job Link marked as Sent")

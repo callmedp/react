@@ -244,6 +244,14 @@ class OIFilterForm(forms.Form):
         widget=forms.Select(
             attrs={'class': 'form-control'}))
 
+    day_choice = forms.ChoiceField(
+        label=("Op Status:"), choices=[],
+        required=False,
+        initial=-1,
+        widget=forms.Select(
+            attrs={'class': 'form-control'}))
+
+
     def __init__(self, *args, **kwargs):
         queue_name = kwargs.pop('queue_name', None)
         super(OIFilterForm, self).__init__(*args, **kwargs)
@@ -269,6 +277,7 @@ class OIFilterForm(forms.Form):
                 (32, 'Sent Links'), (4, 'Closed')
             )
 
+            self.fields['day_choice'].choices = ( (-1, 'All'),(1, 'Today'), (2, 'Tommorrow'),)
         self.fields['oi_status'].choices = NEW_OI_OPS_STATUS
 
         draft_choices = [(-1, "Select Draft Level")]

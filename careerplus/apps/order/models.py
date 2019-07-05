@@ -568,7 +568,7 @@ class OrderItem(AbstractAutoDate):
             return weeks * links_per_week
         return None
 
-    def check_if_required_links_are_sent(self):
+    def get_sent_link_count_for_current_week(self):
         sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5,31]).first()
         started = sevice_started_op.created
         day = self.product.get_duration_in_day()
