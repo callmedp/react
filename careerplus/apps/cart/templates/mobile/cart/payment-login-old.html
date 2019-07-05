@@ -29,69 +29,21 @@
                 <a class="icon-back pull-left" role="button"  onclick="goBack()"></a> 
             </div><!-- / Left side Icon ends here -->
         </div><!-- header menu Icon ends here -->
+
+        <ul class="payment-nav">
+            <li id="log" class="active"><a href="{% url "cart:payment-login" %}">Login</a></li>
+            <li id="detail"><a role="button">Details</a></li>
+            <li id="summary"><a role="button">Summary</a></li>
+            <li id="payment"><a role="button">Payment</a></li>
+        </ul>
     </header><!-- header ends here -->
+
 {% endblock header %}
 
 {% block container %}
-    <div class="payment w100fl">
-        <div class="payment--bg"></div>
-        <ul class="payment__steps">
-            <li class="payment__steps__item">
-                <a href="#" class="active">
-                    <span class="dot">1</span>
-                    <!-- <span class="tick"></span> -->
-                    Summary
-                </a>
-            </li>
 
-            <li class="payment__steps__item">
-                <a href="#">
-                    <span class="dot">2</span>
-                    <!-- <span class="tick"></span> -->
-                    Login
-                </a>
-            </li>
-            
-            <li class="payment__steps__item">
-                <a href="#">
-                    <span class="dot">3</span>
-                    <!-- <span class="tick"></span> -->
-                    Payment
-                </a>
-            </li>
-        </ul>
-
-        <div class="payment__summary">
-            <ul class="payment__summary__items">
-                <li class="payment__summary__item">
-                    <p class="payment__summary__item--course-title">Six Sigma Green Belt Professional</p>
-                    <div class="payment__summary__item--wrap">
-                        <span class="payment__summary__item--price">Rs. 12,711</span>
-                        <span class="payment__summary__item--close">+</span>
-                    </div>
-                </li>
-                <li class="payment__summary__item">
-                    <p class="payment__summary__item--course-title">IT Project Management Essentials</p>
-                    <div class="payment__summary__item--wrap">
-                        <span class="payment__summary__item--price">Rs. 3.499</span>
-                        <span class="payment__summary__item--close">+</span>
-                    </div>
-                </li>
-                <li class="payment__summary__item">
-                    <p class="payment__summary__item--course-title">Agile Practitioner - PMI ACP and Scrum Master Aligned</p>
-                    <div class="payment__summary__item--wrap">
-                        <span class="payment__summary__item--price">Rs. 48,420</span>
-                        <span class="payment__summary__item--close">+</span>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div><!-- /. Payment steps -->
     <div class="body-wrapper">
-        <div class="pa"></div>
-        
-        
-        
+
         <form role="form" method="post" id="login_form" action="">{% csrf_token %}
           <!-- Tab content Satrts here -->
             <div class="content-box mt-20">

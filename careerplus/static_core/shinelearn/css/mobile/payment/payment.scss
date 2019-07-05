@@ -14,6 +14,134 @@
 /* error form Start From Here */
 @import '../components/file-upload';
 
+
+.payment {
+  background-color: $bg-grey-f5;
+  padding-left: 15px;
+  padding-right: 15px;
+
+  &--bg {
+    @include size(100%, 60px, block);
+    background-color: $bg-blue;
+    position: absolute;
+    left: 0;
+  }
+  
+  &__steps {
+    color: $txt-white;
+    position: relative;
+    height: 40px;
+    z-index: 1;
+    display: flex;
+
+    &__item {
+      text-transform: uppercase;
+      font-weight: $font-weight-medium;
+      font-size: $font-size-base;
+      text-align: center;
+      flex: 0 0 33.33%;
+  
+      a {
+        display: block;
+        color: $txt-white;
+        padding: 10px 15px;
+        display: flex;
+  
+        &.active {
+          @include border-radius(4px 4px 0 0);
+          background-color: $bg-white;
+          color: $txt-grey-333;
+        }
+  
+        .dot {
+          @include border-radius(50%);
+          @include size(20px,20px, block);
+          background-color: $bg-grey-d7;
+          padding: 2px 5px;
+          margin-right: 5px;
+          line-height: 16px;
+          color: $txt-grey-333;
+        }
+  
+        .tick {
+          @include border-radius(50%);
+          @include size(20px, 20px, block);
+          background-color: $light-green;
+          position: relative;
+          margin-right: 5px;
+  
+          &::after {
+            content: '';
+            @include size(3px, 7px, block);
+            border: solid $bg-white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+            position: absolute;
+            top: 4px;
+            left: 8px;
+          }
+        }
+      }
+    }
+  }
+
+
+
+  &__summary {
+    @include border-radius(0 4px 4px 4px);
+    background-color: $bg-white;
+    box-shadow: 0 0 10px rgba(0,0,0, .3);
+    // padding: 20px 15px 15px 15px;
+    margin-bottom: 30px;
+    position: relative;
+
+    &__items {
+      padding-top: 10px;
+    }
+
+    &__item {
+      display: flex;
+      padding: 15px;
+
+      &:not(:last-child) {
+        border-bottom: 1px solid $border-grey-c1;
+      }
+
+      &--course-title {
+        display: flex;
+        margin-right: auto;
+        padding-right: 15px;
+        font-size: $font-size-md;
+        padding-bottom: 0;
+      }
+
+      &--wrap {
+        display: flex;
+        padding-right: 20px;
+      } 
+
+      &--price {
+        font-weight: $font-weight-medium;
+        font-size: $font-size-md;
+        width: 100px;
+      }
+
+      &--close {
+        font-size: 2rem;
+        font-weight: $font-weight-light;
+        color: $txt-grey-999;
+        position: absolute;
+        right: 5px;
+        transform: rotate(45deg);
+      }
+
+
+    }
+  }
+
+  
+}
+
 .payment-nav {
   font-size: 1em;
   color: #fff;
