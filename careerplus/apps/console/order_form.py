@@ -485,7 +485,7 @@ class JobLinkForm(forms.ModelForm):
 
     class Meta:
             model = JobsLinks
-            fields = ('company_name', 'location', 'link', 'job_title', 'status', 'oi',)
+            fields = ('company_name', 'location', 'link', 'job_title', 'oi',)
 
     company_name = forms.CharField(
         max_length=500,
@@ -508,12 +508,6 @@ class JobLinkForm(forms.ModelForm):
         widget=forms.TextInput(attrs={
             'class': 'form-control col-md-7 col-xs-12'})
     )
-    status = forms.ChoiceField(
-        widget=forms.Select(attrs={
-            'class': 'form-control col-md-7 col-xs-12'}),
-        choices=(('', ''),) + LINK_STATUS_CHOICES
-    )
-
 
     def __init__(self, *args, **kwargs):
         super(JobLinkForm, self).__init__(*args, **kwargs)

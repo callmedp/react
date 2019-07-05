@@ -76,7 +76,6 @@
           </div>
       </form>
     </div>
-       {% if perms.order.domestic_profile_update_assigner %}
     <div class="row top_tiles">
 
       <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -111,7 +110,6 @@
         </div>
         <!-- /modals -->
     </div>
-{%endif%}
     <div class="row">
       <div class="col-md-12 col-sm-12 col-xs-12">
         {% if messages %}
@@ -144,7 +142,7 @@
             <div class="col-lg-12">
 
             <div class="pull-right">
-                {% if perms.order.domestic_profile_update_assigner %}
+                {% if perms.order.can_assign_jobs_on_the_move %}
 
                     <form autocomplete="off" method="POST" role="form" id="assignment_form" action="{% url "console:assignment-orderitem-view" %}">{% csrf_token %}
                     <div class="col-sm-4">

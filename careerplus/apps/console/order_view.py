@@ -3227,27 +3227,29 @@ class WhatsAppScheduleView(DetailView, PaginationMixin):
             formset = joblinkformset(post_data)
             if formset.is_valid():
                 saved_formset = formset.save()
-                # for ins in formset.deleted_objects:
-                #     ins.delete()
 
-                # In case of send format the message and send to frontend and mark
-                # satus as sent.
                 job_message = None
                 if action_type == 2:
-                    job_message = settings.WHATS_APP_MESSAGE_FORMAT
                     job_data = ''
-                    for k in saved_formset:
-                        if k.status == 2:
-                            k.sent_date = timezone.now() + relativedelta.relativedelta(days=1)
-                            k.last_modified_by = request.user
-                            if not k.created_by:
-                                k.created_by = request.user
-                            k.save()
-                            login_url = {'upload_url': k.link}
-                            shorten_url = create_short_url(login_url=login_url)
-                            job_data += '<p>' + k.company_name + ' - ' + k.job_title + ' - '+ k.location + ' -    ' + shorten_url .get('url', '')+ '</p><br>'
+                    if getattr(formset, '_queryset', None) and not saved_formset:
+                        objects = list(formset._queryset.filter(status=0))
+                    elif getattr(formset, '_queryset', None) and saved_formset:
+                        objects = list(formset._queryset.filter(status=0))
+                    elif saved_formset:
+                        objects = saved_formset
+
+                    for k in objects:
+                        k.sent_date = timezone.now() + relativedelta.relativedelta(days=1)
+                        k.last_modified_by = request.user
+                        if not k.created_by:
+                            k.created_by = request.user
+                        k.status = 2
+                        k.save()
+                        login_url = {'upload_url': k.link}
+                        shorten_url = create_short_url(login_url=login_url)
+                        job_data += '<p>' + k.company_name + ' - ' + k.job_title + ' - '+ k.location + ' -    ' + shorten_url .get('url', '')+ '</p><br>'
                     if job_data:
-                        job_message = job_message.format(job_data)
+                        job_message = settings.WHATS_APP_MESSAGE_FORMAT.format(job_data)
 
                     messages.success(self.request, "Job Link marked as Sent")
                 else:
