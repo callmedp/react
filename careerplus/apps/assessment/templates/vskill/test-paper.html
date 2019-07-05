@@ -92,7 +92,7 @@
                     {% endfor %}
                     <!-- paper end -->
                     <div class="flexbox ml-20">
-                        <button class="blue_btn mr-20" id="nextQuestionBtn" onclick="nextquestion('1')" ;>Next question&nbsp;
+                        <button class="blue_btn mr-20" id="nextQuestionBtn" onclick="nextquestion('1');">Next question&nbsp;
                             &rsaquo;
                         </button>
                         <button class="white_btn" onclick="skipQuestion()" ;>Skip</button>
@@ -238,7 +238,7 @@ activeTab = 1, startTime = {{object.duration}},
 tKey = 'Test-' + '{{object.id}}',myStorage = window.localStorage,
 sec =0,testSec = 0,testMin =0,interval=0,testSubmission= false,
 delAns = {% if delete_ans %}true{% else %}false{% endif %},
-startTestTime = NaN,endTestTime = NaN;
+startTestTime = NaN,endTestTime = NaN,timeout =NaN ;
 
 $(document).ready(function() {
 
@@ -370,7 +370,7 @@ function startTimer(duration,) {
         $('#testRemanMinutes').text(minutes);
         $('#testRemanSeconds').text(seconds);
 
-        if(--timer<0){
+        if(--timer<=0){
             console.log('time out')
         }
 

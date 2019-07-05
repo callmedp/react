@@ -42,6 +42,10 @@ class Test(AbstractAutoDate):
     def get_question_count(self):
         return self.question_set.all().count()
 
+    @property
+    def question_count(self):
+        return self.get_question_count()
+
     def save(self,*args,**kwargs):
         created = not bool(getattr(self, "id"))
         if not created:

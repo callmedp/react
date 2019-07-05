@@ -217,8 +217,6 @@
             addToCart(modalobject.vendor,modalobject.catid);
            }
       );
-
-
 });
 
 
@@ -230,7 +228,7 @@
            $.ajax({
                url: '/api/get-category-level-products',
                type: "GET",
-               data : {'tl': 2, 'page_size' : 4, 'page':page_number},
+               data : {'tl': 2, 'page_size' : 4, 'page':page_number,'only_test_level2category':true },
                dataType: 'json',
                success: function(json) {
                if (json.next == null){

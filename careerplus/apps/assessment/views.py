@@ -73,7 +73,7 @@ class VskillTestView(DetailView):
         test_id = self.get_object()
         show_test, delete_ans = self.is_expired()
         if not show_test:
-            context.update({'show_test': show_test })
+            context.update({'show_test': show_test})
         context.update({'delete_ans': delete_ans})
         questions_list = Question.objects.filter(test_id=test_id.pk)
         if not questions_list:

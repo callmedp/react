@@ -43,9 +43,9 @@
          </div>
          <!-- Most popular tests starts -->
          <div class="col-sm-12 col-lg-12 col-md-12">
-            <div class="popular_test row">
+            <div class="popular_test row" id="funcDiv">
 
-               {% for test in all_test %}
+               {% for test in all_test|slice:":1" %}
                <div class="testinside">
                   <span class="border-left"></span>
   <a id="{{test.id}}" onclick="getProductDetail('{{test.vendor.id}}','{{test.category.id}}');getCourseDetail('{{test.vendor.id}}','{{test.category.id}}','{{test.id}}');" class="testModal" data-toggle="modal" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}" }' data-target="#testModal">
@@ -57,7 +57,7 @@
              {% endfor %}
 
             </div>
-             {% if all_test.count > 8 %}
+             {% if all_test.count > 1 %}
             <button class="btn_white loadmore" id="loadmorebtn" onclick="loadmore();">Load more</button>
              {% endif %}
          </div>
@@ -179,21 +179,34 @@
 
 
 
-   var page_number= 2;
+   var page_number= 1;
    function loadmore(){
             page_number = page_number+1;
              element = document.getElementById('funcDiv');
            $.ajax({
-               url: '/api/get-category-level-products',
+               url: '/api/get-test',
                type: "GET",
-               data : {'tl': 2, 'page_size' : 4, 'page':page_number},
+               data : {'page_size' : 1, 'page':page_number,'category_id':'{{Category.id}}' },
                dataType: 'json',
                success: function(json) {
                if (json.next == null){
                  $('#loadmorebtn').hide();
                }
                for (fa in json.results){
-                element.innerHTML= element.innerHTML +'<div class="functional_test_inside border-'+fa+'"><a href="#"><span class="sales"></span>'+ json.results[fa].heading +'</a></div>'
+                element.innerHTML= element.innerHTML +
+
+                `      <div class="testinside">
+                  <span class="border-left"></span>
+  <a id="${json.results[fa].id}" onclick="getProductDetail('${json.results[fa].vendor}','${json.results[fa].category}');
+  getCourseDetail('${json.results[fa].vendor}','${json.results[fa].category}','${json.results[fa].id}');"
+  class="testModal" data-toggle="modal" data-attr-value='{"id":"${json.results[fa].id}","catid":"${json.results[fa].category}","quescount":"${json.results[fa].question_count}",
+  "testSlug":"${json.results[fa].slug}","vendor":"${json.results[fa].vendor}" }' data-target="#testModal">
+                     ${json.results[fa].title}
+                     <div class="white_hover"></div>
+                     <span class="taketest" >Take Free Test</span>
+                  </a>
+               </div>`
+
 
                }
                },

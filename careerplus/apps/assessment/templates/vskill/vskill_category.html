@@ -155,7 +155,7 @@
            $.ajax({
                url: '/api/get-category-level-products',
                type: "GET",
-               data : {'tl': 3, 'page_size' : 4, 'page':page_number},
+               data : {'tl': 3, 'page_size' : 4, 'page':page_number,},
                dataType: 'json',
                success: function(json) {
                if (json.next == null){
