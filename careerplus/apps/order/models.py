@@ -21,6 +21,7 @@ from .choices import STATUS_CHOICES, SITE_CHOICES,\
     WC_FLOW_STATUS
 from .functions import get_upload_path_order_invoice, process_jobs_on_the_move
 from payment.utils import manually_generate_autologin_url
+from shop.choices import S_ATTR_DICT
 
 #Global Constants
 CURRENCY_SYMBOL_CODE_MAPPING = {0:"INR",1:"USD",2:"AED",3:"GBP"}
@@ -541,6 +542,7 @@ class OrderItem(AbstractAutoDate):
         start, end = None, None
         links_count = 0
         sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5,31]).first()
+        links_per_week = getattr(self.product.attr, S_ATTR_DICT.get('LC'), 2)
         if sevice_started_op:
             links_count = 0
             started = sevice_started_op.created
@@ -551,17 +553,37 @@ class OrderItem(AbstractAutoDate):
                 start = started + relativedelta.relativedelta(days=i * 7)
                 if start > today:
                     break
-                links_count += 2
+                links_count += links_per_week
         return links_count
+
+    def has_saved_links(self):
+        saved_links = self.jobs_link.filter(status=0)
+        return saved_links.count()
 
     def total_links_needs_to_sent(self):
         day = self.product.get_duration_in_day()
+        links_per_week = getattr(self.product.attr, S_ATTR_DICT.get('LC'), 2)
         if day:
             weeks = math.floor(day / 7)
-            return weeks * 2
+            return weeks * links_per_week
         return None
 
+    def check_if_required_links_are_sent(self):
+        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5,31]).first()
+        started = sevice_started_op.created
+        day = self.product.get_duration_in_day()
+        weeks = math.floor(day / 7)
+        today = timezone.now()
+        # Here we compute start date and end date for this week
+        # for this order item
+        for i in range(0, weeks):
+            start = started + relativedelta.relativedelta(days=i * 7)
+            end = started + relativedelta.relativedelta(days=(i + 1) * 7)
+            if end > today:
+                break
+        links = self.jobs_link.filter(status=2, sent_date__range=[start, end])
 
+        return links.count()
 
 
     def get_oi_communications(self):

@@ -175,6 +175,13 @@
                       <button type="submit" class="btn btn-success action_btn">Send</button>
                     </div>
                     {% endif %}
+
+                    {%if orderitem.has_saved_links %}
+
+                    <div class="col-md-2 col-sm-2 col-xs-2 row">
+                      <button type="submit" class="btn btn-success action_btn">View Message</button>
+                    </div>
+                    {% endif %}
                   </div>
                 </form>
             </div> 
@@ -349,6 +356,10 @@
       }
       else if(text=='Send'){
         $('input[name="action_type"]').val(2)
+      }
+      
+      else if(text=='View Message'){
+        $('input[name="action_type"]').val(4)
       }
       $("#link-form").submit()
     })

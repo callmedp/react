@@ -3181,7 +3181,7 @@ class WhatsAppScheduleView(DetailView, PaginationMixin):
         )
 
         formset = joblinkformset(
-            queryset=JobsLinks.objects.filter(oi=obj, status__in=[0,1])
+            queryset=JobsLinks.objects.filter(oi=obj, status__in=[0])
         )
 
         # previously sent link
@@ -3213,6 +3213,7 @@ class WhatsAppScheduleView(DetailView, PaginationMixin):
 
     def post(self, request, *args, **kwargs):
         obj = self.object = self.get_object()
+        objects = []
         joblinkformset = modelformset_factory(
             JobsLinks,
             form=JobLinkForm,
@@ -3228,16 +3229,15 @@ class WhatsAppScheduleView(DetailView, PaginationMixin):
             if formset.is_valid():
                 saved_formset = formset.save()
 
+                if getattr(formset, '_queryset', None) and not saved_formset:
+                    objects = list(formset._queryset.filter(status=0))
+                elif getattr(formset, '_queryset', None) and saved_formset:
+                    objects = list(formset._queryset.filter(status=0))
+                elif saved_formset:
+                    objects = saved_formset
                 job_message = None
-                if action_type == 2:
-                    job_data = ''
-                    if getattr(formset, '_queryset', None) and not saved_formset:
-                        objects = list(formset._queryset.filter(status=0))
-                    elif getattr(formset, '_queryset', None) and saved_formset:
-                        objects = list(formset._queryset.filter(status=0))
-                    elif saved_formset:
-                        objects = saved_formset
 
+                if action_type == 2:
                     for k in objects:
                         k.sent_date = timezone.now() + relativedelta.relativedelta(days=1)
                         k.last_modified_by = request.user
@@ -3245,22 +3245,30 @@ class WhatsAppScheduleView(DetailView, PaginationMixin):
                             k.created_by = request.user
                         k.status = 2
                         k.save()
+                        links_sent = obj.check_if_required_links_are_sent()
+                        if links_sent >= 2:
+                            obj.oi_status = 32
+                            obj.save()
+                    messages.success(self.request, "Job Link marked as Sent")
+                elif action_type == 4:
+                    job_data = ''
+                    for k in objects:
                         login_url = {'upload_url': k.link}
                         shorten_url = create_short_url(login_url=login_url)
-                        job_data += '<p>' + k.company_name + ' - ' + k.job_title + ' - '+ k.location + ' -    ' + shorten_url .get('url', '')+ '</p><br>'
+                        job_data += k.company_name + ' - ' + k.job_title + ' - '+ \
+                            k.location + ' -    ' + shorten_url .get('url', '')+ '<br><br>'
                     if job_data:
                         job_message = settings.WHATS_APP_MESSAGE_FORMAT.format(job_data)
 
-                    messages.success(self.request, "Job Link marked as Sent")
                 else:
                     for k in saved_formset:
-                        k.status = 0
                         k.last_modified_by = request.user
                         if not k.created_by:
                             k.created_by = request.user
                         k.save()
                     messages.success(self.request, "Job Links are Saved")
                 context.update({'job_message': job_message})
+
             else:
                 context.update({'formset': formset})
                 messages.error(

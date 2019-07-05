@@ -145,6 +145,7 @@ S_ATTR_DICT = {
     'FD': 'featured_duration',
     'SD': 'service_doc',
     'SI': 'service_im',
+    'LC': 'links_count'
 }
 
 A_ATTR_DICT = {

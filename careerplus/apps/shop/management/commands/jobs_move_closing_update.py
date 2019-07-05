@@ -111,7 +111,8 @@ class Command(BaseCommand):
                         # mark it as pending.
                         # III. if there is condition that for this week link sent is more than 1
                         # status status is pending then keep the status pending.
-                        if links.count() >= 2 and obj.oi_status == 31:
+                        links_per_week = getattr(obj.product.attr, S_ATTR_DICT.get('LC'), 2)
+                        if links.count() >= links_per_week and obj.oi_status == 31:
                             last_oi_status = obj.oi_status
                             obj.oi_status = 32
                             obj.save()
