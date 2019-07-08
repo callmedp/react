@@ -795,7 +795,6 @@ def process_jobs_on_the_move(obj_id):
     # create jobs on the move profile after welcome call is done.
     if ((obj.wc_cat == 21 and obj.wc_sub_cat in [41, 42]) or (obj.wc_cat == 22 and obj.wc_cat == 63)) and \
             not getattr(obj, 'whatsapp_profile_orderitem', False):
-        from order.models import OrderItem
         other_jobs_on_the_move = OrderItem.objects.filter(
             order__status__in=[1, 3],
             product__type_flow__in=[5],
