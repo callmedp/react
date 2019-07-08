@@ -45,6 +45,7 @@ from scheduler.models import Scheduler
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from review.models import Review
 from partner.models import BoosterRecruiter
+from shop.choices import S_ATTR_DICT, A_ATTR_DICT
 
 from .decorators import (
     Decorate,
