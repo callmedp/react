@@ -643,7 +643,7 @@ class OrderItem(AbstractAutoDate):
         orderitem = OrderItem.objects.filter(id=self.pk).first()
         self.oi_status = 4 if orderitem and orderitem.oi_status == 4 else self.oi_status
         if self.product.sub_type_flow == 502:
-            from .tasks import process_jobs_on_the_move
+            from order.tasks import process_jobs_on_the_move
 
             process_jobs_on_the_move.delay(self.id)
         super().save(*args, **kwargs)  # Call the "real" save() method.
