@@ -801,6 +801,7 @@ def process_jobs_on_the_move(obj_id):
             product__type_flow__in=[5],
             oi_status__in=[31, 32],
             product__sub_type_flow=502,
+            order__candidate_id=obj.order.candidate_id
         ).exclude(whatsapp_profile_orderitem=None).first()
 
         desired_industry, desired_location, desired_salary, current_salary = '', '' ,'', ''
