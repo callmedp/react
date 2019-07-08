@@ -48,7 +48,7 @@ class Command(BaseCommand):
             else:
                 user_register(data={}, order=obj.order.pk)
 
-            featured_op = obj.orderitemoperation_set.filter(oi_status__in=[5,31]).order_by('id').first()
+            featured_op = obj.orderitemoperation_set.filter(oi_status__in=[5,31]).order_by('id').order_by('id').first()
 
             try:
                 activation_date = featured_op.created

@@ -522,7 +522,7 @@ class OrderItem(AbstractAutoDate):
     @property
     def get_weeks(self):
         weeks, weeks_remaining = None, None
-        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5, 31]).first()
+        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5, 31]).order_by('id').first()
         if sevice_started_op:
             started = sevice_started_op.created
             day = self.product.get_duration_in_day()
@@ -541,7 +541,7 @@ class OrderItem(AbstractAutoDate):
     def links_needed_till_now(self):
         start, end = None, None
         links_count = 0
-        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5,31]).first()
+        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5,31]).order_by('id').first()
         links_per_week = getattr(self.product.attr, S_ATTR_DICT.get('LC'), 2)
         if sevice_started_op:
             links_count = 0
@@ -569,7 +569,7 @@ class OrderItem(AbstractAutoDate):
         return None
 
     def get_sent_link_count_for_current_week(self):
-        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5,31]).first()
+        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5,31]).order_by('id').first()
         started = sevice_started_op.created
         day = self.product.get_duration_in_day()
         weeks = math.floor(day / 7)

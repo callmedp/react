@@ -3187,8 +3187,7 @@ class WhatsAppScheduleView(DetailView, PaginationMixin):
             JobsLinks,
             form=JobLinkForm,
             can_delete=True,
-            extra=4,
-            max_num=5, validate_max=True
+            extra=4
         )
 
         formset = joblinkformset(
@@ -3229,8 +3228,7 @@ class WhatsAppScheduleView(DetailView, PaginationMixin):
             JobsLinks,
             form=JobLinkForm,
             can_delete=True,
-            extra=4,
-            max_num=5, validate_max=True
+            extra=4
         )
         action_type = int(request.POST.get('action_type', 0))
         context = self.get_context_data()
