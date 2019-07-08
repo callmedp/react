@@ -3239,9 +3239,9 @@ class WhatsAppScheduleView(DetailView, PaginationMixin):
                 saved_formset = formset.save()
 
                 if getattr(formset, '_queryset', None) and not saved_formset:
-                    objects = list(formset._queryset.filter(status=0))
+                    objects = list(formset._queryset.filter(status=0, oi=obj))
                 elif getattr(formset, '_queryset', None) and saved_formset:
-                    objects = list(formset._queryset.filter(status=0))
+                    objects = list(formset._queryset.filter(status=0, oi=obj))
                 elif saved_formset:
                     objects = saved_formset
                 job_message = None
