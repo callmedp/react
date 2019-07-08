@@ -37,7 +37,7 @@ class Command(BaseCommand):
             oi_status__in=[31, 32],
             product__sub_type_flow=502
         )
-        import ipdb; ipdb.set_trace();
+
         jobs_move_items = jobs_move_items.select_related('order')
         jobs_move_close_count = 0
 
