@@ -342,6 +342,20 @@
 {% block js_block %}
   {{ block.super }}
 
+    {% if job_message %}
+    <script type="text/javascript">
+      $("#message-modal").modal({
+         backdrop: 'static',
+    keyboard: false})
+
+      function copyTextFunc() {
+        var text = $("#whatsapp-message").clone().find('br').prepend('\r\n').end().text()
+        element = $('<textarea>').appendTo('body').val(text).select()
+        document.execCommand('copy')
+        element.remove()
+      }
+    </script>
+  {% endif %}
   {% compress js %}
   <!-- Parsley Validate Scripts -->
   <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
@@ -364,20 +378,6 @@
       $("#link-form").submit()
     })
   </script>
-  {% if job_message %}
-    <script>
-      $("#message-modal").modal({
-         backdrop: 'static',
-    keyboard: false})
-
-      function copyTextFunc() {
-        var text = $("#whatsapp-message").clone().find('br').prepend('\r\n').end().text()
-        element = $('<textarea>').appendTo('body').val(text).select()
-        document.execCommand('copy')
-        element.remove()
-      }
-    </script>
-  {% endif %}
   {% endcompress %}
 }
 
