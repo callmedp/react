@@ -19,7 +19,7 @@ from .choices import STATUS_CHOICES, SITE_CHOICES,\
     OI_USER_STATUS, OI_EMAIL_STATUS, REFUND_MODE, REFUND_OPS_STATUS,\
     TYPE_REFUND, OI_SMS_STATUS, WC_CATEGORY, WC_SUB_CATEGORY,\
     WC_FLOW_STATUS
-from .functions import get_upload_path_order_invoice, process_jobs_on_the_move
+from .functions import get_upload_path_order_invoice
 from payment.utils import manually_generate_autologin_url
 from shop.choices import S_ATTR_DICT
 
@@ -643,7 +643,9 @@ class OrderItem(AbstractAutoDate):
         orderitem = OrderItem.objects.filter(id=self.pk).first()
         self.oi_status = 4 if orderitem and orderitem.oi_status == 4 else self.oi_status
         if self.product.sub_type_flow == 502:
-            process_jobs_on_the_move(self)
+            from .tasks import process_jobs_on_the_move
+
+            process_jobs_on_the_move.delay(self.id)
         super().save(*args, **kwargs)  # Call the "real" save() method.
 
          # # for resume booster create orderitem

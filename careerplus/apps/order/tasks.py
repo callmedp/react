@@ -13,7 +13,9 @@ from emailers.email import SendMail
 from payment.models import PaymentTxn
 from core.mixins import InvoiceGenerate
 from coupon.mixins import CouponMixin
-
+from api.config import LOCATION_MAPPING, INDUSTRY_MAPPING, SALARY_MAPPING
+from shine.core import ShineCandidateDetail
+from shop.models import ProductUserProfile
 
 @task(name="invoice_generation_order")
 def invoice_generation_order(order_pk=None):
@@ -785,3 +787,62 @@ def service_initiation(pk=None):
                             "%s - %s" % (str(sms_type), str(e)))
     except Exception as e:
         logging.getLogger('error_log').error('service initiation failed%s'%str(e))
+
+@task(name="process_jobs_on_the_move")
+def process_jobs_on_the_move(obj_id):
+    from order.models import OrderItem
+    obj = OrderItem.objects.filter(id=obj_id).first()
+    # create jobs on the move profile after welcome call is done.
+    if ((obj.wc_cat == 21 and obj.wc_sub_cat in [41, 42]) or (obj.wc_cat == 22 and obj.wc_cat == 63)) and \
+            not getattr(obj, 'whatsapp_profile_orderitem', False):
+        from order.models import OrderItem
+        other_jobs_on_the_move = OrderItem.objects.filter(
+            order__status__in=[1, 3],
+            product__type_flow__in=[5],
+            oi_status__in=[31, 32],
+            product__sub_type_flow=502,
+        ).exclude(whatsapp_profile_orderitem=None).first()
+
+        desired_industry, desired_location, desired_salary, current_salary = '', '' ,'', ''
+
+        if other_jobs_on_the_move:
+            desired_industry = other_jobs_on_the_move.whatsapp_profile_orderitem.desired_industry
+            desired_location = other_jobs_on_the_move.whatsapp_profile_orderitem.desired_location
+            desired_salary = other_jobs_on_the_move.whatsapp_profile_orderitem.desired_salary
+            current_salary = other_jobs_on_the_move.whatsapp_profile_orderitem.current_salary
+        else:
+            resp_status = ShineCandidateDetail().get_candidate_detail(email=obj.order.email, shine_id=None)
+
+            if resp_status and 'desired_job' in resp_status:
+                candidate_data = resp_status['desired_job'][0]
+
+                # Get canidate location
+                candidate_location = candidate_data['candidate_location']
+                desired_location = ','.join([LOCATION_MAPPING.get(loc, '') for loc in candidate_location])
+
+                # Get candidate industry
+                candidate_industry = candidate_data['industry']
+                desired_industry = ','.join([INDUSTRY_MAPPING.get(ind, '') for ind in candidate_industry])
+
+                # Get desired salary
+                maximum_salary = candidate_data['maximum_salary']
+                expected_min_salary = ','.join([SALARY_MAPPING.get(l, 'N.A') for l in maximum_salary])
+
+                minimum_salary = candidate_data['minimum_salary']
+                expected_max_salary = ','.join([SALARY_MAPPING.get(l, 'N.A') for l in minimum_salary])
+
+                desired_salary = expected_min_salary + ' - ' + expected_max_salary
+
+                # get current salary
+                salary_in_lakh = resp_status['workex'][0]['salary_in_lakh']
+                salary_in_thousand = resp_status['workex'][0]['salary_in_thousand']
+                current_salary = str(salary_in_lakh) + 'Lakh ' + str(salary_in_thousand) + 'Thousand'
+
+        ProductUserProfile.objects.create(
+            order_item=obj,
+            contact_number=obj.order.mobile,
+            desired_industry=desired_industry,
+            desired_location=desired_location,
+            desired_salary=desired_salary,
+            current_salary=current_salary
+        )
