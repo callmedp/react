@@ -79,7 +79,7 @@ class AddToCartView(View, CartMixin):
     def post(self, request, *args, **kwargs):
         data = {"status": -1}
         cart_type = request.POST.get('cart_type')
-        prod_id = request.POST.get('prod_id','')
+        prod_id = request.POST.get('prod_id', '')
         cart_pk = request.session.get('cart_pk', '')
         is_resume_template = request.POST.get('add_resume', False)
         candidate_id = request.session.get('candidate_id', '')
@@ -173,7 +173,7 @@ class PaymentLoginView(TemplateView):
             logging.getLogger('error_log').error("unable to assign cart object to self %s " % str(e))
             return HttpResponseRedirect(reverse('homepage'))
         if candidate_id:
-            return HttpResponseRedirect(reverse('cart:payment-shipping'))
+            return HttpResponseRedirect(reverse('payment:payment-option'))
         return super(self.__class__, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -471,10 +471,10 @@ class PaymentSummaryView(TemplateView, CartMixin):
             try:
                 self.cart_obj = Cart.objects.get(pk=cart_pk)
                 # cart_dict = self.get_solr_cart_items(cart_obj=self.cart_obj)
-                if not self.cart_obj.shipping_done or not self.cart_obj.owner_id:
-                    return HttpResponseRedirect(reverse('cart:payment-shipping'))
+                # if not self.cart_obj.shipping_done or not self.cart_obj.owner_id:
+                #     return HttpResponseRedirect(reverse('cart:payment-shipping'))
 
-                elif not self.cart_obj.lineitems.all().exists():
+                if not self.cart_obj.lineitems.all().exists():
                     return HttpResponseRedirect(reverse('homepage'))
 
             except Exception as e:

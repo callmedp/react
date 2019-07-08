@@ -27,7 +27,7 @@
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          
+
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown have-query">
               <a href="tel:{{ggn_contact}}">Have a query? Call us at <strong>{{ggn_contact}}</strong></a>
@@ -61,7 +61,7 @@
             <figure class="cards-payment-icon mt-20"></figure>
           </div> -->
 
-          </div>  
+          </div>
         <!-- left content end -->
 
         <!-- right content start -->
@@ -89,7 +89,10 @@
                         <span class="col-sm-8 col-md-9 item-sub-heading"><figure class="mr-10"><img class="img-responsive" src="{% static 'shinelearn/images/hr.png' %}"></figure><strong>{{item.name}}</strong>{% if item.experience %}{{item.experience|get_choice_display:"EXP_DICT"}}{% endif %}
                         </span>
                         <strong class="col-sm-4 col-md-3">Rs. {{variations.0.price}}/-</strong>
-                        <span class="close-icon"></span>
+                         <form role="form" id="cart_remove_form{{item.id}}">{% csrf_token %}
+                                <input type="hidden" name="reference_id" value="{{variations.0.reference}}">
+                                        <span class="close-icon"  onclick="removeFromCart('{{item.id}}')" id="id-remove-cart{{item.id}}"></span>
+                            </form>
                     </li>
                     {% if variations.0.delivery_obj and variations.0.delivery_obj.get_price %}
                         <li>
@@ -222,7 +225,7 @@
               <span class="col-sm-6 text-right">CGST @ {{cgst}}%</span>
               <span class="col-sm-6">+Rs. <span>{{cgst_amount}}</span>/-</span>
               <!--span class="col-sm-6 text-right">IGST @ {{igst}}%</span>
-              <span class="col-sm-6">+Rs. <span>{{igst_amount}}</span>/-</span--> 
+              <span class="col-sm-6">+Rs. <span>{{igst_amount}}</span>/-</span-->
             </span>
           </li>
         </ul>
@@ -238,7 +241,7 @@
         <!-- Make payment -->
         <span class="col-sm-7 col-md-8"></span>
         <span class="col-sm-3 col-md-4 continue">
-          <a href="{% url "cart:payment-shipping" %}"><button type="button" id="payment-summary-continue-id">Proceed to payment</button></a>
+          <a href="{% url "cart:payment-login" %}"><button type="button" id="payment-summary-continue-id">Proceed to payment</button></a>
           <!-- <figure class="secure-payment-icon"></figure>
           <span>100% Secure Payment</span> -->
         </span>
@@ -251,7 +254,7 @@
     </section>
     <!-- main section end -->
 {% endblock container %}
-  
+
 
 {% block js_section %}
    {{ block.super }}
