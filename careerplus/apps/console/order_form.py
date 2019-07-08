@@ -570,7 +570,12 @@ class ProductUserProfileForm(forms.ModelForm):
         required=False
     )
 
+    def __init__(self, *args, **kwargs):
+        super(ProductUserProfileForm, self).__init__(*args, **kwargs)
 
+        self.fields['desired_industry'].widget.attrs['class'] =  ' tagsinput tags form-control'
+        self.fields['desired_location'].widget.attrs['class'] =  ' tagsinput tags form-control'
+        self.fields['desired_position'].widget.attrs['class'] =  ' tagsinput tags form-control'
 
 
 

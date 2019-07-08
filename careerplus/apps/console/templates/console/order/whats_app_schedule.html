@@ -343,8 +343,9 @@
     {% if job_message %}
     <script type="text/javascript">
       $("#message-modal").modal({
-         backdrop: 'static',
-    keyboard: false})
+          backdrop: 'static',
+          keyboard: false
+      })
 
       function copyTextFunc() {
         var text = $("#whatsapp-message").clone().find('br').prepend('\r\n').end().text()
@@ -360,6 +361,7 @@
   <script type="text/javascript" src="{% static 'packages/iCheck/icheck.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/moment/moment.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/order/filter.js' %}"></script>
+  <script type="text/javascript" src="{% static 'packages/jquery.tagsinput/src/jquery.tagsinput.js' %}"></script>
   <script type="text/javascript">
     $('.action_btn').click(function(){
       text = $(this).text();
@@ -374,9 +376,22 @@
         $('input[name="action_type"]').val(4)
       }
       $("#link-form").submit()
-    })
+    });
   </script>
   {% endcompress %}
-}
+  <script type="text/javascript">
+    $('#id_desired_industry').tagsInput({
+        width: 'auto',
+        'delimiter': [','],   // Or a string with a single delimiter. Ex: ';'
+    });
+     $('#id_desired_location').tagsInput({
+        width: 'auto',
+        'delimiter': [','],   // Or a string with a single delimiter. Ex: ';'
+    });
+      $('#id_desired_position').tagsInput({
+        width: 'auto',
+        'delimiter': [','],   // Or a string with a single delimiter. Ex: ';'
+    });
+  </script>
 
 {% endblock js_block %}
