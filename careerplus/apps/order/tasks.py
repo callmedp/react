@@ -3,7 +3,6 @@ from celery.decorators import task
 from django.conf import settings
 
 from linkedin.autologin import AutoLogin
-from order.models import Order
 from order.functions import (
     create_short_url,
     send_email
@@ -19,6 +18,8 @@ from shop.models import ProductUserProfile
 
 @task(name="invoice_generation_order")
 def invoice_generation_order(order_pk=None):
+    from order.models import Order
+
     try:
         order = Order.objects.get(pk=order_pk)
         InvoiceGenerate().save_order_invoice_pdf(order=order)
@@ -28,6 +29,8 @@ def invoice_generation_order(order_pk=None):
 
 @task(name="pending_item_email")
 def pending_item_email(pk=None):
+    from order.models import Order
+
     order = None
     try:
         order = Order.objects.get(pk=pk)
@@ -335,6 +338,8 @@ def pending_item_email(pk=None):
 
 @task(name="process_mailer")
 def process_mailer(pk=None):
+    from order.models import Order
+
     order = None
     try:
         order = Order.objects.get(pk=pk)
@@ -576,6 +581,8 @@ def process_mailer(pk=None):
 
 @task(name="payment_pending_mailer")
 def payment_pending_mailer(pk=None):
+    from order.models import Order
+
     order = None
     try:
         order = Order.objects.get(pk=pk)
@@ -663,6 +670,8 @@ def payment_pending_mailer(pk=None):
 
 @task(name="payment_realisation_mailer")
 def payment_realisation_mailer(pk=None):
+    from order.models import Order
+
     order = None
     mail_type = "SHINE_PAYMENT_CONFIRMATION"
     try:
@@ -711,6 +720,8 @@ def payment_realisation_mailer(pk=None):
 
 @task(name="service_initiation")
 def service_initiation(pk=None):
+    from order.models import Order
+
     order = None
     try:
         order = Order.objects.get(pk=pk)
