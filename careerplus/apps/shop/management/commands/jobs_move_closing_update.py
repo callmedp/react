@@ -37,7 +37,6 @@ class Command(BaseCommand):
             oi_status__in=[31, 32],
             product__sub_type_flow=502
         )
-
         jobs_move_items = jobs_move_items.select_related('order')
         jobs_move_close_count = 0
 
@@ -105,24 +104,12 @@ class Command(BaseCommand):
                                 break
                         links = JobsLinks.objects.filter(oi=obj, status=2, sent_date__range=[start, end])
 
-                        # I. Check if link sent for this week is greater than 2 and status is 
-                        # pending links then mark status as job link sent
-                        # II. if for this week link sent is zero and status is job link sent
+                        # I. if for this week link sent is zero and status is job link sent
                         # mark it as pending.
-                        # III. if there is condition that for this week link sent is more than 1
+                        # II. if there is condition that for this week link sent is more than 1
                         # status status is pending then keep the status pending.
-                        links_per_week = getattr(obj.product.attr, S_ATTR_DICT.get('LC'), 2)
-                        if links.count() >= links_per_week and obj.oi_status == 31:
-                            last_oi_status = obj.oi_status
-                            obj.oi_status = 32
-                            obj.save()
-                            obj.orderitemoperation_set.create(
-                                oi_status=obj.oi_status,
-                                last_oi_status=last_oi_status,
-                                assigned_to=obj.assigned_to,
-                                created_by=links.first().last_modified_by
-                            )
-                        elif links.count() == 0 and obj.oi_status == 32:
+
+                        if links.count() == 0 and obj.oi_status == 32:
                             last_oi_status = obj.oi_status
                             obj.oi_status = 31
                             obj.save()
