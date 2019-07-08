@@ -84,15 +84,6 @@ class Command(BaseCommand):
                         weeks = math.floor(day / 7)
                         # today = datetime.datetime(2019, 7, 10, 7, 16, 14, tzinfo=pytz.utc)
                         today = timezone.now()
-
-                        links_needed_till_now = obj.links_needed_till_now()
-                        links_sent_till_now = obj.jobs_link.filter(status=2).count()
-                        links_pending = links_needed_till_now - links_sent_till_now
-
-                        if links_pending < 0:
-                            links_pending = 0
-                        obj.pending_links_count = links_pending
-                        obj.save()
                         started = sevice_started_op.created
 
                         # Here we compute start date and end date for this week

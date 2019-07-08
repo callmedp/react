@@ -206,7 +206,6 @@
                       <th>Location</th>
                       <th>Job Title</th>
                       <th>Link</th>
-                      <th>Select</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -217,7 +216,6 @@
                         <td>{{ link.location }}</td>
                         <td>{{ link.job_title }}</td>
                         <td>{{ link.link }}</td>
-                        <td><input type="checkbox" name="check-{{link.id}}" class="link_checkbox"></td>
                       </tr>
                     {% endfor %}
                   </tbody>

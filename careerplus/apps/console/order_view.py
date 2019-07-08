@@ -3266,6 +3266,16 @@ class WhatsAppScheduleView(DetailView, PaginationMixin):
                                 assigned_to=obj.assigned_to,
                                 created_by=request.user
                             )
+
+                        links_needed_till_now = obj.links_needed_till_now()
+                        links_sent_till_now = obj.jobs_link.filter(status=2).count()
+                        links_pending = links_needed_till_now - links_sent_till_now
+
+                        if links_pending < 0:
+                            links_pending = 0
+                        obj.pending_links_count = links_pending
+                        obj.save()
+                    context = self.get_context_data()
                     messages.success(self.request, "Job Link marked as Sent")
                 elif action_type == 4:
                     job_data = ''
