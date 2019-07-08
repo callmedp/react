@@ -21,7 +21,7 @@ class ShippingDetailUpdateForm(forms.ModelForm):
     class Meta:
         model = Cart
 
-        fields = ['first_name', 'last_name', 'country_code', 'mobile', 'country']
+        fields = ['first_name', 'last_name', 'email', 'country_code', 'mobile', 'country']
 
     def __init__(self, *args, **kwargs):
         flavour = kwargs.pop('flavour', None)
@@ -38,17 +38,16 @@ class ShippingDetailUpdateForm(forms.ModelForm):
 
         form_class = 'form-control'
         self.fields['first_name'].required = True
-        self.fields['first_name'].widget.attrs['placeholder'] = 'First name'
+        self.fields['first_name'].widget.attrs['placeholder'] = ''
         self.fields['first_name'].widget.attrs['class'] = form_class
 
         self.fields['last_name'].required = True
-        self.fields['last_name'].widget.attrs['placeholder'] = 'Last name'
+        self.fields['last_name'].widget.attrs['placeholder'] = ''
         self.fields['last_name'].widget.attrs['class'] = form_class
 
-        # self.fields['email'].required = True
-        # self.fields['email'].widget.attrs['readonly'] = True
-        # self.fields['email'].widget.attrs['placeholder'] = 'Email Id'
-        # self.fields['email'].widget.attrs['class'] = form_class
+        self.fields['email'].required = True
+        self.fields['email'].widget.attrs['placeholder'] = ''
+        self.fields['email'].widget.attrs['class'] = form_class
 
         self.fields['country_code'].required = True
         self.fields['country_code'].widget.attrs['class'] = form_class
@@ -56,7 +55,7 @@ class ShippingDetailUpdateForm(forms.ModelForm):
         self.fields['country_code'].initial = '91'
         
         self.fields['mobile'].required = True
-        self.fields['mobile'].widget.attrs['placeholder'] = 'Mobile'
+        self.fields['mobile'].widget.attrs['placeholder'] = ''
         self.fields['mobile'].widget.attrs['class'] = form_class
 
         if flavour == 'mobile':

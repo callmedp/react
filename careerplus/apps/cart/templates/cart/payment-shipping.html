@@ -70,13 +70,13 @@
 {% block container %}
     <section class="container mt-53">
        <!-- page content body start -->
-        <div class="row">
+        <div class="row greybg2 pad-25">
 
         <!-- left content start -->
           <div class="col-sm-3 payment-summary-tab">
           <!-- <a href="{% url "cart:payment-shipping" %}" class="active"><span>2</span> Shipping</a> -->
-          <a><span class="yellow-circle">1</span> Login</a>
-          <a><span>2</span> Summary</a>
+          <a><span>1</span> Summary</a>
+          <a class="active"><span>2</span> Login</a>
           <a><span>3</span> Payment</a>
 
           <!-- secure payment -->
@@ -91,73 +91,187 @@
         <!-- left content end -->
 
         <!-- right content start -->
-        <div class="col-sm-9 bdr">
+        <div class="col-sm-9 box-shadow">
 
-        <form class="personal-details col-sm-12" method="post" action="" id="shipping_form">{% csrf_token %}
-          <strong class="personal-details-heading ml-15">Personal details</strong>
+        <!-- login -->
+        <form class="personal-details col-sm-6 bdr-rt" method="post" action="" id="shipping_form">{% csrf_token %}
+          <strong class="personal-details-heading ml-15">Login</strong>
           {% if form.non_field_errors %}
                <span class="error" style="left:14px;">{{form.non_field_errors.0}}</span>
           {% endif %}
-          <div class="form-group clearfix">
-            <div class="col-sm-6 {% if form.first_name.errors %} error {% endif %}">
-              {{form.first_name}}
-              <span class="error-txt">{{form.first_name.errors.0}}</span>
-            </div>
-            <div class="col-sm-6 {% if form.last_name.errors %} error {% endif %}">
+          
+          <!-- <div class="form-group clearfix">
+            <div class="col-sm-12 {% if form.last_name.errors %} error {% endif %}">
               {{form.last_name}}
               <span class="error-txt">{{form.last_name.errors.0}}</span>
             </div>
-          </div>
+          </div> -->
           <div class="form-group clearfix">
-            <div class="col-sm-6 {% if form.email.errors %} error {% endif %}">
-              <div class="form-control">
-              {{form.instance.email}}</div>
+            <div class="col-sm-12 {% if form.email.errors %} error {% endif %}">
+              <!-- {{form.email}} -->
+              <input type="text" class="form-control" id="" name="" placeholder=" "/>
+              <label for="">Email id</label>
               <span class="error-txt">{{form.email.errors.0}}</span>
             </div>
-            <div class="col-sm-6 {% if form.mobile.errors or form.country_code.errors %} error {% endif %}">
-              <div class="country-code">
-                <div class="custom-select">
-                  {{form.country_code}}
-                </div>
-                {{form.mobile}}
-                <span class="error-txt">{% if form.mobile.errors %} {{form.mobile.errors.0}} {% else %}{{form.country_code.errors.0}}{% endif %}</span>
-              </div>
-            </div>
           </div>
+
+          <div class="form-group clearfix">
+            <div class="col-sm-12 {% if form.first_name.errors %} error {% endif %}">
+              <!-- {{form.first_name}} -->
+              <input type="password" class="form-control" id="" name="" placeholder=" "/>
+              <label for="">Password</label>
+              <span class="error-txt">{{form.first_name.errors.0}}</span>
+            </div>
+          </div>          
+          
             {%comment%}
           <div class="form-group clearfix">
 
-            <!--<div class="col-sm-6 {% if form.address.errors %} error {% endif %}">-->
+            <!--<div class="col-sm-12 {% if form.address.errors %} error {% endif %}">-->
               <!--{{form.address}}-->
               <!--<span class="error-txt">{{form.address.errors.0}}</span>-->
             <!--</div>-->
-            <!--<div class="col-sm-6 {% if form.pincode.errors %} error {% endif %}">-->
+            <!--<div class="col-sm-12 {% if form.pincode.errors %} error {% endif %}">-->
                <!--{{form.pincode}}-->
               <!--<span class="error-txt">{{form.pincode.errors.0}}</span>-->
             <!--</div>-->
 
           </div>
               {%endcomment%}
-          <div class="form-group clearfix">
+          <!-- <div class="form-group clearfix">
               {%comment%}
-            <!--<div class="col-sm-6 {% if form.state.errors %} error {% endif %}">-->
+            <div class="col-sm-12 {% if form.state.errors %} error {% endif %}">-->
               <!--{{form.state}}-->
               <!--<span class="error-txt">{{form.state.errors.0}}</span>-->
               <!---->
             <!--</div>-->
               {%endcomment%}
-            <div class="col-sm-6 custom-select {% if form.country.errors %} error {% endif %}">
+            <!-- <div class="col-sm-12 custom-select {% if form.country.errors %} error {% endif %}">
               {{form.country}}
               <span class="error-txt">{{form.country.errors.0}}</span>
 
-            </div>
-          </div>
-          <div class="continue ml-15">
+            </div> -->
+          <div class="continue">
+            <a class="pull-right mr-20" href="#">Forgot password?</a>
             <button type="submit">Continue</button>
           </div>
-          <small>* Your order details will be sent to this email address and mobile no</small>
-          <small>** T&C applies</small>
+
+        
+
+          <!-- <small>* Your order details will be sent to this email address and mobile no</small>
+          <small>** T&C applies</small> -->
+          <div class="col-sm-12 text-right social-icon-new mt-20">
+            Login with
+            <a href="#" class="facebook-social-icon"></a>
+            <a href="#" class="linkedin-social-icon"></a>
+            <a href="#" class="google-social-icon"></a>
+          </div>
+
         </form>
+
+        <!-- Continue as guest -->
+        <form class="personal-details col-sm-6 bdr-rt hidden" method="post" action="" id="shipping_form">{% csrf_token %}
+          <strong class="personal-details-heading ml-15">Continue as guest</strong>
+          {% if form.non_field_errors %}
+               <span class="error" style="left:14px;">{{form.non_field_errors.0}}</span>
+          {% endif %}
+          <div class="form-group clearfix">
+            <div class="col-sm-12 {% if form.first_name.errors %} error {% endif %}">
+              <!-- {{form.first_name}} -->
+              <input type="text" class="form-control" id="" name="" placeholder=" "/>
+              <label for="">Your name</label>
+              <span class="error-txt">{{form.first_name.errors.0}}</span>
+            </div>
+          </div>
+          <!-- <div class="form-group clearfix">
+            <div class="col-sm-12 {% if form.last_name.errors %} error {% endif %}">
+              {{form.last_name}}
+              <span class="error-txt">{{form.last_name.errors.0}}</span>
+            </div>
+          </div> -->
+          <div class="form-group clearfix">
+            <div class="col-sm-12 {% if form.email.errors %} error {% endif %}">
+              <!-- {{form.email}} -->
+              <input type="text" class="form-control" id="" name="" placeholder=" "/>
+              <label for="">Email id</label>
+              <span class="error-txt">{{form.email.errors.0}}</span>
+            </div>
+          </div>
+          <div class="form-group clearfix">
+            <div class="col-sm-12 {% if form.mobile.errors or form.country_code.errors %} error {% endif %}">
+              <div class="country-code">
+                <div class="custom-select">
+                  {{form.country_code}}
+                </div>
+              </div>
+                 <div class="form-group wd2 pl-0">
+                <!-- {{form.mobile}} -->
+                <input type="text" class="form-control" id="" name="" placeholder=" "/>
+                <label for="">Mobile no.</label>
+                <span class="error-txt">{% if form.mobile.errors %} {{form.mobile.errors.0}} {% else %}{{form.country_code.errors.0}}{% endif %}</span>
+           </div>
+            </div>
+          </div>
+            {%comment%}
+          <div class="form-group clearfix">
+
+            <!--<div class="col-sm-12 {% if form.address.errors %} error {% endif %}">-->
+              <!--{{form.address}}-->
+              <!--<span class="error-txt">{{form.address.errors.0}}</span>-->
+            <!--</div>-->
+            <!--<div class="col-sm-12 {% if form.pincode.errors %} error {% endif %}">-->
+               <!--{{form.pincode}}-->
+              <!--<span class="error-txt">{{form.pincode.errors.0}}</span>-->
+            <!--</div>-->
+
+          </div>
+              {%endcomment%}
+          <!-- <div class="form-group clearfix">
+              {%comment%}
+            <div class="col-sm-12 {% if form.state.errors %} error {% endif %}">-->
+              <!--{{form.state}}-->
+              <!--<span class="error-txt">{{form.state.errors.0}}</span>-->
+              <!---->
+            <!--</div>-->
+              {%endcomment%}
+            <!-- <div class="col-sm-12 custom-select {% if form.country.errors %} error {% endif %}">
+              {{form.country}}
+              <span class="error-txt">{{form.country.errors.0}}</span>
+
+            </div> -->
+          <div class="continue">
+            <button type="submit">Continue</button>
+          </div>
+          <!-- <small>* Your order details will be sent to this email address and mobile no</small>
+          <small>** T&C applies</small> -->
+          
+        </form>
+
+
+        <div class="col-sm-6 text-center">
+
+          <div class="login-guest">
+            <span>
+              <a href="#">
+                <figure class="guestlogin-payment-icon"></figure>
+                Continue as guest
+              </a>
+            </span>
+          </div>
+          
+        </div>
+
+        <div class="col-sm-6 text-center hidden">
+          <div class="login-guest">
+            <span>
+              <a href="#">
+                <figure class="login-payment-icon"></figure>
+                Login
+              </a>
+            </span>
+          </div>
+          
+        </div>
 
 
 

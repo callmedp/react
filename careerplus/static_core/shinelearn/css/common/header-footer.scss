@@ -2158,6 +2158,46 @@ footer {
 	vertical-align: sub;
 }
 
+.login-payment-icon {
+	width: 23px;
+	height: 28px;
+	background: $sprite -608px -310px;
+	display: inline-block;
+	vertical-align: sub;
+}
+
+.guestlogin-payment-icon {
+	width: 28px;
+	height: 43px;
+	background: $sprite -578px -311px;
+	display: inline-block;
+	vertical-align: sub;
+}
+
+.facebook-social-icon {
+	width: 10px;
+	height: 24px;
+	background: $sprite -195px -473px;
+	display: inline-block;
+	vertical-align: sub;
+}
+
+.linkedin-social-icon {
+	width: 21px;
+	height: 21px;
+	background: $sprite -261px -474px;
+	display: inline-block;
+	vertical-align: sub;
+}
+
+.google-social-icon {
+	width: 21px;
+	height: 20px;
+	background: $sprite -219px -474px;
+	display: inline-block;
+	vertical-align: sub;
+}
+
 
 /*---------login signup banner page css---------*/
 
