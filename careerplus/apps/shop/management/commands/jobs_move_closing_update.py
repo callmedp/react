@@ -74,17 +74,14 @@ class Command(BaseCommand):
                     jobs_move_close_count += 1
                 else:
                     start, end = None, None
-                    links_count = 0
                     sevice_started_op = obj.orderitemoperation_set.all().filter(oi_status__in=[5,31]).order_by('id').first()
 
                     if sevice_started_op:
-                        links_needed_till_now = 0
                         started = sevice_started_op.created
                         day = obj.product.get_duration_in_day()
                         weeks = math.floor(day / 7)
                         # today = datetime.datetime(2019, 7, 10, 7, 16, 14, tzinfo=pytz.utc)
                         today = timezone.now()
-                        started = sevice_started_op.created
 
                         # Here we compute start date and end date for this week
                         # for this order item
