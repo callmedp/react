@@ -789,7 +789,7 @@ def service_initiation(pk=None):
         logging.getLogger('error_log').error('service initiation failed%s'%str(e))
 
 @task(name="process_jobs_on_the_move")
-def process_jobs_on_the_move(obj_id):
+def process_jobs_on_the_move(obj_id=None):
     from order.models import OrderItem
     obj = OrderItem.objects.filter(id=obj_id).first()
     # create jobs on the move profile after welcome call is done.
