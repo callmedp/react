@@ -75,7 +75,7 @@
         <!-- left content start -->
           <div class="col-sm-3 payment-summary-tab">
           <!-- <a href="{% url "cart:payment-shipping" %}" class="active"><span>2</span> Shipping</a> -->
-          <a><span>1</span> Summary</a>
+          <a><span class="green-circle">1</span> Summary</a>
           <a class="active"><span>2</span> Login</a>
           <a><span>3</span> Payment</a>
 
@@ -91,7 +91,7 @@
         <!-- left content end -->
 
         <!-- right content start -->
-        <div class="col-sm-9 box-shadow">
+        <div class="col-sm-9 round-border box-shadow">
 
         <!-- login -->
         <form class="personal-details col-sm-6 bdr-rt" method="post" action="" id="shipping_form">{% csrf_token %}

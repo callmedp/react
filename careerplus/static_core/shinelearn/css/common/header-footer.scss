@@ -1236,6 +1236,25 @@ footer {
 	}
 }
 
+.error1 {
+	position: relative;
+
+	input, textarea {
+		border: 1px solid $error-color !important;
+	}
+	
+	.error-txt {
+		display: block;
+		color: $error-color;
+		font-size: $font-size;
+		position: absolute;
+		left: 0;
+		bottom: -13px;
+		z-index: 9;
+		font-weight: $font-weight+100;
+	}
+}
+
 .error-search {
 	position: relative;
 
@@ -2707,6 +2726,10 @@ footer {
 
 .mb-100 {
 	margin-bottom: 100px;
+}
+
+.ml-5 {
+	margin-left: 5px;
 }
 
 .ml-50 {
