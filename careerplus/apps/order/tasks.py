@@ -846,3 +846,4 @@ def process_jobs_on_the_move(obj_id=None):
             desired_salary=desired_salary,
             current_salary=current_salary
         )
+        obj.update_pending_links_count()
