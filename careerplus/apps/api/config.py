@@ -924,6 +924,50 @@ SALARY_CHOICES = [
     (36, 'Rs 50 Lakh / Yr'),
     (38, '> Rs 50 Lakh / Yr')
 ]
-
 SALARY_MAPPING = dict(SALARY_CHOICES)
+
+DESIRED_SALARY_CHOICES = [{'child': [], 'pdesc': 'Rs 0 / Yr', 'pid': 0},
+ {'child': [], 'pdesc': '< Rs 50,000 / Yr', 'pid': 1},
+ {'child': [], 'pdesc': 'Rs 50,000 - 1 Lakh / Yr', 'pid': 2},
+ {'child': [], 'pdesc': 'Rs 1.0 - 1.5 Lakh / Yr', 'pid': 3},
+ {'child': [], 'pdesc': 'Rs 1.5 - 2.0 Lakh / Yr', 'pid': 4},
+ {'child': [], 'pdesc': 'Rs 2.0 - 2.5 Lakh / Yr', 'pid': 5},
+ {'child': [], 'pdesc': 'Rs 2.5 - 3.0 Lakh / Yr', 'pid': 6},
+ {'child': [], 'pdesc': 'Rs 3.0 - 3.5 Lakh / Yr', 'pid': 7},
+ {'child': [], 'pdesc': 'Rs 3.5 - 4.0 Lakh / Yr', 'pid': 8},
+ {'child': [], 'pdesc': 'Rs 4.0 - 4.5 Lakh / Yr', 'pid': 9},
+ {'child': [], 'pdesc': 'Rs 4.5 - 5.0 Lakh / Yr', 'pid': 10},
+ {'child': [], 'pdesc': 'Rs 5 - 6 Lakh / Yr', 'pid': 11},
+ {'child': [], 'pdesc': 'Rs 6 - 7 Lakh / Yr', 'pid': 12},
+ {'child': [], 'pdesc': 'Rs 7 - 8 Lakh / Yr', 'pid': 13},
+ {'child': [], 'pdesc': 'Rs 8 - 9 Lakh / Yr', 'pid': 14},
+ {'child': [], 'pdesc': 'Rs 9 - 10 Lakh / Yr', 'pid': 15},
+ {'child': [], 'pdesc': 'Rs 10 - 12 Lakh / Yr', 'pid': 16},
+ {'child': [], 'pdesc': 'Rs 12 - 14 Lakh / Yr', 'pid': 17},
+ {'child': [], 'pdesc': 'Rs 14 - 16 Lakh / Yr', 'pid': 18},
+ {'child': [], 'pdesc': 'Rs 16 - 18 Lakh / Yr', 'pid': 19},
+ {'child': [], 'pdesc': 'Rs 18 - 20 Lakh / Yr', 'pid': 20},
+ {'child': [], 'pdesc': 'Rs 20 - 22 Lakh / Yr', 'pid': 21},
+ {'child': [], 'pdesc': 'Rs 22 - 24 Lakh / Yr', 'pid': 22},
+ {'child': [], 'pdesc': 'Rs 24 - 26 Lakh / Yr', 'pid': 23},
+ {'child': [], 'pdesc': 'Rs 26 - 28 Lakh / Yr', 'pid': 24},
+ {'child': [], 'pdesc': 'Rs 28 - 30 Lakh / Yr', 'pid': 25},
+ {'child': [], 'pdesc': 'Rs 30 - 32 Lakh / Yr', 'pid': 26},
+ {'child': [], 'pdesc': 'Rs 32 - 34 Lakh / Yr', 'pid': 27},
+ {'child': [], 'pdesc': 'Rs 34 - 36 Lakh / Yr', 'pid': 28},
+ {'child': [], 'pdesc': 'Rs 36 - 38 Lakh / Yr', 'pid': 29},
+ {'child': [], 'pdesc': 'Rs 38 - 40 Lakh / Yr', 'pid': 30},
+ {'child': [], 'pdesc': 'Rs 40 - 42 Lakh / Yr', 'pid': 31},
+ {'child': [], 'pdesc': 'Rs 42 - 44 Lakh / Yr', 'pid': 32},
+ {'child': [], 'pdesc': 'Rs 44 - 46 Lakh / Yr', 'pid': 33},
+ {'child': [], 'pdesc': 'Rs 46 - 48 Lakh / Yr', 'pid': 34},
+ {'child': [], 'pdesc': 'Rs 48 - 50 Lakh / Yr', 'pid': 35},
+ {'child': [], 'pdesc': 'Rs 50 - 75 Lakh / Yr', 'pid': 36},
+ {'child': [], 'pdesc': 'Rs 75 Lakh - 1 Crore / Yr', 'pid': 69},
+ {'child': [], 'pdesc': '> Rs 1 Crore / Yr', 'pid': 70}
+]
+
+DESIRED_SALARY_MAPPING = {sal['pid']: sal['pdesc'] for sal in DESIRED_SALARY_CHOICES }
+
+
 

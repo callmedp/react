@@ -13,7 +13,7 @@ from emailers.email import SendMail
 from payment.models import PaymentTxn
 from core.mixins import InvoiceGenerate
 from coupon.mixins import CouponMixin
-from api.config import LOCATION_MAPPING, INDUSTRY_MAPPING, SALARY_MAPPING
+from api.config import LOCATION_MAPPING, INDUSTRY_MAPPING, DESIRED_SALARY_MAPPING
 from shine.core import ShineCandidateDetail
 from shop.models import ProductUserProfile
 
@@ -826,12 +826,12 @@ def process_jobs_on_the_move(obj_id=None):
 
                 # Get desired salary
                 maximum_salary = candidate_data['maximum_salary']
-                expected_min_salary = ','.join([SALARY_MAPPING.get(l, 'N.A') for l in maximum_salary])
+                expected_min_salary = ','.join([DESIRED_SALARY_MAPPING.get(l, 'N.A') for l in maximum_salary])
 
                 minimum_salary = candidate_data['minimum_salary']
-                expected_max_salary = ','.join([SALARY_MAPPING.get(l, 'N.A') for l in minimum_salary])
+                expected_max_salary = ','.join([DESIRED_SALARY_MAPPING.get(l, 'N.A') for l in minimum_salary])
 
-                desired_salary = expected_min_salary + ' - ' + expected_max_salary
+                desired_salary = expected_min_salary if expected_min_salary else expected_max_salary
 
                 # get current salary
                 salary_in_lakh = resp_status['workex'][0]['salary_in_lakh']
