@@ -634,9 +634,6 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             return ['shop/assesment.html']
         if not self.request.amp:
             return ['shop/detail1.html']
-        if not settings.DEBUG:
-            from newrelic import agent
-            agent.disable_browser_autorum()
         return ['shop/detail-amp.html']
 
     def get_context_data(self, **kwargs):

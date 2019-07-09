@@ -58,9 +58,6 @@ class CMSPageView(DetailView, LoadMoreMixin):
                 self.object.id, 'cms_page.html')]
         if not self.request.amp:
             return template_names
-        if not settings.DEBUG:
-            from newrelic import agent
-            agent.disable_browser_autorum()
         return [x.split(".html")[0]+"-amp.html" for x in template_names]
         
 
