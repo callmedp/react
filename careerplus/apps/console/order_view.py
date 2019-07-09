@@ -3264,7 +3264,7 @@ class WhatsAppScheduleView(DetailView, PaginationMixin):
                                 oi_status=obj.oi_status,
                                 last_oi_status=last_oi_status,
                                 assigned_to=obj.assigned_to,
-                                created_by=request.user
+                                added_by=request.user
                             )
 
                     links_needed_till_now = obj.links_needed_till_now()
