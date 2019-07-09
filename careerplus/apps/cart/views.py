@@ -162,7 +162,7 @@ class RemoveFromCartView(View, CartMixin):
 
 @Decorate(stop_browser_cache())
 class PaymentLoginView(TemplateView):
-    template_name = "cart/payment-login.html"
+    template_name = "cart/payment-shipping.html"
 
     def get(self, request, *args, **kwargs):
         candidate_id = request.session.get('candidate_id')
@@ -172,8 +172,8 @@ class PaymentLoginView(TemplateView):
         except Exception as e:
             logging.getLogger('error_log').error("unable to assign cart object to self %s " % str(e))
             return HttpResponseRedirect(reverse('homepage'))
-        if candidate_id:
-            return HttpResponseRedirect(reverse('payment:payment-option'))
+        # if candidate_id:
+        #     return HttpResponseRedirect(reverse('payment:payment-option'))
         return super(self.__class__, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -184,6 +184,8 @@ class PaymentLoginView(TemplateView):
             email = self.request.POST.get('email', '').strip()
             password = self.request.POST.get('password', '')
             login_with = self.request.POST.get('login_with', '')
+            mobile_number = ''
+            guest_name = ''
 
             valid_email = False
             try:
@@ -195,11 +197,19 @@ class PaymentLoginView(TemplateView):
 
             if valid_email and login_with:
                 cart_pk = self.request.session.get('cart_pk')
+                mobile_number = self.request.POST.get('mobile', '')
+                guest_name = self.request.POST.get('name', '')
+                if guest_name:
+                    first_name = guest_name.strip().split(' ')[0]
+                    last_name = ' '.join((guest_name + ' ').split(' ')[1:]).strip()
                 if cart_pk:
                     cart_obj = Cart.objects.get(pk=cart_pk)
                     cart_obj.email = email
+                    cart_obj.mobile = mobile_number
+                    cart_obj.first_name = first_name
+                    cart_obj.last_name = last_name
                     cart_obj.save()
-                    return HttpResponseRedirect(reverse('cart:payment-shipping'))
+                    return HttpResponseRedirect(reverse('payment:payment-option'))
                 return HttpResponseRedirect(reverse('cart:cart-product-list'))
 
             if valid_email:
@@ -224,7 +234,7 @@ class PaymentLoginView(TemplateView):
                         if remember_me:
                             self.request.session.set_expiry(
                                 settings.SESSION_COOKIE_AGE)  # 1 year
-                        return HttpResponseRedirect(reverse('cart:payment-shipping'))
+                        return HttpResponseRedirect(reverse('payment:payment-option'))
 
                     elif login_resp['response'] == 'error_pass':
                         context = self.get_context_data()
@@ -253,7 +263,7 @@ class PaymentLoginView(TemplateView):
                         cart_obj = Cart.objects.get(pk=cart_pk)
                         cart_obj.email = email
                         cart_obj.save()
-                        return HttpResponseRedirect(reverse('cart:payment-shipping'))
+                        return HttpResponseRedirect(reverse('payment:payment-option'))
                     return HttpResponseRedirect(reverse('cart:cart-product-list'))
             else:
                 email_error = "Please enter valid email address."
