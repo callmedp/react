@@ -587,6 +587,15 @@ class OrderItem(AbstractAutoDate):
 
         return links.count()
 
+    def update_pending_links_count(self):
+        links_needed_till_now = self.links_needed_till_now()
+        links_sent_till_now = self.jobs_link.filter(status=2).count()
+        links_pending = links_needed_till_now - links_sent_till_now
+
+        if links_pending < 0:
+            links_pending = 0
+        self.pending_links_count = links_pending
+        self.save()
 
     def get_oi_communications(self):
         communications = self.message_set.all().select_related('added_by')
