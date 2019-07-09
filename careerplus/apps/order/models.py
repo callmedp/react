@@ -533,6 +533,7 @@ class OrderItem(AbstractAutoDate):
             weeks = math.floor(day / 7)
             today = timezone.now()
             weeks_till_now = ((today - started).days) // 7
+            weeks_till_now += 1
 
         return weeks, weeks_till_now
 
