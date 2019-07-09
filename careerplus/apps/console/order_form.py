@@ -274,7 +274,7 @@ class OIFilterForm(forms.Form):
         if queue_name == 'queue-whatsappjoblist':
             NEW_OI_OPS_STATUS = (
                 (-1, 'Select Status'), (31, 'Pending Links'),
-                (32, 'Sent Links'), (4, 'Closed')
+                (32, 'Sent Links'), (33, 'Saved Links'), (4, 'Closed')
             )
 
             self.fields['day_choice'].choices = ( (-1, 'All'),(1, 'Today'), (2, 'Tommorrow'),)

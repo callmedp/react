@@ -2935,9 +2935,21 @@ class WhatsappListQueueView(ListView, PaginationMixin):
         queryset = queryset.filter(**query_filters)
         for key, value in query_filters_exclude.items():
             queryset = queryset.exclude(**{key: value})
-
+        queryset = queryset.annotate(
+            save_link=Count(Case(
+                When(jobs_link__status=0, then=1),
+                output_field=IntegerField()
+            ))
+        )
         if int(self.oi_status) != -1:
-            queryset = queryset.filter(oi_status=self.oi_status)
+            if int(self.oi_status) == 33:
+                queryset = queryset.filter(oi_status=31, save_link__gt=0)
+            elif int(self.oi_status) == 31:
+                queryset = queryset.filter(oi_status=31, save_link=0)
+            else:
+                queryset = queryset.filter(oi_status=self.oi_status)
+
+
 
         # data for whats app links:
         queryset = queryset.annotate(
@@ -2946,6 +2958,10 @@ class WhatsappListQueueView(ListView, PaginationMixin):
                     When(jobs_link__status=2, then=1),
                     output_field=IntegerField())
             ),
+            save_link=Count(Case(
+                When(jobs_link__status=0, then=1),
+                output_field=IntegerField())
+            )
         )
         if int(self.day_choice) != -1:
             if int(self.day_choice) == 1:

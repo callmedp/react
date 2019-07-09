@@ -560,6 +560,9 @@ class OrderItem(AbstractAutoDate):
         saved_links = self.jobs_link.filter(status=0)
         return saved_links.count()
 
+    def sent_link_count(self):
+        return self.jobs_link.filter(status=2).count()
+
     def total_links_needs_to_sent(self):
         day = self.product.get_duration_in_day()
         links_per_week = getattr(self.product.attr, S_ATTR_DICT.get('LC'), 2)
