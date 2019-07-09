@@ -935,7 +935,7 @@ class Product(AbstractProduct, ModelMeta):
     avg_rating = models.DecimalField(
         _('Average Rating'),
         max_digits=8, decimal_places=2,
-        default=2.5)
+        default=4.5)
     no_review = models.PositiveIntegerField(
         _('No. Of Review'), default=0)
     buy_count = models.PositiveIntegerField(
