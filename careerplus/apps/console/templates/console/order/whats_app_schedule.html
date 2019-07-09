@@ -231,6 +231,7 @@
                       <th>Location</th>
                       <th>Job Title</th>
                       <th>Link</th>
+                      <th>Added By</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -241,6 +242,7 @@
                         <td>{{ link.location }}</td>
                         <td>{{ link.job_title }}</td>
                         <td>{{ link.link }}</td>
+                        <td>{{ link.created_by }}</td>
                       </tr>
                     {% endfor %}
                   </tbody>
