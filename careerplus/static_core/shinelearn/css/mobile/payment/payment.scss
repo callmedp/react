@@ -3,22 +3,19 @@
 @import '../library/mixin';
 
 /* Main CSS Start From Here */
-@import '../components/form-items';
-
-/* Line form Start From Here */
-@import '../components/line-form';
+@import '../components/form-controls';
 
 /* error form Start From Here */
 @import '../components/error-form';
 
-/* error form Start From Here */
-@import '../components/file-upload';
 
 
 .payment {
   background-color: $bg-grey-f5;
   padding-left: 15px;
   padding-right: 15px;
+  height: calc(100% - 50px);
+  padding-bottom: 70px;
 
   &--bg {
     @include size(100%, 60px, block);
@@ -30,7 +27,8 @@
   &__steps {
     color: $txt-white;
     position: relative;
-    height: 40px;
+    height: 44px;
+    top: 4px;
     z-index: 1;
     display: flex;
 
@@ -40,12 +38,20 @@
       font-size: $font-size-base;
       text-align: center;
       flex: 0 0 33.33%;
+
+      @media (max-width: 320px) {
+        font-size: 0.71rem;
+      }
   
       a {
-        display: block;
         color: $txt-white;
-        padding: 10px 15px;
+        padding: 10px 15px 14px 15px;
+
         display: flex;
+
+        @media (max-width: 320px) {
+          padding: 10px 8px;
+        }
   
         &.active {
           @include border-radius(4px 4px 0 0);
@@ -85,45 +91,63 @@
     }
   }
 
-
-
-  &__summary {
-    @include border-radius(0 4px 4px 4px);
+  &--white-box {
+    @include border-radius(4px);
     background-color: $bg-white;
     box-shadow: 0 0 10px rgba(0,0,0, .3);
-    // padding: 20px 15px 15px 15px;
-    margin-bottom: 30px;
     position: relative;
+  }
+
+  &__summary {
+    margin-bottom: 30px;
 
     &__items {
       padding-top: 10px;
     }
 
     &__item {
-      display: flex;
-      padding: 15px;
+      position: relative;
+      padding: 15px 15px 15px 5px;
+      font-size: $font-size-md;
+
+      @media (max-width: 320px) {
+        font-size: $font-size-base;
+      }
 
       &:not(:last-child) {
         border-bottom: 1px solid $border-grey-c1;
       }
 
-      &--course-title {
+      &--img {
+        padding-right: 10px;
+
         display: flex;
-        margin-right: auto;
-        padding-right: 15px;
-        font-size: $font-size-md;
+        align-items: flex-start;
+        justify-content: center;
+        flex: 0 0 50px;
+      }
+
+      &--course-title {
         padding-bottom: 0;
+        padding-right: 15px;
+
+        display: flex;
+        flex: 1;
+        flex-direction: column;
       }
 
       &--wrap {
         display: flex;
-        padding-right: 20px;
       } 
 
       &--price {
         font-weight: $font-weight-medium;
-        font-size: $font-size-md;
         width: 100px;
+        text-align: right;
+
+        @media (max-width: 320px) {
+          width: 75px;
+        }
       }
 
       &--close {
@@ -131,16 +155,115 @@
         font-weight: $font-weight-light;
         color: $txt-grey-999;
         position: absolute;
-        right: 5px;
+        right: 7px;
+        top: 17px;
         transform: rotate(45deg);
       }
+    }
+  }
+}// Payment payment
 
+.apply {
+  padding: 15px;
 
+  &__wrap {
+    @include border-radius(4px);
+    border: 1px solid $border-grey-c1;
+    padding: 5px 5px 5px 10px;
+    display: flex;
+
+    &--input {
+      border: 0 none;
+      font-size: 14px;
+      margin-right: auto;
+      flex: 1;
+    }
+
+    .btn {
+      margin-left: auto;
     }
   }
 
   
+}// Apply button
+
+.subtotal {
+  &__items {
+    padding: 15px;
+  }
+
+  &__item {
+    color: $txt-grey-333;
+
+    display: flex;
+    justify-content: space-between;
+
+    &--subtotal {
+      font-size: $font-size-md;
+    }
+
+    &--price {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-medium;
+      display: flex;
+      margin-left: auto;
+    }
+
+    &--tax {
+      font-size: $font-size-xs;
+      flex-basis: 60%;
+    }
+
+    &--tax-price {
+      display: flex;
+      margin-left: auto;
+    }
+  }
+}// Subtotal
+
+.bottom-cta {
+  position: fixed;
+  box-shadow: 0 0 10px rgba(0,0,0, .3);
+  background-color: $bg-white;
+  width: 100%;
+  z-index: 1;
+  bottom: 0;
+
+  display: flex;
+
+  &__price {
+    background-color: $bg-white;
+    width: 50%;
+    padding: 5px 10px;
+  }
+
+  &__btn {
+    background-color: $yellow;
+    color: $txt-white;
+    width: 50%;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: $font-size-md;
+  }
+
+
+}// Bottom CTA
+
+
+.login {
+  &__user {
+    font-size: $font-size-md;
+    
+    span {
+
+    }
+  }
 }
+
+
+
 
 .payment-nav {
   font-size: 1em;
