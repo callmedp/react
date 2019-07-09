@@ -3186,6 +3186,7 @@ class CertficationProductQueueView(PaginationMixin, ListView):
 
         return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
 
+
 class WhatsAppScheduleView(DetailView, PaginationMixin):
     template_name = 'console/order/whats_app_schedule.html'
     model = OrderItem
@@ -3197,6 +3198,7 @@ class WhatsAppScheduleView(DetailView, PaginationMixin):
 
     def get_context_data(self, **kwargs):
         obj = self.object = self.get_object()
+
         self.page = self.request.GET.get('page', 1)
         context = super(WhatsAppScheduleView, self).get_context_data(**kwargs)
         joblinkformset = modelformset_factory(
@@ -3211,7 +3213,7 @@ class WhatsAppScheduleView(DetailView, PaginationMixin):
         )
 
         # previously sent link
-        previous_links = JobsLinks.objects.filter(oi=obj, status__in=[2])
+        previous_links = JobsLinks.objects.filter(oi=obj, status__in=[2]).order_by('-sent_date')
         paginator = Paginator(previous_links, self.paginated_by)
         context.update(self.pagination(paginator, self.page))
 
@@ -3239,6 +3241,7 @@ class WhatsAppScheduleView(DetailView, PaginationMixin):
 
     def post(self, request, *args, **kwargs):
         obj = self.object = self.get_object()
+        user = self.request.user
         objects = []
         joblinkformset = modelformset_factory(
             JobsLinks,
