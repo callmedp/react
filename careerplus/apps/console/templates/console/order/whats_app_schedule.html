@@ -84,8 +84,8 @@
                  <tr class="even pointer">
                   {% with orderitem.get_weeks as weeks%}
                     <td>{{ weeks.1 }}/{{ weeks.0 }}</td>
-                    <td>{{ orderitem.sent_link_count }} / {{ orderitem.total_links_needs_to_sent }}</td>
-                    <td>{{ orderitem.links_needed_till_now }}</td>
+                    <td>{{ orderitem.sent_link_count }} / {{ orderitem.get_total_links_needs_to_sent }}</td>
+                    <td>{{ orderitem.get_links_needed_till_now }}</td>
                     <td>{{ orderitem.pending_links_count }}</td>
                   {% endwith %}
                  </tr>

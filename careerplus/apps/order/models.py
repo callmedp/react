@@ -520,6 +520,10 @@ class OrderItem(AbstractAutoDate):
             return self.replacement_order_id
 
     @property
+    def sent_link_count(self):
+        return self.jobs_link.filter(status=2).count()
+
+
     def get_weeks(self):
         weeks, weeks_till_now = None, None
         sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5, 31]).order_by('id').first()
@@ -528,16 +532,12 @@ class OrderItem(AbstractAutoDate):
             day = self.product.get_duration_in_day()
             weeks = math.floor(day / 7)
             today = timezone.now()
-            weeks_till_now = 0
-            for i in range(0, weeks):
-                start = started + relativedelta.relativedelta(days=i * 7)
-                if start > today:
-                    break
-                weeks_till_now += 1
+            weeks_till_now = ((today - started).days) // 7
+
         return weeks, weeks_till_now
 
 
-    def links_needed_till_now(self):
+    def get_links_needed_till_now(self):
         start, end = None, None
         links_count = 0
         sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5,31]).order_by('id').first()
@@ -559,10 +559,7 @@ class OrderItem(AbstractAutoDate):
         saved_links = self.jobs_link.filter(status=0)
         return saved_links.count()
 
-    def sent_link_count(self):
-        return self.jobs_link.filter(status=2).count()
-
-    def total_links_needs_to_sent(self):
+    def get_total_links_needs_to_sent(self):
         day = self.product.get_duration_in_day()
         links_per_week = getattr(self.product.attr, S_ATTR_DICT.get('LC'), 2)
         if day:
@@ -588,7 +585,7 @@ class OrderItem(AbstractAutoDate):
         return links.count()
 
     def update_pending_links_count(self):
-        links_needed_till_now = self.links_needed_till_now()
+        links_needed_till_now = self.get_links_needed_till_now()
         links_sent_till_now = self.jobs_link.filter(status=2).count()
         links_pending = links_needed_till_now - links_sent_till_now
 

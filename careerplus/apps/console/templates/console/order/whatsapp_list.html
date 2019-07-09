@@ -264,9 +264,9 @@
                       <td>{{obj.assigned_to}}</td>
                       {% with obj.get_weeks as weeks%}
                       <td>{{ weeks.1 }}/{{ weeks.0 }}</td>
-                      <td>{{ obj.sent_link }}/{{ obj.total_links_needs_to_sent }} </td>
+                      <td>{{ obj.sent_link }}/{{ obj.get_total_links_needs_to_sent }} </td>
                       <td>{{ obj.save_link }}</td>
-                      <td>{{ obj.links_needed_till_now }}</td>
+                      <td>{{ obj.get_links_needed_till_now }}</td>
                       <td>{{ obj.pending_links_count }}</td>
                       {% endwith %}
                     </tr>

@@ -61,7 +61,7 @@ class Command(BaseCommand):
             delta_time = activation_date + datetime.timedelta(days=duration_days)
             # Close the order if condition satisfies else
             if candidate_id:
-                if delta_time < timezone.now():
+                if (delta_time < timezone.now())  and obj.pending_links_count == 0:
                     last_oi_status = obj.oi_status
                     obj.oi_status = 4
                     obj.closed_on = timezone.now()
@@ -106,6 +106,7 @@ class Command(BaseCommand):
                                 last_oi_status=last_oi_status,
                                 assigned_to=obj.assigned_to
                             )
+                        obj.update_pending_links_count()
 
         out_str = '%s jobs on the move item expired out of %s  items' % (
             jobs_move_close_count, jobs_move_items.count())
