@@ -233,7 +233,6 @@ def gen_auto_login_token_task(task=None, user=None, next_url=None, exp_days=None
             "%(msg)s : %(err)s" % {'msg': 'generate auto login token task', 'err': str(e)})
     return f
 
-
 @task
 def generate_discount_report(sid,start_date,end_date):
     from shared.utils import DiscountReportUtil

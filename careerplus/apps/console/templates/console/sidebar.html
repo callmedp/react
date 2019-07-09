@@ -70,15 +70,17 @@
       </ul>
     {% endif %}
 
-    {% if request.user|has_group:MARKETING_GROUP_LIST %} 
+    {% if request.user|has_group:MARKETING_GROUP_LIST or perms.order.can_download_discount_report %} 
       <h3>Tasks</h3>
         
       <ul class="nav side-menu">
         <li><a><i class="fa fa-list-alt"></i> Task <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
+              {% if request.user|has_group:MARKETING_GROUP_LIST %}
               <li><a href="{% url 'console:tasks:generate-autologintoken' %}">Generate AutoLogin</a></li>
               <li><a href="{% url 'console:tasks:generate-pixel-tracker' %}">Generate Pixel Tracker</a></li>
               <li><a href="{% url 'console:tasks:generate-encrypted-urls' %}">Generate Encoded URL</a></li>
+              {% endif %}
               <li><a href="{% url 'console:tasks:tasklist' %}">Task List</a></li>
               {% if perms.scheduler.can_download_product_list%}
               <li><a href="{% url 'console:tasks:download-product-list'%}">Product List</a></li>

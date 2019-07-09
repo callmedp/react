@@ -165,7 +165,6 @@ class GenerateEncryptedURLSForMailer(FormView):
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group([settings.MARKETING_GROUP_LIST]))
 class TaskListView(ListView, PaginationMixin):
     template_name = 'console/tasks/tasklist.html'
     model = Scheduler
@@ -176,6 +175,9 @@ class TaskListView(ListView, PaginationMixin):
         self.paginated_by = 20
 
     def get(self, request, *args, **kwargs):
+        if 'order.can_download_discount_report' not in request.user.get_all_permissions() and \
+            not request.user.groups.filter(name__in=settings.MARKETING_GROUP_LIST).exists():
+            return HttpResponseForbidden()
         self.page = request.GET.get('page', 1)
         return super(TaskListView, self).get(request, args, **kwargs)
 
@@ -191,20 +193,40 @@ class TaskListView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(TaskListView, self).get_queryset()
-        queryset = queryset.filter(task_type__in=[1, 4, 5, 6, 7,8])
+        task_types_allowed = []
+
+        if 'order.can_download_discount_report' in self.request.user.get_all_permissions():
+            task_types_allowed.append(8)
+
+        if self.request.user.groups.filter(name__in=settings.MARKETING_GROUP_LIST).exists():
+            task_types_allowed.extend([1,4,5,6,7])
+
+        if self.request.user.is_superuser:
+            task_types_allowed = [1,4,5,6,7,8]
+
+        queryset = queryset.filter(task_type__in=task_types_allowed)
         return queryset.order_by('-modified')
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group([settings.MARKETING_GROUP_LIST]))
 class DownloadTaskView(View):
 
     def get(self, request, *args, **kwargs):
+        task_types_allowed = []
+        if 'order.can_download_discount_report' in request.user.get_all_permissions():
+            task_types_allowed.append(8)
+
+        if request.user.groups.filter(name__in=settings.MARKETING_GROUP_LIST).exists():
+            task_types_allowed.extend([1,4,5,6,7])
+
+        if self.request.user.is_superuser:
+            task_types_allowed = [1,4,5,6,7,8]
+
         try:
             task = request.GET.get('task', None)
             download_type = request.GET.get('type', None)
             if task:
-                task = Scheduler.objects.get(id=task)
+                task = Scheduler.objects.get(id=task,task_type__in=task_types_allowed)
             else:
                 return HttpResponseForbidden()
             if task:
