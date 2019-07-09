@@ -521,7 +521,7 @@ class OrderItem(AbstractAutoDate):
 
     @property
     def get_weeks(self):
-        weeks, weeks_remaining = None, None
+        weeks, weeks_till_now = None, None
         sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5, 31]).order_by('id').first()
         if sevice_started_op:
             started = sevice_started_op.created
@@ -534,8 +534,7 @@ class OrderItem(AbstractAutoDate):
                 if start > today:
                     break
                 weeks_till_now += 1
-            weeks_remaining = weeks - weeks_till_now
-        return weeks, weeks_remaining
+        return weeks, weeks_till_now
 
 
     def links_needed_till_now(self):

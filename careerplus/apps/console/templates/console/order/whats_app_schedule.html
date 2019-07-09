@@ -75,8 +75,6 @@
                <thead>
                 <tr class="headings">
                   <th class="column-title">Weeks</th>
-                  <th class="column-title">Remaining Weeks</th>
-                  <th class="column-title">Total links needs to sent</th>
                   <th class="column-title">Sent Links</th>
                   <th class="column-title">Total Supposed to be sent</th>
                   <th class="column-title">Pending Links Count</th>
@@ -85,10 +83,8 @@
                <tbody id="body-table-list">
                  <tr class="even pointer">
                   {% with orderitem.get_weeks as weeks%}
-                    <td>{{ weeks.0 }}</td>
-                    <td>{{ weeks.1 }}</td>
-                    <td>{{ orderitem.total_links_needs_to_sent }}</td>
-                    <td>{{ orderitem.sent_link_count }}</td>
+                    <td>{{ weeks.1 }}/{{ weeks.0 }}</td>
+                    <td>{{ orderitem.sent_link_count }} / {{ orderitem.total_links_needs_to_sent }}</td>
                     <td>{{ orderitem.links_needed_till_now }}</td>
                     <td>{{ orderitem.pending_links_count }}</td>
                   {% endwith %}
