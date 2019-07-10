@@ -168,7 +168,7 @@
 <!------  EndModal test limit ---------->
 
 <!------  Modal login ---------->
-   <div class="modal fade" id="leadCreationModal" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+   <div class="modal fade" data-keyboard="false" data-backdrop="static" id="leadCreationModal" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xs" role="document">
     <div class="modal-content details-modal-box">
       <div class="modal-header pb-0">
@@ -227,7 +227,7 @@ var tKey = 'Test-' + '{{object.id}}',myStorage = window.localStorage,
 right=0,questionAttempt = null,total = {{questions_list.count}};
 
 
-
+,
 
 $(document).ready(function() {
         getCourseDetail('{{object.vendor.id}}','{{object.category.id}}','{{object.id}}');
@@ -296,6 +296,7 @@ $("#leadCreationForm").submit(function(e){
     });
     testSession({'lead_create':true});
     getCoptions();
+    $('#leadCreationModal').modal('hide');
     return false;
 
  });

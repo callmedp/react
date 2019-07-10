@@ -34,7 +34,7 @@ urlpatterns = [
         name='shine-data-for-flow'),
     url(r'^v1/question/$',
         views.QuestionAnswerApiView.as_view(),
-        name='shine-flow'),
+        name='question-answer'),
     url(r'^v1/vendor-certificate/$',
         views.VendorCertificateMappingApiView.as_view(),
         name='vendor-certificate-mapping'),

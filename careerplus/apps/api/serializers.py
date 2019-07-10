@@ -16,6 +16,7 @@ from users.models import User
 
 from shared.rest_addons.mixins import (SerializerFieldsMixin,
 ListSerializerContextMixin, ListSerializerDataMixin)
+from django.core.cache import cache
 
 from django.utils.text import slugify
 from core.library.gcloud.custom_cloud_storage import GCPMediaStorage,GCPPrivateMediaStorage
@@ -379,6 +380,16 @@ class QuestionAnswerSerializer(ModelSerializer):
     class Meta:
         model = Question
         fields = ('id','question_options')
+
+    def to_representation(self, obj):
+        return_val = super(QuestionAnswerSerializer,self).to_representation(obj)
+        session_id = self.context.get('request').session.session_key
+        key = session_id + 'test-'+ str(obj.test.id)
+        fields_to_exclude= []
+        if not cache.get(key) or not cache.get(key).get('test_submit'):
+            fields_to_exclude = ['question_options']
+        [return_val.pop(field, "") for field in fields_to_exclude]
+        return return_val
 
     def get_question_options(self,obj):
         return [option.get('option_id') for option in obj.question_options \
