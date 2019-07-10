@@ -1,6 +1,7 @@
 #python imports
 import logging
 import time
+from decimal import Decimal
 from datetime import datetime,timedelta
 
 #django imports
@@ -21,7 +22,7 @@ class Command(BaseCommand):
     """
         Custom command to Update Jobs form Shine to Products.
     """
-    help = 'Custom command to Update Dail;y Reviews On Products.'
+    help = 'Custom command to Update Daily Reviews On Products.'
     
     def __init__(self, *args, **kwargs):
         super(Command, self).__init__(*args, **kwargs)
@@ -38,7 +39,7 @@ class Command(BaseCommand):
         pid_rating_mapping = {}
         for review in todays_reviews:
             pid = review.object_id
-            if pid_rating_mapping.has_key(pid):
+            if pid_rating_mapping.get(pid):
                 pid_rating_mapping[pid].append(review.average_rating)
             else:
                 pid_rating_mapping[pid] = [review.average_rating]
@@ -51,7 +52,7 @@ class Command(BaseCommand):
             ratings = pid_rating_mapping[product.id]
             
             for rating in ratings:
-                mul += rating
+                mul += Decimal(rating)
 
             new_avg_rating = round(mul / (product.no_review + len(ratings)),2)
             product.avg_rating = new_avg_rating
