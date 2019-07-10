@@ -125,7 +125,7 @@
                   <p>Real exam & Practice environment</p>
                   <p>Answers & Detailed Explanations</p>
                   <span class="flexbox align-items-center mt-20">
-                     <button class="yellow_btn" id="testAddToCart">Add to cart</button>
+                     <button class="yellow_btn" onclick="addToCart('{{object.vendor.id}}','{{object.category.id}}')">Add to cart</button>
                   </span>
                </span>
                     </div>
@@ -136,53 +136,6 @@
     </div>
 </div>
 </div>
-
-<!------  Modal login ---------->
-   <div class="modal fade" id="leadCreationModal" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-xs" role="document">
-    <div class="modal-content details-modal-box">
-      <div class="modal-header pb-0">
-         <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-          <!--<span aria-hidden="true">&times;</span>-->
-        <!--</button>-->
-        <h3 id="exampleModalLongTitle">Fill your details below</h3>
-      </div>
-      <div class="modal-body">
-        <div class="col-sm-7">
-         <form method = "post" id="leadCreationForm">
-            {% csrf_token %}
-            <div class="details-modal">
-               <div class="form-group">
-                  <input type="text" class="form-control" id="name" name="name" placeholder="   " value = "{{request.session.name}}"/>
-                  <label for="">Name</label>
-               </div>
-               <div class="form-group">
-                  <input type="text" class="form-control" id="email" name="email" value="{{request.session.email}}" placeholder="  "/>
-                  <label for="">Email</label>
-               </div>
-               <div class="form-group">
-                  <input type="text" class="form-control" id="number" name="number" value="{{request.session.mobile_no}}" placeholder="  "/>
-                  <label for="">Mobile</label>
-               </div>
-               <div class="form-group">
-                  <button class="blue_btn mr-20"  type="submit" id="leadCreationSubmit">Submit</button>
-               </div>
-            </div>
-         </form>
-        </div>
-        <div class="col-sm-5">
-         <div class="check-result">
-            <i><img src="{% static 'shinelearn/images/free_skill/details-list.png' %}" class="img-responsive"></i>
-            <p>Enter your details to check the Test result</p>
-         </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<!------  EndModal login ---------->
 
 
 
@@ -215,10 +168,8 @@
 {{block.super}}
 <script src="{% static 'shinelearn/js/assessment/take_test.js' %}"></script>
 <script>
-getProductDetail('{{object.vendor.id}}','{{object.category.id}}');
-
 $('#timeTest').ready(function() {
-
+getProductDetail('{{object.vendor.id}}','{{object.category.id}}');
         $.ajax({
          url   : '/api/v1/get-set-time/?test_id={{object.id}}&duration={{object.duration}}',
          type  : 'get',
@@ -413,17 +364,7 @@ function submitTest(){
      $("#submitPermissionModal").modal('show');
 }
 
-function testSession(data){
-        $.ajax({
-         url   : '/api/v1/set-session/',
-         data: data,
-         type  : 'post',
-         success: function(response){
-            return false;
-         }
-    });
 
-}
 
 
 function submitTestFinal(){
@@ -440,20 +381,9 @@ function submitTestFinal(){
       questionAttempt['testSubmission{{object.id}}'] = testSubmission;
       questionAttempt['testTime'+{{object.id}}] = Math.floor((submitTime - startTestTime.getTime())/1000) ;
       myStorage.setItem(tKey, JSON.stringify(questionAttempt));
-      {% if request.session.candidate_id %}
-      $('#leadCreationSubmit').click();
-      {% else %}
-       $("#leadCreationModal").modal('show');
-        {% endif %}
+      window.location.href = '/practice-tests/{{object.slug}}/result/';
 
 }
-
-
-    $('#testAddToCart').click( function()
-           {
-            addToCart('{{object.vendor.id}}','{{object.category.id}}');
-           }
-      );
 
 
 </script>

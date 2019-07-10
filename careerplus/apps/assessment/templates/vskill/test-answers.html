@@ -100,7 +100,7 @@
             <div class="white-box bdr-bottom">
                <div class="test-benefits benefits-bg">
                <span class="pad-15">
-                  <h3><a href="#">Advanced Search Engine Optimisation Test</a></h3>
+                  <h3><a href="#" id="test-product-name">Advanced Search Engine Optimisation Test</a></h3>
                   <h4 class="mt-0" id="test-price">Rs. 699</h4>
                   <strike>Rs. 999</strike>
                   <span class="grey-border mt-15 mb-15"></span>
@@ -115,16 +115,16 @@
               </div>
             </div>
 
-            <div class="white-box mt-20 bdr-bottom">
+            <div class="white-box mt-20 bdr-bottom" id="testCourse" style="visibility:hidden";>
                <div class="improve-skills">
                <span class="pad-15">
-                  <h4 class="mt-0">Improve your skills with this course</h4>
+                  <h4 class="mt-0" >Improve your skills with this course</h4>
                   <span class="grey-border mt-15 mb-15"></span>
-                  <i class="tcell"><img src="https://static1.shine.com/l/m/product_image/322/1509343566_8542.png" class="img-responsive"></i>
+                  <i class="tcell"><img id="courseImg" src="https://static1.shine.com/l/m/product_image/322/1509343566_8542.png" class="img-responsive"></i>
                   <span class="tcell">
-                     <h3><a href="#">Search Engine Optimisation Master Training Course</a></h3>
-                     <p><strong>1096</strong> people bought</p>
-                     <p><strong>12</strong> jobs available</p>
+                     <h3><a href="#" id="courseName">Search Engine Optimisation Master Training Course</a></h3>
+                     <p><strong id="courseBought">1096</strong> people bought</p>
+                     <p><strong id="courseJobsAvailable">12</strong> jobs available</p>
                   </span>
                </span>
               </div>
@@ -167,16 +167,86 @@
 
 <!------  EndModal test limit ---------->
 
+<!------  Modal login ---------->
+   <div class="modal fade" id="leadCreationModal" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xs" role="document">
+    <div class="modal-content details-modal-box">
+      <div class="modal-header pb-0">
+         <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+          <!--<span aria-hidden="true">&times;</span>-->
+        <!--</button>-->
+        <h3 id="exampleModalLongTitle">Fill your details below</h3>
+      </div>
+      <div class="modal-body">
+        <div class="col-sm-7">
+         <form method = "post" id="leadCreationForm">
+            {% csrf_token %}
+            <div class="details-modal">
+               <div class="form-group">
+                  <input type="text" class="form-control" id="name" name="name" placeholder="   " value = "{{request.session.name}}"/>
+                  <label for="">Name</label>
+               </div>
+               <div class="form-group">
+                  <input type="text" class="form-control" id="email" name="email" value="{{request.session.email}}" placeholder="  "/>
+                  <label for="">Email</label>
+               </div>
+               <div class="form-group">
+                  <input type="text" class="form-control" id="number" name="number" value="{{request.session.mobile_no}}" placeholder="  "/>
+                  <label for="">Mobile</label>
+               </div>
+               <div class="form-group">
+                  <button class="blue_btn mr-20"  type="submit" id="leadCreationSubmit">Submit</button>
+               </div>
+            </div>
+         </form>
+        </div>
+        <div class="col-sm-5">
+         <div class="check-result">
+            <i><img src="{% static 'shinelearn/images/free_skill/details-list.png' %}" class="img-responsive"></i>
+            <p>Enter your details to check the Test result</p>
+         </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!------  EndModal login ---------->
+
+
+
 
 {% endblock main_container %}
 {% block js_section %}
+{{block.super}}
 <script src="{% static 'shinelearn/js/assessment/take_test.js' %}"></script>
 
-{{block.super}}
 <script>
 var tKey = 'Test-' + '{{object.id}}',myStorage = window.localStorage,
 right=0,questionAttempt = null,total = {{questions_list.count}};
+
+
+
+
 $(document).ready(function() {
+        getCourseDetail('{{object.vendor.id}}','{{object.category.id}}','{{object.id}}');
+
+       {%if not lead_created %}
+
+      {% if request.session.candidate_id %}
+      $('#leadCreationSubmit').click();
+      {% else %}
+       $("#leadCreationModal").modal('show');
+        {% endif %}
+        {% endif %}
+
+
+});
+
+
+
+function getCoptions(){
         getProductDetail('{{object.vendor.id}}','{{object.category.id}}');
         questionAttempt = JSON.parse(myStorage.getItem(tKey));
         if (questionAttempt != null) {
@@ -203,11 +273,33 @@ $(document).ready(function() {
     });
 
 
-});
+
+}
+
 
 function secondsToMinutes(time){
     return Math.floor(time / 60)+' Min:'+Math.floor(time % 60) +" Secs";
 }
+
+
+
+
+
+$("#leadCreationForm").submit(function(e){
+    var form = $(this);
+    $.ajax({
+         url   : '/lead/lead-management/',
+         type  : 'post',
+         data  : form.serialize(), // data to be submitted
+         success: function(response){
+         }
+    });
+    testSession({'lead_create':true});
+    getCoptions();
+    return false;
+
+ });
+
 
 
 

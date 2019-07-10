@@ -3,13 +3,15 @@
    $.ajax({
                url: '/api/v1/get-products/',
                type: "GET",
-               data : {'type_flow': 16, 'category' : category_id, 'vendor':vendor_id ,'fl':'id,inr_price'},
+               data : {'type_flow': 16, 'category' : category_id, 'vendor':vendor_id ,'fl':'id,inr_price,title'},
                dataType: 'json',
                success: function(json) {
                 if(json.count >=1 ){
                 console.log(json);
                     prod_id =json.results[0].id;
                     $('#test-price').text('');
+                    $('#test-product-name').text('');
+                    $('#test-product-name').text(json.results[0].title);
                     $('#test-price').text("Rs. " + json.results[0].inr_price);
                     $('#test-product').removeAttr('style');
                 }
@@ -81,9 +83,12 @@
                dataType: 'json',
                success: function(json) {
                 if(json.count >=1 ){
-                $('#courseName').text(json.results[0].name);
+                console.log(json.results[0].absolute_url);
+                $('#courseName').text(json.results[0].title);
                 $('#coursePrice').text(json.results[0].inr_price);
                 $('#courseDuration').text(json.results[0].day_duration);
+                $('#courseName').attr('href',json.results[0].absolute_url)
+                $('#courseImg').attr('src',json.results[0].image)
                 $('#courseCartBtn').click(function(){
                 updateToCart(json.results[0].id,'cart');
                 });
@@ -99,3 +104,15 @@
 
 
    }
+
+   function testSession(data){
+        $.ajax({
+         url   : '/api/v1/set-session/',
+         data: data,
+         type  : 'post',
+         success: function(response){
+            return false;
+         }
+    });
+
+}

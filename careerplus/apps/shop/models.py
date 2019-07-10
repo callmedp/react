@@ -1187,6 +1187,11 @@ class Product(AbstractProduct, ModelMeta):
         return ''
 
 
+    @property
+    def absolute_url(self):
+        return self.get_url()
+
+
     def get_heading(self,no_cache=False):
         if self.is_course:
             return '%s ' % (

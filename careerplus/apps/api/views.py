@@ -1401,10 +1401,11 @@ class SetSession(APIView):
         if not session_id:
             data.update({'is_set': False})
             return Response(data)
-        timeout = self.request.POST.get('timeout')
-        submission = self.request.POST.get('submit')
-        test_id = self.request.POST.get('test_id')
-        lead_create = self.request.POST.get('lead_created')
+        timeout = self.request.POST.get('timeout','')
+        submission = self.request.POST.get('submit','')
+        test_id = self.request.POST.get('test_id','')
+        lead_create = self.request.POST.get('lead_created','')
+        key = session_id + test_id
 
         # setting cache for timeout test sessions
         if timeout and test_id:
@@ -1417,7 +1418,7 @@ class SetSession(APIView):
         if submission and test_id:
             key = 'test-' + test_id
             self.cache_test.set_test_submit(key)
-            data.update({'is_set':True})
+            data.update({'is_set': True})
 
         # creating lead for particular session_id
         if lead_create:
@@ -1425,6 +1426,6 @@ class SetSession(APIView):
             cache.set(key, lead_create, 60*24*24)
             return Response({'is_lead_created': cache.get(key)})
 
-        return Response({'timeout': cache.get(session_id + test_id + 'timeout'),
-                         'submission': cache.get(session_id + test_id + 'submission')})
+        return Response({'timeout': cache.get( key + 'timeout'),
+                         'submission': cache.get(key + 'submission'),})
 

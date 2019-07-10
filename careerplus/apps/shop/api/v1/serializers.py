@@ -27,6 +27,9 @@ class ProductDetailSerializer(SerializerFieldsMixin,ModelSerializer):
     #     [ret.pop(field,"") for field in asked_fields]
     #     return ret
     day_duration = serializers.CharField(read_only=True)
+    absolute_url = serializers.CharField(read_only=True)
+
+
 
     class Meta:
         model = Product
