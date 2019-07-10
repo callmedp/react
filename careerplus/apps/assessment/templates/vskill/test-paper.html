@@ -111,11 +111,13 @@
                     </div>
                 </div>
 
+                <!------- Add to cart   ----->
+
                 <div class="white-box bdr-bottom">
                     <div class="test-benefits benefits-bg">
                <span class="pad-15">
                   <h3><a href="#">Advanced Search Engine Optimisation Test</a></h3>
-                  <h4 class="mt-0">Rs. 699</h4>
+                  <h4 class="mt-0" id="test-price">Rs. 699</h4>
                   <strike>Rs. 999</strike>
                   <span class="grey-border mt-15 mb-15"></span>
                   <strong>Benefits</strong>
@@ -123,11 +125,12 @@
                   <p>Real exam & Practice environment</p>
                   <p>Answers & Detailed Explanations</p>
                   <span class="flexbox align-items-center mt-20">
-                     <button class="yellow_btn">Add to cart</button>
+                     <button class="yellow_btn" id="testAddToCart">Add to cart</button>
                   </span>
                </span>
                     </div>
                 </div>
+                <!----------- end add to cart  ------------>
             </div>
         </div>
     </div>
@@ -184,7 +187,7 @@
 
 
 <!-- Modal  for submit permission-->
-<div id="submitPermissionModal" class="modal fade" role="dialog">
+<div id="submitPermissionModal" class="modal fade" role="dialog" aria-labelledby="ModalCenterTitled" aria-hidden="true">
   <div class="modal-dialog">
 
     <!-- Modal content-->
@@ -210,8 +213,12 @@
 {% endblock main_container %}
 {% block js_section %}
 {{block.super}}
+<script src="{% static 'shinelearn/js/assessment/take_test.js' %}"></script>
 <script>
+getProductDetail('{{object.vendor.id}}','{{object.category.id}}');
+
 $('#timeTest').ready(function() {
+
         $.ajax({
          url   : '/api/v1/get-set-time/?test_id={{object.id}}&duration={{object.duration}}',
          type  : 'get',
@@ -234,7 +241,7 @@ $('#timeTest').ready(function() {
 <script type="text/javascript">
 let page_number = 2, questionAttempt = {},
 maxCounter = parseInt({{questions_list.count}}),
-activeTab = 1, startTime = {{object.duration}},
+activeTab = 1,
 tKey = 'Test-' + '{{object.id}}',myStorage = window.localStorage,
 sec =0,testSec = 0,testMin =0,interval=0,testSubmission= false,
 delAns = {% if delete_ans %}true{% else %}false{% endif %},
@@ -269,6 +276,7 @@ $(document).ready(function() {
             questionAttempt = {};
         }
     }
+    delAns =false;
 
 });
 
@@ -378,6 +386,7 @@ function startTimer(duration,) {
             clearInterval(interval);
               $('#testRemanMinutes').text("Time");
             $('#testRemanSeconds').text("Out");
+            timeout = true;
             submitTestFinal();
         }
     }, 1000);
@@ -396,29 +405,55 @@ $("#leadCreationForm").submit(function(e){
          }
     });
     return false;
+    testSession({'lead_create':true});
+
  });
 
 function submitTest(){
-     $("#submitPermissionModal").modal();
+     $("#submitPermissionModal").modal('show');
 }
 
+function testSession(data){
+        $.ajax({
+         url   : '/api/v1/set-session/',
+         data: data,
+         type  : 'post',
+         success: function(response){
+            return false;
+         }
+    });
+
+}
+
+
 function submitTestFinal(){
-      submittime = new Date().getTime();
+      if (timeout){
+            testSession({'timeout':true,'test_id':{{object.id}} });
+      }
+      else{
+            testSession({'submit':true,'test_id':{{object.id}} });
+      }
+      submitTime = new Date().getTime();
       $("#submitPermissionModal").modal('hide');
       clearInterval(interval);
       testSubmission = true;
       questionAttempt['testSubmission{{object.id}}'] = testSubmission;
-      questionAttempt['testTime'+{{object.id}}] = Math.floor((submittime - startTestTime.getTime())/1000) ;
+      questionAttempt['testTime'+{{object.id}}] = Math.floor((submitTime - startTestTime.getTime())/1000) ;
       myStorage.setItem(tKey, JSON.stringify(questionAttempt));
       {% if request.session.candidate_id %}
       $('#leadCreationSubmit').click();
       {% else %}
-       $("#leadCreationModal").modal();
+       $("#leadCreationModal").modal('show');
         {% endif %}
 
 }
 
 
+    $('#testAddToCart').click( function()
+           {
+            addToCart('{{object.vendor.id}}','{{object.category.id}}');
+           }
+      );
 
 
 </script>

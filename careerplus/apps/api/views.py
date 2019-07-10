@@ -69,6 +69,7 @@ from linkedin.autologin import AutoLogin
 from users.mixins import RegistrationLoginApi
 from .education_specialization import educ_list
 from assessment.models import Question
+from assessment.utils import TestCacheUtil
 
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
@@ -1364,26 +1365,66 @@ class TestTimer(APIView):
 
     def get(self,request, *args, **kwargs):
         test_id = self.request.GET.get('test_id')
-        duration = self.request.GET.get('duration')
+        duration = int(self.request.GET.get('duration',0))
+        # print(session_id)
+        self.cache_test = TestCacheUtil(request=request)
+        test_start_time = self.cache_test.get_start_test_cache(key='test-'+test_id)
+        set_test_duration_cache = self.cache_test.get_test_duration_cache(key='test-'+test_id, duration=duration)
+        #
+        # if not timestamp:
+        #     timestamp_with_tduration = (datetime.now() + timedelta(seconds=duration)).strftime(timeformat)
+        #     test_ids = {'ongoing_' + str(test_id): timestamp_with_tduration}
+        #     cache.set(test_session_key, test_ids, 60 * 60 * 24)
+        #
+        # elif timestamp and not timestamp.get('ongoing_' + str(test_id)):
+        #     timestamp_with_tduration = (datetime.now() + timedelta(seconds=duration)).strftime(
+        #         "%m/%d/%Y, %H:%M:%S")
+        #     test_ids = {'ongoing_' + str(test_id): timestamp_with_tduration}
+        #     cache.set(test_session_key, test_ids, 60 * 60 * 24)
+        #
+        # if not cache.get(session_id + 'startTest-' + str(test_id)):
+        #     cache.set(session_id + 'startTest-' + str(test_id), datetime.now().strftime(timeformat),
+        #               60 * 60 * 24)
+        return Response({'testStartTime': test_start_time})
+
+
+class SetSession(APIView):
+    permission_classes = []
+    authentication_classes = []
+
+    def post(self,request,*args,**kwargs):
+        self.cache_test = TestCacheUtil(request=request)
         session_id = self.request.session.session_key
-        test_session_key = session_id + 'test-' + str(test_id)
-        timestamp = cache.get(test_session_key)
-        timeformat = "%m/%d/%Y, %H:%M:%S"
+        data = {}
+        key = None
 
-        if not timestamp:
-            timestamp_with_tduration = (datetime.now() + timedelta(seconds=duration)).strftime(timeformat)
-            test_ids = {'ongoing_' + str(test_id): timestamp_with_tduration}
-            cache.set(test_session_key, test_ids, 60 * 60 * 24)
-            return True, True
+        if not session_id:
+            data.update({'is_set': False})
+            return Response(data)
+        timeout = self.request.POST.get('timeout')
+        submission = self.request.POST.get('submit')
+        test_id = self.request.POST.get('test_id')
+        lead_create = self.request.POST.get('lead_created')
 
-        elif timestamp and not timestamp.get('ongoing_' + str(test_id)):
-            timestamp_with_tduration = (datetime.now() + timedelta(seconds=duration)).strftime(
-                "%m/%d/%Y, %H:%M:%S")
-            test_ids = {'ongoing_' + str(test_id): timestamp_with_tduration}
-            cache.set(test_session_key, test_ids, 60 * 60 * 24)
-            return True, True
+        # setting cache for timeout test sessions
+        if timeout and test_id:
 
-        if not cache.get(session_id + 'startTest-' + str(test_id)):
-            cache.set(session_id + 'startTest-' + str(test_id), datetime.now().strftime(timeformat),
-                      60 * 60 * 24)
-        return Response({'testStartTime': cache.get(session_id + 'startTest-' + str(test_id))})
+            cache.set(key, timeout, 60*60*24)
+            data.update({'is_set': True})
+
+        # setting cache for submit test sessions
+
+        if submission and test_id:
+            key = 'test-' + test_id
+            self.cache_test.set_test_submit(key)
+            data.update({'is_set':True})
+
+        # creating lead for particular session_id
+        if lead_create:
+            key = session_id+'lead_created'
+            cache.set(key, lead_create, 60*24*24)
+            return Response({'is_lead_created': cache.get(key)})
+
+        return Response({'timeout': cache.get(session_id + test_id + 'timeout'),
+                         'submission': cache.get(session_id + test_id + 'submission')})
+

@@ -11,13 +11,13 @@ from django.core.cache import cache
 #local imports
 
 from .models import Question, Test
+from .utils import TestCacheUtil
 from shop.models import Category
 
 
 class VskillTestView(DetailView):
     template_name = 'vskill/test-paper.html'
     model = Test
-
 
     def get_breadcrumbs(self):
         breadcrumbs = []
@@ -27,42 +27,47 @@ class VskillTestView(DetailView):
         category = test.category
         parent_category = category.get_parent().first() if category.get_parent() else None
         if parent_category:
-            breadcrumbs.append({"url": '/practice-test/'+parent_category.slug, "name": parent_category.name})
-        breadcrumbs.append({"url": '/practice-test/'+ category.slug, "name": category.name})
+            breadcrumbs.append({"url": '/practice-test/' + parent_category.slug, "name": parent_category.name})
+        breadcrumbs.append({"url": '/practice-test/' + category.slug, "name": category.name})
         breadcrumbs.append({"url": '/practice-test', "name": 'test'})
         return breadcrumbs
 
-    def is_expired(self):
-        session_id = self.request.session.session_key
-        test = self.get_object()
-        test_session_key = session_id + 'test-' + str(test.id)
-        timestamp = cache.get(test_session_key)
-        timeformat = "%m/%d/%Y, %H:%M:%S"
 
-        if not timestamp:
-            timestamp_with_tduration = (datetime.now() + timedelta(seconds=test.duration)).strftime(timeformat)
-            test_ids = {'ongoing_' + str(test.id): timestamp_with_tduration}
-            cache.set(test_session_key, test_ids, 60 * 60 * 24)
-            return True, True
-
-        elif timestamp and not timestamp.get('ongoing_' + str(test.id)):
-            timestamp_with_tduration = (datetime.now() + timedelta(seconds=test.duration)).strftime("%m/%d/%Y, %H:%M:%S")
-            test_ids = {'ongoing_' + str(test.id): timestamp_with_tduration}
-            cache.set(test_session_key, test_ids, 60 * 60 * 24)
-            return True, True
-        else:
-            timestamp = timestamp.get('ongoing_' + str(test.id))
-            timestamp_obj = datetime.strptime(timestamp,timeformat)
-            if timestamp_obj < datetime.now():
-                return False, False
-        return True, False
+    # def is_expired(self):
+    #     session_id = self.request.session.session_key
+    #     test = self.get_object()
+    #     test_session_key = session_id + 'test-' + str(test.id)
+    #     timestamp = cache.get(test_session_key)
+    #     time_format = "%m/%d/%Y, %H:%M:%S"
+    #
+    #     if not timestamp:
+    #         # timestamp_with_tduration = (datetime.now() + timedelta(seconds=test.duration)).strftime(timeformat)
+    #         # test_ids = {'ongoing_' + str(test.id): timestamp_with_tduration}
+    #         # cache.set(test_session_key, test_ids, 60 * 60 * 24)
+    #         return True, True
+    #
+    #     elif timestamp and not timestamp.get('ongoing_' + str(test.id)):
+    #         # timestamp_with_tduration = (datetime.now() + timedelta(seconds=test.duration)).strftime("%m/%d/%Y, %H:%M:%S")
+    #         # test_ids = {'ongoing_' + str(test.id): timestamp_with_tduration}
+    #         # cache.set(test_session_key, test_ids, 60 * 60 * 24)
+    #         return True, True
+    #     else:
+    #         timestamp = timestamp.get('ongoing_' + str(test.id))
+    #         timestamp_obj = datetime.strptime(timestamp,time_format)
+    #         if timestamp_obj < datetime.now():
+    #             return False, False
+    #     return True, False
 
     def dispatch(self,request,*args,**kwargs):
+        self.cache_test = TestCacheUtil(request=request)
         response = super(VskillTestView, self).dispatch(request, args, **kwargs)
+
         original_context = response.context_data
         test_object = original_context['object']
-
-        if original_context.get('show_test'):
+        show_test, delete_ans = self.cache_test.show_test_remove_local_storage \
+            (key='test-' + str(test_object.id))
+        print(show_test)
+        if not show_test:
             return redirect(reverse('assessment:vskill-result', kwargs={'slug': test_object.slug}))
         response.context_data = original_context
         return response
@@ -70,27 +75,26 @@ class VskillTestView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(VskillTestView, self).get_context_data(**kwargs)
         context.update({'breadcrumbs': self.get_breadcrumbs()})
-        test_id = self.get_object()
-        show_test, delete_ans = self.is_expired()
+        test_object = self.get_object()
+        show_test, delete_ans = self.cache_test.show_test_remove_local_storage\
+            (key='test-'+str(test_object.id))
         if not show_test:
             context.update({'show_test': show_test})
         context.update({'delete_ans': delete_ans})
-        questions_list = Question.objects.filter(test_id=test_id.pk)
+        questions_list = Question.objects.filter(test_id=test_object.pk)
         if not questions_list:
             return context
         test_list = self.request.session.get('vskill_appeared') if\
             self.request.session.get('vskill_appeared') else []
-        test_list.append(test_id)
+        test_list.append(test_object)
         self.request.session.update({'vskill_appeared': test_list})
         lead_created = self.request.session.get('is_lead_created')
         context.update({'questions_list': questions_list,'lead_created': lead_created})
-
         return context
 
 
 class AssessmentLandingPage(TemplateView):
     template_name = 'vskill/vskill_landing.html'
-
 
     def get_breadcrumbs(self):
         breadcrumbs = []
@@ -110,7 +114,6 @@ class AssessmentLandingPage(TemplateView):
         return test
 
     def get_context_data(self, **kwargs):
-
         context = super(AssessmentLandingPage, self).get_context_data(**kwargs)
         context.update({'breadcrumbs': self.get_breadcrumbs()})
         category_ids = self.get_func_area_ids()
@@ -137,7 +140,6 @@ class AssessmentCategoryPage(DetailView):
         breadcrumbs.append({"url": '/practice-tests/', "name": 'practice-test'})
         breadcrumbs.append({"url": '', "name": self.object.name})
         return breadcrumbs
-
 
     def get_context_data(self, **kwargs):
         context = super(AssessmentCategoryPage, self).get_context_data(**kwargs)
@@ -174,7 +176,6 @@ class AssessmentSubCategoryPage(DetailView):
         all_test = category.test_set.all()
         return all_test
 
-
     def get_context_data(self, **kwargs):
         context = super(AssessmentSubCategoryPage, self).get_context_data(**kwargs)
         context.update({'breadcrumbs': self.get_breadcrumbs()})
@@ -206,11 +207,3 @@ class AssessmentResultPage(TemplateView):
         context.update({'questions_list': questions_list})
         context.update({'object':test})
         return context
-
-
-
-
-
-
-
-

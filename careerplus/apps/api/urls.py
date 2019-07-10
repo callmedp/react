@@ -59,7 +59,10 @@ urlpatterns = [
         name='candidate-insights'),
     url(r'^v1/get-set-time/$',
         views.TestTimer.as_view(),
-        name='get-test-time')
+        name='get-test-time'),
+    url(r'^v1/set-session/$',
+        views.SetSession.as_view(),
+        name='set-session')
 ]
 
 if settings.DEBUG:

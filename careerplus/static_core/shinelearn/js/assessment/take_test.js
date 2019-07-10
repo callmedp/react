@@ -77,7 +77,7 @@
    $.ajax({
                url: '/api/v1/get-products/',
                type: "GET",
-               data : {'type_flow': 2, 'category' : category_id, 'vendor':15 },
+               data : {'type_flow': 2, 'category' : category_id, 'vendor':vendor_id },
                dataType: 'json',
                success: function(json) {
                 if(json.count >=1 ){
