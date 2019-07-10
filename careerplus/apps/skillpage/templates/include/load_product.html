@@ -18,7 +18,7 @@
                     {% for star in product.pStar %}
                     <figure {% if star == '*' %}class="full-star"{% elif star == '+'%}class="half-star"{% else %}class="blank-star"{% endif %}></figure>
                     {% endfor %}
-                    <strong>{{ product.pARx|floatformat:1 }}/5</strong> {% if product.pRC %} | {{ product.pRC }} ratings{% endif %}<b>{{product.pRC}} reviews</b>
+                    <strong>{{ product.pARx|floatformat:1 }}/5</strong> 
                   </div>
 	                <div class="providers">
 	                   Providers

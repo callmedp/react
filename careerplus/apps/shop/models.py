@@ -1117,16 +1117,12 @@ class Product(AbstractProduct, ModelMeta):
         cache.set(cache_key, data, 7*24*60*60)
         return data
 
-
     def get_category_main(self,no_cache=False):
         cache_key = "category_main_" + str(self.pk)
         cached_data = cache.get(cache_key)
         if cached_data and not no_cache:
             return cached_data
         return self.category_main
-
-
-
 
     def category_attached(self):
         main_prod_cat = self.categories.filter(
