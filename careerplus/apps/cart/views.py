@@ -169,11 +169,13 @@ class PaymentLoginView(TemplateView):
         cart_pk = request.session.get('cart_pk')
         try:
             self.cart_obj = Cart.objects.get(pk=cart_pk)
+            self.cart_obj.shipping_done = True
+            self.cart_obj.save()
         except Exception as e:
             logging.getLogger('error_log').error("unable to assign cart object to self %s " % str(e))
             return HttpResponseRedirect(reverse('homepage'))
-        # if candidate_id:
-        #     return HttpResponseRedirect(reverse('payment:payment-option'))
+        if candidate_id:
+            return HttpResponseRedirect(reverse('payment:payment-option'))
         return super(self.__class__, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):

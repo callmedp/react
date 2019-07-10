@@ -50,7 +50,7 @@
           <div class="col-sm-3 payment-summary-tab">
           <!-- <a href="{% url "cart:payment-shipping" %}"><span class="yellow-circle">2</span> Shipping</a> -->
           <a href="{% url "cart:payment-summary" %}" class="active"><span>1</span> Summary</a>
-          <a href="{% url "cart:payment-login" %}"><span class="green-circle">2</span> Login</a>
+          <a href="{% url "cart:payment-login" %}"><span {% if cart.owner_id %} class="green-circle" {% endif %}>2</span> Login</a>
           <a><span>3</span> Payment</a>
 
           <!-- secure payment -->

@@ -63,7 +63,7 @@
             <div class="col-sm-3 payment-summary-tab">
                 <!-- <a href="{% url "cart:payment-shipping" %}"><span class="yellow-circle">2</span> Shipping</a> -->
                 <a href="{% url "cart:payment-summary" %}"><span class="green-circle">1</span> Summary</a>
-                <a href="{% url "cart:payment-login" %}"><span class="green-circle">2</span> Logged in <strong>as anandabhineet1</strong></a>
+                <a href="{% url "cart:payment-login" %}"><span class="green-circle">2</span> Logged in <strong>as {{email_id}}</strong></a>
                 <a href="{% url "payment:payment-option" %}" class="active"><span>3</span> Payment</a>
 
                 <!-- secure payment -->
@@ -88,7 +88,7 @@
                     <div class="panel panel-default box-shadow1">
                     <div class="panel-heading">
                       <h4 class="panel-title">
-                        <a class="no-bg" href="#">
+                        <a class="no-bg" href="{% url "payment:ccavenue_request" cart_id 'all' %}">
                           Card & Netbanking
                         </a>
                       </h4>
@@ -201,7 +201,7 @@
                   <div class="panel panel-default box-shadow1">
                     <div class="panel-heading">
                       <h4 class="panel-title">
-                        <a class="no-bg" href="#">
+                        <a class="no-bg" href="{% url "payment:epaylater-request" cart_id %}">
                           Buy now, Pay Later <img src="{% static 'shinelearn/images/payments/epaylater-logo.svg' %}" width="89" alt="ePayLater" class="ml-5">
                         </a>
                       </h4>
