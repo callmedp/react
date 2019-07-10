@@ -199,6 +199,7 @@ class AssessmentResultPage(TemplateView):
         return breadcrumbs
 
     def get_context_data(self, **kwargs):
+        session_id = self.request.session.session_key
         slug = kwargs.get('slug')
         test = Test.objects.filter(slug=slug).first()
         context = super(AssessmentResultPage, self).get_context_data(**kwargs)
@@ -206,4 +207,7 @@ class AssessmentResultPage(TemplateView):
         questions_list = Question.objects.filter(test_id=test.pk)
         context.update({'questions_list': questions_list})
         context.update({'object':test})
+        lead_created = cache.get(session_id+'test-'+str(test.pk)).get('lead_created') if\
+        cache.get(session_id+'test-'+str(test.pk)) else False
+        context.update({'lead_created':lead_created})
         return context
