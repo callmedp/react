@@ -38,7 +38,7 @@
                                     <a href="{% url "blog:articles-deatil" art.slug art.pk %}" title="{{art.display_name}}">
                                      {% if art.image %}
                                       {% thumbnail art.image "360x271" crop="center" as im %}
-                                        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{art.image_alt}}">
+                                        <img aria-label="{{art.image_alt}}" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{art.image_alt}}">
                                      {% endthumbnail %}
                                       <!--img src="{{art.image.url}}" class="img-responsive" alt="{{cat.name}}" height="271px" width="360px"-->
                                       {% endif %}

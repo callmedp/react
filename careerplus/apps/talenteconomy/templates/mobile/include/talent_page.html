@@ -7,7 +7,7 @@
     <a title="{{artList.heading}}" href="{{artList.url}}" itemprop="url">
       <figure class="media-left">
         {% thumbnail artList.image "96x73" crop="center" as im %}
-        <img class="media-object w-auto" width="{{ im.width }}" height="{{ im.height }}" src="{{artList.image.url}}" alt="{{artList.image_alt}}" itemprop="image">
+        <img aria-label="{{artList.image_alt}}" class="media-object w-auto" width="{{ im.width }}" height="{{ im.height }}" src="{{artList.image.url}}" alt="{{artList.image_alt}}" itemprop="image">
         {% endthumbnail %}
       </figure>
       <div class="media-body rel">

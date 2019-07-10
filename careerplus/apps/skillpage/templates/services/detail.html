@@ -71,7 +71,7 @@
 					   {% for top_4_vendor in top_4_vendors %}    
 							{% if top_4_vendor.icon or top_4_vendor.image %}
 
-								<img src="{% if top_4_vendor.icon %}
+								<img aria-label="Top 4 vendor icon" src="{% if top_4_vendor.icon %}
 									{{top_4_vendor.icon.url}}
 								{% elif top_4_vendor.image %}{{top_4_vendor.image.url}}{% endif %}" 
 								alt="{% if top_4_vendor.image_alt %} {{top_4_vendor.image_alt}} {% else %}
@@ -138,7 +138,7 @@
 				{% if category_obj.graph_image %}
 			    <div class="col-sm-6 box-panel">
 			    	<figure>
-			        	<img src="{{category_obj.graph_image.url}}" alt="Importance in Market" class="img-responsive">
+			        	<img aria-label="Importance in Market" src="{{category_obj.graph_image.url}}" alt="Importance in Market" class="img-responsive">
 			    	</figure>
 			    </div>
 			    {% endif %} 
@@ -205,7 +205,7 @@
 
 					            <div class="media" >
 					            	<div class="media-left">
-					                	<img class="media-object" 
+					                	<img aria-label="{{product.pNm}}" class="media-object" 
 					                	src="{{product.pImg}}" 
 					                	alt="{{product.pNm}}" height="130px" width="130px">
 					            	</div>
