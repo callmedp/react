@@ -163,6 +163,7 @@
 .icon-gp-2 {
   @include icon-inblock (21px, 15px, -71px -177px);
   @extend %all-center;
+  transform: scale(1.2);
 }
 
 .icon-link-2 {
@@ -680,5 +681,15 @@
 }
 
 .icon-user {
-  
+  @include size(18px, 22px, inline-block);
+  background-position: -376px -310px;
+  position: relative;
+  top: -2px;
+}
+
+.icon-guest {
+  @include size(17px, 25px, inline-block);
+  background-position: -354px -310px;
+  position: relative;
+  top: -2px;
 }

@@ -4,6 +4,7 @@
 
 /* Main CSS Start From Here */
 @import '../components/form-controls';
+@import '../components/bullet';
 
 /* error form Start From Here */
 @import '../components/error-form';
@@ -14,8 +15,7 @@
   background-color: $bg-grey-f5;
   padding-left: 15px;
   padding-right: 15px;
-  height: calc(100% - 50px);
-  padding-bottom: 70px;
+  padding-bottom: 100px;
 
   &--bg {
     @include size(100%, 60px, block);
@@ -31,6 +31,7 @@
     top: 4px;
     z-index: 1;
     display: flex;
+    margin-bottom: 0;
 
     &__item {
       text-transform: uppercase;
@@ -253,17 +254,191 @@
 
 
 .login {
+  position: relative;
+  padding-bottom: 80px;
+  overflow: hidden;
+
   &__user {
     font-size: $font-size-md;
-    
-    span {
 
+    display: flex;
+    align-items: center;
+  }
+
+  &__item {
+    position: relative;
+    display: flex;
+
+    &:not(:last-child) {
+      margin-bottom: 25px;
+    }
+
+    &--code {
+      flex: 0 0 90px;
+
+      select {
+        background-position: 90% 6px;
+        padding-right: 25px;
+      }
+    }
+
+    &--mobile {
+      flex: 1;
+      margin-left: 15px;
+      position: relative;
+    }
+  }
+
+  &__social {
+    display: flex;
+    justify-content: center;
+
+    a {
+      @include size(35px, 35px, block);
+      position: relative;
+
+      &:not(:last-child) {
+        margin-right: 15px;
+      }
+    }
+
+    sup {
+      position: relative;
+    }
+  }
+
+  &__guest {
+    position: absolute;
+    background-color: #ecf8fc;
+    width: 100%;
+    bottom: 0;
+
+    a {
+      padding: 10px 15px;
+      height: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 }
 
 
+.payment-type {
+  padding-bottom: 40px;
 
+  &--item {
+    background-color: $bg-white;
+    padding: 10px 15px;
+    height: 58px;
+    position: relative;
+    box-shadow: 0 0 10px rgba(0,0,0, .1);
+    display: flex;
+    font-weight: $font-weight-medium;
+    align-items: center;
+    font-size: $font-size-md;
+
+    &:not(:last-child) {
+      margin-bottom: 10px;
+    }
+
+    a {
+      display: block;
+      width: 100%;
+    }
+
+    span {
+      height: 33px;
+      width: 4px;
+      background-color: #aabfe1;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      margin-top: -16px;
+    }
+
+    &--img {
+      position: relative;
+      top: 5px;
+      margin-left: 10px;
+    }
+  }
+
+  .smk_accordion {
+    
+    .accordion_in {
+      border-top: 0 none;
+      margin-bottom: 0;
+      margin-top: 0;
+      overflow: visible;
+      position: relative;
+      z-index: 1;
+
+      .acc_head {
+        display: flex;
+        font-weight: $font-weight-medium;
+        color: $txt-blue;
+      }
+
+      .acc_content {
+        border: 0 none;
+        padding-top: 0;
+        color: $txt-grey-333;
+      }
+    }
+  }
+
+  .acc_active {
+    .acc_head {
+      box-shadow: none;
+    }  
+  }
+
+  &__account {
+    background-color: #f6f6f6;
+    padding: 15px;
+
+    &--detail {
+      font-size: $font-size-base + .1;
+    }
+
+    &--item {
+      display: flex;
+    }
+
+    &--name {
+      flex: 0 0 100px;
+      margin-right: 15px;
+    }
+  }
+  
+  select {
+    background-position: 96% 6px;
+  }
+}
+
+
+.line_wrap {
+  margin: 5px 0 30px;
+  position: relative;
+  text-align: center;
+
+  span {
+    background-color: $bg-white;
+    color: $txt-grey-666;
+    display: inline-block;
+    font-size: 1em;
+    padding: 5px 10px;
+    position: relative;
+    top: 13px;
+  }
+
+  .line {
+    border-bottom: 1px solid $border-grey-c1;
+    margin: 0 10px;
+
+  }
+}
 
 .payment-nav {
   font-size: 1em;
