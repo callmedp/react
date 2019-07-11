@@ -2859,7 +2859,8 @@ class WhatsappListQueueView(ListView, PaginationMixin):
     template_name = 'console/order/whatsapp_list.html'
     model = OrderItem
     http_method_names = [u'get', u'post']
-    permission_to_check = ['order.can_view_assigned_jobs_on_the_move', 'order.can_send_jobs_on_the_move', 'can_assign_jobs_on_the_move']
+    permission_to_check = ['Can view assigned jobs on the move', 'Can assign jobs on the move',
+                           'Can send assigned jobs on the move']
     any_permission = True
 
     def __init__(self):
@@ -3195,7 +3196,8 @@ class WhatsAppScheduleView(UserPermissionMixin, DetailView, PaginationMixin):
     page = 1
     any_permission = True
     paginated_by = 10
-    permission_to_check = ['order.can_view_assigned_jobs_on_the_move', 'order.can_send_jobs_on_the_move', 'can_assign_jobs_on_the_move']
+    permission_to_check = ['Can view assigned jobs on the move', 'Can assign jobs on the move',
+                           'Can send assigned jobs on the move']
 
     def get(self, request, *args, **kwargs):
         obj = self.object = self.get_object()

@@ -493,7 +493,7 @@ class OrderItem(AbstractAutoDate):
             ("can_generate_compliance_report", "can create compliance report permmission"),
 
             # jobs on the move permission
-            ("can_view_assigned_jobs_on_the_move", "Can view jobs on the move assigned to user"),
+            ("can_view_assigned_jobs_on_the_move", "Can view assigned jobs on the move"),
             ("can_assign_jobs_on_the_move", "Can assign jobs on the move"),
             ("can_send_jobs_on_the_move", "Can send assigned jobs on the move")
         )
