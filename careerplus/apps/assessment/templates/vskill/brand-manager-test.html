@@ -45,7 +45,7 @@
          <div class="col-sm-12 col-lg-12 col-md-12">
             <div class="popular_test row" id="funcDiv">
 
-               {% for test in all_test|slice:":1" %}
+               {% for test in all_test|slice:":8" %}
                <div class="testinside">
                   <span class="border-left"></span>
   <a id="{{test.id}}" onclick="getProductDetail('{{test.vendor.id}}','{{test.category.id}}');getCourseDetail('{{test.vendor.id}}','{{test.category.id}}','{{test.id}}');" class="testModal" data-toggle="modal" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}" }' data-target="#testModal">
@@ -57,7 +57,7 @@
              {% endfor %}
 
             </div>
-             {% if all_test.count > 1 %}
+             {% if all_test.count > 8 %}
             <button class="btn_white loadmore" id="loadmorebtn" onclick="loadmore();">Load more</button>
              {% endif %}
          </div>
@@ -179,14 +179,14 @@
 
 
 
-   var page_number= 1;
+   var page_number= 2;
    function loadmore(){
             page_number = page_number+1;
              element = document.getElementById('funcDiv');
            $.ajax({
                url: '/api/get-test',
                type: "GET",
-               data : {'page_size' : 1, 'page':page_number,'category_id':'{{Category.id}}' },
+               data : {'page_size' : 4, 'page':page_number,'category_id':'{{Category.id}}' },
                dataType: 'json',
                success: function(json) {
                if (json.next == null){

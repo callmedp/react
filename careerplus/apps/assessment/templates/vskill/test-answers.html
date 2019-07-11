@@ -1,10 +1,21 @@
 {% extends "basic/base1.html" %}
 {% load static meta thumbnail compress %}
 {% block title %}Job Assistance Services | Online Courses - Shine Learning {% endblock title %}
+{% block head %}
+{{block.super}}
+<script type="text/javascript" >
+
+   function preventBack(){window.history.forward();}
+    setTimeout("preventBack()", 0);
+    window.onunload=function(){null};
+</script>
+
+{% endblock head %}
 {% block canonical_url %}
 <link rel="canonical" href="//{{ SITE_DOMAIN }}/">
 <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}/">
 {% endblock canonical_url %}
+
 {% block django_meta %}
 {% include 'meta/meta.html' %}
 {% endblock django_meta %}
@@ -229,13 +240,16 @@ right=0,questionAttempt = null,total = {{questions_list.count}};
 $(document).ready(function() {
         getCourseDetail('{{object.vendor.id}}','{{object.category.id}}','{{object.id}}');
 
-       {%if not lead_created %}
+
+    {% if not request.session.is_lead_created %}
 
       {% if request.session.candidate_id %}
       $('#leadCreationSubmit').click();
       {% else %}
        $("#leadCreationModal").modal('show');
         {% endif %}
+        {% else %}
+        getCoptions();
         {% endif %}
 
 $('#leadCreationForm').validate({
@@ -253,8 +267,18 @@ $('#leadCreationForm').validate({
                 email:true,
             }
         },
+      highlight: function(element, errorClass) {
+            $(element).closest('.form-group').addClass('error');
+        },
+        unhighlight: function(element, errorClass) {
+            $(element).closest('.form-group').removeClass('error');
+            $(element).siblings('.error-txt').html('');
+        },
+        errorPlacement: function(error, element) {
 
+            $(element).siblings('.error-txt').html(error.text());
 
+},
 
 });
 
@@ -313,7 +337,7 @@ if(flag){
          success: function(response){
          }
     });
-    testSession({'lead_create':true});
+    testSession({'lead_created':true});
     getCoptions();
     $('#leadCreationModal').modal('hide');
     return false;

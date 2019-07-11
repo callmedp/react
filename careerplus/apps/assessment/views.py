@@ -206,8 +206,5 @@ class AssessmentResultPage(TemplateView):
         context.update({'breadcrumbs': self.get_breadcrumbs(test)})
         questions_list = Question.objects.filter(test_id=test.pk)
         context.update({'questions_list': questions_list})
-        context.update({'object':test})
-        lead_created = cache.get(session_id+'test-'+str(test.pk)).get('lead_created') if\
-        cache.get(session_id+'test-'+str(test.pk)) else False
-        context.update({'lead_created':lead_created})
+        context.update({'object': test})
         return context

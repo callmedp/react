@@ -345,20 +345,20 @@ function startTimer(duration,) {
 
 }
 
-$("#leadCreationForm").submit(function(e){
-    var form = $(this);
-    $.ajax({
-         url   : '/lead/lead-management/',
-         type  : 'post',
-         data  : form.serialize(), // data to be submitted
-         success: function(response){
-           window.location.href = '/practice-tests/{{object.slug}}/result/';
-         }
-    });
-    return false;
-    testSession({'lead_create':true});
+<!--$("#leadCreationForm").submit(function(e){-->
+    <!--var form = $(this);-->
+    <!--$.ajax({-->
+         <!--url   : '/lead/lead-management/',-->
+         <!--type  : 'post',-->
+         <!--data  : form.serialize(), // data to be submitted-->
+         <!--success: function(response){-->
+           <!--window.location.href = '/practice-tests/{{object.slug}}/result/';-->
+         <!--}-->
+    <!--});-->
+    <!--return false;-->
+    <!--testSession({'lead_create':true});-->
 
- });
+ <!--});-->
 
 function submitTest(){
      $("#submitPermissionModal").modal('show');

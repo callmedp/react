@@ -1422,9 +1422,8 @@ class SetSession(APIView):
 
         # creating lead for particular session_id
         if lead_create:
-            key = session_id+'lead_created'
-            cache.set(key, lead_create, 60*24*24)
-            return Response({'is_lead_created': cache.get(key)})
+            self.request.session.update({'is_lead_created': 1})
+            return Response({'is_lead_created':True})
 
         return Response({'timeout': cache.get( key + 'timeout'),
                          'submission': cache.get(key + 'submission'),})

@@ -26,8 +26,17 @@
 
 <h1>Sales and Marketing
 Tests</h1>
-<div class="bread-crums"> <a href="#">Home</a> -  <a href="#">Free test</a> - Sales and marketing test</div>
-
+        {% block breadcrumb %}
+         <div class="bread-crums">
+            {% for bread in breadcrumbs %}
+            {% if bread.url %}
+            <a href='{{bread.url}}'>{{bread.name}} -</a>
+            {% else %}
+            <a>{{bread.name}}</a>
+            {% endif %}
+            {% endfor %}
+         </div>
+         {% endblock breadcrumb %}
 
     <div class="search">
         <div class="searchbox">
