@@ -696,7 +696,14 @@ class OrderItem(AbstractAutoDate):
         created = not bool(getattr(self, "id"))
         orderitem = OrderItem.objects.filter(id=self.pk).first()
         self.oi_status = 4 if orderitem and orderitem.oi_status == 4 else self.oi_status
-        if self.product.sub_type_flow == 502:
+
+        # handling combo case getting parent and updating child
+        if self.is_combo and not self.parent:
+            jobs_on_the_move_item = self.order.orderitems.filter(product__sub_type_flow=502)
+            for i in jobs_on_the_move_item:
+                from order.tasks import process_jobs_on_the_move
+                process_jobs_on_the_move.delay(i.id)
+        elif self.product.sub_type_flow == 502:
             from order.tasks import process_jobs_on_the_move
             process_jobs_on_the_move.delay(self.id)
         super().save(*args, **kwargs)  # Call the "real" save() method.
