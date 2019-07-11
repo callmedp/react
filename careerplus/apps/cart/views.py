@@ -207,9 +207,24 @@ class PaymentLoginView(TemplateView):
                 if cart_pk:
                     cart_obj = Cart.objects.get(pk=cart_pk)
                     cart_obj.email = email
+                    cart_obj.owner_email = email
                     cart_obj.mobile = mobile_number
                     cart_obj.first_name = first_name
                     cart_obj.last_name = last_name
+                    # registering user into shine (for getting candidate/owner id
+                    data = {}
+                    data.update({
+                        "email": cart_obj.email,
+                        "country_code": cart_obj.country_code,
+                        "cell_phone": cart_obj.mobile,
+                        "name": guest_name,
+                    })
+                    candidate_id, error = user_register(data=data)
+                    # error handling
+                    cart_obj.owner_id = candidate_id
+                    resp_status = ShineCandidateDetail().get_status_detail(email=None,
+                                                                           shine_id=candidate_id)
+                    self.request.session.update(resp_status)
                     cart_obj.save()
                     return HttpResponseRedirect(reverse('payment:payment-option'))
                 return HttpResponseRedirect(reverse('cart:cart-product-list'))
@@ -232,6 +247,9 @@ class PaymentLoginView(TemplateView):
                         if cart_pk:
                             cart_obj = Cart.objects.get(pk=cart_pk)
                             cart_obj.email = email
+                            cart_obj.owner_id = login_resp['candidate_id']
+                            cart_obj.owner_email = email
+                            cart_obj.first_name = self.request.session.get('first_name', '')
                             cart_obj.save()
                         if remember_me:
                             self.request.session.set_expiry(
@@ -576,7 +594,8 @@ class PaymentSummaryView(TemplateView, CartMixin):
 
         context.update({
             'cart_coupon': cart_coupon, 'cart_wallet': cart_wallet, 'wallet': wal_obj,
-            'cart': cart_obj, 'wallet_total': wal_total, 'wallet_point': wal_point})
+            'cart': cart_obj, 'wallet_total': wal_total, 'wallet_point': wal_point,
+            'candidate_in_session': self.request.session.get('candidate_id')})
 
         context.update({
             "cart_items": cart_items,

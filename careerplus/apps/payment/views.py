@@ -79,8 +79,6 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         return None
 
     def get(self, request, *args, **kwargs):
-        import ipdb;
-        ipdb.set_trace();
         redirect = self.redirect_if_necessary()
         try:
             self.cart_obj.payment_page = True
@@ -219,7 +217,8 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         payment_dict = self.getPayableAmount(cart_obj=self.cart_obj)
         line_item = self.cart_obj.lineitems.filter(parent=None)[0]
         type_flow = int(line_item.product.type_flow)
-        email_id = self.cart_obj.owner_email
+        email_id = self.cart_obj.owner_email,
+        first_name = self.cart_obj.first_name or self.request.session.get('first_name')
         print(type_flow)
         context.update({
             "state_form": StateForm(),
@@ -227,7 +226,8 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
             "total_amount": payment_dict.get('total_payable_amount'),
             "cart_id": self.request.session.get('cart_pk'),
             "type_flow": type_flow,
-            "email_id": email_id
+            "email_id": email_id,
+            "first_name": first_name
 
         })
         return context

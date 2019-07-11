@@ -63,7 +63,7 @@
             <div class="col-sm-3 payment-summary-tab">
                 <!-- <a href="{% url "cart:payment-shipping" %}"><span class="yellow-circle">2</span> Shipping</a> -->
                 <a href="{% url "cart:payment-summary" %}"><span class="green-circle">1</span> Summary</a>
-                <a href="{% url "cart:payment-login" %}"><span class="green-circle">2</span> Logged in <strong>as {{email_id}}</strong></a>
+                <a href="{% url "cart:payment-login" %}"><span class="green-circle">2</span> Logged in <strong>as {{first_name|default:email_id}}</strong></a>
                 <a href="{% url "payment:payment-option" %}" class="active"><span>3</span> Payment</a>
 
                 <!-- secure payment -->
