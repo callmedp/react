@@ -56,7 +56,8 @@ def update_initiat_orderitem_sataus(order=None):
                         assigned_to=oi.assigned_to)
 
             elif oi.product.type_flow == 5:
-                if oi.order.orderitems.filter(product__type_flow=1, no_process=False).exists():
+                if (oi.order.orderitems.filter(product__type_flow=1, no_process=False).exists() and \
+                        oi.product.sub_type_flow == 501):
                     last_oi_status = oi.oi_status
                     oi.oi_status = 61
                     oi.last_oi_status = last_oi_status

@@ -29,6 +29,7 @@ def invoice_generation_order(order_pk=None):
 
 @task(name="pending_item_email")
 def pending_item_email(pk=None):
+    from order.models import Order
     order = None
     try:
         order = Order.objects.get(pk=pk)
@@ -800,7 +801,13 @@ def process_jobs_on_the_move(obj_id=None):
     from order.models import OrderItem
     obj = OrderItem.objects.filter(id=obj_id).first()
     # create jobs on the move profile after welcome call is done.
-    if ((obj.wc_cat == 21 and obj.wc_sub_cat in [41, 42]) or (obj.wc_cat == 22 and obj.wc_cat == 63)) and \
+    if obj.is_combo:
+        wc_cat = obj.parent.wc_cat
+        wc_sub_cat = obj.parent.wc_sub_cat
+    else:
+        wc_cat = obj.wc_cat
+        wc_sub_cat = obj.wc_sub_cat
+    if ((wc_cat == 21 and wc_sub_cat in [41, 42]) or (wc_cat == 22 and wc_sub_cat == 63)) and \
             not getattr(obj, 'whatsapp_profile_orderitem', False):
         other_jobs_on_the_move = OrderItem.objects.filter(
             order__status__in=[1, 3],
