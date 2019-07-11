@@ -120,7 +120,7 @@
                     <li>
                         <figure class="icon-comments"></figure>
                         {% if prd_num_rating %}
-                        <a href="javascript:void(0);">{{prd_num_rating}}
+                        <a href="#review">{{prd_num_rating}}
                         {%if prd_num_rating == 1 %}
                             review
                             {%else%}
@@ -133,12 +133,12 @@
                     </li>
                     {% if prd_num_jobs %}
                         <li>
-                            <figure class="icon-bag"></figure>
+                            <figure class="icon-jobs"></figure>
                             <strong>{{prd_num_jobs}} Jobs</strong>
                         </li>
                     {% endif %}
                     <li>
-                        <figure class="icon-jobs"></figure>
+                        <figure class="icon-bag"></figure>
                         <strong>
                             {{prd_num_bought}}
                         </strong> bought

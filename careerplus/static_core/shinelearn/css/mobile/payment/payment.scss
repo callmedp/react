@@ -16,6 +16,7 @@
   padding-left: 15px;
   padding-right: 15px;
   padding-bottom: 100px;
+  min-height: 91%;
 
   &--bg {
     @include size(100%, 60px, block);
@@ -95,7 +96,7 @@
   &--white-box {
     @include border-radius(4px);
     background-color: $bg-white;
-    box-shadow: 0 0 10px rgba(0,0,0, .3);
+    box-shadow: 0 0 10px rgba(0,0,0, .1);
     position: relative;
   }
 
@@ -135,6 +136,10 @@
         display: flex;
         flex: 1;
         flex-direction: column;
+
+        strong {
+          font-weight: $font-weight-medium;
+        }
       }
 
       &--wrap {
@@ -360,7 +365,7 @@
     &--img {
       position: relative;
       top: 5px;
-      margin-left: 10px;
+      margin-left: 5px;
     }
   }
 
@@ -400,6 +405,18 @@
 
     &--detail {
       font-size: $font-size-base + .1;
+
+      @media (max-width: 320px) {
+        font-size: $font-size-base;
+      }
+    }
+
+    &--head {
+      font-size: $font-size-md;
+
+      @media (max-width: 320px) {
+        font-size: $font-size-base;
+      }
     }
 
     &--item {
