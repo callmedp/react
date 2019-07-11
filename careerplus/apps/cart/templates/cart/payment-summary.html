@@ -27,7 +27,7 @@
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          
+
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown have-query">
               <a href="tel:{{ggn_contact}}">Have a query? Call us at <strong>{{ggn_contact}}</strong></a>
@@ -44,51 +44,55 @@
 {% block container %}
     <section class="container mt-53">
         <!-- page content body start -->
-        <div class="row">
+        <div class="row greybg2 pad-25">
 
         <!-- left content start -->
           <div class="col-sm-3 payment-summary-tab">
-          <a href="{% url "cart:payment-login" %}"><span class="yellow-circle">1</span> Login</a>
-          <a href="{% url "cart:payment-shipping" %}"><span class="yellow-circle">2</span> Shipping</a>
-          <a href="{% url "cart:payment-summary" %}" class="active"><span>3</span> Summary</a>
-          <a><span>4</span> Payment</a>
+          <!-- <a href="{% url "cart:payment-shipping" %}"><span class="yellow-circle">2</span> Shipping</a> -->
+          <a href="{% url "cart:payment-summary" %}" class="active"><span>1</span> Summary</a>
+          <a href="{% url "cart:payment-login" %}"><span {% if candidate_in_session %} class="green-circle" {% endif %}>2</span> Login</a>
+          <a><span>3</span> Payment</a>
 
           <!-- secure payment -->
-          <div class="secure-payment">
+          <!-- <div class="secure-payment">
             <figure class="secure-icon-payment"></figure>
             <strong>100% SECURE PAYMENT</strong>
             All major Credit and Debit cards accepted
             <figure class="cards-payment-icon mt-20"></figure>
-          </div>
+          </div> -->
 
-          </div>  
+          </div>
         <!-- left content end -->
 
         <!-- right content start -->
-        <div class="col-sm-9 bdr payment-summary">
-        {% if request.session.checkout_type == 'cart' %}
+        <div class="col-sm-9 payment-summary box-shadow">
+        <!-- {% if request.session.checkout_type == 'cart' %}
         <div class="edit-cart">
           <a href="{% url "cart:cart-product-list" %}">Edit cart</a>
         </div>
-        {% endif %}
+        {% endif %} -->
 
         {% for item in cart_items %}
 
         {% with addons=item.addons variations=item.variations %}
             <!-- prdduct 1 -->
             <ul>
-              {% if forloop.counter == 1 %}
+              <!-- {% if forloop.counter == 1 %}
                 <li class="bdr-tp-btm">
                     <strong class="col-sm-8 col-md-9 item-heading">Item</strong>
                     <strong class="col-sm-4 col-md-3 item-heading">Price</strong>
                 </li>
-              {% endif %}
+              {% endif %} -->
 
               {% if item.product_class == 'course' and variations and item.is_available and variations.0.is_available %}
                     <li>
-                        <span class="col-sm-8 col-md-9 item-sub-heading"><strong>{{item.name}}</strong>{% if item.experience %}{{item.experience|get_choice_display:"EXP_DICT"}}{% endif %}
+                        <span class="col-sm-8 col-md-9 item-sub-heading"><figure class="mr-10"><img class="img-responsive" src="{% static 'shinelearn/images/hr.png' %}"></figure><strong>{{item.name}}</strong>{% if item.experience %}{{item.experience|get_choice_display:"EXP_DICT"}}{% endif %}
                         </span>
                         <strong class="col-sm-4 col-md-3">Rs. {{variations.0.price}}/-</strong>
+                         <form role="form" id="cart_remove_form{{item.id}}">{% csrf_token %}
+                                <input type="hidden" name="reference_id" value="{{variations.0.reference}}">
+                                        <span class="close-icon"  onclick="removeFromCart('{{item.id}}')" id="id-remove-cart{{item.id}}"></span>
+                            </form>
                     </li>
                     {% if variations.0.delivery_obj and variations.0.delivery_obj.get_price %}
                         <li>
@@ -142,7 +146,7 @@
         <!-- coupon & amount -->
         <ul>
           <li>
-            <span class="col-sm-8 col-md-9 text-right total-amount">Total amount</span>
+            <span class="col-sm-8 col-md-9 text-right subtotal-amount">Subtotal</span>
             <span class="col-sm-4 col-md-3 total-amount">Rs. {{total_amount}}/-</span>
             <style type="text/css">
               .error{
@@ -176,9 +180,8 @@
                 {% endif %}
                   <form action="." id="discountForm">
                     <div id="showCoupon" class="hidden-div">
-                      Enter discount code
-                      <div class="form-group">
-                        <input id="discount_code" type="text" placeholder="Discount code" name="code" maxlength="15">
+                      <div class="form-group pr">
+                        <input id="discount_code" type="text" placeholder="Enter coupon code" name="code" maxlength="15">
                          <span class="error-txt" id="discount-alert"></span>
                         <button type="button" onclick="JSApplyDiscount();">Apply</button>
                       </div>
@@ -222,7 +225,7 @@
               <span class="col-sm-6 text-right">CGST @ {{cgst}}%</span>
               <span class="col-sm-6">+Rs. <span>{{cgst_amount}}</span>/-</span>
               <!--span class="col-sm-6 text-right">IGST @ {{igst}}%</span>
-              <span class="col-sm-6">+Rs. <span>{{igst_amount}}</span>/-</span--> 
+              <span class="col-sm-6">+Rs. <span>{{igst_amount}}</span>/-</span-->
             </span>
           </li>
         </ul>
@@ -230,17 +233,17 @@
         <!-- Payable amount -->
         <ul>
           <li class="payable-amount">
-            <span class="col-sm-8 col-md-9 text-right">Payable amount</span>
+            <span class="col-sm-8 col-md-9 text-right">Total</span>
             <span class="col-sm-4 col-md-3">Rs. {{total_payable_amount}}/-</span>
           </li>
         </ul>
 
         <!-- Make payment -->
-        <span class="col-sm-8 col-md-9"></span>
-        <span class="col-sm-4 col-md-3 continue">
-          <a href="{% url "payment:payment-option" %}"><button type="button" id="payment-summary-continue-id">Make payment</button></a>
-          <figure class="secure-payment-icon"></figure>
-          <span>100% Secure Payment</span>
+        <span class="col-sm-7 col-md-8"></span>
+        <span class="col-sm-3 col-md-4 continue">
+          <a href="{% url "cart:payment-login" %}"><button type="button" id="payment-summary-continue-id">Proceed to payment</button></a>
+          <!-- <figure class="secure-payment-icon"></figure>
+          <span>100% Secure Payment</span> -->
         </span>
 
         </div>
@@ -251,7 +254,7 @@
     </section>
     <!-- main section end -->
 {% endblock container %}
-  
+
 
 {% block js_section %}
    {{ block.super }}

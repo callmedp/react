@@ -222,11 +222,43 @@ function JSRemovePoint() {
 
 };
 
+function removeFromCart(line_id) {
+    debugger;
+    if (line_id) {
+
+        $('#id-remove-cart' + line_id).addClass('disabled').removeAttr("onclick");
+        var formData = $('#cart_remove_form' + line_id).serialize();
+        $.ajax({
+            url: '/cart/remove-from-cart/',
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            success: function (json) {
+                if (json.status == 1) {
+                    window.location.reload();
+                    //alert("product removed from cart successfully");
+                } else if (json.status == -1) {
+                    alert('Something went wrong, Please try again.');
+                }
+            },
+            failure: function (response) {
+                alert("Something went wrong, Please try again")
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert("Something went wrong, Please try again")
+            }
+        });
+    }
+
+};
+
 
 $(document).ready(function() {
 
   $('#payment-summary-continue-id').click(function() {
     $('#payment-summary-continue-id').attr('disabled', true);
   });
+
+
 
 });
