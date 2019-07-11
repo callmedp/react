@@ -78,6 +78,13 @@ key_filter_dict_mapping = {"inbox":{"order__welcome_call_done":True,
                                 "order__welcome_call_done":True
                                 },
 
+                            "linkedin_approval":{"order__status":1, 
+                                "oi_status":45,
+                                "product__type_flow__in":[8],
+                                "order__welcome_call_done":True,
+                                "assigned_to":invoke_user
+                                },
+
                             "welcome_call_inbox":{"status":1, 
                                 "welcome_call_done":False
                                 },
@@ -103,6 +110,7 @@ key_exclude_dict_mapping = {"inbox":{"wc_sub_cat__in":[64, 65]},
                             "rejected_by_admin":{"wc_sub_cat__in":[64, 65]},
                             "rejected_by_candidate":{"wc_sub_cat__in":[64, 65]},
                             "linkedin_inbox":{"wc_sub_cat__in":[64, 65]},
+                            "linkedin_approval":{"wc_sub_cat__in":[64, 65],"oi_status":9},
                             "linkedin_rejected_by_candidate":{"wc_sub_cat__in":[64, 65]},
                             "linkedin_rejected_by_admin":{"wc_sub_cat__in":[64, 65]},
                             "welcome_call_inbox":{},
@@ -138,15 +146,20 @@ key_perm_filter_mapping = {"inbox":{
                             "linkedin_rejected_by_admin":{
                                 "order.can_view_all_rejectedbyadmin_list":{},
                                 "order.can_view_only_assigned_rejectedbyadmin_list":{"assigned_to":invoke_user}
-                            }
+                            },
+                            "linkedin_approval":{
+                                "order.can_view_all_approval_list":{},
+                                }
                         }
 
 def cache_badges_for_writers():
+    logging.getLogger('info_log').info("Started Caching Badges for Writers")
+
     writer_profiles = UserProfile.objects.filter(writer_type__gt=0,user__is_active=True)
     key_prefix = "writer_badges_dict_"
     oi_queues = ['inbox','approval','rejected_by_admin',\
             'rejected_by_candidate','linkedin_inbox','linkedin_rejected_by_candidate',\
-            'linkedin_rejected_by_admin']
+            'linkedin_rejected_by_admin','linkedin_approval']
     
     for profile in writer_profiles:
         user = profile.user
@@ -154,8 +167,11 @@ def cache_badges_for_writers():
         cache_key = "{}{}".format(key_prefix,profile.user.id)
         
         for queue in oi_queues:
-            queryset = OrderItem.objects.filter(**key_filter_dict_mapping[queue]).\
-                exclude(**key_exclude_dict_mapping[queue])
+            queryset = OrderItem.objects.filter(**get_clean_dict(user,key_filter_dict_mapping[queue]))
+            
+            for key,value in key_exclude_dict_mapping[queue].items():
+                queryset = queryset.exclude(**{key:value})
+            
             perm_dict = get_clean_dict(user,key_perm_filter_mapping[queue])
             perm_found = False
 
@@ -168,8 +184,13 @@ def cache_badges_for_writers():
             data[queue] = queryset.count() if perm_found else 0
 
         cache.set(cache_key,data,10*60)
+        logging.getLogger('info_log').info("Cached Sidebar Badge for Writer {}".format(user.id))
+
+    logging.getLogger('info_log').info("Finished Caching Badges for Writers")
 
 def cache_badges_for_vendors():
+    logging.getLogger('info_log').info("Started Caching Badges for Vendors")
+
     key_prefix = "partner_badges_dict_"
     
     for user in User.objects.filter(is_active=True):
@@ -187,11 +208,16 @@ def cache_badges_for_vendors():
             wc_sub_cat__in=[64, 65]).exclude(oi_status__in=[4, 10, 81, 161, 162, 163]).count()
 
         cache.set(cache_key,data,10*60)
+        logging.getLogger('info_log').info("Cached Sidebar Badge for Vendor {}".format(user.id))
+
+    logging.getLogger('info_log').info("Finished Caching Badges for Vendors")
 
 def cache_badges_for_ops():
+    logging.getLogger('info_log').info("Started Caching Badges for Ops")
+
     key_prefix = "ops_badges_dict_"
 
-    #Initialise all OPS groups
+    #Initialise all Ops groups
     ops_groups = settings.WELCOMECALL_GROUP_LIST
     ops_head_groups = settings.OPS_HEAD_GROUP_LIST
     allowed_groups = ops_groups + ops_head_groups
@@ -207,8 +233,10 @@ def cache_badges_for_ops():
         cache_key = "{}{}".format(key_prefix,user.id)
 
         for queue in order_queues:
-            queryset = Order.objects.filter(**get_clean_dict(user,key_filter_dict_mapping[queue],id_based=True)).\
-                exclude(**key_exclude_dict_mapping[queue])
+            queryset = Order.objects.filter(**get_clean_dict(user,key_filter_dict_mapping[queue],id_based=True))
+
+            for key,value in key_exclude_dict_mapping[queue].items():
+                queryset = queryset.exclude(**{key:value})
 
             if user.groups.filter(name__in=ops_head_groups).exists():
                 data[queue] = queryset.count()
@@ -217,6 +245,9 @@ def cache_badges_for_ops():
             data[queue] = queryset.filter(assigned_to=user).count()
 
         cache.set(cache_key,data,10*60)
+        logging.getLogger('info_log').info("Cached Sidebar Badge for Ops {}".format(user.id))
+
+    logging.getLogger('info_log').info("Finished Caching Badges for Ops")
 
 
 def cache_sidebar_badges():

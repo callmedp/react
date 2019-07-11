@@ -25,19 +25,19 @@
         <li><a><i class="fa fa-list-alt"></i> Welcome call <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
               {% if request.user|has_group:OPS_HEAD_GROUP_LIST %}
-              <li><a href="{% url "console:welcomecall:queue" %}">Welcome Queue</a></li>
+              <li><a href="{% url "console:welcomecall:queue" %}">Welcome Queue {% if ops_badges_dict.welcome_call_inbox %}({{ops_badges_dict.welcome_call_inbox}}){% endif %}</a></li>
               {% endif %}
 
               {% if request.user|has_group:WELCOMECALL_GROUP_LIST %}
-              <li><a href="{% url "console:welcomecall:assigned" %}">Wc Assigned</a></li>
+              <li><a href="{% url "console:welcomecall:assigned" %}">Wc Assigned {% if ops_badges_dict.welcome_call_assigned %} ({{ops_badges_dict.welcome_call_assigned}}){% endif %}</a></li>
               {% endif %}
 
               {% if request.user|has_group:WELCOMECALL_GROUP_LIST %}
-              <li><a href="{% url "console:welcomecall:callback" %}">Wc Callback</a></li>
+              <li><a href="{% url "console:welcomecall:callback" %}">Wc Callback{% if ops_badges_dict.welcome_call_callback %} ({{ops_badges_dict.welcome_call_callback}}){% endif %}</a></li>
               {% endif %}
 
               {% if request.user|has_group:WELCOMECALL_GROUP_LIST %}
-              <li><a href="{% url "console:welcomecall:service-issue" %}">Wc Service Issue</a></li>
+              <li><a href="{% url "console:welcomecall:service-issue" %}">Wc Service Issue{% if ops_badges_dict.welcome_call_issue %} ({{ops_badges_dict.welcome_call_issue}}){% endif %}</a></li>
               {% endif %}
 
               <li><a href="{% url "console:welcomecall:done" %}">Wc Closed</a></li>
@@ -337,7 +337,7 @@
         {% if perms.order.can_show_linkedin_inbox_queue %}
             <li>
               <a href="{% url 'console:linkedin-inbox' %}">
-              Linkedin Inbox</a>
+              Linkedin Inbox {% if writer_badges_dict.linkedin_inbox %} ({{writer_badges_dict.linkedin_inbox}}){% endif %}</a>
             </li>
         {% endif %}
         {% if perms.order.can_show_linkedin_approval_queue %}
@@ -349,13 +349,13 @@
         {% if perms.order.can_show_linkedinrejectedbycandidate_queue %}
             <li>
               <a href="{% url 'console:linkedin-rejectedbylinkedincandidate' %}">
-              Linkedin Rejected By Candidate</a>
+              Linkedin Rejected By Candidate {% if writer_badges_dict.linkedin_rejected_by_candidate %} ({{writer_badges_dict.linkedin_rejected_by_candidate}}){% endif %}</a>
             </li>
         {% endif %}
         {% if perms.order.can_show_linkedinrejectedbyadmin_queue %}
             <li>
               <a href="{% url 'console:linkedin-rejectedbylinkedinadmin' %}">
-              Linkedin Rejected By Admin</a>
+              Linkedin Rejected By Admin {% if writer_badges_dict.linkedin_rejected_by_admin %} ({{writer_badges_dict.linkedin_rejected_by_admin}}){% endif %}</a>
             </li>
         {% endif %}
         {% if perms.order.can_show_linkedin_approved_queue %}
@@ -380,14 +380,14 @@
             {% endif %}
 
             {% if perms.order.can_show_inbox_queue %}
-                <li><a href="{% url "console:queue-inbox" %}">Inbox</a></li>
+                <li><a href="{% url "console:queue-inbox" %}">Inbox{% if writer_badges_dict.inbox %} ({{writer_badges_dict.inbox}}){% endif %}</a></li>
             {% endif %}
              {% if perms.order.can_show_replaced_order_queue %}
                 <li><a href="{% url "console:replaced-order" %}">Replaced Order</a></li>
             {% endif %}
 
             {% if perms.order.can_show_approval_queue %}
-                <li><a href="{% url "console:queue-approval" %}">Approval</a></li>
+                <li><a href="{% url "console:queue-approval" %}">Approval {% if writer_badges_dict.approval %} ({{writer_badges_dict.approval}}){% endif %}</a></li>
             {% endif %}
 
             {% if perms.order.can_show_approved_queue %}
@@ -395,11 +395,11 @@
             {% endif %}
 
             {% if perms.order.can_show_rejectedbyadmin_queue %}
-                <li><a href="{% url "console:queue-rejectedbyadmin" %}">RejectedByAdmin</a></li>
+                <li><a href="{% url "console:queue-rejectedbyadmin" %}">RejectedByAdmin {% if writer_badges_dict.rejected_by_admin %} ({{writer_badges_dict.rejected_by_admin}}){% endif %}</a></li>
             {% endif %}
 
             {% if perms.order.can_show_rejectedbycandidate_queue %}
-                <li><a href="{% url "console:queue-rejectedbycandidate" %}">RejectedByCandidate</a></li>
+                <li><a href="{% url "console:queue-rejectedbycandidate" %}">RejectedByCandidate {% if writer_badges_dict.rejected_by_candidate %} ({{writer_badges_dict.rejected_by_candidate}}){% endif %}</a></li>
             {% endif %}
 
             {% if perms.order.can_show_booster_queue %}
@@ -439,7 +439,7 @@
 
             {% if perms.order.can_show_partner_inbox_queue %}
             <li>
-                <a href="{% url "console:partner:partnerinbox" %}">Partner Inbox</a>
+                <a href="{% url "console:partner:partnerinbox" %}">Partner Inbox{% if partner_badges_dict.inbox %} ({{partner_badges_dict.inbox}}){% endif %}</a>
             </li>
             {% endif %}
 
