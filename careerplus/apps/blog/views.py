@@ -145,10 +145,6 @@ class BlogDetailView(DetailView, BlogMixin):
     def get_template_names(self):
         if not self.request.amp:
             return ["blog/article-detail.html"]
-
-        if not settings.DEBUG:
-            from newrelic import agent
-            agent.disable_browser_autorum()
         return ["blog/article-detail-amp.html"]
 
     def redirect_if_necessary(self, current_path, article):

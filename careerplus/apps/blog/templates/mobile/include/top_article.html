@@ -16,7 +16,7 @@
             {% if article.image %}
                 <figure class="media-left">
                   {% thumbnail article.image "96x73" crop="center" as im %}
-                        <img class="media-object w-auto" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{article.image_alt}}">
+                        <img aria-label="{{article.image_alt}}" class="media-object w-auto" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{article.image_alt}}">
                   {% endthumbnail %}
                 </figure>
             {% endif %}

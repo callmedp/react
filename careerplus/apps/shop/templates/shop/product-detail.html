@@ -22,7 +22,7 @@
               <div class="course-caption col-sm-8 no-pad" itemscope itemtype="http://schema.org/Product">
                 <div class="course-caption-img">
                   <figure style="background-color:#fff;">
-                    <img itemprop="image" src="{{prd_img}}" alt="{{prd_img_alt}}" class="img-responsive" >
+                    <img aria-label="{{prd_img_alt}}" itemprop="image" src="{{prd_img}}" alt="{{prd_img_alt}}" class="img-responsive" >
                   </figure>
                 </div>
 
@@ -313,7 +313,7 @@
                     <div class="row">
                       <div class="col-sm-12"></div>
                         <div id="recommended_product" style="display:block">
-                          <img id="loadingimg" src="{% static 'shinelearn/images/loader.gif' %}" > 
+                          <img aria-label="loader" id="loadingimg" src="{% static 'shinelearn/images/loader.gif' %}" > 
                         </div>
                     </div>
                 </div>

@@ -11,9 +11,5 @@ import os
 from django.core.wsgi import get_wsgi_application
 
 os.environ["DJANGO_SETTINGS_MODULE"] = "careerplus.config.settings_live"
-#NewRelic
-if os.path.exists('/tmp/newrelic'):
-    import newrelic.agent
-    newrelic.agent.initialize('/var/www/site/learning/current/careerplus/config/newrelic.ini')
 
 application = get_wsgi_application()

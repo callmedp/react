@@ -9,7 +9,7 @@
         <h1 itemprop="name">{{main_article.heading}}</h1>
         <div class="editor-comments-views">
             <span>
-              <img src="{{main_article.author.image.url}}" class="author-small-pic" alt="{{main_article.author.image_alt}}">
+              <img aria-label="{{main_article.author.image_alt}}" src="{{main_article.author.image.url}}" class="author-small-pic" alt="{{main_article.author.image_alt}}">
               <a href="/talenteconomy/authors/{{main_article.author.slug}}" title="{{main_article.author.name}}">{{main_article.author.name}}</a> / <span itemprop="datePublished">{{main_article.publish_date.date}}</span>
             </span>
             <meta itemprop="author" content={{main_article.author.name}}>
@@ -56,7 +56,7 @@
 
 
     <figure>
-        <img src="{{main_article.image.url}}" alt="{{main_article.image_alt}}" class="img-responsive" itemprop="image">
+        <img aria-label="{{main_article.image_alt}}" src="{{main_article.image.url}}" alt="{{main_article.image_alt}}" class="img-responsive" itemprop="image">
     </figure>
 
     <article class="article-content" itemprop="articleBody">
