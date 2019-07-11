@@ -3110,7 +3110,7 @@ class ReplacedOrderListView(PaginationMixin, ListView):
 
 
 @method_decorator(permission_required('order.can_show_certification_queue', login_url='/console/login/'), name='dispatch')
-class CertficationProductQueueView(UserPermissionMixin, PaginationMixin, ListView):
+class CertficationProductQueueView(PaginationMixin, ListView):
     context_object_name = 'object_list'
     template_name = 'console/order/certification-order-item-list.html'
     model = OrderItem
