@@ -1,0 +1,154 @@
+@import '../../../../styles/variables/vars.scss';
+@import '../../../../styles/variables/mixins.scss';
+
+.right-sidebar {
+	flex: 1;
+	background-color: rgb(255, 255, 255);
+  	@extend %shadow;
+  	margin: 0 0 0 20px;
+  	flex-direction: column;
+  	@include border-radius(4px);
+  	height: 570px;
+}
+
+.right-sidebar-scroll {
+	flex: 1 1 auto;
+	overflow-y: auto;
+	overflow-x: hidden;
+	height: 450px;
+	position: relative;
+}
+
+.right-sidebar-scroll:before {
+	position: absolute;
+}
+
+.right-sidebar-scroll-main {
+	display: block;
+	height: 570px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.head-section {
+	@include flexbox();
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	align-content: center;
+	border-bottom: 1px solid $grey2;
+	width: 100%;
+	flex-wrap: nowrap;
+
+	input {
+		display: inline-block;
+		width: auto !important;
+		font-size: 1.8rem;
+		font-weight: 700 !important;
+		margin: 0 10px;
+	}
+
+	.icon-tick {
+		cursor: pointer;
+	}
+}
+
+.pic-section {
+	flex: 0 1 180px;
+	flex-direction: column;
+
+	label {
+		width: 140px;
+		margin: 18px 25px 0 15px;
+	}
+
+	img {
+		cursor: pointer;
+		box-shadow: 0 5px 16px 0 rgba(190,187,187,0.50);
+	}
+
+	@media (max-width: 1190px) {
+		flex: 0 1 120px;
+	}
+}
+
+.addon-buttons {
+	margin-left: auto;
+
+	span {
+		vertical-align: middle;
+		cursor: pointer;
+	}
+}
+
+.add-section-heading {
+	font-size: 1.8rem;
+	font-weight: 400;
+	margin-left: 10px;
+
+	strong {
+		font-weight: 600;
+	}
+}
+
+.info-section {
+	flex: 100%;
+	flex-direction: row;
+	margin: 20px;
+}
+
+.accordion {
+    border: none !important;
+    border-radius: 2px !important;
+}
+.accordion__button {
+	padding: 18px 0 15px 10px !important;
+	background: $grey-bg1 !important;
+}
+
+.accordion__panel {
+	padding: 15px 10px !important;
+	border: 1px solid $border2;
+	border-top: 1px solid transparent !important;
+}
+
+.accordion__button:before {
+	
+	display: none !important;
+}
+
+.accordion__button .opened-accordion {
+	width: 10px;
+	height: 11px;
+	display: inline-block;
+	background: $sprite -167px -197px;
+	margin-left: 10px;
+	margin-top: 5px;
+}
+
+.accordion__button .closed-accordion {
+	width: 10px;
+	height: 11px;
+	display: inline-block;
+	background: $sprite -151px -197px;
+	margin-left: 10px;
+	margin-top: 5px;
+}
+
+.accordion__item {
+	border-bottom: 1px solid #f4f4f4 !important;
+}
+
+.backtoedit {
+	@include flexbox();
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	flex-direction: column;
+
+	p {
+		font-size: 2.2rem;
+		color: $txt1;
+		margin-bottom: 25px;
+	}
+}

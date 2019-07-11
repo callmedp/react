@@ -25,8 +25,8 @@ def featured_updated():
     ''' featured profile cron for feature updation on shine.com'''
 
     featured_orderitems = OrderItem.objects.filter(
-        order__status__in=[1, 3], product__type_flow__in=[5, 16], oi_status=30,
-        product__sub_type_flow__in=[501, 503, 1602])
+        order__status__in=[1, 3], product__type_flow__in=[5], oi_status=30,
+        product__sub_type_flow__in=[501, 503])
     featured_orderitems = featured_orderitems.select_related('order')
 
     featured_count = 0
@@ -73,8 +73,6 @@ def featured_updated():
                             mail_type = "FEATURED_PROFILE_UPDATED"
                         elif obj.product.sub_type_flow == 503:
                             mail_type = "PRIORITY_APPLICANT_MAIL"
-                        elif obj.product.sub_type_flow == 1602:
-                            mail_type = "BADGING_DONE_MAIL"
 
                         email_sets = list(
                             obj.emailorderitemoperation_set.all().values_list(
@@ -107,7 +105,7 @@ def unfeature():
     ''' featured profile cron for closing updated orderitem '''
 
     featured_orderitems = OrderItem.objects.filter(
-        order__status__in=[1, 3], product__type_flow__in=[5, 16], oi_status=28, product__sub_type_flow__in=[501, 503, 1602])
+        order__status__in=[1, 3], product__type_flow__in=[5], oi_status=28, product__sub_type_flow__in=[501, 503])
     featured_orderitems = featured_orderitems.select_related('order')
     unfeature_count = 0
 

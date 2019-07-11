@@ -1,0 +1,323 @@
+
+
+[class^="icon-"] {
+    text-indent: 200%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.icon-edit {
+    @include icon-inblock (15px, 15px, -76px -1px);
+}
+
+.icon-preview {
+    @include icon-inblock (15px, 22px, -107px -1px);
+}
+
+.icon-delete {
+    @include icon-inblock (14px, 18px, -312px -1px);
+}
+
+.icon-add {
+    @include icon-inblock (20px, 19px, -437px -40px);
+}
+
+.icon-info {
+    @include icon-inblock (27px, 20px, -423px -1px);
+}
+
+.icon-summary {
+    @include icon-inblock (27px, 25px, -267px -38px);
+}
+
+.icon-experience {
+    @include icon-inblock (27px, 19px, -309px -39px);
+}
+
+.icon-education {
+    @include icon-inblock (27px, 24px, -189px 0);
+}
+
+.icon-skills {
+    @include icon-inblock (27px, 25px, -232px -1px);
+}
+
+.icon-languages {
+    @include icon-inblock (27px, 23px, -69px -74px);
+}
+
+.icon-awards {
+    @include icon-inblock (27px, 25px, -154px -75px);
+}
+
+.icon-courses {
+    @include icon-inblock (27px, 23px, -234px -75px);
+}
+
+.icon-projects {
+    @include icon-inblock (27px, 25px, -320px -75px);
+}
+
+.icon-references {
+    @include icon-inblock (27px, 21px, -400px -75px);
+}
+
+.icon-info1 {
+    @include icon-inblock (20px, 20px, -273px -1px);
+}
+
+.icon-summary1 {
+    @include icon-inblock (19px, 25px, -355px -38px);
+}
+
+.icon-experience1 {
+    @include icon-inblock (21px, 19px, -397px -39px);
+}
+
+.icon-education1 {
+    @include icon-inblock (27px, 24px, -339px 0);
+}
+
+.icon-skills1 {
+    @include icon-inblock (25px, 25px, -382px -1px);
+}
+
+.icon-languages1 {
+    @include icon-inblock (26px, 23px, -111px -74px);
+}
+
+.icon-awards1 {
+    @include icon-inblock (21px, 25px, -194px -75px);
+}
+
+.icon-courses1 {
+    @include icon-inblock (21px, 23px, -277px -75px);
+}
+
+.icon-projects1 {
+    @include icon-inblock (21px, 25px, -362px -75px);
+}
+
+.icon-references1 {
+    @include icon-inblock (21px, 21px, -441px -75px);
+}
+
+.icon-plus {
+    @include icon-inblock (12px, 12px, -451px 0);
+}
+
+.icon-ascend {
+    @include icon-inblock (26px, 25px, 0 -75px);
+}
+
+.icon-descend {
+    @include icon-inblock (26px, 25px, -31px -75px);
+}
+
+.icon-ascend1 {
+    @include icon-inblock (26px, 25px, -88px -196px);
+}
+
+.icon-descend1 {
+    @include icon-inblock (26px, 25px, -119px -196px);
+}
+
+.icon-change-theme {
+    @include icon-inblock (20px, 24px, -25px -107px);
+}
+
+.icon-change-font {
+    @include icon-inblock (20px, 20px, -79px -107px);
+}
+
+.icon-change-reorder {
+    @include icon-inblock (20px, 18px, -135px -107px);
+}
+
+.icon-zoon {
+    @include icon-inblock (24px, 24px, -201px -109px);
+}
+
+.icon-ribbon {
+    @include icon-inblock (142px, 35px, -233px -108px);
+}
+
+.icon-payment-done {
+    @include icon-inblock (70px, 88px, -1px -139px);
+}
+
+.icon-advantage1 {
+    @include icon-inblock (29px, 34px, -89px -241px);
+}
+
+.icon-advantage2 {
+    @include icon-inblock (26px, 26px, -125px -241px);
+}
+
+.icon-advantage3 {
+    @include icon-inblock (34px, 19px, -159px -241px);
+}
+
+.icon-advantage4 {
+    @include icon-inblock (48px, 32px, -203px -240px);
+}
+
+.icon-works1 {
+    @include icon-inblock (119px, 122px, -1px -327px);
+}
+
+.icon-works2 {
+    @include icon-inblock (113px, 115px, -129px -322px);
+}
+
+.icon-works3 {
+    @include icon-inblock (113px, 112px, -251px -322px);
+}
+
+.icon-features1 {
+    @include icon-inblock (19px, 22px, 0 -267px);
+}
+
+.icon-features2 {
+    @include icon-inblock (19px, 19px, -26px -269px);
+}
+
+.icon-features3 {
+    @include icon-inblock (25px, 19px, -51px -268px);
+}
+
+.icon-features4 {
+    @include icon-inblock (19px, 19px, 0 -297px);
+}
+
+.icon-features5 {
+    @include icon-inblock (14px, 27px, -26px -295px);
+}
+
+.icon-features6 {
+    @include icon-inblock (23px, 26px, -48px -294px);
+}
+
+.icon-close {
+    @include icon-inblock (10px, 10px, -412px -110px);
+}
+
+.icon-closemenu {
+    @include icon-inblock (12px, 12px, -230px -179px);
+}
+
+.icon-name {
+    @include icon-inblock (24px, 19px, -85px -139px);
+}
+
+.icon-surname {
+    @include icon-inblock (24px, 18px, -113px -139px);
+}
+
+.icon-company {
+    @include icon-inblock (24px, 18px, -143px -139px);
+}
+
+.icon-designation {
+    @include icon-inblock (24px, 18px, -170px -139px);
+}
+
+.icon-linkedin {
+    @include icon-inblock (24px, 22px, -149px -37px);
+}
+
+.icon-facebook {
+    @include icon-inblock (24px, 25px, -189px -39px);
+}
+
+.icon-mobile {
+    @include icon-inblock (24px, 19px, -225px -39px);
+}
+
+.icon-address {
+    @include icon-inblock (24px, 21px, -111px -40px);
+}
+
+.icon-email {
+    @include icon-inblock (24px, 14px, -67px -43px);
+}
+
+.icon-date {
+    @include icon-inblock (24px, 19px, -472px -74px);
+}
+
+.icon-language-gr {
+    @include icon-inblock (24px, 19px, -88px -165px);
+}
+
+.icon-skills-gr {
+    @include icon-inblock (24px, 20px, -198px -139px);
+}
+
+.icon-awards-gr {
+    @include icon-inblock (24px, 20px, -118px -165px);
+}
+
+.icon-courses-gr {
+    @include icon-inblock (24px, 19px, -144px -165px);
+}
+
+.icon-projects-gr {
+    @include icon-inblock (24px, 20px, -170px -165px);
+}
+
+.icon-refrences-gr {
+    @include icon-inblock (24px, 18px, -196px -166px);
+}
+
+.icon-blank {
+    @include icon-inblock (24px, 18px, -505px -483px);
+}
+
+.icon-percentage {
+    @include icon-inblock (16px, 16px, -231px -149px);
+}
+
+.icon-interest {
+    @include icon-inblock (20px, 19px, -260px -149px);
+}
+
+.icon-course-type {
+    @include icon-inblock (17px, 20px, -294px -148px);
+}
+
+.icon-rating {
+    @include icon-inblock (19px, 20px, -324px -149px);
+}
+
+.icon-gender {
+    @include icon-inblock (20px, 20px, -357px -150px);
+}
+
+.icon-builderexpert1 {
+    @include icon-inblock (23px, 22px, 0 -240px);
+}
+
+.icon-builderexpert2 {
+    @include icon-inblock (18px, 16px, -34px -240px);
+}
+
+.icon-builderexpert3 {
+    @include icon-inblock (20px, 14px, -61px -240px);
+}
+
+.icon-builderexpert4 {
+    @include icon-inblock (19px, 20px, -218px -196px);
+}
+
+.icon-shinelearning {
+    @include icon-inblock (190px, 40px, -84px -280px);
+}
+
+.icon-tick {
+    @include icon-inblock (19px, 15px, -433px -110px);
+}
+
+.icon-alert {
+    @include icon-inblock (76px, 70px, -424px -131px);
+}

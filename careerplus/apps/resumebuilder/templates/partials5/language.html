@@ -1,0 +1,14 @@
+{% load static compress resume_tags %}
+{% if languages|length >= 1 %}
+    <div style="vertical-align: top; font-size: 13px; color: #333333; margin-bottom: 30px; display: inline-block; width: 47.5%; margin-{{side}}: 2%; word-break: break-word;">
+        <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: {{ current_config.heading_font_size|heading_font_size_choice }}px;">{{ preference_list.8.entity_text }}</strong>
+        <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
+            {% for language in languages %}
+                <li style="vertical-align: top; margin: 5px 0; width: 49.3%; display: inline-block;">
+                    <span style="width: 9px; height: 9px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
+                    <span style="font-size:  {{ current_config.text_font_size|sub_heading_font_size }}px; color: #333333; display: inline-block; vertical-align: top; width: 86%;">{{ language.name }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}

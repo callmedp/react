@@ -1,0 +1,81 @@
+@import '../../../../styles/variables/vars.scss';
+@import '../../../../styles/variables/mixins.scss';
+
+.flex-container {
+	@include flexbox();
+}
+
+.top-banner {
+	background: url(#{$static-url}react/assets/images/banner-bg.jpg) 0 0 no-repeat;
+	background-size: cover;
+	@include border-radius(4px);
+	display: inline-block;
+	height: 156px;
+	width: 100%;
+	@include flexbox();
+	box-shadow: 1px 5px 9px 0 rgba(141,141,141,0.50);
+
+	&--banner-txt{
+		margin-left: 5%;
+		flex: 1;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: center;
+		@include flexbox();
+
+		h1 {
+			font-size: 2.6rem;
+			color: $white;
+			margin-bottom: 10px;
+		}
+
+		p {
+			font-size: 2.0rem;
+			color: #DAE3F9;
+			font-weight: 300;
+		}
+	}
+
+	&--banner-right {
+		flex: 0 0 340px;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		margin-right: 30px;
+		@include flexbox();
+
+		&--banner-thumb {
+			width: 151px;
+			height: 162px;
+			display: inline-block;
+			@include border-radius(4px);
+			box-shadow: 1px 5px 9px 0 rgba(141,141,141,0.50);
+			margin-top: -30px;
+			overflow: hidden;
+			border: 3px solid $white;
+
+			img {
+				max-width: 100%;
+				@include border-radius(4px);
+			}
+		}
+
+		&--payment-done {
+			width: 70px;
+			height: 88px;
+			display: inline-block;
+			background: $sprite -1px -139px;
+			justify-content: flex-end;
+		}
+	}
+}
+
+.launch-offer {
+	width: 145px;
+	height: 139px;
+	background: url(#{$static-url}react/assets/images/launch-offer.png);
+	display: inline-block;
+	position: absolute;
+	right: 10px;
+	top: -12px;
+}

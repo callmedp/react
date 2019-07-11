@@ -1,0 +1,353 @@
+@import '../../../styles/variables/vars.scss';
+@import '../../../styles/variables/mixins.scss';
+
+.nav-fixed {
+
+    header {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        z-index: 30;
+        background: rgba(0, 0, 0, 0.5);
+
+        &.color-change {
+            background: #2A3C86;
+        }
+    }
+}
+
+.home-links {
+    list-style-type: none;
+    @include flexbox();
+    align-items: center;
+    justify-content: center;
+
+    li {
+        display: inline-block;
+        margin-left: 30px; 
+
+        @media (max-width: 991px) {
+            margin-left: 10px;            
+        }
+
+        a {
+            color: $white;
+        }
+    }
+}
+
+.section-container {
+    padding: 4% 3.6%;
+    color: $txt1;
+    line-height: 20px;
+
+    h2 {
+        font-size: 2.6rem;
+        color: $black;
+        text-align: center;
+        display: block;
+        font-weight: 600;
+    }
+
+    &--sub-head {
+        color: $txt2;
+        text-align: center;
+        display: block;
+        margin-top: 10px;
+    }
+
+    h3 {
+        font-size: 1.6rem;
+        color: $black;
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    button {
+        margin: 0 auto;
+        display: block;
+        padding: 11px 20px;
+    }
+}
+
+.grey-bg {
+    background-color: $grey-bg;
+}
+
+.advantages {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+
+    &--list {
+        box-shadow: 0px 3px 25px 0px rgba(0, 0, 0, 0.16);
+        @include border-radius(8px);
+        @include flexbox();
+        align-items: flex-start;
+        position: relative;
+        flex-direction: row;
+        flex: 0 0 42%;
+        padding: 15px;
+        margin: 15px 0 15px 3.5%;
+    }
+
+    &--image {
+        height: 83px;
+        @include border-radius(100%);
+        background: $blue1;
+        box-shadow: 6.729px 1.929px 9px 0px rgba(0, 0, 0, 0.23);
+        flex: 0 0 83px;
+        margin-left: -60px;
+        position: relative;
+
+        span {
+            position: absolute;
+            margin: auto;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+        }
+    }
+
+    &--content {
+        display: flex;
+        flex-direction: column;
+        margin: 0 10px 0 25px;
+
+        h3 {
+            margin-top: 10px;
+        }
+    }
+}
+
+.works {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+
+    &--list {
+        box-shadow: 0px 3px 25px 0px rgba(0, 0, 0, 0.16);
+        @include border-radius(4px);
+        @include flexbox();
+        align-items: center;
+        justify-content: flex-start;
+        position: relative;
+        flex-direction: column;
+        flex: 0 0 30%;
+        padding: 0 15px 30px 15px;
+        margin: 15px;
+        background-color: $white;
+
+        @media (max-width: 991px) {
+            flex: 0 0 29%;
+        }
+    }
+
+    &--image {
+        @include flexbox();
+        flex-direction: row;
+        position: relative;
+        margin: -30px 0 30px 0;
+
+        i {
+            width: 39px;
+            height: 39px;
+            @include border-radius(100%);
+            background: $white;
+            box-shadow: 0.035px 2px 21px 0px rgba(0, 0, 0, 0.21);
+            position: absolute;
+            left: -15px;
+            top: -20px;
+            font-size: 2rem;
+            text-align: center;
+            vertical-align: center;
+            line-height: 39px;
+        }
+    }
+
+    &--content {
+        display: block;
+        @include flexbox();
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+.features {
+    margin: 0 0 20px 0;
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+
+    &--list {
+        @include border-radius(8px);
+        @include flexbox();
+        align-items: center;
+        justify-content: flex-start;
+        position: relative;
+        flex-direction: row;
+        flex: 0 0 30%;
+        padding: 0 0 15px 0;
+        margin: 15px;
+        background-color: $white;
+
+        @media (max-width: 991px) {
+            flex: 0 0 29%;
+        }
+    }
+
+    &--image {
+        flex: 0 0 57px;
+        @include flexbox();
+        flex-direction: row;
+        justify-content: flex-start;
+        align-self: flex-start;
+        margin-top: 5px;
+        height: 57px;
+        background: $white;
+        @include border-radius(100%);
+        box-shadow: -1.452px 5.822px 20px 0px rgba(0, 0, 0, 0.13);
+        position: relative;
+
+        span {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+        }
+    }
+
+    &--content {
+        display: block;
+        @include flexbox();
+        flex-direction: column;
+        justify-content: flex-start;
+        padding-left: 20px;
+        padding-right: 10px;
+        align-self: flex-start;
+    }
+}
+
+.shinelearning {
+    @include flexbox();
+    align-items: flex-start;
+    justify-content: flex-start;
+    position: relative;
+    flex-direction: column;
+    flex: 1;
+    margin-right: 50px;
+
+    p {
+        font-size: 1.4rem;
+        margin: 30px 0 40px 0;
+    }
+
+    ul {
+        list-style-type: none;
+        margin: 0 auto;
+        padding-left: 0;
+        line-height: 20px;
+
+        li {
+            display: inline-block;
+            margin-right: 15px;
+            background: #f8f8f8;
+            padding: 5px 20px 5px 35px;
+            @include border-radius(8px);
+            color: $txt1;
+            position: relative;
+
+            &:before {
+                position: absolute;
+                left: 15px;
+                top: 12px;
+                content: '';
+                width: 6px;
+                height: 6px;
+                @include border-radius(100%);
+                display: inline-block;
+                background: $blue1;
+            }
+        }
+    }
+
+    .icon-shinelearning {
+        margin: 0 auto;
+    }
+}
+
+.reachout-tous {
+    box-shadow: 0 0 15px 0px rgba(0, 0, 0, 0.16);
+    @include border-radius(4px);
+    @include flexbox();
+    align-items: flex-start;
+    justify-content: flex-start;
+    position: relative;
+    flex-direction: column;
+    flex: 0 0 362px;
+    padding: 15px 20px 30px 20px;
+    margin: -6% 15px 30px 15px;
+    background: $white;
+
+    h2 {
+        margin: 10px 0 10px 0!important;
+    }
+
+    strong {
+        margin-bottom: 20px;
+    }
+
+      input[type='text'] {
+      width: 100%;
+      border: 1px solid $border1;
+      height: 45px;
+      @include border-radius(10px);
+      box-shadow: none;
+      padding: 0 10px;
+      font-weight: 400;
+      font-size: 1.3rem;
+    }
+
+    input[type='number'] {
+        width: 100%;
+        border: 1px solid $border1;
+        height: 45px;
+        @include border-radius(10px);
+        box-shadow: none;
+        padding: 0 10px;
+        font-weight: 400;
+        font-size: 1.3rem;
+      }
+
+    .flex-container {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .orange-button {
+        margin: 5px 0 0 0;
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+}
+
+.error{
+    border-color:red!important;
+}

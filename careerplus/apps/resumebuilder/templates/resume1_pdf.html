@@ -1,0 +1,121 @@
+{% load static compress resume_tags %}
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Resume</title>
+    <script src="https://kit.fontawesome.com/85df0f75f9.js"></script>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif';">
+{% if watermark_in_preview %}
+    <div class="pr">
+        <div style="position: absolute; left: 0; right: 0; top: 94px; margin: 0 auto; transform: rotate(-9deg)">
+            <img src="/media/static/resumebuilder/images/watermark.png" alt="shinelearning.com" style="width: 100%;"/>
+        </div>
+    </div>
+{% endif %}
+<div style="max-width: 1536px; width: 100%; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777; float: left; line-height: 20px; word-break: break-word;">
+
+    <div style="display: flex; display: -webkit-box; display: -ms-flexbox; width: 100%; vertical-align: top;">
+        <!--left column-->
+        <div style="width: 44%; flex: 44%; -webkit-box-flex: 44%; -ms-flex: 44%; background: #ffffff; padding: 3%; vertical-align: top;">
+            <div style="display: block; text-align: center; margin-bottom: 10%;">
+                <h1 style="margin: 0; color:{{ current_config.color|background_color_choice }}; font-size: 32px; line-height: 32px; font-weight: bold; text-transform: uppercase;">{{ candidate.first_name }} {{ candidate.last_name }}</h1>
+                <strong style="display: block; font-style: italic; font-size: 18px; color: #777777; font-weight: normal; margin: 10px 0 20px 0;">{{ latest_exp }}</strong>
+                <span style="display: block; text-align: center;">
+              {% if candidate.image %}
+                  <img src="{{ candidate.image }}" width="205" height="205" alt="Resume"
+                       style="border-radius: 100%; margin: 0 auto; text-align: center; width: 205px; height: 205px;">
+              {% endif %}
+            </span>
+            </div>
+
+            <!--Summary-->
+            {% if entity_position.0.active %}
+                {% include entity_position.0.entity_id|render_section:"partials1/" %}
+            {% endif %}
+
+
+            <!--Profile-->
+            {% if entity_position.1.active %}
+                {% include entity_position.1.entity_id|render_section:"partials1/" %}
+            {% endif %}
+
+
+            <!--Skills-->
+            {% if entity_position.2.active %}
+                {% include entity_position.2.entity_id|render_section:"partials1/" %}
+            {% endif %}
+
+
+            <!--Languages-->
+            {% if entity_position.3.active %}
+                {% include entity_position.3.entity_id|render_section:"partials1/" %}
+            {% endif %}
+
+
+            <!--Interest-->
+            {% if entity_position.4.active %}
+                {% include entity_position.4.entity_id|render_section:"partials1/" %}
+            {% endif %}
+
+
+            {% if entity_position.5.active %}
+                {% include entity_position.5.entity_id|render_section:"partials1/" %}
+            {% endif %}
+
+        </div>
+
+        <!--right column-->
+        <div style="width: 46%; flex: 46%; -webkit-box-flex: 46%; -ms-flex: 46%; background: #ffffff; padding: 3%; vertical-align: top;">
+
+            <!--Work experience-->
+            {% if entity_position.6.active %}
+                {% include entity_position.6.entity_id|render_section:"partials1/" %}
+            {% endif %}
+
+
+            <!--Project-->
+            {% if entity_position.7.active %}
+                {% include entity_position.7.entity_id|render_section:"partials1/" %}
+            {% endif %}
+
+
+            <!--Education-->
+            {% if entity_position.8.active %}
+                {% include entity_position.8.entity_id|render_section:"partials1/" %}
+            {% endif %}
+
+
+            <!--Courses-->
+            {% if entity_position.9.active %}
+                {% include entity_position.9.entity_id|render_section:"partials1/" %}
+            {% endif %}
+
+
+            <!--Achievements/Awards-->
+            {% if entity_position.10.active %}
+                {% include entity_position.10.entity_id|render_section:"partials1/" %}
+            {% endif %}
+
+
+            <!--Reference-->
+            {% if entity_position.11.active %}
+                {% include entity_position.11.entity_id|render_section:"partials1/" %}
+            {% endif %}
+        </div>
+
+
+    </div>
+</div>
+{% if activate_water_mark %}
+    <div style="position: fixed; left: 0; right: 0; top: 2%; margin: 0 auto;">
+        <img src="{% static 'resumebuilder/images/watermark.png' %}"
+             alt="shinelearning.com"
+             style="width: 100%;">
+    </div>
+{% endif %}
+</body>
+</html>

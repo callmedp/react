@@ -661,28 +661,7 @@ class CertiticateParser:
                 logging.getLogger('info_log').info(
                     'Badging After parsing data is done for OrderItem  %s is %s' % (str(oi.id), str(data))
                 )
-
-                # Send mail and sms with subject line as Your Profile updated
-                try:
-                    mail_type = "BADGING_DONE_MAIL"
-
-                    email_sets = list(
-                        oi.emailorderitemoperation_set.all().values_list(
-                            'email_oi_status', flat=True).distinct())
-                    to_emails = [oi.order.get_email()]
-                    data = {}
-                    data.update({
-                        "subject": 'Your Featured Profile Is Updated',
-                        "username": oi.order.first_name,
-                        "product_timeline": oi.product.get_duration_in_day(),
-                    })
-
-                    if 72 not in email_sets:
-                        send_email_task.delay(
-                            to_emails, mail_type, data,
-                            status=72, oi=oi.pk)
-                    SendSMS().send(sms_type=mail_type, data=data)
-                    return True
-                except Exception as e:
-                        logging.getLogger('error_log').error('Bading After pasrsing data failed, Error: %s'.format(str(e)))
-                        return False
+                return True
+            else:
+                logging.getLogger('error_log').error('Bading After pasrsing data failed, Error: %s'.format(str(e)))
+                return False

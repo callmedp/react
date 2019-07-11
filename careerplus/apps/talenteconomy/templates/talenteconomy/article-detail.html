@@ -71,15 +71,21 @@
 			{% endif %}
       <br>
       <!-- Looks interesting? -->
+
+                          <div id="snackbar"></div>
+
+
       <div id="sticker" class="request-call query-form-right box-panel col-sm-6 col-md-12 cleafix">
+
+
         <h2 class="heading-right">Looks interesting?</h2>
           <p>Know more about our services, just fill the details below!</p>
-          <form class="mt-20" role="form" id="queryform" >
+          <form class="mt-20" role="form"  id="enquireform" name="enq" >
             <div style='display:none'>
                 <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'/>
             </div>
             <div class="form-group">
-              <input type="text" class="form-control" name="name" placeholder="Name" 
+              <input type="text" class="form-control" name="name"  id="id_name"  placeholder="Name"
               maxlength="100" value="{{request.session.full_name}}">
               <span class="error-txt position-error"></span>
             </div>
@@ -92,7 +98,7 @@
                       {% endfor %}
                       </select>
                     </div>
-                    <input type="text" class="form-control" name="number" 
+                    <input type="text" class="form-control" name="number" id="id_cell_phone"
                     placeholder="Mobile" maxlength="15" value="{{request.session.mobile_no}}">
                     <span class="error-txt position-error"></span>
                 </div>
@@ -101,22 +107,21 @@
                 <textarea class="form-control" rows="1" name="msg" placeholder="Message" maxlength="500"></textarea>
                 <span class="error-txt position-error"></span>
             </div>
-            <input type="hidden" name="lsource" value="1">
+
             <input type="hidden" name="product" value="{{category_obj.pk}}">
             <input type="hidden" name="prd" value="{{category_obj.heading}}">
             <input type="hidden" name="path" value="{{request.build_absolute_uri}}">
-            
-            <button type="button" id="id_query"  class="submit-button">
-            Submit
-            </button>
+            <input type="hidden" name="email" class="form-control" value="{{request.session.email}}">
+            <input type="hidden" name="lsource" value="8">
+           <input type="hidden" name="campaign" value="blogsonline">
+           <button type="button" id="enquire_form" class="submit-button">Submit</button>
           </form>
 
-      </div> 
+      </div>
       <!-- Looks interesting? --> 
-              <div id="snackbar"></div>
 
       <!-- Look interesting -->
-				{% include './include/look-interesting.tmpl.html' with popular_courses=popular_courses page='talenteconomy-article-details' %}
+				<!--{% include './include/look-interesting.tmpl.html' with popular_courses=popular_courses page='talenteconomy-article-details' %}-->
 
 		</div>
 		<!-- right content end -->

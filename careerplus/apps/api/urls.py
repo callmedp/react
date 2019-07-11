@@ -3,7 +3,6 @@ from django.conf import settings
 
 from . import views
 
-
 urlpatterns = [
     url(r'^v1/create-order/$',
         views.CreateOrderApiView.as_view(), name='api-createorder'),
@@ -42,6 +41,24 @@ urlpatterns = [
     url(r'^v1/talent-economy-blogs/$',
         views.TalentEconomyApiView.as_view(),
         name='talent-economy-blogs'),
+
+    url(r'^v1/order-detail/(?P<pk>\d+)/$',
+        views.OrderDetailApiView.as_view(),
+        name='order-detail'),
+
+    url(r'^v1/media-upload/$',
+        views.MediaUploadView.as_view(),
+        name='v1.media-upload'),
+    url(r'^v1/resume-product-id/$',
+        views.ResumeBuilderProductView.as_view(),
+        name='v1.resume-product-id'),
+    url(r'^v1/candidate-login/$', views.ShineCandidateLoginAPIView.as_view(), name='v1.api-login'),
+    url(r'^v1/update-certificate-assesment/(?P<vendor_name>[\w\-]+)/$',
+        views.UpdateCertificateAndAssesment.as_view(),
+        name='remove-cookie-from-header'),
+    url(r'^v1/candidate-insights/$',
+        views.CandidateInsight.as_view(),
+        name='candidate-insights')
 ]
 
 if settings.DEBUG:

@@ -56,6 +56,7 @@ coverage.xml
 .hypothesis/
 ut-coverage/
 coverage_html_report/
+.vscode
 
 # Translations
 *.mo
@@ -102,6 +103,7 @@ ENV/
 
 #Local Env
 careerplus/templates/.gitignore
+
 # Pycharm files
 .idea
 .DS_Store
@@ -121,5 +123,18 @@ careerplus/config/settings_live.py
 
 
 # ignore dupm.rdb
+
+dump.rdb
+# Node modules
+node_modules/
+
+# Package-lock
+package-lock.json
+
+
+# Webpack Stats
+
+# webpack-mobile-stats.json
+# webpack-desktop-stats.json
 
 dump.rdb

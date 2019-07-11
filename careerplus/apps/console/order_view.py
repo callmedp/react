@@ -46,6 +46,7 @@ from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from review.models import Review
 from partner.models import BoosterRecruiter
 from shop.choices import S_ATTR_DICT, A_ATTR_DICT
+from partner.models import BoosterRecruiter,VendorHierarchy
 
 from .decorators import (
     Decorate,
@@ -102,7 +103,6 @@ class OrderListView(ListView, PaginationMixin):
         paginator = Paginator(context['order_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         var = self.sel_opt
-
         alert = messages.get_messages(self.request)
         initial = {"payment_date": self.payment_date, "created": self.created, "status": self.status}
         filter_form = OrderFilterForm(initial)
@@ -115,7 +115,6 @@ class OrderListView(ListView, PaginationMixin):
             var: "checked",
             'email_form': email_form,
             'mobil_form': mobil_form,
-
 
         })
         return context
@@ -372,6 +371,8 @@ class MidOutQueueView(TemplateView, PaginationMixin):
         initial = {
             "payment_date": self.payment_date,
         }
+        # has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
+        # show_btn = True if has_permission else False
         filter_form = OIFilterForm(initial)
         context.update({
             "messages": alert,
@@ -379,7 +380,8 @@ class MidOutQueueView(TemplateView, PaginationMixin):
             "query": self.query,
             "filter_form": filter_form,
             "action_form": OIActionForm(queue_name='midout'),
-            var: "checked"
+            var: "checked",
+            # "show_btn":show_btn,
         })
         return context
 
@@ -487,6 +489,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
             "created": self.created, "writer": self.writer,
             "delivery_type": self.delivery_type}
         filter_form = OIFilterForm(initial)
+
         context.update({
             "action_form": InboxActionForm(),
             "messages": alert,
@@ -711,43 +714,74 @@ class SearchOrderView(ListView, PaginationMixin):
 
 @Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_view_order_detail', login_url='/console/login/'), name='dispatch')
-class OrderDetailVeiw(DetailView):
+class OrderDetailView(DetailView):
     model = Order
     template_name = "console/order/order-detail.html"
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        context = super(OrderDetailVeiw, self).get(request, *args, **kwargs)
-        return context
+        response = super(OrderDetailView, self).get(request, *args, **kwargs)
+
+        #Redirect user if none of the items are visible
+        if not self.context.get('orderitems'):
+            logging.getLogger('info_log').info("Invalid data access {},{},{}".format(\
+                request.user.id,request.user.get_full_name(),self.object.id))
+            messages.add_message(self.request,messages.ERROR,'You are not authorised to view this order.')
+            return HttpResponseRedirect("/console/")
+        
+        return response
+
+    def _get_visible_order_items_for_order(self,order):
+        order_items = order.orderitems.all().select_related('product', 'partner').order_by('id')
+        
+        #Handle vendor users
+        vendor_ids = [x.vendee.id for x in VendorHierarchy.objects.filter(\
+            employee=self.request.user,active=True)]
+        if vendor_ids:
+            order_items = order_items.filter(Q(partner_id__in=vendor_ids) | \
+                    Q(product__vendor_id__in=vendor_ids))
+
+        #Handle Writers
+        if self.request.user.is_writer:
+            order_items = order_items.filter(assigned_to=self.request.user)
+
+        return order_items
 
     def get_context_data(self, **kwargs):
         last_status = ""
-        context = super(OrderDetailVeiw, self).get_context_data(**kwargs)
+        context = super(OrderDetailView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
         order = self.get_object()
         max_limit_draft = settings.DRAFT_MAX_LIMIT
         last_status_object = order.welcomecalloperation_set.exclude(wc_status__in=[0, 1, 2])\
             .order_by('id').last()
-        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
-        show_btn = True if has_permission else False
+
+        # has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
+        # show_btn = True if has_permission else False
+        email_form = emailupdateform()
+        mobil_form = mobileupdateform()
+        
         if not last_status_object:
             last_status = "Not Done"
         else:
             timestamp = '\n' + date_timezone_convert(last_status_object.created).strftime('%b. %d, %Y, %I:%M %P ')
             last_status = last_status_object.get_wc_status()
             last_status += timestamp
-        order_items = order.orderitems.all().select_related('product', 'partner').order_by('id')
-
+        
         context.update({
             "order": order,
             "order_wc_status": last_status,
-            'orderitems': list(order_items),
+            'orderitems': list(self._get_visible_order_items_for_order(order)),
             "max_limit_draft": max_limit_draft,
             "messages": alert,
             "message_form": MessageForm(),
             "draft_form": FileUploadForm(),
-            "show_btn": show_btn,
+            # "show_btn": show_btn,
+            'email_form': email_form,
+            'mobil_form': mobil_form,
+
         })
+        self.context = context
         return context
 
 
@@ -923,7 +957,7 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
         paginator = Paginator(context['approved_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
-        var=self.sel_opt
+        var = self.sel_opt
         max_limit_draft = settings.DRAFT_MAX_LIMIT
         initial = {
             "modified": self.modified,
@@ -1059,7 +1093,7 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
         paginator = Paginator(context['rejectedbyadmin_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
-        var=self.sel_opt
+        var = self.sel_opt
         max_limit_draft = settings.DRAFT_MAX_LIMIT
         initial = {
             "modified": self.modified,
@@ -1198,7 +1232,7 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
         paginator = Paginator(context['rejectedbycandidate_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
-        var=self.sel_opt
+        var = self.sel_opt
         max_limit_draft = settings.DRAFT_MAX_LIMIT
         initial = {
             "modified": self.modified,
@@ -1975,6 +2009,7 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
         initial = {
             "payment_date": self.payment_date, }
         filter_form = OIFilterForm(initial)
+
         context.update({
             "action_form": OIActionForm(queue_name='booster'),
             "messages": alert,
@@ -2416,16 +2451,25 @@ class ActionOrderItemView(View):
                 approval = 0
                 for obj in orderitems:
                     last_oi_status = obj.oi_status
-                    obj.oi_status = 23  # pending Approval
-                    obj.last_oi_status = last_oi_status
-                    obj.save()
-                    approval += 1
                     obj.orderitemoperation_set.create(
                         oi_status=23,
                         last_oi_status=last_oi_status,
                         assigned_to=obj.assigned_to,
                         added_by=request.user)
-                msg = str(approval) + ' orderitems send for approval.'
+                    # Auto Approve the feature profile as per requirement from product.
+                    # action == -5 and queue_name == "domesticprofileapproval"
+                    last_oi_status = 23
+                    obj.oi_status = 30  # approved
+                    obj.last_oi_status = last_oi_status
+                    obj.approved_on = timezone.now()
+                    obj.save()
+                    approval += 1
+                    obj.orderitemoperation_set.create(
+                        oi_status=obj.oi_status,
+                        last_oi_status=last_oi_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+                msg = str(approval) + ' orderitems updated and approval done.'
                 messages.add_message(request, messages.SUCCESS, msg)
             except Exception as e:
                 messages.add_message(request, messages.ERROR, str(e))
@@ -2711,6 +2755,7 @@ class AssignmentOrderItemView(View):
 class ConsoleResumeDownloadView(View):
 
     def get(self, request, *args, **kwargs):
+        current_time = datetime.datetime.now().strftime("%d %B %Y %I:%M:%S %p")
         try:
             file = request.GET.get('path', None)
             next_url = request.GET.get('next', None)
@@ -2729,7 +2774,9 @@ class ConsoleResumeDownloadView(View):
                 return response
         except Exception as e:
             logging.getLogger('error_log').error("%s" % str(e))
-                       
+        logging.getLogger('info_log').info(
+            '{},{},{},{}'.format(current_time, self.request.user.id, self.request.user.get_full_name(),
+                                 'resume download'))
         return HttpResponseRedirect(next_url)
 
 
@@ -2885,10 +2932,11 @@ class WhatsappListQueueView(ListView, PaginationMixin):
         var = self.sel_opt
         alert = messages.get_messages(self.request)
         initial = {"oi_status": self.oi_status}
+
         filter_form = OIFilterForm(initial, queue_name='queue-whatsappjoblist')
         context.update({"assignment_form": AssignmentActionForm(), "messages": alert, "query": self.query,
             "message_form": MessageForm(), "filter_form": filter_form,
-            "action_form": OIActionForm(queue_name="queue-whatsappjoblist"), var: 'checked', })
+            "action_form": OIActionForm(queue_name="queue-whatsappjoblist"), var: 'checked'})
 
         return context
 
@@ -3153,7 +3201,7 @@ class CertficationProductQueueView(PaginationMixin, ListView):
         queryset = queryset.filter(
             order__status__in=[1, 3],
             product__type_flow=16, no_process=False,
-            oi_status__in=[5, 28, 30],
+            oi_status__in=[5, 4],
             product__sub_type_flow__in=[1601, 1602],
             order__welcome_call_done=True).exclude(
             wc_sub_cat__in=[64, 65])

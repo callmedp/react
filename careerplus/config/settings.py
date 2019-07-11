@@ -300,6 +300,15 @@ CACHES = {
             'CONNECTION_POOL_KWARGS': {'max_connections': 50},
         }
     },
+    'token': {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/2",
+        "TIMEOUT": 30 * 86400,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            'CONNECTION_POOL_KWARGS': {'max_connections': 100},
+        }
+    }
 }
 
 
@@ -316,6 +325,7 @@ GS_BUCKET_NAME = 'learning-media-staging-189607'
 GCP_PRIVATE_MEDIA_BUCKET = 'learning--misc-staging-189607'
 GCP_STATIC_BUCKET = 'learning-static-staging-189607'
 GCP_INVOICE_BUCKET = 'learning-invoices-staging-189607'
+GCP_RESUME_BUILDER_BUCKET = 'learning--misc-staging-189607'
 
 # Addon List For writer Invoice
 VISUAL_RESUME_PRODUCT_LIST = [305, 306, 307, 308, 309]
@@ -372,7 +382,7 @@ EXOTEL_DICT = {
            'check_dnd_url': 'https://{sid}:{token}@api.exotel.com/v1/Accounts/{sid}/Numbers/{number}.json',
             }
 
-
+RESUME_BUILDER_NON_COMBO_PID = 3092
 URL_SHORTENER_AUTH_DICT = {"access_token":"29d325106d379436d7fbe9dc76844350859d24c1",
                         "end_point":"https://u.shine.com/api/generate-url/"
                         }

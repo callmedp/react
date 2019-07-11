@@ -16,10 +16,6 @@ class Migration(migrations.Migration):
             model_name='universitycoursedetail',
             name='late_fee',
         ),
-        migrations.RemoveField(
-            model_name='universitycoursedetailscreen',
-            name='late_fee',
-        ),
         migrations.AlterField(
             model_name='product',
             name='sub_type_flow',

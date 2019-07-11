@@ -1,0 +1,263 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Resume</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif';">
+<div style="max-width: 1536px; width: 100%; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777;">
+
+    <div style="width: 93.7%; background: #d34d4d; padding: 3%;">
+
+        <!--top left-->
+        <div style="width: 46%; padding-right: 2%; display: inline-block; vertical-align: top; border-right: 1px solid #de8080;">
+            <img
+                    src="{% static 'resumebuilder/images/resume1/resume-pic.png' %}"
+                    alt="Resume"
+                    style="border-radius: 100%; margin-bottom: 10px; width: 150px; height: 150px;" width="150"
+                    height="150">
+            <h1 style="margin: 0; color: #ffffff; font-size: 32px;">{{ user.first_name }} {{ user.last_name }}</h1>
+            {% if current_exp %}
+                <strong style="display: block; font-size: 16px; color: #ffd7d7; font-weight: normal; margin-bottom: 20px;">
+                    {{ current_exp.job_profile }}</strong>
+            {% endif %}
+            <p style="color: #ffffff">{{ user.extra_info }}</p>
+        </div>
+
+        <!--top right-->
+        <div style="width: 48%; display: inline-block; vertical-align: top; padding-left: 3%;">
+            <ul style="margin: 20px 0 0 0; padding: 0; font-size: 14px; color: #ffffff; list-style-type: none;">
+                <li style="display: table; margin-bottom: 15px;"><span
+                        style="display: table-cell; padding-right: 10px;"><img
+                        src="{% static 'resumebuilder/images/resume1/mobile-icon.png' %}" alt="Mobile"
+                        style="vertical-align: middle;"></span>+91 {{ user.number }}
+                </li>
+                <li style="display: table; margin-bottom: 15px;"><span
+                        style="display: table-cell; padding-right: 10px;"><img
+                        src="{% static 'resumebuilder/images/resume1/email-icon.png' %}" alt="Email"
+                        style="vertical-align: middle;"></span>{{ user.email }}
+                </li>
+                <li style="display: table; margin-bottom: 15px;"><span
+                        style="display: table-cell; padding-right: 10px;"><img
+                        src="{% static 'resumebuilder/images/resume1/location-icon.png' %}" alt="Location"
+                        style="vertical-align: middle;"></span>{{ user.location }}
+                </li>
+                <li style="display: table; margin-bottom: 15px;"><span
+                        style="display: table-cell; padding-right: 10px;"><img
+                        src="{% static 'resumebuilder/images/resume1/linkedin-icon.png' %}" alt="Linkedin"
+                        style="vertical-align: text-top;"></span>linkedin.com/candidatename
+                </li>
+                <li style="display: table; margin-bottom: 15px;"><span
+                        style="display: table-cell; padding-right: 10px;"><img
+                        src="{% static 'resumebuilder/images/resume1/facebook-icon.png' %}" alt="Facebook"
+                        style="vertical-align: middle;"></span>Facebook.com/candidatename
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div style="width: 93.7%; border-bottom: 13px solid #d34d4d; padding: 3% 3% 0 3%;">
+
+        <!--Experience-->
+        <div style="vertical-align: top; font-size: 13px; color: #999999; margin-bottom: 30px;">
+            <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 16px;">Experience</strong>
+            <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
+                {% for exp in experience %}
+                    <li style="vertical-align: top; margin: 10px 0;">
+                        <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
+                        <span style="display: inline-block; width: 75%; vertical-align: top;">
+                    <strong style="display: block; font-size: 16px; color: #333333;">{{ exp.job_profile }}</strong>
+                    {{ exp.company_name }}
+                    <p style="font-size: 14px; color: #777777; margin-top: 5px;">{{ exp.work_description }}</p>
+                  </span>
+                        <span style="font-style: italic; color: #333333; width: 20%; display: inline-block; vertical-align: top;">({{ exp.start_date | date:"M Y" }} - Current)</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!--Skills-->
+        <div style="vertical-align: top; font-size: 13px; color: #333333; margin-bottom: 30px; display: inline-block; width: 47.5%; margin-right: 2%;">
+            <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 16px;">Skills</strong>
+
+            <div style="width: 65%; margin-left: 13%; display: inline-block; font-size: 13px; color: #333333; text-align: center;">
+                <!--1 skills-->
+                <span style="position: relative; display: table; margin: 20% 0 5% 30%; display: none;">
+              <span style="width: 155px; height: 155px; border-radius: 100%; background: #d8d8d8; vertical-align: middle; text-align: center; display: table-cell; line-height: 15px;">Data enginerring</span>
+            </span>
+                <!--2 skills-->
+                <span style="position: relative; display: table; margin: 20% 0 5% 30%; display: none;">
+              <span style="width: 155px; height: 155px; border-radius: 100%; background: #d8d8d8; vertical-align: middle; text-align: center; display: table-cell; line-height: 15px;">Data enginerring</span>
+              <span style="width: 86px; height: 86px; border-radius: 100%; background: #a7c4f4; vertical-align: middle; text-align: center; display: table-cell; position: absolute; top: 40px; right: -70px;">
+                <b style="vertical-align: middle; display: inline-block; margin-top: 35%; line-height: 15px;">Full stack developer</b>
+              </span>
+            </span>
+                <!--3 skills-->
+                <span style="position: relative; display: table; margin: 20% 0 5% 30%; display: none;">
+              <span style="width: 155px; height: 155px; border-radius: 100%; background: #d8d8d8; vertical-align: middle; text-align: center; display: table-cell; line-height: 15px;">Data enginerring</span>
+              <span style="width: 86px; height: 86px; border-radius: 100%; background: #a7c4f4; vertical-align: middle; text-align: center; display: table-cell; position: absolute; top: 40px; right: -70px;">
+                <b style="vertical-align: middle; display: inline-block; margin-top: 35%; line-height: 15px;">Full stack developer</b>
+              </span>
+              <span style="width: 86px; height: 86px; border-radius: 100%; background: #abc881; vertical-align: middle; text-align: center; display: table-cell; position: absolute; top: 40px; left: -70px;">
+                <b style="vertical-align: middle; display: inline-block; margin-top: 35%; line-height: 15px;">OOP</b>
+              </span>
+            </span>
+                <!--4 skills-->
+                <span style="position: relative; display: table; margin: 20% 0 5% 30%;">
+              <span style="width: 155px; height: 155px; border-radius: 100%; background: #d8d8d8; vertical-align: middle; text-align: center; display: table-cell; line-height: 15px;">Data enginerring</span>
+              <span style="width: 86px; height: 86px; border-radius: 100%; background: #ef8080; vertical-align: middle; text-align: center; display: table-cell; position: absolute; top: -45px; left: 35px;">
+                <b style="vertical-align: middle; display: inline-block; margin-top: 35%; line-height: 15px;">Dev OPS</b>
+              </span>
+              <span style="width: 86px; height: 86px; border-radius: 100%; background: #a7c4f4; vertical-align: middle; text-align: center; display: table-cell; position: absolute; top: 80px; right: -60px;">
+                <b style="vertical-align: middle; display: inline-block; margin-top: 35%; line-height: 15px;">Full stack developer</b>
+              </span>
+              <span style="width: 86px; height: 86px; border-radius: 100%; background: #abc881; vertical-align: middle; text-align: center; display: table-cell; position: absolute; top: 80px; left: -55px;">
+                <b style="vertical-align: middle; display: inline-block; margin-top: 35%; line-height: 15px;">OOP</b>
+              </span>
+            </span>
+                <!--5 skills-->
+                <span style="position: relative; display: table; margin: 20% 0 5% 30%; display: none;">
+              <span style="width: 155px; height: 155px; border-radius: 100%; background: #d8d8d8; vertical-align: middle; text-align: center; display: table-cell; line-height: 15px;">Data enginerring</span>
+              <span style="width: 86px; height: 86px; border-radius: 100%; background: #ef8080; vertical-align: middle; text-align: center; display: table-cell; position: absolute; top: -45px; left: 35px;">
+                <b style="vertical-align: middle; display: inline-block; margin-top: 35%; line-height: 15px;">Dev OPS</b>
+              </span>
+              <span style="width: 86px; height: 86px; border-radius: 100%; background: #a7c4f4; vertical-align: middle; text-align: center; display: table-cell; position: absolute; top: 40px; right: -70px;">
+                <b style="vertical-align: middle; display: inline-block; margin-top: 35%; line-height: 15px;">Full stack developer</b>
+              </span>
+              <span style="width: 86px; height: 86px; border-radius: 100%; background: #e2bd58; vertical-align: middle; text-align: center; display: table-cell; position: absolute; bottom: -45px; left: 35px;">
+                <b style="vertical-align: middle; display: inline-block; margin-top: 35%; line-height: 15px;">Machine Learning</b>
+              </span>
+              <span style="width: 86px; height: 86px; border-radius: 100%; background: #abc881; vertical-align: middle; text-align: center; display: table-cell; position: absolute; top: 40px; left: -70px;">
+                <b style="vertical-align: middle; display: inline-block; margin-top: 35%; line-height: 15px;">OOP</b>
+              </span>
+            </span>
+
+            </div>
+            <p style="margin-top: 0; margin-bottom: 30px; padding: 0; color: #000000; line-height: 20px;">Markdown | Git
+                | Vim | Sublime Text Eclipse | Android Studio | Coral Draw Adobe Illustrator | Photoshop</p>
+        </div>
+
+        <!--Project-->
+        <div style="vertical-align: top; font-size: 13px; color: #333333; margin-bottom: 30px; display: inline-block; width: 47.5%; margin-left: 2%;">
+            <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 16px;">Project</strong>
+            <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none; display: block;">
+                {% for proj in projects %}
+                    <li style="vertical-align: top; margin: 10px 0; display: block;">
+                        <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
+                        <span style="display: inline-block; width: 93%; vertical-align: top; color: #999999; font-size: 14px;">
+                    <strong style="display: block; font-size: 16px; color: #333333; margin-bottom: 5px;">{{ proj.project_name }}</strong>
+                              {{ proj.description }}
+
+                        </span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!--Courses done-->
+        <div style="vertical-align: top; font-size: 13px; color: #333333; margin-bottom: 30px; display: inline-block; width: 47.5%; margin-right: 2%;">
+            <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 16px;">Courses
+                done</strong>
+            <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
+                {% for certi in certifications %}
+
+                    <li style="vertical-align: top; margin: 5px 0; width: 49.3%; display: inline-block;">
+                        <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
+                        <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top; width: 86%;">{{ certi.name_of_certification }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!--Education-->
+        <div style="vertical-align: top; font-size: 13px; color: #333333; margin-bottom: 30px; display: inline-block; width: 47.5%; margin-left: 2%;">
+            <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 16px;">Education</strong>
+            <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
+                {% for edu in education %}
+
+                    <li style="vertical-align: top; margin: 10px 0;">
+                        <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
+                        <span style="display: inline-block; width: 57%; vertical-align: top; color: #999999;">
+                <strong style="display: block; font-size: 16px; color: #333333;">{{ edu.specialization }} <span
+                        style="font-size: 16px; color: #333333; font-weight: bold;">- {{ edu.percentage_cgpa}}%</span></strong>
+               {{ edu.institution_name }}
+              </span>
+                        <span style="font-size: 14px; font-style: italic; color: #333333; width: 35%; display: inline-block; vertical-align: top;">{{ edu.start_date|date:"Y" }} - {{ edu.end_date |date:"Y" }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!--Interest-->
+        <div style="vertical-align: top; font-size: 13px; color: #333333; margin-bottom: 30px; display: inline-block; width: 47.5%; margin-right: 2%;">
+            <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 16px;">Interest</strong>
+            <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
+                {% for interest in extracurricular %}
+
+                    <li style="vertical-align: top; margin: 5px 0; width: 49.3%; display: inline-block;">
+                        <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
+                        <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top; width: 86%;">{{ interest }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!--Certificate-->
+        <div style="vertical-align: top; font-size: 13px; color: #333333; margin-bottom: 30px; display: inline-block; width: 47.5%; margin-left: 2%;">
+            <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 16px;">Achievements/Awards</strong>
+            <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
+                {% for achievement in achievements %}
+
+                    <li style="vertical-align: top; margin: 5px 0 10px 0; display: block;">
+                        <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
+                        <span style="font-size: 14px; color: #555555; display: inline-block; vertical-align: top; width: 93%;">{{ achievement.summary }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!--Reference-->
+        <div style="vertical-align: top; font-size: 13px; color: #333333; margin-bottom: 30px; display: inline-block; width: 47.5%; margin-right: 2%;">
+            <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 16px;">Reference</strong>
+            <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
+                {% for reference in references %}
+                    <li style="vertical-align: top; margin: 10px 0;">
+                        <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
+                        <span style="display: inline-block; width: 75%; vertical-align: top;">
+
+                        <strong style="display: block; font-size: 16px; color: #333333;">{{ reference.reference_name }}<span
+                                style="font-size: 14px; font-weight: normal; color: #777777; display: inline-block;">({{ reference.reference_designation }})</span>
+                        </strong>
+                        Infocom Network Pvt. Ltd
+                            </span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!--Languages-->
+        <div style="vertical-align: top; font-size: 13px; color: #333333; margin-bottom: 30px; display: inline-block; width: 47.5%; margin-left: 2%;">
+            <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 16px;">Languages</strong>
+            <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
+                {% for language in languages %}
+                    <li style="vertical-align: top; margin: 5px 0; width: 49.3%; display: inline-block;">
+                        <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
+                        <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top; width: 86%;">{{ language.name }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    </div>
+
+</div>
+{% comment %} <div style="position: fixed; left: 0; right: 0; top: 2%; margin: 0 auto;"><img
+        src="{% static 'resumebuilder/images/watermark.png' %}"
+        alt="shinelearning.com"
+        style="width: 100%;"></div> {% endcomment %}
+</body>
+</html>

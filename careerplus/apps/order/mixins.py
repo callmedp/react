@@ -14,7 +14,7 @@ from order.tasks import service_initiation
 
 from .models import Order, OrderItem
 from .functions import (
-    update_initiat_orderitem_sataus,)
+    update_initiat_orderitem_sataus, )
 
 
 class OrderMixin(CartMixin, ProductInformationMixin):
@@ -177,7 +177,17 @@ class OrderMixin(CartMixin, ProductInformationMixin):
             self.request.session.update({
                 "order_pk": order.pk,
             })
-            cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
+
+            # cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
+            line_item = cart_obj.lineitems.filter(parent=None)[0]
+            type_flow = int(line_item.product.type_flow)
+
+            # resume builder flow handle
+            if type_flow == 17:
+                cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
+            else:
+                cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
+
             cart_items = cart_dict.get('cart_items', [])
             for item in cart_items:
                 if item.get('is_available'):
@@ -236,7 +246,7 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                             oi.selling_price = 0
                             oi.tax_amount = 0
                             oi.discount_amount = 0
-                        
+
                             if parent_li.delivery_service:
                                 oi.delivery_service = parent_li.delivery_service
                             oi.save()
@@ -349,7 +359,7 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                                     oi.delivery_service = parent_li.delivery_service
                                 elif child_li.delivery_service:
                                     # in case of course variation
-                                    delivery_obj= var.get('delivery_obj')
+                                    delivery_obj = var.get('delivery_obj')
                                     oi.delivery_service = delivery_obj
                                     cost_price = delivery_obj.get_price()
                                     oi.delivery_price_excl_tax = cost_price

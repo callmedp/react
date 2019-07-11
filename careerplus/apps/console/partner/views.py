@@ -156,7 +156,7 @@ class PartnerHoldQueueView(ListView, PaginationMixin):
         alert = messages.get_messages(self.request)
         initial = {"modified": self.modified, "payment_date": self.payment_date}
         filter_form = OIFilterForm(initial)
-        var=self.sel_opt
+        var = self.sel_opt
         context.update({
             "messages": alert,
             "message_form": MessageForm(),

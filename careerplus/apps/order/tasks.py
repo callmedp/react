@@ -3,7 +3,7 @@ from celery.decorators import task
 from django.conf import settings
 
 from linkedin.autologin import AutoLogin
-from order.models import Order
+
 from order.functions import (
     create_short_url,
     send_email
@@ -19,6 +19,7 @@ from shop.models import ProductUserProfile
 
 @task(name="invoice_generation_order")
 def invoice_generation_order(order_pk=None):
+    from order.models import Order
     try:
         order = Order.objects.get(pk=order_pk)
         InvoiceGenerate().save_order_invoice_pdf(order=order)
@@ -335,6 +336,7 @@ def pending_item_email(pk=None):
 
 @task(name="process_mailer")
 def process_mailer(pk=None):
+    from order.models import Order
     order = None
     try:
         order = Order.objects.get(pk=pk)
@@ -359,6 +361,7 @@ def process_mailer(pk=None):
                     'subject': 'Your service details related to order <' + str(oi.order.id) + '>',
                     'username': oi.order.first_name,
                     'type_flow': oi.product.type_flow,
+                    'sub_type_flow': oi.product.sub_type_flow,
                     'pk': oi.pk,
                     'oi': oi,
                     'product_name': oi.product.name,
@@ -576,6 +579,7 @@ def process_mailer(pk=None):
 
 @task(name="payment_pending_mailer")
 def payment_pending_mailer(pk=None):
+    from order.models import Order
     order = None
     try:
         order = Order.objects.get(pk=pk)
@@ -663,6 +667,7 @@ def payment_pending_mailer(pk=None):
 
 @task(name="payment_realisation_mailer")
 def payment_realisation_mailer(pk=None):
+    from order.models import Order
     order = None
     mail_type = "SHINE_PAYMENT_CONFIRMATION"
     try:
@@ -711,6 +716,7 @@ def payment_realisation_mailer(pk=None):
 
 @task(name="service_initiation")
 def service_initiation(pk=None):
+    from order.models import Order
     order = None
     try:
         order = Order.objects.get(pk=pk)
@@ -788,6 +794,7 @@ def service_initiation(pk=None):
     except Exception as e:
         logging.getLogger('error_log').error('service initiation failed%s'%str(e))
 
+
 @task(name="process_jobs_on_the_move")
 def process_jobs_on_the_move(obj_id=None):
     from order.models import OrderItem
@@ -847,3 +854,37 @@ def process_jobs_on_the_move(obj_id=None):
             current_salary=current_salary
         )
         obj.update_pending_links_count()
+
+
+@task
+def generate_resume_for_order(order_id):
+    from resumebuilder.models import Candidate
+    from order.models import Order
+    from resumebuilder.utils import ResumeGenerator
+    order_obj = Order.objects.get(id=order_id)
+    candidate_id = order_obj.candidate_id
+
+    for item in order_obj.orderitems.all():
+        if item.product and item.product.type_flow == 17 and item.product.type_product == 2:
+            product_id = item.product.id
+            break
+
+    is_combo = True if product_id != settings.RESUME_BUILDER_NON_COMBO_PID else False
+    selected_template = Candidate.objects.filter(candidate_id = candidate_id).first().selected_template
+    builder_obj = ResumeGenerator()
+    builder_obj.save_order_resume_pdf(order=order_obj,is_combo=is_combo,index=selected_template)
+
+
+@task
+def send_resume_in_mail_resume_builder(attachment,data):
+    to_email = [data.get('email')]
+    mail_type = "SEND_RESUME_IN_MAIL_RESUME_BUILDER"
+    try:
+        SendMail().send(to_email, mail_type, data,attachment=attachment)
+    except Exception as e:
+        logging.getLogger('error_log').error(
+            "%s" % (str(e)))
+
+
+
+

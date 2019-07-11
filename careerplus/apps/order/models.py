@@ -1,8 +1,11 @@
-import datetime
+#python imports
 import math
+import datetime,logging
+>>>>>>> origin/master
 from decimal import Decimal
 from dateutil import relativedelta
 
+#django imports
 from django.db import models
 from django.db.models import Q, Count, Case, When, IntegerField
 
@@ -10,16 +13,22 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.utils import timezone
 
-from seo.models import AbstractAutoDate
-from geolocation.models import Country, CURRENCY_SYMBOL
-from linkedin.models import Draft
-
+#local imports
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
     PAYMENT_MODE, OI_OPS_STATUS, OI_LINKEDIN_FLOW_STATUS,\
     OI_USER_STATUS, OI_EMAIL_STATUS, REFUND_MODE, REFUND_OPS_STATUS,\
     TYPE_REFUND, OI_SMS_STATUS, WC_CATEGORY, WC_SUB_CATEGORY,\
     WC_FLOW_STATUS
-from .functions import get_upload_path_order_invoice
+
+from .functions import get_upload_path_order_invoice, process_application_highlighter
+from .tasks import generate_resume_for_order
+
+#inter app imports
+from linkedin.models import Draft
+from seo.models import AbstractAutoDate
+from geolocation.models import Country, CURRENCY_SYMBOL
+
+#third party imports
 from payment.utils import manually_generate_autologin_url
 from shop.choices import S_ATTR_DICT
 
@@ -163,6 +172,10 @@ class Order(AbstractAutoDate):
     def __str__(self):
         return u"#%s" % (self.number,)
 
+    def order_contains_resume_builder(self):
+        items = self.orderitems.all()
+        return any([item.product.type_flow == 17 for item in items])
+
     @property
     def get_status(self):
         statusD = dict(STATUS_CHOICES)
@@ -184,6 +197,27 @@ class Order(AbstractAutoDate):
         if oi:
             return oi.order.id
         return None
+
+    @property
+    def masked_email(self):
+        if not self.email:
+            return ""
+        email = self.email
+        return email[:2] + "".join(["*" for i in list(email[2:len(email) - 5])]) + email[-5:]
+
+    @property
+    def masked_mobile(self):
+        if not self.mobile:
+            return ""
+        mobile = str(self.mobile)
+        return mobile[:2] + "".join(["*" for i in list(mobile[2:len(mobile)-2])]) + mobile[-2:]
+
+    @property
+    def masked_altmobile(self):
+        if not self.alt_mobile:
+            return ""
+        mobile = str(self.alt_mobile)
+        return mobile[:2] + "".join(["*" for i in list(mobile[2:len(mobile)-2])]) + mobile[-2:]
 
     def get_currency_code(self):
         return CURRENCY_SYMBOL_CODE_MAPPING.get(self.currency)
@@ -237,8 +271,13 @@ class Order(AbstractAutoDate):
                 return 'pink'
         return ''
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
+    def save(self,**kwargs):
+        created = not bool(getattr(self,"id"))
+        if created:
+            return super(Order,self).save(**kwargs)
+
+        existing_obj = Order.objects.get(id=self.id)
+        
         if self.status == 1:
             assesment_items = self.orderitems.filter(
                 order__status__in=[0, 1],
@@ -247,6 +286,12 @@ class Order(AbstractAutoDate):
                 autologin_url=None
             )
             manually_generate_autologin_url(assesment_items=assesment_items)
+        
+        if self.status == 1 and existing_obj.status != 1 and self.order_contains_resume_builder():
+            generate_resume_for_order.delay(self.id)
+            logging.getLogger('info_log').info("Generating resume for order {}".format(self.id))
+
+        return super(Order,self).save(**kwargs)
 
 
 class OrderItem(AbstractAutoDate):
@@ -653,9 +698,11 @@ class OrderItem(AbstractAutoDate):
         self.oi_status = 4 if orderitem and orderitem.oi_status == 4 else self.oi_status
         if self.product.sub_type_flow == 502:
             from order.tasks import process_jobs_on_the_move
-
             process_jobs_on_the_move.delay(self.id)
         super().save(*args, **kwargs)  # Call the "real" save() method.
+        # automate application highlighter/priority applicant
+        if self.product.sub_type_flow == 503:
+            process_application_highlighter(obj=self)
 
          # # for resume booster create orderitem
         # if self.product.type_flow in [7, 15] and obj.oi_status != last_oi_status:

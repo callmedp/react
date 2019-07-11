@@ -1,0 +1,78 @@
+{% load static compress resume_tags %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% block css_section %}
+        <link type="text/css" href="{% static 'shinelearn/css/resume-builder/resume6.css' %}" rel="stylesheet">
+    {% endblock css_section %}
+
+</head>
+<body>
+{% comment %}
+For Mobile case
+ <div style=" width: 1536px; transform-origin: top left; transform : scale(0.32); font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777; line-height: 20px;">
+ {% endcomment %}
+<div style="max-width: 1536px; width: 100%; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777; line-height: 20px;">
+
+    <div style="width: 100%; background: {{ current_config.color|background_color_choice }}; padding: 3%;">
+
+        <!--top left 1-->
+
+        {% include "partials1/summary.html" %}
+
+
+        <!--top right  2-->
+        {% include "partials1/profile.html" %}
+
+
+    </div>
+
+    <div style="width: 100%; border-bottom: 13px solid {{ current_config.color|background_color_choice }}; padding: 3% 3% 0 3%;">
+
+        <!--Experience 3-->
+        {% include "partials1/experience.html" %}
+
+
+        <!--Skills 4-->
+        {% include "partials1/skill.html" %}
+
+
+        <!--Project  5-->
+        {% include "partials1/project.html" %}
+
+
+        <!--Courses done  6-->
+        {% include "partials1/course.html" %}
+
+
+        <!--Education  7-->
+        {% include "partials1/education.html" %}
+
+
+        <!--Interest  8-->
+        {% include "partials1/interest.html" %}
+
+
+        <!--Achievement  9-->
+        {% include "partials1/award.html" %}
+
+
+        <!--Reference  10-->
+        {% include "partials1/reference.html" %}
+
+
+        <!--Languages  11-->
+        {% include "partials1/language.html" %}
+
+
+    </div>
+
+</div>
+{% comment %} <div style="position: fixed; left: 0; right: 0; top: 2%; margin: 0 auto;"><img src="images/watermark.png"
+                                                                               alt="shinelearning.com"
+                                                                               style="width: 100%;"></div> {% endcomment %}
+
+
+</body>
+</html>

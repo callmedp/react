@@ -313,7 +313,7 @@ class OIActionForm(forms.Form):
             )
         elif queue_name == 'domesticprofileupdate':
             ACTION_CHOICES += (
-                (-4, "Send for approval to ops"),  # send domestic Profile Update for approval
+                (-4, "Update and Approve Profile"),  # send domestic Profile Update for approval
             )
         elif queue_name == 'domesticprofileapproval':
             ACTION_CHOICES += (
@@ -484,7 +484,7 @@ class mobileupdateform(forms.ModelForm):
 
     def clean(self):
         alt_number = self.cleaned_data['alt_mobile']
-        if alt_number == "":
+        if alt_number == "" or len(alt_number) < 10:
             raise ValidationError("please enter the correct mobile number")
         else:
             validate_integer(alt_number)

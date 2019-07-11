@@ -2,53 +2,54 @@
 {% load static compress %}
 
 {% block meta_html %}
-    {{block.super}}
-{%  endblock meta_html %}
+    {{ block.super }}
+{% endblock meta_html %}
 
 {% block title %}
-   Payment Options - Shine Learning
+    Payment Options - Shine Learning
 {% endblock title %}
 
 {% block css_section %}
-    {{block.super}}
+    {{ block.super }}
     {% compress css %}
-    <link href="{% static 'shinelearn/css/bootstrap-datepicker.min.css' %}" rel="stylesheet">
-    <link type="text/scss" href="{% static 'shinelearn/css/cart/payment.scss' %}" rel="stylesheet">
+        <link href="{% static 'shinelearn/css/bootstrap-datepicker.min.css' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/cart/payment.scss' %}" rel="stylesheet">
     {% endcompress %}
     {% compress css inline %}
-    <style type="text/css">
-        .danger-txt{
-            color:red;
-        }
-        .error{
-            color:red;
-        }
-    </style>
+        <style type="text/css">
+            .danger-txt {
+                color: red;
+            }
+
+            .error {
+                color: red;
+            }
+        </style>
     {% endcompress %}
 {% endblock css_section %}
 
 {% block navigation %}
-  <!-- navigation bar -->
-  <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-          <a class="navbar-brand" href="/"></a>
-        </div>
+    <!-- navigation bar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/"></a>
+            </div>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          
-          <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown have-query">
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
-              <a href="tel:{{ggn_contact}}" >Have a query? Call us at <strong>{{ggn_contact}}</strong></a>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown have-query">
 
-            </li>
-          </ul>
-        </div><!-- /.navbar-collapse -->
-      </div><!-- /.container-fluid -->
-</nav>
+                        <a href="tel:{{ ggn_contact }}">Have a query? Call us at <strong>{{ ggn_contact }}</strong></a>
+
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
 
 {% endblock navigation %}
 
@@ -58,59 +59,76 @@
         <!-- page content body start -->
         <div class="row">
 
-        <!-- left content start -->
-          <div class="col-sm-3 payment-summary-tab">
-          <a href="{% url "cart:payment-login" %}"><span class="yellow-circle">1</span> Login</a>
-          <a href="{% url "cart:payment-shipping" %}"><span class="yellow-circle">2</span> Shipping</a>
-          <a href="{% url "cart:payment-summary" %}"><span class="yellow-circle">3</span> Summary</a>
-          <a href="{% url "payment:payment-option" %}" class="active"><span>4</span> Payment</a>
+            <!-- left content start -->
+            <div class="col-sm-3 payment-summary-tab">
+                <a href="{% url "cart:payment-login" %}"><span class="yellow-circle">1</span> Login</a>
+                <a href="{% url "cart:payment-shipping" %}"><span class="yellow-circle">2</span> Shipping</a>
+                <a href="{% url "cart:payment-summary" %}"><span class="yellow-circle">3</span> Summary</a>
+                <a href="{% url "payment:payment-option" %}" class="active"><span>4</span> Payment</a>
 
-          <!-- secure payment -->
-          <div class="secure-payment">
-            <figure class="secure-icon-payment"></figure>
-            <strong>100% SECURE PAYMENT</strong>
-            All major Credit and Debit cards accepted
-            <figure class="cards-payment-icon mt-20"></figure>
-          </div>
-          </div>  
-        <!-- left content end -->
+                <!-- secure payment -->
+                <div class="secure-payment">
+                    <figure class="secure-icon-payment"></figure>
+                    <strong>100% SECURE PAYMENT</strong>
+                    All major Credit and Debit cards accepted
+                    <figure class="cards-payment-icon mt-20"></figure>
+                </div>
+            </div>
+            <!-- left content end -->
 
-        <!-- right content start -->
-        <div class="col-sm-9 bdr payment-option">
-          <div class="payable">
-            Payable amount <strong>Rs. {{total_amount}}/-</strong>
-            <a href="{% url "cart:payment-summary" %}" class="review-order">Review order</a>
-          </div>
+            <!-- right content start -->
+            <div class="col-sm-9 bdr payment-option">
+                <div class="payable">
+                    Payable amount <strong>Rs. {{ total_amount }}/-</strong>
+                    <a href="{% url "cart:payment-summary" %}" class="review-order">Review order</a>
+                </div>
 
-            <ul class="nav payment-tabs col-sm-4 col-md-4 col-lg-3" role="tablist">
-              <li role="presentation" class="active"><a href="#card" aria-controls="card" role="tab" data-toggle="tab">Card & Net Banking</a></li>
-              <!--<li role="presentation"><a href="#mobikwik" aria-controls="mobikwik" role="tab" data-toggle="tab">Mobikwik</a></li>-->
-              <li role="presentation"><a href="#emi" aria-controls="emi" role="tab" data-toggle="tab">EMI</a></li>
-              <li role="presentation"><a href="#cash" aria-controls="cash" role="tab" data-toggle="tab">Cash</a></li>
-              <li role="presentation"><a href="#cheque" aria-controls="cheque" role="tab" data-toggle="tab">Cheque</a></li>
-              <li role="presentation"><a href="#upi" aria-controls="upi" role="tab" data-toggle="tab">UPI</a></li>
-              <li role="presentation"><a href="#paylater" aria-controls="paylater" role="tab" data-toggle="tab">Buy Now, Pay Later</a></li>
-            </ul>
-            
-            <div class="tab-content payment-tabs-content col-sm-8 col-md-8 col-lg-9">
-              <div role="tabpanel" class="tab-pane active card-banking" id="card">
-                <article>
-                  You will be redirected to a secure page where you can choose your bank, and make your payment.
-                </article>
-                <ul>
-                  <li class="credit-card"><a href="{% url "payment:ccavenue_request" cart_id 'creditcard' %}">Credit Card</a></li>
+                <ul class="nav payment-tabs col-sm-4 col-md-4 col-lg-3" role="tablist">
+                    <li role="presentation" class="active"><a href="#card" aria-controls="card" role="tab"
+                                                              data-toggle="tab">Card & Net Banking</a></li>
+                    <!--<li role="presentation"><a href="#mobikwik" aria-controls="mobikwik" role="tab" data-toggle="tab">Mobikwik</a></li>-->
+                    <li role="presentation"><a href="#emi" aria-controls="emi" role="tab" data-toggle="tab">EMI</a></li>
+{% comment %}
+                    {% if type_flow != 17 %}
+{% endcomment %}
+                        <li role="presentation"><a href="#cash" aria-controls="cash" role="tab"
+                                                   data-toggle="tab">Cash</a></li>
+                        <li role="presentation"><a href="#cheque" aria-controls="cheque" role="tab" data-toggle="tab">Cheque</a>
+                        </li>
+{% comment %}
+                    {% endif %}
+{% endcomment %}
 
-                  <li class="debit-card"><a href="{% url "payment:ccavenue_request" cart_id 'debit' %}">Debit Card</a></li>
-
-                  <li class="net-banking"><a href="{% url "payment:ccavenue_request" cart_id 'netbanking' %}">Net Banking</a></li>
-
-                  <li class="internaiton-card"><a href="{% url "payment:ccavenue_request" cart_id 'international' %}">International Card</a></li>
-
-                  <li class="emi"><a href="{% url "payment:ccavenue_request" cart_id 'emi' %}">EMI</a></li>
-
+                    <li role="presentation"><a href="#upi" aria-controls="upi" role="tab" data-toggle="tab">UPI</a></li>
+                    <li role="presentation"><a href="#paylater" aria-controls="paylater" role="tab" data-toggle="tab">Buy
+                        Now, Pay Later</a></li>
                 </ul>
-              </div>
-                {% comment %}
+
+                <div class="tab-content payment-tabs-content col-sm-8 col-md-8 col-lg-9">
+                    <div role="tabpanel" class="tab-pane active card-banking" id="card">
+                        <article>
+                            You will be redirected to a secure page where you can choose your bank, and make your
+                            payment.
+                        </article>
+                        <ul>
+                            <li class="credit-card"><a href="{% url "payment:ccavenue_request" cart_id 'creditcard' %}">Credit
+                                Card</a></li>
+
+                            <li class="debit-card"><a href="{% url "payment:ccavenue_request" cart_id 'debit' %}">Debit
+                                Card</a></li>
+
+                            <li class="net-banking"><a href="{% url "payment:ccavenue_request" cart_id 'netbanking' %}">Net
+                                Banking</a></li>
+
+                            <li class="internaiton-card"><a
+                                    href="{% url "payment:ccavenue_request" cart_id 'international' %}">International
+                                Card</a></li>
+
+                            <li class="emi"><a href="{% url "payment:ccavenue_request" cart_id 'emi' %}">EMI</a></li>
+
+                        </ul>
+                    </div>
+                    {% comment %}
               <!--<div role="tabpanel" class="tab-pane other-payment" id="mobikwik">-->
                 <!--<article>Pay using <figure class="mobikwik-icon dib"></figure> wallet</article>-->
 
@@ -129,146 +147,183 @@
                 <!--</div>-->
               <!--</div>-->
                 {% endcomment %}
-              <div role="tabpanel" class="tab-pane other-payment" id="emi">
-                <article>For EMI, you will be redirected to a secure page where you can choose your bank, and make your payment.</article>
-                <strong>Rs. {{total_amount}} <small>(amount payable)</small> </strong>
+                    <div role="tabpanel" class="tab-pane other-payment" id="emi">
+                        <article>For EMI, you will be redirected to a secure page where you can choose your bank, and
+                            make your payment.
+                        </article>
+                        <strong>Rs. {{ total_amount }}
+                            <small>(amount payable)</small>
+                        </strong>
 
-                <div class="continue">
-                  <a href="{% url "payment:ccavenue_request" cart_id 'emi' %}"><button type="button" class="make-payment">Make Payment</button></a>
-                  <figure class="secure-payment-icon"></figure>100% Secure Payment
-                </div>
-              </div>
+                        <div class="continue">
+                            <a href="{% url "payment:ccavenue_request" cart_id 'emi' %}">
+                                <button type="button" class="make-payment">Make Payment</button>
+                            </a>
+                            <figure class="secure-payment-icon"></figure>
+                            100% Secure Payment
+                        </div>
+                    </div>
 
 
-              <!-- cash payment method -->
-              <div role="tabpanel" class="tab-pane other-payment" id="cash">
-                <article>Deposit your cash at ICICI bank branches accross the country!</article>
+                    <!-- cash payment method -->
+                    <div role="tabpanel" class="tab-pane other-payment" id="cash">
+                        <article>Deposit your cash at ICICI bank branches accross the country!</article>
 
-                Step to follow
-                  <ul>
-                    <li>Confirm the payment below to generate your Transaction ID</li>
-                    <li>Deposit the cash at the nearest ICICI Bank branch</li>
-                    <li>Mail us a scanned copy of the deposit slip at <a href="mailto:resumeservices@shine.com">resumeservices@shine.com</a></li>
-                  </ul>
+                        Step to follow
+                        <ul>
+                            <li>Confirm the payment below to generate your Transaction ID</li>
+                            <li>Deposit the cash at the nearest ICICI Bank branch</li>
+                            <li>Mail us a scanned copy of the deposit slip at <a href="mailto:resumeservices@shine.com">resumeservices@shine.com</a>
+                            </li>
+                        </ul>
 
-                  <span class="bank-details">
+                        <span class="bank-details">
                     <strong>Our Account Details with ICICI Bank</strong>
                     <p><small>Account Name</small> : HT Media Limited</p>
                     <p><small>Account No.</small> : 000705038629</p>
                   </span>
 
-                  <form role="form" id="id-cash-form" method="post" action="." >{% csrf_token %}
-                      <span class="custom-select">
+                        <form role="form" id="id-cash-form" method="post" action=".">{% csrf_token %}
+                            <span class="custom-select">
                         <div class="{% if state_form.state.errors %}error{% endif %}">
-                            {{state_form.state}}
-                            <span class="error-txt">{{state_form.state.errors.0}}</span>
+                            {{ state_form.state }}
+                            <span class="error-txt">{{ state_form.state.errors.0 }}</span>
                         </div>
                       </span>
-                      <input type="hidden" name="payment_type" value="cash">
+                            <input type="hidden" name="payment_type" value="cash">
 
-                    <strong>Rs. {{total_amount}}<small>(amount payable)</small> </strong>
+                            <strong>Rs. {{ total_amount }}
+                                <small>(amount payable)</small>
+                            </strong>
 
-                    <div class="continue">
-                      <button type="submit" class="make-payment">Make Payment</button>
-                      <figure class="secure-payment-icon"></figure>100% Secure Payment
+                            <div class="continue">
+                                <button type="submit" class="make-payment">Make Payment</button>
+                                <figure class="secure-payment-icon"></figure>
+                                100% Secure Payment
+                            </div>
+                        </form>
                     </div>
-                </form>
-              </div>
-              <!-- cash payment method end -->
+                    <!-- cash payment method end -->
 
 
-              <div role="tabpanel" class="tab-pane other-payment" id="emi">
-                <article>For EMI, you will be redirected to a secure page where you can choose your bank, and make your payment.</article>
-                <strong>Rs. 4599 <small>(amount payable)</small> </strong>
+                    <div role="tabpanel" class="tab-pane other-payment" id="emi">
+                        <article>For EMI, you will be redirected to a secure page where you can choose your bank, and
+                            make your payment.
+                        </article>
+                        <strong>Rs. 4599
+                            <small>(amount payable)</small>
+                        </strong>
 
-                <div class="continue">
-                  <button type="button" class="make-payment">Make Payment</button>
-                  <figure class="secure-payment-icon"></figure>100% Secure Payment
-                </div>
-              </div>
-              <div role="tabpanel" class="tab-pane other-payment" id="cheque">
-                <article>Pay by Cheque</article>
-
-                  <form class="form-inline" id="check-pay-form" method="post" action="">{% csrf_token %}
-                  <fieldset>
-                    {% for field in check_form %}
-                        <div class="form-group {% if field.errors %}error{% endif %}">
-                            {{ field }}
-                            <span class="danger-txt">{{field.errors.0}}</span>
-                            {% if field.help_text %}
-                                <p class="text-muted"><small>{{ field.help_text }}</small></p>
-                            {% endif %}
+                        <div class="continue">
+                            <button type="button" class="make-payment">Make Payment</button>
+                            <figure class="secure-payment-icon"></figure>
+                            100% Secure Payment
                         </div>
-                    {% endfor %}
-                  </fieldset>
-                  <input type="hidden" name="payment_type" value="cheque">
+                    </div>
+                    <div role="tabpanel" class="tab-pane other-payment" id="cheque">
+                        <article>Pay by Cheque</article>
 
-                  </form>
+                        <form class="form-inline" id="check-pay-form" method="post" action="">{% csrf_token %}
+                            <fieldset>
+                                {% for field in check_form %}
+                                    <div class="form-group {% if field.errors %}error{% endif %}">
+                                        {{ field }}
+                                        <span class="danger-txt">{{ field.errors.0 }}</span>
+                                        {% if field.help_text %}
+                                            <p class="text-muted">
+                                                <small>{{ field.help_text }}</small>
+                                            </p>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </fieldset>
+                            <input type="hidden" name="payment_type" value="cheque">
 
-                  <span class="bank-details">
+                        </form>
+
+                        <span class="bank-details">
                     <strong>Our Account Details with ICICI Bank</strong>
                     <p><small>Account Name</small> : HT Media Limited</p>
                     <p><small>Account No.</small> : 000705038629</p>
                   </span>
 
-                  Step to follow
-                  <ul>
-                    <li>Confirm the payment below to generate your Transaction ID</li>
-                    <li>Deposit the cash at the nearest ICICI Bank branch</li>
-                    <li>Mail us a scanned copy of the deposit slip at <a href="mailto:resumeservices@shine.com">resumeservices@shine.com</a></li>
-                  </ul>
+                        Step to follow
+                        <ul>
+                            <li>Confirm the payment below to generate your Transaction ID</li>
+                            <li>Deposit the cash at the nearest ICICI Bank branch</li>
+                            <li>Mail us a scanned copy of the deposit slip at <a href="mailto:resumeservices@shine.com">resumeservices@shine.com</a>
+                            </li>
+                        </ul>
 
-                <strong>Rs. {{total_amount}} <small>(amount payable)</small> </strong>
+                        <strong>Rs. {{ total_amount }}
+                            <small>(amount payable)</small>
+                        </strong>
 
-                <div class="continue">
-                  <button type="button" id="check-sumit-button" class="make-payment">Make Payment</button>
-                  <figure class="secure-payment-icon"></figure>100% Secure Payment
+                        <div class="continue">
+                            <button type="button" id="check-sumit-button" class="make-payment">Make Payment</button>
+                            <figure class="secure-payment-icon"></figure>
+                            100% Secure Payment
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane other-payment" id="emi">
+                        <article>For EMI, you will be redirected to a secure page where you can choose your bank, and
+                            make your payment.
+                        </article>
+                        <strong>Rs. 4599
+                            <small>(amount payable)</small>
+                        </strong>
+
+                        <div class="continue">
+                            <button type="button">Make Payment</button>
+                            <figure class="secure-payment-icon"></figure>
+                            100% Secure Payment
+                        </div>
+
+                    </div>
+                    <div role="tabpanel" class="tab-pane other-payment" id="upi">
+                        <article>For UPI, you will be redirected to a secure page where you can enter your UPI address,
+                            and complete your payment.
+                        </article>
+                        <strong>Rs. {{ total_amount }}
+                            <small>(amount payable)</small>
+                        </strong>
+                        <div class="continue">
+                            <a href="{% url "payment:ccavenue_request" cart_id 'upi' %}">
+                                <button type="button" class="make-payment">Make UPI Payment</button>
+                            </a>
+                            <figure class="secure-payment-icon"></figure>
+                            100% Secure Payment
+                        </div>
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane card-banking" id="paylater">
+                        <article>
+                            You will be redirected to a secure page where you can fill up some details and pay at a
+                            later date.
+                        </article>
+                        <ul>
+                            <li class="credit-card"><a href="{% url "payment:epaylater-request" cart_id %}"><img
+                                    width="140px" src="{% static 'shinelearn/images/payments/epaylater-logo.svg' %}"
+                                    alt="EPayLater" title="EPayLater"></a></li>
+                        </ul>
+                    </div>
+
                 </div>
-              </div>
-              <div role="tabpanel" class="tab-pane other-payment" id="emi">
-                <article>For EMI, you will be redirected to a secure page where you can choose your bank, and make your payment.</article>
-                <strong>Rs. 4599 <small>(amount payable)</small> </strong>
-
-                <div class="continue">
-                  <button type="button">Make Payment</button>
-                  <figure class="secure-payment-icon"></figure>100% Secure Payment
-                </div>
-                
-              </div>
-              <div role="tabpanel" class="tab-pane other-payment" id="upi">
-                <article>For UPI, you will be redirected to a secure page where you can enter your UPI address, and complete your payment.</article>
-                <strong>Rs. {{total_amount}} <small>(amount payable)</small> </strong>
-                  <div class="continue">
-                  <a href="{% url "payment:ccavenue_request" cart_id 'upi' %}"><button type="button" class="make-payment">Make UPI Payment</button></a>
-                  <figure class="secure-payment-icon"></figure>100% Secure Payment
-                </div>
-              </div>
-
-              <div role="tabpanel" class="tab-pane card-banking" id="paylater">
-                <article>
-                  You will be redirected to a secure page where you can fill up some details and pay at a later date.
-                </article>
-                <ul>
-                  <li class="credit-card"><a href="{% url "payment:epaylater-request" cart_id %}"><img width="140px" src="{% static 'shinelearn/images/payments/epaylater-logo.svg' %}" alt="EPayLater" title="EPayLater"></a></li>
-                </ul>
-              </div>
-
             </div>
-        </div>
-        <!-- right content end -->
+            <!-- right content end -->
 
         </div>
         <!-- page content body end -->
     </section>
     <!-- main section end -->
 {% endblock container %}
-  
+
 
 {% block js_section %}
     {{ block.super }}
     {% compress js %}
-    <script src="{% static 'shinelearn/js/common/bootstrap-datepicker.min.js' %}"></script>
-    <script src="{% static 'shinelearn/js/payment/payment.js' %}"></script>
+        <script src="{% static 'shinelearn/js/common/bootstrap-datepicker.min.js' %}"></script>
+        <script src="{% static 'shinelearn/js/payment/payment.js' %}"></script>
     {% endcompress %}
 {% endblock js_section %}
 {% block johukum %}

@@ -1,9 +1,10 @@
-import logging
+import logging, binascii, os, pickle
 import datetime
+
 import requests
 from decimal import Decimal
 
-from django.db.models import Sum, Count
+from django.db.models import Sum, Count, Subquery, OuterRef, F
 from django.utils import timezone
 from django.conf import settings
 from django.http import JsonResponse
@@ -14,19 +15,24 @@ from rest_framework import status
 from rest_framework.permissions import (
     IsAuthenticated,
     IsAdminUser, )
+
+from rest_framework.generics import ListAPIView, CreateAPIView
+from rest_framework.authentication import SessionAuthentication
 from haystack import connections
 from haystack.query import SearchQuerySet
 from core.library.haystack.query import SQS
 from partner.utils import CertiticateParser
 from partner.models import ProductSkill
 from rest_framework.generics import ListAPIView
+
+from rest_framework.generics import ListAPIView,RetrieveAPIView
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from django_filters.rest_framework import DjangoFilterBackend
 
 from users.tasks import user_register
 from order.models import Order, OrderItem, RefundRequest
 from shop.views import ProductInformationMixin
-from shop.models import Product,Category
+from shop.models import Product, Category
 from coupon.models import Coupon, CouponUser
 from core.api_mixin import ShineCandidateDetail, AmcatApiMixin
 from payment.tasks import add_reward_point_in_wallet
@@ -45,14 +51,26 @@ from .serializers import (
     OrderListHistorySerializer,
     RecommendedProductSerializer,
     RecommendedProductSerializerSolr,
+    MediaUploadSerializer,
+    ResumeBuilderProductSerializer,
+    ShineDataFlowDataSerializer,
     VendorCertificateSerializer,
     ImportCertificateSerializer,
     ShineDataFlowDataSerializer,
-    CertificateSerializer,TalentEconomySerializer)
+    CertificateSerializer,TalentEconomySerializer,OrderDetailSerializer)
 
 from partner.models import Certificate, Vendor
 from shared.rest_addons.pagination import LearningCustomPagination
-from shared.rest_addons.mixins import (SerializerFieldsMixin,FieldFilterMixin)
+
+from shared.rest_addons.permissions import OrderAccessPermission
+from shared.rest_addons.authentication import ShineUserAuthentication
+from shared.rest_addons.mixins import (SerializerFieldsMixin, FieldFilterMixin)
+
+from django_redis import get_redis_connection
+from shared.utils import ShineCandidate
+from linkedin.autologin import AutoLogin
+from users.mixins import RegistrationLoginApi
+from .education_specialization import educ_list
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
     authentication_classes = [OAuth2Authentication]
@@ -428,19 +446,19 @@ class EmailLTValueApiView(APIView):
             return Response(
                 {"status": "FAIL", "msg": "Email or User Doesn't Exists"},
                 status=status.HTTP_400_BAD_REQUEST)
-        
+
         ltv_pks = list(Order.objects.filter(
             candidate_id=candidate_id,
-            status__in=[1,2,3]).values_list('pk', flat=True))
+            status__in=[1, 2, 3]).values_list('pk', flat=True))
         if ltv_pks:
             ltv_order_sum = Order.objects.filter(
                 pk__in=ltv_pks).aggregate(ltv_price=Sum('total_incl_tax'))
-            last_order = OrderItem.objects.select_related('order').filter(order__in = ltv_pks)\
+            last_order = OrderItem.objects.select_related('order').filter(order__in=ltv_pks) \
                 .exclude(oi_status=163).order_by('-order__payment_date').first()
             if last_order:
-                last_order =last_order.order.payment_date.strftime('%Y-%m-%d %H:%M:%S')
+                last_order = last_order.order.payment_date.strftime('%Y-%m-%d %H:%M:%S')
             else:
-                last_order=""
+                last_order = ""
 
             ltv = ltv_order_sum.get('ltv_price') if ltv_order_sum.get('ltv_price') else Decimal(0)
             rf_ois = list(OrderItem.objects.filter(
@@ -461,6 +479,7 @@ class OrderHistoryAPIView(ListAPIView):
     serializer_class = OrderListHistorySerializer
     authentication_classes = [OAuth2Authentication]
     permission_classes = [IsAuthenticated, IsAdminUser]
+
     # permission_classes = []
 
     def get_queryset(self, *args, **kwargs):
@@ -555,7 +574,8 @@ class ValidateCouponApiView(APIView):
                             "msg": 'This code is not valid for your account.'},
                             status=status.HTTP_400_BAD_REQUEST)
 
-                    if coupon.user_limit is coupon.users.filter(redeemed_at__isnull=False).count():  # all coupons redeemed
+                    if coupon.user_limit is coupon.users.filter(
+                            redeemed_at__isnull=False).count():  # all coupons redeemed
                         return Response({
                             "status": "FAIL",
                             "msg": 'This code has already been used.'},
@@ -746,14 +766,371 @@ class RemoveCookieFromHeader(APIView):
         return response
 
 
-class UpdateCertificateAndAssesment(APIView):
+class MediaUploadView(CreateAPIView):
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = MediaUploadSerializer
 
+
+class ResumeBuilderProductView(ListAPIView):
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = ResumeBuilderProductSerializer
+
+    def get_queryset(self):
+        type_flow = self.request.query_params.get('type_flow')
+        return Product.objects.filter(type_flow=type_flow, type_product=2,active=True).annotate(
+            parent=F('siblingproduct__main')).values(\
+            'id', 'parent', 'name','inr_price','usd_price','aed_price').order_by('inr_price')
+
+
+class ShineDataFlowDataApiView(ListAPIView):
+    permission_classes = []
+    authentication_classes = []
+    queryset = ShineProfileData.objects.all()
+    serializer_class = ShineDataFlowDataSerializer
+    pagination_class = None
+
+
+class ShineCandidateLoginAPIView(APIView):
+    """
+    Sample Input Data - <br><br>
+    {
+        "email":"sharma.animesh@hotmail.com",
+        "password":"1234",
+        "alt":"CwcWCBUDCwlIVk8hHwsZCBRIGw4VGk1SHgBJAklXS1RIAkEFSQBMUBkEGQMeAgRTSFdBUUxUSFNIVU9VTxoABwAH"
+    }
+    Constraints - <br><br>
+    Required - email/password or alt
+    """
+    serializer_class = None
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = ()
+    conn = get_redis_connection('token')
+
+    def set_user_in_cache(self, token, candidate_obj):
+        self.conn.set(candidate_obj.id, pickle.dumps(token))
+        self.conn.set(token, pickle.dumps(candidate_obj))
+
+    def generate_token(self):
+        return binascii.hexlify(os.urandom(20)).decode()
+
+    def get_or_create_token(self, candidate_obj):
+        existing_token = self.conn.get(candidate_obj.id)
+        token = pickle.loads(existing_token) if existing_token else self.generate_token()
+        self.set_user_in_cache(token, candidate_obj)
+        return token
+
+    def get_entity_status_for_candidate(self, candidate_id, BUILDER_ENTITY_MAPPING=None):
+        from resumebuilder.models import Candidate, Skill, CandidateExperience, \
+            CandidateEducation, CandidateCertification, CandidateProject, \
+            CandidateReference, CandidateSocialLink, CandidateLanguage, CandidateAchievement
+
+        from resumebuilder.choices import BUILDER_ENTITY_KEYS
+        entity_mapping = dict(BUILDER_ENTITY_KEYS)
+
+        entity_slug_model_mapping = {1: (Candidate, "candidate_id"),
+                                     2: (Skill, "candidate__candidate_id"),
+                                     3: (CandidateExperience, "candidate__candidate_id"),
+                                     4: (CandidateEducation, "candidate__candidate_id"),
+                                     5: (CandidateCertification, "candidate__candidate_id"),
+                                     6: (CandidateProject, "candidate__candidate_id"),
+                                     7: (CandidateReference, "candidate__candidate_id"),
+                                     # 8: (CandidateSocialLink, "candidate__candidate_id"),
+                                     8: (CandidateLanguage, "candidate__candidate_id"),
+                                     9: (CandidateAchievement, "candidate__candidate_id")
+                                     }
+
+        data = []
+        for key, value_tuple in entity_slug_model_mapping.items():
+            model = value_tuple[0]
+            objects_count = model.objects.filter(**{value_tuple[1]: candidate_id}).count()
+            d = {"id": key, "set": bool(objects_count), "display_value": entity_mapping.get(key)}
+            data.append(d)
+
+        return data
+
+    def get_existing_order_data(self,candidate_id):
+        from order.models import Order
+
+        product_found = False
+        order_data = {}
+        order_obj_list = Order.objects.filter(candidate_id=candidate_id,status__in=[1,3])
+
+        if not order_obj_list:
+            return order_data
+
+        for order_obj in order_obj_list: 
+            if product_found:
+                break
+                
+            for item in order_obj.orderitems.all():
+                if item.product and item.product.type_flow == 17 and item.product.type_product == 2:
+                    order_data = {"id":order_obj.id,
+                    "combo":True if item.product.id != settings.RESUME_BUILDER_NON_COMBO_PID else False
+                    }
+                    product_found = True
+                    break
+
+        return order_data
+
+    def get_response_for_successful_login(self, candidate_id, login_response):
+        candidate_obj = ShineCandidate(**login_response)
+        candidate_obj.id = candidate_id
+        candidate_obj.candidate_id = candidate_id
+        token = self.get_or_create_token(candidate_obj)
+
+        data_to_send = {"token": token,
+                        "candidate_id": candidate_id,
+                        "candidate_profile": self.customize_user_profile(login_response),
+                        "entity_status": self.get_entity_status_for_candidate(candidate_id),
+                        "order_data":self.get_existing_order_data(candidate_id)
+                        # TODO make param configurable
+                        }
+        self.request.session.update(login_response)
+        return Response(data_to_send, status=status.HTTP_201_CREATED)
+
+    def get_profile_info(self, profile):
+        candidate_profile_keys = ['first_name', 'last_name', 'email', 'number', 'date_of_birth', 'location', 'gender',
+                                  'candidate_id']
+        candidate_profile_values = [profile['first_name'], profile['last_name'], profile['email'],
+                                    profile['cell_phone'], profile['date_of_birth'],
+                                    profile['candidate_location'], profile['gender'], profile['id']]
+        candidate_profile = dict(zip(candidate_profile_keys, candidate_profile_values))
+
+        return candidate_profile
+
+    def get_education_info(self, education):
+        candidate_education_keys = ['candidate_id', 'specialization', 'institution_name', 'course_type',
+                                    'percentage_cgpa',
+                                    'start_date',
+                                    'end_date', 'is_pursuing', 'order']
+        candidate_education = []
+
+        for ind, edu in enumerate(education):
+            course_type = ""
+            if edu['course_type'] == 1:
+                course_type = "FT"
+            elif edu['course_type'] == 2:
+                course_type = "PT"
+            else:
+                course_type = "CR"
+
+            degree_index = next((index for (index, d) in enumerate(educ_list) if d["pid"] == edu['education_level']),
+                                None)
+
+            degree_name = educ_list[degree_index]['pdesc'];
+
+            child = educ_list[degree_index]['child']
+
+            specialization_index = next((index for (index, d) in enumerate(child)
+                                         if d['cid'] == edu['education_specialization']), None)
+            specialization_name = child[specialization_index]['cdesc']
+
+            candidate_education_values = ['', '{}({})'.format(degree_name, specialization_name),
+                                          edu['institute_name'],
+                                          course_type,
+                                          '',
+                                          None, None, True, ind]
+            education_dict = dict(zip(candidate_education_keys, candidate_education_values))
+            candidate_education.append(education_dict)
+
+        return candidate_education
+
+    def get_experience_info(self, experience):
+        candidate_experience_keys = ['candidate_id', 'job_profile', 'company_name', 'start_date', 'end_date',
+                                     'is_working', 'job_location', 'work_description', 'order']
+        candidate_experience = []
+
+        for ind, exp in enumerate(experience):
+            start_date = datetime.datetime.strptime(exp['start_date'], '%Y-%m-%dT%H:%M:%S').date() \
+                if exp['start_date'] is not None else \
+                exp['start_date']
+            end_date = datetime.datetime.strptime(exp['end_date'], '%Y-%m-%dT%H:%M:%S').date() \
+                if exp['end_date'] is not None else \
+                exp['end_date']
+            candidate_experience_values = ['', exp['job_title'], exp['company_name'],
+                                           start_date, end_date,
+                                           exp['is_current'], '', exp['description'], ind]
+            experience_dict = dict(zip(candidate_experience_keys, candidate_experience_values))
+            candidate_experience.append(experience_dict)
+
+        return candidate_experience
+
+    def get_skill_info(self, skills):
+        skill_keys = ['candidate_id', 'name', 'proficiency', 'order']
+        candidate_skill = []
+
+        for ind, skill in enumerate(skills):
+            candidate_skill_values = ['', skill['value'], 5, ind]
+            skill_dict = dict(zip(skill_keys, candidate_skill_values))
+            candidate_skill.append(skill_dict)
+
+        return candidate_skill
+
+    def get_certification_info(self, certifications):
+        candidate_certification_keys = ['candidate_id', 'name_of_certification', 'year_of_certification', 'order']
+        candidate_certification = []
+
+        for ind, certi in enumerate(certifications):
+            candidate_certification_values = ['', certi['certification_name'], certi['certification_year'], ind]
+            certification_dict = dict(zip(candidate_certification_keys, candidate_certification_values))
+            candidate_certification.append(certification_dict)
+
+        if len(candidate_certification) == 0:
+            candidate_certification = [{
+                "candidate_id": '',
+                "id": '',
+                "name_of_certification": '',
+                "year_of_certification": '',
+                "order": 0
+            }]
+            return candidate_certification
+
+    def customize_user_profile(self, login_response):
+
+        # get personal info
+        profile = login_response and login_response['personal_detail'][0]
+        candidate_info = dict()
+        candidate_info['personalInfo'] = self.get_profile_info(profile)
+
+        # get education info
+        candidate_info['education'] = self.get_education_info(login_response and login_response['education'])
+
+        #  get experience info
+        candidate_info['experience'] = self.get_experience_info(login_response and login_response['jobs'])
+
+        #  get skills
+        candidate_info['skill'] = self.get_skill_info(login_response and login_response['skills'])
+
+        #  get language
+        candidate_info['language'] = [{
+            "candidate_id": '',
+            "id": '',
+            "name": '',
+            "proficiency": {
+                'value': 5, 'label': '5'
+            },
+            'order': 0
+        }]
+
+        #  get courses
+        candidate_info['course'] = self.get_certification_info(login_response and login_response['certifications'])
+
+        #   get award
+        candidate_info['award'] = [{
+            "candidate_id": '',
+            "id": '',
+            "title": '',
+            "date": '',
+            "summary": '',
+            "order": 0
+        }]
+
+        #  get reference
+        candidate_info['reference'] = [{
+            "candidate_id": '',
+            "id": '',
+            "reference_name": '',
+            "reference_designation": '',
+            "about_user": "",
+            "order": 0
+        }]
+
+        #  get projects
+        candidate_info['project'] = [{
+            "candidate_id": '',
+            "id": '',
+            "project_name": '',
+            "start_date": '',
+            "end_date": '',
+            "skills": [],
+            "description": '',
+            "order": 0
+        }]
+
+        return candidate_info
+
+    def _dispatch_via_autologin(self, alt):
+        try:
+            email, candidate_id, valid = AutoLogin().decode(alt)
+        except Exception as e:
+            logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
+            return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not valid or not candidate_id:
+            return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
+        except Exception as e:
+            logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
+            return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return self.get_response_for_successful_login(candidate_id, login_response)
+
+    def _dispatch_via_email_password(self, email, password):
+        login_data = {"email": email.strip(), "password": password}
+
+        try:
+            login_resp = RegistrationLoginApi.user_login(login_data)
+        except Exception as e:
+            logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
+            return Response({"data": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+
+        candidate_id = login_resp.get('candidate_id')
+        access_token = login_resp.get('access_token')
+
+        if not candidate_id and not access_token:
+            logging.getLogger('info_log').info("Login attempt failed - {}".format(login_resp))
+            return Response({"data": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
+        except Exception as e:
+            logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
+            return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return self.get_response_for_successful_login(candidate_id, login_response)
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        candidate_id = request.session.get('candidate_id')
+        if not user.is_authenticated() and not candidate_id:
+            return Response({"detail": "Not Authorised"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        if not candidate_id:
+            candidate_id = user.candidate_id
+
+        try:
+            login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
+        except Exception as e:
+            logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
+            return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return self.get_response_for_successful_login(candidate_id, login_response)
+
+    def post(self, request, *args, **kwargs):
+        email = request.data.get('email')
+        password = request.data.get('password')
+        alt = request.data.get('alt')
+
+        if alt:
+            return self._dispatch_via_autologin(alt)
+
+        if email and password:
+            return self._dispatch_via_email_password(email, password)
+
+        return Response({"data": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UpdateCertificateAndAssesment(APIView):
     authentication_classes = [OAuth2Authentication]
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         certificate_updated = False
-        subject = "You have not cleared the test"
+        subject = "Sorry, You have not cleared the test."
         vendor_name = self.kwargs.get('vendor_name')
         data = request.data
         logging.getLogger('info_log').error(
@@ -771,7 +1148,6 @@ class UpdateCertificateAndAssesment(APIView):
         parser = CertiticateParser(parse_type=0)
         parsed_data = parser.parse_data(data)
         certificates, user_certificates = parser.save_parsed_data(parsed_data, vendor=data['vendor'])
-        print(user_certificates)
         if user_certificates:
             for user_certificate in user_certificates:
                 certificate = user_certificate.certificate
@@ -818,13 +1194,12 @@ class UpdateCertificateAndAssesment(APIView):
                         last_oi_status=last_oi_status,
                         assigned_to=oi.assigned_to
                     )
-                    subject = "{} on completing the certification on {}>".format(
+                    subject = "Congrats, {} on completing the certification on {}".format(
                         oi.order.first_name, oi.product.name
                     )
             to_emails = [oi.order.get_email()]
             mail_type = "CERTIFICATE_AND_ASSESMENT"
             data = {}
-
             data.update({
                 "username": oi.order.first_name,
                 "subject": subject,
@@ -832,9 +1207,10 @@ class UpdateCertificateAndAssesment(APIView):
                 "skill_name": ', '.join(
                     list(ProductSkill.objects.filter(product=oi.product).values_list('skill__name', flat=True))
                 ),
-                "certificate_updated": certificate_updated
+                "certificate_updated": certificate_updated,
+                "score": parsed_data.assesment.overallScore,
+
             })
-            print(to_emails)
             send_email_task.delay(to_emails, mail_type, data, status=201, oi=oi.pk)
             oi.orderitemoperation_set.create(
                 oi_status=oi.oi_status,
@@ -865,11 +1241,11 @@ class VendorCertificateMappingApiView(ListAPIView):
     queryset = Vendor.objects.all()
     serializer_class = VendorCertificateSerializer
     pagination_class = None
-    filter_backends = (DjangoFilterBackend,)
-    filter_fields = ('name',)
 
     def get_queryset(self):
         queryset = super(self.__class__, self).get_queryset()
+        name = self.request.GET.get('name', '')
+        queryset = queryset.filter(slug=name)
         return queryset.exclude(certificate=None)
 
     def get(self, request, *args, **kwargs):
@@ -955,16 +1331,16 @@ class TalentEconomyApiView(FieldFilterMixin,ListAPIView):
     Example:-
 
     {
-    "count": 1,
-    "next": null,
-    "previous": null,
-    "results": [
-        {
-            "id": 15,
-            "title": "Questions To Ask During Job Interview - Learning.Shine"
-        }
-    ]
-}
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+            {
+                "id": 15,
+                "title": "Questions To Ask During Job Interview - Learning.Shine"
+            }
+        ]
+    }
 
     """
     permission_classes = []
@@ -972,11 +1348,8 @@ class TalentEconomyApiView(FieldFilterMixin,ListAPIView):
     serializer_class = TalentEconomySerializer
     pagination_class = LearningCustomPagination
 
-
-
-
-    def get_queryset(self,*args, **kwargs):
-        status = self.request.GET.get('status',)
+    def get_queryset(self, *args, **kwargs):
+        status = self.request.GET.get('status', )
         visibility = self.request.GET.get('visibility')
         filter_dict = {}
         if status:
@@ -985,3 +1358,35 @@ class TalentEconomyApiView(FieldFilterMixin,ListAPIView):
             filter_dict.update({'visibility': visibility})
         return Blog.objects.filter(**filter_dict)
 
+
+class OrderDetailApiView(FieldFilterMixin,RetrieveAPIView):
+    permission_classes = [IsAuthenticated,OrderAccessPermission]
+    authentication_classes = [SessionAuthentication]
+    serializer_class = OrderDetailSerializer
+    queryset = Order.objects.all()
+    
+    def get(self, request, *args, **kwargs):
+        instance = self.get_object()
+        user = self.request.user
+        current_time = datetime.datetime.now().strftime("%d %B %Y %I:%M:%S %p")
+        fields_to_check = self.get_required_fields()
+        fields_to_log = ['email', 'alt_email', 'mobile', 'alt_mobile']
+        for field in fields_to_log:
+            if field not in fields_to_check:
+                continue
+            logging.getLogger('info_log').info('Order Data Accessed - {},{},{},{},{},{}'.format(current_time,\
+        user.id, user.get_full_name(), getattr(instance, 'number', 'None'), field, getattr(instance, field, 'None')))
+        return self.retrieve(request, *args, **kwargs)
+
+
+class CandidateInsight(APIView):
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        logging.getLogger('info_log').info("Candidate Insight:- {}".format(str(data)) )
+        return Response({
+            "msg": "Data has been noted."},
+            status=status.HTTP_201_CREATED
+        )

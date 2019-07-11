@@ -61,22 +61,32 @@
                       <tbody>
                         <tr>
                           <td>{{order.number}}</td>
-                            <td><div >{{order.email}}</div><div style=" white-space: nowrap;">
-                              {% if order.alt_email %}<b>  Alt
-                                -</b>{{order.alt_email}}{%endif%}
-                            </div></td>
-                          <td><div>{{order.country_code}} {{order.mobile}}
-                          </div><div
-                                  style=" white-space: nowrap;">
-                              {% if order.alt_mobile %}<b>Alt
-                                  -</b>{{order.country_code}}
-                              {{order.alt_mobile}}
-                              {% endif %}
-                          </div>
-                            {% if show_btn %}
+                        <td><div id="{{order.id}}"><div id="email_field{{order.id}}_1"></div>
+
+                            </div>
+
+                          <button type="button" class="btn btn-default btn-xs" aria-hidden="true" onclick="alt_email_update('{{order.number}}')">
+                                <i class="fa fa-envelope"> Alternate Email</i>
+                              </button>
+
+                                  <div>
+                        <button type="button" class="btn btn-primary btn-xs" onclick="order_get_details('{{order.id}}','email,alt_email','email');"><i class="fa fa-search" aria-hidden="true"></i>ClickToView</button>
+                            </div>
+                            </td>
+                         <td> <div id="{{order.number}}">
+                             <div id="mobile_field{{order.id}}_1"></div>
+                            {% if exoitel_status%}
                             <button id="{{order.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{order.id}});"></button>
-                            <div style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{order.id}}callingbtn-error"></div>
-                                {% endif %}
+                            <span style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{order.id}}callingbtn-error"></span>
+                           {% endif %}
+
+                         </div>
+                          <button type="button" class="btn btn-default btn-xs" aria-hidden="true" onclick="alt_num_update('{{order.number}}')">
+                                <i class="fa fa-phone"> Alternate Number</i>
+                              </button>
+
+                          <button type="button" onclick="order_get_details('{{order.id}}','mobile,alt_mobile','mobile')"; class="btn btn-primary btn-xs"><i class="fa fa-search" aria-hidden="true"></i>ClickToView</button>
+
                           </td>
                           <td>{{order.first_name}} {{order.last_name}}</td>
                           <td>{{order.get_status}}</td>
@@ -91,7 +101,7 @@
                   </div>
                   <div>
                      {% if order.replaced_order %}
-                    <p>Replacement of 
+                    <p>Replacement of
                     <a target="_blank" style="color:#1583c7;" href="{% url "console:order-detail"  order.replaced_order %}"><b style="text-decoration: underline;">CP{{ order.replaced_order }}</b></a>
                     </p>
                     {% endif %}
@@ -192,7 +202,7 @@
                         <th>Is Variation</th>
                         <th>Is Addon</th>
                     <tr>
-                      
+
                   </thead>
                   <tbody>
                       {% for obj in orderitems %}
@@ -204,7 +214,7 @@
                               {% if obj.wc_sub_cat == 65  and obj.get_replacement_order_id%}
                                <br>
                                <br>
-                              Replaced With  
+                              Replaced With
                               <a target="_blank" style="color:#1583c7;" href="{% url "console:order-detail"  obj.get_replacement_order_id %}"><b style="text-decoration: underline;">CP{{ obj.get_replacement_order_id }}</b></a>
                               {% endif %}
                             </strong>
@@ -235,7 +245,7 @@
 
                           </td>
                           <td>{{obj.get_oi_status}}</td>
-                          
+
                           <td>
                               <table class="table table-bordered table-responsive">
                                   {% for op in obj.get_oi_operations %}
@@ -265,7 +275,7 @@
                                     {% if obj.oi_draft or op.linkedin %}
                                     <tr>
                                       <td colspan="4">
-                                        <form autocomplete="off" role="form" method="post"  data-parsley-validate enctype="multipart/form-data" 
+                                        <form autocomplete="off" role="form" method="post"  data-parsley-validate enctype="multipart/form-data"
                                         id="draft-upload-form{{obj.pk}}">{% csrf_token %}
                                         {{draft_form.file}}
                                         <div style="display:none">
@@ -316,14 +326,14 @@
                                           </a>
                                         </li>
                                     {% endfor %}
-                                    
+
 
                                   </ul>
                                   <form autocomplete="off" id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
                                     <fieldset>
 
                                         {% for field in message_form %}
-                                            <div class="form-group"> 
+                                            <div class="form-group">
                                                 <div class="col-md-8">
                                                     {{ field }}
                                                     {% if field.help_text %}
@@ -349,7 +359,7 @@
                           <td>{% if obj.is_variation %}Variation product{% endif %}</td>
                           <td>{% if obj.is_addon %}addon product{% endif %}</td>
                       </tr>
-                      {% endfor %}          
+                      {% endfor %}
                   </tbody>
                 </table>
 
@@ -357,21 +367,25 @@
             </div>
           </div>
 
+         {%include "console/order/partials/modals.html" %}
+
         </div>
       </div>
     </div>
     <!-- /page content -->
 {% endblock pagecontent %}
 
-        
 {% block js_block %}
   {{ block.super }}
-
   {% compress js %}
   <!-- Parsley Validate Scripts -->
   <script type="text/javascript" src="{% static 'console/js/order/exotelCall.js' %}"></script>
   <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/order/draft-upload.js' %}"></script>
+  <script type="text/javascript" src="{% static 'console/js/order/alter.js' %}"></script>
+  <script type="text/javascript" src = "{% static 'console/js/order-info.js' %}"></script>
+
+
   {% endcompress %}
 
 {% endblock js_block %}

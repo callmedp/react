@@ -155,10 +155,7 @@
         <article class="mt-20">
         {% if prd_about %}
             <h2>Overview</h2>
-            <p>Multi choice test that measures the knowledge on the concepts of need SEO, SEO planning, SEO strategies, SEO software, tools, exchanging links etc.</p>
-
-            <p class="pb-0"><strong>About Aspiring MInd</strong></p>
-            <p>Aspiring Minds ia a leader in scientific, automated, AI-powered pre-employment assessments and video interview analytics including technology coding test,call...<a href="#">know more</a></p>
+            {{prd_about|safe}}
             <style>
                 .morecontent span {
                       display: none;
@@ -183,7 +180,7 @@
                 <div class="test-wrap__item">
                     <span class="icon-time"></span>
                     <div class="test-wrap__item--content">
-                        <strong>{{ prd_asft.test_duration }} min</strong>
+                        <strong>{{ prd_asft.test_duration }} mins</strong>
                         <p class="pb-0">Test duration</p>
                     </div>
                 </div>
@@ -237,7 +234,6 @@
                           <li>{{ chapter.heading }}</li>
                         {% endfor %}
                     	</ul>
-                    {{prd_uget|safe}}
                		 </div>
                 </div>
 
@@ -345,38 +341,6 @@ $(function() {
 
 
 
-$('#enquire_form').click(function(event) {
-    event.preventDefault();
-        $('#enquire_form').attr("disabled", true);
-    var $enquireform = $("#enquireform");
-        var typeOfProduct = document.getElementsByName("lsource")[0].value;
-
-    var flag = $enquireform.valid();
-    if (flag) {
-        var formData = $enquireform.serialize();
-        $.ajax({
-            url: "/lead/lead-management/",
-            type: "POST",
-            data: formData,
-            success: function(data, textStatus, jqXHR) {
-                gaEventFunc(typeOfProduct,'success');
-            pop('Your Query Submitted Successfully.');
-               $('#enquire_form').removeAttr("disabled");
-
-                $('#enquireform')[0].reset();
-
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                gaEventFunc(typeOfProduct,'failure');
-                  $('#enquire_form').removeAttr("disabled");
-
-
-                pop('Something went wrong. Try again later.');
-            }
-        });
-    }
-});
-
 
 function pop(param) {
     // Get the snackbar DIV
@@ -454,7 +418,6 @@ function close_review() {
 
 {% if sqs.id in linkedin_resume_services %}
   {% block zendesk %}
-    {{block.super}}
   {% endblock zendesk %}
 {% endif %}
 
