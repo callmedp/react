@@ -372,7 +372,6 @@ class ForgotHtmlView(TemplateView):
 class ForgotPasswordEmailView(View):
 
     def post(self, request, *args, **kwargs):
-
         if request.is_ajax():
             email = request.POST.get('email')
             user_exist = RegistrationLoginApi.check_email_exist(email)

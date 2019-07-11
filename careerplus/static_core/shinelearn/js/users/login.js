@@ -142,7 +142,6 @@ function ajaxCallSocialLogin(accessToken, expiresIn, social_id, next_url = undef
 }
 
 
-
 $(document).ready(function () {
 
     $('#accept-condition').click(function () {
@@ -269,6 +268,9 @@ $(document).ready(function () {
             var formData = $(form).serialize();
             var post_url = $(form).attr('action');
             $('#forgot_div').modal('hide');
+            $('#forgot_form').addClass('hidden');
+            $('#login_form').removeClass('hidden');
+
             $.ajax({
                 url: post_url,
                 type: "POST",

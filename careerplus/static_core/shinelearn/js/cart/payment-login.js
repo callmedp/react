@@ -5,7 +5,7 @@ const continueAsGuest = () => {
     $('#guest_form').removeClass('hidden');
     $('#continue-as-guest-button').addClass('hidden');
     $('#login-candidate-button').removeClass('hidden');
-    $('#forgot-password-form').addClass('hidden');
+    $('#forgot_form').addClass('hidden');
 
 
 };
@@ -15,7 +15,7 @@ const loginAsCandidate = () => {
     $('#guest_form').addClass('hidden');
     $('#continue-as-guest-button').removeClass('hidden');
     $('#login-candidate-button').addClass('hidden');
-    $('#forgot-password-form').addClass('hidden');
+    $('#forgot_form').addClass('hidden');
 
 
 };
@@ -23,7 +23,7 @@ const loginAsCandidate = () => {
 const forgotPassword = () => {
     $('#login_form').addClass('hidden');
     $('#guest_form').addClass('hidden');
-    $('#forgot-password-form').removeClass('hidden');
+    $('#forgot_form').removeClass('hidden');
 }
 
 

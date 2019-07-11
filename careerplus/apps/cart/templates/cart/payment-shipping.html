@@ -185,7 +185,11 @@
         </form>
 
             <!-- Forgot Password  -->
-        <form  class="personal-details col-sm-6 bdr-rt hidden" method="post" action="" id="forgot-password-form">{% csrf_token %}
+        <form  class="personal-details col-sm-6 bdr-rt hidden"
+               method="post"
+               id="forgot_form"
+               action="{% url 'users:forgot-email-sent' %}"
+               >{% csrf_token %}
           <strong class="personal-details-heading ml-15">Forgot Password</strong>
           {% if form.non_field_errors %}
                <span class="error" style="left:14px;">{{form.non_field_errors.0}}</span>
@@ -193,7 +197,7 @@
           <div class="form-group clearfix">
             <div class="col-sm-12 {% if form.first_name.errors %} error {% endif %}">
               <!-- {{form.first_name}} -->
-              <input type="text" class="form-control" id="" name="" placeholder=" "/>
+              <input type="text" class="form-control" id="" name="email" placeholder=" "/>
               <label for="">Your email</label>
               <span class="error-txt">{{form.first_name.errors.0}}</span>
             </div>
@@ -250,6 +254,8 @@
    <script src="{% static 'shinelearn/js/common/jquery.autocomplete.min.js' %}"></script>
    <script src="{% static 'shinelearn/js/cart/payment-shipping.js' %}"></script>
     <script src="{% static 'shinelearn/js/cart/payment-login.js' %}"></script>
+   <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
+
    {% endcompress %}
 {% endblock js_section %}
 
