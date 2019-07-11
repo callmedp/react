@@ -3173,22 +3173,22 @@ class ProductUserProfile(AbstractAutoDate):
         'order.OrderItem', related_name='whatsapp_profile_orderitem',
         verbose_name=_("Order Item"))
     contact_number = models.CharField(
-        _("Contact number"), max_length=128)
+        _("Contact number"), max_length=50)
     desired_industry = models.CharField(max_length=255, blank=True, null=True)
     desired_location = models.CharField(max_length=255, blank=True, null=True)
     desired_position = models.CharField(max_length=255, blank=True, null=True)
-    desired_salary = models.CharField(max_length=255, blank=True, null=True)
-    current_salary = models.CharField(max_length=255, blank=True, null=True)
+    desired_salary = models.CharField(max_length=50, blank=True, null=True)
+    current_salary = models.CharField(max_length=50, blank=True, null=True)
 
 
 class JobsLinks(AbstractCommonModel, AbstractAutoDate):
     schedule_date = models.DateTimeField(
         _('Date'), blank=True, null=True)
     company_name = models.CharField(max_length=255)
-    location = models.CharField(max_length=255)
+    location = models.CharField(max_length=50)
     link = models.URLField(max_length=2000)
-    job_title = models.CharField(max_length=255)
-    status = models.IntegerField(choices=LINK_STATUS_CHOICES, default=0)
+    job_title = models.CharField(max_length=100)
+    status = models.PositiveSmallIntegerField(choices=LINK_STATUS_CHOICES, default=0)
     oi = models.ForeignKey(
         'order.OrderItem', related_name='jobs_link',
         verbose_name=_("Order Item"))
