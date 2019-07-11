@@ -11,7 +11,6 @@ from order.choices import OI_OPS_STATUS
 from review.models import Review, STATUS_CHOICES
 from django.core.validators import validate_email,validate_integer
 from django.core.exceptions import ValidationError
-from order.functions import create_short_url
 
 User = get_user_model()
 
@@ -525,12 +524,6 @@ class JobLinkForm(forms.ModelForm):
         if not self.instance.id:
             self.initial['status'] = ''
 
-    def clean_link(self):
-        if self.cleaned_data['link']:
-            login_url = {'upload_url': self.cleaned_data['link']}
-            shorten_url = create_short_url(login_url=login_url)
-            return shorten_url .get('url', '')
-        return ''
 
 class ProductUserProfileForm(forms.ModelForm):
 
