@@ -2901,7 +2901,7 @@ class ReviewModerateView(UpdateView):
 
 
 @Decorate(stop_browser_cache())
-class WhatsappListQueueView(ListView, PaginationMixin):
+class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
     context_object_name = 'object_list'
     template_name = 'console/order/whatsapp_list.html'
     model = OrderItem
@@ -3256,7 +3256,8 @@ class WhatsAppScheduleView(UserPermissionMixin, DetailView, PaginationMixin):
         elif request.user.has_perm('order.can_view_assigned_jobs_on_the_move') and request.user == obj.assigned_to:
             pass
         else:
-            return HttpResponseForbidden()
+            messages.add_message(self.request,messages.ERROR,'You are not authorised to view this order.')
+            return HttpResponseRedirect("/console/")
         return super(WhatsAppScheduleView, self).get(request, *args, **kwargs)
 
 
