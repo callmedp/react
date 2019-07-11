@@ -27,7 +27,7 @@ from mongoengine import Document, ListField, FloatField,\
 
 from partner.models import Vendor
 from core.models import AbstractCommonModel
-
+from order.functions import create_short_url
 from review.models import Review
 from faq.models import (
     FAQuestion, ScreenFAQ)
@@ -3200,9 +3200,17 @@ class JobsLinks(AbstractCommonModel, AbstractAutoDate):
 
 
     @property
-    def get_sent_date(self):
+    def formatted_sent_date(self):
         sent_date = self.sent_date.strftime('%d-%m-%Y') if self.sent_date else ''
         return sent_date
+
+    @property
+    def shorten_url(self):
+        if self.link:
+            login_url = {'upload_url': self.link}
+            shorten_url = create_short_url(login_url=login_url)
+            return shorten_url.get('url', '')
+        return ''
 
     def __str__(self):
         schedule_date = self.schedule_date.strftime('%d-%m-%Y') if self.schedule_date else ''

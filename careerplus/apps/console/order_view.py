@@ -3304,10 +3304,8 @@ class WhatsAppScheduleView(UserPermissionMixin, DetailView, PaginationMixin):
                 elif action_type == 4:
                     job_data = ''
                     for k in objects:
-                        login_url = {'upload_url': k.link}
-                        shorten_url = create_short_url(login_url=login_url)
                         job_data += k.company_name + ' - ' + k.job_title + ' - '+ \
-                            k.location + ' -    ' + shorten_url .get('url', '')+ '<br><br>'
+                            k.location + ' -    ' + k.shorten_url + '<br><br>'
                     if job_data:
                         job_message = settings.WHATS_APP_MESSAGE_FORMAT.format(job_data)
 

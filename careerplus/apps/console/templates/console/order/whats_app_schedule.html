@@ -237,7 +237,7 @@
                   <tbody>
                     {% for link in page.object_list%}
                       <tr>
-                        <td>{{ link.get_sent_date }}</td>
+                        <td>{{ link.formatted_sent_date }}</td>
                         <td>{{ link.company_name }}</td>
                         <td>{{ link.location }}</td>
                         <td>{{ link.job_title }}</td>
