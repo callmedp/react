@@ -2854,7 +2854,7 @@ class ReviewModerateView(UpdateView):
 
 
 @Decorate(stop_browser_cache())
-@method_decorator(permission_required('order.can_show_domestic_profile_update_queue', login_url='/console/login/'), name='dispatch')
+@method_decorator(permission_required(['order.can_view_assigned_jobs_on_the_move', 'order.can_send_jobs_on_the_move', 'can_assign_jobs_on_the_move'], login_url='/console/login/'), name='dispatch')
 class WhatsappListQueueView(ListView, PaginationMixin):
     context_object_name = 'object_list'
     template_name = 'console/order/whatsapp_list.html'
@@ -3187,6 +3187,7 @@ class CertficationProductQueueView(PaginationMixin, ListView):
         return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
 
 
+@method_decorator(permission_required(['order.can_view_assigned_jobs_on_the_move', 'order.can_send_jobs_on_the_move', 'can_assign_jobs_on_the_move'], login_url='/console/login/'), name='dispatch')
 class WhatsAppScheduleView(DetailView, PaginationMixin):
     template_name = 'console/order/whats_app_schedule.html'
     model = OrderItem
@@ -3194,11 +3195,22 @@ class WhatsAppScheduleView(DetailView, PaginationMixin):
     page = 1
     paginated_by = 10
 
-    #     return links
+
+    def get(self, request, *args, **kwargs):
+        obj = self.object = self.get_object()
+        if request.user.is_superuser or request.user.has_perm('order.can_assign_jobs_on_the_move'):
+            pass
+        elif request.user.has_perm('order.can_send_jobs_on_the_move') and obj.assigned_to:
+            pass
+        elif request.user.has_perm('order.can_view_assigned_jobs_on_the_move') and request.user == obj.assigned_to:
+            pass
+        else:
+            return HttpResponseForbidden()
+        return super(WhatsAppScheduleView, self).get(request, *args, **kwargs)
+
 
     def get_context_data(self, **kwargs):
         obj = self.object = self.get_object()
-
         self.page = self.request.GET.get('page', 1)
         context = super(WhatsAppScheduleView, self).get_context_data(**kwargs)
         joblinkformset = modelformset_factory(
