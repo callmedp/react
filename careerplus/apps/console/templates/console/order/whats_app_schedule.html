@@ -342,7 +342,7 @@
   </div>
 </div>
 {% if job_message %}
-<div class="modal fade bs-example-modal-sm filter" id="message-modal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade bs-example-modal-sm filter" id="message-modal" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-md">
         <div class="modal-content">
 
@@ -377,14 +377,11 @@
       function copyTextFunc() {
 
         event.preventDefault()
-        
-        setTimeout(function(){
           var text = $("#whatsapp-message").clone().find('br').prepend('\r\n').end().text()
           element = $('<textarea>').appendTo('body').val(text).select()
           document.execCommand('copy')
           element.remove()
-        }, 1000)
-       
+
       }
     </script>
   {% endif %}
