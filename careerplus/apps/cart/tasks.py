@@ -121,15 +121,28 @@ def lead_creation_function(filter_dict=None, cndi_name=None):
                 })
             if m_prods and m_prods.count() == 1:
                 m_prod = m_prods[0]
-                
+            
+            data_dict.update({"extra_info": json.dumps(extra_info)})
 
+            #Create resume lead if resume items present in cart
+            if cart_obj.lineitems.exclude(product__type_flow__in=[2,14]):
+                data_dict.update({
+                    "campaign_slug": "cartleads",
+                    'lead_type': lead_type,
+                })
+                # create lead on crm
+                lead_create_on_crm(cart_obj, data_dict=data_dict)
+            
+            if not cart_obj.lineitems.filter(product__type_flow__in=[2,14]):
+                return
+
+            #Create course lead if course items present in cart
             data_dict.update({
-                "extra_info": json.dumps(extra_info),
-                "campaign_slug": "cartleads",
-                'lead_type': lead_type,
-            })
-            # create lead on crm
+                    "campaign_slug":"cartleadcourses",
+                    "lead_type":2
+                    })
             lead_create_on_crm(cart_obj, data_dict=data_dict)
+    
     except Exception as e:
         logging.getLogger('error_log').error("lead creation from crm failed %s" % str(e))
 

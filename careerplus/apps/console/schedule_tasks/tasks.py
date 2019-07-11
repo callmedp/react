@@ -233,6 +233,31 @@ def gen_auto_login_token_task(task=None, user=None, next_url=None, exp_days=None
             "%(msg)s : %(err)s" % {'msg': 'generate auto login token task', 'err': str(e)})
     return f
 
+@task
+def generate_discount_report(sid,start_date,end_date):
+    from shared.utils import DiscountReportUtil
+    from datetime import datetime, timedelta
+
+    scheduler_obj = Scheduler.objects.get(id=sid)
+    today_date_str = datetime.now().date().strftime("%Y_%m_%d")
+    file_name = "scheduler/{}/{}_discount_report.csv".format(today_date_str,sid)
+    start_date = datetime.strptime(start_date,"%Y-%m-%dT%H:%M:%S") if isinstance(start_date,str) else start_date
+    end_date = datetime.strptime(end_date,"%Y-%m-%dT%H:%M:%S") if isinstance(end_date,str) else end_date
+
+    logging.getLogger('info_log').info(\
+        "Disount Report Task Started for {},{},{}".format(sid,start_date,end_date))
+    util_obj = DiscountReportUtil(\
+        start_date=start_date,end_date=end_date+timedelta(days=1),file_name=file_name)
+    util_obj.generate_report()
+    logging.getLogger('info_log').info(\
+        "Disount Report Task Complete for {},{},{}".format(sid,start_date,end_date))
+
+    scheduler_obj.file_generated = file_name
+    scheduler_obj.percent_done = 100
+    scheduler_obj.status = 2
+    scheduler_obj.completed_on = datetime.now()
+    scheduler_obj.save()
+
 
 @task(name="generate_encrypted_urls_for_mailer_task")
 def generate_encrypted_urls_for_mailer_task(task_id=None,user=None):
