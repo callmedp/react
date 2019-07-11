@@ -1,7 +1,7 @@
 #python imports
 import math
 import datetime,logging
->>>>>>> origin/master
+
 from decimal import Decimal
 from dateutil import relativedelta
 
