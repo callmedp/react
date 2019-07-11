@@ -404,7 +404,7 @@
                 <li><a href="{% url "console:queue-booster" %}">Booster</a></li>
             {% endif %}
 
-             {% if perms.order.can_show_domestic_profile_update_queue %}
+             {% if perms.order.can_view_assigned_jobs_on_the_move or perms.order.can_send_jobs_on_the_move or perms.can_assign_jobs_on_the_move %}
                 <li><a href="{% url "console:queue-whatsappjoblist" %}">Whatsapp Jobs</a></li>
             {% endif %}
 

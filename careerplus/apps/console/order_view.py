@@ -70,7 +70,7 @@ from .order_form import (
     ProductUserProfileForm,
     JobLinkForm)
 from .mixins import ActionUserMixin
-
+from users.mixins import UserPermissionMixin
 
 @Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_show_order_queue', login_url='/console/login/'), name='dispatch')
@@ -2854,12 +2854,13 @@ class ReviewModerateView(UpdateView):
 
 
 @Decorate(stop_browser_cache())
-@method_decorator(permission_required(['order.can_view_assigned_jobs_on_the_move', 'order.can_send_jobs_on_the_move', 'can_assign_jobs_on_the_move'], login_url='/console/login/'), name='dispatch')
 class WhatsappListQueueView(ListView, PaginationMixin):
     context_object_name = 'object_list'
     template_name = 'console/order/whatsapp_list.html'
     model = OrderItem
     http_method_names = [u'get', u'post']
+    permission_to_check = ['order.can_view_assigned_jobs_on_the_move', 'order.can_send_jobs_on_the_move', 'can_assign_jobs_on_the_move']
+    any_permission = True
 
     def __init__(self):
         self.page = 1
@@ -3109,7 +3110,7 @@ class ReplacedOrderListView(PaginationMixin, ListView):
 
 
 @method_decorator(permission_required('order.can_show_certification_queue', login_url='/console/login/'), name='dispatch')
-class CertficationProductQueueView(PaginationMixin, ListView):
+class CertficationProductQueueView(UserPermissionMixin, PaginationMixin, ListView):
     context_object_name = 'object_list'
     template_name = 'console/order/certification-order-item-list.html'
     model = OrderItem
@@ -3187,14 +3188,14 @@ class CertficationProductQueueView(PaginationMixin, ListView):
         return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
 
 
-@method_decorator(permission_required(['order.can_view_assigned_jobs_on_the_move', 'order.can_send_jobs_on_the_move', 'can_assign_jobs_on_the_move'], login_url='/console/login/'), name='dispatch')
-class WhatsAppScheduleView(DetailView, PaginationMixin):
+class WhatsAppScheduleView(UserPermissionMixin, DetailView, PaginationMixin):
     template_name = 'console/order/whats_app_schedule.html'
     model = OrderItem
     context_object_name = 'orderitem'
     page = 1
+    any_permission = True
     paginated_by = 10
-
+    permission_to_check = ['order.can_view_assigned_jobs_on_the_move', 'order.can_send_jobs_on_the_move', 'can_assign_jobs_on_the_move']
 
     def get(self, request, *args, **kwargs):
         obj = self.object = self.get_object()
