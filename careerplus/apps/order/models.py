@@ -579,6 +579,10 @@ class OrderItem(AbstractAutoDate):
     def sent_link_count(self):
         return self.jobs_link.filter(status=2).count()
 
+    @property
+    def is_closed(self):
+        if self.oi_status == 4:
+            return True
 
     def get_weeks(self):
         weeks, weeks_till_now = None, None

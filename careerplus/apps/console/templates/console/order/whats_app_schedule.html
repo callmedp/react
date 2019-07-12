@@ -97,7 +97,7 @@
                </tbody>
              </table>
            </div>
-          {% if orderitem.oi_status != 5 %}
+          {% if not orderitem.is_closed %}
           <div class="x_title">
             <h2>Jobs Links</h2>
             <ul class="nav navbar-right panel_toolbox">
