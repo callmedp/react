@@ -160,11 +160,16 @@ def cache_badges_for_writers():
     oi_queues = ['inbox','approval','rejected_by_admin',\
             'rejected_by_candidate','linkedin_inbox','linkedin_rejected_by_candidate',\
             'linkedin_rejected_by_admin','linkedin_approval']
+
+    allowed_groups = ['WRITER','WRITER_HEAD']
     
-    for profile in writer_profiles:
-        user = profile.user
+    for user in User.objects.filter(is_active=True):
+        
+        if not user.groups.filter(name__in=allowed_groups).exists():
+            continue
+
         data = {}
-        cache_key = "{}{}".format(key_prefix,profile.user.id)
+        cache_key = "{}{}".format(key_prefix,user.id)
         
         for queue in oi_queues:
             queryset = OrderItem.objects.filter(**get_clean_dict(user,key_filter_dict_mapping[queue]))
