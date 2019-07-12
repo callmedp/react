@@ -43,6 +43,11 @@ key_filter_dict_mapping = {"inbox":{"order__welcome_call_done":True,
                                 "oi_status":23,
                                 "product__type_flow__in":[1, 3, 12, 13]
                                 },
+
+                            "midout":{"status":1, 
+                                "orderitems__oi_status":2,
+                                "orderitems__no_process":False
+                                },
                             
                             "rejected_by_admin":{"order__status":1,
                                 "no_process":False,
@@ -116,7 +121,8 @@ key_exclude_dict_mapping = {"inbox":{"wc_sub_cat__in":[64, 65]},
                             "welcome_call_inbox":{},
                             "welcome_call_assigned":{},
                             "welcome_call_callback":{},
-                            "welcome_call_issue":{}
+                            "welcome_call_issue":{},
+                            "midout":{}
                             }
 
 key_perm_filter_mapping = {"inbox":{
@@ -127,6 +133,9 @@ key_perm_filter_mapping = {"inbox":{
                                 "order.can_view_all_approval_list":{},
                                 "order.can_view_only_assigned_approval_list":{"assigned_to":invoke_user}
                             },
+                            "midout":{
+                                "order.can_show_midout_queue":{}
+                                },
                             "rejected_by_admin":{
                                 "order.can_view_all_rejectedbyadmin_list":{},
                                 "order.can_view_only_assigned_rejectedbyadmin_list":{"assigned_to":invoke_user}
@@ -152,12 +161,14 @@ key_perm_filter_mapping = {"inbox":{
                                 }
                         }
 
+key_model_mapping = {'midout':Order.objects.prefetch_related('orderitems')}
+
 def cache_badges_for_writers():
     logging.getLogger('info_log').info("Started Caching Badges for Writers")
 
     writer_profiles = UserProfile.objects.filter(writer_type__gt=0,user__is_active=True)
     key_prefix = "writer_badges_dict_"
-    oi_queues = ['inbox','approval','rejected_by_admin',\
+    oi_queues = ['inbox','approval','midout','rejected_by_admin',\
             'rejected_by_candidate','linkedin_inbox','linkedin_rejected_by_candidate',\
             'linkedin_rejected_by_admin','linkedin_approval']
 
@@ -172,7 +183,8 @@ def cache_badges_for_writers():
         cache_key = "{}{}".format(key_prefix,user.id)
         
         for queue in oi_queues:
-            queryset = OrderItem.objects.filter(**get_clean_dict(user,key_filter_dict_mapping[queue]))
+            model_objects = key_model_mapping.get(queue,OrderItem.objects)
+            queryset = model_objects.filter(**get_clean_dict(user,key_filter_dict_mapping[queue]))
             
             for key,value in key_exclude_dict_mapping[queue].items():
                 queryset = queryset.exclude(**{key:value})
@@ -186,7 +198,7 @@ def cache_badges_for_writers():
 
                     queryset = queryset.filter(**get_clean_dict(user,filter_dict))
 
-            data[queue] = queryset.count() if perm_found else 0
+            data[queue] = queryset.distinct().count() if perm_found else 0
 
         cache.set(cache_key,data,10*60)
         logging.getLogger('info_log').info("Cached Sidebar Badge for Writer {}".format(user.id))
