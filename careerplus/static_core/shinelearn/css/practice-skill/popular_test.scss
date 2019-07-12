@@ -752,6 +752,27 @@ h2 {
 }
 
 .details-modal {
+    .error {
+        position: relative;
+
+        input, textarea {
+            border: 1px solid $error-color !important;
+        }
+        
+        .error-txt {
+            display: block;
+            color: $error-color;
+            font-size: $font-size;
+            position: absolute;
+            left: 0;
+            bottom: -13px;
+            z-index: 9;
+            font-weight: $font-weight+100;
+        }
+    }
+}
+
+.details-modal {
     border-bottom-left-radius: 7px;
     border-bottom-right-radius: 7px;
 }
@@ -960,6 +981,40 @@ h2 {
     border-radius: 100%;
     background: $p-blue;
     border: 5px solid #d0dce5;
+}
+
+.submittest {
+    width: 470px;
+    
+    .modal-body {
+        padding: 30px 0 40px 0;
+        text-align: center;
+
+        i {
+            width: 135px;
+            height: 135px;
+            border-radius: 100%;
+            background: #F6F6F6;
+            display: table;
+            vertical-align: middle;
+            text-align: center;
+            margin: 0 auto 10px auto;
+
+            img {
+                margin: 20px auto 0 auto;
+            }
+        }
+
+        p {
+            font-size: $font-size+5;
+
+            strong {
+                font-size: $font-size+9;
+                font-weight: $font-weight+300;
+                display: block;
+            }
+        }
+    }
 }
 
 /* ID for FA*/
