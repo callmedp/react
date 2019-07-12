@@ -14,6 +14,9 @@ urlpatterns = [
     url(r'^service-leads/$', views.ServiceQueryView.as_view(),
         name='service-query'),
 
+    url(r'^human-resource-leads/$', views.HumanResourceQueryView.as_view(),
+        name='human-resource-query'),
+
     url(r'^user-query-action/$', views.UserQueryActionView.as_view(),
         name='user-query-action'),
 ]

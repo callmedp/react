@@ -59,10 +59,13 @@ class LeadManagement(View):
             queried_for = request.POST.get('queried_for', '')
             lead_source = request.POST.get('lsource', 0)
             selection = request.POST.get('selection', 0)
+            company = request.POST.get('cname','')
             path = request.POST.get('path', '')
             rejectlist = ['http', 'www', 'href', '***', 'url', '<html>']
             if any(rejectkey in msg for rejectkey in rejectlist):
                 return HttpResponse(json.dumps({'status': False}))
+
+            name = name + ' (' + company+')'if company else name
             try:
                 product_id = int(product_id)
             except Exception as e:

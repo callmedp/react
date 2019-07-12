@@ -65,6 +65,9 @@
               {% if request.user|has_group:SERVICE_GROUP_LIST %}
                   <li><a href="{% url 'console:userquery:service-query' %}">Service Leads</a></li>
               {% endif %}
+               {% if request.user|has_group:SERVICE_GROUP_LIST %}
+              <li><a href="{% url 'console:userquery:human-resource-query' %}">HR Leads</a></li>
+          {% endif %}
             </ul>
         </li>
       </ul>
