@@ -376,7 +376,7 @@
             {% endif %}
 
             {% if perms.order.can_show_midout_queue %}
-                <li><a href="{% url "console:queue-midout" %}">Midout</a></li>
+                <li><a href="{% url "console:queue-midout" %}">Midout{% if writer_badges_dict.midout %} ({{writer_badges_dict.midout}}){% endif %}</a></li>
             {% endif %}
 
             {% if perms.order.can_show_inbox_queue %}
