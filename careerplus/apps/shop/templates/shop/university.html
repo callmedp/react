@@ -64,7 +64,7 @@
               <!-- course image -->
               <div class="exe-course-img mt-30">
                 <figure>
-                  <img src="{{prd_img}}" alt="{{prd_img_alt}}" class="img-responsive">
+                  <img aria-label="{{prd_img_alt}}" src="{{prd_img}}" alt="{{prd_img_alt}}" class="img-responsive">
                 </figure>
               </div>
               <div class="exe-course-sep"></div>
@@ -271,7 +271,7 @@
                              {% for fac in inner_fac %}
                               <div class="{% if inner_fac|length == 1 %}col-sm-12{% else %}col-sm-6{% endif %} text-center">
                                 <figure>
-                                  <a class="faculty-thumb" href="{{fac.get_absolute_url}}"  target='_blank'><img src="{{ fac.get_image_url }}" alt="Faculty Profile"></a>
+                                  <a class="faculty-thumb" href="{{fac.get_absolute_url}}"  target='_blank'><img aria-label="Faculty Profile" src="{{ fac.get_image_url }}" alt="Faculty Profile"></a>
                                   <figcaption>
                                     <strong><a href="{{fac.get_absolute_url}}" target='_blank'>{{ fac.name }}</a></strong>
                                     <div class="exe-designation">{{ fac.designation }} – 
@@ -416,7 +416,7 @@
                       {% if university_detail.sample_certificate %}
                       <div class="exe-sample-certificate mt-20">
                         <figure>
-                          <img class="img-responsive" src="{{university_detail.sample_certificate}}" alt="Sample certificate">
+                          <img aria-label="Sample certificate" class="img-responsive" src="{{university_detail.sample_certificate}}" alt="Sample certificate">
                         </figure>
                         <h3 class="mt-30 ml-40">Sample Certificate</h3>
                         <a class="exe-button-view-sample pull-right mt-20 mr-20" href="#" type="button" data-toggle="modal" data-target=".bs-example-modal-lg">View sample certificate</a>
@@ -436,7 +436,7 @@
                         <h3 class="heading-primary-exe" id="myModalLabel">Sample Certificate</h3>
                       </div>
                       <div class="modal-body exe-sample-certificate-modal">
-                        <img class="img-responsive text-center" src="{{university_detail.sample_certificate}}"  alt="Sample certificate">
+                        <img aria-label="Sample certificate" class="img-responsive text-center" src="{{university_detail.sample_certificate}}"  alt="Sample certificate">
                       </div>
                     </div>
                   </div>
@@ -485,7 +485,7 @@
 
                             <p class="mb-20 mt-20">{{ testimonial.review|safe }}</p>
                             <figure>
-                              <img src="{{ testimonial.get_image_url }}" alt="Faculty Profile">
+                              <img aria-label="Faculty Profile" src="{{ testimonial.get_image_url }}" alt="Faculty Profile">
                               <figcaption>
                                 <strong>{{testimonial.user_name }}</strong>
                                 <div class="exe-designation">
@@ -921,7 +921,7 @@ $("#lead1, #lead2, #lead3").each(function() {
     <script type="text/javascript">
     var recommended_product_url = '/api/v1/recommended-products/?skills='+$('#skilllist').val()+'&product={{sqs.id}}&uc=1'
  
-    var product_html = '<li class="col-sm-6"><a title="product_name" class="box-panel" href="product_url"><div class="media"><div class="media-body"><h3 class="listing-heading">product_name</h3><div class="rating-review-box"><strong>product_bought</strong> people bought<span class="jobs-available"><strong>product_bought</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="product_image" alt="CSS Designer"></figure></div></div></a></li>';
+    var product_html = '<li class="col-sm-6"><a title="product_name" class="box-panel" href="product_url"><div class="media"><div class="media-body"><h3 class="listing-heading">product_name</h3><div class="rating-review-box"><strong>product_bought</strong> people bought<span class="jobs-available"><strong>product_bought</strong> jobs available</span></div></div><div class="media-left"><figure><img aria-label="CSS Designer" class="img-responsive" src="product_image" alt="CSS Designer"></figure></div></div></a></li>';
 
 
     var start_html = '<section class="container-fluid detail-box you-may-like-carousel mb-30"><div class="scroll"><h2 class="heading-primary-exe mt-30 mb-10 text-center">You may also like</h2><article class="col-sm-12"><div id="carousel-example-generic2" class="carousel slide" data-ride="carousel"><div class="carousel-inner " role="listbox" id="skill_list_box">';

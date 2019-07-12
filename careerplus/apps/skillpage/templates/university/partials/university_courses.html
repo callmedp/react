@@ -8,7 +8,7 @@
       <div class="media">
         <div class="media-body">
           <figure>
-            <i class="exe-university-small-img"><img src="{{category_obj.icon.url}}" alt="{{category_obj.name}}.png" class="img-responsive"></i>
+            <i class="exe-university-small-img"><img aria-label="{{category_obj.name}}.png" src="{{category_obj.icon.url}}" alt="{{category_obj.name}}.png" class="img-responsive"></i>
             <figcaption>
               <a href="{{prd.pURL}}"><h3 itemprop="name">{{prd.pHd}}</h3></a>
               <p> <i class="exe-icon-batch-grey"></i>{% if prd.pUncdl %} Starts  <strong>{{prd.pUncdl.launchdate}}</strong>  |  {% endif %}<strong>{% if prd.pVrs.var_list %}{{prd.pVrs.var_list.0.dur_days|convert_to_month}} months{% endif %}</strong></p>
@@ -21,7 +21,7 @@
           {% endif %}
           <a href="{{prd.pURL}}" itemprop="url">
           <figure>
-            <img src="{{prd.pIc}}" alt="{{prd.pImA}}">
+            <img aria-label="{{prd.pImA}}" src="{{prd.pIc}}" alt="{{prd.pImA}}">
           </figure>
           </a>
         </div>

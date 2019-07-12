@@ -938,7 +938,7 @@ class Product(AbstractProduct, ModelMeta):
     avg_rating = models.DecimalField(
         _('Average Rating'),
         max_digits=8, decimal_places=2,
-        default=2.5)
+        default=4.5)
     no_review = models.PositiveIntegerField(
         _('No. Of Review'), default=0)
     buy_count = models.PositiveIntegerField(
@@ -1120,16 +1120,12 @@ class Product(AbstractProduct, ModelMeta):
         cache.set(cache_key, data, 7*24*60*60)
         return data
 
-
     def get_category_main(self,no_cache=False):
         cache_key = "category_main_" + str(self.pk)
         cached_data = cache.get(cache_key)
         if cached_data and not no_cache:
             return cached_data
         return self.category_main
-
-
-
 
     def category_attached(self):
         main_prod_cat = self.categories.filter(

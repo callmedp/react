@@ -27,7 +27,7 @@
 
 {% block header %}
     <header class="w100fl he-auto">
-        <img src="{% static 'shinelearn/images/mobile/shop/header-img-3.png' %}">
+        <img aria-label="header image" src="{% static 'shinelearn/images/mobile/shop/header-img-3.png' %}">
         <!-- header menu Icon Starts here -->
 
         {% if not navigation %}
@@ -99,7 +99,7 @@
                             {% endif %}
                         </a>
                         {% else %}
-                        <span class="fs-11">Be the first to review</span>
+                        <span class="fs-11">Write a review</span>
                         {% endif %}
                     </li>
                     {% if prd_num_jobs %}
@@ -207,7 +207,7 @@
                     <li>
                         <a href="{{provider.url}}" for="test1">
                             <span>
-                                <img src="{{provider.vendor.image.url}}" style="z-index: 10;">
+                                <img aria-label="provider vendor image" src="{{provider.vendor.image.url}}" style="z-index: 10;">
                                 {{provider.vendor}} - {{provider.heading}} (Rs.{{provider.inr_price|floatformat:"0"}})
                             </span>
                         </a>

@@ -59,9 +59,6 @@ class SkillPageView(DetailView, SkillPageMixin):
     def get_template_names(self):
         if not self.request.amp:
             return ["skillpage/skill.html"]
-        if not settings.DEBUG:
-            from newrelic import agent
-            agent.disable_browser_autorum()
         return ["skillpage/skill-amp.html"]
         
     def redirect_if_necessary(self, current_path, skill):
@@ -606,9 +603,6 @@ class LocationSkillPageView(DetailView, SkillPageMixin):
     def get_template_names(self):
         if not self.request.amp:
             return ["locationskillpage/skill.html"]
-        if not settings.DEBUG:
-            from newrelic import agent
-            agent.disable_browser_autorum()
         return ["locationskillpage/skill-amp.html"]
 
 
