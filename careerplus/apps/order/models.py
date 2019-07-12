@@ -564,6 +564,17 @@ class OrderItem(AbstractAutoDate):
                 return replacement_order_id.replace('CP', '')
             return self.replacement_order_id
 
+    def get_item_operations(self):
+        if self.product.sub_type_flow == 502:
+            ops = []
+            start_op = self.orderitemoperation_set.filter(oi_status__in=[31, 32, 5]).order_by('id').first()
+            ops.append(start_op)
+            closed_op = self.orderitemoperation_set.filter(oi_status=4).order_by('id').first()
+            if closed_op:
+                start_op = ops.append(closed_op)
+
+            return ops
+
     @property
     def sent_link_count(self):
         return self.jobs_link.filter(status=2).count()
