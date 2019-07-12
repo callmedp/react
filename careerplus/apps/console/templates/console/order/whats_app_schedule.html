@@ -354,7 +354,7 @@
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
             </button>
-            <h4 class="modal-title" id="myModalLabel2">Message <a style="cursor:pointer;" onclick="copyTextFunc()"><i class="fa fa-clipboard" aria-hidden="true" data-toggle="tooltip" title="click to copy"></i></a></h4>
+            <h4 class="modal-title" id="myModalLabel2">Message <a style="cursor:pointer;" onclick="copyTextFunc()"><i class="fa fa-clipboard" aria-hidden="true" data-toggle="tooltip" title="click to copy"></i><sub> Click to copy</sub></a></h4>
           </div>
           <div class="modal-body" id="whatsapp-message">
             {{ job_message|safe }}
@@ -386,6 +386,7 @@
           element = $('<textarea>').appendTo('body').val(text).select()
           document.execCommand('copy')
           element.remove()
+          alert('Text copied')
 
       }
     </script>

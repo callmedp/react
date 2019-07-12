@@ -387,21 +387,8 @@ URL_SHORTENER_AUTH_DICT = {"access_token":"29d325106d379436d7fbe9dc76844350859d2
                         "end_point":"https://u.shine.com/api/generate-url/"
                         }
 
-WHATS_APP_MESSAGE_FORMAT = '''
-                        Here are our job recommendations for this week.<br>
-                        <br>
-
-                         {}
-
-                       Please do not call/reply directly to this message<br>
-                       <br>
-
-                        In case of any queries, you can call us on  08047105151 or email us at resume@shine.com<br>
-                        <br>
-                        Thanks,
-                        <br>
-                        <br>
-                        Team Shine
+WHATS_APP_MESSAGE_FORMAT = '''Here are our job recommendations for this week.<br>
+                        <br>{}Please do not call/reply directly to this message<br><br>In case of any queries, you can call us on  08047105151 or email us at resume@shine.com<br><br>Thanks,<br><br>Team Shine
                         '''
 try:
     from .settings_local import *
