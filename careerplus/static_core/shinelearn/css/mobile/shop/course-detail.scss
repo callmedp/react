@@ -330,3 +330,18 @@
 		}
 	}
 }
+
+.byvskills {
+ 	background: #f2f7fc;
+ 	color: #999;
+ 	border-left: 5px solid #ffde8b;
+ 	font-size: 12px;
+ 	padding: 10px;
+ 	display: table;
+ 	vertical-align: top;
+
+ 	strong {
+ 		font-size: 13px;
+ 		font-weight: 600;
+ 	}
+ }
