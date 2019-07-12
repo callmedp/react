@@ -62,7 +62,7 @@ class Command(BaseCommand):
             obj.update_pending_links_count()
             # Close the order if condition satisfies else
             if candidate_id:
-                if (delta_time < timezone.now())  and obj.pending_links_count == 0:
+                if (delta_time < timezone.now()) and obj.pending_links_count == 0:
                     last_oi_status = obj.oi_status
                     obj.oi_status = 4
                     obj.closed_on = timezone.now()
@@ -74,7 +74,6 @@ class Command(BaseCommand):
                         assigned_to=obj.assigned_to)
                     jobs_move_close_count += 1
                 else:
-                    start, end = None, None
                     sevice_started_op = obj.orderitemoperation_set.all().filter(oi_status__in=[5,31]).order_by('id').first()
 
                     if sevice_started_op:
@@ -87,7 +86,6 @@ class Command(BaseCommand):
                                 last_oi_status=last_oi_status,
                                 assigned_to=obj.assigned_to
                             )
-                        
 
         out_str = '%s jobs on the move item expired out of %s  items' % (
             jobs_move_close_count, jobs_move_items.count())
