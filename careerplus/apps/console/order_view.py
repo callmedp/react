@@ -3335,11 +3335,10 @@ class WhatsAppScheduleView(UserPermissionMixin, DetailView, PaginationMixin):
                         k.last_modified_by = request.user
                         if not k.created_by:
                             k.created_by = request.user
-                        links_per_week = getattr(obj.product.attr, S_ATTR_DICT.get('LC'), 2)
                         k.status = 2
                         k.save()
-                        links_sent = obj.get_sent_link_count_for_current_week()
-                        if links_sent >= links_per_week and obj.oi_status == 31:
+                        obj.update_pending_links_count()
+                        if obj.pending_links_count == 0 and obj.oi_status == 31:
                             last_oi_status = obj.oi_status
                             obj.oi_status = 32
                             obj.save()

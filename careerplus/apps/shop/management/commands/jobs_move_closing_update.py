@@ -59,6 +59,7 @@ class Command(BaseCommand):
             duration_days = getattr(obj.product.attr, S_ATTR_DICT.get('FD'), 180)
 
             delta_time = activation_date + datetime.timedelta(days=duration_days)
+            obj.update_pending_links_count()
             # Close the order if condition satisfies else
             if candidate_id:
                 if (delta_time < timezone.now())  and obj.pending_links_count == 0:
@@ -77,27 +78,7 @@ class Command(BaseCommand):
                     sevice_started_op = obj.orderitemoperation_set.all().filter(oi_status__in=[5,31]).order_by('id').first()
 
                     if sevice_started_op:
-                        started = sevice_started_op.created
-                        day = obj.product.get_duration_in_day()
-                        weeks = math.floor(day / 7)
-                        # today = datetime.datetime(2019, 7, 10, 7, 16, 14, tzinfo=pytz.utc)
-                        today = timezone.now()
-
-                        # Here we compute start date and end date for this week
-                        # for this order item
-                        for i in range(0, weeks):
-                            start = started + relativedelta.relativedelta(days=i * 7)
-                            end = started + relativedelta.relativedelta(days=(i + 1) * 7)
-                            if end > today:
-                                break
-                        links = JobsLinks.objects.filter(oi=obj, status=2, sent_date__range=[start, end])
-
-                        # I. if for this week link sent is zero and status is job link sent
-                        # mark it as pending.
-                        # II. if there is condition that for this week link sent is more than 1
-                        # status status is pending then keep the status pending.
-
-                        if links.count() == 0 and obj.oi_status == 32:
+                        if obj.pending_links_count > 0 and obj.oi_status == 32:
                             last_oi_status = obj.oi_status
                             obj.oi_status = 31
                             obj.save()
@@ -106,7 +87,7 @@ class Command(BaseCommand):
                                 last_oi_status=last_oi_status,
                                 assigned_to=obj.assigned_to
                             )
-                        obj.update_pending_links_count()
+                        
 
         out_str = '%s jobs on the move item expired out of %s  items' % (
             jobs_move_close_count, jobs_move_items.count())
