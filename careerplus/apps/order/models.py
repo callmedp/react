@@ -8,6 +8,7 @@ from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.utils import timezone
+from django_mysql.models import ListTextField
 
 #local imports
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
@@ -23,12 +24,15 @@ from .tasks import generate_resume_for_order
 from linkedin.models import Draft
 from seo.models import AbstractAutoDate
 from geolocation.models import Country, CURRENCY_SYMBOL
+from users.models import User
+from console.feedbackCall.choices import FEEDBACK_RESOLUTION_CHOICES,FEEDBACK_CATEGORY_CHOICES,FEEDBACK_STATUS
 
 #third party imports
 from payment.utils import manually_generate_autologin_url
 
 #Global Constants
 CURRENCY_SYMBOL_CODE_MAPPING = {0:"INR",1:"USD",2:"AED",3:"GBP"}
+
 
 class Order(AbstractAutoDate):
     co_id = models.IntegerField(
@@ -919,3 +923,31 @@ class WelcomeCallOperation(AbstractAutoDate):
     def get_wc_status(self,default_text=""):
         status_dict = dict(WC_FLOW_STATUS)
         return status_dict.get(self.wc_status, default_text)
+
+
+class CustomerFeedback(models.Model):
+    candidate_id = models.CharField('Candidate Id', max_length=100)
+    added_on = models.DateTimeField(editable=False, auto_now_add=True)
+    status = models.SmallIntegerField(choices=FEEDBACK_STATUS,default=1)
+    assigned_to =  models.ForeignKey(User,blank=True, null=True) 
+    follow_up_date = models.DateField('Follow Up Date', blank=True, null=True)
+    comment = models.CharField('Feedback Comment', max_length=500)
+
+    @property
+    def last_payment_date(self):
+        return "finding"
+    
+    # @property
+    # def ltv(self):
+    #     return "finding"
+
+    # @property
+    # def name(self):
+    #     return "Name"
+
+
+class OrderItemFeedback(models.Model):
+    category =  models.SmallIntegerField(choices=FEEDBACK_CATEGORY_CHOICES)
+    resolution =  models.SmallIntegerField(choices=FEEDBACK_RESOLUTION_CHOICES)
+    order_item = models.ForeignKey(OrderItem)
+    customer_feedback  = models.ForeignKey(CustomerFeedback)

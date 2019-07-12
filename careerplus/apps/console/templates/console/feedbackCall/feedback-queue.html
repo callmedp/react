@@ -1,0 +1,251 @@
+{% extends "console/base_console.html" %}
+{% load static compress %}
+{% load humanize %}
+{% load thumbnail %}
+
+
+{% block title %}
+  <title>Feedback Call - Shine Learning</title>
+{% endblock title %}
+
+{% block css_block %}
+    {{block.super}}
+
+    {% compress css %}
+    <link href="{% static "packages/iCheck/skins/flat/green.css"  %}" rel="stylesheet" type="text/css">
+    <link type="text/css" href="{% static "console/css/feedbackCall/feedback.css" %}" rel="stylesheet">
+    <link type="text/css" href="{% static "console/css/datepicker/daterangepicker.css" %}" rel="stylesheet">
+    {% endcompress %}
+
+{% endblock css_block %}
+
+{% block pagecontent %}
+<!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>Feedback Call</h3>
+      </div>
+    </div>
+
+
+    <div class="row top_tiles">
+
+      <div class="col-lg-12">
+        <button type="button" class="btn btn-app" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-filter"></i> Filter Order</button>
+      </div>
+      <div class="modal fade bs-example-modal-sm filter" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+              <div class="modal-content">
+
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                  </button>
+                  <h4 class="modal-title" id="myModalLabel2">Filter By</h4>
+                </div>
+                <div class="modal-body">
+                  <form autocomplete="off" class="form-group" method="GET" action="{% url "console:welcomecall:queue" %}" id="list-filter-form">
+                        <div class="form-group">
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.payment_date.label }}</label></br>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                {{ filter_form.payment_date }}
+                            </div>
+                            <br/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.created.label }}</label></br>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                {{ filter_form.created }}
+                            </div>
+                            <br/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.assigned.label }}</label></br>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                {{ filter_form.assigned }}
+                            </div>
+                            <br/>
+                        </div>
+                       {% if self.query %}
+                           <input type="hidden" name="query" value="{{query}}">
+                       {% endif %}
+                    </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="button" id="id_filter" class="btn btn-primary" data-dismiss="modal">Filter</button>
+                </div>
+              </div>
+            </div>
+        </div>
+        <!-- /modals -->
+    </div>
+
+
+    <div class="clearfix"></div>
+
+    <div class="row">
+
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <div class="col-sm-4">
+            <div class="input-group">
+                {{action_form.action}}
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-primary" id="action_button_go">Assign To!</button>
+                </span>
+            </div>
+            </div>
+            <!--h2>Select Comment to Change</h2-->
+            <!-- large modal -->
+
+            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="actionModal">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                      </button>
+                      <h4 class="modal-title" id="myModalLabel">Action On Feedback Call</h4>
+                    </div>
+                    <div class="modal-body" id="myModalbody">
+                      Are You Sure???
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary" id="action_welcome">Yes</button>
+                    </div>
+
+                  </div>
+                </div>
+            </div>
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+
+          <div class="x_content">
+            {% if page %}
+                <b>{{page.object_list.count}}</b> item listed out of <b>{{ page.paginator.count }}</b>
+            {% endif %}
+            <div class="table-responsive">
+              <form autocomplete="off" id="welcome_table_form" method="post" action=".">{% csrf_token %}
+              <input type="hidden" name="action_type" id="action_type_id" class="flat">
+              <table class="table table-striped jambo_table bulk_action" id="welcome-table">
+                <thead>
+                  <tr class="headings">
+                    <th>
+                      <input autocomplete="off" type="checkbox" id="check-all" class="flat">
+                    </th>
+                    <th class="column-title">Name</th>
+                    <th class="column-title">Added On</th>
+                    <th class="column-title">Follow Up Date&Time</th>
+                    <th class="column-title">Status</th>
+                    <th class="column-title">Last Payment</th>
+                    <th class="column-title">Assigned To</th>
+                    <th class="column-title">Update Status</th>
+                  </tr>
+                </thead>
+
+                <tbody id="body-table-list">
+                  {% for obj in page %}
+                    <tr class="even pointer">
+                      <td class="a-center ">
+                          <input autocomplete="off" type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
+                      </td>
+                      <td>{{obj.name}}</td>
+                      <td>{{obj.added_on}}</td>
+                      <td>{{obj.folow_up_date}}</td>
+                      <td>{{obj.status}}</td>
+                      <td>{{obj.assigned_to}}</td>
+                      <td><a target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-edit"></i>Update Wc</button></a></td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              </form>
+            </div>
+
+            {% block main_pagination %}
+                <div class="main_pagination">
+                  {% if page %}
+                  <div class="col-sm-4">
+                       <div class="pull-left" style="display: inline-block;adding-left: 0;margin: 20px 0;">
+                        {% with current_page=page.number total_page=page.paginator.num_pages %}Page {{ current_page }} of {{ total_page }}
+                        {% endwith %}
+                      </div>
+                  </div>
+
+                <div class="col-sm-8">
+                    <div class="pull-right">
+                        <ul class="pagination">
+                        {% if page.has_previous %}
+                            <li class="paginate_button previous">
+                                <a href="?page={{ page.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >&laquo;</a>
+                            </li>
+                        {% endif %}
+
+                        {% for page_number in begin %}
+                            <li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %} ">
+                                <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
+                            </li>
+                        {% endfor %}
+
+                        {% if middle %}
+                            <li class="paginate_button disable"><a href="javascript:void(0);">&hellip;</a></li>
+                            {% for page_number in middle %}
+                                <li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %}">
+                                    <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
+
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if page_end %}
+                            <li class="paginate_button disable"><a href="javascript:void(0);">&hellip;</a></li>
+                            {% for page_number in page_end %}
+                                <li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %}">
+                                    <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if page.has_next %}
+                            <li class="paginate_button next">
+                                <a href="?page={{ page.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >&raquo;</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                  </div>
+                </div>
+                {% endif %}
+
+
+      </div><!-- main_pagination end here -->
+      {% endblock main_pagination %}
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /page content -->
+
+
+{% endblock pagecontent %}
+
+
+{% block js_block %}
+  {{ block.super }}
+
+  {% compress js %}
+  {% endcompress %}
+
+
+{% endblock js_block %}

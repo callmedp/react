@@ -122,7 +122,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'core.middleware.UpgradedMobileDetectionMiddleware',
-    'core.middleware.UpgradedSetFlavourMiddleware',
+    'core.middleware.UpgradedSetFlavourMiddleware',   
     'core.middleware.LearningShineMiddleware',
     'core.middleware.LoginMiddleware',
     'core.middleware.TrackingMiddleware',

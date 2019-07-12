@@ -26,3 +26,6 @@ class OrderItemOperations(models.Model):
     operation_changed_from = models.PositiveSmallIntegerField(
         choices=OPERATION_TYPE, default=0)
     uploaded_document = models.FileField(upload_to=get_upload_path_order_item_operation)
+
+
+
