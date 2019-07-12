@@ -114,7 +114,7 @@ class Home extends Component {
                                 <span className="sprite icon--choose-download mr-20">
                                     <i className="how-works--count">3</i>
                                 </span>
-                                <p>Download your <br/>customised Resume</p>
+                                <p>Start impressing employers with new resume</p>
                             </li>
                         </ul>
                     </div>

@@ -53,7 +53,8 @@ export default class Banner extends Component {
                     </li>
                     <li>
                         <span className="sprite icon--create-download mr-5"></span>
-                        <span><strong>Create/edit & download</strong> multiple resume for 12 months</span>
+                        <span>Use <strong>resume builder for 12 months</strong> to
+                        create unlimited resume</span>
                     </li>
                 </ul>
             </section>

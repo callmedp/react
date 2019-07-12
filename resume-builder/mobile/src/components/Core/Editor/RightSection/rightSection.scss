@@ -16,7 +16,7 @@
 		box-shadow: 0 0 10px rgba($black, .1);
 		border-radius: .5rem;
 		// height: 100%;
-		margin-top:50px;
+		// margin-top:50px;
 		margin-bottom: 50px;
 		overflow-y: auto; /* has to be scroll, not auto */
 		-webkit-overflow-scrolling: touch;
@@ -68,6 +68,24 @@
 	// 	display: flex;
 	// 	justify-content: space-evenly;
 	// }
+
+	&__subscribe {
+		margin-top: 50px;
+		margin-bottom: 15px;
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		&--text {
+			font-size: 1.4rem;
+			flex: 1;
+
+			@media only screen and (max-width : 320px) {
+				font-size: 1.2rem;
+			}
+		}
+	}
 }
 
 .heading {
