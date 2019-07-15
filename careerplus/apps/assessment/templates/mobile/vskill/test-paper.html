@@ -52,32 +52,23 @@
 
         <div class="question-timer__question-count">
             <ul>
-                <li>1</li>
-                <li>2</li>
-                <li class="skip">3</li>
-                <li>4</li>
-                <li>5</li>
-                <li class="active">6</li>
-                <li>7</li>
+              {% for quest in questions_list|slice:"7" %}
+            <li class="marked" id="markedquestion-{{forloop.counter}}"
+                      data-attr-value="{{forloop.counter}}">{{forloop.counter}}</li>
+                {% endfor %}
             </ul>
-
+            {% if questions_list.count >= 8 %}
             <div id="more_question">
                 <ul>
-                    <li>8</li>
-                    <li>9</li>
-                    <li>10</li>
-                    <li>11</li>
-                    <li>12</li>
-                    <li>13</li>
-                    <li>14</li>
-                    <li>15</li>
-                    <li>16</li>
-                    <li>17</li>
-                    <li>18</li>
-                    <li>19</li>
-                    <li>20</li>
+                    {% for quest in questions_list %}
+                    {% if forloop.counter > 8 %}
+                          <li class="marked" id="markedquestion-{{forloop.counter}}"
+                      data-attr-value="{{forloop.counter}}">{{forloop.counter}}</li>
+                    {% endif %}
+                    {% endfor %}
                 </ul>
             </div>
+            {% endif %}
             <div class="pt-sprite icon-open-aarow" id="btn-more-question"></div>
         </div>
 
@@ -193,13 +184,15 @@
 
 
 
-<!-- Script here -->
-<script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+{% endblock container %}
+{% block js_section %}
+{{block.super}}
+<script src="{% static 'shinelearn/js/assessment/take_test.js' %}"></script>
 <script>
 // JavaScript for label effects only
 	$(window).load(function(){
 		$(".check-result__item input").val("");
-		
+
 		$(".input-effect input").focusout(function(){
 			if($(this).val() != ""){
 				$(this).addClass("has-content");
@@ -212,7 +205,7 @@
     $("#btn_check_result").click(function(){
      $("#check_results").addClass("open");
     });
-    
+
     $("#close").click(function(){
      $("#check_results").removeClass("open");
     });
@@ -228,19 +221,241 @@
         {
             $("#more_question").slideToggle();
             return false;
-        }); 
+        });
     });
-    
-    
+
+
     $('#btn-more-question').click(function(){
         $('#btn-more-question').toggleClass('icon-close-aarow');
     });
 
 
 
-    
+
 </script>
-{% endblock container %}
+<script>
+$('#timeTest').ready(function() {
+getProductDetail('{{object.vendor.id}}','{{object.category.id}}');
+        $.ajax({
+         url   : '/api/v1/get-set-time/?test_id={{object.id}}&duration={{object.duration}}',
+         type  : 'get',
+         success: function(response){
+         startTestTime = new Date(response.testStartTime);
+         endTestTime = new Date(response.testStartTime);
+        endTestTime.setSeconds(endTestTime.getSeconds() + {{object.duration}});
+        if (endTestTime > new Date()){
+           startTimer(Math.floor((endTestTime.getTime() - new Date().getTime())/1000));
+        }
+        else{
+           window.location.href = '/practice-tests/{{object.slug}}/result/';
+        }
+            return false;
+         }
+    });
+
+});
+</script>
+<script type="text/javascript">
+let page_number = 2, questionAttempt = {},
+maxCounter = parseInt({{questions_list.count}}),
+activeTab = 1,
+tKey = 'Test-' + '{{object.id}}',myStorage = window.localStorage,
+sec =0,testSec = 0,testMin =0,interval=0,testSubmission= false,
+delAns = {% if delete_ans %}true{% else %}false{% endif %},
+startTestTime = NaN,endTestTime = NaN,timeout =NaN ;
+
+$(document).ready(function() {
+
+    // removes local storage
+    if (delAns) {
+        myStorage.removeItem(tKey);
+    }
+    else {
+        questionAttempt = JSON.parse(myStorage.getItem(tKey));
+        if (questionAttempt != null) {
+        testSubmission = questionAttempt['testSubmission' + {{object.id}}];
+
+        if (testSubmission == true) {
+
+            window.location.href = '/practice-tests/{{object.slug}}/result/';
+        }
+
+            for (var id in Object.keys(questionAttempt)) {
+                if (Object.values(questionAttempt)[id] != "") {
+                    $('#' + Object.values(questionAttempt)[id]).click();
+                    $('#marked' + Object.keys(questionAttempt)[id]).removeClass();
+                    $('#marked' + Object.keys(questionAttempt)[id]).addClass('dirt');
+                }
+            }
+            $('#' + questionAttempt['question-' + activeTab]).prop("checked", true);
+
+        } else {
+            questionAttempt = {};
+        }
+    }
+    delAns =false;
+
+});
+
+function loadmore() {
+    page_number = page_number + 1;
+    element = document.getElementById('funcDiv');
+    $.ajax({
+        url: '/api/get-category-level-products',
+        type: "GET",
+        data: {
+            'tl': 2,
+            'page_size': 4,
+            'page': page_number
+        },
+        dataType: 'json',
+        success: function(json) {
+            if (json.next == null) {
+                $('#loadmorebtn').hide();
+            }
+            for (fa in json.results) {
+                element.innerHTML = element.innerHTML + '<div class="functional_test_inside border-' + fa + '"><a href="#"><span class="sales"></span>' + json.results[fa].heading + '</a></div>'
+
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            if (xhr.status == 404) {
+                alert("No more Categories to show ");
+                $('#loadmorebtn').hide();
+            } else {
+                alert("Something went wrong. Try again later");
+            }
+        }
+    });
+}
+
+$('.marked').click(function() {
+    let value = parseInt(this.dataset.attrValue);
+    activeTab = value;
+    if (questionAttempt['question-' + activeTab]) {
+        $('#' + questionAttempt['question-' + activeTab]).prop("checked", true);
+    }
+    $('.test-paper').addClass('inactive');
+    $('.test-paper').removeClass('actived');
+    $('#question-' + value).removeClass('inactive');
+    $('#question-' + value).addClass('actived');
+    if (activeTab >= maxCounter) {
+        $('#nextQuestionBtn').hide();
+    } else {
+        $('#nextQuestionBtn').show();
+    }
+});
+
+
+function nextquestion(number) {
+    if (activeTab < maxCounter && number > 0) {
+        $('#question-' + activeTab).removeClass("actived");
+        $('.test-paper').addClass('inactive');
+
+        activeTab = parseInt(activeTab) + parseInt(number);
+        if (questionAttempt['question-' + activeTab]) {
+            $('#' + questionAttempt['question-' + activeTab]).prop("checked", true);
+        }
+        $('#question-' + activeTab).removeClass('inactive');
+        $('#question-' + activeTab).addClass('actived');
+
+        if (activeTab >= maxCounter) {
+        $('#nextQuestionBtn').hide();
+        } else {
+        $('#nextQuestionBtn').show();
+        }
+    }
+}
+
+$('input[name="radio"]').on("click", function(e) {
+    let quest_id = $(e.target).closest(".test-paper")[0].id;
+    $('#marked' + quest_id).removeClass();
+    $('#marked' + quest_id).addClass('dirt');
+    questionAttempt[quest_id] = e.target.id;
+    myStorage.setItem(tKey, JSON.stringify(questionAttempt));
+});
+
+function skipQuestion() {
+    $('#markedquestion-' + activeTab).addClass('skipped');
+    let quest_id = 'question-' + activeTab;
+    $('#' + questionAttempt[quest_id]).prop("checked", false);
+    delete questionAttempt[quest_id];
+    nextquestion(1);
+}
+
+function startTimer(duration,) {
+    var timer = duration, minutes, seconds;
+     interval = setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        $('#testRemanMinutes').text(minutes);
+        $('#testRemanSeconds').text(seconds);
+
+        if(--timer<=0){
+            console.log('time out')
+        }
+
+       if (minutes <= 0 && seconds <= 0) {
+            clearInterval(interval);
+              $('#testRemanMinutes').text("Time");
+            $('#testRemanSeconds').text("Out");
+            timeout = true;
+            submitTestFinal();
+        }
+    }, 1000);
+    $('#timeTest').show();
+
+}
+
+<!--$("#leadCreationForm").submit(function(e){-->
+    <!--var form = $(this);-->
+    <!--$.ajax({-->
+         <!--url   : '/lead/lead-management/',-->
+         <!--type  : 'post',-->
+         <!--data  : form.serialize(), // data to be submitted-->
+         <!--success: function(response){-->
+           <!--window.location.href = '/practice-tests/{{object.slug}}/result/';-->
+         <!--}-->
+    <!--});-->
+    <!--return false;-->
+    <!--testSession({'lead_create':true});-->
+
+ <!--});-->
+
+function submitTest(){
+     $("#submitPermissionModal").modal('show');
+}
+
+
+
+
+function submitTestFinal(){
+      if (timeout){
+            testSession({'timeout':true,'test_id':{{object.id}} });
+      }
+      else{
+            testSession({'submit':true,'test_id':{{object.id}} });
+      }
+      submitTime = new Date().getTime();
+      $("#submitPermissionModal").modal('hide');
+      clearInterval(interval);
+      testSubmission = true;
+      questionAttempt['testSubmission{{object.id}}'] = testSubmission;
+      questionAttempt['testTime'+{{object.id}}] = Math.floor((submitTime - startTestTime.getTime())/1000) ;
+      myStorage.setItem(tKey, JSON.stringify(questionAttempt));
+      window.location.href = '/practice-tests/{{object.slug}}/result/';
+
+}
+
+
+</script>
+{% endblock js_section %}
+
+
 {% block johukum %}
 {% endblock johukum %}
 {% block zendesk %}

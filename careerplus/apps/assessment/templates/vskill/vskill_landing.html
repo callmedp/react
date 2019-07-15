@@ -76,8 +76,6 @@
                      <span class="taketest" >Take Free Test</span>
                   </a>
                </div>
-
-
                {% endfor %}
 
             </div>
@@ -93,11 +91,11 @@
 
                <div class="functional_test_inside border-{{forloop.counter}}">
                   <a href="{% url 'assessment:vskill-category' slug=fa.slug %}">
-                  <span class="span-{{forloop.counter}}"></span>
+                  <span class="fa-{{fa.id}}"></span>
                   {{fa.heading}}
                   </a>
                </div>
-                  {%endfor%}
+                  {% endfor %}
 
                </div>
                 {% if  func_area.count > 8  %}
@@ -235,9 +233,7 @@
                  $('#loadmorebtn').hide();
                }
                for (fa in json.results){
-                color = counter(facolor)
-                element.innerHTML= element.innerHTML +'<div class="functional_test_inside border-'+color+'"><a href="/practice-tests/'+ json.results[fa].slug+ '"><span class= "span-'+ color+ '"></span>'+ json.results[fa].heading +'</a></div>';
-                facolor+=1 ;
+                element.innerHTML= element.innerHTML +'<div class="functional_test_inside border-'+color+'"><a href="/practice-tests/'+ json.results[fa].slug+ '"><span class= "fa-'+ json.results[fa].id + '"></span>'+ json.results[fa].heading +'</a></div>';
                }
                },
                error: function(xhr, ajaxOptions, thrownError) {
@@ -251,10 +247,6 @@
                    }
                }
            });
-   }
-
-   function counter(facolor){
-    return facolor % 8;
    }
 
 

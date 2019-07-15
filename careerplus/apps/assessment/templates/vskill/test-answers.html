@@ -1,6 +1,9 @@
 {% extends "basic/base1.html" %}
 {% load static meta thumbnail compress %}
 {% block title %}Job Assistance Services | Online Courses - Shine Learning {% endblock title %}
+
+
+{% comment %}
 {% block head %}
 {{block.super}}
 <script type="text/javascript" >
@@ -8,9 +11,11 @@
    function preventBack(){window.history.forward();}
     setTimeout("preventBack()", 0);
     window.onunload=function(){null};
+
 </script>
 
 {% endblock head %}
+{% endcomment %}
 {% block canonical_url %}
 <link rel="canonical" href="//{{ SITE_DOMAIN }}/">
 <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}/">
@@ -59,6 +64,8 @@
                   <div class="flexbox mt-20 mb-15">
                      <a data-toggle="modal"  href="#TestLimitModal" class="result_btn" >Next test &nbsp; &rsaquo;</a>
                      <a href="/practice-tests/{{object.category.slug}}/sub" class="result_btn ml-20">Explore other test</a>
+                     <button class="result_btn ml-20"  onclick="reTestFunc();" >Re Test</button>
+
                   </div>
                </div>
                <div class="col-sm-2 col-md-3">
@@ -101,12 +108,14 @@
 
             <div class="flexbox ml-20 mt-30">
                <a class="blue_btn mr-20" data-toggle="modal"  href="#TestLimitModal">Next test&nbsp; &rsaquo;</a>
-               <a class="white_btn" href="/practice-tests/{{object.category.slug}}/sub" >Explore other test</a>
+               <a class="white_btn mr-20" href="/practice-tests/{{object.category.slug}}/sub" >Explore other test</a>
+                <button class="white_btn" onclick="reTestFunc();" >Re Test</button>
+
             </div>
          </div>
 
          <!-- right section starts -->
-         <div class="col-sm-3 mt-30" id="test-product" style="visibility:hidden;">
+         <div class="col-sm-3 mt-30" id="test-product" style="display:none;">
 
             <div class="white-box bdr-bottom">
                <div class="test-benefits benefits-bg">
@@ -166,7 +175,7 @@
                <p>Real exam & Practice environment</p>
                <p>Answers & Detailed Explanations</p>
                <span class="flexbox mt-20 mb-30">
-                  <button class="blue_btn">View test</button>
+                  <a class="blue_btn" id="viewPaidTest">View test</a>
                </span>
          </div>
         </div>
@@ -320,6 +329,17 @@ function getCoptions(){
 
 function secondsToMinutes(time){
     return Math.floor(time / 60)+' Min:'+Math.floor(time % 60) +" Secs";
+}
+
+function reTestFunc(){
+ $.ajax({
+         url   : '/api/v1/remove-cache/',
+         type  : 'post',
+         data  : {'test_id':'{{object.id}}' }, // data to be submitted
+         success: function(response){
+         window.location.href = '/practice-tests/{{object.slug}}-test/'
+         }
+    });
 }
 
 

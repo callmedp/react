@@ -1426,5 +1426,17 @@ class SetSession(APIView):
             return Response({'is_lead_created':True})
 
         return Response({'timeout': cache.get( key + 'timeout'),
-                         'submission': cache.get(key + 'submission'),})
+                         'submission': cache.get(key + 'submission')})
+
+
+class RemoveCache(APIView):
+    permission_classes = []
+    authentication_classes = []
+
+    def post(self,request,*args,**kwargs):
+        test_id = self.request.POST.get('test_id','')
+        session_key = self.request.session.session_key
+        key = session_key+'test-'+test_id
+        cache_delete = cache.delete(key)
+        return Response({'cache_delete': cache_delete})
 

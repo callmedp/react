@@ -25,118 +25,45 @@
 
     <div class="back"></div>
 
-<h1>Sales and Marketing
-Tests</h1>
-<div class="bread-crums"> <a href="#">Home</a> -  <a href="#">Free test</a> - Sales and marketing test</div>
+<h1>{{Category.heading}}</h1>
+            {% block breadcrumb %}
+         <div class="bread-crums">
+            {% for bread in breadcrumbs %}
+            {% if bread.url %}
+            <a href='{{bread.url}}'>{{bread.name}} -</a>
+            {% else %}
+            <a>{{bread.name}}</a>
+            {% endif %}
+            {% endfor %}
+         </div>
+         {% endblock breadcrumb %}
 
 
     <div class="search">
-        <div class="searchbox">
-            <input type="text" name="" placeholder="Search popular tests">
+        <div class="searchbox" id="bloodhound">
+            <input type="text" class="typeahead"  name="" placeholder="Search popular tests">
             <span class="icon_search"></span>
         </div>
     </div>
 
-    <div class="popular_test">
+
+    <div class="popular_test" id="funcDiv">
+                       {% for test in all_test|slice:":8" %}
+
         <div class="popular_test_inside">
-            <a href="#">
-                <span class=" border border2"></span>
-                <span class="name">Brand Manager</span>
+           <a id="{{test.id}}" onclick="testModal(event);" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}" }'>
+                <span class=" border border{{forloop.counter0}}"></span>
+                <span class="name">{{test.title}}</span>
                 <span class="btn btn-md btn-round-30 btn-blue" id="btn_check_result">Take free test</span>
             </a>
         </div>
-
-        <div class="popular_test_inside">
-            <a href="#">
-                <span class=" border border0"></span>
-                <span class="name">Email Marketing Master</span>
-                <span class="btn btn-md btn-round-30 btn-blue">Take free test</span>
-            </a>
-        </div>
-
-
-                     <div class="popular_test_inside">
-                <a href="#">
-
-                <span class=" border border1"></span><span class="name">Search Engine
-Optimisation</span>
-                    <span class="btn btn-md btn-round-30 btn-blue">Take free test</span>
-
-                    </a></div>
-
-
-                     <div class="popular_test_inside">
-                <a href="#">
-
-                <span class=" border border2"></span><span class="name">Brand Manager</span>
-                    <span class="btn btn-md btn-round-30 btn-blue">Take free test</span>
-
-                    </a></div>
-
-
-                     <div class="popular_test_inside">
-                <a href="#">
-
-                <span class=" border border3"></span><span class="name">Digital Marketing
-Master</span>
-                    <span class="btn btn-md btn-round-30 btn-blue">Take free test</span>
-
-                    </a></div>
-
-
-                     <div class="popular_test_inside">
-                <a href="#">
-
-                <span class=" border border4"></span><span class="name">Marketing Essentials</span>
-                    <span class="btn btn-md btn-round-30 btn-blue">Take free test</span>
-
-                    </a></div>
-
-
-                     <div class="popular_test_inside">
-                <a href="#">
-
-                <span class=" border border5"></span><span class="name">Distribution
-Management</span>
-                    <span class="btn btn-md btn-round-30 btn-blue">Take free test</span>
-
-                    </a></div>
-
-
-                     <div class="popular_test_inside">
-                <a href="#">
-
-                <span class=" border border6"></span><span class="name">Sales Negotiations</span>
-                    <span class="btn btn-md btn-round-30 btn-blue">Take free test</span>
-
-                    </a></div>
-
-                     <div class="popular_test_inside">
-                <a href="#">
-
-                <span class=" border border7"></span><span class="name">Campaign
-Management</span>
-                    <span class="btn btn-md btn-round-30 btn-blue">Take free test</span>
-
-                    </a></div>
-
-                     <div class="popular_test_inside">
-                <a href="#">
-
-                <span class=" border border8"></span><span class="name">Digital Marketing
-Master</span>
-                    <span class="btn btn-md btn-round-30 btn-blue">Take free test</span>
-
-                    </a></div>
-
-
-
-
-
+                     {% endfor %}
 
       
     </div>
-        <div class="load_more_button"><a href="#">Load more</a></div>
+       {%if category.count > 8 %}
+        <button class="load_more_button" id="loadmorebtn" onclick="loadmore();">Load more</button>
+      {% endif %}
     </div>
 
 
@@ -153,21 +80,21 @@ Master</span>
                     <span>Test Format</span>
                     <p>Practice Exam</p>
                 </div>
-                
+
                 <div class="test-option-box--content">
                     <span>No. of Questions</span>
-                    <p>25 Questions</p>
+                    <p id="questCount">25 Questions</p>
                 </div>
             </div>
-    
+
             <div class="test-option-box--cta">
                 <strong class="fs-20">FREE</strong>
-                <button class="btn btn-lg btn-round-30 btn-blue semi-bold">Take free test</button>
+                <a class="btn btn-lg btn-round-30 btn-blue semi-bold" id="startTestLink">Take free test</a>
             </div>
         </div><!-- option test box-->
-        
+
         <div class="test-option-box">
-            <h2 class="fs-20"><a href="#">Practice Tests</a></h2>
+            <h2 class="fs-20"><a href="#" id="test-product-name">Practice Tests</a></h2>
             <span class="test-option-box--recommended">
                 Recommended
             </span>
@@ -176,13 +103,13 @@ Master</span>
                     <span>Test Format</span>
                     <p>Practice Exam</p>
                 </div>
-                
+
                 <div class="test-option-box--content">
                     <span>No. of Questions</span>
                     <p>500+ Questions</p>
                 </div>
             </div>
-    
+
             <ul class="blue-bullet mt-20">
                 <li>
                     <span></span>
@@ -193,52 +120,142 @@ Master</span>
                     Answers and Detailed Explanations
                 </li>
             </ul>
-    
+
             <div class="test-option-box--cta mt-20">
                 <div class="test-option-box--price">
                     <span>Rs. 999</span>
-                    <strong>Rs. 699</strong>
+                    <strong id="test-price">Rs. 699</strong>
                 </div>
-                <button class="btn btn-lg btn-round-30 btn-yellow semi-bold">Add to cart</button>
+                <button class="btn btn-lg btn-round-30 btn-yellow semi-bold" id="testAddToCart">Add to cart</button>
             </div>
         </div><!-- Practice Tests box-->
-    
-        <div class="test-option-box">
-            <h2 class="fs-20"><a href="#">Online Course</a></h2>
+
+        <div class="test-option-box" id="testCourse" style="display:none">
+            <h2 class="fs-20"><a href="#" id="courseName">Online Course</a></h2>
             <div class="test-option-box--test-wrap">
                 <div class="test-option-box--content">
                     <span>Duration</span>
-                    <p>8 Days</p>
+                    <p id="courseDuration">8 Days</p>
                 </div>
-                
+
                 <div class="test-option-box--content">
                     <span>Availability</span>
                     <p>Unlimited</p>
                 </div>
             </div>
-    
+
             <div class="test-option-box--cta mt-20">
                 <div class="test-option-box--price">
                     <span>Rs. 1999</span>
-                    <strong>Rs. 1699</strong>
+                    <strong id="coursePrice">Rs. 1699</strong>
                 </div>
-                <button class="btn btn-lg btn-round-30 btn-blue semi-bold">Add to cart</button>
+                <button class="btn btn-lg btn-round-30 btn-blue semi-bold" id="courseCartBtn">Add to cart</button>
             </div>
         </div><!-- option test box-->
     </div>
 
-    <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
-    <script>
+
+
+{% endblock container %}
+{% block js_section %}
+<script src="{% static 'shinelearn/js/assessment/take_test.js' %}"></script>
+   {{block.super}}
+   <script type="text/javascript">
+    $('#testModal').on('show.bs.modal', function(e) {
+    var modalobject = JSON.parse(e.relatedTarget.dataset.attrValue);
+    console.log(modalobject);
+
+    $('#questCount').text(modalobject.quescount);
+    $('#startTestLink').attr('href','/practice-tests/'+ modalobject.testSlug +'-test/');
+    $('#testAddToCart').click( function()
+           {
+            addToCart(modalobject.vendor,modalobject.catid);
+           }
+      );
+
+
+});
+
+
+
+   var page_number= 2;
+   function loadmore(){
+            page_number = page_number+1;
+             element = document.getElementById('funcDiv');
+           $.ajax({
+               url: '/api/get-test',
+               type: "GET",
+               data : {'page_size' : 4, 'page':page_number,'category_id':'{{Category.id}}' },
+               dataType: 'json',
+               success: function(json) {
+               if (json.next == null){
+                 $('#loadmorebtn').hide();
+               }
+               for (fa in json.results){
+                element.innerHTML= element.innerHTML +
+
+                `      <div class="testinside">
+                  <span class="border-left"></span>
+  <a id="${json.results[fa].id}" onclick="getProductDetail('${json.results[fa].vendor}','${json.results[fa].category}');
+  getCourseDetail('${json.results[fa].vendor}','${json.results[fa].category}','${json.results[fa].id}');"
+  class="testModal" data-toggle="modal" data-attr-value='{"id":"${json.results[fa].id}","catid":"${json.results[fa].category}","quescount":"${json.results[fa].question_count}",
+  "testSlug":"${json.results[fa].slug}","vendor":"${json.results[fa].vendor}" }' data-target="#testModal">
+                     ${json.results[fa].title}
+                     <div class="white_hover"></div>
+                     <span class="taketest" >Take Free Test</span>
+                  </a>
+               </div>`
+
+
+               }
+               },
+               error: function(xhr, ajaxOptions, thrownError) {
+               if(xhr.status == 404){
+                     alert("No more Categories to show ");
+                     $('#loadmorebtn').hide();
+                     }
+                     else{
+
+                   alert("Something went wrong. Try again later");
+                   }
+               }
+           });
+   }
+
+
+
+   </script>
+<script src="{% static 'shinelearn/js/assessment/assessment_search.js' %}"></script>
+   <script>
+    function testModal(e){
+    testObject = JSON.parse(e.currentTarget.dataset.attrValue);
+    getProductDetail(testObject.vendor,testObject.catid);
+           $("#check_results").addClass("open");
+              $('#startTestLink').attr('href','/practice-tests/'+ testObject.testSlug +'-test/');
+           $('#questCount').text(testObject.quescount);
+         getCourseDetail(testObject.vendor,testObject.catid,testObject.id);
+
+    }
+
+
         $("#btn_check_result").click(function(){
             $("#check_results").addClass("open");
         });
-        
+
         $("#close").click(function(){
             $("#check_results").removeClass("open");
         });
+
+          $('#testAddToCart').click( function()
+           {
+            addToCart(testObject.vendor,testObject.catid);
+           }
+      );
+
     </script>
 
-{% endblock container %}
+{% endblock js_section %}
+
 {% block johukum %}
 {% endblock johukum %}
 {% block zendesk %}

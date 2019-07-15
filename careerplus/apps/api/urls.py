@@ -62,6 +62,9 @@ urlpatterns = [
         name='get-test-time'),
     url(r'^v1/set-session/$',
         views.SetSession.as_view(),
+        name='set-session'),
+    url(r'^v1/remove-cache/$',
+        views.RemoveCache.as_view(),
         name='set-session')
 ]
 

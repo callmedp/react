@@ -3,17 +3,24 @@
    $.ajax({
                url: '/api/v1/get-products/',
                type: "GET",
-               data : {'type_flow': 16, 'category' : category_id, 'vendor':vendor_id ,'fl':'id,inr_price,title'},
+               data : {'type_flow': 16, 'category' : category_id, 'vendor':vendor_id ,'fl':'id,inr_price,name,heading,absolute_url'},
                dataType: 'json',
                success: function(json) {
                 if(json.count >=1 ){
-                console.log(json);
                     prod_id =json.results[0].id;
                     $('#test-price').text('');
                     $('#test-product-name').text('');
-                    $('#test-product-name').text(json.results[0].title);
+                    $('#test-product-name').text(json.results[0].name);
+                    $('#test-product-name').attr('href',json.results[0].absolute_url)
+                    $('#viewPaidTest').attr('href',json.results[0].absolute_url)
                     $('#test-price').text("Rs. " + json.results[0].inr_price);
                     $('#test-product').removeAttr('style');
+                }
+                else{
+                     $('#test-price').text('');
+                    $('#test-product-name').text('');
+                    $('#test-price').text("");
+                   $('#test-product-name').attr('href',"#");
                 }
                },
                error: function(xhr, ajaxOptions, thrownError) {

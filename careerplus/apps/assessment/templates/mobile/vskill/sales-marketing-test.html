@@ -24,8 +24,7 @@
 
     <div class="back"></div>
 
-<h1>Sales and Marketing
-Tests</h1>
+<h1>{{Category.heading}}</h1>
         {% block breadcrumb %}
          <div class="bread-crums">
             {% for bread in breadcrumbs %}
@@ -39,54 +38,68 @@ Tests</h1>
          {% endblock breadcrumb %}
 
     <div class="search">
-        <div class="searchbox">
-            <input type="text" name="" placeholder="Search popular tests"><span class="icon_search"></span>
+        <div class="searchbox" id="bloodhound">
+            <input type="text"  class="typeahead form-control" name="" placeholder="Search popular tests"><span class="icon_search"></span>
         </div>
     </div>
 
-    <div class="popular_test">
+    <div class="popular_test" id="funcDiv">
+                       {% for cat in category|slice:":8"  %}
+
         <div class="popular_test_inside category">
-            <a href="#">
-                <span class="border border0"></span>
-                <span class="name">Digital Marketing Master</span>
-                <span class="test">25 Tests</span>
+            <a href="{% url 'assessment:vskill-subcategory' slug=cat.slug %}">
+                <span class="border border{{forloop.counter0}}"></span>
+                <span class="name">{{cat.heading}}</span>
+                <span class="test">{{cat.get_assessment_test}}
+                    {% if cat.get_assessment_test < 1 %}Test {% else %}Tests{% endif %}</span>
             </a>
         </div>
-                     <div class="popular_test_inside category">
-                <a href="#">
-                <span class=" border border1"></span><span class="name">Search Engine Optimisation</span><span class="test">25 Tests</span></a></div>
+                       {% endfor %}
 
-            <div class="popular_test_inside category">
-                <a href="#">
-                <span class=" border border2"></span><span class="name">Brand Manager</span><span class="test">25 Tests</span></a></div>
-
-                     <div class="popular_test_inside category">
-                <a href="#">
-                <span class=" border border3"></span><span class="name">Digital Marketing
-                     Master</span><span class="test">25 Tests</span></a></div>
-
-                     <div class="popular_test_inside category">
-                <a href="#">
-                <span class=" border border4"></span><span class="name">Email Marketing Master</span><span class="test">25 Tests</span></a></div>
-
-                     <div class="popular_test_inside category">
-                <a href="#">
-                <span class=" border border5"></span><span class="name">Marketing Essentials</span><span class="test">25 Tests</span></a></div>
-
-                     <div class="popular_test_inside category">
-                <a href="#">
-                <span class=" border border6"></span><span class="name">Digital Marketing
-                     Master</span><span class="test">25 Tests</span></a></div>
-
-                     <div class="popular_test_inside category">
-                <a href="#">
-                <span class=" border border7"></span><span class="name">Digital Marketing
-                     Master</span><span class="test">25 Tests</span></a></div>
-      
     </div>
-        <div class="load_more_button"><a href="#">Load more</a></div>
+        {%if category.count > 8 %}
+        <button class="load_more_button" id="loadmorebtn" onclick="loadmore();">Load more</button>
+      {% endif %}
+
     </div>
 {% endblock container %}
+{% block js_section %}
+{{block.super}}
+   <script type="text/javascript">
+   var page_number= 2;
+   function loadmore(){
+            page_number = page_number+1;
+             element = document.getElementById('funcDiv');
+           $.ajax({
+               url: '/api/get-category-level-products',
+               type: "GET",
+               data : {'page_size' : 4,'test_category_id':'{{Category.id}}' ,'page':page_number,'only_test_level3category':true},
+               dataType: 'json',
+               success: function(json) {
+               if (json.next == null){
+                 $('#loadmorebtn').hide();
+               }
+               for (fa in json.results){
+                element.innerHTML=
+                element.innerHTML +'<div class="testinside testinside-inner"><span class="border-left"></span><a class="test-box" a href="/practice-tests/'+ json.results[fa].slug +'">'+ json.results[fa].heading +'<span class="test">22 Test</span></a></div>'
+               }
+               },
+               error: function(xhr, ajaxOptions, thrownError) {
+               if(xhr.status == 404){
+                     alert("No more Categories to show ");
+                     $('#loadmorebtn').hide();
+                     }
+                     else{
+
+                   alert("Something went wrong. Try again later");
+                   }
+               }
+           });
+   }
+   </script>
+<script src="{% static 'shinelearn/js/assessment/assessment_search.js' %}"></script>
+
+{% endblock js_section %}
 {% block johukum %}
 {% endblock johukum %}
 {% block zendesk %}

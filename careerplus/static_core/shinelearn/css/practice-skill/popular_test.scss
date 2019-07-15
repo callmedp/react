@@ -134,7 +134,7 @@ h2 {
 
     .testinside-inner {
         box-shadow: $box-shadow;
-        
+
         &:hover {
             box-shadow: 0 3px 20px 0 #DEE7F3;
             background: $white-bg;
@@ -145,8 +145,12 @@ h2 {
 
 
 /** vskills modal css**/
-/**
+
 .modal-open .modal {
+   /** display: flex !important;**/
+}
+
+.modal-open #testModal {
     display: flex !important;
 }
 
@@ -174,7 +178,7 @@ h2 {
     }
 }
 
-**/
+
 
 
 
@@ -923,7 +927,7 @@ h2 {
   border-radius: 100%;
 }
 
-/* On mouse-over, add a grey background color 
+/* On mouse-over, add a grey background color
 .custom-radio:hover input ~ .checkmark {
   background-color: #ccc;
 }*/
