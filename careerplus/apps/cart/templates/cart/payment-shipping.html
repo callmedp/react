@@ -151,7 +151,7 @@
           <div class="form-group clearfix">
             <div class="col-sm-12 {% if form.email.errors %} error {% endif %}">
               <!-- {{form.email}} -->
-              <input type="text"
+              <input type="email"
                      class="form-control"
                      name="email"
                      placeholder=" "
@@ -253,7 +253,7 @@
    {% compress js %}
    <script src="{% static 'shinelearn/js/common/jquery.autocomplete.min.js' %}"></script>
    <script src="{% static 'shinelearn/js/cart/payment-shipping.js' %}"></script>
-    <script src="{% static 'shinelearn/js/cart/payment-login.js' %}"></script>
+   <script src="{% static 'shinelearn/js/cart/payment-login.js' %}"></script>
    <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
 
    {% endcompress %}

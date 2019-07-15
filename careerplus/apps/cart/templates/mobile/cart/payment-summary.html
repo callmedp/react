@@ -46,7 +46,7 @@
 
       <li class="payment__steps__item">
           <a href="{% url "cart:payment-login" %}" >
-              <span class="dot">2</span>
+              <span class="{% if candidate_in_session %} tick {% else %} dot {% endif %}">{% if candidate_in_session %} {% else %} 2 {% endif %}</span>
               <!-- <span class="tick"></span> -->
               Login
           </a>

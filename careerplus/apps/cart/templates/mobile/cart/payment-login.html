@@ -60,23 +60,30 @@
             </li>
         </ul><!-- payment setps-->
 
-        <div class="payment--white-box login hide">
+        <div class="payment--white-box login hide" id="user_payment_login">
             <div class="p-15">
                 <div class="login__user mb-20">
                     <span class="icon-user mr-10"></span>
                     User login
                 </div>
+        <form class="personal-details col-sm-6 bdr-rt" method="post" action="" role="form" id="login_form">{% csrf_token %}
 
                 <ul>
                     <li class="login__item input-effect">
-                        <input type="email" class="form--control animation-input" id="email-id" aria-describedby="email-id" placeholder="">
+                        <input type="email" class="form--control animation-input" name="email" id="email-id" aria-describedby="email-id" placeholder="">
                         <label for="email-id">Email id</label>
                     </li>
                     <li class="login__item input-effect">
-                        <input type="password" class="form--control animation-input" id="password" aria-describedby="password" placeholder="">
+                        <input type="password"
+                               class="form--control animation-input"
+                               value="{% if request.session.email%}{{request.session.email}}{% elif request.session.lead_email %}{{ request.session.lead_email }}{% endif %}" {% if request.session.email %}  {% endif %}"
+                               name="password"
+                               id="password" aria-describedby="password"
+                               placeholder="">
                         <label for="password">Password</label>
                     </li>
                 </ul>
+        </form>
                 <a href="#" class="mt-10 fw600 block">Forget password</a>
             </div><!-- /. p-15 -->
 
@@ -95,47 +102,53 @@
             </div><!-- Login social -->
 
             <div class="login__guest">
-                <a href="#" class="fs-18">
+                <a onclick="continueAsGuest()" class="fs-18">
                     <span class="icon-guest mr-10"></span>
                     Continue as guest
                 </a>
             </div>
         </div><!-- Login Guest user -->
         
-        <div class="payment--white-box login">
+        <div class="payment--white-box login" id="guest_payment_login">
             <div class="p-15">
                 <div class="login__user mb-20">
                     <span class="icon-guest mr-10"></span>
                     Continue as guest
                 </div>
+        <form  class="personal-details col-sm-6 bdr-rt hidden" method="post" action="" id="guest_form">{% csrf_token %}
 
                 <ul>
                     <li class="login__item input-effect">
-                        <input type="text" class="form--control animation-input" id="name" aria-describedby="name" placeholder="">
-                        <label for="name">Name</label>
+                        <input type="text" class="form--control animation-input" id="guest-name"  name="name" id="name" aria-describedby="name" placeholder="">
+                        <label for="guest-name">Name</label>
                     </li>
                     <li class="login__item input-effect">
-                        <input type="email" class="form--control animation-input" id="email-id" aria-describedby="email-id" placeholder="">
-                        <label for="email-id">Email</label>
+                        <input type="email" class="form--control animation-input" id="guest-email" name="email" aria-describedby="email-id" placeholder="">
+                        <label for="guest-email">Email</label>
                     </li>
 
                     <li class="login__item">
                         <span class="login__item--code">
-                            <select class="form--control" id="exampleFormControlSelect1">
+                            <!--<select class="form&#45;&#45;control" id="exampleFormControlSelect1">
                                 <option>+91</option>
                                 <option>+92</option>
                                 <option>+93</option>
                                 <option>+94</option>
                                 <option>+95</option>
                                 <option>+0123</option>
-                            </select>
+                            </select>-->
+                            {% if request.session.country_code %}
+                                 {{request.session.country_code}}
+                            {% endif %}
                         </span>
                         <div class="input-effect login__item--mobile">
-                            <input type="email" class="form--control animation-input" id="mobile" aria-describedby="mobile" placeholder="">
-                            <label for="mobile">Mobile</label>
+                            <input type="email" class="form--control animation-input" id="guest-mobile" name="mobile" aria-describedby="mobile" placeholder="">
+                            <label for="guest-mobile">Mobile</label>
                         </div>
                     </li>
                 </ul>
+        </form>
+
             </div><!-- /. p-15 -->
 
             <div class="line_wrap"><span>Login with</span><div class="line"></div></div>
@@ -153,7 +166,7 @@
             </div><!-- Login social -->
 
             <div class="login__guest">
-                <a href="#" class="fs-18">
+                <a onclick="loginAsCandidate()" class="fs-18">
                     <span class="icon-user mr-10"></span>
                     User login
                 </a>
@@ -165,10 +178,12 @@
     <div class="bottom-cta">
         <div class="bottom-cta__price">
             <p class="fs-12 pb-0 c6">Payable Amount</p>
-            <strong class="fs-22">Rs. 76,263.40</strong>
+            <strong class="fs-22">Rs. {{total_payable_amount}}</strong>
         </div>
 
-        <div class="bottom-cta__btn">Continue</div>
+        <div class="bottom-cta__btn" id="login_guests" >Continue</div>
+
+        <div  class="bottom-cta__btn hide" id="login_users" onclick="document.getElementById('login_form').submit();">Continue</div>
     </div>
 {% endblock container %}
 
@@ -184,6 +199,7 @@
     {% compress js %}
         <script src="{% static 'shinelearn/js/cart/payment-login.js' %}"></script>
         <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
+        <script src="{% static 'shinelearn/js/cart/payment-shipping.js' %}"></script>
         <script type="text/javascript" src="{% static 'shinelearn/js/users/forgot_password.js' %}"></script>
         <script>
         // JavaScript for label effects only

@@ -162,7 +162,7 @@ class RemoveFromCartView(View, CartMixin):
 
 @Decorate(stop_browser_cache())
 class PaymentLoginView(TemplateView):
-    template_name = "cart/payment-shipping.html"
+    template_name = "cart/payment-login.html"
 
     def get(self, request, *args, **kwargs):
         candidate_id = request.session.get('candidate_id')
