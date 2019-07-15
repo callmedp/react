@@ -28,6 +28,7 @@ from console.decorators import (
 
 from .forms import (
     UserQueryFilterForm, UserQueryActionForm)
+from users.mixins import UserPermissionMixin
 
 
 @Decorate(stop_browser_cache())
@@ -249,11 +250,11 @@ class CourseQueryView(ListView, PaginationMixin):
 
         return queryset.select_related('country').order_by('-modified')
 
-@Decorate(stop_browser_cache())
-@Decorate(check_group([settings.COURSE_GROUP_LIST]))
-class HumanResourceQueryView(ListView, PaginationMixin):
+
+class HumanResourceQueryView(UserPermissionMixin,ListView, PaginationMixin):
     context_object_name = 'course_query_list'
     template_name = 'console/userquery/user-query-list.html'
+    permission_to_check = ['Can View Hr Queries']
     model = UserQuries
 
     def __init__(self):
