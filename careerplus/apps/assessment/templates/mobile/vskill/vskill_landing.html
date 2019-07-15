@@ -224,7 +224,7 @@
            $("#check_results").addClass("open");
        $('#startTestLink').attr('href','/practice-tests/'+ testObject.testSlug +'-test/');
            $('#questCount').text(testObject.quescount);
-    getCourseDetail('{{test.vendor.id}}','{{test.category.id}}','{{test.id}}');"
+    getCourseDetail(testObject.vendor,testObject.catid,testObject.id);
 
     }
 
