@@ -69,6 +69,7 @@
                     {% if item.product_class == 'course' or item.type_flow == 17%}
                       <!-- Item wrap -->
                           <li class="payment__summary__item">
+                              <form role="form" method="post" id="cart_remove_form{{item.id}}">{% csrf_token %}
                               <div class="payment__summary__item--wrap">
                                   <span class="payment__summary__item--img">
                                       <img src="https://static1.shine.com/l/m/product_image/1668/1507608787_5699.png" class="img-responsive" />
@@ -77,20 +78,29 @@
                                       <strong class="mt-10">Rs. {{variations.0.price}}</strong>
                                   </p>
                               </div>
-                              <span class="payment__summary__item--close">+</span>
+                              <input type="hidden" name="product_reference" value="{{variations.0.reference}}">
+
+                              <span class="payment__summary__item--close" onclick="removeFromCartMobile('{{item.id}}')">+</span>
+                              </form>
                           </li>
                     {% elif item.is_available %}
                          <!-- Item wrap -->
                           <li class="payment__summary__item">
-                              <div class="payment__summary__item--wrap">
-                                  <span class="payment__summary__item--img">
-                                      <img src="https://static1.shine.com/l/m/product_image/1668/1507608787_5699.png" class="img-responsive" />
-                                  </span>
-                                  <p class="payment__summary__item--course-title">{{item.name}}
-                                      <strong class="mt-10">Rs. {{variations.0.price}}</strong>
-                                  </p>
-                              </div>
-                              <span class="payment__summary__item--close">+</span>
+                              <form role="form" method="post" id="cart_remove_form{{item.id}}">{% csrf_token %}
+
+                                  <div class="payment__summary__item--wrap">
+                                     <span class="payment__summary__item--img">
+                                        <img src="https://static1.shine.com/l/m/product_image/1668/1507608787_5699.png" class="img-responsive" />
+                                   </span>
+                                   <p class="payment__summary__item--course-title">{{item.name}}
+                                          <strong class="mt-10">Rs. {{variations.0.price}}</strong>
+                                   </p>
+                                   </div>
+                              <input type="hidden" name="product_reference" value="{{variations.0.reference}}">
+
+                              <span class="payment__summary__item--close" onclick="removeFromCartMobile('{{item.id}}')">+</span>
+                              </form>
+
                           </li>
                     {% endif %}
 
@@ -104,10 +114,16 @@
               <input id="discount_code" type="text" placeholder="Enter coupon code" name="code" maxlength="15" class="apply__wrap--input">
               <button class="btn btn-lg btn-round btn-blue" type="button" onclick="JSApplyDiscount();">Apply</button>
           </div>
+              <p class="error-txt" id="discount-alert"> </p>
       </div>
 
       <div class="subtotal mb-10">
-          <ul class="subtotal__items">
+                <ul class="subtotal__items">
+              <li class="subtotal__item">
+                  <span class="subtotal__item--tax">Subtotal</span>
+                  <span class="subtotal__item--tax-price">Rs. {{total_amount}}</span>
+              </li>
+
                {% if cart_coupon %}
                   <li>
                     <span class="item">Coupon applied</span>
@@ -160,6 +176,7 @@
     {{block.super}}
 
     {% compress js %}
+        <script src="{% static 'shinelearn/js/mobile/cart/cart.js' %}"></script>
         <script type="text/javascript" src="{% static 'shinelearn/js/cart/payment-summary.js' %}"></script>
     {% endcompress %}
     

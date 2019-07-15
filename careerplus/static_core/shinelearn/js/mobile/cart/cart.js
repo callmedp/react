@@ -1,6 +1,7 @@
 function removeFromCartMobile(line_id){
     if (line_id){
         var formData = $('#cart_remove_form' + line_id).serialize();
+
         $.ajax({
             url: '/cart/mobile/remove-from-cart/',
             type: 'POST',
