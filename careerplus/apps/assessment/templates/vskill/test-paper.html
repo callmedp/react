@@ -141,26 +141,26 @@
 
 <!-- Modal  for submit permission-->
 <div id="submitPermissionModal" class="modal fade" role="dialog" aria-labelledby="ModalCenterTitled" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog submittest">
 
     <!-- Modal content-->
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">ATTENTION</h4>
-      </div>
       <div class="modal-body">
-        <p>Are You Sure, You Want To Submit The Test ?</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" data-dismiss="modal" class="btn btn-default" >No</button>
-        <button type="button" class="btn btn-default" onclick="submitTestFinal();">Yes</button>
-
+        <i><img src="{% static 'shinelearn/images/free_skill/submit-test.png' %}" class="img-responsive"></i>
+        <p class="mt-20">
+          <strong>Are you sure,</strong> 
+          You want to submit the test ?
+        </p>
+        <div class="flexbox align-items-center mt-30">
+          <button type="button" class="blue_btn" onclick="submitTestFinal();">Submit</button>
+          <button type="button" data-dismiss="modal" class="white_btn ml-20" >Cancel</button>
+        </div>
       </div>
     </div>
 
   </div>
 </div>
+
 
 
 {% endblock main_container %}
