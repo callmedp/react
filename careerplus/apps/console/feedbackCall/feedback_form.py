@@ -14,7 +14,6 @@ class FeedbackCallAssignedForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(FeedbackCallAssignedForm, self).__init__(*args, **kwargs)
-        import ipdb; ipdb.set_trace()
         users = User.objects.filter(
             groups__name__in=settings.WELCOMECALL_GROUP_LIST)
         users = users.filter(is_active=True)

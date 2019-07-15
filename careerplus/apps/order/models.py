@@ -936,6 +936,14 @@ class CustomerFeedback(models.Model):
     @property
     def last_payment_date(self):
         return "finding"
+
+    @property
+    def status_name(self):
+        return FEEDBACK_STATUS[self.status -1][1]
+    
+    @property
+    def full_name(self):
+        return "USer"
     
     # @property
     # def ltv(self):
@@ -947,7 +955,7 @@ class CustomerFeedback(models.Model):
 
 
 class OrderItemFeedback(models.Model):
-    category =  models.SmallIntegerField(choices=FEEDBACK_CATEGORY_CHOICES)
-    resolution =  models.SmallIntegerField(choices=FEEDBACK_RESOLUTION_CHOICES)
+    category =  models.SmallIntegerField(choices=FEEDBACK_CATEGORY_CHOICES,blank=True, null=True)
+    resolution =  models.SmallIntegerField(choices=FEEDBACK_RESOLUTION_CHOICES,blank=True, null=True)
     order_item = models.ForeignKey(OrderItem)
     customer_feedback  = models.ForeignKey(CustomerFeedback)

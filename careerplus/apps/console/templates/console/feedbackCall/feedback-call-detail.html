@@ -1,0 +1,121 @@
+{% extends "console/base_console.html" %}
+{% load static compress %}
+{% load humanize %}
+{% load thumbnail %}
+
+{% block title %}
+  <title>Update Welcomecall - Shine Learning</title>
+{% endblock title %}
+
+{% block css_block %}
+    {{block.super}}
+
+    {% compress css %}
+      <link type="text/css" href="{% static "console/css/datepicker/bootstrap-datetimepicker.min.css" %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_block %}
+
+
+
+{% block pagecontent %}
+<!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>Update Feedback Call</h3>
+      </div>
+    </div>
+
+
+    <div class="clearfix"></div>
+    <div class="row">
+       <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_content">
+            <div class="table-responsive">
+              <table class="table table-striped jambo_table bulk_action">
+                <thead>
+                  <tr class="headings">
+                    <th class="column-title">Name</th>
+                    <th class="column-title">Email</th>
+                    <th class="column-title">Mobile</th>
+                    <th class="column-title">LTV</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                    <tr class="even pointer">
+                        <td>{{customer_name}}</td>
+                        <td>
+                            <div id="email{{customer_feedback.id}}">
+                                <div>{{email}}</div>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-primary btn-xs" onclick="showData('email',)"><i class="fa fa-search" aria-hidden="true"></i>ClickToView</button>
+                            </div>
+                        </td>
+                        <td>
+                            <div id="mobile{{customer_feedback.id}}">
+                                <div>{{mobile}}</div>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-phone-square" aria-hidden="true"></i>ClickToView</button>
+                            </div>
+                        </td>
+                      <td>{{customer_feedback.ltv}}</td>
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Item details</h2>
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+
+          <div class="x_content">
+            <div class="row">
+              <div class="col-md-6 col-xs-12">
+                  <label for="subcat">Category:</label>
+                  <select id="id-resolution" required="required" name="resolution" class="form-control">
+                    <option value="">Select Category</option>
+                  </select>
+              </div>
+              <div class="col-md-6 col-xs-12">
+                  <label for="subcat">Resolution:</label>
+                  <select id="id-resolution" required="required" name="resolution" class="form-control">
+                    <option value="">Select Resolution</option>
+                  </select>
+              </div>
+            </div>
+            <hr>
+            <button type="button" id="id-welcomecall-update" class="btn btn-success">Update Welcome Call</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /page content -->
+
+
+{% endblock pagecontent %}
+
+        
+{% block js_block %}
+  {{ block.super }}
+
+  {% compress js %}
+  {% endcompress %}
+
+{% endblock js_block %}
+
