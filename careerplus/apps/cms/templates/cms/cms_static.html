@@ -2,7 +2,6 @@
 {% load static humanize compress %}
 
 {% block head %}
-  <title>{% block title %}Resume Format 2019- Download CV Sample with Examples - Shine Learning {% endblock title%}</title>
  {% block canonical_url %}
       <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
       <link rel="alternate" media="only screen and (maxwidth:640px)" href="https://{{ MOBILE_SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
@@ -49,6 +48,7 @@
 {% endblock meta_html %}
     <!-- Bootstrap CSS -->
     <link rel="shortcut icon" href="https://static1.shine.com/l/s/shinelearn/images/fav_icon.png">
+    <title>{% block title %}Resume Format 2019- Download CV Sample with Examples - Shine Learning {%endblock title%}</title>
 
 {% block GA %}
              <!--Global site tag (gtag.js) - Google Analytics-->
@@ -90,31 +90,175 @@
             </div>
             <div class="col-md-8">
                 <h1 class="mb-30">Resume Format</h1>
+
+                <p>A Resume is a summarised document which represents a job seeker’s professional background and skills for a prospective employer. A resume format usually describes an individual’s work experience, qualifications, and relevant skills about a job application. A perfect resume format will successfully pass applicant tracking systems which aims to access resume and other details electronically. </p>
+
+                <!-- fresher & experience tab start -->
+                <div class="freshers-experienced-tab mb-40 mt-30">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <h2 itemprop="name"><a href="#freshers-tab" aria-controls="freshers-tab" role="tab" data-toggle="tab">Freshers</a></h2>
+                        </li>
+                        <li role="presentation" class="">
+                            <h2 itemprop="name"><a href="#experienced-tab" aria-controls="experienced-tab" role="tab" data-toggle="tab">Experienced</a></h2>
+                        </li>
+                    </ul>
+                    <div class="tab-content mt-30">
+                        <!-- fresher tab start -->
+                        <div role="tabpanel" class="tab-pane active" id="freshers-tab">
+                            <div class="white-box">
+                                <p class="mt-0 subhead uppercase">Header</p>
+                                <p><img src="{% static 'shinelearn/images/cms/rf-header.jpg' %}" alt="Header"  class="img-responsive"/></p>
+                                <p>A header enables the recruiters to know your basic contact details and where you are at present. A header should be clearly and neatly placed right on top of the resume – ideally centre aligned. You header should include:</p>
+                                <p><strong>Name:</strong> Make sure your name is in bold and a bigger font than the rest of the resume.  <br>
+                                <strong>E-mail ID:</strong> Do not share your work e-mail, but a personal one. However, make sure it sounds professional and unlike sweetguy@gmail.com or so.<br>
+                                <strong>Phone and mobile number:</strong> It's best to list just one phone number. Make sure you add the code before a landline number. Only give a number on which you would be available during office hours.</p>
+
+                                <p class="mt-30 subhead uppercase">OBJECTIVE</p>
+                                <p><img src="{% static 'shinelearn/images/cms/rf-objective.jpg' %}" alt="OBJECTIVE" class="img-responsive" /></p>
+                                <p>Convey your goal to your employer and aim towards a particular position in a specific industry in about 15 words. It should maximum go into 2 lines for middle to senior level candidates. It's important to customize the resume objective to match the position you are applying for. Customize your objective according to the job role you apply to. Keep in mind the employer’s requirement and be specific about your aim.</p>
+
+                                <p class="mt-30 subhead uppercase">PROFILE SUMMARY</p>
+                                <p><img src="{% static 'shinelearn/images/cms/rf-summary.jpg' %}" alt="PROFILE SUMMARY" class="img-responsive" /></p>
+                                <p>A profile summary is the synopsis of your career. This section is your chance to convince the prospective employer that you have the skills necessary for the job, held responsible positions marked with achievements in the past, and that your career has progressed over the years.</p>
+                                <p>For freshers, profile summary can be of 5 to 7 pointers. Explain your + points and skills in a clear and concise manner. Do not fake any achievements or projects. Begin by your educational achievements and proficiencies. Add your expertise and skills in an effective manner.</p>
+
+                                <p class="mt-30 subhead uppercase">ACADEMIC PROJECTS</p>
+                                <p><img src="{% static 'shinelearn/images/cms/rf-project.jpg' %}" alt="ACADEMIC PROJECTS" class="img-responsive" /></p>
+                                <p>This section is considered to be an important section which determines your projects in detail. Since you are not experienced, it is essential for you to show the kind of work you can produce for upcoming organizations. Your examples will show you the capabilities in different areas. </p>
+                                <p>Mention the projects individually and describe in short about your responsibilities over the period of time. Put all relevant information about the projects and present it in a clear and concise manner.</p>
+
+                                <p class="mt-30 subhead uppercase">EDUCATION</p>
+                                <p><img src="{% static 'shinelearn/images/cms/rf-education.jpg' %}" alt="EDUCATION" class="img-responsive" /></p>
+                                <p>Your educational qualifications have a lot of effect on the recruiters’ decision to consider you for the job. The best approach in this case will be to list your qualifications in a functional manner, so that the recruiters see the most relevant ones on the top. This way, recruiters get the required information in just a glance. Mention your educational details starting from the most recent one.</p>
+                                <p>Enlist life experiences like a short stint as a voluntary social worker, community service efforts as they are beneficial even if not related to the job. These can actually be translated to job skills. Listing coursework and awards also work to your advantage if they are relevant to the job you are applying for. Pay attention to areas where it fits the job's requirements. If you have any extra-curricular activities to boost your skills, mention them.</p>
+
+                                <p class="mt-30 subhead uppercase">SKILLS</p>
+                                <p><img src="{% static 'shinelearn/images/cms/rf-skills.jpg' %}" alt="SKILLS" class="img-responsive" /></p>
+                                <p>Understand the requirement of the job vacancies you are interested in applying for. This exercise will help you outline the skill demands of those job openings and make it easier for you to list the most important skills you must highlight as you build your resume.</p>
+                                <p class="mt-20">Use this section to:</p>
+                                <ul class="rf-list">
+                                    <li>Outline your expertise</li>
+                                    <li>Target your resume to a particular job opening by including keywords that define the particular job vacancy.</li>
+                                    <li>Highlight soft skills</li>
+                                    <li>Showcase transferable skills</li>
+                                </ul>
+
+                                <p class="mt-30 subhead uppercase">EXTRA ACTIVITIES</p>
+                                <p><img src="{% static 'shinelearn/images/cms/rf-curriculum.jpg' %}" alt="EXTRA ACTIVITIES" class="img-responsive" /></p>
+                                <p>For a fresher, it is essential to showcase extra curriculum activities. Listing your accomplishments in the resume not only showcases your candidature in a stronger light, it will also reinforce confidence in you about your career track. </p>
+
+                                <p class="mt-30 subhead uppercase">PERSONAL DETAILS</p>
+                                <p><img src="{% static 'shinelearn/images/cms/rf-details.jpg' %}" alt="PERSONAL DETAILS" class="img-responsive" /></p>
+                                <p>There are no set rules for this section. Give the details you are comfortable with. For example, if you are worried about your age then you can skip this detail in the resume. Include details like:</p>
+                                <ul class="rf-list">
+                                    <li>Date of birth</li>
+                                    <li>Language known</li>
+                                    <li>Marital Status</li>
+                                    <li>Languages Known</li>
+                                </ul>
+                                <p>In case of references, if you do not have any while submitting the resume then it is perfectly fine. Be ready, however, to face these questions at the time of interview.</p>
+                            </div>
+                        </div>
+                        <!-- fresher tab end -->
+                        
+                        <!-- experience tab start -->
+                        <div role="tabpanel" class="tab-pane" id="experienced-tab">
+                            <div class="white-box">
+                                <p class="mt-0 subhead uppercase">Header</p>
+                                <p><img src="{% static 'shinelearn/images/cms/re-header.jpg' %}" alt="Header"  class="img-responsive"/></p>
+                                <p>A header enables the recruiters to know your basic contact details and where you are at present. A header should be clearly and neatly placed right on top of the resume – ideally centre aligned. You header should include:</p>
+                                <p><strong>Name:</strong> Make sure your name is in bold and a bigger font than the rest of the resume. <br>
+                                <strong>Phone and mobile number:</strong> It's best to list just one phone number. Make sure you add the code before a landline number. Only give a number on which you would be available during office hours.<br>
+                                <strong>E-mail ID:</strong> Do not share your work e-mail, but a personal one. However, make sure it sounds professional and unlike sweetguy@gmail.com or so <br>
+                                <strong>Address:</strong> Include your permanent address. However, it is not always mandatory to mention the address.</p>
+
+                                <p class="mt-30 subhead uppercase">OBJECTIVE</p>
+                                <p><img src="{% static 'shinelearn/images/cms/re-objective.jpg' %}" alt="OBJECTIVE" class="img-responsive" /></p>
+                                <p>A resume objective is like a headline to the rest of the resume. It lets the readers know what to expect from the resume. While some include the objective in the cover letter, many include it in the resume. For most of us, objectives feature in our resumes but no matter where we place it, <strong>an objective statement is important as it summarizes in a line what the resume is all about.</strong> It should contain the key words to get shortlisted among thousands of others.</p>
+
+                                <p class="mt-30 subhead uppercase">PROFILE SUMMARY</p>
+                                <p><img src="{% static 'shinelearn/images/cms/re-summary.jpg' %}" alt="PROFILE SUMMARY" class="img-responsive" /></p>
+                                <p>A profile summary is the synopsis of your career. This section is your chance to convince the prospective employer that you have the skills necessary for the job, held responsible positions marked with achievements in the past, and that your career has progressed over the years.</p>
+                                <p>For experienced individuals, start explaining your career history from your present role. Mention about your + points and skills in a clear and concise manner. Do not fake any achievements or projects. Add your expertise and skills in an effective manner.</p>
+
+                                <p class="mt-30 subhead uppercase">EXPERIENCE</p>
+                                <p><img src="{% static 'shinelearn/images/cms/re-experience.jpg' %}" alt="EXPERIENCE" class="img-responsive" /></p>
+                                <p>This is one of the most relevant sections for experienced individuals. You have to understand that your professional experience is going to attract the prospect employer and not the marks you scored in your college degree.</p>
+                                <p>State your experience and not mention it in a manner where it is implied that you did a certain job. You should list one company at a time and mention your responsibilities and the nature of your work in bullet points. With each experience you should mention the time frame you spent at a particular company in a certain profile.</p>
+
+                                <p class="mt-30 subhead uppercase">WORK HISTORY</p>
+                                <p><img src="{% static 'shinelearn/images/cms/re-workhistory.jpg' %}" alt="WORK HISTORY" class="img-responsive" /></p>
+                                <p>Under the experience section, mention the company names, job titles held, dates of employment, and include briefly the main functions handled by you and further provide the results or accomplishments of each.</p>
+                                <p>Another major consideration when preparing a resume is deciding to showcase the early years of your career and the extent of detail to be provided.</p>
+                                <ul class="rf-list">
+                                    <li>Long stint in one job – A ten year work experience with the same company calls for a detailed description of the various responsibilities forming the core of the resume.</li>
+                                    <li>Frequent job changes – For those with numerous job changes spanning the length of the career, it is best to
+                                     highlight in greater detail the recent job descriptions, while limiting the early career positions to job titles, name
+                                     of company and</li>
+                                </ul>
+
+                                <p class="mt-30 subhead uppercase">EDUCATION</p>
+                                <p><img src="{% static 'shinelearn/images/cms/re-education.jpg' %}" alt="EDUCATION" class="img-responsive" /></p>
+                                <p>List your educational qualifications in a functional manner in order to let recruiters see the most relevant ones on the top. This way, recruiters get the required information in just a glance. Mention your educational details starting from the most recent one. </p>
+                                <p>Enlist life experiences like a short stint as a voluntary social worker, community service efforts as they are beneficial even if not related to the job. These can actually be translated to job skills. Listing coursework and awards also work to your advantage if they are relevant to the job you are applying for. Pay attention to areas where it fits the job's requirements. If you have any extra-curricular activities to boost your skills, mention them.</p>
+
+                                <p class="mt-30 subhead uppercase">TRAINING/ CERTIFICATIONS</p>
+                                <p><img src="{% static 'shinelearn/images/cms/re-certification.jpg' %}" alt="TRAINING/ CERTIFICATIONS" class="img-responsive" /></p>
+                                <p>Mentioning about your training and professional development on your resume can portray that you carry a job specific knowledge and exposure which are relevant to the job you are applying for. List the ones you have recently completed and demonstrate that how do you qualify for the position. To describe about you certifications/ training, mention the key achievements with company details and tenure.</p>
+
+                                <p class="mt-30 subhead uppercase">IT SKILLS</p>
+                                <p><img src="{% static 'shinelearn/images/cms/re-skills.jpg' %}" alt="IT SKILLS" class="img-responsive" /></p>
+                                <p>Understand the requirement of the job vacancies you are interested in applying for. This exercise will help you outline the skill demands of those job openings and make it easier for you to list the most important skills you must highlight as you build your resume.</p>
+                                <p class="mt-20">Use this section to:</p>
+                                <ul class="rf-list">
+                                    <li>Outline your expertise</li>
+                                    <li>Target your resume to a particular job opening by including keywords that define the particular job vacancy.</li>
+                                    <li>Highlight soft skills and most importantly, technical skills</li>
+                                    <li>Showcase transferable skills</li>
+                                </ul>
+
+                                <p class="mt-30 subhead uppercase">EXTRA ACTIVITIES</p>
+                                <p><img src="{% static 'shinelearn/images/cms/rf-curriculum.jpg' %}" alt="EXTRA ACTIVITIES" class="img-responsive" /></p>
+                                <p>For an experienced individual, it is however not essential to showcase extra curriculum activities. Though, you can skip this section if your resume exceeds the length. Only include this section if your activities relate with the job role.</p>
+
+                                <p class="mt-30 subhead uppercase">PERSONAL DETAILS</p>
+                                <p><img src="{% static 'shinelearn/images/cms/re-details.jpg' %}" alt="PERSONAL DETAILS" class="img-responsive" /></p>
+                                <p>There are no set rules for this section. Give the details you are comfortable with. For example, if you are worried about your age then you can skip this detail in the resume. Include details like:</p>
+                                <ul class="rf-list">
+                                    <li>Date of birth</li>
+                                    <li>Language known</li>
+                                    <li>Marital Status</li>
+                                    <li>Languages Known</li>
+                                </ul>
+                                <p>In case of references, if you do not have any while submitting the resume then it is perfectly fine. Be ready, however, to face these questions at the time of interview.</p>
+                            </div>
+                        </div>
+                        <!-- experience tab end -->
+                    </div>
+                </div>
+                <!-- fresher & experience tab end -->
+
                 <!-- white box -->
                 <div class="white-box">
-                    <p>A Resume is a summarised document which represents a job seeker’s professional background and skills for a prospective employer. A resume format usually describes an individual’s work experience, qualifications, and relevant skills about a job application. A perfect resume format will successfully pass applicant tracking systems which aims to access resume and other details electronically. </p>
-                    <p>Resume format is one of the essential parts of the application process. A relevant and well-organised format of resume will aid you to clear an interview, while a poor one will remain invisible in the pool of applicants. To solve this modern concern, we have introduced customised resume formats for discrete profiles.</p>
-                    <p>Our resume writers have bought their expertise in delivering quality to the customers by determining the correct order of sections on different types of resume formats. We will organise your education, work history, and other professional experience into a resume specific to your professional level.</p>
-                    <p>Facilitate your job hunting process through our most targeted resume format services and expedite your career growth.</p>
-
-                    <div class="most-resume mt-25 wd27">
+                    <div class="most-resume wd27">
                         <p class="mt-0 subhead">Table of index</p>
                         <ul class="mt-15">
                             <li><a href="#resume-formats">Types of Resume formats and their use</a></li>
                             <li><a href="#creative-visual">Creative and visual resume formats</a></li>
                             <li><a href="#faq">Frequently asked Questions</a></li>
                             <li><a href="#layout-tips">Resume formatting and layout tips</a></li>
-                            <li><a href="#difference">Difference Between Resume, CV and Biodata</li>
+                            <li><a href="#difference">Difference Between Resume, CV and Biodata</a></li>
                         </ul>
                     </div>
-                    <div class="most-resume mt-25 wd71">
+                    <div class="most-resume wd71">
                         <div class="media">
                             <div class="media-left">
                                 <div class="img-wrap mr-20">
                                     <div class="img-content">
                                         <a aria-label="Sample Resume" href="{% static 'shinelearn/static_media/learning_sample_resume.pdf' %}" target="_blank" class="icon-downlod"></a>
                                         <div class="overlay"></div>
-                                        <img aria-label="most targeted resume format" src="{% static 'shinelearn/images/cms/resume-1-thumb.jpg' %}" alt="most targeted resume format" />
+                                        <img src="{% static 'shinelearn/images/cms/resume-1-thumb.jpg' %}" alt="most targeted resume format" />
                                         </div>
                                 </div>
                             </div>
@@ -144,7 +288,7 @@
                     <h2 class="mb-15">Types of Resume formats and their use</h2>
                     <p>From traditional format to a highly creative one, there are many proper resume formats from which you can choose. However, there are three basic formats which are widely accepted amongst recruiters. They are chronological, functional, and combination resume format. Another class of formats which are in consideration are creative and visual resume format.</p>
 
-                    <p> <img aria-label="Types of Resume formats" src="{% static 'shinelearn/images/cms/type-of-resume.jpg' %}" alt="Types of Resume formats"/></p>
+                    <p> <img src="{% static 'shinelearn/images/cms/type-of-resume.jpg' %}" alt="Types of Resume formats" class="img-responsive" /></p>
 
                     <div class="most-resume mt-25">
                         <h3 class="uppercase">CHRONOLOGICAL RESUME FORMATS</h3>
@@ -156,7 +300,7 @@
                                     <div class="img-content">
                                     <a aria-label="Chronological Resume Format" href="{% static 'shinelearn/static_media/chronological-resume-format.docx' %}" class="icon-downlod"></a>
                                     <div class="overlay"></div>
-                                    <img aria-label="Chronological Resume Format" src="{% static 'shinelearn/images/cms/chrono-format.jpg' %}" alt="Chronological Resume Format">
+                                    <img src="{% static 'shinelearn/images/cms/chrono-format.jpg' %}" alt="Chronological Resume Format">
                                 </div>
                                 </div><!-- /. img-wrap -->
                             </div>
@@ -186,7 +330,7 @@
                                     <div class="img-content">
                                     <a aria-label="FUNCTIONAL RESUME FORMAT" href="{% static 'shinelearn/static_media/functional-resume-format.docx' %}" class="icon-downlod"></a>
                                     <div class="overlay"></div>
-                                    <img aria-label="Functional Resume Format" src="{% static 'shinelearn/images/cms/functional.jpg' %}"alt="Functional Resume Format">
+                                    <img src="{% static 'shinelearn/images/cms/functional.jpg' %}"alt="Functional Resume Format">
                                 </div>
                             </div>
                             </div>
@@ -216,7 +360,7 @@
                                     <div class="img-content">
                                     <a aria-label="COMBINATION RESUME FORMAT" href="{% static 'shinelearn/static_media/combination-resume-format.docx' %}" class="icon-downlod"></a>
                                     <div class="overlay"></div>
-                                    <img aria-label="Combination resumes Format" src="{% static 'shinelearn/images/cms/mixed-format.jpg' %}" alt="Combination resumes Format">
+                                    <img src="{% static 'shinelearn/images/cms/mixed-format.jpg' %}" alt="Combination resumes Format">
                                 </div>
                                 </div>
                             </div>
@@ -248,7 +392,7 @@
                                     <div class="overlay">
                                         <a href="#" data-toggle="modal" data-target="#resume-1" class="icon-zoom"></a>
                                     </div>
-                                    <img aria-label="Creative and visual resume formats" src="{% static 'shinelearn/images/cms/creative-1-thumb.jpg' %}" alt="Creative and visual resume formats" class="img-responsive" />
+                                    <img src="{% static 'shinelearn/images/cms/creative-1-thumb.jpg' %}" alt="Creative and visual resume formats" class="img-responsive" />
                                 </div>
 
                                 <!-- Modal -->
@@ -262,7 +406,7 @@
                                             </button>
                                             </div>
                                             <div class="modal-body">
-                                                <img aria-label="Creative and visual resume formats" src="{% static 'shinelearn/images/cms/creative-1.jpg' %}" alt="Creative and visual resume formats" class="img-responsive">
+                                                <img src="{% static 'shinelearn/images/cms/creative-1.jpg' %}" alt="Creative and visual resume formats" class="img-responsive">
                                             </div>
                                         </div>
                                     </div>
@@ -273,7 +417,7 @@
                                     <div class="overlay">
                                         <a href="#" data-toggle="modal" data-target="#resume-2" class="icon-zoom"></a>
                                     </div>
-                                    <img aria-label="Creative and visual resume formats" src="{% static 'shinelearn/images/cms/creative-2-thumb.jpg' %}" alt="Creative and visual resume formats" class="img-responsive">
+                                    <img src="{% static 'shinelearn/images/cms/creative-2-thumb.jpg' %}" alt="Creative and visual resume formats" class="img-responsive">
                                 </div>
 
                                 <!-- Modal -->
@@ -287,7 +431,7 @@
                                             </button>
                                             </div>
                                             <div class="modal-body">
-                                                <img aria-label="Creative and visual resume formats" src=" {% static 'shinelearn/images/cms/creative-2.jpg' %}" alt="Creative and visual resume formats" class="img-responsive">
+                                                <img src=" {% static 'shinelearn/images/cms/creative-2.jpg' %}" alt="Creative and visual resume formats" class="img-responsive">
                                             </div>
                                         </div>
                                     </div>
@@ -298,7 +442,7 @@
                                     <div class="overlay">
                                             <a href="#" data-toggle="modal" data-target="#resume-3" class="icon-zoom"></a>
                                     </div>
-                                       <img aria-label="Creative and visual resume formats" src="{% static 'shinelearn/images/cms/creative-3-thumb.jpg' %}"  alt="Creative and visual resume formats" class="img-responsive">
+                                       <img src="{% static 'shinelearn/images/cms/creative-3-thumb.jpg' %}"  alt="Creative and visual resume formats" class="img-responsive">
                                 </div>
                                 <!-- Modal -->
                                 <div class="modal fade" id="resume-3" tabindex="-3" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -311,7 +455,7 @@
                                             </button>
                                             </div>
                                             <div class="modal-body">
-                                               <img aria-label="Creative and visual resume formats" src="{% static 'shinelearn/images/cms/creative-3.jpg' %}" alt="Creative and visual resume formats" class="img-responsive">
+                                               <img src="{% static 'shinelearn/images/cms/creative-3.jpg' %}" alt="Creative and visual resume formats" class="img-responsive">
                                             </div>
                                         </div>
                                     </div>
@@ -468,37 +612,64 @@
                 </div><!--/. White box -->
 
                  <!-- White box -->
-                <div id="layout-tips" class="white-box mt-30">
-                    <h2 class="mb-15">Resume formatting and layout tips</h2>
-                    <P>Here are few tips you should consider when you want to create your resume format to stand out from other candidates:</P>
-                    <ul class="mt-15">
-                        <li>Present your work history in an order</li>
-                        <li>Try and avoid long paragraphs and lengthy bullet lists</li>
-                        <li>Avoid too much white space.</li>
-                        <li>Courier, Times New Roman, Helvetica, and Arial are some of the readable fonts.</li>
-                        <li>Never use double spaces between words and use just a single line space between lines.</li>
-                        <li>Use 0.5 inches to 1 inch of margins to give your resume a neat look.</li>
-                        <li>Avoid using a table with multiple columns.</li>
-                        <li>Don’t include graphics, background images or pictures in your resume</li>
-                        <li>Ensure that there are no spelling or grammatical errors in your resume.</li>
-                        <li>Ensure that you have just the relevant information in your resume and not a complete laundry list.</li>
-                    </ul>
-                    <hr/>
-                    <h2 class="mb-15">Why to choose professional resume over self created resume? </h2>
-                    <p>Your resume is a document which is the employer’s first impression. Obviously, you want to make a good one. Regardless of your polished skills and years of expertise, your resume should be built in a way so that it appears in a search or it passes well through the online applicant tracking system. Our resume experts analyse the market trend specific to your profile. The resume is built based on keyword optimisation and is tailored to what recruiters/managers are looking for. You can choose among the best-suited resume formats according to your skills and experience. To avail the service, we have listed free resume formats with examples and FAQs.</p>
+                <div id="layout-tips" class="white-box mt-30 rf">
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-bottom: 0;">
+                      <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingTen">
+                          <h2 class="panel-title">
+                            <a role="button" class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTen" aria-expanded="true" aria-controls="collapseTen">
+                            Resume formatting and layout tips</a>
+                          </h2>
+                      </div>
+                  </div>
+                  <div id="collapseTen" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTen">
+                          <div class="panel-body">
+                            <P>Here are few tips you should consider when you want to create your resume format to stand out from other candidates:</P>
+                            <ul class="mt-15">
+                                <li>Present your work history in an order</li>
+                                <li>Try and avoid long paragraphs and lengthy bullet lists</li>
+                                <li>Avoid too much white space.</li>
+                                <li>Courier, Times New Roman, Helvetica, and Arial are some of the readable fonts.</li>
+                                <li>Never use double spaces between words and use just a single line space between lines.</li>
+                                <li>Use 0.5 inches to 1 inch of margins to give your resume a neat look.</li>
+                                <li>Avoid using a table with multiple columns.</li>
+                                <li>Don’t include graphics, background images or pictures in your resume</li>
+                                <li>Ensure that there are no spelling or grammatical errors in your resume.</li>
+                                <li>Ensure that you have just the relevant information in your resume and not a complete laundry list.</li>
+                            </ul>
+                            <hr/>
+                            <h2 class="mb-15">Why to choose professional resume over self created resume? </h2>
+                            <p>Your resume is a document which is the employer’s first impression. Obviously, you want to make a good one. Regardless of your polished skills and years of expertise, your resume should be built in a way so that it appears in a search or it passes well through the online applicant tracking system. Our resume experts analyse the market trend specific to your profile. The resume is built based on keyword optimisation and is tailored to what recruiters/managers are looking for. You can choose among the best-suited resume formats according to your skills and experience. To avail the service, we have listed free resume formats with examples and FAQs.</p>
+                        </div>
+                    </div>
+                </div>
+
                 </div><!--/. White box -->
 
                 <!-- White box -->
-                <div id="difference" class="white-box mt-30">
-                    <h2 class="mb-15">Difference Between Resume, Curriculum Vitae (CV) and Biodata </h2>
-                    <p>Resumes, CV and Biodata are very similar in nature and are used to present personal-professional information about a person. They are usually used in job applications, academic applications, and similar documentation. The primary differences between the three are: </p>
-                    <ul class="list">
-                        <li>Biodata is a very short document with basic factual information only while resume and CV present the same information in more details. Curriculum Vitaes contain very detailed information while resumes have brief descriptions only. </li>
-                        <li>Biodata formats are single page while resume formats can extend to two pages and CV formats can be even longer due to the details presented. However, it is not recommended to have a CV longer than 3-pages unless you are highly experienced. </li>
-                        <li>Biodata is used widely and may be required for documentation other than jobs or academic. Resumes and CVs are mainly used for job applications and academic applications or similar professional use. </li>
-                        <li>Biodata follows the format of a functional resume while CVs can be made with either combination resume or chronological resume. </li>
-                    </ul>
+                <div id="difference" class="white-box mt-30 rf">
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-bottom: 0;">
+                      <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingEleven">
+                          <h2 class="panel-title">
+                            <a role="button" class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseEleven" aria-expanded="true" aria-controls="collapseEleven">
+                                Difference Between Resume, Curriculum Vitae (CV) and Biodata
+                            </a></h2>
+                        </div>
+                    </div>
+                    <div id="collapseEleven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingEleven">
+                        <div class="panel-body">
+                        <p>Resumes, CV and Biodata are very similar in nature and are used to present personal-professional information about a person. They are usually used in job applications, academic applications, and similar documentation. The primary differences between the three are: </p>
+                        <ul class="list">
+                            <li>Biodata is a very short document with basic factual information only while resume and CV present the same information in more details. Curriculum Vitaes contain very detailed information while resumes have brief descriptions only. </li>
+                            <li>Biodata formats are single page while resume formats can extend to two pages and CV formats can be even longer due to the details presented. However, it is not recommended to have a CV longer than 3-pages unless you are highly experienced. </li>
+                            <li>Biodata is used widely and may be required for documentation other than jobs or academic. Resumes and CVs are mainly used for job applications and academic applications or similar professional use. </li>
+                            <li>Biodata follows the format of a functional resume while CVs can be made with either combination resume or chronological resume. </li>
+                        </ul>
+                    </div>
+                </div>
                 </div><!--/. White box -->
+            </div>
             </div><!-- /. col -->
             <div class="col-md-4">
                 <div class="right-pan">
@@ -558,7 +729,7 @@
                                 <div class="media">
                                     <div class="media-left">
                                         <a href="https://learning.shine.com/article/6-things-to-be-removed-from-your-resume/14/" target="_blank">
-                                        <img aria-label="6 Things to be removed from Your Resume" class="mr-3" src="{% static 'shinelearn/images/cms/related-1.jpg' %}" alt="6 Things to be removed from Your Resume"></a>
+                                        <img class="mr-3" src="{% static 'shinelearn/images/cms/related-1.jpg' %}" alt="6 Things to be removed from Your Resume"></a>
                                     </div>
 
                                     <div class="media-body ml-15 fs-16">
@@ -571,7 +742,7 @@
                                 <div class="media">
                                         <div class="media-left">
                                         <a href="https://learning.shine.com/article/should-i-write-ctc-in-my-resume/3/" target="_blank">
-                                            <img aria-label="Should I write CTC in my Resume" class="mr-3" src= "{% static 'shinelearn/images/cms/related-2.jpg' %}"  alt="Should I write CTC in my Resume">
+                                            <img class="mr-3" src= "{% static 'shinelearn/images/cms/related-2.jpg' %}"  alt="Should I write CTC in my Resume">
                                         </a>
                                         </div>
                                     <div class="media-body ml-15 fs-16">
@@ -584,7 +755,7 @@
                                 <div class="media">
                                         <div class="media-left">
                                         <a href="https://learning.shine.com/talenteconomy/career-help/3-ways-to-self-evaluate-your-resume-format-and-content/" target="_blank">
-                                            <img aria-label="3 Ways To Self Evaluate Your Resume Format And Content" class="mr-3" src= "{% static 'shinelearn/images/cms/related-3.jpg' %}"  alt="3 Ways To Self Evaluate Your Resume Format And Content">
+                                            <img class="mr-3" src= "{% static 'shinelearn/images/cms/related-3.jpg' %}"  alt="3 Ways To Self Evaluate Your Resume Format And Content">
                                         </a>
                                         </div>
                                     <div class="media-body ml-15 fs-16">
@@ -597,7 +768,7 @@
                                 <div class="media">
                                         <div class="media-left">
                                         <a href="https://learning.shine.com/talenteconomy/career-help/7-quick-strategic-changes-in-your-resume-format-you-can-do-right-away/" target="_blank">
-                                           <img aria-label="7 Quick Strategic Changes In Your Resume Format You Can Do Right Away!" class="mr-3" src="{% static 'shinelearn/images/cms/related-4.jpg' %}" alt="7 Quick Strategic Changes In Your Resume Format You Can Do Right Away!">
+                                           <img class="mr-3" src="{% static 'shinelearn/images/cms/related-4.jpg' %}" alt="7 Quick Strategic Changes In Your Resume Format You Can Do Right Away!">
                                         </a>
                                         </div>
                                     <div class="media-body ml-15 fs-16">
@@ -610,7 +781,7 @@
                                 <div class="media">
                                         <div class="media-left">
                                         <a href="https://learning.shine.com/talenteconomy/career-help/9-words-to-replace-in-your-resume-and-other-professional-communications/" target="_blank">
-                                            <img aria-label="9 Words To Replace In Your Resume And Other Professional Communications!" class="mr-3" src="{% static 'shinelearn/images/cms/related-5.jpg' %}"alt="9 Words To Replace In Your Resume And Other Professional Communications!">
+                                            <img class="mr-3" src="{% static 'shinelearn/images/cms/related-5.jpg' %}"alt="9 Words To Replace In Your Resume And Other Professional Communications!">
                                         </a>
                                         </div>
                                     <div class="media-body ml-15 fs-16">
@@ -624,7 +795,7 @@
                     <div class="white-box mt-30">
                         <div class="media">
                             <div class="media-left">
-                                <img aria-label="Resume Writing Service" class="mr-3" src="{% static 'shinelearn/images/cms/resume-writing-service-pic.png' %}"alt="Resume Writing Service">
+                                <img class="mr-3" src="{% static 'shinelearn/images/cms/resume-writing-service-pic.png' %}"alt="Resume Writing Service">
                             </div>
                             <div class="media-body ml-15 fs-16">
                                 <p class="resume-writing-service-head">Resume Writing Service</p>
