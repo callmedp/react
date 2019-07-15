@@ -37,7 +37,7 @@
   <div class="payment--bg"></div>
   <ul class="payment__steps">
       <li class="payment__steps__item">
-          <a href="#" class="active">
+          <a  href="{% url "cart:payment-summary" %}" class="active">
               <span class="dot">1</span>
               <!-- <span class="tick"></span> -->
               Summary
@@ -45,7 +45,7 @@
       </li>
 
       <li class="payment__steps__item">
-          <a href="#">
+          <a href="{% url "cart:payment-login" %}" >
               <span class="dot">2</span>
               <!-- <span class="tick"></span> -->
               Login
@@ -53,7 +53,7 @@
       </li>
       
       <li class="payment__steps__item">
-          <a href="#">
+          <a href="{% url "payment:payment-option" %}">
               <span class="dot">3</span>
               <!-- <span class="tick"></span> -->
               Payment
@@ -63,41 +63,40 @@
 
   <div class="payment--white-box payment__summary">
       <ul class="payment__summary__items">
-          <li class="payment__summary__item">
-              <div class="payment__summary__item--wrap">
-                  <span class="payment__summary__item--img">
-                      <img src="https://static1.shine.com/l/m/product_image/1668/1507608787_5699.png" class="img-responsive" />
-                  </span>
-                  <p class="payment__summary__item--course-title">Six Sigma Green Belt Professional
-                      <strong class="mt-10">Rs. 12,711</strong>
-                  </p>
-              </div>
-              <span class="payment__summary__item--close">+</span>
-          </li>
-          
-          <li class="payment__summary__item">
-              <div class="payment__summary__item--wrap">
-                  <span class="payment__summary__item--img">
-                      <img src="https://static1.shine.com/l/m/product_image/1543/1508947697_2365.png" class="img-responsive" />
-                  </span>
-                  <p class="payment__summary__item--course-title">IT Project Management Essentials
-                      <strong class="mt-10">Rs. 3.499</strong>
-                  </p>
-              </div>
-              <span class="payment__summary__item--close">+</span>
-          </li>
-          
-          <li class="payment__summary__item">
-              <div class="payment__summary__item--wrap">
-                  <span class="payment__summary__item--img">
-                      <img src="https://static1.shine.com/l/m/product_image/669/1508058918_1005.png" class="img-responsive" />
-                  </span>
-                  <p class="payment__summary__item--course-title">Agile Practitioner - PMI ACP and Scrum Master Aligned
-                      <strong class="mt-10">Rs. 48,420</strong>
-                  </p>
-              </div>
-              <span class="payment__summary__item--close">+</span>
-          </li>
+          {% for item in cart_items %}
+            {% with addons=item.addons variations=item.variations %}
+                {% if variations and item.is_available and variations.0.is_available %}
+                    {% if item.product_class == 'course' or item.type_flow == 17%}
+                      <!-- Item wrap -->
+                          <li class="payment__summary__item">
+                              <div class="payment__summary__item--wrap">
+                                  <span class="payment__summary__item--img">
+                                      <img src="https://static1.shine.com/l/m/product_image/1668/1507608787_5699.png" class="img-responsive" />
+                                  </span>
+                                  <p class="payment__summary__item--course-title">{{item.name}}
+                                      <strong class="mt-10">Rs. {{variations.0.price}}</strong>
+                                  </p>
+                              </div>
+                              <span class="payment__summary__item--close">+</span>
+                          </li>
+                    {% elif item.is_available %}
+                         <!-- Item wrap -->
+                          <li class="payment__summary__item">
+                              <div class="payment__summary__item--wrap">
+                                  <span class="payment__summary__item--img">
+                                      <img src="https://static1.shine.com/l/m/product_image/1668/1507608787_5699.png" class="img-responsive" />
+                                  </span>
+                                  <p class="payment__summary__item--course-title">{{item.name}}
+                                      <strong class="mt-10">Rs. {{variations.0.price}}</strong>
+                                  </p>
+                              </div>
+                              <span class="payment__summary__item--close">+</span>
+                          </li>
+                    {% endif %}
+
+                {% endif %}
+            {% endwith %}
+          {% endfor %}
       </ul>
 
       <div class="apply mb-10">
@@ -109,19 +108,31 @@
 
       <div class="subtotal mb-10">
           <ul class="subtotal__items">
+               {% if cart_coupon %}
+                  <li>
+                    <span class="item">Coupon applied</span>
+                    <span class="price">-Rs. {{coupon_amount}}/-</span>
+                  </li>
+              {% elif cart_wallet %}
+                  <li>
+                    <span class="item">Shine loyalty points</span>
+                    <span class="price">-Rs. {{redeemed_reward_point}}/-</span>
+                  </li>
+              {% endif %}
+              {% if cart_coupon or cart_wallet %}
               <li class="subtotal__item mb-15">
                   <span class="subtotal__item--subtotal">Subtotal</span>
-                  <span class="subtotal__item--price">Rs. 64,630</span>
+                  <span class="subtotal__item--price">Rs. {{amount_after_discount}}</span>
+              </li>
+              {% endif %}
+              <li class="subtotal__item">
+                  <span class="subtotal__item--tax">SGST @ {{sgst}}%</span>
+                  <span class="subtotal__item--tax-price">+Rs. {{sgst_amount}}</span>
               </li>
               
               <li class="subtotal__item">
-                  <span class="subtotal__item--tax">SGST @ 9.0%</span>
-                  <span class="subtotal__item--tax-price">+Rs. 5,816.70</span>
-              </li>
-              
-              <li class="subtotal__item">
-                  <span class="subtotal__item--tax">CGST @ 9.0%</span>
-                  <span class="subtotal__item--tax-price">+Rs. 5,816.70</span>
+                  <span class="subtotal__item--tax">CGST @ {{cgst}}%</span>
+                  <span class="subtotal__item--tax-price">+Rs. {{cgst_amount}}</span>
               </li>
 
           </ul>
@@ -132,11 +143,11 @@
 <div class="bottom-cta">
   <div class="bottom-cta__price">
       <p class="fs-12 pb-0 c6">Payable Amount</p>
-      <strong class="fs-22">Rs. 76,263.40</strong>
+      <strong class="fs-22">Rs. {{total_payable_amount}}</strong>
   </div>
 
   <div class="bottom-cta__btn">
-      Proceed
+      <a href="{% url "cart:payment-login" %}">Proceed</a>
   </div>
 </div><!-- Bottom CTA -->
 
