@@ -111,13 +111,12 @@
       position: relative;
       padding: 15px 15px 15px 5px;
       font-size: $font-size-md;
+      border-top: 1px solid $border-grey-f2;
+
+      display: flex;
 
       @media (max-width: 320px) {
         font-size: $font-size-base;
-      }
-
-      &:not(:last-child) {
-        border-bottom: 1px solid $border-grey-c1;
       }
 
       &--img {
@@ -143,7 +142,11 @@
       }
 
       &--wrap {
+        width: 100%;
+        padding-right: 15px;
+
         display: flex;
+        flex-direction: column;
       } 
 
       &--price {
@@ -165,6 +168,33 @@
         top: 17px;
         transform: rotate(45deg);
       }
+
+      &__addons {
+        padding-right: 15px;
+        
+        &__item {
+          font-size: $font-size-xs;
+          
+          display: flex;
+          justify-content: space-between;
+          position: relative;
+
+          &:not(:last-child) {
+            margin-bottom: 12px;
+          }
+
+          &--title {
+            width: 130px;
+          }
+
+          .payment__summary__item--close {
+            top: 0;
+            right: -35px;
+          }
+        }
+      }
+
+
     }
   }
 }// Payment payment

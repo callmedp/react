@@ -68,12 +68,12 @@
                 {% if variations and item.is_available and variations.0.is_available %}
                     {% if item.product_class == 'course' or item.type_flow == 17%}
                       <!-- Item wrap -->
-                          <li class="payment__summary__item">
-                              <form role="form" method="post" id="cart_remove_form{{item.id}}">{% csrf_token %}
+                        <form role="form" method="post" id="cart_remove_form{{item.id}}">{% csrf_token %}
+                          <li class="payment__summary__item {% if forloop.counter0 == 0  %} border-top-none {%endif %}">
+                            <span class="payment__summary__item--img">
+                                <img src="https://static1.shine.com/l/m/product_image/1668/1507608787_5699.png" class="img-responsive" />
+                            </span>
                               <div class="payment__summary__item--wrap">
-                                  <span class="payment__summary__item--img">
-                                      <img src="https://static1.shine.com/l/m/product_image/1668/1507608787_5699.png" class="img-responsive" />
-                                  </span>
                                   <p class="payment__summary__item--course-title">{{item.name}}
                                       <strong class="mt-10">Rs. {{variations.0.price}}</strong>
                                   </p>
@@ -81,17 +81,16 @@
                               <input type="hidden" name="product_reference" value="{{variations.0.reference}}">
 
                               <span class="payment__summary__item--close" onclick="removeFromCartMobile('{{item.id}}')">+</span>
-                              </form>
-                          </li>
+                            </li>
+                        </form>
                     {% elif item.is_available %}
                          <!-- Item wrap -->
+                         <form role="form" method="post" id="cart_remove_form{{item.id}}">{% csrf_token %}
                           <li class="payment__summary__item">
-                              <form role="form" method="post" id="cart_remove_form{{item.id}}">{% csrf_token %}
-
-                                  <div class="payment__summary__item--wrap">
-                                     <span class="payment__summary__item--img">
+                                    <span class="payment__summary__item--img">
                                         <img src="https://static1.shine.com/l/m/product_image/1668/1507608787_5699.png" class="img-responsive" />
-                                   </span>
+                                    </span>  
+                                <div class="payment__summary__item--wrap">
                                    <p class="payment__summary__item--course-title">{{item.name}}
                                           <strong class="mt-10">Rs. {{variations.0.price}}</strong>
                                    </p>
@@ -99,22 +98,95 @@
                               <input type="hidden" name="product_reference" value="{{variations.0.reference}}">
 
                               <span class="payment__summary__item--close" onclick="removeFromCartMobile('{{item.id}}')">+</span>
-                              </form>
-
-                          </li>
+                            </li>
+                        </form>
                     {% endif %}
-
                 {% endif %}
             {% endwith %}
           {% endfor %}
+            <!-- Item wrap -->
+            <li class="payment__summary__item">
+                <span class="payment__summary__item--img">
+                    <img src="https://static1.shine.com/l/m/product_image/1668/1507608787_5699.png" class="img-responsive" />
+                </span>
+
+                <div class="payment__summary__item--wrap">
+                    <p class="payment__summary__item--course-title">International Profile Update
+                        <strong class="mt-10">Rs. 40</strong>
+                    </p>
+
+                    <div class="payment__summary__item__addons mt-20">
+                        <p class="fs-13 c9">Addons</p>
+                        <ul>
+                            <li class="payment__summary__item__addons__item">
+                                <span class="payment__summary__item__addons__item--title">Middle East</span>
+                                <span class="semi-bold">Rs. 12,71.00/-</span>
+                                <span class="payment__summary__item--close">+</span>
+                            </li>
+
+                            <li class="payment__summary__item__addons__item">
+                                <span class="payment__summary__item__addons__item--title">United Kingdom</span>
+                                <span class="semi-bold">Rs. 12,71.00/-</span>
+                                <span class="payment__summary__item--close">+</span>
+                            </li>
+
+                            <li class="payment__summary__item__addons__item">
+                                <span class="payment__summary__item__addons__item--title">Singapore</span>
+                                <span class="semi-bold">Rs. 12,71.00/-</span>
+                                <span class="payment__summary__item--close">+</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <span class="payment__summary__item--close">+</span>
+            </li>
+
+            <!-- Item wrap -->
+            <li class="payment__summary__item">
+                <span class="payment__summary__item--img">
+                    <img src="https://static1.shine.com/l/m/product_image/1668/1507608787_5699.png" class="img-responsive" />
+                </span>
+
+                <div class="payment__summary__item--wrap">
+                    <p class="payment__summary__item--course-title">Certified Lean Six Sigma Green Belt</p>
+
+                    <div class="payment__summary__item__addons mt-20">
+                        <p class="fs-13 c9">Select delivery method </p>
+                        <ul>
+                            <li class="payment__summary__item__addons__item">
+                                <input type="radio" id="normal" name="farea" value="19">
+                                <label for="normal"><strong>Normal</strong> (get it in 5 working days)</label>
+                            </li>
+                            <li class="payment__summary__item__addons__item">
+                                <input type="radio" id="express" name="farea" value="19">
+                                <label for="express"><strong>Express </strong> (get it in 3 working days)</label>
+                            </li>
+                            <li class="payment__summary__item__addons__item">
+                                <input type="radio" id="superexpress" name="farea" value="19">
+                                <label for="superexpress"><strong>Superexpress  </strong> (get it within 24 hrs)</label>
+                            </li>
+                        </ul>
+                    </div>
+                    <p class="mt-20"><strong class="mt-10">Rs. 48,420</strong></p>
+                </div>
+                <span class="payment__summary__item--close">+</span>
+            </li>
       </ul>
 
-      <div class="apply mb-10">
+      <div class="apply">
           <div class="apply__wrap">
               <input id="discount_code" type="text" placeholder="Enter coupon code" name="code" maxlength="15" class="apply__wrap--input">
               <button class="btn btn-lg btn-round btn-blue" type="button" onclick="JSApplyDiscount();">Apply</button>
           </div>
               <p class="error-txt" id="discount-alert"> </p>
+      </div>
+      
+      <div class="apply mb-10 pt-0">
+          <p><a href="javascript:void(0)" id="btn-reedem">Reedem Shine Credit</a></p>
+          <div class="apply__wrap" id="redeem-content" style="display: none;">
+              <input id="discount_code" type="text" placeholder="6191.00 shine loyalty points." name="code" maxlength="15" class="apply__wrap--input">
+              <button class="btn btn-lg btn-round btn-blue" type="button" onclick="JSApplyDiscount();">Reedem</button>
+          </div>
       </div>
 
       <div class="subtotal mb-10">
@@ -178,6 +250,15 @@
     {% compress js %}
         <script src="{% static 'shinelearn/js/mobile/cart/cart.js' %}"></script>
         <script type="text/javascript" src="{% static 'shinelearn/js/cart/payment-summary.js' %}"></script>
+
+        <script>
+            $(function() {
+                $("#btn-reedem").click(function() {
+                    $("#redeem-content").slideToggle();
+                    return false;
+                });
+            });
+        </script>
     {% endcompress %}
     
     {% block johukum %}
