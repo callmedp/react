@@ -62,7 +62,7 @@
                 <ul>
                     {% for quest in questions_list %}
                     {% if forloop.counter > 8 %}
-                          <li class="marked" id="markedquestion-{{forloop.counter}}"
+                        <li class="marked" id="markedquestion-{{forloop.counter}}"
                       data-attr-value="{{forloop.counter}}">{{forloop.counter}}</li>
                     {% endif %}
                     {% endfor %}
@@ -75,25 +75,21 @@
     </div><!-- /. question-timer -->
 
     <div class="take-test">
-        <h2>6) SEO = 'Search Engine optimization', then SEM = ?</h2>
-        <ul>
-            <li>
-                <input type="radio" name="question" value="test" id="search_1">
-                <label for="search_1">Search Engine Manipulation</label>
+        <ol>
+        {% for quest in questions_list %}
+            <li class="take-test__wrap {% if forloop.counter == 1 %} actived {% else %}inactive{% endif %}" id="question-{{forloop.counter}}">
+            <h2>{{forloop.counter}} {{quest.question_text}}</h2>
+                <ul>
+                    {% for ans in quest.question_options %}
+                    <li>
+                        <input type="radio" name="question" value="test" id="{{ans.option_id}}">
+                        <label for="{{ans.option_id}}">Search Engine Manipulation</label>
+                    </li>
+                    {% endfor %}
+                </ul>
             </li>
-            <li>
-                <input type="radio" name="question" value="test" id="search_2">
-                <label for="search_2">Search Engine Marketing</label>
-            </li>
-            <li>
-                <input type="radio" name="question" value="test" id="search_3">
-                <label for="search_3">Social Ethical Marketing</label>
-            </li>
-            <li>
-                <input type="radio" name="question" value="test" id="search_4">
-                <label for="search_4">Safe Easy Marketing</label>
-            </li>
-        </ul>
+        {% endfor %}
+        </ol>
         
         <div class="btn btn-round-30 btn-blue w-100" id="btn_check_result">
             Next question 
