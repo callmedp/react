@@ -3,6 +3,8 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from .serializers import GetUsersSerializer
 
+import json
+
 User = get_user_model()
 
 class GetUsersView(ListAPIView):
@@ -11,8 +13,8 @@ class GetUsersView(ListAPIView):
     permission_classes = ()
 
     def get_queryset(self):
-        group = self.kwargs['group']
-        active = self.kwargs['active']
+        group =self.request.query_params.get('group','')
+        active = json.loads(self.request.query_params.get('active','false'))
         queryset =User.objects.all()
         if group =='welcome_call':
             group = settings.WELCOMECALL_GROUP_LIST

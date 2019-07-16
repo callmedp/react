@@ -535,6 +535,18 @@ class OrderItem(AbstractAutoDate):
         return "#{}".format(self.pk)
 
     @property
+    def order_payment_date(self):
+        return self.order.payment_date
+
+    @property
+    def product_name(self):
+        return self.product.name
+
+    @property
+    def order_status_text(self):
+        return dict(STATUS_CHOICES).get(self.order.status)
+
+    @property
     def get_oi_status(self):
         dict_status = dict(OI_OPS_STATUS)
         return dict_status.get(self.oi_status)
@@ -939,11 +951,23 @@ class CustomerFeedback(models.Model):
 
     @property
     def status_name(self):
-        return FEEDBACK_STATUS[self.status -1][1]
+        return dict(FEEDBACK_STATUS).get(self.status)
     
     @property
     def full_name(self):
         return "USer"
+
+    @property
+    def mobile(self):
+        return 912345678
+
+    @property
+    def email(self):
+        return 'abc@gmail.com'
+    
+    @property
+    def ltv(self):
+        return 30000
     
     # @property
     # def ltv(self):

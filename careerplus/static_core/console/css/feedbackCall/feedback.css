@@ -1,4 +1,15 @@
-/* .filter-align{
-    float: right;
-    text-align: right;
-} */
+.set-cursor{
+    cursor: pointer;
+}
+
+#customer-email{
+    display: none;
+}
+
+#customer-mobile{
+    display: none;
+}
+
+.padding-item{
+    padding-top:16px!important;
+}

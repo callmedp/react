@@ -1,18 +1,43 @@
 let page_size = 5
 let total_pages = 0
+let feedback_id_selected = []
 
 function update_feedback(id){
     window.location.href = `/console/feedbackcall/update/${id}`
 }
 
 $(document).ready(function() { 
+    $('.feedback_users').select2({
+        width:'100%',
+    });
     customerList(1)
     $.get(`/user/api/v1/get-users/`,{
         'group':'welcome_call',
         'active':true
     },(data)=>{
         console.log(data)
+        $('.feedback_users').empty()
+        $('.feedback_users').append(
+            `
+            <option value="">Select User</option>
+            `
+        )
+        for (user of data['results']){
+            $('.feedback_users').append(
+                `
+                <option value='${user.id}'>${user.name}(${user.email})</option>
+                `
+            )
+        }
     })
+
+    $('#check-all').click(function(e){      
+        $(this).closest('table').find('td input:checkbox').prop('checked', this.checked);
+        feedback_id_selected = []
+        $('#body-table-list input[name="table_records"]:checked').each(function() {
+            feedback_id_selected.push(parseInt($(this).prop('value')));
+        });
+    });
     
 });
 
@@ -26,7 +51,7 @@ function customerList(page_no){
                     `
                         <tr class="even pointer">
                             <td class="a-center ">
-                                <input autocomplete="off" type="checkbox" class="flat" name="table_records" value="${result.id}" >
+                                <input autocomplete="off" type="checkbox" class="flat" name="table_records" onclick="uncheckAll(this,${result.id})" value="${result.id}" >
                             </td>
                             <td>${result.full_name}</td>
                             <td>${result.added_on}</td>
@@ -75,4 +100,30 @@ function customerList(page_no){
         
     })
     
+}
+
+function uncheckAll(checkbox,id){
+   if($('#check-all')[0].checked && !checkbox.checked){
+        $('#check-all').attr('checked',false)
+   }
+   if(checkbox.checked){
+       feedback_id_selected.push(id)
+   }
+   else{
+       feedback_id_selected.splice(feedback_id_selected.indexOf(id),1)
+   }
+
+}
+
+
+function assignFeedbackIdsUser(){
+    user_id =$('.feedback_users').find(':selected').val();
+    if(!user_id || feedback_id_selected.length===0)
+        return
+    $.post(`/console/api/v1/feedback-call/assign-feedback-call/`,{
+        'feedback_ids':JSON.stringify(feedback_id_selected),
+        'user_id':user_id
+    },(data)=>{
+        console.log(data);
+    })
 }

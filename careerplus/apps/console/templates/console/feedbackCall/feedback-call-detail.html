@@ -12,6 +12,7 @@
 
     {% compress css %}
       <link type="text/css" href="{% static "console/css/datepicker/bootstrap-datetimepicker.min.css" %}" rel="stylesheet">
+      <link type="text/css" href="{% static "console/css/feedbackCall/feedback.css" %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_block %}
 
@@ -43,27 +44,7 @@
                   </tr>
                 </thead>
 
-                <tbody>
-                    <tr class="even pointer">
-                        <td>{{customer_name}}</td>
-                        <td>
-                            <div id="email{{customer_feedback.id}}">
-                                <div>{{email}}</div>
-                            </div>
-                            <div>
-                                <button type="button" class="btn btn-primary btn-xs" onclick="showData('email',)"><i class="fa fa-search" aria-hidden="true"></i>ClickToView</button>
-                            </div>
-                        </td>
-                        <td>
-                            <div id="mobile{{customer_feedback.id}}">
-                                <div>{{mobile}}</div>
-                            </div>
-                            <div>
-                                <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-phone-square" aria-hidden="true"></i>ClickToView</button>
-                            </div>
-                        </td>
-                      <td>{{customer_feedback.ltv}}</td>
-                    </tr>
+                <tbody id="customer-detail">
                 </tbody>
               </table>
             </div>
@@ -85,19 +66,36 @@
           <div class="x_content">
             <div class="row">
               <div class="col-md-6 col-xs-12">
-                  <label for="subcat">Category:</label>
-                  <select id="id-resolution" required="required" name="resolution" class="form-control">
+                  <label for="category">Service Feedback:</label>
+                  <select id="category-choices" required="required" name="category" class="form-control">
                     <option value="">Select Category</option>
                   </select>
               </div>
               <div class="col-md-6 col-xs-12">
-                  <label for="subcat">Resolution:</label>
-                  <select id="id-resolution" required="required" name="resolution" class="form-control">
+                  <label for="resolution">Resolution:</label>
+                  <select id="resolution-choices" required="required" name="resolution" class="form-control">
                     <option value="">Select Resolution</option>
                   </select>
               </div>
             </div>
             <hr>
+
+            <div class="table-responsive">
+              <table class="table table-striped jambo_table">
+                <thead>
+                  <tr class="headings">
+                    <th class="column-title">Item Name</th>
+                    <th class="column-title">Status</th>
+                    <th class="column-title">Order ID</th>
+                    <th class="column-title">Payment Date</th>
+                    <th class="column-title">Service Feedback</th>
+                    <th class="column-title">Resolution</th>
+                  </tr>
+                </thead>
+                <tbody id="order-item-entries">
+                </tbody>
+              </table>
+            </div>
             <button type="button" id="id-welcomecall-update" class="btn btn-success">Update Welcome Call</button>
           </div>
         </div>
@@ -113,8 +111,11 @@
         
 {% block js_block %}
   {{ block.super }}
-
+  <script>
+    const id = {{id}}
+  </script>
   {% compress js %}
+  <script type="text/javascript" src="{% static "console/js/feedbackCall/customer-feedback-detail.js" %}"></script>
   {% endcompress %}
 
 {% endblock js_block %}

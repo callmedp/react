@@ -12,10 +12,11 @@
     {{block.super}}
 
     {% compress css %}
-    <link href="{% static "packages/iCheck/skins/flat/green.css"  %}" rel="stylesheet" type="text/css">
-    <link type="text/css" href="{% static "console/css/feedbackCall/feedback.css" %}" rel="stylesheet">
-    <link type="text/css" href="{% static "console/css/datepicker/daterangepicker.css" %}" rel="stylesheet">
+      <link href="{% static "packages/iCheck/skins/flat/green.css"  %}" rel="stylesheet" type="text/css">
+      <link type="text/css" href="{% static "console/css/feedbackCall/feedback.css" %}" rel="stylesheet">
+      <link type="text/css" href="{% static "console/css/datepicker/daterangepicker.css" %}" rel="stylesheet">
     {% endcompress %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
 
 {% endblock css_block %}
 
@@ -61,10 +62,14 @@
       <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
-            <div class="col-sm-4">
+            <div class="col-sm-6">
+            
             <div class="input-group">
-                <span class="input-group-btn">
-                  <button type="button" class="btn btn-primary" id="action_button_go">Assign To!</button>
+                <select class="feedback_users">
+                  <option value="">Loading ....</option>
+                </select>
+                <span class="input-group-btn" >
+                  <button type="button" class="btn btn-primary" id="assign-user" style="margin-left:12px;" onclick="assignFeedbackIdsUser()">Assign To!</button>
                 </span>
             </div>
             </div>
@@ -77,8 +82,6 @@
 
           <div class="x_content">
             <div class="table-responsive">
-              <form>
-              <input type="hidden" name="action_type" id="action_type_id" class="flat">
               <table class="table table-striped jambo_table bulk_action" id="welcome-table">
                 <thead>
                   <tr class="headings">
@@ -99,35 +102,18 @@
 
                 </tbody>
               </table>
-              </form>
             </div>
 
             {% block main_pagination %}
             <div class="main_pagination">
                 <div class="col-sm-4">
                       <div class="pull-left" id="page-no" style="display: inline-block;adding-left: 0;margin: 20px 0;">
-                        Page {{ current_page }} of {{ total_page }}
                     </div>
                 </div>
 
                 <div class="col-sm-8">
                   <div class="pull-right">
-                    <ul class="pagination">
-                      <li>
-                        <a href="#" aria-label="Previous">
-                          <span aria-hidden="true">&laquo;</span>
-                        </a>
-                      </li>
-                      <li><a href="#">1</a></li>
-                      <li><a href="#">2</a></li>
-                      <li><a href="#">3</a></li>
-                      <li><a href="#">4</a></li>
-                      <li><a href="#">5</a></li>
-                      <li>
-                        <a href="#" aria-label="Next">
-                          <span aria-hidden="true">&raquo;</span>
-                        </a>
-                      </li>
+                    <ul class="pagination set-cursor">
                     </ul>
                   </div>
                 </div>
@@ -150,8 +136,10 @@
   {{ block.super }}
 
   {% compress js %}
-    <script type="text/javascript" src="{% static "console/js/order/feedback-call.js" %}"></script>
+    <script type="text/javascript" src="{% static "console/js/feedbackCall/feedback-call-listing.js" %}"></script>
   {% endcompress %}
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
 
 
 {% endblock js_block %}
