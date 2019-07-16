@@ -60,7 +60,7 @@
             </li>
         </ul><!-- payment setps-->
 
-        <div class="payment--white-box login hide" id="user_payment_login">
+        <div class="payment--white-box login" id="user_payment_login">
             <div class="p-15">
                 <div class="login__user mb-20">
                     <span class="icon-user mr-10"></span>
@@ -69,9 +69,10 @@
         <form class="personal-details col-sm-6 bdr-rt" method="post" action="" role="form" id="login_form">{% csrf_token %}
 
                 <ul>
-                    <li class="login__item input-effect">
+                    <li class="login__item input-effect error">
                         <input type="email" class="form--control animation-input" name="email" id="email-id" aria-describedby="email-id" placeholder="">
                         <label for="email-id">Email id</label>
+                        <span class="error--mgs">Required</span>
                     </li>
                     <li class="login__item input-effect">
                         <input type="password"
@@ -118,9 +119,10 @@
         <form  class="personal-details col-sm-6 bdr-rt hidden" method="post" action="" id="guest_form">{% csrf_token %}
 
                 <ul>
-                    <li class="login__item input-effect">
+                    <li class="login__item input-effect error">
                         <input type="text" class="form--control animation-input" id="guest-name"  name="name" id="name" aria-describedby="name" placeholder="">
                         <label for="guest-name">Name</label>
+                        <span class="error--mgs">Required</span>
                     </li>
                     <li class="login__item input-effect">
                         <input type="email" class="form--control animation-input" id="guest-email" name="email" aria-describedby="email-id" placeholder="">
@@ -172,6 +174,28 @@
                 </a>
             </div>
         </div><!-- Continue as guest -->
+        
+        <div class="payment--white-box login">
+            <div class="p-15">
+                <div class="login__user mb-20">
+                    Forget password
+                </div>
+                <form  class="personal-details col-sm-6 bdr-rt hidden" method="post" action="">
+                    <ul class="mt-30">
+                        <li class="login__item input-effect error mb-10">
+                            <input type="text" class="form--control animation-input" id="guest-name"  name="name" id="name" aria-describedby="name" placeholder="">
+                            <label for="guest-name">Name</label>
+                            <span class="error--mgs">Required</span>
+                        </li>
+                        <li class="fs-12 c6 mb-30">Enter the Email Id which you are registered on Shine.com</li>
+
+                        <li>
+                            <button class="btn btn-round btn-blue w100">Submit</button>
+                        </li>
+                    </ul>
+                </form>
+            </div><!-- /. p-15 -->
+        </div><!-- Forget password -->
     </div><!-- /. Payment steps -->
 
 

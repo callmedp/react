@@ -34,6 +34,10 @@
     display: flex;
     margin-bottom: 0;
 
+    @media (max-width:320px) {
+      top: 7px;
+    }
+
     &__item {
       text-transform: uppercase;
       font-weight: $font-weight-medium;
@@ -52,7 +56,7 @@
         display: flex;
 
         @media (max-width: 320px) {
-          padding: 10px 8px;
+          padding: 10px 8px 17px;
         }
   
         &.active {
@@ -185,6 +189,10 @@
 
           &--title {
             width: 130px;
+
+            @media (max-width:320px) {
+              width: 110px;
+            }
           }
 
           .payment__summary__item--close {
@@ -210,9 +218,13 @@
 
     &--input {
       border: 0 none;
-      font-size: 14px;
+      font-size: $font-size-base;
       margin-right: auto;
       flex: 1;
+
+      @media (max-width:320px) {
+        font-size: $font-size-xs;
+      }
     }
 
     .btn {
@@ -266,6 +278,10 @@
   bottom: 0;
 
   display: flex;
+
+  a {
+    color: $txt-white;
+  }
 
   &__price {
     background-color: $bg-white;
