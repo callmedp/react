@@ -235,3 +235,22 @@
         }
     }
 }
+
+
+.sure {
+    padding: 50px 20px;
+
+    &__icon-wrap {
+        @include border-radius(50%);
+        @include square(136px, flex);
+        background-color: $bg-grey-f6;
+        margin: 0 auto;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &--btn-warp {
+        display: flex;
+        justify-content: space-evenly;
+    }
+}
