@@ -1,6 +1,7 @@
 $(document).ready(function() {
     $("#forgot_form").validate({
         submitHandler: function(form) {
+
             var formData = $(form).serialize();
             var post_url = $(form).attr('action' );
             $.ajax({
@@ -9,6 +10,7 @@ $(document).ready(function() {
                 data : formData,
                 dataType: 'json',
                 success: function(json) {
+
                     $("#forgot_form")[0].reset();
                     if (json.exist == true){
                         alert("Link has been sent to your registered email id");

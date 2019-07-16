@@ -270,7 +270,6 @@ $(document).ready(function () {
             $('#forgot_div').modal('hide');
             $('#forgot_form').addClass('hidden');
             $('#login_form').removeClass('hidden');
-
             $.ajax({
                 url: post_url,
                 type: "POST",

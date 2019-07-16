@@ -180,17 +180,22 @@
                 <div class="login__user mb-20">
                     Forget password
                 </div>
-                <form  class="personal-details col-sm-6 bdr-rt hidden" method="post" action="">
+                <form
+                        class="personal-details col-sm-6 bdr-rt hidden"
+                        id="forgot_form"
+                        method="post"
+                        action="{% url 'users:forgot-email-sent' %}"
+                >{% csrf_token %}
                     <ul class="mt-30">
                         <li class="login__item input-effect error mb-10">
-                            <input type="text" class="form--control animation-input" id="guest-name"  name="name" id="name" aria-describedby="name" placeholder="">
+                            <input type="text" class="form--control animation-input" name="name" id="name" aria-describedby="name" placeholder="">
+
                             <label for="guest-name">Name</label>
                             <span class="error--mgs">Required</span>
                         </li>
                         <li class="fs-12 c6 mb-30">Enter the Email Id which you are registered on Shine.com</li>
-
                         <li>
-                            <button class="btn btn-round btn-blue w100">Submit</button>
+                            <button class="btn btn-round btn-blue w100" type="submit">Submit</button>
                         </li>
                     </ul>
                 </form>
@@ -221,10 +226,10 @@
         <script src="{% static 'shinelearn/js/cart/guest_login.js' %}"></script>
 
     {% compress js %}
+        <script type="text/javascript" src="{% static 'shinelearn/js/users/forgot_password.js' %}"></script>
         <script src="{% static 'shinelearn/js/cart/payment-login.js' %}"></script>
         <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
         <script src="{% static 'shinelearn/js/cart/payment-shipping.js' %}"></script>
-        <script type="text/javascript" src="{% static 'shinelearn/js/users/forgot_password.js' %}"></script>
         <script>
         // JavaScript for label effects only
             $(window).load(function(){

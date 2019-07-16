@@ -6,7 +6,7 @@
 {%  endblock meta_html %}
 
 {% block title %}
-   Payment Login - Shine Learning
+   Shipping detail - Shine Learning
 {% endblock title %}
 
 {% block css_section %}
@@ -14,10 +14,29 @@
     {% compress css %}
     <link type="text/scss" href="{% static 'shinelearn/css/cart/payment.scss' %}" rel="stylesheet">
     {% endcompress %}
-    
     <style type="text/css">
         .error{
             color:red;
+        }
+        .autocomplete-suggestions {
+            border: 2px solid #e4e4e4;
+            background: #F4F4F4;
+            cursor: default;
+            overflow: auto;
+        }
+        .autocomplete-suggestion {
+            padding: 2px 5px;
+            font-size: 1.2em;
+            white-space: nowrap;
+            overflow: hidden
+        }
+        .autocomplete-selected {
+            background: #f0f0f0
+        }
+        .autocomplete-suggestions strong {
+            font-weight: normal;
+            color: #3399ff;
+            font-weight: bolder
         }
     </style>
 {% endblock css_section %}
@@ -33,9 +52,10 @@
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          
+
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown have-query">
+
               <a href="tel:{{ggn_contact}}">Have a query? Call us at <strong>{{ggn_contact}}</strong></a>
 
             </li>
@@ -49,76 +69,169 @@
 
 {% block container %}
     <section class="container mt-53">
-        <!-- page content body start -->
+       <!-- page content body start -->
         <div class="row greybg2 pad-25">
 
         <!-- left content start -->
           <div class="col-sm-3 payment-summary-tab">
-          <!-- <a><span>2</span> Shipping</a> -->
-          <a><span>1</span> Summary</a>
-          <a href="{% url "cart:payment-login" %}" class="active"><span>2</span> Login/Sign-up</a>
+          <!-- <a href="{% url "cart:payment-shipping" %}" class="active"><span>2</span> Shipping</a> -->
+          <a><span class="green-circle">1</span> Summary</a>
+          <a class="active"><span>2</span> Login</a>
           <a><span>3</span> Payment</a>
-
-          <!-- secure payment -->
-          <!-- <div class="secure-payment">
-            <figure class="secure-icon-payment"></figure>
-            <strong>100% SECURE PAYMENT</strong>
-            All major Credit and Debit cards accepted
-            <figure class="cards-payment-icon mt-20"></figure>
-          </div> -->
-
           </div>
         <!-- left content end -->
 
         <!-- right content start -->
-        <div class="col-sm-9 box-shadow">
-            <form role="form" method="post" id="login_form" action="" class="personal-details col-sm-6"> {% csrf_token %}
+        <div class="col-sm-9 round-border box-shadow">
 
-                {% if email_exist %}
-                    <strong class="personal-details-heading col-sm-12">Login with your email id</strong>
-                    <p id="non-field-error" class="error">{{non_field_error}}</p>
-                    <div class="form-group col-sm-12 {% if email_error %}error{% endif %}">
-                      <input type="email" name="email" value="{{email}}"  class="form-control" placeholder="Enter your email id">
-                      <span class="error-txt">{{email_error}}</span>
-                    </div>
-                    <div class="form-group col-sm-12">
-                      <input type="password" required name="password" class="form-control"  placeholder="Password">
-                      <span class="error-txt"></span>
-                    </div>
+        <!-- login -->
+        <form class="personal-details col-sm-6 bdr-rt" method="post" action="" role="form" id="login_form">{% csrf_token %}
+          <strong class="personal-details-heading ml-15">Login</strong>
+            {% if email_exist %}
+          {% if non_field_error %}
+               <span class="error" style="left:14px;">{{non_field_error}}</span>
+          {% endif %}
+          <div class="form-group clearfix">
+            <div class="col-sm-12 {% if email_error %} error {% endif %}">
+              <input type="email"   class="form-control"  name="email" placeholder=" "   value="{{email}}"/>
+              <label for="">Email id</label>
+              <span class="error-txt">{{email_error}}</span>
+            </div>
+          </div>
+            {% else %}
+             {% if non_field_error %}
+               <span class="error" style="left:14px;">{{non_field_error}}</span>
+          {% endif %}
+          <div class="form-group clearfix">
+            <div class="col-sm-12 {% if email_error %} error {% endif %}">
+              <input type="email"  name ="email" class="form-control" placeholder=" "    value="{% if request.session.email%}{{request.session.email}}{% elif request.session.lead_email %}{{ request.session.lead_email }}{% endif %}" {% if request.session.email %}  {% endif %}"/>
+              <label for="">Email id</label>
+              <span class="error-txt">{{email_error}}</span>
+            </div>
+          </div>
+            {% endif %}
+              <div class="form-group clearfix">
+            <div class="col-sm-12 {% if form.first_name.errors %} error {% endif %}">
+              <input type="password" class="form-control" required id="" name="password" placeholder=" "/>
+              <label for="">Password</label>
+              <span class="error-txt"></span>
+            </div>
+          </div>
 
-                    <div class="continue col-sm-6">
-                      <button style="font-size:16px;" type="submit" onclick="soc_gaevent('Buy Flow','Cart Order Login','Continue');">Continue</button>
-                    </div>
-                     {% if guest_login%}
-                    <div class="continue col-sm-6">
-                     <a id="login_guests" style="cursor: pointer; line-height:50px;" type="button">Continue As Guest</a>
-                        </div>
+          <div class="continue">
+            <a class="pull-right mr-20" onclick="forgotPassword()">Forgot password?</a>
+            <button type="submit">Continue</button>
+          </div>
+
+          <div class="col-sm-12 text-right social-icon-new mt-20">
+            Login with
+            <a class="facebook-social-icon" onclick="Login('/cart/payment-shipping/');soc_gaevent('Buy Flow','Facebook_BuyFlow','Sign In');"></a>
+            <a class="linkedin-social-icon"  onclick="soc_gaevent('Buy Flow','Linkedin_BuyFlow','Sign In');" href="{% url 'users:linkedin-code' %}?next=/cart/payment-shipping/"></a>
+            <a class="google-social-icon" onclick="glogin('/cart/payment-shipping/');soc_gaevent('Buy Flow','GooglePlus_BuyFlow','Sign In');"></a>
+          </div>
+
+        </form>
+
+        <!-- Continue as guest -->
+        <form  class="personal-details col-sm-6 bdr-rt hidden" method="post" action="" id="guest_form">{% csrf_token %}
+          <strong class="personal-details-heading ml-15">Continue as guest</strong>
+          {% if form.non_field_errors %}
+               <span class="error" style="left:14px;">{{form.non_field_errors.0}}</span>
+          {% endif %}
+          <div class="form-group clearfix">
+            <div class="col-sm-12 {% if form.first_name.errors %} error {% endif %}">
+              <!-- {{form.first_name}} -->
+              <input type="text" class="form-control" name="name"  placeholder=" "/>
+              <label for="">Your name</label>
+              <span class="error-txt">{{form.first_name.errors.0}}</span>
+            </div>
+          </div>
+          <div class="form-group clearfix">
+            <div class="col-sm-12 {% if form.email.errors %} error {% endif %}">
+              <!-- {{form.email}} -->
+              <input type="email"
+                     class="form-control"
+                     name="email"
+                     placeholder=" "
+              />
+
+              <label for="">Email id</label>
+              <span class="error-txt">{{form.email.errors.0}}</span>
+            </div>
+          </div>
+          <div class="form-group clearfix">
+            <div class="col-sm-12 {% if form.mobile.errors or form.country_code.errors %} error {% endif %}">
+              <div class="country-code">
+                <div class="custom-select">
+                    {% if request.session.country_code%}
+                    {{request.session.country_code}}
                     {% endif %}
-                    <div class="col-sm-12" style="padding: 0px;">
-                      <small style="display:block" class="form-text text-muted">
-                        <a href="javascript:void(0)" id="modalforgot">
-                        Forgot Password?</a>
-                      </small>
-                    </div>
-                {% else %}
-                    <strong class="personal-details-heading col-sm-12">Enter your email id</strong>
-                    <p id="non-field-error" class="error">{{non_field_error}}</p>
-                    <div class="form-group col-sm-12 {% if email_error %}error{% endif %}">
-                          <input type="email" name="email" class="form-control" placeholder="Enter your email id" value="{% if request.session.email%}{{request.session.email}}{% elif request.session.lead_email %}{{ request.session.lead_email }}{% endif %}" {% if request.session.email %} readonly {% endif %}>
-                      <span class="error-txt">{{email_error}}</span>
-                    </div>
-                    <div class="continue col-sm-12">
-                      <button type="submit" onclick="soc_gaevent('Buy Flow','Cart Login','Continue')";>Continue</button>
-                    </div>
-                {% endif %}
 
-            </form>
-              <div class="social-login" style="margin:30px 0 15px 0px;">
-                    <span>or login with</span>
-                    <a class="facebook" onclick="Login('/cart/payment-shipping/');soc_gaevent('Buy Flow','Facebook_BuyFlow','Sign In');"></a>
-                    <a class="linkedin" onclick="soc_gaevent('Buy Flow','Linkedin_BuyFlow','Sign In');" href="{% url 'users:linkedin-code' %}?next=/cart/payment-shipping/"></a>
-                    <a class="gplus" onclick="glogin('/cart/payment-shipping/');soc_gaevent('Buy Flow','GooglePlus_BuyFlow','Sign In');"></a>
                 </div>
+              </div>
+                 <div class="form-group wd2 pl-0">
+                <input type="text" class="form-control" name="mobile" placeholder=" "/>
+                <label for="">Mobile no.</label>
+                <span class="error-txt">{% if form.mobile.errors %} {{form.mobile.errors.0}} {% else %}{{form.country_code.errors.0}}{% endif %}</span>
+           </div>
+            </div>
+          </div>
+
+          <div class="continue">
+            <button type="button" id="login_guests">Continue</button>
+          </div>
+        </form>
+
+            <!-- Forgot Password  -->
+        <form  class="personal-details col-sm-6 bdr-rt hidden"
+               method="post"
+               id="forgot_form"
+               action="{% url 'users:forgot-email-sent' %}"
+               >{% csrf_token %}
+          <strong class="personal-details-heading ml-15">Forgot Password</strong>
+          {% if form.non_field_errors %}
+               <span class="error" style="left:14px;">{{form.non_field_errors.0}}</span>
+          {% endif %}
+          <div class="form-group clearfix">
+            <div class="col-sm-12 {% if form.first_name.errors %} error {% endif %}">
+              <!-- {{form.first_name}} -->
+              <input type="text" class="form-control" id="" name="email" placeholder=" "/>
+              <label for="">Your email</label>
+              <span class="error-txt">{{form.first_name.errors.0}}</span>
+            </div>
+          </div>
+          <div class="continue">
+            <button type="submit">Submit</button>
+          </div>
+        </form>
+
+
+        <div class="col-sm-6 text-center" id="continue-as-guest-button">
+
+          <div class="login-guest">
+            <span>
+              <a onclick="continueAsGuest()">
+                <figure class="guestlogin-payment-icon"></figure>
+                Continue as guest
+              </a>
+            </span>
+          </div>
+
+        </div>
+
+        <div class="col-sm-6 text-center hidden" id="login-candidate-button">
+          <div class="login-guest">
+            <span>
+              <a onclick="loginAsCandidate()">
+                <figure class="login-payment-icon"></figure>
+                Login
+              </a>
+            </span>
+          </div>
+
+        </div>
+
+
 
         </div>
         <!-- right content end -->
@@ -127,65 +240,22 @@
         <!-- page content body end -->
     </section>
     <!-- main section end -->
-<!-- forgot password box -->
-  <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="forgot_div">
-  <div class="modal-dialog modal-sm modal-custom" role="document">
-    <div class="modal-content">
-        <div class="register">
-            <div>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <span class="modal-title" id="myModalLabel">Forgot Password</span>
-            </div>
-            <div id="msg_for_user"></div>
-            <form method="post" id="forgot_form" 
-            action="{% url "users:forgot-email-sent" %}">
-            {% csrf_token %}
-                {% for field in reset_form %}
-                    <div class="form-group {% if field.errors %}error{% endif %}">
-                        {{field}}
-                        {% for error in  field.errors %}{{ error }}{% endfor %}
-                    </div>
-                {% endfor %}
-              <button type="submit" class="btn btn-primary submit mt-20">Submit</button>
-            </form>
-        </div>
-    </div>
-  </div>
-</div>
 {% endblock container %}
-  
+
 
 {% block js_section %}
-<script>
-
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-              })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-              ga('create', 'UA-3537905-41', 'auto', {'name': 'a'});
-              ga('a.send', 'pageview');
-              ga('create', 'UA-3537905-41', 'auto');
-              ga('send', 'pageview');
-
- function hitGAContinue(){
-    ga('send', 'event', 'Cart Order Login', 'Buy Flow', 'Continue');
-  }
-
-function soc_gaevent(event_cat,event_lab,event_action){
-  ga('send', 'event', event_cat, event_action, event_lab);
- }
-
-
-</script>
-
 
    {{ block.super }}
       <script src="{% static 'shinelearn/js/cart/guest_login.js' %}"></script>
 
-    {% compress js %}
-      <script src="{% static 'shinelearn/js/cart/payment-login.js' %}"></script>
-      <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
-    {% endcompress %}
+   {% compress js %}
+   <script src="{% static 'shinelearn/js/common/jquery.autocomplete.min.js' %}"></script>
+   <script src="{% static 'shinelearn/js/cart/payment-shipping.js' %}"></script>
+   <script src="{% static 'shinelearn/js/cart/payment-login.js' %}"></script>
+   <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
+
+
+   {% endcompress %}
 {% endblock js_section %}
 
 {% block johukum %}
