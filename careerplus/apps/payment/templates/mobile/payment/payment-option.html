@@ -56,7 +56,7 @@
                 Login
             </a>
         </li>
-        
+
         <li class="payment__steps__item">
             <a href="#" class="active">
                 <span class="dot">3</span>
@@ -74,7 +74,7 @@
         <div class="payment-type">
           <div class="payment-type--item">
             <span></span>
-            <a href="#">Card & Netbanking</a>
+            <a href="{% url "payment:ccavenue_request" cart_id 'all' %}">Card & Netbanking</a>
           </div>
 
 
@@ -101,38 +101,61 @@
                           <span class="payment-type__account--name">Account Name</span>
                           <span>: HT Media Limited</span>
                         </div>
-                        
+
                         <div class="payment-type__account--item">
                           <span class="payment-type__account--name">Account No.</span>
                           <span>: 00705038629</span>
                         </div>
                       </div>
                     </div><!-- /. Account Details -->
-
+                <form role="form" id="id-cash-form" method="post" action="." >{% csrf_token %}
                     <div class="mt-15">
-                        <select class="form--control" id="exampleFormControlSelect1">
+                        {{ state_form.state }}
+                        <p class="error-txt">{{state_form.state.errors.0}}</p>
+
+                        <input type="hidden" name="payment_type" value="cash">
+
+                     <!--   <select class="form&#45;&#45;control" id="exampleFormControlSelect1">
                           <option>Select your state</option>
                           <option>Delhi</option>
                           <option>3</option>
                           <option>4</option>
                           <option>5</option>
-                        </select>
+                        </select>-->
                     </div>
 
-                    <p class="fs-18 mt-10 c3"><strong>Rs. 76,263.40</strong> (amount payable)</p>
-                    <p class="mt-20"><a href="#" class="btn btn-yellow btn-round w100">Make Payment</a></p>
+                    <p class="fs-18 mt-10 c3"><strong>Rs. {{total_amount}}</strong> (amount payable)</p>
+                    <p class="mt-20">
+                        <button type="submit" class="btn btn-yellow btn-round w100">Make Payment</button>
+                    </p>
+                </form>
+
                   </div><!-- /. accordion content -->
               </div><!-- /. cash accordion item -->
-              
+
               <div class="accordion_in">
                 <div class="acc_head payment-type--item">
                   <span></span>
                   Cheque
                 </div>
+
                   <div class="acc_content" style="display: none;">
+                   <form id="check-pay-form" method="post" action="">{% csrf_token %}
+
                     <p class="fs-16">Pay by Cheque</p>
 
-                    <form>
+                    <ul class="p-0 mt-15 mb-15 ">
+                        {% for field in check_form %}
+                          <li class="login__item input-effect {% if field.errors %}error{% endif %}">
+                              {{ field }}
+                               <p class="error-txt"></p>
+                          </li>
+                        {% endfor %}
+                    </ul>
+
+                        <input type="hidden" name="payment_type" value="cheque">
+
+<!--
                       <ul class="p-0 mt-15 mb-15">
                           <li class="login__item input-effect">
                               <input type="text" class="form--control animation-input" id="cheque" aria-describedby="cheque" placeholder="">
@@ -147,7 +170,8 @@
                               <label for="deposit">Date of Desposit *</label>
                           </li>
                       </ul>
-                    </form>
+-->
+
 
                     <div class="payment-type__account">
                       <p class="payment-type__account--head fw600 c3 ">Our Account Details with ICICI Bank</p>
@@ -156,7 +180,7 @@
                           <span class="payment-type__account--name">Account Name</span>
                           <span>: HT Media Limited</span>
                         </div>
-                        
+
                         <div class="payment-type__account--item">
                           <span class="payment-type__account--name">Account No.</span>
                           <span>: 00705038629</span>
@@ -171,15 +195,16 @@
                       <li>Mail us a scanned copy of the deposit slip at resumeservices@shine.com</li>
                     </ul>
 
-                    <p class="fs-18 mt-20 c3"><strong>Rs. 76,263.40</strong> (amount payable)</p>
-                    <p class="mt-20"><a href="#" class="btn btn-yellow btn-round w100">Make Payment</a></p>
+                    <p class="fs-18 mt-20 c3"><strong>Rs. {{total_amount}}</strong> (amount payable)</p>
+                    <p class="mt-20"><a href="javascript:{}" onclick="document.getElementById('check-pay-form').submit();" class="btn btn-yellow btn-round w100">Make Payment</a></p>
+                     </form>
                   </div><!-- /. accordion content -->
               </div><!-- /. Cheque accordion item -->
           </div><!-- /. accordion wrap -->
-          
+
           <div class="payment-type--item">
             <span></span>
-            <a href="#">Card & Netbanking
+            <a href="{% url "payment:epaylater-request" cart_id %}" >Card & Netbanking
               <img src="{% static 'shinelearn/images/mobile/common/epaylater.jpg' %}" class="payment-type--item--img"/>
             </a>
           </div>
@@ -190,7 +215,7 @@
 <div class="bottom-cta">
     <div class="bottom-cta__price">
         <p class="fs-12 pb-0 c6">Payable Amount</p>
-        <strong class="fs-22">Rs. 76,263.40</strong>
+        <strong class="fs-22">Rs. {{total_amount}}</strong>
     </div>
 </div>
 {% endblock container %}
