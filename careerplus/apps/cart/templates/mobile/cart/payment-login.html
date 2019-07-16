@@ -60,7 +60,7 @@
             </li>
         </ul><!-- payment setps-->
 
-        <div class="payment--white-box login" id="user_payment_login">
+        <div class="payment--white-box login hide" id="user_payment_login">
             <div class="p-15">
                 <div class="login__user mb-20">
                     <span class="icon-user mr-10"></span>
@@ -85,7 +85,7 @@
                     </li>
                 </ul>
         </form>
-                <a href="#" class="mt-10 fw600 block">Forget password</a>
+                <a onclick="forgotPassword()" class="mt-10 fw600 block">Forget password</a>
             </div><!-- /. p-15 -->
 
             <div class="line_wrap"><span>Login with</span><div class="line"></div></div>
@@ -116,56 +116,56 @@
                     <span class="icon-guest mr-10"></span>
                     Continue as guest
                 </div>
-        <form  class="personal-details col-sm-6 bdr-rt hidden" method="post" action="" id="guest_form">{% csrf_token %}
+            <form  class="personal-details col-sm-6 bdr-rt hidden" method="post" action="" id="guest_form">{% csrf_token %}
 
-                <ul>
-                    <li class="login__item input-effect error">
-                        <input type="text" class="form--control animation-input" id="guest-name"  name="name" id="name" aria-describedby="name" placeholder="">
-                        <label for="guest-name">Name</label>
-                        <span class="error--mgs">Required</span>
-                    </li>
-                    <li class="login__item input-effect">
-                        <input type="email" class="form--control animation-input" id="guest-email" name="email" aria-describedby="email-id" placeholder="">
-                        <label for="guest-email">Email</label>
-                    </li>
+                    <ul>
+                        <li class="login__item input-effect error">
+                            <input type="text" class="form--control animation-input" id="guest-name"  name="name" id="name" aria-describedby="name" placeholder="">
+                            <label for="guest-name">Name</label>
+                            <span class="error--mgs">Required</span>
+                        </li>
+                        <li class="login__item input-effect">
+                            <input type="email" class="form--control animation-input" id="guest-email" name="email" aria-describedby="email-id" placeholder="">
+                            <label for="guest-email">Email</label>
+                        </li>
 
-                    <li class="login__item">
-                        <span class="login__item--code">
-                            <!--<select class="form&#45;&#45;control" id="exampleFormControlSelect1">
-                                <option>+91</option>
-                                <option>+92</option>
-                                <option>+93</option>
-                                <option>+94</option>
-                                <option>+95</option>
-                                <option>+0123</option>
-                            </select>-->
-                            {% if request.session.country_code %}
-                                 {{request.session.country_code}}
-                            {% endif %}
-                        </span>
-                        <div class="input-effect login__item--mobile">
-                            <input type="email" class="form--control animation-input" id="guest-mobile" name="mobile" aria-describedby="mobile" placeholder="">
-                            <label for="guest-mobile">Mobile</label>
-                        </div>
-                    </li>
-                </ul>
-        </form>
+                        <li class="login__item">
+                            <span class="login__item--code">
+                                <!--<select class="form&#45;&#45;control" id="exampleFormControlSelect1">
+                                    <option>+91</option>
+                                    <option>+92</option>
+                                    <option>+93</option>
+                                    <option>+94</option>
+                                    <option>+95</option>
+                                    <option>+0123</option>
+                                </select>-->
+                                {% if request.session.country_code %}
+                                     {{request.session.country_code}}
+                                {% endif %}
+                            </span>
+                            <div class="input-effect login__item--mobile">
+                                <input type="email" class="form--control animation-input" id="guest-mobile" name="mobile" aria-describedby="mobile" placeholder="">
+                                <label for="guest-mobile">Mobile</label>
+                            </div>
+                        </li>
+                    </ul>
+            </form>
 
             </div><!-- /. p-15 -->
 
             <div class="line_wrap"><span>Login with</span><div class="line"></div></div>
 
-            <div class="login__social text-center">
-                <a onclick="Login();">
-                    <sup class="icon-fb-2"></sup>
-                </a>
-                <a href="/user/linkedin/code/" class="link">
-                    <sup class="icon-link-2"></sup>
-                </a>
-                <a onclick="glogin()">
-                    <sup class="icon-gp-2"></sup>
-                </a>
-            </div><!-- Login social -->
+                <div class="login__social text-center">
+                    <a onclick="Login();">
+                        <sup class="icon-fb-2"></sup>
+                    </a>
+                    <a href="/user/linkedin/code/" class="link">
+                        <sup class="icon-link-2"></sup>
+                    </a>
+                    <a onclick="glogin()">
+                        <sup class="icon-gp-2"></sup>
+                    </a>
+                </div><!-- Login social -->
 
             <div class="login__guest">
                 <a onclick="loginAsCandidate()" class="fs-18">
@@ -175,7 +175,7 @@
             </div>
         </div><!-- Continue as guest -->
         
-        <div class="payment--white-box login">
+        <div class="payment--white-box login hide" id="user-forgot-password">
             <div class="p-15">
                 <div class="login__user mb-20">
                     Forget password
@@ -188,9 +188,9 @@
                 >{% csrf_token %}
                     <ul class="mt-30">
                         <li class="login__item input-effect error mb-10">
-                            <input type="text" class="form--control animation-input" name="name" id="name" aria-describedby="name" placeholder="">
+                            <input type="text" class="form--control animation-input" name="email"  aria-describedby="name" placeholder="">
 
-                            <label for="guest-name">Name</label>
+                            <label for="guest-name">Email</label>
                             <span class="error--mgs">Required</span>
                         </li>
                         <li class="fs-12 c6 mb-30">Enter the Email Id which you are registered on Shine.com</li>

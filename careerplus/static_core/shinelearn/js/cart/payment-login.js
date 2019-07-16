@@ -23,6 +23,7 @@ const loginAsCandidate = () => {
     $('#forgot_form').addClass('hidden');
     $('#user_payment_login').removeClass('hide');
     $('#guest_payment_login').addClass('hide');
+    $('#user-forgot-password').addClass('hide');
     $('#login_users').removeClass('hide');
     $('#login_guests').addClass('hide');
 
@@ -33,6 +34,11 @@ const loginAsCandidate = () => {
 const forgotPassword = () => {
     $('#login_form').addClass('hidden');
     $('#guest_form').addClass('hidden');
+     $('#login_users').addClass('hide');
+    $('#login_guests').addClass('hide');
+     $('#user_payment_login').addClass('hide');
+    $('#guest_payment_login').addClass('hide');
+    $('#user-forgot-password').removeClass('hide');
     $('#forgot_form').removeClass('hidden');
 
 }

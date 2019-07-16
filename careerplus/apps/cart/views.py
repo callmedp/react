@@ -161,7 +161,7 @@ class RemoveFromCartView(View, CartMixin):
 
 
 @Decorate(stop_browser_cache())
-class PaymentLoginView(TemplateView):
+class PaymentLoginView(TemplateView, CartMixin):
     template_name = "cart/payment-login.html"
 
     def get(self, request, *args, **kwargs):
@@ -307,6 +307,22 @@ class PaymentLoginView(TemplateView):
 
         cart_pk = self.request.session.get('cart_pk')  # required for calling self.get_context_data()
         cart_obj = Cart.objects.get(pk=cart_pk)
+        type_flow = -1
+
+        line_item_list = cart_obj.lineitems.filter(parent=None)
+
+        if len(line_item_list):
+            line_item = line_item_list[0]
+            type_flow = int(line_item.product.type_flow)
+        # resume builder flow handle
+        if type_flow == 17:
+            cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
+        else:
+            cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
+        cart_items = cart_dict.get('cart_items', [])
+        payment_dict = self.getPayableAmount(cart_obj, cart_dict.get('total_amount'))
+        context.update(payment_dict)
+
         if cart_obj.email == email:
             context['email_exist'] = True
             context.update({'email': email, })
