@@ -715,9 +715,15 @@ class OrderItem(AbstractAutoDate):
         # handling combo case getting parent and updating child
         if self.is_combo and not self.parent:
             jobs_on_the_move_item = self.order.orderitems.filter(product__sub_type_flow=502)
+            priority_applicant_items = self.order.orderitems.filter(product__sub_type_flow=503)
+
             for i in jobs_on_the_move_item:
                 from order.tasks import process_jobs_on_the_move
                 process_jobs_on_the_move.delay(i.id)
+
+            for i in priority_applicant_items:
+                process_application_highlighter(i.id)
+
         elif self.product.sub_type_flow == 502:
             from order.tasks import process_jobs_on_the_move
             process_jobs_on_the_move.delay(self.id)
