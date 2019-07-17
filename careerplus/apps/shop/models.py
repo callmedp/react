@@ -404,6 +404,10 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
     def get_canonical_url(self):
         return self.get_absolute_url()
 
+    @property
+    def assessment_test(self):
+        return self.get_assessment_test()
+
     def get_assessment_test(self):
         return self.test_set.count()
 

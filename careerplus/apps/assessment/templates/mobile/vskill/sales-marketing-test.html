@@ -81,7 +81,16 @@
                }
                for (fa in json.results){
                 element.innerHTML=
-                element.innerHTML +'<div class="testinside testinside-inner"><span class="border-left"></span><a class="test-box" a href="/practice-tests/'+ json.results[fa].slug +'">'+ json.results[fa].heading +'<span class="test">22 Test</span></a></div>'
+                element.innerHTML + `<div class="popular_test_inside category">
+                <a href = "/practice-tests/${json.results[fa].slug}/sub/"
+
+                <span class="border border{{forloop.counter0}}"></span>
+                <span class="name">${json.results[fa].heading}</span>
+                <span class="test">${json.results[fa].assessment_test}
+                ${json.results[fa].assessment_test < 1 ? 'Test':'Tests'}
+                    </span>
+            </a>
+        </div>`
                }
                },
                error: function(xhr, ajaxOptions, thrownError) {

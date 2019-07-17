@@ -66,7 +66,7 @@
       {% endif %}
     </div>
 
-
+      <!--start Test Modal-->
     <div class="practice-test check-result-wrap pt-30" id="check_results">
         <div class="practice-test-inside"></div>
         <div class="back" id="close"></div>
@@ -154,6 +154,8 @@
         </div><!-- option test box-->
     </div>
 
+   <!--end test modal-->
+
 
 
 {% endblock container %}
@@ -161,23 +163,6 @@
 <script src="{% static 'shinelearn/js/assessment/take_test.js' %}"></script>
    {{block.super}}
    <script type="text/javascript">
-    $('#testModal').on('show.bs.modal', function(e) {
-    var modalobject = JSON.parse(e.relatedTarget.dataset.attrValue);
-    console.log(modalobject);
-
-    $('#questCount').text(modalobject.quescount);
-    $('#startTestLink').attr('href','/practice-tests/'+ modalobject.testSlug +'-test/');
-    $('#testAddToCart').click( function()
-           {
-            addToCart(modalobject.vendor,modalobject.catid);
-           }
-      );
-
-
-});
-
-
-
    var page_number= 2;
    function loadmore(){
             page_number = page_number+1;
@@ -192,19 +177,14 @@
                  $('#loadmorebtn').hide();
                }
                for (fa in json.results){
-                element.innerHTML= element.innerHTML +
-
-                `      <div class="testinside">
-                  <span class="border-left"></span>
-  <a id="${json.results[fa].id}" onclick="getProductDetail('${json.results[fa].vendor}','${json.results[fa].category}');
-  getCourseDetail('${json.results[fa].vendor}','${json.results[fa].category}','${json.results[fa].id}');"
-  class="testModal" data-toggle="modal" data-attr-value='{"id":"${json.results[fa].id}","catid":"${json.results[fa].category}","quescount":"${json.results[fa].question_count}",
-  "testSlug":"${json.results[fa].slug}","vendor":"${json.results[fa].vendor}" }' data-target="#testModal">
-                     ${json.results[fa].title}
-                     <div class="white_hover"></div>
-                     <span class="taketest" >Take Free Test</span>
-                  </a>
-               </div>`
+                element.innerHTML= element.innerHTML + `<div class="popular_test_inside">
+           <a id="${json.results[fa].id}" onclick="testModal(event);" data-attr-value='{"id":"${json.results[fa].id}","catid":"${json.results[fa].category}","quescount":"${json.results[fa].question_count}",
+  "testSlug":"${json.results[fa].slug}","vendor":"${json.results[fa].vendor}" }'>
+                  <span class=" border border{{forloop.counter0}}"></span>
+                <span class="name">${json.results[fa].title</span>
+                <span class="btn btn-md btn-round-30 btn-blue" id="btn_check_result">Take free test</span>
+            </a>
+        </div>`
 
 
                }
