@@ -722,7 +722,7 @@ class OrderItem(AbstractAutoDate):
                 process_jobs_on_the_move.delay(i.id)
 
             for i in priority_applicant_items:
-                process_application_highlighter(i.id)
+                process_application_highlighter(i)
 
         elif self.product.sub_type_flow == 502:
             from order.tasks import process_jobs_on_the_move
