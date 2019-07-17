@@ -334,7 +334,21 @@
                 <label> Current Salary</label>
                 {{profile_form.current_salary}}
               </div>
+              <div class="form-group col-md-3">
+                <label> Skills</label>
+                {{profile_form.skills}}
+              </div>
+              <div class="form-group col-md-3">
+                <label> Experience</label>
+                {{profile_form.experience}}
+              </div>
+              <br>
+              <div class="form-group col-md-12">
+                <label> Approved {{profile_form.approved}}</label>
+              </div>
               <input type="hidden" name="action_type" value="3">
+              <br>
+              <br>
               <div class="form-group col-md-12">
                 <button type="submit" class="btn btn-primary">Save Profile</button>
               </div>
@@ -425,6 +439,10 @@
         'delimiter': [','],   // Or a string with a single delimiter. Ex: ';'
     });
       $('#id_desired_position').tagsInput({
+        width: 'auto',
+        'delimiter': [','],   // Or a string with a single delimiter. Ex: ';'
+    });
+       $('#id_skills').tagsInput({
         width: 'auto',
         'delimiter': [','],   // Or a string with a single delimiter. Ex: ';'
     });

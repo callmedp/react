@@ -12,6 +12,7 @@
 
     {% compress css %}
     <link href="{% static 'packages/iCheck/skins/flat/green.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'packages/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet" type="text/css">
     <link type="text/css" href="{% static 'console/css/datepicker/daterangepicker.css' %}" rel="stylesheet">
     {% endcompress %}
 
@@ -93,12 +94,15 @@
                 <div class="modal-body">
                   <form autocomplete="off" class="form-group" method="GET" action="{% url "console:queue-whatsappjoblist" %}" id="list-filter-form">
                         <div class="form-group">
-                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.oi_status}}</label></br>
+                            <label class="control-label col-md-12 col-sm-12 col-xs-12"> Status {{ filter_form.oi_status}}</label></br>
                             <br/>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.day_choice}}</label></br>
+                            <label class="control-label col-md-12 col-sm-12 col-xs-12">{{ filter_form.day_choice}}</label></br>
                             <br/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-12 col-sm-12 col-xs-12"> Payment Date<input class="form-control datepicker " id="id_filter_date" name="payment_date" placeholder="Payment Date"  value="{{ request.GET.payment_date}}" /></label></br>
                         </div>
                        {% if query %}
                            <input type="hidden" name="query" value="{{query}}">
@@ -277,8 +281,7 @@
                       </td>
                       <td>{{obj.get_oi_status}}</td>
                       <td>
-                          {{obj.payment_date|naturaltime}}
-                          <b>Updated On: {{obj.modified}}</b>
+                          <b>Paid On: {{obj.order.payment_date}}</b>
                       </td>
                       
                       <td>{{obj.assigned_to}}</td>
@@ -367,7 +370,18 @@
         
 {% block js_block %}
   {{ block.super }}
-
+  <script type="text/javascript">
+    $('#id_filter_date').daterangepicker({
+        'opens': 'center',
+        "dateLimit": {
+           "month": 2
+        },
+        autoUpdateInput: false,
+      });
+      $('input[name="payment_date"]').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+    });
+  </script>
   {% compress js %}
   <!-- Parsley Validate Scripts -->
   <script type="text/javascript" src="{% static 'console/js/order/exotelCall.js' %}"></script>
@@ -379,6 +393,7 @@
   <script type="text/javascript" src="{% static 'console/js/order/orderitem-action.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/order/filter.js' %}"></script>
   <script type="text/javascript" src = "{% static 'console/js/order-info.js' %}"></script>
+  <script type="text/javascript" src="{% static 'console/js/datepicker/daterangepicker.js' %}"></script>
 
   {% endcompress %}
 

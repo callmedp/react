@@ -3161,8 +3161,10 @@ class ShineProfileData(AbstractAutoDate):
         verbose_name=_('Vendor'),
         related_name='vendor'
     )
+
     class Meta:
         unique_together = ('type_flow', 'sub_type_flow', 'vendor')
+
 
 class ProductUserProfile(AbstractAutoDate):
     order_item = models.OneToOneField(
@@ -3175,6 +3177,9 @@ class ProductUserProfile(AbstractAutoDate):
     desired_position = models.CharField(max_length=255, blank=True, null=True)
     desired_salary = models.CharField(max_length=50, blank=True, null=True)
     current_salary = models.CharField(max_length=50, blank=True, null=True)
+    experience = models.CharField(max_length=50, blank=True, null=True)
+    skills = models.CharField(max_length=100, blank=True, null=True)
+    approved = models.BooleanField(default=False)
 
 
 class JobsLinks(AbstractCommonModel, AbstractAutoDate):

@@ -274,7 +274,8 @@ class OIFilterForm(forms.Form):
         if queue_name == 'queue-whatsappjoblist':
             NEW_OI_OPS_STATUS = (
                 (-1, 'Select Status'), (31, 'Pending Links'),
-                (32, 'Sent Links'), (33, 'Saved Links'), (4, 'Closed')
+                (32, 'Sent Links'), (33, 'Saved Links'),
+                (34, 'Pending Approval'), (4, 'Closed')
             )
 
             self.fields['day_choice'].choices = ( (-1, 'All'),(1, 'Today'), (2, 'Tommorrow'),)
@@ -531,7 +532,8 @@ class ProductUserProfileForm(forms.ModelForm):
         model = ProductUserProfile
         fields = (
             'contact_number', 'desired_industry', 'desired_location',
-            'desired_position', 'desired_salary', 'current_salary'
+            'desired_position', 'desired_salary', 'current_salary',
+            'approved', 'experience', 'skills'
         )
     contact_number = forms.CharField(
         max_length=500,
@@ -564,6 +566,18 @@ class ProductUserProfileForm(forms.ModelForm):
         required=False
     )
     current_salary = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-3 col-xs-12'}),
+        required=False
+    )
+    experience = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-3 col-xs-12'}),
+        required=False
+    )
+    skills = forms.CharField(
         max_length=500,
         widget=forms.TextInput(attrs={
             'class': 'form-control col-md-3 col-xs-12'}),

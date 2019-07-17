@@ -15,6 +15,10 @@ from core.mixins import InvoiceGenerate
 from coupon.mixins import CouponMixin
 from api.config import LOCATION_MAPPING, INDUSTRY_MAPPING, DESIRED_SALARY_MAPPING
 from shine.core import ShineCandidateDetail
+from crmapi.config import (
+    EXPERIENCE_IN_YEARS_MODEL_CHOICES
+)
+
 from shop.models import ProductUserProfile
 
 @task(name="invoice_generation_order")
@@ -801,7 +805,7 @@ def process_jobs_on_the_move(obj_id=None):
     from order.models import OrderItem
     obj = OrderItem.objects.filter(id=obj_id).first()
     # create jobs on the move profile after welcome call is done.
-    if obj.is_combo:
+    if obj.is_combo and obj.parent:
         wc_cat = obj.parent.wc_cat
         wc_sub_cat = obj.parent.wc_sub_cat
     else:
@@ -817,26 +821,41 @@ def process_jobs_on_the_move(obj_id=None):
             order__candidate_id=obj.order.candidate_id
         ).exclude(whatsapp_profile_orderitem=None).first()
 
-        desired_industry, desired_location, desired_salary, current_salary = '', '' ,'', ''
+        desired_industry, desired_location, desired_salary, current_salary, experience, skills = '', '' ,'', '', '', ''
 
         if other_jobs_on_the_move:
             desired_industry = other_jobs_on_the_move.whatsapp_profile_orderitem.desired_industry
             desired_location = other_jobs_on_the_move.whatsapp_profile_orderitem.desired_location
             desired_salary = other_jobs_on_the_move.whatsapp_profile_orderitem.desired_salary
             current_salary = other_jobs_on_the_move.whatsapp_profile_orderitem.current_salary
+            experience = other_jobs_on_the_move.whatsapp_profile_orderitem.experience
+            skills = other_jobs_on_the_move.whatsapp_profile_orderitem.skills
         else:
             resp_status = ShineCandidateDetail().get_candidate_detail(email=obj.order.email, shine_id=None)
 
+            if 'total_experience' in resp_status and resp_status['total_experience']:
+                experience_years = resp_status['total_experience'][0].get('experience_in_years', 0)
+                experience_months = resp_status['total_experience'][0].get('experience_in_months', 0)
+
+                experience_years = dict(EXPERIENCE_IN_YEARS_MODEL_CHOICES).get(experience_years)
+                if experience_months:
+                    experience_months = str(experience_months) + ' months' 
+                experience = '{} {}'.format(experience_years, experience_months)
+
+            if 'skills' in resp_status and resp_status['skills']:
+                skills = ','.join([i['value'] for i in resp_status['skills']])[0:99]
+
             if resp_status and 'desired_job' in resp_status:
+
                 candidate_data = resp_status['desired_job'][0]
 
                 # Get canidate location
                 candidate_location = candidate_data['candidate_location']
-                desired_location = ','.join([LOCATION_MAPPING.get(loc, '') for loc in candidate_location])
+                desired_location = ','.join([LOCATION_MAPPING.get(loc, '') for loc in candidate_location])[0:244]
 
                 # Get candidate industry
                 candidate_industry = candidate_data['industry']
-                desired_industry = ','.join([INDUSTRY_MAPPING.get(ind, '') for ind in candidate_industry])
+                desired_industry = ','.join([INDUSTRY_MAPPING.get(ind, '') for ind in candidate_industry])[0:244]
 
                 # Get desired salary
                 maximum_salary = candidate_data['maximum_salary']
@@ -858,7 +877,9 @@ def process_jobs_on_the_move(obj_id=None):
             desired_industry=desired_industry,
             desired_location=desired_location,
             desired_salary=desired_salary,
-            current_salary=current_salary
+            current_salary=current_salary,
+            experience=experience,
+            skills=skills
         )
         obj.update_pending_links_count()
 
