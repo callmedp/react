@@ -96,21 +96,29 @@
                                   {% endif %}
                                   {% if delivery_types %}
                                            <div class="payment__summary__item__addons mt-20">
-                                                <p class="fs-13 c9">Select delivery speed </p>
-                                                <ul>
-                                                    <li class="payment__summary__item__addons__item">
-                                                        <input type="radio" id="normal" name="normal" onclick="selectDeliveryType('normal')" value="19">
-                                                        <label for="normal"><strong>Normal</strong> (get it in 5 working days)</label>
+                                                <div class="delivery-speed mb-15" id="btn-delivery">
+                                                    <span class="icon-delivery"></span>
+                                                    <p class="pb-0">
+                                                        <strong class="block">Normal - No extra cost</strong>
+                                                        (get it in 5 working days) 
+                                                    </p>
+                                                    <span class="icon-down-arrow"></span>
+                                                </div><!-- /. select delivery options -->
+
+                                                <ul class="delivery-list cls_delivery-content" style="display: none;">
+                                                    <li>
+                                                        <input type="radio" id="normal" name="delivery-list" onclick="selectDeliveryType('normal')" value="19">
+                                                        <label for="normal"><strong class="block">Normal- No extra cost</strong> (get it in 5 working days)</label>
                                                     </li>
-                                                    <li class="payment__summary__item__addons__item">
-                                                        <input type="radio" id="express" name="express" onclick="selectDeliveryType('express')" value="19">
-                                                        <label for="express"><strong>Express </strong> (get it in 3 working days)</label>
+                                                    <li>
+                                                        <input type="radio" id="express" name="delivery-list" onclick="selectDeliveryType('express')" value="19">
+                                                        <label for="express"><strong class="block">Express- Rs. 500/- </strong> (get it in 3 working days)</label>
                                                     </li>
-                                                    <li class="payment__summary__item__addons__item">
-                                                        <input type="radio" id="superexpress" name="super-express" onclick="selectDeliveryType('superexpress')" value="19">
-                                                        <label for="superexpress"><strong>Superexpress  </strong> (get it within 24 hrs)</label>
+                                                    <li>
+                                                        <input type="radio" id="superexpress" name="delivery-list" onclick="selectDeliveryType('superexpress')" value="19">
+                                                        <label for="superexpress"><strong class="block">Superexpress- Rs. 800/-  </strong> (get it within 24 hrs)</label>
                                                     </li>
-                                                </ul>
+                                                </ul><!-- /. select delivery Lists -->
                                            </div>
                                   {% endif %}
                               </div>
@@ -123,14 +131,14 @@
                          <!-- Item wrap -->
                          <form role="form" method="post" id="cart_remove_form{{item.id}}">{% csrf_token %}
                           <li class="payment__summary__item">
-                                    <span class="payment__summary__item--img">
-                                        <img src="https://static1.shine.com/l/m/product_image/1668/1507608787_5699.png" class="img-responsive" />
-                                    </span>  
+                                <span class="payment__summary__item--img">
+                                    <img src="https://static1.shine.com/l/m/product_image/1668/1507608787_5699.png" class="img-responsive" />
+                                </span>  
                                 <div class="payment__summary__item--wrap">
                                    <p class="payment__summary__item--course-title">{{item.name}}
                                           <strong class="mt-10">Rs. {{variations.0.price}}</strong>
                                    </p>
-                                   </div>
+                                </div>
                               <input type="hidden" name="product_reference" value="{{variations.0.reference}}">
 
                               <span class="payment__summary__item--close" onclick="removeFromCartMobile('{{item.id}}')">+</span>
@@ -140,9 +148,47 @@
                 {% endif %}
             {% endwith %}
           {% endfor %}
+
+          <!-- Addons list item starts here  -->
+            <li class="payment__summary__item">
+                <span class="payment__summary__item--img">
+                    <img src="https://static1.shine.com/l/m/product_image/1668/1507608787_5699.png" class="img-responsive" />
+                </span>
+
+                <div class="payment__summary__item--wrap">
+                    <p class="payment__summary__item--course-title">International Profile Update
+                        <strong class="mt-10">Rs. 40</strong>
+                    </p>
+
+                    <div class="payment__summary__item__addons mt-20">
+                        <p class="fs-13 c9">Addons</p>
+                        <ul>
+                            <li class="payment__summary__item__addons__item">
+                                <span class="payment__summary__item__addons__item--title">Middle East</span>
+                                <span class="semi-bold c3">Rs. 12,71.00/-</span>
+                                <span class="payment__summary__item--close">+</span>
+                            </li>
+
+                            <li class="payment__summary__item__addons__item">
+                                <span class="payment__summary__item__addons__item--title">United Kingdom</span>
+                                <span class="semi-bold c3">Rs. 12,71.00/-</span>
+                                <span class="payment__summary__item--close">+</span>
+                            </li>
+
+                            <li class="payment__summary__item__addons__item">
+                                <span class="payment__summary__item__addons__item--title">Singapore</span>
+                                <span class="semi-bold c3">Rs. 12,71.00/-</span>
+                                <span class="payment__summary__item--close">+</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <span class="payment__summary__item--close">+</span>
+            </li> <!-- Addons list item ends here  -->
+
       </ul>
 
-      <div class="apply">
+      <div class="apply border-top mt-15 pt-30">
           <div class="apply__wrap">
               <input id="discount_code" type="text" placeholder="Enter coupon code" name="code" maxlength="15" class="apply__wrap--input">
               <button class="btn btn-lg btn-round btn-blue" type="button" onclick="JSApplyDiscount();">Apply</button>
@@ -171,9 +217,9 @@
 
       <div class="subtotal mb-10">
                 <ul class="subtotal__items">
-              <li class="subtotal__item">
-                  <span class="subtotal__item--tax">Subtotal</span>
-                  <span class="subtotal__item--tax-price">Rs. {{total_amount}}</span>
+              <li class="subtotal__item mb-10">
+                  <span class="subtotal__item--tax fs-14">Subtotal</span>
+                  <span class="subtotal__item--tax-price fs-20 semi-bold">Rs. {{total_amount}}</span>
               </li>
 
                {% if cart_coupon %}
@@ -238,6 +284,15 @@
                     return false;
                 });
             });
+
+            $(function(){
+                $("#btn-delivery").click(function(){
+                    $(".cls_delivery-content").slideToggle();
+                    return false;
+                });
+            });
+
+           
         </script>
     {% endcompress %}
     

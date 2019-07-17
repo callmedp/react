@@ -246,6 +246,7 @@ label:hover:before {
   -webkit-transform: scale(0);
   transform: scale(0);
 }
+
 [type="radio"]:checked + label:after {
   opacity: 1;
   -webkit-transform: scale(1);

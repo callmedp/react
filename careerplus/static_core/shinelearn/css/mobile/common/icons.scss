@@ -693,3 +693,18 @@
   position: relative;
   top: -2px;
 }
+
+.icon-delivery {
+  @include size(25px, 17px, inline-block);
+  background-position: -398px -428px;
+  position: relative;
+  margin-right: 15px;
+}
+
+.icon-down-arrow {
+  @include size(7px, 9px, inline-block);
+  background-position: -100px -206px;
+  position: relative;
+
+  transform: rotate(90deg);
+}
