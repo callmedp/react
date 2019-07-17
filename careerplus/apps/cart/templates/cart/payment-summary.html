@@ -98,16 +98,44 @@
                         <li>
                             <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure>{{variations.0.delivery_obj.name}}</span>
                             <span class="col-sm-4 col-md-3">Rs. {{variations.0.delivery_obj.get_price|floatformat:0}}/-</span>
+
+
                         </li>
                     {% endif %}
-                  {% for addon in addons %}
-                       {% if addon.is_available %}
+                  
                        <li>
-                            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure> {{addon.name}}</span>
-                            <span class="col-sm-4 col-md-3">Rs. {{addon.price}}/-</span>
+                            <span class="addons">addons</span>
+                            <div class="addons-box">
+                              <span class="col-sm-8 col-md-9 item-sub-heading">
+                              <figure class="mr-10"></figure> <b>Middle East</b></span>
+                              <span class="col-sm-4 col-md-3">Rs. 12,71.00/-</span>
+                              <span class="close-icon"></span>
+                            </div>
+                            <div class="addons-box">
+                              <span class="col-sm-8 col-md-9 item-sub-heading">
+                              <figure class="mr-10"></figure> <b>United Kingdom</b></span>
+                              <span class="col-sm-4 col-md-3">Rs. 12,71.00/-</span>
+                              <span class="close-icon"></span>
+                            </div>
+                            <div class="payment-option mt-20">
+                              <span class="payment-tabs-content">
+                                <span class="other-payment">
+                                  <span class="delivery-heading">Select delivery method</span>
+                                  <span class="custom-select">
+                                    <div class="">
+                                      <select name="state" class="form-control" id="id_state" aria-required="true" aria-invalid="true">
+                                        <option value="-1" selected=""><strong>Normal</strong> (Get it in 5 working days)  </option>
+                                        <option value="1"><strong>Express</strong> (get it in 3 working days) </option>
+                                        <option value="2"><strong>Superexpress</strong> (get it within 24 hrs) </option>
+                                      </select>
+                                    </div>
+                                  </span>
+                                </span>
+                              </span>
+                            </div>
+                            <input type="hidden" name="delivery_type" value="delivery">
                         </li>
-                       {% endif %}
-                  {% endfor %}
+                       
 
               {% elif item.is_available %}
                   <li>
@@ -172,7 +200,8 @@
                 </div>
                 </div>
               {% else %}
-                <a href="javascript:void(0)" onclick="toggler('showCoupon',true);" id="show_hide_coupon">Apply coupon</a>
+                <a href="javascript:void(0)" onclick="toggler('showCoupon',true);" id="show_hide_coupon">Apply coupon</a> | 
+                <a href="javascript:void(0)" onclick="toggler('shineCredit',false);">Redeem Shine credit</a>
                 {% if wallet %}
                   or
                   <a href="javascript:void(0)" onclick="toggler('shineCredit',false);">Redeem Shine credit</a>
