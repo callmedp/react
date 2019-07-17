@@ -96,18 +96,18 @@
                                   {% endif %}
                                   {% if delivery_types %}
                                            <div class="payment__summary__item__addons mt-20">
-                                                <p class="fs-13 c9">Select delivery method </p>
+                                                <p class="fs-13 c9">Select delivery speed </p>
                                                 <ul>
                                                     <li class="payment__summary__item__addons__item">
-                                                        <input type="radio" id="normal" name="farea" value="19">
+                                                        <input type="radio" id="normal" name="normal" onclick="selectDeliveryType('normal')" value="19">
                                                         <label for="normal"><strong>Normal</strong> (get it in 5 working days)</label>
                                                     </li>
                                                     <li class="payment__summary__item__addons__item">
-                                                        <input type="radio" id="express" name="farea" value="19">
+                                                        <input type="radio" id="express" name="express" onclick="selectDeliveryType('express')" value="19">
                                                         <label for="express"><strong>Express </strong> (get it in 3 working days)</label>
                                                     </li>
                                                     <li class="payment__summary__item__addons__item">
-                                                        <input type="radio" id="superexpress" name="farea" value="19">
+                                                        <input type="radio" id="superexpress" name="super-express" onclick="selectDeliveryType('superexpress')" value="19">
                                                         <label for="superexpress"><strong>Superexpress  </strong> (get it within 24 hrs)</label>
                                                     </li>
                                                 </ul>
@@ -151,11 +151,22 @@
       </div>
       
       <div class="apply mb-10 pt-0">
-          <p><a href="javascript:void(0)" id="btn-reedem">Reedem Shine Credit</a></p>
-          <div class="apply__wrap" id="redeem-content" style="display: none;">
-              <input id="discount_code" type="text" placeholder="6191 shine loyalty points." name="code" maxlength="15" class="apply__wrap--input">
-              <button class="btn btn-lg btn-round btn-blue" type="button" onclick="JSApplyDiscount();">Reedem</button>
-          </div>
+          <p><a href="javascript:void(0)" id="btn-reedem" >Reedem Shine Credit</a></p>
+         <div id="redeem-content" style="display: none;">
+              <div class="apply__wrap">
+                  <input id="loyalty_point"
+                         type="text"
+                         placeholder="{{wallet_total}} shine loyalty points."
+                         name="point"
+                         min="0"
+                         max="{{wallet_total}}"
+                         class="apply__wrap--input">
+                  <button class="btn btn-lg btn-round btn-blue" type="button" onclick="JSApplyPoint();">Reedem</button>
+              </div>
+             <p class="error-txt" id="point-alert">Required</p>
+         </div>
+
+
       </div>
 
       <div class="subtotal mb-10">
