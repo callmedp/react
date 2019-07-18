@@ -131,7 +131,7 @@
                 </li>
                 <li>
                   <span class="icon-courses sprite"></span>
-                  <span class="pointer">Java & Linux Fundamentals courses to brush up your skills</span>
+                  <span class="pointer">Java Fundamentals course to brush up your skills</span>
                 </li>
               </ul>
               </div><!-- Right Header -->
@@ -157,6 +157,7 @@
                     </li>
                     
                     <li class="form-group">
+                       <select class="form-control" id="selection" name="selection">
                          {%for prd in products_lists %}
 							 <option {% if prd.pk == select %} select="selected" {% endif %} value={{prd.pk}} >Fees - Rs. {{prd.pPinb}} /- </option>
                               {%endfor%}
@@ -166,7 +167,7 @@
 
                   <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}3101{% endif %}">
 
-                   <input type="hidden" name="prd" value="Data Scientist - Rs. 19,995/-">
+                   <input type="hidden" name="prd" value="DevOps Practitioner Certification Course ">
 
 
                   <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
