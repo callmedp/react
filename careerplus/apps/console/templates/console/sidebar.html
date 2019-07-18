@@ -65,6 +65,9 @@
               {% if request.user|has_group:SERVICE_GROUP_LIST %}
                   <li><a href="{% url 'console:userquery:user-query' query_listing='service-leads' %}">Service Leads</a></li>
               {% endif %}
+              {% if request.user|has_group:ASSIGNMENT_GROUP_LIST %}
+                  <li><a href="{% url 'console:userquery:user-query' query_listing='assignment-leads' %}">Assignment Leads</a></li>
+              {% endif %}
                {% if perms.crmapi.can_view_hr_queries %}
               <li><a href="{% url 'console:userquery:user-query' query_listing='human-resource-leads' %}">HR Leads</a></li>
           {% endif %}

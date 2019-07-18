@@ -224,7 +224,8 @@ MAPPING_VALUES_TO_DATA_KEY_1 = {
         'assesment': {
             'candidate_email': '1|candidateEmailID',
             'assesment_name': '1|assessmentName',
-            "overallScore": '1|overallScore'
+            "overallScore": '1|overallScore',
+            'order_item_id': '1|shineLearningOrderID',
         },
         'certificate': {
             'certificate': '6|certificates',

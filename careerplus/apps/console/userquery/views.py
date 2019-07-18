@@ -34,7 +34,7 @@ from users.mixins import UserPermissionMixin,UserGroupMixin
 
 
 class UserQueryView(UserGroupMixin,UserPermissionMixin,ListView):
-    
+
     USERQUERY_DICT = {
         'cms-leads': {'queue_name': 'cms-query', 'queue_title': 'Cms Queries', 'lead_source': {'lead_source': 7}},
         'skill-leads': {'queue_name': 'skill-query', 'queue_title': 'Skill Queries', 'lead_source': {'lead_source': 1}},
@@ -43,13 +43,15 @@ class UserQueryView(UserGroupMixin,UserPermissionMixin,ListView):
         'human-resource-leads': {"queue_name": "human-resource-query", "queue_title": "Human Resource Queries",
                                  'lead_source': {'lead_source': 29}},
         'service-leads': {"queue_name": "service-query", "queue_title": "Service Queries",
-                          'lead_source': {'lead_source__in': [8, 9]}}
+                          'lead_source': {'lead_source__in': [8, 9]}},
+        'assignment-leads': {'queue_name': 'assignment-query', 'queue_title': 'Assignment Queries', 'lead_source': {'lead_source': 30}},
     }
 
     USERQUERY_GROUP_PERMS_DICT = {
         'cms-leads': [settings.CMS_GROUP_LIST],
         'skill-leads': [settings.SKILL_GROUP_LIST],
         'course-leads': [settings.COURSE_GROUP_LIST],
+        'assignment-leads': [settings.ASSIGNMENT_GROUP_LIST]
     }
 
     USERQUERY_FILTER_DICT = {
@@ -57,6 +59,7 @@ class UserQueryView(UserGroupMixin,UserPermissionMixin,ListView):
         'skill-leads': 'userqueryform',
         'course-leads': 'userqueryform',
         'service-leads': 'userqueryform',
+        'assignment-leads': 'userqueryform',
         'human-resource-leads': '',
     }
 
@@ -65,7 +68,6 @@ class UserQueryView(UserGroupMixin,UserPermissionMixin,ListView):
     model = UserQuries
     paginate_by = 20
     page_kwarg = 'page'
-
 
     @property
     def group_names(self):
@@ -93,7 +95,7 @@ class UserQueryView(UserGroupMixin,UserPermissionMixin,ListView):
         context = super(UserQueryView, self).get_context_data(**kwargs)
         if self.USERQUERY_FILTER_DICT.get(self.user_query_list):
             context.update({
-            "action_form": UserQueryActionForm(),
+                "action_form": UserQueryActionForm(),
             })
         context.update({
             "query": self.query,
@@ -136,6 +138,7 @@ class UserQueryView(UserGroupMixin,UserPermissionMixin,ListView):
             pass
 
         return queryset.select_related('country').order_by('-modified')
+
 
 class DownloadHrQueryView(UserPermissionMixin,View):
     permission_to_check = ['Can View Hr Queries']
@@ -183,8 +186,8 @@ class DownloadHrQueryView(UserPermissionMixin,View):
             return HttpResponseRedirect(reverse('console:userquery:user-query',kwargs={'query_listing':queue_name}))
         queryset = UserQuries.objects.filter(
             lead_created=False,
-            inactive=False,lead_source=29)
-        return self.create_csv(date_range,queryset)
+            inactive=False, lead_source=29)
+        return self.create_csv(date_range, queryset)
 
 
 class UserQueryActionView(View):
@@ -215,7 +218,7 @@ class UserQueryActionView(View):
                     messages.add_message(request, messages.SUCCESS, msg)
             except Exception as e:
                 messages.add_message(request, messages.ERROR, str(e))
-            return HttpResponseRedirect( reverse('console:userquery:user-query',kwargs={'query_listing':queue_name}))
+            return HttpResponseRedirect(reverse('console:userquery:user-query',kwargs={'query_listing':queue_name}))
         elif action == 2:
             try:
                 query_list = UserQuries.objects.filter(
@@ -232,7 +235,7 @@ class UserQueryActionView(View):
                     messages.add_message(request, messages.SUCCESS, msg)
             except Exception as e:
                 messages.add_message(request, messages.ERROR, str(e))
-            return HttpResponseRedirect( reverse('console:userquery:user-query',kwargs={'query_listing':queue_name}))
+            return HttpResponseRedirect(reverse('console:userquery:user-query',kwargs={'query_listing':queue_name}))
 
         messages.add_message(request, messages.ERROR, "Select Valid Action")
         try:
@@ -240,4 +243,3 @@ class UserQueryActionView(View):
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
             return HttpResponseForbidden()
-
