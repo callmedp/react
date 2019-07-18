@@ -1,6 +1,7 @@
 {% extends "mobile/basic/base.html" %}
 {% load static compress search_tags %}
 {% load static compress %}
+{% load cart_tags %}
 {% load thumbnail %}
 
 
@@ -16,7 +17,7 @@
         <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/checkbox.scss' %}" rel="stylesheet">
         <link type="text/scss" href="{% static 'shinelearn/css/mobile/payment/payment.scss' %}" rel="stylesheet">
     {% endcompress %}
-    
+
 {% endblock css_section %}
 
 {% block header %}
@@ -25,7 +26,7 @@
         <!-- header menu Icon Starts here -->
         <div class="main-menu w100fl">
             <div class="pull-left">
-                <a class="icon-back pull-left" role="button"  onclick="goBack()"></a> 
+                <a class="icon-back pull-left" role="button"  onclick="goBack()"></a>
             </div><!-- / Left side Icon ends here -->
         </div><!-- header menu Icon ends here -->
     </header><!-- header ends here -->
@@ -51,7 +52,7 @@
               Login
           </a>
       </li>
-      
+
       <li class="payment__steps__item">
           <a href="{% url "payment:payment-option" %}">
               <span class="dot">3</span>
@@ -64,10 +65,9 @@
   <div class="payment--white-box payment__summary">
       <ul class="payment__summary__items">
           {% for item in cart_items %}
-            {% with addons=item.addons variations=item.variations delivery_types=item.delivery_types %}
+            {% with addons=item.addons variations=item.variations delivery_types=item.delivery_types delivery_service=item.delivery_obj  %}
 
-                {% if variations and item.is_available and variations.0.is_available %}
-                    {% if item.product_class == 'course' or item.type_flow == 17 %}
+                {% if item.is_available%}
                       <!-- Item wrap -->
                         <form role="form" method="post" id="cart_remove_form{{item.id}}">{% csrf_token %}
                           <li class="payment__summary__item {% if forloop.counter0 == 0  %} border-top-none {%endif %}">
@@ -76,116 +76,104 @@
                             </span>
                               <div class="payment__summary__item--wrap">
                                   <p class="payment__summary__item--course-title">{{item.name}}
-                                      <strong class="mt-10">Rs. {{variations.0.price}}</strong>
+                                      <strong class="mt-10">Rs. {% if variations|length  %} {{variations.0.price}} {% else %} {{item.price}} {% endif %} </strong>
                                   </p>
-                                      {% if addons|length %}
-                                   <div class="payment__summary__item__addons mt-20">
-                                     <p class="fs-13 c9">Addons</p>
-                                          <ul>
-                                              {% for addon in addons %}
-                                                    {% if addon.is_available %}
-                                                      <li class="payment__summary__item__addons__item">
-                                                        <span class="payment__summary__item__addons__item--title">{{addon.name}}</span>
-                                                        <span class="semi-bold">Rs. {{addon.price}}/-</span>
-                                                        <span class="payment__summary__item--close">+</span>
-                                                    </li>
-                                                    {% endif %}
-                                              {% endfor %}
-                                     </ul>
-                                </div>
-                                  {% endif %}
+                                      {% if addons|length or variations|length %}
+                                           <div class="payment__summary__item__addons mt-20">
+                                             <p class="fs-13 c9">Addons</p>
+                                                  <ul>
+                                                       {% for var in variations %}
+                                                            <li class=" payment__summary__item__addons__item {% if not var.is_available %}disbale{% endif %}">
+                                                                <span class="payment__summary__item__addons__item--title">{{var.name}}</span>
+                                                                <span class="semi-bold">Rs. {{var.price}}/-</span>
+                                                                <span class="payment__summary__item--close">+</span>
+                                                            </li>
+                                                            {% if not var.is_available %}
+                                                                <p class="pb-0 red-text text-right mt-sub-10">Not available</p>
+                                                            {% endif %}
+                                                      {% endfor %}
+                                                      {% for addon in addons %}
+                                                            {% if addon.is_available %}
+                                                              <li class="payment__summary__item__addons__item">
+                                                                <span class="payment__summary__item__addons__item--title">{{addon.name}}</span>
+                                                                <span class="semi-bold">Rs. {{addon.price}}/-</span>
+                                                                <span class="payment__summary__item--close">+</span>
+                                                            </li>
+                                                            {% endif %}
+                                                      {% endfor %}
+                                                  </ul>
+                                            </div>
+                                      {% endif %}
+
                                   {% if delivery_types %}
                                            <div class="payment__summary__item__addons mt-20">
                                                 <div class="delivery-speed mb-15" id="btn-delivery">
                                                     <span class="icon-delivery"></span>
-                                                    <p class="pb-0">
-                                                        <strong class="block">Normal - No extra cost</strong>
-                                                        (get it in 5 working days) 
+                                                    <p class="pb-0" >
+                                                        <strong class="block" id="active-delivery-title">{%if delivery_service %} {{delivery_service.title}}- {% if delivery_service.inr_price|is_free %}No extra cost {% else %}Rs. {{delivery_service.inr_price}}/- {% endif %} {%else%}Normal - No extra cost{%endif%}</strong>
+                                                       <span id="active-delivery-description"> ({%if delivery_service %} {{delivery_service.meta_desc}} {%else%}get it in 5 working days{%endif%})</span>
                                                     </p>
                                                     <span class="icon-down-arrow"></span>
                                                 </div><!-- /. select delivery options -->
 
                                                 <ul class="delivery-list cls_delivery-content" style="display: none;">
+                                                    {% for delivery_obj in delivery_types %}
                                                     <li>
-                                                        <input type="radio" id="normal" name="delivery-list" onclick="selectDeliveryType('normal')" value="19">
-                                                        <label for="normal"><strong class="block">Normal- No extra cost</strong> (get it in 5 working days)</label>
+                                                        <input type="radio" id="{{delivery_obj.slug}}" {% if forloop.counter0 == delivery_service|get_count %} checked {%endif %} name="delivery-list" onclick="selectDeliveryType('{{delivery_obj.id}}', '{% if variations|length  %} {{variations.0.id}} {% else %} {{item.id}} {% endif %}', '{{csrf_token}}')" value="19">
+                                                        <label for="{{delivery_obj.slug}}"><strong class="block">{{delivery_obj.title}}- {% if delivery_obj.inr_price|is_free %}No extra cost {% else %}Rs. {{delivery_obj.inr_price}}/- {% endif %}</strong> ({{delivery_obj.meta_desc}})</label>
                                                     </li>
-                                                    <li>
-                                                        <input type="radio" id="express" name="delivery-list" onclick="selectDeliveryType('express')" value="19">
-                                                        <label for="express"><strong class="block">Express- Rs. 500/- </strong> (get it in 3 working days)</label>
-                                                    </li>
-                                                    <li>
-                                                        <input type="radio" id="superexpress" name="delivery-list" onclick="selectDeliveryType('superexpress')" value="19">
-                                                        <label for="superexpress"><strong class="block">Superexpress- Rs. 800/-  </strong> (get it within 24 hrs)</label>
-                                                    </li>
+                                                    {% endfor %}
                                                 </ul><!-- /. select delivery Lists -->
                                            </div>
                                   {% endif %}
                               </div>
-                              <input type="hidden" name="product_reference" value="{{variations.0.reference}}">
+                              <input type="hidden" name="product_reference" value=" {% if variations|length  %}
+                              {{variations.0.reference}} {% else %} {{item.reference}} {% endif %}">
 
                               <span class="payment__summary__item--close" onclick="removeFromCartMobile('{{item.id}}')">+</span>
                             </li>
                         </form>
-                    {% elif item.is_available %}
-                         <!-- Item wrap -->
-                         <form role="form" method="post" id="cart_remove_form{{item.id}}">{% csrf_token %}
-                          <li class="payment__summary__item">
-                                <span class="payment__summary__item--img">
-                                    <img src="https://static1.shine.com/l/m/product_image/1668/1507608787_5699.png" class="img-responsive" />
-                                </span>  
-                                <div class="payment__summary__item--wrap">
-                                   <p class="payment__summary__item--course-title">{{item.name}}
-                                          <strong class="mt-10">Rs. {{variations.0.price}}</strong>
-                                   </p>
-                                </div>
-                              <input type="hidden" name="product_reference" value="{{variations.0.reference}}">
-
-                              <span class="payment__summary__item--close" onclick="removeFromCartMobile('{{item.id}}')">+</span>
-                            </li>
-                        </form>
-                    {% endif %}
                 {% endif %}
             {% endwith %}
           {% endfor %}
 
           <!-- Addons list item starts here  -->
-            <li class="payment__summary__item">
-                <span class="payment__summary__item--img">
+           <!-- <li class="payment__summary__item">
+                <span class="payment__summary__item&#45;&#45;img">
                     <img src="https://static1.shine.com/l/m/product_image/1668/1507608787_5699.png" class="img-responsive" />
                 </span>
 
-                <div class="payment__summary__item--wrap">
-                    <p class="payment__summary__item--course-title">International Profile Update
+                <div class="payment__summary__item&#45;&#45;wrap">
+                    <p class="payment__summary__item&#45;&#45;course-title">International Profile Update
                         <strong class="mt-10">Rs. 40</strong>
                     </p>
 
-                    <div class="payment__summary__item__addons mt-20">
+                     <div class="payment__summary__item__addons mt-20">
                         <p class="fs-13 c9">Addons</p>
                         <ul>
                             <li class="payment__summary__item__addons__item">
-                                <span class="payment__summary__item__addons__item--title">Middle East</span>
+                                <span class="payment__summary__item__addons__item&#45;&#45;title">Middle East</span>
                                 <span class="semi-bold c3">Rs. 12,71.00/-</span>
-                                <span class="payment__summary__item--close">+</span>
+                                <span class="payment__summary__item&#45;&#45;close">+</span>
                             </li>
 
                             <li class="payment__summary__item__addons__item">
-                                <span class="payment__summary__item__addons__item--title">United Kingdom</span>
+                                <span class="payment__summary__item__addons__item&#45;&#45;title">United Kingdom</span>
                                 <span class="semi-bold c3">Rs. 12,71.00/-</span>
-                                <span class="payment__summary__item--close">+</span>
+                                <span class="payment__summary__item&#45;&#45;close">+</span>
                             </li>
 
                             <li class="payment__summary__item__addons__item">
-                                <span class="payment__summary__item__addons__item--title">Singapore</span>
+                                <span class="payment__summary__item__addons__item&#45;&#45;title">Singapore</span>
                                 <span class="semi-bold c3">Rs. 12,71.00/-</span>
-                                <span class="payment__summary__item--close">+</span>
+                                <span class="payment__summary__item&#45;&#45;close">+</span>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <span class="payment__summary__item--close">+</span>
-            </li> <!-- Addons list item ends here  -->
-
+                <span class="payment__summary__item&#45;&#45;close">+</span>
+            </li> &lt;!&ndash; Addons list item ends here  &ndash;&gt;
+-->
       </ul>
 
       <div class="apply border-top mt-15 pt-30">
@@ -195,7 +183,7 @@
           </div>
               <p class="error-txt" id="discount-alert"> </p>
       </div>
-      
+
       <div class="apply mb-10 pt-0">
           <p><a href="javascript:void(0)" id="btn-reedem" >Reedem Shine Credit</a></p>
          <div id="redeem-content" style="display: none;">
@@ -216,10 +204,10 @@
       </div>
 
       <div class="subtotal mb-10">
-                <ul class="subtotal__items">
+          <ul class="subtotal__items">
               <li class="subtotal__item mb-10">
                   <span class="subtotal__item--tax fs-14">Subtotal</span>
-                  <span class="subtotal__item--tax-price fs-20 semi-bold">Rs. {{total_amount}}</span>
+                  <span class="subtotal__item--tax-price fs-20 semi-bold" id="total-cart-amount-id">Rs. {{total_amount}}</span>
               </li>
 
                {% if cart_coupon %}
@@ -243,12 +231,11 @@
                   <span class="subtotal__item--tax">SGST @ {{sgst}}%</span>
                   <span class="subtotal__item--tax-price">+Rs. {{sgst_amount}}</span>
               </li>
-              
+
               <li class="subtotal__item">
                   <span class="subtotal__item--tax">CGST @ {{cgst}}%</span>
                   <span class="subtotal__item--tax-price">+Rs. {{cgst_amount}}</span>
               </li>
-
           </ul>
       </div>
   </div>
@@ -257,7 +244,7 @@
 <div class="bottom-cta">
   <div class="bottom-cta__price">
       <p class="fs-12 pb-0 c6">Payable Amount</p>
-      <strong class="fs-22">Rs. {{total_payable_amount}}</strong>
+      <strong class="fs-22" id="total-payable-amount">Rs. {{total_payable_amount}}</strong>
   </div>
 
   <div class="bottom-cta__btn">
@@ -292,10 +279,10 @@
                 });
             });
 
-           
+
         </script>
     {% endcompress %}
-    
+
     {% block johukum %}
     {% endblock johukum %}
 {% endblock js_section %}

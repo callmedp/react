@@ -649,9 +649,13 @@ class UpdateDeliveryType(View, CartMixin):
                     cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
                 total_cart_amount = cart_dict.get('total_amount')
                 delivery_charge = delivery_obj.get_price()
+                payment_dict = self.getPayableAmount(cart_obj, cart_dict.get('total_amount'))
                 data.update({
+                    "total_payable_amount":int(payment_dict['total_payable_amount']),
                     "total_cart_amount": int(total_cart_amount),
                     "delivery_charge": int(delivery_charge),
+                    "delivery_service_title": delivery_obj.title,
+                    "delivery_service_meta_desc": delivery_obj.meta_desc
                 })
 
         return HttpResponse(json.dumps(data), content_type="application/json")

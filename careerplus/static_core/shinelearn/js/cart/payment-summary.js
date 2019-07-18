@@ -235,11 +235,6 @@ function removeFromCart(line_id) {
 
 };
 
-const selectDeliveryType = (type) => {
-    $('')
-
-}
-
 
 $(document).ready(function () {
 
