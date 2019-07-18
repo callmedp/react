@@ -54,19 +54,19 @@
         <li><a><i class="fa fa-list-alt"></i> User Query <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
               {% if request.user|has_group:CMS_GROUP_LIST %}
-                  <li><a href="{% url 'console:userquery:cms-query' %}">Cms Leads</a></li>
+                  <li><a href="{% url 'console:userquery:user-query' query_listing='cms-leads' %}">Cms Leads</a></li>
               {% endif %}
               {% if request.user|has_group:SKILL_GROUP_LIST %}
-                  <li><a href="{% url 'console:userquery:skill-query' %}">Skill Leads</a></li>
+                  <li><a href="{% url 'console:userquery:user-query' query_listing='skill-leads' %}">Skill Leads</a></li>
               {% endif %}
               {% if request.user|has_group:COURSE_GROUP_LIST %}
-                  <li><a href="{% url 'console:userquery:course-query' %}">Course Leads</a></li>
+                  <li><a href="{% url 'console:userquery:user-query' query_listing='course-leads' %}">Course Leads</a></li>
               {% endif %}
               {% if request.user|has_group:SERVICE_GROUP_LIST %}
-                  <li><a href="{% url 'console:userquery:service-query' %}">Service Leads</a></li>
+                  <li><a href="{% url 'console:userquery:user-query' query_listing='service-leads' %}">Service Leads</a></li>
               {% endif %}
                {% if perms.crmapi.can_view_hr_queries %}
-              <li><a href="{% url 'console:userquery:human-resource-query' %}">HR Leads</a></li>
+              <li><a href="{% url 'console:userquery:user-query' query_listing='human-resource-leads' %}">HR Leads</a></li>
           {% endif %}
             </ul>
         </li>
