@@ -435,6 +435,8 @@ class ProductInformationMixin(object):
         ctx['show_chat'] = True
         ctx['product_main'] = product_main,
         ctx['sqs_main'] = sqs_main
+        ctx['prd_vendor_count'] = Product.objects.filter(vendor=product.vendor,\
+            visibility=True,active=True,is_indexed=True).count()
         return ctx
 
     def get_other_detail(self, product, sqs):
@@ -472,10 +474,6 @@ class ProductInformationMixin(object):
             navigation = False
         ctx['navigation'] = navigation
         return ctx
-
-
-
-
 
     def get_product_detail_context(self, product, sqs, product_main, sqs_main):
         main_ctx = {}
