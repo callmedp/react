@@ -117,23 +117,30 @@
                               <span class="col-sm-4 col-md-3">Rs. 12,71.00/-</span>
                               <span class="close-icon"></span>
                             </div>
-                            <div class="payment-option mt-20">
-                              <span class="payment-tabs-content">
-                                <span class="other-payment">
-                                  <span class="delivery-heading">Select delivery method</span>
-                                  <span class="custom-select">
-                                    <div class="">
-                                      <select name="state" class="form-control" id="id_state" aria-required="true" aria-invalid="true">
-                                        <option value="-1" selected=""><strong>Normal</strong> (Get it in 5 working days)  </option>
-                                        <option value="1"><strong>Express</strong> (get it in 3 working days) </option>
-                                        <option value="2"><strong>Superexpress</strong> (get it within 24 hrs) </option>
-                                      </select>
-                                    </div>
-                                  </span>
-                                </span>
-                              </span>
-                            </div>
-                            <input type="hidden" name="delivery_type" value="delivery">
+                            
+                            <div class="delivery-speed mt-30 mb-15"  id="btn-delivery">
+                              <span class="delivery-icon"></span>
+                              <p class="pb-0">
+                                  <strong class="block">Normal - No extra cost</strong>
+                                  (get it in 5 working days)
+                              </p>
+                              <span class="down-arrow-icon mt-10"></span>
+                          </div><!-- /. select delivery options -->
+
+                          <ul class="delivery-list cls_delivery-content" id="delivery-item" style="display: block;">
+                              <li>
+                                  <input type="radio" id="normal" name="delivery-list" onclick="selectDeliveryType('normal')" value="19">
+                                  <label for="normal"><strong class="block">Normal- No extra cost</strong> (get it in 5 working days)</label>
+                              </li>
+                              <li>
+                                  <input type="radio" id="express" name="delivery-list" onclick="selectDeliveryType('express')" value="19">
+                                  <label for="express"><strong class="block">Express- Rs. 500/- </strong> (get it in 3 working days)</label>
+                              </li>
+                              <li>
+                                  <input type="radio" id="superexpress" name="delivery-list" onclick="selectDeliveryType('superexpress')" value="19">
+                                  <label for="superexpress"><strong class="block">Superexpress- Rs. 800/-  </strong> (get it within 24 hrs)</label>
+                              </li>
+                          </ul>
                         </li>
                        
 
@@ -289,6 +296,20 @@
    {{ block.super }}
     {% compress js %}
     <script type="text/javascript" src="{% static 'shinelearn/js/cart/payment-summary.js' %}"></script>
+    <script>
+      function handleClick(){
+            console.log('clickedd___-dddd');
+        }
+        $(document).ready(function(){
+            $("#btn-delivery").click(function(){
+                console.log('clickeddddd');
+                $("#delivery-item").slideToggle();
+                return false;
+        });
+    
+        });
+      
+    </script>
     {% endcompress %}
 {% endblock js_section %}
 

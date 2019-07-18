@@ -136,10 +136,11 @@
 		border-bottom: 1px solid $grey-bg;
 
 		li {
-			display: block;
+			display: table;
 			margin-bottom: 10px;
-			overflow: hidden;
+			/*overflow: hidden;*/
 			position: relative;
+			width: 100%;
 
 			&.bdr-btm {
 				border-bottom: 1px solid $border-color;
@@ -334,36 +335,7 @@
 		}
 	}
 
-	.payment-option {
-		margin-left: 70px;
-
-		.payment-tabs-content {
-			margin: 0;
-
-			.other-payment {
-				padding: 0;
-
-				.delivery-heading {
-					font-size: $font-size;
-					color: $grey-color;
-					display: block;
-					margin-bottom: 5px;
-				}
-
-				.custom-select {
-					select {
-						option {
-							color: $grey-color;
-
-							strong {
-								font-weight: $font-weight+300;
-							}
-						}
-					}
-				}
-			}
-		}		
-	}
+	
 }
 
 .bdr-rt {
@@ -792,35 +764,7 @@
 				}
 			}
 
-			.form-inline {
-				margin-bottom: 30px;
-
-				.form-group {
-					width: 30%;
-					margin-right: 10px;
-					overflow: hidden;
-					vertical-align: text-top;
-
-					@media (max-width: 991px) {
-						margin-right: 0;
-					}
-
-					.form-control {
-						border-radius: 5px;
-						box-shadow: none;
-						border: 1px solid $border-color;
-						color: $primary-color;
-						width: 100%;
-						height: 40px;
-						font-size: $font-size+2;
-					}
-
-					.datepicker {
-						padding-left: 10px;
-						color: $primary-color;
-					}
-				}
-			}
+			
 
 			.make-payment {
 				font-size: $font-size+9;
@@ -1396,6 +1340,12 @@
     /*opacity:0.5;*/
 }
 
+.personal-details .cheque-no {
+	width: 30%;
+	margin-right: 10px;
+	display: inline-block;
+}
+
 .login-guest {
 	width: 180px;
 	height: 180px;
@@ -1431,4 +1381,136 @@
 		margin-left: 15px;
 		display: inline-block;
 	}
+}
+
+.delivery-speed {
+  border-radius: 4px;
+  border: 1px solid $border-color;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  width: 40%;
+  margin-left: 71px;
+
+  p {
+    font-size: $font-size+1;
+    color: $grey-color;
+    line-height: 18px;
+    flex: 1;
+    font-weight: $font-weight+100;
+    margin: 0;
+
+    strong {
+      font-size: $font-size+2 !important;
+      color: $primary-color;
+      display: block;
+      font-weight: $font-weight+300;
+    }
+  }
+
+  .delivery-icon {
+  	margin: 0 10px 0 -2px;
+  }
+}
+
+.delivery-list {
+  border-radius: 4px;
+  border: 1px solid $border-color;
+  width: 40%;
+  margin-left: 71px !important;
+  margin-top: 10px !important;
+
+  li {
+  	margin-bottom: 0 !important;
+    &:not(:last-child){
+      border-bottom: 1px solid $border-color;
+    }
+
+    label {
+      width: 100%;
+      color: $grey-color !important;
+      padding: 10px;
+      padding-left: 40px !important;
+      color: $grey-color;
+      font-size: $font-size+1;
+      margin-bottom: 0;
+      font-weight: $font-weight+100;
+
+      strong {
+        color: $primary-color;
+        font-size: $font-size+2;
+      }
+
+      &::before {
+        left: 10px !important;
+        top: 20px !important;
+      }
+
+      &::after {
+        left: 13px !important;
+        top: 23px !important;
+      }
+    }
+
+    [type="radio"]:checked,
+	[type="radio"]:not(:checked) {
+	  position: absolute;
+	  left: -9999px;
+	}
+	[type="radio"]:checked + label,
+	[type="radio"]:not(:checked) + label
+	{
+	  position: relative;
+	  padding-left: 28px;
+	  cursor: pointer;
+	  line-height: 20px;
+	  display: inline-block;
+	  color: #666;
+	}
+	[type="radio"]:checked + label:before,
+	[type="radio"]:not(:checked) + label:before {
+	  width: 16px;
+	  height: 16px;
+	  display: block;
+	  content: '';
+	  position: absolute;
+	  left: 0;
+	  top: 0;
+	  border: 1px solid $anchor-color;
+	  border-radius: 100%;
+	  background: #fff;
+	}
+	[type="radio"]:checked + label:after,
+	[type="radio"]:not(:checked) + label:after {
+	  width: 10px;
+	  height: 10px;
+	  display: block;
+	  content: '';
+	  background: $anchor-color;
+	  position: absolute;
+	  top: 4px;
+	  left: 4px;
+	  border-radius: 100%;
+	  -webkit-transition: all 0.2s ease;
+	  transition: all 0.2s ease;
+	}
+	[type="radio"]:not(:checked) + label:after {
+	  opacity: 0;
+	  -webkit-transform: scale(0);
+	  transform: scale(0);
+	}
+	[type="radio"]:checked + label:after {
+	  opacity: 1;
+	  -webkit-transform: scale(1);
+	  transform: scale(1);
+	}
+
+    [type="radio"]:checked + label {
+      background-color: $grey-bg;
+    }
+  }
+}
+
+.pb-0 {
+	padding-bottom: 0 !important;
 }

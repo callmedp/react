@@ -155,11 +155,12 @@
                         <!-- cheque payment method -->
                         <article>Pay by Cheque</article>
 
-                        <form class="form-inline" id="check-pay-form" method="post" action="">{% csrf_token %}
+                        <form class="personal-details" id="check-pay-form" method="post" action="">{% csrf_token %}
                             <fieldset>
                                 {% for field in check_form %}
-                                    <div class="form-group {% if field.errors %}error{% endif %}">
+                                    <div class="form-group cheque-no {% if field.errors %}error{% endif %}">
                                         {{ field }}
+                                        <label for="{{field.name}}">{{field.name}}</label>
                                         <span class="danger-txt">{{ field.errors.0 }}</span>
                                         {% if field.help_text %}
                                             <p class="text-muted">

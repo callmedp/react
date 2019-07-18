@@ -46,9 +46,9 @@ class PayByCheckForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(PayByCheckForm, self).__init__(*args, **kwargs)
-        self.fields['cheque_no'].widget.attrs['placeholder'] = 'Check no.*'
-        self.fields['drawn_bank'].widget.attrs['placeholder'] = 'Drawn On Bank*'
-        self.fields['deposit_date'].widget.attrs['placeholder'] = 'Date of Deposit*'
+        self.fields['cheque_no'].widget.attrs['placeholder'] = ' '
+        self.fields['drawn_bank'].widget.attrs['placeholder'] = ' '
+        self.fields['deposit_date'].widget.attrs['placeholder'] = ' '
         self.fields['deposit_date'].widget.attrs['data-date-format'] = 'MM/DD/YYYY'
 
     def clean_cheque_no(self):
