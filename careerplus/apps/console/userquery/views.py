@@ -1,5 +1,5 @@
 import json
-import datetime
+# import datetime
 import logging
 from io import StringIO
 import csv
@@ -31,31 +31,35 @@ from .forms import (
 from users.mixins import UserPermissionMixin,UserGroupMixin
 
 
-USERQUERY_DICT ={
-'cms-leads': {'queue_name': 'cms-query','queue_title': 'Cms Queries', 'lead_source':{'lead_source': 7}},
-'skill-leads': {'queue_name': 'skill-query','queue_title': 'Skill Queries', 'lead_source':{'lead_source': 1}},
-'course-leads': {"queue_name": "course-query","queue_title": "Course Queries", 'lead_source':{'lead_source': 2}},
-'human-resource-leads': {"queue_name": "human-resource-query","queue_title": "Human Resource Queries",'lead_source':{'lead_source': 29}},
-'service-leads': {"queue_name": "service-query","queue_title": "Service Queries",'lead_source':{'lead_source__in':[8,9]}}
-}
-
-USERQUERY_GROUP_PERMS_DICT = {
-'cms-leads':  [settings.CMS_GROUP_LIST],
-'skill-leads': [settings.SKILL_GROUP_LIST],
-'course-leads': [settings.COURSE_GROUP_LIST],
-}
-
-
-USERQUERY_FILTER_DICT = {
-'cms-leads':  'userqueryform',
-'skill-leads': 'userqueryform',
-'course-leads': 'userqueryform',
-'service-leads': 'userqueryform',
-'human-resource-leads':'',
-}
 
 
 class UserQueryView(UserGroupMixin,UserPermissionMixin,ListView):
+    
+    USERQUERY_DICT = {
+        'cms-leads': {'queue_name': 'cms-query', 'queue_title': 'Cms Queries', 'lead_source': {'lead_source': 7}},
+        'skill-leads': {'queue_name': 'skill-query', 'queue_title': 'Skill Queries', 'lead_source': {'lead_source': 1}},
+        'course-leads': {"queue_name": "course-query", "queue_title": "Course Queries",
+                         'lead_source': {'lead_source': 2}},
+        'human-resource-leads': {"queue_name": "human-resource-query", "queue_title": "Human Resource Queries",
+                                 'lead_source': {'lead_source': 29}},
+        'service-leads': {"queue_name": "service-query", "queue_title": "Service Queries",
+                          'lead_source': {'lead_source__in': [8, 9]}}
+    }
+
+    USERQUERY_GROUP_PERMS_DICT = {
+        'cms-leads': [settings.CMS_GROUP_LIST],
+        'skill-leads': [settings.SKILL_GROUP_LIST],
+        'course-leads': [settings.COURSE_GROUP_LIST],
+    }
+
+    USERQUERY_FILTER_DICT = {
+        'cms-leads': 'userqueryform',
+        'skill-leads': 'userqueryform',
+        'course-leads': 'userqueryform',
+        'service-leads': 'userqueryform',
+        'human-resource-leads': '',
+    }
+
     context_object_name = 'userquery'
     template_name = 'console/userquery/user-query-list.html'
     model = UserQuries
@@ -66,7 +70,7 @@ class UserQueryView(UserGroupMixin,UserPermissionMixin,ListView):
     @property
     def group_names(self):
         query_list_name = self.kwargs.get('query_listing')
-        get_group_name = USERQUERY_GROUP_PERMS_DICT.get(query_list_name)
+        get_group_name = self.USERQUERY_GROUP_PERMS_DICT.get(query_list_name)
         if query_list_name == 'human-resource-leads':
             return []
         return get_group_name
@@ -87,7 +91,7 @@ class UserQueryView(UserGroupMixin,UserPermissionMixin,ListView):
 
     def get_context_data(self, **kwargs):
         context = super(UserQueryView, self).get_context_data(**kwargs)
-        if USERQUERY_FILTER_DICT.get(self.user_query_list):
+        if self.USERQUERY_FILTER_DICT.get(self.user_query_list):
             context.update({
             "action_form": UserQueryActionForm(),
             })
@@ -95,7 +99,7 @@ class UserQueryView(UserGroupMixin,UserPermissionMixin,ListView):
             "query": self.query,
             "filter_form": UserQueryFilterForm({"created": self.created,}),
             "queue_name": self.user_query_list,
-            "queue_title": USERQUERY_DICT.get(self.user_query_list).get('queue_title'),
+            "queue_title": self.USERQUERY_DICT.get(self.user_query_list).get('queue_title'),
         })
         return context
 
@@ -104,7 +108,7 @@ class UserQueryView(UserGroupMixin,UserPermissionMixin,ListView):
         queryset = queryset.filter(
             lead_created=False,
             inactive=False)
-        queryset = queryset.filter(**(USERQUERY_DICT.get(self.user_query_list).get('lead_source')))
+        queryset = queryset.filter(**(self.USERQUERY_DICT.get(self.user_query_list).get('lead_source')))
 
         if self.query:
             queryset = queryset.filter(
@@ -120,10 +124,10 @@ class UserQueryView(UserGroupMixin,UserPermissionMixin,ListView):
             if self.created:
                 date_range = self.created.split('-')
                 start_date = date_range[0].strip()
-                start_date = datetime.datetime.strptime(
+                start_date = datetime.strptime(
                     start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
                 end_date = date_range[1].strip()
-                end_date = datetime.datetime.strptime(
+                end_date = datetime.strptime(
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     created__range=[start_date, end_date])
