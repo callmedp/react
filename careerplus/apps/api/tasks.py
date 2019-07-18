@@ -61,4 +61,7 @@ def create_assignment_lead(obj_id=None):
             medium=medium,
             campaign_slug=campaign_slug,
         )
-        create_lead_crm.delay(pk=lead.pk)
+        flag = create_lead_crm.delay(pk=lead.pk)
+        if flag:
+            lead.lead_created = True
+            lead.save()
