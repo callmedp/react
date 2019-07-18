@@ -218,7 +218,8 @@
                     <th class="column-title">Mobile</th>
                     <th class="column-title">Item Name</th>
                     <th class="column-title">Flow Status</th>
-                    <th class="column-title">Payment Date</th>
+                    <th class="column-title"> Payment Date</th>
+                    <th class="column-title">Assigned Date</th>
                     <th class="column-title">Assigned To</th>
                     <th class="column-title">Weeks</th>
                     <th class="column-title">Sent Links</th>
@@ -282,6 +283,9 @@
                       <td>{{obj.get_oi_status}}</td>
                       <td>
                           <b>Paid On: {{obj.order.payment_date}}</b>
+                      </td>
+                      <td>
+                          <b>Assigned On: {{obj.get_assigned_operation_date}}</b>
                       </td>
                       
                       <td>{{obj.assigned_to}}</td>

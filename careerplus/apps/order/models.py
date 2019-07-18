@@ -707,6 +707,12 @@ class OrderItem(AbstractAutoDate):
         status_dict = dict(WC_FLOW_STATUS)
         return status_dict.get(self.wc_status, '')
 
+    def get_assigned_operation_date(self):
+        assigned_op = self.orderitemoperation_set.filter(oi_status=1).first()
+        if assigned_op:
+            return assigned_op.created
+
+
     def save(self, *args, **kwargs):
         created = not bool(getattr(self, "id"))
         orderitem = OrderItem.objects.filter(id=self.pk).first()

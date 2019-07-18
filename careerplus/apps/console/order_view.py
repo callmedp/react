@@ -3022,14 +3022,18 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
             )
         )
         if int(self.day_choice) != -1:
+            q_objects = Q()
             if int(self.day_choice) == 1:
                 today = timezone.now()
                 date_list = [(today - relativedelta.relativedelta(days=i * 7)).date() for i in range(0,52) ]
+                for d in date_list:
+                    q_objects |= Q(orderitemoperation__oi_status=1, orderitemoperation__created__range=[d, d + relativedelta.relativedelta(days=1)])
             elif int(self.day_choice) == 2:
                 tommorrow = timezone.now() + relativedelta.relativedelta(days=1)
                 date_list = [(tommorrow - relativedelta.relativedelta(days=i * 7)).date() for i in range(0,52) ]
-
-            queryset = queryset.filter(order__payment_date__date__in=date_list)
+                for d in date_list:
+                    q_objects |= Q(orderitemoperation__oi_status=1, orderitemoperation__created__range=[d, d + relativedelta.relativedelta(days=1)])
+            queryset = queryset.filter(q_objects)
 
         queryset = queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-pending_links_count')
 
