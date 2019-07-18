@@ -465,9 +465,17 @@ class CertiticateParser:
 
         if vendor_field == 'vendor_text':
                 assesmemnt_data['vendor_text'] = vendor
+        defaults = {'order_item_id': assesmemnt_data['order_item_id']}
+
         assesment, created = Assesment.objects.get_or_create(
-            **assesmemnt_data
+            **defaults
         )
+
+        if created:
+            for key, value in assesmemnt_data.items():
+                setattr(assesment, key, value)
+            assesment.save()
+
         setattr(assesment, vendor_field, vendor)
 
         # Save assesment data
