@@ -1,5 +1,6 @@
 function removeFromCartMobile(line_id) {
     if (line_id) {
+        debugger;
         var formData = $('#cart_remove_form' + line_id).serialize();
 
         $.ajax({
@@ -59,7 +60,7 @@ function handleDeliveryUpdation(formData, lineId) {
                 const str = `${deliveryServiceTitle}- ${Number(deliveryCharge) === 0 ? 'No extra cost' : 'Rs. ' + deliveryCharge.toFixed(2) + '/-'}`
                 $('#active-delivery-title').text(str)
 
-                $('#active-delivery-description').text(deliveryServiceDesc)
+                $('#active-delivery-description').text(`(${deliveryServiceDesc})`)
 
 
             }

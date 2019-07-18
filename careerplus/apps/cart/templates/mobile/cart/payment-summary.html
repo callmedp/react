@@ -127,8 +127,7 @@
                                            </div>
                                   {% endif %}
                               </div>
-                              <input type="hidden" name="product_reference" value=" {% if variations|length  %}
-                              {{variations.0.reference}} {% else %} {{item.reference}} {% endif %}">
+                              <input type="hidden" name="product_reference" value="{% if variations|length%}{{variations.0.reference}}{% else %}{{item.reference}}{% endif %}">
 
                               <span class="payment__summary__item--close" onclick="removeFromCartMobile('{{item.id}}')">+</span>
                             </li>
