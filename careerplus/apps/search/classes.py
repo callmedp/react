@@ -3,9 +3,9 @@ import re
 import itertools
 
 # django imports
+from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ImproperlyConfigured
-from django.conf import settings
 
 # third party imports
 from haystack.inputs import Raw
@@ -34,7 +34,7 @@ class BaseSearch(object):
               "pPvn", "pCmbs", "pVrs", "pPinr", "pPfinr", "pPusd", "pPfusd", "pPaed", "pPfaed", "pPgbp", "pPfgbp", "pCC",
               "pPin", "pPfin", "pPus", "pPfus", "pPae", "pPfae", "pPgb", "pPfgb",
               "pPinb", "pPfinb", "pPusb", "pPfusb", "pPaeb", "pPfaeb", "pPgbb", "pPfgbb",
-              "pPc", "pFA", "pNm", "pBC"]
+              "pPc", "pFA", "pNm", "pBC","pVid"]
 
     similar_fields = []
 
@@ -54,31 +54,21 @@ class BaseSearch(object):
     }
 
     facet_list = [
-        '{!ex=ratng,funa,inr,usd,aed,gbp}pCL',
-        '{!ex=ratng,funa,inr,usd,aed,gbp}pAR',
-        '{!ex=ratng,funa,inr,usd,aed,gbp}pFA',
-        '{!ex=ratng,funa,inr,usd,aed,gbp}pDM',
-        '{!ex=ratng,funa,inr,usd,aed,gbp}pCert',
-        '{!ex=ratng,funa,inr,usd,aed,gbp}pStM',
-        '{!ex=ratng,funa,inr,usd,aed,gbp}pPinr'
+        '{!ex=pCL}pCL',
+        '{!ex=pAR}pAR',
+        '{!ex=pFA}pFA',
+        '{!ex=pVid}pVid'
     ]
 
     # These are the filters shown on search page
     filter_mapping = {
         '{!tag=funa}pFA': 'farea',
         '{!tag=ratng}pAR': 'frating',
+        '{!tag=pVid}pVid': 'fvid',
         '{!tag=inr}pAttrINR': ['fclevel', 'fcert', 'fduration', 'fmode', 'fprice'],
-        # '{!tag=usd}pAttrUSD': ['fclevel', 'fcert', 'fduration', 'fmode', 'fprice'],
-        # '{!tag=aed}pAttrAED': ['fclevel', 'fcert', 'fduration', 'fmode', 'fprice'],
-        # '{!tag=gbp}pAttrGBP': ['fclevel', 'fcert', 'fduration', 'fmode', 'fprice']
     }
 
-    boost_mapping = {
-        # 'jIndID': (('IndustryCurr', 2), ('IndustryPrev', 1)),
-        # 'jAreaID': (('SubFunctionalAreaCurr', 2), ('SubFunctionalAreaPrev', 1)),
-        # 'jExID': (('Experience', 2),),
-        # 'jLocID': (('Location', 2),),
-    }
+    boost_mapping = {}
 
     needed_params_options = {}
 
@@ -235,6 +225,7 @@ class BaseSearch(object):
             'spellcheck.maxCollations',
             'spellcheck.onlyMorePopular', 'spellcheck.maxResultsForSuggest',
             'spellcheck.maxCollationTries', 'spellcheck.collateExtendedResults']
+            
             for param in params_to_pop:
                 extra_params.pop(param, None)
 
@@ -479,7 +470,6 @@ class BaseParams(object):
         return self.query
 
     def get_search_params(self):
-
         self.search_params = self.get_request_params()
         self.clean_search_params()
         return self.search_params
@@ -624,6 +614,7 @@ class FuncAreaSearch(BaseSearch):
 
 
 class FuncAreaParams(BaseParams):
+
     query_param_name = None
     clean_query = False
 
@@ -648,6 +639,7 @@ class RecommendedSearch(BaseSearch):
 
 
 class RecommendedParams(BaseParams):
+
     query_param_name = None
     clean_query = False
 
@@ -657,3 +649,9 @@ class RecommendedParams(BaseParams):
             self.search_params['area'] = self.kwargs.get('area')
             self.search_params['skills'] = self.kwargs.get('skills').split('-')
         return self.search_params
+
+
+
+
+
+

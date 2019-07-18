@@ -87,8 +87,11 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pBC = indexes.IntegerField(model_attr='buy_count', default=0, indexed=True)
     pNJ = indexes.IntegerField(model_attr='num_jobs', default=0, indexed=False) 
 
+    #Vendor Fields
     pVi = indexes.CharField(null=True, indexed=False)
     pViA = indexes.CharField(null=True, indexed=False)
+    pVid = indexes.IntegerField(indexed=True,faceted=True)
+
     pCT = indexes.CharField(null=True, indexed=False)
     pDD = indexes.IntegerField(default=0, indexed=False)
     pRD = indexes.BooleanField(default=True, indexed=False)
@@ -624,6 +627,9 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         if obj.vendor:
             return obj.vendor.image_alt if obj.vendor.image_alt else ''
         return ''
+
+    def prepare_pVid(self,obj):
+        return obj.vendor.id if obj.vendor else -1
     
     def prepare_pRD(self, obj):
         if obj.is_course:

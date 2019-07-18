@@ -20,7 +20,7 @@
         <div class="vertical-tabbing">
             <div class="tab-container pb-100">
         <ul class="tabs box-panel p-0">
-            {% if facets.fields.pFA|length %}
+            {% if facets.pFA|length %}
                 <li class="current" data-tab="tab-1"><a href="#">Functional Area</a></li>
             {% endif %}
             {% if facets.fields.pCL|length %}
@@ -35,7 +35,7 @@
             {% if facets.fields.pStM|length %}
                 <li data-tab="tab-6"><a href="#">Study Mode</a></li>
             {% endif %}
-            {% if facets.fields.pAR|length %}
+            {% if facets.pAR|length %}
                 <li data-tab="tab-3"><a href="#">Review</a></li>
             {% endif %}
             {% if facets.fields.pPinr|length %}
@@ -154,14 +154,14 @@
             </ul>
             </div><!-- Tab content ends here -->
             {% endif %}
-            {% if facets.fields.pAR|length %}
+            {% if facets.pAR|length %}
             <div id="tab-3" class="tab-content">
             <ul>
                 {% for i in '54321' %}
                 <li>
                 <input name="frating" type="checkbox" id="test3{{ forloop.counter }}" {% if i in rating %}checked="checked"{% endif %}
-                            {% if facets.fields.pAR|length == 1 %}disabled="disabled"{% endif %} value="{{ i }}">
-                <label for="test3{{ forloop.counter }}" {% if facets.fields.pAR|length == 1 %}class="c9"{% endif %}>{{ i }} Star {% for facet in facets.fields.pAR%}{% if facet.0 == i %}({{facet.1|intcomma}}){% endif %}{% endfor %}</label>
+                            {% if facets.pAR|length == 1 %}disabled="disabled"{% endif %} value="{{ i }}">
+                <label for="test3{{ forloop.counter }}" {% if facets.pAR|length == 1 %}class="c9"{% endif %}>{{ i }} Star {% for facet in facets.pAR%}{% if facet.id == i %}({{facet.count|intcomma}}){% endif %}{% endfor %}</label>
                 </li>
                 {% endfor %}
             </ul>
@@ -194,6 +194,6 @@
 
         </div><!-- vertival tabing container ends here -->
 
-        <a href="javascript:void(0)" class="btn-slg btn-blue block apply-bottom text-center js_apply_filter">Apply</a>
+        <a href="javascript:void(0)" class="btn-slg btn-blue block apply-bottom text-center js_apply_filter">TApply</a>
     </div>
 </form>

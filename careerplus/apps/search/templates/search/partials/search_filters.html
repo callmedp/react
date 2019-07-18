@@ -16,7 +16,7 @@
                 <strong class="filter-heading">Filter</strong>
                 <a href="javascript:void(0)" class="apply-filter js_apply_filter" >Apply</a>
             </div>
-            {% if facets.fields.pFA|length %}
+            {% if facets.pFA|length %}
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
@@ -27,16 +27,16 @@
                 </div>
                 <div class="panel-collapse">
                     <div class="panel-body scroll js_filter_sxn">
-                        {% if facets.fields.pFA|length == 1 %}
-                            <label title="{{facets.fields.pFA.0.0|get_choice_display:"FA_FACETS"}}">
-                                <input type="checkbox" {% if areaf %}name="farea" {% else %}name="ign_farea"{% endif %} value="{{facets.fields.pFA.0.0}}" checked="checked" disabled="disabled" />
-                                <span>{{facets.fields.pFA.0.0|get_choice_display:"FA_FACETS"}} <b>({{facets.fields.pFA.0.1|intcomma}})</b></span>
+                        {% if facets.pFA|length == 1 %}
+                            <label title="{{facets.pFA.0.label}}">
+                                <input type="checkbox" {% if areaf %}name="farea" {% else %}name="ign_farea"{% endif %} value="{{facets.pFA.0.id}}" checked="checked" disabled="disabled" />
+                                <span>{{facets.pFA.0.label}} <b>({{facets.pFA.0.count}})</b></span>
                             </label>
                         {% else %}
-                            {% for facet in facets.fields.pFA|slice:"15" %}
-                            <label title="{{facet.0|get_choice_display:"FA_FACETS"}}">
-                                <input type="checkbox" name="farea" value="{{facet.0}}" {% if facet.0 in areaf %}checked="checked" {% endif %} {% comment %}onmousedown="jsrpTrackComscore('sal','{{facet.0|get_choice_display:"FA_FACETS"|slugify}}',false);"{% else %} onmousedown="jsrpTrackComscore('sal','{{facet.0|get_choice_display:"SALARY_FACETS"|slugify}}',true);"{% endif %} {% endcomment %} />
-                                <span>{{facet.0|get_choice_display:"FA_FACETS"}} <b>({{facet.1|intcomma}})</b></span>
+                            {% for facet in facets.pFA %}
+                            <label title="{{facet.label}}">
+                                <input type="checkbox" name="farea" value="{{facet.id}}" {% if facet.id in areaf %}checked="checked" {% endif %} />
+                                <span>{{facet.label}} <b>({{facet.count}})</b></span>
                             </label>
                             {% endfor %}
                         {% endif %}
@@ -44,7 +44,7 @@
                 </div>
             </div>
             {% endif %}
-            {% if facets.fields.pCL|length %}
+            {% if facets.pCL|length %}
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
@@ -55,20 +55,17 @@
                 </div>
                 <div class="panel-collapse">
                     <div class="panel-body js_filter_sxn">
-                        {% if facets.fields.pCL|length == 1 %}
-                            <label title="{{facets.fields.pCL.0.0|get_choice_display:"CL_FACETS"}}">
+                        {% if facets.pCL|length == 1 %}
+                            <label title="{{facets.pCL.0.label}}">
                                 <input type="checkbox" {% if clevel %}name="fclevel" {% else %}name="ign_fclevel"{% endif %}
-                                       value="{{facets.fields.pCL.0.0}}" checked="checked" disabled="disabled" />
-                                <span>{{facets.fields.pCL.0.0|get_choice_display:"CL_FACETS"}} <b>({{facets.fields.pCL.0.1|intcomma}})</b></span>
+                                       value="{{facets.pCL.0.id}}" checked="checked" disabled="disabled" />
+                                <span>{{facets.pCL.0.label}} <b>({{facets.pCL.0.count}})</b></span>
                             </label>
                         {% else %}
-                            {% for facet in facets.fields.pCL|slice:"15" %}
-                            <label title="{{facet.0|get_choice_display:"CL_FACETS"}}">
-                                <input type="checkbox" name="fclevel" value="{{facet.0}}" {% if facet.0 in clevel %}checked="checked" {% endif %}
-                                        {% comment %}onmousedown="jsrpTrackComscore('clevel','{{facet.0|get_choice_display:"CL_FACETS"|slugify}}',false);"
-                                        {% else %} onmousedown="jsrpTrackComscore('clevel','{{facet.0|get_choice_display:"CL_FACETS"|slugify}}',true);"{% endif %} {% endcomment %}
-                                />
-                                <span>{{facet.0|get_choice_display:"CL_FACETS"}} <b>({{facet.1|intcomma}})</b></span>
+                            {% for facet in facets.pCL|slice:"15" %}
+                            <label title="{{facet.label}}">
+                                <input type="checkbox" name="fclevel" value="{{facet.id}}" {% if facet.id in clevel %}checked="checked" {% endif %} />
+                                <span>{{facet.label}} <b>({{facet.count}})</b></span>
                             </label>
                             {% endfor %}
                         {% endif %}
@@ -76,7 +73,7 @@
                 </div>
             </div>
             {% endif %}
-            {% if facets.fields.pCert|length %}
+            {% if facets.pCert|length %}
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
@@ -87,20 +84,17 @@
                 </div>
                 <div class="panel-collapse">
                     <div class="panel-body js_filter_sxn">
-                        {% if facets.fields.pCert|length == 1 %}
-                        <label title="{{facets.fields.pCert.0.0|get_choice_display:"CERT_FACETS"}}">
+                        {% if facets.pCert|length == 1 %}
+                        <label title="{{facets.pCert.0.label}}">
                             <input type="checkbox" {% if cert %}name="fcert" {% else %}name="ign_fcert"{% endif %}
-                                       value="{{facets.fields.pCert.0.0}}" checked="checked" disabled="disabled">
-                            <span>{{facets.fields.pCert.0.0|get_choice_display:"CERT_FACETS"}} <b>({{facets.fields.pCert.0.1|intcomma}})</b></span>
+                                       value="{{facets.pCert.0.id}}" checked="checked" disabled="disabled">
+                            <span>{{facets.pCert.0.label}} <b>({{facets.pCert.0.count}})</b></span>
                         </label>
                         {% else %}
-                            {% for facet in facets.fields.pCert %}
-                            <label title="{{facet.0|get_choice_display:"CERT_FACETS"}}">
-                                <input type="checkbox" name="fcert" value="{{facet.0}}" {% if facet.0 in cert %}checked="checked" {% endif %}
-                                        {% comment %}onmousedown="jsrpTrackComscore('cert','{{facet.0|get_choice_display:"CERT_FACETS"|slugify}}',false);"
-                                        {% else %} onmousedown="jsrpTrackComscore('cert','{{facet.0|get_choice_display:"CERT_FACETS"|slugify}}',true);"{% endif %} {% endcomment %}
-                                />
-                                <span>{{facet.0|get_choice_display:"CERT_FACETS"}} <b>({{facet.1|intcomma}})</b></span>
+                            {% for facet in facets.pCert %}
+                            <label title="{{facet.label}}">
+                                <input type="checkbox" name="fcert" value="{{facet.id}}" {% if facet.id in cert %}checked="checked" {% endif %} />
+                                <span>{{facet.label}} <b>({{facet.count}})</b></span>
                             </label>
                             {% endfor %}
                         {% endif %}
@@ -108,7 +102,39 @@
                 </div>
             </div>
             {% endif %}
-            {% if facets.fields.pDM|length %}
+
+            {% if facets.pVid|length %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a>
+                        Vendors
+                        </a>
+                    </h4>
+                </div>
+                <div class="panel-collapse">
+                    <div class="panel-body js_filter_sxn">
+                        {% if facets.pVid|length == 1 %}
+                        <label title="{{facets.pVid.label}}">
+                            <input type="checkbox" {% if cert %}name="vid" {% else %}name="ign_fcert"{% endif %}
+                                       value="{{facets.pVid.0.id}}" checked="checked" disabled="disabled">
+                            <span>{{facets.pVid.0.label}} <b>({{facets.pVid.0.count}})</b></span>
+                        </label>
+                        {% else %}
+                            {% for facet in facets.pVid %}
+                            <label title="{{facet.label}}">
+                                <input type="checkbox" name="vid" value="{{facet.id}}" {% if facet.id in cert %}checked="checked" {%endif%} /> 
+                                
+                                <span>{{facet.label}} <b>({{facet.count}})</b></span>
+                            </label>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if facets.pDM|length %}
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
@@ -119,20 +145,17 @@
                 </div>
                 <div class="panel-collapse">
                     <div class="panel-body js_filter_sxn">
-                        {% if facets.fields.pDM|length == 1 %}
-                        <label title="{{facets.fields.pDM.0.0|get_choice_display:"DURATION_DICT"}}">
+                        {% if facets.pDM|length == 1 %}
+                        <label title="{{facets.pDM.0.label}}">
                             <input type="checkbox" {% if duration %}name="fduration" {% else %}name="ign_fduration"{% endif %}
-                                       value="{{facets.fields.pDM.0.0}}" checked="checked" disabled="disabled">
-                            <span>{{facets.fields.pDM.0.0|get_choice_display:"DURATION_DICT"}} <b>({{facets.fields.pDM.0.1|intcomma}})</b></span>
+                                       value="{{facets.pDM.0.id}}" checked="checked" disabled="disabled">
+                            <span>{{facets.pDM.0.label}} <b>({{facets.pDM.0.count}})</b></span>
                         </label>
                         {% else %}
-                            {% for facet in facets.fields.pDM %}
-                            <label title="{{facet.0|get_choice_display:"DURATION_DICT"}}">
-                                <input type="checkbox" name="fduration" value="{{facet.0}}" {% if facet.0 in duration %}checked="checked" {% endif %}
-                                        {% comment %}onmousedown="jsrpTrackComscore('cert','{{facet.0|get_choice_display:"DURATION_DICT"|slugify}}',false);"
-                                        {% else %} onmousedown="jsrpTrackComscore('cert','{{facet.0|get_choice_display:"DURATION_DICT"|slugify}}',true);"{% endif %} {% endcomment %}
-                                />
-                                <span>{{facet.0|get_choice_display:"DURATION_DICT"}} <b>({{facet.1|intcomma}})</b></span>
+                            {% for facet in facets.pDM %}
+                            <label title="{{facet.label}}">
+                                <input type="checkbox" name="fduration" value="{{facet.id}}" {% if facet.id in duration %}checked="checked" {% endif %} />
+                                <span>{{facet.label}} <b>({{facet.count}})</b></span>
                             </label>
                             {% endfor %}
                         {% endif %}
@@ -140,7 +163,7 @@
                 </div>
             </div>
             {% endif %}
-            {% if facets.fields.pStM|length %}
+            {% if facets.pStM|length %}
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
@@ -151,20 +174,17 @@
                 </div>
                 <div class="panel-collapse">
                     <div class="panel-body js_filter_sxn">
-                        {% if facets.fields.pStM|length == 1 %}
-                        <label title="{{facets.fields.pStM.0.0|get_choice_display:"STUDY_MODE"}}">
+                        {% if facets.pStM|length == 1 %}
+                        <label title="{{facets.pStM.0.label}}">
                             <input type="checkbox" {% if mode %}name="fmode" {% else %}name="ign_fmode"{% endif %}
-                                       value="{{facets.fields.pStM.0.0}}" checked="checked" disabled="disabled">
-                            <span>{{facets.fields.pStM.0.0|get_choice_display:"STUDY_MODE"}} <b>({{facets.fields.pStM.0.1|intcomma}})</b></span>
+                                       value="{{facets.pStM.0.id}}" checked="checked" disabled="disabled">
+                            <span>{{facets.pStM.0.label}} <b>({{facets.pStM.0.count}})</b></span>
                         </label>
                         {% else %}
-                            {% for facet in facets.fields.pStM %}
-                            <label title="{{facet.0|get_choice_display:"STUDY_MODE"}}">
-                                <input type="checkbox" name="fmode" value="{{facet.0}}" {% if facet.0 in mode %}checked="checked" {% endif %}
-                                        {% comment %}onmousedown="jsrpTrackComscore('study_mode','{{facet.0|get_choice_display:"STUDY_MODE"|slugify}}',false);"
-                                        {% else %} onmousedown="jsrpTrackComscore('study_mode','{{facet.0|get_choice_display:"STUDY_MODE"|slugify}}',true);"{% endif %} {% endcomment %}
-                                />
-                                <span>{{facet.0|get_choice_display:"STUDY_MODE"}} <b>({{facet.1|intcomma}})</b></span>
+                            {% for facet in facets.pStM %}
+                            <label title="{{facet.label}}">
+                                <input type="checkbox" name="fmode" value="{{facet.id}}" {% if facet.id in mode %}checked="checked" {% endif %} />
+                                <span>{{facet.label}} <b>({{facet.count}})</b></span>
                             </label>
                             {% endfor %}
                         {% endif %}
@@ -172,7 +192,7 @@
                 </div>
             </div>
             {% endif %}
-            {% if facets.fields.pAR|length %}
+            {% if facets.pAR|length %}
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
@@ -186,18 +206,22 @@
                     {% for i in '54321' %}
                         <div class="rating-review-box">
                             <input name="frating" type="checkbox" {% if i in rating %}checked="checked"{% endif %}
-                            {% if facets.fields.pAR|length == 1 %}disabled="disabled"{% endif %} value="{{ i }}">
+                            {% if facets.pAR|length == 1 %}disabled="disabled"{% endif %} value="{{ i }}">
                             {% for j in "12345" %}
-                                <figure class={% if j <= i %}"full-star"{% else %}"blank-star"{% endif %}></figure>
+                                <figure class={% if j <= i %}"full-star"{% else %}"blank-star"{% endif %}> </figure>
                             {% endfor %}
-                            {% for facet in facets.fields.pAR%}{% if facet.0 == i %} <b>({{facet.1|intcomma}})</b>{% endif %}{% endfor %}
+                            {% for facet in facets.pAR%}
+                                {% if facet.id|stringformat:"i" == i %} 
+                                    &nbsp;<b>({{facet.count}})</b>
+                                {% endif %}
+                            {% endfor %}
                         </div>
                         {% endfor %}
                     </div>
                 </div>
             </div>
             {% endif %}
-            {% if facets.fields.pPinr|length %}
+            {% if facets.pPinr|length %}
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
@@ -208,20 +232,17 @@
                 </div>
                 <div class="panel-collapse">
                     <div class="panel-body js_filter_sxn">
-                        {% if facets.fields.pPinr|length == 1 %}
-                        <label title="{{facets.fields.pPinr.0.0|get_choice_display:"PRICE_FACETS"}}">
+                        {% if facets.pPinr|length == 1 %}
+                        <label title="{{facets.pPinr.0.label}}">
                             <input type="checkbox" {% if price %}name="fprice" {% else %}name="ign_fprice"{% endif %}
-                                       value="{{facets.fields.pPinr.0.0}}" checked="checked" disabled="disabled">
-                            <span>{{facets.fields.pPinr.0.0|get_choice_display:"PRICE_FACETS"}} <b>({{facets.fields.pPinr.0.1|intcomma}})</b></span>
+                                       value="{{facets.pPinr.0.id}}" checked="checked" disabled="disabled">
+                            <span>{{facets.pPinr.0.label}} <b>({{facets.pPinr.0.count}})</b></span>
                         </label>
                         {% else %}
-                            {% for facet in facets.fields.pPinr %}
-                            <label title="{{facet.0|get_choice_display:"PRICE_FACETS"}}">
-                                <input type="checkbox" name="fprice" value="{{facet.0}}" {% if facet.0 in price %}checked="checked" {% endif %}
-                                        {% comment %}onmousedown="jsrpTrackComscore('cert','{{facet.0|get_choice_display:"DURATION_DICT"|slugify}}',false);"
-                                        {% else %} onmousedown="jsrpTrackComscore('cert','{{facet.0|get_choice_display:"DURATION_DICT"|slugify}}',true);"{% endif %} {% endcomment %}
-                                />
-                                <span>{{facet.0|get_choice_display:"PRICE_FACETS"}} <b>({{facet.1|intcomma}})</b></span>
+                            {% for facet in facets.pPinr %}
+                            <label title="{{facet.label}}">
+                                <input type="checkbox" name="fprice" value="{{facet.id}}" {% if facet.id in price %}checked="checked" {% endif %} />
+                                <span>{{facet.label}} <b>({{facet.count}})</b></span>
                             </label>
                             {% endfor %}
                         {% endif %}
