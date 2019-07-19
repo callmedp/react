@@ -2994,11 +2994,19 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
         )
         if int(self.oi_status) != -1:
             if int(self.oi_status) == 33:
-                queryset = queryset.filter(oi_status=31, save_link__gt=0)
+                queryset = queryset.filter(
+                    oi_status=31, save_link__gt=0,
+                    whatsapp_profile_orderitem__approved=True
+                )
             elif int(self.oi_status) == 31:
-                queryset = queryset.filter(oi_status=31, save_link=0)
+                queryset = queryset.filter(
+                    oi_status=31, save_link=0,
+                    whatsapp_profile_orderitem__approved=True
+                )
             elif int(self.oi_status) == 34:
-                queryset = queryset.filter(whatsapp_profile_orderitem__approved=False)
+                queryset = queryset.filter(
+                    whatsapp_profile_orderitem__approved=False
+                )
             else:
                 queryset = queryset.filter(oi_status=self.oi_status)
 
