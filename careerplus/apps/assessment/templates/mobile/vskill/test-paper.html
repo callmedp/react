@@ -4,23 +4,6 @@
 {% block title %}Shine learning{% endblock %}
 {% block css_section %}
 {{ block.super }}
-<style>
-   .inactive{
-      display:None;
-   }
-   .dirt{
-      background:green !important;
-      color:white !important;
-   }
-   .skipped{
-      background:red !important;
-      color:white !important;
-   }
-
-
-
-
-</style>
 {% compress css %}
 <link type="text/scss" href="{% static 'shinelearn/css/mobile/vskill/practice_tests.scss' %}" rel="stylesheet">
 <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
@@ -39,7 +22,6 @@
 {% block container %}
 <div class="body-wrapper practice-test ">
     <div class="practice-test-inside"></div>
-    <div class="back"></div>
 
     <h1>Search Engine Optimisation Test</h1>
     <div class="bread-crums">
@@ -63,12 +45,14 @@
     
             <div class="question-timer--score-text">Time left</div>
             <div class="question-timer__count-down" id="timeTest">
-                <div class="question-timer__count-down--time" id="testRemanMinutes" style="color:red;">
-                    <span>MINUTES</span>
+                <div class="question-timer__count-down--time">
+                    <span id="testRemanMinutes"></span>
+                    <small>MINUTES</small>
                 </div>
                 <span>:</span>
-                <div class="question-timer__count-down--time"  id="testRemanSeconds" style="color:red;">
-                    <span>SECONDS</span>
+                <div class="question-timer__count-down--time">
+                    <span id="testRemanSeconds"></span>
+                    <small>SECONDS</small>
                 </div>
             </div>
         </div>
@@ -99,7 +83,7 @@
         <ol>
         {% for quest in questions_list %}
             <li class="take-test__wrap test-paper {% if forloop.counter == 1 %} actived {% else %}inactive{% endif %}" id="question-{{forloop.counter}}">
-            <h2>{{quest.question_text}}</h2>
+                <h2 class="fs-18 d-flex"><span class="take-test__wrap--count">{{forloop.counter}}</span>{{quest.question_text}}</h2>
                 <ul>
                     {% for ans in quest.question_options %}
                     <li>

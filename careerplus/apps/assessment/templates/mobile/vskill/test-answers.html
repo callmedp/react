@@ -105,8 +105,6 @@
                         <label for="{{ans.option_id}}">{{ans.option}}</label>
                     </li>
                     {% endfor %}
-
-
                 </ul>
             </li>
                                 {% endfor %}
@@ -115,7 +113,11 @@
     </div><!-- /. Test Answers -->
 
     <div class="mt-30 mb-30">
-        <div class="btn btn-round-30 btn-blue w-100 mb-15" id="btn_next-test">Next test</div>
+        <div class="d-flex justify-content-between align-items-start">
+            <button class="btn btn-round-30 btn-blue w-50" onclick="reTestFunc();">Re Test</button>
+            <div class="btn btn-round-30 btn-blue w-50 mb-15" id="btn_next-test">Next test</div>
+        </div>
+        
         <div class="btn btn-round-30 btn-outline w-100" ><a href="/practice-tests/{{object.category.slug}}/sub">Explore other test</a></div>
     </div>
 
