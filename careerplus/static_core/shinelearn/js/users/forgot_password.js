@@ -1,7 +1,6 @@
 $(document).ready(function() {
     $("#forgot_form").validate({
         submitHandler: function(form) {
-            debugger;
             var formData = $(form).serialize();
             var post_url = $(form).attr('action' );
             $.ajax({
