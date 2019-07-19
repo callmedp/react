@@ -18,7 +18,8 @@
                     <span class="express-delivery">{{obj.delivery_service.name}}</span>
                 {% endif %}
             </h2>
-            <span class="transaction">Order ID : {{obj.order.number}}<span>(Item ID : {{obj.id}})</span></span>
+            <span class="transaction">Order ID : {{obj.order.number}}</span>
+            <span hidden>{{obj.id}}</span>
            {% if obj.product.type_flow == 17 %}
                 <form role="form" id="download-resume-form{{obj.order.pk}}" method="POST" action="{% url "dashboard:dashboard-resumetemplatedownload" %}" >
                     <div style="display:none">
