@@ -69,14 +69,14 @@
 
                 {% if item.is_available%}
                       <!-- Item wrap -->
-                        <form role="form" method="post" id="cart_remove_form{{item.id}}">{% csrf_token %}
+                        <form  role="form" method="post" id="cart_remove_form{{item.id}}">{% csrf_token %}
                           <li class="payment__summary__item {% if forloop.counter0 == 0  %} border-top-none {%endif %}">
                             <span class="payment__summary__item--img">
                                 <img src="https://static1.shine.com/l/m/product_image/1668/1507608787_5699.png" class="img-responsive" />
                             </span>
                               <div class="payment__summary__item--wrap">
                                   <p class="payment__summary__item--course-title">{{item.name}}
-                                      <strong class="mt-10">Rs. {% if variations|length  %} {{variations.0.price}} {% else %} {{item.price}} {% endif %} </strong>
+                                      <strong class="mt-10">Rs. {% if variations|length and item.product_class == 'course' or item.type_flow == 17  %} {{variations.0.price}} {% else %} {{item.price}} {% endif %} </strong>
                                   </p>
                                       {% if addons|length or variations|length %}
                                            <div class="payment__summary__item__addons mt-20">
@@ -86,7 +86,7 @@
                                                             <li class=" payment__summary__item__addons__item {% if not var.is_available %}disbale{% endif %}">
                                                                 <span class="payment__summary__item__addons__item--title">{{var.name}}</span>
                                                                 <span class="semi-bold">Rs. {{var.price}}/-</span>
-                                                                <span class="payment__summary__item--close">+</span>
+                                                                <span class="payment__summary__item--close" onclick="removeVariationsOrAddons('{{csrf_token}}','{{var.reference}}','{{var.id}}')">+</span>
                                                             </li>
                                                             {% if not var.is_available %}
                                                                 <p class="pb-0 red-text text-right mt-sub-10">Not available</p>
@@ -97,7 +97,10 @@
                                                               <li class="payment__summary__item__addons__item">
                                                                 <span class="payment__summary__item__addons__item--title">{{addon.name}}</span>
                                                                 <span class="semi-bold">Rs. {{addon.price}}/-</span>
-                                                                <span class="payment__summary__item--close">+</span>
+                                                                  <form role="form" id="cart_remove_form{{addon.id}}">{% csrf_token %}
+                                                                        <input type="hidden" name="reference_id" value="{{addon.reference}}">
+                                                                        <span class="payment__summary__item--close" id="id-remove-cart{{addon.id}}" onclick="removeFromCart('{{addon.id}}')">+</span>
+                                                                  </form>
                                                             </li>
                                                             {% endif %}
                                                       {% endfor %}
@@ -127,7 +130,7 @@
                                            </div>
                                   {% endif %}
                               </div>
-                              <input type="hidden" name="product_reference" value="{% if variations|length%}{{variations.0.reference}}{% else %}{{item.reference}}{% endif %}">
+                              <input type="hidden" name="product_reference" value="{% if variations|length and item.product_class == 'course' or item.type_flow == 17 %}{{variations.0.reference}}{% else %}{{item.reference}}{% endif %}">
 
                               <span class="payment__summary__item--close" onclick="removeFromCartMobile('{{item.id}}')">+</span>
                             </li>
@@ -135,44 +138,6 @@
                 {% endif %}
             {% endwith %}
           {% endfor %}
-
-          <!-- Addons list item starts here  -->
-           <!-- <li class="payment__summary__item">
-                <span class="payment__summary__item&#45;&#45;img">
-                    <img src="https://static1.shine.com/l/m/product_image/1668/1507608787_5699.png" class="img-responsive" />
-                </span>
-
-                <div class="payment__summary__item&#45;&#45;wrap">
-                    <p class="payment__summary__item&#45;&#45;course-title">International Profile Update
-                        <strong class="mt-10">Rs. 40</strong>
-                    </p>
-
-                     <div class="payment__summary__item__addons mt-20">
-                        <p class="fs-13 c9">Addons</p>
-                        <ul>
-                            <li class="payment__summary__item__addons__item">
-                                <span class="payment__summary__item__addons__item&#45;&#45;title">Middle East</span>
-                                <span class="semi-bold c3">Rs. 12,71.00/-</span>
-                                <span class="payment__summary__item&#45;&#45;close">+</span>
-                            </li>
-
-                            <li class="payment__summary__item__addons__item">
-                                <span class="payment__summary__item__addons__item&#45;&#45;title">United Kingdom</span>
-                                <span class="semi-bold c3">Rs. 12,71.00/-</span>
-                                <span class="payment__summary__item&#45;&#45;close">+</span>
-                            </li>
-
-                            <li class="payment__summary__item__addons__item">
-                                <span class="payment__summary__item__addons__item&#45;&#45;title">Singapore</span>
-                                <span class="semi-bold c3">Rs. 12,71.00/-</span>
-                                <span class="payment__summary__item&#45;&#45;close">+</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <span class="payment__summary__item&#45;&#45;close">+</span>
-            </li> &lt;!&ndash; Addons list item ends here  &ndash;&gt;
--->
       </ul>
 
       <div class="apply border-top mt-15 pt-30">

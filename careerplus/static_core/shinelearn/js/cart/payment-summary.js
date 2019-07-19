@@ -207,33 +207,52 @@ function JSRemovePoint() {
 
 };
 
+const removalAjax = (formData) => {
+
+    $.ajax({
+        url: '/cart/remove-from-cart/',
+        type: 'POST',
+        data: formData,
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        success: function (json) {
+            if (json.status == 1) {
+                window.location.reload();
+                //alert("product removed from cart successfully");
+            } else if (json.status == -1) {
+                alert('Something went wrong, Please try again.');
+            }
+        },
+        failure: function (response) {
+            alert("Something went wrong, Please try again")
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert("Something went wrong, Please try again")
+        }
+    });
+}
+
 function removeFromCart(line_id) {
     if (line_id) {
+        debugger;
         $('#id-remove-cart' + line_id).addClass('disabled').removeAttr("onclick");
         var formData = $('#cart_remove_form' + line_id).serialize();
-        $.ajax({
-            url: '/cart/remove-from-cart/',
-            type: 'POST',
-            data: formData,
-            dataType: 'json',
-            success: function (json) {
-                if (json.status == 1) {
-                    window.location.reload();
-                    //alert("product removed from cart successfully");
-                } else if (json.status == -1) {
-                    alert('Something went wrong, Please try again.');
-                }
-            },
-            failure: function (response) {
-                alert("Something went wrong, Please try again")
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                alert("Something went wrong, Please try again")
-            }
-        });
+        removalAjax(formData)
+
     }
 
 };
+
+function removeVariationsOrAddons(csrfToken, reference, lineId) {
+    if (lineId) {
+        let formData = new FormData()
+        formData.append('csrfmiddlewaretoken', csrfToken);
+        formData.append('reference_id', reference);
+        removalAjax(formData)
+
+    }
+}
 
 
 $(document).ready(function () {

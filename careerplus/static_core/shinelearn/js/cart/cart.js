@@ -1,8 +1,8 @@
 function removeFromCart(line_id) {
     if (line_id) {
-
         $('#id-remove-cart' + line_id).addClass('disabled').removeAttr("onclick");
         var formData = $('#cart_remove_form' + line_id).serialize();
+
         $.ajax({
             url: '/cart/remove-from-cart/',
             type: 'POST',
