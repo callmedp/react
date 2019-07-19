@@ -1123,7 +1123,6 @@ class UpdateCertificateAndAssesment(APIView):
         parser = CertiticateParser(parse_type=0)
         parsed_data = parser.parse_data(data)
         certificates, user_certificates = parser.save_parsed_data(parsed_data, vendor=data['vendor'])
-        print(user_certificates)
         if user_certificates:
             for user_certificate in user_certificates:
                 certificate = user_certificate.certificate
@@ -1186,7 +1185,6 @@ class UpdateCertificateAndAssesment(APIView):
                 ),
                 "certificate_updated": certificate_updated
             })
-            print(to_emails)
             send_email_task.delay(to_emails, mail_type, data, status=201, oi=oi.pk)
             oi.orderitemoperation_set.create(
                 oi_status=oi.oi_status,
@@ -1366,7 +1364,6 @@ class TestTimer(APIView):
     def get(self,request, *args, **kwargs):
         test_id = self.request.GET.get('test_id')
         duration = int(self.request.GET.get('duration',0))
-        # print(session_id)
         self.cache_test = TestCacheUtil(request=request)
         test_start_time = self.cache_test.get_start_test_cache(key='test-'+test_id)
         set_test_duration_cache = self.cache_test.get_test_duration_cache(key='test-'+test_id, duration=duration)

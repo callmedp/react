@@ -15,23 +15,6 @@
       rel="stylesheet">
 <link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
 {% endcompress %}
-<style>
-   .inactive{
-      display:None;
-   }
-   .dirt{
-      background:green !important;
-      color:white !important;
-   }
-   .skipped{
-      background:red !important;
-      color:white !important;
-   }
-
-
-
-
-</style>
 {% endblock css_section %}
 {% block main_container %}
 <div class="practice-skill__wrap-inner">
@@ -59,7 +42,7 @@
                     <div class="pagination-box flexbox">
                         <div class="paper-pagination">
                             {% for quest in questions_list %}
-                            <span class="marked" id="markedquestion-{{forloop.counter}}"
+                            <span class="marked  {% if forloop.counter == 1 %} active {% endif %}" id="markedquestion-{{forloop.counter}}"
                                   data-attr-value="{{forloop.counter}}">{{forloop.counter}}</span>
                             {% endfor %}
                         </div>
@@ -220,7 +203,10 @@ $(document).ready(function() {
                     $('#marked' + Object.keys(questionAttempt)[id]).addClass('dirt');
                 }
             }
+            $('#markedquestion-' + activeTab).addClass('active');
             $('#' + questionAttempt['question-' + activeTab]).prop("checked", true);
+
+
 
         } else {
             questionAttempt = {};
@@ -272,6 +258,8 @@ $('.marked').click(function() {
     $('.test-paper').removeClass('actived');
     $('#question-' + value).removeClass('inactive');
     $('#question-' + value).addClass('actived');
+    $('.active').removeClass('active');
+    $('#markedquestion-' + activeTab).addClass('active');
     if (activeTab >= maxCounter) {
         $('#nextQuestionBtn').hide();
     } else {
@@ -297,6 +285,9 @@ function nextquestion(number) {
         } else {
         $('#nextQuestionBtn').show();
         }
+         $('.active').removeClass('active');
+            $('#markedquestion-' + activeTab).addClass('active');
+
     }
 }
 
@@ -313,6 +304,7 @@ function skipQuestion() {
     let quest_id = 'question-' + activeTab;
     $('#' + questionAttempt[quest_id]).prop("checked", false);
     delete questionAttempt[quest_id];
+    myStorage.setItem(tKey, JSON.stringify(questionAttempt));
     nextquestion(1);
 }
 
@@ -343,21 +335,6 @@ function startTimer(duration,) {
     $('#timeTest').show();
 
 }
-
-<!--$("#leadCreationForm").submit(function(e){-->
-    <!--var form = $(this);-->
-    <!--$.ajax({-->
-         <!--url   : '/lead/lead-management/',-->
-         <!--type  : 'post',-->
-         <!--data  : form.serialize(), // data to be submitted-->
-         <!--success: function(response){-->
-           <!--window.location.href = '/practice-tests/{{object.slug}}/result/';-->
-         <!--}-->
-    <!--});-->
-    <!--return false;-->
-    <!--testSession({'lead_create':true});-->
-
- <!--});-->
 
 function submitTest(){
      $("#submitPermissionModal").modal('show');

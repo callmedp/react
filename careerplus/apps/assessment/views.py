@@ -66,7 +66,6 @@ class VskillTestView(DetailView):
         test_object = original_context['object']
         show_test, delete_ans = self.cache_test.show_test_remove_local_storage \
             (key='test-' + str(test_object.id))
-        print(show_test)
         if not show_test:
             return redirect(reverse('assessment:vskill-result', kwargs={'slug': test_object.slug}))
         response.context_data = original_context
