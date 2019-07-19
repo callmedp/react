@@ -492,7 +492,7 @@ class TECategoryArticleLoadView(View, BlogMixin):
 
 
 class TEBlogDetailView(DetailView, BlogMixin):
-    template_name = "talenteconomy/article-detail.html"
+    template_name = "talenteconomy/article-detail1.html"
     model = Blog
 
     def __init__(self):
@@ -529,8 +529,15 @@ class TEBlogDetailView(DetailView, BlogMixin):
 
 
     def get_template_names(self):
+        if not self.request.amp and self.object.p_cat.slug == 'human-resources':
+            return ["talenteconomy/article-detail1"
+                    ".html"]
         if not self.request.amp:
             return ["talenteconomy/article-detail.html"]
+
+        if not settings.DEBUG:
+            from newrelic import agent
+            agent.disable_browser_autorum()
         return ["talenteconomy/article-detail-amp.html"]
 
 #    def redirect_if_necessary(self, current_path, article):

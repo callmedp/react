@@ -1,0 +1,324 @@
+{% extends "basic/base.html" %}
+{% load static compress %}
+
+{% block django_meta %}
+        {% include 'meta/meta.html' %}
+<meta property="og:image" content="{{main_article.image.url}}">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@shinelearning">
+
+<meta name="twitter:domain" content="learning.shine.com">
+<meta name="twitter:title" content="{{main_article.title}}">
+<meta name="twitter:description" content="{{ main_article.get_description }}" />
+<meta name="twitter:image:src" content="{{main_article.image.url}}">
+
+
+{%  endblock django_meta %}
+{% block canonical_url %}
+  <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
+  <link rel="alternate" media="only screen and (maxwidth:640px)" href="https://{{ MOBILE_SITE_DOMAIN }}{{request.path}}">
+  <link rel="alternate" media="handheld" href="https://{{ MOBILE_SITE_DOMAIN }}{{request.path}}">
+  <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{ request.path }}?type=amp">
+{% endblock canonical_url %}
+
+
+{% block title %}
+	{{main_article.title}} - Talent Economy
+{% endblock title %}
+
+{% block css_section %}
+    {{block.super}}
+    {% compress css %}
+    <link type="text/scss" href="{% static 'shinelearn/css/talenteconomy/article.scss' %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+
+{% block container %}
+<!-- breadcrums -->
+<section class="container">
+	{% include './include/breadcrumbs.tmpl.html' with breadcrumbs=breadcrumbs %}
+</section>
+
+<section class="container mb-20">
+	<!-- page content body start -->
+	<div class="row">
+        <!-- left content start -->
+        <div class="col-md-9 col-sm-12">
+
+          <div id="related-container">
+            <div class="cls_ajax_article" data-url="{{main_article.get_absolute_url}}" data-title="{{main_article.display_name}}">
+            {{detail_article}}
+            </div>
+          </div>
+          <div id="id_ajax_article"></div>
+          <!-- content start -->
+        </div>
+
+		<!-- left content end -->
+
+		<!-- right content start -->
+		<div class="col-md-3 col-sm-12">
+            <div class="popular-courses box-panel col-sm-6 col-md-12 mb-40 look-interesting">
+    <h2 class="heading-right-talent">Looking for ways to hire top talent </h2>
+    <p class="mt-15">Ask for a call back</p>
+
+    <form id="enquireform" name="enq" class="mt-15 register">
+        <div class="form-group">
+         <input type="text" name="name" placeholder="Name" class="form-control" maxlength="60" inputmode="name" value="{{request.session.full_name}}"  id="id_name" aria-required="true">
+        </div>
+          <div class="form-group">
+         <input type="text" name="cname" placeholder="Company Name" class="form-control" maxlength="60" value="{{request.session.full_name}}"  id="id_cname" aria-required="true">
+        </div>
+
+        <div class="form-group ">
+            <div class="country-code">
+                <div class="custom-select">
+                    <select name="country_code" class="form-control" id="id_country_code">
+                  {% for country in country_choices %}
+                            <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.0}}</option>
+                          {% endfor %}
+
+                        </select>
+                    </div>
+            <span class="mobile_input">
+          <input type="tel" name="number" class="form-control number" inputmode="numeric" required="" id="id_cell_phone" aria-required="true" placeholder="Mobile" value="{{request.session.mobile_no|safe}}">
+                    </span></div>
+        </div>
+
+        <div class="form-group">
+       <textarea class="form-control" rows="2" name="msg" placeholder="Message"></textarea>
+            <span class="error-txt">Please enter a valid email address.</span>
+        </div>
+        <input type="hidden" name="email" class="form-control" value="{{request.session.email}}">
+        <input type="hidden" name="lsource" value="29">
+        <input type="hidden" name="campaign" value="humanresource">
+        <button type="button" id="enquire_form" class="btn btn-primary submit">Submit</button>
+    </form>
+
+</div>
+
+			
+			<!-- take me to -->
+			{% if categories %}
+				{% include './include/category.tmpl.html' with categories=categories %}
+			{% endif %}
+
+			<!-- Popular Courses -->
+      <br>
+      <!-- Looks interesting? -->
+
+                          <div id="snackbar"></div>
+
+
+      <!-- Looks interesting? -->
+
+      <!-- Look interesting -->
+				<!--{% include './include/look-interesting.tmpl.html' with popular_courses=popular_courses page='talenteconomy-article-details' %}-->
+
+		</div>
+		<!-- right content end -->
+
+	</div>
+<!-- page content body end -->
+</section>
+
+<!--modals-->
+<!--login-->
+<div class="modal fade bs-example-modal-sm login-div" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="login-model">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+     <div class="register">
+     <div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <span class="modal-title" id="myModalLabel">Login</span>
+        <label id="non-field-error" class="error-msg"></label>
+      </div>
+
+       <form autocomplete="off" role method="post" id="login_form" >{% csrf_token %}
+          
+          <div class="form-group {% if loginform.email.errors %} error {% endif %}">
+            {{loginform.email}}
+            <span class="error-txt">{{loginform.email.errors.0}}</span>
+          </div>
+          <div class="form-group {% if loginform.password.errors %} error {% endif %}">
+               {{loginform.password}}
+               <span class="error-txt">{{loginform.password.errors.0}}</span>
+          </div>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input type="checkbox" name="remember_me" class="form-check-input">
+              Remember me
+            </label>
+          </div>
+          <button type="button" id="login-button" class="btn btn-primary submit">Login</button>
+          <small class="form-text text-muted text-center">
+            <a href="javascript:void(0)" data-toggle="modal" data-dismiss="modal" 
+            id="modalforgot">
+              Forgot Password?
+            </a>
+          </small>
+          <div class="social-login">
+            <span>or login with</span>
+            <a class="facebook" onclick="Login();"></a>
+            <a class="linkedin" href="{% url 'users:linkedin-code' %}"></a>
+            <a class="gplus" onclick="glogin();"></a>
+          </div>
+          <small class="form-text text-muted text-center">Don’t have an account yet? <a role="button" data-toggle="modal" data-target=".bs-example-modal-sm2" data-dismiss="modal">Register Now</a></small>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>  
+
+<!--signup-->
+<div class="modal fade bs-example-modal-sm2" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+     <div class="register">
+     <div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <span class="modal-title" id="myModalLabel">Register</span>
+        <label id="non-field-error-register" class="error"></label>
+      </div>
+
+      <form autocomplete="off" role="form" id="register_form" >
+        {% csrf_token %}
+          <div class="form-group {% if registerform.email.errors %}error{% endif %}">
+            {{ registerform.email }}
+            <span class="error-txt">{{ registerform.email.errors.0 }}</span>
+          </div>
+          <div id="user_email"></div>
+          <div class="form-group {% if registerform.email.errors %}error{% endif %}">
+            {{ registerform.raw_password }}
+            <span class="error-txt">{{ registerform.raw_password.errors.0 }}</span>
+          </div>
+          <div id="raw_psd"></div>
+          <div class="form-group {% if registerform.cell_phone.errors or registerform.country_code.errors %}error{% endif %}">
+            <div class="country-code">
+              <div class="custom-select">
+                {{registerform.country_code}}
+              </div>
+               {{registerform.cell_phone}}
+              <span class="error-txt">
+                   {% if registerform.cell_phone.errors %}
+                      {{registerform.cell_phone.errors.0}}
+                   {% else %}
+                       {{registerform.country_code.errors.0}}
+                   {% endif %}
+              </span>
+            </div>
+          </div>
+          <div id="cell_phone"></div>
+          <div class="form-group">
+            {{registerform.vendor_id }}
+          </div>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input type="checkbox" class="form-check-input" name="term_conditions">
+              I agree to Terms & conditions
+            </label>
+          </div>
+          <div id="terms"></div>
+          <button type="button" id="register-button" class="btn btn-primary submit">Register</button>
+          <div class="social-login">
+            <span>or Register with</span>
+            <a class="facebook" onclick="Login();"></a>
+            <a class="linkedin" href="{% url 'users:linkedin-code' %}"></a>
+            <a class="gplus" onclick="glogin();"></a>
+          </div>
+          <small class="form-text text-muted text-center mt-4">Already have an account? <a role="button" data-toggle="modal" data-target=".login-div" data-dismiss="modal">Login Now</a></small>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+<!--forgot password div-->
+<div class="modal fade bs-example-modal-sm forgotdiv" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="forgot_div">
+  <div class="modal-dialog modal-sm modal-custom" role="document">
+    <div class="modal-content">
+     <div class="register">
+     <div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <span class="modal-title" id="myModalLabel">Forgot Password</span>
+      </div>
+      <div id="msg_for_user"></div>
+        <form method="post" id="forgot_form" 
+        action="{% url "users:forgot-email-sent" %}">
+        {% csrf_token %}
+            {% for field in reset_form %}
+                <div class="form-group {% if field.errors %}error{% endif %}">
+                    {{field}}
+                    <span class="error-txt">{{ field.errors.0 }}</span>
+                </div>
+            {% endfor %}
+          <button type="submit" class="btn btn-primary submit mt-20">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock container %}
+{% block js_section %}
+<script>
+
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-3537905-41', 'auto', {'name': 'a'});
+  ga('a.send', 'pageview');
+  ga('create', 'UA-3537905-41', 'auto');
+  ga('send', 'pageview');
+
+function gaEvent(event_cat,event_lab,event_action){
+  ga('send', 'event', event_cat, event_action, event_lab);
+ }
+
+ function gaEventFunc(status,typeOfProduct){
+    var event_cat='Form Interactions';
+    gaEvent(event_cat,typeOfProduct,status);
+ }
+
+</script>
+
+    {{ block.super }}
+    {% compress js %}
+    <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/blog/blog-detail.js' %}"></script>
+    <script src="{% static 'shinelearn/js/blog/login-register.js' %}"></script>
+    <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
+    <script src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        var s = $("#sticker");
+        var pos = s.position();            
+        $(window).scroll(function() {
+          var windowpos = $(window).scrollTop();
+          // s.html("Distance from top:" + pos.top + "<br />Scroll position: " + windowpos);
+          if (windowpos >= pos.top) {
+            s.addClass("stick");
+          } else {
+            s.removeClass("stick"); 
+          }
+        });
+      });
+    </script>
+    {% endcompress %}
+
+    {% compress js inline %}
+    <script>
+      $(function(){
+        Article.init();
+      });
+      if (window.location.hash == '#_=_') {
+          open(location, '_self').close();
+      }
+      showArticleOnScroll.scroll(); /* for calling infinite articles */
+    </script>
+    {% endcompress %}
+{% endblock js_section %}
