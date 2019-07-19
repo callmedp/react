@@ -56,7 +56,7 @@ export default class TopBar extends Component {
                                 '' :
                                 <div className="top-banner--banner-right">
                                     <div>
-                                        <button className="orange-button mr-20">Subscribe now</button>
+                                        <button className="orange-button mr-10">Subscribe now</button>
                                         <button className="white-button mr-20" onClick={()=>{newUser ? showAlertModal() : this.changeTemplate()}}>Change template</button>
                                     </div>
                                     <span className="top-banner--banner-right--banner-thumb">
