@@ -435,8 +435,8 @@ class ProductInformationMixin(object):
         ctx['show_chat'] = True
         ctx['product_main'] = product_main,
         ctx['sqs_main'] = sqs_main
-        ctx['prd_vendor_count'] = Product.objects.filter(vendor=product.vendor,\
-            visibility=True,active=True,is_indexed=True).count()
+        ctx['prd_vendor_count'] = SQS().filter(pVid=product.vendor.id).\
+            exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).count()
         return ctx
 
     def get_other_detail(self, product, sqs):

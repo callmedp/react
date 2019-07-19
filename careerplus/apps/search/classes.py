@@ -24,7 +24,6 @@ RESULTS_PER_PAGE = getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
 
 
 class BaseSearch(object):
-
     results = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS)
     results_per_page = RESULTS_PER_PAGE
     search_params = {}
@@ -424,7 +423,6 @@ class BaseSearch(object):
 
 
 class BaseParams(object):
-
     args = ''
     keywords = ''
     clean_query = True
@@ -482,7 +480,7 @@ class BaseParams(object):
 
 class SimpleSearch(BaseSearch):
 
-    needed_params_options = {'q', 'fclevel', 'fcert', 'farea', 'frating', 'fduration', 'fmode'}
+    needed_params_options = {'q', 'fclevel', 'fcert', 'farea', 'frating', 'fduration', 'fmode','fvid'}
 
     def get_extra_params(self):
         """
@@ -491,14 +489,12 @@ class SimpleSearch(BaseSearch):
         """
         extra_params = super(SimpleSearch, self).get_extra_params()
         extra_params.update({'search_type': 'simple'})
-
         return extra_params
 
 
 class SimpleParams(BaseParams):
 
     def set_params_from_lookups(self, params):
-
         params['q'] = " ".join(self.keywords)
         params['q'] = handle_special_chars(params['q'], False, True, False, False)
         params = get_filters(params)
@@ -511,7 +507,6 @@ class SimpleParams(BaseParams):
         The view calls this method if the request is for web/mobile.
         The API will call this method if the request is for app.
         """
-
         params_filtered = False
         params = super(SimpleParams, self).get_request_params()
 
@@ -619,7 +614,6 @@ class FuncAreaSearch(BaseSearch):
 
 
 class FuncAreaParams(BaseParams):
-
     query_param_name = None
     clean_query = False
 
@@ -631,7 +625,6 @@ class FuncAreaParams(BaseParams):
 
 
 class RecommendedSearch(BaseSearch):
-
     needed_params_options = {'area', 'skills'}  # , 'fclevel', 'fcert', 'farea', 'frating', 'fduration', 'fmode'}
 
     def add_filters(self):
@@ -644,7 +637,6 @@ class RecommendedSearch(BaseSearch):
 
 
 class RecommendedParams(BaseParams):
-
     query_param_name = None
     clean_query = False
 

@@ -143,11 +143,12 @@ class SearchBaseView(TemplateView):
             'fmode': 'mode',
             'fduration': 'duration',
             'fclevel': 'level',
-            'fcert': 'certify'
+            'fcert': 'certify',
+            'fvid': 'vid'
         }
 
         # Following code is for generating starting from price according to variation filtered TODO: move to ajax later on
-        requested_filters = [x for x in ['fprice', 'fmode', 'fduration', 'fclevel', 'fcert'] if x in self.request.GET]
+        requested_filters = [x for x in ['fprice', 'fmode', 'fduration', 'fclevel', 'fcert', 'fvid'] if x in self.request.GET]
         # if filters are not applied, skip
         if len(requested_filters):
             for result in self.results:
