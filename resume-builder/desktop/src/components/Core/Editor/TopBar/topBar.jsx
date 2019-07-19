@@ -41,7 +41,7 @@ export default class TopBar extends Component {
                                 </div> :
                                 <div className="top-banner--banner-txt">
                                     <h1>You are closer to your perfect resume.</h1>
-                                    <p>Fill the details to generate your resume </p>
+                                    <p>Fill the details to create your resume ( You can also subscribe <br/>now and create resume later) </p>
                                 </div>
                     }
                     {
@@ -56,6 +56,7 @@ export default class TopBar extends Component {
                                 '' :
                                 <div className="top-banner--banner-right">
                                     <div>
+                                        <button className="orange-button mr-20">Subscribe now</button>
                                         <button className="white-button mr-20" onClick={()=>{newUser ? showAlertModal() : this.changeTemplate()}}>Change template</button>
                                     </div>
                                     <span className="top-banner--banner-right--banner-thumb">
