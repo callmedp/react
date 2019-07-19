@@ -541,7 +541,8 @@ class OrderItem(AbstractAutoDate):
             # jobs on the move permission
             ("can_view_assigned_jobs_on_the_move", "Can view assigned jobs on the move"),
             ("can_assign_jobs_on_the_move", "Can assign jobs on the move"),
-            ("can_send_jobs_on_the_move", "Can send assigned jobs on the move")
+            ("can_send_jobs_on_the_move", "Can send assigned jobs on the move"),
+            ("can_approve_jobs_on_the_move", "Can Approve jobs on the move")
         )
 
     def __str__(self):
