@@ -454,6 +454,8 @@ h2 {
     padding: 35px 25px 15px 25px;
     margin: 0 0 10px 0;
 
+
+
     h2 {
         font-size: $font-size+12;
         color: $primary-color;
@@ -467,8 +469,15 @@ h2 {
         color: $primary-color;
         margin: 0;
         flex: 1;
+        display: flex;
     }
 
+    .test-paper-count {
+        margin-right: 5px;
+        &::after {
+            content: ')';
+        }
+    }
     strong {
         font-size: $font-size+9;
         color: $secondary-color;
