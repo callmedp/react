@@ -730,7 +730,7 @@ class RecommendedProductsCategoryView(APIView):
             status=status.HTTP_200_OK)
 
 
-from .tasks import cron_initiate
+from .tasks import cron_initiate, create_assignment_lead
 from .config import CRON_TO_ID_MAPPING
 
 
@@ -1211,6 +1211,7 @@ class UpdateCertificateAndAssesment(APIView):
                 "score": parsed_data.assesment.overallScore,
 
             })
+            create_assignment_lead.delay(obj_id=oi.id)
             send_email_task.delay(to_emails, mail_type, data, status=201, oi=oi.pk)
             oi.orderitemoperation_set.create(
                 oi_status=oi.oi_status,
