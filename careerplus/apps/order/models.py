@@ -12,6 +12,7 @@ from django.db.models import Q, Count, Case, When, IntegerField
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.utils import timezone
+from django.db.models.signals import post_save
 
 #local imports
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
@@ -718,27 +719,9 @@ class OrderItem(AbstractAutoDate):
         orderitem = OrderItem.objects.filter(id=self.pk).first()
         self.oi_status = 4 if orderitem and orderitem.oi_status == 4 else self.oi_status
         # handling combo case getting parent and updating child
-        super().save(*args, **kwargs)  # Call the "real" save() method.
-        # automate application highlighter/priority applicant
-        if self.is_combo and not self.parent:
-            jobs_on_the_move_item = self.order.orderitems.filter(product__sub_type_flow=502)
-            priority_applicant_items = self.order.orderitems.filter(product__sub_type_flow=503)
+        super().save(*args, **kwargs)  # Call the "real" save() method.        
 
-            for i in jobs_on_the_move_item:
-                from order.tasks import process_jobs_on_the_move
-                process_jobs_on_the_move.delay(i.id)
-
-            for i in priority_applicant_items:
-                process_application_highlighter(i)
-
-        elif self.product.sub_type_flow == 502:
-            from order.tasks import process_jobs_on_the_move
-            process_jobs_on_the_move.delay(self.id)
-
-        if self.product.sub_type_flow == 503:
-            process_application_highlighter(obj=self)
-
-         # # for resume booster create orderitem
+        # # for resume booster create orderitem
         # if self.product.type_flow in [7, 15] and obj.oi_status != last_oi_status:
         #     if obj.oi_status == 5:
         #         self.orderitemoperation_set.create(
@@ -778,6 +761,28 @@ class OrderItem(AbstractAutoDate):
         #                 sms_type="BOOSTER_CANDIDATE", data=candidate_data)
         #         self.emailorderitemoperation_set.create(email_oi_status=92)
 
+    @classmethod
+    def post_save_product(cls, sender, instance, **kwargs):
+        # automate application highlighter/priority applicant
+        if instance.is_combo and not instance.parent:
+            jobs_on_the_move_item = instance.order.orderitems.filter(product__sub_type_flow=502)
+            priority_applicant_items = instance.order.orderitems.filter(product__sub_type_flow=503)
+
+            for i in jobs_on_the_move_item:
+                from order.tasks import process_jobs_on_the_move
+                process_jobs_on_the_move.delay(i.id)
+
+            for i in priority_applicant_items:
+                process_application_highlighter(i)
+
+        elif instance.product.sub_type_flow == 502:
+            from order.tasks import process_jobs_on_the_move
+            process_jobs_on_the_move.delay(instance.id)
+
+        if instance.product.sub_type_flow == 503:
+            process_application_highlighter(obj=self)
+
+post_save.connect(OrderItem.post_save_product, sender=OrderItem)
 
 
 class OrderItemOperation(AbstractAutoDate):

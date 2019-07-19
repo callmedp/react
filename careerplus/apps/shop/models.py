@@ -3182,7 +3182,7 @@ class ProductUserProfile(AbstractAutoDate):
     approved = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
-        user = kwargs.pop('user')
+        user = kwargs.pop('user', None)
         super(ProductUserProfile, self).save(*args, **kwargs)
         obj = self.order_item
         if obj and self.approved:
