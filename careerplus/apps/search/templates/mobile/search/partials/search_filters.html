@@ -83,7 +83,7 @@
                     <li>
                         <input type="checkbox" {% if clevel %}name="fclevel" {% else %}name="ign_fclevel"{% endif %}
                                    value="{{facets.pCL.0.id}}" checked="checked" disabled="disabled" id="test21">
-                        <label for="test21" class="c9">{{facets.fields.pCL.0.label}} ({{facets.fields.pCL.0.count}})</label>
+                        <label for="test21" class="c9">{{facets.pCL.0.label}} ({{facets.pCL.0.count}})</label>
                     </li>
                 {% else %}
                     {% for facet in facets.pCL|slice:"15" %}
@@ -152,7 +152,7 @@
                         <input type="checkbox" {% if duration %}name="fduration" {% else %}name="ign_fduration"{% endif %}
                                    value="{{facets.pDM.0.id}}" id="test51" checked="checked" disabled="disabled">
                         <label for="test51" class="c9">
-                            {{facets.fields.pDM.0.label}} ({{facets.fields.pDM.0.count}})
+                            {{facets.pDM.0.label}} ({{facets.pDM.0.count}})
                         </label>
                     </li>
                 {% else %}
@@ -192,6 +192,7 @@
             {% endif %}
 
             {% if facets.pAR|length %}
+
             <div id="tab-7" class="tab-content">
             <ul>
                 {% for i in '54321' %}
@@ -207,24 +208,24 @@
 
             {% if facets.pPinr|length %}
             <div id="tab-8" class="tab-content">
-            <ul>
-                {% if facets.pPinr|length == 1 %}
-                <li>
-                    <input type="checkbox" {% if price %}name="fprice" {% else %}name="ign_fprice"{% endif %}
-                               value="{{facets.pPinr.0.id}}" id="test81" checked="checked" disabled="disabled">
-                    <label for="test81" class="c9">
-                        {{facets.fields.pPinr.0.label}} ({{facets.fields.pPinr.0.count}})</label>
-                </li>
-                {% else %}
-                    {% for facet in facets.pPinr|slice:"15" %}
-                        <li>
-                            <input type="checkbox" name="fprice" id="test8{{ forloop.counter }}"
-                            value="{{facet.id}}" {% if facet.0|stringformat:'i' in price %}checked="checked" {% endif %}>
-                            <label for="test8{{ forloop.counter }}">{{facet.label}} ({{facet.count}})</label>
-                        </li>
-                    {% endfor %}
-                {% endif %}
-            </ul>
+                <ul>
+                    {% if facets.pPinr|length == 1 %}
+                    <li>
+                        <input type="checkbox" {% if price %}name="fprice" {% else %}name="ign_fprice"{% endif %}
+                                   value="{{facets.pPinr.0.id}}" id="test81" checked="checked" disabled="disabled">
+                        <label for="test81" class="c9">
+                            {{facets.pPinr.0.label}} ({{facets.pPinr.0.count}})</label>
+                    </li>
+                    {% else %}
+                        {% for facet in facets.pPinr|slice:"15" %}
+                            <li>
+                                <input type="checkbox" name="fprice" id="test8{{ forloop.counter }}"
+                                value="{{facet.id}}" {% if facet.0|stringformat:'i' in price %}checked="checked" {% endif %}>
+                                <label for="test8{{ forloop.counter }}">{{facet.label}} ({{facet.count}})</label>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
             </div><!-- Tab content ends here -->
             {% endif %}
         </div>
