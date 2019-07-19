@@ -780,7 +780,7 @@ class OrderItem(AbstractAutoDate):
             process_jobs_on_the_move.delay(instance.id)
 
         if instance.product.sub_type_flow == 503:
-            process_application_highlighter(obj=self)
+            process_application_highlighter(obj=instance)
 
 post_save.connect(OrderItem.post_save_product, sender=OrderItem)
 
