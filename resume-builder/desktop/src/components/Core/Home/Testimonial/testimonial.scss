@@ -22,13 +22,19 @@
     flex: 0 0 30%;
     padding: 15px 30px 30px 30px;
     margin: 30px 15px;
-    min-height: 240px;
+    min-height: 280px;
     
     background-color: $white;
 
     @media (max-width: 991px) {
       flex: 0 0 29%;
       padding: 15px;
+    }
+
+    .icon-quote {
+      position: absolute;
+      left: 30px;
+      top: 30px;
     }
   }
 
@@ -58,6 +64,20 @@
     }
   }
 
+  &--author {
+    display: block;
+    margin: 30px 20px 15px 0;
+    font-size: 1.3rem;
+    color: $txt2;
+
+    strong {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: $black;
+      display: block;
+    }
+  }
+
   &--intro {
     font-size: 1.3rem;
     color: $txt2;
@@ -78,7 +98,8 @@
     @include flexbox();
     flex-direction: column;
     justify-content: flex-start;
-    font-size: 1.3rem;
+    font-size: 1.4rem;
+    margin-top: 50px;
   }
 
 

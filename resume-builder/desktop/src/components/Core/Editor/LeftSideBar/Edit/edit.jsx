@@ -130,21 +130,34 @@ class Edit extends Component {
                                     className={(type === itemType ? ' edit-section--active' : '')}>
                                     {
                                         !!(error || newUser) ?
-                                            (<div onClick={() => this.showErrorMessage(link)} className={"non-link"}>
-                                                <span className={'mr-20 ' + icon}></span>
-                                                {elem['entity_text']}
-                                            </div>)
-                                            :
-                                            (<Link to={link} 
-                                                onClick={()=>{
-                                                    eventClicked({
-                                                        'action':'SelectSection',
-                                                        'label':name
-                                                    })}}>
-                                                    <span className={'mr-20 ' + icon}></span>
-                                                    {elem['entity_text']}
-                                                </Link>
+                                        
+                                            (
+                                            <React.Fragment>
+                                                <div onClick={() => this.showErrorMessage(link)} className={"non-link"}>
+                                                </div>
+                                                 <span className={'mr-20 ' + icon}></span>
+                                                 {elem['entity_text']}
+                                            </React.Fragment>
                                             )
+
+                                            :
+                                            
+                                            (
+                                            <React.Fragment>
+                                                <Link to={link} 
+                                                    onClick={()=>{
+                                                        eventClicked({
+                                                            'action':'SelectSection',
+                                                            'label':name
+                                                        })}}>
+                                                        <span className={'mr-20 ' + icon}></span>
+                                                        {elem['entity_text']}
+                                                       
+                                                </Link>
+                                                <span class="icon-closemenu pull-right mt-25"></span>
+                                                </React.Fragment>
+                                            )
+                                        
                                     }
                                 </li>
                             )
@@ -155,7 +168,7 @@ class Edit extends Component {
                 <div className="edit-section--addmore" onClick={() => {
                     newUser ? showAlertModal('error') : this.openMenuModal()
                 }}>
-                    + Add/Remove sections
+                    + Add more sections
                 </div>
             </div>
         )
