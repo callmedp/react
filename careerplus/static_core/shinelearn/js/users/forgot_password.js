@@ -1,7 +1,7 @@
 $(document).ready(function() {
     $("#forgot_form").validate({
         submitHandler: function(form) {
-
+            debugger;
             var formData = $(form).serialize();
             var post_url = $(form).attr('action' );
             $.ajax({
@@ -37,6 +37,16 @@ $(document).ready(function() {
         },
         messages:{
             email: { required:"Please enter a valid email address"},
-        }
+        },
+         highlight: function (element, errorClass) {
+            $(element).closest('li').addClass('error');
+        },
+        unhighlight: function (element, errorClass) {
+            $(element).closest('li').removeClass('error');
+            $(element).siblings('.error--mgs').html('');
+        },
+        errorPlacement: function (error, element) {
+            $(element).siblings('.error--mgs').html(error.text());
+        },
     });
 });

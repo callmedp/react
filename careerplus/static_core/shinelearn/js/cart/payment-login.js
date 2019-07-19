@@ -69,13 +69,15 @@ $().ready(function () {
             },
         },
         highlight: function (element) {
-            $(element).closest('.form-group').addClass('error');
+            $(element).closest('li').addClass('error');
         },
         unhighlight: function (element) {
-            $(element).closest('.form-group').removeClass('error');
+            $(element).closest('li').removeClass('error');
+            $(element).siblings('.error--mgs').html('');
+
         },
         errorPlacement: function (error, element) {
-            $(element).siblings('.error-txt').html(error.text());
+            $(element).siblings('.error--mgs').html(error.text());
         }
     });
 

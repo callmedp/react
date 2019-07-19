@@ -69,10 +69,10 @@
         <form class="personal-details col-sm-6 bdr-rt" method="post" action="" role="form" id="login_form">{% csrf_token %}
 
                 <ul>
-                    <li class="login__item input-effect error">
+                    <li class="login__item input-effect">
                         <input type="email" class="form--control animation-input" name="email" id="email-id" aria-describedby="email-id" placeholder="">
                         <label for="email-id">Email id</label>
-                        <span class="error--mgs">Required</span>
+                        <span class="error--mgs"></span>
                     </li>
                     <li class="login__item input-effect">
                         <input type="password"
@@ -82,6 +82,8 @@
                                id="password" aria-describedby="password"
                                placeholder="">
                         <label for="password">Password</label>
+                        <span class="error--mgs"></span>
+
                     </li>
                 </ul>
         </form>
@@ -187,11 +189,11 @@
                         action="{% url 'users:forgot-email-sent' %}"
                 >{% csrf_token %}
                     <ul class="mt-30">
-                        <li class="login__item input-effect error mb-10">
+                        <li class="login__item input-effect mb-10">
                             <input type="text" class="form--control animation-input" name="email"  aria-describedby="name" placeholder="">
 
                             <label for="guest-name">Email</label>
-                            <span class="error--mgs">Required</span>
+                            <span class="error--mgs"></span>
                         </li>
                         <li class="fs-12 c6 mb-30">Enter the Email Id which you are registered on Shine.com</li>
                         <li>
@@ -212,7 +214,7 @@
 
         <div class="bottom-cta__btn" id="login_guests" >Continue</div>
 
-        <div  class="bottom-cta__btn hide" id="login_users" onclick="document.getElementById('login_form').submit();">Continue</div>
+        <div  class="bottom-cta__btn hide" id="login_users" onclick="handleLogin()">Continue</div>
     </div>
 {% endblock container %}
 

@@ -141,6 +141,11 @@ function ajaxCallSocialLogin(accessToken, expiresIn, social_id, next_url = undef
     window.location.href = sign_in_url
 }
 
+const handleLogin = () => {
+    if ($('#login_form').valid()) {
+        document.getElementById('login_form').submit();
+    }
+}
 
 $(document).ready(function () {
 
@@ -179,6 +184,7 @@ $(document).ready(function () {
     );
     $("#login_form").validate({
         submitHandler: function (form) {
+            debugger;
             form.submit();
             // e.preventDefault();
             /*if($(this).val() != '')
@@ -204,7 +210,7 @@ $(document).ready(function () {
             }
         },
         messages: {
-            email: {required: "Please enter a valid email address"},
+            email: {required: "Please enter a valid email address."},
             password: {
                 required: "Please provide a password"
             }
@@ -265,6 +271,7 @@ $(document).ready(function () {
 
     $("#forgot_form").validate({
         submitHandler: function (form) {
+            debugger;
             var formData = $(form).serialize();
             var post_url = $(form).attr('action');
             $('#forgot_div').modal('hide');
@@ -301,17 +308,20 @@ $(document).ready(function () {
             }
         },
         messages: {
-            email: {required: "Please enter a valid email address"},
+            email: {required: "Please enter a valid email address."},
         },
         highlight: function (element, errorClass) {
-            $(element).closest('.form-group').addClass('error');
+            debugger;
+            $(element).closest('li').addClass('error');
         },
         unhighlight: function (element, errorClass) {
-            $(element).closest('.form-group').removeClass('error');
-            $(element).siblings('.error-txt').html('');
+            debugger;
+            $(element).closest('li').removeClass('error');
+            $(element).siblings('.error--mgs').html('');
         },
         errorPlacement: function (error, element) {
-            $(element).siblings('.error-txt').html(error.text());
+            debugger;
+            $(element).siblings('.error--mgs').html(error.text());
         },
     });
     // end login and registration js

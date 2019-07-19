@@ -94,7 +94,6 @@ $().ready(function() {
         },
         highlight: function(element) {
 
-
             /*if (window.CURRENT_FLAVOUR == 'mobile'){
                 $(element).closest('.form-group').addClass('error');
             }
@@ -123,7 +122,6 @@ $().ready(function() {
         invalidHandler: function(event, validator) {
         },
         errorPlacement: function(error, element){
-
             $(element).siblings('.error--mgs').html(error.text());
         }
     });
