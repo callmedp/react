@@ -2995,17 +2995,11 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
         if int(self.oi_status) != -1:
             if int(self.oi_status) == 33:
                 queryset = queryset.filter(
-                    oi_status=31, save_link__gt=0,
-                    whatsapp_profile_orderitem__approved=True
+                    oi_status=31, save_link__gt=0
                 )
             elif int(self.oi_status) == 31:
                 queryset = queryset.filter(
-                    oi_status=31, save_link=0,
-                    whatsapp_profile_orderitem__approved=True
-                )
-            elif int(self.oi_status) == 34:
-                queryset = queryset.filter(
-                    whatsapp_profile_orderitem__approved=False
+                    oi_status=31, save_link=0
                 )
             else:
                 queryset = queryset.filter(oi_status=self.oi_status)
@@ -3394,7 +3388,11 @@ class WhatsAppScheduleView(UserPermissionMixin, DetailView, PaginationMixin):
                     self.request,
                     "Job Link Scheduled Failed, Changes not Saved")
         else:
-            profile_form = ProductUserProfileForm(data=request.POST, instance=obj.whatsapp_profile_orderitem)
+            profile_form = ProductUserProfileForm(
+                data=request.POST,
+                instance=obj.whatsapp_profile_orderitem,
+                user=request.user
+            )
             if profile_form.is_valid:
                 profile_form.save()
                 messages.success(
@@ -3404,6 +3402,7 @@ class WhatsAppScheduleView(UserPermissionMixin, DetailView, PaginationMixin):
                 messages.error(
                     self.request,
                     "Profile Changes not Saved")
+            context = self.get_context_data()
             context.update({'profile_form': profile_form})
         return TemplateResponse(
             request, [

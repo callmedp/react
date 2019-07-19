@@ -280,11 +280,7 @@
                                 <strong>Duration:</strong> {{obj.product.get_duration_db}}
                             {% endif %}
                       </td>
-                      {% if obj.whatsapp_profile_orderitem and not obj.whatsapp_profile_orderitem.approved%}
-                        <td>Pending Approval</td>
-                      {% else %}
-                        <td>{{obj.get_oi_status}}</td>
-                      {% endif %}
+                      <td>{{obj.get_oi_status}}</td>
 
                       <td>
                           <b>Paid On: {{obj.order.payment_date}}</b>

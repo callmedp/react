@@ -275,7 +275,7 @@ class OIFilterForm(forms.Form):
             NEW_OI_OPS_STATUS = (
                 (-1, 'Select Status'), (31, 'Pending Links'),
                 (32, 'Sent Links'), (33, 'Saved Links'),
-                (34, 'Pending Approval'), (4, 'Closed')
+                (23, 'Pending Approval'), (4, 'Closed')
             )
 
             self.fields['day_choice'].choices = ( (-1, 'All'),(1, 'Today'), (2, 'Tommorrow'),)
@@ -585,12 +585,20 @@ class ProductUserProfileForm(forms.ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
         super(ProductUserProfileForm, self).__init__(*args, **kwargs)
 
-        self.fields['desired_industry'].widget.attrs['class'] =  ' tagsinput tags form-control'
-        self.fields['desired_location'].widget.attrs['class'] =  ' tagsinput tags form-control'
-        self.fields['desired_position'].widget.attrs['class'] =  ' tagsinput tags form-control'
 
+        self.fields['desired_industry'].widget.attrs['class'] = ' tagsinput tags form-control'
+        self.fields['desired_location'].widget.attrs['class'] = ' tagsinput tags form-control'
+        self.fields['desired_position'].widget.attrs['class'] = ' tagsinput tags form-control'
+
+
+    def save(self, commit=True):
+        instance = super(ProductUserProfileForm, self).save(commit=False)
+        if commit:
+            instance.save(user=self.user)
+        return instance
 
 
 

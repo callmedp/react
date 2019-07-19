@@ -3181,6 +3181,22 @@ class ProductUserProfile(AbstractAutoDate):
     skills = models.CharField(max_length=100, blank=True, null=True)
     approved = models.BooleanField(default=False)
 
+    def save(self, *args, **kwargs):
+        user = kwargs.pop('user')
+        super(ProductUserProfile, self).save(*args, **kwargs)
+        obj = self.order_item
+        if obj and self.approved:
+            if not obj.orderitemoperation_set.filter(oi_status=31).exists():
+                last_oi_status = obj.oi_status
+                obj.orderitemoperation_set.create(
+                    oi_status=31,
+                    last_oi_status=last_oi_status,
+                    assigned_to=obj.assigned_to,
+                    added_by=user
+                )
+                obj.oi_status = 31
+                obj.save()
+
 
 class JobsLinks(AbstractCommonModel, AbstractAutoDate):
     schedule_date = models.DateTimeField(
