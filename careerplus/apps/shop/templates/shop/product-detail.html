@@ -155,7 +155,7 @@
                 </ul>
                 {% if prd_service == 'course' or product.type_flow == 16 %}
                 <span class="byvskills">
-                  <strong><a href="/search/results/?fvid={{product.vendor.id}}">All courses/ certification ({{prd_vendor_count}})</a></strong>
+                  <strong><a onclick="gaEvent('Search','{{prd_vendor}}','ViewAllProductVendor');" href="/search/results/?fvid={{product.vendor.id}}">All courses/ certification ({{prd_vendor_count}})</a></strong>
                   By {{prd_vendor}}
                 </span>
                 {% endif %}
@@ -326,4 +326,3 @@
         </div><!-- ./ row -->
       </section><!-- main parent2 section end -->      
     {% endblock section2 %}
-

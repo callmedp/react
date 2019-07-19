@@ -135,7 +135,7 @@
                     {% for facet in facets.pVid|slice:"15" %}
                         <li>
                             <input type="checkbox" name="fvid" id="test4{{ forloop.counter }}"
-                                   value="{{facet.id}}" {% if facet.0|stringformat:'i' in vid %}checked="checked" {% endif %}>
+                                   value="{{facet.id}}" {% if facet.id|stringformat:'i' in vid %}checked="checked" {% endif %}>
                             <label for="test4{{ forloop.counter }}">{{facet.label}} ({{facet.count}})</label>
                         </li>
                     {% endfor %}
@@ -220,7 +220,7 @@
                         {% for facet in facets.pPinr|slice:"15" %}
                             <li>
                                 <input type="checkbox" name="fprice" id="test8{{ forloop.counter }}"
-                                value="{{facet.id}}" {% if facet.0|stringformat:'i' in price %}checked="checked" {% endif %}>
+                                value="{{facet.id}}" {% if facet.id|stringformat:'i' in price %}checked="checked" {% endif %}>
                                 <label for="test8{{ forloop.counter }}">{{facet.label}} ({{facet.count}})</label>
                             </li>
                         {% endfor %}
