@@ -275,7 +275,8 @@ class OIFilterForm(forms.Form):
             NEW_OI_OPS_STATUS = (
                 (-1, 'Select Status'), (31, 'Pending Links'),
                 (32, 'Sent Links'), (33, 'Saved Links'),
-                (23, 'Pending Approval'), (4, 'Closed')
+                (23, 'Pending Approval'), (4, 'Closed'),
+                (34, 'UnAssigned')
             )
 
             self.fields['day_choice'].choices = ( (-1, 'All'),(1, 'Today'), (2, 'Tommorrow'),)

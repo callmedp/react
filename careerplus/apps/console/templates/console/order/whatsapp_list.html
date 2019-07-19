@@ -107,6 +107,7 @@
                        {% if query %}
                            <input type="hidden" name="query" value="{{query}}">
                        {% endif %}
+                       <input type="hidden" name="sort_payment_date" value="{{request.GET.sort_payment_date}}">
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -147,51 +148,70 @@
               </li>
             </ul>
 
-            <div class="col-lg-12">
+            <div class="col-lg-5">
 
-            <div class="pull-right">
-                {% if perms.order.can_assign_jobs_on_the_move %}
+              <div class="pull-right">
+                  {% if perms.order.can_assign_jobs_on_the_move %}
 
-                    <form autocomplete="off" method="POST" role="form" id="assignment_form" action="{% url "console:assignment-orderitem-view" %}">{% csrf_token %}
-                    <div class="col-sm-4">
-                        <div class="input-group">
-                            {{assignment_form.assign_to}}
-                            <input type="hidden" id="selected-id-assign" name="selected_id" />
-                            <input type="hidden" name="queue_name" value="whatsappjoblist" />
-                            <span class="input-group-btn">
-                              <button type="button" class="btn btn-primary" id="assignment_button_go">Assign To!</button>
-                            </span>
+                      <form autocomplete="off" method="POST" role="form" id="assignment_form" action="{% url "console:assignment-orderitem-view" %}">{% csrf_token %}
+                      <div class="col-md-12">
+                          <div class="input-group">
+                              {{assignment_form.assign_to}}
+                              <input type="hidden" id="selected-id-assign" name="selected_id" />
+                              <input type="hidden" name="queue_name" value="whatsappjoblist" />
+                              <span class="input-group-btn">
+                                <button type="button" class="btn btn-primary" id="assignment_button_go">Assign To!</button>
+                              </span>
+                          </div>
+                      </div>
+                      </form>
+
+                  {% endif %}
+                  <!--h2>Select Comment to Change</h2-->
+                  <!-- large modal -->
+
+                  <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="assignmentModal">
+                      <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                            </button>
+                            <h4 class="modal-title" id="myModalLabel">Action On Inbox</h4>
+                          </div>
+                          <div class="modal-body" id="assignmentModalbody">
+                            Are You Sure???
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="assignment_action_yes">Yes</button>
+                          </div>
+
                         </div>
-                    </div>
-                    </form>
+                      </div>
+                  </div>
+              </div>
 
-                {% endif %}
-                <!--h2>Select Comment to Change</h2-->
-                <!-- large modal -->
+            </div>
+            <div class="col-lg-5">
+                <div class="pull-right">
 
-                <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="assignmentModal">
-                    <div class="modal-dialog modal-lg">
-                      <div class="modal-content">
-
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                          </button>
-                          <h4 class="modal-title" id="myModalLabel">Action On Inbox</h4>
-                        </div>
-                        <div class="modal-body" id="assignmentModalbody">
-                          Are You Sure???
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                          <button type="button" class="btn btn-primary" id="assignment_action_yes">Yes</button>
-                        </div>
-
+                  <form autocomplete="off" method="GET" role="form" action="{% url "console:queue-whatsappjoblist" %}">
+                    <div class="col-md-8">
+                      <div class="input-group">
+                          <select class="form-control" name="sort_payment_date">
+                            <option value="0" {% if request.GET.sort_payment_date == '0' %} selected {% endif %}>Select</option>
+                            <option value="1"  {% if request.GET.sort_payment_date == '1' %} selected {% endif %}>Payment Date</option>
+                          </select>
+                          <span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary" >Sort</button>
+                          </span>
                       </div>
                     </div>
+                  </form>
                 </div>
             </div>
 
-            </div>
 
             <div class="clearfix"></div>
           </div>
@@ -258,7 +278,7 @@
                         <span style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{obj.order.id}}callingbtn-error"></span>
                         {% endif %}
                         <button type="button" onclick="order_get_details('{{obj.order.id}}','mobile,alt_mobile','mobile','{{forloop.counter}}');" class="btn btn-primary btn-xs"><i class="fa fa-phone" aria-hidden="true"></i>ClickToView</button>
-					</div>
+					         </div>
 
 
                       </td>
