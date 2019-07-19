@@ -6,6 +6,7 @@ from geolocation.models import Country
 from .models import Cart
 
 
+
 class ShippingDetailUpdateForm(forms.ModelForm):
     country_code = forms.ChoiceField(
         required=True, widget=forms.Select())

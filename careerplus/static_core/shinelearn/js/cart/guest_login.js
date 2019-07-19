@@ -6,7 +6,6 @@ if (login_button != null) {
 
 
 function guest_login() {
-
     (function (i, s, o, g, r, a, m) {
         i['GoogleAnalyticsObject'] = r;
         i[r] = i[r] || function () {
@@ -34,17 +33,15 @@ function guest_login() {
         return obj;
     }, {})
     hitGA();
-    email = guest_info['email'] || '';
+   let email = guest_info['email'] || '';
 
-    if (email) {
-
+    if($('#guest_form').valid()) {
         var input = document.createElement("input");
         input.setAttribute("type", "hidden");
         input.setAttribute("name", "login_with");
         input.setAttribute("value", "login_guest")
         form.appendChild(input);
         form.submit();
-
     }
 
 }

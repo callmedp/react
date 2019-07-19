@@ -24,6 +24,8 @@ from geolocation.models import Country
 from users.tasks import user_register
 from search.helpers import get_recommendations
 from cart.tasks import cart_drop_out_mail, create_lead_on_crm
+from django.db.models import Q
+
 
 from .models import Cart
 from .mixins import CartMixin
@@ -201,6 +203,8 @@ class PaymentLoginView(TemplateView, CartMixin):
                 cart_pk = self.request.session.get('cart_pk')
                 mobile_number = self.request.POST.get('mobile', '')
                 guest_name = self.request.POST.get('name', '')
+                country_code = self.request.POST.get('country_code')
+
                 if guest_name:
                     first_name = guest_name.strip().split(' ')[0]
                     last_name = ' '.join((guest_name + ' ').split(' ')[1:]).strip()
@@ -211,6 +215,7 @@ class PaymentLoginView(TemplateView, CartMixin):
                     cart_obj.mobile = mobile_number
                     cart_obj.first_name = first_name
                     cart_obj.last_name = last_name
+                    cart_obj.country_code = country_code
                     # registering user into shine (for getting candidate/owner id
                     data = {}
                     data.update({
@@ -321,11 +326,14 @@ class PaymentLoginView(TemplateView, CartMixin):
             cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
         cart_items = cart_dict.get('cart_items', [])
         payment_dict = self.getPayableAmount(cart_obj, cart_dict.get('total_amount'))
+        country_list = Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact='') | Q(active__exact=False))
+
         context.update(payment_dict)
+        context.update({'country_list': country_list})
 
         if cart_obj.email == email:
             context['email_exist'] = True
-            context.update({'email': email, })
+            context.update({'email': email})
         return context
 
 
@@ -651,7 +659,7 @@ class UpdateDeliveryType(View, CartMixin):
                 delivery_charge = delivery_obj.get_price()
                 payment_dict = self.getPayableAmount(cart_obj, cart_dict.get('total_amount'))
                 data.update({
-                    "total_payable_amount":int(payment_dict['total_payable_amount']),
+                    "total_payable_amount": int(payment_dict['total_payable_amount']),
                     "total_cart_amount": int(total_cart_amount),
                     "delivery_charge": int(delivery_charge),
                     "delivery_service_title": delivery_obj.title,

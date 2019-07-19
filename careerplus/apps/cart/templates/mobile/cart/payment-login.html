@@ -119,33 +119,33 @@
             <form  class="personal-details col-sm-6 bdr-rt hidden" method="post" action="" id="guest_form">{% csrf_token %}
 
                     <ul>
-                        <li class="login__item input-effect error">
+                        <li class="login__item input-effect">
                             <input type="text" class="form--control animation-input" id="guest-name"  name="name" id="name" aria-describedby="name" placeholder="">
                             <label for="guest-name">Name</label>
-                            <span class="error--mgs">Required</span>
+                            <span class="error--mgs"></span>
                         </li>
                         <li class="login__item input-effect">
                             <input type="email" class="form--control animation-input" id="guest-email" name="email" aria-describedby="email-id" placeholder="">
                             <label for="guest-email">Email</label>
+                            <span class="error--mgs"></span>
+
                         </li>
 
                         <li class="login__item">
                             <span class="login__item--code">
-                                <!--<select class="form&#45;&#45;control" id="exampleFormControlSelect1">
-                                    <option>+91</option>
-                                    <option>+92</option>
-                                    <option>+93</option>
-                                    <option>+94</option>
-                                    <option>+95</option>
-                                    <option>+0123</option>
-                                </select>-->
-                                {% if request.session.country_code %}
-                                     {{request.session.country_code}}
-                                {% endif %}
+                                <select class="form--control" id="country_code" name="country_code">
+                                    {% for country in country_list %}
+                                    <option  value="{{country.phone}}">+ {{country.phone}} {{country.name}}</option>
+                                    {% endfor %}
+                                </select>
+
+                                </select>
                             </span>
                             <div class="input-effect login__item--mobile">
-                                <input type="email" class="form--control animation-input" id="guest-mobile" name="mobile" aria-describedby="mobile" placeholder="">
+                                <input type="number" class="form--control animation-input" id="guest-mobile" name="mobile" aria-describedby="mobile" placeholder="">
                                 <label for="guest-mobile">Mobile</label>
+                                <span class="error--mgs"></span>
+
                             </div>
                         </li>
                     </ul>
