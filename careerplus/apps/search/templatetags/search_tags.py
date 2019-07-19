@@ -35,3 +35,7 @@ def get_choice_display(value, choice):
         value = value.upper()
     return mapping.get(value,'Others')
 
+
+@register.assignment_tag
+def define(val):
+    return val

@@ -1,4 +1,4 @@
-{% load humanize search_tags %}
+{% load humanize search_tags i18n  %}
 <!-- left content start -->
 <form action="{{searchquery}}" id="form_facets">
     <input type="hidden" name="page" id="id_page" value="1"/>
@@ -35,7 +35,7 @@
                         {% else %}
                             {% for facet in facets.pFA %}
                             <label title="{{facet.label}}">
-                                <input type="checkbox" name="farea" value="{{facet.id}}" {% if facet.id in areaf %}checked="checked" {% endif %} />
+                                <input type="checkbox" name="farea" value="{{facet.id}}" {% if facet.id|stringformat:"i" in areaf %}checked="checked" {% endif %} />
                                 <span>{{facet.label}} <b>({{facet.count}})</b></span>
                             </label>
                             {% endfor %}
@@ -116,15 +116,14 @@
                     <div class="panel-body js_filter_sxn">
                         {% if facets.pVid|length == 1 %}
                         <label title="{{facets.pVid.label}}">
-                            <input type="checkbox" {% if cert %}name="vid" {% else %}name="ign_fcert"{% endif %}
+                            <input type="checkbox" {% if cert %}name="fvid" {% else %}name="ign_fvid"{% endif %}
                                        value="{{facets.pVid.0.id}}" checked="checked" disabled="disabled">
                             <span>{{facets.pVid.0.label}} <b>({{facets.pVid.0.count}})</b></span>
                         </label>
                         {% else %}
                             {% for facet in facets.pVid %}
                             <label title="{{facet.label}}">
-                                <input type="checkbox" name="vid" value="{{facet.id}}" {% if facet.id in cert %}checked="checked" {%endif%} /> 
-                                
+                                <input type="checkbox" name="fvid" value="{{facet.id}}" {% if facet.id|stringformat:"i" in vid %}checked="checked" {%endif%} /> 
                                 <span>{{facet.label}} <b>({{facet.count}})</b></span>
                             </label>
                             {% endfor %}
@@ -154,7 +153,7 @@
                         {% else %}
                             {% for facet in facets.pDM %}
                             <label title="{{facet.label}}">
-                                <input type="checkbox" name="fduration" value="{{facet.id}}" {% if facet.id in duration %}checked="checked" {% endif %} />
+                                <input type="checkbox" name="fduration" value="{{facet.id}}" {% if facet.id|stringformat:"i" in duration %}checked="checked" {% endif %} />
                                 <span>{{facet.label}} <b>({{facet.count}})</b></span>
                             </label>
                             {% endfor %}
@@ -197,7 +196,7 @@
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a>
-                        Review
+                        Rating
                         </a>
                     </h4>
                 </div>
@@ -205,18 +204,21 @@
                     <div class="panel-body js_filter_sxn">
                     {% for i in '54321' %}
                         <div class="rating-review-box">
-                            <input name="frating" type="checkbox" {% if i in rating %}checked="checked"{% endif %}
-                            {% if facets.pAR|length == 1 %}disabled="disabled"{% endif %} value="{{ i }}">
-                            {% for j in "12345" %}
-                                <figure class={% if j <= i %}"full-star"{% else %}"blank-star"{% endif %}> </figure>
-                            {% endfor %}
-                            {% for facet in facets.pAR%}
-                                {% if facet.id|stringformat:"i" == i %} 
-                                    &nbsp;<b>({{facet.count}})</b>
+
+                            {% for facet in facets.pAR %}
+                                {% if facet.id|stringformat:"i" == i %}
+                                    {% if facet.count %}
+                                    <input name="frating" type="checkbox" {% if i in rating %}checked="checked"{% endif %}
+                                        {% if facets.pAR|length == 1 %}disabled="disabled"{% endif %} value="{{ i }}">
+                                        {% for j in "12345" %}
+                                        <figure class={% if j <= i %}"full-star"{% else %}"blank-star"{% endif %}> </figure>
+                                        {% endfor %}
+                                        &nbsp;<b>({{facet.count}})</b>
+                                    {% endif %}
                                 {% endif %}
                             {% endfor %}
                         </div>
-                        {% endfor %}
+                    {% endfor %}
                     </div>
                 </div>
             </div>
@@ -241,7 +243,7 @@
                         {% else %}
                             {% for facet in facets.pPinr %}
                             <label title="{{facet.label}}">
-                                <input type="checkbox" name="fprice" value="{{facet.id}}" {% if facet.id in price %}checked="checked" {% endif %} />
+                                <input type="checkbox" name="fprice" value="{{facet.id}}" {% if facet.id|stringformat:"i" in price %}checked="checked" {% endif %} />
                                 <span>{{facet.label}} <b>({{facet.count}})</b></span>
                             </label>
                             {% endfor %}

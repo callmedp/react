@@ -56,8 +56,13 @@ class BaseSearch(object):
     facet_list = [
         '{!ex=pCL}pCL',
         '{!ex=pAR}pAR',
-        '{!ex=pFA}pFA',
-        '{!ex=pVid}pVid'
+        '{!ex=funa}pFA',
+        '{!ex=pVid}pVid',
+        '{!ex=ratng,inrp}pAR',
+        '{!ex=inr}pDM',
+        '{!ex=inr}pCert',
+        '{!ex=inr}pStM',
+        '{!ex=inr}pPinr'
     ]
 
     # These are the filters shown on search page

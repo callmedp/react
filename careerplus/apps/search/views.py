@@ -254,7 +254,6 @@ class SearchBaseView(TemplateView):
         context['QUERY_STRING'] = self.request.get_full_path()
         if self.found:
             context['facets'] = self.get_facets_dict()
-        print(context['facets']['pAR'])
 
         context['search_params_string'] = self.search_params.urlencode()
         context = self.set_form_attributes_in_context(context)
@@ -270,23 +269,23 @@ class SearchBaseView(TemplateView):
         else:
             context['tracking_medium'] = 'web'
         context['prod_type'] = self.search_params.getlist('prod_type', [])
-        if self.search_params.getlist('fclevel'):
-            context['clevel'] = self.request.GET.getlist('fclevel')
-        if self.search_params.getlist('fcert'):
-            context['cert'] = self.request.GET.getlist('fcert')
-        if self.search_params.getlist('frating'):
-            context['rating'] = self.search_params.getlist('frating')
-        if self.search_params.getlist('farea'):
-            context['areaf'] = self.search_params.getlist('farea')
-        if self.search_params.getlist('fduration'):
-            context['duration'] = self.request.GET.getlist('fduration')
-        if self.search_params.getlist('fmode'):
-            context['mode'] = self.request.GET.getlist('fmode')
-        if self.search_params.getlist('fprice'):
-            context['price'] = self.request.GET.getlist('fprice')
+        
+        facet_context_param_mapping = {'fclevel':'clevel',
+                                    'fcert':'cert',
+                                    'frating':'rating',
+                                    'farea':'areaf',
+                                    'fduration':'duration',
+                                    'fmode':'mode',
+                                    'fprice':'price',
+                                    'fvid': 'vid'
+                                    }
+
+        for facet,context_param in facet_context_param_mapping.items():
+            context[context_param] = self.request.GET.getlist(facet)
+            
         context['breadcrumbs'] = self.get_breadcrumbs()
         context['products_found'] = self.found
-        context['show_chat'] = True,
+        context['show_chat'] = True
         return context
 
     def build_page(self):
