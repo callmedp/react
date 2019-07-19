@@ -3039,7 +3039,7 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
                 for d in date_list:
                     q_objects |= Q(orderitemoperation__oi_status=1, orderitemoperation__created__range=[d, d + relativedelta.relativedelta(days=1)])
             queryset = queryset.filter(q_objects)
-        if int(self.sort_payment_date):
+        if self.sort_payment_date and int(self.sort_payment_date):
             print(self.sort_payment_date)
             queryset = queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-order__payment_date')
         else:
