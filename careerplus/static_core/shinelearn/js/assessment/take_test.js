@@ -3,7 +3,7 @@
    $.ajax({
                url: '/api/v1/get-products/',
                type: "GET",
-               data : {'type_flow': 16, 'category' : category_id, 'vendor':vendor_id ,'fl':'id,inr_price,name,heading,absolute_url'},
+               data : {'type_flow': 16, 'category' : category_id, 'vendor':vendor_id ,'fl':'id,inr_price,name,heading,absolute_url,num_jobs'},
                dataType: 'json',
                success: function(json) {
                 if(json.count >=1 ){
@@ -96,6 +96,7 @@
                 $('#courseDuration').text(json.results[0].day_duration);
                 $('#courseName').attr('href',json.results[0].absolute_url)
                 $('#courseImg').attr('src',json.results[0].image)
+                $('#courseJobsAvailable').text(json.results[0].num_jobs);
                 $('#courseCartBtn').click(function(){
                 updateToCart(json.results[0].id,'cart');
                 });

@@ -6,14 +6,6 @@
 {% comment %}
 {% block head %}
 {{block.super}}
-<script type="text/javascript" >
-
-   function preventBack(){window.history.forward();}
-    setTimeout("preventBack()", 0);
-    window.onunload=function(){null};
-
-</script>
-
 {% endblock head %}
 {% endcomment %}
 {% block canonical_url %}
@@ -135,7 +127,7 @@
               </div>
             </div>
 
-            <div class="white-box mt-20 bdr-bottom" id="testCourse" style="visibility:hidden";>
+            <div class="white-box mt-20 bdr-bottom" id="testCourse" style="display:none";>
                <div class="improve-skills">
                <span class="pad-15">
                   <h4 class="mt-0" >Improve your skills with this course</h4>
