@@ -153,7 +153,7 @@
                         {% else %}
                             {% for facet in facets.pDM %}
                             <label title="{{facet.label}}">
-                                <input type="checkbox" name="fduration" value="{{facet.id}}" {% if facet.id|stringformat:"i" in duration %}checked="checked" {% endif %} />
+                                <input type="checkbox" name="fduration" value="{{facet.id}}" {% if facet.id in duration %}checked="checked" {% endif %} />
                                 <span>{{facet.label}} <b>({{facet.count}})</b></span>
                             </label>
                             {% endfor %}

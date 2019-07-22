@@ -411,10 +411,6 @@ class SearchListView(SearchBaseView):
     def prepare_response(self):
         self.keywords = self.args
         current_url = resolve(self.request.path_info).url_name
-        if current_url == 'search_listing' and not self.request.GET:
-            return HttpResponsePermanentRedirect(
-                reverse('search:recommended_listing',
-                kwargs={'f_area': 'it-software', 'skill': 'development'}))
         return super(SearchListView, self).prepare_response()
 
     def get_breadcrumbs(self):
