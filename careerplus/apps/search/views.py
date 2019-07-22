@@ -200,6 +200,10 @@ class SearchBaseView(TemplateView):
                     facet_data.update({"label":get_choice_display(value[0],self.facet_choice_map[key])})
 
                 if facet_data.get('label') == "Others":
+                    
+                    if str(val) in others_dict.get('id',''):
+                        continue
+
                     others_dict['id'] = "{} {}".format(others_dict['id'],val) if others_dict.get('id') else str(val)
                     others_dict['count'] = others_dict.get('count',0) + value[1]
                     continue

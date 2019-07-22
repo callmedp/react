@@ -68,7 +68,7 @@
                         {% for facet in facets.pFA|slice:"15" %}
                             <li>
                                 <input type="checkbox" id="test1{{ forloop.counter }}" name="farea"
-                                       value="{{facet.id}}" {% if facet.id|stringformat:'i' in areaf %}checked="checked" {% endif %}>
+                                       value="{{facet.id}}" {% if facet.label == 'Others' %}{% if facet.id in areaf %}checked="checked"{% endif %} {% else %}{% if facet.id|stringformat:"i" in areaf %}checked="checked" {% endif %} {% endif %}>
                                 <label for="test1{{ forloop.counter }}">{{facet.label}} ({{facet.count}})</label>
                             </li>
                         {% endfor %}
@@ -220,7 +220,7 @@
                         {% for facet in facets.pPinr|slice:"15" %}
                             <li>
                                 <input type="checkbox" name="fprice" id="test8{{ forloop.counter }}"
-                                value="{{facet.id}}" {% if facet.id|stringformat:'i' in price %}checked="checked" {% endif %}>
+                                value="{{facet.id}}" {% if facet.label == 'Others' %}{% if facet.id in price %}checked="checked"{% endif %} {% else %}{% if facet.id|stringformat:"i" in price %}checked="checked" {% endif %} {% endif %}>
                                 <label for="test8{{ forloop.counter }}">{{facet.label}} ({{facet.count}})</label>
                             </li>
                         {% endfor %}
