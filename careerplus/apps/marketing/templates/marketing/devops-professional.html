@@ -103,7 +103,7 @@
 
                     <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}3101{% endif %}">
 
-                                   <input type="hidden" name="prd" value="Data Scientist - Rs. 19,995/-">
+                                   <input type="hidden" name="prd" value="{{products_lists.0.pHd}} - Rs. {{products_lists.0.pPinb}}">
 
 
                   <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
@@ -167,7 +167,7 @@
 
                   <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}3101{% endif %}">
 
-                   <input type="hidden" name="prd" value="DevOps Practitioner Certification Course ">
+                   <input type="hidden" name="prd" value="{{products_lists.0.pHd}} - Rs. {{products_lists.0.pPinb}}" >
 
 
                   <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
@@ -375,11 +375,11 @@
                       <div class="text-center btn-wrap">
                           <a href="tel:01244312500" class="btn-white">
                               <span class="phone-icon"></span>
-                              0124-4312500
+                              9535298159
                           </a>
                           <a href="mailto:contactus@shine.com" class="btn-white">
                               <span class="mail-icon"></span>
-                              contactus@shine.com
+                              education@shine.com
                           </a>
                       </div>
                   </div>
