@@ -51,8 +51,6 @@ from seo.sitemap import (
     CMSSitemap, TalentEconomySitemap, TalentCategorySitemap,
     TalentAuthorSitemap)
 
-from rest_framework_swagger.views import get_swagger_view
-
 handler404 = 'users.views.page_not_found'
 handler500 = 'users.views.server_error'
 
@@ -81,7 +79,7 @@ talent_sitemap = {
    'author': TalentAuthorSitemap
 }
 
-schema_view = get_swagger_view(title='Shine Learning API Docs')
+
 
 #Library Patches
 from .startup_script import apply_patch
@@ -232,6 +230,9 @@ if settings.DEBUG:
     from rest_framework.schemas import SchemaGenerator
     from rest_framework.views import APIView
     from rest_framework_swagger import renderers
+    from rest_framework_swagger.views import get_swagger_view
+
+    schema_view = get_swagger_view(title='Shine Learning API Docs')
 
 
     class SwaggerSchemaView(APIView):
