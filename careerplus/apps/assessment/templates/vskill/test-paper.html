@@ -15,20 +15,6 @@
       rel="stylesheet">
 <link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
 {% endcompress %}
-<style>
-   .inactive{
-      display:None;
-   }
-   .dirt{
-      background:green !important;
-      color:white !important;
-   }
-   .skipped{
-      background:red !important;
-      color:white !important;
-   }
-
-</style>
 {% endblock css_section %}
 {% block main_container %}
 <div class="practice-skill__wrap-inner">
@@ -102,8 +88,9 @@
                 <div class="white-box mb-20 bdr-bottom">
                     <div class="time flexbox align-items-center" id="timeTest" >
                         <strong>Time left</strong>
-                        <span class="time-dot" id="testRemanMinutes" style="color:red;">--<span>minutes</span></span>
-                        <span id="testRemanSeconds" style="color:red;">--<span>seconds</span></span>
+                        <span class="minutes" id="testRemanMinutes"><!-- --<span>minutes</span> --></span>
+                        <span class="time-dot"></span>
+                        <span class="seconds" id="testRemanSeconds"><!-- --<span>seconds</span> --></span>
                     </div>
                 </div>
 

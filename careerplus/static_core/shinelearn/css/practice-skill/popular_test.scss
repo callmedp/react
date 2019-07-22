@@ -232,11 +232,13 @@ h2 {
     text-align: center;
     padding: 12px 25px;
 
-    /*&:hover {
-        background-color: $white-bg;
-        border: 1px solid $p-blue;
-        color: $p-blue;
-    }*/
+    &:hover {
+        color: $white-color;
+    }
+
+    &:focus {
+        color: $white-color;
+    }
 }
 
 .yellow_btn {
@@ -427,13 +429,25 @@ h2 {
             color: $grey-color;
 
             &.marked {
-                background: $border;
+                background-color: $white-bg;
+                border: 1px solid $border;
             }
 
-            &.current {
+            &.active {
                 background: $p-blue;
                 border: 1px solid $p-blue;
                 color: $white-bg;
+            }
+
+            &.skipped {
+                background-color: $white-bg;
+                border: 1px solid $border;
+            }
+
+            &.dirt {
+                background: $border;
+                border: 1px solid $border;
+                color: $grey-color;
             }
         }
 
@@ -507,6 +521,10 @@ h2 {
     }
 }
 
+.inactive {
+    display: none;
+}
+
 .bdr-bottom {
     border-bottom: 3px solid $p-blue;
     border-bottom-left-radius: 7px;
@@ -514,12 +532,12 @@ h2 {
 }
 
 .time {
-    padding: 10px 20px;
+    padding: 10px 20px 20px 20px;
 
     strong {
         font-size: $font-size+5;
         color: $secondary-color;
-        margin-top: 10px;
+        margin: 5px 10px 0 0;
     }
 
     span {
@@ -528,7 +546,7 @@ h2 {
         font-weight: $font-weight+300;
         color: $grey-color;
         text-align: center;
-        margin-left: 10px;
+        margin: 0 5px;
         position: relative;
 
         span {
@@ -538,12 +556,42 @@ h2 {
         }
     }
 
+    .minutes {
+        /*letter-spacing: 5px;*/
+        width: 40px;
+        &:after {
+            content: 'minutes';
+            position: absolute;
+            bottom: -10px;
+            right: -4px;
+            font-size: $font-size;
+            font-weight: $font-weight;
+            color: $grey-color;
+            letter-spacing: normal;
+        }
+    }
+
+    .seconds {
+        /*letter-spacing: 5px;*/
+        width: 40px;
+        &:after {
+            content: 'seconds';
+            position: absolute;
+            bottom: -10px;
+            right: -4px;
+            font-size: $font-size;
+            font-weight: $font-weight;
+            color: $grey-color;
+            letter-spacing: normal;
+        }
+    }
+
     .time-dot {
         &:after {
             content: ':';
             position: absolute;
             top: -10px;
-            right: -9px;
+            right: -4px;
             font-size: $font-size+18;
             color: $border;
         }
@@ -615,7 +663,7 @@ h2 {
 }
 
 .ans-right {
-    background: url($path + 'images/free_skill/free_skill_sprite.png') no-repeat -4px -727px;
+    background: url($path + 'images/free_skill/free_skill_sprite.png') no-repeat -20px -753px;
     display: inline-block;
     width: 18px;
     height: 13px;
@@ -623,7 +671,7 @@ h2 {
 }
 
 .ans-wrong {
-    background: url($path + 'images/free_skill/free_skill_sprite.png') no-repeat -31px -729px;
+    background: url($path + 'images/free_skill/free_skill_sprite.png') no-repeat -47px -755px;
     display: inline-block;
     width: 12px;
     height: 12px;
@@ -631,14 +679,14 @@ h2 {
 }
 
 .pagination-up {
-    background: url($path + 'images/free_skill/free_skill_sprite.png') no-repeat -32px -707px;
+    background: url($path + 'images/free_skill/free_skill_sprite.png') no-repeat -48px -733px;
     display: inline-block;
     width: 14px;
     height: 8px;
 }
 
 .pagination-down {
-    background: url($path + 'images/free_skill/free_skill_sprite.png') no-repeat -7px -707px;
+    background: url($path + 'images/free_skill/free_skill_sprite.png') no-repeat -23px -733px;
     display: inline-block;
     width: 14px;
     height: 8px;
@@ -1063,6 +1111,14 @@ h2 {
     background-position: 3px -383px;
 }
 
-.fa-29p {
-    background-position: 4px -436px;
+.fa-29 {
+    background-position: -19px -779px;
+}
+
+.fa-engineering {
+    background-position: -19px -827px;
+}
+
+.fa-testprep {
+    background-position: -23px -888px;
 }
