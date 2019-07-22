@@ -309,6 +309,8 @@ $(document).ready(function() {
                 }
             }
             $('#' + questionAttempt['question-' + activeTab]).prop("checked", true);
+            $('#markedquestion-' + activeTab).addClass('active');
+
 
         } else {
             questionAttempt = {};
@@ -360,6 +362,8 @@ $('.marked').click(function() {
     $('.test-paper').removeClass('actived');
     $('#question-' + value).removeClass('inactive');
     $('#question-' + value).addClass('actived');
+    $('.active').removeClass('active');
+    $('#markedquestion-' + activeTab).addClass('active');
     if (activeTab >= maxCounter) {
         $('#nextQuestionBtn').hide();
     } else {
@@ -386,6 +390,9 @@ function nextquestion(number) {
         $('#nextQuestionBtn').show();
         }
         $('#activeQuestion').text(activeTab);
+         $('.active').removeClass('active');
+            $('#markedquestion-' + activeTab).addClass('active');
+
     }
 }
 
@@ -398,10 +405,13 @@ $('input[name="radio"]').on("click", function(e) {
 });
 
 function skipQuestion() {
+
     $('#markedquestion-' + activeTab).addClass('skipped');
     let quest_id = 'question-' + activeTab;
     $('#' + questionAttempt[quest_id]).prop("checked", false);
     delete questionAttempt[quest_id];
+        myStorage.setItem(tKey, JSON.stringify(questionAttempt));
+
     nextquestion(1);
 }
 

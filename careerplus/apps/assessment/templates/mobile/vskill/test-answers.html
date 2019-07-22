@@ -249,7 +249,6 @@ function getCoptions(){
          type  : 'get',
          success: function(response){
          for(i of response){
-                 debugger;
             $('#check'+i.question_options[0]).addClass('pt-sprite icon-right');
             if(Object.values(questionAttempt).includes(i.question_options[0])){
                   right+= 1 ;

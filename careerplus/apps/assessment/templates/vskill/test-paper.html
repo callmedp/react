@@ -15,6 +15,20 @@
       rel="stylesheet">
 <link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
 {% endcompress %}
+<style>
+   .inactive{
+      display:None;
+   }
+   .dirt{
+      background:green !important;
+      color:white !important;
+   }
+   .skipped{
+      background:red !important;
+      color:white !important;
+   }
+
+</style>
 {% endblock css_section %}
 {% block main_container %}
 <div class="practice-skill__wrap-inner">
@@ -181,7 +195,6 @@ delAns = {% if delete_ans %}true{% else %}false{% endif %},
 startTestTime = NaN,endTestTime = NaN,timeout =NaN ;
 
 $(document).ready(function() {
-
     // removes local storage
     if (delAns) {
         myStorage.removeItem(tKey);
@@ -190,12 +203,10 @@ $(document).ready(function() {
         questionAttempt = JSON.parse(myStorage.getItem(tKey));
         if (questionAttempt != null) {
         testSubmission = questionAttempt['testSubmission' + {{object.id}}];
-
         if (testSubmission == true) {
 
             window.location.href = '/practice-tests/{{object.slug}}/result/';
         }
-
             for (var id in Object.keys(questionAttempt)) {
                 if (Object.values(questionAttempt)[id] != "") {
                     $('#' + Object.values(questionAttempt)[id]).click();
@@ -205,15 +216,11 @@ $(document).ready(function() {
             }
             $('#markedquestion-' + activeTab).addClass('active');
             $('#' + questionAttempt['question-' + activeTab]).prop("checked", true);
-
-
-
         } else {
             questionAttempt = {};
         }
     }
     delAns =false;
-
 });
 
 function loadmore() {
@@ -358,10 +365,7 @@ function submitTestFinal(){
       questionAttempt['testTime'+{{object.id}}] = Math.floor((submitTime - startTestTime.getTime())/1000) ;
       myStorage.setItem(tKey, JSON.stringify(questionAttempt));
       window.location.href = '/practice-tests/{{object.slug}}/result/';
-
 }
-
-
 </script>
 {% endblock js_section %}
 {% block johukum %}

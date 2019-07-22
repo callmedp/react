@@ -386,7 +386,7 @@ class QuestionAnswerSerializer(ModelSerializer):
         session_id = self.context.get('request').session.session_key
         key = session_id + 'test-'+ str(obj.test.id)
         fields_to_exclude= []
-        if not cache.get(key) or not cache.get(key).get('test_submit'):
+        if not cache.get(key) or not (cache.get(key).get('test_submit') or cache.get(key).get('timeout')):
             fields_to_exclude = ['question_options']
         [return_val.pop(field, "") for field in fields_to_exclude]
         return return_val
