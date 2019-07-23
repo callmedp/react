@@ -1,6 +1,5 @@
 function removeFromCartMobile(line_id) {
     if (line_id) {
-        debugger;
         var formData = $('#cart_remove_form' + line_id).serialize();
 
         $.ajax({

@@ -208,7 +208,6 @@ function JSRemovePoint() {
 };
 
 const removalAjax = (formData) => {
-
     $.ajax({
         url: '/cart/remove-from-cart/',
         type: 'POST',
