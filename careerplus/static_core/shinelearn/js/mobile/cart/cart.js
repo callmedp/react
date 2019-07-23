@@ -57,10 +57,9 @@ function handleDeliveryUpdation(formData, lineId) {
                     delivery_charge: deliveryCharge
                 } = data;
                 const str = `${deliveryServiceTitle}- ${Number(deliveryCharge) === 0 ? 'No extra cost' : 'Rs. ' + deliveryCharge.toFixed(2) + '/-'}`
-                debugger;
-                $(`#active-delivery-title${lineId}`).text(str)
+                $(`#active-delivery-title${lineId.trim()}`).text(str)
 
-                $(`#active-delivery-description${lineId}`).text(`(${deliveryServiceDesc})`)
+                $(`#active-delivery-description${lineId.trim()}`).text(`(${deliveryServiceDesc})`)
 
 
             }
@@ -87,7 +86,6 @@ function deliveryOptionUpdate(line_id) {
 }
 
 const selectDeliveryType = (deliveryType, lineId, csrf) => {
-    debugger;
     if (lineId) {
         var formData = new FormData();
         formData.append("csrfmiddlewaretoken", csrf);
