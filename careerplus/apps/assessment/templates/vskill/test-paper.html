@@ -1,6 +1,6 @@
 {% extends "basic/base1.html" %}
 {% load static meta thumbnail compress %}
-{% block title %}Job Assistance Services | Online Courses - Shine Learning {% endblock title %}
+{% block title %}Practice test | online mock test – Shine Learning{% endblock title %}
 {% block canonical_url %}
 <link rel="canonical" href="//{{ SITE_DOMAIN }}/">
 <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}/">
@@ -286,11 +286,13 @@ function nextquestion(number) {
 }
 
 $('input[name="radio"]').on("click", function(e) {
+if (!timeout){
     let quest_id = $(e.target).closest(".test-paper")[0].id;
     $('#marked' + quest_id).removeClass();
     $('#marked' + quest_id).addClass('dirt');
     questionAttempt[quest_id] = e.target.id;
     myStorage.setItem(tKey, JSON.stringify(questionAttempt));
+    }
 });
 
 function skipQuestion() {

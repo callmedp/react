@@ -115,7 +115,7 @@
     <div class="mt-30 mb-30">
         <div class="d-flex justify-content-between align-items-start">
             <button class="btn btn-round-30 btn-blue w-50" onclick="reTestFunc();">Re Test</button>
-            <div class="btn btn-round-30 btn-blue w-50 mb-15" id="btn_next-test">Next test</div>
+            <div class="btn btn-round-30 btn-blue w-50 mb-15" onclick="showTest('{{object.vendor.id}}','{{object.category.id}}');" id="btn_next-test">Next test</div>
         </div>
         
         <div class="btn btn-round-30 btn-outline w-100" ><a href="/practice-tests/{{object.category.slug}}/sub">Explore other test</a></div>
@@ -124,7 +124,7 @@
 </div><!-- Practice test -->
 
 
-<div class="modal">
+<div class="modal" id="testLimit" style="display:none">
     <span class="close-big">+</span>
     <div class="modal-content">
        <div class="view-test">
@@ -145,7 +145,7 @@
                 <li><span></span>Answers & Detailed Explanations</li>
             </ul>
 
-            <button class="btn btn-round-30 btn-blue btn-lg mt-20"  id="viewPaidTest">View test</button>
+            <button class="btn btn-round-30 btn-blue btn-lg mt-20"   id="viewPaidTest">View test</button>
        </div>
     </div>
 </div><!-- /. modal -->
@@ -261,6 +261,12 @@ function getCoptions(){
     });
 
 
+
+}
+
+function showTest(vid,cid){
+getProductDetail(vid,cid);
+$('#testLimit').show();
 
 }
 

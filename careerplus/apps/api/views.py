@@ -1394,7 +1394,6 @@ class SetSession(APIView):
         session_id = self.request.session.session_key
         data = {}
         key = None
-
         if not session_id:
             data.update({'is_set': False})
             return Response(data)
@@ -1402,12 +1401,10 @@ class SetSession(APIView):
         submission = self.request.POST.get('submit','')
         test_id = self.request.POST.get('test_id','')
         lead_create = self.request.POST.get('lead_created','')
-        key = session_id + test_id
-
+        key = 'test-' + str(test_id)
         # setting cache for timeout test sessions
         if timeout and test_id:
-
-            cache.set(key, timeout, 60*60*24)
+            self.cache_test.set_test_time_out(key)
             data.update({'is_set': True})
 
         # setting cache for submit test sessions
@@ -1422,9 +1419,8 @@ class SetSession(APIView):
             self.request.session.update({'is_lead_created': 1})
             return Response({'is_lead_created':True})
 
-        return Response({'timeout': cache.get( key + 'timeout'),
-                         'submission': cache.get(key + 'submission')})
-
+        return Response({'timeout': self.cache_test.get_test_time_out(key),
+                         'submission': self.cache_test.get_test_submit(key)})
 
 class RemoveCache(APIView):
     permission_classes = []

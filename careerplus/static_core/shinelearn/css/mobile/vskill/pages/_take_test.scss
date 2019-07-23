@@ -108,18 +108,18 @@
                 }
 
                 &.active {
-                    background-color: $blue;
-                    border-color: $blue;
-                    color: $txt-white;
+                    background-color: $blue !important;
+                    border-color: $blue !important;
+                    color: $txt-white !important;
                 }
 
                 &.skipped {
-                    border: 1px solid $border-grey-c1;
+             ;
                     background-color: transparent;
                 }
 
                 &.dirt{
-                    background-color: $bg-grey-ec;
+                    background-color: $bg-grey-ec ;
                  }
             }
         }

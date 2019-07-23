@@ -170,9 +170,11 @@ class TestCacheUtil:
             return self.set_start_test_time_cache(key).get('start_test_time')
         return self.get_cache(key).get('start_test_time')
 
+    def get_test_time_out(self,key):
+        return False if not self.get_cache(key) else self.get_cache(key).get('timeout')
 
     def set_test_time_out(self,key, data=True):
-        data = {'data':data}
+        data = {'timeout':data}
         test_dict = self.get_cache(key)
         test_dict.update(**data)
         return self.set_cache_data(key,test_dict)
