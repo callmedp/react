@@ -4,8 +4,6 @@ import datetime
 import requests
 from decimal import Decimal
 from datetime import timedelta
-from datetime import  datetime
-
 from django.db.models import Sum, Count, Subquery, OuterRef, F
 from django.utils import timezone
 from django.conf import settings
@@ -1432,4 +1430,23 @@ class RemoveCache(APIView):
         key = session_key+'test-'+test_id
         cache_delete = cache.delete(key)
         return Response({'cache_delete': cache_delete})
+
+
+class ServerTimeAPIView(APIView):
+    permission_classes = []
+    authentication_classes = []
+
+    def get(self,request,*args,**kwargs):
+        self.time_format = "%m/%d/%Y, %H:%M:%S"
+        if self.request.GET.get('time_format'):
+            return Response({'time':datetime.datetime.now().strftime(self.request.GET.get('time_format'))})
+        if self.request.GET.get('time_stamp'):
+            return Response({'time': datetime.datetime.timestamp(datetime.datetime.now())})
+        return Response({'time':datetime.datetime.now().strftime(self.time_format)})
+
+
+
+
+
+
 

@@ -151,6 +151,21 @@
 {{block.super}}
 <script src="{% static 'shinelearn/js/assessment/take_test.js' %}"></script>
 <script>
+function getSystemTime(){
+let resp = NaN;
+  $.ajax({
+     url   : '/api/v1/get-server-time',
+     data  : {'time_format': '%m/%d/%Y, %H:%M:%S'},
+     type  : 'get',
+      async: false,
+     success: function(response){
+        resp= response.time;
+     }
+});
+return resp;
+}
+
+
 $('#timeTest').ready(function() {
 getProductDetail('{{object.vendor.id}}','{{object.category.id}}');
         $.ajax({
@@ -160,8 +175,8 @@ getProductDetail('{{object.vendor.id}}','{{object.category.id}}');
          startTestTime = new Date(response.testStartTime);
          endTestTime = new Date(response.testStartTime);
         endTestTime.setSeconds(endTestTime.getSeconds() + {{object.duration}});
-        if (endTestTime > new Date()){
-           startTimer(Math.floor((endTestTime.getTime() - new Date().getTime())/1000));
+        if (endTestTime > new Date(getSystemTime())){
+           startTimer(Math.floor((endTestTime.getTime() - new Date(getSystemTime()).getTime())/1000));
         }
         else{
            window.location.href = '/practice-tests/{{object.slug}}/result/';
@@ -338,7 +353,6 @@ function submitTest(){
 
 
 
-
 function submitTestFinal(){
       if (timeout){
             testSession({'timeout':true,'test_id':{{object.id}} });
@@ -346,7 +360,7 @@ function submitTestFinal(){
       else{
             testSession({'submit':true,'test_id':{{object.id}} });
       }
-      submitTime = new Date().getTime();
+      submitTime = new Date(getSystemTime()).getTime();
       $("#submitPermissionModal").modal('hide');
       clearInterval(interval);
       testSubmission = true;

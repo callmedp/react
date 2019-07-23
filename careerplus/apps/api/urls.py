@@ -65,7 +65,11 @@ urlpatterns = [
         name='set-session'),
     url(r'^v1/remove-cache/$',
         views.RemoveCache.as_view(),
-        name='set-session')
+        name='set-session'),
+    url(r'^v1/get-server-time/$',
+        views.ServerTimeAPIView.as_view(),
+        name='get-server-time'
+        ),
 ]
 
 if settings.DEBUG:
