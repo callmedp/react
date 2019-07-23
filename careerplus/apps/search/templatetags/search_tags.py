@@ -34,4 +34,3 @@ def get_choice_display(value, choice):
     elif value.upper() in mapping:
         value = value.upper()
     return mapping.get(value,'Others')
-

@@ -2923,6 +2923,8 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
         self.oi_status = request.GET.get('oi_status', '-1').strip()
         self.day_choice = request.GET.get('day_choice', '-1').strip()
         self.sel_opt = request.GET.get('rad_search', 'number')
+        self.payment_date = self.request.GET.get('payment_date', '')
+        self.sort_payment_date = self.request.GET.get('sort_payment_date', '0')
         return super(WhatsappListQueueView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -2993,13 +2995,24 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
         )
         if int(self.oi_status) != -1:
             if int(self.oi_status) == 33:
-                queryset = queryset.filter(oi_status=31, save_link__gt=0)
+                queryset = queryset.filter(
+                    oi_status=31, save_link__gt=0
+                )
             elif int(self.oi_status) == 31:
-                queryset = queryset.filter(oi_status=31, save_link=0)
+                queryset = queryset.filter(
+                    oi_status=31, save_link=0
+                )
+            elif int(self.oi_status) == 34:
+                queryset = queryset.filter(assigned_to=None)
             else:
                 queryset = queryset.filter(oi_status=self.oi_status)
 
-
+        if self.payment_date:
+            start_date, end_date = self.payment_date.split(' - ')
+            start_date = datetime.datetime.strptime(start_date, "%m/%d/%Y")
+            end_date = datetime.datetime.strptime(end_date, "%m/%d/%Y")
+            end_date = end_date + relativedelta.relativedelta(days=1)
+            queryset = queryset.filter(order__payment_date__range=[start_date, end_date])
 
         # data for whats app links:
         queryset = queryset.annotate(
@@ -3014,16 +3027,23 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
             )
         )
         if int(self.day_choice) != -1:
+            q_objects = Q()
             if int(self.day_choice) == 1:
                 today = timezone.now()
                 date_list = [(today - relativedelta.relativedelta(days=i * 7)).date() for i in range(0,52) ]
+                for d in date_list:
+                    q_objects |= Q(orderitemoperation__oi_status=1, orderitemoperation__created__range=[d, d + relativedelta.relativedelta(days=1)])
             elif int(self.day_choice) == 2:
                 tommorrow = timezone.now() + relativedelta.relativedelta(days=1)
                 date_list = [(tommorrow - relativedelta.relativedelta(days=i * 7)).date() for i in range(0,52) ]
-
-            queryset = queryset.filter(order__payment_date__date__in=date_list)
-
-        queryset = queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-pending_links_count')
+                for d in date_list:
+                    q_objects |= Q(orderitemoperation__oi_status=1, orderitemoperation__created__range=[d, d + relativedelta.relativedelta(days=1)])
+            queryset = queryset.filter(q_objects)
+        if self.sort_payment_date and int(self.sort_payment_date):
+            print(self.sort_payment_date)
+            queryset = queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-order__payment_date')
+        else:
+            queryset = queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-pending_links_count')
 
         return queryset
 
@@ -3374,17 +3394,28 @@ class WhatsAppScheduleView(UserPermissionMixin, DetailView, PaginationMixin):
                     self.request,
                     "Job Link Scheduled Failed, Changes not Saved")
         else:
-            profile_form = ProductUserProfileForm(data=request.POST, instance=obj.whatsapp_profile_orderitem)
-            if profile_form.is_valid:
-                profile_form.save()
-                messages.success(
-                    self.request,
-                    "Profile Changes Saved")
+            profile = getattr(obj, 'whatsapp_profile_orderitem', None)
+            if profile:
+                profile_form = ProductUserProfileForm(
+                    data=request.POST,
+                    instance=profile,
+                    user=request.user
+                )
+                if profile_form.is_valid:
+                    profile_form.save()
+                    messages.success(
+                        self.request,
+                        "Profile Changes Saved")
+                else:
+                    messages.error(
+                        self.request,
+                        "Profile Changes not Saved")
             else:
                 messages.error(
                     self.request,
                     "Profile Changes not Saved")
-            context.update({'profile_form': profile_form})
+                obj.save()
+            context = self.get_context_data()
         return TemplateResponse(
             request, [
                 "console/order/whats_app_schedule.html"

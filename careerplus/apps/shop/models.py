@@ -3161,8 +3161,10 @@ class ShineProfileData(AbstractAutoDate):
         verbose_name=_('Vendor'),
         related_name='vendor'
     )
+
     class Meta:
         unique_together = ('type_flow', 'sub_type_flow', 'vendor')
+
 
 class ProductUserProfile(AbstractAutoDate):
     order_item = models.OneToOneField(
@@ -3175,6 +3177,25 @@ class ProductUserProfile(AbstractAutoDate):
     desired_position = models.CharField(max_length=255, blank=True, null=True)
     desired_salary = models.CharField(max_length=50, blank=True, null=True)
     current_salary = models.CharField(max_length=50, blank=True, null=True)
+    experience = models.CharField(max_length=50, blank=True, null=True)
+    skills = models.CharField(max_length=100, blank=True, null=True)
+    approved = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(ProductUserProfile, self).save(*args, **kwargs)
+        obj = self.order_item
+        if obj and self.approved:
+            if not obj.orderitemoperation_set.filter(oi_status=31).exists():
+                last_oi_status = obj.oi_status
+                obj.orderitemoperation_set.create(
+                    oi_status=31,
+                    last_oi_status=last_oi_status,
+                    assigned_to=obj.assigned_to,
+                    added_by=user
+                )
+                obj.oi_status = 31
+                obj.save()
 
 
 class JobsLinks(AbstractCommonModel, AbstractAutoDate):

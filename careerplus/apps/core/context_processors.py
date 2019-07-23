@@ -92,6 +92,7 @@ def common_context_processor(request):
         "CMS_GROUP_LIST": settings.CMS_GROUP_LIST,
         "SKILL_GROUP_LIST": settings.SKILL_GROUP_LIST,
         "COURSE_GROUP_LIST": settings.COURSE_GROUP_LIST,
+        "ASSIGNMENT_GROUP_LIST": settings.ASSIGNMENT_GROUP_LIST,
         "SERVICE_GROUP_LIST": settings.SERVICE_GROUP_LIST,
         "MARKETING_GROUP_LIST": settings.MARKETING_GROUP_LIST,
         "roundone_user": roundone_user,

@@ -3,9 +3,9 @@ import re
 import itertools
 
 # django imports
+from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ImproperlyConfigured
-from django.conf import settings
 
 # third party imports
 from haystack.inputs import Raw
@@ -24,7 +24,6 @@ RESULTS_PER_PAGE = getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
 
 
 class BaseSearch(object):
-
     results = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS)
     results_per_page = RESULTS_PER_PAGE
     search_params = {}
@@ -34,7 +33,7 @@ class BaseSearch(object):
               "pPvn", "pCmbs", "pVrs", "pPinr", "pPfinr", "pPusd", "pPfusd", "pPaed", "pPfaed", "pPgbp", "pPfgbp", "pCC",
               "pPin", "pPfin", "pPus", "pPfus", "pPae", "pPfae", "pPgb", "pPfgb",
               "pPinb", "pPfinb", "pPusb", "pPfusb", "pPaeb", "pPfaeb", "pPgbb", "pPfgbb",
-              "pPc", "pFA", "pNm", "pBC"]
+              "pPc", "pFA", "pNm", "pBC","pVid"]
 
     similar_fields = []
 
@@ -54,31 +53,26 @@ class BaseSearch(object):
     }
 
     facet_list = [
-        '{!ex=ratng,funa,inr,usd,aed,gbp}pCL',
-        '{!ex=ratng,funa,inr,usd,aed,gbp}pAR',
-        '{!ex=ratng,funa,inr,usd,aed,gbp}pFA',
-        '{!ex=ratng,funa,inr,usd,aed,gbp}pDM',
-        '{!ex=ratng,funa,inr,usd,aed,gbp}pCert',
-        '{!ex=ratng,funa,inr,usd,aed,gbp}pStM',
-        '{!ex=ratng,funa,inr,usd,aed,gbp}pPinr'
+        '{!ex=pCL}pCL',
+        '{!ex=pAR}pAR',
+        '{!ex=funa}pFA',
+        '{!ex=pVid}pVid',
+        '{!ex=ratng,inrp}pAR',
+        '{!ex=inr}pDM',
+        '{!ex=inr}pCert',
+        '{!ex=inr}pStM',
+        '{!ex=inr}pPinr'
     ]
 
     # These are the filters shown on search page
     filter_mapping = {
         '{!tag=funa}pFA': 'farea',
         '{!tag=ratng}pAR': 'frating',
+        '{!tag=pVid}pVid': 'fvid',
         '{!tag=inr}pAttrINR': ['fclevel', 'fcert', 'fduration', 'fmode', 'fprice'],
-        # '{!tag=usd}pAttrUSD': ['fclevel', 'fcert', 'fduration', 'fmode', 'fprice'],
-        # '{!tag=aed}pAttrAED': ['fclevel', 'fcert', 'fduration', 'fmode', 'fprice'],
-        # '{!tag=gbp}pAttrGBP': ['fclevel', 'fcert', 'fduration', 'fmode', 'fprice']
     }
 
-    boost_mapping = {
-        # 'jIndID': (('IndustryCurr', 2), ('IndustryPrev', 1)),
-        # 'jAreaID': (('SubFunctionalAreaCurr', 2), ('SubFunctionalAreaPrev', 1)),
-        # 'jExID': (('Experience', 2),),
-        # 'jLocID': (('Location', 2),),
-    }
+    boost_mapping = {}
 
     needed_params_options = {}
 
@@ -235,6 +229,7 @@ class BaseSearch(object):
             'spellcheck.maxCollations',
             'spellcheck.onlyMorePopular', 'spellcheck.maxResultsForSuggest',
             'spellcheck.maxCollationTries', 'spellcheck.collateExtendedResults']
+            
             for param in params_to_pop:
                 extra_params.pop(param, None)
 
@@ -428,7 +423,6 @@ class BaseSearch(object):
 
 
 class BaseParams(object):
-
     args = ''
     keywords = ''
     clean_query = True
@@ -479,7 +473,6 @@ class BaseParams(object):
         return self.query
 
     def get_search_params(self):
-
         self.search_params = self.get_request_params()
         self.clean_search_params()
         return self.search_params
@@ -487,7 +480,7 @@ class BaseParams(object):
 
 class SimpleSearch(BaseSearch):
 
-    needed_params_options = {'q', 'fclevel', 'fcert', 'farea', 'frating', 'fduration', 'fmode'}
+    needed_params_options = {'q', 'fclevel', 'fcert', 'farea', 'frating', 'fduration', 'fmode','fvid'}
 
     def get_extra_params(self):
         """
@@ -496,14 +489,12 @@ class SimpleSearch(BaseSearch):
         """
         extra_params = super(SimpleSearch, self).get_extra_params()
         extra_params.update({'search_type': 'simple'})
-
         return extra_params
 
 
 class SimpleParams(BaseParams):
 
     def set_params_from_lookups(self, params):
-
         params['q'] = " ".join(self.keywords)
         params['q'] = handle_special_chars(params['q'], False, True, False, False)
         params = get_filters(params)
@@ -516,7 +507,6 @@ class SimpleParams(BaseParams):
         The view calls this method if the request is for web/mobile.
         The API will call this method if the request is for app.
         """
-
         params_filtered = False
         params = super(SimpleParams, self).get_request_params()
 
@@ -635,7 +625,6 @@ class FuncAreaParams(BaseParams):
 
 
 class RecommendedSearch(BaseSearch):
-
     needed_params_options = {'area', 'skills'}  # , 'fclevel', 'fcert', 'farea', 'frating', 'fduration', 'fmode'}
 
     def add_filters(self):
@@ -657,3 +646,9 @@ class RecommendedParams(BaseParams):
             self.search_params['area'] = self.kwargs.get('area')
             self.search_params['skills'] = self.kwargs.get('skills').split('-')
         return self.search_params
+
+
+
+
+
+

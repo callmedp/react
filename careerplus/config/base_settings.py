@@ -486,7 +486,8 @@ CMS_GROUP_LIST = ['CMS_USER']
 SKILL_GROUP_LIST = ['SKILL_USER']
 COURSE_GROUP_LIST = ['COURSE_USER']
 SERVICE_GROUP_LIST = ['SERVICE_USER']
-USER_QUERY_GROUP_LIST = CMS_GROUP_LIST + SKILL_GROUP_LIST + COURSE_GROUP_LIST + SERVICE_GROUP_LIST
+ASSIGNMENT_GROUP_LIST = ['ASSIGNMENT_USER']
+USER_QUERY_GROUP_LIST = CMS_GROUP_LIST + SKILL_GROUP_LIST + COURSE_GROUP_LIST + SERVICE_GROUP_LIST + ASSIGNMENT_GROUP_LIST
 
 # Marketing User Auto login token Generation
 MARKETING_GROUP_LIST = ['MARKETING']
@@ -534,7 +535,8 @@ URL_MAPPING_TO_PRODUCT = {"resume-writing-services-1": ([1921, 1922, 1923, 1924,
                           "gst-certification": ([1810], 1810),
                           "data-science": ([3417], 3417),
                           "six-sigma": ([3400], 3400),
-                          "linkedin": ([1926], 1926)
+                          "linkedin": ([1926], 1926),
+                          'devops-professional': ([4131],4131),
 
                           }
 
