@@ -35,9 +35,9 @@
 
      <div class="search mb-50">
         <div class="search_base"></div>
-        <div class="search__searchbox">
+        <div class="search__searchbox" id="bloodhound" >
             <input type="text" class="typeahead form-control"  name="" placeholder="Search popular tests">
-            <i class="icon_search"></i>
+            <span class="icon_search"></span>
         </div>
     </div><!-- /. searc -->
 
@@ -61,7 +61,7 @@
 
             <div class="functional_area_inside border-{{forloop.counter0}}">
             <a href="{% url 'assessment:vskill-category' slug=fa.slug %}">
-            <span class="icon fa-testprep"></span>
+            <span class="icon fa-{{fa.id}}"></span>
                 <span class="fa_name">{{fa.heading}}</span></a> </div>
               {%endfor%}
             <!--<div class="functional_area_inside border-1">-->
