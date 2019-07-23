@@ -55,8 +55,9 @@
             </div>
             {% endfor %}
     </div><!-- /. popular test -->
-       <h2>Tests by functional area</h2>
+      
     <div class="functional_area mt-40" id="funcDiv">
+            <h2>Tests by functional area</h2>
            {% for fa in func_area|slice:":8" %}
 
             <div class="functional_area_inside border-{{forloop.counter0}}">
