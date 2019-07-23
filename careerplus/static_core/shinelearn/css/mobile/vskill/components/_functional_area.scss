@@ -132,6 +132,14 @@
                 background-position: 4px -324px;
             }
 
+            &.fa-engineering { // Engineering
+                background-position: -41px 15px;
+            }
+
+            &.fa-testprep { // Testprep
+                background-position: -41px -53px;
+            }
+
 
             &:hover {
                 box-shadow: 0 3px 14px 0 #BAD5F6, inset 0 1px 3px 0 #BAD5F6;
