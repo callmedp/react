@@ -4,7 +4,8 @@ from django.conf import settings
 
 from order.models import OrderItem, Message,Order
 from order.choices import STATUS_CHOICES
-from shop.models import DeliveryService
+from shop.models import DeliveryService, JobsLinks, ProductUserProfile
+from shop.choices import LINK_STATUS_CHOICES
 # from cart.choices import DELIVERY_TYPE
 from order.choices import OI_OPS_STATUS
 from review.models import Review, STATUS_CHOICES
@@ -243,6 +244,14 @@ class OIFilterForm(forms.Form):
         widget=forms.Select(
             attrs={'class': 'form-control'}))
 
+    day_choice = forms.ChoiceField(
+        label=("Op Status:"), choices=[],
+        required=False,
+        initial=-1,
+        widget=forms.Select(
+            attrs={'class': 'form-control'}))
+
+
     def __init__(self, *args, **kwargs):
         queue_name = kwargs.pop('queue_name', None)
         super(OIFilterForm, self).__init__(*args, **kwargs)
@@ -263,8 +272,12 @@ class OIFilterForm(forms.Form):
 
         NEW_OI_OPS_STATUS = ((-1, 'Select Status'),) + OI_OPS_STATUS
         if queue_name == 'queue-whatsappjoblist':
-            NEW_OI_OPS_STATUS = ((-1, 'Select Status'), (1, 'Allocated'), (4, 'Closed'),)
+            NEW_OI_OPS_STATUS = (
+                (-1, 'Select Status'), (31, 'Pending Links'),
+                (32, 'Sent Links'), (33, 'Saved Links'), (4, 'Closed')
+            )
 
+            self.fields['day_choice'].choices = ( (-1, 'All'),(1, 'Today'), (2, 'Tommorrow'),)
         self.fields['oi_status'].choices = NEW_OI_OPS_STATUS
 
         draft_choices = [(-1, "Select Draft Level")]
@@ -476,6 +489,93 @@ class mobileupdateform(forms.ModelForm):
         else:
             validate_integer(alt_number)
 
+
+class JobLinkForm(forms.ModelForm):
+
+    class Meta:
+            model = JobsLinks
+            fields = ('company_name', 'location', 'link', 'job_title', 'oi',)
+
+    company_name = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-7 col-xs-12'})
+    )
+    location = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-7 col-xs-12'})
+    )
+
+    link = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-7 col-xs-12'})
+    )
+    job_title = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-7 col-xs-12'})
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(JobLinkForm, self).__init__(*args, **kwargs)
+        self.empty_permitted = True
+        if not self.instance.id:
+            self.initial['status'] = ''
+
+
+class ProductUserProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = ProductUserProfile
+        fields = (
+            'contact_number', 'desired_industry', 'desired_location',
+            'desired_position', 'desired_salary', 'current_salary'
+        )
+    contact_number = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-3 col-xs-12'}),
+        required=False
+    )
+    desired_industry = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-3 col-xs-12'}),
+        required=False
+    )
+    desired_location = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-3 col-xs-12'}),
+        required=False
+    )
+    desired_position = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-3 col-xs-12'}),
+        required=False
+    )
+    desired_salary = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-3 col-xs-12'}),
+        required=False
+    )
+    current_salary = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-3 col-xs-12'}),
+        required=False
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(ProductUserProfileForm, self).__init__(*args, **kwargs)
+
+        self.fields['desired_industry'].widget.attrs['class'] =  ' tagsinput tags form-control'
+        self.fields['desired_location'].widget.attrs['class'] =  ' tagsinput tags form-control'
+        self.fields['desired_position'].widget.attrs['class'] =  ' tagsinput tags form-control'
 
 
 

@@ -3,8 +3,8 @@
 <!doctype html>
 <html amp lang="en" itemscope itemtype="http://www.schema.org/WebPage">
   <head>
-    <meta charset="utf-8">
     <title>{% if meta.title %}{{ meta.title }}{% endif %}</title>
+    <meta charset="utf-8">
     <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{canonical_url}}">
     <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
     {% include 'meta/meta.html' %}
@@ -92,7 +92,7 @@
                         <a href="#">{{prd_num_rating}}</a>
 
                         {% else %}
-                        <span class="fs-11">Be the first to review</span>
+                        <span class="fs-11">Write a review</span>
                         {% endif %}
                     </li>
                     {% if prd_num_jobs %}

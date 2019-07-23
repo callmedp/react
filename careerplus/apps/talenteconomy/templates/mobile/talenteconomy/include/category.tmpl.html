@@ -8,7 +8,7 @@
       <li>
         <a href="{{category.get_absolute_url}}" title="{{category.name}}"><div class="list-box">
           {% thumbnail category.image "133x90" crop="center" as im %}
-            <img src="{{category.image.url}}" alt="{{category.image_alt}}" class="img-responsive" width="{{ im.width }}" height="{{ im.height }}">
+            <img aria-label="{{category.image_alt}}" src="{{category.image.url}}" alt="{{category.image_alt}}" class="img-responsive" width="{{ im.width }}" height="{{ im.height }}">
           {% endthumbnail %}
           <h3 class="title">{{category.name}}</h3>
         </div> </a>    

@@ -148,7 +148,8 @@ TEMPLATES = [
                 'sekizai.context_processors.sekizai',
                 'core.context_processors.js_settings',
                 'core.context_processors.marketing_context_processor',
-                'core.context_processors.getSearchSet'
+                'core.context_processors.getSearchSet',
+                'core.context_processors.get_console_sidebar_badges'
             ],
             'loaders': ([
                 # ('django_mobile.loader.CachedLoader', [
@@ -563,4 +564,9 @@ RESUME_TEMPLATE_DIR = "resume-builder"
 
 #Haystack Settings
 HAYSTACK_ROUTERS = ['careerplus.config.haystack_routers.MasterSlaveRouter', 'haystack.routers.DefaultRouter']
+
+#JOTM Default Message
+WHATS_APP_MESSAGE_FORMAT = '''Here are our job recommendations for this week.<br>
+                        <br>{}Please do not call/reply directly to this message<br><br>In case of any queries, you can call us on  08047105151 or email us at resume@shine.com<br><br>Thanks,<br><br>Team Shine
+                        '''
 

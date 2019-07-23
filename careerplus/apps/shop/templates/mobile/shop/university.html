@@ -41,7 +41,7 @@
                     <div class="header-content">
                         <h1 class="semi-bold">{{ prd_H1 }}</h1>
                         <div class="university-logo">
-                            <img 
+                            <img aria-label="university logo" 
                                 src="{% static 'shinelearn/images/mobile/executive-course/university-logo.jpg' %}"/>
                         </div>
                         <!-- Banner info band -->
@@ -77,7 +77,7 @@
                         </div>
                     </div><!-- header menu Icon ends here -->
                     <div class="overlay"></div>
-                    <img src="{% static 'shinelearn/images/mobile/executive-course/exec-landing-img.jpg' %}">
+                    <img aria-label="exec landing" src="{% static 'shinelearn/images/mobile/executive-course/exec-landing-img.jpg' %}">
                 {% block header_title %}{% endblock header_title %}
                 </div><!-- header ends here -->
             {% endblock header %}
@@ -198,7 +198,7 @@
 
                                     <li>
                                         <span class="faculty-image">
-                                            <img src="{{ fac.get_image_url }}"/>
+                                            <img aria-label="faculty image" src="{{ fac.get_image_url }}"/>
                                         </span>
                                         <h3><a href="{{fac.get_absolute_url}}">{{ fac.name }}</a></h3>
                                         <p class="desigation mt-15">{{ fac.designation }} – {{ fac.institute.name }}
@@ -345,7 +345,7 @@
                                     </div><!-- /. header -->
 
                                     <div class="modal-body">
-                                        <img src="{{ university_detail.sample_certificate }}" class="img-responsive"/>
+                                        <img aria-label="sample certificate" src="{{ university_detail.sample_certificate }}" class="img-responsive"/>
                                     </div>
                                 </div><!-- /. modal-content-->
                             </div><!-- /. modal -->
@@ -362,7 +362,7 @@
                         <div class="content">
                             <div class="instutite-image gr_instutite mb-10">
                                 <h3>{{ institute.name }}</h3>
-                                <img src="{% static 'shinelearn/images/mobile/executive-course/institute.jpg'%}" class="img-responsive"/>
+                                <img aria-label="institute image" src="{% static 'shinelearn/images/mobile/executive-course/institute.jpg'%}" class="img-responsive"/>
                             </div>
                             <div class="more1">
                             {{ institute.description|safe }}
@@ -385,7 +385,7 @@
                                     <div class="media">
                                         <div class="media-left">
                                             <span class="testimonial-image">
-                                             <img class="media-object" src="{{ testimonial.get_image_url }}" alt="...">
+                                             <img aria-label="testimonial image" class="media-object" src="{{ testimonial.get_image_url }}" alt="...">
                                             </span>
                                         </div>
                                         <div class="media-body">
@@ -498,7 +498,7 @@
                     {% endif %}
                     </div>
                 </div>
-                <img src="{% static 'shinelearn/images/mobile/executive-course/enroll-now.jpg' %}" class="img-responsive"/>
+                <img aria-label="enroll now" src="{% static 'shinelearn/images/mobile/executive-course/enroll-now.jpg' %}" class="img-responsive"/>
             </div>
             <div id="popup-modal1" class="modal" style="display: none;z-index:99999;">
                   <div class="modal-helper">
@@ -646,7 +646,7 @@
             start_html = '<div class="you-may-like row"><div class="container"><h2 class="pt-5">You may also like</h2><div class="slide-container"><ul class="login-slider">'
             end_html = '</ul></div></div></div>'
             final_html = ''
-            product_html = '<li><div class="media"><div class="media-body"> <p class="fs-15 bold"><a title="product_name" href="product_url">product_name</a></p><div class="rating block ml-0 fs-12 pb-10"><sup class="fill-star"></sup><strong>3.3</strong>/5</div><p class="fs-12 c6"><strong>jobs_available</strong> Jobs available</p></div><div class="media-left"><a title="Lean Six Sigma Green Belt" href="product_url" class="home-banner-img"><img src="product_image" alt="..."></a></div></div></li>'
+            product_html = '<li><div class="media"><div class="media-body"> <p class="fs-15 bold"><a title="product_name" href="product_url">product_name</a></p><div class="rating block ml-0 fs-12 pb-10"><sup class="fill-star"></sup><strong>3.3</strong>/5</div><p class="fs-12 c6"><strong>jobs_available</strong> Jobs available</p></div><div class="media-left"><a title="Lean Six Sigma Green Belt" href="product_url" class="home-banner-img"><img aria-label="product image" src="product_image" alt="..."></a></div></div></li>'
             $.get(recommended_product_url, function(data){
               if(data.count){
                 for(i=0; i< data.results.length;i++) {

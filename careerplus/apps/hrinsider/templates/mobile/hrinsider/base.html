@@ -3,6 +3,7 @@
 <html lang="en">
 {% block head %}
  <head>
+    <title>{% block title %}Shine Learning{% endblock title%}</title>
 
  	{% block meta_html %}
     <meta charset="utf-8">
@@ -18,9 +19,6 @@
       <!-- <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
       <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ request.path }}"> -->
     {% endblock canonical_url %}
-    
-    <title>{% block title %}Shine Learning{%endblock title%}</title>
-
     {% block css_section %}
 	{% compress css %}
 	<link type="text/scss" href="{% static 'shinelearn/css/mobile/hr-insider/global.scss' %}" rel="stylesheet">

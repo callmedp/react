@@ -4,6 +4,11 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    {% block title %}
+      <title>Console - Shine Learning</title>
+  
+    {% endblock title %}
+    
     {% block meta %}
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
       <!-- Meta, title, CSS, favicons, etc. -->
@@ -12,11 +17,6 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
   
     {% endblock meta %}
-    
-    {% block title %}
-      <title>Console - Shine Learning</title>
-  
-    {% endblock title %}
     
     {% block css_block %}
 

@@ -42,7 +42,7 @@
               <td>{% if vars.certify %}
                 Yes {% else %}
                 No{% endif %}</td>
-              <td>{{vars.type|get_choice_display:"ATTRIBUTE_OPTION"}}</td>
+              <td>{{vars.level|get_choice_display:"CL_FACETS"}}</td>
               <td><strong>Rs. {{vars.inr_price|floatformat}}/-</strong></td>
             </tr>
           {% endfor %}

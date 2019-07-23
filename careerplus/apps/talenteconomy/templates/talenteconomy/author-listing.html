@@ -49,7 +49,7 @@ Career & Certification Guidance Top Authors @ Shine Learning
               {% if author.image %}
               <a href="{{author.get_absolute_url}}" class="media-left" title="{{author.name}}">
                 <figure>
-                  <img src="{{author.image.url}}" class="img-responsive" alt="{{author.image_alt}}">
+                  <img aria-label="{{author.image_alt}}" src="{{author.image.url}}" class="img-responsive" alt="{{author.image_alt}}">
                 </figure>
               </a>
               {% endif %}
