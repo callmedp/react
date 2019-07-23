@@ -1419,6 +1419,11 @@
   width: 40%;
   margin-left: 71px !important;
   margin-top: 10px !important;
+	position: absolute;
+	left: 0;
+	top: -20px;
+	background: $white-bg;
+	z-index: 99;
 
   li {
   	margin-bottom: 0 !important;

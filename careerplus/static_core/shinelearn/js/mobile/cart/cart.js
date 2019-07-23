@@ -57,12 +57,14 @@ function handleDeliveryUpdation(formData, lineId) {
                     delivery_charge: deliveryCharge
                 } = data;
                 const str = `${deliveryServiceTitle}- ${Number(deliveryCharge) === 0 ? 'No extra cost' : 'Rs. ' + deliveryCharge.toFixed(2) + '/-'}`
-                $('#active-delivery-title').text(str)
+                debugger;
+                $(`#active-delivery-title${lineId}`).text(str)
 
-                $('#active-delivery-description').text(`(${deliveryServiceDesc})`)
+                $(`#active-delivery-description${lineId}`).text(`(${deliveryServiceDesc})`)
 
 
             }
+
         },
         failure: function (response) {
             alert("Something went wrong, Please try again")
@@ -85,6 +87,7 @@ function deliveryOptionUpdate(line_id) {
 }
 
 const selectDeliveryType = (deliveryType, lineId, csrf) => {
+    debugger;
     if (lineId) {
         var formData = new FormData();
         formData.append("csrfmiddlewaretoken", csrf);
@@ -95,17 +98,24 @@ const selectDeliveryType = (deliveryType, lineId, csrf) => {
     }
 }
 
+const toggleDeliveryItems  = (deliveryId) =>{
+    $(`#delivery-item${deliveryId}`).slideToggle();
+    return false;
+}
 function cartScroller() {
 
 };
 
 $(document).ready(function ($) {
-    $(".accordion_example1").smk_Accordion({
-        showIcon: true, //boolean
-        animation: true, //boolean
-        closeAble: true, //boolean
-        slideSpeed: 200 //integer, miliseconds
-    });
+
+    if (window.CURRENT_FLAVOUR == 'mobile') {
+        $(".accordion_example1").smk_Accordion({
+            showIcon: true, //boolean
+            animation: true, //boolean
+            closeAble: true, //boolean
+            slideSpeed: 200 //integer, miliseconds
+        });
+    }
     // Configure/customize these variables.
     var showChar = 280;  // How many characters are shown by default
     var ellipsestext = "...";

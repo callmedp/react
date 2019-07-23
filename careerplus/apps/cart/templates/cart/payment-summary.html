@@ -128,23 +128,24 @@
                            {% endif %}
 
                             {% if delivery_types %}
-                                    <div class="delivery-speed mt-30 mb-15"  id="btn-delivery">
+                                     <div class="delivery-speed mt-30 mb-15"  id="btn-delivery" onclick="toggleDeliveryItems('{{item.id}}')">
                                       <span class="delivery-icon"></span>
                                       <p class="pb-0">
-                                          <strong class="block" id="active-delivery-title">{%if delivery_service %} {{delivery_service.title}}- {% if delivery_service.inr_price|is_free %}No extra cost {% else %}Rs. {{delivery_service.inr_price}}/- {% endif %} {%else%}Normal - No extra cost{%endif%}</strong>
-                                          <span id="active-delivery-description"> ({%if delivery_service %} {{delivery_service.meta_desc}} {%else%}get it in 5 working days{%endif%})</span>
+                                          <strong class="block" id="active-delivery-title{{item.id}}">{%if delivery_service %} {{delivery_service.title}}- {% if delivery_service.inr_price|is_free %}No extra cost {% else %}Rs. {{delivery_service.inr_price}}/- {% endif %} {%else%}Normal - No extra cost{%endif%}</strong>
+                                          <span id="active-delivery-description{{item.id}}"> ({%if delivery_service %} {{delivery_service.meta_desc}} {%else%}get it in 5 working days{%endif%})</span>
                                       </p>
                                       <span class="down-arrow-icon mt-10"></span>
                                   </div><!-- /. select delivery options -->
 
-                                  <ul class="delivery-list cls_delivery-content" id="delivery-item" style="display: block;">
+                                 <div class="pr"> <ul class="delivery-list cls_delivery-content" id="delivery-item{{item.id}}" style="display: block;">
                                       {% for delivery_obj in delivery_types %}
                                       <li>
-                                          <input type="radio" id="{{delivery_obj.slug}}" {% if forloop.counter0 == delivery_service|get_count %} checked {%endif %} name="delivery-list" onclick="selectDeliveryType('{{delivery_obj.id}}', '{% if variations|length  %} {{variations.0.id}} {% else %} {{item.id}} {% endif %}', '{{csrf_token}}')" value="19">
-                                          <label for="{{delivery_obj.slug}}"><strong class="block">{{delivery_obj.title}}- {% if delivery_obj.inr_price|is_free %}No extra cost {% else %}Rs. {{delivery_obj.inr_price}}/- {% endif %}</strong> ({{delivery_obj.meta_desc}})</label>
+                                          <input type="radio" id="{{delivery_obj.slug}}{{item.id}}" {% if forloop.counter0 == delivery_service|get_count %} checked {%endif %} name="delivery-list" onclick="selectDeliveryType('{{delivery_obj.id}}', '{% if variations|length  %} {{variations.0.id}} {% else %} {{item.id}} {% endif %}', '{{csrf_token}}')" value="19">
+                                          <label for="{{delivery_obj.slug}}{{item.id}}"><strong class="block">{{delivery_obj.title}}- {% if delivery_obj.inr_price|is_free %}No extra cost {% else %}Rs. {{delivery_obj.inr_price}}/- {% endif %}</strong> ({{delivery_obj.meta_desc}})</label>
                                       </li>
                                       {% endfor %}
                                   </ul>
+                                 </div>
                            {% endif %}
                         </li>
                 {% endif %}
@@ -182,12 +183,10 @@
                 </div>
                 </div>
               {% else %}
-                <a href="javascript:void(0)" onclick="toggler('showCoupon',true);" id="show_hide_coupon">Apply coupon</a> | 
+                <a href="javascript:void(0)" onclick="toggler('showCoupon',true);" id="show_hide_coupon">Apply coupon</a>
+                {% if candidate_in_session %}
+                |
                 <a href="javascript:void(0)" onclick="toggler('shineCredit',false);">Redeem Shine credit</a>
-                {% if wallet %}
-                  or
-                  <a href="javascript:void(0)" onclick="toggler('shineCredit',false);">Redeem Shine credit</a>
-                  
                 {% endif %}
                   <form action="." id="discountForm">
                     <div id="showCoupon" class="hidden-div">
@@ -198,8 +197,7 @@
                       </div>
                     </div>
                   </form>
-                {% if wallet %}
-                  
+
                   <form action="." id="walletForm">
                     <div id="shineCredit" class="hidden-div">
                       You have {{wallet_total}} shine loyalty points.
@@ -210,8 +208,7 @@
                       </div>
                     </div>
                   </form>
-                {% endif %}
-                
+
               {% endif %}
               </span>
 
@@ -223,7 +220,7 @@
               {% elif cart_wallet %}
                     <!--span class="col-sm-6 text-right">Your Shine cash</span>
                     <span class="col-sm-6">-Rs. 2000/-</span-->
-                
+
                     <span class="col-sm-6 text-right">Shine loyalty points</span>
                     <span class="col-sm-6">-Rs. <span>{{redeemed_reward_point}}</span>/-</span>
               {% endif %}
@@ -271,24 +268,8 @@
    {{ block.super }}
     {% compress js %}
     <script type="text/javascript" src="{% static 'shinelearn/js/cart/payment-summary.js' %}"></script>
-    <script src="{% static 'shinelearn/js/mobile/cart/cart.js' %}"></script>
-
-    <script>
-      function handleClick(){
-            console.log('clickedd___-dddd');
-        }
-        $(document).ready(function(){
-
-            $("#btn-delivery").click(function(){
-                debugger;
-                console.log('clickeddddd');
-                $("#delivery-item").slideToggle();
-                return false;
-        });
-    
-        });
-      
-    </script>
+    <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
+    <script type="text/javascript" src="{% static 'shinelearn/js/mobile/cart/cart.js' %}"></script>
     {% endcompress %}
 {% endblock js_section %}
 

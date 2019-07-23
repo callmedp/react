@@ -147,7 +147,7 @@
           </div>
               <p class="error-txt" id="discount-alert"> </p>
       </div>
-
+      {% if candidate_in_session %}
       <div class="apply mb-10 pt-0">
           <p><a href="javascript:void(0)" id="btn-reedem" >Reedem Shine Credit</a></p>
          <div id="redeem-content" style="display: none;">
@@ -163,9 +163,8 @@
               </div>
              <p class="error-txt" id="point-alert">Required</p>
          </div>
-
-
       </div>
+      {% endif %}
 
       <div class="subtotal mb-10">
           <ul class="subtotal__items">
