@@ -93,7 +93,6 @@ $().ready(function() {
             // }
         },
         highlight: function(element) {
-
             /*if (window.CURRENT_FLAVOUR == 'mobile'){
                 $(element).closest('.form-group').addClass('error');
             }
@@ -101,11 +100,13 @@ $().ready(function() {
                 $(element).closest('.col-sm-6').addClass('error');
             }*/
 
-            var className = '.col-sm-6';
+            let className = '.form-group', addClass = 'error1';
+
             if (window.CURRENT_FLAVOUR == 'mobile'){
-                className = '.form-group';
+                className = 'li';
+                addClass = 'error'
             }
-            $(element).closest('li').addClass('error');
+            $(element).closest(className).addClass(addClass);
         },
         unhighlight: function(element) {
             if (window.CURRENT_FLAVOUR == 'mobile'){
@@ -114,15 +115,20 @@ $().ready(function() {
 
             }
             else{
-                if ($(element).attr('name') != "country_code"){
-                    $(element).closest('.col-sm-6').removeClass('error');
-                }
+                 $(element).closest('.form-group').removeClass('error1');
+                 $(element).siblings('.error-txt').html('');
+                // if ($(element).attr('name') != "country_code"){
+                // }
             }
         },
         invalidHandler: function(event, validator) {
         },
         errorPlacement: function(error, element){
-            $(element).siblings('.error--mgs').html(error.text());
+            let  errorTextClass = '.error-txt';
+             if (window.CURRENT_FLAVOUR == 'mobile'){
+               errorTextClass = '.error--mgs';
+             }
+             $(element).siblings(errorTextClass).html(error.text());
         }
     });
 

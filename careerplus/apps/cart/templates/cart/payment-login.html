@@ -141,7 +141,7 @@
           <div class="form-group clearfix">
             <div class="col-sm-12 {% if form.first_name.errors %} error {% endif %}">
               <!-- {{form.first_name}} -->
-              <input type="text" class="form-control" name="name"  placeholder=" "/>
+              <input type="text" class="form-control" id="guest-name" name="name"  placeholder=" "/>
               <label for="">Your name</label>
               <span class="error-txt">{{form.first_name.errors.0}}</span>
             </div>
@@ -152,6 +152,7 @@
               <input type="email"
                      class="form-control"
                      name="email"
+                     id="guest-email"
                      placeholder=" "
               />
 
@@ -163,14 +164,15 @@
             <div class="col-sm-12 {% if form.mobile.errors or form.country_code.errors %} error {% endif %}">
               <div class="country-code">
                 <div class="custom-select">
-                    {% if request.session.country_code%}
-                    {{request.session.country_code}}
-                    {% endif %}
-
+                    <select class="form--control" id="country_code" name="country_code">
+                        {% for country in country_list %}
+                            <option  value="{{country.phone}}">{{country.phone}}</option>
+                        {% endfor %}
+                    </select>
                 </div>
               </div>
                  <div class="form-group wd2 pl-0">
-                <input type="text" class="form-control" name="mobile" placeholder=" "/>
+                <input type="text" class="form-control"  id="guest-mobile" name="mobile" placeholder=" "/>
                 <label for="">Mobile no.</label>
                 <span class="error-txt">{% if form.mobile.errors %} {{form.mobile.errors.0}} {% else %}{{form.country_code.errors.0}}{% endif %}</span>
            </div>
@@ -230,7 +232,6 @@
           </div>
 
         </div>
-
 
 
         </div>

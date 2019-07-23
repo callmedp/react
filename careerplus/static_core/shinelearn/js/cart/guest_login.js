@@ -34,7 +34,6 @@ function guest_login() {
     }, {})
     hitGA();
    let email = guest_info['email'] || '';
-
     if($('#guest_form').valid()) {
         var input = document.createElement("input");
         input.setAttribute("type", "hidden");

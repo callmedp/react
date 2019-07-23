@@ -311,11 +311,9 @@ $(document).ready(function () {
             email: {required: "Please enter a valid email address."},
         },
         highlight: function (element, errorClass) {
-            debugger;
             $(element).closest('li').addClass('error');
         },
         unhighlight: function (element, errorClass) {
-            debugger;
             $(element).closest('li').removeClass('error');
             $(element).siblings('.error--mgs').html('');
         },

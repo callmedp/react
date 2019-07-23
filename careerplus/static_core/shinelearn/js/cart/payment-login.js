@@ -1,5 +1,3 @@
-
-
 const continueAsGuest = () => {
     $('#login_form').addClass('hidden');
     $('#guest_form').removeClass('hidden');
@@ -10,7 +8,6 @@ const continueAsGuest = () => {
     $('#guest_payment_login').removeClass('hide')
     $('#login_users').addClass('hide');
     $('#login_guests').removeClass('hide');
-
 
 
 };
@@ -28,15 +25,14 @@ const loginAsCandidate = () => {
     $('#login_guests').addClass('hide');
 
 
-
 };
 
 const forgotPassword = () => {
     $('#login_form').addClass('hidden');
     $('#guest_form').addClass('hidden');
-     $('#login_users').addClass('hide');
+    $('#login_users').addClass('hide');
     $('#login_guests').addClass('hide');
-     $('#user_payment_login').addClass('hide');
+    $('#user_payment_login').addClass('hide');
     $('#guest_payment_login').addClass('hide');
     $('#user-forgot-password').removeClass('hide');
     $('#forgot_form').removeClass('hidden');
@@ -48,7 +44,6 @@ $().ready(function () {
     $('#login_form').on('submit', function () {
 // hitGAContinue();
     });
-
 
 
     $("#login_form").validate({
@@ -69,15 +64,35 @@ $().ready(function () {
             },
         },
         highlight: function (element) {
-            $(element).closest('li').addClass('error');
+
+            let className = '.form-group', addClass = 'error1';
+
+            if (window.CURRENT_FLAVOUR == 'mobile') {
+                className = 'li';
+                addClass = 'error'
+            }
+            $(element).closest(className).addClass(addClass);
         },
         unhighlight: function (element) {
-            $(element).closest('li').removeClass('error');
-            $(element).siblings('.error--mgs').html('');
+
+            let className = '.form-group', addClass = 'error1', errorTextClass = '.error-txt';
+
+            if (window.CURRENT_FLAVOUR == 'mobile') {
+                className = 'li';
+                addClass = 'error'
+                errorTextClass = '.error--mgs'
+            }
+            $(element).closest(className).removeClass(addClass);
+            $(element).siblings(errorTextClass).html('');
+
 
         },
         errorPlacement: function (error, element) {
-            $(element).siblings('.error--mgs').html(error.text());
+             let  errorTextClass = '.error-txt';
+             if (window.CURRENT_FLAVOUR == 'mobile') {
+               errorTextClass = '.error-mgs';
+             }
+               $(element).siblings(errorTextClass).html(error.text());
         }
     });
 
