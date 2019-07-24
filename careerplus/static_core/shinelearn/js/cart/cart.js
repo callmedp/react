@@ -217,8 +217,11 @@ function updateUnCheckedPrice(this_obj) {
     }
 }
 
-function toggler(divId) {
+function toggler(divId, divToHide) {
     $("#" + divId).toggle();
+    if($('#'+divToHide).is(':visible')) {
+        $('#'+divToHide).toggle();
+    }
 }
 
 function updateCartPrice() {

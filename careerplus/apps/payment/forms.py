@@ -36,10 +36,10 @@ class PayByCheckForm(forms.Form):
 
     cheque_no = forms.CharField(
         max_length=100, required=True,
-        widget=forms.TextInput(attrs={'class': 'form-control'}))
+        widget=forms.TextInput(attrs={'class': 'form-control form--control'}))
     drawn_bank = forms.CharField(
         max_length=255, required=True,
-        widget=forms.TextInput(attrs={'class': 'form-control'}))
+        widget=forms.TextInput(attrs={'class': 'form-control form--control'}))
     deposit_date = forms.CharField(
         max_length=50, required=True,
         widget=forms.TextInput(attrs={'class': 'form-control datepicker'}))

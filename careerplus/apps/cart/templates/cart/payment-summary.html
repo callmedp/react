@@ -183,10 +183,10 @@
                 </div>
                 </div>
               {% else %}
-                <a href="javascript:void(0)" onclick="toggler('showCoupon',true);" id="show_hide_coupon">Apply coupon</a>
+                <a href="javascript:void(0)" onclick="toggler('showCoupon','shineCredit',true);" id="show_hide_coupon">Apply coupon</a>
                 {% if candidate_in_session %}
                 |
-                <a href="javascript:void(0)" onclick="toggler('shineCredit',false);">Redeem Shine credit</a>
+                <a href="javascript:void(0)" onclick="toggler('shineCredit','showCoupon',false) ;">Redeem Shine credit</a>
                 {% endif %}
                   <form action="." id="discountForm">
                     <div id="showCoupon" class="hidden-div">
