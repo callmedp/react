@@ -146,7 +146,7 @@ export class Buy extends Component {
                         <section className="right-sidebar right-sidebar-scroll-main">
                             <div className="choose-plan">
                                 <h2 className="mt-10">Choose your plan</h2>
-                                <span class="choose-plan-txt">You can <strong>create/ edit and download</strong> multiple resume for 12 months</span>
+                                <span class="choose-plan-txt">Use resume builder for 12 months to<strong> create/edit</strong> unlimited resume.</span>
                                 <ul>
                                     <li>
                                         <div className="flex-container">
@@ -159,7 +159,7 @@ export class Buy extends Component {
                                             <p>Buy 1 resume template</p>
                                             Rs. <strong>{price1}/-</strong>
                                             <strike className="ml-10">Rs. 1499</strike>
-                                            <span className="choose-plan--off ml-10">Flat 50% off</span>
+                                            <span className="choose-plan--off ml-10">Flat 75% off</span>
                                             </span>
                                         </div>
                                     </li>
@@ -176,7 +176,7 @@ export class Buy extends Component {
                                             Rs. <strong>{price2}
                                             /-</strong>
                                             <strike className="ml-10">Rs. 1999</strike>
-                                            <span className="choose-plan--off ml-10">Flat 50% off</span>
+                                            <span className="choose-plan--off ml-10">Flat 75% off</span>
                                             </span>
                                         </div>
 

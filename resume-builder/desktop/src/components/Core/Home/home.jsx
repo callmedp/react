@@ -71,7 +71,7 @@ class Home extends Component {
                     !!(loader) &&
                     <LoaderPage/>
                 }
-                <Header page={'home'} userInfo={userInfo} eventClicked={eventClicked}  feedback={feedback} getclass={this.state.scrolled ? 'color-change' : ''}/>
+                <Header userName={first_name} page={'home'} userInfo={userInfo} eventClicked={eventClicked}  feedback={feedback} getclass={this.state.scrolled ? 'color-change' : ''}/>
                 <Banner userName={first_name} eventClicked={eventClicked}/>
                 <section className="section-container">
                     <h2>Resume builder advantages</h2>

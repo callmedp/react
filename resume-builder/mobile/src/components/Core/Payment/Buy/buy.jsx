@@ -123,8 +123,7 @@ class Buy extends Component {
 
 
                 <div className="buy">
-                    <p className="buy--create">You can <strong>create/ edit and download</strong> multiple resume for 12
-                        months</p>
+                    <p className="buy--create">Use resume builder for 12 months to<strong> create/edit</strong> unlimited resume.</p>
                     <div className="buy__wrap mt-15">
                         <div className="buy__item">
                             <div className="buy__item--left">
@@ -137,7 +136,7 @@ class Buy extends Component {
                                     Buy your <br/>customised resume<br/>
                                     <strong>Rs. {price1}/-</strong>
                                     <span className="fs-14 line-through">Rs. 1499 </span>
-                                    <span className="fs-14 bold">Flat 50% off</span>
+                                    <span className="fs-14 bold">Flat 75% off</span>
                                 </label>
                             </div>
                             <div className="buy__item--right">
@@ -167,7 +166,7 @@ class Buy extends Component {
                                     <div className="buy__item--price">
                                         <span className="fs-22 color-333 semi-bold">Rs. {price2}/-</span>
                                         <span className="fs-14 line-through">Rs. 1999</span>
-                                        <span className="fs-14 bold">Flat 50% off</span>
+                                        <span className="fs-14 bold">Flat 75% off</span>
                                     </div>
                                 </label>
                             </div>
