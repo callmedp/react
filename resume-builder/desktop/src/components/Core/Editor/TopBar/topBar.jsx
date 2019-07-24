@@ -10,7 +10,11 @@ export default class TopBar extends Component {
     }
 
     redirectToBuyPage(){
-        const {history} = this.props;
+        const {history, eventClicked} = this.props;
+        eventClicked({
+            'action':'SubscribeNow',
+            'label':'Click'
+        })
         history.push('/resume-builder/buy');
     }
 

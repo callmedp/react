@@ -8,7 +8,11 @@ export default class Subscribe extends Component{
         this.redirectToBuyPage = this.redirectToBuyPage.bind(this);
     }
     redirectToBuyPage(){
-        const {history} = this.props;
+        const {history, eventClicked} = this.props;
+        eventClicked({
+            'action':'SubscribeNow',
+            'label':'Click'
+        })
         history.push('/resume-builder/buy');
     }
     render() {
