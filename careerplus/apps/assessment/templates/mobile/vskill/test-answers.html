@@ -46,7 +46,7 @@
         <div class="test-result__you-scored mt-15">
             <p class="test-result__you-scored--text">You scored</p>
             <p class="test-result__you-scored--percentage"><strong id="scoringPercent"></strong>%</p>
-            <a href="#" class="btn btn-blue btn-lg2 btn-round-30">Check answers</a>
+            <a href="#answers" class="btn btn-blue btn-lg2 btn-round-30" id="btn-checkAnswers">Check answers</a>
             <p class="mt-15 fs-16 pb-0"><strong id="correctMsg"> </strong></p>
             <span >Time taken: <p id="timeTaken"> 04min 55 secs</p></span>
         </div>
@@ -91,7 +91,7 @@
         </div>
     </div><!-- /. Improve your skills with this course -->
 
-    <div class="test-answers">
+    <div class="test-answers" id="answers">
         <h2>Test Answers</h2>
         <ol>
                {% for quest in questions_list %}
@@ -125,7 +125,7 @@
 
 
 <div class="modal" id="testLimit" style="display:none">
-    <span class="close-big">+</span>
+    <span class="close-big" id="close">+</span>
     <div class="modal-content">
        <div class="view-test">
            <span class="overlay"></span>
@@ -265,10 +265,17 @@ function getCoptions(){
 }
 
 function showTest(vid,cid){
-getProductDetail(vid,cid);
-$('#testLimit').show();
-
+    getProductDetail(vid,cid);
+    $('#testLimit').show();
+    $('body').addClass('overflow-hidden');
 }
+
+
+$("#btn-checkAnswers").click(function() {
+    $('html,body').animate({
+        scrollTop: $("#answers").offset().top},
+        'slow');
+});
 
 
 function secondsToMinutes(time){

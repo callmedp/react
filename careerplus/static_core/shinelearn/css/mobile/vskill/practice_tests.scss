@@ -63,8 +63,7 @@ h2 {
         padding: 0 20px;
         height: 50px;
         justify-content: center;
-
-
+        position: relative;
 
         input {
             color: $txt-grey-999;
@@ -73,6 +72,9 @@ h2 {
             width: 90%;
             height: 100%;
             border: none;
+            top: -50px;
+            height: 50px;
+            background-color: transparent;
         }
 
         .icon_search {

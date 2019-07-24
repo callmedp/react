@@ -36,7 +36,7 @@
      <div class="search mb-50">
         <div class="search_base"></div>
         <div class="search__searchbox" id="bloodhound" >
-            <input type="text" class="typeahead form-control"  name="" placeholder="Search popular tests">
+            <input type="text" class="typeahead"  name="" placeholder="Search popular tests">
             <span class="icon_search"></span>
         </div>
     </div><!-- /. searc -->
@@ -65,26 +65,8 @@
             <span class="icon fa-{{fa.id}}"></span>
                 <span class="fa_name">{{fa.heading}}</span></a> </div>
               {%endfor%}
-            <!--<div class="functional_area_inside border-1">-->
-                <!--<a href="#">-->
-            <!--<span class="icon fa-22"></span>-->
-                <!--<span class="fa_name">Information Technology</span>-->
-            <!--(45 Tests) </a></div>-->
-        <!---->
-            <!--<div class="functional_area_inside border-2">-->
-            <!--<a href="#">-->
-            <!--<span class="icon fa-20"></span>-->
-                <!--<span class="fa_name">Banking & Finance</span>-->
-            <!--(32 Tests) </a></div>-->
-        <!---->
-            <!--<div class="functional_area_inside border-3">-->
-            <!--<a href="#">-->
-            <!--<span class="icon fa-19"></span>-->
-                <!--<span class="fa_name">Operation Management</span>-->
-            <!--(25 Tests)-->
-            <!--</a>-->
-                <!--</div>-->
-                            {% if  func_area.count > 8  %}
+            
+            {% if  func_area.count > 8  %}
 
             <div class="load_more_button" id="loadmorebtn" onclick="loadmore();">Load more</div>
         {% endif %}
@@ -223,9 +205,10 @@
     function testModal(e){
     testObject = JSON.parse(e.currentTarget.dataset.attrValue);
     getProductDetail(testObject.vendor,testObject.catid);
-           $("#check_results").addClass("open");
-       $('#startTestLink').attr('href','/practice-tests/'+ testObject.testSlug +'-test/');
-           $('#questCount').text(testObject.quescount);
+        $('body').addClass('overflow-hidden');
+        $("#check_results").addClass("open");
+        $('#startTestLink').attr('href','/practice-tests/'+ testObject.testSlug +'-test/');
+        $('#questCount').text(testObject.quescount);
     getCourseDetail(testObject.vendor,testObject.catid,testObject.id);
 
     }
@@ -237,6 +220,7 @@
 
         $("#close").click(function(){
             $("#check_results").removeClass("open");
+            $('body').removeClass('overflow-hidden');
         });
 
           $('#testAddToCart').click( function()
