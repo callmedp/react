@@ -26,7 +26,7 @@
 
 .has-content {
     &.animation-input {
-        border: 2px solid $bg-blue;
+        border: 2px solid $bg-blue !important;
 
         &~ label {
             @extend %has-content;

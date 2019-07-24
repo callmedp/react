@@ -156,6 +156,7 @@
                              <input name="deposit_date" data-date="" data-date-format="MM/DD/YYYY" required class="animation-input form--control" type="date" placeholder="">
                              <label for="cheque">Date of deposit *</label>
                              <p class="error--mgs"></p>
+
                           </li>
                     </ul>
                         <input type="hidden" name="payment_type" value="cheque">
@@ -246,6 +247,18 @@
                 closeAble: true, //boolean
                 slideSpeed: 200 //integer, miliseconds
               });
+            });
+
+            $(window).load(function(){
+                $(".input-effect input").val("");
+                
+                $(".input-effect input").focusout(function(){
+                    if($(this).val() != ""){
+                        $(this).addClass("has-content");
+                    }else{
+                        $(this).removeClass("has-content");
+                    }
+                })
             });
         </script>
     {% endcompress js %}

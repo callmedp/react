@@ -40,6 +40,7 @@ class PayByCheckForm(forms.Form):
     drawn_bank = forms.CharField(
         max_length=255, required=True,
         widget=forms.TextInput(attrs={'class': 'form-control form--control'}))
+
     deposit_date = forms.CharField(
         max_length=50, required=True,
         widget=forms.TextInput(attrs={'class': 'form-control datepicker'}))
@@ -50,6 +51,7 @@ class PayByCheckForm(forms.Form):
         self.fields['drawn_bank'].widget.attrs['placeholder'] = ' '
         self.fields['deposit_date'].widget.attrs['placeholder'] = ' '
         self.fields['deposit_date'].widget.attrs['data-date-format'] = 'MM/DD/YYYY'
+        self.fields['deposit_date'].widget.attrs['type']= 'date'
 
     def clean_cheque_no(self):
         cheque_no = self.cleaned_data.get('cheque_no').strip()
