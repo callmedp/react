@@ -145,7 +145,6 @@ class Edit extends Component {
                                     className={(type === itemType ? ' edit-section--active' : '')}>
                                     {
                                         !!(error || newUser) ?
-
                                             (
                                                 <React.Fragment>
                                                     <div onClick={() => this.showErrorMessage(link)}
@@ -177,7 +176,7 @@ class Edit extends Component {
                                     {
                                          !!(elem['entity_id'] !== 1 && elem['entity_id'] !== 6) ?
                                             <span onClick={() => this.deleteFromVisibleList(elem)}
-                                                  className="icon-closemenu pull-right mt-20"/> : ''
+                                                  className="icon-closemenu pull-right mt-10"/> : ''
                                     }
                                 </li>
                             )
