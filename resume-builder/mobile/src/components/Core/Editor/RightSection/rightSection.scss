@@ -72,10 +72,19 @@
 	&__subscribe {
 		margin-top: 50px;
 		margin-bottom: 15px;
+		width: 105%;
+		padding: 10px;
+		top: -14px;
+		position: relative;
+		background-color: #DBEBF9;
 
 		display: flex;
 		justify-content: center;
 		align-items: center;
+
+		@media only screen and (max-width: 320px) {
+			width: 106%;	
+		}
 
 		&--text {
 			font-size: 1.4rem;
