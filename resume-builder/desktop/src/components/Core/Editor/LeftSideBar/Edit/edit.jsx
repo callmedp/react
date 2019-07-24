@@ -146,19 +146,17 @@ class Edit extends Component {
                                     {
                                         !!(error || newUser) ?
                                             (
-                                                <React.Fragment>
                                                     <div onClick={() => this.showErrorMessage(link)}
-                                                         className={"non-link"}>
+                                                             className={"non-link"}>
+                                                        <span className={'mr-20 ' + icon}></span>
+                                                        {elem['entity_text']}
                                                     </div>
-                                                    <span className={'mr-20 ' + icon}></span>
-                                                    {elem['entity_text']}
-                                                </React.Fragment>
+
                                             )
 
                                             :
 
                                             (
-                                                <React.Fragment>
                                                     <Link to={link}
                                                           onClick={() => {
                                                               eventClicked({
@@ -168,15 +166,13 @@ class Edit extends Component {
                                                           }}>
                                                         <span className={'mr-20 ' + icon}></span>
                                                         {elem['entity_text']}
-
                                                     </Link>
-                                                </React.Fragment>
                                             )
                                     }
                                     {
                                          !!(elem['entity_id'] !== 1 && elem['entity_id'] !== 6) ?
                                             <span onClick={() => this.deleteFromVisibleList(elem)}
-                                                  className="icon-closemenu pull-right mt-10"/> : ''
+                                                  className="icon-closemenu pull-right mt-25"/> : ''
                                     }
                                 </li>
                             )
