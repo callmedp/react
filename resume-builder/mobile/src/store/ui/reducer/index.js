@@ -8,18 +8,18 @@ import {
     SHOW_GENERATE_RESUME_MODAL,
     HIDE_GENERATE_RESUME_MODAL,
     SHOW_HELP_MODAL,
-    HIDE_HELP_MODAL
+    HIDE_HELP_MODAL,
 } from "../actions/actionTypes";
 
 const initialState = {
     'mainloader': true,
     'dataloader': false,
-    'formName' : '',
+    'formName': '',
     'suggestions': [],
     'suggestionType': 'experience',
     'alertModalStatus': false,
-    'generateResumeModal':false,
-    'helpModal': false
+    'generateResumeModal': false,
+    'helpModal': false,
 };
 
 export const uiReducer = (state = initialState, action) => {
@@ -58,7 +58,7 @@ export const uiReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...{
-                    alertModalStatus:action.payload
+                    alertModalStatus: action.payload
                 }
             }
         }
