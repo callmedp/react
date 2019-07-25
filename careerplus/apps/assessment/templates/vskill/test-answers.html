@@ -51,12 +51,16 @@
                   <img src="{% static 'shinelearn/images/free_skill/test-result-bg.png' %}" class="img-responsive">
                </div>
                <div class="col-sm-8 col-md-7">
+<<<<<<< HEAD
                   <h2 id="resultRemark"></h2>
+=======
+                  <h2>Wow! Awesome Score</h2>
+>>>>>>> changes
                   <strong id="correctMsg"></strong>
-                  <div class="flexbox mt-20 mb-15">
+                  <p>Take <a href="#">Search Engine Optimisation Master Training Course</a> to show off your skills to the recruiter</p>
+                  <div class="flexbox mt-20 mb-20">
                      <a data-toggle="modal"  href="#TestLimitModal" onclick="getProductDetail('{{object.vendor.id}}','{{object.category.id}}');"  class="result_btn" >Next test &nbsp; &rsaquo;</a>
                      <a href="/practice-tests/{{object.category.slug}}/sub" class="result_btn ml-20">Explore other test</a>
-                     <button class="result_btn ml-20"  onclick="reTestFunc();" >Re Test</button>
 
                   </div>
                </div>
@@ -65,7 +69,7 @@
                      You scored
                      <strong id="scoringPercent" ></strong>
                   </div>
-                  <span class="time-taken pull-right mt-10">Time taken : <strong id="timeTaken"></strong></span>
+                  <span class="time-taken pull-right mt-20">Time taken : <strong id="timeTaken"></strong></span>
                </div>
             </div>
          </div>

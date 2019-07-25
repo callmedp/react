@@ -743,18 +743,36 @@ h2 {
 .result-box {
     background: #5A8DD3;
     overflow: hidden;
-    padding: 20px 20px 0 30px;
+    padding: 25px 20px 0 30px;
     border-radius: 4px;
 
     h2 {
         color: $white-bg;
         font-size: $font-size+17;
+        margin-top: 0;
     }
 
     strong {
         color: $white-bg;
-        font-size: $font-size+7;
-        font-weight: $font-weight+300;
+        font-size: $font-size+5;
+        font-weight: $font-weight+100;
+        opacity: 0.8;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    p {
+        font-size: $font-size+4;
+        color: $white-bg;
+
+        a {
+            font-weight: $font-weight+300;
+            color: $white-bg;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
     }
 }
 
@@ -765,7 +783,7 @@ h2 {
     background: $white-bg;
     text-align: center;
     vertical-align: middle;
-    width: 175px;
+    width: 180px;
     box-shadow: 0 2px 15px 0 #416493;
     color: $secondary-color;
     text-transform: uppercase;
@@ -775,6 +793,7 @@ h2 {
         color: #F9CA09;
         line-height: 60px;
         display: block;
+        font-weight: $font-weight+300;
     }
 }
 
@@ -789,6 +808,7 @@ h2 {
     strong {
         font-weight: $font-weight+100;
         font-size: $font-size+2;
+        display: inline-block;
     }
 }
 
