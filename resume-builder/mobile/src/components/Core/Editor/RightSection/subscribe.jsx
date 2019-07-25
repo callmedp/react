@@ -20,12 +20,8 @@ export default class Subscribe extends Component{
             <div>
                 <div className="buildResume__subscribe">
                     <p className="buildResume__subscribe--text">Subscribe now create later</p>
-<<<<<<< HEAD
-                    <a href="#" className="btn btn__sm btn__round btn--outline">Subscribe</a>
-                    <a className="close" href="javascript:void(0)">+</a>
-=======
                     <a onClick={this.redirectToBuyPage} className="btn btn__sm btn__round btn--outline">Subscribe</a>
->>>>>>> d3b049023efced613d0f3bd94df7c22d9a142dd4
+                    <a className="close" href="javascript:void(0)">+</a>
                 </div>
             </div>
         )
