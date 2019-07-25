@@ -96,7 +96,7 @@ class Edit extends Component {
     }
 
     openMenuModal() {
-        this.setState({menu_modal_status: true})
+        this.setState({menu_modal_status: true});
         this.props.eventClicked({
             'action': 'Add/Remove',
             'label': 'Click'
@@ -172,7 +172,7 @@ class Edit extends Component {
                                     {
                                          !!(elem['entity_id'] !== 1 && elem['entity_id'] !== 6) ?
                                             <span onClick={() => this.deleteFromVisibleList(elem)}
-                                                  className="icon-closemenu pull-right mt-25"/> : ''
+                                                  className="icon-closemenu pull-right mt-20"/> : ''
                                     }
                                 </li>
                             )
