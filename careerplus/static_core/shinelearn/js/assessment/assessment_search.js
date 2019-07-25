@@ -4,7 +4,7 @@ var tests = new Bloodhound({
   },
   queryTokenizer: Bloodhound.tokenizers.whitespace,
   remote: {
-    url: "/api/get-test/?fl=id,category,title",
+    url: "/api/get-test/?fl=id,category,title,slug",
     filter: function(response) {
       return response.results;
     }
@@ -29,5 +29,5 @@ $('.typeahead').typeahead(
 });
 
 $('.typeahead').on('typeahead:selected', function(evt, item) {
- window.location = 'http://' + window.location.host + '/online-exam/'+ item['id'];
+ window.location = 'http://' + window.location.host + item['slug'] +'-test/';
 })

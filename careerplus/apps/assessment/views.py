@@ -6,6 +6,8 @@ from datetime import datetime,timedelta
 from django.conf import settings
 from django.views.generic import (DetailView,ListView,TemplateView)
 from django.shortcuts import redirect,reverse,render
+from django.http import HttpResponseRedirect
+
 from django.core.cache import cache
 
 #local imports
@@ -185,6 +187,26 @@ class AssessmentSubCategoryPage(DetailView):
 
 class AssessmentResultPage(TemplateView):
     template_name = 'vskill/test-answers.html'
+
+    def get_redirection_path(self):
+        test_slug = self.kwargs.get('slug')
+        session_id = self.request.session.session_key
+        key = session_id + test_slug
+        category = getattr(Test.objects.filter(slug=test_slug).first(), 'category', None)
+        if not cache.get(key):
+            category = getattr(Test.objects.filter(slug=test_slug).first(), 'category', None)
+            return reverse('assessment:vskill-subcategory',\
+                kwargs={'slug': category.slug}) if category else reverse("'homepage'")
+        elif cache.get(key).get('timeout') or cache.get(key).get('test_submit'):
+            return
+        else:
+            return reverse('assessment:vskill-exam', \
+             kwargs={'slug': test_slug}) if category else HttpResponseRedirect("homepage")
+
+    def get(self,request,*args,**kwargs):
+        if self.get_redirection_path():
+            return HttpResponseRedirect(self.get_redirection_path())
+        return super(AssessmentResultPage, self).get(request, *args, **kwargs)
 
     def get_breadcrumbs(self,test):
         breadcrumbs = []

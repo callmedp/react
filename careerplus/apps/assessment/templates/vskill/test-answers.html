@@ -51,7 +51,7 @@
                   <img src="{% static 'shinelearn/images/free_skill/test-result-bg.png' %}" class="img-responsive">
                </div>
                <div class="col-sm-8 col-md-7">
-                  <h2>Congratulations, you are doing great</h2>
+                  <h2 id="resultRemark"></h2>
                   <strong id="correctMsg"></strong>
                   <div class="flexbox mt-20 mb-15">
                      <a data-toggle="modal"  href="#TestLimitModal" onclick="getProductDetail('{{object.vendor.id}}','{{object.category.id}}');"  class="result_btn" >Next test &nbsp; &rsaquo;</a>
@@ -246,7 +246,7 @@ $(document).ready(function() {
     {% if not request.session.is_lead_created %}
       {% if request.session.candidate_id %}
       $('#leadCreationSubmit').click();
-      {% else %}
+     {% else %}
        $("#leadCreationModal").modal('show');
         {% endif %}
         {% else %}
@@ -309,7 +309,20 @@ function getCoptions(){
                      }
                             }
               $('#correctMsg').text( right+ ' out of '+total+' correct answers ');
-              $('#scoringPercent').text((right/total)*100 +"%");
+              let scorePercent = (right/total)*100 ;
+              let scoreMessage = "";
+              $('#scoringPercent').text(scorePercent +"%");
+              if(scorePercent >80){
+              scoreMessage =  ` Wow! Awesome Score. Take ${$('#courseName').text()} to show off your skills to the recruiter`;
+              }
+               else if(scorePercent <= 80 && scorePercent >=50){
+              scoreMessage =  `  Don’t worry! You are almost there. Take ${$('#test-product-name').text()} to be the master`;
+              }
+               else{
+              scoreMessage =  ` Don’t panic! We ‘ve got you covered. Take ${$('#test-product-name').text()}  to be the master`;
+              }
+
+              $('#resultRemark').text(scoreMessage);
               $('#timeTaken').text(secondsToMinutes(questionAttempt['testTime'+{{object.id}}]));
                                     }
     });

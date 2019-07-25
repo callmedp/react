@@ -15,6 +15,7 @@
                     $('#viewPaidTest').attr('href',json.results[0].absolute_url)
                     $('#test-price').text("Rs. " + json.results[0].inr_price);
                     $('#test-product').removeAttr('style');
+                    
                 }
                 else{
                      $('#test-price').text('');
