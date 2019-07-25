@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {hideSubscribeButton} from '../../../../store/personalInfo/actions/index';
+import {updateAlertModalStatus} from '../../../../store/ui/actions/index';
 import './rightSection.scss'
 import moment from 'moment';
 
@@ -13,6 +14,7 @@ class Subscribe extends Component {
         this.state = {
             showSubscribeButton: true
         }
+
     }
 
     hideSubscribeButton() {
@@ -50,12 +52,17 @@ class Subscribe extends Component {
 
     render() {
         const {showSubscribeButton} = this.state;
+        const {updateAlertModalStatus} = this.props;
         if (!showSubscribeButton) return null;
+        const newUser = localStorage.getItem('newUser');
+
+
         return (
             <div>
                 <div className="buildResume__subscribe">
                     <p className="buildResume__subscribe--text">Subscribe now create later</p>
-                    <a onClick={this.redirectToBuyPage} className="btn btn__sm btn__round btn--outline">Subscribe</a>
+                    <a onClick={() => newUser ? updateAlertModalStatus(true) : this.redirectToBuyPage()}
+                       className="btn btn__sm btn__round btn--outline">Subscribe</a>
                     <a className="close" href="javascript:void(0)" onClick={this.hideSubscribeButton}>+</a>
                 </div>
             </div>
@@ -73,6 +80,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         'hideSubscribeButton': () => {
             return dispatch(hideSubscribeButton())
+        },
+        'updateAlertModalStatus': (data) => {
+            return dispatch(updateAlertModalStatus(data))
         }
     }
 }
