@@ -39,19 +39,19 @@ export class Buy extends Component {
         this.props.showModal()
     }
 
-    changeTemplate(){
-        const {eventClicked,showSelectTemplateModal} = this.props
+    changeTemplate() {
+        const {eventClicked, showSelectTemplateModal} = this.props
         showSelectTemplateModal()
         eventClicked({
-            'action':'ChangeTemplate',
-            'label':'PaymentPage'
+            'action': 'ChangeTemplate',
+            'label': 'PaymentPage'
         })
     }
 
     async redirectToCart() {
         this.props.eventClicked({
-            'action':'PayNow',
-            'label':'Click'
+            'action': 'PayNow',
+            'label': 'Click'
         })
         if (!this.props.productIds[0])
             return;
@@ -101,11 +101,14 @@ export class Buy extends Component {
             slidesToShow: 3,
             slidesToScroll: 1,
         };
-        const {userInfo: {first_name,last_name,number,email, selected_template,order_data}, ui: {loader}, template: {templateImage, thumbnailImages},productIds,eventClicked} = this.props;
+        const {userInfo: {first_name, last_name, number, email, selected_template, order_data}, ui: {loader}, template: {templateImage, thumbnailImages}, productIds, eventClicked} = this.props;
         const {userInfo} = this.props;
         const {checked} = this.state;
         const price1 = productIds[0] ? productIds[0].inr_price : 999
+        const discount1 = Math.floor(((1499 - price1) / 1499) * 100)
         const price2 = productIds[1] ? productIds[1].inr_price : 1248
+        const discount2 = Math.floor(((1999 - price2) / 1999) * 100)
+
         return (
             /*
             * @desc Top Bar component
@@ -146,7 +149,8 @@ export class Buy extends Component {
                         <section className="right-sidebar right-sidebar-scroll-main">
                             <div className="choose-plan">
                                 <h2 className="mt-10">Choose your plan</h2>
-                                <span class="choose-plan-txt">Use resume builder for 12 months to<strong> create/edit</strong> unlimited resume.</span>
+                                <span
+                                    class="choose-plan-txt">Use resume builder for 12 months to<strong> create/edit</strong> unlimited resume.</span>
                                 <ul>
                                     <li>
                                         <div className="flex-container">
@@ -159,7 +163,7 @@ export class Buy extends Component {
                                             <p>Buy 1 resume template</p>
                                             Rs. <strong>{price1}/-</strong>
                                             <strike className="ml-10">Rs. 1499</strike>
-                                            <span className="choose-plan--off ml-10">Flat 75% off</span>
+                                            <span className="choose-plan--off ml-10">Flat {discount1}% off</span>
                                             </span>
                                         </div>
                                     </li>
@@ -174,9 +178,9 @@ export class Buy extends Component {
                                             <span className="choose-plan--price">
                                             <p>Buy all resume templates</p>
                                             Rs. <strong>{price2}
-                                            /-</strong>
+                                                /-</strong>
                                             <strike className="ml-10">Rs. 1999</strike>
-                                            <span className="choose-plan--off ml-10">Flat 75% off</span>
+                                            <span className="choose-plan--off ml-10">Flat {discount2}% off</span>
                                             </span>
                                         </div>
 
@@ -228,10 +232,14 @@ export class Buy extends Component {
                             <React.Fragment>
                                 <a onClick={this.changeTemplate}>Change template</a> |
                             </React.Fragment>
-                        } 
-                        <Link to={'/resume-builder/edit'} 
-                            onClick={()=>{eventClicked({'action':'EditTemplate',
-                                                        'label':'Click'})}}>Edit template</Link>
+                        }
+                        <Link to={'/resume-builder/edit'}
+                              onClick={() => {
+                                  eventClicked({
+                                      'action': 'EditTemplate',
+                                      'label': 'Click'
+                                  })
+                              }}>Edit template</Link>
                     </div>
                 </div>
                 <Footer/>

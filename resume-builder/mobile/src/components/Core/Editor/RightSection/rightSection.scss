@@ -10,7 +10,7 @@
 .buildResume {
 	position: relative;
 	height: 100%;
-	padding: 1.5rem;
+	padding: 6.3rem 1.5rem 1.5rem 1.5rem;
 	
 	&__wrap {
 		box-shadow: 0 0 10px rgba($black, .1);
@@ -70,20 +70,20 @@
 	// }
 
 	&__subscribe {
-		margin-top: 50px;
 		margin-bottom: 15px;
-		width: 105%;
+		width: 110%;
 		padding: 10px;
 		top: -14px;
 		position: relative;
 		background-color: #DBEBF9;
+		left: -14px;
 
 		display: flex;
 		justify-content: center;
 		align-items: center;
 
 		@media only screen and (max-width: 320px) {
-			width: 106%;	
+			width: 113%;
 		}
 
 		&--text {
