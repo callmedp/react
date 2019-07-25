@@ -67,11 +67,11 @@ export class Buy extends Component {
             "cart_type": 'cart',
             "cv_id": product.id,
             "req_options": [],
-            'add_resume': "true"
-        }
+            'add_resume': true
 
-        const {data: {cart_id}} = await this.props.addToCart(data);
-        window.location.href = `/payment/ccavenue/request/${cart_id}/all/`
+        }
+        await this.props.addToCart(data);
+        window.location.href = '/cart'
     }
 
     componentDidMount() {

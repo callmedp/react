@@ -168,7 +168,6 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
     def get(self, request, *args, **kwargs):
         if not request.session.get('cart_pk'):
             return HttpResponseRedirect(reverse('homepage'))
-
         data = {}
         cart_id = kwargs.get('cart_id', None)
         paytype = kwargs.get('paytype', '')

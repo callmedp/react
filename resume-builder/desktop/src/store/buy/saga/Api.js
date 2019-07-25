@@ -9,8 +9,8 @@ const fetchProductIds = () => {
 };
 
 const addToCart = (data) => {
-    const url = 'cart/cart-order/';
-    return BaseApiService.post(`${siteDomain}/api/v1/${url}`, data);
+    const url = 'cart/add-to-cart/';
+    return BaseApiService.post(`${siteDomain}/${url}`, data, {'Content-Type': 'application/x-www-form-urlencoded'}, false);
 
 }
 
