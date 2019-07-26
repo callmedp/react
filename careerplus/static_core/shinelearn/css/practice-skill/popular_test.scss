@@ -118,6 +118,7 @@ h2 {
             &:hover .taketest,
             &:hover .white_hover {
                 display: block;
+                cursor: pointer;
 
             }
 
@@ -1141,4 +1142,8 @@ h2 {
 
 .fa-testprep {
     background-position: -6px -909px !important;
+}
+
+input[type="button"] {
+ outline: none;
 }

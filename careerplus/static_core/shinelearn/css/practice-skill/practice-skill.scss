@@ -31,10 +31,22 @@ display: block;
  	
  }
 
-
-
+a:focus, a:active {
+    outline: 0;
+    border: none;
+    -moz-outline-style: none;
 }
 
+button:focus, button:active {
+    outline: 0;
+    border: none;
+    -moz-outline-style: none;
+}
+
+input[type="button"] {
+ outline: none;
+}
+}
 }
 .loadmore {
 	margin:20px auto;
@@ -48,3 +60,7 @@ display: block;
 
 }
 
+
+:focus {
+outline: 0;
+}
