@@ -22,7 +22,6 @@ def update_practice_test_info(email=None):
     if test_info:
         email = test_info.email
         json_rep = NeoApiMixin().get_pt_result(email=email)
-        print(json_rep)
         if json_rep:
             setattr(test_info, 'test_data', str(json_rep))
             test_info.save()

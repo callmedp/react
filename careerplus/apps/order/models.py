@@ -183,6 +183,10 @@ class Order(AbstractAutoDate):
         items = self.orderitems.all()
         return any([item.product.type_flow == 17 for item in items])
 
+    def order_contains_neo_item(self):
+        items = self.orderitems.all()
+        return any([item.product.vendor.slug == 'neo' for item in items])
+
     @property
     def get_status(self):
         statusD = dict(STATUS_CHOICES)
@@ -293,16 +297,19 @@ class Order(AbstractAutoDate):
                 autologin_url=None
             )
             manually_generate_autologin_url(assesment_items=assesment_items)
-        if self.status == 1 and existing_obj.status != 1 and self.order_contains_resume_builder():
-            generate_resume_for_order.delay(self.id)
+        if self.status == 1 and existing_obj.status != 1 and self.order_contains_neo_item():
             neo_items_id = list(self.orderitems.filter(
                 order__status__in=[0, 1],
-                product__vendor__slug='neo' 
+                product__vendor__slug='neo'
             ).values_list('id', flat=True))
-            board_user_on_neo(neo_items=neo_items_id)
+            board_user_on_neo(neo_ids=neo_items_id)
+
+        if self.status == 1 and existing_obj.status != 1 and self.order_contains_resume_builder():
+            generate_resume_for_order.delay(self.id)
+
             logging.getLogger('info_log').info("Generating resume for order {}".format(self.id))
 
-        return super(Order,self).save(**kwargs)
+        return super(Order, self).save(**kwargs)
 
 
 class OrderItem(AbstractAutoDate):

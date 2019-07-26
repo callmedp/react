@@ -918,10 +918,9 @@ def send_resume_in_mail_resume_builder(attachment,data):
 
 
 @task(name='board_user_on_neo')
-def board_user_on_neo(ids):
-    import ipdb; ipdb.set_trace();
+def board_user_on_neo(neo_ids):
     from order.models import OrderItem
-    neo_items = OrderItem.object.get(id__in=ids)
+    neo_items = OrderItem.objects.filter(id__in=neo_ids)
     for item in neo_items:
         email = item.order.email
         NeoApiMixin().board_user_on_neo(email=email)

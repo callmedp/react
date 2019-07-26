@@ -230,13 +230,19 @@ $('#neo-enroll-button').click(function(){
 
 function update_test_info(email){
     $.ajax({
-        url: "/api/v1/update_practice_info/?email=" + email,
+        url: "/api/v1/update_practice_info/?email="+ encodeURIComponent(email),
         type: "GET",
         success: function(data, textStatus, jqXHR) {
           if(data['status'] == 'done'){
-            $("#neo-enroll-button").text('Buy Now')
-            $("#neo-enroll-button").attr('id', 'add-to-cart')
-            $('#neo-test-modal').modal('hide');
+            $("#neo-enroll-button").text('Buy Now');
+            $("#neo-enroll-button").attr('id', 'add-to-cart');
+              var ifrm = document.getElementById('iframe');
+              var doc = ifrm.contentDocument? ifrm.contentDocument: ifrm.contentWindow.document;
+              btn = $(doc).find('#neobackhomebutton');
+              btn.text('Enroll Now');
+              btn.css('color', 'black')
+              btn.css('background', '#ffcf26')
+
           }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -259,7 +265,13 @@ $('iframe').load(function(){
     $(doc).on('click', '#neookbutton', function() {
         email = $('#neo-test-form :input[name="email"]').val();
         update_test_info(email);
+
     });
+
+    $(doc).on('click', "#neobackhomebutton", function(){
+      $('#neo-test-modal').modal('hide');
+      $('#add-to-cart').trigger('click');
+    })
 });
 
 

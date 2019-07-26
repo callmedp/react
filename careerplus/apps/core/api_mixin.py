@@ -433,7 +433,6 @@ class NeoApiMixin(object):
                 return user_id
 
     def board_user_on_neo(self, email):
-        import ipdb; ipdb.set_trace();
         user_id = self.get_user_neo_id(email)
         headers = self.get_headers()
         if user_id:
