@@ -18,6 +18,8 @@ from shine.core import ShineCandidateDetail
 from crmapi.config import (
     EXPERIENCE_IN_YEARS_MODEL_CHOICES
 )
+from shop.models import PracticeTestInfo
+from core.api_mixin import NeoApiMixin
 
 from shop.models import ProductUserProfile
 
@@ -915,5 +917,11 @@ def send_resume_in_mail_resume_builder(attachment,data):
             "%s" % (str(e)))
 
 
-
-
+@task(name='board_user_on_neo')
+def board_user_on_neo(ids):
+    import ipdb; ipdb.set_trace();
+    from order.models import OrderItem
+    neo_items = OrderItem.object.get(id__in=ids)
+    for item in neo_items:
+        email = item.order.email
+        NeoApiMixin().board_user_on_neo(email=email)

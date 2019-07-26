@@ -428,6 +428,9 @@ class ProductInformationMixin(object):
         ctx.update(json.loads(sqs.pFBT))
         get_fakeprice = self.get_solar_fakeprice(sqs.pPinb, sqs.pPfinb)
         ctx['domain_name'] = '{}//{}'.format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN)
+        if getattr(product, 'vendor', None):
+            ctx.update({'prd_vendor_slug': product.vendor.slug})
+
         ctx.update({'sqs': sqs})
         ctx.update({'get_fakeprice': get_fakeprice})
         ctx['meta'] = product.as_meta(self.request)

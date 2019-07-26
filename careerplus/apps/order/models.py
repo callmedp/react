@@ -24,7 +24,7 @@ from .choices import STATUS_CHOICES, SITE_CHOICES,\
     WC_FLOW_STATUS
 
 from .functions import get_upload_path_order_invoice, process_application_highlighter
-from .tasks import generate_resume_for_order
+from .tasks import generate_resume_for_order, board_user_on_neo
 
 #inter app imports
 from linkedin.models import Draft
@@ -284,6 +284,7 @@ class Order(AbstractAutoDate):
             return super(Order,self).save(**kwargs)
 
         existing_obj = Order.objects.get(id=self.id)
+
         if self.status == 1:
             assesment_items = self.orderitems.filter(
                 order__status__in=[0, 1],
@@ -292,9 +293,13 @@ class Order(AbstractAutoDate):
                 autologin_url=None
             )
             manually_generate_autologin_url(assesment_items=assesment_items)
-        
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_resume_builder():
             generate_resume_for_order.delay(self.id)
+            neo_items_id = list(self.orderitems.filter(
+                order__status__in=[0, 1],
+                product__vendor__slug='neo' 
+            ).values_list('id', flat=True))
+            board_user_on_neo(neo_items=neo_items_id)
             logging.getLogger('info_log').info("Generating resume for order {}".format(self.id))
 
         return super(Order,self).save(**kwargs)

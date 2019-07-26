@@ -52,7 +52,9 @@
 
 
 {% block main_container %}
-
+<br>
+<br>
+{{request.session.candidate_id}}
     <div id="id-detail-body">
 
       {{product_detail|safe}}
@@ -127,6 +129,141 @@ $(document).ready(function() {
 
 </script>
 
+<script>
+  function load_test(email, name, country_code, mobile_no){
+      var iframe = document.getElementById('iframe'),
+      iframeWin = iframe.contentWindow || iframe,
+      iframeDoc = iframe.contentDocument || iframeWin.document;
+      var html =
+        '<html>' + 
+        '<head>' +
+        '<meta content="width=device-width,  initial-scale=1"  name="viewport" />' +
+        '<scr' + 'ipt src="https://etest.dyned.com/neowidget.min.js"></scr' + 'ipt>' +
+        '</head>' +
+        '<body>'+
+        '<neo id="widgetbyneo"data-neo-email="'+ email +'"data-neo-mode="pt" data-neo-token="xRm7FoiyQ221ZL7MV07zEOtcF3xrPcCTXYKmAnA5ylPtFWYCWJS6XqgXoHFsmuPR"data-neo-dial-code="'+country_code+'"data-neo-phone-number="'+mobile_no+'"data-neo-fullname="'+name+'"data-neo-autostart="false">' +
+        '</body>' + 
+        '</html>';
+
+        iframe.srcdoc = html;
+    }
+
+function get_create_profile(email, name, country_code, mobile) {
+    var data = {
+        'email': email,
+        'mobile_no': country_code + mobile ,
+        'name': name,
+    }
+    $.ajax({
+        url: "/api/v1/create_practice_test_info/",
+        type: "POST",
+        data: data,
+        success: function(data, textStatus, jqXHR) {
+            check_for_load_test(data);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          console.log(errorThrown)
+           
+        }
+    });
+}
+
+function check_for_load_test(data){
+ 
+    if('has_completed' in data){
+      if(data['has_completed']){
+        //pass
+        $("#neo-enroll-button").text('Buy Now')
+        $("#neo-enroll-button").attr('id', 'add-to-cart')
+        $('#neo-test-modal').modal('hide');
+      }
+      else{
+        $('#iframe').show();
+        $("#neo-test-form").hide();
+        load_test(email, name, country_code, mobile_no);
+        $('#neo-test-modal').modal();
+      }
+    }
+}
+
+{% if request.session.candidate_id %}
+  let email = "{{ request.session.email }}";
+  let name = "{{request.session.full_name}}";
+  let country_code = "{{request.session.country_code}}";
+  let mobile_no = "{{request.session.mobile_no}}";
+  get_create_profile(email, name, country_code, mobile_no)
+
+{% endif %}
+
+{% if not request.session.candidate_id %}
+$("#neo-form-btn").click(function(e){
+  var $inputs = $('#neo-test-form :input');
+  var values = {};
+  $inputs.each(function() {
+      values[this.name] = $(this).val();
+  });
+  name = values['name'];
+  email = values['email'];
+  country_code = values['country_code'];
+  mobile_no = values['mobile'];
+  get_create_profile(email, name, country_code, mobile_no);
+});
+{% endif %}
+
+
+$('#neo-enroll-button').click(function(){
+  if($('#neo-enroll-button').text() == 'Take Test') {
+    {% if request.session.candidate_id %}
+        let email = "{{ request.session.email }}";
+        let name = "{{request.session.full_name}}";
+        let country_code = "{{request.session.country_code}}";
+        let mobile_no = "{{request.session.mobile_no}}";
+        get_create_profile(email, name, country_code, mobile_no)
+
+    {% else %}
+        $("#neo-test-form").show();
+        $('#neo-test-modal').modal();
+    {% endif %}
+  }
+});
+
+
+function update_test_info(email){
+    $.ajax({
+        url: "/api/v1/update_practice_info/?email=" + email,
+        type: "GET",
+        success: function(data, textStatus, jqXHR) {
+          if(data['status'] == 'done'){
+            $("#neo-enroll-button").text('Buy Now')
+            $("#neo-enroll-button").attr('id', 'add-to-cart')
+            $('#neo-test-modal').modal('hide');
+          }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          console.log(errorThrown)
+        }
+    });
+}
+
+$('#neo-test-modal').on('hidden.bs.modal', function () {
+  $("#neo-test-form").hide();
+  $('#iframe').hide();
+
+    // do something…
+});
+
+// attache event handler to neo test submit button
+$('iframe').load(function(){
+    var ifrm = document.getElementById('iframe');
+    var doc = ifrm.contentDocument? ifrm.contentDocument: ifrm.contentWindow.document;
+    $(doc).on('click', '#neookbutton', function() {
+        email = $('#neo-test-form :input[name="email"]').val();
+        update_test_info(email);
+    });
+});
+
+
+  </script>
 {% endblock js_section %}
 
   {% block zendesk %}
