@@ -52,7 +52,8 @@ export default class TopBar extends Component {
                                 <div className="top-banner--banner-txt">
                                     <h1>You are closer to your perfect resume.</h1>
                                     <p>Fill the details to create your
-                                        resume {!! (!(order_data && order_data.id)) ?<span>( You can also subscribe <br/>now and create resume later)</span> : ""}</p>
+                                        resume {!!(!(order_data && order_data.id)) ?
+                                            <span>( You can also subscribe <br/>now and create resume later)</span> : ""}</p>
                                 </div>
                     }
                     {
@@ -63,24 +64,40 @@ export default class TopBar extends Component {
                 			    
                 		        </span>
                             </div> :
-                            page === 'buy' || order_data && order_data.id && !order_data.combo ?
+                            page === 'buy' ?
                                 '' :
-                                <div className="top-banner--banner-right">
-                                    <div>
-                                        <button className="orange-button mr-10"
-                                                onClick={() => newUser ? showAlertModal() : this.redirectToBuyPage()}>Subscribe now
-                                        </button>
-                                        <button className="white-button mr-20" onClick={() => {
-                                            newUser ? showAlertModal() : this.changeTemplate()
-                                        }}>Change template
-                                        </button>
-                                    </div>
-                                    <span className="top-banner--banner-right--banner-thumb">
+                                !(order_data && order_data.id) ?
+                                    <div className="top-banner--banner-right">
+                                        <div>
+                                            <button className="orange-button mr-10"
+                                                    onClick={() => newUser ? showAlertModal() : this.redirectToBuyPage()}>Subscribe
+                                                now
+                                            </button>
+                                            <button className="white-button mr-20" onClick={() => {
+                                                newUser ? showAlertModal() : this.changeTemplate()
+                                            }}>Change template
+                                            </button>
+                                        </div>
+                                        <span className="top-banner--banner-right--banner-thumb">
                                     <img
                                         src={`${this.staticUrl}react/assets/images/resume-thumb-${selected_template}.jpg`}
                                         alt=""/>
                 		            </span>
-                                </div>
+                                    </div> :
+                                    (order_data && order_data.id && order_data.isCombo) ?
+                                        <div className="top-banner--banner-right">
+                                            <div>
+                                                <button className="white-button mr-20" onClick={() => {
+                                                    newUser ? showAlertModal() : this.changeTemplate()
+                                                }}>Change template
+                                                </button>
+                                            </div>
+                                            <span className="top-banner--banner-right--banner-thumb">
+                                    <img
+                                        src={`${this.staticUrl}react/assets/images/resume-thumb-${selected_template}.jpg`}
+                                        alt=""/>
+                		            </span>
+                                        </div> : ""
                     }
                 </div>
             </section>
