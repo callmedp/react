@@ -41,7 +41,7 @@ export default class Testimonial extends Component {
                                         
                                         <div className="testimonials--author">
                                             <strong>{el.name}</strong>
-                                            <span>Associate, Amazon</span>
+                                            <span>{el.profile}</span>
                                         </div>
                                     </div>
                                 </div>
