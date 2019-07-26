@@ -3,14 +3,14 @@
   "chunks": {
     "main": [
       {
-        "name": "main-1564059214987.css"
+        "name": "main-1564060794827.css",
+        },
+      {
+        "name": "main-1564060794827.js",
       },
       {
-        "name": "main-1564059214987.js"
-      },
-      {
-        "name": "main-1564059214987.js.map"
-      }
+        "name": "main-1564060794827.js.map",
+       }
     ]
   }
-}
+} 

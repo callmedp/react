@@ -154,7 +154,7 @@ urlpatterns += [
                    url(r'^api-auth/',
                        include('rest_framework.urls', namespace='rest_framework')),
                    # cart rest apis
-                   url(r'^api/v1/cart/', include('cart.api.v1.urls', namespace="cart-api")),
+                   # url(r'^api/v1/cart/', include('cart.api.v1.urls', namespace="cart-api")),
                    url(r'api/v1/', include('shop.api.v1.urls', namespace='shop-api')),
                    url(r'^$', homepage_view.HomePageView.as_view(), name='homepage'),
                    url(r'^console/', include('console.urls', namespace='console')),
