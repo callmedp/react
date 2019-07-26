@@ -24,14 +24,14 @@ class VskillTestView(DetailView):
     def get_breadcrumbs(self):
         breadcrumbs = []
         breadcrumbs.append({"url": '/', "name": "Home"})
-        breadcrumbs.append({"url": '/practice-test', "name": 'practice-test'})
+        breadcrumbs.append({"url": '/practice-tests', "name": 'practice-test'})
         test = self.get_object()
         category = test.category
         parent_category = category.get_parent().first() if category.get_parent() else None
         if parent_category:
-            breadcrumbs.append({"url": '/practice-test/' + parent_category.slug, "name": parent_category.name})
-        breadcrumbs.append({"url": '/practice-test/' + category.slug, "name": category.name})
-        breadcrumbs.append({"url": '/practice-test', "name": 'test'})
+            breadcrumbs.append({"url": '/practice-tests/' + parent_category.slug, "name": parent_category.name})
+        breadcrumbs.append({"url": '/practice-tests/' + category.slug, "name": category.name})
+        breadcrumbs.append({"url": '/practice-tests', "name": 'test'})
         return breadcrumbs
 
 
@@ -100,7 +100,7 @@ class AssessmentLandingPage(TemplateView):
     def get_breadcrumbs(self):
         breadcrumbs = []
         breadcrumbs.append({"url": '/', "name": "Home"})
-        breadcrumbs.append({"url": None, "name": 'practice-test'})
+        breadcrumbs.append({"url": None, "name": 'practice-tests'})
         return breadcrumbs
 
     def get_func_area_ids(self):
