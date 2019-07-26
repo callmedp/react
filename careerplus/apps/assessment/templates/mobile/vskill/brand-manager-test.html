@@ -51,7 +51,7 @@
                        {% for test in all_test|slice:":8" %}
 
         <div class="popular_test_inside">
-           <a id="{{test.id}}" onclick="testModal(event);" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}" }'>
+           <a id="{{test.id}}" onclick="testModal(event);" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}","courseName":"{{test.course.name}}","courseDuration":"{{test.course.get_duration_in_day}}","coursePrice":"{{test.course.inr_price}}","productName":"{{test.product.name}}","productDuration":"{{test.product.get_duration_day}}","productPrice":"{{test.product.inr_price}}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}" }'>
                 <span class=" border border{{forloop.counter0}}"></span>
                 <span class="name">{{test.title}}</span>
                 <span class="btn btn-md btn-round-30 btn-blue" id="btn_check_result">Take free test</span>
@@ -94,7 +94,7 @@
         </div><!-- option test box-->
 
         <div class="test-option-box">
-            <h2 class="fs-20"><a href="#" id="test-product-name">Practice Tests</a></h2>
+            <h2 class="fs-20"><a href="#" id="productName">Practice Tests</a></h2>
             <span class="test-option-box--recommended">
                 Recommended
             </span>
@@ -124,7 +124,7 @@
             <div class="test-option-box--cta mt-20">
                 <div class="test-option-box--price">
                     <span>Rs. 999</span>
-                    <strong id="test-price">Rs. 699</strong>
+                    <strong id="productPrice">Rs. 699</strong>
                 </div>
                 <button class="btn btn-lg btn-round-30 btn-yellow semi-bold" id="testAddToCart">Add to cart</button>
             </div>
@@ -160,10 +160,10 @@
 
 {% endblock container %}
 {% block js_section %}
-<script src="{% static 'shinelearn/js/assessment/take_test.js' %}"></script>
    {{block.super}}
    <script type="text/javascript">
    var page_number= 2;
+   var facolor = 0;
    function loadmore(){
             page_number = page_number+1;
              element = document.getElementById('funcDiv');
@@ -177,15 +177,18 @@
                  $('#loadmorebtn').hide();
                }
                for (fa in json.results){
+                  color = counter(facolor)
                 element.innerHTML= element.innerHTML + `<div class="popular_test_inside">
            <a id="${json.results[fa].id}" onclick="testModal(event);" data-attr-value='{"id":"${json.results[fa].id}","catid":"${json.results[fa].category}","quescount":"${json.results[fa].question_count}",
-  "testSlug":"${json.results[fa].slug}","vendor":"${json.results[fa].vendor}" }'>
-                  <span class=" border border{{forloop.counter0}}"></span>
+  "testSlug":"${json.results[fa].slug}","vendor":"${json.results[fa].vendor}",
+   "courseName":"${json.results[fa].course_id_data[0].name}","courseDuration":"${json.results[fa].course_id_data[0].day_duration}","coursePrice":"${json.results[fa].course_id_data[0].inr_price}","productName":"${json.results[fa].product_id_data[0].name}","productDuration":"${json.results[fa].product_id_data[0].day_duration}","productPrice":"${json.results[fa].product_id_data[0].inr_price}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}"
+   }' data-target="#testModal">
+                  <span class=" border border${color}"></span>
                 <span class="name">${json.results[fa].title}</span>
                 <span class="btn btn-md btn-round-30 btn-blue" id="btn_check_result">Take free test</span>
             </a>
         </div>`
-
+                facolor +=1;
 
                }
                },
@@ -201,19 +204,43 @@
                }
            });
    }
+    function counter(facolor){
 
+    return facolor%8;
+
+   }
 
 
    </script>
+<script src="{% static 'shinelearn/js/assessment/landing.js' %}"></script>
 <script src="{% static 'shinelearn/js/assessment/assessment_search.js' %}"></script>
    <script>
     function testModal(e){
-    testObject = JSON.parse(e.currentTarget.dataset.attrValue);
-    getProductDetail(testObject.vendor,testObject.catid);
-           $("#check_results").addClass("open");
-              $('#startTestLink').attr('href','/practice-tests/'+ testObject.testSlug +'-test/');
-           $('#questCount').text(testObject.quescount);
-         getCourseDetail(testObject.vendor,testObject.catid,testObject.id);
+    modalobject = JSON.parse(e.currentTarget.dataset.attrValue);
+        $('body').addClass('overflow-hidden');
+        $("#check_results").addClass("open");
+         $('#productName').text(modalobject.productName);
+        $('#productDuration').text(modalobject.productDuration);
+        $('#productPrice').text(modalobject.productPrice);
+        $('#courseDuration').text(modalobject.courseDuration);
+        $('#coursePrice').text(modalobject.coursePrice);
+        $('#courseName').text(modalobject.courseName);
+        $('#questCount').text(modalobject.quescount);
+       if(modalobject.courseName == ""|| modalobject.courseName == "undefined" ){
+        $('#testCourse').hide();
+        }
+        else{
+         $('#testCourse').show();
+        }
+        $('#startTestLink').attr('href','/practice-tests/'+ modalobject.testSlug +'-test/');
+        $('#testAddToCart').click( function()
+         {
+           updateToCart(modalobject.productId,'cart');
+         }
+      );
+        $('#courseCartBtn').click(function(){
+        updateToCart(modalobject.courseId,'cart');
+        });
 
     }
 
@@ -226,11 +253,7 @@
             $("#check_results").removeClass("open");
         });
 
-          $('#testAddToCart').click( function()
-           {
-            addToCart(testObject.vendor,testObject.catid);
-           }
-      );
+
 
     </script>
 

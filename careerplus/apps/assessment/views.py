@@ -193,15 +193,14 @@ class AssessmentResultPage(TemplateView):
         session_id = self.request.session.session_key
         key = session_id + test_slug
         category = getattr(Test.objects.filter(slug=test_slug).first(), 'category', None)
-        if not cache.get(key):
-            category = getattr(Test.objects.filter(slug=test_slug).first(), 'category', None)
+        if not cache.get(key) and category:
             return reverse('assessment:vskill-subcategory',\
                 kwargs={'slug': category.slug}) if category else reverse("'homepage'")
         elif cache.get(key).get('timeout') or cache.get(key).get('test_submit'):
             return
         else:
             return reverse('assessment:vskill-exam', \
-             kwargs={'slug': test_slug}) if category else HttpResponseRedirect("homepage")
+             kwargs={'slug': test_slug}) if category else reverse("homepage")
 
     def get(self,request,*args,**kwargs):
         if self.get_redirection_path():

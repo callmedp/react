@@ -47,8 +47,8 @@
 
                {% for test in all_test|slice:":8" %}
                <div class="testinside">
-                  <span class="border-left"></span>
-  <a id="{{test.id}}" onclick="getProductDetail('{{test.vendor.id}}','{{test.category.id}}');getCourseDetail('{{test.vendor.id}}','{{test.category.id}}','{{test.id}}');" class="testModal" data-toggle="modal" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}" }' data-target="#testModal">
+                  <span class="border-left border{{forloop.counter}}"></span>
+  <a id="{{test.id}}" class="testModal" data-toggle="modal" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}","courseName":"{{test.course.name}}","courseDuration":"{{test.course.get_duration_in_day}}","coursePrice":"{{test.course.inr_price}}","productName":"{{test.product.name}}","productDuration":"{{test.product.get_duration_day}}","productPrice":"{{test.product.inr_price}}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}"  }' data-target="#testModal">
                      {{test.title}}
                      <div class="white_hover"></div>
                      <span class="taketest" >Take Free Test</span>
@@ -107,7 +107,7 @@
                <img src="{% static 'shinelearn/images/free_skill/practice-test-bg.jpg' %}" class="img-responsive">
             </i>
             <span class="pad-15">
-               <h3>Practice Tests</h3>
+               <h3 id="productName">Practice Tests</h3>
                <ul>
                   <li>
                      Test Format <strong>Practice Exam</strong>
@@ -120,7 +120,7 @@
                <p class="pb-30">Explanation to every questions</p>
                <button class="yellow_btn pull-right" id="testAddToCart" >Add to cart</button>
                <strike>Rs. 999</strike>
-               <h4 class="mt-0" id="test-price">Rs.</h4>
+               <h4 class="mt-0" id="productPrice">Rs.</h4>
             </span>
            </div>
         </div>
@@ -159,54 +159,40 @@
    </div>
 {% endblock main_container %}
 {% block js_section %}
-<script src="{% static 'shinelearn/js/assessment/take_test.js' %}"></script>
    {{block.super}}
+<script src="{% static 'shinelearn/js/assessment/landing.js' %}"></script>
    <script type="text/javascript">
-    $('#testModal').on('show.bs.modal', function(e) {
-    var modalobject = JSON.parse(e.relatedTarget.dataset.attrValue);
-    console.log(modalobject);
-
-    $('#questCount').text(modalobject.quescount);
-    $('#startTestLink').attr('href','/practice-tests/'+ modalobject.testSlug +'-test/');
-    $('#testAddToCart').click( function()
-           {
-            addToCart(modalobject.vendor,modalobject.catid);
-           }
-      );
-
-
-});
-
-
-
    var page_number= 2;
+      var facolor = 0;
    function loadmore(){
             page_number = page_number+1;
              element = document.getElementById('funcDiv');
            $.ajax({
                url: '/api/get-test',
                type: "GET",
-               data : {'page_size' : 4, 'page':page_number,'category_id':'{{Category.id}}' },
+               data : {'page_size' : 4, 'page':page_number,'category_id':'{{Category.id}}','include_product_id':1,
+                'include_course_id':1},
                dataType: 'json',
                success: function(json) {
                if (json.next == null){
                  $('#loadmorebtn').hide();
                }
                for (fa in json.results){
+            color = counter(facolor)
                 element.innerHTML= element.innerHTML +
 
                 `      <div class="testinside">
-                  <span class="border-left"></span>
-  <a id="${json.results[fa].id}" onclick="getProductDetail('${json.results[fa].vendor}','${json.results[fa].category}');
-  getCourseDetail('${json.results[fa].vendor}','${json.results[fa].category}','${json.results[fa].id}');"
-  class="testModal" data-toggle="modal" data-attr-value='{"id":"${json.results[fa].id}","catid":"${json.results[fa].category}","quescount":"${json.results[fa].question_count}",
-  "testSlug":"${json.results[fa].slug}","vendor":"${json.results[fa].vendor}" }' data-target="#testModal">
+                  <span class="border-left border border${color}"></span>
+  <a id="${json.results[fa].id}" class="testModal" data-toggle="modal" data-attr-value='{"id":"${json.results[fa].id}","catid":"${json.results[fa].category}","quescount":"${json.results[fa].question_count}",
+  "testSlug":"${json.results[fa].slug}","vendor":"${json.results[fa].vendor}",
+   "courseName":"${json.results[fa].course_id_data[0].name}","courseDuration":"${json.results[fa].course_id_data[0].day_duration}","coursePrice":"${json.results[fa].course_id_data[0].inr_price}","productName":"${json.results[fa].product_id_data[0].name}","productDuration":"${json.results[fa].product_id_data[0].day_duration}","productPrice":"${json.results[fa].product_id_data[0].inr_price}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}"
+   }' data-target="#testModal">
                      ${json.results[fa].title}
                      <div class="white_hover"></div>
                      <span class="taketest" >Take Free Test</span>
                   </a>
                </div>`
-
+ facolor +=1;
 
                }
                },
@@ -223,8 +209,11 @@
            });
    }
 
+       function counter(facolor){
 
+    return facolor%8;
 
+   }
    </script>
 <script src="{% static 'shinelearn/js/assessment/assessment_search.js' %}"></script>
 

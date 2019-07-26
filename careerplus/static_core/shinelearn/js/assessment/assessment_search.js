@@ -29,5 +29,5 @@ $('.typeahead').typeahead(
 });
 
 $('.typeahead').on('typeahead:selected', function(evt, item) {
- window.location = 'http://' + window.location.host + item['slug'] +'-test/';
+ window.location = 'http://' + window.location.host +'/practice-tests/'+ item['slug'] +'-test/';
 })

@@ -134,6 +134,8 @@ class TestCacheUtil:
             return True, True
         timestamp_obj = datetime.strptime(test_duration_time, self.time_format)
         if timestamp_obj < datetime.now() or self.get_test_submit(key):
+            if not self.get_test_time_out(key) and not self.get_test_submit(key):
+                self.set_test_time_out(key)
             return False, False
         return True, False
 

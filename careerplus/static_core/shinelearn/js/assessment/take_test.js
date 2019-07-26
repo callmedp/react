@@ -56,7 +56,7 @@
 
    }
 
-   function updateToCart(prod_id,cart_type)
+   function updateToCart(prod_id,cart_type='cart')
    {
    $.ajax({
                 url: '/cart/add-to-cart/',

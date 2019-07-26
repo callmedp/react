@@ -34,6 +34,7 @@ class Test(AbstractAutoDate):
     description = models.TextField(null=True, blank=True)
     category = models.ForeignKey(Category, null=True, blank=True)
     product = models.ForeignKey(Product, null=True, blank=True)
+    course = models.ForeignKey(Product, null=True, blank=True,related_name='testcourse')
     vendor = models.ForeignKey(Vendor,blank=True, null=True)
 
     def __str__(self):

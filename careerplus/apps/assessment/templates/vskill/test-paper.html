@@ -34,7 +34,7 @@
 
         <div class="row">
             <div class="col-sm-12 col-lg-12 col-md-12">
-                <h1>Search Engine Optimisation Test</h1>
+                <h1>{{object.name}}</h1>
             </div>
             <!-- tests starts -->
             <div class="col-sm-9 mt-30">
@@ -96,11 +96,11 @@
 
                 <!------- Add to cart   ----->
 
-                <div class="white-box bdr-bottom" id="test-product" style="display:none">
+                <div class="white-box bdr-bottom" id="test-product" style="{% if not object.product %}display:none{% endif %}">
                     <div class="test-benefits benefits-bg">
                <span class="pad-15">
-                  <h3><a href="#" id="test-product-name">Advanced Search Engine Optimisation Test</a></h3>
-                  <h4 class="mt-0" id="test-price">Rs. 699</h4>
+                  <h3><a href="#" id="test-product-name">{{object.product.name}}</a></h3>
+                  <h4 class="mt-0" id="test-price">Rs. {{object.product.inr_price}}</h4>
                   <strike>Rs. 999</strike>
                   <span class="grey-border mt-15 mb-15"></span>
                   <strong>Benefits</strong>
@@ -108,7 +108,7 @@
                   <p>Real exam & Practice environment</p>
                   <p>Answers & Detailed Explanations</p>
                   <span class="flexbox align-items-center mt-20">
-                     <button class="yellow_btn" onclick="addToCart('{{object.vendor.id}}','{{object.category.id}}')">Add to cart</button>
+                     <button class="yellow_btn" onclick="updateToCart('{{object.product.id}}');">Add to cart</button>
                   </span>
                </span>
                     </div>
@@ -167,7 +167,6 @@ return resp;
 
 
 $('#timeTest').ready(function() {
-getProductDetail('{{object.vendor.id}}','{{object.category.id}}');
         $.ajax({
          url   : '/api/v1/get-set-time/?test_id={{object.id}}&duration={{object.duration}}',
          type  : 'get',
@@ -225,37 +224,6 @@ $(document).ready(function() {
     delAns =false;
 });
 
-function loadmore() {
-    page_number = page_number + 1;
-    element = document.getElementById('funcDiv');
-    $.ajax({
-        url: '/api/get-category-level-products',
-        type: "GET",
-        data: {
-            'tl': 2,
-            'page_size': 4,
-            'page': page_number
-        },
-        dataType: 'json',
-        success: function(json) {
-            if (json.next == null) {
-                $('#loadmorebtn').hide();
-            }
-            for (fa in json.results) {
-                element.innerHTML = element.innerHTML + '<div class="functional_test_inside border-' + fa + '"><a href="#"><span class="sales"></span>' + json.results[fa].heading + '</a></div>'
-
-            }
-        },
-        error: function(xhr, ajaxOptions, thrownError) {
-            if (xhr.status == 404) {
-                alert("No more Categories to show ");
-                $('#loadmorebtn').hide();
-            } else {
-                alert("Something went wrong. Try again later");
-            }
-        }
-    });
-}
 
 $('.marked').click(function() {
     let value = parseInt(this.dataset.attrValue);

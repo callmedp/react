@@ -23,7 +23,7 @@
 <div class="body-wrapper practice-test ">
     <div class="practice-test-inside"></div>
 
-    <h1>Search Engine Optimisation Test</h1>
+    <h1>{{object.name}}</h1>
     <div class="bread-crums">
         {% for bread in breadcrumbs %}
                   {% if bread.url %}
@@ -107,9 +107,9 @@
     </div>
 
     <div class="feature-test">
-        <h2 id="test-product" style="display:none" id="test-product-name"> Advanced Search Engine Optimisation Test</h2>
+        <h2 id="productName" > {{object.product.name}}</h2>
         <div class="feature-test--price">
-            <strong id="test-price">Rs. 699</strong>
+            <strong id="productPrice">Rs. {{object.product.inr_price}}</strong>
             <span class="stirke-through">Rs. 999</span>
         </div>
 
@@ -123,7 +123,7 @@
             </ul>
 
             <div class="feature-test__btn-wrap">
-                <button class="btn btn-round-30 btn-yellow w-50" onclick="addToCart('{{object.vendor.id}}','{{object.category.id}}')">Add to cart</button>
+                <button class="btn btn-round-30 btn-yellow w-50" onclick="updateToCart('{{object.product.id}}')">Add to cart</button>
             </div>
 
         </div>
@@ -151,7 +151,7 @@
                 </li>
                 <li><span></span>Answers & Detailed Explanations</li>
             </ul>
-            <button class="btn btn-round-30 btn-blue btn-lg mt-20">View test</button>
+            <a class="btn btn-round-30 btn-blue btn-lg mt-20" href="{{object.product.get_absolute_url}}" >View test</a>
        </div>
     </div>
 </div><!-- /. modal -->
@@ -209,6 +209,7 @@
 {% block js_section %}
 {{block.super}}
 <script src="{% static 'shinelearn/js/assessment/take_test.js' %}"></script>
+
 <script>
 // JavaScript for label effects only
 	$(window).load(function(){
@@ -264,13 +265,9 @@ let resp = NaN;
 return resp;
 }
 
-
-
-
 </script>
 <script>
 $('#timeTest').ready(function() {
-getProductDetail('{{object.vendor.id}}','{{object.category.id}}');
         $.ajax({
          url   : '/api/v1/get-set-time/?test_id={{object.id}}&duration={{object.duration}}',
          type  : 'get',
@@ -336,37 +333,6 @@ $(document).ready(function() {
 
 });
 
-function loadmore() {
-    page_number = page_number + 1;
-    element = document.getElementById('funcDiv');
-    $.ajax({
-        url: '/api/get-category-level-products',
-        type: "GET",
-        data: {
-            'tl': 2,
-            'page_size': 4,
-            'page': page_number
-        },
-        dataType: 'json',
-        success: function(json) {
-            if (json.next == null) {
-                $('#loadmorebtn').hide();
-            }
-            for (fa in json.results) {
-                element.innerHTML = element.innerHTML + '<div class="functional_test_inside border-' + fa + '"><a href="#"><span class="sales"></span>' + json.results[fa].heading + '</a></div>'
-
-            }
-        },
-        error: function(xhr, ajaxOptions, thrownError) {
-            if (xhr.status == 404) {
-                alert("No more Categories to show ");
-                $('#loadmorebtn').hide();
-            } else {
-                alert("Something went wrong. Try again later");
-            }
-        }
-    });
-}
 
 $('.marked').click(function() {
     let value = parseInt(this.dataset.attrValue);

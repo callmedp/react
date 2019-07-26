@@ -40,22 +40,23 @@
 
     <div class="test-result">
         <span class="text-center mt-10">
-            <img src="{% static 'shinelearn/images/mobile/practice_test/cup.png' %}">
+            <img id="resultImage" src="{% static 'shinelearn/images/mobile/practice_test/cup.png' %}">
         </span>
-        <h2>Congratulations,<br>You are doing great</h2>
+        <h2 id="resultRemark"></h2>
         <div class="test-result__you-scored mt-15">
             <p class="test-result__you-scored--text">You scored</p>
             <p class="test-result__you-scored--percentage"><strong id="scoringPercent"></strong>%</p>
             <a href="#answers" class="btn btn-blue btn-lg2 btn-round-30" id="btn-checkAnswers">Check answers</a>
             <p class="mt-15 fs-16 pb-0"><strong id="correctMsg"> </strong></p>
+            <p id="resultCourse">Take our paid <a href="#">Search Engine Optimisation Master Training test</a> to do better </p>
             <span >Time taken: <p id="timeTaken"> 04min 55 secs</p></span>
         </div>
     </div><!-- Your Test Result -->
 
     <div class="feature-test" id="test-product" style="display:none;">
-        <h2 ><a href="#" id="test-product-name">Advanced Search Engine Optimisation Test</a></h2>
+        <h2 ><a href="#" id="test-product-name">{{object.product.name}}</a></h2>
         <div class="feature-test--price">
-            <strong id="test-price">Rs. 699</strong>
+            <strong id="test-price">{{object.product.inr_price}}</strong>
             <span class="stirke-through">Rs. 999</span>
         </div>
 
@@ -69,7 +70,7 @@
             </ul>
 
             <div class="feature-test__btn-wrap">
-                <button class="btn btn-round-30 btn-yellow w-50" onclick="=addToCart('{{object.vendor.id}}','{{object.category.id}}')" >Add to cart</button>
+                <button class="btn btn-round-30 btn-yellow w-50" onclick="=updateToCart('{{object.product.id}}')" >Add to cart</button>
             </div>
 
         </div>
@@ -82,10 +83,10 @@
                 <img id="courseImg" src="https://static1.shine.com/l/m/product_image/3410/1539673448_4625.png" class="img-responsive" alt="...">
             </span>
             <div class="media-flex--body">
-                <p class="fs-16 semi-bold"><a href="#" id="courseName">Search Engine Optimisation Master Training Course</a></p>
+                <p class="fs-16 semi-bold"><a href="#" id="courseName">{{object.course.name}}</a></p>
                 <ul>
                     <li class="mb-10"><strong class="mr-10" id="courseBought">1096</strong>people bought</li>
-                    <li><strong class="mr-10" id="courseJobsAvailable">12</strong>job available</li>
+                    <li><strong class="mr-10" id="courseJobsAvailable">{{object.course.num_jobs}}</strong>job available</li>
                 </ul>
             </div>
         </div>
@@ -145,7 +146,7 @@
                 <li><span></span>Answers & Detailed Explanations</li>
             </ul>
 
-            <button class="btn btn-round-30 btn-blue btn-lg mt-20"   id="viewPaidTest">View test</button>
+            <a class="btn btn-round-30 btn-blue btn-lg mt-20" id="viewPaidTest" href="{{object.product.get_absolute_url}}">View test</a>
        </div>
     </div>
 </div><!-- /. modal -->
@@ -255,7 +256,30 @@ function getCoptions(){
                      }
                             }
               $('#correctMsg').text( right+ ' out of '+total+' correct answers ');
+                   let scorePercent = (right/total)*100 ;
+              let scoreMessage = "";
               $('#scoringPercent').text((right/total)*100 );
+              if(scorePercent >80){
+              scoreMessage =  ` Wow! Awesome Score. </br>Take <a href="{{object.product.get_absolute_url}}"> {{object.product.name}}</a> to show off your skills to the recruiter`;
+               $('#resultImage').attr("src","IMAGE PATH");
+               $('#resultCourse').html('Take <a href= "{{object.course.get_absolute_url}}">{{object.course.name}} </a>to show off your skills to the recruiter');
+
+              }
+               else if(scorePercent <= 80 && scorePercent >=50){
+              scoreMessage =  `  Don’t worry! </br> You are almost there. Take {{object.product.name}} to be the master`;
+              $('#resultImage').attr("src","IMAGE PATH");
+              $('#resultCourse').html('Take our paid <a href= "{{object.product.get_absolute_url}}">{{object.product.name}} </a>to do better');
+
+              }
+               else{
+              $('#resultCourse').html('Take our paid <a href= "{{object.product.get_absolute_url}}">{{object.product.name}}</a>to do better');
+
+              scoreMessage =  ` Don’t panic! </br> We ‘ve got you covered. Take <a href= "{{object.product.get_absolute_url}}">{{object.product.name}}</a> to be the master`;
+                           $('#resultImage').attr("src","IMAGE PATH");
+
+              }
+              $('#resultRemark').html(scoreMessage);
+
               $('#timeTaken').text(secondsToMinutes(questionAttempt['testTime'+{{object.id}}]));
                                     }
     });
@@ -265,7 +289,6 @@ function getCoptions(){
 }
 
 function showTest(vid,cid){
-    getProductDetail(vid,cid);
     $('#testLimit').show();
     $('body').addClass('overflow-hidden');
 }

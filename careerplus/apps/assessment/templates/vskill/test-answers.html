@@ -1,8 +1,6 @@
 {% extends "basic/base1.html" %}
 {% load static meta thumbnail compress %}
 {% block title %}Practice test | online mock test – Shine Learning {% endblock title %}
-
-
 {% comment %}
 {% block head %}
 {{block.super}}
@@ -48,16 +46,13 @@
          <div class="col-sm-12 col-lg-12 col-md-12">
             <div class="result-box mt-20">
                <div class="col-sm-2">
-                  <img src="{% static 'shinelearn/images/free_skill/test-result-bg.png' %}" class="img-responsive">
+                  <img id="resultImage" src="{% static 'shinelearn/images/free_skill/test-result-bg.png' %}" class="img-responsive">
                </div>
                <div class="col-sm-8 col-md-7">
-<<<<<<< HEAD
                   <h2 id="resultRemark"></h2>
-=======
-                  <h2>Wow! Awesome Score</h2>
->>>>>>> changes
+
                   <strong id="correctMsg"></strong>
-                  <p>Take <a href="#">Search Engine Optimisation Master Training Course</a> to show off your skills to the recruiter</p>
+                  <p id="resultCourse"></p>
                   <div class="flexbox mt-20 mb-20">
                      <a data-toggle="modal"  href="#TestLimitModal" onclick="getProductDetail('{{object.vendor.id}}','{{object.category.id}}');"  class="result_btn" >Next test &nbsp; &rsaquo;</a>
                      <a href="/practice-tests/{{object.category.slug}}/sub" class="result_btn ml-20">Explore other test</a>
@@ -117,8 +112,8 @@
             <div class="white-box bdr-bottom">
                <div class="test-benefits benefits-bg">
                <span class="pad-15">
-                  <h3><a href="#" id="test-product-name">Advanced Search Engine Optimisation Test</a></h3>
-                  <h4 class="mt-0" id="test-price">Rs. 699</h4>
+                  <h3><a href="#" id="test-product-name" href="{{object.product.get_absolute_url}}">{{object.product.name}}</a></h3>
+                  <h4 class="mt-0" id="test-price">Rs. {{object.product.price}}</h4>
                   <strike>Rs. 999</strike>
                   <span class="grey-border mt-15 mb-15"></span>
                   <strong>Benefits</strong>
@@ -126,7 +121,7 @@
                   <p>Real exam & Practice environment</p>
                   <p>Answers & Detailed Explanations</p>
                   <span class="flexbox align-items-center mt-20">
-                     <button class="yellow_btn" onclick="=addToCart('{{object.vendor.id}}','{{object.category.id}}')">Add to cart</button>
+                     <button class="yellow_btn" onclick="=updateToCart('{{object.product.id}}','cart')">Add to cart</button>
                   </span>
                </span>
               </div>
@@ -172,7 +167,7 @@
                <p>Real exam & Practice environment</p>
                <p>Answers & Detailed Explanations</p>
                <span class="flexbox mt-20 mb-30">
-                  <a class="blue_btn" id="viewPaidTest">View test</a>
+                  <a class="blue_btn" id="viewPaidTest" href="{{object.product.get_absolute_url}}">View test</a>
                </span>
          </div>
         </div>
@@ -244,8 +239,6 @@ var tKey = 'Test-' + '{{object.id}}',myStorage = window.localStorage,
 right=0,questionAttempt = null,total = {{questions_list.count}};
 
 $(document).ready(function() {
-        getCourseDetail('{{object.vendor.id}}','{{object.category.id}}','{{object.id}}');
-
 
     {% if not request.session.is_lead_created %}
       {% if request.session.candidate_id %}
@@ -308,7 +301,7 @@ function getCoptions(){
          success: function(response){
          for(i of response){
             $('#check'+i.question_options[0]).addClass('ans-right');
-            if(Object.values(questionAttempt).includes(i.question_options[0])){
+            if(questionAttempt && Object.values(questionAttempt) && Object.values(questionAttempt).includes(i.question_options[0])){
                   right+= 1 ;
                      }
                             }
@@ -317,18 +310,32 @@ function getCoptions(){
               let scoreMessage = "";
               $('#scoringPercent').text(scorePercent +"%");
               if(scorePercent >80){
-              scoreMessage =  ` Wow! Awesome Score. Take ${$('#courseName').text()} to show off your skills to the recruiter`;
+              scoreMessage =  ` Wow! Awesome Score. Take <a href="{{object.product.get_absolute_url}}"> {{object.product.name}}</a> to show off your skills to the recruiter`;
+               $('#resultImage').attr("src","IMAGE PATH");
+               $('#resultCourse').html('Take <a href= "{{object.course.get_absolute_url}}">{{object.course.name}} </a>to show off your skills to the recruiter');
+
               }
                else if(scorePercent <= 80 && scorePercent >=50){
-              scoreMessage =  `  Don’t worry! You are almost there. Take ${$('#test-product-name').text()} to be the master`;
+              scoreMessage =  `  Don’t worry! You are almost there. Take {{object.product.name}} to be the master`;
+              $('#resultImage').attr("src","IMAGE PATH");
+              $('#resultCourse').html('Take our paid <a href= "{{object.product.get_absolute_url}}">{{object.product.name}} </a>to do better');
+
               }
                else{
-              scoreMessage =  ` Don’t panic! We ‘ve got you covered. Take ${$('#test-product-name').text()}  to be the master`;
-              }
+              $('#resultCourse').html('Take our paid <a href= "{{object.product.get_absolute_url}}">{{object.product.name}}</a>to do better');
 
-              $('#resultRemark').text(scoreMessage);
+              scoreMessage =  ` Don’t panic! We ‘ve got you covered. Take <a href= "{{object.product.get_absolute_url}}">{{object.product.name}}</a> to be the master`;
+                           $('#resultImage').attr("src","IMAGE PATH");
+
+              }
+              $('#resultRemark').html(scoreMessage);
+              if(questionAttempt){
               $('#timeTaken').text(secondsToMinutes(questionAttempt['testTime'+{{object.id}}]));
-                                    }
+              }else{
+               $('#timeTaken').text();
+
+              }
+                 }
     });
 
 
