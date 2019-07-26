@@ -663,7 +663,6 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
         return context
 
     def post(self, request, *args, **kwargs):
-        import ipdb ; ipdb.set_trace()
         self.object = self.get_object()
         order = self.object
         message = request.POST.get('message', '').strip()
