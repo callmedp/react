@@ -9,6 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.utils import timezone
 from django_mysql.models import ListTextField
+from django.core.cache import cache
 
 #local imports
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
@@ -26,6 +27,7 @@ from seo.models import AbstractAutoDate
 from geolocation.models import Country, CURRENCY_SYMBOL
 from users.models import User
 from console.feedbackCall.choices import FEEDBACK_RESOLUTION_CHOICES,FEEDBACK_CATEGORY_CHOICES,FEEDBACK_STATUS
+from order.utils import get_ltv
 
 #third party imports
 from payment.utils import manually_generate_autologin_url
@@ -276,6 +278,8 @@ class Order(AbstractAutoDate):
             return super(Order,self).save(**kwargs)
 
         existing_obj = Order.objects.get(id=self.id)
+        key = 'ltv' + self.candidate_id
+        cache.delete(key)
         
         if self.status == 1:
             assesment_items = self.orderitems.filter(
@@ -536,7 +540,8 @@ class OrderItem(AbstractAutoDate):
 
     @property
     def order_payment_date(self):
-        return self.order.payment_date
+        payment_date = self.order.payment_date.date()
+        return payment_date
 
     @property
     def product_name(self):
@@ -939,47 +944,77 @@ class WelcomeCallOperation(AbstractAutoDate):
 
 class CustomerFeedback(models.Model):
     candidate_id = models.CharField('Candidate Id', max_length=100)
+    full_name = models.CharField('Full Name',max_length=255,blank=True, null=True)
+    mobile = models.CharField(max_length=15, null=True, blank=True,)
+    email = models.CharField('Full Name',max_length=255,blank=True, null=True)
     added_on = models.DateTimeField(editable=False, auto_now_add=True)
     status = models.SmallIntegerField(choices=FEEDBACK_STATUS,default=1)
     assigned_to =  models.ForeignKey(User,blank=True, null=True) 
-    follow_up_date = models.DateField('Follow Up Date', blank=True, null=True)
+    follow_up_date = models.DateTimeField('Follow Up Date', blank=True, null=True)
     comment = models.CharField('Feedback Comment', max_length=500)
+    last_payment_date = models.DateField('Last Payment Date',blank=True, null=True)
 
     @property
-    def last_payment_date(self):
-        return "finding"
-
-    @property
-    def status_name(self):
+    def status_text(self):
         return dict(FEEDBACK_STATUS).get(self.status)
-    
-    @property
-    def full_name(self):
-        return "USer"
 
     @property
-    def mobile(self):
-        return 912345678
+    def assigned_to_text(self):
+        return self.assigned_to.name
 
     @property
-    def email(self):
-        return 'abc@gmail.com'
-    
-    @property
-    def ltv(self):
-        return 30000
-    
-    # @property
-    # def ltv(self):
-    #     return "finding"
+    def ltv_value(self):
+        return get_ltv(self.candidate_id)
 
-    # @property
-    # def name(self):
-    #     return "Name"
+    @property
+    def added_on_date(self):
+        return self.added_on.strftime("%d-%b-%Y (%H:%M:%S)")
+
+    @property
+    def follow_up_date_text(self):
+        return self.follow_up_date.strftime("%d-%b-%Y (%H:%M:%S)")
 
 
 class OrderItemFeedback(models.Model):
     category =  models.SmallIntegerField(choices=FEEDBACK_CATEGORY_CHOICES,blank=True, null=True)
     resolution =  models.SmallIntegerField(choices=FEEDBACK_RESOLUTION_CHOICES,blank=True, null=True)
+    comment = models.CharField('Feedback Comment', max_length=500,blank=True, null=True)
     order_item = models.ForeignKey(OrderItem)
     customer_feedback  = models.ForeignKey(CustomerFeedback)
+
+    def save(self, *args, **kwargs):
+        create = not bool(self.id)
+        if not create:
+            assigned_to = CustomerFeedback.objects.get(id=self.customer_feedback.id).assigned_to
+            prev_data = OrderItemFeedback.objects.get(id=self.id)
+            compare_list = [self.category==prev_data.category,self.resolution==prev_data.resolution,self.comment==prev_data.comment]
+            if not all(compare_list):
+                OrderItemFeedbackOperation.objects.create(category=self.category,resolution=self.resolution,comment=self.comment,order_item=self.order_item,customer_feedback=self.customer_feedback,assigned_to=assigned_to)
+        super(OrderItemFeedback, self).save(*args, **kwargs) # Call the real save() method
+
+class OrderItemFeedbackOperation(models.Model):
+    assigned_to = models.ForeignKey(User,blank=True, null=True) 
+    added_on = models.DateTimeField(editable=False, auto_now_add=True)
+    category =  models.SmallIntegerField(choices=FEEDBACK_CATEGORY_CHOICES,blank=True, null=True)
+    resolution =  models.SmallIntegerField(choices=FEEDBACK_RESOLUTION_CHOICES,blank=True, null=True)
+    comment = models.CharField('Feedback Comment', max_length=500,blank=True, null=True)
+    order_item = models.ForeignKey(OrderItem,blank=True, null=True)
+    customer_feedback  = models.ForeignKey(CustomerFeedback,blank=True, null=True)
+
+
+    @property
+    def category_text(self):
+        return dict(FEEDBACK_CATEGORY_CHOICES).get(self.category)
+
+    @property
+    def resolution_text(self):
+        return dict(FEEDBACK_RESOLUTION_CHOICES).get(self.resolution)
+
+    @property
+    def assigned_to_text(self):
+        return self.assigned_to.name
+    
+    @property
+    def added_on_date(self):
+        return self.added_on.strftime("%d-%b-%Y (%H:%M:%S)")
+

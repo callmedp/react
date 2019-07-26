@@ -43,21 +43,16 @@ def get_edit_purl(form_set):
 
 @register.filter(name='has_group')
 def has_group(user, grp_list):
-    try:
-        if user.is_superuser:
-            return True
-        groups = user.groups.all().values_list('name', flat=True)
-        groups = set(groups)
-        
-        flat_list = [ll for ll in flatlist(grp_list)]
-        flat_list = set(flat_list)
-        intersection = flat_list.intersection(groups)
+    if user.is_superuser:
+        return True
+    groups = user.groups.all().values_list('name', flat=True)
+    groups = set(groups)
+    
+    flat_list = [ll for ll in flatlist(grp_list)]
+    flat_list = set(flat_list)
+    intersection = flat_list.intersection(groups)
 
-        return True if intersection else False
-    except Exception as e:
-        logging.getLogger('error_log').error(str(e))
-        return False
-    return False
+    return True if intersection else False
 
 
 @register.filter(name='widget_type')

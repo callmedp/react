@@ -13,3 +13,36 @@
 .padding-item{
     padding-top:16px!important;
 }
+
+.modal-item{
+    padding: 9px 10px;
+}
+
+.button-maring-top{
+    margin-top:13px;
+}
+
+.button-margin-left{
+    margin-left:14px;
+}
+
+.edit-icon{
+    margin-right:3px;
+}
+
+.review-button{
+    transform: translateY(-8px) scale(0.8);
+}
+
+.follow-date{
+    margin-top: 9px;
+}
+.help-block{
+    margin:0;
+}
+.scalling{
+    transform: scale(0.8);
+}
+.filter-dropdown{
+    transform: translateY(40%);
+}

@@ -1,4 +1,5 @@
 {% extends "console/base_console.html" %}
+{% load console_tags %}
 {% load static compress %}
 {% load humanize %}
 {% load thumbnail %}
@@ -30,11 +31,48 @@
       </div>
     </div>
 
+    <div class="title_right">
+            <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
+              <div class="input-group">
+                <input type="text" id="search-box" class="form-control" placeholder="Search for name/email/mobile..." onkeypress="searchBoxKeyEnter(event);">
+
+                <span class="input-group-btn">
+                  <button class="btn btn-default" onclick="searchNameOrEmail()" type="button">Go!</button>
+                </span>
+              </div>
+
+            </div>
+
+          </div>
+
 
     <div class="row top_tiles">
 
       <div class="col-lg-12">
-        <button type="button" class="btn btn-app" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-filter"></i> Filter Order</button>
+        <div class="row">
+          <div class="col-lg-6">
+            <button type="button" class="btn btn-app" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-filter"></i> Filter Order</button>
+          </div>
+          <div class="col-lg-6">
+            <div class="row">
+              <div class="col-lg-6">
+                <select id="feedback-type" class="form-control filter-dropdown">
+                    <option value="">Select Fresh/Follow-up</option>
+                    <option value="1">Fresh</option>
+                    <option value="2">Follow-up</option>
+                </select>
+              </div>
+              <div class="col-lg-6">
+                <select id="filter-status" class="form-control filter-dropdown">
+                    <option value="">Select Status</option>
+                    <option value="1">Pending</option>
+                    <option value="2">Assigned</option>
+                    <option value="3">Closed</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="modal fade bs-example-modal-sm filter" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-sm">
@@ -46,10 +84,40 @@
                   <h4 class="modal-title" id="myModalLabel2">Filter By</h4>
                 </div>
                 <div class="modal-body">
+                  <div class="row modal-item">
+                      <div class="form-group">
+                        <label for="follow">Follow-up Date Range:</label>
+                        <div class="input-group date form_datetime ">
+                            <span class="input-group-addon">
+                              <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                            <input type='text' id="filter-follow-up" name="follow" class="form-control" readonly />
+                        </div>
+                    </div>
+                  </div>
+                  <div class="row modal-item">
+                      <div class="form-group">
+                        <label for="follow">Added On Date Range:</label>
+                        <div class="input-group date form_datetime ">
+                            <span class="input-group-addon">
+                              <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                            <input type='text' id="filter-added-on" name="follow" class="form-control" readonly />
+                        </div>
+                    </div>
+                  </div>
+                  {% if request.user|has_group:OPS_HEAD_GROUP_LIST %}
+                    <div class="row modal-item">
+                        <label>Select User:</label>
+                        <select id="filter-user" class="form-control filter-dropdown">
+                            <option value="">All</option>
+                        </select>
+                    </div>
+                  {% endif %}
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                  <button type="button" id="id_filter" class="btn btn-primary" data-dismiss="modal">Filter</button>
+                  <button type="button" class="btn btn-primary" onclick="filterFeedbackList()" data-dismiss="modal">Filter</button>
                 </div>
               </div>
             </div>
@@ -61,24 +129,25 @@
 
       <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
-          <div class="x_title">
-            <div class="col-sm-6">
-            
-            <div class="input-group">
-                <select class="feedback_users">
-                  <option value="">Loading ....</option>
-                </select>
-                <span class="input-group-btn" >
-                  <button type="button" class="btn btn-primary" id="assign-user" style="margin-left:12px;" onclick="assignFeedbackIdsUser()">Assign To!</button>
-                </span>
+          {% if request.user|has_group:OPS_HEAD_GROUP_LIST %}
+            <div class="x_title">
+              <div class="col-sm-6">
+                <div class="input-group">
+                    <select class="feedback_users">
+                      <option value="">Loading ....</option>
+                    </select>
+                    <span class="input-group-btn" >
+                      <button type="button" class="btn btn-primary" id="assign-user" style="margin-left:12px;" onclick="assignFeedbackIdsUser()">Assign To!</button>
+                    </span>
+                </div>
+              </div>
+              <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+              </ul>
+              <div class="clearfix"></div>
             </div>
-            </div>
-            <ul class="nav navbar-right panel_toolbox">
-              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-              </li>
-            </ul>
-            <div class="clearfix"></div>
-          </div>
+          {% endif %}
 
           <div class="x_content">
             <div class="table-responsive">
@@ -136,6 +205,7 @@
   {{ block.super }}
 
   {% compress js %}
+    <script type="text/javascript" src="{% static "console/js/feedbackCall/csrfToken.js" %}"></script>
     <script type="text/javascript" src="{% static "console/js/feedbackCall/feedback-call-listing.js" %}"></script>
   {% endcompress %}
 

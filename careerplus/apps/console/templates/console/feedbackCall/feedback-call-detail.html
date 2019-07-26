@@ -4,7 +4,7 @@
 {% load thumbnail %}
 
 {% block title %}
-  <title>Update Welcomecall - Shine Learning</title>
+  <title>Update Feedbackcall - Shine Learning</title>
 {% endblock title %}
 
 {% block css_block %}
@@ -52,7 +52,40 @@
         </div>
       </div>
 
-      <div class="col-md-12 col-sm-12 col-xs-12">
+      <!-- modal for writing review-->
+      <div class="modal fade" tabindex="-1" role="dialog" id="review-modal">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">Write a Review</h4>
+            </div>
+            <div class="modal-body">
+              <div class="row modal-item">
+                <label for="order-item-message">Message:</label>
+                <textarea class="form-control" name="order-item-message" id="order-item-message" rows="3"></textarea>
+              </div>
+              <div class="row modal-item hide" id="follow-up-div">
+                  <div class="form-group">
+                    <label for="follow">Follow-up Date/Time:</label>
+                    <div class="input-group date form_datetime ">
+                        <span class="input-group-addon">
+                          <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                        <input type='text' id="follow-up" name="follow" class="form-control" readonly />
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" onclick="saveReview()">Save changes</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+
+      <div class="col-md-12 col-sm-12 col-xs-12" id="add-order-item-feedback">
         <div class="x_panel">
           <div class="x_title">
             <h2>Item details</h2>
@@ -90,13 +123,73 @@
                     <th class="column-title">Payment Date</th>
                     <th class="column-title">Service Feedback</th>
                     <th class="column-title">Resolution</th>
+                    <th class="column-title">Message</th>
                   </tr>
                 </thead>
                 <tbody id="order-item-entries">
                 </tbody>
               </table>
             </div>
-            <button type="button" id="id-welcomecall-update" class="btn btn-success">Update Welcome Call</button>
+            {% comment %} <div class="row message-box">
+              <label for="message">Message:</label>
+              <textarea class="form-control" name="message" rows="3"></textarea>
+            </div>
+             {% endcomment %}
+          <div class="row">
+              <div class="col-md-12 col-xs-12">
+                <label for="message" class="control-label">Message:</label>
+                <textarea id="feedback-comment" class="form-control" name="message" onkeyup="removeError('#feedback-comment','comment')"></textarea>
+                <span class="help-block hide">Add a message</span>
+              </div>
+            </div>
+            {% comment %} <button type="button" class="btn btn-success button-maring-top" onclick="submitFeedback()">Update Feedback Call</button> {% endcomment %}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Feedback Call Ops History</h2>
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+
+          <div class="x_content">
+
+            <div class="table-responsive">
+              <table class="table table-striped jambo_table">
+                <thead>
+                  <tr class="headings">
+                    <th class="column-title">Agent Name</th>
+                    <th class="column-title">Product Name</th>
+                    <th class="column-title">Operation Date&TIme</th>
+                    <th class="column-title">Status</th>
+                    <th class="column-title">Resolution</th>
+                    <th class="column-title">Message</th>
+                  </tr>
+                </thead>
+                <tbody id="ops-history-entries">
+                </tbody>
+              </table>
+              <div class="main_pagination">
+                  <div class="col-sm-4">
+                        <div class="pull-left" id="page-no" style="display: inline-block;adding-left: 0;margin: 20px 0;">
+                      </div>
+                  </div>
+
+                  <div class="col-sm-8">
+                    <div class="pull-right">
+                      <ul class="pagination set-cursor">
+                      </ul>
+                    </div>
+                  </div>
+              </div>
+            <button type="button" class="btn btn-success button-maring-top" id="set-follow-up" onclick="followUpFeedback()">Set follow Up</button>
+            <button type="button" class="btn btn-primary button-maring-top button-margin-left" id="close-feedback" onclick="submitFeedback()">Close Feedback Call</button>
           </div>
         </div>
       </div>
@@ -115,7 +208,9 @@
     const id = {{id}}
   </script>
   {% compress js %}
-  <script type="text/javascript" src="{% static "console/js/feedbackCall/customer-feedback-detail.js" %}"></script>
+    <script type="text/javascript" src="{% static "console/js/feedbackCall/csrfToken.js" %}"></script>
+    <script type="text/javascript" src="{% static "console/js/feedbackCall/customer-feedback-detail.js" %}"></script>
+    <script src="{% static "console/js/datepicker/bootstrap-datetimepicker.js" %}"></script>
   {% endcompress %}
 
 {% endblock js_block %}

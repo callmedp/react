@@ -9,6 +9,7 @@ import datetime
 
 # import apps module
 from order.models import WelcomeCallOperation,CustomerFeedback,OrderItemFeedback
+from order.utils import get_ltv
 
 
 class Command(BaseCommand):
@@ -19,18 +20,23 @@ def feedback_call_entry():
     start_date = timezone.now() - timedelta(days=7)
     end_date = timezone.now() - timedelta(days=3)
     welcome_operations = WelcomeCallOperation.objects.filter(created__range=[start_date,end_date],order__welcome_call_done=True)
-    if welcome_operations.count() > 0 :
+    if welcome_operations.exists():
         for operation in welcome_operations:
-            candidate_id = operatioordern..candidate_id
-            # customer_name = operation.order.first_name + " " + operation.order.last_name
-            customer_feedback_exist_entry = CustomerFeedback.objects.filter(added_on__contains=timezone.now().date(),candidate_id=candidate_id)
-            customer_feedback = None
-            if customer_feedback_exist_entry.count() == 0:
-                customer_feedback = CustomerFeedback.objects.create(candidate_id=candidate_id)
+            candidate_id = operation.order.candidate_id
+            customer_name = operation.order.first_name + " " + operation.order.last_name
+            mobile = operation.order.mobile
+            email = operation.order.email
+            ltv = get_ltv(candidate_id)
+            payment_date = operation.order.payment_date
+            customer_feedback = CustomerFeedback.objects.filter(candidate_id=candidate_id,status=1).first()
+            if not customer_feedback:
+                customer_feedback = CustomerFeedback.objects.create(candidate_id=candidate_id,full_name=customer_name,mobile=mobile,email=email,last_payment_date=payment_date)
             else:
-                customer_feedback = customer_feedback_exist_entry.first()
+                if customer_feedback.last_payment_date < payment_date.date():
+                    customer_feedback.last_payment_date = payment_date
+                    customer_feedback.save()
             for order_item in operation.order.orderitems.all():
-                OrderItemFeedback.objects.create(order_item=order_item,customer_feedback=customer_feedback)
+                OrderItemFeedback.objects.get_or_create(order_item=order_item,customer_feedback=customer_feedback)
 
 
     

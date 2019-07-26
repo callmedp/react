@@ -1,26 +1,73 @@
 from rest_framework.generics import (ListAPIView, CreateAPIView,RetrieveAPIView)
 from django.views.generic.detail import DetailView
 from rest_framework.views import APIView
-from order.models import CustomerFeedback,OrderItemFeedback
-from console.api.v1.feedbackCall.serializers import FeedbackQueueSerializer,CustomerFeedbackSerializer,OrderItemFeedbackSerializer
+from order.models import CustomerFeedback,OrderItemFeedback,OrderItemFeedbackOperation
+from console.api.v1.feedbackCall.serializers import FeedbackQueueSerializer,CustomerFeedbackSerializer,OrderItemFeedbackSerializer,OrderItemFeedbackOperationSerializer
 from shared.rest_addons.pagination import LearningCustomPagination 
 from django.http import HttpResponse
 from console.feedbackCall.choices import FEEDBACK_CATEGORY_CHOICES,FEEDBACK_RESOLUTION_CHOICES
+from rest_framework.authentication import SessionAuthentication
+from users.mixins import UserMixin
+from django.conf import settings
+from datetime import datetime
+from django.db.models import Q
 
-import json
+import json,logging
 
 
 
 class FeedbackQueueView(ListAPIView):
-    queryset = CustomerFeedback.objects.filter(status=1)
+    queryset = CustomerFeedback.objects.all()
     serializer_class = FeedbackQueueSerializer
-    authentication_classes = ()
+    authentication_classes = (SessionAuthentication,)
     permission_classes = ()
     pagination_class = LearningCustomPagination
 
+    def get_queryset(self):
+        queryset = super(FeedbackQueueView, self).get_queryset()
+        status = self.request.GET.get('status')
+        feedback_type = self.request.GET.get('type') # fresh/follow-up type
+        follow_up_date_range = self.request.GET.get('follow_up_date_range')
+        added_on_range = self.request.GET.get('added_on_range')
+        search_text = self.request.GET.get('search_text')
+        if status:
+            queryset = queryset.filter(status=status)
+        if search_text:
+            queryset = queryset.filter(Q(full_name__icontains=search_text) | Q(email__icontains=search_text) | Q(mobile__icontains=search_text))
+        if feedback_type == '1':
+            queryset = queryset.filter(follow_up_date=None)
+        elif feedback_type == '2':
+            queryset = queryset.exclude(follow_up_date=None)
+
+        if follow_up_date_range:
+            date_range = follow_up_date_range.split(' - ')
+            start_date = datetime.strptime(date_range[0],'%Y-%m-%d')
+            end_date = datetime.strptime(date_range[1],'%Y-%m-%d')
+            queryset = queryset.filter(follow_up_date__range=(start_date,end_date))
+
+        if added_on_range:
+            date_range = added_on_range.split(' - ')
+            start_date = datetime.strptime(date_range[0],'%Y-%m-%d')
+            end_date = datetime.strptime(date_range[1],'%Y-%m-%d')
+            queryset = queryset.filter(added_on__range=(start_date,end_date))
+
+        user = self.request.user
+        ops_head_group = settings.OPS_HEAD_GROUP_LIST
+        feedback_call_group = settings.WELCOMECALL_GROUP_LIST
+        if UserMixin().check_user_in_groups(user,ops_head_group):
+            user_filter = self.request.GET.get('user')
+            if user_filter:
+                queryset = queryset.filter(assigned_to=user_filter)
+        elif UserMixin().check_user_in_groups(user,feedback_call_group):
+            queryset = queryset.filter(assigned_to=user)
+        else:
+            queryset = queryset.none()
+
+        return queryset
+
 
 class FeedbackCallsAssignUserView(CreateAPIView):
-    authentication_classes = ()
+    authentication_classes = (SessionAuthentication,)
     permission_classes = ()
 
     def post(self,*args, **kwargs):
@@ -31,7 +78,7 @@ class FeedbackCallsAssignUserView(CreateAPIView):
 
 
 class CustomerFeedbackDetailView(RetrieveAPIView):
-    authentication_classes = ()
+    authentication_classes = (SessionAuthentication,)
     permission_classes = ()
     serializer_class = CustomerFeedbackSerializer
     lookup_field = 'pk'
@@ -39,7 +86,7 @@ class CustomerFeedbackDetailView(RetrieveAPIView):
     
     
 class FeedbackCategoryResolutionChoicesView(APIView):
-    authentication_classes = ()
+    authentication_classes = (SessionAuthentication,)
     permission_classes = ()
 
     def get(self,*args, **kwargs):
@@ -52,7 +99,7 @@ class FeedbackCategoryResolutionChoicesView(APIView):
 
 class OrderItemFeedbackView(ListAPIView):
     serializer_class = OrderItemFeedbackSerializer
-    authentication_classes = ()
+    authentication_classes = (SessionAuthentication,)
     permission_classes = ()
     pagination_class = LearningCustomPagination
     queryset = OrderItemFeedback.objects.all()
@@ -62,6 +109,47 @@ class OrderItemFeedbackView(ListAPIView):
         id = self.kwargs.get('pk')
         queryset = queryset.filter(customer_feedback=id)
         return queryset
+
+
+class OrderItemFeedbackOperationView(ListAPIView):
+    queryset = OrderItemFeedbackOperation.objects.all()
+    serializer_class = OrderItemFeedbackOperationSerializer
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = ()
+    pagination_class = LearningCustomPagination
+
+    def get_queryset(self):
+        queryset = super(OrderItemFeedbackOperationView, self).get_queryset()
+        id = self.kwargs.get('pk')
+        queryset = queryset.filter(customer_feedback=id)
+        return queryset
+
+class SaveFeedbackIdData(CreateAPIView):
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = ()
+
+    def post(self,*args, **kwargs):
+        feedback_id = kwargs.get('pk')
+        form_data = json.loads(self.request.POST.get('form_data'))
+        for value in form_data.values():
+            if type(value) is dict:
+                order_item_feedback = OrderItemFeedback.objects.filter(id=value.get('id')).first()
+                order_item_feedback.category =value.get('category')
+                order_item_feedback.resolution =value.get('resolution')
+                order_item_feedback.comment =value.get('comment')
+                order_item_feedback.save()
+        
+        customer_feedback = CustomerFeedback.objects.filter(id=feedback_id)
+        if form_data['IsFollowUp']:
+            customer_feedback.update(follow_up_date=form_data.get('follow-up'),comment=form_data.get('comment'))
+        else:
+            customer_feedback.update(comment=form_data.get('comment'),status=3)  
+                
+        # user_id =self.request.POST.get('user_id')
+        # CustomerFeedback.objects.filter(id__in=feedback_ids).update(assigned_to=user_id,status=2)
+        return HttpResponse(json.dumps({'result':'updated'}), content_type="application/json")
+
+
     
  
 

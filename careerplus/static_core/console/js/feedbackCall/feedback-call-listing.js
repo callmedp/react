@@ -1,21 +1,28 @@
-let page_size = 5
+let page_size = 10
 let total_pages = 0
 let feedback_id_selected = []
+
 
 function update_feedback(id){
     window.location.href = `/console/feedbackcall/update/${id}`
 }
 
 $(document).ready(function() { 
+    $('#filter-status').val('1')
+
+    $('#feedback-type').val('1')
+    
     $('.feedback_users').select2({
         width:'100%',
     });
+
     customerList(1)
+
+
     $.get(`/user/api/v1/get-users/`,{
         'group':'welcome_call',
         'active':true
     },(data)=>{
-        console.log(data)
         $('.feedback_users').empty()
         $('.feedback_users').append(
             `
@@ -28,6 +35,11 @@ $(document).ready(function() {
                 <option value='${user.id}'>${user.name}(${user.email})</option>
                 `
             )
+            $('#filter-user').append(
+                `
+                <option value='${user.id}'>${user.name}</option>
+                `
+            )
         }
     })
 
@@ -38,12 +50,42 @@ $(document).ready(function() {
             feedback_id_selected.push(parseInt($(this).prop('value')));
         });
     });
+
+    $('#filter-status').click(()=>{
+        customerList(1)
+    })
+    $('#feedback-type').click(()=>{
+        customerList(1)
+    })
+
+    $('#filter-follow-up').daterangepicker({
+        locale: {
+            format: 'YYYY-MM-DD'
+        }
+      }).val('');
+    $('#filter-added-on').daterangepicker({
+        locale: {
+            format: 'YYYY-MM-DD'
+        }
+      }).val('');
     
 });
 
 
-function customerList(page_no){
-    $.get(`/console/api/v1/feedback-call/customer-list/?page_size=${page_size}&page=${page_no}`,(data)=>{
+function customerList(page_no,filter_data){
+    filter_update_data = {
+        search_text:$('#search-box').val(),
+        page_size:page_size,
+        page:page_no,
+        status:$('#filter-status').val(),
+        type:$('#feedback-type').val(),
+    }
+    if(filter_data){
+        filter_update_data = Object.assign({},filter_update_data,filter_data)
+    }
+    $.get(`/console/api/v1/feedback-call/customer-list/`,
+    filter_update_data,
+    (data)=>{
         if (data['results']){
             $('#body-table-list').empty()
             for (result of data['results']){
@@ -54,11 +96,11 @@ function customerList(page_no){
                                 <input autocomplete="off" type="checkbox" class="flat" name="table_records" onclick="uncheckAll(this,${result.id})" value="${result.id}" >
                             </td>
                             <td>${result.full_name}</td>
-                            <td>${result.added_on}</td>
-                            <td>${result.follow_up_date}</td>
-                            <td>${result.status_name}</td>
+                            <td>${result.added_on_date}</td>
+                            <td>${result.follow_up_date_text ? result.follow_up_date_text : '-'}</td>
+                            <td>${result.status_text}</td>
                             <td>${result.last_payment_date}</td>
-                            <td>${result.assigned_to}</td>
+                            <td>${result.assigned_to_text ? result.assigned_to_text : '-'}</td>
                             <td><a><button type="button" class="btn btn-primary btn-xs" onclick="update_feedback(${result.id})">Update</button></a></td>
                         </tr>
                     `
@@ -66,7 +108,7 @@ function customerList(page_no){
             }
         }
         total_pages = Math.ceil(data['count']/page_size)
-        $('#page-no').text(`Page ${page_no} of ${total_pages}`)
+        $('#page-no').text(`Page ${total_pages===0 ? 0: page_no} of ${total_pages}`)
         $('.pagination').empty()
         if (page_no !== 1){
             $('.pagination').append(
@@ -86,7 +128,7 @@ function customerList(page_no){
                 `
             )
         }
-        if (page_no !== total_pages){
+        if (page_no !== total_pages && total_pages>0){
             $('.pagination').append(
                 `
                     <li>
@@ -124,6 +166,35 @@ function assignFeedbackIdsUser(){
         'feedback_ids':JSON.stringify(feedback_id_selected),
         'user_id':user_id
     },(data)=>{
-        console.log(data);
+        if(data.result){
+            customerList(1)
+        }
     })
 }
+
+
+function filterFeedbackList(){
+    filter_data ={
+        follow_up_date_range : $('#filter-follow-up').val(),
+        added_on_range : $('#filter-added-on').val(),
+        user : $('#filter-user').val()
+    }
+    customerList(1,filter_data)
+
+}
+
+
+
+
+function searchNameOrEmail(){
+    $('#filter-status').val('')
+    $('#feedback-type').val('')
+    customerList(1)
+}
+
+function searchBoxKeyEnter(event){
+    if (event.keyCode == 13 || event.which == 13){
+        searchNameOrEmail()
+    }
+}
+

@@ -17,6 +17,7 @@ from geolocation.models import Country
 from order.models import OrderItem
 from core.mixins import InvoiceGenerate
 from core.library.gcloud.custom_cloud_storage import GCPInvoiceStorage
+from console.decorators import flatlist
 
 from .choices import (
     WRITING_STARTER_VALUE, RESUME_WRITING_MATRIX_DICT,
@@ -971,6 +972,18 @@ class UserMixin(object):
             country_obj = Country.objects.get(phone='91')
 
         return country_obj
+
+    def check_user_in_groups(self,user,grp_list):
+        if user.is_superuser:
+            return True
+        groups = user.groups.all().values_list('name', flat=True)
+        groups = set(groups)
+        
+        flat_list = [ll for ll in flatlist(grp_list)]
+        flat_list = set(flat_list)
+        intersection = flat_list.intersection(groups)
+
+        return True if intersection else False
 
 
 class UserGroupMixin(object):
