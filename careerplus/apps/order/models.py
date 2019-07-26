@@ -952,7 +952,7 @@ class CustomerFeedback(models.Model):
     assigned_to =  models.ForeignKey(User,blank=True, null=True) 
     follow_up_date = models.DateTimeField('Follow Up Date', blank=True, null=True)
     comment = models.CharField('Feedback Comment', max_length=500)
-    last_payment_date = models.DateField('Last Payment Date',blank=True, null=True)
+    last_payment_date = models.DateTimeField('Last Payment Date',blank=True, null=True)
 
     @property
     def status_text(self):
@@ -966,13 +966,6 @@ class CustomerFeedback(models.Model):
     def ltv_value(self):
         return get_ltv(self.candidate_id)
 
-    @property
-    def added_on_date(self):
-        return self.added_on.strftime("%d-%b-%Y (%H:%M:%S)")
-
-    @property
-    def follow_up_date_text(self):
-        return self.follow_up_date.strftime("%d-%b-%Y (%H:%M:%S)")
 
 
 class OrderItemFeedback(models.Model):
@@ -1014,7 +1007,4 @@ class OrderItemFeedbackOperation(models.Model):
     def assigned_to_text(self):
         return self.assigned_to.name
     
-    @property
-    def added_on_date(self):
-        return self.added_on.strftime("%d-%b-%Y (%H:%M:%S)")
 

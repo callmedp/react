@@ -1,24 +1,50 @@
+//global variables
 let page_size = 10
 let total_pages = 0
 let feedback_id_selected = []
 
 
-function update_feedback(id){
-    window.location.href = `/console/feedbackcall/update/${id}`
-}
-
 $(document).ready(function() { 
-    $('#filter-status').val('1')
+    $('#filter-status').val('1') //default Status  dopdown selected to Pending   (Requirement from Product)
 
-    $('#feedback-type').val('1')
+    $('#feedback-type').val('1') //default Feedback Type dropdown selected to Fresh (Requirement from Product)
     
-    $('.feedback_users').select2({
+    $('.feedback_users').select2({    //create searchable dropdown
         width:'100%',
     });
 
-    customerList(1)
+    customerFeedbackList(1)
+
+    $('#check-all').click(function(e){      //select all feedback on page
+        $(this).closest('table').find('td input:checkbox').prop('checked', this.checked);
+        feedback_id_selected = []
+        $('#body-table-list input[name="table_records"]:checked').each(function() {
+            feedback_id_selected.push(parseInt($(this).prop('value')));
+        });
+    });
+
+    $('#filter-status').click(()=>{
+        customerFeedbackList(1)
+    })
+    $('#feedback-type').click(()=>{
+        customerFeedbackList(1)
+    })
+
+    $('#filter-follow-up').daterangepicker({
+        locale: {
+            format: 'YYYY-MM-DD'
+        }
+      }).val('');
+    $('#filter-added-on').daterangepicker({
+        locale: {
+            format: 'YYYY-MM-DD'
+        }
+      }).val('');
+    
+});
 
 
+function getUsers(){
     $.get(`/user/api/v1/get-users/`,{
         'group':'welcome_call',
         'active':true
@@ -42,37 +68,10 @@ $(document).ready(function() {
             )
         }
     })
-
-    $('#check-all').click(function(e){      
-        $(this).closest('table').find('td input:checkbox').prop('checked', this.checked);
-        feedback_id_selected = []
-        $('#body-table-list input[name="table_records"]:checked').each(function() {
-            feedback_id_selected.push(parseInt($(this).prop('value')));
-        });
-    });
-
-    $('#filter-status').click(()=>{
-        customerList(1)
-    })
-    $('#feedback-type').click(()=>{
-        customerList(1)
-    })
-
-    $('#filter-follow-up').daterangepicker({
-        locale: {
-            format: 'YYYY-MM-DD'
-        }
-      }).val('');
-    $('#filter-added-on').daterangepicker({
-        locale: {
-            format: 'YYYY-MM-DD'
-        }
-      }).val('');
-    
-});
+}
 
 
-function customerList(page_no,filter_data){
+function customerFeedbackList(page_no,filter_data){
     filter_update_data = {
         search_text:$('#search-box').val(),
         page_size:page_size,
@@ -96,12 +95,12 @@ function customerList(page_no,filter_data){
                                 <input autocomplete="off" type="checkbox" class="flat" name="table_records" onclick="uncheckAll(this,${result.id})" value="${result.id}" >
                             </td>
                             <td>${result.full_name}</td>
-                            <td>${result.added_on_date}</td>
-                            <td>${result.follow_up_date_text ? result.follow_up_date_text : '-'}</td>
+                            <td>${formatDate(result.added_on)}</td>
+                            <td>${result.follow_up_date ? formatDate(result.follow_up_date,true) : '-'}</td>
                             <td>${result.status_text}</td>
-                            <td>${result.last_payment_date}</td>
+                            <td>${formatDate(result.last_payment_date)}</td>
                             <td>${result.assigned_to_text ? result.assigned_to_text : '-'}</td>
-                            <td><a><button type="button" class="btn btn-primary btn-xs" onclick="update_feedback(${result.id})">Update</button></a></td>
+                            <td><a><button type="button" class="btn btn-primary btn-xs" onclick="redirectFeedbackUpdatePage(${result.id})">Update</button></a></td>
                         </tr>
                     `
                 )
@@ -114,7 +113,7 @@ function customerList(page_no,filter_data){
             $('.pagination').append(
                 `
                     <li>
-                        <a onclick="customerList(${page_no -1})" aria-label="Previous">
+                        <a onclick="customerFeedbackList(${page_no -1})" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
@@ -124,7 +123,7 @@ function customerList(page_no,filter_data){
         for (let page=1;page<=total_pages && page<=5;page++){
             $('.pagination').append(
                 `
-                    <li ${page===page_no ? "class='active'" : ''} ><a ${page===page_no ? '' :`onclick="customerList(${page})"`}>${page}</a></li>
+                    <li ${page===page_no ? "class='active'" : ''} ><a ${page===page_no ? '' :`onclick="customerFeedbackList(${page})"`}>${page}</a></li>
                 `
             )
         }
@@ -132,7 +131,7 @@ function customerList(page_no,filter_data){
             $('.pagination').append(
                 `
                     <li>
-                        <a onclick="customerList(${page_no +1})" aria-label="Next">
+                        <a onclick="customerFeedbackList(${page_no +1})" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
@@ -167,7 +166,7 @@ function assignFeedbackIdsUser(){
         'user_id':user_id
     },(data)=>{
         if(data.result){
-            customerList(1)
+            customerFeedbackList(1)
         }
     })
 }
@@ -179,8 +178,12 @@ function filterFeedbackList(){
         added_on_range : $('#filter-added-on').val(),
         user : $('#filter-user').val()
     }
-    customerList(1,filter_data)
+    customerFeedbackList(1,filter_data)
 
+}
+
+function redirectFeedbackUpdatePage(id){
+    window.location.href = `/console/feedbackcall/update/${id}`
 }
 
 
@@ -189,7 +192,7 @@ function filterFeedbackList(){
 function searchNameOrEmail(){
     $('#filter-status').val('')
     $('#feedback-type').val('')
-    customerList(1)
+    customerFeedbackList(1)
 }
 
 function searchBoxKeyEnter(event){

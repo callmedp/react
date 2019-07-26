@@ -13,7 +13,6 @@
     {{block.super}}
 
     {% compress css %}
-      <link href="{% static "packages/iCheck/skins/flat/green.css"  %}" rel="stylesheet" type="text/css">
       <link type="text/css" href="{% static "console/css/feedbackCall/feedback.css" %}" rel="stylesheet">
       <link type="text/css" href="{% static "console/css/datepicker/daterangepicker.css" %}" rel="stylesheet">
     {% endcompress %}
@@ -155,7 +154,7 @@
                 <thead>
                   <tr class="headings">
                     <th>
-                      <input autocomplete="off" type="checkbox" id="check-all" class="flat">
+                      <input autocomplete="off" type="checkbox" id="check-all"*>
                     </th>
                     <th class="column-title">Name</th>
                     <th class="column-title">Added On</th>
@@ -205,7 +204,7 @@
   {{ block.super }}
 
   {% compress js %}
-    <script type="text/javascript" src="{% static "console/js/feedbackCall/csrfToken.js" %}"></script>
+    <script type="text/javascript" src="{% static "console/js/feedbackCall/utils.js" %}"></script>
     <script type="text/javascript" src="{% static "console/js/feedbackCall/feedback-call-listing.js" %}"></script>
   {% endcompress %}
 

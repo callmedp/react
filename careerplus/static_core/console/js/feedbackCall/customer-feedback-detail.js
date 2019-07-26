@@ -1,34 +1,44 @@
+//global variables
 let category = {},resolution = {},total_order_item = 0,total_pages_operations=0,page_size=5
 let form_data = {
     IsFollowUp:false
 }
 let current_index = -1
 
-function createDropdown(id,data,pre_value){
-    for (item in data){
-        $(`#${id}`).append(
-            `
-                <option value="${item}">${data[item]}</option>
-            `
-        )
-    }
-    if(pre_value)
-        $(`#${id}`).val(`${pre_value}`);
-}
-
+//fuunctions called when page loads
 $(document).ready(function() { 
-    
-    $.ajaxSetup({ 
-        beforeSend: function(xhr, settings) {
-            if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
-                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-            }
-        } 
+
+    $('#follow-up').datetimepicker() //make input fild datetime
+    feedbackCallDetails()
+    getDropdownChoices()
+    getOrderItemFeedback()
+
+    $('#category-choices').change(function(){ //detect change in category dropdown choices
+        var value = $(this).val();
+        for(let order_item_index = 0;order_item_index<total_order_item;order_item_index++){
+            $(`#item-category-${order_item_index}`).val(value)
+            removeError(`#item-category-${order_item_index}`,order_item_index,'category')
+        }
     });
 
+    $('#resolution-choices').change(function(){ //detect change in resolution dropdown choices
+        var value = $(this).val();
+        for(let order_item_index = 0;order_item_index<total_order_item;order_item_index++){
+            $(`#item-resolution-${order_item_index}`).val(value)
+            removeError(`#item-resolution-${order_item_index}`,order_item_index,'resolution')
+        }
+    });
 
-    $('#follow-up').datetimepicker()
+    $('#follow-up').on('changeDate', function(ev){  //hide datetimepicker when date is selected
+        $(this).datetimepicker('hide');
+    });
 
+    getOrderItemFeedbackOperation(1)
+
+})
+
+
+function feedbackCallDetails(){
     $.get(`/console/api/v1/feedback-call/feedback-detail/${id}/`,(data)=>{
         $('#customer-detail').empty()
         $('#customer-detail').append(
@@ -51,7 +61,7 @@ $(document).ready(function() {
             </tr>
           `
         )
-        if (data.status === 3){ //closed feedback call
+        if (data.status === 3){  //closed feedback call so hide forms
             $('#add-order-item-feedback').hide()
             $('#close-feedback').hide()
             $('#set-follow-up').hide()
@@ -60,18 +70,9 @@ $(document).ready(function() {
         form_data['comment'] = data.comment
         form_data['follow-up'] = data.follow_up_date
     })
+}
 
-    $.get(`/console/api/v1/feedback-call/dropdown-choices/`,(data)=>{
-        if(data.category){
-            category = data.category
-            createDropdown('category-choices',category)
-        }
-        if(data.resolution){
-            resolution = data.resolution
-            createDropdown('resolution-choices',resolution)
-        }
-    })
-
+function getOrderItemFeedback(){
     $.get(`/console/api/v1/feedback-call/feedback/${id}/order-items/`,{
         'include_order_item_id':true
     },(data)=>{
@@ -86,7 +87,7 @@ $(document).ready(function() {
                             <td class="padding-item">${order_item.length ? order_item[0].product_name : ''}item</td>
                             <td class="padding-item">${order_item.length ? order_item[0].order_status_text : ''}</td>
                             <td class="padding-item">${item.order_item}</td>
-                            <td class="padding-item">${order_item.length ? order_item[0].order_payment_date : ''}</td>
+                            <td class="padding-item">${order_item.length ? formatDate(order_item[0].order_payment_date) : ''}</td>
                             <td class="scalling">
                                 <select id="item-category-${index}" onclick="removeError('#item-category-${index}',${index},'category')" name="resolution" class="form-control">
                                     <option value="">Select Category</option>
@@ -116,29 +117,33 @@ $(document).ready(function() {
         
     })
 
-    $('#category-choices').change(function(){ 
-        var value = $(this).val();
-        for(let order_item_index = 0;order_item_index<total_order_item;order_item_index++){
-            $(`#item-category-${order_item_index}`).val(value)
-            removeError(`#item-category-${order_item_index}`,order_item_index,'category')
+}
+
+function getDropdownChoices(){
+    $.get(`/console/api/v1/feedback-call/dropdown-choices/`,(data)=>{
+        if(data.category){
+            category = data.category
+            createDropdown('category-choices',category)
         }
-    });
-
-    $('#resolution-choices').change(function(){ 
-        var value = $(this).val();
-        for(let order_item_index = 0;order_item_index<total_order_item;order_item_index++){
-            $(`#item-resolution-${order_item_index}`).val(value)
-            removeError(`#item-resolution-${order_item_index}`,order_item_index,'resolution')
+        if(data.resolution){
+            resolution = data.resolution
+            createDropdown('resolution-choices',resolution)
         }
-    });
+    })
+}
 
-    $('#follow-up').on('changeDate', function(ev){
-        $(this).datetimepicker('hide');
-    });
 
-    getOrderItemFeedbackOperation(1)
-
-})
+function createDropdown(id,data,pre_value){
+    for (item in data){
+        $(`#${id}`).append(
+            `
+                <option value="${item}">${data[item]}</option>
+            `
+        )
+    }
+    if(pre_value)
+        $(`#${id}`).val(`${pre_value}`);
+}
 
 function showData(button,type){
     $(button).hide()
@@ -248,7 +253,7 @@ function getOrderItemFeedbackOperation(page_no){
                         <tr class="even pointer">
                             <td class="padding-item">${item.assigned_to_text ? item.assigned_to_text : '-'}</td>
                             <td class="padding-item">${order_item.length ? order_item[0].product_name : ''}item</td>
-                            <td class="padding-item">${item.added_on_date}</td>
+                            <td class="padding-item">${formatDate(item.added_on,true)}</td>
                             <td class="padding-item">${item.category_text ? item.category_text : '-'}</td>
                             <td class="padding-item">${item.resolution_text ? item.resolution_text : '-'}</td>
                             <td class="padding-item">${item.comment ? item.comment : ''}</td>
