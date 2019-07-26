@@ -224,7 +224,8 @@ MAPPING_VALUES_TO_DATA_KEY_1 = {
         'assesment': {
             'candidate_email': '1|candidateEmailID',
             'assesment_name': '1|assessmentName',
-            "overallScore": '1|overallScore'
+            "overallScore": '1|overallScore',
+            'order_item_id': '1|shineLearningOrderID',
         },
         'certificate': {
             'certificate': '6|certificates',
@@ -464,9 +465,17 @@ class CertiticateParser:
 
         if vendor_field == 'vendor_text':
                 assesmemnt_data['vendor_text'] = vendor
+        defaults = {'order_item_id': assesmemnt_data['order_item_id']}
+
         assesment, created = Assesment.objects.get_or_create(
-            **assesmemnt_data
+            **defaults
         )
+
+        if created:
+            for key, value in assesmemnt_data.items():
+                setattr(assesment, key, value)
+            assesment.save()
+
         setattr(assesment, vendor_field, vendor)
 
         # Save assesment data

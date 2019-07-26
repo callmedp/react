@@ -9,7 +9,7 @@
                 {% if art.image %}
                     <div class="media-left">
                         {% thumbnail art.image "98x64" crop="center" as im %}
-                            <img class="media-object" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{art.image_alt}}">
+                            <img aria-label="{{art.image_alt}}" class="media-object" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{art.image_alt}}">
                         {% endthumbnail %}
                     </div>
                 {% endif %}

@@ -4,7 +4,7 @@
 
 {% for comment in comments %}
 	<li>
-	    <sup><img src="{% static 'shinelearn/images/mobile/common/default-user.jpg' %}"></sup>
+	    <sup><img aria-label="default user" src="{% static 'shinelearn/images/mobile/common/default-user.jpg' %}"></sup>
 	    <p class="pb-0">{{comment.message}}</p>
 	    <span class="editor fs-12 c9">{% if comment.name %}{{comment.name}},{% endif %} {% get_humanize_date comment.created_on %}</span>
 	</li>

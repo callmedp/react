@@ -5,7 +5,7 @@
     	<a title="{{product.name}}" href="{{site}}{{product.pURL}}">
             <div class="media">
             	<div class="media-left">
-                	<img class="media-object" src="{{product.pImg}}" alt="{{product.pNm}}" height="130px" width="130px">
+                	<img aria-label="{{product.pNm}}" class="media-object" src="{{product.pImg}}" alt="{{product.pNm}}" height="130px" width="130px">
             	</div>
             	<div class="media-body">
                   <div class="certification-jobs-box">
@@ -18,7 +18,7 @@
                     {% for star in product.pStar %}
                     <figure {% if star == '*' %}class="full-star"{% elif star == '+'%}class="half-star"{% else %}class="blank-star"{% endif %}></figure>
                     {% endfor %}
-                    <strong>{{ product.pARx|floatformat:1 }}/5</strong> {% if product.pRC %} | {{ product.pRC }} ratings{% endif %}<b>{{product.pRC}} reviews</b>
+                    <strong>{{ product.pARx|floatformat:1 }}/5</strong> 
                   </div>
 	                <div class="providers">
 	                   Providers

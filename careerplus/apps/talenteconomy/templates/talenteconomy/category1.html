@@ -1,0 +1,138 @@
+{% extends "basic/base.html" %}
+{% load static compress %}
+
+{% block django_meta %}
+        {% include 'meta/meta.html' %}
+{%  endblock django_meta %}
+{% block canonical_url %}
+  <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
+  <link rel="alternate" media="only screen and (maxwidth:640px)" href="https://{{ MOBILE_SITE_DOMAIN }}{{request.path}}">
+  <link rel="alternate" media="handheld" href="https://{{ MOBILE_SITE_DOMAIN }}{{request.path}}">
+  <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{ request.path }}?type=amp">
+{% endblock canonical_url %}
+
+
+{% block title %}
+   {{category.name}} - Career & Certification Guidance @ Shine Learning
+{% endblock title %}
+
+{% block css_section %}
+    {{block.super}}
+    {% compress css %}
+    <link type="text/scss" href="{% static 'shinelearn/css/talenteconomy/article.scss' %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+
+{% block container %}
+<!-- header -->
+<header class="article-category-header">
+  <div class="container">
+    <!-- breadcrums -->
+    {% include './include/breadcrumbs.tmpl.html' with breadcrumbs=breadcrumbs %}
+    
+    <div class="article-category-heading">
+      <h1>{{category.name}} - Career Guidance</h1>
+    </div>
+  </div>
+</header>
+
+ <!-- main section start -->
+<section class="container mt-40">
+	<!-- page content body start -->
+	<div class="row">
+		<!-- left content start -->
+	    <div class="col-md-9 col-sm-12">
+        <div class="row" itemscope itemtype="https://schema.org/ItemList">
+          <h2 class="main-heading-article ml-15">All Articles</h2>
+            <div id="snackbar"></div>
+          <div id="related-talent-container">
+            {{article_list}}
+          </div>
+          <div id="id_ajax_talentpage"></div>
+        </div>
+		</div>
+		<!-- left content end -->
+		<!-- right content start -->
+		<div class="col-md-3 col-sm-12">
+			<!-- take me to -->
+
+
+			<!-- Popular Courses -->
+<div class="popular-courses box-panel col-sm-6 col-md-12 mb-40 look-interesting">
+    <h2 class="heading-right-talent">WANT TO HIRE TOP TALENTS? </h2>
+    <p class="mt-15">Ask for a call back</p>
+
+    <form id="enquireform" name="enq" class="mt-15 register">
+        <div class="form-group">
+         <input type="text" name="name" placeholder="Name" class="form-control" maxlength="60" inputmode="name" value="{{request.session.full_name}}"  id="id_name" aria-required="true">
+        </div>
+          <div class="form-group">
+         <input type="text" name="cname" placeholder="Company Name" class="form-control" maxlength="60" value="{{request.session.full_name}}"  id="id_cname" aria-required="true">
+        </div>
+
+        <div class="form-group ">
+            <div class="country-code">
+                <div class="custom-select">
+                    <select name="country_code" class="form-control" id="id_country_code">
+                  {% for country in country_choices %}
+                            <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.0}}</option>
+                          {% endfor %}
+
+                        </select>
+                    </div>
+  <span class="mobile_input">
+                        <input type="tel" name="number" class="form-control number" inputmode="numeric" required="" id="id_cell_phone" aria-required="true" placeholder="Mobile" value="{{request.session.mobile_no|safe}}">
+                    </span>            </div>
+        </div>
+
+        <div class="form-group">
+       <textarea class="form-control" rows="2" name="msg" placeholder="Message"></textarea>
+            <span class="error-txt">Please enter a valid email address.</span>
+        </div>
+        <input type="hidden" name="email" class="form-control" value="{{request.session.email}}">
+        <input type="hidden" name="lsource" value="29">
+        <input type="hidden" name="campaign" value="humanresource">
+        <button type="button" id="enquire_form" class="btn btn-primary submit">Submit</button>
+    </form>
+
+</div>
+
+
+            {% if categories %}
+				{% include './include/category.tmpl.html' with categories=categories main_cat=category.slug  %}
+			{% endif %}
+
+            {% comment %}
+			{% if popular_courses %}
+				{% include './include/popular.tmpl.html' with popular_courses=popular_courses page='talenteconomy-category' %}
+			{% endif %}
+            {% endcomment %}
+		</div>
+		<!-- right content end -->
+	</div>
+</section>
+<!-- main section end -->
+<!-- contributors start -->
+{% if authors %}
+	{% include './include/authorSlide.tmpl.html' with authors=authors %}
+{% endif %}
+<!-- contributors end -->
+{% endblock container %}
+
+{% block js_section %}
+    
+    {{ block.super }}
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
+    <script src="{% static 'shinelearn/js/talenteconomy/scrollpage.js' %}"></script>
+    {% endcompress %}
+
+    {% compress js inline %}
+      <script>
+        $(function(){
+          Article.init();
+        });
+        showTalentpageOnScroll.scroll(); /* for calling infinite articles */
+      </script>
+    {% endcompress %}
+{% endblock js_section %}

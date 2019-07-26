@@ -165,8 +165,9 @@ class Assesment(AbstractAutoDate):
         default=Decimal('0.00'), decimal_places=2,
         max_digits=12, null=True, blank=True
     )
-
-
+    order_item = models.OneToOneField(
+        'order.OrderItem', related_name='assesment',
+        verbose_name=_("Order Item"), blank=True, null=True)
 
 
 class Certificate(AbstractAutoDate):
@@ -243,7 +244,6 @@ class BoosterRecruiter(AbstractAutoDate):
         return '<' + self.get_type_recruiter_display() + '>'
 
 class Report(models.Model):
-
     assessment_id = models.IntegerField()
     url = models.URLField(max_length=500, blank=True, null=True)
     name = models.CharField(max_length=255)
@@ -285,7 +285,6 @@ class UserCertificateOperations(AbstractAutoDate):
 
 
 class ProductSkill(AbstractAutoDate):
-
     skill = models.ForeignKey(
         'shop.Skill',
         verbose_name=_('Skill'),
@@ -309,6 +308,7 @@ class ProductSkill(AbstractAutoDate):
         unique_together = ('product', 'skill')
         verbose_name = _('Product Skill')
         verbose_name_plural = _('Product Skills')
+
 
 class PixelTracker(AbstractAutoDate):
     pixel_slug = models.CharField(

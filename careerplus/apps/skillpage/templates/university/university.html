@@ -54,7 +54,7 @@
           <!-- university image -->
           <div class="exe-university-img mb-10">
             <figure>
-              <img src="{{category_obj.icon.url}}" alt="{{category_obj.alt_name}}" class="img-responsive">
+              <img aria-label="{{category_obj.alt_name}}" src="{{category_obj.icon.url}}" alt="{{category_obj.alt_name}}" class="img-responsive">
             </figure>
           </div>
           <!-- course heading -->
@@ -170,7 +170,7 @@
                               {% if fac %}
                               <div class="{% if fslide|length == 1 %}col-sm-12{%else %}col-sm-6{% endif %} text-center">
                                 <figure>
-                                  <a class="faculty-thumb" target="_blank" href="{{fac.get_absolute_url}}"><img src="{% if fac.image %}{{fac.image.url}}{% else %}{% static 'shinelearn/images/executive/default-user-pic.jpg' %}{% endif %}" alt="{{fac.alt_name}}.jpg"></a>
+                                  <a class="faculty-thumb" target="_blank" href="{{fac.get_absolute_url}}"><img aria-label="{{fac.alt_name}}.jpg" src="{% if fac.image %}{{fac.image.url}}{% else %}{% static 'shinelearn/images/executive/default-user-pic.jpg' %}{% endif %}" alt="{{fac.alt_name}}.jpg"></a>
                                   <figcaption>
                                     <strong><a href="{{fac.get_absolute_url}}" target="_blank">{{fac.name}}</a></strong>
                                     <div class="exe-designation">{{fac.designation}} – 
@@ -213,9 +213,9 @@
                         </div>
                         <div class="col-sm-6">
                           <figure class="pr">
-                            <i><img src="{{category_obj.icon.url}}" alt="Logo" class="img-responsive"></i>
+                            <i><img aria-label="Logo" src="{{category_obj.icon.url}}" alt="Logo" class="img-responsive"></i>
 
-                            <img src="{{category_obj.image.url}}" class="img-responsive" alt="About institute">
+                            <img aria-label="About institute" src="{{category_obj.image.url}}" class="img-responsive" alt="About institute">
                           </figure>
                         </div>
                       </div>
@@ -231,9 +231,9 @@
                           <div class="media-left">
                             <h2 class="heading-primary-exe1 mb-30">Principal speak</h2>
                             <figure class="principal">
-                              <img src="{% if principal.image %}{{principal.image.url}}{% else %}{% static 'shinelearn/images/executive/default-user-pic.jpg' %}{% endif %}" class="img-responsive" alt="{{principal.name}}.jpg">
+                              <img aria-label="{{principal.name}}.jpg" src="{% if principal.image %}{{principal.image.url}}{% else %}{% static 'shinelearn/images/executive/default-user-pic.jpg' %}{% endif %}" class="img-responsive" alt="{{principal.name}}.jpg">
                               {% if category_obj.icon %}
-                              <i><img src="{{category_obj.icon.url}}" alt="{{category_obj.name}}.jpg" class="img-responsive"></i>
+                              <i><img aria-label="{{category_obj.name}}.jpg" src="{{category_obj.icon.url}}" alt="{{category_obj.name}}.jpg" class="img-responsive"></i>
                               {% endif %}
                             </figure>
                           </div>
@@ -263,7 +263,7 @@
                           <div class="item col-sm-12 {% if forloop.first %}active{% endif %}">
                             <p class="mb-40 mt-20">{{testimonial.review}}</p>
                             <figure>
-                              <img src="{% if testimonial.image %}{{testimonial.image.url}}{% else %}{% static 'shinelearn/images/executive/default-user-pic.jpg' %}{% endif %}" alt="{{testimonial.user_name}}">
+                              <img aria-label="{{testimonial.user_name}}" src="{% if testimonial.image %}{{testimonial.image.url}}{% else %}{% static 'shinelearn/images/executive/default-user-pic.jpg' %}{% endif %}" alt="{{testimonial.user_name}}">
                               <figcaption>
                                 <strong>{{testimonial.user_name}}</strong>
                                 <div class="exe-designation">

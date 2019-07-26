@@ -1,13 +1,18 @@
 #python imports
+import math
 import datetime,logging
+
 from decimal import Decimal
+from dateutil import relativedelta
 
 #django imports
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, Count, Case, When, IntegerField
+
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.utils import timezone
+from django.db.models.signals import post_save
 
 #local imports
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
@@ -26,6 +31,7 @@ from geolocation.models import Country, CURRENCY_SYMBOL
 
 #third party imports
 from payment.utils import manually_generate_autologin_url
+from shop.choices import S_ATTR_DICT
 
 #Global Constants
 CURRENCY_SYMBOL_CODE_MAPPING = {0:"INR",1:"USD",2:"AED",3:"GBP"}
@@ -425,6 +431,12 @@ class OrderItem(AbstractAutoDate):
         _("Auto Login Url"), null=True, blank=True, max_length=2000,
     )
 
+    # field for whatsapp job
+    pending_links_count = models.IntegerField(
+        blank=True,
+        null=True,
+        default=0
+    )
 
     class Meta:
         app_label = 'order'
@@ -525,6 +537,12 @@ class OrderItem(AbstractAutoDate):
 
             # complaince generation permission
             ("can_generate_compliance_report", "can create compliance report permmission"),
+
+            # jobs on the move permission
+            ("can_view_assigned_jobs_on_the_move", "Can view assigned jobs on the move"),
+            ("can_assign_jobs_on_the_move", "Can assign jobs on the move"),
+            ("can_send_jobs_on_the_move", "Can send assigned jobs on the move"),
+            ("can_approve_jobs_on_the_move", "Can Approve jobs on the move")
         )
 
     def __str__(self):
@@ -547,6 +565,97 @@ class OrderItem(AbstractAutoDate):
             if 'CP' in replacement_order_id:
                 return replacement_order_id.replace('CP', '')
             return self.replacement_order_id
+
+    def get_item_operations(self):
+        if self.product.sub_type_flow == 502:
+            ops = []
+            start_op = self.orderitemoperation_set.filter(oi_status__in=[31, 32, 5]).order_by('id').first()
+            ops.append(start_op)
+            closed_op = self.orderitemoperation_set.filter(oi_status=4).order_by('id').first()
+            if closed_op:
+                start_op = ops.append(closed_op)
+
+            return ops
+
+    @property
+    def sent_link_count(self):
+        return self.jobs_link.filter(status=2).count()
+
+    @property
+    def is_closed(self):
+        if self.oi_status == 4:
+            return True
+
+    def get_weeks(self):
+        weeks, weeks_till_now = None, None
+        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5, 31]).order_by('id').first()
+        if sevice_started_op:
+            started = sevice_started_op.created
+            day = self.product.get_duration_in_day()
+            weeks = math.floor(day / 7)
+            today = timezone.now()
+            weeks_till_now = ((today - started).days) // 7
+            weeks_till_now += 1
+
+        return weeks, weeks_till_now
+
+
+    def get_links_needed_till_now(self):
+        start, end = None, None
+        links_count = 0
+        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5,31]).order_by('id').first()
+        links_per_week = getattr(self.product.attr, S_ATTR_DICT.get('LC'), 2)
+        if sevice_started_op:
+            links_count = 0
+            started = sevice_started_op.created
+            day = self.product.get_duration_in_day()
+            weeks = math.floor(day / 7)
+            today = timezone.now()
+            for i in range(0, weeks):
+                start = started + relativedelta.relativedelta(days=i * 7)
+                if start > today:
+                    break
+                links_count += links_per_week
+        return links_count
+
+    def has_saved_links(self):
+        saved_links = self.jobs_link.filter(status=0)
+        return saved_links.count()
+
+    def get_total_links_needs_to_sent(self):
+        day = self.product.get_duration_in_day()
+        links_per_week = getattr(self.product.attr, S_ATTR_DICT.get('LC'), 2)
+        if day:
+            weeks = math.floor(day / 7)
+            return weeks * links_per_week
+        return None
+
+    def get_sent_link_count_for_current_week(self):
+        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5,31]).order_by('id').first()
+        started = sevice_started_op.created
+        day = self.product.get_duration_in_day()
+        weeks = math.floor(day / 7)
+        today = timezone.now()
+        # Here we compute start date and end date for this week
+        # for this order item
+        for i in range(0, weeks):
+            start = started + relativedelta.relativedelta(days=i * 7)
+            end = started + relativedelta.relativedelta(days=(i + 1) * 7)
+            if end > today:
+                break
+        links = self.jobs_link.filter(status=2, sent_date__range=[start, end])
+
+        return links.count()
+
+    def update_pending_links_count(self):
+        links_needed_till_now = self.get_links_needed_till_now()
+        links_sent_till_now = self.jobs_link.filter(status=2).count()
+        links_pending = links_needed_till_now - links_sent_till_now
+
+        if links_pending < 0:
+            links_pending = 0
+        self.pending_links_count = links_pending
+        self.save()
 
     def get_oi_communications(self):
         communications = self.message_set.all().select_related('added_by')
@@ -600,17 +709,20 @@ class OrderItem(AbstractAutoDate):
         status_dict = dict(WC_FLOW_STATUS)
         return status_dict.get(self.wc_status, '')
 
+    def get_assigned_operation_date(self):
+        assigned_op = self.orderitemoperation_set.filter(oi_status=1).first()
+        if assigned_op:
+            return assigned_op.created
+
+
     def save(self, *args, **kwargs):
         created = not bool(getattr(self, "id"))
         orderitem = OrderItem.objects.filter(id=self.pk).first()
         self.oi_status = 4 if orderitem and orderitem.oi_status == 4 else self.oi_status
+        # handling combo case getting parent and updating child
+        super().save(*args, **kwargs)  # Call the "real" save() method.        
 
-        super().save(*args, **kwargs)  # Call the "real" save() method.
-        # automate application highlighter/priority applicant
-        if self.product.sub_type_flow == 503:
-            process_application_highlighter(obj=self)
-
-         # # for resume booster create orderitem
+        # # for resume booster create orderitem
         # if self.product.type_flow in [7, 15] and obj.oi_status != last_oi_status:
         #     if obj.oi_status == 5:
         #         self.orderitemoperation_set.create(
@@ -650,6 +762,28 @@ class OrderItem(AbstractAutoDate):
         #                 sms_type="BOOSTER_CANDIDATE", data=candidate_data)
         #         self.emailorderitemoperation_set.create(email_oi_status=92)
 
+    @classmethod
+    def post_save_product(cls, sender, instance, **kwargs):
+        # automate application highlighter/priority applicant
+        if instance.is_combo and not instance.parent:
+            jobs_on_the_move_item = instance.order.orderitems.filter(product__sub_type_flow=502)
+            priority_applicant_items = instance.order.orderitems.filter(product__sub_type_flow=503)
+
+            for i in jobs_on_the_move_item:
+                from order.tasks import process_jobs_on_the_move
+                process_jobs_on_the_move.delay(i.id)
+
+            for i in priority_applicant_items:
+                process_application_highlighter(i)
+
+        elif instance.product.sub_type_flow == 502:
+            from order.tasks import process_jobs_on_the_move
+            process_jobs_on_the_move.delay(instance.id)
+
+        if instance.product.sub_type_flow == 503:
+            process_application_highlighter(obj=instance)
+
+post_save.connect(OrderItem.post_save_product, sender=OrderItem)
 
 
 class OrderItemOperation(AbstractAutoDate):

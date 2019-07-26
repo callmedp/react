@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html lang="en" itemscope itemtype="http://www.schema.org/WebPage">
     <head>
+    <title> {% block title %}Shine Learning{% endblock title %}</title>
     {% block head %}
     {% block meta_html %}
         <meta charset="utf-8">
@@ -14,8 +15,6 @@
     {% block canonical_url %}
       <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
    {% endblock canonical_url %}
-        
-    <title> {% block title %}Shine Learning{% endblock title %}</title>
     
     {% block css_section %}
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">

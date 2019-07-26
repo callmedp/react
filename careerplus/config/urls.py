@@ -79,7 +79,13 @@ talent_sitemap = {
     'author': TalentAuthorSitemap
 }
 
+<<<<<<< HEAD
 # Library Patches
+=======
+
+
+#Library Patches
+>>>>>>> master
 from .startup_script import apply_patch
 
 apply_patch()
@@ -183,7 +189,11 @@ urlpatterns += [
                    url(r'^autologin/(?P<token>.+)/$', AutoLoginView.as_view(), name='autologin'),
                    url(r'^linkedin/login/$',
                        LinkedinCallbackView.as_view(), name='linkedin-login'),
+<<<<<<< HEAD
                    url(r'^api/v1/resume/', include('resumebuilder.api.v1.urls', namespace='resume_builder')),
+=======
+                  url(r'^api/v1/resume/', include('resumebuilder.api.v1.urls', namespace='resume_builder')),
+>>>>>>> master
 
                    url(r'^api/', include('api.urls', namespace='api')),
 
@@ -229,11 +239,14 @@ if settings.DEBUG:
     from rest_framework.schemas import SchemaGenerator
     from rest_framework.views import APIView
     from rest_framework_swagger import renderers
+    from rest_framework_swagger.views import get_swagger_view
+
+    schema_view = get_swagger_view(title='Shine Learning API Docs')
 
 
     class SwaggerSchemaView(APIView):
         renderer_classes = [
-            renderers.OpenAPIRenderer,
+        #     renderers.OpenAPIRenderer,
             renderers.SwaggerUIRenderer
         ]
 
@@ -249,7 +262,7 @@ if settings.DEBUG:
 
     urlpatterns = [
                       url(r'^__debug__/', include(debug_toolbar.urls)),
-                      url(r'^api-docs/', SwaggerSchemaView.as_view()),
+                      url(r'^api-docs/', schema_view),
                   ] + urlpatterns
 
 import logging
