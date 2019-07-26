@@ -24,7 +24,7 @@ from geolocation.models import Country
 from users.tasks import user_register
 from search.helpers import get_recommendations
 from cart.tasks import cart_drop_out_mail, create_lead_on_crm
-
+from django.core.cache import cache
 from .models import Cart
 from .mixins import CartMixin
 from .forms import ShippingDetailUpdateForm
@@ -277,6 +277,11 @@ class PaymentLoginView(TemplateView):
 
         cart_pk = self.request.session.get('cart_pk')  # required for calling self.get_context_data()
         cart_obj = Cart.objects.get(pk=cart_pk)
+        # get neo item email from cache set after user submit neo test
+        if self.cart_obj.lineitems.filter(product__vendor__slug='neo').exists():
+            session_id = self.request.session.session_key
+            email = cache.get('{}_neo_email_done'.format(session_id))
+            context.update({'neo_email': email})
         if cart_obj.email == email:
             context['email_exist'] = True
             context.update({'email': email, })

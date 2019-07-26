@@ -13,7 +13,7 @@ from rest_framework.response import Response
 from .tasks import delete_from_solr, update_practice_test_info
 import subprocess, os
 from rest_framework.generics import RetrieveAPIView
-
+from django.core.cache import cache
 from django.conf import settings
 
 
@@ -86,6 +86,9 @@ class UpdatePracticeInfoApiView(APIView):
             return Response({'email: Provide this field'}, status=status.HTTP_400_BAD_REQUEST)
         data = update_practice_test_info(email)
         if data:
+            if data['status'] == 'done':
+                session_id = request.session.session_key
+                cache.set('{}_neo_email_done'.format(session_id), email, 3600 * 24 * 30)
             return Response(data)
         else:
             return Response({'message': 'Invalid Email'.format(email)}, status=status.HTTP_400_BAD_REQUEST)
