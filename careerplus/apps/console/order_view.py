@@ -3401,7 +3401,7 @@ class WhatsAppScheduleView(UserPermissionMixin, DetailView, PaginationMixin):
                     instance=profile,
                     user=request.user
                 )
-                if profile_form.is_valid:
+                if profile_form.is_valid():
                     profile_form.save()
                     messages.success(
                         self.request,
