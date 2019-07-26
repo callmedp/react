@@ -8,7 +8,7 @@ from datetime import timedelta
 import datetime
 
 # import apps module
-from order.models import WelcomeCallOperation,CustomerFeedback,OrderItemFeedback
+from order.models import WelcomeCallOperation,CustomerFeedback,OrderItemFeedback,OrderItemFeedbackOperation
 from order.utils import get_ltv
 
 
@@ -22,21 +22,26 @@ def feedback_call_entry():
     welcome_operations = WelcomeCallOperation.objects.filter(created__range=[start_date,end_date],order__welcome_call_done=True)
     if welcome_operations.exists():
         for operation in welcome_operations:
+            import ipdb; ipdb.set_trace()
             candidate_id = operation.order.candidate_id
-            customer_name = operation.order.first_name + " " + operation.order.last_name
-            mobile = operation.order.mobile
-            email = operation.order.email
             ltv = get_ltv(candidate_id)
-            payment_date = operation.order.payment_date
-            customer_feedback = CustomerFeedback.objects.filter(candidate_id=candidate_id,status=1).first()
-            if not customer_feedback:
-                customer_feedback = CustomerFeedback.objects.create(candidate_id=candidate_id,full_name=customer_name,mobile=mobile,email=email,last_payment_date=payment_date)
-            else:
-                if customer_feedback.last_payment_date < payment_date.date():
-                    customer_feedback.last_payment_date = payment_date
-                    customer_feedback.save()
-            for order_item in operation.order.orderitems.all():
-                OrderItemFeedback.objects.get_or_create(order_item=order_item,customer_feedback=customer_feedback)
+            if ltv>=30000:
+                customer_name = operation.order.first_name + " " + operation.order.last_name
+                mobile = operation.order.mobile
+                email = operation.order.email
+                payment_date = operation.order.payment_date
+                customer_feedback = CustomerFeedback.objects.filter(candidate_id=candidate_id,status=1).first()
+                if not customer_feedback:
+                    customer_feedback = CustomerFeedback.objects.create(candidate_id=candidate_id,full_name=customer_name,mobile=mobile,email=email,last_payment_date=payment_date)
+                else:
+                    if customer_feedback.last_payment_date < payment_date.date():
+                        customer_feedback.last_payment_date = payment_date
+                        customer_feedback.save()
+                    assigned_to = customer_feedback.assigned_to
+                for order_item in operation.order.orderitems.all():
+                    OrderItemFeedback.objects.get_or_create(order_item=order_item,customer_feedback=customer_feedback)
+                    if assigned_to:
+                        OrderItemFeedbackOperation.create(order_item=order_item,customer_feedback=customer_feedback,assigned_to=assigned_to)
 
 
     
