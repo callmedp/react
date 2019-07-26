@@ -79,13 +79,8 @@ talent_sitemap = {
     'author': TalentAuthorSitemap
 }
 
-<<<<<<< HEAD
+
 # Library Patches
-=======
-
-
-#Library Patches
->>>>>>> master
 from .startup_script import apply_patch
 
 apply_patch()
@@ -189,11 +184,7 @@ urlpatterns += [
                    url(r'^autologin/(?P<token>.+)/$', AutoLoginView.as_view(), name='autologin'),
                    url(r'^linkedin/login/$',
                        LinkedinCallbackView.as_view(), name='linkedin-login'),
-<<<<<<< HEAD
                    url(r'^api/v1/resume/', include('resumebuilder.api.v1.urls', namespace='resume_builder')),
-=======
-                  url(r'^api/v1/resume/', include('resumebuilder.api.v1.urls', namespace='resume_builder')),
->>>>>>> master
 
                    url(r'^api/', include('api.urls', namespace='api')),
 
