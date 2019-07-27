@@ -1,10 +1,14 @@
+# python imports
 from decimal import Decimal
+
+# django imports
 from django.db.models import Sum
 from django.core.cache import cache
 
+
 def get_ltv(candidate_id):
     from order.models import Order,OrderItem,RefundRequest
-    key = 'ltv' + candidate_id
+    key = 'ltv_' + candidate_id
     ltv = cache.get(key)
     if ltv:
         return ltv

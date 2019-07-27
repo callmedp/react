@@ -278,7 +278,7 @@ class Order(AbstractAutoDate):
             return super(Order,self).save(**kwargs)
 
         existing_obj = Order.objects.get(id=self.id)
-        key = 'ltv' + self.candidate_id
+        key = 'ltv_' + self.candidate_id
         cache.delete(key)
         
         if self.status == 1:
@@ -960,7 +960,7 @@ class CustomerFeedback(models.Model):
 
     @property
     def assigned_to_text(self):
-        return self.assigned_to.name
+        return self.assigned_to.name if self.assigned_to else ''
 
     @property
     def ltv_value(self):
@@ -1005,6 +1005,6 @@ class OrderItemFeedbackOperation(models.Model):
 
     @property
     def assigned_to_text(self):
-        return self.assigned_to.name
+        return self.assigned_to.name if self.assigned_to else ''
     
 

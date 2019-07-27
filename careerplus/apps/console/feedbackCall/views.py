@@ -1,10 +1,14 @@
+#django imports
 from django.views.generic import TemplateView
-from users.mixins import UserGroupMixin
-from order.models import CustomerFeedback
-from users.mixins import UserMixin
 from django.conf import settings
 from django.shortcuts import redirect
 from django.http import HttpResponse,HttpResponseRedirect
+
+#app imports
+from users.mixins import UserGroupMixin
+from order.models import CustomerFeedback
+from users.mixins import UserMixin
+
 
 class FeedbackQueueView(UserGroupMixin, TemplateView):
     template_name = 'console/feedbackCall/feedback-queue.html'
@@ -25,7 +29,7 @@ class CustomerFeedbackUpdate(UserGroupMixin, TemplateView):
         user = request.user
         customer_feedback = CustomerFeedback.objects.filter(id=id).first()
         if customer_feedback:
-            if customer_feedback.assigned_to == user or UserMixin().check_user_in_groups(user,settings.OPS_HEAD_GROUP_LIST):
+            if customer_feedback.assigned_to == user or user.groups.filter(name__in=settings.OPS_HEAD_GROUP_LIST).exists() or user.is_superuser:
                 return super(CustomerFeedbackUpdate,self).get(request,*args, **kwargs)
         return HttpResponseRedirect('/console/feedbackcall/queue')
     

@@ -973,18 +973,6 @@ class UserMixin(object):
 
         return country_obj
 
-    def check_user_in_groups(self,user,grp_list):
-        if user.is_superuser:
-            return True
-        groups = user.groups.all().values_list('name', flat=True)
-        groups = set(groups)
-        
-        flat_list = [ll for ll in flatlist(grp_list)]
-        flat_list = set(flat_list)
-        intersection = flat_list.intersection(groups)
-
-        return True if intersection else False
-
 
 class UserGroupMixin(object):
     user_check_failure_path = '/console'  # can be path, url name or reverse_lazy

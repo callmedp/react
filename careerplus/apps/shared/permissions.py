@@ -1,6 +1,7 @@
 #python imports
 
 #django imports
+from django.conf import settings
 
 #local imports
 
@@ -46,3 +47,23 @@ class IsObjectOwner(BasePermission):
 
         return permission_granted
 
+
+class IsActiveUser(BasePermission):
+
+    def has_permission(self,request,view):
+        return request.user.is_active
+
+
+class InFeedbackGroup(BasePermission):
+
+    def has_permission(self,request,view):
+        user = request.user
+        if user.is_superuser:
+            return True
+        ops_head_group = settings.OPS_HEAD_GROUP_LIST
+        feedback_call_group = settings.WELCOMECALL_GROUP_LIST
+        if user.groups.filter(name__in=ops_head_group).exists():
+            return True
+        elif user.groups.filter(name__in=feedback_call_group).exists():
+            return True
+        return False
