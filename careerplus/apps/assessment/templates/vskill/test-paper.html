@@ -99,7 +99,7 @@
                 <div class="white-box bdr-bottom" id="test-product" style="{% if not object.product %}display:none{% endif %}">
                     <div class="test-benefits benefits-bg">
                <span class="pad-15">
-                  <h3><a href="#" id="test-product-name">{{object.product.name}}</a></h3>
+                  <h3><a href="{{object.product.get_absolute_url}}" id="test-product-name">{{object.product.name}}</a></h3>
                   <h4 class="mt-0" id="test-price">Rs. {{object.product.inr_price}}</h4>
                   <strike>Rs. 999</strike>
                   <span class="grey-border mt-15 mb-15"></span>

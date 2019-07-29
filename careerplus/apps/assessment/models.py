@@ -50,7 +50,8 @@ class Test(AbstractAutoDate):
     def save(self,*args,**kwargs):
         created = not bool(getattr(self, "id"))
         if not created:
-            value = slugify(getattr(self, 'slug', self.title))
+            title = self.title
+            value = slugify(getattr(self, 'slug') or title)
             self.slug = value
         super().save(*args, **kwargs)
 
