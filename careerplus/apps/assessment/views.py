@@ -190,8 +190,9 @@ class AssessmentResultPage(TemplateView):
 
     def get_redirection_path(self):
         test_slug = self.kwargs.get('slug')
+        test_object = Test.objects.filter(slug=test_slug).first()
         session_id = self.request.session.session_key
-        key = session_id + test_slug
+        key = session_id + str(test_object.id)
         category = getattr(Test.objects.filter(slug=test_slug).first(), 'category', None)
         if not cache.get(key) and category:
             return reverse('assessment:vskill-subcategory',\
