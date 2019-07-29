@@ -189,7 +189,6 @@ class AssessmentResultPage(TemplateView):
     template_name = 'vskill/test-answers.html'
 
     def get_redirection_path(self):
-        import ipdb;ipdb.set_trace()
         test_slug = self.kwargs.get('slug')
         test_object = Test.objects.filter(slug=test_slug).first()
         session_id = self.request.session.session_key
