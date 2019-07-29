@@ -20,7 +20,7 @@
          }
       );
         $('#courseCartBtn').click(function(){
-        updateToCart(modalobject.courseId,'cart');
+        courseUpdateToCart(modalobject.courseId,'cart');
         });
 });
 
@@ -37,6 +37,36 @@ function testSession(data){
 });
 
 }
+
+
+   function courseUpdateToCart(prod_id,cart_type='cart')
+   {
+   $.ajax({
+                url: '/cart/add-to-cart/',
+                type: 'POST',
+                data: { 'prod_id': prod_id,'cv_id': prod_id,'cart_type': cart_type,},
+                dataType: 'json',
+                success: function(json) {
+                    if (json.status == 1){
+
+                        window.location.href = json.cart_url
+                    }
+                    else if (json.status == -1){
+                        alert("Something went wrong, Please try again.");
+                    }
+
+                },
+                failure: function(response){
+                    alert("Something went wrong, Please try again");
+
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert("Something went wrong, Please try again");
+                }
+            });
+        }
+
+
 
    function updateToCart(prod_id,cart_type='cart')
    {
