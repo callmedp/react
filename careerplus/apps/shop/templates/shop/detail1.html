@@ -128,6 +128,7 @@ $(document).ready(function() {
 
 <script>
   function load_test(email, name, country_code, mobile_no){
+      global_email = email
       var iframe = document.getElementById('iframe'),
       iframeWin = iframe.contentWindow || iframe,
       iframeDoc = iframe.contentDocument || iframeWin.document;
@@ -272,7 +273,7 @@ $('#neo-enroll-button').click(function(){
         let name = "{{request.session.full_name}}";
         let country_code = "{{request.session.country_code}}";
         let mobile_no = "{{request.session.mobile_no}}";
-        get_create_profile(email, name, country_code, mobile_no)
+        get_create_profile(email, name, country_code, mobile_no);
 
     {% else %}
         $("#neo-test-form").show();
@@ -286,7 +287,6 @@ $('#neo-enroll-button').click(function(){
 $('#neo-test-modal').on('hidden.bs.modal', function () {
   $("#neo-test-form").hide();
   $('#iframe').hide();
-
     // do something…
 });
 
@@ -294,9 +294,15 @@ $('#neo-test-modal').on('hidden.bs.modal', function () {
 $('iframe').load(function(){
     var ifrm = document.getElementById('iframe');
     var doc = ifrm.contentDocument? ifrm.contentDocument: ifrm.contentWindow.document;
+ 
     $(doc).on('click', '#neookbutton', function() {
-        email = $('#neo-test-form :input[name="email"]').val();
-        update_test_info(email);
+        update_test_info(global_email);
+    });
+
+    $(doc).on('click', '#neoStartButton', function() {
+    setTimeout(function(){
+        check_if_user_exists_for_another_vendor(global_email)
+    }, 1000) 
 
     });
 
@@ -305,6 +311,23 @@ $('iframe').load(function(){
       $('#add-to-cart').trigger('click');
     })
 });
+
+
+function check_if_user_exists_for_another_vendor(email) {
+  $.ajax({
+      url: "/api/v1/update_practice_info/?email="+ encodeURIComponent(email),
+      type: "GET",
+      success: function(data, textStatus, jqXHR) {
+        // do nothing if exists
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+      $('#neo-test-modal').modal('hide');
+      $("#neo-test-form").show();
+      $('#iframe').hide();
+      alert('This email already registered with another Neo Partner');
+      }
+  });
+}
 
 
   </script>

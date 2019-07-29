@@ -18,6 +18,7 @@ from shine.core import ShineCandidateDetail
 from crmapi.config import (
     EXPERIENCE_IN_YEARS_MODEL_CHOICES
 )
+from django.core.cache import cache
 from shop.models import PracticeTestInfo
 from core.api_mixin import NeoApiMixin
 
@@ -923,4 +924,6 @@ def board_user_on_neo(neo_ids):
     neo_items = OrderItem.objects.filter(id__in=neo_ids)
     for item in neo_items:
         email = item.order.email
-        NeoApiMixin().board_user_on_neo(email=email)
+        flag = NeoApiMixin().board_user_on_neo(email=email)
+        if flag:
+            cache.set('neo_mail_sent_{}'.format(str(item.id)), 1, 3600 * 24 * 2)

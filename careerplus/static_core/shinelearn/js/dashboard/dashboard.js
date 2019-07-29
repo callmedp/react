@@ -44,6 +44,7 @@ function boardNeoUser(oi_pk, ) {
             data : {'oi_pk': oi_pk, },
             dataType: 'html',
             success: function(html) {
+                window.location.reload();
                 alert('Please check you mail to confirm boarding on Neo')
             },
             error: function(xhr, ajaxOptions, thrownError) {

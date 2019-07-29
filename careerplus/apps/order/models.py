@@ -15,6 +15,7 @@ from django.utils import timezone
 from django_mysql.models import ListTextField
 from django.core.cache import cache
 from django.db.models.signals import post_save
+from django.core.cache import cache
 
 #local imports
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
@@ -629,6 +630,11 @@ class OrderItem(AbstractAutoDate):
     def is_closed(self):
         if self.oi_status == 4:
             return True
+
+    @property
+    def neo_mail_sent(self):
+        sent = cache.get('neo_mail_sent_{}'.format(self.id))
+        return sent
 
     def get_weeks(self):
         weeks, weeks_till_now = None, None

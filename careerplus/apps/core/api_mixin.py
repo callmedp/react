@@ -455,7 +455,10 @@ class NeoApiMixin(object):
         resp = requests.post(url_to_hit, data=data)
         if resp.status_code == 200:
             json_rep = resp.json()
-            return json_rep
+            data = {'status': 200, 'data': json_rep}
+            return data
+        if resp.status_code == 400:
+            return {'status': 400}
 
     def get_student_status_on_neo(self, email):
         url_to_hit = settings.NEO_URL['user_detail']

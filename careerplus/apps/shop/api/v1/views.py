@@ -75,19 +75,21 @@ class ProductDeleteView(APIView):
 
 class CreatePracticeTestInfoAPIView(CreateAPIView):
     serializer_class = PracticeTestInfoCreateSerializer
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = ()
     permission_classes = ()
 
     @method_decorator(csrf_protect)
     def dispatch(self, request, *args, **kwargs):
         return super(CreatePracticeTestInfoAPIView, self).dispatch(request, *args, **kwargs)
+
 
 class UpdatePracticeInfoApiView(APIView):
+    authentication_classes = ()
     permission_classes = ()
 
     @method_decorator(csrf_protect)
     def dispatch(self, request, *args, **kwargs):
-        return super(CreatePracticeTestInfoAPIView, self).dispatch(request, *args, **kwargs)
+        return super(UpdatePracticeInfoApiView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         email = request.query_params.get('email', None)
@@ -97,12 +99,14 @@ class UpdatePracticeInfoApiView(APIView):
             return Response({'email: Provide this field'}, status=status.HTTP_400_BAD_REQUEST)
         data = update_practice_test_info(email)
         if data:
-            if data['status'] == 'done':
-                session_id = request.session.session_key
-                cache.set('{}_neo_email_done'.format(session_id), email, 3600 * 24 * 30)
-            return Response(data)
-        else:
-            return Response({'message': 'Invalid Email'.format(email)}, status=status.HTTP_400_BAD_REQUEST)
+            if data.get('status', None) != 400:
+                if data['status'] == 'done':
+                    session_id = request.session.session_key
+                    cache.set('{}_neo_email_done'.format(session_id), email, 3600 * 24 * 30)
+                return Response(data)
+            else:
+                return Response({'message': 'Already Registered'.format(email)}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'message': 'Invalid Email'.format(email)}, status=status.HTTP_400_BAD_REQUEST)
 
 class BoardNeoProductApiView(APIView):
     authentication_classes = (ShineUserAuthentication,)
@@ -120,8 +124,9 @@ class BoardNeoProductApiView(APIView):
                 and self.oi.order.candidate_id == self.candidate_id\
                 and self.oi.order.status in [1, 3]
             ):
-                board_user_on_neo.delay([self.oi.id])
-                return Response({'message': 'Mail sent fro verification on neo'})
+                if not self.oi.neo_mail_sent:
+                    board_user_on_neo([self.oi.id])
+                return Response({'message': 'Mail sent for verification on neo'})
 
         raise PermissionDenied
 

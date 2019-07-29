@@ -15,15 +15,21 @@ def delete_from_solr():
 
 
 @task(name='update_practice_test_info')
-def update_practice_test_info(email=None):
+def update_practice_test_info(email=None, with_orderitem=False):
     if not email:
         return False
-    test_info = PracticeTestInfo.objects.filter(email=email).first()
+    test_info = PracticeTestInfo.objects.filter(
+        email=email, order_item=None
+    ).first()
     if test_info:
         email = test_info.email
         json_rep = NeoApiMixin().get_pt_result(email=email)
-        if json_rep:
+        print(json_rep)
+        if json_rep and json_rep.get('status', None) == 200:
+            json_rep = json_rep.get('data', {})
             setattr(test_info, 'test_data', str(json_rep))
             test_info.save()
             if email:
                 return eval(getattr(test_info, 'test_data'))
+        if json_rep and json_rep.get('status', None) == 400:
+            return {'status': 400}

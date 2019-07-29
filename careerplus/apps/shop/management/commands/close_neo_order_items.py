@@ -36,7 +36,8 @@ class Command(BaseCommand):
                     test_info.is_boarded = True
                     if not test_info.test_data:
                         json_rep = NeoApiMixin().get_pt_result(email=email)
-                        if json_rep:
+                        if json_rep and json_rep.get('status', None) == 200:
+                            json_rep = json_rep.get('data', {})
                             setattr(test_info, 'test_data', str(json_rep))
                     test_info.save()
                     last_oi_status = oi.oi_status

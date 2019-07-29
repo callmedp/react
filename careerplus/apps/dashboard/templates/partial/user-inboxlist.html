@@ -116,8 +116,11 @@
                 {% if obj.oi_status == 5 %}
 
                         <p><strong>Status:</strong> {{obj.get_user_oi_status}}
-                            {% if obj.product.vendor.slug == 'neo' %}
-                                 <a role="button" onclick="boardNeoUser('{{obj.pk}}',)">:- Board On Neo</a>
+                            {% if obj.product.vendor.slug == 'neo'  and not obj.neo_mail_sent%}
+                                <span id="board_neo_btn"><a role="button" onclick="boardNeoUser('{{obj.pk}}',)">:- Board On Neo</a></span>
+                            {% endif %}
+                             {% if obj.product.vendor.slug == 'neo'  and obj.neo_mail_sent%}
+                                <span id="board_neo_msg"> :- Please Confirm Boarding on Mail Sent to you</span>
                             {% endif %}
                         </p>
                     
