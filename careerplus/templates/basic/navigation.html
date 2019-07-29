@@ -244,7 +244,7 @@
           </ul>
         </li>
         <li>
-          <a href="{% url "cart:cart-product-list" %}"><span class="cart-icon"><span class="{% if cart_count %}cart-counter{% endif %}" id="cart-counter-id">{% if cart_count %}{{cart_count}}{% endif %}</span></span></a>
+          <a href="{% url "cart:payment-summary" %}"><span class="cart-icon"><span class="{% if cart_count %}cart-counter{% endif %}" id="cart-counter-id">{% if cart_count %}{{cart_count}}{% endif %}</span></span></a>
         </li>
         {% if request.session.candidate_id %}
         <li class="dropdown login-dropdown">
