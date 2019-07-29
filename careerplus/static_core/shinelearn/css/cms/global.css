@@ -84,6 +84,46 @@ h2, .h2 {
       .white-box ul li a {
         color: #3f5f94; }
 
+.white-box .rf-list li {
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+
+.rf .panel {
+  border: none;
+  box-shadow: none;
+}
+
+.rf .panel .panel-title{
+  font-size: 19px;
+}
+
+.rf .panel-default > .panel-heading {
+  background: #fff;
+  border: none;
+}
+
+.rf .panel-title > a {
+  position: relative;
+  display: block;
+}
+.rf .panel-title > a:after {
+  content: "";
+  position: absolute;
+  top: 7px;
+  right: 0;
+  background: url("/media/static/shinelearn/images/sprite.png") no-repeat -292px -474px;
+  width: 13px;
+  height: 8px; }
+.rf .panel-title > a.collapsed:after {
+  content: "";
+  position: absolute;
+  top: 7px;
+  right: 0;
+  background: url("/media/static/shinelearn/images/sprite.png") no-repeat -292px -489px;
+  width: 13px;
+  height: 8px; }
+
 .round {
   -webkit-border-radius: 100px;
      -moz-border-radius: 100px;

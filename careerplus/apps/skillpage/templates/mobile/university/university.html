@@ -29,7 +29,7 @@
                 <div class="exec-header">
                     <div class="header-content">
                         <div class="university-logo">
-                            <img src="{{category_obj.icon.url}}" />
+                            <img aria-label="Category object icon" src="{{category_obj.icon.url}}" />
                         </div>
                         <h1 class="semi-bold">{{category_obj.heading}}</h1>
                         <ul class="banner-list">
@@ -141,7 +141,7 @@
                                     {% if fac %}
                                     <li>
                                         <span class="faculty-image">
-                                            <img 
+                                            <img aria-label="{{fac.image_alt}}" 
                                             src="{% if fac.image %}{{fac.image.url}}{% else %}{% static 'shinelearn/images/executive/default-user-pic.jpg' %}{% endif %}" alt="{{fac.image_alt}}"/>
                                         </span>
                                         <h3><a href="{{fac.get_absolute_url}}">{{fac.name}}</a></h3>
@@ -169,12 +169,12 @@
 
                         <div class="college-image-about">
                             <div class="university-logo">
-                                <img           
+                                <img aria-label="logo"           
                                 src="{{category_obj.icon.url}}" alt="logo"/>
                             </div>
 
                             <div class="image-wrap">
-                                <img 
+                                <img aria-label="university.jpg" 
                                 src="{{category_obj.image.url}}" alt="university.jpg"
                                 />
                             </div>
@@ -189,9 +189,9 @@
                         <div class="content pt-0">
                             <div class="principal-image-wrap">
                                 <div class="university-logo">
-                                    <img src="{{category_obj.icon.url}}"/></div>
+                                    <img aria-label="Category object icon" src="{{category_obj.icon.url}}"/></div>
                                 <div class="principle-image">
-                                    <img 
+                                    <img aria-label="{{principal.image_alt}}" 
                                         src="{% if principal.image %}{{principal.image.url}}{% else %}{% static 'shinelearn/images/executive/default-user-pic.jpg' %}{% endif %}" alt="{{principal.image_alt}}" class="img-responsive" 
                                     />
                                 </div>
@@ -221,7 +221,7 @@
                                     <div class="media">
                                         <div class="media-left">
                                             <span class="testimonial-image">
-                                             <img class="media-object" src="{% if testimonial.image %}{{testimonial.image.url}}{% else %}{% static 'shinelearn/images/executive/default-user-pic.jpg' %}{% endif %}" alt="{{testimonial.user_name}}">
+                                             <img aria-label="{{testimonial.user_name}}" class="media-object" src="{% if testimonial.image %}{{testimonial.image.url}}{% else %}{% static 'shinelearn/images/executive/default-user-pic.jpg' %}{% endif %}" alt="{{testimonial.user_name}}">
                                             </span>
                                         </div>
                                         <div class="media-body">

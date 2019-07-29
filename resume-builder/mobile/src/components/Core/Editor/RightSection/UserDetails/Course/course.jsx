@@ -9,6 +9,7 @@ import validate from "../../../../../FormHandler/validtaions/course/validate"
 import {siteDomain} from "../../../../../../Utils/domains";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 import BottomCTC from '../../../../../Common/BottomCTC/bottom-ctc';
+import Subscribe from '../../../RightSection/subscribe';
 
 
 class Course extends Component {
@@ -117,6 +118,7 @@ class Course extends Component {
 
             <div className="buildResume">
                 <PreviewModal {...this.props}/>
+                <Subscribe {...this.props}/>
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <FieldArray name="list" 
                                 handleSubmit={handleSubmit}

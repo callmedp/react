@@ -1,6 +1,7 @@
 import json
 import csv
 import datetime
+import math
 import logging
 import mimetypes
 import textwrap
@@ -12,9 +13,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.views.generic import (
     TemplateView, ListView, DetailView, View, UpdateView)
 from django.core.paginator import Paginator
-from django.db.models import Q, Count, Case, When, IntegerField
-
+from django.db.models import Q, Count, Case, When, IntegerField, Value
 from django.contrib import messages
+from django import forms
 from django.contrib.auth.decorators import permission_required
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -24,10 +25,12 @@ from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.utils import timezone
 from django.shortcuts import render
+from django.forms import modelformset_factory
+from django.template.response import TemplateResponse
 
 from geolocation.models import Country
 from order.models import Order, OrderItem, InternationalProfileCredential, OrderItemOperation
-from shop.models import DeliveryService, Product
+from shop.models import DeliveryService, Product, JobsLinks
 from blog.mixins import PaginationMixin
 from emailers.email import SendMail
 from emailers.tasks import send_email_task, send_booster_recruiter_mail_task
@@ -35,12 +38,14 @@ from emailers.sms import SendSMS
 from core.mixins import TokenExpiry
 from payment.models import PaymentTxn
 from linkedin.autologin import AutoLogin
-from order.functions import send_email, date_timezone_convert
+from order.functions import send_email, date_timezone_convert, create_short_url
 from .schedule_tasks.tasks import generate_compliance_report
 from scheduler.models import Scheduler
 
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from review.models import Review
+from partner.models import BoosterRecruiter
+from shop.choices import S_ATTR_DICT, A_ATTR_DICT
 from partner.models import BoosterRecruiter,VendorHierarchy
 
 from .decorators import (
@@ -62,9 +67,11 @@ from .order_form import (
     ReviewFilterForm,
     ReviewUpdateForm,
     emailupdateform,
-    mobileupdateform,)
+    mobileupdateform,
+    ProductUserProfileForm,
+    JobLinkForm)
 from .mixins import ActionUserMixin
-
+from users.mixins import UserPermissionMixin
 
 @Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_show_order_queue', login_url='/console/login/'), name='dispatch')
@@ -2894,12 +2901,14 @@ class ReviewModerateView(UpdateView):
 
 
 @Decorate(stop_browser_cache())
-@method_decorator(permission_required('order.can_show_domestic_profile_update_queue', login_url='/console/login/'), name='dispatch')
-class WhatsappListQueueView(ListView, PaginationMixin):
+class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
     context_object_name = 'object_list'
     template_name = 'console/order/whatsapp_list.html'
     model = OrderItem
     http_method_names = [u'get', u'post']
+    permission_to_check = ['Can view assigned jobs on the move', 'Can assign jobs on the move',
+                           'Can send assigned jobs on the move']
+    any_permission = True
 
     def __init__(self):
         self.page = 1
@@ -2911,8 +2920,11 @@ class WhatsappListQueueView(ListView, PaginationMixin):
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '').strip()
-        self.oi_status = request.GET.get('oi_status', '').strip()
+        self.oi_status = request.GET.get('oi_status', '-1').strip()
+        self.day_choice = request.GET.get('day_choice', '-1').strip()
         self.sel_opt = request.GET.get('rad_search', 'number')
+        self.payment_date = self.request.GET.get('payment_date', '')
+        self.sort_payment_date = self.request.GET.get('sort_payment_date', '0')
         return super(WhatsappListQueueView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -2935,18 +2947,17 @@ class WhatsappListQueueView(ListView, PaginationMixin):
         query_filters_exclude = dict()
         queryset = super(WhatsappListQueueView, self).get_queryset()
         query_filters.update({'order__status__in': [1, 2, 3], 'product__type_flow': 5, 'no_process': False,
-          'product__sub_type_flow': 502, 'order__welcome_call_done': True})
+            'product__sub_type_flow': 502, 'order__welcome_call_done': True})
         query_filters_exclude.update({'wc_sub_cat__in': [64, 65]})
         user = self.request.user
-        if user.is_superuser:
-            query_filters.update({'assigned_to': None})
-
+        if user.is_superuser or user.has_perm('order.can_assign_jobs_on_the_move'):
             pass
-        elif user.has_perm('order.domestic_profile_update_assigner'):
-            query_filters.update({'assigned_to': None})
-        elif user.has_perm('order.domestic_profile_update_assignee'):
+        elif user.has_perm('order.can_view_assigned_jobs_on_the_move'):
             query_filters.update({'assigned_to': user})
             query_filters_exclude.update({'oi_status': 4})
+        elif user.has_perm('order.can_send_jobs_on_the_move'):
+            query_filters_exclude.update({'assigned_to': None})
+
         else:
             return queryset.none()
         try:
@@ -2972,19 +2983,69 @@ class WhatsappListQueueView(ListView, PaginationMixin):
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
-        if self.oi_status and self.oi_status != '-1':
-            if 'assigned_to' in query_filters.keys():
-                del query_filters['assigned_to']
-            if self.oi_status == '1':
-                query_filters.update({'assigned_to__isnull':False})
-                query_filters_exclude.update({'oi_status':4})
-            else:
-                query_filters.update({'oi_status':self.oi_status})
 
         queryset = queryset.filter(**query_filters)
-        for key,value in query_filters_exclude.items():
-            queryset=queryset.exclude(**{key:value})
-        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
+        for key, value in query_filters_exclude.items():
+            queryset = queryset.exclude(**{key: value})
+        queryset = queryset.annotate(
+            save_link=Count(Case(
+                When(jobs_link__status=0, then=1),
+                output_field=IntegerField()
+            ))
+        )
+        if int(self.oi_status) != -1:
+            if int(self.oi_status) == 33:
+                queryset = queryset.filter(
+                    oi_status=31, save_link__gt=0
+                )
+            elif int(self.oi_status) == 31:
+                queryset = queryset.filter(
+                    oi_status=31, save_link=0
+                )
+            elif int(self.oi_status) == 34:
+                queryset = queryset.filter(assigned_to=None)
+            else:
+                queryset = queryset.filter(oi_status=self.oi_status)
+
+        if self.payment_date:
+            start_date, end_date = self.payment_date.split(' - ')
+            start_date = datetime.datetime.strptime(start_date, "%m/%d/%Y")
+            end_date = datetime.datetime.strptime(end_date, "%m/%d/%Y")
+            end_date = end_date + relativedelta.relativedelta(days=1)
+            queryset = queryset.filter(order__payment_date__range=[start_date, end_date])
+
+        # data for whats app links:
+        queryset = queryset.annotate(
+            sent_link=Count(
+                Case(
+                    When(jobs_link__status=2, then=1),
+                    output_field=IntegerField())
+            ),
+            save_link=Count(Case(
+                When(jobs_link__status=0, then=1),
+                output_field=IntegerField())
+            )
+        )
+        if int(self.day_choice) != -1:
+            q_objects = Q()
+            if int(self.day_choice) == 1:
+                today = timezone.now()
+                date_list = [(today - relativedelta.relativedelta(days=i * 7)).date() for i in range(0,52) ]
+                for d in date_list:
+                    q_objects |= Q(orderitemoperation__oi_status=1, orderitemoperation__created__range=[d, d + relativedelta.relativedelta(days=1)])
+            elif int(self.day_choice) == 2:
+                tommorrow = timezone.now() + relativedelta.relativedelta(days=1)
+                date_list = [(tommorrow - relativedelta.relativedelta(days=i * 7)).date() for i in range(0,52) ]
+                for d in date_list:
+                    q_objects |= Q(orderitemoperation__oi_status=1, orderitemoperation__created__range=[d, d + relativedelta.relativedelta(days=1)])
+            queryset = queryset.filter(q_objects)
+        if self.sort_payment_date and int(self.sort_payment_date):
+            print(self.sort_payment_date)
+            queryset = queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-order__payment_date')
+        else:
+            queryset = queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-pending_links_count')
+
+        return queryset
 
 @method_decorator(permission_required('order.can_generate_compliance_report', login_url='/console/login/'), name='dispatch')
 class ComplianceReport(TemplateView):
@@ -3194,3 +3255,170 @@ class CertficationProductQueueView(PaginationMixin, ListView):
                 created__range=[start_date, end_date])
 
         return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
+
+
+class WhatsAppScheduleView(UserPermissionMixin, DetailView, PaginationMixin):
+    template_name = 'console/order/whats_app_schedule.html'
+    model = OrderItem
+    context_object_name = 'orderitem'
+    page = 1
+    any_permission = True
+    paginated_by = 10
+    permission_to_check = ['Can view assigned jobs on the move', 'Can assign jobs on the move',
+                           'Can send assigned jobs on the move']
+
+    def get(self, request, *args, **kwargs):
+        obj = self.object = self.get_object()
+        if request.user.is_superuser or request.user.has_perm('order.can_assign_jobs_on_the_move'):
+            pass
+        elif request.user.has_perm('order.can_send_jobs_on_the_move') and obj.assigned_to:
+            pass
+        elif request.user.has_perm('order.can_view_assigned_jobs_on_the_move') and request.user == obj.assigned_to:
+            pass
+        else:
+            messages.add_message(self.request,messages.ERROR,'You are not authorised to view this order.')
+            return HttpResponseRedirect("/console/")
+        return super(WhatsAppScheduleView, self).get(request, *args, **kwargs)
+
+
+    def get_context_data(self, **kwargs):
+        obj = self.object = self.get_object()
+        self.page = self.request.GET.get('page', 1)
+        context = super(WhatsAppScheduleView, self).get_context_data(**kwargs)
+        joblinkformset = modelformset_factory(
+            JobsLinks,
+            form=JobLinkForm,
+            can_delete=True,
+            extra=4
+        )
+
+        formset = joblinkformset(
+            queryset=JobsLinks.objects.filter(oi=obj, status__in=[0])
+        )
+
+        # previously sent link
+        previous_links = JobsLinks.objects.filter(oi=obj, status__in=[2]).order_by('-sent_date')
+        paginator = Paginator(previous_links, self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+
+        if getattr(obj, 'whatsapp_profile_orderitem', None):
+            profile_form = ProductUserProfileForm(instance=obj.whatsapp_profile_orderitem)
+        else:
+            profile_form = ProductUserProfileForm()
+        context.update({'formset': formset, 'previous_links': previous_links, 'profile_form': profile_form})
+        return context
+
+    def attach_object_with_data(self, request, *args, **kwargs):
+
+        fields = ['id', 'company_name', 'location', 'experience', 'job_title', 'link','status']
+        total_forms = int(request.POST.get('form-TOTAL_FORMS', 0))
+
+        request_copy = request.POST.copy()
+        for i in range(total_forms):
+            prefix = "form-{}-".format(i)
+            form_to_consider = any([bool(request.POST.get(prefix + field)) for field in fields])
+            if not form_to_consider:
+                continue
+
+            request_copy.update({prefix + "oi": self.object.id})
+        return request_copy
+
+    def post(self, request, *args, **kwargs):
+        obj = self.object = self.get_object()
+        user = self.request.user
+        objects = []
+        joblinkformset = modelformset_factory(
+            JobsLinks,
+            form=JobLinkForm,
+            can_delete=True,
+            extra=4
+        )
+        action_type = int(request.POST.get('action_type', 0))
+        context = self.get_context_data()
+        post_data = self.attach_object_with_data(request, *args, **kwargs)
+        if action_type != 3:
+            formset = joblinkformset(post_data)
+            if formset.is_valid():
+                saved_formset = formset.save()
+
+                if getattr(formset, '_queryset', None) and not saved_formset:
+                    objects = list(formset._queryset.filter(status=0, oi=obj))
+                elif getattr(formset, '_queryset', None) and saved_formset:
+                    objects = list(formset._queryset.filter(status=0, oi=obj))
+                elif saved_formset:
+                    objects = saved_formset
+                job_message = None
+
+                if action_type == 2:
+                    for k in objects:
+                        k.sent_date = timezone.now()
+                        k.last_modified_by = request.user
+                        if not k.created_by:
+                            k.created_by = request.user
+                        k.status = 2
+                        k.save()
+                        obj.update_pending_links_count()
+                        if obj.pending_links_count == 0 and obj.oi_status == 31:
+                            last_oi_status = obj.oi_status
+                            obj.oi_status = 32
+                            obj.save()
+                            obj.orderitemoperation_set.create(
+                                oi_status=obj.oi_status,
+                                last_oi_status=last_oi_status,
+                                assigned_to=obj.assigned_to,
+                                added_by=request.user
+                            )
+                    obj.update_pending_links_count()
+                    context = self.get_context_data()
+                    messages.success(self.request, "Job Link marked as Sent")
+                elif action_type == 4:
+                    job_data = ''
+                    for k in objects:
+                        job_data += k.company_name + ' - ' + k.job_title + ' - '+ \
+                            k.location + ' -    ' + k.shorten_url + '<br><br>'
+                    if job_data:
+                        job_message = settings.WHATS_APP_MESSAGE_FORMAT.format(job_data)
+
+                else:
+                    for k in saved_formset:
+                        k.last_modified_by = request.user
+                        if not k.created_by:
+                            k.created_by = request.user
+                        k.save()
+                    messages.success(self.request, "Job Links are Saved")
+                context.update({'job_message': job_message})
+
+            else:
+                context.update({'formset': formset})
+                messages.error(
+                    self.request,
+                    "Job Link Scheduled Failed, Changes not Saved")
+        else:
+            profile = getattr(obj, 'whatsapp_profile_orderitem', None)
+            if profile:
+                profile_form = ProductUserProfileForm(
+                    data=request.POST,
+                    instance=profile,
+                    user=request.user
+                )
+                if profile_form.is_valid():
+                    profile_form.save()
+                    messages.success(
+                        self.request,
+                        "Profile Changes Saved")
+                else:
+                    messages.error(
+                        self.request,
+                        "Profile Changes not Saved")
+            else:
+                messages.error(
+                    self.request,
+                    "Profile Changes not Saved")
+                obj.save()
+            context = self.get_context_data()
+        return TemplateResponse(
+            request, [
+                "console/order/whats_app_schedule.html"
+            ], context)
+
+

@@ -6,7 +6,7 @@
     	<a class="box-panel" href="{% url 'talent:te-articles-detail' artList.p_cat.slug artList.slug %}" title="{{artList.heading}}" itemprop="url">
       	<figure class="pr">
       		{% if artList.image  %}
-        			<img src="{{artList.image.url}}" alt="{{artList.image_alt}}" itemprop="image">
+        			<img aria-label="{{artList.image_alt}}" src="{{artList.image.url}}" alt="{{artList.image_alt}}" itemprop="image">
         		{% endif %}
         		<span class="product-title product-title-pos">{{artList.p_cat.name}}</span>
       	</figure>
@@ -26,7 +26,7 @@
       <div class="author author-secondary">
         <figure>
         	{% if artList.author.image %}
-          <img src="{{artList.author.image.url}}" alt="{{artList.author.name}}">
+          <img aria-label="{{artList.author.name}}" src="{{artList.author.image.url}}" alt="{{artList.author.name}}">
           {% endif %}
         </figure>
         <span itemprop="author">{{artList.author.name}}</span>

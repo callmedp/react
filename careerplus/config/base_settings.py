@@ -148,7 +148,8 @@ TEMPLATES = [
                 'sekizai.context_processors.sekizai',
                 'core.context_processors.js_settings',
                 'core.context_processors.marketing_context_processor',
-                'core.context_processors.getSearchSet'
+                'core.context_processors.getSearchSet',
+                'core.context_processors.get_console_sidebar_badges'
             ],
             'loaders': ([
                 # ('django_mobile.loader.CachedLoader', [
@@ -485,7 +486,8 @@ CMS_GROUP_LIST = ['CMS_USER']
 SKILL_GROUP_LIST = ['SKILL_USER']
 COURSE_GROUP_LIST = ['COURSE_USER']
 SERVICE_GROUP_LIST = ['SERVICE_USER']
-USER_QUERY_GROUP_LIST = CMS_GROUP_LIST + SKILL_GROUP_LIST + COURSE_GROUP_LIST + SERVICE_GROUP_LIST
+ASSIGNMENT_GROUP_LIST = ['ASSIGNMENT_USER']
+USER_QUERY_GROUP_LIST = CMS_GROUP_LIST + SKILL_GROUP_LIST + COURSE_GROUP_LIST + SERVICE_GROUP_LIST + ASSIGNMENT_GROUP_LIST
 
 # Marketing User Auto login token Generation
 MARKETING_GROUP_LIST = ['MARKETING']
@@ -533,7 +535,8 @@ URL_MAPPING_TO_PRODUCT = {"resume-writing-services-1": ([1921, 1922, 1923, 1924,
                           "gst-certification": ([1810], 1810),
                           "data-science": ([3417], 3417),
                           "six-sigma": ([3400], 3400),
-                          "linkedin": ([1926], 1926)
+                          "linkedin": ([1926], 1926),
+                          'devops-professional': ([4131],4131),
 
                           }
 
@@ -563,4 +566,9 @@ RESUME_TEMPLATE_DIR = "resume-builder"
 
 #Haystack Settings
 HAYSTACK_ROUTERS = ['careerplus.config.haystack_routers.MasterSlaveRouter', 'haystack.routers.DefaultRouter']
+
+#JOTM Default Message
+WHATS_APP_MESSAGE_FORMAT = '''Here are our job recommendations for this week.<br>
+                        <br>{}Please do not call/reply directly to this message<br><br>In case of any queries, you can call us on  08047105151 or email us at resume@shine.com<br><br>Thanks,<br><br>Team Shine
+                        '''
 

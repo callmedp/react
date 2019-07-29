@@ -206,7 +206,8 @@ class SendMail():
             self.process(to, send_dict, data)
 
         elif mail_type == "PRIORITY_APPLICANT_MAIL":
-            send_dict['subject'] = data.get('subject', "Congratulations, you are now Shine’s Priority Applicant")
+            send_dict['subject'] = "Your applications will be highlighted"
+            data['subject'] =  "Your applications will be highlighted"
             template_name = data.get('template_name', 'priority_applicant.html')
             send_dict['template'] = 'emailers/candidate/' + template_name
             self.process(to, send_dict, data)

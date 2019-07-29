@@ -13,7 +13,13 @@ from emailers.email import SendMail
 from payment.models import PaymentTxn
 from core.mixins import InvoiceGenerate
 from coupon.mixins import CouponMixin
+from api.config import LOCATION_MAPPING, INDUSTRY_MAPPING, DESIRED_SALARY_MAPPING
+from shine.core import ShineCandidateDetail
+from crmapi.config import (
+    EXPERIENCE_IN_YEARS_MODEL_CHOICES
+)
 
+from shop.models import ProductUserProfile
 
 @task(name="invoice_generation_order")
 def invoice_generation_order(order_pk=None):
@@ -27,6 +33,7 @@ def invoice_generation_order(order_pk=None):
 
 @task(name="pending_item_email")
 def pending_item_email(pk=None):
+    from order.models import Order
     order = None
     try:
         order = Order.objects.get(pk=pk)
@@ -793,6 +800,91 @@ def service_initiation(pk=None):
         logging.getLogger('error_log').error('service initiation failed%s'%str(e))
 
 
+@task(name="process_jobs_on_the_move")
+def process_jobs_on_the_move(obj_id=None):
+    from order.models import OrderItem
+    obj = OrderItem.objects.filter(id=obj_id).first()
+    # create jobs on the move profile after welcome call is done.
+    if obj:
+        if obj.is_combo and obj.parent:
+            wc_cat = obj.parent.wc_cat
+            wc_sub_cat = obj.parent.wc_sub_cat
+        else:
+            wc_cat = obj.wc_cat
+            wc_sub_cat = obj.wc_sub_cat
+        if ((wc_cat == 21 and wc_sub_cat in [41, 42]) or (wc_cat == 22 and wc_sub_cat == 63)) and \
+                not getattr(obj, 'whatsapp_profile_orderitem', False):
+            other_jobs_on_the_move = OrderItem.objects.filter(
+                order__status__in=[1, 3],
+                product__type_flow__in=[5],
+                oi_status__in=[31, 32],
+                product__sub_type_flow=502,
+                order__candidate_id=obj.order.candidate_id
+            ).exclude(whatsapp_profile_orderitem=None).first()
+
+            desired_industry, desired_location, desired_salary, current_salary, experience, skills = '', '' ,'', '', '', ''
+
+            if other_jobs_on_the_move:
+                desired_industry = other_jobs_on_the_move.whatsapp_profile_orderitem.desired_industry
+                desired_location = other_jobs_on_the_move.whatsapp_profile_orderitem.desired_location
+                desired_salary = other_jobs_on_the_move.whatsapp_profile_orderitem.desired_salary
+                current_salary = other_jobs_on_the_move.whatsapp_profile_orderitem.current_salary
+                experience = other_jobs_on_the_move.whatsapp_profile_orderitem.experience
+                skills = other_jobs_on_the_move.whatsapp_profile_orderitem.skills
+            else:
+                resp_status = ShineCandidateDetail().get_candidate_detail(email=obj.order.email, shine_id=None)
+
+                if 'total_experience' in resp_status and resp_status['total_experience']:
+                    experience_years = resp_status['total_experience'][0].get('experience_in_years', 0)
+                    experience_months = resp_status['total_experience'][0].get('experience_in_months', 0)
+
+                    experience_years = dict(EXPERIENCE_IN_YEARS_MODEL_CHOICES).get(experience_years)
+                    if experience_months:
+                        experience_months = str(experience_months) + ' months' 
+                    experience = '{} {}'.format(experience_years, experience_months)
+
+                if 'skills' in resp_status and resp_status['skills']:
+                    skills = ','.join([i['value'] for i in resp_status['skills']])[0:99]
+
+                if resp_status and 'desired_job' in resp_status:
+
+                    candidate_data = resp_status['desired_job'][0]
+
+                    # Get canidate location
+                    candidate_location = candidate_data['candidate_location']
+                    desired_location = ','.join([LOCATION_MAPPING.get(loc, '') for loc in candidate_location])[0:244]
+
+                    # Get candidate industry
+                    candidate_industry = candidate_data['industry']
+                    desired_industry = ','.join([INDUSTRY_MAPPING.get(ind, '') for ind in candidate_industry])[0:244]
+
+                    # Get desired salary
+                    maximum_salary = candidate_data['maximum_salary']
+                    expected_min_salary = ','.join([DESIRED_SALARY_MAPPING.get(l, 'N.A') for l in maximum_salary])
+
+                    minimum_salary = candidate_data['minimum_salary']
+                    expected_max_salary = ','.join([DESIRED_SALARY_MAPPING.get(l, 'N.A') for l in minimum_salary])
+
+                    desired_salary = expected_min_salary if expected_min_salary else expected_max_salary
+
+                    # get current salary
+                    salary_in_lakh = resp_status['workex'][0]['salary_in_lakh']
+                    salary_in_thousand = resp_status['workex'][0]['salary_in_thousand']
+                    current_salary = str(salary_in_lakh) + 'Lakh ' + str(salary_in_thousand) + 'Thousand'
+
+            ProductUserProfile.objects.create(
+                order_item=obj,
+                contact_number=obj.order.mobile,
+                desired_industry=desired_industry,
+                desired_location=desired_location,
+                desired_salary=desired_salary,
+                current_salary=current_salary,
+                experience=experience,
+                skills=skills
+            )
+            obj.update_pending_links_count()
+
+
 @task
 def generate_resume_for_order(order_id):
     from resumebuilder.models import Candidate
@@ -800,7 +892,7 @@ def generate_resume_for_order(order_id):
     from resumebuilder.utils import ResumeGenerator
     order_obj = Order.objects.get(id=order_id)
     candidate_id = order_obj.candidate_id
-    
+
     for item in order_obj.orderitems.all():
         if item.product and item.product.type_flow == 17 and item.product.type_product == 2:
             product_id = item.product.id
@@ -810,6 +902,7 @@ def generate_resume_for_order(order_id):
     selected_template = Candidate.objects.filter(candidate_id = candidate_id).first().selected_template
     builder_obj = ResumeGenerator()
     builder_obj.save_order_resume_pdf(order=order_obj,is_combo=is_combo,index=selected_template)
+
 
 @task
 def send_resume_in_mail_resume_builder(attachment,data):

@@ -1,0 +1,123 @@
+{% extends "mobile/basic/base.html" %}
+{% load static compress %}
+{% load thumbnail %}
+
+{% block django_meta %}
+    {% include 'meta/meta.html' %}
+{%  endblock django_meta %}
+{% block canonical_url %}
+  <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
+  <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{ request.path }}?type=amp">
+{% endblock canonical_url %}
+
+{% block title %}
+   {{category.name}} - Career & Certification Guidance @ Shine Learning
+{% endblock title %}
+
+{% block css_section %}
+    {{ block.super }}
+    {% compress css %}
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/blog/blog.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'shinelearn/css/common/mobile/typeaheadjs.css' %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+
+{% block header %}
+
+<header class="w100fl">
+    <!-- header menu Icon Starts here -->
+    <div class="main-menu w100fl">
+        <div class="pull-left">
+            <a id="sidebar-main-trigger" class="icon-bar pull-left"  href="#" ></a> 
+            <a href="/" class="icon-logo pull-left"></a>
+        </div>
+
+        <div class="pull-right" style="width:30%;">       
+          <a class="icon-cart pull-right" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+          <form method='get' id="search-form">
+            <div class="searchbox">
+              <input id='id_q' type="text" placeholder="Search here" name="search" class="searchbox-input" autocomplete="off">
+              <span class="searchbox-icon"></span>
+            </div>
+          </form>
+        </div>
+    </div>
+</header>
+{% endblock header %}
+
+{% block container %}
+<div class="body-wrapper" style="padding-bottom: 125px;">
+<div class="article-category talent-gr">
+    <div class="content">
+      <ul class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
+        {% for bradcbs in breadcrumbs %}
+          {% if bradcbs.url %}
+            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item"><span itemprop="name">{{bradcbs.name}}</span></a></li>
+          {% else %}
+            <li class="active">{{bradcbs.name}}</li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+
+      <h1>{{category.name}} - Career Guidance</h1>
+
+    </div>
+    <img aria-label="Article Category" src="{% static 'shinelearn/images/mobile/common/article-category.jpg' %}" class="img-responsive">
+</div><!-- Trending articles Ends here -->
+
+<!-- Starts of talent-economy list -->
+<section class="content-box pt-0 pb-0">
+  <!-- box panel starts here -->
+  <div class="box-panel row " itemscope itemtype="https://schema.org/ItemList">
+    <h2 class="semi-head">All articles</h2>
+
+    <div id="related-talent-container">
+      {{article_list}}
+    </div>
+    <div id="id_ajax_talentpage"></div>
+
+  </div><!-- box panel ends here -->
+
+  {% if popular_courses %}
+      {% include './include/popular.tmpl.html' with popular_courses=popular_courses page='talenteconomy-category' %}
+  {% endif %}
+
+  {% if categories %}
+    {% include './include/category.tmpl.html' with categories=categories %}
+  {% endif %}
+
+ {% include './include/authorSlide.tmpl.html' with authors=authors %}
+
+</section><!-- End of talent-economy list -->
+</div>
+
+{% block call_us %}
+  {% include "shop/partials/call_us.html" %}
+{% endblock call_us %}
+
+{% endblock container %}
+
+
+{% block js_section %}
+    {{block.super}}
+    {% compress js %}
+      <script type="text/javascript" src="{% static 'shinelearn/js/mobile/talenteconomy/article.js' %}"></script>
+      <script src="{% static 'shinelearn/js/talenteconomy/scrollpage.js' %}"></script>
+      <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
+    {% endcompress %}
+
+    {% compress js inline %}
+      <script>
+        $(function() {
+          Article.init();
+        });
+        showTalentpageOnScroll.scroll(); /* for calling infinite articles */
+      </script>
+    {% endcompress %}
+{% endblock js_section %}
+
+{% block johukum %}
+
+{% endblock johukum %}

@@ -11,7 +11,7 @@
         {% if article.image %}
         <figure class="media-left">
           {% thumbnail article.image "171x113" crop="center" as im %}
-                <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{article.image_alt}}">
+                <img aria-label="{{article.image_alt}}" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{article.image_alt}}">
           {% endthumbnail %}
           <!--img class="media-object" src="{{article.image.url}}" alt="Government Jobs" width="173" height="113"-->
         </figure>
@@ -33,7 +33,7 @@
 {% if page_obj.has_next %}
 {% comment %}
 <p id="loading">
-    <img src="{% static 'console/images/blog/loading.gif' %}" alt="Loading…" />
+    <img aria-label="" src="{% static 'console/images/blog/loading.gif' %}" alt="Loading…" />
 </p>
 {% endcomment %}
 <div id="load_more" style='display:none'>

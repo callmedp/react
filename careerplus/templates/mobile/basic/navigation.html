@@ -6,7 +6,7 @@
                 <div class="user_details">
                     <div class="media">
                         <div class="media-left">
-                            <span><img alt="user loggedin" src="{% static 'shinelearn/images/user-loggedin.jpg' %}"></span>
+                            <span><img aria-label="user loggedin" alt="user loggedin" src="{% static 'shinelearn/images/user-loggedin.jpg' %}"></span>
                         </div>
                         <div class="media-body rel">
                             <h3 class="media-heading">{% if request.session.candidate_id %}{{ request.session.full_name|title }}{% else %}Welcome Guest{% endif %}</h3>
@@ -21,7 +21,7 @@
                         </div>
                     </div>
                 </div><!-- User after login Ends here -->
-            </div><img alt="user non loggedin" src="{% static 'shinelearn/images/mobile/common/nonlogin.jpg' %}">
+            </div><img aria-label="user non loggedin" alt="user non loggedin" src="{% static 'shinelearn/images/mobile/common/nonlogin.jpg' %}">
 
         </div><!-- Login widgets Ends here -->
 

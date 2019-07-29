@@ -58,6 +58,8 @@ from .shop_form import (
     AddSubCategoryForm,ChangeSubCategoryForm
 )
 
+from scheduler.models import Scheduler
+from console.schedule_tasks.tasks import generate_discount_report
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 
 from shop.forms import (
@@ -2479,14 +2481,9 @@ class DownloadDiscountReportView(TemplateView):
             return HttpResponseForbidden()
         return super(DownloadDiscountReportView,self).dispatch(request,*args,**kwargs)
 
-    def post(self,request,*args,**kwargs):
-        if not request.user.is_authenticated():
-            return HttpResponseForbidden()
-        if 'order.can_download_discount_report' not in request.user.get_all_permissions():
-            return HttpResponseForbidden()
-
-        report_type = request.POST.get('report_type')
-        report_date = request.POST.get('report_date')
+    def get_response_for_file_download(self):
+        report_type = self.request.POST.get('report_type')
+        report_date = self.request.POST.get('report_date')
         file_found = False
         file_path = "reports/discount_report_" + report_date + \
              "_" + report_type + ".csv"
@@ -2508,15 +2505,57 @@ class DownloadDiscountReportView(TemplateView):
         
         if file_found:
             logging.getLogger('info_log').info("Discount Report Downloaded | {},{},{},{}".\
-                format(request.user.id,request.user.get_full_name(),datetime.now(),report_date))
+                format(self.request.user.id,self.request.user.get_full_name(),datetime.now(),report_date))
             response = HttpResponse(
                 fsock,content_type=mimetypes.guess_type(filename)[0])
             response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
             return response
         
         else:
-            messages.add_message(request, messages.ERROR, "No record found.")
-            return render(request,template_name=self.template_name)
+            messages.add_message(self.request, messages.ERROR, "No record found.")
+            return render(self.request,template_name=self.template_name)
+
+    def get_response_for_file_generation(self):
+        start_date_str = self.request.POST.get('gen_start_date')
+        end_date_str = self.request.POST.get('gen_end_date')
+
+        if not start_date_str or not end_date_str:
+            messages.add_message(self.request, messages.ERROR, "Please provide start and end date")
+            return render(self.request,template_name=self.template_name)
+
+        try:
+            start_date = datetime.strptime(start_date_str,'%Y_%m_%d')
+            end_date = datetime.strptime(end_date_str,'%Y_%m_%d')
+        except Exception as e:
+            logging.getLogger('error_log').error("Unable to parse date {}".format(e))
+            messages.add_message(self.request, messages.ERROR, "Please provide start and end date")
+            return render(self.request,template_name=self.template_name)
+
+        if start_date > end_date:
+            messages.add_message(self.request, messages.ERROR, "Start Date must be smaller than End Date")
+            return render(self.request,template_name=self.template_name)
+
+        scheduler_obj = Scheduler()
+        scheduler_obj.task_type = 8
+        scheduler_obj.status = 3
+        scheduler_obj.created_by = self.request.user
+        scheduler_obj.save()
+
+        generate_discount_report.delay(scheduler_obj.id,start_date,end_date)
+        return HttpResponseRedirect("/console/tasks/tasklist/")
+
+
+    def post(self,request,*args,**kwargs):
+        if not request.user.is_authenticated():
+            return HttpResponseForbidden()
+        if 'order.can_download_discount_report' not in request.user.get_all_permissions():
+            return HttpResponseForbidden()
+
+        action = request.POST.get('action')
+        if action == "1":
+            return self.get_response_for_file_download()
+        return self.get_response_for_file_generation()
+        
         
 class DownloadUpsellReportView(TemplateView):
     template_name = "console/order/upsell_report.html"

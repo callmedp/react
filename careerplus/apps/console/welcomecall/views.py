@@ -496,8 +496,6 @@ class WelcomeCallDoneView(ListView, PaginationMixin):
         self.created = request.GET.get('created', '')
         self.assigned = request.GET.get('assigned', '-1')
         self.sel_opt = request.GET.get('rad_search','')
-
-
         return super(WelcomeCallDoneView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -535,7 +533,6 @@ class WelcomeCallDoneView(ListView, PaginationMixin):
 
         try:
             if self.query:
-
                 if self.sel_opt == 'number':
                     queryset = queryset.filter(number=self.query)
                 elif self.sel_opt =='email':
@@ -545,7 +542,6 @@ class WelcomeCallDoneView(ListView, PaginationMixin):
 
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
-            pass
 
         try:
             if self.payment_date:

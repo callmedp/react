@@ -24,10 +24,10 @@ class Edit extends Component {
 
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.props.eventClicked({
-            'action':'Add/Edit',
-            'label':'Click'
+            'action': 'Add/Edit',
+            'label': 'Click'
         })
     }
 
@@ -57,6 +57,21 @@ class Edit extends Component {
         })
     }
 
+    deleteFromVisibleList(deletedElem) {
+        const updatedList = (this.state.preferenceList || []).map(elem => {
+            if (elem['entity_id'] === deletedElem['entity_id']) {
+                return {
+                    ...elem,
+                    ...{active: false}
+                }
+            }
+            return elem;
+        })
+        this.props.updateCategoryEntity(updatedList);
+        this.setState({
+            preferenceList: updatedList
+        })
+    }
 
     showErrorMessage(link) {
         this.setState({
@@ -81,10 +96,10 @@ class Edit extends Component {
     }
 
     openMenuModal() {
-        this.setState({menu_modal_status: true})
+        this.setState({menu_modal_status: true});
         this.props.eventClicked({
-            'action':'Add/Remove',
-            'label':'Click'
+            'action': 'Add/Remove',
+            'label': 'Click'
         })
     }
 
@@ -94,7 +109,7 @@ class Edit extends Component {
 
     render() {
         const {type, preferenceList, nextLink, elemToDelete, menu_modal_status} = this.state;
-        let {formData, ui: {formName}, updateCategoryEntity, showAlertModal, userInfo: {order_data},eventClicked} = this.props;
+        let {formData, ui: {formName}, updateCategoryEntity, showAlertModal, userInfo: {order_data}, eventClicked} = this.props;
         let error = false;
         const obj = (formData && formData[formName]) || {};
         let syncErrors = obj['syncErrors'] || {};
@@ -124,27 +139,40 @@ class Edit extends Component {
                 <ul>
                     {
                         (preferenceList || []).filter(elem => elem.active === true).map((elem, index) => {
-                            const {link, icon, itemType,name} = formCategoryList[elem['entity_id']];
+                            const {link, icon, itemType, name} = formCategoryList[elem['entity_id']];
                             return (
                                 <li key={index}
                                     className={(type === itemType ? ' edit-section--active' : '')}>
                                     {
                                         !!(error || newUser) ?
-                                            (<div onClick={() => this.showErrorMessage(link)} className={"non-link"}>
-                                                <span className={'mr-20 ' + icon}></span>
-                                                {elem['entity_text']}
-                                            </div>)
-                                            :
-                                            (<Link to={link} 
-                                                onClick={()=>{
-                                                    eventClicked({
-                                                        'action':'SelectSection',
-                                                        'label':name
-                                                    })}}>
-                                                    <span className={'mr-20 ' + icon}></span>
-                                                    {elem['entity_text']}
-                                                </Link>
+                                            (
+                                                    <div onClick={() => this.showErrorMessage(link)}
+                                                             className={"non-link"}>
+                                                        <span className={'mr-20 ' + icon}></span>
+                                                        {elem['entity_text']}
+                                                    </div>
+
                                             )
+
+                                            :
+
+                                            (
+                                                    <Link to={link}
+                                                          onClick={() => {
+                                                              eventClicked({
+                                                                  'action': 'SelectSection',
+                                                                  'label': name
+                                                              })
+                                                          }}>
+                                                        <span className={'mr-20 ' + icon}></span>
+                                                        {elem['entity_text']}
+                                                    </Link>
+                                            )
+                                    }
+                                    {
+                                         !!(elem['entity_id'] !== 1 && elem['entity_id'] !== 6) ?
+                                            <span onClick={() => this.deleteFromVisibleList(elem)}
+                                                  className="icon-closemenu pull-right mt-20"/> : ''
                                     }
                                 </li>
                             )
@@ -155,7 +183,7 @@ class Edit extends Component {
                 <div className="edit-section--addmore" onClick={() => {
                     newUser ? showAlertModal('error') : this.openMenuModal()
                 }}>
-                    + Add/Remove sections
+                    + Add more sections
                 </div>
             </div>
         )

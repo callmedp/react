@@ -321,3 +321,11 @@
 .icon-alert {
     @include icon-inblock (76px, 70px, -424px -131px);
 }
+
+.icon-quote {
+    @include icon-inblock (59px, 49px, -441px -210px);
+}
+
+.icon-closemenu {
+    @include icon-inblock (12px, 12px, -230px -179px);
+}

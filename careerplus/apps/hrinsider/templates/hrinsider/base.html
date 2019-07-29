@@ -4,7 +4,7 @@
 <html lang="en" itemscope itemtype="http://www.schema.org/WebPage">
 {% block head %}
   <head>
-
+    <title>{% block title %}Shine Learning{% endblock title%}</title>
   	{% block meta_html %}
   	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -19,8 +19,6 @@
       <!-- <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
       <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ request.path }}"> -->
     {% endblock canonical_url %}
-
-    <title>{% block title %}Shine Learning{%endblock title%}</title>
 
     {% block css_section %}
         <!-- Bootstrap -->

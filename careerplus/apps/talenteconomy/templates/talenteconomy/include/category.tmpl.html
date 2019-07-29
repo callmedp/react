@@ -6,7 +6,7 @@
 	    	<a href="{{category.get_absolute_url}}" title="{{category.name}}">
 					<figure>
 						{% if category.image %}
-						<img src="{{category.image.url}}" alt="{{category.image_alt}}" class="img-responsive">
+						<img aria-label="{{category.image_alt}}" src="{{category.image.url}}" alt="{{category.image_alt}}" class="img-responsive">
 						{% endif %}
 					</figure>
 					<h3>{{category.name}}</h3>

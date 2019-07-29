@@ -40,7 +40,7 @@ export default class Banner extends Component {
                         <li> <span className="icon-builderexpert1"></span><strong>33% higher</strong> chances of shortlisting</li>
                         <li> <span className="icon-builderexpert2"></span><strong>10+ years</strong> of Resume Building Experience</li>
                         <li> <span className="icon-builderexpert3"></span>Resume data fetched from <strong>Shine profile</strong></li>
-                        <li> <span className="icon-builderexpert4"></span><strong>Create/ edit and download</strong> multiple resume for 12 months</li>
+                        <li> <span className="icon-builderexpert4"></span>Use <strong>resume builder for 12 months</strong> to create unlimited resume</li>
                     </ul>
                     <button className="orange-button banner-content--button"
                             onClick={() => this.scrollTo('templates','BuildResume','TopButton')}>Build your resume

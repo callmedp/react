@@ -17,7 +17,7 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Download Discount Report</h3>
+                <h3>Discount Report</h3>
             </div>
         </div>
         <div class="row">
@@ -33,10 +33,12 @@
         <div class="clearfix"></div>
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
+                <h2>Download Report</h2>
                 <div class="x_panel">
                     <div class="x_title">
                         <form autocomplete="off" method="POST" role="form" id="discount_report_form" action=".">
                             {% csrf_token %}
+                            <input type="hidden" name="action" value="1">
                             <div class="col-sm-3 col-md-4">
                                 <div class="form-group">
                                     <label>Report Type</label>
@@ -52,7 +54,7 @@
                                 <div class="form-group">
                                     <label>For Date</label>
                                     <div class='input-group' id='startdate'>
-                                        <input class="form-control datepicker" id="id_filter_date" name="report_date" placeholder="For Date" />
+                                        <input class="form-control datepicker id_filter_date" name="report_date" placeholder="For Date" />
                                     </div>
                                 </div>
                             </div>
@@ -60,12 +62,50 @@
                                 <div class="form-group">
                                     <label> </label>
                                     <span class="input-group-btn">
-					                    <button type="button" class="btn btn-primary" id="action_button_go" style="border-radius:10px;top:-7px;">Download</button>
-					                  </span>
+                                        <button type="button" class="btn btn-primary" id="action_button_go" style="border-radius:10px;top:-7px;">Download</button>
+                                    </span>
                                 </div>
                             </div>
+                        </form>
                     </div>
-                    </form>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <h2>Generate Report</h2>
+                <div class="x_panel">
+                    <div class="x_title">
+                        <form autocomplete="off" method="POST" role="form" id="discount_report_gen_form" action=".">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="2">
+                            <div class="col-sm-3 col-md-4">
+                                <div class="form-group">
+                                    <label>Start Date</label>
+                                    <div class='input-group' id='gen_start_date'>
+                                        <input class="form-control datepicker id_filter_date" id="gen_start_date" name="gen_start_date" placeholder="Start Date" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-4">
+                                <div class="form-group">
+                                    <label>End Date</label>
+                                    <div class='input-group' id='gen_end_date'>
+                                        <input class="form-control datepicker id_filter_date" id="gen_end_date" name="gen_end_date" placeholder="End Date" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-4" style="margin-left:-15px">
+                                <div class="form-group">
+                                    <label> </label>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-primary" id="gen_button_go" style="border-radius:10px;top:-7px;">Generate</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                     <div class="clearfix"></div>
                 </div>
             </div>
@@ -78,10 +118,14 @@
 {{ block.super }}
 <script type="text/javascript" src="{% static 'shinelearn/js/common/bootstrap-datepicker.min.js' %}"></script>
 <script type="text/javascript">
-	$('#id_filter_date').datepicker({'format':'yyyy_mm_dd','endDate':'today'});
+$('.id_filter_date').datepicker({ 'format': 'yyyy_mm_dd', 'endDate': 'today' });
 
-	$("#action_button_go").click(function() {
-	    $("#discount_report_form").attr('method', 'post').attr('action', '.').submit();
-	});
+$("#action_button_go").click(function() {
+    $("#discount_report_form").attr('method', 'post').attr('action', '.').submit();
+});
+
+$("#gen_button_go").click(function() {
+    $("#discount_report_gen_form").attr('method', 'post').attr('action', '.').submit();
+});
 </script>
 {% endblock js_block %}

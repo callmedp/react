@@ -75,4 +75,24 @@ $(function(){
     $('#id_filter').click(function(){
         $('#list-filter-form').submit();
     });
+
+//    $('#downloadReport').click(function(){
+//
+//                $.ajax({
+//                type: "GET",
+//                data: {'start_date':$('#id_filter_date').data('daterangepicker').startDate.format('YYYY-MM-DD'),
+//                'end_date':$('#id_filter_date').data('daterangepicker').endDate.format('YYYY-MM-DD')}
+//                async: false,
+//                url:"/ajax/email-exist/",
+//                data:{email:$("#id_email").val()},
+//                success: function(res)
+//                {
+//                    emailresponse = !res.exists;
+//                }
+//            });
+//            return emailresponse;
+//
+//
+//    })
+
 });

@@ -73,7 +73,7 @@
                 <div class="panel col-sm-3" role="tab" id="headingOne{{fa.pk}}">
                     <a title="{{fa.name}}" class="cc_box cls_showPanel"  href="javascript:void(0)" aria-expanded="true" data-controls="collapseOne{{fa.pk}}">
                         <figure>
-                            <img src="{% if fa.icon_image %}{{fa.icon_image}}{% else %}{% static "shinelearn/images/course-logo1.png" %}
+                            <img aria-label="{{fa.name}}.png" src="{% if fa.icon_image %}{{fa.icon_image}}{% else %}{% static "shinelearn/images/course-logo1.png" %}
                             {% endif %}" alt="{{fa.name}}.png" class="img-responsive">
                         </figure>
                         <h3>
@@ -138,7 +138,7 @@
             <div class="panel col-sm-3" role="tab" id="headingOne">
               <a class="vc_box" data-toggle="collapse" data-parent="#accordion" aria-expanded="true" aria-controls="collapseOne">
                 <figure>
-                    <img src="{{vendor.image}}" alt="" class="img-responsive">
+                    <img aria-label="vendor image" src="{{vendor.image}}" alt="vendor image" class="img-responsive">
                 </figure>
                 <h3>{{vendor.name}}</h3>
               </a>
@@ -165,15 +165,15 @@
     <div class="why_scp"> <h2>Why Shine Learning?</h2>
       <ul>
         <li>
-          <span class="scp_icon"><img src="{% static 'shinelearn/images/why-1.png'%}" alt="" /></span>
+          <span class="scp_icon"><img aria-label="why 1" src="{% static 'shinelearn/images/why-1.png'%}" alt="" /></span>
           Our experts will guide you through the variety of courses suited for your profile
         </li>
         <li>
-          <span class="scp_icon"><img src="{% static 'shinelearn/images/why-2.png'%}" alt="" /></span>
+          <span class="scp_icon"><img aria-label="why 2" src="{% static 'shinelearn/images/why-2.png'%}" alt="" /></span>
           Invest in your career and get a jump in your salary
         </li>
         <li>
-          <span class="scp_icon"><img src="{% static 'shinelearn/images/why-3.png'%}" alt="" /></span>
+          <span class="scp_icon"><img aria-label="why 3" src="{% static 'shinelearn/images/why-3.png'%}" alt="" /></span>
           We bridge the gap between education and employment with a free 1 month featured profile on shine.com
         </li>
       </ul><!-- / UL -->

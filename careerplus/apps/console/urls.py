@@ -303,6 +303,10 @@ urlpatterns += [
         order_view.WhatsappListQueueView.as_view(),
         name='queue-whatsappjoblist'),
 
+    url(r'^queue/whatsapp/(?P<pk>\d+)/schedule$',
+        order_view.WhatsAppScheduleView.as_view(),
+        name='queue-whatsapp-schedule'),
+
     url(r'^queue/certification-queue/$',
         order_view.CertficationProductQueueView.as_view(),
         name='queue-certification'),

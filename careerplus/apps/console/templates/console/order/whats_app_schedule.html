@@ -1,0 +1,459 @@
+{% extends "console/base_console.html" %}
+{% load static compress %}
+{% load humanize %}
+{% load thumbnail %}
+{% load console_tags %}
+
+{% block title %}
+  <title>Whatsapp List Update Order Item - Shine Learning</title>
+{% endblock title %}
+
+{% block css_block %}
+    {{block.super}}
+
+    {% compress css %}
+    <link href="{% static 'packages/iCheck/skins/flat/green.css' %}" rel="stylesheet" type="text/css">
+    <link type="text/css" href="{% static 'console/css/datepicker/daterangepicker.css' %}" rel="stylesheet">
+    <style>
+    ul.errorlist {
+      color: #fff !important;
+    }
+    .tag:after {
+      border-left: 0px;
+    }
+  </style>
+
+    {% endcompress %}
+
+
+{% endblock css_block %}
+
+
+
+{% block pagecontent %}
+<!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>Schedule Whatsapp messages</h3>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        {% if messages %}
+            {% for message in messages %}
+
+              <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+              {{ message }}
+              </div>
+            {% endfor %}
+        {% endif %}
+        {% if formset.errors %}
+          {% for dict in formset.errors %}
+              {% for error in dict.values %}
+               <div class="alert alert-error alert-dismissable">
+                  {{ error }}
+                </div>
+              {% endfor %}
+          {% endfor %}
+        {% endif %}
+
+      </div>
+    </div>
+
+    
+    <div class="clearfix"></div>
+    
+    <div class="row">
+
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          {% if orderitem.oi_status == 31 or orderitem.oi_status == 32 or orderitem.oi_status == 4%}
+            <div class="x_title">
+              Details
+            </div>
+            <div class="x_content">
+               <table class="table table-striped jambo_table bulk_action" id="inbox-table">
+                 <thead>
+                  <tr class="headings">
+                    <th class="column-title">Weeks</th>
+                    <th class="column-title">Sent Links</th>
+                    <th class="column-title">Total Supposed to be sent</th>
+                    <th class="column-title">Pending Links Count</th>
+                  </tr>
+                </thead>
+                 <tbody id="body-table-list">
+                   <tr class="even pointer">
+                    {% with orderitem.get_weeks as weeks%}
+                      <td>{{ weeks.1 }}/{{ weeks.0 }}</td>
+                      <td>{{ orderitem.sent_link_count }} / {{ orderitem.get_total_links_needs_to_sent }}</td>
+                      <td>{{ orderitem.get_links_needed_till_now }}</td>
+                      <td>{{ orderitem.pending_links_count }}</td>
+                    {% endwith %}
+                   </tr>
+                 </tbody>
+               </table>
+            </div>
+          {% endif %}
+          {% if not orderitem.is_closed %}
+            {% if orderitem.oi_status == 31 or orderitem.oi_status == 32%}
+              <div class="x_title">
+                <h2>Jobs Links</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                  </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+                <div class="accordion" id="accordion40" role="tablist" aria-multiselectable="true">
+                    <form class="form-horizontal form-label-left" method="POST" action="{% url 'console:queue-whatsapp-schedule' orderitem.pk %}" novalidate enctype="multipart/form-data" id="link-form">
+                      {% csrf_token %}
+                      {{ formset.management_form }}
+                      {% if formset.non_form_errors %}
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                          </button>
+                          {{ formset.non_form_errors }}
+                        </div>
+                      {% endif %}
+                      <div class="inter-related-parent-div">    
+                        {% for inline_admin_form in formset.forms %}
+                        <div class="panel {% if forloop.last %} {% endif %}">
+                          <a class="panel-heading {% if not inline_admin_form.errors %}collapsed{% endif %}" role="tab" id="heading2{{forloop.counter}}40" data-toggle="collapse" data-parent="#accordion40" href="#collapse2{{forloop.counter}}40" 
+                          {% if inline_admin_form.errors %}aria-expanded="true"{% else %}aria-expanded="false"{% endif %} aria-controls="collapse2{{forloop.counter}}40">
+                            {% if  inline_admin_form.instance.id %}
+                            <h4 class="panel-title">Job Link:&nbsp;{{inline_admin_form|get_instance}}</h4>
+
+                            {% else %}
+                            <h4 class="panel-title">Job Link: Add New
+                            </h4>{% endif %}
+
+                              
+                          </a>
+                          <div id="collapse2{{forloop.counter}}40" class="panel-collapse collapse {% if inline_admin_form.errors %}in{% endif %}" role="tabpanel" aria-labelledby="heading2{{forloop.counter}}40"
+                          {% if inline_admin_form.errors %}aria-expanded="true"{% else %}aria-expanded="false" style="height: 0px;"{% endif %}>
+                            <div class="panel-body">
+                                {% if  inline_admin_form.DELETE %}
+                                  <div class="pull-left">
+                                    {{inline_admin_form.DELETE}}<label for="{{ inline_admin_form.DELETE.id_for_label }}" style="color:#d9534f !important;">&nbsp;&nbsp;Delete
+                                    </label>
+                                    
+                                  </div>
+                                  </br>
+                                    <div class="clearfix"></div>
+                                {% endif %}
+
+                                {% for hidden in inline_admin_form.hidden_fields %}
+                                    {{ hidden }}
+                                {% endfor %}
+                            
+                                <div class="item form-group {% if inline_admin_form.company_name.errors %}bad{% endif %}">
+                                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ inline_admin_form.company_name.id_for_label }}">Company Name <span class="required">*</span>
+                                </label>
+                                <div class="col-md-7 col-sm-7 col-xs-12">
+                                  {{inline_admin_form.company_name}}
+                                </div>
+                                <div class="alert">{{inline_admin_form.company_name.errors}}</div>
+                              </div>
+                              
+                              <div class="item form-group {% if inline_admin_form.location.errors %}bad{% endif %}">
+                                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ inline_admin_form.location.id_for_label }}">Location <span class="required"></span>
+                                </label>
+                                <div class="col-md-7 col-sm-7 col-xs-12">
+                                  {{inline_admin_form.location}}
+                                </div>
+                                <div class="alert">{{inline_admin_form.location.errors}}</div>
+                              </div>
+                              
+                              <div class="item form-group {% if inline_admin_form.job_title.errors %}bad{% endif %}">
+                                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ inline_admin_form.job_title.id_for_label }}">Job Title <span class="required"></span>
+                                </label>
+                                <div class="col-md-7 col-sm-7 col-xs-12">
+                                  {{inline_admin_form.job_title}}
+                                </div>
+                                <div class="alert">{{inline_admin_form.job_title.errors}}</div>
+                              </div>
+                              
+                              <div class="item form-group {% if inline_admin_form.link.errors %}bad{% endif %}">
+                                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ inline_admin_form.link.id_for_label }}">Link<span class="required"></span>
+                                </label>
+                                <div class="col-md-7 col-sm-7 col-xs-12">
+                                  {{inline_admin_form.link}}
+                                </div>
+                                <div class="alert">{{inline_admin_form.link.errors}}</div>
+                              </div>                        
+                           </div>
+                          </div>
+                        </div>
+                        {% endfor %}
+                      </div>
+                   
+
+                      <input type="hidden" name="action_type" value="0">
+                      <input type="hidden" name="oi" value="{{ orderitem.pk }}">
+                      <br>
+                      <div class="form-group row">
+                        <div class="col-md-2 col-sm-2 col-xs-2 row">
+                          <button type="submit" class="btn btn-success action_btn">Save</button>
+                        </div>
+                        {% if perms.order.can_send_jobs_on_the_move %}
+
+                        <div class="col-md-2 col-sm-2 col-xs-2 row">
+                          <button type="submit" class="btn btn-success action_btn">Send</button>
+                        </div>
+                        {% endif %}
+
+                        {%if orderitem.has_saved_links %}
+
+                        <div class="col-md-2 col-sm-2 col-xs-2 row">
+                          <button type="submit" class="btn btn-success action_btn">View Message</button>
+                        </div>
+                        {% endif %}
+                      </div>
+                    </form>
+                </div> 
+              </div>
+            {% endif %}
+          {% endif %}
+
+<!--  Previous Link -->
+        {% if orderitem.oi_status == 31 or orderitem.oi_status == 32 or orderitem.oi_status == 4%}
+          <br>
+          <br>
+          <div class="x_title">
+            <h2>Previous Links</h2>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            {% if previous_links %}
+              <div>
+                <table class="table table-stripped">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Company</th>
+                      <th>Location</th>
+                      <th>Job Title</th>
+                      <th>Link</th>
+                      <th>Added By</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for link in page.object_list%}
+                      <tr>
+                        <td>{{ link.formatted_sent_date }}</td>
+                        <td>{{ link.company_name }}</td>
+                        <td>{{ link.location }}</td>
+                        <td>{{ link.job_title }}</td>
+                        <td>{{ link.link }}</td>
+                        <td>{{ link.created_by }}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <div class="col-sm-12">
+                  <div class="text-center">
+                      <ul class="pagination">
+                      {% if page.has_previous %}
+                          <li class="paginate_button previous">
+                              <a href="?page={{ page.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >&laquo;</a>
+                          </li>
+                      {% endif %}
+
+                      {% for page_number in begin %}
+                          <li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %} ">
+                              <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
+                          </li>
+                      {% endfor %}
+
+                      {% if middle %}
+                          <li class="paginate_button disable"><a href="javascript:void(0);">&hellip;</a></li>
+                          {% for page_number in middle %}
+                              <li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %}">
+                                  <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
+                                  
+                              </li>
+                          {% endfor %}
+                      {% endif %}
+
+                      {% if page_end %}
+                          <li class="paginate_button disable"><a href="javascript:void(0);">&hellip;</a></li>
+                          {% for page_number in page_end %}
+                              <li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %}">
+                                  <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
+                              </li>
+                          {% endfor %}
+                      {% endif %}
+
+                      {% if page.has_next %}
+                          <li class="paginate_button next">
+                              <a href="?page={{ page.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >&raquo;</a>
+                          </li>
+                      {% endif %}
+                  </ul>
+                </div>
+              </div>
+            {% else%}
+              <h5 class="text-center">No Previous Links</h5>
+            {% endif %}
+          </div>
+        {% endif %}
+<!--  End Previous Link -->
+
+
+<!--  Profile Data -->
+  
+          <div class="x_title">
+            <h2>Profile</h2>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            <form action="{% url 'console:queue-whatsapp-schedule' orderitem.pk %}" method="post">
+              {% csrf_token %}
+              <div class="form-group col-md-3">
+                <label> Contact Number</label>
+                {{profile_form.contact_number}}
+              </div>
+              <div class="form-group col-md-3">
+                <label> Desired Industry</label>
+                {{profile_form.desired_industry}}
+              </div>
+              <div class="form-group col-md-3">
+                <label> Desired Location</label>
+                {{profile_form.desired_location}}
+              </div>
+              <div class="form-group col-md-3">
+                <label> Desired Position</label>
+                {{profile_form.desired_position}}
+              </div>
+               <div class="form-group col-md-3">
+                <label> Desired Salary</label>
+                {{profile_form.desired_salary}}
+              </div>
+               <div class="form-group col-md-3">
+                <label> Current Salary</label>
+                {{profile_form.current_salary}}
+              </div>
+              <div class="form-group col-md-3">
+                <label> Skills</label>
+                {{profile_form.skills}}
+              </div>
+              <div class="form-group col-md-3">
+                <label> Experience</label>
+                {{profile_form.experience}}
+              </div>
+              <br>
+              {% if orderitem.oi_status == 23 and perms.order.can_approve_jobs_on_the_move %}
+              <div class="form-group col-md-12">
+                <label> Approved {{profile_form.approved}}</label>
+              </div>
+              {% endif %}
+              <input type="hidden" name="action_type" value="3">
+              <br>
+              <br>
+              <div class="form-group col-md-12">
+                <button type="submit" class="btn btn-primary">Update </button>
+              </div>
+            </form>
+          </div>
+<!--  End Profile Data -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% if job_message %}
+<div class="modal fade bs-example-modal-sm filter" id="message-modal" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-md">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel2">Message <a style="cursor:pointer;" onclick="copyTextFunc()"><i class="fa fa-clipboard" aria-hidden="true" data-toggle="tooltip" title="click to copy"></i><sub> Click to copy</sub></a></h4>
+          </div>
+          <div class="modal-body" id="whatsapp-message">
+            {{ job_message|safe }}
+          </div>
+    
+        </div>
+      </div>
+  </div>
+<!-- /page content -->
+
+{% endif %}
+{% endblock pagecontent %}
+
+        
+{% block js_block %}
+  {{ block.super }}
+
+    {% if job_message %}
+    <script type="text/javascript">
+      $("#message-modal").modal({
+          backdrop: 'static',
+          keyboard: false
+      })
+
+      function copyTextFunc() {
+
+        event.preventDefault()
+          var text = $("#whatsapp-message").clone().find('br').prepend('\r\n').end().text()
+          element = $('<textarea>').appendTo('body').val(text).select()
+          document.execCommand('copy')
+          element.remove()
+          alert('Text copied')
+
+      }
+    </script>
+  {% endif %}
+  {% compress js %}
+  <!-- Parsley Validate Scripts -->
+  <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'packages/iCheck/icheck.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'console/js/moment/moment.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'console/js/order/filter.js' %}"></script>
+  <script type="text/javascript" src="{% static 'packages/jquery.tagsinput/src/jquery.tagsinput.js' %}"></script>
+  <script type="text/javascript">
+    $('.action_btn').click(function(){
+      text = $(this).text();
+      if(text=='Save'){
+        $('input[name="action_type"]').val(0)
+      }
+      else if(text=='Send'){
+        $('input[name="action_type"]').val(2)
+      }
+      
+      else if(text=='View Message'){
+        $('input[name="action_type"]').val(4)
+      }
+      $("#link-form").submit()
+    });
+  </script>
+  {% endcompress %}
+  <script type="text/javascript">
+    $('#id_desired_industry').tagsInput({
+        width: 'auto',
+        'delimiter': [','],   // Or a string with a single delimiter. Ex: ';'
+    });
+     $('#id_desired_location').tagsInput({
+        width: 'auto',
+        'delimiter': [','],   // Or a string with a single delimiter. Ex: ';'
+    });
+      $('#id_desired_position').tagsInput({
+        width: 'auto',
+        'delimiter': [','],   // Or a string with a single delimiter. Ex: ';'
+    });
+       $('#id_skills').tagsInput({
+        width: 'auto',
+        'delimiter': [','],   // Or a string with a single delimiter. Ex: ';'
+    });
+  </script>
+
+{% endblock js_block %}

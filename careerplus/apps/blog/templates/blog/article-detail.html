@@ -103,7 +103,7 @@
               {% if art.image %}
                     <figure class="media-left">
                       {% thumbnail art.image "98x64" crop="center" as im %}
-                            <img class="media-object" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{art.image_alt}}">
+                            <img aria-label="{{art.image_alt}}" class="media-object" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{art.image_alt}}">
                       {% endthumbnail %}
                       <!--img class="media-object" src="{{article.image.url}}" alt="Government Jobs" width="173" height="113"-->
                     </figure>
@@ -125,7 +125,7 @@
                 {% if art.image %}
                     <figure class="media-left">
                       {% thumbnail art.image "98x64" crop="center" as im %}
-                            <img class="media-object" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{art.image_alt}}">
+                            <img aria-label="{{art.image_alt}}" class="media-object" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{art.image_alt}}">
                       {% endthumbnail %}
                       <!--img class="media-object" src="{{article.image.url}}" alt="Government Jobs" width="173" height="113"-->
                     </figure>

@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <title>{% block title %}HT LEARN! | {% endblock title %}</title>
     {% block meta_tags %}
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Meta, title, CSS, favicons, etc. -->
@@ -9,8 +10,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% endblock meta_tags %}
-
-    <title>{% block title %}HT LEARN! | {% endblock title %}</title>
 
     {% block css %}
 
@@ -67,7 +66,7 @@
             <!-- menu profile quick info -->
             <div class="profile clearfix">
               <div class="profile_pic">
-                <img src="{% static 'console/images/img.jpg' %}" alt="..." class="img-circle profile_img">
+                <img aria-label="profile pic" src="{% static 'console/images/img.jpg' %}" alt="..." class="img-circle profile_img">
               </div>
               <div class="profile_info">
                 <span>Welcome,</span>

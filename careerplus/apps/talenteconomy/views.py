@@ -334,8 +334,15 @@ class TEBlogCategoryListView(TemplateView, BlogMixin):
         self.paginated_by = 8
         self.cat_obj = None
 
+    def get_template_names(self):
+        slug =self.kwargs.get('slug')
+        if slug == 'human-resources':
+            return "talenteconomy/category1.html"
+        return self.template_name
+
     def get(self, request, *args, **kwargs):
         slug = kwargs.get('slug', None)
+
         self.page = request.GET.get('page', 1)
         try:
             self.cat_obj = Category.objects.get(slug=slug, is_active=True, visibility=2)
@@ -347,6 +354,14 @@ class TEBlogCategoryListView(TemplateView, BlogMixin):
 
         context = super(TEBlogCategoryListView, self).get(request, args, **kwargs)
         return context
+
+    def get_countries(self):
+        country_choices = [(m.phone, m.name) for m in
+            Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+        initial_country = Country.objects.filter(phone='91')[0].phone
+        return country_choices,initial_country
+
+
 
     def get_context_data(self, **kwargs):
         context = super(
@@ -412,7 +427,8 @@ class TEBlogCategoryListView(TemplateView, BlogMixin):
         context.update(self.get_breadcrumb_data())
         context['meta'] = cat_obj.as_meta(self.request)
         context.update(self.get_meta_details())
-
+        country_choices, initial_country = self.get_countries()
+        context.update({'country_choices': country_choices, 'initial_country': initial_country, })
         return context
 
     def get_breadcrumb_data(self):
@@ -476,7 +492,7 @@ class TECategoryArticleLoadView(View, BlogMixin):
 
 
 class TEBlogDetailView(DetailView, BlogMixin):
-    template_name = "talenteconomy/article-detail.html"
+    template_name = "talenteconomy/article-detail1.html"
     model = Blog
 
     def __init__(self):
@@ -513,8 +529,12 @@ class TEBlogDetailView(DetailView, BlogMixin):
 
 
     def get_template_names(self):
+        if not self.request.amp and self.object.p_cat.slug == 'human-resources':
+            return ["talenteconomy/article-detail1"
+                    ".html"]
         if not self.request.amp:
             return ["talenteconomy/article-detail.html"]
+
         if not settings.DEBUG:
             from newrelic import agent
             agent.disable_browser_autorum()
@@ -725,9 +745,6 @@ class AuthorDetailView(DetailView):
     def get_template_names(self):
         if not self.request.amp:
             return ["talenteconomy/author-detail.html"]
-        if not settings.DEBUG:
-            from newrelic import agent
-            agent.disable_browser_autorum()
         return ["talenteconomy/author-detail-amp.html"]
 
     def get(self, request, *args, **kwargs):

@@ -4,6 +4,7 @@
 <html lang="en" itemscope itemtype="http://www.schema.org/WebPage">
   {% block head %}
     <head>
+    <title> {% block title %}Shine Learning{% endblock title %}</title>
     {% block meta_html %}
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,8 +16,6 @@
     {% block canonical_url %}
       <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
     {% endblock canonical_url %}
-        
-    <title> {% block title %}Shine Learning{% endblock title %}</title>
     
     {% block css_section %}
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
@@ -149,7 +148,18 @@
     <script src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
     <script src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
     {% endcompress %}
+
     <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+              })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-3537905-41', 'auto');
+
+        function gaEvent(event_cat,event_lab,event_action){
+          ga('send', 'event', event_cat, event_action, event_lab);
+        }
+
         $('.nav-tabs > li > a').hover(function() {
             $(this).tab('show');
           });
@@ -157,12 +167,10 @@
             $('.dropdown-toggle', this).trigger('click');
           });
       {% if marketing_popup_html %}
-        
         setTimeout(function() {
           $('.marketing-popup').modal();
         }, 1000);
-      {% endif %}
-      
+      {% endif %}      
     </script>
 
     {% endblock js_section %}

@@ -12,7 +12,7 @@ export default class Banner extends Component {
 
     }
 
-    scrollTo(elem,action,label) {
+    scrollTo(elem, action, label) {
         scroller.scrollTo(elem, {
             duration: 800,
             delay: 0,
@@ -27,16 +27,19 @@ export default class Banner extends Component {
 
 
     render() {
+        const {userName} = this.props;
+
         return (
             <section className="banner">
                 <h1 className="mt-15">Resume Builder <br/> <strong>by Experts</strong></h1>
-                <p><strong>Amit</strong>, secure the job you want with our
+                <p><strong>{userName || 'Hello'}</strong>, secure the job you want with our
                     resume builder</p>
 
                 <img src={`${this.staticUrl}react/assets/images/mobile/resume-bundel.png`} alt=""
                      className="img-fluid"/>
                 <p className="text-center mt-5">
-                    <a className="btn pt-10 pb-10 btn__round btn__primary btn__shadow" onClick={() => this.scrollTo('templates','BuildResume','TopButton')}>Build your resume</a>
+                    <a className="btn pt-10 pb-10 btn__round btn__primary btn__shadow"
+                       onClick={() => this.scrollTo('templates', 'BuildResume', 'TopButton')}>Build your resume</a>
                 </p>
                 <ul className="resume-pointer">
                     <li>
@@ -53,7 +56,8 @@ export default class Banner extends Component {
                     </li>
                     <li>
                         <span className="sprite icon--create-download mr-5"></span>
-                        <span><strong>Create/edit & download</strong> multiple resume for 12 months</span>
+                        <span>Use <strong>resume builder for 12 months</strong> to
+                        create unlimited resume</span>
                     </li>
                 </ul>
             </section>
