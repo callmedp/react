@@ -36,6 +36,23 @@ function viewCommentOrderitem(oi_pk, ) {
     }
 };
 
+function boardNeoUser(oi_pk, ) {
+    if (oi_pk){
+        $.ajax({
+            url: '/api/v1/neo_board_user/',
+            type: "POST",
+            data : {'oi_pk': oi_pk, },
+            dataType: 'html',
+            success: function(html) {
+                alert('Please check you mail to confirm boarding on Neo')
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                alert("Something went wrong");
+            }
+        });
+    }
+};
+
 function giveFeedbackOrderitem(oi_pk,rating) {
 
     if (oi_pk){

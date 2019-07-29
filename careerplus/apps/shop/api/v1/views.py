@@ -15,7 +15,9 @@ import subprocess, os
 from rest_framework.generics import RetrieveAPIView
 from django.core.cache import cache
 from django.conf import settings
-
+from shared.rest_addons.authentication import ShineUserAuthentication
+from rest_framework.permissions import IsAuthenticated
+from django.core.exceptions import PermissionDenied
 
 class ProductListView(FieldFilterMixin, ListAPIView):
     serializer_class = ProductListSerializerForAuditHistory
@@ -92,4 +94,26 @@ class UpdatePracticeInfoApiView(APIView):
             return Response(data)
         else:
             return Response({'message': 'Invalid Email'.format(email)}, status=status.HTTP_400_BAD_REQUEST)
+
+class BoardNeoProductApiView(APIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, *args, **kwargs):
+        from order.models import OrderItem
+        from order.tasks import board_user_on_neo
+        self.candidate_id = request.session.get('candidate_id', None)
+        self.oi_pk = request.data.get('oi_pk')
+        if self.oi_pk and self.candidate_id:
+            self.oi = OrderItem.objects.select_related("order").filter(pk=self.oi_pk).first()
+            if (
+                self.oi and self.oi.product.vendor.slug == 'neo'\
+                and self.oi.order.candidate_id == self.candidate_id\
+                and self.oi.order.status in [1, 3]
+            ):
+                board_user_on_neo.delay([self.oi.id])
+                return Response({'message': 'Mail sent fro verification on neo'})
+
+        raise PermissionDenied
+
 

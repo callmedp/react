@@ -114,7 +114,13 @@
 
             {% elif obj.product.type_flow == 2 or obj.product.type_flow == 14 %}
                 {% if obj.oi_status == 5 %}
-                    <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
+
+                        <p><strong>Status:</strong> {{obj.get_user_oi_status}}
+                            {% if obj.product.vendor.slug == 'neo' %}
+                                 <a role="button" onclick="boardNeoUser('{{obj.pk}}',)">:- Board On Neo</a>
+                            {% endif %}
+                        </p>
+                    
                 
                 {% elif obj.oi_status == 6 %}
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a href="{% url "dashboard:dashboard-resumedownload" obj.order.pk %}?path={{obj.oi_draft.name}}">Download</a></p>
