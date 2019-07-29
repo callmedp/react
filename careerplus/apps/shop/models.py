@@ -3259,6 +3259,12 @@ class PracticeTestInfo(AbstractAutoDate):
     is_boarded = models.BooleanField(
         default=False
     )
+    order_item = models.ForeignKey(
+        'order.OrderItem', related_name='test_info',
+        verbose_name=_("Order Item"),
+        null=True,
+        blank=True
+    )
 
     @property
     def has_completed(self):
@@ -3266,6 +3272,6 @@ class PracticeTestInfo(AbstractAutoDate):
             datum = eval(getattr(self, 'test_data'))
             status = datum.get('status', None)
             if status.lower() == 'done':
-                return 'True'
+                return True
         return False
 

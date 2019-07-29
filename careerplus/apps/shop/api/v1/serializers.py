@@ -17,22 +17,32 @@ class PracticeTestInfoCreateSerializer(ModelSerializer):
         model = PracticeTestInfo
         fields = ('email', 'mobile_no', 'name', 'has_completed')
 
+    def update_session_if_already_done_with_test(self, test_info):
+        data = eval(getattr(test_info, 'test_data'))
+        session = self.context['request'].session
+        session_id = session.session_key
+        if data['status'] == 'done' and 'candidate_id' not in session:
+            cache.set('{}_neo_email_done'.format(session_id), test_info.email, 3600 * 24 * 30)
+            print(cache.get('{}_neo_email_done'.format(session_id)))
+
+
+
     def create(self, validated_data):
-        try:
-            test_info = PracticeTestInfo.objects.get(email=validated_data.get('email', None))
-            test_info.save()
-            # For non authenticated user, save email as per session key
-            # for later use in payment login screen.
-            if getattr(test_info, 'test_data', None):
-                data = eval(getattr(test_info, 'test_data'))
-                session = self.context['request'].session
-                session_id = session.session_key
-                if data['status'] == 'done' and 'candidate_id' not in session_id:    
-                    cache.set('{}_neo_email_done'.format(session_id), test_info.email, 3600 * 24 * 30)
-                    print(cache.get('{}_neo_email_done'.format(session_id)))
+        test_info = PracticeTestInfo.objects.filter(
+            email=validated_data.get('email', None), order_item=None
+        ).first()
+        # For non authenticated user, save email as per session key
+        # for later use in payment login screen.
+        if test_info:
             return test_info
-        except:
+        else:
             return super(PracticeTestInfoCreateSerializer, self).create(validated_data)
 
     def get_has_completed(self, obj):
-        return obj.has_completed
+        email = obj.email
+        test_infos = PracticeTestInfo.objects.filter(email=email)
+        for info in test_infos:
+            if info.has_completed:
+                self.update_session_if_already_done_with_test(info)
+                return True
+        return False

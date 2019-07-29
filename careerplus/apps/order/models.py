@@ -302,7 +302,7 @@ class Order(AbstractAutoDate):
                 order__status__in=[0, 1],
                 product__vendor__slug='neo'
             ).values_list('id', flat=True))
-            board_user_on_neo(neo_ids=neo_items_id)
+            board_user_on_neo.delay(neo_ids=neo_items_id)
 
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_resume_builder():
             generate_resume_for_order.delay(self.id)

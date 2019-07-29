@@ -3224,12 +3224,22 @@ class CertficationProductQueueView(PaginationMixin, ListView):
     def get_queryset(self):
         queryset = super(CertficationProductQueueView, self).get_queryset()
         queryset = queryset.filter(
-            order__status__in=[1, 3],
-            product__type_flow=16, no_process=False,
-            oi_status__in=[5, 4],
-            product__sub_type_flow__in=[1601, 1602],
-            order__welcome_call_done=True).exclude(
-            wc_sub_cat__in=[64, 65])
+            Q(
+                order__status__in=[1, 3],
+                product__type_flow=16, no_process=False,
+                oi_status__in=[5, 4],
+                product__sub_type_flow__in=[1601, 1602],
+                order__welcome_call_done=True)|
+            Q(
+                order__status__in=[1, 3],
+                product__type_flow=2, no_process=False,
+                oi_status__in=[5, 4],
+                product__vendor__slug='neo',
+                order__welcome_call_done=True
+            )
+        ).exclude(
+                wc_sub_cat__in=[64, 65]
+        )
 
         if self.query:
             if self.sel_opt == 'number':
