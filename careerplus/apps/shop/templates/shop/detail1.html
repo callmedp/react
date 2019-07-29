@@ -145,12 +145,39 @@ $(document).ready(function() {
         iframe.srcdoc = html;
     }
 
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+function getCookie(name) {
+  var cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+          var cookie = jQuery.trim(cookies[i]);
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+          }
+      }
+  }
+  return cookieValue;
+}
 function get_create_profile(email, name, country_code, mobile) {
     var data = {
         'email': email,
         'mobile_no': country_code + mobile ,
         'name': name,
     }
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+          if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+              xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+          }
+        }
+    });
     $.ajax({
         url: "/api/v1/create_practice_test_info/",
         type: "POST",
@@ -184,6 +211,13 @@ function check_for_load_test(data){
 }
 
 function update_test_info(email){
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+          if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+              xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+          }
+        }
+    });
     $.ajax({
         url: "/api/v1/update_practice_info/?email="+ encodeURIComponent(email),
         type: "GET",

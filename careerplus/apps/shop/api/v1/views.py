@@ -18,6 +18,9 @@ from django.conf import settings
 from shared.rest_addons.authentication import ShineUserAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.core.exceptions import PermissionDenied
+from django.views.decorators.csrf import csrf_protect
+from django.utils.decorators import method_decorator
+
 
 class ProductListView(FieldFilterMixin, ListAPIView):
     serializer_class = ProductListSerializerForAuditHistory
@@ -72,13 +75,19 @@ class ProductDeleteView(APIView):
 
 class CreatePracticeTestInfoAPIView(CreateAPIView):
     serializer_class = PracticeTestInfoCreateSerializer
-    authentication_classes = ()
+    authentication_classes = (SessionAuthentication,)
     permission_classes = ()
+
+    @method_decorator(csrf_protect)
+    def dispatch(self, request, *args, **kwargs):
+        return super(CreatePracticeTestInfoAPIView, self).dispatch(request, *args, **kwargs)
 
 class UpdatePracticeInfoApiView(APIView):
-    authentication_classes = ()
     permission_classes = ()
 
+    @method_decorator(csrf_protect)
+    def dispatch(self, request, *args, **kwargs):
+        return super(CreatePracticeTestInfoAPIView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         email = request.query_params.get('email', None)

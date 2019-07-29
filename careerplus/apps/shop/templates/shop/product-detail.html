@@ -329,7 +329,7 @@
 
         <!--neo test modal-->
 {% if prd_vendor_slug == 'neo' %}
-
+{% csrf_token %}
 <div class="modal fade bs-example-modal-sm login-div" role="dialog" aria-labelledby="mySmallModalLabel" id="neo-test-modal">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content" style="width: 535px;position: relative;left: 19%;">
