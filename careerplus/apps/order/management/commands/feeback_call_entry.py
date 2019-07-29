@@ -24,7 +24,7 @@ def feedback_call_entry():
         return
     for operation in welcome_operations:
         candidate_id = operation.order.candidate_id
-        ltv = get_ltv(candidate_id)
+        ltv = get_ltv(candidate_id) if candidate_id else 0
         if ltv<30000:
             continue
         customer_name = (operation.order.first_name + " " if operation.order.first_name else '') + (operation.order.last_name if operation.order.last_name else '')

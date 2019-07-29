@@ -14,6 +14,7 @@ $(document).ready(function() {
     });
 
     customerFeedbackList(1)
+    getUsers()
 
     $('#check-all').click(function(e){      //select all feedback on page
         $(this).closest('table').find('td input:checkbox').prop('checked', this.checked);
@@ -72,11 +73,14 @@ function getUsers(){
 
 
 function customerFeedbackList(page_no,filter_data){
+    status = $('#filter-status').val()
+    status === '3' ? $('#assign-user-form').hide() : $('#assign-user-form').show()
+
     filter_update_data = {
         search_text:$('#search-box').val(),
         page_size:page_size,
         page:page_no,
-        status:$('#filter-status').val(),
+        status:status,
         type:$('#feedback-type').val(),
     }
     if(filter_data){
