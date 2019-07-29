@@ -29,11 +29,15 @@ class Command(BaseCommand):
         neo_closing_count = 0
         for oi in order_item:
             email = oi.order.email
-            test_info = PracticeTestInfo.objects.filter(email=email).first()
+            test_info = PracticeTestInfo.objects.filter(email=email).exclude(order_item=None).first()
             if test_info:
                 status = NeoApiMixin().get_student_status_on_neo(email=test_info.email)
                 if status == 'onboard':
                     test_info.is_boarded = True
+                    if not test_info.test_data:
+                        json_rep = NeoApiMixin().get_pt_result(email=email)
+                        if json_rep:
+                            setattr(test_info, 'test_data', str(json_rep))
                     test_info.save()
                     last_oi_status = oi.oi_status
                     oi.oi_status = 4
