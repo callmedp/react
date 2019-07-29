@@ -2,9 +2,9 @@
         var modalobject = JSON.parse(e.relatedTarget.dataset.attrValue);
         $('#productName').text(modalobject.productName);
         $('#productDuration').text(modalobject.productDuration);
-        $('#productPrice').text(modalobject.productPrice);
+        $('#productPrice').text('Rs. ' + modalobject.productPrice);
         $('#courseDuration').text(modalobject.courseDuration);
-        $('#coursePrice').text(modalobject.coursePrice);
+        $('#coursePrice').text('Rs. '+ modalobject.coursePrice);
         $('#courseName').text(modalobject.courseName);
         $('#questCount').text(modalobject.quescount);
         if(modalobject.courseName == ""|| modalobject.courseName == "undefined" ){

@@ -170,7 +170,8 @@
            $.ajax({
                url: '/api/get-test',
                type: "GET",
-               data : {'page_size' : 4, 'page':page_number,'category_id':'{{Category.id}}' },
+               data : {'page_size' : 4, 'page':page_number,'category_id':'{{Category.id}}','include_product_id':1,
+                'include_course_id':1 },
                dataType: 'json',
                success: function(json) {
                if (json.next == null){
