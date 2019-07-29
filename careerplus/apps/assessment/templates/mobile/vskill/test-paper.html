@@ -22,6 +22,7 @@
 {% block container %}
 <div class="body-wrapper practice-test ">
     <div class="practice-test-inside"></div>
+    <!-- <div class="back"></div> -->
 
     <h1>{{object.name}}</h1>
     <div class="bread-crums">
@@ -203,6 +204,14 @@
     </div><!-- Check Result -->
 </div>
 
+<!-- loading start here -->
+<div class="loading" id="loading-test">
+    <div class="loading--content">
+        <img src="{% static 'shinelearn/images/test-loading.gif' %}"/>
+        <p>Loading...<br />Please wait!</p>
+    </div>
+</div>
+<!-- loading ends here -->
 
 
 {% endblock container %}
@@ -277,9 +286,13 @@ $('#timeTest').ready(function() {
         endTestTime.setSeconds(endTestTime.getSeconds() + {{object.duration}});
         if (endTestTime > new Date(getSystemTime())){
            startTimer(Math.floor((endTestTime.getTime() - new Date(getSystemTime()).getTime())/1000));
+            $("#loading-test").hide();
+            $("body").removeClass("overflow-hidden");
         }
         else{
            window.location.href = '/practice-tests/{{object.slug}}/result/';
+           $("#loading-test").show();
+           $("body").addClass("overflow-hidden");
         }
             return false;
          }

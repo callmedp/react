@@ -145,6 +145,15 @@
 </div>
 
 
+<!-- loading start here -->
+<div class="loading" id="loading-test">
+    <div class="loading--content">
+        <img src="{% static 'shinelearn/images/test-loading.gif' %}"/>
+        <p>Loading...<br />Please wait!</p>
+    </div>
+</div>
+<!-- loading ends here -->
+
 
 {% endblock main_container %}
 {% block js_section %}
@@ -176,9 +185,11 @@ $('#timeTest').ready(function() {
         endTestTime.setSeconds(endTestTime.getSeconds() + {{object.duration}});
         if (endTestTime > new Date(getSystemTime())){
            startTimer(Math.floor((endTestTime.getTime() - new Date(getSystemTime()).getTime())/1000));
+           $("#loading-test").hide();
         }
         else{
            window.location.href = '/practice-tests/{{object.slug}}/result/';
+           $("#loading-test").show();
         }
             return false;
          }

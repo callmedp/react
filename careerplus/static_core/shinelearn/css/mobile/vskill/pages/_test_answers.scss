@@ -32,7 +32,7 @@
         background-color: $bg-white;
         padding: 15px;
         text-align: center;
-        box-shadow: 0 0 10px $box-shadow-2;
+        box-shadow: $box-shadow-2; 
         border-radius: 5px;
 
         &--text {
@@ -49,6 +49,13 @@
             padding-bottom: 0;
             line-height: 40px;
         }
+    }
+
+    &--time-taken {
+        color: $txt-white;
+        text-align: center;
+        padding-top: 15px;
+        font-size: $font-size-14;
     }
 }
 
