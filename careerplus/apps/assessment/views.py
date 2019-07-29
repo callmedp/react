@@ -189,10 +189,11 @@ class AssessmentResultPage(TemplateView):
     template_name = 'vskill/test-answers.html'
 
     def get_redirection_path(self):
+        import ipdb;ipdb.set_trace()
         test_slug = self.kwargs.get('slug')
         test_object = Test.objects.filter(slug=test_slug).first()
         session_id = self.request.session.session_key
-        key = session_id + str(test_object.id)
+        key = session_id + 'test-' + str(test_object.id)
         category = getattr(Test.objects.filter(slug=test_slug).first(), 'category', None)
         if not cache.get(key) and category:
             return reverse('assessment:vskill-subcategory',\
