@@ -50,7 +50,8 @@ function testSession(data){
                 success: function(json) {
                     if (json.status == 1){
 
-                        window.location.href = json.cart_url
+                        window.location.href = json.cart_url ;
+                        alert('Adding To Cart');
                     }
                     else if (json.status == -1){
                         alert("Something went wrong, Please try again.");
@@ -79,7 +80,9 @@ function testSession(data){
                 success: function(json) {
                     if (json.status == 1){
 
-                        window.location.href = json.cart_url
+                        window.location.href = json.cart_url ;
+                        alert('Adding To Cart');
+
                     }
                     else if (json.status == -1){
                         alert("Something went wrong, Please try again.");
