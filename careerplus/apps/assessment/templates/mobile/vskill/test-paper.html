@@ -360,11 +360,12 @@ $('.marked').click(function() {
     $('#markedquestion-' + activeTab).addClass('active');
     if (activeTab >= maxCounter) {
         $('#nextQuestionBtn').hide();
-        $('#skipBtn').hide();
+        $('#skipBtn').text('De-Select');
 
     } else {
         $('#nextQuestionBtn').show();
-         $('#skipBtn').show();
+               $('#skipBtn').text('Skip');
+
 
     }
 });
@@ -384,11 +385,10 @@ function nextquestion(number) {
 
         if (activeTab >= maxCounter) {
         $('#nextQuestionBtn').hide();
-        $('#skipBtn').hide();
+        $('#skipBtn').text('De-Select');
         } else {
         $('#nextQuestionBtn').show();
-                $('#skipBtn').show();
-
+      $('#skipBtn').text('Skip');
         }
         $('#activeQuestion').text(activeTab);
          $('.active').removeClass('active');
