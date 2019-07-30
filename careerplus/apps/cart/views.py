@@ -182,8 +182,6 @@ class PaymentLoginView(TemplateView, CartMixin):
 
     def post(self, request, *args, **kwargs):
         try:
-            import ipdb;
-            ipdb.set_trace();
             login_resp = {}
             login_dict = {}
             remember_me = request.POST.get('remember_me')

@@ -13,6 +13,7 @@
 {% block css_section %}
     {{ block.super }}
     {% compress css %}
+        <link href="{% static 'packages/select2/dist/css/select2.min.css' %}" rel="stylesheet" type="text/css">
         <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/checkbox.scss' %}" rel="stylesheet">
         <link type="text/scss" href="{% static 'shinelearn/css/mobile/payment/payment.scss' %}" rel="stylesheet">
     {% endcompress %}
@@ -135,9 +136,8 @@
                         <li class="login__item">
                             <span class="login__item--code">
                                 <select class="form--control" id="country_code" name="country_code">
-                                    {% for country in country_list %}
-                                    <option  value="{{country.phone}}">+ {{country.phone}} {{country.name}}</option>
-                                    {% endfor %}
+                                    <option selected value="91" >+91</option>
+                                        <option></option>
                                 </select>
 
                                 </select>
@@ -224,8 +224,11 @@
 
 {% block js_section %}
     {{block.super}}
+        <script type="text/javascript" src="{% static 'packages/select2/dist/js/select2.min.js' %}"></script>
         <script src="{% static 'shinelearn/js/cart/guest_login.js' %}"></script>
-
+    <script>
+        var site_domain = "{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN}}";
+    </script>
     {% compress js %}
         <script type="text/javascript" src="{% static 'shinelearn/js/users/forgot_password.js' %}"></script>
         <script src="{% static 'shinelearn/js/cart/payment-login.js' %}"></script>
