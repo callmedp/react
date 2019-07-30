@@ -1,0 +1,33 @@
+.neo {
+    box-shadow: $box-shadow-10;
+    position: relative;
+    padding: 20px 10px 25px 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &--image {
+        width: 120px;
+        margin-right: 15px;
+    }
+
+    &__content {
+        p {
+            line-height: 1.3;
+            font-size: $font-size-base;
+
+            strong {
+                font-weight: 600;
+                display: block;
+                padding-bottom: 5px;
+            }
+        }
+    }
+}
+
+.neo-modal {
+    &__item {
+        position: relative;
+    }
+}

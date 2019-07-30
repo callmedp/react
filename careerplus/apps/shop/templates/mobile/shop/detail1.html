@@ -151,7 +151,22 @@
                 </ul>
             </div><!-- end of icons wrapper -->
 
-        <hr class="row">
+        <hr class="row mb-0">
+
+        <!-- Neo Widgets start here -->
+        <div class="neo row">
+            <span class="neo--image">
+                <img src="{% static 'shinelearn/images/mobile/neo/neo-widget.jpg' %}" class="img-responsive"/>
+            </span>
+            <div class="neo__content">
+                <p><strong>Know your current English CEFR level,</strong>corresponding TOEFL & IELTS score by taking this test.</p>
+                <a href="#" class="btn btn-sm btn-blue mt-5">Take free test</a>
+            </div>
+        </div>
+        <!-- Neo Widgets ends here -->
+
+
+
         <article class="mt-20">
             {% if prd_service == 'course' or product.type_flow == 16 %}
             <span class="byvskills mb-30">
@@ -324,46 +339,35 @@
         {% include "shop/partials/call_us.html" %}
     {% endblock call_us %}
 
-        <!--neo test modal-->
+<!--neo test modal-->
 {% if prd_vendor_slug == 'neo' %}
 {% csrf_token %}
-<div class="modal fade bs-example-modal-sm login-div" role="dialog" aria-labelledby="mySmallModalLabel" id="neo-test-modal">
+<div class="modal bs-example-modal-sm login-div" role="dialog" aria-labelledby="mySmallModalLabel" id="neo-test-modal" style="display: block">
   <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content" style="width: 535px;position: relative;left: 19%;">
+    <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="neo-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-        </button>
-        <h4 class="modal-title" id="myModalLabel2">Please complete Test</h4>
+        <span class="icon-close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">+</span>
+        </span>
+        <p><strong>Fill the form below to start the test</strong></p>
       </div>
+
       <div class="modal-body" id="neo-modal-body">
-        <form id="neo-test-form" style="display:none;" >
-          <div class="form-group">
-          <label>
-            Name
-          <input type="text" class="form-control" name="name"/>
-          </label>
-        </div>
-        <div class="form-group">
-          <label>
-          Email
-          <input type="text" class="form-control" name="email"/>
-          </label>
-        </div>
-        <div class="form-group">
-          <label>
-          Country Code
-          <input type="text" class="form-control" name="country_code"/>
-          </label>
-        </div>
-        <div class="form-group">
-          <label>
-            Mobile
-            <input type="text" class="form-control" name="mobile"/>
-          </label>
-        </div>
-         <div class="form-group">
-            <button type="button" id="neo-form-btn" class="btn btn-primary"> Submit</button>
-        </div>
+        
+        <form id="neo-test-form">
+
+            <ul class="neo-modal">
+                <li class="neo-modal__item input-effect form-group">
+                    <input type="text" class="form--control animation-input" id="name" aria-describedby="name" placeholder="">
+                    <label for="name">Name</label>
+                </li>
+                
+                <li class="neo-modal__item input-effect form-group">
+                    <input type="email" class="form--control animation-input" id="email" aria-describedby="email" placeholder="">
+                    <label for="email">Email</label>
+                </li>
+            </ul>
+        
         </form>
         <iframe src="" sandbox="allow-scripts allow-same-origin" id="iframe" width="500" height="800" style="border:none;{% if not request.session.candidate_id %} display: none;{% endif %}"></iframe>
       </div>
@@ -773,8 +777,34 @@ var span = document.getElementsByClassName("neo-close")[0];
 span.onclick = function() {
     modal('neo-test-modal','none');
     // modal.style.display = "none";
-}
+};
   </script>
+
+<!-- Script here -->
+
+<script>
+// JavaScript for label effects only
+    $(window).load(function(){
+        $(".input-effect input").val("");
+        
+        $(".input-effect input").focusout(function(){
+            if($(this).val() != ""){
+                $(this).addClass("has-content");
+            }else{
+                $(this).removeClass("has-content");
+            }
+        })
+    });
+
+    $("#btn_check_result").click(function(){
+     $("#check_results").addClass("open");
+    });
+    
+    $("#close").click(function(){
+     $("#check_results").removeClass("open");
+    });
+    
+</script>
 
 
 
