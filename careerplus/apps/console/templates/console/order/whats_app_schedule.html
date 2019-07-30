@@ -72,7 +72,7 @@
 
       <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
-          {% if orderitem.oi_status == 31 or orderitem.oi_status == 32 or orderitem.oi_status == 4%}
+          {% if orderitem.oi_status == 31 or orderitem.oi_status == 32 or orderitem.oi_status == 4 or orderitem.is_onboard %}
             <div class="x_title">
               Details
             </div>
@@ -100,7 +100,7 @@
             </div>
           {% endif %}
           {% if not orderitem.is_closed %}
-            {% if orderitem.oi_status == 31 or orderitem.oi_status == 32%}
+            {% if orderitem.oi_status == 31 or orderitem.oi_status == 32 or orderitem.is_onboard %}
               <div class="x_title">
                 <h2>Jobs Links</h2>
                 <ul class="nav navbar-right panel_toolbox">
@@ -201,7 +201,7 @@
                         <div class="col-md-2 col-sm-2 col-xs-2 row">
                           <button type="submit" class="btn btn-success action_btn">Save</button>
                         </div>
-                        {% if perms.order.can_send_jobs_on_the_move %}
+                        {% if perms.order.can_send_jobs_on_the_move and orderitem.is_approved %}
 
                         <div class="col-md-2 col-sm-2 col-xs-2 row">
                           <button type="submit" class="btn btn-success action_btn">Send</button>
@@ -222,7 +222,7 @@
           {% endif %}
 
 <!--  Previous Link -->
-        {% if orderitem.oi_status == 31 or orderitem.oi_status == 32 or orderitem.oi_status == 4%}
+        {% if orderitem.oi_status == 31 or orderitem.oi_status == 32 or orderitem.oi_status == 4 or orderitem.is_onboard %}
           <br>
           <br>
           <div class="x_title">
@@ -349,7 +349,12 @@
                 {{profile_form.experience}}
               </div>
               <br>
-              {% if orderitem.oi_status == 23 and perms.order.can_approve_jobs_on_the_move %}
+              {% if orderitem.oi_status == 23 and not orderitem.is_onboard and perms.order.can_approve_jobs_on_the_move %}
+              <div class="form-group col-md-12">
+                <label> Board User {{profile_form.onboard}}</label>
+              </div>
+              {% endif %}
+              {% if orderitem.oi_status == 23 and orderitem.is_onboard and perms.order.can_approve_jobs_on_the_move %}
               <div class="form-group col-md-12">
                 <label> Approved {{profile_form.approved}}</label>
               </div>

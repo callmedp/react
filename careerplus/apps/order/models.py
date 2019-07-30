@@ -566,6 +566,20 @@ class OrderItem(AbstractAutoDate):
                 return replacement_order_id.replace('CP', '')
             return self.replacement_order_id
 
+    @property
+    def is_approved(self):
+        if self.product.sub_type_flow == 502:
+            profile = getattr(self, 'whatsapp_profile_orderitem', None)
+            if profile:
+                return profile.approved
+
+    @property
+    def is_onboard(self):
+        if self.product.sub_type_flow == 502:
+            profile = getattr(self, 'whatsapp_profile_orderitem', None)
+            if profile:
+                return profile.onboard
+
     def get_item_operations(self):
         if self.product.sub_type_flow == 502:
             ops = []

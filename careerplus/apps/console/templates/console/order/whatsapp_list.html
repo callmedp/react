@@ -206,6 +206,15 @@
                           <span class="input-group-btn">
                                 <button type="submit" class="btn btn-primary" >Sort</button>
                           </span>
+                          {% if request.GET.oi_status %}
+                          <input type="hidden" name="oi_status" value="{{request.GET.oi_status}}">
+                          {% endif %}
+                          {% if request.GET.day_choice %}
+                          <input type="hidden" name="day_choice" value="{{request.GET.day_choice}}">
+                          {% endif %}
+                          {% if request.GET.payment_date %}
+                          <input type="hidden" name="payment_date" value="{{request.GET.payment_date}}">
+                          {% endif %}
                       </div>
                     </div>
                   </form>
