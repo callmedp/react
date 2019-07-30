@@ -31,3 +31,19 @@
         position: relative;
     }
 }
+
+#neo-test-form {
+    margin: 0 15px;
+}
+
+.neo-modal-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    #iframe {
+        body {
+            height: 100%;
+        }
+    }
+}
