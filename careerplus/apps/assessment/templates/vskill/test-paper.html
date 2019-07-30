@@ -274,11 +274,11 @@ function nextquestion(number) {
 
         if (activeTab >= maxCounter) {
         $('#nextQuestionBtn').hide();
-                $('#skipBtn').hide();
+          $('#skipBtn').hide();
 
         } else {
         $('#nextQuestionBtn').show();
-                        $('#skipBtn').show();
+           $('#skipBtn').show();
 
         }
          $('.active').removeClass('active');
@@ -292,12 +292,14 @@ if (!timeout){
     let quest_id = $(e.target).closest(".test-paper")[0].id;
     $('#marked' + quest_id).removeClass();
     $('#marked' + quest_id).addClass('dirt');
+        $('#marked' + quest_id).addClass('active');
     questionAttempt[quest_id] = e.target.id;
     myStorage.setItem(tKey, JSON.stringify(questionAttempt));
     }
 });
 
 function skipQuestion() {
+    $('#markedquestion-' + activeTab).removeClass('dirt');
     $('#markedquestion-' + activeTab).addClass('skipped');
     let quest_id = 'question-' + activeTab;
     $('#' + questionAttempt[quest_id]).prop("checked", false);

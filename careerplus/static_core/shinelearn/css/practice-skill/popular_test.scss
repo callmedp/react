@@ -435,14 +435,15 @@ h2 {
             }
 
             &.active {
-                background: $p-blue;
-                border: 1px solid $p-blue;
-                color: $white-bg;
+                background: $p-blue !important ;
+                border: 1px solid $p-blue !important ;
+                color: $white-bg !important ;
             }
 
             &.skipped {
                 background-color: $white-bg;
                 border: 1px solid $border;
+                color: $grey-color;
             }
 
             &.dirt {
