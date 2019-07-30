@@ -210,7 +210,7 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
                 context['check_form'] = form
                 return render(request, self.template_name, context)
 
-        return HttpResponseRedirect(reverse('cart:cart-product-list'))
+        return HttpResponseRedirect(reverse('cart:payment-summary'))
 
     def get_context_data(self, **kwargs):
         context = super(PaymentOptionView, self).get_context_data(**kwargs)

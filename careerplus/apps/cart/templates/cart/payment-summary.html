@@ -49,7 +49,6 @@
 
         <!-- left content start -->
           <div class="col-sm-3 payment-summary-tab">
-          <!-- <a href="{% url "cart:payment-shipping" %}"><span class="yellow-circle">2</span> Shipping</a> -->
           <a href="{% url "cart:payment-summary" %}" class="active"><span>1</span> Summary</a>
           <a href="{% url "cart:payment-login" %}"><span {% if candidate_in_session %} class="green-circle" {% endif %}>2</span> Login</a>
           <a><span>3</span> Payment</a>
@@ -67,11 +66,6 @@
 
         <!-- right content start -->
         <div class="col-sm-9 payment-summary box-shadow">
-        <!-- {% if request.session.checkout_type == 'cart' %}
-        <div class="edit-cart">
-          <a href="{% url "cart:cart-product-list" %}">Edit cart</a>
-        </div>
-        {% endif %} -->
     <ul>
 
         {% for item in cart_items %}
@@ -204,7 +198,7 @@
                       <div class="form-group">
                         <input id="loyalty_point" type="number" placeholder="Enter loyalty points" min="0" max="{{wallet_total}}" name="point">
                         <span class="error-txt" id="point-alert" ></span>
-                        <button type="button" onclick="JSApplyPoint();">Redeem</button>
+                        <button type="button" class="add-redeem-button" onclick="JSApplyPoint();">Redeem</button>
                       </div>
                     </div>
                   </form>

@@ -97,7 +97,7 @@
 		margin-top: 20px;
 
 		@media (max-width: 991px) {
-			padding-left: 0; 
+			padding-left: 0;
 		}
 
 		strong {
@@ -112,7 +112,7 @@
 
 	.cards-payment-icon {
 		@media (max-width: 991px) {
-			margin-left: -10px; 
+			margin-left: -10px;
 		}
 	}
 }
@@ -238,7 +238,7 @@
 					border-radius: 4px;
 
 					@media (max-width: 991px) {
-						width: 100%; 
+						width: 100%;
 						margin-top: 10px;
 					}
 				}
@@ -258,8 +258,12 @@
 					top: -2px;
 
 					@media (max-width: 991px) {
-						width: 100%; 
+						width: 100%;
 					}
+				}
+				.add-redeem-button{
+					right: 95px;
+					top: 38px;
 				}
 			}
 
@@ -335,7 +339,7 @@
 		}
 	}
 
-	
+
 }
 
 .bdr-rt {
@@ -348,12 +352,12 @@
 	margin: 20px 0;
 
 	.form-control {
-		
+
 		.select {
 			box-shadow: none;
-			border-top: 1px solid $white-color; 
-			border-left: 1px solid $white-color; 
-			border-right: 1px solid $white-color; 
+			border-top: 1px solid $white-color;
+			border-left: 1px solid $white-color;
+			border-right: 1px solid $white-color;
 			border-bottom: 1px solid $border-color;
 		}
 	}
@@ -406,7 +410,7 @@
 			-webkit-appearance: none;
 			-moz-appearance: none;
 		    text-indent: 0;
-		    text-overflow: '';		    
+		    text-overflow: '';
 			height: 47px;
 			padding: 6px 10px;
 
@@ -468,13 +472,13 @@
 			@media (max-width: 991px) {
 				width: 75%;
 			}
-		}		
+		}
 	}
 
 	.error-txt {
 		left: 15px;
 	}
-	
+
 }
 
 .continue {
@@ -500,14 +504,14 @@
 	figure {
 		display: inline-block;
 		margin-right: 3px;
-	}	
+	}
 }
 
 
 .payment-option {
 	border-radius: 5px;
 	padding: 0;
-	
+
 	.payable {
 		font-size: $font-size+13;
 		margin: 0 0 15px 0;
@@ -536,7 +540,7 @@
 		border: none;
 
 		@media (max-width: 991px) {
-			font-size: $font-size+3; 
+			font-size: $font-size+3;
 		}
 
 		li {
@@ -585,7 +589,7 @@
 		margin: 30px 30px 50px 30px;
 
 		@media (max-width: 991px) {
-			font-size: $font-size+3; 
+			font-size: $font-size+3;
 		}
 
 		/*.card-banking {
@@ -610,7 +614,7 @@
 						width: 45%;
 						height: 70px;
 					}
-					
+
 					a {
 						display: table-cell;
 						vertical-align: middle;
@@ -736,7 +740,7 @@
 					-webkit-appearance: none;
 					-moz-appearance: none;
 				    text-indent: 1px;
-				    text-overflow: '';		    
+				    text-overflow: '';
 					border-radius: 5px;
 					height: 45px;
 					padding: 4px;
@@ -764,7 +768,7 @@
 				}
 			}
 
-			
+
 
 			.make-payment {
 				font-size: $font-size+9;
@@ -814,8 +818,8 @@
 							content:"";
 						    position: absolute;
 						    top: 30px;
-						    right: 30px;  
-						    background: $sprite -292px -474px; 
+						    right: 30px;
+						    background: $sprite -292px -474px;
 						    width: 13px;
 						    height: 8px;
 						}
@@ -826,7 +830,7 @@
 							    position: absolute;
 							    top: 30px;
 							    right: 30px;
-							    background: $sprite -292px -489px; 
+							    background: $sprite -292px -489px;
 							    width: 13px;
 							    height: 8px;
 							}
@@ -1004,7 +1008,7 @@
 
 .payment-done {
 	> .error {
-		border: 1px solid $error-color !important; 
+		border: 1px solid $error-color !important;
 
 		.error-txt {
 			bottom: -15px !important;
@@ -1055,7 +1059,7 @@
 			}
 		}
 
-		
+
 
 		li {
 			display: inline-block;
@@ -1130,7 +1134,7 @@
 					-webkit-appearance: none;
 					-moz-appearance: none;
 				    text-indent: 1px;
-				    text-overflow: '';		    
+				    text-overflow: '';
 					border-radius: 0;
 					height: 30px;
 					padding: 4px;
@@ -1518,4 +1522,8 @@
 
 .pb-0 {
 	padding-bottom: 0 !important;
+}
+
+.input-dropdown-select2{
+	width: 150px !important;
 }

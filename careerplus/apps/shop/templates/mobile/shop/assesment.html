@@ -69,7 +69,7 @@
 
                    <!--a class="icon-search pull-left" href="search-listing.html">search</a-->
 
-                   <!--a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a-->
+                   <!--a class="icon-cart" href="{% url "cart:payment-summary" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a-->
                 </div><!-- / Right side Icon ends here -->
             </div><!-- header menu Icon ends here -->
         {% else %}
@@ -79,7 +79,7 @@
                 </div>
                 <div class="pull-right" style="width:90%;">
 
-                   <a class="icon-cart pull-right" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+                   <a class="icon-cart pull-right" href="{% url "cart:payment-summary" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
                    <form method='get' id="search-form">
                     <div class="searchbox">
                         <input id='id_q' type="text" placeholder="Search here" name="search" class="searchbox-input" autocomplete="off">

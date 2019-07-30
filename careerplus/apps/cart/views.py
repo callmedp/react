@@ -182,6 +182,8 @@ class PaymentLoginView(TemplateView, CartMixin):
 
     def post(self, request, *args, **kwargs):
         try:
+            import ipdb;
+            ipdb.set_trace();
             login_resp = {}
             login_dict = {}
             remember_me = request.POST.get('remember_me')
@@ -289,7 +291,7 @@ class PaymentLoginView(TemplateView, CartMixin):
                         cart_obj.email = email
                         cart_obj.save()
                         return HttpResponseRedirect(reverse('payment:payment-option'))
-                    return HttpResponseRedirect(reverse('cart:cart-product-list'))
+                    return HttpResponseRedirect(reverse('cart:payment-summary'))
             else:
                 email_error = "Please enter valid email address."
                 context = self.get_context_data()
@@ -524,10 +526,6 @@ class PaymentSummaryView(TemplateView, CartMixin):
             cart_pk = self.request.session.get('cart_pk')
             try:
                 self.cart_obj = Cart.objects.get(pk=cart_pk)
-                # cart_dict = self.get_solr_cart_items(cart_obj=self.cart_obj)
-                # if not self.cart_obj.shipping_done or not self.cart_obj.owner_id:
-                #     return HttpResponseRedirect(reverse('cart:payment-shipping'))
-
                 if not self.cart_obj.lineitems.all().exists():
                     return HttpResponseRedirect(reverse('homepage'))
 

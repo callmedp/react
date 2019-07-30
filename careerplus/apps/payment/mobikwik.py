@@ -262,5 +262,5 @@ class MobikwikResponseView(View, PaymentMixin, OrderMixin):
     def dispatch(self, *args, **kwargs):
         cart_pk = self.request.session.get('cart_pk')
         if not cart_pk:
-            return HttpResponseRedirect(reverse('cart:cart-product-list'))
+            return HttpResponseRedirect(reverse('cart:payment-summary'))
         return super(self.__class__, self).dispatch(*args, **kwargs)
