@@ -65,8 +65,9 @@
                 dataType: 'json',
                 success: function(json) {
                     if (json.status == 1){
-
+                             alert('Adding To Cart');
                         window.location.href = json.cart_url
+
                     }
                     else if (json.status == -1){
                         alert("Something went wrong, Please try again.");

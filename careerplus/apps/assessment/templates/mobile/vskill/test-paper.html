@@ -107,7 +107,7 @@
     </div>
 
     <div class="feature-test">
-        <h2 id="productName" > {{object.product.name}}</h2>
+        <h2 href="{{object.product.get_absolute_url}}" id="productName" > {{object.product.name}}</h2>
         <div class="feature-test--price">
             <strong id="productPrice">Rs. {{object.product.inr_price}}</strong>
             <span class="stirke-through">Rs. 999</span>
@@ -410,7 +410,7 @@ if (!timeout){
 });
 
 function skipQuestion() {
-
+    $('#markedquestion-' + activeTab).removeClass('dirt');
     $('#markedquestion-' + activeTab).addClass('skipped');
     let quest_id = 'question-' + activeTab;
     $('#' + questionAttempt[quest_id]).prop("checked", false);

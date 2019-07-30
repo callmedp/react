@@ -54,7 +54,7 @@
                   <strong id="correctMsg"></strong>
                   <p id="resultCourse"></p>
                   <div class="flexbox mt-20 mb-20">
-                     <a data-toggle="modal"  href="#TestLimitModal" onclick="getProductDetail('{{object.vendor.id}}','{{object.category.id}}');"  class="result_btn" >Next test &nbsp; &rsaquo;</a>
+                     <a data-toggle="modal"  href="#TestLimitModal" class="result_btn" >Next test &nbsp; &rsaquo;</a>
                      <a href="/practice-tests/{{object.category.slug}}/sub" class="result_btn ml-20">Explore other test</a>
 
                   </div>
@@ -99,7 +99,7 @@
             </div>
 
             <div class="flexbox ml-20 mt-30">
-               <a class="blue_btn mr-20" data-toggle="modal" onclick="getProductDetail('{{object.vendor.id}}','{{object.category.id}}');"  href="#TestLimitModal">Next test&nbsp; &rsaquo;</a>
+               <a class="blue_btn mr-20" data-toggle="modal"  href="#TestLimitModal">Next test&nbsp; &rsaquo;</a>
                <a class="white_btn mr-20" href="/practice-tests/{{object.category.slug}}/sub" >Explore other test</a>
                 <button class="white_btn" onclick="reTestFunc();" >Re Test</button>
 
@@ -132,7 +132,7 @@
                <span class="pad-15">
                   <h4 class="mt-0" >Improve your skills with this course</h4>
                   <span class="grey-border mt-15 mb-15"></span>
-                  <i class="tcell"><img id="courseImg" src="{{object.course.image.url}}" class="img-responsive"></i>
+                  <i class="tcell"><img id="courseImg" src="{% if object.course.image %} {{object.course.image.url}} {% endif %}" class="img-responsive"></i>
                   <span class="tcell">
                      <h3><a href="{{object.course.get_absolute_url}}" id="courseName">{{object.course.name}}</a></h3>
                      <p><strong id="courseBought">{{object.course.buy_count}}</strong> people bought</p>
@@ -206,6 +206,9 @@
                   <input type="text" class="form-control" id="number" name="number" value="{{request.session.mobile_no}}" placeholder="  "/>
                   <label for="">Mobile</label>
                </div>
+                 <input type="hidden" class="form-control" id="campaign" name="campaign" value="testprep" />
+                  <input type="hidden" class="form-control" id="lsource" name="lsource" value="1" />
+
                <div class="form-group">
                   <button class="blue_btn mr-20"  type="submit" id="leadCreationSubmit">Submit</button>
                </div>
@@ -286,7 +289,6 @@ $('#leadCreationForm').validate({
 
 
 function getCoptions(){
-        getProductDetail('{{object.vendor.id}}','{{object.category.id}}');
         questionAttempt = JSON.parse(myStorage.getItem(tKey));
         if (questionAttempt != null) {
             for (var id in Object.keys(questionAttempt)) {
@@ -332,7 +334,7 @@ function getCoptions(){
               if(questionAttempt){
               $('#timeTaken').text(secondsToMinutes(questionAttempt['testTime'+{{object.id}}]));
               }else{
-               $('#timeTaken').text();
+               $('#timeTaken').text('');
 
               }
                  }

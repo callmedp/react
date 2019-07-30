@@ -115,7 +115,7 @@
             <h2>Improve your skills with this course</h2>
             <div class="media-flex">
                 <span class="media-flex--img">
-                    <img id="courseImg" src="{{object.course.image.url}}" class="img-responsive" alt="...">
+                    <img id="courseImg" src="{% if object.course.image %} {{object.course.image.url}} {% endif %}" class="img-responsive" alt="...">
                 </span>
                 <div class="media-flex--body">
                     <p class="fs-16 semi-bold"><a href="{{object.course.get_absolute_url}}" id="courseName">{{object.course.name}}</a></p>
@@ -177,6 +177,8 @@
                 <input type="tel" class="form-control" id="mobile" name="number" value="{{request.session.mobile_no}}"  aria-describedby="mobile" placeholder=" ">
                 <label for="mobile">Mobile</label>
             </li>
+                 <input type="hidden" class="form-control" id="campaign" name="campaign" value="testprep" />
+                  <input type="hidden" class="form-control" id="lsource" name="lsource" value="1" />
             <li class="mt-40 mb-20">
                 <button class="btn btn-round-30 btn-blue w-100" type="submit" id="leadCreationSubmit">Submit</button>
             </li>
@@ -195,7 +197,6 @@ var tKey = 'Test-' + '{{object.id}}',myStorage = window.localStorage,
 right=0,questionAttempt = null,total = {{questions_list.count}};
 
 $(document).ready(function() {
-    getCourseDetail('{{object.vendor.id}}','{{object.category.id}}','{{object.id}}');
     {% if not request.session.is_lead_created %}
         {% if request.session.candidate_id %}
             $('#leadCreationSubmit').click();
@@ -241,7 +242,6 @@ $('#leadCreationForm').validate({
 
 
 function getCoptions(){
-        getProductDetail('{{object.vendor.id}}','{{object.category.id}}');
         questionAttempt = JSON.parse(myStorage.getItem(tKey));
         if (questionAttempt != null) {
             for (var id in Object.keys(questionAttempt)) {
