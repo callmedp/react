@@ -107,7 +107,7 @@
          </div>
 
          <!-- right section starts -->
-         <div class="col-sm-3 mt-30" id="test-product" style="display:none;">
+         <div class="col-sm-3 mt-30" id="test-product" style="{% if not object.product %} display:none {% endif %};">
 
             <div class="white-box bdr-bottom">
                <div class="test-benefits benefits-bg">
@@ -127,16 +127,16 @@
               </div>
             </div>
 
-            <div class="white-box mt-20 bdr-bottom" id="testCourse" style="display:none";>
+            <div class="white-box mt-20 bdr-bottom" id="testCourse" style="{% if not object.course %} display:none {% endif %};">
                <div class="improve-skills">
                <span class="pad-15">
                   <h4 class="mt-0" >Improve your skills with this course</h4>
                   <span class="grey-border mt-15 mb-15"></span>
-                  <i class="tcell"><img id="courseImg" src="https://static1.shine.com/l/m/product_image/322/1509343566_8542.png" class="img-responsive"></i>
+                  <i class="tcell"><img id="courseImg" src="{{object.course.image.url}}" class="img-responsive"></i>
                   <span class="tcell">
-                     <h3><a href="#" id="courseName">Search Engine Optimisation Master Training Course</a></h3>
-                     <p><strong id="courseBought">1096</strong> people bought</p>
-                     <p><strong id="courseJobsAvailable">12</strong> jobs available</p>
+                     <h3><a href="{{object.course.get_absolute_url}}" id="courseName">{{object.course.name}}</a></h3>
+                     <p><strong id="courseBought">{{object.course.buy_count}}</strong> people bought</p>
+                     <p><strong id="courseJobsAvailable">{{object.course.num_jobs}}</strong> jobs available</p>
                   </span>
                </span>
               </div>

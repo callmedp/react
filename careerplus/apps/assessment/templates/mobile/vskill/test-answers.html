@@ -88,8 +88,8 @@
         <div class="btn btn-round-30 btn-outline w-100" ><a href="/practice-tests/{{object.category.slug}}/sub">Explore other test</a></div>
     </div>
 
-    <div class="feature-test" id="test-product" style="display:none;">
-            <h2 ><a href="#" id="test-product-name">{{object.product.name}}</a></h2>
+    <div class="feature-test" id="test-product" style="{% if not object.product %} display:none {% endif %};">
+            <h2 ><a href="{{object.product.get_absolute_url}}" id="test-product-name">{{object.product.name}}</a></h2>
             <div class="feature-test--price">
                 <strong id="test-price">{{object.product.inr_price}}</strong>
                 <span class="stirke-through">Rs. 999</span>
@@ -111,16 +111,16 @@
             </div>
         </div><!-- /. feature-test -->
     
-        <div class="improve-skills" id="testCourse" style="display:none">
+        <div class="improve-skills" id="testCourse" style="{% if not object.course %} display:none {% endif %};">
             <h2>Improve your skills with this course</h2>
             <div class="media-flex">
                 <span class="media-flex--img">
-                    <img id="courseImg" src="https://static1.shine.com/l/m/product_image/3410/1539673448_4625.png" class="img-responsive" alt="...">
+                    <img id="courseImg" src="{{object.course.image.url}}" class="img-responsive" alt="...">
                 </span>
                 <div class="media-flex--body">
-                    <p class="fs-16 semi-bold"><a href="#" id="courseName">{{object.course.name}}</a></p>
+                    <p class="fs-16 semi-bold"><a href="{{object.course.get_absolute_url}}" id="courseName">{{object.course.name}}</a></p>
                     <ul>
-                        <li class="mb-10"><strong class="mr-10" id="courseBought">1096</strong>people bought</li>
+                        <li class="mb-10"><strong class="mr-10" id="courseBought">{{object.course.buy_count}}</strong>people bought</li>
                         <li><strong class="mr-10" id="courseJobsAvailable">{{object.course.num_jobs}}</strong>job available</li>
                     </ul>
                 </div>
