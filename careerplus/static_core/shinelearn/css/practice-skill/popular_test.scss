@@ -871,6 +871,7 @@ h2 {
     font-size: $font-size+2;
     background: $white-bg;
     padding: 3px;
+    pointer-events: none;
 
 }
 .details-modal .form-group input:focus + label,.details-modal .form-group input:not(:placeholder-shown) + label{
@@ -894,6 +895,7 @@ h2 {
     transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
     opacity:0.5;
 }
+
 
 .check-result {
     text-align: center;
