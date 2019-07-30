@@ -101,7 +101,7 @@
             <span class="pt-sprite icon-arrow"></span>
         </div>
         <div class="take-test--button-wrap mt-15">
-            <span class="btn btn-outline btn-round-30" onclick="skipQuestion();">Skip</span>
+            <span class="btn btn-outline btn-round-30" id="skipBtn" onclick="skipQuestion();">Skip</span>
             <span class="btn btn-outline btn-round-30" onclick="submitTest();">End test</span>
         </div>
     </div>
@@ -360,8 +360,12 @@ $('.marked').click(function() {
     $('#markedquestion-' + activeTab).addClass('active');
     if (activeTab >= maxCounter) {
         $('#nextQuestionBtn').hide();
+        $('#skipBtn').hide();
+
     } else {
         $('#nextQuestionBtn').show();
+         $('#skipBtn').show();
+
     }
 });
 
@@ -380,8 +384,11 @@ function nextquestion(number) {
 
         if (activeTab >= maxCounter) {
         $('#nextQuestionBtn').hide();
+        $('#skipBtn').hide();
         } else {
         $('#nextQuestionBtn').show();
+                $('#skipBtn').show();
+
         }
         $('#activeQuestion').text(activeTab);
          $('.active').removeClass('active');

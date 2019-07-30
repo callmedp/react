@@ -7,6 +7,7 @@
         $('#coursePrice').text('Rs. '+ modalobject.coursePrice);
         $('#courseName').text(modalobject.courseName);
         $('#questCount').text(modalobject.quescount);
+        $('#exampleModalLongTitle').text(modalobject.catname);
         if(modalobject.courseName == ""|| modalobject.courseName == "undefined" ){
         $('#testCourse').hide();
         }
