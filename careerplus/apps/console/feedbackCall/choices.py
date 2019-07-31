@@ -19,6 +19,6 @@ FEEDBACK_CATEGORY_CHOICES_ID_1 =((101, "Service Utilized"),
                                   (104, "Annoyed"),
                                   (105, "Call Back"))
 
-FEEDBACK_CATEGORY_CHOICES_ID_2 =((201, "Call Back"),)
+FEEDBACK_CATEGORY_CHOICES_ID_2 =((201, "Not Connected"),)
 
 FEEDBACK_CATEGORY_CHOICES = FEEDBACK_CATEGORY_CHOICES_ID_1 + FEEDBACK_CATEGORY_CHOICES_ID_2

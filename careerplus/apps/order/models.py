@@ -1142,3 +1142,5 @@ class OrderItemFeedbackOperation(models.Model):
         return self.assigned_to.name if self.assigned_to else ''
     
 
+# class CustomerLtv(models.Model):
+#     candidate_id = 

@@ -13,7 +13,10 @@ $(document).ready(() => {
     $('body').addClass('body-overflow') //remove scrolling while loading
 
 
-    $('#follow-up').datetimepicker() //make input fild datetime
+    $('#follow-up').datetimepicker({
+        startDate: new Date(),
+        setDate: new Date()
+    }) //make input fild datetime
     feedbackCallDetails()
     getDropdownChoices()
 
@@ -22,7 +25,7 @@ $(document).ready(() => {
         for(let order_item_index = 0;order_item_index<total_order_item;order_item_index++){
             $(`#item-category-${order_item_index}`).val(value)
             $(`#item-category-${order_item_index}`).trigger('change.select2');
-            removeError(false,{id:`#item-category-${order_item_index}`,key:order_item_index,type:'category'})
+            removeError(false,{id:`#item-category-${order_item_index}`,key:order_item_index,type:'category'},true)
         }
     });
 
@@ -31,13 +34,17 @@ $(document).ready(() => {
         for(let order_item_index = 0;order_item_index<total_order_item;order_item_index++){
             $(`#item-resolution-${order_item_index}`).val(value)
             $(`#item-resolution-${order_item_index}`).trigger('change.select2');
-            removeError(false,{id:`#item-resolution-${order_item_index}`,key:order_item_index,type:'resolution'})
+            removeError(false,{id:`#item-resolution-${order_item_index}`,key:order_item_index,type:'resolution'},true)
         }
     });
 
     $('#follow-up').on('changeDate', function(ev){  //hide datetimepicker when date is selected
         $(this).datetimepicker('hide');
     });
+
+    let default_followUp_date = new Date();
+    default_followUp_date.setDate(default_followUp_date.getDate() + 7);
+    $('#follow-up').val(formatDate(default_followUp_date,true))
 
     
       
@@ -95,7 +102,7 @@ const getOrderItemFeedback = () => {
                     `
                         <tr class="even pointer">
                             <td class="padding-item">${order_item.length ? order_item[0].product_name : ''}</td>
-                            <td class="padding-item">${order_item.length ? order_item[0].order_status_text : ''}</td>
+                            <td class="padding-item">${order_item.length ? order_item[0].get_oi_status : ''}</td>
                             <td class="padding-item">${item.order_item}</td>
                             <td class="padding-item">${order_item.length ? formatDate(order_item[0].order_payment_date) : ''}</td>
                             <td class="scalling">
@@ -117,8 +124,8 @@ const getOrderItemFeedback = () => {
                 createDropdown(`#item-category-${index}`,category,index,'category',item.category)
                 form_data[index] = {
                                         id: item.id,
-                                        category: item.category,
-                                        resolution: item.resolution,
+                                        category: `${item.category}`,
+                                        resolution: `${item.resolution}`,
                                         comment: item.comment,
                                     };
                 createDropdown(`#item-resolution-${index}`,resolution,index,'resolution',item.resolution)
@@ -191,7 +198,7 @@ const saveReview = () => {
 }
 
 const sendData = (type) => {
-    // loader remove
+    // loader show
     $('.feedback-loader').show()
     $('body').addClass('body-overflow')
 
@@ -238,7 +245,7 @@ const checkError = () => {
             else if(item.category === '201'){   //not connected id
                 $(`#item-resolution-${key}`).val('')
                 $(`#item-resolution-${key}`).trigger('change.select2');
-                removeError(false,{id:`#item-resolution-${key}`,key,type:'resolution'})
+                removeError(false,{id:`#item-resolution-${key}`,key,type:'resolution'},true)
                 continue;
             }
             if(!item.resolution){
@@ -254,7 +261,6 @@ const checkError = () => {
             }
         }
     }
-    console.log(form_data)
     return error
 }
 
@@ -266,7 +272,7 @@ const showError = (id) => {
     parent.children('.help-block').removeClass('hide')
 }
 
-const removeError = (event,data) => {
+const removeError = (event,data,isMainDropdown) => {
     first_error_id = null
     let id,key,type;
     if(event){
@@ -282,15 +288,17 @@ const removeError = (event,data) => {
     let  parent = $(id).parent()
     parent.removeClass('has-error')
     parent.children('.help-block').addClass('hide')
-    if(type === 'resolution' && form_data[key].category ==='201'){  //make resolution null as not connected selected
-        $(`#item-resolution-${key}`).val('')
-        $(`#item-resolution-${key}`).trigger('change.select2');
-        alert("Not Connected category selected so resolution cannot be selected ")
-    }
     if(type)
-        form_data[key][type] = $(id).val()
+        form_data[key][type] = $(id).val() ? $(id).val() : null
     else
         form_data[key] = $(id).val()
+    if(form_data[key].category === '201'){  //make resolution null as not connected selected
+        $(`#item-resolution-${key}`).val('')
+        $(`#item-resolution-${key}`).trigger('change.select2');
+        type === 'resolution' && !isMainDropdown ? alert("Cannot select resolution when category is not connected ") : ()=>{}
+        return
+    }
+    
 
 }
 

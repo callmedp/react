@@ -22,7 +22,7 @@ function formatDate(date,isTime) {
     if (day.length < 2) day = '0' + day;
     if (minutes>=0 && minutes<9) minutes = '0' + minutes;
     if (seconds>=0 && seconds<9) seconds ='0' + seconds;
-    let resultDate = [year, month, day].join('/')
+    let resultDate = [year, month, day].join('-')
     if(isTime) 
         return `${resultDate} ${[hour,minutes,seconds].join(':')}`;
     return resultDate;

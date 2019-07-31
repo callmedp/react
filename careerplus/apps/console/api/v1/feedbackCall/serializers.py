@@ -25,7 +25,7 @@ class CustomerFeedbackSerializer(serializers.ModelSerializer):
 
 class OrderItemFeedbackSerializer(ListSerializerContextMixin,ListSerializerDataMixin,serializers.ModelSerializer,):
     list_lookup_fields = ['order_item_id']
-    fields_required_mapping = {'order_item_id': ['product_name', 'order_payment_date', 'order_status_text',]}
+    fields_required_mapping = {'order_item_id': ['product_name', 'order_payment_date', 'get_oi_status',]}
     field_model_mapping = {'order_item_id':OrderItem}
 
     class Meta:
