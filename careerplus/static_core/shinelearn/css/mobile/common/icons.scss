@@ -152,21 +152,18 @@
 
 .icon-fb-2 {
   @include icon-inblock (10px, 18px, -48px -176px);
-  @extend %all-center;
 }
 
 .icon-tw-2 {
   @include icon-inblock (18px, 15px, -100px -177px);
-  @extend %all-center;
 }
 
 .icon-gp-2 {
-  @include icon-inblock (21px, 15px, -71px -177px);
-  @extend %all-center;
+  @include icon-inblock (18px, 18px, -69px -177px);
 }
 
 .icon-link-2 {
-  @include icon-inblock (21px, 34px, -73px -282px);
+  @include icon-inblock (21px, 19px, -73px -291px);
   }
 
 .icon-edit {
