@@ -12,10 +12,10 @@ class ProductListSerializerForAuditHistory(SerializerFieldsMixin, ModelSerialize
 
 class PracticeTestInfoCreateSerializer(ModelSerializer):
     has_completed = serializers.SerializerMethodField()
-
+    cefr_level = serializers.SerializerMethodField()
     class Meta:
         model = PracticeTestInfo
-        fields = ('email', 'mobile_no', 'name', 'has_completed')
+        fields = ('email', 'mobile_no', 'name', 'has_completed', 'cefr_level')
 
     def update_session_if_already_done_with_test(self, test_info):
         data = eval(getattr(test_info, 'test_data'))
@@ -46,3 +46,13 @@ class PracticeTestInfoCreateSerializer(ModelSerializer):
                 self.update_session_if_already_done_with_test(info)
                 return True
         return False
+
+    def get_cefr_level(self, obj):
+        level = 'N.A'
+
+        data = getattr(obj, 'test_data', '{}')
+        if data:
+            data = eval(data)
+            result = data.get('result', {})
+            level = result.get('pt_level', 'N.A')
+        return level

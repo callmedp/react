@@ -154,23 +154,23 @@
         <hr class="row mb-0">
 
         <!-- Neo Widgets start here -->
-        <div class="neo row">
+        <div class="neo row" id="row_neo">
             <span class="neo--image">
                 <img src="{% static 'shinelearn/images/mobile/neo/neo-widget.jpg' %}" class="img-responsive"/>
             </span>
             <div class="neo__content">
                 <p><strong>Know your current English CEFR level,</strong>corresponding TOEFL & IELTS score by taking this test.</p>
-                <a href="#" class="btn btn-sm btn-blue mt-5">Take free test</a>
+                <a href="#" class="btn btn-sm btn-blue mt-5"  id="take-test_button" >Take free test</a>
             </div>
         </div> <!-- Neo Widgets ends here -->
 
         <!-- Your Level starts here -->
-        <div class="neo-level mt-30">
+        <div class="neo-level mt-30" id="cefr_level_box" style="display: none">
             <span class="neo-level--image">
                 <img src="{% static 'shinelearn/images/mobile/neo/neo-level.jpg' %}" class="img-responsive"/>
             </span>
             <div class="neo-level--content">
-                <h2 class="mb-0">B1</h2>
+                <h2 class="mb-0" id="cefr_level"></h2>
                 <p class="pb-0">Your CEFR level </p>
             </div>
 
@@ -360,7 +360,7 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content text-center neo-modal-content">
       <div class="modal-header">
-        <span class="icon-close" data-dismiss="modal" aria-label="Close"></span>
+        <span id="neo-close" class="icon-close" data-dismiss="modal"  aria-label="Close"></span>
       </div>
       <div class="modal-body" id="neo-modal-body">
        
@@ -384,14 +384,14 @@
                         <input type="text" class="form--control" name="country_code" placeholder="+91" disabled/>
                     </span>
                     <div class="phone--number input-effect rel">
-                        <input type="tel" name="mobile" class="form--control animation-input" id="mobile" name="mobile" aria-describedby="mobile" placeholder="">
+                        <input type="tel" name="mobile" class="form--control animation-input" id="mobile" name="mobile" aria-describedby="mobile" placeholder="" maxlength="10">
                         <label for="mobile">Mobile No.</label>
                     </div>
                     <span class="error--mgs">Required</span>
                 </li>
 
                 <li class="neo-modal__item input-effect form-group mt-40">
-                    <button type="button" id="neo-form-btn" class="btn btn-yellow btn-round btn-slg"> Submit</button>
+                    <button type="submit" id="neo-form-btn" class="btn btn-yellow btn-round btn-slg"> Submit</button>
                 </li>
             </ul>
         </form>
@@ -404,11 +404,11 @@
 {% endif %}
 
 <!-- Take test Modal Start here  -->
-<div class="modal bs-example-modal-sm login-div" role="dialog" aria-labelledby="mySmallModalLabel" id="neo-test-modal">
+<div class="modal bs-example-modal-sm login-div" role="dialog" aria-labelledby="mySmallModalLabel" id="neo-info-modal">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content text-center neo-takeTest-modal">
         <div class="modal-header">
-          <span class="icon-close" data-dismiss="modal" aria-label="Close"></span>
+          <span class="icon-close" id="neo-info-close" data-dismiss="modal" aria-label="Close"></span>
         </div>
         <div class="modal-body">
             <span class="neo-takeTest-modal--image">
@@ -422,7 +422,7 @@
                 Official translations of CEFR global scale
             </a>
 
-            <p class="mb-20"><a href="#" class="btn btn-yellow btn-round btn-slg">Take test</a></p>
+            <p class="mb-20"><a href="#" class="btn btn-yellow btn-round btn-slg" id="modal-take-test-btn">Take test</a></p>
         </div>
       </div>
     </div>
@@ -689,6 +689,9 @@ function check_for_load_test(data){
         //pass
         $("#neo-enroll-button").text('Buy Now')
         $("#neo-enroll-button").attr('id', 'add-to-cart')
+        $("#cefr_level").text(data['cefr_level'])
+        $("#cefr_level_box").show()
+        $("#row_neo").remove()
         modal('neo-test-modal','none');
       }
       else{
@@ -713,14 +716,17 @@ function update_test_info(email){
         type: "GET",
         success: function(data, textStatus, jqXHR) {
           if(data['status'] == 'done'){
-            $("#neo-enroll-button").text('Buy Now');
-            $("#neo-enroll-button").attr('id', 'add-to-cart');
+              $("#neo-enroll-button").text('Buy Now');
+              $("#neo-enroll-button").attr('id', 'add-to-cart');
               var ifrm = document.getElementById('iframe');
               var doc = ifrm.contentDocument? ifrm.contentDocument: ifrm.contentWindow.document;
               btn = $(doc).find('#neobackhomebutton');
               btn.text('Enroll Now');
               btn.css('color', 'black')
               btn.css('background', '#ffcf26')
+              $("#cefr_level").text(data['result']['pt_level'])
+              $("#cefr_level_box").show()
+              $("#row_neo").remove()
 
           }
         },
@@ -739,24 +745,65 @@ function update_test_info(email){
 
 {% endif %}
 
-{% if not request.session.candidate_id %}
-$("#neo-form-btn").click(function(e){
-  var $inputs = $('#neo-test-form :input');
-  var values = {};
-  $inputs.each(function() {
-      values[this.name] = $(this).val();
-  });
-  name = values['name'];
-  email = values['email'];
-  country_code = values['country_code'];
-  mobile_no = values['mobile'];
-  get_create_profile(email, name, country_code, mobile_no);
-});
-{% endif %}
+ $('#neo-test-form').validate({
+      submitHandler:function (form) {
+          var $inputs = $('#neo-test-form :input');
+          var values = {};
+          $inputs.each(function() {
+              values[this.name] = $(this).val();
+          });
+          name = values['name'];
+          email = values['email'];
+          country_code = values['country_code'];
+          mobile_no = values['mobile'];
+          get_create_profile(email, name, country_code, mobile_no);
+      },
+      rules:{
+          mobile:{
+              required:true,
+              number:true,
+              minlength:10,
+              maxlength:20,
+          },
+          email:{
+              email:true,
+              required:true,
 
+          },
+          name:{
+              required:true,
+              lettersonly:true,
 
-$('#neo-enroll-button').click(function(){
-  if($('#neo-enroll-button').text() == 'Take Test') {
+          },
+      },
+      messages:{
+          mobile:{
+             required:"Field is required",
+             number: "Please enter valid number only"
+          },
+          email:{
+              required:"Field is required"
+          },
+          name:{
+              required:"Field is required"
+          },
+
+      },
+      highlight:function(element, errorClass) {
+        $(element).closest('.form-group').addClass('error');
+      },
+      unhighlight:function(element, errorClass) {
+        $(element).closest('.form-group').removeClass('error');
+        $(element).siblings('.js-error').html("");
+      },
+      errorPlacement: function(error, element){
+        $(element).siblings('.js-error').html(error.text());
+      } 
+    });
+ 
+
+$('#take-test_button').click(function(){
+  
     {% if request.session.candidate_id %}
         let email = "{{ request.session.email }}";
         let name = "{{request.session.full_name}}";
@@ -768,8 +815,7 @@ $('#neo-enroll-button').click(function(){
         $("#neo-test-form").show();
         modal('neo-test-modal','block');
     {% endif %}
-  }
-});
+  });
 
 
 
@@ -785,7 +831,11 @@ $('iframe').load(function(){
     var ifrm = document.getElementById('iframe');
     var doc = ifrm.contentDocument? ifrm.contentDocument: ifrm.contentWindow.document;
     $(doc).on('click', '#neookbutton', function() {
-        email = $('#neo-test-form :input[name="email"]').val();
+        {% if request.session.candidate_id %}
+            var email = "{{ request.session.email }}";
+        {% else %}
+            var email = $('#neo-test-form :input[name="email"]').val();
+        {% endif %}
         update_test_info(email);
 
     });
@@ -794,6 +844,14 @@ $('iframe').load(function(){
             check_if_user_exists_for_another_vendor(global_email)
         }, 1000) 
     });
+    $(doc).on('click', '#neonextquestion', function() {
+        setTimeout(function(){
+           $(doc).find("#neomodalquit").css('position','absolute')
+           $(doc).find("#neomodalquit").css('height','200%')
+        }, 1000);
+    });
+
+    
 
     $(doc).on('click', "#neobackhomebutton", function(){
       modal('neo-test-modal','none');
@@ -826,11 +884,30 @@ function check_if_user_exists_for_another_vendor(email) {
 
 
 // Get the <span> element that closes the modal
-var span = document.getElementsByClassName("neo-close")[0];
-span.onclick = function() {
+var neoClose = document.getElementById("neo-close");
+neoClose.onclick = function() {
     modal('neo-test-modal','none');
     // modal.style.display = "none";
 }
+
+// Get the <span> element that closes the modal
+var neoInfoClose = document.getElementById("neo-info-close")
+neoInfoClose.onclick = function() {
+    modal('neo-info-modal','none');
+}
+
+$('#neo-enroll-button').click(function(){
+    text = $(this).text()
+    if(text=='Enroll Now') {
+        modal('neo-info-modal', 'block')
+    }
+})
+
+$("#modal-take-test-btn").click(function(){
+    modal('neo-info-modal', 'none');
+    modal('neo-test-modal','block');
+})
+document.getElementById('iframe');
   </script>
 
 <script>
