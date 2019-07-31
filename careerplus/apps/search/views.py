@@ -20,19 +20,23 @@ from django.conf import settings
 from django.utils.http import urlencode, urlquote_plus
 from django.db.models import Q
 
+# local imports
+from .templatetags.search_tags import get_choice_display
+from .forms import SearchForm, SearchRecommendedForm
+from .classes import SimpleSearch, SimpleParams, FuncAreaSearch, FuncAreaParams, RecommendedSearch, RecommendedParams
+
+#inter app imports
+from partner.models import Vendor
+from geolocation.models import Country
+from shop.models import FunctionalArea, Skill, Category
+
 # third party imports
-# from haystack.views import SearchView
 from haystack.query import EmptySearchQuerySet
 from core.library.haystack.query import SQS
 from django_redis import get_redis_connection
 
-# local imports
-from .forms import SearchForm, SearchRecommendedForm
-from .classes import SimpleSearch, SimpleParams, FuncAreaSearch, FuncAreaParams, RecommendedSearch, RecommendedParams
-from shop.models import FunctionalArea, Skill, Category
-from geolocation.models import Country
+#Global Constants
 RESULTS_PER_PAGE = getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
-
 error_log = logging.getLogger('error_log')
 redis_conn = get_redis_connection("search_lookup")
 
@@ -55,6 +59,15 @@ class SearchBaseView(TemplateView):
     search_type = ""
     none_query = False
 
+    facet_key_model_mapping = {"pVid":Vendor}
+    facet_model_extra_key_mapping = {}
+    facet_choice_map = {"pFA":"FA_FACETS",
+                    "pCL":"CL_FACETS",
+                    "pDM":"DURATION_DICT",
+                    "pCert":"CERT_FACETS",
+                    "pStM":"STUDY_MODE",
+                    "pPinr":"PRICE_FACETS"}
+
     def get_search_class(self):
         """
         Search class must be defined for all the extending views.
@@ -67,7 +80,6 @@ class SearchBaseView(TemplateView):
         return self.search_class
 
     def get_params_class(self):
-
         if not hasattr(self, 'params_class'):
             raise ImproperlyConfigured("'%s' must define params_class" % self.__class__.__name__)
 
@@ -76,15 +88,11 @@ class SearchBaseView(TemplateView):
     def get_template_names(self):
         if not self.request.amp:
             return ["search/search.html"]
-        if not settings.DEBUG:
-            from newrelic import agent
-            agent.disable_browser_autorum()
         return ["search/search-amp.html"]
 
     def get_search_params(self):
         self.params_class_obj = self.params_class()
         self.params_class_obj.set_args(self.args, self.kwargs)
-
         setattr(self.params_class_obj, "request", self.request)
         self.search_params = self.params_class_obj.get_search_params()
 
@@ -135,11 +143,12 @@ class SearchBaseView(TemplateView):
             'fmode': 'mode',
             'fduration': 'duration',
             'fclevel': 'level',
-            'fcert': 'certify'
+            'fcert': 'certify',
+            'fvid': 'vid'
         }
 
         # Following code is for generating starting from price according to variation filtered TODO: move to ajax later on
-        requested_filters = [x for x in ['fprice', 'fmode', 'fduration', 'fclevel', 'fcert'] if x in self.request.GET]
+        requested_filters = [x for x in ['fprice', 'fmode', 'fduration', 'fclevel', 'fcert', 'fvid'] if x in self.request.GET]
         # if filters are not applied, skip
         if len(requested_filters):
             for result in self.results:
@@ -171,6 +180,66 @@ class SearchBaseView(TemplateView):
             if float(result.pPfin):
                 result.discount = round((float(result.pPfin) - float(result.pPin)) * 100 / float(result.pPfin), 2)
 
+    def get_facets_dict(self):       
+        results_facets = self.results.facet_counts()
+        facet_fields_data = results_facets.get('fields',{})
+        facet_dict = {}
+        bool_string_mapping = {"true":True,"false":False}
+        
+        for key in facet_fields_data.keys():
+            facet_dict[key] = []
+            others_dict = {}
+            
+            for value in facet_fields_data[key]:
+                val = int(value[0]) if value[0].isdigit() else value[0]
+                val = bool_string_mapping.get(val,val)
+
+                facet_data = {"id":val,"count":value[1]}
+                
+                if self.facet_choice_map.get(key):
+                    facet_data.update({"label":get_choice_display(value[0],self.facet_choice_map[key])})
+
+                if facet_data.get('label') == "Others":
+                    
+                    if str(val) in others_dict.get('id',''):
+                        continue
+
+                    others_dict['id'] = "{} {}".format(others_dict['id'],val) if others_dict.get('id') else str(val)
+                    others_dict['count'] = others_dict.get('count',0) + value[1]
+                    continue
+
+                facet_dict[key].append(facet_data)
+
+            if others_dict:
+                other_ids = others_dict.get('id','').split()
+                sorted_other_ids = map(str,sorted([int(x) for x in other_ids]))
+                facet_dict[key].append({"label":"Others","id":" ".join(sorted_other_ids),
+                                        "count":others_dict['count']
+                                        })
+
+        for key,model in self.facet_key_model_mapping.items():
+            data = facet_dict.get(key)
+            
+            if not data:
+                continue
+
+            ids = [x.get('id') for x in data]
+            objects = model.objects.filter(id__in=ids)
+            id_to_object_mapping = {str(x.id):x for x in objects}
+
+            for x in data:
+                obj = id_to_object_mapping.get(str(x.get("id","")))
+                if not obj:
+                    x.update({"label":"","slug":""})
+                else:
+                    x.update({"label":getattr(obj,"name",""),"slug":getattr(obj,"slug","")})
+                
+                if self.facet_model_extra_key_mapping.get(model.__name__):
+                    extra_fields_required = self.facet_model_extra_key_mapping[model.__name__]
+                    x.update({key:getattr(obj,key) if obj else None for key in extra_fields_required})
+
+        return facet_dict
+
     def get_extra_context(self):
         """
         Returns extra context to be passed to the template. List is maintained in
@@ -189,7 +258,8 @@ class SearchBaseView(TemplateView):
         context['search_params'] = self.search_params
         context['QUERY_STRING'] = self.request.get_full_path()
         if self.found:
-            context['facets'] = self.results.facet_counts()
+            context['facets'] = self.get_facets_dict()
+
         context['search_params_string'] = self.search_params.urlencode()
         context = self.set_form_attributes_in_context(context)
         context['search_type'] = self.search_type
@@ -204,23 +274,23 @@ class SearchBaseView(TemplateView):
         else:
             context['tracking_medium'] = 'web'
         context['prod_type'] = self.search_params.getlist('prod_type', [])
-        if self.search_params.getlist('fclevel'):
-            context['clevel'] = self.request.GET.getlist('fclevel')
-        if self.search_params.getlist('fcert'):
-            context['cert'] = self.request.GET.getlist('fcert')
-        if self.search_params.getlist('frating'):
-            context['rating'] = self.search_params.getlist('frating')
-        if self.search_params.getlist('farea'):
-            context['areaf'] = self.search_params.getlist('farea')
-        if self.search_params.getlist('fduration'):
-            context['duration'] = self.request.GET.getlist('fduration')
-        if self.search_params.getlist('fmode'):
-            context['mode'] = self.request.GET.getlist('fmode')
-        if self.search_params.getlist('fprice'):
-            context['price'] = self.request.GET.getlist('fprice')
+        
+        facet_context_param_mapping = {'fclevel':'clevel',
+                                    'fcert':'cert',
+                                    'frating':'rating',
+                                    'farea':'areaf',
+                                    'fduration':'duration',
+                                    'fmode':'mode',
+                                    'fprice':'price',
+                                    'fvid': 'vid'
+                                    }
+
+        for facet,context_param in facet_context_param_mapping.items():
+            context[context_param] = self.request.GET.getlist(facet)
+            
         context['breadcrumbs'] = self.get_breadcrumbs()
         context['products_found'] = self.found
-        context['show_chat'] = True,
+        context['show_chat'] = True
         return context
 
     def build_page(self):
@@ -345,10 +415,6 @@ class SearchListView(SearchBaseView):
     def prepare_response(self):
         self.keywords = self.args
         current_url = resolve(self.request.path_info).url_name
-        if current_url == 'search_listing' and not self.request.GET:
-            return HttpResponsePermanentRedirect(
-                reverse('search:recommended_listing',
-                kwargs={'f_area': 'it-software', 'skill': 'development'}))
         return super(SearchListView, self).prepare_response()
 
     def get_breadcrumbs(self):
@@ -366,14 +432,12 @@ class SearchListView(SearchBaseView):
         request_get.update(self.request.POST)
         self.request_get = request_get
         context = super(SearchListView, self).get_extra_context()
-
         context['track_query_dict'] = self.track_query_dict.urlencode()
         context.update({"search_type": "simple"})
         return context
 
     def prepare_track(self, page):
         self.track_query_dict = QueryDict(self.search_params.urlencode()).copy()
-
         self.track_query_dict['template'] = 'psrp_impressions'
 
     def build_page(self):

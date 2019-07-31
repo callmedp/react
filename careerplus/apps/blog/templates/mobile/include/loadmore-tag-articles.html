@@ -8,7 +8,7 @@
         {% if obj.image %}
             <figure class="media-left">
                 {% thumbnail obj.image "96x73" crop="center" as im %}
-                   <img class="media-object w-auto" src="{{im.url}}" width="{{ im.width }}" height="{{ im.height }}" alt="...">
+                   <img aria-label="..." class="media-object w-auto" src="{{im.url}}" width="{{ im.width }}" height="{{ im.height }}" alt="...">
                 {% endthumbnail %}
             </figure>
         {% endif %}

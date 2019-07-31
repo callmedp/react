@@ -55,36 +55,38 @@ handler404 = 'users.views.page_not_found'
 handler500 = 'users.views.server_error'
 
 course_sitemap = {
-   'course': CourseSitemap,
-   'skill': SkillSitemap,
-   'category': CategorySitemap
+    'course': CourseSitemap,
+    'skill': SkillSitemap,
+    'category': CategorySitemap
 }
 
 service_sitemap = {
-   'service': ServiceSitemap,
+    'service': ServiceSitemap,
 }
 
 article_sitemap = {
-   'article': ArticleSitemap,
-   'category': ArticleCategorySitemap,
+    'article': ArticleSitemap,
+    'category': ArticleCategorySitemap,
 }
 
 cms_sitemap = {
-   'service': CMSSitemap,
+    'service': CMSSitemap,
 }
 
 talent_sitemap = {
-   'talenteconomy': TalentEconomySitemap,
-   'category': TalentCategorySitemap,
-   'author': TalentAuthorSitemap
+    'talenteconomy': TalentEconomySitemap,
+    'category': TalentCategorySitemap,
+    'author': TalentAuthorSitemap
 }
 
-#Library Patches
+
+# Library Patches
 from .startup_script import apply_patch
+
 apply_patch()
 
-urlpatterns = [url(r'^services/%s/%s/$' %(cat_slug,cat_id),
-        ServiceDetailPage.as_view())  for cat_id,cat_slug in settings.SERVICE_PAGE_ID_SLUG_MAPPING.items()]
+urlpatterns = [url(r'^services/%s/%s/$' % (cat_slug, cat_id),
+                   ServiceDetailPage.as_view()) for cat_id, cat_slug in settings.SERVICE_PAGE_ID_SLUG_MAPPING.items()]
 
 # Product Detail URLs
 urlpatterns += [
@@ -147,9 +149,10 @@ def get_urls():
     urls += [
         url(r'^autologintoken/$',
             admin.site.admin_view(UserLoginTokenView.as_view())),
-        url(r'^shownumberfield/$',admin.site.admin_view(ShowNumberField.as_view()))
+        url(r'^shownumberfield/$', admin.site.admin_view(ShowNumberField.as_view()))
     ]
     return urls
+
 
 admin.site.get_urls = get_urls
 
@@ -157,6 +160,8 @@ urlpatterns += [
                    url(r'^admin/', include(admin.site.urls)),
                    url(r'^api-auth/',
                        include('rest_framework.urls', namespace='rest_framework')),
+                   # cart rest apis
+                   # url(r'^api/v1/cart/', include('cart.api.v1.urls', namespace="cart-api")),
                    url(r'api/v1/', include('shop.api.v1.urls', namespace='shop-api')),
                    url(r'^$', homepage_view.HomePageView.as_view(), name='homepage'),
                    url(r'^console/', include('console.urls', namespace='console')),
@@ -166,7 +171,6 @@ urlpatterns += [
                    url(r'^article/', include('blog.urls', namespace='blog')),
                    url(r'^talenteconomy/', include('talenteconomy.urls', namespace='talent')),
                    url(r'^hr-insider/', include('hrinsider.urls', namespace='hrinsider')),
-
                    url(r'^cart/', include('cart.urls', namespace='cart')),
                    url(r'^order/', include('order.urls', namespace='order')),
                    url(r'^geolocation/', include('geolocation.urls', namespace='geolocation')),
@@ -186,7 +190,7 @@ urlpatterns += [
                    url(r'^autologin/(?P<token>.+)/$', AutoLoginView.as_view(), name='autologin'),
                    url(r'^linkedin/login/$',
                        LinkedinCallbackView.as_view(), name='linkedin-login'),
-    url(r'^api/v1/resume/', include('resumebuilder.api.v1.urls', namespace='resume_builder')),
+                   url(r'^api/v1/resume/', include('resumebuilder.api.v1.urls', namespace='resume_builder')),
 
                    url(r'^api/', include('api.urls', namespace='api')),
 
@@ -217,9 +221,9 @@ urlpatterns += [
                    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 
                    # entry point for react template
-                   url(r'^resume-builder/', WriteResumeView.as_view())
+                   url(r'^resume-builder/', WriteResumeView.as_view()),
 
-] + static(
+               ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
 ) + static(
     settings.STATIC_URL, document_root=settings.STATIC_ROOT
@@ -232,11 +236,14 @@ if settings.DEBUG:
     from rest_framework.schemas import SchemaGenerator
     from rest_framework.views import APIView
     from rest_framework_swagger import renderers
+    from rest_framework_swagger.views import get_swagger_view
+
+    schema_view = get_swagger_view(title='Shine Learning API Docs')
 
 
     class SwaggerSchemaView(APIView):
         renderer_classes = [
-            renderers.OpenAPIRenderer,
+        #     renderers.OpenAPIRenderer,
             renderers.SwaggerUIRenderer
         ]
 
@@ -252,13 +259,11 @@ if settings.DEBUG:
 
     urlpatterns = [
                       url(r'^__debug__/', include(debug_toolbar.urls)),
-                      url(r'^api-docs/', SwaggerSchemaView.as_view()),
+                      url(r'^api-docs/', schema_view),
                   ] + urlpatterns
-
 
 import logging
 from sorl.thumbnail.log import ThumbnailLogHandler
-
 
 handler = ThumbnailLogHandler()
 handler.setLevel(logging.ERROR)

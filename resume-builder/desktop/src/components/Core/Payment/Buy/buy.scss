@@ -36,6 +36,17 @@
     color: $black;
   }
 
+  .choose-plan-txt {
+      font-size: 1.4rem;
+      color: $black;
+      margin: 10px 0 0 15px;
+      display: block;
+
+      strong {
+        font-weight: 600;
+      } 
+    }
+
   ul {
     list-style-type: none;
     margin: 20px 0;
@@ -47,7 +58,7 @@
       font-size: 1.6rem;
       color: $txt1;
       display: block;
-      padding: 25px 15px;
+      padding: 18px 15px;
 
       span {
         display: inline-block;

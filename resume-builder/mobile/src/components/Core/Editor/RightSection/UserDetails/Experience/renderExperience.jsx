@@ -15,6 +15,7 @@ const renderExperiences = ({
                                meta: {touched, error, submitFailed},
                                handleSubmit,
                                handleAddition,
+                                eventClicked,
                                deleteExperience,
                                changeOrderingUp,
                                changeOrderingDown,
@@ -52,7 +53,7 @@ const renderExperiences = ({
                 </div>
                 {!editHeading ?
                     <button role="button"
-                            onClick={handleSubmit(handleAddition.bind(this, fields, experienceNewData(fields), 780, 'experience'))}
+                            onClick={handleSubmit(handleAddition.bind(this, fields, experienceNewData(fields), 780, 'experience',eventClicked,'Experience'))}
                             type={'button'} className="btn btn__round btn--outline">+ Add new</button> : ''
                 }
             </div>
@@ -158,7 +159,7 @@ const renderExperiences = ({
                             <li className="form__group">
                                 <Field component={renderTextArea} type={"textarea"} name={`${member}.work_description`}
                                        label={'Description'}
-                                       className="form__input h-150" rows="5" maxLength={'400'}
+                                       className="form__input h-150" rows="5" maxLength={'1000'}
                                        id={`${member}.work_description`}
                                 />
                                 <p className="add-suggested" onClick={event => {

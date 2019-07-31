@@ -5,10 +5,10 @@
         <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
             {% for ref in references %}
                 <li style="vertical-align: top; margin: 10px 0;">
-                    <span style="width: 8px; height: 8px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: middle;"></span>
+                    <span style="vertical-align: top; width: 8px; height: 8px; border-radius: 100%; background: {{ current_config.color|background_color_choice }}; display: inline-block; margin-right: 10px; vertical-align: middle;"></span>
                     <span style="display: inline-block; width: 73%; vertical-align: top;">
-          <strong style="display: block; font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #333333;">{{ ref.reference_name }}  <span
-                  style="font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', 'Arial', 'sans-serif';font-size: {{ current_config.text_font_size|text_font_size }}px; color: #777777; display: inline-block; font-weight: normal;">({{ ref.reference_designation }})</span> </strong>
+          <strong style="vertical-align: top; overflow:hidden; display: block; font-size: {{ current_config.text_font_size|sub_heading_font_size }}px; color: #333333;">{{ ref.reference_name }}  <span
+                  style="font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', 'Arial', 'sans-serif';font-size: {{ current_config.text_font_size|text_font_size }}px; color: #777777; display: inline; font-weight: normal;">({{ ref.reference_designation }})</span> </strong>
                         {% if ref.about_candidate %}
                             {{ ref.about_candidate }}
                         {% endif %}

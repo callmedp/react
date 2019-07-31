@@ -9,34 +9,47 @@ import RightSection from './RightSection/rightSection.jsx'
 import {withRouter} from "react-router-dom";
 import LoaderPage from "../../Loader/loaderPage.jsx";
 import * as actions from "../../../store/ui/actions"
-import {customizeTemplate, fetchDefaultCustomization, reorderSection} from "../../../store/template/actions"
+import {
+    customizeTemplate,
+    fetchDefaultCustomization,
+    reorderSection,
+    reGeneratePDF
+} from "../../../store/template/actions"
 import * as profileActions from "../../../store/personalInfo/actions"
 import SelectTemplateModal from '../../Modal/selectTemplateModal';
-import {showAlertModal, hideAlertModal,previewButtonClicked} from '../../../store/ui/actions/index'
+import {
+    showAlertModal,
+    hideAlertModal,
+    previewButtonClicked,
+    showGenerateResumeModal,
+    hideGenerateResumeModal
+} from '../../../store/ui/actions/index'
 import moment from 'moment'
+import {locationRouteChange, eventClicked} from '../../../store/googleAnalytics/actions/index'
 
 class EditPreview extends Component {
 
     componentDidMount() {
-        this.props.fetchEntityInfo();
-        if(localStorage.getItem('personalInfo')){
-            localStorage.setItem('newUser',true)
+        const {analytics: {locationPath}, fetchEntityInfo, history: {location: {pathname}}, locationRouteChange} = this.props
+        fetchEntityInfo();
+        if (localStorage.getItem('personalInfo')) {
+            localStorage.setItem('newUser', true)
         }
     }
 
-
     render() {
-        const {ui: {loader}, userInfo: {first_name}} = this.props;
+        const {ui: {loader}, userInfo: {first_name, last_name, number, email}} = this.props;
         return (
-            /*
-            * @desc Top Bar component
-            * */
             <div>
                 {
                     !!(loader) &&
                     <LoaderPage/>
                 }
-                <Header userName={first_name}/>
+                <Header
+                    userName={first_name}
+                    lastName={last_name}
+                    number={number}
+                    email={email}/>
                 <div className="page-container">
                     <SelectTemplateModal {...this.props} page={'edit'}/>
                     <TopBar {...this.props}/>
@@ -57,7 +70,8 @@ const mapStateToProps = (state) => {
     return {
         ui: state.ui,
         userInfo: state.personalInfo,
-        template: state.template
+        template: state.template,
+        analytics: state.analytics
     }
 }
 
@@ -78,7 +92,7 @@ const mapDispatchToProps = (dispatch) => {
         },
         "fetchDefaultCustomization": (templateId) => {
             return new Promise((resolve, reject) => {
-                return dispatch(fetchDefaultCustomization({templateId, resolve,reject}))
+                return dispatch(fetchDefaultCustomization({templateId, resolve, reject}))
             })
         },
         "updateSelectedTemplate": (personalDetails) => {
@@ -107,6 +121,21 @@ const mapDispatchToProps = (dispatch) => {
         },
         'previewButtonClicked': (data) => {
             return dispatch(previewButtonClicked(data))
+        },
+        'reGeneratePDF': (data) => {
+            return dispatch(reGeneratePDF(data))
+        },
+        'showGenerateResumeModal': () => {
+            return dispatch(showGenerateResumeModal())
+        },
+        'hideGenerateResumeModal': () => {
+            return dispatch(hideGenerateResumeModal())
+        },
+        'locationRouteChange': (path) => {
+            return dispatch(locationRouteChange(path))
+        },
+        'eventClicked': (data) => {
+            return dispatch(eventClicked(data))
         }
     }
 }

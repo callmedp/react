@@ -6,7 +6,6 @@ import AsyncCreatableSelect from 'react-select/lib/AsyncCreatable';
 import Select from 'react-select';
 import makeAnimated from 'react-select/lib/animated';
 import moment from 'moment';
-import {Field} from "redux-form";
 
 
 export const renderField = ({
@@ -20,6 +19,7 @@ export const renderField = ({
                                 iconClass,
                                 autoFocus,
                                 maxLength,
+                                disabled,
                                 meta: {touched, error, warning}
                             }) => {
     return (
@@ -31,7 +31,7 @@ export const renderField = ({
                     <input {...input} className={className}
 
                            onClick={(e) => tillTodayDisable(index, !input.checked, e)}
-                           maxLength={maxLength}
+                           maxLength={maxLength} disabled={disabled}
                            autoComplete="off" placeholder={label} type={type}/>
                     {
                         !!(text) && <span>{text}</span>
@@ -47,7 +47,7 @@ export const renderField = ({
                     </div>
                     <div className={"Error " + (touched && error ? 'errormsg' : '')}>
                         <input
-                            {...input}
+                            {...input} disabled={disabled}
                             autoFocus={autoFocus} maxLength={maxLength}
                             className={className} autoComplete="off" placeholder={label} type={type}/>
                         {touched &&
@@ -312,7 +312,37 @@ export const renderTextArea = ({
         }
 
     </React.Fragment>
-
-
 )
+
+
+export const feedbackRenderField = ({
+                                        input,
+                                        label,
+                                        type,
+                                        className,
+                                        meta: {touched, error, warning}
+                                    }) => {
+    return (
+        <React.Fragment>
+            {
+                <div className="feedback-input">
+                    <div className={(touched && error ? "fedback-input-error" : '')}>
+                        <input {...input}
+                               className={className}
+                               autoComplete="off"
+                               placeholder={label}
+                               type={type}/>
+                    </div>
+                    <div>
+                        {touched && ((error && <span className={'error-feedback'}>{error}</span>))}
+                    </div>
+                </div>
+            }
+        </React.Fragment>
+    )
+};
+
+
+
+
 

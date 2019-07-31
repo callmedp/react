@@ -254,13 +254,13 @@ CP_VENDOR_ID = '12345'
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'core.library.haystack.custom_solr_backend.CustomSolrEngine',
-        'URL': 'http://172.22.65.33:8983/solr/prdt',  # prdt(staging learning1) # live_prod(staging learing2)
+        'URL': 'http://172.22.67.214:8983/solr/prdt',  # prdt(staging learning1) # live_prod(staging learing2)
         'INCLUDE_SPELLING': False,
     },
 
     'index': {
         'ENGINE': 'core.library.haystack.custom_solr_backend.CustomSolrEngine',
-        'URL': 'http://172.22.65.33:8983/solr/prdt',  # prdt(staging learning1) # live_prod(staging learing2)
+        'URL': 'http://172.22.67.214:8983/solr/prdt',  # prdt(staging learning1) # live_prod(staging learing2)
         'INCLUDE_SPELLING': False,
     }
 }
@@ -397,7 +397,15 @@ URL_SHORTENER_AUTH_DICT = {"access_token":"29d325106d379436d7fbe9dc76844350859d2
                         "end_point":"https://u.shine.com/api/generate-url/"
                         }
 
+WHATS_APP_MESSAGE_FORMAT = '''Here are our job recommendations for this week.<br>
+                        <br>{}Please do not call/reply directly to this message<br><br>In case of any queries, you can call us on  08047105151 or email us at resume@shine.com<br><br>Thanks,<br><br>Team Shine
+                        '''
+
+ROOT_URLCONF = 'careerplus.config.urls'
+
 try:
     from .settings_local import *
 except:
     pass
+
+

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './banner.scss'
-import {Events, animateScroll as scroll, scrollSpy, scroller} from 'react-scroll'
+import {scroller} from 'react-scroll';
 
 export default class Banner extends Component {
 
@@ -12,36 +12,34 @@ export default class Banner extends Component {
 
     }
 
-    scrollTo(elem) {
+    scrollTo(elem, action, label) {
         scroller.scrollTo(elem, {
             duration: 800,
             delay: 0,
             smooth: 'easeInOutQuad',
             offset: -50
         })
-    }
-
-    componentDidMount() {
-
-
-    }
-
-    componentWillUnmount() {
-
+        this.props.eventClicked({
+            action,
+            label
+        })
     }
 
 
     render() {
+        const {userName} = this.props;
+
         return (
             <section className="banner">
                 <h1 className="mt-15">Resume Builder <br/> <strong>by Experts</strong></h1>
-                <p><strong>Amit</strong>, secure the job you want with our
+                <p><strong>{userName || 'Hello'}</strong>, secure the job you want with our
                     resume builder</p>
 
                 <img src={`${this.staticUrl}react/assets/images/mobile/resume-bundel.png`} alt=""
                      className="img-fluid"/>
                 <p className="text-center mt-5">
-                    <a className="btn pt-10 pb-10 btn__round btn__primary btn__shadow" onClick={() => this.scrollTo('templates')}>Build your resume</a>
+                    <a className="btn pt-10 pb-10 btn__round btn__primary btn__shadow"
+                       onClick={() => this.scrollTo('templates', 'BuildResume', 'TopButton')}>Build your resume</a>
                 </p>
                 <ul className="resume-pointer">
                     <li>
@@ -55,6 +53,11 @@ export default class Banner extends Component {
                     <li>
                         <span className="sprite icon--profile mr-5"></span>
                         <span>Resume data fetched from <strong>Shine profile</strong></span>
+                    </li>
+                    <li>
+                        <span className="sprite icon--create-download mr-5"></span>
+                        <span>Use <strong>resume builder for 12 months</strong> to
+                        create unlimited resume</span>
                     </li>
                 </ul>
             </section>

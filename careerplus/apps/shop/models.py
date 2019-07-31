@@ -26,6 +26,8 @@ from mongoengine import Document, ListField, FloatField,\
     StringField, IntField, DateTimeField
 
 from partner.models import Vendor
+from core.models import AbstractCommonModel
+from order.functions import create_short_url
 from review.models import Review
 from faq.models import (
     FAQuestion, ScreenFAQ)
@@ -60,6 +62,7 @@ from .choices import (
     CITY_CHOICES,
     SHINE_FLOW_ACTION,
     convert_to_month,
+    LINK_STATUS_CHOICES,
     convert_inr,
     convert_usd,
     convert_aed,
@@ -942,7 +945,7 @@ class Product(AbstractProduct, ModelMeta):
     avg_rating = models.DecimalField(
         _('Average Rating'),
         max_digits=8, decimal_places=2,
-        default=2.5)
+        default=4.5)
     no_review = models.PositiveIntegerField(
         _('No. Of Review'), default=0)
     buy_count = models.PositiveIntegerField(
@@ -1124,16 +1127,12 @@ class Product(AbstractProduct, ModelMeta):
         cache.set(cache_key, data, 7*24*60*60)
         return data
 
-
     def get_category_main(self,no_cache=False):
         cache_key = "category_main_" + str(self.pk)
         cached_data = cache.get(cache_key)
         if cached_data and not no_cache:
             return cached_data
         return self.category_main
-
-
-
 
     def category_attached(self):
         main_prod_cat = self.categories.filter(
@@ -3175,5 +3174,76 @@ class ShineProfileData(AbstractAutoDate):
         verbose_name=_('Vendor'),
         related_name='vendor'
     )
+
     class Meta:
         unique_together = ('type_flow', 'sub_type_flow', 'vendor')
+
+
+class ProductUserProfile(AbstractAutoDate):
+    order_item = models.OneToOneField(
+        'order.OrderItem', related_name='whatsapp_profile_orderitem',
+        verbose_name=_("Order Item"))
+    contact_number = models.CharField(
+        _("Contact number"), max_length=50)
+    desired_industry = models.CharField(max_length=255, blank=True, null=True)
+    desired_location = models.CharField(max_length=255, blank=True, null=True)
+    desired_position = models.CharField(max_length=255, blank=True, null=True)
+    desired_salary = models.CharField(max_length=50, blank=True, null=True)
+    current_salary = models.CharField(max_length=50, blank=True, null=True)
+    experience = models.CharField(max_length=50, blank=True, null=True)
+    skills = models.CharField(max_length=100, blank=True, null=True)
+    approved = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(ProductUserProfile, self).save(*args, **kwargs)
+        obj = self.order_item
+        if obj and self.approved:
+            if not obj.orderitemoperation_set.filter(oi_status=31).exists():
+                last_oi_status = obj.oi_status
+                obj.orderitemoperation_set.create(
+                    oi_status=31,
+                    last_oi_status=last_oi_status,
+                    assigned_to=obj.assigned_to,
+                    added_by=user
+                )
+                obj.oi_status = 31
+                obj.save()
+
+
+class JobsLinks(AbstractCommonModel, AbstractAutoDate):
+    schedule_date = models.DateTimeField(
+        _('Date'), blank=True, null=True)
+    company_name = models.CharField(max_length=255)
+    location = models.CharField(max_length=50)
+    link = models.URLField(max_length=2000)
+    job_title = models.CharField(max_length=100)
+    status = models.PositiveSmallIntegerField(choices=LINK_STATUS_CHOICES, default=0)
+    oi = models.ForeignKey(
+        'order.OrderItem', related_name='jobs_link',
+        verbose_name=_("Order Item"))
+    sent_date = models.DateTimeField(
+        _('Date'), blank=True, null=True)
+
+    class Meta:
+        unique_together = [['oi', 'link']]
+
+
+    @property
+    def formatted_sent_date(self):
+        sent_date = self.sent_date.strftime('%d-%m-%Y') if self.sent_date else ''
+        return sent_date
+
+    @property
+    def shorten_url(self):
+        if self.link:
+            login_url = {'upload_url': self.link}
+            shorten_url = create_short_url(login_url=login_url)
+            return shorten_url.get('url', '')
+        return ''
+
+    def __str__(self):
+        schedule_date = self.schedule_date.strftime('%d-%m-%Y') if self.schedule_date else ''
+        return str(self.company_name) + ' - ' + str(self.get_status_display()) +' ' + schedule_date
+
+

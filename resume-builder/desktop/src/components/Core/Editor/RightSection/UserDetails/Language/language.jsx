@@ -11,6 +11,7 @@ import 'react-accessible-accordion/dist/fancy-example.css';
 import {scroller} from "react-scroll/modules";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
+import {siteDomain} from '../../../../../../Utils/domains'
 
 class Language extends Component {
     constructor(props) {
@@ -49,13 +50,14 @@ class Language extends Component {
     }
 
     async updateInfoBeforeLoss(){
-        let { initialValues, formData: {Language: {values, syncErrors}}} = this.props;
+        let { initialValues, formData: {language: {values, syncErrors}}} = this.props;
         let error = false;
         (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el || {}).map(key => (!!el[key] ? error = true : false)))
         if (!error && !this.state.submit && JSON.stringify(initialValues)!==JSON.stringify(values)) await this.props.bulkUpdateOrCreate(values && values['list']);
     }
 
     async handleSubmit(values, entityLink) {
+        const {userInfo:{order_data},hideGenerateResumeModal,showGenerateResumeModal,history,reGeneratePDF} = this.props
         const {list} = values;
         if (list.length) {
             await this.props.bulkUpdateOrCreate(list);
@@ -63,7 +65,17 @@ class Language extends Component {
                 submit: true
             })
             if (entityLink) this.props.history.push(entityLink);
-            else this.props.history.push('/resume-builder/buy/')
+            else if(order_data && order_data.id){
+            showGenerateResumeModal()
+            reGeneratePDF(order_data.id)
+            setTimeout(function() {
+                window.location.href = `${siteDomain}/dashboard`
+                hideGenerateResumeModal()
+            }, 5000);
+        }
+        else{
+            history.push(`/resume-builder/buy`) 
+        }
         }
     }
 
@@ -86,6 +98,10 @@ class Language extends Component {
             offset: 0,
             containerId: 'language'
         })
+        this.props.eventClicked({
+            'action':'AddNew',
+            'label':'Languages'
+        })
     }
 
 
@@ -105,8 +121,8 @@ class Language extends Component {
 
     render() {
         const {
-            handleSubmit, ui: {loader}, isEditable,
-            editHeading, saveTitle, entityName, nextEntity,
+            handleSubmit,userInfo:{order_data}, ui: {loader}, isEditable,
+            editHeading, saveTitle, entityName, nextEntity,eventClicked,
             showAlertModal,history, changeOrderingUp, changeOrderingDown, handleInputValue
         } = this.props;
         return (
@@ -122,7 +138,7 @@ class Language extends Component {
                     changeOrderingDown={changeOrderingDown}
                     component={LanguageRenderer}
                     saveTitle={(event) => saveTitle(event, 9)}
-                    editHeading={(value) => editHeading(value)}
+                    editHeading={() => editHeading(9)}
                     isEditable={isEditable}
                     entityName={entityName}
                     expanded={this.state.active}
@@ -131,8 +147,8 @@ class Language extends Component {
                 />
 
                 <SavePreviewButtons 
-                        showAlertModal={showAlertModal} context={this} history={history}
-                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data} form_name={'Languages'}
+                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss} eventClicked={eventClicked}
                     />
             </form>
         )

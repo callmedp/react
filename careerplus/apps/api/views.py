@@ -16,7 +16,8 @@ from rest_framework import status
 from rest_framework.permissions import (
     IsAuthenticated,
     IsAdminUser, )
-from rest_framework.generics import ListAPIView, CreateAPIView
+
+from rest_framework.generics import ListAPIView, CreateAPIView,RetrieveAPIView
 from rest_framework.authentication import SessionAuthentication
 from haystack import connections
 from haystack.query import SearchQuerySet
@@ -51,13 +52,16 @@ from .serializers import (
     RecommendedProductSerializerSolr,
     MediaUploadSerializer,
     ResumeBuilderProductSerializer,
+    ShineDataFlowDataSerializer,
     VendorCertificateSerializer,
     ImportCertificateSerializer,
     ShineDataFlowDataSerializer,
-    CertificateSerializer,TalentEconomySerializer,QuestionAnswerSerializer)
+    CertificateSerializer,TalentEconomySerializer,QuestionAnswerSerializer,OrderDetailSerializer)
 
 from partner.models import Certificate, Vendor
 from shared.rest_addons.pagination import LearningCustomPagination
+
+from shared.rest_addons.permissions import OrderAccessPermission
 from shared.rest_addons.authentication import ShineUserAuthentication
 from shared.rest_addons.mixins import (SerializerFieldsMixin, FieldFilterMixin)
 
@@ -444,7 +448,7 @@ class EmailLTValueApiView(APIView):
             return Response(
                 {"status": "FAIL", "msg": "Email or User Doesn't Exists"},
                 status=status.HTTP_400_BAD_REQUEST)
-        
+
         ltv_pks = list(Order.objects.filter(
             candidate_id=candidate_id,
             status__in=[1,2,3]).values_list('pk', flat=True))
@@ -728,7 +732,7 @@ class RecommendedProductsCategoryView(APIView):
             status=status.HTTP_200_OK)
 
 
-from .tasks import cron_initiate
+from .tasks import cron_initiate, create_assignment_lead
 from .config import CRON_TO_ID_MAPPING
 
 
@@ -848,6 +852,30 @@ class ShineCandidateLoginAPIView(APIView):
 
         return data
 
+    def get_existing_order_data(self,candidate_id):
+        from order.models import Order
+
+        product_found = False
+        order_data = {}
+        order_obj_list = Order.objects.filter(candidate_id=candidate_id,status__in=[1,3])
+
+        if not order_obj_list:
+            return order_data
+
+        for order_obj in order_obj_list:
+            if product_found:
+                break
+
+            for item in order_obj.orderitems.all():
+                if item.product and item.product.type_flow == 17 and item.product.type_product == 2:
+                    order_data = {"id":order_obj.id,
+                    "combo":True if item.product.id != settings.RESUME_BUILDER_NON_COMBO_PID else False
+                    }
+                    product_found = True
+                    break
+
+        return order_data
+
     def get_response_for_successful_login(self, candidate_id, login_response):
         candidate_obj = ShineCandidate(**login_response)
         candidate_obj.id = candidate_id
@@ -857,7 +885,8 @@ class ShineCandidateLoginAPIView(APIView):
         data_to_send = {"token": token,
                         "candidate_id": candidate_id,
                         "candidate_profile": self.customize_user_profile(login_response),
-                        "entity_status": self.get_entity_status_for_candidate(candidate_id)
+                        "entity_status": self.get_entity_status_for_candidate(candidate_id),
+                        "order_data":self.get_existing_order_data(candidate_id)
                         # TODO make param configurable
                         }
         self.request.session.update(login_response)
@@ -1103,7 +1132,7 @@ class UpdateCertificateAndAssesment(APIView):
 
     def post(self, request, *args, **kwargs):
         certificate_updated = False
-        subject = "You have not cleared the test"
+        subject = "Sorry, You have not cleared the test."
         vendor_name = self.kwargs.get('vendor_name')
         data = request.data
         logging.getLogger('info_log').error(
@@ -1167,13 +1196,12 @@ class UpdateCertificateAndAssesment(APIView):
                         last_oi_status=last_oi_status,
                         assigned_to=oi.assigned_to
                     )
-                    subject = "{} on completing the certification on {}>".format(
+                    subject = "Congrats, {} on completing the certification on {}".format(
                         oi.order.first_name, oi.product.name
                     )
             to_emails = [oi.order.get_email()]
             mail_type = "CERTIFICATE_AND_ASSESMENT"
             data = {}
-
             data.update({
                 "username": oi.order.first_name,
                 "subject": subject,
@@ -1181,8 +1209,11 @@ class UpdateCertificateAndAssesment(APIView):
                 "skill_name": ', '.join(
                     list(ProductSkill.objects.filter(product=oi.product).values_list('skill__name', flat=True))
                 ),
-                "certificate_updated": certificate_updated
+                "certificate_updated": certificate_updated,
+                "score": parsed_data.assesment.overallScore,
+
             })
+            create_assignment_lead.delay(obj_id=oi.id)
             send_email_task.delay(to_emails, mail_type, data, status=201, oi=oi.pk)
             oi.orderitemoperation_set.create(
                 oi_status=oi.oi_status,
@@ -1225,11 +1256,11 @@ class VendorCertificateMappingApiView(ListAPIView):
     queryset = Vendor.objects.all()
     serializer_class = VendorCertificateSerializer
     pagination_class = None
-    filter_backends = (DjangoFilterBackend,)
-    filter_fields = ('name',)
 
     def get_queryset(self):
         queryset = super(self.__class__, self).get_queryset()
+        name = self.request.GET.get('name', '')
+        queryset = queryset.filter(slug=name)
         return queryset.exclude(certificate=None)
 
     def get(self, request, *args, **kwargs):
@@ -1341,6 +1372,27 @@ class TalentEconomyApiView(FieldFilterMixin,ListAPIView):
         if visibility:
             filter_dict.update({'visibility': visibility})
         return Blog.objects.filter(**filter_dict)
+
+
+class OrderDetailApiView(FieldFilterMixin,RetrieveAPIView):
+    permission_classes = [IsAuthenticated,OrderAccessPermission]
+    authentication_classes = [SessionAuthentication]
+    serializer_class = OrderDetailSerializer
+    queryset = Order.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        instance = self.get_object()
+        user = self.request.user
+        current_time = datetime.datetime.now().strftime("%d %B %Y %I:%M:%S %p")
+        fields_to_check = self.get_required_fields()
+        fields_to_log = ['email', 'alt_email', 'mobile', 'alt_mobile']
+        for field in fields_to_log:
+            if field not in fields_to_check:
+                continue
+            logging.getLogger('info_log').info('Order Data Accessed - {},{},{},{},{},{}'.format(current_time,\
+        user.id, user.get_full_name(), getattr(instance, 'number', 'None'), field, getattr(instance, field, 'None')))
+        return self.retrieve(request, *args, **kwargs)
+
 
 class CandidateInsight(APIView):
     authentication_classes = [OAuth2Authentication]

@@ -992,7 +992,7 @@ class UserGroupMixin(object):
                 if gname not in user_groups:
                     return False
             return True
-        return False
+        return True
 
     def user_check_failed(self, request, *args, **kwargs):
         return HttpResponseRedirect(self.user_check_failure_path)
@@ -1004,14 +1004,18 @@ class UserGroupMixin(object):
 
 class UserPermissionMixin(object):
     permission_to_check = []
+    any_permission = False
 
     def check_permission(self, user):
-        if user.is_superuser:
+        if user.is_superuser or not self.permission_to_check:
             return True
         user_perms = user.user_permissions.values_list('name', flat=True)
+        if self.any_permission:
+            return any([perm in user_perms for perm in self.permission_to_check])
         return all([perm in user_perms for perm in self.permission_to_check])
 
     def dispatch(self, request, *args, **kwargs):
         if not self.check_permission(request.user):
             raise PermissionDenied()
         return super(UserPermissionMixin, self).dispatch(request, *args, **kwargs)
+

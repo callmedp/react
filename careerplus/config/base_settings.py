@@ -149,7 +149,8 @@ TEMPLATES = [
                 'sekizai.context_processors.sekizai',
                 'core.context_processors.js_settings',
                 'core.context_processors.marketing_context_processor',
-                'core.context_processors.getSearchSet'
+                'core.context_processors.getSearchSet',
+                'core.context_processors.get_console_sidebar_badges'
             ],
             'loaders': ([
                 # ('django_mobile.loader.CachedLoader', [
@@ -308,7 +309,7 @@ ACCESSKEY = 'Af7fa4f7dacdc996393c18071b57d0a6f'
 ########## DOMAIN SETTINGS ######################
 SITE_DOMAIN = 'learning.shine.com'
 SITE_PROTOCOL = 'https'
-MAIN_DOMAIN_PREFIX = '{}://{}'.format(SITE_PROTOCOL, SITE_DOMAIN) #'http://learning.shine.com'
+MAIN_DOMAIN_PREFIX = '{}://{}'.format(SITE_PROTOCOL, SITE_DOMAIN)  # 'http://learning.shine.com'
 MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
 SITE_ID = 1
 CART_MAX_LIMIT = 5
@@ -343,7 +344,7 @@ ENCODE_SALT = 'xfxa'
 
 # Url Shortner
 URL_SHORTENER_API = 'https://www.googleapis.com/urlshortener/v1/url'
-URL_SHORTENER_ACCESS_KEY='AIzaSyBtmK_SIBfhb_hXkgLlfk7IwVlnKZxTb2I'
+URL_SHORTENER_ACCESS_KEY = 'AIzaSyBtmK_SIBfhb_hXkgLlfk7IwVlnKZxTb2I'
 
 # resume writing India product List
 RESUME_WRITING_INDIA = [2]
@@ -384,15 +385,15 @@ LOGGING = {
             'formatter': 'simple'
         },
         'syslog': {
-         'level': 'DEBUG',
-         'class': 'logging.handlers.SysLogHandler',
-         'facility': 'local4',
-         'formatter': 'verbose'
-       },
+            'level': 'DEBUG',
+            'class': 'logging.handlers.SysLogHandler',
+            'facility': 'local4',
+            'formatter': 'verbose'
+        },
     },
     'loggers': {
         # root logger
-        '':{
+        '': {
             'handlers': ['console', 'syslog'],
             'level': 'INFO',
             'disabled': False
@@ -486,7 +487,8 @@ CMS_GROUP_LIST = ['CMS_USER']
 SKILL_GROUP_LIST = ['SKILL_USER']
 COURSE_GROUP_LIST = ['COURSE_USER']
 SERVICE_GROUP_LIST = ['SERVICE_USER']
-USER_QUERY_GROUP_LIST = CMS_GROUP_LIST + SKILL_GROUP_LIST + COURSE_GROUP_LIST + SERVICE_GROUP_LIST
+ASSIGNMENT_GROUP_LIST = ['ASSIGNMENT_USER']
+USER_QUERY_GROUP_LIST = CMS_GROUP_LIST + SKILL_GROUP_LIST + COURSE_GROUP_LIST + SERVICE_GROUP_LIST + ASSIGNMENT_GROUP_LIST
 
 # Marketing User Auto login token Generation
 MARKETING_GROUP_LIST = ['MARKETING']
@@ -525,29 +527,30 @@ MAINTENANCE_MESSAGE = "This site will be under maintenance from 9 pm to 12 pm on
 
 ############ MARKETING PAGES MAPPING WITH ID
 
-URL_MAPPING_TO_PRODUCT = {"resume-writing-services-1": ([1921,1922,1923,1924,32],1921)
-                            ,"linkedin-1": ([1926,1925,1927,1928,33],1926),
-                            "aws-cert": ([3133],3133),
-                            "ban-cert":([3133],3133),
-                            "data-scientist":([3417],3417),
-                            "ifrs-cert":([1880],1880),
-                            "gst-certification":([1810],1810),
-                            "data-science":([3417],3417),
-                            "six-sigma":([3400],3400),
-                            "linkedin":([1926],1926)
+URL_MAPPING_TO_PRODUCT = {"resume-writing-services-1": ([1921, 1922, 1923, 1924, 32], 1921)
+    , "linkedin-1": ([1926, 1925, 1927, 1928, 33], 1926),
+                          "aws-cert": ([3133], 3133),
+                          "ban-cert": ([3133], 3133),
+                          "data-scientist": ([3417], 3417),
+                          "ifrs-cert": ([1880], 1880),
+                          "gst-certification": ([1810], 1810),
+                          "data-science": ([3417], 3417),
+                          "six-sigma": ([3400], 3400),
+                          "linkedin": ([1926], 1926),
+                          'devops-professional': ([4131],4131),
 
                           }
 
-LOCAL_NETWORK_IPS_RANGE =[ "59.160.104.0/24", "220.227.160.128/25", "122.177.0.0/16", "172.22.65.0/24",
-    "125.23.128.20/30", "59.144.72.128/28", "203.145.175.0/28", "103.248.118.192/28"]
+LOCAL_NETWORK_IPS_RANGE = ["59.160.104.0/24", "220.227.160.128/25", "122.177.0.0/16", "172.22.65.0/24",
+                           "125.23.128.20/30", "59.144.72.128/28", "203.145.175.0/28", "103.248.118.192/28"]
 
-LOCAL_NETWORK_IPS = [ "172.16.64.80","125.19.44.195","124.124.86.138","115.112.32.194","115.254.3.5",
-    "59.160.104.254","59.160.104.5","103.245.33.42","172.16.64.105","111.93.231.2",
-    "122.160.111.100","59.160.104.254","59.160.104.248","122.15.40.51","125.19.44.195",
-    "122.15.29.195","59.160.104.150","122.15.44.233","103.248.118.194","106.215.170.236",
-    "182.64.252.176","125.17.83.97","220.225.255.161","118.102.181.219","220.227.36.202",
-    "202.164.38.195","122.162.129.43","192.168.1.5","223.179.134.80","223.179.151.72",
-    "122.162.42.142","171.79.76.124"]
+LOCAL_NETWORK_IPS = ["172.16.64.80", "125.19.44.195", "124.124.86.138", "115.112.32.194", "115.254.3.5",
+                     "59.160.104.254", "59.160.104.5", "103.245.33.42", "172.16.64.105", "111.93.231.2",
+                     "122.160.111.100", "59.160.104.254", "59.160.104.248", "122.15.40.51", "125.19.44.195",
+                     "122.15.29.195", "59.160.104.150", "122.15.44.233", "103.248.118.194", "106.215.170.236",
+                     "182.64.252.176", "125.17.83.97", "220.225.255.161", "118.102.181.219", "220.227.36.202",
+                     "202.164.38.195", "122.162.129.43", "192.168.1.5", "223.179.134.80", "223.179.151.72",
+                     "122.162.42.142", "171.79.76.124"]
 
 MEDIA_ALLOWED_CONTENT_TYPES = ['image/jpeg', 'image/jpg', 'image/gif', 'image/png', 'image/svg', 'image/svg+xml', \
                                'video/x-flv', 'video/mp4', 'application/x-mpegURL', 'video/MP2T', 'video/3gpp', \
@@ -564,4 +567,9 @@ RESUME_TEMPLATE_DIR = "resume-builder"
 
 #Haystack Settings
 HAYSTACK_ROUTERS = ['careerplus.config.haystack_routers.MasterSlaveRouter', 'haystack.routers.DefaultRouter']
+
+#JOTM Default Message
+WHATS_APP_MESSAGE_FORMAT = '''Here are our job recommendations for this week.<br>
+                        <br>{}Please do not call/reply directly to this message<br><br>In case of any queries, you can call us on  08047105151 or email us at resume@shine.com<br><br>Thanks,<br><br>Team Shine
+                        '''
 

@@ -12,7 +12,8 @@ const initialState = {
     entity_preference_data : [],
     extracurricular: [],
     extra_info: '',
-    interest_list:['loading...']
+    interest_list:['loading...'],
+    'hide_subscribe_button': false
 
 
 };

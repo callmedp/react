@@ -2,9 +2,9 @@
 <!doctype html>
 <html lang="en">
 <head>
+    <title>Resume</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Resume</title>
     <script src="https://kit.fontawesome.com/85df0f75f9.js"></script>
 </head>
 <body style="margin: 0; padding: 0; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif';">
@@ -24,7 +24,7 @@
             {% if candidate.image %}
                 <span style="display: block; text-align: center; margin-bottom: 10%;">
               <img src="{{ candidate.image }}" width="205" height="205" alt="Resume"
-                   style="border-radius: 100%; margin: 0 auto; text-align: center; width: 205px; height: 205px;">
+                   style="border-radius: 100%; margin: 0 auto; text-align: center; width: 205px; height: 205px; overflow: hidden;">
             </span>
             {% endif %}
 

@@ -435,6 +435,8 @@ class ProductInformationMixin(object):
         ctx['show_chat'] = True
         ctx['product_main'] = product_main,
         ctx['sqs_main'] = sqs_main
+        ctx['prd_vendor_count'] = SQS().filter(pVid=product.vendor.id).\
+            exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).count()
         return ctx
 
     def get_other_detail(self, product, sqs):
@@ -472,10 +474,6 @@ class ProductInformationMixin(object):
             navigation = False
         ctx['navigation'] = navigation
         return ctx
-
-
-
-
 
     def get_product_detail_context(self, product, sqs, product_main, sqs_main):
         main_ctx = {}
@@ -634,9 +632,6 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             return ['shop/assesment.html']
         if not self.request.amp:
             return ['shop/detail1.html']
-        if not settings.DEBUG:
-            from newrelic import agent
-            agent.disable_browser_autorum()
         return ['shop/detail-amp.html']
 
     def get_context_data(self, **kwargs):

@@ -56,7 +56,7 @@ export const formCategoryList = {
 
     },
     '8': {
-        name: 'Courses',
+        name: 'Certifications',
         link: '/resume-builder/edit/?type=course',
         icon: 'icon-courses',
         itemType: 'course',
@@ -80,6 +80,9 @@ export const formCategoryList = {
 
 
     },
+    '11': {
+        name:'Interest'
+    }
 
 };
 
@@ -129,7 +132,7 @@ export const entityList = [
     },
     {
         "entity_id": 8,
-        "entity_text": "Courses",
+        "entity_text": "Certifications",
         "active": false,
         "priority": 8
     },

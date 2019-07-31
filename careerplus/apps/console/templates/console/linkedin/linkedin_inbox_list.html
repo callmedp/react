@@ -8,6 +8,7 @@
 {% endblock title %}
 
 {% block css_block %}
+
     {{block.super}}
 
     {% compress css %}
@@ -255,9 +256,26 @@
                              <span id="orderitempk">({{obj.pk}})</span>
                       </td>
                       <td>
-                        email:{{obj.order.email}}<br>
-                        name:{{obj.order.first_name}}<br>
-                        mobile:{{obj.order.mobile}}
+                      <div>
+                            <div id="email_field{{obj.order.id}}_{{forloop.counter}}"></div>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-primary btn-xs" onclick="order_get_details('{{obj.order.id}}','email,alt_email','email','{{forloop.counter}}');"><i class="fa fa-search" aria-hidden="true"></i>View Email</button>
+                        </div>
+                          <hr style="margin-top: 1px;margin-bottom: 1px;border-top: 1px solid #337ab7;" >
+                        <b>name</b>:{{obj.order.first_name}}
+                           <hr style="margin-top: 1px;
+        margin-bottom: 1px;
+        border-top: 1px solid #337ab7;">
+                        <b>mobile</b>:
+                                <div id="mobile_field{{obj.order.id}}_{{forloop.counter}}"> </div>
+                        {% if exoitel_status%}
+                        <button id="{{obj.order.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{obj.order.id}});"></button>
+                        <span style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{obj.order.id}}callingbtn-error"></span>
+                        {% endif %}
+                        <button type="button" onclick="order_get_details('{{obj.order.id}}','mobile,alt_mobile','mobile','{{forloop.counter}}');" class="btn btn-primary btn-xs"><i class="fa fa-phone" aria-hidden="true"></i>View Mobile</button>
+
+
                       </td>
                       <td>
                           {% if obj.parent and obj.is_variation %}
@@ -449,6 +467,8 @@
   {{ block.super }}
 
   {% compress js %}
+  <script type="text/javascript" src="{% static 'console/js/order/exotelCall.js' %}"></script>
+
   <script type="text/javascript" 
     src="{% static 'console/js/moment/moment.min.js' %}">
   </script>
@@ -468,6 +488,8 @@
   <script type="text/javascript" 
     src="{% static 'console/js/order/draft-upload.js' %}">
   </script>
+  <script type="text/javascript" src = "{% static 'console/js/order-info.js' %}"></script>
+
 
   {% endcompress %}
 

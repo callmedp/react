@@ -9,6 +9,7 @@ const renderCourse = ({
                         meta: {touched, error, submitFailed},
                         handleSubmit,
                         handleAddition,
+                                eventClicked,
                         deleteCourse,
                         changeOrderingUp,
                         changeOrderingDown,
@@ -39,7 +40,7 @@ const renderCourse = ({
                 </div>
                 {!editHeading ?
                     <button role="button" className="btn btn__round btn--outline"
-                        onClick={handleSubmit(handleAddition.bind(this,fields,courseNewData(fields),0,'course'))}
+                        onClick={handleSubmit(handleAddition.bind(this,fields,courseNewData(fields),0,'course',eventClicked,'Courses'))}
                         type={'button'}>+ Add new</button>:''
                 }
             </div>

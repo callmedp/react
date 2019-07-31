@@ -8,6 +8,7 @@ import {CourseRenderer} from "./courseRenderer";
 import {scroller} from "react-scroll/modules";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
+import {siteDomain} from '../../../../../../Utils/domains'
 
 class Course extends Component {
     constructor(props) {
@@ -31,6 +32,7 @@ class Course extends Component {
     }
 
     async handleSubmit(values, entityLink) {
+         const {userInfo:{order_data},hideGenerateResumeModal,showGenerateResumeModal,history,reGeneratePDF} = this.props
         const {list} = values;
         if (list.length) {
             await this.props.bulkUpdateOrCreate(list);
@@ -38,7 +40,17 @@ class Course extends Component {
                 submit: true
             })
             if (entityLink) this.props.history.push(entityLink);
-            else this.props.history.push('/resume-builder/buy/')
+            else if(order_data && order_data.id){
+            showGenerateResumeModal()
+            reGeneratePDF(order_data.id)
+            setTimeout(function() {
+                window.location.href = `${siteDomain}/dashboard`
+                hideGenerateResumeModal()
+            }, 5000);
+        }
+        else{
+            history.push(`/resume-builder/buy`) 
+        }
         }
 
     }
@@ -56,8 +68,8 @@ class Course extends Component {
     async updateInfoBeforeLoss(){
         let { initialValues, formData: {course: {values, syncErrors}}} = this.props;
         let error = false;
-        ((syncErrors && syncErrors['list']) || []).map(el => Object.keys(el || {}).map(key => (!!el[key] ? error = true : false)))
-        if (!error && !this.state.submit) await this.props.bulkUpdateOrCreate(values && values['list'])
+        (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el || {}).map(key => (!!el[key] ? error = true : false)))
+        if (!error && !this.state.submit && JSON.stringify(initialValues)!==JSON.stringify(values)) await this.props.bulkUpdateOrCreate(values && values['list'])
     }
 
 
@@ -83,6 +95,10 @@ class Course extends Component {
             offset: 200,
             containerId: 'course'
         })
+        this.props.eventClicked({
+            'action':'AddNew',
+            'label':'Courses'
+        })
     }
 
     deleteCourse(index, fields, event) {
@@ -100,8 +116,8 @@ class Course extends Component {
 
     render() {
         const {
-            handleSubmit, ui: {loader}, editHeading, saveTitle, isEditable,
-            entityName, nextEntity, showAlertModal, history, handleInputValue, changeOrderingUp, changeOrderingDown
+            handleSubmit,userInfo:{order_data}, ui: {loader}, editHeading, saveTitle, isEditable,eventClicked,
+            entityName, nextEntity, showAlertModal,history, handleInputValue, changeOrderingUp, changeOrderingDown
         } = this.props;
 
         return (
@@ -116,16 +132,16 @@ class Course extends Component {
                             changeOrderingDown={changeOrderingDown}
                             component={CourseRenderer}
                             saveTitle={(event) => saveTitle(event, 8)}
-                            editHeading={(value) => editHeading(value)}
+                            editHeading={() => editHeading(8)}
                             isEditable={isEditable}
                             entityName={entityName}
                             expanded={this.state.active}
                             handleInputValue={handleInputValue}
                 />
-                <SavePreviewButtons
-                    showAlertModal={showAlertModal} context={this} history={history}
-                    nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
-                />
+                <SavePreviewButtons 
+                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data} form_name={'Courses'}
+                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss} eventClicked={eventClicked}
+                    />
             </form>
 
         )

@@ -18,6 +18,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.db.models import Q
 from google.cloud import storage
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 from geolocation.models import Country
 from shine.core import ShineCandidateDetail
@@ -725,13 +726,19 @@ class DownloadMonthlyWriterInvoiceView(UserGroupMixin,TemplateView):
         return HttpResponseRedirect(reverse('console:dashboard'))
 
 
-class UserLoginTokenView(View):
+class UserLoginTokenView(UserPassesTestMixin,TemplateView):
     template_name = 'admin/users/autologin.html'
     login_url = None
 
-    def get(self, request, *args, **kwargs):
-        has_permission = request.user.is_superuser
-        return render(request, self.template_name, {'has_permission': has_permission})
+    def test_func(self):
+        permission_granted = self.request.user.is_superuser
+        self.raise_exception = not permission_granted
+        return permission_granted
+
+    def get_context_data(self,**kwargs):
+        context = super(UserLoginTokenView,self).get_context_data(**kwargs)
+        context.update({"has_permission":self.request.user.is_superuser})
+        return context
 
     def post(self, request, *args, **kwargs):
         has_permission = request.user.is_superuser

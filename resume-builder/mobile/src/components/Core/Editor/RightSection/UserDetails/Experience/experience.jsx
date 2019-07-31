@@ -11,6 +11,7 @@ import {siteDomain} from "../../../../../../Utils/domains";
 import AddSuggesion from '../../../../../Common/AddSuggestion/addSuggesion';
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 import BottomCTC from '../../../../../Common/BottomCTC/bottom-ctc';
+import Subscribe from '../../../RightSection/subscribe';
 
 class Experience extends Component {
 
@@ -57,22 +58,27 @@ class Experience extends Component {
     }
 
     async handleSubmit(values) {
-        let {listOfLinks,currentLinkPos} = this.props.sidenav
+        let {sidenav:{listOfLinks,currentLinkPos},bulkUpdateUserExperience,personalInfo:{order_data},updateCurrentLinkPos,history,showGenerateResumeModal,hideGenerateResumeModal,reGeneratePDF} = this.props
         this.setState({submit:true})
         currentLinkPos++
-        await this.props.bulkUpdateUserExperience(values.list);
+        await bulkUpdateUserExperience(values.list);
          if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
-            if(this.props.personalInfo.subscription_status){
-                window.location.href = `${siteDomain}/dashboard/myorder`
+            if(order_data && order_data.id){
+                showGenerateResumeModal()
+                reGeneratePDF(order_data.id)
+                setTimeout(function() {
+                    window.location.href = `${siteDomain}/dashboard`
+                    hideGenerateResumeModal()
+                }, 5000);
             }
             else{
-                this.props.history.push(`/resume-builder/buy`) 
+                history.push(`/resume-builder/buy`) 
             }
         }
         else{
-            this.props.updateCurrentLinkPos({currentLinkPos})
-            this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)    
+            updateCurrentLinkPos({currentLinkPos})
+            history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)    
         }
         
     }
@@ -153,20 +159,22 @@ class Experience extends Component {
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {updateAlertModalStatus,handleSubmit,submitting,personalInfo:{subscription_status,entity_preference_data},history,
-                changeOrderingUp,changeOrderingDown,fetchJobTitles,ui:{suggestions},headingChange} = this.props;
+        const {updateAlertModalStatus,handleSubmit,submitting,personalInfo:{order_data,entity_preference_data},history,
+                changeOrderingUp,changeOrderingDown,fetchJobTitles,ui:{suggestions},headingChange,eventClicked} = this.props;
         const {editHeading,heading,till_today,modal_status} =this.state;
         return(
             <div className="buildResume">
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <PreviewModal {...this.props}/>
-                    <AddSuggesion label={'Job Description'} modal_status={modal_status} maxLength="300" length={length} closeModal={this.closeModal} suggestions={suggestions}  />
+                    <Subscribe {...this.props}/>
+                    <AddSuggesion label={'Job Description'} modal_status={modal_status} maxLength="1000" length={length} closeModal={this.closeModal} suggestions={suggestions}  />
                     <FieldArray name="list" 
                                 handleSubmit={handleSubmit}
                                 handleAddition={this.props.handleAddition}
                                 deleteExperience={this.deleteExperience}
                                 changeOrderingUp={changeOrderingUp}
                                 changeOrderingDown={changeOrderingDown}
+                                eventClicked={eventClicked}
                                 component={renderExperiences}
                                 headingChange={headingChange}
                                 entity_preference_data={entity_preference_data}
@@ -182,7 +190,7 @@ class Experience extends Component {
                         <li className="form__group">
                             <BottomCTC  disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
                                 length={length} pos={pos+1} updateInfoBeforeLoss={this.updateInfoBeforeLoss} 
-                                subscription_status={subscription_status}/>
+                                order_data={order_data} eventClicked={eventClicked} form_name={'Experience'}/>
                         </li>
                     </ul>
                 </form>

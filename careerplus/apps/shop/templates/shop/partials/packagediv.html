@@ -8,7 +8,7 @@
     {% if sqs_main.id == sqs.id %}
       <a role="button" class="other-package selected" data-id="{{sqs_main.id}}" main-id="{{sqs_main.id}}">
         <div class="other-package-img">
-          <img src="{{prd_vendor_img}}" class="img-responsive text-center" alt="{{prd_vendor}}">
+          <img aria-label="{{prd_vendor}}" src="{{prd_vendor_img}}" class="img-responsive text-center" alt="{{prd_vendor}}">
         </div>
         <div class="other-package-content">
           <strong>{{prd_vendor}}</strong>
@@ -18,7 +18,7 @@
     {% else %}
       <a role="button" class="other-package other-product" data-id="{{sqs_main.id}}" main-id="{{sqs_main.id}}">
         <div class="other-package-img">
-          <img src="{{sqs_main.pVi}}" class="img-responsive text-center" alt="{{sqs_main.pPvn}}">
+          <img aria-label="{{sqs_main.pPvn}}" src="{{sqs_main.pVi}}" class="img-responsive text-center" alt="{{sqs_main.pPvn}}">
         </div>
       </a>
     {% endif %}
@@ -28,7 +28,7 @@
         {% if provider.id == sqs.id %}
           <a role="button" class="other-package selected" data-id="{{provider.id}}" main-id="{{sqs_main.id}}">
             <div class="other-package-img">
-              <img src="{{provider.vendor_image}}" class="img-responsive text-center" alt="{{provider.vendor}}">
+              <img aria-label="{{provider.vendor}}" src="{{provider.vendor_image}}" class="img-responsive text-center" alt="{{provider.vendor}}">
             </div>
             <div class="other-package-content">
               <strong>{{provider.vendor}}</strong>
@@ -38,7 +38,7 @@
         {% else %}
           <a role="button" class="other-package other-product" data-id="{{provider.id}}" main-id="{{sqs_main.id}}">
             <div class="other-package-img">
-              <img src="{{provider.vendor_image}}" class="img-responsive text-center" alt="{{provider.vendor}}">
+              <img aria-label="{{provider.vendor}}" src="{{provider.vendor_image}}" class="img-responsive text-center" alt="{{provider.vendor}}">
             </div>
           </a>
         {% endif %}

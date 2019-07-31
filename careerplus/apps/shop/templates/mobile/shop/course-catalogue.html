@@ -47,7 +47,7 @@
         <p class="sub-haed">Join the club of 4mn learners with our partners <br />like Skillsoft, ACCA etc</p>
         <!-- <p class="callToAction"><a href="#">Why you should you buy?</a></p> -->
       </div>
-      <img src="{% static 'shinelearn/images/mobile/common/category-img.jpg' %}" class="img-responsive">
+      <img aria-label="Category image" src="{% static 'shinelearn/images/mobile/common/category-img.jpg' %}" class="img-responsive">
   </div><!-- Category banner Ends here -->
 
   {% block section1 %}
@@ -64,8 +64,8 @@
             <div class="media">
                 <div class="media-left">
                   <span class="img-box">
-                  <img src="{% if fa.icon_image %}{{fa.icon_image}}{% else %}{% static "shinelearn/images/course-logo1.png" %}
-                    {% endif %}" alt="" class="img-responsive"></span>
+                  <img aria-label="course logo" src="{% if fa.icon_image %}{{fa.icon_image}}{% else %}{% static "shinelearn/images/course-logo1.png" %}
+                    {% endif %}" alt="course logo" class="img-responsive"></span>
                 </div>
               <div class="media-body pt-5"><h3>{{fa.name}}</h3></div>
             </div><!-- media ends here -->
@@ -102,7 +102,7 @@
           <li>
             <a class="box-shadow">
                 <span class="img-box">
-                  <img src="{{vendor.image}}" alt="{{vendor.name}}.png" class="img-responsive">
+                  <img aria-label="{{vendor.name}}.png" src="{{vendor.image}}" alt="{{vendor.name}}.png" class="img-responsive">
                 </span>
                 <p class="pb-0 row">
                   <span class="cc_heading"><h3>{{vendor.name}}</h3></span>
@@ -124,15 +124,15 @@
     <div class="content-box">
       <h2>Why Shine Learning?</h2>
       <ul>
-        <li><span class="scp_icon"><img src="/media/static/shinelearn/images/why-1.png" alt=""></span>
+        <li><span class="scp_icon"><img aria-label="why 1" src="/media/static/shinelearn/images/why-1.png" alt="why 1"></span>
             Our experts will guide you through the variety of courses suited for your profile
         </li>
 
-        <li><span class="scp_icon"><img src="/media/static/shinelearn/images/why-2.png" alt=""></span>
+        <li><span class="scp_icon"><img aria-label="why 2" src="/media/static/shinelearn/images/why-2.png" alt="why 2"></span>
             Invest in your career and get a jump in your salary
         </li>
 
-        <li><span class="scp_icon"><img src="/media/static/shinelearn/images/why-3.png" alt=""></span>
+        <li><span class="scp_icon"><img aria-label="why 3" src="/media/static/shinelearn/images/why-3.png" alt="why 3"></span>
             We bridge the gap between education and employment with a free 1 month featured profile on shine.com
         </li>
       </ul>

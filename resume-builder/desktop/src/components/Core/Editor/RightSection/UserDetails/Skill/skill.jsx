@@ -13,6 +13,7 @@ styles
 * */
 import 'react-accessible-accordion/dist/fancy-example.css';
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
+import {siteDomain} from '../../../../../../Utils/domains'
 
 class Skill extends Component {
     constructor(props) {
@@ -40,6 +41,7 @@ class Skill extends Component {
     }
 
     async handleSubmit(values, entityLink) {
+         const {userInfo:{order_data},hideGenerateResumeModal,showGenerateResumeModal,history,reGeneratePDF} = this.props
         const {list} = values;
         if (list.length) {
             await this.props.bulkUpdateOrCreate(list);
@@ -47,7 +49,17 @@ class Skill extends Component {
                 submit: true
             })
             if (entityLink) this.props.history.push(entityLink);
-            else this.props.history.push('/resume-builder/buy/')
+            else if(order_data && order_data.id){
+            showGenerateResumeModal()
+            reGeneratePDF(order_data.id)
+            setTimeout(function() {
+                window.location.href = `${siteDomain}/dashboard`
+                hideGenerateResumeModal()
+            }, 5000);
+        }
+        else{
+            history.push(`/resume-builder/buy`) 
+        }
         }
     }
 
@@ -87,6 +99,10 @@ class Skill extends Component {
             offset: 0,
             containerId: 'skill'
         })
+        this.props.eventClicked({
+            'action':'AddNew',
+            'label':'Skills'
+        })
     }
 
     deleteSkill(index, fields, event) {
@@ -108,7 +124,7 @@ class Skill extends Component {
 
     render() {
         const {
-            handleSubmit, history, showAlertModal,
+            handleSubmit,userInfo:{order_data}, history, showAlertModal,eventClicked,
             ui: {loader}, isEditable, editHeading, saveTitle, entityName, nextEntity,
             changeOrderingUp, changeOrderingDown, handleInputValue
         } = this.props;
@@ -125,7 +141,7 @@ class Skill extends Component {
                     loader={loader}
                     component={SkillRenderer}
                     saveTitle={(event) => saveTitle(event, 5)}
-                    editHeading={(value) => editHeading(value)}
+                    editHeading={() => editHeading(5)}
                     isEditable={isEditable}
                     entityName={entityName}
                     expanded={this.state.active}
@@ -135,8 +151,8 @@ class Skill extends Component {
                 />
 
                 <SavePreviewButtons 
-                        showAlertModal={showAlertModal} context={this} history={history}
-                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data} form_name={'Skills'}
+                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss} eventClicked={eventClicked}
                     />
 
 

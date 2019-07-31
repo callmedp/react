@@ -8,6 +8,7 @@ const renderReferences = ({
                             meta: {touched, error, submitFailed},
                             handleSubmit,
                             handleAddition,
+                                eventClicked,
                             deleteReference,
                             changeOrderingUp,
                             changeOrderingDown,
@@ -38,7 +39,7 @@ const renderReferences = ({
                 </div>
                 {!editHeading ?
                     <button role="button" className="btn btn__round btn--outline"
-                        onClick={handleSubmit(handleAddition.bind(this,fields,referenceNewData(fields),150,'references'))}
+                        onClick={handleSubmit(handleAddition.bind(this,fields,referenceNewData(fields),150,'references',eventClicked,'References'))}
                         type={'button'}>+ Add new</button>:''
                 }
             </div>

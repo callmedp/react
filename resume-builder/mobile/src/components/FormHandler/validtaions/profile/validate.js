@@ -16,7 +16,7 @@ const validate = values => {
         errors.email = 'Invalid email address'
     }
     errors.location = values && values.location && values.location.length >100 ? 'Address limited to 100 characters' : undefined
-    errors.extracurricular = values && values.extracurricular && values.extracurricular.length >5 ? 'We recommend to add 5 interest' : undefined
+    errors.extracurricular = values && values.extracurricular && values.extracurricular.length > 8 ? 'We recommend you not to add more interests.' : undefined
     return errors;
 };
 

@@ -13,7 +13,7 @@
                 alt="user">
             </amp-img>
             {% else %}
-            <img src="{{ default_user_pic }}">
+            <img aria-label="default user pic" src="{{ default_user_pic }}" alt="default user pic">
             {% endif %}
         </sup>
         <p class="pb-0">{{comment.message}}</p>

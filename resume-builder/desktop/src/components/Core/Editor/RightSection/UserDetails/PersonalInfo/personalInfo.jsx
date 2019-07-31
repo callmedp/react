@@ -16,6 +16,7 @@ import validate from '../../../../../FormHandler/validations/personalInfo/valida
 import moment from 'moment';
 import {renderAsyncCreatableSelect} from "../../../../../FormHandler/formFieldRenderer";
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
+import {siteDomain} from '../../../../../../Utils/domains'
 
 
 export class PersonalInfo extends Component {
@@ -41,30 +42,40 @@ export class PersonalInfo extends Component {
     //     this.props.fetchPersonalInfo();
     // }
 
-    async componentDidUpdate(prevProps){
-        const {ui:{previewClicked},previewButtonClicked,history} = this.props;
-        if(previewClicked !== prevProps.ui.previewClicked && previewClicked){
+    async componentDidUpdate(prevProps) {
+        const {ui: {previewClicked}, previewButtonClicked, history} = this.props;
+        if (previewClicked !== prevProps.ui.previewClicked && previewClicked) {
             await this.updateInfoBeforeLoss()
-            this.setState({submit:true})
+            this.setState({submit: true})
             previewButtonClicked(false)
             history.push('/resume-builder/preview/')
         }
     }
 
-    async updateInfoBeforeLoss(){
-        let { initialValues, formData: {profile: {values, syncErrors}}} = this.props;
+    async updateInfoBeforeLoss() {
+        let {initialValues, personalInfo, formData: {profile: {values, syncErrors}}} = this.props;
         let error = false;
         Object.keys(syncErrors || {}).map(key => (!!syncErrors[key] ? error = true : false));
-        if (!error && !this.state.submit && JSON.stringify(initialValues)!==JSON.stringify(values)) await this.props.onSubmit(values, this.state.imageURL, this.state.flag)
+        if (!error && !this.state.submit && JSON.stringify(initialValues) !== JSON.stringify(values)) await this.props.onSubmit(values, this.state.imageURL, this.state.flag, personalInfo)
     }
 
     async handleSubmit(values, entityLink) {
-        await this.props.onSubmit(values, this.state.imageURL, this.state.flag);
+        const {userInfo: {order_data}, hideGenerateResumeModal, showGenerateResumeModal, history, reGeneratePDF, personalInfo} = this.props
+        await this.props.onSubmit(values, this.state.imageURL, this.state.flag, personalInfo);
         this.setState({
             submit: true
         })
         if (entityLink) this.props.history.push(entityLink);
-        else this.props.history.push('/resume-builder/buy/')
+        else if (order_data && order_data.id) {
+            showGenerateResumeModal()
+            reGeneratePDF(order_data.id)
+            setTimeout(function () {
+                window.location.href = `${siteDomain}/dashboard`
+                hideGenerateResumeModal()
+            }, 5000);
+        } else {
+            history.push(`/resume-builder/buy`)
+        }
     }
 
     removeImage() {
@@ -77,7 +88,7 @@ export class PersonalInfo extends Component {
 
 
     componentWillUnmount() {
-       this.updateInfoBeforeLoss()
+        this.updateInfoBeforeLoss()
     }
 
     async getImageURI(event) {
@@ -101,8 +112,8 @@ export class PersonalInfo extends Component {
 
     render() {
         const {
-            handleSubmit, personalInfo, isEditable, fetchInterests,
-            editHeading,currentAddress, saveTitle, entityName, nextEntity, history, handleInputValue,showAlertModal
+            handleSubmit, userInfo: {order_data}, personalInfo, ui: {loader}, isEditable, fetchInterests,eventClicked,
+            editHeading, currentAddress, saveTitle, entityName, nextEntity, history, handleInputValue, showAlertModal
         } = this.props;
         const newUser = localStorage.getItem('newUser')
         let elem = null;
@@ -115,15 +126,16 @@ export class PersonalInfo extends Component {
                         </h2> :
                         <React.Fragment>
                             <input autoFocus type="text" name="" defaultValue={entityName}
-                                   onChange={(event) => handleInputValue(event.target.value || entityName)} maxLength="20"/>
+                                   onChange={(event) => handleInputValue(event.target.value || entityName)}
+                                   maxLength="20"/>
                             <span onClick={(event) => saveTitle(event, 1)} className="icon-tick"/>
                         </React.Fragment>
                     }
-                    {newUser ? 
-                    <span onClick={() => editHeading(elem)} onClick={showAlertModal}
-                        className={"icon-edit " + styles['icon-edit__cursor']}/> :
-                        <span onClick={() => editHeading(elem)}
-                            className={!!(!isEditable) ? "icon-edit " + styles['icon-edit__cursor'] : ''}/>
+                    {newUser ?
+                        <span onClick={() => editHeading(elem)} onClick={showAlertModal}
+                              className={"icon-edit " + styles['icon-edit__cursor']}/> :
+                        <span onClick={() => editHeading(1)}
+                              className={!!(!isEditable) ? "icon-edit " + styles['icon-edit__cursor'] : ''}/>
                     }
 
                 </section>
@@ -135,12 +147,12 @@ export class PersonalInfo extends Component {
                                     <label>First Name</label>
 
                                     <Field component={renderField} type={"text"} iconClass={'icon-name'}
-                                           name="first_name" maxLength={"20"}/>
+                                           name="first_name" maxLength={"20"} disabled={order_data && order_data.id ? true: false}/>
                                 </fieldset>
                                 <fieldset>
                                     <label>Last Name</label>
                                     <Field component={renderField}
-                                           iconClass={'icon-surname'}
+                                           iconClass={'icon-surname'} disabled={order_data && order_data.id ? true: false}
                                            type={"text"} name="last_name" maxLength={"20"}/>
                                 </fieldset>
                             </div>
@@ -247,16 +259,10 @@ export class PersonalInfo extends Component {
 
                         </section>
                     </section>
-                    <SavePreviewButtons 
-                        showAlertModal={showAlertModal} context={this} history={history}
-                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                    <SavePreviewButtons
+                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data} form_name={'Personal Info'} 
+                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss} eventClicked={eventClicked}
                     />
-
-                    {/* <div className="flex-container items-right mr-20 mb-30">
-                        <button className="blue-button mr-10" type={"button"} onClick={newUser ? showAlertModal: handlePreview.bind(this,handleSubmit)}>Preview</button>
-                        <button className="orange-button" type="submit">{!nextEntity ? "Download" : 'Save and Continue'}
-                        </button>
-                    </div> */}
                 </form>
             </div>
         )
@@ -288,8 +294,9 @@ const mapDispatchToProps = (dispatch) => {
         "fetchInterestList": () => {
             return dispatch(actions.fetchInterestList())
         },
-        "onSubmit": (personalDetails, imageURL, flag) => {
+        "onSubmit": (personalDetails, imageURL, flag, storeInfo) => {
             const {gender, date_of_birth, extracurricular, image} = personalDetails;
+            const {entity_preference_data} = storeInfo;
             personalDetails = {
                 ...personalDetails,
                 ...{
@@ -297,7 +304,8 @@ const mapDispatchToProps = (dispatch) => {
                     'gender': (gender && gender['value']) || '',
                     'image': imageURL || (flag ? image : ''),
                     'extracurricular': extracurricular instanceof Array ?
-                        (extracurricular || []).filter(el => el !== undefined).map(el => el.value).join(',') : ''
+                        (extracurricular || []).filter(el => el !== undefined).map(el => el.value).join(',') : '',
+                    'entity_preference_data': (entity_preference_data || []).map(el => el)
                 }
             }
             personalDetails = {

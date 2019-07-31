@@ -91,6 +91,10 @@ class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
         blank=True)
 
     priority = models.IntegerField(default=0)
+    url_slug_fix = "fix_field"
+    fix_field = False
+
+    recursive_call = True
 
     class Meta:
         verbose_name = _('Vendor')
@@ -100,6 +104,15 @@ class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        recieved_slug = self.slug
+        super(Vendor, self).save(*args, **kwargs)
+        if getattr(self, 'recursive_call', True):
+            setattr(self, 'slug', recieved_slug)
+            self.recursive_call = False
+            self.fix_field = True
+            self.save()
 
     def clean(self):
 
@@ -152,8 +165,9 @@ class Assesment(AbstractAutoDate):
         default=Decimal('0.00'), decimal_places=2,
         max_digits=12, null=True, blank=True
     )
-
-
+    order_item = models.OneToOneField(
+        'order.OrderItem', related_name='assesment',
+        verbose_name=_("Order Item"), blank=True, null=True)
 
 
 class Certificate(AbstractAutoDate):
@@ -230,7 +244,6 @@ class BoosterRecruiter(AbstractAutoDate):
         return '<' + self.get_type_recruiter_display() + '>'
 
 class Report(models.Model):
-
     assessment_id = models.IntegerField()
     url = models.URLField(max_length=500, blank=True, null=True)
     name = models.CharField(max_length=255)
@@ -272,7 +285,6 @@ class UserCertificateOperations(AbstractAutoDate):
 
 
 class ProductSkill(AbstractAutoDate):
-
     skill = models.ForeignKey(
         'shop.Skill',
         verbose_name=_('Skill'),
@@ -296,6 +308,7 @@ class ProductSkill(AbstractAutoDate):
         unique_together = ('product', 'skill')
         verbose_name = _('Product Skill')
         verbose_name_plural = _('Product Skills')
+
 
 class PixelTracker(AbstractAutoDate):
     pixel_slug = models.CharField(

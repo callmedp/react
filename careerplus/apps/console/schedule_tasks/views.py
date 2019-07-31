@@ -24,7 +24,8 @@ from scheduler.models import Scheduler
 from .tasks import (
     gen_auto_login_token_task,
     gen_product_list_task,
-    generate_encrypted_urls_for_mailer_task
+    generate_encrypted_urls_for_mailer_task,
+    generate_pixel_report
 )
 from . import forms
 
@@ -164,7 +165,6 @@ class GenerateEncryptedURLSForMailer(FormView):
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group([settings.MARKETING_GROUP_LIST]))
 class TaskListView(ListView, PaginationMixin):
     template_name = 'console/tasks/tasklist.html'
     model = Scheduler
@@ -175,6 +175,9 @@ class TaskListView(ListView, PaginationMixin):
         self.paginated_by = 20
 
     def get(self, request, *args, **kwargs):
+        if 'order.can_download_discount_report' not in request.user.get_all_permissions() and \
+            not request.user.groups.filter(name__in=settings.MARKETING_GROUP_LIST).exists():
+            return HttpResponseForbidden()
         self.page = request.GET.get('page', 1)
         return super(TaskListView, self).get(request, args, **kwargs)
 
@@ -190,20 +193,40 @@ class TaskListView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(TaskListView, self).get_queryset()
-        queryset = queryset.filter(task_type__in=[1, 4, 5, 6])
+        task_types_allowed = []
+
+        if 'order.can_download_discount_report' in self.request.user.get_all_permissions():
+            task_types_allowed.append(8)
+
+        if self.request.user.groups.filter(name__in=settings.MARKETING_GROUP_LIST).exists():
+            task_types_allowed.extend([1,4,5,6,7])
+
+        if self.request.user.is_superuser:
+            task_types_allowed = [1,4,5,6,7,8]
+
+        queryset = queryset.filter(task_type__in=task_types_allowed)
         return queryset.order_by('-modified')
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group([settings.MARKETING_GROUP_LIST]))
 class DownloadTaskView(View):
 
     def get(self, request, *args, **kwargs):
+        task_types_allowed = []
+        if 'order.can_download_discount_report' in request.user.get_all_permissions():
+            task_types_allowed.append(8)
+
+        if request.user.groups.filter(name__in=settings.MARKETING_GROUP_LIST).exists():
+            task_types_allowed.extend([1,4,5,6,7])
+
+        if self.request.user.is_superuser:
+            task_types_allowed = [1,4,5,6,7,8]
+
         try:
             task = request.GET.get('task', None)
             download_type = request.GET.get('type', None)
             if task:
-                task = Scheduler.objects.get(id=task)
+                task = Scheduler.objects.get(id=task,task_type__in=task_types_allowed)
             else:
                 return HttpResponseForbidden()
             if task:
@@ -318,23 +341,35 @@ class GeneratePixelTracker(FormView, PaginationMixin):
         return super(GeneratePixelTracker, self).get(request, args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        form = self.get_form()
-        if form.is_valid():
-            obj, created = PixelTracker.objects.get_or_create(pixel_slug=form.cleaned_data.get('pixel_slug'))
-            obj.landing_urls = form.cleaned_data.get('landing_urls')
-            obj.conversion_urls = form.cleaned_data.get('conversion_urls')
-            obj.days = form.cleaned_data.get('days')
-            obj.save()
-            content = self.generate_pixel_code(
-                obj.pixel_slug,
-                obj.landing_urls.split(','),
-                obj.conversion_urls.split(','),
-                obj.days
+        action_type = int(request.POST.get('type', 0))
+        task_type = 7
+        if action_type == 1:
+            slug = request.POST.get('slug')
+            days = request.POST.get('days')
+            task = Scheduler.objects.create(
+                task_type=task_type,
+                created_by=request.user,
             )
-            context = self.get_context_data()
-            context.update({'pixel_tracker': content})
-            return self.render_to_response(context) 
-        return self.form_invalid(form)
+            generate_pixel_report.delay(task=task.pk, url_slug=slug, days=str(days))
+            return HttpResponseRedirect(reverse('console:tasks:tasklist'))
+        else:
+            form = self.get_form()
+            if form.is_valid():
+                obj, created = PixelTracker.objects.get_or_create(pixel_slug=form.cleaned_data.get('pixel_slug'))
+                obj.landing_urls = form.cleaned_data.get('landing_urls')
+                obj.conversion_urls = form.cleaned_data.get('conversion_urls')
+                obj.days = form.cleaned_data.get('days')
+                obj.save()
+                content = self.generate_pixel_code(
+                    obj.pixel_slug,
+                    obj.landing_urls.split(','),
+                    obj.conversion_urls.split(','),
+                    obj.days
+                )
+                context = self.get_context_data()
+                context.update({'pixel_tracker': content})
+                return self.render_to_response(context) 
+            return self.form_invalid(form)
 
     def get_context_data(self, **kwargs):
         context = super(GeneratePixelTracker, self).get_context_data(**kwargs)

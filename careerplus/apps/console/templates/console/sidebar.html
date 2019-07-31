@@ -25,19 +25,19 @@
         <li><a><i class="fa fa-list-alt"></i> Welcome call <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
               {% if request.user|has_group:OPS_HEAD_GROUP_LIST %}
-              <li><a href="{% url "console:welcomecall:queue" %}">Welcome Queue</a></li>
+              <li><a href="{% url "console:welcomecall:queue" %}">Welcome Queue {% if ops_badges_dict.welcome_call_inbox %}({{ops_badges_dict.welcome_call_inbox}}){% endif %}</a></li>
               {% endif %}
 
               {% if request.user|has_group:WELCOMECALL_GROUP_LIST %}
-              <li><a href="{% url "console:welcomecall:assigned" %}">Wc Assigned</a></li>
+              <li><a href="{% url "console:welcomecall:assigned" %}">Wc Assigned {% if ops_badges_dict.welcome_call_assigned %} ({{ops_badges_dict.welcome_call_assigned}}){% endif %}</a></li>
               {% endif %}
 
               {% if request.user|has_group:WELCOMECALL_GROUP_LIST %}
-              <li><a href="{% url "console:welcomecall:callback" %}">Wc Callback</a></li>
+              <li><a href="{% url "console:welcomecall:callback" %}">Wc Callback{% if ops_badges_dict.welcome_call_callback %} ({{ops_badges_dict.welcome_call_callback}}){% endif %}</a></li>
               {% endif %}
 
               {% if request.user|has_group:WELCOMECALL_GROUP_LIST %}
-              <li><a href="{% url "console:welcomecall:service-issue" %}">Wc Service Issue</a></li>
+              <li><a href="{% url "console:welcomecall:service-issue" %}">Wc Service Issue{% if ops_badges_dict.welcome_call_issue %} ({{ops_badges_dict.welcome_call_issue}}){% endif %}</a></li>
               {% endif %}
 
               <li><a href="{% url "console:welcomecall:done" %}">Wc Closed</a></li>
@@ -47,38 +47,46 @@
       </ul>
     {% endif %}
 
-    {% if request.user|has_group:USER_QUERY_GROUP_LIST %} 
+    {% if request.user|has_group:USER_QUERY_GROUP_LIST or perms.crmapi.can_view_hr_queries %}
       <h3>User Query</h3>
         
       <ul class="nav side-menu">
         <li><a><i class="fa fa-list-alt"></i> User Query <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
               {% if request.user|has_group:CMS_GROUP_LIST %}
-                  <li><a href="{% url 'console:userquery:cms-query' %}">Cms Leads</a></li>
+                  <li><a href="{% url 'console:userquery:user-query' query_listing='cms-leads' %}">Cms Leads</a></li>
               {% endif %}
               {% if request.user|has_group:SKILL_GROUP_LIST %}
-                  <li><a href="{% url 'console:userquery:skill-query' %}">Skill Leads</a></li>
+                  <li><a href="{% url 'console:userquery:user-query' query_listing='skill-leads' %}">Skill Leads</a></li>
               {% endif %}
               {% if request.user|has_group:COURSE_GROUP_LIST %}
-                  <li><a href="{% url 'console:userquery:course-query' %}">Course Leads</a></li>
+                  <li><a href="{% url 'console:userquery:user-query' query_listing='course-leads' %}">Course Leads</a></li>
               {% endif %}
               {% if request.user|has_group:SERVICE_GROUP_LIST %}
-                  <li><a href="{% url 'console:userquery:service-query' %}">Service Leads</a></li>
+                  <li><a href="{% url 'console:userquery:user-query' query_listing='service-leads' %}">Service Leads</a></li>
               {% endif %}
+              {% if request.user|has_group:ASSIGNMENT_GROUP_LIST %}
+                  <li><a href="{% url 'console:userquery:user-query' query_listing='assignment-leads' %}">Assignment Leads</a></li>
+              {% endif %}
+               {% if perms.crmapi.can_view_hr_queries %}
+              <li><a href="{% url 'console:userquery:user-query' query_listing='human-resource-leads' %}">HR Leads</a></li>
+          {% endif %}
             </ul>
         </li>
       </ul>
     {% endif %}
 
-    {% if request.user|has_group:MARKETING_GROUP_LIST %} 
+    {% if request.user|has_group:MARKETING_GROUP_LIST or perms.order.can_download_discount_report %} 
       <h3>Tasks</h3>
         
       <ul class="nav side-menu">
         <li><a><i class="fa fa-list-alt"></i> Task <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
+              {% if request.user|has_group:MARKETING_GROUP_LIST %}
               <li><a href="{% url 'console:tasks:generate-autologintoken' %}">Generate AutoLogin</a></li>
               <li><a href="{% url 'console:tasks:generate-pixel-tracker' %}">Generate Pixel Tracker</a></li>
               <li><a href="{% url 'console:tasks:generate-encrypted-urls' %}">Generate Encoded URL</a></li>
+              {% endif %}
               <li><a href="{% url 'console:tasks:tasklist' %}">Task List</a></li>
               {% if perms.scheduler.can_download_product_list%}
               <li><a href="{% url 'console:tasks:download-product-list'%}">Product List</a></li>
@@ -335,7 +343,7 @@
         {% if perms.order.can_show_linkedin_inbox_queue %}
             <li>
               <a href="{% url 'console:linkedin-inbox' %}">
-              Linkedin Inbox</a>
+              Linkedin Inbox {% if writer_badges_dict.linkedin_inbox %} ({{writer_badges_dict.linkedin_inbox}}){% endif %}</a>
             </li>
         {% endif %}
         {% if perms.order.can_show_linkedin_approval_queue %}
@@ -347,13 +355,13 @@
         {% if perms.order.can_show_linkedinrejectedbycandidate_queue %}
             <li>
               <a href="{% url 'console:linkedin-rejectedbylinkedincandidate' %}">
-              Linkedin Rejected By Candidate</a>
+              Linkedin Rejected By Candidate {% if writer_badges_dict.linkedin_rejected_by_candidate %} ({{writer_badges_dict.linkedin_rejected_by_candidate}}){% endif %}</a>
             </li>
         {% endif %}
         {% if perms.order.can_show_linkedinrejectedbyadmin_queue %}
             <li>
               <a href="{% url 'console:linkedin-rejectedbylinkedinadmin' %}">
-              Linkedin Rejected By Admin</a>
+              Linkedin Rejected By Admin {% if writer_badges_dict.linkedin_rejected_by_admin %} ({{writer_badges_dict.linkedin_rejected_by_admin}}){% endif %}</a>
             </li>
         {% endif %}
         {% if perms.order.can_show_linkedin_approved_queue %}
@@ -365,6 +373,7 @@
       </ul>
       </li>
       {% endif %}
+
       {% if perms.order.can_show_order_queue or perms.order.can_show_midout_queue or perms.order.can_show_inbox_queue or perms.order.can_show_approval_queue or perms.order.can_show_rejectedbyadmin_queue  or perms.order.can_show_rejectedbycandidate_queue or perms.order.can_show_booster_queue or perms.order.can_show_domestic_profile_update_queue or perms.order.can_show_domestic_profile_approval_queue or perms.order.can_show_international_profile_update_queue or perms.order.can_show_international_profile_approval_queue or perms.order.can_show_allocated_queue or perms.order.can_show_closed_oi_queue or perms.order.can_show_partner_inbox_queue or perms.order.can_show_hold_orderitem_queue or perms.order.can_show_varification_report_queue %}
         <li><a><i class="fa fa-list-alt"></i> Queue <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
@@ -374,18 +383,18 @@
             {% endif %}
 
             {% if perms.order.can_show_midout_queue %}
-                <li><a href="{% url "console:queue-midout" %}">Midout</a></li>
+                <li><a href="{% url "console:queue-midout" %}">Midout{% if writer_badges_dict.midout %} ({{writer_badges_dict.midout}}){% endif %}</a></li>
             {% endif %}
 
             {% if perms.order.can_show_inbox_queue %}
-                <li><a href="{% url "console:queue-inbox" %}">Inbox</a></li>
+                <li><a href="{% url "console:queue-inbox" %}">Inbox{% if writer_badges_dict.inbox %} ({{writer_badges_dict.inbox}}){% endif %}</a></li>
             {% endif %}
              {% if perms.order.can_show_replaced_order_queue %}
                 <li><a href="{% url "console:replaced-order" %}">Replaced Order</a></li>
             {% endif %}
 
             {% if perms.order.can_show_approval_queue %}
-                <li><a href="{% url "console:queue-approval" %}">Approval</a></li>
+                <li><a href="{% url "console:queue-approval" %}">Approval {% if writer_badges_dict.approval %} ({{writer_badges_dict.approval}}){% endif %}</a></li>
             {% endif %}
 
             {% if perms.order.can_show_approved_queue %}
@@ -393,18 +402,18 @@
             {% endif %}
 
             {% if perms.order.can_show_rejectedbyadmin_queue %}
-                <li><a href="{% url "console:queue-rejectedbyadmin" %}">RejectedByAdmin</a></li>
+                <li><a href="{% url "console:queue-rejectedbyadmin" %}">RejectedByAdmin {% if writer_badges_dict.rejected_by_admin %} ({{writer_badges_dict.rejected_by_admin}}){% endif %}</a></li>
             {% endif %}
 
             {% if perms.order.can_show_rejectedbycandidate_queue %}
-                <li><a href="{% url "console:queue-rejectedbycandidate" %}">RejectedByCandidate</a></li>
+                <li><a href="{% url "console:queue-rejectedbycandidate" %}">RejectedByCandidate {% if writer_badges_dict.rejected_by_candidate %} ({{writer_badges_dict.rejected_by_candidate}}){% endif %}</a></li>
             {% endif %}
 
             {% if perms.order.can_show_booster_queue %}
                 <li><a href="{% url "console:queue-booster" %}">Booster</a></li>
             {% endif %}
 
-             {% if perms.order.can_show_domestic_profile_update_queue %}
+             {% if perms.order.can_view_assigned_jobs_on_the_move or perms.order.can_send_jobs_on_the_move or perms.can_assign_jobs_on_the_move %}
                 <li><a href="{% url "console:queue-whatsappjoblist" %}">Whatsapp Jobs</a></li>
             {% endif %}
 
@@ -437,7 +446,7 @@
 
             {% if perms.order.can_show_partner_inbox_queue %}
             <li>
-                <a href="{% url "console:partner:partnerinbox" %}">Partner Inbox</a>
+                <a href="{% url "console:partner:partnerinbox" %}">Partner Inbox{% if partner_badges_dict.inbox %} ({{partner_badges_dict.inbox}}){% endif %}</a>
             </li>
             {% endif %}
 

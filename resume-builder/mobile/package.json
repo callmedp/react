@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@redux-beacon/google-analytics": "^1.2.2",
     "bootstrap": "^4.3.1",
     "dotenv": "^7.0.0",
     "moment": "^2.24.0",
@@ -24,6 +25,7 @@
     "react-slick": "^0.24.0",
     "react-widgets": "^4.4.11",
     "redux": "^4.0.1",
+    "redux-beacon": "^2.1.0",
     "redux-form": "^8.2.0",
     "redux-saga": "^1.0.2",
     "rewire": "^4.0.1",
@@ -33,7 +35,7 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
-    "build": "sh -ac ' node ./scripts/build-config.js'",
+    "build": "sh -ac 'rm -rf ../../careerplus/static_core/react/dist/mobile/*; node ./scripts/build-config.js'",
     "build:staging": "REACT_APP_ENV=staging npm run build",
     "build:production": "REACT_APP_ENV=production npm run build",
     "test": "react-scripts test",

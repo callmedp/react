@@ -44,6 +44,11 @@ urlpatterns = [
     url(r'^v1/talent-economy-blogs/$',
         views.TalentEconomyApiView.as_view(),
         name='talent-economy-blogs'),
+
+    url(r'^v1/order-detail/(?P<pk>\d+)/$',
+        views.OrderDetailApiView.as_view(),
+        name='order-detail'),
+
     url(r'^v1/media-upload/$',
         views.MediaUploadView.as_view(),
         name='v1.media-upload'),

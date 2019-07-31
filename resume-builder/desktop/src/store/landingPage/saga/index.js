@@ -5,7 +5,7 @@ import * as Actions from '../actions/actionTypes';
 import {UPDATE_UI} from '../../ui/actions/actionTypes'
 import {entityList} from "../../../Utils/formCategoryList";
 import {SAVE_USER_INFO} from "../../personalInfo/actions/actionTypes";
-import {Toast} from "../../../services/ErrorToast";
+import {Toast, LandingPageToast} from "../../../services/ErrorToast";
 
 
 function* getCandidateId() {
@@ -29,9 +29,6 @@ function* loginCandidate(action) {
     try {
         let {payload} = action;
 
-        localStorage.clear();
-
-
         yield put({type: UPDATE_UI, data: {loader: true}});
 
 
@@ -42,6 +39,7 @@ function* loginCandidate(action) {
         }
 
         if (result['error']) {
+            localStorage.clear();
             window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
             yield put({type: UPDATE_UI, data: {loader: false}})
             return;
@@ -88,8 +86,26 @@ function* loginCandidate(action) {
 }
 
 
+function* feedbackSubmit(action) {
+    try {
+        let {payload} = action;
+        let result = yield call(Api.feedbackSubmit, payload);
+        if (result["error"]) {
+            console.log("error");
+        } else {
+            LandingPageToast.fire({
+                type: "success",
+                title: "<font size='3'>Feedback Submitted Successfully</font>"
+            });
+        }
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 export default function* watchLandingPage() {
     yield takeLatest(Actions.GET_CANDIDATE_ID, getCandidateId);
     yield takeLatest(Actions.LOGIN_CANDIDATE, loginCandidate);
+    yield takeLatest(Actions.FEEDBACK_SUBMIT, feedbackSubmit);
 
 }

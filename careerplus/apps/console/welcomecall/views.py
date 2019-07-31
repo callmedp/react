@@ -150,8 +150,6 @@ class WelcomeQueueView(ListView, PaginationMixin):
         context = super(WelcomeQueueView, self).get_context_data(**kwargs)
         paginator = Paginator(context['object_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
-        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
-        show_btn = True if has_permission else False
         alert = messages.get_messages(self.request)
         initial = {
             "payment_date": self.payment_date,
@@ -165,7 +163,6 @@ class WelcomeQueueView(ListView, PaginationMixin):
             "filter_form": filter_form,
             "query": self.query,
             self.sel_opt: 'checked',
-            'show_btn':show_btn,
         })
 
         return context
@@ -255,9 +252,6 @@ class WelcomeAssignedView(ListView, PaginationMixin):
         paginator = Paginator(context['object_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
-        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
-        show_btn = True if has_permission else False
-
         today = timezone.now()
         date_start = datetime.datetime(
             today.year, today.month, today.day, 0, 0, 0, 0, today.tzinfo)
@@ -274,7 +268,6 @@ class WelcomeAssignedView(ListView, PaginationMixin):
             "messages": alert,
             "followup_today": followup_today,
             "count_follow_up": len(followup_today),
-            'show_btn': show_btn
         })
 
         return context
@@ -318,8 +311,6 @@ class WelcomeCallbackView(ListView, PaginationMixin):
         paginator = Paginator(context['object_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
-        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
-        show_btn = True if has_permission else False
         initial = {
             "payment_date": self.payment_date,
             "created": self.created,
@@ -329,7 +320,6 @@ class WelcomeCallbackView(ListView, PaginationMixin):
             "messages": alert,
             "filter_form": filter_form,
             "query": self.query,
-            'show_btn':show_btn
         })
 
         return context
@@ -414,8 +404,6 @@ class WelcomeServiceIssueView(ListView, PaginationMixin):
         context = super(WelcomeServiceIssueView, self).get_context_data(**kwargs)
         paginator = Paginator(context['object_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
-        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
-        show_btn = True if has_permission else False
         alert = messages.get_messages(self.request)
         initial = {
             "payment_date": self.payment_date,
@@ -426,7 +414,6 @@ class WelcomeServiceIssueView(ListView, PaginationMixin):
             "messages": alert,
             "filter_form": filter_form,
             "query": self.query,
-            "show_btn":show_btn
         })
 
         return context
@@ -509,17 +496,12 @@ class WelcomeCallDoneView(ListView, PaginationMixin):
         self.created = request.GET.get('created', '')
         self.assigned = request.GET.get('assigned', '-1')
         self.sel_opt = request.GET.get('rad_search','')
-
-
         return super(WelcomeCallDoneView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(WelcomeCallDoneView, self).get_context_data(**kwargs)
         paginator = Paginator(context['object_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
-        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
-        show_btn = True if has_permission else False
-        context.update({'show_btn': show_btn})
         alert = messages.get_messages(self.request)
         initial = {
             "payment_date": self.payment_date,
@@ -551,7 +533,6 @@ class WelcomeCallDoneView(ListView, PaginationMixin):
 
         try:
             if self.query:
-
                 if self.sel_opt == 'number':
                     queryset = queryset.filter(number=self.query)
                 elif self.sel_opt =='email':
@@ -561,7 +542,6 @@ class WelcomeCallDoneView(ListView, PaginationMixin):
 
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
-            pass
 
         try:
             if self.payment_date:
@@ -919,9 +899,6 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
         context = super(WelcomeCallUpdateView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
         order = self.get_object()
-        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
-        show_btn = True if has_permission else False
-
         order_items = InvoiceGenerate().get_order_item_list(
             order=order)
         wc_items = self.get_welcome_list(
@@ -942,7 +919,6 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
             "sub_cat2_dict": sub_cat2_dict,
             "sub_cat3_dict": sub_cat3_dict,
             "wc_sub_cat2_dict": wc_sub_cat2_dict,
-            'show_btn':show_btn,
         })
         return context
 

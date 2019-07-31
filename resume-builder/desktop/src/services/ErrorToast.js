@@ -8,5 +8,11 @@ export const Toast = Swal.mixin({
     timer: 3000
 });
 
-
-
+export const LandingPageToast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 3000,
+  heightAuto: false,
+  padding: 20
+});

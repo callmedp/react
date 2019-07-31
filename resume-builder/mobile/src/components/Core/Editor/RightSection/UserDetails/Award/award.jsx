@@ -9,6 +9,7 @@ import renderAwards from "./renderAwards"
 import {siteDomain} from "../../../../../../Utils/domains";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 import BottomCTC from '../../../../../Common/BottomCTC/bottom-ctc';
+import Subscribe from "../../../RightSection/subscribe";
 
 
 class Award extends Component {
@@ -64,22 +65,28 @@ class Award extends Component {
 
     async handleSubmit(values) {
         values = this.state.fields ? this.state.fields : values.list
-        let {listOfLinks,currentLinkPos} = this.props.sidenav
+        let {sidenav:{listOfLinks,currentLinkPos},bulkUpdateUserAward,personalInfo:{order_data},
+            updateCurrentLinkPos,history,showGenerateResumeModal,hideGenerateResumeModal,reGeneratePDF} = this.props
         currentLinkPos++
         this.setState({submit:true})
-        await this.props.bulkUpdateUserAward(values);
-         if(currentLinkPos === listOfLinks.length){
+        await bulkUpdateUserAward(values);
+        if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
-            if(this.props.personalInfo.subscription_status){
-                window.location.href = `${siteDomain}/dashboard/myorder`
+            if(order_data && order_data.id){
+                showGenerateResumeModal()
+                reGeneratePDF(order_data.id)
+                setTimeout(function() {
+                    window.location.href = `${siteDomain}/dashboard`
+                    hideGenerateResumeModal()
+                }, 5000);
             }
             else{
-                this.props.history.push(`/resume-builder/buy`) 
+                history.push(`/resume-builder/buy`) 
             }
         }
         else{
-            this.props.updateCurrentLinkPos({currentLinkPos})
-            this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)    
+            updateCurrentLinkPos({currentLinkPos})
+            history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)    
         }
     }
 
@@ -104,7 +111,7 @@ class Award extends Component {
     }
 
     render () {
-        const {handleSubmit,submitting,history,personalInfo:{subscription_status,entity_preference_data},changeOrderingUp,changeOrderingDown,headingChange,updateAlertModalStatus} = this.props;
+        const {handleSubmit,submitting,history,personalInfo:{order_data,entity_preference_data},changeOrderingUp,changeOrderingDown,headingChange,updateAlertModalStatus,eventClicked} = this.props;
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
         const {editHeading,heading} =this.state;
@@ -112,6 +119,7 @@ class Award extends Component {
         return(
             <div className="buildResume">
                 <PreviewModal {...this.props}/>
+                <Subscribe {...this.props}/>
                 <form onSubmit={handleSubmit((values)=>this.handleSubmit(values))}>
                     <FieldArray name="list" 
                                 handleSubmit={handleSubmit}
@@ -119,6 +127,7 @@ class Award extends Component {
                                 deleteAward={this.deleteAward}
                                 changeOrderingUp={changeOrderingUp}
                                 changeOrderingDown={changeOrderingDown}
+                                eventClicked={eventClicked}
                                 component={renderAwards}
                                 headingChange={headingChange}
                                 editHeading={editHeading}
@@ -130,7 +139,7 @@ class Award extends Component {
                         <li className="form__group">
                             <BottomCTC  disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
                                 length={length} pos={pos+1} updateInfoBeforeLoss={this.updateInfoBeforeLoss} 
-                                subscription_status={subscription_status}/>
+                                order_data={order_data} eventClicked={eventClicked} form_name={'Awards'}/>
                         </li>
                     </ul>
                 </form>

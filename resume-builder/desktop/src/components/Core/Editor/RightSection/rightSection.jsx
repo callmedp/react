@@ -56,10 +56,14 @@ class RightSection extends Component {
     }
 
 
-    editHeading() {
+    editHeading(entityId) {
         this.setState({
             'isEditable': true
         });
+        this.props.eventClicked({
+            'action':'EditSection',
+            'label':formCategoryList[entityId].name
+        })
     }
 
     saveTitle(event, entityId) {
@@ -74,7 +78,6 @@ class RightSection extends Component {
             entityList[index]['entity_text'] = titleValue || '';
             this.props.updateEntityPreference(entityList)
         }
-
     }
 
     handleInputValue(value) {

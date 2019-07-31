@@ -224,7 +224,8 @@ MAPPING_VALUES_TO_DATA_KEY_1 = {
         'assesment': {
             'candidate_email': '1|candidateEmailID',
             'assesment_name': '1|assessmentName',
-            "overallScore": '1|overallScore'
+            "overallScore": '1|overallScore',
+            'order_item_id': '1|shineLearningOrderID',
         },
         'certificate': {
             'certificate': '6|certificates',
@@ -464,9 +465,17 @@ class CertiticateParser:
 
         if vendor_field == 'vendor_text':
                 assesmemnt_data['vendor_text'] = vendor
+        defaults = {'order_item_id': assesmemnt_data['order_item_id']}
+
         assesment, created = Assesment.objects.get_or_create(
-            **assesmemnt_data
+            **defaults
         )
+
+        if created:
+            for key, value in assesmemnt_data.items():
+                setattr(assesment, key, value)
+            assesment.save()
+
         setattr(assesment, vendor_field, vendor)
 
         # Save assesment data
@@ -661,28 +670,7 @@ class CertiticateParser:
                 logging.getLogger('info_log').info(
                     'Badging After parsing data is done for OrderItem  %s is %s' % (str(oi.id), str(data))
                 )
-
-                # Send mail and sms with subject line as Your Profile updated
-                try:
-                    mail_type = "BADGING_DONE_MAIL"
-
-                    email_sets = list(
-                        oi.emailorderitemoperation_set.all().values_list(
-                            'email_oi_status', flat=True).distinct())
-                    to_emails = [oi.order.get_email()]
-                    data = {}
-                    data.update({
-                        "subject": 'Your Featured Profile Is Updated',
-                        "username": oi.order.first_name,
-                        "product_timeline": oi.product.get_duration_in_day(),
-                    })
-
-                    if 72 not in email_sets:
-                        send_email_task.delay(
-                            to_emails, mail_type, data,
-                            status=72, oi=oi.pk)
-                    SendSMS().send(sms_type=mail_type, data=data)
-                    return True
-                except Exception as e:
-                        logging.getLogger('error_log').error('Bading After pasrsing data failed, Error: %s'.format(str(e)))
-                        return False
+                return True
+            else:
+                logging.getLogger('error_log').error('Bading After pasrsing data failed, Error: %s'.format(str(e)))
+                return False

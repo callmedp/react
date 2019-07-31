@@ -78,7 +78,10 @@ def generate_image_for_resume(candidate_id,template_no):
                 latest_end_date = i.end_date
                 latest_experience = i.job_profile
 
-    template = get_template('resume{}_preview.html'.format(template_no))
+
+    template_id_suffix_mapping = {1:"pdf",4:"pdf"}
+    template = get_template('resume{}_{}.html'.format(\
+        template_no,template_id_suffix_mapping.get(int(template_no),"preview")))
 
     rendered_template = template.render(
         {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,
@@ -140,13 +143,13 @@ def update_customisations_for_all_templates(candidate_id):
         obj.save()
 
 @task
-def zip_all_resume_pdfs(order_id):
+def zip_all_resume_pdfs(order_id,data):
     from resumebuilder.models import Candidate
     from order.models import Order
     from resumebuilder.utils import store_resume_file
-
+    from order.tasks import send_resume_in_mail_resume_builder
+    
     order = Order.objects.get(id=order_id)
-
     content_type = "zip"
     candidate = Candidate.objects.get(candidate_id=order.candidate_id)
     file_dir = "{}/{}".format(candidate.id, content_type)
@@ -174,9 +177,9 @@ def zip_all_resume_pdfs(order_id):
         open(current_file, 'wb').write(file_obj.read())
         zf.write(current_file)
         os.unlink(current_file)
-
     zf.close()
     store_resume_file(file_dir, file_name, zip_stream.getvalue())
+    send_resume_in_mail_resume_builder([file_name,zip_stream.getvalue()],data)
 
 
 @task
@@ -184,10 +187,11 @@ def generate_and_upload_resume_pdf(data):
     from resumebuilder.models import Candidate
     from order.models import Order
     from resumebuilder.utils import store_resume_file
-
+    from order.tasks import send_resume_in_mail_resume_builder
     data = json.loads(data)
     order = Order.objects.get(id=data.get('order_id'))
     template_no = data.get('template_no')
+    send_mail = data.get('send_mail')
 
     #Render PDF for context
     def generate_file(context_dict={}, template_src= None,file_type='pdf'):
@@ -271,7 +275,9 @@ def generate_and_upload_resume_pdf(data):
                 latest_end_date = exp.end_date
                 latest_experience = exp.job_profile
 
-    template = get_template('resume{}_preview.html'.format(template_id))
+    template_id_suffix_mapping = {1:"pdf",4:"pdf"}
+    template_src = 'resume{}_{}.html'.format(template_id,template_id_suffix_mapping.get(template_id,"preview"))
+    
     context_dict = {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,
                     'achievements': achievements, 'references': references, 'projects': projects,
                     'certifications': certifications, 'extracurricular': extracurricular, 'languages': languages,
@@ -279,14 +285,23 @@ def generate_and_upload_resume_pdf(data):
                     'preference_list': entity_preference, 'current_config': current_config,
                     'entity_position': updated_entity_position, "width": 93.7
                     }
-
-    pdf_file = generate_file(context_dict=context_dict,\
-        template_src='resume{}_preview.html'.format(template_no),file_type='pdf')
-
+    pdf_file = generate_file(context_dict=context_dict,template_src=template_src,file_type='pdf')
     store_resume_file(file_dir,file_name,pdf_file)
+
+    data = {}
+    data.update({
+        'email' : candidate.email,
+        'username':candidate.first_name,
+        'subject': 'Your resume is here',
+        'siteDomain': settings.SITE_DOMAIN
+    })
     
     if template_no == 5:
-        zip_all_resume_pdfs.apply_async((order.id,),countdown=2)
+        zip_all_resume_pdfs.apply_async((order.id,data),countdown=2)
+    
+    if send_mail:
+        send_resume_in_mail_resume_builder(data.get('order_id'),['resume',pdf_file],data)
+
 
 
 

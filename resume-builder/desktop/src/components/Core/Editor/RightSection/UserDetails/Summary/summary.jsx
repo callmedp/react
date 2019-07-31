@@ -13,6 +13,7 @@ import {
     renderTextArea
 } from "../../../../../FormHandler/formFieldRenderer.jsx";
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
+import {siteDomain} from '../../../../../../Utils/domains'
 
 
 class Summary extends Component {
@@ -46,18 +47,29 @@ class Summary extends Component {
         }
     }
 
-    async updateInfoBeforeLoss(){
-        let {initialValues, formData: {summary: {values}}} = this.props;
-        if (!this.state.submit && JSON.stringify(initialValues)!==JSON.stringify(values)) await this.props.onSubmit(values)
+    async updateInfoBeforeLoss() {
+        let {initialValues, formData: {summary: {values}}, personalInfo} = this.props;
+        if (!this.state.submit && JSON.stringify(initialValues) !== JSON.stringify(values)) await this.props.onSubmit(values, personalInfo)
     }
 
     async handleSubmit(values, entityLink) {
-        await this.props.onSubmit(values);
+        const {userInfo: {order_data}, hideGenerateResumeModal, showGenerateResumeModal, history, reGeneratePDF, personalInfo} = this.props;
+        await this.props.onSubmit(values, personalInfo);
         this.setState({
             submit: true
         })
-        if (entityLink) this.props.history.push(entityLink);
-        else this.props.history.push('/resume-builder/buy/')
+        if (entityLink) {
+            this.props.history.push(entityLink)
+        } else if (order_data && order_data.id) {
+            showGenerateResumeModal()
+            reGeneratePDF(order_data.id)
+            setTimeout(function () {
+                window.location.href = `${siteDomain}/dashboard`
+                hideGenerateResumeModal()
+            }, 5000);
+        } else {
+            history.push(`/resume-builder/buy`)
+        }
     }
 
 
@@ -111,11 +123,11 @@ class Summary extends Component {
 
 
     render() {
-        const {extra_info, ui: {suggestions}, handleInputValue, handleSubmit, showAlertModal, history, isEditable, editHeading, saveTitle, entityName, nextEntity} = this.props;
+        const {extra_info, ui: {suggestions}, eventClicked, handleInputValue, handleSubmit, showAlertModal, history, isEditable, editHeading, saveTitle, entityName, nextEntity, personalInfo: {order_data}} = this.props;
         const {modal_status} = this.state;
         return (
             <div>
-                <SuggestionModal label={'Summary'} length={extra_info.length} maxLength="500"
+                <SuggestionModal label={'Summary'} length={extra_info.length} maxLength="1000"
                                  modal_status={modal_status} closeModal={this.closeModal} suggestions={suggestions}/>
                 <section className="head-section">
                     <span className="icon-box"><i className="icon-summary1"/></span>
@@ -129,7 +141,7 @@ class Summary extends Component {
                             <span onClick={(event) => saveTitle(event, 6)} className="icon-tick"/>
                         </React.Fragment>
                     }
-                    <span onClick={() => editHeading()}
+                    <span onClick={() => editHeading(6)}
                           className={!!(!isEditable) ? "icon-edit " + styles['icon-summary__cursor'] : ''}/>
                 </section>
                 <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
@@ -138,7 +150,7 @@ class Summary extends Component {
                             <h3>Summary</h3>
                             <Field
                                 noIcon={true}
-                                component={renderTextArea} type={"textarea"} name="extra_info" maxLength={"500"}
+                                component={renderTextArea} type={"textarea"} name="extra_info" maxLength={"1000"}
                                 className="summary-box--summary-txt" rows="10" value={extra_info}/>
                         </div>
                         <span className="add-suggested mt-15" onClick={() => {
@@ -149,8 +161,8 @@ class Summary extends Component {
 
 
                     <SavePreviewButtons
-                        showAlertModal={showAlertModal} context={this} history={history}
-                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data} form_name={'Summary'}
+                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss} eventClicked={eventClicked}
                     />
                 </form>
             </div>
@@ -192,14 +204,16 @@ const mapDispatchToProps = (dispatch) => {
                 return dispatch(fetchJobTitles({inputValue, suggestionType, res, rej}))
             })
         },
-        "onSubmit": (personalDetails) => {
+        "onSubmit": (personalDetails, storeInformation) => {
             const {gender, extracurricular} = personalDetails;
+            const {entity_preference_data} = storeInformation;
             personalDetails = {
                 ...personalDetails,
                 ...{
                     'gender': (gender && gender['value']) || '',
                     'extracurricular': extracurricular instanceof Array ?
-                        (extracurricular || []).filter(el => el !== undefined).map(el => el.value).join(',') : ''
+                        (extracurricular || []).filter(el => el !== undefined).map(el => el.value).join(',') : '',
+                    'entity_preference_data': (entity_preference_data || []).map(el => el)
                 }
             };
 

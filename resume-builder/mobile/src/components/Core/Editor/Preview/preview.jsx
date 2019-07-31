@@ -2,8 +2,9 @@ import React ,{Component} from 'react';
 import Header from '../../../Common/Header/header.jsx';
 import './preview.scss';
 import {connect} from "react-redux";
-import {fetchTemplate,updateModalStatus,customizeTemplate,fetchDefaultCustomization,reorderSection} from "../../../../store/template/actions/index"
+import {fetchTemplate,updateModalStatus,customizeTemplate,fetchDefaultCustomization,reorderSection,reGeneratePDF,} from "../../../../store/template/actions/index"
 import {updatePersonalInfo,fetchPersonalInfo} from "../../../../store/personalInfo/actions/index"
+import {updateAlertModalStatus,showGenerateResumeModal,hideGenerateResumeModal} from "../../../../store/ui/actions/index"
 import Loader from '../../../Common/Loader/loader.jsx';
 import ChangeTemplateModal from './changeTemplateModal.jsx';
 import moment from 'moment'
@@ -16,6 +17,10 @@ import {
 } from "react-accessible-accordion";
 import InputRange from 'react-input-range';
 import Swal from 'sweetalert2'
+import {siteDomain} from "../../../../Utils/domains";
+import AlertModal from '../../../Common/AlertModal/alertModal.jsx';
+import {eventClicked} from '../../../../store/googleAnalytics/actions/index'
+import {formCategoryList} from '../../../../Utils/formCategoryList'
 
 class Preview extends Component {
 
@@ -40,7 +45,9 @@ class Preview extends Component {
         this.handleActiveSection = this.handleActiveSection.bind(this);
         this.handleZoomTemplate = this.handleZoomTemplate.bind(this);
         this.showReorderErrorToast = this.showReorderErrorToast.bind(this);
-
+        this.getResume = this.getResume.bind(this);
+        this.themeChange = this.themeChange.bind(this);
+        this.fontChange = this.fontChange.bind(this);
     }
 
     componentWillUpdate(prevProps){
@@ -106,6 +113,22 @@ class Preview extends Component {
 
     }
 
+    themeChange(colorNo,colorName){
+        this.setState({selectedColor:colorNo})
+        this.props.eventClicked({
+            'action':'ChangeTheme',
+            'label':colorName
+        })
+    }
+
+    fontChange(fontSize,isHeadingFontSize){
+        isHeadingFontSize ? this.setState({ headingFontSize: fontSize }) : this.setState({ textFontSize: fontSize })
+        this.props.eventClicked({
+            'action':'ChangeFont',
+            'label': fontSize===0 ? 'S' : fontSize===1 ? 'M' : 'L'
+        })
+    }
+
     handleActiveSection(section) {
         this.setState({
             activeSection: section,
@@ -120,18 +143,46 @@ class Preview extends Component {
     }
 
     moveUpSection(selectedEntity, selectedTemplate) {
-
-        this.props.reorderSection({
+        const {eventClicked,reorderSection} = this.props;
+        eventClicked({
+            'action':'ReorderSection',
+            'label':formCategoryList[selectedEntity['entity_id']].name
+        })
+        reorderSection({
             templateId: selectedTemplate,
             info: {entity_id: selectedEntity['entity_id'], step: -1,pos:selectedEntity['pos']}
         })
     }
 
     moveDownSection(selectedEntity, selectedTemplate) {
-        this.props.reorderSection({
+        const {eventClicked,reorderSection} = this.props;
+        eventClicked({
+            'action':'ReorderSection',
+            'label':formCategoryList[selectedEntity['entity_id']].name
+        })
+        reorderSection({
             templateId: selectedTemplate,
             info: {entity_id: selectedEntity['entity_id'], step: 1,pos:selectedEntity['pos']}
         })
+    }
+
+    getResume(){
+        const {personalInfo:{order_data},history,reGeneratePDF,showGenerateResumeModal,hideGenerateResumeModal,eventClicked} = this.props;
+        eventClicked({
+            'action':'GetYourResume',
+            'label':'Click'
+        })
+        if(order_data && order_data.id){
+            showGenerateResumeModal()
+            reGeneratePDF(order_data.id)
+            setTimeout(function() {
+                window.location.href = `${siteDomain}/dashboard`
+                hideGenerateResumeModal()
+            }, 5000);
+        }
+        else{
+            history.push(`/resume-builder/buy`)
+        }
     }
 
     async handleCustomization(data) {
@@ -142,10 +193,11 @@ class Preview extends Component {
 
     render(){
         const {customize,currentTab,selectedColor,headingFontSize,textFontSize,sectionEntityName,startingReorderUpDowmIndex,zoomIn} = this.state
-        const {template:{html,zoomInHtml,entity_position,entity_id_count_mapping},ui:{mainloader},personalInfo:{selected_template}} = this.props
+        const {template:{html,zoomInHtml,entity_position,entity_id_count_mapping},ui:{mainloader,alertModalStatus,generateResumeModal},personalInfo:{selected_template,order_data},history,eventClicked} = this.props
         return(
             <div className="preview">
-               <Header page={'preview'} {...this.props}/>
+               <Header page={'preview'} {...this.props} order_data={order_data} eventClicked={eventClicked} />
+               <AlertModal modal_status={alertModalStatus|| generateResumeModal}  history={history} generateResumeModal={generateResumeModal}/>
                <ChangeTemplateModal {...this.props}/>
                
                {mainloader ? <Loader/> :""}
@@ -161,7 +213,7 @@ class Preview extends Component {
 
                <div className="preview__bottom-btns pos-fixed">
                     <span className="btn btn__round btn--outline" onClick={()=>{this.setState({customize:true})}}>Customize template</span>
-                    <span className="btn btn__round btn__primary" onClick={()=>{this.props.history.push(`/resume-builder/buy`) }}>Get your resume</span>
+                    <span className="btn btn__round btn__primary" onClick={this.getResume }>Get your resume</span>
                </div>
 
                {customize ?
@@ -193,7 +245,7 @@ class Preview extends Component {
                                                     <ul className="resume-color-theme">
                                                         <li className="resume-color-theme__item">
                                                             <input className="resume-color-theme__item--input" type="radio" name="radio1" id="green" value="green"
-                                                                onClick={()=>{this.setState({selectedColor:1})}}
+                                                                onClick={()=>{this.themeChange(1,'Green')}}
                                                                 checked={selectedColor === 1} readOnly />
                                                             <label htmlFor="green" className="resume-color-theme__item__label">
                                                                 <span className="resume-color-theme__item__theme resume-color-theme__item--green"></span>
@@ -202,7 +254,7 @@ class Preview extends Component {
 
                                                         <li className="resume-color-theme__item">
                                                             <input className="resume-color-theme__item--input" type="radio" name="radio1" id="blue" value="blue"
-                                                                onClick={()=>{this.setState({selectedColor:2})}} 
+                                                                onClick={()=>{this.themeChange(2,'Blue')}}
                                                                 checked={selectedColor === 2} readOnly/>
                                                             <label htmlFor="blue" className="resume-color-theme__item__label">
                                                                 <span className="resume-color-theme__item__theme resume-color-theme__item--blue"></span>
@@ -211,7 +263,7 @@ class Preview extends Component {
                                                         
                                                         <li className="resume-color-theme__item">
                                                             <input className="resume-color-theme__item--input" type="radio" name="radio1" id="red" value="red"
-                                                                onClick={()=>{this.setState({selectedColor:3})}}
+                                                                onClick={()=>{this.themeChange(3,'Red')}}
                                                                 checked={selectedColor === 3} readOnly/>
                                                             <label htmlFor="red" className="resume-color-theme__item__label">
                                                                 <span className="resume-color-theme__item__theme resume-color-theme__item--red"></span>
@@ -220,7 +272,7 @@ class Preview extends Component {
                                                         
                                                         <li className="resume-color-theme__item">
                                                             <input className="resume-color-theme__item--input" type="radio" name="radio1" id="black" value="black" 
-                                                                onClick={()=>{this.setState({selectedColor:4})}}
+                                                                onClick={()=>{this.themeChange(4,'Black')}}
                                                                 checked={selectedColor === 4} readOnly/>
                                                             <label htmlFor="black" className="resume-color-theme__item__label">
                                                                 <span className="resume-color-theme__item__theme resume-color-theme__item--black"></span>
@@ -229,7 +281,7 @@ class Preview extends Component {
                                                         
                                                         <li className="resume-color-theme__item">
                                                             <input className="resume-color-theme__item--input" type="radio" name="radio1" id="brown" value="brown"
-                                                                onClick={()=>{this.setState({selectedColor:5})}} 
+                                                                onClick={()=>{this.themeChange(5,'Brown')}}
                                                                 checked={selectedColor === 5} readOnly/>
                                                             <label htmlFor="brown" className="resume-color-theme__item__label">
                                                                 <span className="resume-color-theme__item__theme resume-color-theme__item--brown"></span>
@@ -238,7 +290,7 @@ class Preview extends Component {
                                                         
                                                         <li className="resume-color-theme__item">
                                                             <input className="resume-color-theme__item--input" type="radio" name="radio1" id="violet" value="violet" 
-                                                                onClick={()=>{this.setState({selectedColor:6})}} 
+                                                                onClick={()=>{this.themeChange(6,'Violet')}}
                                                                 checked={selectedColor === 6} readOnly/>
                                                             <label htmlFor="violet" className="resume-color-theme__item__label">
                                                                 <span className="resume-color-theme__item__theme resume-color-theme__item--violet"></span>
@@ -281,7 +333,7 @@ class Preview extends Component {
                                                         maxValue={2}
                                                         minValue={0}
                                                         value={headingFontSize}
-                                                        onChange={value => this.setState({ headingFontSize: value })} />
+                                                        onChange={value => this.fontChange(value,true)} />
                                                     <div className="heading-size">
                                                         <div className="heading-size-item">S</div>
                                                         <div className="heading-size-item">M</div>
@@ -293,7 +345,7 @@ class Preview extends Component {
                                                         maxValue={2}
                                                         minValue={0}
                                                         value={textFontSize}
-                                                        onChange={value => this.setState({ textFontSize: value })} />
+                                                        onChange={value => this.fontChange(value,false)} />
                                                     <div className="heading-size">
                                                         <div className="heading-size-item">S</div>
                                                         <div className="heading-size-item">M</div>
@@ -402,6 +454,9 @@ const mapDispatchToProps = (dispatch) => {
         "fetchTemplate": () => {
             return dispatch(fetchTemplate())
         },
+        'reGeneratePDF': (data) => {
+            return dispatch(reGeneratePDF(data))
+        },
         "updateModalStatus": (data) => {
             return dispatch(updateModalStatus(data))
         },
@@ -418,6 +473,15 @@ const mapDispatchToProps = (dispatch) => {
         },
         "reorderSection": (data) => {
             return dispatch(reorderSection(data))
+        },
+        "updateAlertModalStatus": (data) => {
+            return dispatch(updateAlertModalStatus(data))
+        },
+        'showGenerateResumeModal': () => {
+            return dispatch(showGenerateResumeModal())
+        },
+        'hideGenerateResumeModal': () => {
+            return dispatch(hideGenerateResumeModal())
         },
         "updateSelectedTemplate": (personalInfo) => {
             let { date_of_birth, extracurricular,image,gender} = personalInfo;
@@ -436,6 +500,9 @@ const mapDispatchToProps = (dispatch) => {
                 dispatch(updatePersonalInfo({personalDetails, resolve, reject}));
             })
         },
+        'eventClicked': (data) => {
+            return dispatch(eventClicked(data))
+        }
     }
 };
 

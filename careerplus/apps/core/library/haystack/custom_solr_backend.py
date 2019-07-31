@@ -45,11 +45,9 @@ class CustomSolrSearchBackend(SolrSearchBackend):
         """
         Overridden to include extra_params and boost_params apart from the other params.
         """
-
         search_params =super(CustomSolrSearchBackend,self).build_search_kwargs(query_string,sort_by,start_offset,end_offset,fields,highlight,facets,date_facets,query_facets,narrow_queries,spelling_query,within,dwithin,distance_point,models,limit_to_registered_models,result_class,stats)
 
         search_params.update(**kwargs)
-
         return search_params
 
     def _process_results(self, raw_results, highlight=False, result_class=None, distance_point=None):
@@ -130,7 +128,6 @@ class CustomSolrSearchQuery(SolrSearchQuery):
         if not final_query:
             # Match all.
             final_query = self.matching_all_fragment()
-        
         return final_query
 
 

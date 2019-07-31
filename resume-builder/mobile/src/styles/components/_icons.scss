@@ -483,6 +483,11 @@
     @include size(20px, 16px, block);
     background-position: -133px -264px;
   }
+
+  &--create-download {
+    @include size(24px, 18px, block);
+    background-position: -108px -361px;
+  }
 }
 
 

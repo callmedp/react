@@ -119,9 +119,9 @@ class PartnerInboxQueueView(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     order__payment_date__range=[start_date, end_date])
+        
         except Exception as e:
             logging.getLogger('error_log').error('unable to get order payment queryset with date range %s'%str(e))
-
             pass
 
         return queryset.select_related('order', 'product').order_by('-modified')
@@ -156,7 +156,7 @@ class PartnerHoldQueueView(ListView, PaginationMixin):
         alert = messages.get_messages(self.request)
         initial = {"modified": self.modified, "payment_date": self.payment_date}
         filter_form = OIFilterForm(initial)
-        var=self.sel_opt
+        var = self.sel_opt
         context.update({
             "messages": alert,
             "message_form": MessageForm(),

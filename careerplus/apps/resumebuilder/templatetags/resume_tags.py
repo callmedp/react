@@ -68,16 +68,16 @@ def skill_color(proficiency, color):
 @register.filter
 def degree(proficiency):
     proficiency_dict = {
-        1: -50,
-        2: -20,
-        3: 10,
-        4: 50,
-        5: 90,
-        6: -65,
-        7: -30,
-        8: 10,
-        9: 50,
-        10: 90
+        1: 140,
+        2: 110,
+        3: 70,
+        4: 45,
+        5: 0,
+        6: 145,
+        7: 105,
+        8: 85,
+        9: 30,
+        10: 0
     }
     return proficiency_dict.get(proficiency,50)
 
@@ -90,7 +90,7 @@ def background_color_choice(color_code):
         3: '#D95B5B',
         4: '#000000',
         5: '#C6A828',
-        6: '#7C39CA',
+        6: '#7d5ca5',
     }
     return code_dict.get(color_code,'#639F59')
 

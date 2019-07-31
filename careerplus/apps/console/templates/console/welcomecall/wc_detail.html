@@ -83,18 +83,24 @@
                 <tbody>
                     <tr class="even pointer">
                       <td>{{order.number}}</td>
-                      <td>{{order.email}}</td>
-                      <td>
-                        {{order.mobile}}
-                        {% if show_btn %}
-
-                   <button id="{{order.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{order.id}});"></button>
-                         <div style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{order.id}}callingbtn-error"></div>
-
-                                            {% endif %}
-
-
-                      </td>
+                        <td>
+                    <div id="email{{order.id}}">
+                      <div id="email_field{{order.id}}_1"></div>
+                    </div>
+                    <div>
+                      <button type="button" class="btn btn-primary btn-xs" onclick="order_get_details('{{order.id}}','email,alt_email','email');"><i class="fa fa-search" aria-hidden="true"></i>ClickToView</button>
+                    </div>
+                  </td>
+                  <td>
+                    <div id="mobile{{order.id}}" style="display: -moz-inline-stack;">
+                      <div id="mobile_field{{order.id}}_1"></div>
+                    </div>
+                      {% if exoitel_status%}
+                      <button id="{{order.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{order.id}});"></button>
+                      <span style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{order.id}}callingbtn-error"></span>
+                      {% endif %}
+                    <button type="button" onclick="order_get_details('{{order.id}}','mobile,alt_mobile','mobile');" class="btn btn-primary btn-xs"><i class="fa fa-phone-square" aria-hidden="true"></i> ClickToView</button>
+                  </td>
                       <td>{{order.first_name}} {{order.last_name}}</td>
                       <td>
                         {% if order.wc_follow_up %}
@@ -299,6 +305,9 @@
   <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
   <script type="text/javascript" src="{% static "console/js/order/welcome-call.js" %}"></script>
   <script src="{% static "console/js/datepicker/bootstrap-datetimepicker.js" %}"></script>
+   <script type="text/javascript" src = "{% static 'console/js/order-info.js' %}"></script>
+
   {% endcompress %}
 
 {% endblock js_block %}
+

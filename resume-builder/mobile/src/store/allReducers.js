@@ -15,6 +15,7 @@ import {getProductIdsReducer} from './buy/reducer/index'
 import {templateReducer} from './template/reducer/index'
 import {sidenavReducer} from './sidenav/reducer/index'
 import {uiReducer} from './ui/reducer/index'
+import {googleAnalyticsReducer} from './googleAnalytics/reducer/index'
 
 const allReducer = combineReducers({
         form: formReducer,
@@ -31,7 +32,8 @@ const allReducer = combineReducers({
         productIds: getProductIdsReducer,
         template: templateReducer,
         sidenav : sidenavReducer,
-        ui : uiReducer
+        ui : uiReducer,
+        analytics: googleAnalyticsReducer
     })
 ;
 

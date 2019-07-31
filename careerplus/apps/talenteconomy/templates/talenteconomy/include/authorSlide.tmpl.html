@@ -13,7 +13,7 @@
 										<a class="box-panel" href="{% url 'talent:authors-detail' author.slug %}" title="{{author.name}}">
 											<figure>
 												{% if author.image %}
-												<img src="{{author.image.url}}" class="img-responsive" alt="{{author.image_alt}}">
+												<img aria-label="{{author.image_alt}}" src="{{author.image.url}}" class="img-responsive" alt="{{author.image_alt}}">
 												{% endif %}
 											</figure>
 											<figcaption>

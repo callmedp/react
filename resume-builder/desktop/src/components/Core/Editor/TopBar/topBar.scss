@@ -30,14 +30,15 @@
 		}
 
 		p {
-			font-size: 2.0rem;
-			color: #DAE3F9;
+			font-size: 1.8rem;
+			color: $white;
 			font-weight: 300;
+			line-height: 20px;
 		}
 	}
 
 	&--banner-right {
-		flex: 0 0 340px;
+		flex: 0 0 475px;
 		flex-direction: row;
 		align-items: center;
 		justify-content: center;
@@ -67,5 +68,19 @@
 			background: $sprite -1px -139px;
 			justify-content: flex-end;
 		}
+
+		.white-button {
+			padding: 8px 15px;
+		}
 	}
+}
+
+.launch-offer {
+	width: 145px;
+	height: 139px;
+	background: url(#{$static-url}react/assets/images/launch-offer.png);
+	display: inline-block;
+	position: absolute;
+	right: 10px;
+	top: -12px;
 }

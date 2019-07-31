@@ -182,6 +182,7 @@ class ResumeGenerator(object):
         data_to_send = {"order_id":order.id,"template_no":index}
 
         if not is_combo:
+            data_to_send.update({"send_mail":True})
             generate_and_upload_resume_pdf.delay(json.dumps(data_to_send))
             return
 

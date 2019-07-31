@@ -9,13 +9,15 @@ import {withRouter} from "react-router-dom";
 import * as profileActions from '../../../store/personalInfo/actions/index';
 import * as uiActions from '../../../store/ui/actions/index';
 import Loader from '../../Common/Loader/loader'
-import moment from 'moment'
+import {eventClicked} from '../../../store/googleAnalytics/actions/index'
+import {formCategoryList} from '../../../Utils/formCategoryList'
 
 class EditPreview extends Component {
 
     constructor(props){
         super(props);
         this.changeLink = this.changeLink.bind(this)
+        this.headingChange = this.headingChange.bind(this);
     }
 
     componentDidMount() {
@@ -30,6 +32,15 @@ class EditPreview extends Component {
         this.props.headingChange(this.props.personalInfo,id,heading)
     }
 
+    headingChange(entity,heading,pos){
+        const {eventClicked,entityChange} = this.props
+        eventClicked({
+            'action':'EditSection',
+            'label':formCategoryList[pos+1].name
+        })
+        entityChange(entity,heading,pos);
+    }
+
     render() {
         const {history,ui:{mainloader}} = this.props;
         return (
@@ -37,7 +48,7 @@ class EditPreview extends Component {
                 {mainloader ? <Loader/> :""}
                 <Header page={'edit'} history={history}/>
                 <LeftSideBar {...this.props}/>
-                <RightSection {...this.props} changeLink={this.changeLink}/>
+                <RightSection {...this.props} changeLink={this.changeLink} headingChange={this.headingChange}/>
             </div>
 
         )
@@ -60,10 +71,16 @@ const mapDispatchToProps = (dispatch) => {
         "updateModalStatus": (data) => {
             return dispatch(actions.updateModalStatus(data))
         },
+        'showGenerateResumeModal': () => {
+            return dispatch(uiActions.showGenerateResumeModal())
+        },
+        'hideGenerateResumeModal': () => {
+            return dispatch(uiActions.hideGenerateResumeModal())
+        },
         "fetchPersonalInfo": () => {
             return dispatch(profileActions.fetchPersonalInfo())
         },
-        'headingChange': (entity,heading,pos) => {
+        'entityChange': (entity,heading,pos) => {
             entity[pos].entity_text = heading
             return new Promise((resolve, reject) => {
                 return dispatch(profileActions.updateEntityPreference({"entity_preference_data": entity,resolve,reject}))
@@ -78,6 +95,12 @@ const mapDispatchToProps = (dispatch) => {
         "updateAlertModalStatus": (data) => {
             return dispatch(uiActions.updateAlertModalStatus(data))
         },
+        'reGeneratePDF': (data) => {
+            return dispatch(actions.reGeneratePDF(data))
+        },
+        'eventClicked': (data) => {
+            return dispatch(eventClicked(data))
+        }
     }
 };
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditPreview))

@@ -20,8 +20,9 @@ export default class AlertModal extends React.Component {
     }
 
     render() {
-        const {ui: {alertModal}, nextLink, newUser, isPreview} = this.props;
+        const {ui: {alertModal,generateResumeModal}, nextLink, newUser,isPreview} = this.props;
         return (
+
             <React.Fragment>
                 <div className="pr alert-modal">
 
@@ -37,7 +38,7 @@ export default class AlertModal extends React.Component {
                                 height: '280px',
                             }
                         }}
-                        isOpen={alertModal}
+                        isOpen={alertModal || generateResumeModal}
                         onRequestClose={this.closeModal}
                         contentLabel="Example Modal"
                         shouldCloseOnOverlayClick={false}
@@ -53,7 +54,17 @@ export default class AlertModal extends React.Component {
                                     </div>
                                 </div>
                             </div> :
-                            isPreview ?
+                            generateResumeModal ?
+                            <div className="pr">
+                                <div className="alert-modal margin-top-alert">
+                                    <strong>Generating Resume</strong>
+                                    <p>Your resume is being generated. Please wait..</p>
+                                    <div className="logo-center">
+                                        <img src={`${this.staticUrl}react/assets/images/blue-loader.png`}/>
+                                    </div> 
+                                </div>
+                            </div>:
+                            isPreview  ?
                                 <div className="pr">
                                     <div className="alert-modal">
                                         <span className="icon-alert"></span>
@@ -70,6 +81,7 @@ export default class AlertModal extends React.Component {
                                     </div>
                                 </div>
                                 :
+                            
                                 <div className="pr">
                                     <div className="alert-modal">
                                         <span className="icon-alert"></span>

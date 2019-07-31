@@ -8,7 +8,6 @@ from emailers.email import SendMail
 from emailers.sms import SendSMS
 from django.utils import timezone
 
-
 def update_initiat_orderitem_sataus(order=None):
     if order:
         orderitems = order.orderitems.filter(
@@ -57,7 +56,8 @@ def update_initiat_orderitem_sataus(order=None):
                         assigned_to=oi.assigned_to)
 
             elif oi.product.type_flow == 5:
-                if oi.order.orderitems.filter(product__type_flow=1, no_process=False).exists():
+                if (oi.order.orderitems.filter(product__type_flow=1, no_process=False).exists() and \
+                        oi.product.sub_type_flow == 501):
                     last_oi_status = oi.oi_status
                     oi.oi_status = 61
                     oi.last_oi_status = last_oi_status
@@ -69,6 +69,8 @@ def update_initiat_orderitem_sataus(order=None):
                 else:
                     last_oi_status = oi.oi_status
                     if oi.product.sub_type_flow == 502:
+                        oi.oi_status = 23
+                    elif oi.product.sub_type_flow == 503:
                         oi.oi_status = 5
                     else:
                         oi.oi_status = 2
@@ -250,3 +252,30 @@ def close_resume_booster_ois(ois_to_update):
                 assigned_to=oi.assigned_to,
             )
         oi.emailorderitemoperation_set.create(email_oi_status=92)
+
+# Use to automate Processing for application highlighter Update/Approval.
+def process_application_highlighter(obj=None):
+    if obj.is_combo and obj.parent:
+        wc_cat = obj.parent.wc_cat
+        wc_sub_cat = obj.parent.wc_sub_cat
+    else:
+        wc_cat = obj.wc_cat
+        wc_sub_cat = obj.wc_sub_cat
+    updated_orderitem_operation = obj.orderitemoperation_set.filter(oi_status=30).first()
+    if ((wc_cat == 21 and wc_sub_cat in [41, 42]) or (wc_cat == 22 and wc_sub_cat == 63)) and not updated_orderitem_operation:
+        last_oi_status = obj.oi_status
+        obj.orderitemoperation_set.create(
+            oi_status=23,
+            last_oi_status=last_oi_status,
+            assigned_to=obj.assigned_to
+        )
+        obj.orderitemoperation_set.create(
+            oi_status=30,
+            last_oi_status=23,
+            assigned_to=obj.assigned_to)
+
+        last_oi_status = 23
+        obj.oi_status = 30  # approved
+        obj.last_oi_status = last_oi_status
+        obj.approved_on = timezone.now()
+        obj.save()

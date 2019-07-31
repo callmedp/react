@@ -48,10 +48,10 @@
                         style="background-image:url({% if university.banner %}{{university.banner.url}}{% else %}{% static 'shinelearn/images/mobile/executive-course/college-image.jpg' %}{% endif %})">
                         <div class="principal-image-wrap">
                             <div class="university-logo">
-                                <img src="{{university.icon.url}}" alt="{{university.name}}"/>
+                                <img aria-label="{{university.name}}" src="{{university.icon.url}}" alt="{{university.name}}"/>
                             </div>
                             <div class="principle-image">
-                                <img src="{% if faculty_obj.image %}{{faculty_obj.image.url}}{% else %}{% static 'shinelearn/images/executive/default-user-pic.jpg' %}{% endif %}" class="img-responsive" alt="{{faculty_obj.alt_name}}"/>
+                                <img aria-label="{{faculty_obj.alt_name}}" src="{% if faculty_obj.image %}{{faculty_obj.image.url}}{% else %}{% static 'shinelearn/images/executive/default-user-pic.jpg' %}{% endif %}" class="img-responsive" alt="{{faculty_obj.alt_name}}"/>
                             </div>
                         </div><!-- /. principal-image-wrap -->
                     </div><!-- /. background image -->
@@ -79,7 +79,7 @@
                             <div class="offer-tag">Admission open</div>
                             {% endif %}
                             <div class="university-logo">
-                                <img
+                                <img aria-label="{{university.name}}"
                                     src="{{university.icon.url}}" alt="{{university.name}}" />
                             </div>
                             <div class="media mt-15">
@@ -90,7 +90,7 @@
                                 
                                 <div class="media-left pr-0">
                                     <a href="{{prd.get_absolute_url}}" class="course-logo" itemprop="url">
-                                        <img    
+                                        <img aria-label="{{prd.image_alt}}"    
                                             src="{{prd.icon.url}}" 
                                             class="img-responsive" alt="{{prd.image_alt}}"
                                         />

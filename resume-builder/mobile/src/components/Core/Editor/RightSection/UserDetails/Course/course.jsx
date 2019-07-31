@@ -9,6 +9,7 @@ import validate from "../../../../../FormHandler/validtaions/course/validate"
 import {siteDomain} from "../../../../../../Utils/domains";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 import BottomCTC from '../../../../../Common/BottomCTC/bottom-ctc';
+import Subscribe from '../../../RightSection/subscribe';
 
 
 class Course extends Component {
@@ -35,22 +36,27 @@ class Course extends Component {
 
     async handleSubmit(values) {
         values = this.state.fields ? this.state.fields : values.list
-        let {listOfLinks,currentLinkPos} = this.props.sidenav
+        let {sidenav:{listOfLinks,currentLinkPos},bulkUpdateUserCourse,personalInfo:{order_data},updateCurrentLinkPos,history,showGenerateResumeModal,hideGenerateResumeModal,reGeneratePDF} = this.props
         currentLinkPos++
         this.setState({submit:true})
-        await this.props.bulkUpdateUserCourse(values);
+        await bulkUpdateUserCourse(values);
          if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
-            if(this.props.personalInfo.subscription_status){
-                window.location.href = `${siteDomain}/dashboard/myorder`
+            if(order_data && order_data.id){
+                showGenerateResumeModal()
+                reGeneratePDF(order_data.id)
+                setTimeout(function() {
+                    window.location.href = `${siteDomain}/dashboard`
+                    hideGenerateResumeModal()
+                }, 5000);
             }
             else{
-                this.props.history.push(`/resume-builder/buy`) 
+                history.push(`/resume-builder/buy`) 
             }
         }
         else{
-            this.props.updateCurrentLinkPos({currentLinkPos})
-            this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)    
+            updateCurrentLinkPos({currentLinkPos})
+            history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)    
         }
         
     }
@@ -106,12 +112,13 @@ class Course extends Component {
     render () {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {updateAlertModalStatus,handleSubmit, history,submitting,personalInfo:{subscription_status,entity_preference_data},headingChange,changeOrderingUp,changeOrderingDown} = this.props;
+        const {updateAlertModalStatus,handleSubmit, history,submitting,personalInfo:{order_data,entity_preference_data},headingChange,changeOrderingUp,changeOrderingDown,eventClicked} = this.props;
         const {editHeading,heading} =this.state;
         return(
 
             <div className="buildResume">
                 <PreviewModal {...this.props}/>
+                <Subscribe {...this.props}/>
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <FieldArray name="list" 
                                 handleSubmit={handleSubmit}
@@ -119,6 +126,7 @@ class Course extends Component {
                                 deleteCourse={this.deleteCourse}
                                 changeOrderingUp={changeOrderingUp}
                                 changeOrderingDown={changeOrderingDown}
+                                eventClicked={eventClicked}
                                 component={renderCourse}
                                 headingChange={headingChange}
                                 entity_preference_data={entity_preference_data}
@@ -130,7 +138,7 @@ class Course extends Component {
                         <li className="form__group">
                             <BottomCTC  disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
                                 length={length} pos={pos+1} updateInfoBeforeLoss={this.updateInfoBeforeLoss} 
-                                subscription_status={subscription_status}/>
+                                order_data={order_data} eventClicked={eventClicked} form_name={'Courses'}/>
                         </li>
                     </ul>
                 </form>

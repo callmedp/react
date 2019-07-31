@@ -2,10 +2,10 @@
 <!doctype html>
 <html lang="en">
 <head>
+    <title>Resume</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Resume</title>
     <script src="https://kit.fontawesome.com/85df0f75f9.js"></script>
 </head>
 <body style="margin: 0; padding: 0; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif';">
@@ -21,7 +21,7 @@
     <!--top column-->
     <div style="display: flex; display: -webkit-box; display: -ms-flexbox; width: 100%; vertical-align: top;">
         <!--top left column-->
-        <div style="width: 50%; background: {{ current_config.color|background_color_choice }}; padding: 3%; flex: 50%; -webkit-box-flex: 50%; -ms-flex: 50%; vertical-align: top; vertical-align: top; min-height: 275px;">
+        <div style="background: {{ current_config.color|background_color_choice }}; padding: 3%; width: 50%; flex: 50%; -webkit-box-flex: 50%; -ms-flex: 50%; vertical-align: top; vertical-align: top; min-height: 275px;">
             {% if candidate.image %}
                 <img src="{{ candidate.image }}" alt="Resume" width="150" height="150"
                      style="border-radius: 100%; margin-bottom: 10px; width: 150px; height: 150px;">
@@ -33,7 +33,7 @@
         </div>
 
         <!--top right column-->
-        <div style="width: 50%; background: {{ current_config.color|background_color_choice }}; padding: 3%; flex: 50%; -webkit-box-flex: 50%; -ms-flex: 50%; vertical-align: top; vertical-align: top; min-height: 275px;">
+        <div style="background: {{ current_config.color|background_color_choice }}; padding: 3%; width: 50%; flex: 50%; -webkit-box-flex: 50%; -ms-flex: 50%; vertical-align: top; vertical-align: top; min-height: 275px;">
             <!--Contact-->
             {% if entity_position.0.active %}
                 {% include entity_position.0.entity_id|render_section:"partials4/" %}
@@ -45,7 +45,7 @@
     <!--bottom column-->
     <div style="display: flex; display: -webkit-box; display: -ms-flexbox; width: 100%; margin-top: 3%;">
         <!--bottom left column-->
-        <div style="width: 50%; padding: 3%; flex: 50%; -webkit-box-flex: 50%; -ms-flex: 50%; vertical-align: top;">
+        <div style="padding: 3%; width: 50%; flex: 50%; -webkit-box-flex: 50%; -ms-flex: 50%; vertical-align: top;">
             <!--Summary-->
             {% if entity_position.1.active %}
                 {% include entity_position.1.entity_id|render_section:"partials4/" %}
@@ -85,7 +85,7 @@
         </div>
 
         <!--bottom right column-->
-        <div style="width: 50%; border-left: 1px solid {{ current_config.color|background_color_choice }}; padding: 3%; flex: 50%; -webkit-box-flex: 50%; -ms-flex: 50%; vertical-align: top;">
+        <div style="border-left: 1px solid {{ current_config.color|background_color_choice }}; padding: 3%; width: 50%; flex: 50%; -webkit-box-flex: 50%; -ms-flex: 50%; vertical-align: top;">
             <!--Reference-->
             {% if entity_position.7.active %}
                 {% include entity_position.7.entity_id|render_section:"partials4/" %}

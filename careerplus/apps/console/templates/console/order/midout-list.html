@@ -2,362 +2,329 @@
 {% load static compress %}
 {% load humanize %}
 {% load thumbnail %}
-
 {% block title %}
-  <title>Midout- Shine Learning</title>
+<title>Midout- Shine Learning</title>
 {% endblock title %}
-
 {% block css_block %}
-    {{block.super}} 
-
-    {% compress css %}
-    <link href="{% static 'packages/iCheck/skins/flat/green.css' %}" rel="stylesheet" type="text/css">
-    <link type="text/css" href="{% static 'console/css/datepicker/daterangepicker.css' %}" rel="stylesheet">
-    {% endcompress %}
-
-    {% compress css inline %}
-    <style type="text/css">
-        .error{
-            color: red;
-        }
-    </style>
-    {% endcompress %}
+{{block.super}}
+{% compress css %}
+<link href="{% static 'packages/iCheck/skins/flat/green.css' %}" rel="stylesheet" type="text/css">
+<link type="text/css" href="{% static 'console/css/datepicker/daterangepicker.css' %}" rel="stylesheet">
+{% endcompress %}
+{% compress css inline %}
+<style type="text/css">
+	.error{
+	color: red;
+	}
+</style>
+{% endcompress %}
 {% endblock css_block %}
-
-
-
 {% block pagecontent %}
 <!-- page content -->
 <div class="right_col" role="main">
-  <div class="">
-    <div class="page-title">
-      <div class="title_left">
-        <h3>Midout Items</h3>
-      </div>
-
-      <form autocomplete="off" class="form-group" method="GET" action="{% url "console:queue-midout" %}" id="filter-tables">
-          <div class="title_right">
-            <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
-              <div class="input-group">
-                <input type="text" name="query" class="form-control" {% if query %} value="{{query}}" {% endif %} placeholder="Search for...">
-                <div style="display:none">
-                    <div class="form-group">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            {{ filter_form.modified }}
-                        </div>
-                        <br/>
-                    </div>
-                </div>
-                <span class="input-group-btn">
-                  <button type="submit" class="btn btn-default" id="search_button" type="button">Go!</button>
-                </span>
-              </div>
-                       <div class="form-group">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-
-<label class="radio-inline"><input type="radio" name="rad_search" value="id" checked><b>OrderID</b></label>
-<label class="radio-inline"><input type="radio" name="rad_search" value="email" {{email}}><b>Email</b></label>
-<label class="radio-inline"><input type="radio" name="rad_search"value="mobile" {{mobile}}><b>Mobile</b></label>
-                      </div>
-                    </div>
-            </div>
-
-          </div>
-      </form>
-    </div>
-
-
-    <div class="row top_tiles">
-
-      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <button type="button" class="btn btn-app" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-filter"></i>Filter By</button>
-      </div>
-      <div class="modal fade bs-example-modal-sm filter" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-sm">
-              <div class="modal-content">
-
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-                  </button>
-                  <h4 class="modal-title" id="myModalLabel2">Filter By</h4>
-                </div>
-                <div class="modal-body">
-                  <form autocomplete="off" class="form-group" method="GET" action="{% url "console:queue-midout" %}" id="list-filter-form">
-                        <div class="form-group">
-                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.payment_date.label }}</label></br>
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                {{ filter_form.payment_date }}
-                            </div>
-                            <br/>
-                        </div>
-                        
-                       {% if query %}
-                           <input type="hidden" name="query" value="{{query}}">
-                       {% endif %}
-                    </form>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                  <button type="button" id="id_filter" class="btn btn-primary" data-dismiss="modal">Filter</button>
-                </div>
-              </div>
-            </div>
-        </div>
-        <!-- /modals -->
-    </div>
-
-    <div class="row">
-      <div class="col-md-12 col-sm-12 col-xs-12">
-        {% if messages %}
-            {% for message in messages %}
-
-              <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
-              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-
-              {{ message }}
-              </div>
-            {% endfor %}
-        {% endif %}
-
-      </div>
-    </div>
-
-
-
-    
-    <div class="clearfix"></div>
-    
-    <div class="row">
-
-      <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="x_panel">
-          <div class="x_title">
-            <ul class="nav navbar-right panel_toolbox">
-              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-              </li>
-            </ul>
-            <div class="clearfix"></div>
-            {% if perms.order.oi_action_permission %}
-                <form autocomplete="off" method="POST" role="form" id="action_form" action="{% url "console:action-orderitem-view"%}">{% csrf_token %}
-                <div class="col-sm-4">
-                    <div class="input-group">
-                        {{action_form.action}}
-                        <input type="hidden" name="queue_name" value="midout" />
-                        <input type="hidden" id="selected-id" name="selected_id" />
-                        <span class="input-group-btn">
-                          <button type="button" class="btn btn-primary" id="action_button_go">Go!</button>
-                        </span>
-                    </div>
-                </div>
-                </form>
-            {% endif %}
-            <!-- modal action -->
-            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="actionModal">
-                <div class="modal-dialog modal-lg">
-                  <div class="modal-content">
-
-                    <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                      </button>
-                      <h4 class="modal-title" id="myModalLabel">Action</h4>
-                    </div>
-                    <div class="modal-body" id="myModalbody">
-                      Are You Sure???
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary" id="action_button">Yes</button>
-                    </div>
-
-                  </div>
-                </div>
-            </div>
-
-          </div>
-
-          <div class="x_content">
-            {% if page %}
-                <b>{{page.object_list.count}}</b> item listed out of <b>{{ page.paginator.count }}</b>
-            {% endif %}
-            <div class="table-responsive">
-              <table class="table table-striped jambo_table bulk_action">
-                <thead>
-                  <tr class="headings">
-                    {% if perms.order.oi_action_permission %}
-                        <th>
-                          <input autocomplete="off" type="checkbox" id="check-all" class="flat">
-                        </th>
-                        <th class="bulk-actions" colspan="100%">
-                            <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-                        </th>
-                    {% endif %}
-                    <!--
-                    <th class="column-title">#Id</th>
-                    -->
-                    <th class="column-title">OrderId</th>
-                    <th class="column-title">Name</th>
-                    <th class="column-title">Email</th>
-                    <th class="column-title">Mobile</th>
-                    <!--
-                    <th class="column-title">Item Name</th>
-                    -->
-                    <th class="column-title">Payment Date</th>
-                    <th class="column-title">Midout sent on</th>
-                    <th class="column-title">How Old</th>
-                    <th class="column-title">Actions</th>
-                  </tr>
-                </thead>
-
-                <tbody id="body-table-list">
-                  {% for obj in page %}
-                    <tr class="even pointer">
-                      {% if perms.order.oi_action_permission %}
-                            <td class="a-center ">
-                              <input autocomplete="off" type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
-                            </td>
-                      {% endif %}
-                      <!--
-                      <td>{{obj.pk}}</td>
-                      -->
-                   <td><a target="_blank" href="{% url "console:order-detail" obj.pk %}"><b style="text-decoration: underline;">{{obj.number}}</b></a></td>
-
-                      <td>{{obj.first_name}} {{obj.last_name}}</td>
-                      <td>{{obj.email}}</td>
-                      <td>{{obj.country_code}} {{obj.mobile}}</td>
-                      <!--
-                      <td>
-                            {% if obj.parent and obj.is_variation %}
-                              <strong>{{obj.parent.product.get_name}}{% if obj.parent.product.get_exp_db %} - Exp: {{obj.parent.product.get_exp_db}}{% endif %}:</strong><br/>
-                            {% endif %}
-                                {{obj.product.get_name}}<br/>
-                            {%if obj.product.get_exp_db %}
-                                <strong>Exp:</strong> {{obj.product.get_exp_db}}<br/>
-                            {% endif %}
-                            {% if obj.product.get_studymode_db %}
-                                <strong>Study mode:</strong> {{obj.product.get_studymode_db}}<br/>
-                            {% endif %}
-                            {% if obj.product.get_coursetype_db %}
-                                <strong>Course type:</strong> {{obj.product.get_coursetype_db}}<br/>
-                            {% endif %}
-                            {% if obj.product.get_duration_db %}
-                                <strong>Duration:</strong> {{obj.product.get_duration_db}}
-                            {% endif %}
-                      </td>
-                      -->
-                      <td>{{obj.payment_date}}</td>
-                      <td>{{obj.midout_sent_on}}</td>
-                      <td>
-                          {{obj.modified|naturaltime}}</br>
-                          <b>Updated On: {{obj.modified}}</b>
-                      </td>
-                      <td>
-                        <form autocomplete="off" data-parsley-validate method="POST" action="." enctype="multipart/form-data" id="resume-upload-form{{obj.pk}}">{% csrf_token %}
-                          {{form.oi_resume}}
-                          <div style="display:none">
-                          <input type="hidden" name="oi_pk" value="{{obj.pk}}"></div>
-                          </br>
-                          <button type="button" id="uploadbutton{{obj.pk}}" onclick="upload_click({{obj.pk}});" class="btn btn-primary btn-xs"><i class="fa fa-upload"> Upload Document</i></button>
-                        </form>
-                      </td>
-                      
-                    </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-            </div>
-                   
-            {% block main_pagination %}
-                <div class="main_pagination">
-                  {% if page %}
-                  <div class="col-sm-4">
-                       <div class="pull-left" style="display: inline-block;adding-left: 0;margin: 20px 0;">
-                        {% with current_page=page.number total_page=page.paginator.num_pages %}Page {{ current_page }} of {{ total_page }}
-                        {% endwith %}
-                      </div>
-                  </div>
-
-                <div class="col-sm-8">
-                    <div class="pull-right">
-                        <ul class="pagination">
-                        {% if page.has_previous %}
-                            <li class="paginate_button previous">
-                                <a href="?page={{ page.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >&laquo;</a>
-                            </li>
-                        {% endif %}
-
-                        {% for page_number in begin %}
-                            <li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %} ">
-                                <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
-                            </li>
-                        {% endfor %}
-
-                        {% if middle %}
-                            <li class="paginate_button disable"><a href="javascript:void(0);">&hellip;</a></li>
-                            {% for page_number in middle %}
-                                <li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %}">
-                                    <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
-                                    
-                                </li>
-                            {% endfor %}
-                        {% endif %}
-
-                        {% if page_end %}
-                            <li class="paginate_button disable"><a href="javascript:void(0);">&hellip;</a></li>
-                            {% for page_number in page_end %}
-                                <li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %}">
-                                    <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
-                                </li>
-                            {% endfor %}
-                        {% endif %}
-
-                        {% if page.has_next %}
-                            <li class="paginate_button next">
-                                <a href="?page={{ page.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >&raquo;</a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                  </div>
-                </div>
-                {% endif %}
-
-
-      </div><!-- main_pagination end here -->
-      {% endblock main_pagination %}
-     
-                
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+	<div class="">
+		<div class="page-title">
+			<div class="title_left">
+				<h3>Midout Items</h3>
+			</div>
+			<form autocomplete="off" class="form-group" method="GET" action="{% url "console:queue-midout" %}" id="filter-tables">
+			<div class="title_right">
+				<div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
+					<div class="input-group">
+						<input type="text" name="query" class="form-control" {% if query %} value="{{query}}" {% endif %} placeholder="Search for...">
+						<div style="display:none">
+							<div class="form-group">
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									{{ filter_form.modified }}
+								</div>
+								<br/>
+							</div>
+						</div>
+						<span class="input-group-btn">
+						<button type="submit" class="btn btn-default" id="search_button" type="button">Go!</button>
+						</span>
+					</div>
+					<div class="form-group">
+						<div class="col-md-12 col-sm-12 col-xs-12">
+							<label class="radio-inline"><input type="radio" name="rad_search" value="id" checked><b>OrderID</b></label>
+							<label class="radio-inline"><input type="radio" name="rad_search" value="email" {{email}}><b>Email</b></label>
+							<label class="radio-inline"><input type="radio" name="rad_search"value="mobile" {{mobile}}><b>Mobile</b></label>
+						</div>
+					</div>
+				</div>
+			</div>
+			</form>
+		</div>
+		<div class="row top_tiles">
+			<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+				<button type="button" class="btn btn-app" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-filter"></i>Filter By</button>
+			</div>
+			<div class="modal fade bs-example-modal-sm filter" tabindex="-1" role="dialog" aria-hidden="true">
+				<div class="modal-dialog modal-sm">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel2">Filter By</h4>
+						</div>
+						<div class="modal-body">
+							<form autocomplete="off" class="form-group" method="GET" action="{% url "console:queue-midout" %}" id="list-filter-form">
+							<div class="form-group">
+								<label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.payment_date.label }}</label></br>
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									{{ filter_form.payment_date }}
+								</div>
+								<br/>
+							</div>
+							{% if query %}
+							<input type="hidden" name="query" value="{{query}}">
+							{% endif %}
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							<button type="button" id="id_filter" class="btn btn-primary" data-dismiss="modal">Filter</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /modals -->
+		</div>
+		<div class="row">
+			<div class="col-md-12 col-sm-12 col-xs-12">
+				{% if messages %}
+				{% for message in messages %}
+				<div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				{{ message }}
+			</div>
+			{% endfor %}
+			{% endif %}
+		</div>
+	</div>
+	<div class="clearfix"></div>
+	<div class="row">
+		<div class="col-md-12 col-sm-12 col-xs-12">
+			<div class="x_panel">
+				<div class="x_title">
+					<ul class="nav navbar-right panel_toolbox">
+						<li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+						</li>
+					</ul>
+					<div class="clearfix"></div>
+					{% if perms.order.oi_action_permission %}
+					<form autocomplete="off" method="POST" role="form" id="action_form" action="{% url "console:action-orderitem-view"%}">{% csrf_token %}
+					<div class="col-sm-4">
+						<div class="input-group">
+							{{action_form.action}}
+							<input type="hidden" name="queue_name" value="midout" />
+							<input type="hidden" id="selected-id" name="selected_id" />
+							<span class="input-group-btn">
+							<button type="button" class="btn btn-primary" id="action_button_go">Go!</button>
+							</span>
+						</div>
+					</div>
+					</form>
+					{% endif %}
+					<!-- modal action -->
+					<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="actionModal">
+						<div class="modal-dialog modal-lg">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+									</button>
+									<h4 class="modal-title" id="myModalLabel">Action</h4>
+								</div>
+								<div class="modal-body" id="myModalbody">
+									Are You Sure???
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+									<button type="button" class="btn btn-primary" id="action_button">Yes</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="x_content">
+					{% if page %}
+					<b>{{page.object_list.count}}</b> item listed out of <b>{{ page.paginator.count }}</b>
+					{% endif %}
+					<div class="table-responsive">
+						<table class="table table-striped jambo_table bulk_action">
+							<thead>
+								<tr class="headings">
+									{% if perms.order.oi_action_permission %}
+									<th>
+										<input autocomplete="off" type="checkbox" id="check-all" class="flat">
+									</th>
+									<th class="bulk-actions" colspan="100%">
+										<a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+									</th>
+									{% endif %}
+									<!--
+										<th class="column-title">#Id</th>
+										-->
+									<th class="column-title">OrderId</th>
+									<th class="column-title">Name</th>
+									<th class="column-title">Email</th>
+									<th class="column-title">Mobile</th>
+									<!--
+										<th class="column-title">Item Name</th>
+										-->
+									<th class="column-title">Payment Date</th>
+									<th class="column-title">Midout sent on</th>
+									<th class="column-title">How Old</th>
+									<th class="column-title">Actions</th>
+								</tr>
+							</thead>
+							<tbody id="body-table-list">
+								{% for obj in page %}
+								<tr class="even pointer">
+									{% if perms.order.oi_action_permission %}
+									<td class="a-center ">
+										<input autocomplete="off" type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
+									</td>
+									{% endif %}
+									<!--
+										<td>{{obj.pk}}</td>
+										-->
+									<td><a target="_blank" href="{% url "console:order-detail" obj.pk %}"><b style="text-decoration: underline;">{{obj.number}}</b></a></td>
+									<td>{{obj.first_name}} {{obj.last_name}}</td>
+									<td>
+										<div>
+											<div id="email_field{{obj.id}}_{{forloop.counter}}"></div>
+										</div>
+										<div>
+											<button type="button" class="btn btn-primary btn-xs" onclick="order_get_details('{{obj.id}}','email,alt_email','email','{{forloop.counter}}');"><i class="fa fa-search" aria-hidden="true"></i>ClickToView</button>
+										</div>
+									</td>
+									<td>
+										<div id="mobile_field{{obj.id}}_{{forloop.counter}}"> </div>
+										{% if exoitel_status%}
+										<button id="{{obj.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{obj.id}});"></button>
+										<span style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{obj.id}}callingbtn-error"></span>
+										{% endif %}
+										<button type="button" onclick="order_get_details('{{obj.id}}','mobile,alt_mobile','mobile','{{forloop.counter}}');" class="btn btn-primary btn-xs"><i class="fa fa-search" aria-hidden="true"></i>ClickToView</button>
+									</td>
+									<!--
+										<td>
+										      {% if obj.parent and obj.is_variation %}
+										        <strong>{{obj.parent.product.get_name}}{% if obj.parent.product.get_exp_db %} - Exp: {{obj.parent.product.get_exp_db}}{% endif %}:</strong><br/>
+										      {% endif %}
+										          {{obj.product.get_name}}<br/>
+										      {%if obj.product.get_exp_db %}
+										          <strong>Exp:</strong> {{obj.product.get_exp_db}}<br/>
+										      {% endif %}
+										      {% if obj.product.get_studymode_db %}
+										          <strong>Study mode:</strong> {{obj.product.get_studymode_db}}<br/>
+										      {% endif %}
+										      {% if obj.product.get_coursetype_db %}
+										          <strong>Course type:</strong> {{obj.product.get_coursetype_db}}<br/>
+										      {% endif %}
+										      {% if obj.product.get_duration_db %}
+										          <strong>Duration:</strong> {{obj.product.get_duration_db}}
+										      {% endif %}
+										</td>
+										-->
+									<td>{{obj.payment_date}}</td>
+									<td>{{obj.midout_sent_on}}</td>
+									<td>
+										{{obj.modified|naturaltime}}</br>
+										<b>Updated On: {{obj.modified}}</b>
+									</td>
+									<td>
+										<form autocomplete="off" data-parsley-validate method="POST" action="." enctype="multipart/form-data" id="resume-upload-form{{obj.pk}}">
+											{% csrf_token %}
+											{{form.oi_resume}}
+											<div style="display:none">
+												<input type="hidden" name="oi_pk" value="{{obj.pk}}">
+											</div>
+											</br>
+											<button type="button" id="uploadbutton{{obj.pk}}" onclick="upload_click({{obj.pk}});" class="btn btn-primary btn-xs"><i class="fa fa-upload"> Upload Document</i></button>
+										</form>
+									</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+					{% block main_pagination %}
+					<div class="main_pagination">
+						{% if page %}
+						<div class="col-sm-4">
+							<div class="pull-left" style="display: inline-block;adding-left: 0;margin: 20px 0;">
+								{% with current_page=page.number total_page=page.paginator.num_pages %}Page {{ current_page }} of {{ total_page }}
+								{% endwith %}
+							</div>
+						</div>
+						<div class="col-sm-8">
+							<div class="pull-right">
+								<ul class="pagination">
+									{% if page.has_previous %}
+									<li class="paginate_button previous">
+										<a href="?page={{ page.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >&laquo;</a>
+									</li>
+									{% endif %}
+									{% for page_number in begin %}
+									<li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %} ">
+										<a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
+									</li>
+									{% endfor %}
+									{% if middle %}
+									<li class="paginate_button disable"><a href="javascript:void(0);">&hellip;</a></li>
+									{% for page_number in middle %}
+									<li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %}">
+										<a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
+									</li>
+									{% endfor %}
+									{% endif %}
+									{% if page_end %}
+									<li class="paginate_button disable"><a href="javascript:void(0);">&hellip;</a></li>
+									{% for page_number in page_end %}
+									<li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %}">
+										<a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
+									</li>
+									{% endfor %}
+									{% endif %}
+									{% if page.has_next %}
+									<li class="paginate_button next">
+										<a href="?page={{ page.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >&raquo;</a>
+									</li>
+									{% endif %}
+								</ul>
+							</div>
+						</div>
+						{% endif %}
+					</div>
+					<!-- main_pagination end here -->
+					{% endblock main_pagination %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 </div>
 <!-- /page content -->
-
-
 {% endblock pagecontent %}
-
-        
 {% block js_block %}
-  {{ block.super }}
+{{ block.super }}
 <script>
-
-function upload_click(pk){
-   $("#uploadbutton"+pk).attr('disabled','true');
-   $("#resume-upload-form"+ pk).submit();
-}
+	function upload_click(pk){
+	   $("#uploadbutton"+pk).attr('disabled','true');
+	   $("#resume-upload-form"+ pk).submit();
+	}
 
 </script>
-  {% compress js %}
-  <!-- Parsley Validate Scripts -->
-  <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'packages/iCheck/icheck.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'console/js/order/orderitem-action.js' %}"></script>
-
-  <script type="text/javascript" src="{% static 'console/js/moment/moment.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'console/js/datepicker/daterangepicker.js' %}"></script>
-
-  <script type="text/javascript" src="{% static 'console/js/order/filter.js' %}"></script>
-
-  {% endcompress %}
-
+{% compress js %}
+<!-- Parsley Validate Scripts -->
+<script type="text/javascript" src="{% static 'console/js/order/exotelCall.js' %}"></script>
+<script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'packages/iCheck/icheck.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'console/js/order/orderitem-action.js' %}"></script>
+<script type="text/javascript" src="{% static 'console/js/moment/moment.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'console/js/datepicker/daterangepicker.js' %}"></script>
+<script type="text/javascript" src="{% static 'console/js/order/filter.js' %}"></script>
+<script type="text/javascript" src = "{% static 'console/js/order-info.js' %}"></script>
+{% endcompress %}
 {% endblock js_block %}

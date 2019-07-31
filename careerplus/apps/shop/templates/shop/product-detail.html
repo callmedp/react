@@ -22,7 +22,7 @@
               <div class="course-caption col-sm-8 no-pad" itemscope itemtype="http://schema.org/Product">
                 <div class="course-caption-img">
                   <figure style="background-color:#fff;">
-                    <img itemprop="image" src="{{prd_img}}" alt="{{prd_img_alt}}" class="img-responsive" >
+                    <img aria-label="{{prd_img_alt}}" itemprop="image" src="{{prd_img}}" alt="{{prd_img_alt}}" class="img-responsive" >
                   </figure>
                 </div>
 
@@ -126,7 +126,7 @@
                     <li>
                      <a href="#review" class="cls_review">
                       <figure class="review-icon"></figure>
-                      <span>{% if prd_num_rating %}&nbsp;<strong class="anchor-color" >{{prd_num_rating}}</strong>&nbsp;{% if prd_num_rating == 1 %}review {% else %}reviews {% endif %}{% else %}Be the first to review{% endif %}</span>
+                      <span>{% if prd_num_rating %}&nbsp;<strong class="anchor-color" >{{prd_num_rating}}</strong>&nbsp;{% if prd_num_rating == 1 %}review {% else %}reviews {% endif %}{% else %}Write a review{% endif %}</span>
                      </a> 
                     </li>
                     <li>
@@ -153,7 +153,12 @@
                     {% endif %}
                   {% endif %}
                 </ul>
-
+                {% if prd_service == 'course' or product.type_flow == 16 %}
+                <span class="byvskills">
+                  <strong><a onclick="gaEvent('Search','{{prd_vendor}}','ViewAllProductVendor');" href="/search/results/?fvid={{product.vendor.id}}">All courses/ certification ({{prd_vendor_count}})</a></strong>
+                  By {{prd_vendor}}
+                </span>
+                {% endif %}
               </div>
             </div>
 
@@ -207,8 +212,6 @@
                   {% if prd_uget %}
                       {% if prd_service == 'course' %}
                       <a title="Course Highlights" class="active cls_tab_child" href="#get">Course Highlights</a>
-
-
                       {% else %}
                          <a title="Service Highlights" class="active cls_tab_child" href="#get">Service Highlights</a>
                       {% endif %}
@@ -313,7 +316,7 @@
                     <div class="row">
                       <div class="col-sm-12"></div>
                         <div id="recommended_product" style="display:block">
-                          <img id="loadingimg" src="{% static 'shinelearn/images/loader.gif' %}" > 
+                          <img aria-label="loader" id="loadingimg" src="{% static 'shinelearn/images/loader.gif' %}" > 
                         </div>
                     </div>
                 </div>
@@ -323,4 +326,3 @@
         </div><!-- ./ row -->
       </section><!-- main parent2 section end -->      
     {% endblock section2 %}
-

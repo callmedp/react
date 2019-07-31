@@ -30,7 +30,7 @@
         <ul class="home-slider">
             {% if request.session.candidate_id %}
                 <li>
-                    <img src="{% static 'shinelearn/images/mobile/common/home-img2.jpg' %}" class="img-responsive">
+                    <img aria-label="home image" src="{% static 'shinelearn/images/mobile/common/home-img2.jpg' %}" class="img-responsive">
                     <span class="slide-caption">
                         <h1>Hi {% if request.session.full_name %} {{request.session.full_name}} {%else %}{{request.session.email}}{% endif %},</h1>
                         <strong>Want to make your career future ready? <br> Discover courses matched for your profile</strong>
@@ -38,7 +38,7 @@
                 </li>
             {% else %}
                 <li>
-                    <img src="{% static 'shinelearn/images/mobile/common/home-img1.jpg' %}" class="img-responsive">
+                    <img aria-label="home image" src="{% static 'shinelearn/images/mobile/common/home-img1.jpg' %}" class="img-responsive">
                     <span class="slide-caption">
                         <h1>Take online courses from <br>India’s largest career skills site.</h1>
                     </span>
@@ -119,7 +119,7 @@
                                     
                                 </div>
                                 <div class="media-left">
-                                  <a title="{{ product.pHd|default:product.pNm}}" href="{{ product.pURL }}" class="home-banner-img" title="{{ product.pHd|default:product.pNm}}"><img src="{{product.pImg}}" alt="{{product.pImA}}" class="img-responsive" alt="{{product.pImA}}"></a>
+                                  <a title="{{ product.pHd|default:product.pNm}}" href="{{ product.pURL }}" class="home-banner-img" title="{{ product.pHd|default:product.pNm}}"><img aria-label="{{product.pImA}}" src="{{product.pImg}}" alt="{{product.pImA}}" class="img-responsive" alt="{{product.pImA}}"></a>
                                 </div><!-- end of media body -->
                               </div><!-- end of media -->
                         </li>
@@ -141,7 +141,7 @@
                                     
                                 </div>
                                 <div class="media-left">
-                                  <a title="{{ product.pHd|default:product.pNm|truncatechars:40 }}" href="{{ product.pURL }}" class="home-banner-img"><img src="{{product.pImg}}" class="img-responsive" alt="{{product.pImA}}"></a>
+                                  <a title="{{ product.pHd|default:product.pNm|truncatechars:40 }}" href="{{ product.pURL }}" class="home-banner-img"><img aria-label="{{product.pImA}}" src="{{product.pImg}}" class="img-responsive" alt="{{product.pImA}}"></a>
                                 </div><!-- end of media body -->
                               </div><!-- end of media -->
                         </li>
@@ -170,7 +170,7 @@
                     </div>                
                     <div class="media-right"> 
                         <div class="img-box">                   
-                            <img src="{% static 'shinelearn/images/mobile/common/invetsment_banking.png' %}" alt="Finance">
+                            <img aria-label="finance" src="{% static 'shinelearn/images/mobile/common/invetsment_banking.png' %}" alt="Finance">
                         </div>
                     </div>                
                 </a>
@@ -183,7 +183,7 @@
                     </div>                
                     <div class="media-right"> 
                         <div class="img-box">                   
-                            <img src="{% static 'shinelearn/images/mobile/common/operation-management.png' %}" alt="Operation">
+                            <img aria-label="Operation" src="{% static 'shinelearn/images/mobile/common/operation-management.png' %}" alt="Operation">
                         </div>
                     </div>                
                 </a>
@@ -196,7 +196,7 @@
                     </div>                
                     <div class="media-right"> 
                         <div class="img-box">                   
-                            <img src="{% static 'shinelearn/images/mobile/common/it.png' %}" alt="information">
+                            <img aria-label="information" src="{% static 'shinelearn/images/mobile/common/it.png' %}" alt="information">
                         </div>
                     </div>                
                 </a>
@@ -209,7 +209,7 @@
                     </div>                
                     <div class="media-right"> 
                         <div class="img-box">                   
-                            <img src="{% static 'shinelearn/images/mobile/common/hr.png' %}" alt="human res">
+                            <img aria-label="human res" src="{% static 'shinelearn/images/mobile/common/hr.png' %}" alt="human res">
                         </div>
                     </div>         
                 </a>
@@ -231,7 +231,7 @@
                     <li>
                         <a title="{{tprd.pHd|default:tprd.pNm|truncatechars:40}}" href="{{tprd.pURL}}">
                             <div class="img-box">
-                                <img src="{{ tprd.pImg }}" class="img-responsive" alt="{{tprd.pImA}}">
+                                <img aria-label="{{tprd.pImA}}" src="{{ tprd.pImg }}" class="img-responsive" alt="{{tprd.pImA}}">
                             </div>
                             <p class="title">{{tprd.pHd|default:tprd.pNm|truncatechars:40}}</p>
                         </a>
@@ -270,9 +270,9 @@
     <div class="text-center how-it-works mb-20">
         <h2>Why us</h2>
         <ul>
-            <li><figure><img src="{% static 'shinelearn/images/mobile/common/how-work-icon1.png' %}" class="img-responsive"></figure> Explore 500+ courses with reviews and ratings from fellow learners</li>
-            <li><figure><img src="{% static 'shinelearn/images/mobile/common/how-work-icon2.png' %}" class="img-responsive"></figure> Learn at your own pace, choose your mode of study</li>
-            <li><figure><img src="{% static 'shinelearn/images/mobile/common/how-work-icon3.png' %}" class="img-responsive"></figure> Be future-ready with industry recognised certifications in skills that recruiters want</li>
+            <li><figure><img aria-label="why us" src="{% static 'shinelearn/images/mobile/common/how-work-icon1.png' %}" class="img-responsive"></figure> Explore 500+ courses with reviews and ratings from fellow learners</li>
+            <li><figure><img aria-label="why us" src="{% static 'shinelearn/images/mobile/common/how-work-icon2.png' %}" class="img-responsive"></figure> Learn at your own pace, choose your mode of study</li>
+            <li><figure><img aria-label="why us" src="{% static 'shinelearn/images/mobile/common/how-work-icon3.png' %}" class="img-responsive"></figure> Be future-ready with industry recognised certifications in skills that recruiters want</li>
         </ul>
     </div>
     <!-- how it works ends here -->

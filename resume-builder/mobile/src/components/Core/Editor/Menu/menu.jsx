@@ -8,6 +8,7 @@ import {updatePersonalInfo} from "../../../../store/personalInfo/actions"
 import Menuitem from './menuItem';
 import moment from 'moment'
 import Loader from '../../../Common/Loader/loader';
+import {eventClicked} from '../../../../store/googleAnalytics/actions/index'
 
 
 class Menu extends Component {
@@ -43,7 +44,11 @@ class Menu extends Component {
 
     async saveMenu() {
         const {addmore} = this.state
-        const {sidenav:{currentLinkPos},updateMenuItems,personalInfo,updateListOfLink,history} = this.props
+        const {sidenav:{currentLinkPos},updateMenuItems,personalInfo,updateListOfLink,history,eventClicked} = this.props
+        eventClicked({
+            'action':'CompletedAddRemove',
+            'label':'Click'
+        })
         let links = []
         for (let i of addmore) {
             if (i.active) {
@@ -167,6 +172,9 @@ const mapDispatchToProps = (dispatch) => {
                 dispatch(updatePersonalInfo({personalDetails, resolve, reject}));
             })
         },
+        'eventClicked': (data) => {
+            return dispatch(eventClicked(data))
+        }
         
     }
 };

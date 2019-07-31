@@ -10,6 +10,7 @@ import SuggestionModal from '../../../../../Modal/suggestionModal'
 import {hideSuggestionModal, showSuggestionModal, setSuggestionType} from "../../../../../../store/ui/actions";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons.jsx';
+import {siteDomain} from '../../../../../../Utils/domains'
 
 
 class Experience extends Component {
@@ -76,6 +77,7 @@ class Experience extends Component {
     }
 
     async handleSubmit(values, entityLink, currentFields) {
+         const {userInfo:{order_data},hideGenerateResumeModal,showGenerateResumeModal,history,reGeneratePDF} = this.props
         const {list} = values;
         if (list.length) {
             await this.props.bulkUpdateOrCreate(list);
@@ -83,7 +85,17 @@ class Experience extends Component {
                 submit: true
             })
             if (entityLink) this.props.history.push(entityLink);
-            else this.props.history.push('/resume-builder/buy/')
+            else if(order_data && order_data.id){
+            showGenerateResumeModal()
+            reGeneratePDF(order_data.id)
+            setTimeout(function() {
+                window.location.href = `${siteDomain}/dashboard`
+                hideGenerateResumeModal()
+            }, 5000);
+        }
+        else{
+            history.push(`/resume-builder/buy`) 
+        }
         }
 
     }
@@ -97,7 +109,7 @@ class Experience extends Component {
 
     async openModal(fields,index){
 
-        const {job_profile:{label},work_description} = fields.get(index)
+        const {job_profile:{label},work_description} = fields.get(index);
         this.setState({length:work_description.length})
         await this.props.fetchJobTitles(label || '','experience')
         this.setState({modal_status:true,scrollpos:window.scrollY,fields,currentIndex:index})
@@ -111,6 +123,7 @@ class Experience extends Component {
             Object.keys(suggestions).map((el,index) => {
                 suggestionsList += suggestions[el] + (index+1 === Object.keys(suggestions).length ? "" : '\n')
             })
+            console.log('-ddi------', suggestionsList);
             currentField['work_description'] = suggestionsList;
             fields.remove(currentIndex);
             fields.insert(currentIndex, currentField)
@@ -144,6 +157,10 @@ class Experience extends Component {
             offset: 470,
             containerId: 'experience'
         })
+        this.props.eventClicked({
+            'action':'AddNew',
+            'label':'Experience'
+        })
     }
 
     deleteExperience(index, fields, event) {
@@ -162,15 +179,15 @@ class Experience extends Component {
 
     render() {
         const {
-            handleSubmit, ui: {loader,suggestions}, isEditable,
-            editHeading, saveTitle, entityName, nextEntity, showAlertModal,history,
+            handleSubmit,userInfo:{order_data}, ui: {loader,suggestions}, isEditable,
+            editHeading, saveTitle, entityName, nextEntity, showAlertModal,history, eventClicked,
             changeOrderingDown, changeOrderingUp, handleInputValue, currentFields, fetchJobTitles
         } = this.props;
         const {till_today,modal_status,length} = this.state;
 
         return (
             <React.Fragment>
-                <SuggestionModal label={'Job Description'} modal_status={modal_status} maxLength="300" length={length} closeModal={this.closeModal} suggestions={suggestions}/>
+                <SuggestionModal label={'Job Description'} modal_status={modal_status} maxLength="1000" length={length} closeModal={this.closeModal} suggestions={suggestions}/>
                 <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity, currentFields))}>
                     <FieldArray name={"list"}
                                 loader={loader}
@@ -182,7 +199,7 @@ class Experience extends Component {
                                 changeOrderingDown={changeOrderingDown}
                                 component={ExperienceRenderer}
                                 saveTitle={(event) => saveTitle(event, 3)}
-                                editHeading={(value) => editHeading(value)}
+                                editHeading={() => editHeading(3)}
                                 isEditable={isEditable}
                                 entityName={entityName}
                                 expanded={this.state.active}
@@ -197,8 +214,8 @@ class Experience extends Component {
                     />
 
                     <SavePreviewButtons 
-                        showAlertModal={showAlertModal} context={this} history={history}
-                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data} form_name={'Experience'}
+                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss} eventClicked={eventClicked}
                     />
                 </form>
             </React.Fragment>

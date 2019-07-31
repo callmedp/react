@@ -6,6 +6,7 @@ import queryString from "query-string";
 import RenderNavItem from './renderNavItem';
 import {entityLinkNameLink ,iconClassList} from '../../../../Utils/entitydata.js'
 import AlertModal from '../../../Common/AlertModal/alertModal';
+import {formCategoryList} from '../../../../Utils/formCategoryList'
 
 class LeftSideBar extends Component {
 
@@ -35,13 +36,17 @@ class LeftSideBar extends Component {
         e.stopPropagation();
     }
 
-    changeLink(page) {
-        const {sidenav:{listOfLinks},updateCurrentLinkPos} = this.props
+    changeLink(page,pos) {
+        const {sidenav:{listOfLinks},updateCurrentLinkPos,eventClicked} = this.props
         for (let i in listOfLinks) {
             if (page === listOfLinks[i]) {
                 updateCurrentLinkPos({currentLinkPos: i})
             }
         }
+        eventClicked({
+            'action':'SelectSection',
+            'label':formCategoryList[pos].name
+        })
 
     }
 
@@ -91,7 +96,12 @@ class LeftSideBar extends Component {
     }
 
     openMenu(){
-        this.props.history.push(`/resume-builder/menu`) 
+        const {history,eventClicked} = this.props
+        history.push(`/resume-builder/menu`) 
+        eventClicked({
+            'action':'Add/Remove',
+            'label':'Click'
+        })
     }
 
     updateLink(entity_preference_data) {
@@ -106,7 +116,7 @@ class LeftSideBar extends Component {
 
     render() {
         const {type,sidenav_active_pos,link} = this.state;
-        const {formData,ui:{formName,alertModalStatus},personalInfo:{first_name,entity_preference_data},history,updateAlertModalStatus} = this.props
+        const {formData,ui:{formName,alertModalStatus,generateResumeModal},personalInfo:{first_name,entity_preference_data},history,updateAlertModalStatus,eventClicked} = this.props
         let error = false;
         const obj = formData && formData[formName] || {};
         let syncErrors = obj['syncErrors'] || {};
@@ -117,7 +127,7 @@ class LeftSideBar extends Component {
         }
         return (
             <React.Fragment>
-                <AlertModal modal_status={alertModalStatus} link={link} history={history} newUser={newUser} closeModal={this.closeModal}/>
+                <AlertModal modal_status={alertModalStatus ||generateResumeModal} generateResumeModal={generateResumeModal} link={link} history={history} newUser={newUser} closeModal={this.closeModal}/>
                 {(entity_preference_data.length) ?
                     <div>
                         <div className={"overlay-sidenav"}></div>

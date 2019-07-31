@@ -35,6 +35,9 @@
     .clearimg a{
       margin-right: 30px;
     }
+    .vendor_hidden{
+     display: none;
+    }
 
   </style>
   {% endcompress %}
@@ -147,6 +150,16 @@
                 </div>
                 <div class="alert">{{form.upc.errors}}</div>
               </div>
+
+                   <div class="item form-group {% if form.vendor.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.vendor.id_for_label }}">Vendor <span class="required">*</span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.vendor}}
+                </div>
+                <div class="alert">{{form.vendor.errors}}</div>
+              </div>
+
               
 
               <div class="item form-group {% if form.inr_price.errors %}bad{% endif %}">
@@ -207,7 +220,11 @@
          
     });
   $("select[name='type_flow']").change()
-  </script>
+
+$('document').ready(function(){
+  $('.vendor_hidden').parent().parent().hide();
+  });
+</script>
 
   {% compress js %}
   <!-- Parsley Validate Scripts -->

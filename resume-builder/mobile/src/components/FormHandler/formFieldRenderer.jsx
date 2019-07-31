@@ -16,6 +16,7 @@ export const renderField = ({
                                 id,
                                 prepend,
                                 maxLength,
+                                disabled,
                                 meta: {touched, error, warning}
                             }) => (
 
@@ -25,7 +26,7 @@ export const renderField = ({
         {!prepend ?
             <React.Fragment>
                 <input {...input} className={className + (touched && error ? " error error-field" : "")}
-                       maxLength={maxLength} id={id} type={type} autoComplete="off"/>
+                       maxLength={maxLength} id={id} type={type} autoComplete="off" disabled={disabled}/>
                 {touched &&
                 ((<span className={'error-message'}>{error}</span>) ||
                     (warning && <span className={'warn-Message'}>{warning}</span>))
@@ -38,7 +39,7 @@ export const renderField = ({
                     <i className={iconClass}></i>
                 </span>
                 </div>
-                <input {...input} className={className} id={id} type={type} maxLength={maxLength} autoComplete="off"/>
+                <input {...input} className={className} id={id} type={type} maxLength={maxLength} autoComplete="off" disabled={disabled}/>
                 {touched &&
                 ((<span className={'error-message'}>{error}</span>) ||
                     (warning && <span className={'warn-Message'}>{warning}</span>))
@@ -320,7 +321,7 @@ export const renderAsyncCreatableSelect = ({
                                                className,
                                                isMulti,
                                                id,
-                                               closeMenuOnSelect,
+                                               closeMenuOnSelect=true,
                                                meta: {touched, error, warning}
                                            }) => {
     return (
@@ -340,7 +341,8 @@ export const renderAsyncCreatableSelect = ({
                                       isMulti={isMulti}
                                       styles={dropdownStyles}
                                       autoComplete="off"
-                    // closeMenuOnSelect={closeMenuOnSelect}
+                                      closeMenuOnSelect={closeMenuOnSelect}
+                                      blurInputOnSelect={closeMenuOnSelect}
                                       onBlur={event => event.preventDefault()}
                 />
                 {   ((<span className={'error-message'}>{error}</span>) ||

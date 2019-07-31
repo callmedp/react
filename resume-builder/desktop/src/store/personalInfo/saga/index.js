@@ -26,7 +26,7 @@ const genderDict = {
 }
 
 function modifyPersonalInfo(data) {
-    const {date_of_birth, gender, extracurricular} = data;
+    const {date_of_birth, gender, extracurricular, entity_preference_data} = data;
     data = {
         ...data,
         ...{
@@ -35,9 +35,9 @@ function modifyPersonalInfo(data) {
             extracurricular: (extracurricular && extracurricular.split(',').map(key => ({
                 'value': key,
                 'label': key
-            }))) || ''
+            }))) || '',
         }
-    }
+    };
     return data;
 }
 
@@ -180,10 +180,11 @@ function* fetchImageUrl(action) {
 
 function* updateEntityPreference(action) {
     try {
-        const {payload: {entity_preference_data, resolve, reject}} = action;
+        const {payload: {entity_preference_data, resolve, reject, showLoader}} = action;
+        debugger;
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        yield put({type: UPDATE_UI, data: {loader: true}});
+        if (showLoader) yield put({type: UPDATE_UI, data: {loader: true}});
 
         const result = yield call(Api.updateEntityPreference, {entity_preference_data}, candidateId);
 
@@ -197,7 +198,7 @@ function* updateEntityPreference(action) {
         const data = modifyPersonalInfo(result['data']);
 
         yield put({type: Actions.SAVE_USER_INFO, data: data});
-        return resolve("ENtity Updated")
+        return resolve("Entity Updated")
 
     } catch (e) {
         console.log('error', e);

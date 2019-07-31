@@ -13,6 +13,7 @@ const renderEducation = ({
                              meta: {touched, error, submitFailed},
                              handleSubmit,
                              handleAddition,
+                                eventClicked,
                              deleteEducation,
                              changeOrderingDown,
                              changeOrderingUp,
@@ -49,7 +50,7 @@ const renderEducation = ({
 
                 {!editHeading ?
                     <button role="button" className="btn btn__round btn--outline"
-                            onClick={handleSubmit(handleAddition.bind(this, fields, educationNewData(fields), 450, 'education', 'education'))}
+                            onClick={handleSubmit(handleAddition.bind(this, fields, educationNewData(fields), 450, 'education',eventClicked,'Education'))}
                             type={'button'}>+ Add new</button> : ''
                 }
             </div>
@@ -98,7 +99,7 @@ const renderEducation = ({
                                 <Field component={renderField} label={"Degree"} type={"text"}
                                        name={`${member}.degree`} prepend={true}
                                        id={`${member}.degree`} iconClass={"sprite icon--designation"}
-                                       className="form__input" maxLength={'50'}/>
+                                       className="form__input" maxLength={'100'}/>
                             </li>
 
                             <li className="form__group">

@@ -213,8 +213,28 @@
                           ({{obj.pk}})
                       </td>
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
-                      <td>{{obj.order.email}}</td>
-                      <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
+                                          <td>
+                         <div>
+                            <div id="email_field{{obj.order.id}}_{{forloop.counter}}"></div>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-primary btn-xs" onclick="order_get_details('{{obj.order.id}}','email,alt_email','email','{{forloop.counter}}');"><i class="fa fa-search" aria-hidden="true"></i>ClickToView</button>
+                        </div>
+
+                      </td>
+
+                        <td>
+                    <div>
+                        <div id="mobile_field{{obj.order.id}}_{{forloop.counter}}"> </div>
+                        {% if exoitel_status%}
+                        <button id="{{obj.order.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{obj.order.id}});"></button>
+                        <span style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{obj.order.id}}callingbtn-error"></span>
+                        {% endif %}
+                        <button type="button" onclick="order_get_details('{{obj.order.id}}','mobile,alt_mobile','mobile','{{forloop.counter}}');" class="btn btn-primary btn-xs"><i class="fa fa-phone" aria-hidden="true"></i>ClickToView</button>
+					</div>
+
+
+                      </td>
                       <td>
                           {% if obj.parent and obj.is_variation %}
                               <strong>{{obj.parent.product.get_name}}{% if obj.parent.product.get_exp_db %} - Exp: {{obj.parent.product.get_exp_db}}{% endif %}:</strong><br/>
@@ -364,6 +384,7 @@
 
   {% compress js %}
   <!-- Parsley Validate Scripts -->
+  <script type="text/javascript" src="{% static 'console/js/order/exotelCall.js' %}"></script>
   <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'packages/iCheck/icheck.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/moment/moment.min.js' %}"></script>
@@ -371,6 +392,8 @@
   <script type="text/javascript" src="{% static 'console/js/order/draft-upload.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/order/orderitem-action.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/order/filter.js' %}"></script>
+  <script type="text/javascript" src = "{% static 'console/js/order-info.js' %}"></script>
+
   {% endcompress %} 
 
 {% endblock js_block %}

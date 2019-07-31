@@ -9,6 +9,7 @@ const renderSkills = ({
                         meta: {touched, error, submitFailed},
                         handleSubmit,
                         handleAddition,
+                                eventClicked,
                         deleteSkill,
                         changeOrderingUp,
                         changeOrderingDown,
@@ -38,7 +39,7 @@ const renderSkills = ({
                     }
                     </div>
                     {!editHeading ?
-                        <button type={'button'}  onClick={handleSubmit(handleAddition.bind(this,fields,skillNewData(fields),0,'skill'))} 
+                        <button type={'button'}  onClick={handleSubmit(handleAddition.bind(this,fields,skillNewData(fields),0,'skill',eventClicked,'Skills'))} 
                             className="btn btn__round btn--outline">+ Add new</button>:''
                     }
                 </div>

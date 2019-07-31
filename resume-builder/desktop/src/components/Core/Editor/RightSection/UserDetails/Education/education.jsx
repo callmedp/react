@@ -8,6 +8,7 @@ import validate from '../../../../../FormHandler/validations/education/validate'
 import {scroller} from "react-scroll/modules";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
+import {siteDomain} from '../../../../../../Utils/domains'
 
 
 class Education extends Component {
@@ -29,6 +30,7 @@ class Education extends Component {
     }
 
     async handleSubmit(values, entityLink) {
+         const {userInfo:{order_data},hideGenerateResumeModal,showGenerateResumeModal,history,reGeneratePDF} = this.props
         const {list} = values;
         if (list.length) {
             await this.props.bulkUpdateOrCreate(list);
@@ -36,7 +38,17 @@ class Education extends Component {
                 submit: true
             })
             if (entityLink) this.props.history.push(entityLink);
-            else this.props.history.push('/resume-builder/buy/')
+            else if(order_data && order_data.id){
+            showGenerateResumeModal()
+            reGeneratePDF(order_data.id)
+            setTimeout(function() {
+                window.location.href = `${siteDomain}/dashboard`
+                hideGenerateResumeModal()
+            }, 5000);
+        }
+        else{
+            history.push(`/resume-builder/buy`) 
+        }
         }
     }
 
@@ -108,7 +120,10 @@ class Education extends Component {
             offset: 350,
             containerId: 'education'
         })
-
+        this.props.eventClicked({
+            'action':'AddNew',
+            'label':'Education'
+        })
 
     }
 
@@ -127,7 +142,7 @@ class Education extends Component {
 
     render() {
         const {
-            handleSubmit, ui: {loader}, saveTitle, isEditable,
+            handleSubmit,userInfo:{order_data}, ui: {loader}, saveTitle, isEditable,eventClicked,
             editHeading, entityName, nextEntity, handleInputValue, showAlertModal,history, changeOrderingUp
             , changeOrderingDown
         } = this.props;
@@ -145,7 +160,7 @@ class Education extends Component {
                             changeOrderingDown={changeOrderingDown}
                             component={EducationRenderer}
                             saveTitle={(event) => saveTitle(event, 2)}
-                            editHeading={(value) => editHeading(value)}
+                            editHeading={() => editHeading(2)}
                             isEditable={isEditable}
                             entityName={entityName}
                             expanded={this.state.active}
@@ -156,8 +171,8 @@ class Education extends Component {
                 />
 
                     <SavePreviewButtons 
-                        showAlertModal={showAlertModal} context={this} history={history}
-                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data} form_name={'Education'}
+                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss} eventClicked={eventClicked}
                     />
 
             </form>

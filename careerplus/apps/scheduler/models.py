@@ -13,7 +13,9 @@ TASK_TYPE = (
     (3, 'Upload Candidate Certificate'),
     (4, 'Generate Product  List'),
     (5, 'Encrypted URLs for Mailer'),
-    (6, 'Generate Compliance Report')
+    (6, 'Generate Compliance Report'),
+    (7, 'Pixel Report Generation'),
+    (8, "Discount Report Generation")
 )
 
 TASK_STATUS = (
@@ -25,7 +27,6 @@ TASK_STATUS = (
 
 
 class Scheduler(AbstractAutoDate):
-
     task_type = models.PositiveIntegerField(
         choices=TASK_TYPE, default=0)
     status = models.PositiveIntegerField(
@@ -54,6 +55,7 @@ class Scheduler(AbstractAutoDate):
             ("can_view_completed_task_list_scheduler", "Can View All Completed Task List From Console"),
             ("can_download_product_list", "Can Download Product List from Console"),
             ('can_generate_compliance_report','Can Download Compliance Report From Console'),
+            ('order.can_download_discount_report','Can Download Discount Report'),
         )
 
     def __str__(self):
@@ -88,3 +90,6 @@ class Scheduler(AbstractAutoDate):
             2: 'progress-bar-success',
             3: 'progress-bar-warning'}
         return progress_dict.get(self.status, '')
+
+
+

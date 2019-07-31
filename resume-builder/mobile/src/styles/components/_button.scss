@@ -47,7 +47,7 @@
     &__primary {
         border: .1rem solid $orange;
         background-color: $orange;
-        color: $white;
+        color: $grey-333;
     }
 
     &__shadow {
@@ -59,6 +59,14 @@
         color: $white;
         display: flex;
         justify-content: center;
+    }
+
+    &__transparent {
+        background-color: transparent;
+        color: $white;
+        display: flex;
+        justify-content: center;
+        border: .1rem solid $white;
     }
     
 }

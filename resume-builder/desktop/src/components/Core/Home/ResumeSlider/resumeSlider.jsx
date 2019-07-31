@@ -13,6 +13,10 @@ export default class ResumeSlider extends Component {
     }
 
     selectTemplate() {
+        this.props.eventClicked({
+            'action':'SelectTemplate',
+            'label':'HomePage'
+        })
         const templateId = parseInt(document.getElementsByClassName('slick-current slick-center')[0].getAttribute('data-index')) + 1;
         const {page, fetchSelectedTemplateImage} = this.props;
         localStorage.setItem('selected_template', (templateId))

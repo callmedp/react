@@ -248,7 +248,7 @@
         </li>
         {% if request.session.candidate_id %}
         <li class="dropdown login-dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="loggedin-user"><img src="{% static 'shinelearn/images/user-loggedin.jpg' %}" align="user name"></span></a>
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="loggedin-user"><img aria-label="user name" src="{% static 'shinelearn/images/user-loggedin.jpg' %}" align="user name"></span></a>
 
           <!--a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="login-btn">{{request.session.email}}</span></a-->
           <ul class="dropdown-menu">

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './banner.scss'
-import {Events, scroller} from 'react-scroll'
+import {scroller} from 'react-scroll'
 
 export default class Banner extends Component {
 
@@ -12,27 +12,17 @@ export default class Banner extends Component {
 
     }
 
-    scrollTo(elem) {
+    scrollTo(elem,action,label) {
         scroller.scrollTo(elem, {
             duration: 800,
             delay: 0,
             smooth: 'easeInOutQuad',
             offset: -63
         })
-    }
-
-    componentDidMount() {
-        Events.scrollEvent.register('begin', function () {
-        });
-
-        Events.scrollEvent.register('end', function () {
-        });
-
-    }
-
-    componentWillUnmount() {
-        Events.scrollEvent.remove('begin');
-        Events.scrollEvent.remove('end');
+        this.props.eventClicked({
+            action,
+            label
+        })
     }
 
 
@@ -50,9 +40,10 @@ export default class Banner extends Component {
                         <li> <span className="icon-builderexpert1"></span><strong>33% higher</strong> chances of shortlisting</li>
                         <li> <span className="icon-builderexpert2"></span><strong>10+ years</strong> of Resume Building Experience</li>
                         <li> <span className="icon-builderexpert3"></span>Resume data fetched from <strong>Shine profile</strong></li>
+                        <li> <span className="icon-builderexpert4"></span>Use <strong>resume builder for 12 months</strong> to create unlimited resume</li>
                     </ul>
                     <button className="orange-button banner-content--button"
-                            onClick={() => this.scrollTo('templates')}>Build your resume
+                            onClick={() => this.scrollTo('templates','BuildResume','TopButton')}>Build your resume
                     </button>
                 </div>
                 <div className="banner-slider">

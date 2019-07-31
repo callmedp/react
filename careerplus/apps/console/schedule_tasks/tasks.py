@@ -4,6 +4,8 @@ import os
 import csv
 import codecs
 import time
+import sys,gzip
+import datetime
 
 #django imports
 from django.contrib.auth import get_user_model
@@ -21,9 +23,11 @@ from linkedin.autologin import AutoLogin
 from core.mixins import EncodeDecodeUserData
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from order.functions import date_timezone_convert
+from core.mixins import EncodeDecodeUserData
 
 #third party imports
 from celery.decorators import task
+from dateutil.relativedelta import relativedelta
 
 #Global Constants
 User = get_user_model()
@@ -229,6 +233,31 @@ def gen_auto_login_token_task(task=None, user=None, next_url=None, exp_days=None
             "%(msg)s : %(err)s" % {'msg': 'generate auto login token task', 'err': str(e)})
     return f
 
+@task
+def generate_discount_report(sid,start_date,end_date):
+    from shared.utils import DiscountReportUtil
+    from datetime import datetime, timedelta
+
+    scheduler_obj = Scheduler.objects.get(id=sid)
+    today_date_str = datetime.now().date().strftime("%Y_%m_%d")
+    file_name = "scheduler/{}/{}_discount_report.csv".format(today_date_str,sid)
+    start_date = datetime.strptime(start_date,"%Y-%m-%dT%H:%M:%S") if isinstance(start_date,str) else start_date
+    end_date = datetime.strptime(end_date,"%Y-%m-%dT%H:%M:%S") if isinstance(end_date,str) else end_date
+
+    logging.getLogger('info_log').info(\
+        "Disount Report Task Started for {},{},{}".format(sid,start_date,end_date))
+    util_obj = DiscountReportUtil(\
+        start_date=start_date,end_date=end_date+timedelta(days=1),file_name=file_name)
+    util_obj.generate_report()
+    logging.getLogger('info_log').info(\
+        "Disount Report Task Complete for {},{},{}".format(sid,start_date,end_date))
+
+    scheduler_obj.file_generated = file_name
+    scheduler_obj.percent_done = 100
+    scheduler_obj.status = 2
+    scheduler_obj.completed_on = datetime.now()
+    scheduler_obj.save()
+
 
 @task(name="generate_encrypted_urls_for_mailer_task")
 def generate_encrypted_urls_for_mailer_task(task_id=None,user=None):
@@ -266,7 +295,7 @@ def generate_encrypted_urls_for_mailer_task(task_id=None,user=None):
         csvwriter.writerow(row)
 
         count = count + 1
-        
+
     scheduler_obj.file_generated = generated_path
     scheduler_obj.percent_done = 100
     scheduler_obj.status = 2
@@ -471,3 +500,90 @@ def generate_compliance_report(task_id=None,start_date=None,end_date=None):
             "%(msg)s : %(err)s" % {'msg': 'generate compliance list task', 'err': str(e)})
     return f
 
+def find_between(s, first, last):
+    try:
+        start = s.index(first) + len(first)
+        end = s.index(last, start)
+        return s[start:end]
+    except ValueError:
+        return ""
+
+@task(name="generate_pixel_report")
+def generate_pixel_report(task=None, url_slug=None, days=None):
+    up_task = Scheduler.objects.get(pk=task)
+    count = 0
+    today = datetime.datetime.now()
+    ccount = 0
+    days = int(days)
+    yesterday = (datetime.datetime.now() - relativedelta(days=days))
+    encode_decode_obj = EncodeDecodeUserData()
+    output = []
+    uniques_dict = {}
+    if up_task:
+        up_task.status = 3
+        up_task.save()
+        timestr = time.strftime("%Y_%m_%d")
+    header_fields = ['Email', 'Name', 'Contact']
+    while yesterday.date() < today.date():
+        yesterday_as_str = yesterday.strftime('%Y%m%d')
+        file_name = ''
+        bucket_name = ''
+
+        if settings.DEBUG:
+            file_name = 'uploads/celery-learningcrm/worker.log-' + yesterday_as_str + '.gz'
+            bucket_name = 'learningcrm-misc-staging-189607'
+        else:
+            file_name = 'nginx-access-learning/access.log-' + yesterday_as_str + '.gz'
+            bucket_name = 'shine-logs'
+        print("Fetching records from {}".format(file_name))
+        try:
+            if settings.DEBUG:
+                content = gzip.open(open(file_name, 'rb')).read()
+            else:
+                content = gzip.open(GCPPrivateMediaStorage(bucket_name=bucket_name).open(file_name, 'rb')).read()
+        except IOError:
+            content = b''
+            print()
+            logging.getLogger('error_log').error('File' + file_name + 'Does not Exist')
+
+        for line in content.decode('utf-8').split('\n'):
+            count += 1
+            if 'pixel/{}?udata'.format(url_slug) not in line:
+                continue
+            udata = find_between(line, 'udata=', ' ')
+            decrypted_data = encode_decode_obj.decode(udata)
+            if decrypted_data and decrypted_data[0]:
+                output.append(decrypted_data)
+                uniques_dict[decrypted_data[0]] = (decrypted_data[1], decrypted_data[2])
+            ccount += 1
+
+        yesterday = yesterday + datetime.timedelta(days=1)
+
+    path = 'scheduler/' + timestr + '/'
+    file_name = str(up_task.pk) + '_pixel_report_' + timestr + ".csv"
+    if not settings.IS_GCP:
+        upload_path = os.path.join(
+            settings.MEDIA_ROOT + '/' + path)
+        if not os.path.exists(upload_path):
+            os.makedirs(upload_path)
+        upload_path = upload_path + file_name
+        csvfile = open(upload_path, 'w', newline='')
+    else:
+        upload_path = path + file_name
+        csvfile = GCPPrivateMediaStorage().open(upload_path,'wb')
+    csvwriter = csv.DictWriter(
+        csvfile, delimiter=',', fieldnames=header_fields)
+    csvwriter.writeheader()
+
+    for key, value in uniques_dict.items():
+        row = {}
+        row['Email'] = key
+        row['Name'] = value[0]
+        row['Contact'] = value[1]
+        csvwriter.writerow(row)
+    up_task.percent_done = 100
+    up_task.status = 2
+    up_task.completed_on = timezone.now()
+    csvfile.close()
+    up_task.file_generated = upload_path
+    up_task.save()

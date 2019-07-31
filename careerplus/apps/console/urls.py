@@ -301,6 +301,10 @@ urlpatterns += [
         order_view.WhatsappListQueueView.as_view(),
         name='queue-whatsappjoblist'),
 
+    url(r'^queue/whatsapp/(?P<pk>\d+)/schedule$',
+        order_view.WhatsAppScheduleView.as_view(),
+        name='queue-whatsapp-schedule'),
+
     url(r'^queue/certification-queue/$',
         order_view.CertficationProductQueueView.as_view(),
         name='queue-certification'),
@@ -325,7 +329,7 @@ urlpatterns += [
         order_view.OrderItemDetailVeiw.as_view(), name='order-item-detail'),
 
     url(r'^queue/order/(?P<pk>\d+)/details/$',
-        order_view.OrderDetailVeiw.as_view(), name='order-detail'),
+        order_view.OrderDetailView.as_view(), name='order-detail'),
 
     url(r'^queue/orderitem/action/$',
         order_view.ActionOrderItemView.as_view(),
