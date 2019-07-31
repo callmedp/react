@@ -33,9 +33,10 @@
       ga('send', 'pageview');
 
     </script>
-
-
+    <!-- Global site tag (gtag.js) - Google Ads: 991709191 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-991709191"></script>
   </head>
+
   <body>
     <div class="main-wrapper" id="cls_landing-page">
     <div class="container-fluid banner-bg">
@@ -448,6 +449,8 @@
     {% compress js inline %}
     <script type="text/javascript">
     var _gaq = _gaq || [];
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
 
     $.validator.addMethod("lettersonly", function (value, element){
         return this.optional(element) || /^[a-z\s]*$/i.test(value);
@@ -549,6 +552,8 @@
                        document.getElementById('gif-loader').style.display = "none";
                        $('#cls_landing-page').addClass("fadeOut");
                        $('#cls-thank-you').addClass("fadeIn");
+                       gtag('js', new Date());
+                       gtag('config', 'AW-991709191',{ 'send_page_view': false });
                         return false;
                     }
                 }, 'json');
