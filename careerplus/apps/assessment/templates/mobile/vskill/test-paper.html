@@ -483,7 +483,13 @@ function submitTestFinal(){
       clearInterval(interval);
       testSubmission = true;
       questionAttempt['testSubmission{{object.id}}'] = testSubmission;
-      questionAttempt['testTime'+{{object.id}}] = Math.floor((submitTime - startTestTime.getTime())/1000) ;
+        if (submitTime > endTestTime.getTime()){
+            questionAttempt['testTime'+{{object.id}}] = Math.floor((endTestTime.getTime() - startTestTime.getTime())/1000) ;
+      }
+      else{
+            questionAttempt['testTime'+{{object.id}}] = Math.floor((submitTime - startTestTime.getTime())/1000) ;
+
+      }
       myStorage.setItem(tKey, JSON.stringify(questionAttempt));
       window.location.href = '/practice-tests/{{object.slug}}/result/';
 
