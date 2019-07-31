@@ -438,6 +438,7 @@
       else if(text=='View Message'){
         $('input[name="action_type"]').val(4)
       }
+      $(this).attr("disabled", true);
       $("#link-form").submit()
     });
   </script>
