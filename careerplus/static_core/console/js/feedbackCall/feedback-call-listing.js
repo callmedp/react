@@ -4,7 +4,7 @@ let total_pages = 0
 let feedback_id_selected = []
 
 
-$(document).ready(function() { 
+$(document).ready(() => { 
     $('#filter-status').val('1') //default Status  dopdown selected to Pending   (Requirement from Product)
 
     $('#feedback-type').val('1') //default Feedback Type dropdown selected to Fresh (Requirement from Product)
@@ -16,18 +16,18 @@ $(document).ready(function() {
     customerFeedbackList(1)
     getUsers()
 
-    $('#check-all').click(function(e){      //select all feedback on page
+    $('#check-all').click((e) => {      //select all feedback on page
         $(this).closest('table').find('td input:checkbox').prop('checked', this.checked);
         feedback_id_selected = []
-        $('#body-table-list input[name="table_records"]:checked').each(function() {
+        $('#body-table-list input[name="table_records"]:checked').each(() => {
             feedback_id_selected.push(parseInt($(this).prop('value')));
         });
     });
 
-    $('#filter-status').click(()=>{
+    $('#filter-status').change(()=>{
         customerFeedbackList(1)
     })
-    $('#feedback-type').click(()=>{
+    $('#feedback-type').change(()=>{
         customerFeedbackList(1)
     })
 
@@ -45,7 +45,7 @@ $(document).ready(function() {
 });
 
 
-function getUsers(){
+const getUsers = () => {
     $.get(`/user/api/v1/get-users/`,{
         'group':'welcome_call',
         'active':true
@@ -72,7 +72,11 @@ function getUsers(){
 }
 
 
-function customerFeedbackList(page_no,filter_data){
+const customerFeedbackList = (page_no,filter_data) => {
+    //add loader
+    $('.feedback-loader').show()
+    $('body').addClass('body-overflow') //remove scrolling while loading
+
     status = $('#filter-status').val()
     status === '3' ? $('#assign-user-form').hide() : $('#assign-user-form').show()
 
@@ -142,12 +146,15 @@ function customerFeedbackList(page_no,filter_data){
                 `
             )
         }
+        // loader remove
+        $('.feedback-loader').hide()
+        $('body').removeClass('body-overflow')
         
     })
     
 }
 
-function uncheckAll(checkbox,id){
+const uncheckAll = (checkbox,id) => {
    if($('#check-all')[0].checked && !checkbox.checked){
         $('#check-all').attr('checked',false)
    }
@@ -161,22 +168,29 @@ function uncheckAll(checkbox,id){
 }
 
 
-function assignFeedbackIdsUser(){
+const assignFeedbackIdsUser = () => {
     user_id =$('.feedback_users').find(':selected').val();
-    if(!user_id || feedback_id_selected.length===0)
+    if(!user_id || feedback_id_selected.length===0){
+        alert(`${!user_id ?'Select user id': 'Select Customer feedback'} to continue`)
         return
+    }   
+    $('.feedback-loader').show()
+    $('body').addClass('body-overflow') //remove scrolling while loading
     $.post(`/console/api/v1/feedback-call/assign-feedback-call/`,{
         'feedback_ids':JSON.stringify(feedback_id_selected),
         'user_id':user_id
     },(data)=>{
         if(data.result){
+            $('.feedback_users').val('')
+            $('.feedback_users').trigger('change.select2');
             customerFeedbackList(1)
+            
         }
     })
 }
 
 
-function filterFeedbackList(){
+const filterFeedbackList = () => {
     filter_data ={
         follow_up_date_range : $('#filter-follow-up').val(),
         added_on_range : $('#filter-added-on').val(),
@@ -186,22 +200,26 @@ function filterFeedbackList(){
 
 }
 
-function redirectFeedbackUpdatePage(id){
+const redirectFeedbackUpdatePage = (id) => {
     window.location.href = `/console/feedbackcall/update/${id}`
 }
 
 
 
 
-function searchNameOrEmail(){
+const searchNameOrEmail = () => {
     $('#filter-status').val('')
     $('#feedback-type').val('')
     customerFeedbackList(1)
 }
 
-function searchBoxKeyEnter(event){
+const searchBoxKeyEnter = (event) =>{
     if (event.keyCode == 13 || event.which == 13){
         searchNameOrEmail()
     }
+}
+
+const removeDate = (id)=>{
+    $(id).val('')
 }
 

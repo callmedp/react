@@ -14,7 +14,7 @@ from django.db.models import Q
 from order.models import CustomerFeedback,OrderItemFeedback,OrderItemFeedbackOperation
 from console.api.v1.feedbackCall.serializers import FeedbackQueueSerializer,CustomerFeedbackSerializer,OrderItemFeedbackSerializer,OrderItemFeedbackOperationSerializer
 from shared.rest_addons.pagination import LearningCustomPagination 
-from console.feedbackCall.choices import FEEDBACK_CATEGORY_CHOICES,FEEDBACK_RESOLUTION_CHOICES
+from console.feedbackCall.choices import FEEDBACK_CATEGORY_CHOICES,FEEDBACK_RESOLUTION_CHOICES,FEEDBACK_PARENT_CATEGORY_CHOICES
 from shared.permissions import IsActiveUser,InFeedbackGroup,InFeedbackGroup
 
 #python imports
@@ -27,7 +27,7 @@ class FeedbackQueueView(ListAPIView):
     queryset = CustomerFeedback.objects.all()
     serializer_class = FeedbackQueueSerializer
     authentication_classes = (SessionAuthentication,)
-    permission_classes = (IsAuthenticated,IsActiveUser,InFeedbackGroup,InFeedbackGroup,)
+    permission_classes = (IsAuthenticated,IsActiveUser,InFeedbackGroup,)
     pagination_class = LearningCustomPagination
 
     def get_queryset(self):
@@ -74,7 +74,7 @@ class FeedbackQueueView(ListAPIView):
 
 class FeedbackCallsAssignUserView(CreateAPIView):
     authentication_classes = (SessionAuthentication,)
-    permission_classes = (IsAuthenticated,IsActiveUser,InFeedbackGroup,InFeedbackGroup,)
+    permission_classes = (IsAuthenticated,IsActiveUser,InFeedbackGroup,)
 
     def post(self,*args, **kwargs):
         feedback_ids = eval(self.request.POST.get('feedback_ids'))
@@ -85,29 +85,44 @@ class FeedbackCallsAssignUserView(CreateAPIView):
 
 class CustomerFeedbackDetailView(RetrieveAPIView):
     authentication_classes = (SessionAuthentication,)
-    permission_classes = (IsAuthenticated,IsActiveUser,InFeedbackGroup,InFeedbackGroup,)
+    permission_classes = (IsAuthenticated,IsActiveUser,InFeedbackGroup,)
     serializer_class = CustomerFeedbackSerializer
     lookup_field = 'pk'
     queryset = CustomerFeedback.objects.all()
     
     
-class FeedbackCategoryResolutionChoicesView(APIView):
+class FeedbackCategoryChoicesView(APIView):
     authentication_classes = (SessionAuthentication,)
-    permission_classes = (IsAuthenticated,IsActiveUser,InFeedbackGroup,InFeedbackGroup,)
+    permission_classes = (IsAuthenticated,IsActiveUser,InFeedbackGroup,)
 
     def get(self,*args, **kwargs):
-        result = {
-            'category':dict(FEEDBACK_CATEGORY_CHOICES),
-            'resolution':dict(FEEDBACK_RESOLUTION_CHOICES)
-        }
+        results = []
+        for parent_key,parent_text in dict(FEEDBACK_PARENT_CATEGORY_CHOICES).items():
+            category_data = []
+            for category_key,category_text in dict(FEEDBACK_CATEGORY_CHOICES).items():
+                if category_key//100 == parent_key:
+                    category_data.append({'id':category_key,'text':category_text})
+            results.append({
+                    'text':parent_text,
+                    'children':category_data
+                })
+        return HttpResponse(json.dumps(results), content_type="application/json")
+
+class FeedbackResolutionChoicesView(APIView):
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (IsAuthenticated,IsActiveUser,InFeedbackGroup,)
+
+    def get(self,*args, **kwargs):
+        result = []
+        for resolution_key,resolution_text in dict(FEEDBACK_RESOLUTION_CHOICES).items():
+            result.append({'id':resolution_key,'text':resolution_text})
         return HttpResponse(json.dumps(result), content_type="application/json")
 
 
 class OrderItemFeedbackView(ListAPIView):
     serializer_class = OrderItemFeedbackSerializer
     authentication_classes = (SessionAuthentication,)
-    permission_classes = (IsAuthenticated,IsActiveUser,InFeedbackGroup,InFeedbackGroup,)
-    pagination_class = LearningCustomPagination
+    permission_classes = (IsAuthenticated,IsActiveUser,InFeedbackGroup,)
     queryset = OrderItemFeedback.objects.all()
 
     def get_queryset(self,*args, **kwargs):
@@ -121,7 +136,7 @@ class OrderItemFeedbackOperationView(ListAPIView):
     queryset = OrderItemFeedbackOperation.objects.all()
     serializer_class = OrderItemFeedbackOperationSerializer
     authentication_classes = (SessionAuthentication,)
-    permission_classes = (IsAuthenticated,IsActiveUser,InFeedbackGroup,InFeedbackGroup,)
+    permission_classes = (IsAuthenticated,IsActiveUser,InFeedbackGroup,)
     pagination_class = LearningCustomPagination
 
     def get_queryset(self):
@@ -132,7 +147,7 @@ class OrderItemFeedbackOperationView(ListAPIView):
 
 class SaveFeedbackIdData(CreateAPIView):
     authentication_classes = (SessionAuthentication,)
-    permission_classes = (IsAuthenticated,IsActiveUser,InFeedbackGroup,InFeedbackGroup,)
+    permission_classes = (IsAuthenticated,IsActiveUser,InFeedbackGroup,)
 
     def post(self,*args, **kwargs):
         feedback_id = kwargs.get('pk')
@@ -149,7 +164,7 @@ class SaveFeedbackIdData(CreateAPIView):
         if form_data['IsFollowUp']:
             customer_feedback.update(follow_up_date=form_data.get('follow-up'),comment=form_data.get('comment'))
         else:
-            customer_feedback.update(comment=form_data.get('comment'),status=3)  
+            customer_feedback.update(comment=form_data.get('comment'),status=3,follow_up_date=None)  
                 
         # user_id =self.request.POST.get('user_id')
         # CustomerFeedback.objects.filter(id__in=feedback_ids).update(assigned_to=user_id,status=2)

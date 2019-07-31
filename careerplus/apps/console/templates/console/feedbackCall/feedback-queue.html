@@ -22,6 +22,9 @@
 
 {% block pagecontent %}
 <!-- page content -->
+<div class="feedback-loader">
+  <img src="{% static 'console/images/feedback-loader.gif' %}" alt="Loading Icon" class="feedback-loader-image">
+</div>
 <div class="right_col" role="main">
   <div class="">
     <div class="page-title">
@@ -50,7 +53,7 @@
       <div class="col-lg-12">
         <div class="row">
           <div class="col-lg-6">
-            <button type="button" class="btn btn-app" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-filter"></i> Filter Order</button>
+            <button type="button" class="btn btn-app" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-filter"></i> Filter</button>
           </div>
           <div class="col-lg-6">
             <div class="row">
@@ -73,10 +76,10 @@
           </div>
         </div>
       </div>
+      <!-- modal -->
       <div class="modal fade bs-example-modal-sm filter" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-sm">
+            <div class="modal-dialog">
               <div class="modal-content">
-
                 <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
                   </button>
@@ -84,8 +87,9 @@
                 </div>
                 <div class="modal-body">
                   <div class="row modal-item">
-                      <div class="form-group">
+                      <div class="form-group filter-div">
                         <label for="follow">Follow-up Date Range:</label>
+                        <span class="glyphicon glyphicon-remove filter-remove-icon" aria-hidden="true" onclick="removeDate('#filter-follow-up')"></span>
                         <div class="input-group date form_datetime ">
                             <span class="input-group-addon">
                               <span class="glyphicon glyphicon-calendar"></span>
@@ -95,8 +99,9 @@
                     </div>
                   </div>
                   <div class="row modal-item">
-                      <div class="form-group">
+                      <div class="form-group filter-div">
                         <label for="follow">Added On Date Range:</label>
+                        <span class="glyphicon glyphicon-remove filter-remove-icon" aria-hidden="true" onclick="removeDate('#filter-added-on')"></span>
                         <div class="input-group date form_datetime ">
                             <span class="input-group-addon">
                               <span class="glyphicon glyphicon-calendar"></span>
@@ -121,7 +126,7 @@
               </div>
             </div>
         </div>
-        <!-- /modals -->
+        <!-- modal end -->
     </div>
 
     <div class="row">

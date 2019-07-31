@@ -14,12 +14,16 @@
       <link type="text/css" href="{% static "console/css/datepicker/bootstrap-datetimepicker.min.css" %}" rel="stylesheet">
       <link type="text/css" href="{% static "console/css/feedbackCall/feedback.css" %}" rel="stylesheet">
     {% endcompress %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
 {% endblock css_block %}
 
 
 
 {% block pagecontent %}
 <!-- page content -->
+<div class="feedback-loader">
+  <img src="{% static 'console/images/feedback-loader.gif' %}" alt="Loading Icon" class="feedback-loader-image">
+</div>
 <div class="right_col" role="main">
   <div class="">
     <div class="page-title">
@@ -138,7 +142,7 @@
           <div class="row">
               <div class="col-md-12 col-xs-12">
                 <label for="message" class="control-label">Message:</label>
-                <textarea id="feedback-comment" class="form-control" name="message" onkeyup="removeError('#feedback-comment','comment')"></textarea>
+                <textarea id="feedback-comment" class="form-control" name="message" onkeyup="removeError(false,{id:'#feedback-comment',key:'comment'})"></textarea>
                 <span class="help-block hide">Add a message</span>
               </div>
             </div>
@@ -212,6 +216,6 @@
     <script type="text/javascript" src="{% static "console/js/feedbackCall/customer-feedback-detail.js" %}"></script>
     <script src="{% static "console/js/datepicker/bootstrap-datetimepicker.js" %}"></script>
   {% endcompress %}
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
 {% endblock js_block %}
 

@@ -40,9 +40,48 @@
 .help-block{
     margin:0;
 }
-.scalling{
-    transform: scale(0.8);
+.scalling .select2-container{
+    transform: scale(0.8) translateX(-10%);
+}
+.scalling .help-block{
+    transform: scale(0.8) translateX(-10%);
 }
 .filter-dropdown{
     transform: translateY(40%);
+}
+
+.feedback-loader{
+    background-color: rgba(0,0,0,0.5);
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 10;
+    display: none;
+}
+
+.body-overflow{
+    overflow: hidden;
+}
+
+.feedback-loader-image{
+    width: 100px;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+}
+
+.filter-remove-icon{
+    position: absolute;
+    right: 10px;
+    top: 35px;
+    z-index:3;
+    cursor: pointer;
+}
+
+.filter-div{
+    position: relative;
+}
+
+.has-error .select2-selection {
+    border-color: rgb(185, 74, 72) !important;
 }
