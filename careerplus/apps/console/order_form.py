@@ -276,7 +276,7 @@ class OIFilterForm(forms.Form):
                 (-1, 'Select Status'), (31, 'Pending Links'),
                 (32, 'Sent Links'), (33, 'Saved Links'),
                 (23, 'Pending Approval'), (4, 'Closed'),
-                (34, 'UnAssigned')
+                (34, 'UnAssigned',), (35, 'Not Boarded')
             )
 
             self.fields['day_choice'].choices = ( (-1, 'All'),(1, 'Today'), (2, 'Tommorrow'),)
@@ -534,7 +534,7 @@ class ProductUserProfileForm(forms.ModelForm):
         fields = (
             'contact_number', 'desired_industry', 'desired_location',
             'desired_position', 'desired_salary', 'current_salary',
-            'approved', 'experience', 'skills'
+            'approved', 'experience', 'skills', 'onboard'
         )
     contact_number = forms.CharField(
         max_length=500,

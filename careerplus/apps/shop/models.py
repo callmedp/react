@@ -3180,6 +3180,7 @@ class ProductUserProfile(AbstractAutoDate):
     experience = models.CharField(max_length=50, blank=True, null=True)
     skills = models.CharField(max_length=100, blank=True, null=True)
     approved = models.BooleanField(default=False)
+    onboard = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         user = kwargs.pop('user', None)
