@@ -3332,6 +3332,7 @@ class WhatsAppScheduleView(UserPermissionMixin, DetailView, PaginationMixin):
         obj = self.object = self.get_object()
         user = self.request.user
         objects = []
+        saved_formset = []
         joblinkformset = modelformset_factory(
             JobsLinks,
             form=JobLinkForm,
@@ -3344,8 +3345,10 @@ class WhatsAppScheduleView(UserPermissionMixin, DetailView, PaginationMixin):
         if action_type != 3:
             formset = joblinkformset(post_data)
             if formset.is_valid():
-                saved_formset = formset.save()
-
+                try:
+                    saved_formset = formset.save()
+                except:
+                    pass
                 if getattr(formset, '_queryset', None) and not saved_formset:
                     objects = list(formset._queryset.filter(status=0, oi=obj))
                 elif getattr(formset, '_queryset', None) and saved_formset:
