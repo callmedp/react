@@ -110,18 +110,14 @@
                     </div><!-- /. Account Details -->
                 <form role="form" id="id-cash-form" method="post" action="." >{% csrf_token %}
                     <div class="mt-15">
-                        {{ state_form.state }}
-                        <p class="error-txt">{{state_form.state.errors.0}}</p>
-
+                        <select class="form--control" id="states_list" name="state">
+                            <option disabled>Select State</option>
+                             {% for state in state_list %}
+                                 <option value="{{state.0}}" >{{ state.1}}</option>
+                             {% endfor  %}
+                         </select>
+                        <p class="error--mgs"></p>
                         <input type="hidden" name="payment_type" value="cash">
-
-                     <!--   <select class="form&#45;&#45;control" id="exampleFormControlSelect1">
-                          <option>Select your state</option>
-                          <option>Delhi</option>
-                          <option>3</option>
-                          <option>4</option>
-                          <option>5</option>
-                        </select>-->
                     </div>
 
                     <p class="fs-18 mt-10 c3"><strong>Rs. {{total_amount}}</strong> (amount payable)</p>
@@ -145,14 +141,23 @@
                     <p class="fs-16">Pay by Cheque</p>
 
                     <ul class="p-0 mt-15 mb-15 ">
-                        {% for field in check_form %}
-                          <li class="login__item input-effect {% if field.errors %}error{% endif %}">
-                              {{ field }}
-                               <p class="error-txt"></p>
-                          </li>
-                        {% endfor %}
-                    </ul>
 
+                          <li class="login__item input-effect ">
+                             <input maxlength="100" placeholder="" name="cheque_no" required class="animation-input form--control" type="text">
+                             <label for="cheque">Cheque no. *</label>
+                             <p class="error--mgs"></p>
+                          </li>
+                          <li class="login__item input-effect ">
+                             <input maxlength="255" placeholder="" name="drawn_bank" required class="animation-input form--control" type="text">
+                             <label for="cheque">Drawn on bank *</label>
+                             <p class="error--mgs"></p>
+                          </li>
+                          <li class="login__item input-effect ">
+                             <input name="deposit_date" data-date="" data-date-format="MM/DD/YYYY" required class="animation-input form--control" type="date" placeholder="">
+                             <label for="cheque">Date of deposit *</label>
+                             <p class="error--mgs"></p>
+                          </li>
+                    </ul>
                         <input type="hidden" name="payment_type" value="cheque">
 
 <!--
@@ -196,7 +201,7 @@
                     </ul>
 
                     <p class="fs-18 mt-20 c3"><strong>Rs. {{total_amount}}</strong> (amount payable)</p>
-                    <p class="mt-20"><a href="javascript:{}" onclick="document.getElementById('check-pay-form').submit();" class="btn btn-yellow btn-round w100">Make Payment</a></p>
+                    <p class="mt-20"><a href="javascript:{}" id='check-sumit-button' class="btn btn-yellow btn-round w100">Make Payment</a></p>
                      </form>
                   </div><!-- /. accordion content -->
               </div><!-- /. Cheque accordion item -->

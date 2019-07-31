@@ -77,22 +77,42 @@ $(document).ready(function () {
         },
         highlight: function (element, errorClass) {
             let className = '.form-group', addClass = 'error1';
-
+            if (window.CURRENT_FLAVOUR == 'mobile') {
+                className = 'li';
+                addClass = 'error'
+            }
             $(element).closest(className).addClass(addClass);
         },
         unhighlight: function (element, errorClass) {
             let className = '.form-group', removeClass = 'error1', errorTextClass = '.error-txt';
-
+            if (window.CURRENT_FLAVOUR == 'mobile') {
+                className = 'li';
+                removeClass = 'error'
+                errorTextClass = '.error--mgs'
+            }
             $(element).closest(className).removeClass(removeClass);
             $(element).siblings(errorTextClass).html('');
         },
         errorPlacement: function (error, element) {
-            let  errorTextClass = '.error-txt';
+            let errorTextClass = '.error-txt';
+            if (window.CURRENT_FLAVOUR == 'mobile') {
+                errorTextClass = '.error--mgs';
+            }
             $(element).siblings(errorTextClass).html(error.text());
 
         },
 
     });
+
+    $(".input-effect input").val("");
+
+    $(".input-effect input").focusout(function () {
+        if ($(this).val() != "") {
+            $(this).addClass("has-content");
+        } else {
+            $(this).removeClass("has-content");
+        }
+    })
 
 
 });

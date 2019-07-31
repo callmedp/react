@@ -318,7 +318,6 @@ $(document).ready(function () {
             $(element).siblings('.error--mgs').html('');
         },
         errorPlacement: function (error, element) {
-            debugger;
             $(element).siblings('.error--mgs').html(error.text());
         },
     });

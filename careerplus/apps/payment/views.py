@@ -141,8 +141,6 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         return super(PaymentOptionView, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        import ipdb;
-        ipdb.set_trace();
         payment_type = request.POST.get('payment_type', '').strip()
         if payment_type == 'cash':
             cart_pk = request.session.get('cart_pk')

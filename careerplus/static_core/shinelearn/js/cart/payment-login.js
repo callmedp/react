@@ -90,7 +90,7 @@ $().ready(function () {
         errorPlacement: function (error, element) {
              let  errorTextClass = '.error-txt';
              if (window.CURRENT_FLAVOUR == 'mobile') {
-               errorTextClass = '.error-mgs';
+               errorTextClass = '.error--mgs';
              }
                $(element).siblings(errorTextClass).html(error.text());
         }
