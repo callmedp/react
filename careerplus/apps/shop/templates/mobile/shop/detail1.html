@@ -162,8 +162,22 @@
                 <p><strong>Know your current English CEFR level,</strong>corresponding TOEFL & IELTS score by taking this test.</p>
                 <a href="#" class="btn btn-sm btn-blue mt-5">Take free test</a>
             </div>
-        </div>
-        <!-- Neo Widgets ends here -->
+        </div> <!-- Neo Widgets ends here -->
+
+        <!-- Your Level starts here -->
+        <div class="neo-level mt-30">
+            <span class="neo-level--image">
+                <img src="{% static 'shinelearn/images/mobile/neo/neo-level.jpg' %}" class="img-responsive"/>
+            </span>
+            <div class="neo-level--content">
+                <h2 class="mb-0">B1</h2>
+                <p class="pb-0">Your CEFR level </p>
+            </div>
+
+            <a href="#" class="neo-level--share">
+                <i class="icon-share-social"></i>
+            </a>
+        </div><!-- Your Level ends here -->
 
 
 
@@ -342,7 +356,7 @@
 <!--neo test modal-->
 {% if prd_vendor_slug == 'neo' %}
 {% csrf_token %}
-<div class="modal bs-example-modal-sm login-div" role="dialog" aria-labelledby="mySmallModalLabel" id="neo-test-modal" style="display: block;">
+<div class="modal bs-example-modal-sm login-div" role="dialog" aria-labelledby="mySmallModalLabel" id="neo-test-modal">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content text-center neo-modal-content">
       <div class="modal-header">
@@ -388,6 +402,32 @@
   </div>
 </div>
 {% endif %}
+
+<!-- Take test Modal Start here  -->
+<div class="modal bs-example-modal-sm login-div" role="dialog" aria-labelledby="mySmallModalLabel" id="neo-test-modal">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content text-center neo-takeTest-modal">
+        <div class="modal-header">
+          <span class="icon-close" data-dismiss="modal" aria-label="Close"></span>
+        </div>
+        <div class="modal-body">
+            <span class="neo-takeTest-modal--image">
+                <img src="{% static 'shinelearn/images/mobile/neo/neo-pop.jpg' %}" class="img-responsive"/>
+            </span>
+
+            <p>Take Neo english test to enroll for this course. This test will show you, your CEFR level and help you to improve your skill</p>
+
+            <a href="#" class="neo-takeTest-modal--share">
+                <span class="icon-share-blue"></span>
+                Official translations of CEFR global scale
+            </a>
+
+            <p class="mb-20"><a href="#" class="btn btn-yellow btn-round btn-slg">Take test</a></p>
+        </div>
+      </div>
+    </div>
+  </div><!-- Take test Modal Start here  -->
+
 {% endblock container %}
 
 {% block js_section %}

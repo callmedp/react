@@ -677,4 +677,48 @@
 
 .icon-receive {
   background-position: -230px -405px;
+
+}
+
+.icon-user {
+  @include size(18px, 22px, inline-block);
+  background-position: -376px -310px;
+  position: relative;
+  top: -2px;
+}
+
+.icon-guest {
+  @include size(17px, 25px, inline-block);
+  background-position: -354px -310px;
+  position: relative;
+  top: -2px;
+}
+
+.icon-delivery {
+  @include size(25px, 17px, inline-block);
+  background-position: -398px -428px;
+  position: relative;
+  margin-right: 15px;
+}
+
+.icon-down-arrow {
+  @include size(7px, 9px, inline-block);
+  background-position: -100px -206px;
+  position: relative;
+
+  transform: rotate(90deg);
+}
+
+
+.icon-share-blue {
+  @include size(16px, 13px, inline-block);
+  background-position: -430px -430px;
+  position: relative;
+}
+
+
+.icon-share-social {
+  @include size(20px, 20px, inline-block);
+  background-position: -453px -427px;
+  position: relative;
 }
