@@ -65,15 +65,17 @@
   <div class="payment--white-box payment__summary">
       <ul class="payment__summary__items">
           {% for item in cart_items %}
-            {% with addons=item.addons variations=item.variations delivery_types=item.delivery_types delivery_service=item.delivery_obj  %}
+            {% with addons=item.addons variations=item.variations product=item.li.product delivery_types=item.delivery_types delivery_service=item.delivery_obj  %}
 
                 {% if item.is_available%}
                       <!-- Item wrap -->
                         <form  role="form" method="post" id="cart_remove_form{{item.id}}">{% csrf_token %}
                           <li class="payment__summary__item {% if forloop.counter0 == 0  %} border-top-none {%endif %}">
+                          {% if product and product.image %}
                             <span class="payment__summary__item--img">
-                                <img src="https://static1.shine.com/l/m/product_image/1668/1507608787_5699.png" class="img-responsive" />
+                                <img src="{{product.image.url}}" class="img-responsive"  alt="Product_responsive"/>
                             </span>
+                          {% endif %}
                               <div class="payment__summary__item--wrap">
                                   <p class="payment__summary__item--course-title">{{item.name}}
                                       <strong class="mt-10">Rs. {% if variations|length and item.product_class == 'course' or item.type_flow == 17  %} {{variations.0.price}} {% else %} {{item.price}} {% endif %} </strong>

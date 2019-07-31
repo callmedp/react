@@ -70,12 +70,16 @@
 
         {% for item in cart_items %}
 
-            {% with addons=item.addons variations=item.variations delivery_types=item.delivery_types delivery_service=item.delivery_obj  %}
+            {% with addons=item.addons variations=item.variations delivery_types=item.delivery_types product=item.li.product delivery_service=item.delivery_obj  %}
             <!-- prdduct 1 -->
 
               {% if item.is_available %}
                     <li>
-                        <span class="col-sm-8 col-md-9 item-sub-heading"><figure class="mr-10"><img class="img-responsive" src="{% static 'shinelearn/images/hr.png' %}"></figure><strong>{{item.name}}</strong>{% if item.experience %}{{item.experience|get_choice_display:"EXP_DICT"}}{% endif %}
+                        <span class="col-sm-8 col-md-9 item-sub-heading"><figure class="mr-10">
+                            {% if product and  product.image %}
+                         <img class="img-responsive"  src="{{ product.image.url }}">
+                            {% endif %}
+                        </figure><strong>{{item.name}}</strong>{% if item.experience %}{{item.experience|get_choice_display:"EXP_DICT"}}{% endif %}
                         </span>
                         <strong class="col-sm-4 col-md-3">Rs. {% if variations|length and item.product_class == 'course' or item.type_flow == 17  %} {{variations.0.price}} {% else %} {{item.price}} {% endif %}/-</strong>
                          <form role="form" id="cart_remove_form{{item.id}}">{% csrf_token %}

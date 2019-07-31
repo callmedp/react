@@ -613,7 +613,8 @@ class PaymentSummaryView(TemplateView, CartMixin):
                     wal_obj = None
 
         context.update({
-            'cart_coupon': cart_coupon, 'cart_wallet': cart_wallet, 'wallet': wal_obj,
+            'cart_coupon': cart_coupon, 'cart_wallet': cart_wallet,
+            'wallet': wal_obj,'type_flow': type_flow,
             'cart': cart_obj, 'wallet_total': wal_total, 'wallet_point': wal_point,
             'candidate_in_session': self.request.session.get('candidate_id')})
 
