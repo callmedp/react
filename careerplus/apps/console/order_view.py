@@ -2933,7 +2933,7 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
         context.update(self.pagination(paginator, self.page))
         var = self.sel_opt
         alert = messages.get_messages(self.request)
-        initial = {"oi_status": self.oi_status}
+        initial = {"oi_status": self.oi_status, "day_choice": self.day_choice}
 
         filter_form = OIFilterForm(initial, queue_name='queue-whatsappjoblist')
         context.update({"assignment_form": AssignmentActionForm(), "messages": alert, "query": self.query,
