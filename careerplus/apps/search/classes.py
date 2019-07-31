@@ -607,7 +607,7 @@ class FuncAreaSearch(BaseSearch):
         # Functional Area Filter
         if self.params.get('pk') and search_clean_fields(self.params.get('pk')) and self.found:
             self.results = self.results.narrow('pFA:%s' % self.params.get('pk'))
-        if not self.results.count():
+        if not self.found:
             self.results = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).only('pTt pURL pHd pAR pNJ pImA pImg pNm').order_by('-pBC')[:20]
             self.found = False
         return self.results, self.found
