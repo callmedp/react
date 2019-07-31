@@ -43,6 +43,7 @@ from dashboard.dashboard_mixin import DashboardInfo
 from console.decorators import Decorate, stop_browser_cache
 from core.utils import get_client_ip, get_client_device_type
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
+from geolocation.models import Country
 
 
 # third party imports
@@ -77,6 +78,17 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         elif self.cart_obj and not self.cart_obj.lineitems.filter(no_process=False).exists():
             return HttpResponsePermanentRedirect(reverse('homepage'))
         return None
+
+    def get_state_list(self):
+        india_obj = Country.objects.filter(phone='91')
+        state_choices = []
+        if india_obj:
+            india_obj = india_obj[0]
+            states = india_obj.state_set.all().order_by('name')
+            for st in states:
+                state_choices.append((st.id, st.name))
+
+        return state_choices
 
     def get(self, request, *args, **kwargs):
         redirect = self.redirect_if_necessary()
@@ -129,86 +141,77 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         return super(PaymentOptionView, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        import ipdb;
+        ipdb.set_trace();
         payment_type = request.POST.get('payment_type', '').strip()
         if payment_type == 'cash':
-            form = StateForm(request.POST)
-            if form.is_valid():
-                cart_pk = request.session.get('cart_pk')
-                if cart_pk:
-                    cart_obj = Cart.objects.get(pk=cart_pk)
-                    order = self.createOrder(cart_obj)
-                    self.closeCartObject(cart_obj)
-                    if order:
-                        txn = 'CP%d%s' % (order.pk, int(time.time()))
-                        pay_txn = PaymentTxn.objects.create(
-                            txn=txn,
-                            order=order,
-                            cart=cart_obj,
-                            status=0,
-                            payment_mode=1,
-                            currency=order.currency,
-                            txn_amount=order.total_incl_tax,
-                        )
-                        payment_type = "CASH"
-                        return_parameter = self.process_payment_method(
-                            payment_type, request, pay_txn)
-                        try:
-                            del request.session['cart_pk']
-                            del request.session['checkout_type']
-                            request.session.modified = True
-                        except Exception as e:
+            cart_pk = request.session.get('cart_pk')
+            if cart_pk:
+                cart_obj = Cart.objects.get(pk=cart_pk)
+                order = self.createOrder(cart_obj)
+                self.closeCartObject(cart_obj)
+                if order:
+                    txn = 'CP%d%s' % (order.pk, int(time.time()))
+                    pay_txn = PaymentTxn.objects.create(
+                        txn=txn,
+                        order=order,
+                        cart=cart_obj,
+                        status=0,
+                        payment_mode=1,
+                        currency=order.currency,
+                        txn_amount=order.total_incl_tax,
+                    )
+                    payment_type = "CASH"
+                    return_parameter = self.process_payment_method(
+                        payment_type, request, pay_txn)
+                    try:
+                        del request.session['cart_pk']
+                        del request.session['checkout_type']
+                        request.session.modified = True
+                    except Exception as e:
 
-                            logging.getLogger('error_log').error('unable to delete session request object%s' % str(e))
-                            pass
-                        return HttpResponseRedirect(return_parameter)
-                else:
-                    return HttpResponseRedirect(reverse('homepage'))
+                        logging.getLogger('error_log').error('unable to delete session request object%s' % str(e))
+                        pass
+                    return HttpResponseRedirect(return_parameter)
             else:
-                context = self.get_context_data()
-                context['state_form'] = form
-                return render(request, self.template_name, context)
+                return HttpResponseRedirect(reverse('homepage'))
         elif payment_type == 'cheque':
             form = PayByCheckForm(request.POST)
-            if form.is_valid():
-                cart_pk = request.session.get('cart_pk')
-                if cart_pk:
-                    cart_obj = Cart.objects.get(pk=cart_pk)
-                    order = self.createOrder(cart_obj)
-                    self.closeCartObject(cart_obj)
-                    if order:
-                        txn = 'CP%d%s%s' % (
-                            order.pk,
-                            int(time.time()),
-                            request.POST.get('cheque_no'))
-                        pay_txn = PaymentTxn.objects.create(
-                            txn=txn,
-                            order=order,
-                            cart=cart_obj,
-                            status=0,
-                            payment_mode=4,
-                            currency=order.currency,
-                            txn_amount=order.total_incl_tax,
-                            instrument_number=request.POST.get('cheque_no'),
-                            instrument_issuer=request.POST.get('drawn_bank'),
-                            instrument_issue_date=request.POST.get('deposit_date')
-                        )
-                        payment_type = "CHEQUE"
-                        return_parameter = self.process_payment_method(
-                            payment_type, request, pay_txn)
-                        try:
-                            del request.session['cart_pk']
-                            del request.session['checkout_type']
-                            request.session.modified = True
-                        except Exception as e:
-                            logging.getLogger('error_log').error('unable to delete request session object%s' % str(e))
-                            pass
-                        return HttpResponseRedirect(return_parameter)
-                else:
-                    return HttpResponseRedirect(reverse('homepage'))
+            cart_pk = request.session.get('cart_pk')
+            if cart_pk:
+                cart_obj = Cart.objects.get(pk=cart_pk)
+                order = self.createOrder(cart_obj)
+                self.closeCartObject(cart_obj)
+                if order:
+                    txn = 'CP%d%s%s' % (
+                        order.pk,
+                        int(time.time()),
+                        request.POST.get('cheque_no'))
+                    pay_txn = PaymentTxn.objects.create(
+                        txn=txn,
+                        order=order,
+                        cart=cart_obj,
+                        status=0,
+                        payment_mode=4,
+                        currency=order.currency,
+                        txn_amount=order.total_incl_tax,
+                        instrument_number=request.POST.get('cheque_no'),
+                        instrument_issuer=request.POST.get('drawn_bank'),
+                        instrument_issue_date=request.POST.get('deposit_date')
+                    )
+                    payment_type = "CHEQUE"
+                    return_parameter = self.process_payment_method(
+                        payment_type, request, pay_txn)
+                    try:
+                        del request.session['cart_pk']
+                        del request.session['checkout_type']
+                        request.session.modified = True
+                    except Exception as e:
+                        logging.getLogger('error_log').error('unable to delete request session object%s' % str(e))
+                        pass
+                    return HttpResponseRedirect(return_parameter)
             else:
-                context = self.get_context_data()
-                context['check_form'] = form
-                return render(request, self.template_name, context)
+                return HttpResponseRedirect(reverse('homepage'))
 
         return HttpResponseRedirect(reverse('cart:payment-summary'))
 
@@ -219,7 +222,7 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         type_flow = int(line_item.product.type_flow)
         email_id = self.cart_obj.owner_email,
         first_name = self.cart_obj.first_name or self.request.session.get('first_name')
-        print(type_flow)
+        state_list = self.get_state_list()
         context.update({
             "state_form": StateForm(),
             "check_form": PayByCheckForm(),
@@ -227,8 +230,8 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
             "cart_id": self.request.session.get('cart_pk'),
             "type_flow": type_flow,
             "email_id": email_id,
-            "first_name": first_name
-
+            "first_name": first_name,
+            "state_list": state_list
         })
         return context
 

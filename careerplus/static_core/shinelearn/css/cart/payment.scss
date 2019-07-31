@@ -1312,6 +1312,7 @@
     background: $white-bg;
     padding: 3px;
     color: $secondary-color;
+	pointer-events: none;
 
 }
 .personal-details .form-group input:focus + label,.personal-details .form-group input:not(:placeholder-shown) + label{
