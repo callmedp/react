@@ -3007,7 +3007,10 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
             elif int(self.oi_status) == 35:
                 queryset = queryset.filter(whatsapp_profile_orderitem__onboard=False)
             else:
-                queryset = queryset.filter(oi_status=self.oi_status)
+                queryset = queryset.filter(
+                    oi_status=self.oi_status,
+                    whatsapp_profile_orderitem__onboard=True
+                )
 
         if self.payment_date:
             start_date, end_date = self.payment_date.split(' - ')
