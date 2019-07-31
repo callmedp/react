@@ -67,7 +67,9 @@
               <div class="col-lg-6">
                 <select id="filter-status" class="form-control filter-dropdown">
                     <option value="">Select Status</option>
+                    {% if request.user|has_group:OPS_HEAD_GROUP_LIST %}
                     <option value="1">Pending</option>
+                    {% endif%}
                     <option value="2">Assigned</option>
                     <option value="3">Closed</option>
                 </select>
@@ -108,8 +110,29 @@
                             </span>
                             <input type='text' id="filter-added-on" name="follow" class="form-control" readonly />
                         </div>
+                      </div>
+                  </div>
+
+                  <div class="row modal-item">
+                    <div class="form-group filter-div">
+                      <label for="follow">Last Payment Date Range:</label>
+                      <span class="glyphicon glyphicon-remove filter-remove-icon" aria-hidden="true" onclick="removeDate('#filter-added-on')"></span>
+                      <div class="input-group date form_datetime ">
+                          <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                          </span>
+                          <input type='text' id="filter-payment-on" name="follow" class="form-control" readonly />
+                      </div>
                     </div>
                   </div>
+
+                  <div class="row modal-item">
+                    <div class="form-group filter-div">
+                      <label for="follow">Min LTV:</label>
+                      <input type='number' id="min-ltv" class="form-control" />
+                    </div>
+                  </div>
+
                   {% if request.user|has_group:OPS_HEAD_GROUP_LIST %}
                     <div class="row modal-item">
                         <label>Select User:</label>

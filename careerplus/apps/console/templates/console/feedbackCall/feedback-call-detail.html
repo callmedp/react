@@ -15,6 +15,7 @@
       <link type="text/css" href="{% static "console/css/feedbackCall/feedback.css" %}" rel="stylesheet">
     {% endcompress %}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.min.css" rel="stylesheet" />
 {% endblock css_block %}
 
 
@@ -123,7 +124,7 @@
                   <tr class="headings">
                     <th class="column-title">Item Name</th>
                     <th class="column-title">Status</th>
-                    <th class="column-title">Order ID</th>
+                    <th class="column-title">Order Item ID</th>
                     <th class="column-title">Payment Date</th>
                     <th class="column-title">Service Feedback</th>
                     <th class="column-title">Resolution</th>
@@ -211,6 +212,7 @@
   <script>
     const id = {{id}}
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.all.min.js"></script>
   {% compress js %}
     <script type="text/javascript" src="{% static "console/js/feedbackCall/utils.js" %}"></script>
     <script type="text/javascript" src="{% static "console/js/feedbackCall/customer-feedback-detail.js" %}"></script>

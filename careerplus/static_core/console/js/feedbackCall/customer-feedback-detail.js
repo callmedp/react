@@ -73,7 +73,7 @@ const feedbackCallDetails = () => {
                       <button type="button" class="btn btn-primary btn-xs" onclick="showData(this,'mobile')"><i class="fa fa-phone-square" aria-hidden="true"></i>ClickToView</button>
                   </div>
               </td>
-              <td>${data.ltv_value}</td>
+              <td>${data.ltv}</td>
             </tr>
           `
         )
@@ -103,7 +103,7 @@ const getOrderItemFeedback = () => {
                         <tr class="even pointer">
                             <td class="padding-item">${order_item.length ? order_item[0].product_name : ''}</td>
                             <td class="padding-item">${order_item.length ? order_item[0].get_oi_status : ''}</td>
-                            <td class="padding-item">${item.order_item}</td>
+                            <td class="padding-item"><a href="/console/queue/order/${order_item.length ? order_item[0].order_id : ''}/details/">${item.order_item}</a></td>
                             <td class="padding-item">${order_item.length ? formatDate(order_item[0].order_payment_date) : ''}</td>
                             <td class="scalling">
                                 <select id="item-category-${index}" onclick="removeError('#item-category-${index}',${index},'category')" name="resolution" class="form-control">
@@ -124,8 +124,8 @@ const getOrderItemFeedback = () => {
                 createDropdown(`#item-category-${index}`,category,index,'category',item.category)
                 form_data[index] = {
                                         id: item.id,
-                                        category: `${item.category}`,
-                                        resolution: `${item.resolution}`,
+                                        category: `${item.category ? item.category : ''}`,
+                                        resolution: `${item.resolution ? item.resolution : ''}`,
                                         comment: item.comment,
                                     };
                 createDropdown(`#item-resolution-${index}`,resolution,index,'resolution',item.resolution)
@@ -197,6 +197,13 @@ const saveReview = () => {
     
 }
 
+const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000
+});
+
 const sendData = (type) => {
     // loader show
     $('.feedback-loader').show()
@@ -205,8 +212,11 @@ const sendData = (type) => {
     $.post(`/console/api/v1/feedback-call/feedback/${id}/save-data/`,{
         form_data:JSON.stringify(form_data)
     },(data)=>{
-        if(data.result){
-            alert(`${type} submitted successfully`)
+        if(data.result){    
+            Toast.fire({
+                type: 'success',
+                title: 'Feedback Saved Succesfully'
+            })
             window.location = '/console/feedbackcall/queue/'
         }
     })
@@ -235,6 +245,7 @@ const followUpFeedback = () => {
 
 const checkError = () => {
     let error = false
+    console.log(form_data)
     for(key in form_data){
         let item = form_data[key]
         if(item && typeof item === 'object'){ 

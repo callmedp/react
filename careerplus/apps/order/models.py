@@ -284,9 +284,13 @@ class Order(AbstractAutoDate):
             return super(Order,self).save(**kwargs)
 
         existing_obj = Order.objects.get(id=self.id)
-        key = 'ltv_' + self.candidate_id
-        cache.delete(key)
-        
+        candidate_id = existing_obj.candidate_id
+        email = existing_obj.email
+        ltv = get_ltv(candidate_id)
+        CustomerLtv.objects.update_or_create(
+                candidate_id=candidate_id, email=email,
+                defaults={'ltv':ltv },
+            )
         if self.status == 1:
             assesment_items = self.orderitems.filter(
                 order__status__in=[0, 1],
@@ -1087,6 +1091,7 @@ class CustomerFeedback(models.Model):
     follow_up_date = models.DateTimeField('Follow Up Date', blank=True, null=True)
     comment = models.CharField('Feedback Comment', max_length=500)
     last_payment_date = models.DateTimeField('Last Payment Date',blank=True, null=True)
+    ltv = models.DecimalField(max_digits=20, decimal_places=2,blank=True, null=True)
 
     @property
     def status_text(self):
@@ -1096,9 +1101,9 @@ class CustomerFeedback(models.Model):
     def assigned_to_text(self):
         return self.assigned_to.name if self.assigned_to else ''
 
-    @property
-    def ltv_value(self):
-        return get_ltv(self.candidate_id)
+    # @property
+    # def ltv_value(self):
+    #     return get_ltv(self.candidate_id)
 
 
 
@@ -1141,6 +1146,3 @@ class OrderItemFeedbackOperation(models.Model):
     def assigned_to_text(self):
         return self.assigned_to.name if self.assigned_to else ''
     
-
-# class CustomerLtv(models.Model):
-#     candidate_id = 

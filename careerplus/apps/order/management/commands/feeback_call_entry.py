@@ -17,7 +17,8 @@ class Command(BaseCommand):
         feedback_call_entry()
 
 def feedback_call_entry():
-    start_date = timezone.now() - timedelta(days=7)
+    import ipdb; ipdb.set_trace()
+    start_date = timezone.now() - timedelta(days=30)
     end_date = timezone.now() - timedelta(days=3)
     welcome_operations = WelcomeCallOperation.objects.filter(created__range=[start_date,end_date],order__welcome_call_done=True)
     if not welcome_operations.exists():
@@ -29,12 +30,13 @@ def feedback_call_entry():
         mobile = operation.order.mobile
         email = operation.order.email
         payment_date = operation.order.payment_date
-        customer_feedback = CustomerFeedback.objects.filter(candidate_id=candidate_id,status=1).first()
+        customer_feedback = CustomerFeedback.objects.filter(candidate_id=candidate_id,status__in=[1,2]).first()
         if not customer_feedback:
             customer_feedback = CustomerFeedback.objects.create(candidate_id=candidate_id,full_name=customer_name,mobile=mobile,email=email,last_payment_date=payment_date)
         if customer_feedback.last_payment_date < payment_date:
             customer_feedback.last_payment_date = payment_date
-            customer_feedback.save()
+        customer_feedback.ltv = ltv
+        customer_feedback.save()
         assigned_to = customer_feedback.assigned_to
         for order_item in operation.order.orderitems.all():
             OrderItemFeedback.objects.get_or_create(order_item=order_item,customer_feedback=customer_feedback)

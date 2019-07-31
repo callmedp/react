@@ -36,15 +36,35 @@ class FeedbackQueueView(ListAPIView):
         feedback_type = self.request.GET.get('type') # fresh/follow-up type
         follow_up_date_range = self.request.GET.get('follow_up_date_range')
         added_on_range = self.request.GET.get('added_on_range')
+        last_payment_range = self.request.GET.get('last_payment_range')
+        min_ltv = self.request.GET.get('min_ltv')
         search_text = self.request.GET.get('search_text')
+
         if status:
             queryset = queryset.filter(status=status)
+
         if search_text:
             queryset = queryset.filter(Q(full_name__icontains=search_text) | Q(email__icontains=search_text) | Q(mobile__icontains=search_text))
+        
         if feedback_type == '1':
             queryset = queryset.filter(follow_up_date=None)
         elif feedback_type == '2':
             queryset = queryset.exclude(follow_up_date=None)
+
+        if min_ltv:
+            queryset = queryset.filter(ltv__gte = min_ltv)
+
+        if last_payment_range:
+            date_range = follow_up_date_range.split(' - ')
+            start_date = datetime.strptime(date_range[0],'%Y-%m-%d')
+            end_date = datetime.strptime(date_range[1],'%Y-%m-%d')
+            queryset = queryset.filter(last_payment_date__range=(start_date,end_date))
+
+        if follow_up_date_range:
+            date_range = follow_up_date_range.split(' - ')
+            start_date = datetime.strptime(date_range[0],'%Y-%m-%d')
+            end_date = datetime.strptime(date_range[1],'%Y-%m-%d')
+            queryset = queryset.filter(follow_up_date__range=(start_date,end_date))
 
         if follow_up_date_range:
             date_range = follow_up_date_range.split(' - ')
@@ -68,6 +88,8 @@ class FeedbackQueueView(ListAPIView):
             queryset = queryset.filter(assigned_to=user)
         else:
             queryset = queryset.none()
+
+        queryset = queryset.order_by('-last_payment_date')
 
         return queryset
 
@@ -143,6 +165,7 @@ class OrderItemFeedbackOperationView(ListAPIView):
         queryset = super(OrderItemFeedbackOperationView, self).get_queryset()
         id = self.kwargs.get('pk')
         queryset = queryset.filter(customer_feedback=id)
+        queryset = queryset.order_by('-id')
         return queryset
 
 class SaveFeedbackIdData(CreateAPIView):

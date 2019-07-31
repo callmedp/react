@@ -41,6 +41,11 @@ $(document).ready(() => {
             format: 'YYYY-MM-DD'
         }
       }).val('');
+    $('#filter-payment-on').daterangepicker({
+    locale: {
+        format: 'YYYY-MM-DD'
+    }
+    }).val('');
     
 });
 
@@ -194,7 +199,9 @@ const filterFeedbackList = () => {
     filter_data ={
         follow_up_date_range : $('#filter-follow-up').val(),
         added_on_range : $('#filter-added-on').val(),
-        user : $('#filter-user').val()
+        last_payment_range : $('#filter-added-on').val(),
+        user : $('#filter-user').val(),
+        min_ltv: $('#min-ltv').val()
     }
     customerFeedbackList(1,filter_data)
 

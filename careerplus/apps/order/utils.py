@@ -8,10 +8,6 @@ from django.core.cache import cache
 
 def get_ltv(candidate_id):
     from order.models import Order,OrderItem,RefundRequest
-    key = 'ltv_' + candidate_id
-    ltv = cache.get(key)
-    if ltv:
-        return ltv
     ltv_pks = list(Order.objects.filter(candidate_id=candidate_id, status__in=[1, 2, 3]).values_list('pk', flat=True))
     ltv = Decimal(0)
     if ltv_pks:
@@ -21,5 +17,4 @@ def get_ltv(candidate_id):
         rf_sum = RefundRequest.objects.filter(order__in=rf_ois).aggregate(rf_price=Sum('refund_amount'))
         if rf_sum.get('rf_price'):
             ltv = ltv - rf_sum.get('rf_price')
-    cache.set(key, ltv, 2592000)
     return ltv
