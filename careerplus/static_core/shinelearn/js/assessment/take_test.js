@@ -65,7 +65,7 @@
                 dataType: 'json',
                 success: function(json) {
                     if (json.status == 1){
-                             alert('Adding To Cart');
+
                         window.location.href = json.cart_url
 
                     }
@@ -99,6 +99,8 @@
                 $('#courseName').attr('href',json.results[0].absolute_url)
                 $('#courseImg').attr('src',json.results[0].image)
                 $('#courseJobsAvailable').text(json.results[0].num_jobs);
+                $('#fakeCoursePrice').text('Rs. '+ parseInt(parseInt(modalobject.coursePrice)/0.9));
+                $('#fakeProductPrice').text('Rs. '+parseInt(parseInt(modalobject.productPrice)/0.9));
                 $('#courseCartBtn').click(function(){
                 updateToCart(json.results[0].id,'cart');
                 });

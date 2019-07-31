@@ -260,6 +260,14 @@ function getCoptions(){
                   right+= 1 ;
                      }
                             }
+                              for (i of Object.values(questionAttempt)){
+                if(! $("#check"+i).hasClass('icon-right')){
+                $("#check"+i).addClass('pt-sprite icon-cross');
+                }
+
+
+            }
+
               $('#correctMsg').text( right+ ' out of '+total+' correct answers ');
                    let scorePercent = (right/total)*100 ;
               let scoreMessage = "";
@@ -285,7 +293,11 @@ function getCoptions(){
               }
               $('#resultRemark').html(scoreMessage);
 
+                if(questionAttempt && questionAttempt['testTime'+{{object.id}}]){
               $('#timeTaken').text(secondsToMinutes(questionAttempt['testTime'+{{object.id}}]));
+              }else{
+               $('#timeTaken').text(secondsToMinutes({{object.duration}}));
+              }
                                     }
     });
 

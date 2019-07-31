@@ -70,7 +70,7 @@
     <div class="practice-test check-result-wrap pt-30" id="check_results">
         <div class="practice-test-inside"></div>
         <div class="back" id="close"></div>
-        <h1 class="mt-30">{Category.heading}}</h1>
+        <h1 class="mt-30">{{Category.heading}}</h1>
         <p class="c6">Make your choice and go ahead</p>
 
         <div class="test-option-box">
@@ -123,7 +123,7 @@
 
             <div class="test-option-box--cta mt-20">
                 <div class="test-option-box--price">
-                    <span>Rs. 999</span>
+                    <span id="fakeProductPrice"> </span>
                     <strong id="productPrice">Rs. 699</strong>
                 </div>
                 <button class="btn btn-lg btn-round-30 btn-yellow semi-bold" id="testAddToCart">Add to cart</button>
@@ -146,7 +146,7 @@
 
             <div class="test-option-box--cta mt-20">
                 <div class="test-option-box--price">
-                    <span>Rs. 1999</span>
+                    <span id="fakeCoursePrice"></span>
                     <strong id="coursePrice">Rs. 1699</strong>
                 </div>
                 <button class="btn btn-lg btn-round-30 btn-blue semi-bold" id="courseCartBtn">Add to cart</button>

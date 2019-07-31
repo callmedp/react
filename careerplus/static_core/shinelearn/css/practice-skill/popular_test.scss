@@ -770,6 +770,7 @@ h2 {
         a {
             font-weight: $font-weight+300;
             color: $white-bg;
+            text-decoration: underline;
 
             &:hover {
                 text-decoration: underline;

@@ -114,7 +114,7 @@
                <span class="pad-15">
                   <h3><a id="test-product-name" href="{{object.product.get_absolute_url}}">{{object.product.name}}</a></h3>
                   <h4 class="mt-0" id="test-price">Rs. {{object.product.inr_price}}</h4>
-                  <strike>Rs. 999</strike>
+                  <strike id="fakeProductPrice"></strike>
                   <span class="grey-border mt-15 mb-15"></span>
                   <strong>Benefits</strong>
                   <p>500+ questions</p>
@@ -307,18 +307,27 @@ function getCoptions(){
                   right+= 1 ;
                      }
                             }
+
+            for (i of Object.values(questionAttempt)){
+                if(! $("#check"+i).hasClass('ans-right')){
+                $("#check"+i).addClass('ans-wrong');
+                }
+
+
+            }
+
               $('#correctMsg').text( right+ ' out of '+total+' correct answers ');
               let scorePercent = (right/total)*100 ;
               let scoreMessage = "";
               $('#scoringPercent').text(scorePercent +"%");
               if(scorePercent >80){
-              scoreMessage =  ` Wow! Awesome Score. Take <a href="{{object.product.get_absolute_url}}"> {{object.product.name}}</a> to show off your skills to the recruiter`;
+              scoreMessage =  ` Wow! Awesome Score.`;
                $('#resultImage').attr("src","{% static 'shinelearn/images/free_skill/test-result-bg.png' %}");
                $('#resultCourse').html('Take <a href= "{{object.course.get_absolute_url}}">{{object.course.name}} </a>to show off your skills to the recruiter');
 
               }
                else if(scorePercent <= 80 && scorePercent >=50){
-              scoreMessage =  `  Don’t worry! You are almost there. Take {{object.product.name}} to be the master`;
+              scoreMessage =  ` Don’t worry! You are almost there.`;
               $('#resultImage').attr("src","{% static 'shinelearn/images/free_skill/test-result-bg2.png' %}");
               $('#resultCourse').html('Take our paid <a href= "{{object.product.get_absolute_url}}">{{object.product.name}} </a>to do better');
 
@@ -326,16 +335,15 @@ function getCoptions(){
                else{
               $('#resultCourse').html('Take our paid <a href= "{{object.product.get_absolute_url}}">{{object.product.name}} </a>to do better');
 
-              scoreMessage =  ` Don’t panic! We ‘ve got you covered. Take <a href= "{{object.product.get_absolute_url}}">{{object.product.name}}</a> to be the master`;
+              scoreMessage =  ` Don’t panic! We ‘ve got you covered.`;
                            $('#resultImage').attr("src","{% static 'shinelearn/images/free_skill/test-result-bg3.png' %}");
 
               }
               $('#resultRemark').html(scoreMessage);
-              if(questionAttempt){
+              if(questionAttempt && questionAttempt['testTime'+{{object.id}}]){
               $('#timeTaken').text(secondsToMinutes(questionAttempt['testTime'+{{object.id}}]));
               }else{
-               $('#timeTaken').text('');
-
+               $('#timeTaken').text(secondsToMinutes({{object.duration}}));
               }
                  }
     });

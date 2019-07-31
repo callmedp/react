@@ -8,6 +8,9 @@
         $('#courseName').text(modalobject.courseName);
         $('#questCount').text(modalobject.quescount);
         $('#exampleModalLongTitle').text(modalobject.catname);
+        $('#fakeCoursePrice').text('Rs. '+ parseInt(parseInt(modalobject.coursePrice)/0.9));
+        $('#fakeProductPrice').text('Rs. '+parseInt(parseInt(modalobject.productPrice)/0.9));
+
         if(modalobject.courseName == ""|| modalobject.courseName == "undefined" ){
         $('#testCourse').hide();
         }

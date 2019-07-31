@@ -46,9 +46,9 @@
                                   data-attr-value="{{forloop.counter}}">{{forloop.counter}}</span>
                             {% endfor %}
                         </div>
-                        <div class="pagination-more">
-                            <i class="pagination-down"></i>
-                        </div>
+                        <!--<div class="pagination-more">-->
+                            <!--<i class="pagination-down"></i>-->
+                        <!--</div>-->
                     </div>
                     <!-- paper starts -->
                     {% for quest in questions_list %}
@@ -101,7 +101,7 @@
                <span class="pad-15">
                   <h3><a href="{{object.product.get_absolute_url}}" id="test-product-name">{{object.product.name}}</a></h3>
                   <h4 class="mt-0" id="test-price">Rs. {{object.product.inr_price}}</h4>
-                  <strike>Rs. 999</strike>
+                  <strike id="fakeProductPrice"></strike>
                   <span class="grey-border mt-15 mb-15"></span>
                   <strong>Benefits</strong>
                   <p>500+ questions</p>
@@ -309,8 +309,8 @@ function skipQuestion() {
 }
 
 function startTimer(duration,) {
-    var timer = duration, minutes, seconds;
-     interval = setInterval(function () {
+        var timer = duration, minutes, seconds;
+        interval = setInterval(function () {
         minutes = parseInt(timer / 60, 10);
         seconds = parseInt(timer % 60, 10);
 

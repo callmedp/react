@@ -129,7 +129,7 @@
 
             <div class="test-option-box--cta mt-20">
                 <div class="test-option-box--price">
-                    <span>Rs. 999</span>
+                    <span id="fakeProductPrice"></span>
                     <strong id="productPrice">Rs. </strong>
                 </div>
                 <button class="btn btn-lg btn-round-30 btn-yellow semi-bold" id="testAddToCart">Add to cart</button>
@@ -152,7 +152,7 @@
 
             <div class="test-option-box--cta mt-20">
                 <div class="test-option-box--price">
-                    <span>Rs. 1999</span>
+                    <span id="fakeCoursePrice"></span>
                     <strong id="coursePrice"></strong>
                 </div>
                 <button class="btn btn-lg btn-round-30 btn-blue semi-bold" id="courseCartBtn">Add to cart</button>
@@ -209,6 +209,8 @@
         $('#productPrice').text(modalobject.productPrice);
         $('#courseDuration').text(modalobject.courseDuration);
         $('#coursePrice').text(modalobject.coursePrice);
+              $('#fakeCoursePrice').text('Rs. '+ parseInt(parseInt(modalobject.coursePrice)/0.9));
+                $('#fakeProductPrice').text('Rs. '+parseInt(parseInt(modalobject.productPrice)/0.9));
         $('#courseName').text(modalobject.courseName);
         $('#questCount').text(modalobject.quescount);
        if(modalobject.courseName == ""|| modalobject.courseName == "undefined" ){
