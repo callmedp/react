@@ -2151,6 +2151,87 @@ footer {
 }
 
 
+.close-icon {
+	width: 12px;
+	height: 12px;
+	background: $sprite -219px -273px;
+	display: inline-block;
+	vertical-align: sub;
+}
+
+.login-payment-icon {
+	width: 23px;
+	height: 28px;
+	background: $sprite -608px -310px;
+	display: inline-block;
+	vertical-align: sub;
+}
+
+.guestlogin-payment-icon {
+	width: 28px;
+	height: 43px;
+	background: $sprite -578px -311px;
+	display: inline-block;
+	vertical-align: sub;
+}
+
+.facebook-social-icon {
+	width: 10px;
+	height: 24px;
+	background: $sprite -195px -473px;
+	display: inline-block;
+	vertical-align: sub;
+}
+
+.linkedin-social-icon {
+	width: 21px;
+	height: 21px;
+	background: $sprite -261px -474px;
+	display: inline-block;
+	vertical-align: sub;
+}
+
+.google-social-icon {
+	width: 21px;
+	height: 20px;
+	background: $sprite -219px -474px;
+	display: inline-block;
+	vertical-align: sub;
+}
+
+.down-arrow-icon {
+	width: 13px;
+	height: 18px;
+	background: $sprite -276px -271px;
+	display: inline-block;
+	vertical-align: sub;
+}
+
+.delivery-icon {
+	width: 25px;
+	height: 17px;
+	background: $sprite -325px -483px;
+	display: inline-block;
+	vertical-align: sub;
+}
+
+.link-icon {
+	width: 20px;
+	height: 16px;
+	background: $sprite -327px -474px;
+	display: inline-block;
+	vertical-align: sub;
+}
+
+.share-icon {
+	width: 13px;
+	height: 14px;
+	background: $sprite -334px -451px;
+	display: inline-block;
+	vertical-align: sub;
+}
+
+
 /*---------login signup banner page css---------*/
 
 .login-signup-box {
@@ -2659,6 +2740,15 @@ footer {
 
 .mb-100 {
 	margin-bottom: 100px;
+}
+
+
+.ml-5 {
+	margin-left: 5px;
+}
+
+.ml-10 {
+	margin-left: 10px;
 }
 
 .ml-50 {
