@@ -97,7 +97,7 @@
                             <span class="error" style="left:14px;">{{ non_field_error }}</span>
                         {% endif %}
                         <div class="form-group clearfix">
-                            <div class="col-sm-12 {% if email_error %} error {% endif %}">
+                            <div class="col-sm-12 {% if email_error %} error1 {% endif %}">
                                 <input type="email" class="form-control" name="email" placeholder=" "
                                        value="{{ email }}"/>
                                 <label for="">Email id</label>
@@ -109,7 +109,7 @@
                             <span class="error" style="left:14px;">{{ non_field_error }}</span>
                         {% endif %}
                         <div class="form-group clearfix">
-                            <div class="col-sm-12 {% if email_error %} error {% endif %}">
+                            <div class="col-sm-12 {% if email_error %} error1 {% endif %}">
                                 <input type="email" name="email" class="form-control" placeholder=" " value="
 
                                         {% if request.session.email %}{{ request.session.email }}{% elif request.session.lead_email %}{{ request.session.lead_email }}{% endif %}"
@@ -160,8 +160,7 @@
                         </div>
                     </div>
                     <div class="form-group clearfix">
-                        <div class="col-sm-12 {% if form.email.errors %} error {% endif %}">
-                            <!-- {{form.email}} -->
+                        <div class="col-sm-12">
                             <input type="email"
                                    class="form-control"
                                    name="email"
@@ -170,7 +169,7 @@
                             />
 
                             <label for="">Email id</label>
-                            <span class="error-txt">{{ form.email.errors.0 }}</span>
+                            <span class="error-txt" id="email-error"></span>
                         </div>
                     </div>
                     <div class="form-group clearfix">

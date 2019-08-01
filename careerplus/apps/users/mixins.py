@@ -144,7 +144,7 @@ class WriterInvoiceMixin(object):
                     self.combo_discount_object.add(oi.pk)
                 else:
                     _, last_day = calendar.monthrange(
-                        invoice_date.year, invoice_date.month) 
+                        invoice_date.year, invoice_date.month)
                     last_invoice_date = datetime.date(
                         invoice_date.year, invoice_date.month, last_day)
                     writing_ois = OrderItem.objects.filter(
@@ -213,7 +213,7 @@ class WriterInvoiceMixin(object):
             valid_from = user.userprofile.valid_from
             valid_to = user.userprofile.valid_to
             if valid_from and valid_to and valid_from < valid_to \
-                and invoice_date and invoice_date >= valid_from and invoice_date <= valid_to:
+                    and invoice_date and invoice_date >= valid_from and invoice_date <= valid_to:
                 pass
             elif not error:
                 error = 'Update writer Po Number validity'
@@ -233,7 +233,7 @@ class WriterInvoiceMixin(object):
 
         if user and invoice_date and not error:
             _, last_day = calendar.monthrange(
-                invoice_date.year, invoice_date.month)  #  _  return weekday of first day of the month
+                invoice_date.year, invoice_date.month)  # _  return weekday of first day of the month
             last_invoice_date = datetime.date(
                 invoice_date.year, invoice_date.month, last_day)
             first_invoice_date = datetime.date(
@@ -415,7 +415,7 @@ class WriterInvoiceMixin(object):
                     elif product_pk in PORTFOLIO_PRODUCT_LIST:
                         amount = PORTFOLIO_PRICE
                         process = True
-                    
+
                     if process:
                         oi_dict.update({
                             "item_id": pk,
@@ -520,7 +520,7 @@ class WriterInvoiceMixin(object):
                         added_delivery_object.append(oi.pk)
                         total_sum += amount
                     process = True
-                
+
                 if not process:
                     pk = oi.pk
                     product_name = oi.product.get_name
@@ -528,8 +528,8 @@ class WriterInvoiceMixin(object):
                     combo_discount = 0
                     product_pk = oi.product.pk
                     resuem_writing_ois = oi.order.orderitems.filter(
-                        product__type_flow__in=[1,12],assigned_to=user)
-                    
+                        product__type_flow__in=[1, 12], assigned_to=user)
+
                     if product_pk in VISUAL_RESUME_PRODUCT_LIST and resuem_writing_ois.exists():
                         amount = VISUAL_RESUME
                         # combo discount calculation
@@ -697,8 +697,8 @@ class WriterInvoiceMixin(object):
                 path = "invoice/user/{user_pk}/{month}_{year}/".format(
                     user_pk=user.pk, month=invoice_date.month,
                     year=invoice_date.year)
-                file_name = 'invoice-' + str(user.name) + '-'\
-                    + timezone.now().strftime('%d%m%Y') + '.pdf'
+                file_name = 'invoice-' + str(user.name) + '-' \
+                            + timezone.now().strftime('%d%m%Y') + '.pdf'
                 pdf_file = SimpleUploadedFile(
                     file_name, pdf_file,
                     content_type='application/pdf')
@@ -771,9 +771,11 @@ class RegistrationLoginApi(object):
     def user_registration(post_data):
         response_json = {"response": "exist_user"}
         post_url = "{}/api/v2/web/candidate-profiles/?format=json".format(settings.SHINE_SITE)
-        try:
-            country_obj = Country.objects.get(phone=post_data['country_code'])
-        except Country.DoesNotExist:
+
+        country_obj = Country.objects.filter(phone=post_data['country_code'])
+        if len(country_obj):
+            country_obj = country_obj[0]
+        else:
             country_obj = Country.objects.get(phone='91')
 
         headers = ShineCandidateDetail().get_api_headers_non_auth()
@@ -795,7 +797,7 @@ class RegistrationLoginApi(object):
                 response_json.update({'response': "form_error"})
             else:
                 logging.getLogger('error_log').error("Error getting response from shine for"
-                                                 " registration. {}".format(response))
+                                                     " registration. {}".format(response))
 
         except Exception as e:
             logging.getLogger('error_log').error("Error getting response from shine for"
@@ -826,7 +828,7 @@ class RegistrationLoginApi(object):
                 response_json.update({'response': "form_error"})
             else:
                 logging.getLogger('error_log').error("Error getting response from shine for"
-                                                 " login. {}".format(response))
+                                                     " login. {}".format(response))
 
         except Exception as e:
             logging.getLogger('error_log').error("Error in getting response from shine for login. %s " % str(e))
@@ -860,25 +862,25 @@ class RegistrationLoginApi(object):
 
         post_data.update({
             'email': data_dict.get('email').lower(),
-            'password':data_dict.get('new_password1'),
-            'confirm_password':data_dict.get('new_password2')
+            'password': data_dict.get('new_password1'),
+            'confirm_password': data_dict.get('new_password2')
         })
         request_header = ShineCandidateDetail().get_api_headers(token=None)
-        request_header.update({'Content-Type':'application/json'})
+        request_header.update({'Content-Type': 'application/json'})
         try:
             response = requests.post(post_url, data=json.dumps(post_data), headers=request_header)
             if response.status_code == 201:
                 response_json = response.json()
-                response_json.update({'response':True})
+                response_json.update({'response': True})
 
             elif response.status_code == 400:
                 response_json = response.json()
-                response_json.update({'status_code':response.status_code})
+                response_json.update({'status_code': response.status_code})
                 logging.getLogger('error_log').error(
                     "Error in getting response from shine for existing email check. ""%s " % str(response.status_code))
             else:
                 logging.getLogger('error_log').error("Error getting response from shine for"
-                                                 " reset update. {}".format(response))
+                                                     " reset update. {}".format(response))
         except Exception as e:
             logging.getLogger('error_log').error("Error in getting response from shine for existing email check. "
                                                  "%s " % str(e))
@@ -912,7 +914,7 @@ class RegistrationLoginApi(object):
 
         try:
             request_header = ShineCandidateDetail().get_api_headers(token=None)
-            request_header.update({'Content-Type':'application/json'})
+            request_header.update({'Content-Type': 'application/json'})
             response = requests.post(post_url, data=json.dumps(post_data), headers=request_header)
             if response.status_code == 201:
                 response_json = response.json()
@@ -920,12 +922,12 @@ class RegistrationLoginApi(object):
 
             elif response.status_code == 400:
                 response_json = response.json()
-                response_json.update({'status_code':response.status_code})
+                response_json.update({'status_code': response.status_code})
                 logging.getLogger('error_log').error(
                     "Error in getting response from shine for existing email check. ""%s " % str(response.status_code))
             else:
                 logging.getLogger('error_log').error("Error getting response from shine for"
-                                                 " social login. {}".format(response))
+                                                     " social login. {}".format(response))
         except Exception as e:
             logging.getLogger('error_log').error("Error in getting response from shine for existing email check. "
                                                  "%s " % str(e))
@@ -975,8 +977,8 @@ class UserMixin(object):
 
 class UserGroupMixin(object):
     user_check_failure_path = '/console'  # can be path, url name or reverse_lazy
-    group_names = []    # use group_names if any one out of list is enough
-    group_list = []     # use group_list if all elements of list is required
+    group_names = []  # use group_names if any one out of list is enough
+    group_list = []  # use group_list if all elements of list is required
 
     def check_group(self, user):
         if user.is_superuser:
@@ -1002,6 +1004,7 @@ class UserGroupMixin(object):
             return self.user_check_failed(request, *args, **kwargs)
         return super(UserGroupMixin, self).dispatch(request, *args, **kwargs)
 
+
 class UserPermissionMixin(object):
     permission_to_check = []
     any_permission = False
@@ -1018,4 +1021,3 @@ class UserPermissionMixin(object):
         if not self.check_permission(request.user):
             raise PermissionDenied()
         return super(UserPermissionMixin, self).dispatch(request, *args, **kwargs)
-

@@ -141,7 +141,7 @@
             {% endwith %}
           {% endfor %}
       </ul>
-
+      {% if candidate_in_session %}
       <div class="apply border-top mt-15 pt-30">
           <div class="apply__wrap">
               <input id="discount_code" type="text" placeholder="Enter coupon code" name="code" maxlength="15" class="apply__wrap--input">
@@ -149,7 +149,6 @@
           </div>
               <p class="error-txt" id="discount-alert"> </p>
       </div>
-      {% if candidate_in_session %}
       <div class="apply mb-10 pt-0">
           <p><a href="javascript:void(0)" id="btn-reedem" >Reedem Shine Credit</a></p>
          <div id="redeem-content" style="display: none;">

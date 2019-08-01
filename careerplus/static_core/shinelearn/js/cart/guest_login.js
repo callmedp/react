@@ -6,7 +6,7 @@ $(document).ready(function () {
     }
 
 
-    function guest_login() {
+    async function guest_login() {
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
             i[r] = i[r] || function () {
@@ -35,6 +35,13 @@ $(document).ready(function () {
         }, {})
         hitGA();
         let email = guest_info['email'] || '';
+        let isEmailRegistered = await checkEmailExists(email)
+        if (isEmailRegistered) {
+            $('#email-error').html('this email already exists.Please register with some other email.');
+            $('#email-error').closest('.form-group').addClass('error1');
+            return;
+        }
+
         if ($('#guest_form').valid()) {
             var input = document.createElement("input");
             input.setAttribute("type", "hidden");
@@ -46,6 +53,13 @@ $(document).ready(function () {
 
     }
 
+    const checkEmailExists = async (email = '') => {
+        //  create an api to check whether a user has registered email or not
+        const result = await fetch(`${site_domain}/api/v1/cart/email-status/${email}/`)
+        const {exists} = await result.json();
+        return exists
+
+    };
     /*
     * Fetch Country List
     * */

@@ -4,16 +4,25 @@ import random
 from datetime import datetime, date
 
 # django imports
-from django.conf import settings
-from django.template.loader import get_template
-from django.core.files.uploadedfile import SimpleUploadedFile
-from django_redis import get_redis_connection
 
 # local imports
 
 # inter app imports
+from users.mixins import RegistrationLoginApi
 
 # third party imports
-from rest_framework.generics import (ListAPIView)
-from rest_framework.pagination import PageNumberPagination
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 
+
+class EmailStatusView(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = None
+
+    def get(self, request, *args, **kwargs):
+        email = kwargs.get('email')
+        email_status = RegistrationLoginApi.check_email_exist(email)
+        return Response(
+            email_status, status=status.HTTP_200_OK)

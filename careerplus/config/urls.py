@@ -186,6 +186,8 @@ urlpatterns += [
 
                    url(r'^api/v1/geolocation/', include('geolocation.api.v1.urls', namespace='geolocation')),
 
+                   url(r'^api/v1/cart/', include('cart.api.v1.urls', namespace='cart')),
+
                    url(r'^api/', include('api.urls', namespace='api')),
 
                    url(r'^lead/', include('crmapi.urls', namespace='crmapi')),

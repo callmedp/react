@@ -13,7 +13,7 @@ from django.utils.decorators import method_decorator
 from django.template.response import TemplateResponse
 from django.conf import settings
 from users.forms import (
-    PasswordResetRequestForm, )
+    PasswordResetRequestForm,)
 
 from shine.core import ShineCandidateDetail
 from shop.models import Product, ProductClass
@@ -30,6 +30,7 @@ from django.db.models import Q
 from .models import Cart
 from .mixins import CartMixin
 from .forms import ShippingDetailUpdateForm
+
 
 
 @Decorate(stop_browser_cache())
@@ -225,6 +226,14 @@ class PaymentLoginView(TemplateView, CartMixin):
                         "name": guest_name,
                     })
                     candidate_id, error = user_register(data=data)
+
+                    if error:
+                        email_error = error
+                        context = self.get_context_data()
+                        context.update({
+                            "guest_email_error": email_error})
+                        return TemplateResponse(request, self.template_name, context)
+
                     # error handling
                     cart_obj.owner_id = candidate_id
                     resp_status = ShineCandidateDetail().get_status_detail(email=None,
@@ -232,7 +241,7 @@ class PaymentLoginView(TemplateView, CartMixin):
                     self.request.session.update(resp_status)
                     cart_obj.save()
                     return HttpResponseRedirect(reverse('payment:payment-option'))
-                return HttpResponseRedirect(reverse('cart:cart-product-list'))
+                return HttpResponseRedirect(reverse('cart:payment-summary'))
 
             if valid_email:
                 login_dict.update({
@@ -614,7 +623,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
 
         context.update({
             'cart_coupon': cart_coupon, 'cart_wallet': cart_wallet,
-            'wallet': wal_obj,'type_flow': type_flow,
+            'wallet': wal_obj, 'type_flow': type_flow,
             'cart': cart_obj, 'wallet_total': wal_total, 'wallet_point': wal_point,
             'candidate_in_session': self.request.session.get('candidate_id')})
 
@@ -664,3 +673,4 @@ class UpdateDeliveryType(View, CartMixin):
                 })
 
         return HttpResponse(json.dumps(data), content_type="application/json")
+

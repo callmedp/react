@@ -24,7 +24,7 @@ def randompassword():
     return ''.join(random.choice(chars) for x in range(size))
 
 
-@task(name="register user on shine" )
+# @task(name="register user on shine" )
 def user_register(data={}, order=None):
     try:
         # data dict contains following data email, raw_password, country_code, cell_phone, vendor_id
