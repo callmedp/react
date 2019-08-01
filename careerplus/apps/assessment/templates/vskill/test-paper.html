@@ -155,7 +155,7 @@
 <!-- loading ends here -->
 
                <!--TIMEOUT MODAL-->
-<div class="modal" id="timeOutModal" style="display:none">
+<!-- /.<div class="modal" id="timeOutModal" style="display:block">
     <div class="modal-content">
        <div class="view-test">
            <span class="overlay"></span>
@@ -165,7 +165,22 @@
            </div>
        </div>
     </div>
-</div><!-- /. modal -->
+</div> modal -->
+<div class="modal fade" data-keyboard="false" data-backdrop="static" style="display: none;" id="timeOutModal" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">  <div class="modal-dialog submittest">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-body">
+        <figure><img src="{% static 'shinelearn/images/free_skill/out-of-time.png' %}" class="img-responsive"></figure>
+        <p class="mt-20">
+          <strong class="mb-10">Timeout!</strong> 
+          You will be redirecting to result page, <br>Please wait...
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>
                <!--END TIMEOUT MODAL-->
 
 
@@ -336,7 +351,7 @@ function startTimer(duration,) {
 
         if(--timer<=0){
             console.log('time out')
-            $('#timeOutModal').show();
+            $('#timeOutModal').modal('show');
         }
 
        if (minutes <= 0 && seconds <= 0) {

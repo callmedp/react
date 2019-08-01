@@ -1091,6 +1091,21 @@ h2 {
             }
         }
 
+        figure {
+            width: 146px;
+            height: 146px;
+            border-radius: 100%;
+            background: #F6F6F6;
+            display: table;
+            vertical-align: middle;
+            text-align: center;
+            margin: 0 auto 10px auto;
+
+            img {
+                margin: 15px auto 0 auto;
+            }
+        }
+
         p {
             font-size: $font-size+5;
 
