@@ -284,13 +284,6 @@ class Order(AbstractAutoDate):
             return super(Order,self).save(**kwargs)
 
         existing_obj = Order.objects.get(id=self.id)
-        candidate_id = existing_obj.candidate_id
-        email = existing_obj.email
-        ltv = get_ltv(candidate_id)
-        CustomerLtv.objects.update_or_create(
-                candidate_id=candidate_id, email=email,
-                defaults={'ltv':ltv },
-            )
         if self.status == 1:
             assesment_items = self.orderitems.filter(
                 order__status__in=[0, 1],
@@ -1103,13 +1096,11 @@ class CustomerFeedback(models.Model):
 
     def save(self, *args, **kwargs):
         created = not bool(self.id)
-        prev_comment = None
         if not created:
             prev_comment = CustomerFeedback.objects.get(id=self.id).comment
-        obj = super(CustomerFeedback, self).save(*args, **kwargs)
-        if prev_comment != self.comment:
-            OrderItemFeedbackOperation.objects.create(comment=self.comment,customer_feedback=self,assigned_to=self.assigned_to,oi_type=2)
-        return obj
+            if prev_comment != self.comment :
+                OrderItemFeedbackOperation.objects.create(comment=self.comment,customer_feedback=self,assigned_to=self.assigned_to,oi_type=2)
+        super(CustomerFeedback, self).save(*args, **kwargs)
 
 
 class OrderItemFeedback(models.Model):

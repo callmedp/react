@@ -12,6 +12,13 @@ $(document).ready(() => {
     $('.feedback-loader').show()
     $('body').addClass('body-overflow') //remove scrolling while loading
 
+    let one_day_followUp_date = new Date()
+    let seven_days_followUp_date = new Date();
+    one_day_followUp_date.setDate(one_day_followUp_date.getDate() + 1);
+    seven_days_followUp_date.setDate(seven_days_followUp_date.getDate() + 7);
+
+    $('#follow-up').val(formatDate(seven_days_followUp_date,true))
+
 
     $('#follow-up').datetimepicker({
         startDate: new Date(),
@@ -26,6 +33,12 @@ $(document).ready(() => {
             $(`#item-category-${order_item_index}`).val(value)
             $(`#item-category-${order_item_index}`).trigger('change.select2');
             removeError(false,{id:`#item-category-${order_item_index}`,key:order_item_index,type:'category'},true)
+        }
+        if (value === '201'){
+            $('#follow-up').val(formatDate(one_day_followUp_date,true))
+        }
+        else{
+            $('#follow-up').val(formatDate(seven_days_followUp_date,true))
         }
     });
 
@@ -48,10 +61,8 @@ $(document).ready(() => {
         getOrderItemFeedbackOperation(1)
     })
 
-    let default_followUp_date = new Date();
-    default_followUp_date.setDate(default_followUp_date.getDate() + 7);
-    $('#follow-up').val(formatDate(default_followUp_date,true))
-
+    
+    
     getOrderItemFeedbackOperation(1)
 
 })

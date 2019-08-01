@@ -55,16 +55,10 @@ class FeedbackQueueView(ListAPIView):
             queryset = queryset.filter(ltv__gte = min_ltv)
 
         if last_payment_range:
-            date_range = follow_up_date_range.split(' - ')
+            date_range = last_payment_range.split(' - ')
             start_date = datetime.strptime(date_range[0],'%Y-%m-%d')
             end_date = datetime.strptime(date_range[1],'%Y-%m-%d')
             queryset = queryset.filter(last_payment_date__range=(start_date,end_date))
-
-        if follow_up_date_range:
-            date_range = follow_up_date_range.split(' - ')
-            start_date = datetime.strptime(date_range[0],'%Y-%m-%d')
-            end_date = datetime.strptime(date_range[1],'%Y-%m-%d')
-            queryset = queryset.filter(follow_up_date__range=(start_date,end_date))
 
         if follow_up_date_range:
             date_range = follow_up_date_range.split(' - ')
