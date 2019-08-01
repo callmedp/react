@@ -37,7 +37,7 @@ $(document).ready(function () {
         let email = guest_info['email'] || '';
         let isEmailRegistered = await checkEmailExists(email)
         if (isEmailRegistered) {
-            $('#email-error').html('this email already exists.Please register with some other email.');
+            $('#email-error').html('This email already exists. Please register with some other email.');
             $('#email-error').closest('.form-group').addClass('error1');
             return;
         }
