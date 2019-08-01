@@ -20,16 +20,15 @@ class Command(BaseCommand):
         super(Command, self).__init__(*args, **kwargs)
 
     def handle(self, *args, **options):
-        emails = list(PracticeTestInfo.objects.filter(is_boarded=False).values_list('email', flat=True))
         order_item = OrderItem.objects.filter(
             product__vendor__slug='neo',
             order__status__in=[1, 3],
-            order__email__in=emails
+            oi_status=5
         )
         neo_closing_count = 0
         for oi in order_item:
             email = oi.order.email
-            test_info = PracticeTestInfo.objects.filter(email=email).exclude(order_item=None).first()
+            test_info = oi.test_info.first()
             if test_info:
                 status = NeoApiMixin().get_student_status_on_neo(email=test_info.email)
                 if status == 'onboard':
@@ -43,6 +42,7 @@ class Command(BaseCommand):
                     last_oi_status = oi.oi_status
                     oi.oi_status = 4
                     oi.closed_on = timezone.now()
+                    oi.save()
                     oi.orderitemoperation_set.create(
                         oi_status=33,
                         last_oi_status=last_oi_status,
