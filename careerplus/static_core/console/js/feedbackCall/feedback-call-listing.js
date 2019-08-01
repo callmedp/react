@@ -125,7 +125,7 @@ const customerFeedbackList = (page_no,filter_data) => {
             }
         }
         total_pages = Math.ceil(data['count']/page_size)
-        $('#page-no').text(`Page ${total_pages===0 ? 0: page_no} of ${total_pages}`)
+        total_pages ? $('#page-no').text(`Page ${page_no + ' '}of ${total_pages}`) : $('#page-no').text('')
         $('.pagination').empty()
         if (page_no !== 1){
             $('.pagination').append(

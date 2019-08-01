@@ -353,8 +353,8 @@ const getOrderItemFeedbackOperation = (page_no) => {
                 )
             }
         }
-        $('#page-no').text(`Page ${total_pages_operations===0 ? 0: page_no} of ${total_pages_operations}`)
-        $('.pagination').empty()
+        total_pages_operations ?  $('#page-no').text(`Page ${page_no + ' '}of ${total_pages_operations}`): $('#page-no').text('')
+        $('.pagination').empty();
         if (page_no !== 1){
             $('.pagination').append(
                 `
