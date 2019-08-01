@@ -16,10 +16,10 @@ $(document).ready(() => {
     customerFeedbackList(1)
     getUsers()
 
-    $('#check-all').click((e) => {      //select all feedback on page
+    $('#check-all').click(function(e){      //select all feedback on page
         $(this).closest('table').find('td input:checkbox').prop('checked', this.checked);
         feedback_id_selected = []
-        $('#body-table-list input[name="table_records"]:checked').each(() => {
+        $('#body-table-list input[name="table_records"]:checked').each(function(e){
             feedback_id_selected.push(parseInt($(this).prop('value')));
         });
     });
@@ -73,6 +73,11 @@ const getUsers = () => {
                 `
             )
         }
+    }).fail(()=>{
+        Toast.fire({
+            type: 'error',
+            title: 'Users not loaded'
+        })
     })
 }
 
@@ -81,7 +86,7 @@ const customerFeedbackList = (page_no,filter_data) => {
     //add loader
     $('.feedback-loader').show()
     $('body').addClass('body-overflow') //remove scrolling while loading
-
+    $('#filter-status').val()===null ? $('#filter-status').val('2') : ()=>{} 
     status = $('#filter-status').val()
     status === '3' ? $('#assign-user-form').hide() : $('#assign-user-form').show()
 
@@ -155,6 +160,11 @@ const customerFeedbackList = (page_no,filter_data) => {
         $('.feedback-loader').hide()
         $('body').removeClass('body-overflow')
         
+    }).fail(()=>{
+        Toast.fire({
+            type: 'error',
+            title: 'Feedback list not loaded'
+        })
     })
     
 }
@@ -188,9 +198,18 @@ const assignFeedbackIdsUser = () => {
         if(data.result){
             $('.feedback_users').val('')
             $('.feedback_users').trigger('change.select2');
+            Toast.fire({
+                type: 'success',
+                title: 'Feedback calls assigned to user Successfully'
+            })
             customerFeedbackList(1)
             
         }
+    }).fail(()=>{
+        Toast.fire({
+            type: 'error',
+            title: 'Feedback calls not assigned'
+        })
     })
 }
 

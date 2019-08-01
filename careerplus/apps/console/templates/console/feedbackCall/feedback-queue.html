@@ -17,6 +17,7 @@
       <link type="text/css" href="{% static "console/css/datepicker/daterangepicker.css" %}" rel="stylesheet">
     {% endcompress %}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.min.css" rel="stylesheet" />
 
 {% endblock css_block %}
 
@@ -230,7 +231,7 @@
 
 {% block js_block %}
   {{ block.super }}
-
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.all.min.js"></script>
   {% compress js %}
     <script type="text/javascript" src="{% static "console/js/feedbackCall/utils.js" %}"></script>
     <script type="text/javascript" src="{% static "console/js/feedbackCall/feedback-call-listing.js" %}"></script>

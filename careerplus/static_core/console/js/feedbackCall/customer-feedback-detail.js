@@ -46,9 +46,6 @@ $(document).ready(() => {
     default_followUp_date.setDate(default_followUp_date.getDate() + 7);
     $('#follow-up').val(formatDate(default_followUp_date,true))
 
-    
-      
-
     getOrderItemFeedbackOperation(1)
 
 })
@@ -85,6 +82,11 @@ const feedbackCallDetails = () => {
         $('#feedback-comment').val(data.comment)
         form_data['comment'] = data.comment
         form_data['follow-up'] = data.follow_up_date
+    }).fail(()=>{
+        Toast.fire({
+            type: 'error',
+            title: 'Feedback call details not loaded'
+        })
     })
 }
 
@@ -135,6 +137,11 @@ const getOrderItemFeedback = () => {
         $('.feedback-loader').hide()
         $('body').removeClass('body-overflow')
         
+    }).fail(()=>{
+        Toast.fire({
+            type: 'error',
+            title: 'OrderItem feedabcks not loaded'
+        })
     })
 
 }
@@ -150,8 +157,18 @@ const getDropdownChoices = () => {
                     createDropdown('#resolution-choices',resolution)
                     getOrderItemFeedback()
                 }
+            }).fail(()=>{
+                Toast.fire({
+                    type: 'error',
+                    title: 'Resolution Choice not loaded'
+                })
             })
         }
+    }).fail(()=>{
+        Toast.fire({
+            type: 'error',
+            title: 'Category CHoice not loaded'
+        })
     })
     
 }
@@ -197,13 +214,6 @@ const saveReview = () => {
     
 }
 
-const Toast = Swal.mixin({
-    toast: true,
-    position: 'top-end',
-    showConfirmButton: false,
-    timer: 3000
-});
-
 const sendData = (type) => {
     // loader show
     $('.feedback-loader').show()
@@ -219,6 +229,11 @@ const sendData = (type) => {
             })
             window.location = '/console/feedbackcall/queue/'
         }
+    }).fail(()=>{
+        Toast.fire({
+            type: 'error',
+            title: 'Feedback not Saved'
+        })
     })
 }
 
@@ -245,7 +260,6 @@ const followUpFeedback = () => {
 
 const checkError = () => {
     let error = false
-    console.log(form_data)
     for(key in form_data){
         let item = form_data[key]
         if(item && typeof item === 'object'){ 
@@ -306,8 +320,11 @@ const removeError = (event,data,isMainDropdown) => {
     if(form_data[key].category === '201'){  //make resolution null as not connected selected
         $(`#item-resolution-${key}`).val('')
         $(`#item-resolution-${key}`).trigger('change.select2');
-        type === 'resolution' && !isMainDropdown ? alert("Cannot select resolution when category is not connected ") : ()=>{}
+        $(`#item-resolution-${key}`).prop('disabled', true)
         return
+    }
+    else{
+        $(`#item-resolution-${key}`).prop('disabled', false)
     }
     
 
@@ -367,6 +384,11 @@ const getOrderItemFeedbackOperation = (page_no) => {
                 `
             )
         }
+    }).fail(()=>{
+        Toast.fire({
+            type: 'error',
+            title: 'OrderItem Feedback Operations not loaded'
+        })
     })
 }
 

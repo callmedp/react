@@ -24,6 +24,13 @@ function formatDate(date,isTime) {
     if (seconds>=0 && seconds<9) seconds ='0' + seconds;
     let resultDate = [year, month, day].join('-')
     if(isTime) 
-        return `${resultDate} ${[hour,minutes,seconds].join(':')}`;
+        return `${resultDate+ ' '}${[hour,minutes,seconds].join(':')}`;
     return resultDate;
 }
+
+const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000
+});
