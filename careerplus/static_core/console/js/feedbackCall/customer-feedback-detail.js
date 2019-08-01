@@ -42,6 +42,12 @@ $(document).ready(() => {
         $(this).datetimepicker('hide');
     });
 
+    $('#oi-type-choices').val('');
+
+    $('#oi-type-choices').change(()=>{
+        getOrderItemFeedbackOperation(1)
+    })
+
     let default_followUp_date = new Date();
     default_followUp_date.setDate(default_followUp_date.getDate() + 7);
     $('#follow-up').val(formatDate(default_followUp_date,true))
@@ -70,7 +76,7 @@ const feedbackCallDetails = () => {
                       <button type="button" class="btn btn-primary btn-xs" onclick="showData(this,'mobile')"><i class="fa fa-phone-square" aria-hidden="true"></i>ClickToView</button>
                   </div>
               </td>
-              <td>${data.ltv}</td>
+              <td>${data.ltv ? data.ltv : 0}</td>
             </tr>
           `
         )
@@ -105,7 +111,7 @@ const getOrderItemFeedback = () => {
                         <tr class="even pointer">
                             <td class="padding-item">${order_item.length ? order_item[0].product_name : ''}</td>
                             <td class="padding-item">${order_item.length ? order_item[0].get_oi_status : ''}</td>
-                            <td class="padding-item"><a href="/console/queue/order/${order_item.length ? order_item[0].order_id : ''}/details/">${item.order_item}</a></td>
+                            <td class="padding-item"><a class="orderitem-id" href="/console/queue/order/${order_item.length ? order_item[0].order_id : ''}/details/">${item.order_item}</a></td>
                             <td class="padding-item">${order_item.length ? formatDate(order_item[0].order_payment_date) : ''}</td>
                             <td class="scalling">
                                 <select id="item-category-${index}" onclick="removeError('#item-category-${index}',${index},'category')" name="resolution" class="form-control">
@@ -331,8 +337,13 @@ const removeError = (event,data,isMainDropdown) => {
 }
 
 const getOrderItemFeedbackOperation = (page_no) => {
+
+    $('.feedback-loader').show()
+    $('body').addClass('body-overflow') //remove scrolling while loading
+
     $.get(`/console/api/v1/feedback-call/feedback/${id}/operations/?page_size=${page_size}&page=${page_no}`,{
-        'include_order_item_id':true
+        'include_order_item_id':true,
+        'oi_type': $('#oi-type-choices').val()
     },(data)=>{
         total_pages_operations = Math.ceil(data['count']/page_size)
         if(data.results){
@@ -343,7 +354,8 @@ const getOrderItemFeedbackOperation = (page_no) => {
                     `
                         <tr class="even pointer">
                             <td class="padding-item">${item.assigned_to_text ? item.assigned_to_text : '-'}</td>
-                            <td class="padding-item">${order_item.length ? order_item[0].product_name : ''}item</td>
+                            <td class="padding-item">${order_item.length && order_item[0].product_name ? order_item[0].product_name : '-'}</td>
+                            <td class="padding-item">${item.oi_type_text}</td>
                             <td class="padding-item">${formatDate(item.added_on,true)}</td>
                             <td class="padding-item">${item.category_text ? item.category_text : '-'}</td>
                             <td class="padding-item">${item.resolution_text ? item.resolution_text : '-'}</td>
@@ -384,6 +396,8 @@ const getOrderItemFeedbackOperation = (page_no) => {
                 `
             )
         }
+        $('.feedback-loader').hide()
+        $('body').removeClass('body-overflow') //remove scrolling while loading
     }).fail(()=>{
         Toast.fire({
             type: 'error',

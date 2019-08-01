@@ -227,7 +227,7 @@ const filterFeedbackList = () => {
 }
 
 const redirectFeedbackUpdatePage = (id) => {
-    window.location.href = `/console/feedbackcall/update/${id}`
+    window.open(`/console/feedbackcall/update/${id}`, '_blank');
 }
 
 

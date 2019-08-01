@@ -165,12 +165,16 @@ class OrderItemFeedbackOperationView(ListAPIView):
         queryset = super(OrderItemFeedbackOperationView, self).get_queryset()
         id = self.kwargs.get('pk')
         queryset = queryset.filter(customer_feedback=id)
+        oi_type = self.request.GET.get('oi_type')
+        if oi_type:
+            queryset = queryset.filter(oi_type=oi_type)
         queryset = queryset.order_by('-id')
         return queryset
 
 class SaveFeedbackIdData(CreateAPIView):
     authentication_classes = (SessionAuthentication,)
     permission_classes = (IsAuthenticated,IsActiveUser,InFeedbackGroup,)
+    serializer_class = None
 
     def post(self,*args, **kwargs):
         feedback_id = kwargs.get('pk')
@@ -183,14 +187,14 @@ class SaveFeedbackIdData(CreateAPIView):
                 order_item_feedback.comment =value.get('comment')
                 order_item_feedback.save()
         
-        customer_feedback = CustomerFeedback.objects.filter(id=feedback_id)
+        customer_feedback = CustomerFeedback.objects.get(id=feedback_id)
+        customer_feedback.comment = form_data.get('comment')
         if form_data['IsFollowUp']:
-            customer_feedback.update(follow_up_date=form_data.get('follow-up'),comment=form_data.get('comment'))
+            customer_feedback.follow_up_date = form_data.get('follow-up')
         else:
-            customer_feedback.update(comment=form_data.get('comment'),status=3,follow_up_date=None)  
-                
-        # user_id =self.request.POST.get('user_id')
-        # CustomerFeedback.objects.filter(id__in=feedback_ids).update(assigned_to=user_id,status=2)
+            customer_feedback.status=3
+            customer_feedback.follow_up_date = None
+        customer_feedback.save()
         return HttpResponse(json.dumps({'result':'updated'}), content_type="application/json")
 
 

@@ -31,7 +31,7 @@ from linkedin.models import Draft
 from seo.models import AbstractAutoDate
 from geolocation.models import Country, CURRENCY_SYMBOL
 from users.models import User
-from console.feedbackCall.choices import FEEDBACK_RESOLUTION_CHOICES,FEEDBACK_CATEGORY_CHOICES,FEEDBACK_STATUS
+from console.feedbackCall.choices import FEEDBACK_RESOLUTION_CHOICES,FEEDBACK_CATEGORY_CHOICES,FEEDBACK_STATUS,FEEDBACK_OPERATION_TYPE
 from order.utils import get_ltv
 
 #third party imports
@@ -1101,10 +1101,16 @@ class CustomerFeedback(models.Model):
     def assigned_to_text(self):
         return self.assigned_to.name if self.assigned_to else ''
 
-    # @property
-    # def ltv_value(self):
-    #     return get_ltv(self.candidate_id)
-
+    def save(self, *args, **kwargs):
+        import ipdb; ipdb.set_trace()
+        created = not bool(self.id)
+        prev_comment = None
+        if not created:
+            prev_comment = CustomerFeedback.objects.get(id=self.id).comment
+        obj = super(CustomerFeedback, self).save(*args, **kwargs)
+        if prev_comment != self.comment:
+            OrderItemFeedbackOperation.objects.create(comment=self.comment,customer_feedback=self,assigned_to=self.assigned_to,oi_type=2)
+        return obj
 
 
 class OrderItemFeedback(models.Model):
@@ -1131,7 +1137,8 @@ class OrderItemFeedbackOperation(models.Model):
     resolution =  models.SmallIntegerField(choices=FEEDBACK_RESOLUTION_CHOICES,blank=True, null=True)
     comment = models.CharField('Feedback Comment', max_length=500,blank=True, null=True)
     order_item = models.ForeignKey(OrderItem,blank=True, null=True)
-    customer_feedback  = models.ForeignKey(CustomerFeedback,blank=True, null=True)
+    customer_feedback  = models.ForeignKey(CustomerFeedback)
+    oi_type = models.SmallIntegerField(choices=FEEDBACK_OPERATION_TYPE,default=1)
 
 
     @property
@@ -1145,4 +1152,8 @@ class OrderItemFeedbackOperation(models.Model):
     @property
     def assigned_to_text(self):
         return self.assigned_to.name if self.assigned_to else ''
+
+    @property
+    def oi_type_text(self):
+        return dict(FEEDBACK_OPERATION_TYPE).get(self.oi_type)
     

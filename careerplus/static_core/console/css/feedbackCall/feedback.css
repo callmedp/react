@@ -85,3 +85,13 @@
 .has-error .select2-selection {
     border-color: rgb(185, 74, 72) !important;
 }
+
+.orderitem-id{
+    font-weight: 800;
+    text-decoration: underline;
+
+}
+.oi-type{
+    float:right;
+    margin-bottom:20px;
+}

@@ -36,12 +36,13 @@ class OrderItemFeedbackOperationSerializer(ListSerializerContextMixin,ListSerial
     category_text = serializers.CharField()
     resolution_text = serializers.CharField()
     assigned_to_text = serializers.CharField()
+    oi_type_text = serializers.CharField()
     list_lookup_fields = ['order_item_id']
     fields_required_mapping = {'order_item_id': ['product_name',]}
     field_model_mapping = {'order_item_id':OrderItem}
 
     class Meta:
         model = OrderItemFeedbackOperation
-        exclude = ('customer_feedback',)
+        exclude = ('customer_feedback','assigned_to','category','resolution','oi_type','id')
 
 
