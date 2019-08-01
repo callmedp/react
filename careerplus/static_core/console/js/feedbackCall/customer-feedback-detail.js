@@ -156,11 +156,11 @@ const getDropdownChoices = () => {
     $.get(`/console/api/v1/feedback-call/category-choices/`,(data)=>{
         if(data){
             category = data
-            createDropdown('#category-choices',category)
+            createDropdown('#category-choices',category,null,null,null,true)
             $.get(`/console/api/v1/feedback-call/resolution-choices/`,(data)=>{
                 if(data){
                     resolution = data
-                    createDropdown('#resolution-choices',resolution)
+                    createDropdown('#resolution-choices',resolution,null,null,null,true)
                     getOrderItemFeedback()
                 }
             }).fail(()=>{
@@ -180,11 +180,13 @@ const getDropdownChoices = () => {
 }
 
 
-const createDropdown  = (id,data,index,type,pre_value) => {
-    $(id).select2({
+const createDropdown  = (id,data,index,type,pre_value,isMainDropdown) => {
+    properties = {
         data:data,
-        minimumResultsForSearch: -1
-    });
+        minimumResultsForSearch: -1,
+    }
+    isMainDropdown ? ()=>{} : properties['width']='160px'  
+    $(id).select2(properties);
     $(id).on('select2:select', {id:id,key:index,type},removeError);
     if (pre_value){
         $(id).val(pre_value)
@@ -337,9 +339,14 @@ const removeError = (event,data,isMainDropdown) => {
 }
 
 const getOrderItemFeedbackOperation = (page_no) => {
-
-    $('.feedback-loader').show()
-    $('body').addClass('body-overflow') //remove scrolling while loading
+    prev_loader = false
+    if($('.feedback-loader:visible').length == 0){
+        $('.feedback-loader').show()
+        $('body').addClass('body-overflow') //remove scrolling while loading
+    }
+    else
+        prev_loader = true
+    
 
     $.get(`/console/api/v1/feedback-call/feedback/${id}/operations/?page_size=${page_size}&page=${page_no}`,{
         'include_order_item_id':true,
@@ -396,8 +403,10 @@ const getOrderItemFeedbackOperation = (page_no) => {
                 `
             )
         }
-        $('.feedback-loader').hide()
-        $('body').removeClass('body-overflow') //remove scrolling while loading
+        if(!prev_loader){
+            $('.feedback-loader').hide()
+            $('body').removeClass('body-overflow') //remove scrolling while loading
+        }
     }).fail(()=>{
         Toast.fire({
             type: 'error',
