@@ -215,13 +215,18 @@
 <div class="modal" id="timeOutModal" style="display:none">
     <span class="close-big" id="close">+</span>
     <div class="modal-content">
-       <div class="view-test">
-           <span class="overlay"></span>
-           <div class="view-test__content">
-            <h2>TIME OUT!!</h2>
-            <h3>You will be Redirecting to Result Page, Please Wait...</h3>
+       <div class="time-out">
+           <span class="time-out--circle">
+                <img src="{% static 'shinelearn/images/mobile/practice_test/out-of-time.png' %}"/>
+           </span>
+
+           <div class="text-center">
+            <h2>TimeOut!</h2>
+            <p>You will be redirecting to result page,<br/>
+             Please wait...</p>
            </div>
        </div>
+    </div>
 
 
 </div><!-- /. modal -->

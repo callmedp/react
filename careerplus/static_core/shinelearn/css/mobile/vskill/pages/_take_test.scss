@@ -9,6 +9,7 @@
 .question-timer {
     @extend %white-box;
     padding: 0;
+    position: relative;
 
     &--wrap {
         border-bottom: 1px solid $border-grey-d8;
@@ -104,7 +105,7 @@
                 }
 
                 &.skip {
-                    background-color: transparent;
+                    background-color: #FBF5E3;
                 }
 
                 &.active {
@@ -114,12 +115,11 @@
                 }
 
                 &.skipped {
-             ;
-                    background-color: transparent;
+                    background-color: #FBF5E3;
                 }
 
                 &.dirt{
-                    background-color: $bg-grey-ec ;
+                    background-color: #D8F6E0 ;
                  }
             }
         }
@@ -271,3 +271,27 @@
     }
 }
 
+.time-out {
+    padding: 50px 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    font-size: $font-size-md;
+
+    h2 {
+        margin-top: 30px;
+        border-bottom: 0 !important;
+    }
+
+    &--circle {
+        @include border-radius(50%);
+        @include size(146px, 146px, flex);
+        background-color: $bg-grey-f6;
+
+        justify-content: center;
+        align-items: center;
+    }
+}
