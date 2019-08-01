@@ -210,12 +210,13 @@ $(document).ready(function() {
 $('#leadCreationForm').validate({
   rules: {
             name: {
-                required: true,
                 maxlength: 80
             },
             number: {
                 required: true,
                 number: true,
+                minlength: 10,
+                maxlength: 10,
             },
             email: {
                 required: true,
@@ -260,12 +261,14 @@ function getCoptions(){
                   right+= 1 ;
                      }
                             }
+                               if(questionAttempt){
                               for (i of Object.values(questionAttempt)){
                 if(! $("#check"+i).hasClass('icon-right')){
                 $("#check"+i).addClass('pt-sprite icon-cross');
                 }
 
 
+            }
             }
 
               $('#correctMsg').text( right+ ' out of '+total+' correct answers ');
