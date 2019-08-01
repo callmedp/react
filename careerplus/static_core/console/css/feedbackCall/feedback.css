@@ -95,3 +95,14 @@
     float:right;
     margin-bottom:20px;
 }
+.truncate{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 200px;
+    width: 200px;
+}
+.view-more{
+    font-weight: 900;
+    cursor: pointer;
+}

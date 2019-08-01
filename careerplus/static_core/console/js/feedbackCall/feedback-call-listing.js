@@ -96,6 +96,11 @@ const customerFeedbackList = (page_no,filter_data) => {
         page:page_no,
         status:status,
         type:$('#feedback-type').val(),
+        follow_up_date_range : $('#filter-follow-up').val(),
+        added_on_range : $('#filter-added-on').val(),
+        last_payment_range : $('#filter-payment-on').val(),
+        user : $('#filter-user').val(),
+        min_ltv: $('#min-ltv').val()
     }
     if(filter_data){
         filter_update_data = Object.assign({},filter_update_data,filter_data)
@@ -215,15 +220,7 @@ const assignFeedbackIdsUser = () => {
 
 
 const filterFeedbackList = () => {
-    filter_data ={
-        follow_up_date_range : $('#filter-follow-up').val(),
-        added_on_range : $('#filter-added-on').val(),
-        last_payment_range : $('#filter-added-on').val(),
-        user : $('#filter-user').val(),
-        min_ltv: $('#min-ltv').val()
-    }
-    customerFeedbackList(1,filter_data)
-
+    customerFeedbackList(1)
 }
 
 const redirectFeedbackUpdatePage = (id) => {

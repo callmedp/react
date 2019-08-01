@@ -377,7 +377,7 @@ const getOrderItemFeedbackOperation = (page_no) => {
                             <td class="padding-item">${formatDate(item.added_on,true)}</td>
                             <td class="padding-item">${item.category_text ? item.category_text : '-'}</td>
                             <td class="padding-item">${item.resolution_text ? item.resolution_text : '-'}</td>
-                            <td class="padding-item">${item.comment ? item.comment : ''}</td>
+                            <td class="padding-item"><div id="operation-comment" class="truncate">${item.comment ? item.comment : ''}</div>${item.comment ? '<a class="view-more" onclick="viewMore()">View More</a>' : ''}</td>
                         </tr> 
                     `
                 )
@@ -424,6 +424,16 @@ const getOrderItemFeedbackOperation = (page_no) => {
             title: 'OrderItem Feedback Operations not loaded'
         })
     })
+}
+
+const viewMore = ()=>{
+    $('#operation-comment').toggleClass('truncate')
+    if($('#operation-comment').hasClass('truncate')){
+        $('.view-more').text('Show More')
+    }
+    else{
+        $('.view-more').text('Show Less')
+    }
 }
 
 

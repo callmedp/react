@@ -18,7 +18,7 @@ from console.feedbackCall.choices import FEEDBACK_CATEGORY_CHOICES,FEEDBACK_RESO
 from shared.permissions import IsActiveUser,InFeedbackGroup,InFeedbackGroup
 
 #python imports
-from datetime import datetime
+from datetime import datetime,timedelta
 import json,logging
 
 
@@ -58,19 +58,19 @@ class FeedbackQueueView(ListAPIView):
             date_range = last_payment_range.split(' - ')
             start_date = datetime.strptime(date_range[0],'%Y-%m-%d')
             end_date = datetime.strptime(date_range[1],'%Y-%m-%d')
-            queryset = queryset.filter(last_payment_date__range=(start_date,end_date))
+            queryset = queryset.filter(last_payment_date__range=(start_date,end_date+timedelta(days=1)))
 
         if follow_up_date_range:
             date_range = follow_up_date_range.split(' - ')
             start_date = datetime.strptime(date_range[0],'%Y-%m-%d')
             end_date = datetime.strptime(date_range[1],'%Y-%m-%d')
-            queryset = queryset.filter(follow_up_date__range=(start_date,end_date))
+            queryset = queryset.filter(follow_up_date__range=(start_date,end_date+timedelta(days=1)))
 
         if added_on_range:
             date_range = added_on_range.split(' - ')
             start_date = datetime.strptime(date_range[0],'%Y-%m-%d')
             end_date = datetime.strptime(date_range[1],'%Y-%m-%d')
-            queryset = queryset.filter(added_on__range=(start_date,end_date))
+            queryset = queryset.filter(added_on__range=(start_date,end_date+timedelta(days=1)))
         user = self.request.user
         ops_head_group = settings.OPS_HEAD_GROUP_LIST
         feedback_call_group = settings.WELCOMECALL_GROUP_LIST
