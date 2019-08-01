@@ -246,7 +246,7 @@ function getCoptions(){
         questionAttempt = JSON.parse(myStorage.getItem(tKey));
         if (questionAttempt != null) {
             for (var id in Object.keys(questionAttempt)) {
-                if (Object.values(questionAttempt)[id] != "") {
+      if (Object.values(questionAttempt)[id] != "" && Object.keys(questionAttempt)[id] != "skippedQuestion") {
                     $('#' + Object.values(questionAttempt)[id]).attr('checked',true);
                 }
             }

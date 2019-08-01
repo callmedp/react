@@ -243,7 +243,7 @@ right=0,questionAttempt = null,total = {{questions_list.count}};
 
 $(document).ready(function() {
 
-    {% if not request.session.is_lead_createdee %}
+    {% if not request.session.is_lead_created %}
       {% if request.session.candidate_id %}
       $('#leadCreationSubmit').click();
      {% else %}
@@ -294,7 +294,8 @@ function getCoptions(){
         questionAttempt = JSON.parse(myStorage.getItem(tKey));
         if (questionAttempt != null) {
             for (var id in Object.keys(questionAttempt)) {
-                if (Object.values(questionAttempt)[id] != "") {
+                if (Object.values(questionAttempt)[id] != "" && Object.keys(questionAttempt)[id] != "skippedQuestion") {
+
                     $('#' + Object.values(questionAttempt)[id]).attr('checked',true);
                 }
             }

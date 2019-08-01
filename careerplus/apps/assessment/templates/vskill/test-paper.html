@@ -233,7 +233,7 @@ activeTab = 1,
 tKey = 'Test-' + '{{object.id}}',myStorage = window.localStorage,
 sec =0,testSec = 0,testMin =0,interval=0,testSubmission= false,
 delAns = {% if delete_ans %}true{% else %}false{% endif %},
-startTestTime = NaN,endTestTime = NaN,timeout =NaN ;
+startTestTime = NaN,endTestTime = NaN,timeout =NaN,skippedQuest =[] ;
 
 $(document).ready(function() {
     // removes local storage
@@ -244,15 +244,22 @@ $(document).ready(function() {
         questionAttempt = JSON.parse(myStorage.getItem(tKey));
         if (questionAttempt != null) {
         testSubmission = questionAttempt['testSubmission' + {{object.id}}];
+         skippedQuest =  questionAttempt['skippedQuestion'];
         if (testSubmission == true) {
 
             window.location.href = '/practice-tests/{{object.slug}}/result/';
         }
+
             for (var id in Object.keys(questionAttempt)) {
-                if (Object.values(questionAttempt)[id] != "") {
+                if (Object.values(questionAttempt)[id] != "" && Object.keys(questionAttempt)[id] != "skippedQuestion") {
                     $('#' + Object.values(questionAttempt)[id]).click();
                     $('#marked' + Object.keys(questionAttempt)[id]).removeClass();
                     $('#marked' + Object.keys(questionAttempt)[id]).addClass('dirt');
+                }
+                else if(Object.keys(questionAttempt)[id] == "skippedQuestion"){
+                  for(i of Object.values(questionAttempt)[id]){
+                  $(i).addClass('skipped');
+                  }
                 }
             }
             $('#markedquestion-' + activeTab).addClass('active');
@@ -321,8 +328,11 @@ if (!timeout){
     let quest_id = $(e.target).closest(".test-paper")[0].id;
     $('#marked' + quest_id).removeClass();
     $('#marked' + quest_id).addClass('dirt');
+    skippedQuest = skippedQuest.filter(item => item !== '#marked' + quest_id);
+    questionAttempt['skippedQuestion'] =skippedQuest;
         $('#marked' + quest_id).addClass('active');
     questionAttempt[quest_id] = e.target.id;
+
     myStorage.setItem(tKey, JSON.stringify(questionAttempt));
     }
 });
@@ -330,6 +340,9 @@ if (!timeout){
 function skipQuestion() {
     $('#markedquestion-' + activeTab).removeClass('dirt');
     $('#markedquestion-' + activeTab).addClass('skipped');
+    if (skippedQuest){
+    skippedQuest.push('#markedquestion-' + activeTab);
+    }
     let quest_id = 'question-' + activeTab;
     $('#' + questionAttempt[quest_id]).prop("checked", false);
     delete questionAttempt[quest_id];
@@ -384,6 +397,8 @@ function submitTestFinal(){
       clearInterval(interval);
       testSubmission = true;
       questionAttempt['testSubmission{{object.id}}'] = testSubmission;
+      questionAttempt['skippedQuestion'] = skippedQuest;
+
       if (submitTime > endTestTime.getTime()){
             questionAttempt['testTime'+{{object.id}}] = Math.floor((endTestTime.getTime() - startTestTime.getTime())/1000) ;
       }
