@@ -17,7 +17,6 @@ class Command(BaseCommand):
         feedback_call_entry()
 
 def feedback_call_entry():
-    import ipdb; ipdb.set_trace()
     start_date = timezone.now() - timedelta(days=7)
     end_date = timezone.now() - timedelta(days=3)
     welcome_operations = WelcomeCallOperation.objects.filter(created__range=[start_date,end_date],order__welcome_call_done=True)

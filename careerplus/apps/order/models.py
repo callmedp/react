@@ -1102,7 +1102,6 @@ class CustomerFeedback(models.Model):
         return self.assigned_to.name if self.assigned_to else ''
 
     def save(self, *args, **kwargs):
-        import ipdb; ipdb.set_trace()
         created = not bool(self.id)
         prev_comment = None
         if not created:
