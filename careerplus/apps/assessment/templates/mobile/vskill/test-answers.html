@@ -257,7 +257,7 @@ function getCoptions(){
          success: function(response){
          for(i of response){
             $('#check'+i.question_options[0]).addClass('pt-sprite icon-right');
-            if(Object.values(questionAttempt).includes(i.question_options[0])){
+            if(questionAttempt && Object.values(questionAttempt) && Object.values(questionAttempt).includes(i.question_options[0])){
                   right+= 1 ;
                      }
                             }

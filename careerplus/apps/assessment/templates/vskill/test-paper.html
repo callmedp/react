@@ -154,6 +154,20 @@
 </div>
 <!-- loading ends here -->
 
+               <!--TIMEOUT MODAL-->
+<div class="modal" id="timeOutModal" style="display:none">
+    <div class="modal-content">
+       <div class="view-test">
+           <span class="overlay"></span>
+           <div class="view-test__content">
+            <h2>Time Out!!</h2>
+            <h3>You will be Redirecting to Result Page, Please Wait... </h3>
+           </div>
+       </div>
+    </div>
+</div><!-- /. modal -->
+               <!--END TIMEOUT MODAL-->
+
 
 {% endblock main_container %}
 {% block js_section %}
@@ -322,6 +336,7 @@ function startTimer(duration,) {
 
         if(--timer<=0){
             console.log('time out')
+            $('#timeOutModal').show();
         }
 
        if (minutes <= 0 && seconds <= 0) {
