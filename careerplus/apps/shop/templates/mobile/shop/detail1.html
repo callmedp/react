@@ -152,6 +152,7 @@
             </div><!-- end of icons wrapper -->
 
         <hr class="row mb-0">
+        {% if prd_vendor_slug == 'neo' %}
 
         <!-- Neo Widgets start here -->
         <div class="neo row" id="row_neo">
@@ -179,7 +180,7 @@
             </a>
         </div><!-- Your Level ends here -->
 
-
+        {% endif %}
 
         <article class="mt-20">
             {% if prd_service == 'course' or product.type_flow == 16 %}
@@ -401,7 +402,6 @@
     </div>
   </div>
 </div>
-{% endif %}
 
 <!-- Take test Modal Start here  -->
 <div class="modal bs-example-modal-sm login-div" role="dialog" aria-labelledby="mySmallModalLabel" id="neo-info-modal">
@@ -427,6 +427,7 @@
       </div>
     </div>
   </div><!-- Take test Modal Start here  -->
+{% endif %}
 
 {% endblock container %}
 
@@ -735,16 +736,17 @@ function update_test_info(email){
         }
     });
 }
+{% if prd_vendor_slug == 'neo' %}
 
-{% if request.session.candidate_id %}
-  let email = "{{ request.session.email }}";
-  let name = "{{request.session.full_name}}";
-  let country_code = "{{request.session.country_code}}";
-  let mobile_no = "{{request.session.mobile_no}}";
-  get_create_profile(email, name, country_code, mobile_no)
+    {% if request.session.candidate_id %}
+      let email = "{{ request.session.email }}";
+      let name = "{{request.session.full_name}}";
+      let country_code = "{{request.session.country_code}}";
+      let mobile_no = "{{request.session.mobile_no}}";
+      get_create_profile(email, name, country_code, mobile_no)
 
+    {% endif %}
 {% endif %}
-
  $('#neo-test-form').validate({
       submitHandler:function (form) {
           var $inputs = $('#neo-test-form :input');
