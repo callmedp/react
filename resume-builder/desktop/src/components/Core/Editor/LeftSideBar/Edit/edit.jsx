@@ -146,31 +146,31 @@ class Edit extends Component {
                                     {
                                         !!(error || newUser) ?
                                             (
-                                                    <div onClick={() => this.showErrorMessage(link)}
-                                                             className={"non-link"}>
-                                                        <span className={'mr-20 ' + icon}></span>
-                                                        {elem['entity_text']}
-                                                    </div>
+                                                <div onClick={() => this.showErrorMessage(link)}
+                                                     className={"non-link"}>
+                                                    <span className={'mr-20 ' + icon}></span>
+                                                    {elem['entity_text']}
+                                                </div>
 
                                             )
 
                                             :
 
                                             (
-                                                    <Link to={link}
-                                                          onClick={() => {
-                                                              eventClicked({
-                                                                  'action': 'SelectSection',
-                                                                  'label': name
-                                                              })
-                                                          }}>
-                                                        <span className={'mr-20 ' + icon}></span>
-                                                        {elem['entity_text']}
-                                                    </Link>
+                                                <Link to={link}
+                                                      onClick={() => {
+                                                          eventClicked({
+                                                              'action': 'SelectSection',
+                                                              'label': name
+                                                          })
+                                                      }}>
+                                                    <span className={'mr-20 ' + icon}></span>
+                                                    {elem['entity_text']}
+                                                </Link>
                                             )
                                     }
                                     {
-                                         !!(elem['entity_id'] !== 1 && elem['entity_id'] !== 6) ?
+                                        !!(elem['entity_id'] !== 1 && elem['entity_id'] !== 6) ?
                                             <span onClick={() => this.deleteFromVisibleList(elem)}
                                                   className="icon-closemenu pull-right mt-20"/> : ''
                                     }
