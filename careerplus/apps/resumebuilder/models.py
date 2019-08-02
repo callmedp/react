@@ -92,7 +92,6 @@ class Candidate(PreviewImageCreationMixin, CandidateProfile):
                     }
                     product_found = True
                     break
-
         return order_data
             
     def create_template_customisations(self, candidate_id):
