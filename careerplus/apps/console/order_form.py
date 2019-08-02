@@ -588,7 +588,11 @@ class ProductUserProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
         super(ProductUserProfileForm, self).__init__(*args, **kwargs)
-
+        if self.instance:
+            if self.instance.approved:
+                del self.fields['approved']
+            if self.instance.onboard:
+                del self.fields['onboard']
 
         self.fields['desired_industry'].widget.attrs['class'] = ' tagsinput tags form-control'
         self.fields['desired_location'].widget.attrs['class'] = ' tagsinput tags form-control'
@@ -596,7 +600,7 @@ class ProductUserProfileForm(forms.ModelForm):
 
 
     def save(self, commit=True):
-        instance = super(ProductUserProfileForm, self).save(commit=False)
+        instance = super(ProductUserProfileForm, self).save()
         if commit:
             instance.save(user=self.user)
         return instance

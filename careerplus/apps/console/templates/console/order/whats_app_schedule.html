@@ -354,6 +354,7 @@
                 <label> Board User {{profile_form.onboard}}</label>
               </div>
               {% endif %}
+              {{orderitem.is_approved}}
               {% if not orderitem.is_approved and orderitem.is_onboard and perms.order.can_approve_jobs_on_the_move %}
               <div class="form-group col-md-12">
                 <label> Approved {{profile_form.approved}}</label>
