@@ -65,6 +65,12 @@ $(document).ready(() => {
     
     getOrderItemFeedbackOperation(1)
 
+    $("textarea[maxlength]").on("propertychange input", function() {
+        if (this.value.length > this.maxlength) {
+            this.value = this.value.substring(0, this.maxlength);
+        }  
+    });
+
 })
 
 
@@ -125,7 +131,7 @@ const getOrderItemFeedback = () => {
                             <td class="padding-item"><a class="orderitem-id" href="/console/queue/order/${order_item.length ? order_item[0].order_id : ''}/details/">${item.order_item}</a></td>
                             <td class="padding-item">${order_item.length ? formatDate(order_item[0].order_payment_date) : ''}</td>
                             <td class="scalling">
-                                <select id="item-category-${index}" onclick="removeError('#item-category-${index}',${index},'category')" name="resolution" class="form-control">
+                                <select id="item-category-${index}" onclick="removeError('#item-category-${index}',${index},'category')" name="category" class="form-control">
                                     <option value="">Select Category</option>
                                 </select>
                                 <span class="help-block hide">Select a Category</span>
@@ -366,7 +372,8 @@ const getOrderItemFeedbackOperation = (page_no) => {
         total_pages_operations = Math.ceil(data['count']/page_size)
         if(data.results){
             $('#ops-history-entries').empty()
-            for (item of data.results){
+            for (key in data.results){
+                let item = data.results[key]
                 let order_item = item.order_item_id_data
                 $('#ops-history-entries').append(
                     `
@@ -377,7 +384,7 @@ const getOrderItemFeedbackOperation = (page_no) => {
                             <td class="padding-item">${formatDate(item.added_on,true)}</td>
                             <td class="padding-item">${item.category_text ? item.category_text : '-'}</td>
                             <td class="padding-item">${item.resolution_text ? item.resolution_text : '-'}</td>
-                            <td class="padding-item"><div id="operation-comment" class="truncate">${item.comment ? item.comment : ''}</div>${item.comment ? '<a class="view-more" onclick="viewMore()">View More</a>' : ''}</td>
+                            <td class="padding-item"><div id="operation-comment-${key}" class="truncate">${item.comment ? item.comment : ''}</div>${item.comment ? `<a class="view-more" onclick="viewMore('#operation-comment-${key}',this)">Show More</a>` : ''}</td>
                         </tr> 
                     `
                 )
@@ -426,13 +433,13 @@ const getOrderItemFeedbackOperation = (page_no) => {
     })
 }
 
-const viewMore = ()=>{
-    $('#operation-comment').toggleClass('truncate')
-    if($('#operation-comment').hasClass('truncate')){
-        $('.view-more').text('Show More')
+const viewMore = (id,viewMoreElement)=>{
+    $(id).toggleClass('truncate')
+    if($(id).hasClass('truncate')){
+        $(viewMoreElement).text('Show More')
     }
     else{
-        $('.view-more').text('Show Less')
+        $(viewMoreElement).text('Show Less')
     }
 }
 
