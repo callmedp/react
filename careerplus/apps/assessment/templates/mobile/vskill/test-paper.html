@@ -385,15 +385,16 @@ $('.marked').click(function() {
     $('#question-' + value).addClass('actived');
     $('.active').removeClass('active');
     $('#markedquestion-' + activeTab).addClass('active');
+            $('#activeQuestion').text(activeTab);
+
     if (activeTab >= maxCounter) {
         $('#nextQuestionBtn').hide();
         $('#skipBtn').text('De-Select');
 
     } else {
+
         $('#nextQuestionBtn').show();
                $('#skipBtn').text('Skip');
-
-
     }
 });
 
