@@ -1082,7 +1082,7 @@ class CustomerFeedback(models.Model):
     status = models.SmallIntegerField(choices=FEEDBACK_STATUS,default=1)
     assigned_to =  models.ForeignKey(User,blank=True, null=True) 
     follow_up_date = models.DateTimeField('Follow Up Date', blank=True, null=True)
-    comment = models.CharField('Feedback Comment', max_length=500)
+    comment = models.TextField('Feedback Comment',blank=True, null=True)
     last_payment_date = models.DateTimeField('Last Payment Date',blank=True, null=True)
     ltv = models.DecimalField(max_digits=20, decimal_places=2,blank=True, null=True)
 
@@ -1106,7 +1106,7 @@ class CustomerFeedback(models.Model):
 class OrderItemFeedback(models.Model):
     category =  models.SmallIntegerField(choices=FEEDBACK_CATEGORY_CHOICES,blank=True, null=True)
     resolution =  models.SmallIntegerField(choices=FEEDBACK_RESOLUTION_CHOICES,blank=True, null=True)
-    comment = models.CharField('Feedback Comment', max_length=500,blank=True, null=True)
+    comment = models.TextField('Feedback Comment',blank=True, null=True)
     order_item = models.ForeignKey(OrderItem)
     customer_feedback  = models.ForeignKey(CustomerFeedback)
 
@@ -1125,7 +1125,7 @@ class OrderItemFeedbackOperation(models.Model):
     added_on = models.DateTimeField(editable=False, auto_now_add=True)
     category =  models.SmallIntegerField(choices=FEEDBACK_CATEGORY_CHOICES,blank=True, null=True)
     resolution =  models.SmallIntegerField(choices=FEEDBACK_RESOLUTION_CHOICES,blank=True, null=True)
-    comment = models.CharField('Feedback Comment', max_length=500,blank=True, null=True)
+    comment = models.TextField('Feedback Comment',blank=True, null=True)
     order_item = models.ForeignKey(OrderItem,blank=True, null=True)
     customer_feedback  = models.ForeignKey(CustomerFeedback)
     oi_type = models.SmallIntegerField(choices=FEEDBACK_OPERATION_TYPE,default=1)

@@ -65,12 +65,6 @@ $(document).ready(() => {
     
     getOrderItemFeedbackOperation(1)
 
-    $("textarea[maxlength]").on("propertychange input", function() {
-        if (this.value.length > this.maxlength) {
-            this.value = this.value.substring(0, this.maxlength);
-        }  
-    });
-
 })
 
 
