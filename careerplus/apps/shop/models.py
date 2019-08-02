@@ -3266,6 +3266,9 @@ class PracticeTestInfo(AbstractAutoDate):
         blank=True
     )
 
+    def __str__(self):
+        return self.email
+
     @property
     def has_completed(self):
         if getattr(self, 'test_data', None):
