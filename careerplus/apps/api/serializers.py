@@ -19,9 +19,11 @@ from geolocation.models import Country
 
 from shared.rest_addons.mixins import (SerializerFieldsMixin,
 ListSerializerContextMixin, ListSerializerDataMixin)
+from django.core.cache import cache
 
 from django.utils.text import slugify
 from core.library.gcloud.custom_cloud_storage import GCPMediaStorage,GCPPrivateMediaStorage
+from assessment.models import Question
 
 import logging
 
@@ -374,6 +376,28 @@ class  ShineDataFlowDataSerializer(ModelSerializer):
     def get_image_url(self, obj):
         if obj.image:
             return obj.image.url
+
+class QuestionAnswerSerializer(ModelSerializer):
+    question_options = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Question
+        fields = ('id','question_options')
+
+    def to_representation(self, obj):
+        return_val = super(QuestionAnswerSerializer,self).to_representation(obj)
+        session_id = self.context.get('request').session.session_key
+        key = session_id + 'test-'+ str(obj.test.id)
+        fields_to_exclude= []
+        if not cache.get(key) or not (cache.get(key).get('test_submit') or cache.get(key).get('timeout')):
+            fields_to_exclude = ['question_options']
+        [return_val.pop(field, "") for field in fields_to_exclude]
+        return return_val
+
+    def get_question_options(self,obj):
+        return [option.get('option_id') for option in obj.question_options \
+                if option.get('is_correct') and bool(eval(option.get('is_correct')) \
+                                    if isinstance(option.get('is_correct'), str) else option.get('is_correct'))]
 
 class CertificateSerializer(ModelSerializer):
     skill = serializers.SerializerMethodField()

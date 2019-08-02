@@ -32,6 +32,9 @@ urlpatterns = [
     url(r'^v1/shine-data-for-flow/$',
         views.ShineDataFlowDataApiView.as_view(),
         name='shine-data-for-flow'),
+    url(r'^v1/question/$',
+        views.QuestionAnswerApiView.as_view(),
+        name='question-answer'),
     url(r'^v1/vendor-certificate/$',
         views.VendorCertificateMappingApiView.as_view(),
         name='vendor-certificate-mapping'),
@@ -58,7 +61,20 @@ urlpatterns = [
         name='remove-cookie-from-header'),
     url(r'^v1/candidate-insights/$',
         views.CandidateInsight.as_view(),
-        name='candidate-insights')
+        name='candidate-insights'),
+    url(r'^v1/get-set-time/$',
+        views.TestTimer.as_view(),
+        name='get-test-time'),
+    url(r'^v1/set-session/$',
+        views.SetSession.as_view(),
+        name='set-session'),
+    url(r'^v1/remove-cache/$',
+        views.RemoveCache.as_view(),
+        name='set-session'),
+    url(r'^v1/get-server-time/$',
+        views.ServerTimeAPIView.as_view(),
+        name='get-server-time'
+        ),
 ]
 
 if settings.DEBUG:

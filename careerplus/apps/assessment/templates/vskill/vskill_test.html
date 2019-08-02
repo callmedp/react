@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+{% for i in questions_list %}
+
+{{i.question_text}}
+
+<br>
+{% endfor  %}
+
+
+<input type="button" id="back" onclick="nextquestion('-1');">Back
+<input type="button" id="forward" onclick="nextquestion(1);">Next
+
+</body>
+<script type="text/javascript">
+    var firstLoad =1;
+
+
+</script>
+</html>

@@ -1,0 +1,85 @@
+@import '../components/popular_test';
+@import '../components/functional_area';
+
+.headband_practice {
+    display: flex;
+    flex-direction: column;
+
+    h1 {
+        font-size: 34px;
+        color: $txt-blue;
+        font-weight: $font-weight-bold;
+        line-height: 34px;
+        margin:20px 0; 
+    }
+
+    h2 {
+        font-size: $font-size + 4;
+        color: $txt-grey-333;
+        font-weight: $font-weight-normal;
+        text-align:left; 
+
+        strong {
+            font-weight: $font-weight-bold;
+        }
+    }
+
+    ul {
+        display: flex;
+        flex-direction: column;
+
+        li {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            font-size: $font-size;
+            padding: 10px 0;
+
+            strong {
+                padding-right: 3px;
+            }
+
+
+            &:before {
+                content: "";
+                width: 24px;
+                height: 27px;
+                background: url($practice-test) -10px -12px;
+                margin-right: 11px;
+                display: flex;
+            }
+
+            &.strength {
+                strong {
+                    padding: 0px 3px;
+                }
+
+                &:before {
+                    background-position: -10px -43px;
+                }
+
+            }
+
+            &.recommendation {
+                strong {
+                    padding: 0px 3px;
+                }
+
+                &:before {
+                    background-position: -10px -80px;
+                }
+
+            }
+
+        }
+    }
+}
+
+.search_base {
+    position: absolute;
+    background: url($path + 'images/mobile/practice_test/base.png') -56px -1px no-repeat ;
+    width: 131px;
+    left: -15px;
+    height: 165px;
+}

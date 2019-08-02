@@ -38,6 +38,34 @@
   display: block;
 }
 
+.justify-content-center {
+  justify-content: center
+}
+
+.justify-content-around {
+  justify-content: space-around;
+}
+
+.justify-content-between {
+  justify-content:space-between;
+}
+
+.justify-content-evenly {
+  justify-content: space-evenly;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.align-items-end {
+  align-items: flex-end;
+}
+
+.align-items-start {
+  align-items: flex-start;
+}
+
 .inline-block {
   display: inline-block;
 }
@@ -48,6 +76,10 @@
 
 .pull-right {
   float: right;
+}
+
+.d-flex {
+  display: flex;
 }
 
 .w100fl {

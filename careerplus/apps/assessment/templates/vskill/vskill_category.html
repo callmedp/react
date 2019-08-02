@@ -1,0 +1,186 @@
+{% extends "basic/base1.html" %}
+{% load static meta thumbnail compress %}
+{% block title %}Job Assistance Services | Online Courses - Shine Learning {% endblock title %}
+{% block canonical_url %}
+<link rel="canonical" href="//{{ SITE_DOMAIN }}/">
+<link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}/">
+{% endblock canonical_url %}
+{% block django_meta %}
+{% include 'meta/meta.html' %}
+{% endblock django_meta %}
+{% block css_section %}
+{{block.super}}
+{% compress css %}
+<link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/practice-skill/practice-skill.scss' %}" rel="stylesheet">
+<link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
+{% endcompress %}
+{% endblock css_section %}
+{% block main_container %}
+<div class="  practice-skill__wrap">
+   <div class="left_base"></div>
+   <div class="right_base"></div>
+      <div class="container">
+         {% block breadcrumb %}
+         <ol class="breadcrumb  black " itemscope="" itemtype="http://schema.org/BreadcrumbList">
+            {% for bread in breadcrumbs %}
+            {% if bread.url %}
+            <li><a href='{{bread.url}}'>{{bread.name}}</a></li>
+            {% else %}
+            <li class="active">{{bread.name}}</li>
+            {% endif %}
+            {% endfor %}
+         </ol>
+         {% endblock breadcrumb %}
+
+      <div class="row">
+         <div class="col-sm-6 col-lg-6 col-md-6">
+            <h1>Take free practice tests</h1>
+            <em><strong>Start preparing</strong> for competitive exams and job interviews</em>
+            <ul class="practice_test">
+               <li>
+                  <div class="round"> <span class="icon-skill specialized"></span></div>
+                  <strong>500+ Specialized</strong>  Tests
+               </li>
+               <li>
+                  <div class="round"> <span class="icon-skill custom"></span></div>
+                  Strength & Weakness <strong>analysis</strong>
+               </li>
+               <li>
+                  <div class="round"> <span class="icon-skill weaker "></span></div>
+                  Custom course
+                  <strong>Recommendations</strong>
+               </li>
+            </ul>
+            <div class="search_content">
+               <div class="form-inline">
+                  <input type="text" class="form-control" placeholder="Search popular tests">
+                  <button type="submit" class=" skill-jobs-btn btn  "></button>
+               </div>
+            </div>
+         </div>
+         <!-- Most popular tests starts -->
+         <div class="col-sm-12 col-lg-12 col-md-12">
+            <h2>Most popular tests</h2>
+            <div class="popular_test">
+         {% for test in test_list %}
+               <div class="testinside">
+                  <span class="border-left"></span>
+                  <a href= "#">
+                     {{test.title}}
+                     <div class="white_hover"></div>
+                     <span class="taketest" >Take Free Test</span>
+                  </a>
+               </div>
+
+               {% endfor %}
+
+            </div>
+         </div>
+         <!-- Most popular tests starts -->
+         <!-- Tests by functional area starts -->
+         <div class="col-sm-12 col-lg-12 col-md-12">
+            <h2>Tests by functional area</h2>
+
+
+            <div class="functional_test" id="funcDiv">
+                  {% for fa in category %}
+
+               <div class="functional_test_inside border-{{forloop.counter}}">
+                  <a href="/">
+                  <span class="sales"></span>
+                  {{fa.heading}}
+                  </a>
+               </div>
+                  {%endfor%}
+
+               <!--<div class="functional_test_inside border-purple">-->
+                  <!--<a href="#">-->
+                  <!--<span class="info"></span>-->
+                  <!--Information Technology-->
+                  <!--</a>-->
+               <!--</div>-->
+               <!--<div class="functional_test_inside border-orange">-->
+                  <!--<a href="#">-->
+                  <!--<span class="bank"></span>-->
+                  <!--Banking & Finance</a>-->
+               <!--</div>-->
+               <!--<div class="functional_test_inside border-olive">-->
+                  <!--<a href="#">-->
+                  <!--<span class="ops"></span>-->
+                  <!--Operation Management-->
+                  <!--</a>-->
+               <!--</div>-->
+               <!--<div class="functional_test_inside border-grey">-->
+                  <!--<a href="#">-->
+                  <!--<span class="law"></span>-->
+                  <!--Law-->
+                  <!--</a>-->
+               <!--</div>-->
+               <!--<div class="functional_test_inside border-mint">-->
+                  <!--<a href="#">-->
+                  <!--<span class="hr"></span>-->
+                  <!--HR - Human Resource-->
+                  <!--</a>-->
+               <!--</div>-->
+               <!--<div class="functional_test_inside border-pink">-->
+                  <!--<a href="#"> <span class="mgmt"></span>-->
+                  <!--Management-->
+                  <!--</a>-->
+               <!--</div>-->
+               <!--<div class="functional_test_inside border-beige"> <a href="#">-->
+                  <!--<span class="pdev"></span>-->
+                  <!--Personal Development</a>-->
+               </div>
+
+            <button class="btn_white loadmore" id="loadmorebtn" onclick="loadmore();">Load more</button>
+
+
+
+
+            </div>
+         </div>
+         <!-- Tests by functional area ends -->
+      </div>
+      </div>
+   </div>
+</div>
+{% endblock main_container %}
+{% block js_section %}
+{{block.super}}
+   <script type="text/javascript">
+   var page_number= 1;
+   function loadmore(){
+            page_number = page_number+1;
+             element = document.getElementById('funcDiv');
+           $.ajax({
+               url: '/api/get-category-level-products',
+               type: "GET",
+               data : {'tl': 3, 'page_size' : 4, 'page':page_number,},
+               dataType: 'json',
+               success: function(json) {
+               if (json.next == null){
+                 $('#loadmorebtn').hide();
+               }
+               for (fa in json.results){
+                element.innerHTML= element.innerHTML +'<div class="functional_test_inside border-'+fa+'"><a href="#"><span class="sales"></span>'+ json.results[fa].heading +'</a></div>'
+
+               }
+               },
+               error: function(xhr, ajaxOptions, thrownError) {
+               if(xhr.status == 404){
+                     alert("No more Categories to show ");
+                     $('#loadmorebtn').hide();
+                     }
+                     else{
+
+                   alert("Something went wrong. Try again later");
+                   }
+               }
+           });
+   }
+   </script>
+{% endblock js_section %}
+{% block johukum %}
+{% endblock johukum %}
+{% block zendesk %}
+{% endblock zendesk %}
