@@ -2,54 +2,70 @@
 @import '../../../../styles/variables/mixins.scss';
 
 .success-stories {
-
     &__items {
-        display: flex;
-        align-items: center;
         width: 100%;
-        overflow-x: scroll;
         box-sizing: content-box;
         padding: 1.5rem;
         margin: 0 -1.5rem;
+        overflow-x: scroll;
         
+        display: flex;
     }
 
     &__item {
         flex: 0 0 290px;
         margin-right: 1.5rem;
-        height: 280px;
+        position: relative;
+        padding-top: 40px !important;
+
+        &::before {
+            @include size(43px, 36px, block);
+            content: '';
+            position: absolute;
+            background-image: url('#{$path}/sprite.svg');
+            background-repeat: no-repeat;
+            background-position: -156px 0;
+            top: 15px;
+            left: 15px;
+        }
     }
 
 
     &__infoWrap {
         font-size: 1.4rem;
+        margin-top: 2.0rem;
     }
     
-    &__userInfo {
-        display: flex;
-        align-items: center;
-        margin-bottom: 3.0rem;
-    }
+    // &__userInfo {
+    //     display: flex;
+    //     align-items: center;
+    //     margin-bottom: 3.0rem;
+    // }
     
-    &__user {
-        @include square(7.0rem);
-        @include border-radius(50%);
-        overflow: hidden;
-        display: block;
-        box-shadow: 0 0 10px rgba($black, .5);
-        margin-right: 2.0rem;
+    // &__user {
+    //     @include square(7.0rem);
+    //     @include border-radius(50%);
+    //     overflow: hidden;
+    //     display: block;
+    //     box-shadow: 0 0 10px rgba($black, .5);
+    //     margin-right: 2.0rem;
 
-        flex: 0 0 7.0rem;
+    //     flex: 0 0 7.0rem;
 
-        img {
-            width: 100%;
-            display: block;
-        }
-    }
+    //     img {
+    //         width: 100%;
+    //         display: block;
+    //     }
+    // }
     
     &__nameInfo {
         font-size: 1.3rem;
         color: $grey-999;
+        margin-top: 1.5rem;
+
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
 
         h3 {
             font-size: 1.6rem;

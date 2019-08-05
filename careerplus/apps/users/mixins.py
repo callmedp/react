@@ -17,6 +17,7 @@ from geolocation.models import Country
 from order.models import OrderItem
 from core.mixins import InvoiceGenerate
 from core.library.gcloud.custom_cloud_storage import GCPInvoiceStorage
+from console.decorators import flatlist
 
 from .choices import (
     WRITING_STARTER_VALUE, RESUME_WRITING_MATRIX_DICT,

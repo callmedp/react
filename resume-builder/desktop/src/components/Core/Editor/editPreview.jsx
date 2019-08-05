@@ -25,15 +25,15 @@ import {
     hideGenerateResumeModal
 } from '../../../store/ui/actions/index'
 import moment from 'moment'
-import {locationRouteChange,eventClicked} from '../../../store/googleAnalytics/actions/index'
+import {locationRouteChange, eventClicked} from '../../../store/googleAnalytics/actions/index'
 
 class EditPreview extends Component {
 
     componentDidMount() {
-        const {analytics:{locationPath},fetchEntityInfo,history:{location:{pathname}},locationRouteChange} = this.props
+        const {analytics: {locationPath}, fetchEntityInfo, history: {location: {pathname}}, locationRouteChange} = this.props
         fetchEntityInfo();
-        if(localStorage.getItem('personalInfo')){
-            localStorage.setItem('newUser',true)
+        if (localStorage.getItem('personalInfo')) {
+            localStorage.setItem('newUser', true)
         }
     }
 
@@ -46,10 +46,10 @@ class EditPreview extends Component {
                     <LoaderPage/>
                 }
                 <Header
-                        userName={first_name}
-                        lastName={last_name}
-                        number={number}
-                        email={email}/>
+                    userName={first_name}
+                    lastName={last_name}
+                    number={number}
+                    email={email}/>
                 <div className="page-container">
                     <SelectTemplateModal {...this.props} page={'edit'}/>
                     <TopBar {...this.props}/>

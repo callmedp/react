@@ -15,6 +15,7 @@ import {
 
 import moment from 'moment';
 import PreviewModal from "../../../Preview/changeTemplateModal";
+import Subscribe from "../../../RightSection/subscribe";
 import validate from "../../../../../FormHandler/validtaions/profile/validate"
 import {siteDomain} from "../../../../../../Utils/domains";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError";
@@ -143,6 +144,8 @@ class PersonalInfo extends Component {
 
             <div className="buildResume">
                 <PreviewModal {...this.props}/>
+                <Subscribe {...this.props}/>
+                
                 <div className="buildResume__wrap">
                     <div className="buildResume__heading">
                         {!editHeading ?

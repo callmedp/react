@@ -122,7 +122,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'core.middleware.UpgradedMobileDetectionMiddleware',
-    'core.middleware.UpgradedSetFlavourMiddleware',
+    'core.middleware.UpgradedSetFlavourMiddleware',   
     'core.middleware.LearningShineMiddleware',
     'core.middleware.LoginMiddleware',
     'core.middleware.TrackingMiddleware',
@@ -230,11 +230,13 @@ COMPRESS_PRECOMPILERS = (
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+GCP_MEDIA_LOCATION = "l/m/"
 
 LEAD_UPLOAD = os.path.join(BASE_DIR, 'media/uploads/lead_file/')
 
 STATIC_ROOT = os.path.join(MEDIA_ROOT, 'static')
 STATIC_URL = '/media/static/'
+GCP_STATIC_LOCATION = "l/s/"
 
 DOWNLOAD_ROOT = os.path.join(BASE_DIR, 'download')
 DOWNLOAD_URL = '/download/'

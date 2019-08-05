@@ -79,6 +79,7 @@ talent_sitemap = {
     'author': TalentAuthorSitemap
 }
 
+
 # Library Patches
 from .startup_script import apply_patch
 
@@ -162,7 +163,6 @@ urlpatterns += [
                    url(r'^article/', include('blog.urls', namespace='blog')),
                    url(r'^talenteconomy/', include('talenteconomy.urls', namespace='talent')),
                    url(r'^hr-insider/', include('hrinsider.urls', namespace='hrinsider')),
-
                    url(r'^cart/', include('cart.urls', namespace='cart')),
                    url(r'^order/', include('order.urls', namespace='order')),
                    url(r'^geolocation/', include('geolocation.urls', namespace='geolocation')),
@@ -217,7 +217,7 @@ urlpatterns += [
                    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 
                    # entry point for react template
-                   url(r'^resume-builder/', WriteResumeView.as_view())
+                   url(r'^resume-builder/', WriteResumeView.as_view()),
 
                ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT

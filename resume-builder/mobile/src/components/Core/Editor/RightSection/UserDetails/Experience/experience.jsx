@@ -11,6 +11,7 @@ import {siteDomain} from "../../../../../../Utils/domains";
 import AddSuggesion from '../../../../../Common/AddSuggestion/addSuggesion';
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 import BottomCTC from '../../../../../Common/BottomCTC/bottom-ctc';
+import Subscribe from '../../../RightSection/subscribe';
 
 class Experience extends Component {
 
@@ -165,6 +166,7 @@ class Experience extends Component {
             <div className="buildResume">
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <PreviewModal {...this.props}/>
+                    <Subscribe {...this.props}/>
                     <AddSuggesion label={'Job Description'} modal_status={modal_status} maxLength="1000" length={length} closeModal={this.closeModal} suggestions={suggestions}  />
                     <FieldArray name="list" 
                                 handleSubmit={handleSubmit}

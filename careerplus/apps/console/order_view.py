@@ -2933,7 +2933,7 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
         context.update(self.pagination(paginator, self.page))
         var = self.sel_opt
         alert = messages.get_messages(self.request)
-        initial = {"oi_status": self.oi_status}
+        initial = {"oi_status": self.oi_status, "day_choice": self.day_choice}
 
         filter_form = OIFilterForm(initial, queue_name='queue-whatsappjoblist')
         context.update({"assignment_form": AssignmentActionForm(), "messages": alert, "query": self.query,
@@ -3004,8 +3004,13 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
                 )
             elif int(self.oi_status) == 34:
                 queryset = queryset.filter(assigned_to=None)
+            elif int(self.oi_status) == 35:
+                queryset = queryset.filter(whatsapp_profile_orderitem__onboard=False)
             else:
-                queryset = queryset.filter(oi_status=self.oi_status)
+                queryset = queryset.filter(
+                    oi_status=self.oi_status,
+                    whatsapp_profile_orderitem__onboard=True
+                )
 
         if self.payment_date:
             start_date, end_date = self.payment_date.split(' - ')
@@ -3327,6 +3332,7 @@ class WhatsAppScheduleView(UserPermissionMixin, DetailView, PaginationMixin):
         obj = self.object = self.get_object()
         user = self.request.user
         objects = []
+        saved_formset = []
         joblinkformset = modelformset_factory(
             JobsLinks,
             form=JobLinkForm,
@@ -3339,8 +3345,10 @@ class WhatsAppScheduleView(UserPermissionMixin, DetailView, PaginationMixin):
         if action_type != 3:
             formset = joblinkformset(post_data)
             if formset.is_valid():
-                saved_formset = formset.save()
-
+                try:
+                    saved_formset = formset.save()
+                except:
+                    pass
                 if getattr(formset, '_queryset', None) and not saved_formset:
                     objects = list(formset._queryset.filter(status=0, oi=obj))
                 elif getattr(formset, '_queryset', None) and saved_formset:
@@ -3401,7 +3409,7 @@ class WhatsAppScheduleView(UserPermissionMixin, DetailView, PaginationMixin):
                     instance=profile,
                     user=request.user
                 )
-                if profile_form.is_valid:
+                if profile_form.is_valid():
                     profile_form.save()
                     messages.success(
                         self.request,

@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url,include
 from users.views import (
     DownloadBoosterResume, ForgotPasswordResetView,
     ForgotHtmlView, ForgotPasswordEmailView,
@@ -31,5 +31,6 @@ urlpatterns = [
     url(r'^download-monthly-writer-invoice/$',
         DownloadMonthlyWriterInvoiceView.as_view(),
         name='download-monthly-writer-invoice'),
+    url(r'^api/', include('users.api.urls', namespace='api')),
 
 ]

@@ -39,6 +39,7 @@ function* loginCandidate(action) {
         }
 
         if (result['error']) {
+            localStorage.clear();
             window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
             yield put({type: UPDATE_UI, data: {loader: false}})
             return;

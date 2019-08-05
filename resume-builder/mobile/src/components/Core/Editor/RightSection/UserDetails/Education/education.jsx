@@ -9,6 +9,7 @@ import renderEducation from "./renderEducation"
 import {siteDomain} from "../../../../../../Utils/domains";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 import BottomCTC from '../../../../../Common/BottomCTC/bottom-ctc';
+import Subscribe from '../../../RightSection/subscribe';
 
 class Education extends Component {
 
@@ -139,6 +140,7 @@ class Education extends Component {
             <div className="buildResume">
                 <form onSubmit={handleSubmit(this.handleSubmit)}> 
                     <PreviewModal {...this.props}/>
+                    <Subscribe {...this.props}/>
                     <FieldArray name={'list'}
                                 handleSubmit={handleSubmit}
                                 handleAddition={this.props.handleAddition}
