@@ -76,4 +76,7 @@ urlpatterns = [
 
     url(r'^service-call/$', csrf_exempt(views.WelcomeServiceCallView.as_view()), name='wcservice-call'),
 
+    #duplicateproductcreation
+    url(r'^copy-product/$', csrf_exempt(views.ProductCopyAPIView.as_view()), name='product-copy'),
+
 ]

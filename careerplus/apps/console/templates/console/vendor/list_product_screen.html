@@ -9,6 +9,11 @@
   <title>Product</title>
 {% endblock title %}
 
+{% block css_block %}
+<link href="{% static 'packages/select2/dist/css/select2.min.css' %}" rel="stylesheet" type="text/css">
+
+{{block.super}}
+{% endblock css_block %}
 {% block pagecontent %}
 <!-- page content -->
 <div class="right_col" role="main">
@@ -40,10 +45,47 @@
             <a class="btn btn-app" href="{% url "console:screenproduct-add" %}">
               <i class="fa fa-edit"></i> Add New Product</a>
           </div>
+               <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <a class="btn btn-app" data-toggle="modal" data-target="#copyProduct">
+              <i class="fa fa-edit"></i> Copy Product</a>
+          </div>
+
+
+
         </div>
-      {% endif %}  
-    
+      <!--end product copy form-->
+      {% endif %}
+                <div class="modal fade bs-example-modal-lg" tabindex="-1" id="copyProduct" role="dialog" aria-labelledby="mySmallModalLabel">
+
+              <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Copy Product</h4>
+      </div>
+      <div class="modal-body">
+
+<div>
+    <p>Select the Product to copy: </p><span><select id="productSelect" style="width:300px;" class="form-control">
+</select></span>
+</div>
+      </div>
+
+      <div class="modal-footer">
+           <input type="button"  class="btn btn-success" id="productCopy" value="Copy">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+
+            </div>
+              </div>
+                </div>
+
     {% endif %}
+
+
+
     
     <div class="row">
       <div class="col-md-12 col-sm-12 col-xs-12">
@@ -198,14 +240,71 @@
         
 {% block js_block %}
   {{ block.super }}
-
+<script type="text/javascript" src="{% static 'packages/select2/dist/js/select2.min.js' %}"></script>
   {% compress js %}
   <!-- Parsley Validate Scripts -->
   <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
-  
   <!-- Custom Theme Scripts -->
   <script type="text/javascript" src="{% static 'console/js/shop/console_shop.js' %}"></script>
   {% endcompress %}
+<script>
+$(document).ready(function() {
+var vendorIds=[]
+{% for vendor in user.get_vendor_list %}
+    vendorIds.push({{vendor.id}});
+{% endfor %}
+vendorIds = vendorIds.join();
+console.log(vendorIds)
 
+$('#productSelect').select2({
+  placeholder: 'Select the product to copy',
+  allowClear: true,
+   minimumInputLength: 3 ,
+    dropdownParent: $("#copyProduct"),
+  ajax: {
+    url:`/api/v1/products/?fl=id,name&vendor=${vendorIds}`,
+    dataType: 'json',
+      data: function (params) {
+      var query = {
+        name: params.term,
+        type: 'name'
+      }
+      return query;
+    },
+      processResults: function (response) {
+      // Transforms the top-level key of the response object from 'items' to 'results'
+          return {
+          results: response.results.map(vendor =>  {
+                    return {
+                    id:vendor.id,
+                    text:vendor.name,
+                    }
+      })
+      }
+  }
+  }
+});
+
+$('#productCopy').click(function(){
+productId = $('#productSelect').val();
+if (productId){
+ $.post("/ajax/copy-product/", {'id': productId}, function(result){
+ debugger;
+ if (result.status == 1){
+ window.location.href =`/console/screenproduct/change/${result.id}/`;
+ }
+      });
+
+}
+
+
+
+
+});
+
+
+});
+
+</script>
 
 {% endblock js_block %}
