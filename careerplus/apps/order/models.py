@@ -12,6 +12,8 @@ from django.db.models import Q, Count, Case, When, IntegerField
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.utils import timezone
+from django_mysql.models import ListTextField
+from django.core.cache import cache
 from django.db.models.signals import post_save
 
 #local imports
@@ -28,6 +30,9 @@ from .tasks import generate_resume_for_order
 from linkedin.models import Draft
 from seo.models import AbstractAutoDate
 from geolocation.models import Country, CURRENCY_SYMBOL
+from users.models import User
+from console.feedbackCall.choices import FEEDBACK_RESOLUTION_CHOICES,FEEDBACK_CATEGORY_CHOICES,FEEDBACK_STATUS,FEEDBACK_OPERATION_TYPE
+from order.utils import get_ltv
 
 #third party imports
 from payment.utils import manually_generate_autologin_url
@@ -35,6 +40,7 @@ from shop.choices import S_ATTR_DICT
 
 #Global Constants
 CURRENCY_SYMBOL_CODE_MAPPING = {0:"INR",1:"USD",2:"AED",3:"GBP"}
+
 
 class Order(AbstractAutoDate):
     co_id = models.IntegerField(
@@ -278,7 +284,6 @@ class Order(AbstractAutoDate):
             return super(Order,self).save(**kwargs)
 
         existing_obj = Order.objects.get(id=self.id)
-        
         if self.status == 1:
             assesment_items = self.orderitems.filter(
                 order__status__in=[0, 1],
@@ -549,6 +554,19 @@ class OrderItem(AbstractAutoDate):
         return "#{}".format(self.pk)
 
     @property
+    def order_payment_date(self):
+        payment_date = self.order.payment_date.date()
+        return payment_date
+
+    @property
+    def product_name(self):
+        return self.product.name
+
+    @property
+    def order_status_text(self):
+        return dict(STATUS_CHOICES).get(self.order.status)
+
+    @property
     def get_oi_status(self):
         dict_status = dict(OI_OPS_STATUS)
         return dict_status.get(self.oi_status)
@@ -565,6 +583,20 @@ class OrderItem(AbstractAutoDate):
             if 'CP' in replacement_order_id:
                 return replacement_order_id.replace('CP', '')
             return self.replacement_order_id
+
+    @property
+    def is_approved(self):
+        if self.product.sub_type_flow == 502:
+            profile = getattr(self, 'whatsapp_profile_orderitem', None)
+            if profile:
+                return profile.approved
+
+    @property
+    def is_onboard(self):
+        if self.product.sub_type_flow == 502:
+            profile = getattr(self, 'whatsapp_profile_orderitem', None)
+            if profile:
+                return profile.onboard
 
     def get_item_operations(self):
         if self.product.sub_type_flow == 502:
@@ -588,7 +620,7 @@ class OrderItem(AbstractAutoDate):
 
     def get_weeks(self):
         weeks, weeks_till_now = None, None
-        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5, 31]).order_by('id').first()
+        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5, 23]).order_by('id').first()
         if sevice_started_op:
             started = sevice_started_op.created
             day = self.product.get_duration_in_day()
@@ -603,7 +635,7 @@ class OrderItem(AbstractAutoDate):
     def get_links_needed_till_now(self):
         start, end = None, None
         links_count = 0
-        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5,31]).order_by('id').first()
+        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5,23]).order_by('id').first()
         links_per_week = getattr(self.product.attr, S_ATTR_DICT.get('LC'), 2)
         if sevice_started_op:
             links_count = 0
@@ -631,7 +663,7 @@ class OrderItem(AbstractAutoDate):
         return None
 
     def get_sent_link_count_for_current_week(self):
-        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5,31]).order_by('id').first()
+        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5,23]).order_by('id').first()
         started = sevice_started_op.created
         day = self.product.get_duration_in_day()
         weeks = math.floor(day / 7)
@@ -1053,3 +1085,79 @@ class WelcomeCallOperation(AbstractAutoDate):
     def get_wc_status(self,default_text=""):
         status_dict = dict(WC_FLOW_STATUS)
         return status_dict.get(self.wc_status, default_text)
+
+
+class CustomerFeedback(models.Model):
+    candidate_id = models.CharField('Candidate Id', max_length=100)
+    full_name = models.CharField('Full Name',max_length=255,blank=True, null=True)
+    mobile = models.CharField(max_length=15, null=True, blank=True,)
+    email = models.CharField('Full Name',max_length=255,blank=True, null=True)
+    added_on = models.DateTimeField(editable=False, auto_now_add=True)
+    status = models.SmallIntegerField(choices=FEEDBACK_STATUS,default=1)
+    assigned_to =  models.ForeignKey(User,blank=True, null=True) 
+    follow_up_date = models.DateTimeField('Follow Up Date', blank=True, null=True)
+    comment = models.TextField('Feedback Comment',blank=True, null=True)
+    last_payment_date = models.DateTimeField('Last Payment Date',blank=True, null=True)
+    ltv = models.DecimalField(max_digits=20, decimal_places=2,blank=True, null=True)
+
+    @property
+    def status_text(self):
+        return dict(FEEDBACK_STATUS).get(self.status)
+
+    @property
+    def assigned_to_text(self):
+        return self.assigned_to.name if self.assigned_to else ''
+
+    def save(self, *args, **kwargs):
+        created = not bool(self.id)
+        if not created:
+            prev_comment = CustomerFeedback.objects.get(id=self.id).comment
+            if prev_comment != self.comment :
+                OrderItemFeedbackOperation.objects.create(comment=self.comment,customer_feedback=self,assigned_to=self.assigned_to,oi_type=2)
+        super(CustomerFeedback, self).save(*args, **kwargs)
+
+
+class OrderItemFeedback(models.Model):
+    category =  models.SmallIntegerField(choices=FEEDBACK_CATEGORY_CHOICES,blank=True, null=True)
+    resolution =  models.SmallIntegerField(choices=FEEDBACK_RESOLUTION_CHOICES,blank=True, null=True)
+    comment = models.TextField('Feedback Comment',blank=True, null=True)
+    order_item = models.ForeignKey(OrderItem)
+    customer_feedback  = models.ForeignKey(CustomerFeedback)
+
+    def save(self, *args, **kwargs):
+        create = not bool(self.id)
+        if not create:
+            assigned_to = CustomerFeedback.objects.get(id=self.customer_feedback.id).assigned_to
+            prev_data = OrderItemFeedback.objects.get(id=self.id)
+            compare_list = [self.category==prev_data.category,self.resolution==prev_data.resolution,self.comment==prev_data.comment]
+            if not all(compare_list):
+                OrderItemFeedbackOperation.objects.create(category=self.category,resolution=self.resolution,comment=self.comment,order_item=self.order_item,customer_feedback=self.customer_feedback,assigned_to=assigned_to)
+        super(OrderItemFeedback, self).save(*args, **kwargs) # Call the real save() method
+
+class OrderItemFeedbackOperation(models.Model):
+    assigned_to = models.ForeignKey(User,blank=True, null=True) 
+    added_on = models.DateTimeField(editable=False, auto_now_add=True)
+    category =  models.SmallIntegerField(choices=FEEDBACK_CATEGORY_CHOICES,blank=True, null=True)
+    resolution =  models.SmallIntegerField(choices=FEEDBACK_RESOLUTION_CHOICES,blank=True, null=True)
+    comment = models.TextField('Feedback Comment',blank=True, null=True)
+    order_item = models.ForeignKey(OrderItem,blank=True, null=True)
+    customer_feedback  = models.ForeignKey(CustomerFeedback)
+    oi_type = models.SmallIntegerField(choices=FEEDBACK_OPERATION_TYPE,default=1)
+
+
+    @property
+    def category_text(self):
+        return dict(FEEDBACK_CATEGORY_CHOICES).get(self.category)
+
+    @property
+    def resolution_text(self):
+        return dict(FEEDBACK_RESOLUTION_CHOICES).get(self.resolution)
+
+    @property
+    def assigned_to_text(self):
+        return self.assigned_to.name if self.assigned_to else ''
+
+    @property
+    def oi_type_text(self):
+        return dict(FEEDBACK_OPERATION_TYPE).get(self.oi_type)
+    

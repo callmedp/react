@@ -20,6 +20,8 @@ urlpatterns = [
         include('console.badgeuser.urls', namespace='badge')),
     url(r'^welcomecall/',
         include('console.welcomecall.urls', namespace='welcomecall')),
+    url(r'^feedbackcall/',
+        include('console.feedbackCall.urls', namespace='feedbackcall')),
     url(r'^wallet/$', wallet_view.WalletView.as_view(), name='walletrewards'),
     url(r'^wallet/history/$', wallet_view.WalletHistoryView.as_view(), name='wallethistory'),
     url(r'^api/', include('console.api.urls', namespace='api')),

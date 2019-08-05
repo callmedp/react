@@ -47,6 +47,17 @@
       </ul>
     {% endif %}
 
+    {% if request.user|has_group:WELCOMECALL_GROUP_LIST or request.user|has_group:OPS_HEAD_GROUP_LIST %}
+      <h3>Feedback Call</h3>   
+      <ul class="nav side-menu">
+        <li><a><i class="fa fa-list-alt"></i> Feedback call <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+              <li><a href="{% url "console:feedbackcall:queue" %}">Feedback Queue</a></li>
+            </ul>
+        </li>
+      </ul>
+    {% endif %}
+
     {% if request.user|has_group:USER_QUERY_GROUP_LIST or perms.crmapi.can_view_hr_queries %}
       <h3>User Query</h3>
         
