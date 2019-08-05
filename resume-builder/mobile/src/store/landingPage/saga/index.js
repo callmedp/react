@@ -25,15 +25,20 @@ function* getCandidateId() {
 
 function* loginCandidate(action) {
     try {
-        let {payload} = action;
+        let {data: {payload, resolve, reject, isTokenAvail}} = action;
 
         yield put({type: uiAction.UPDATE_MAIN_PAGE_LOADER, payload: {mainloader: true}})
-        let result = yield call(Api.loginCandidate, payload);
 
-        if (result['error']) {
+        let result;
+        if (isTokenAvail) {
+            result = yield call(Api.loginCandidate, payload);
+        }
+        if (result && result['error'] || !isTokenAvail) {
             result = yield call(Api.getInformation)
         }
-        if (result['error']) {
+
+
+        if (result && result['error']) {
             apiError('login')
             localStorage.clear();
             window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
@@ -68,8 +73,11 @@ function* loginCandidate(action) {
             }
         }
         localStorage.setItem('token', (token) || '');
+        resolve('Login Successfully');
+
         yield put({type: uiAction.UPDATE_MAIN_PAGE_LOADER, payload: {mainloader: false}})
-    } catch (e) {
+    } catch
+        (e) {
         apiError();
     }
 }

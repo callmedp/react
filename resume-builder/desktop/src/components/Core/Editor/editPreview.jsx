@@ -9,6 +9,7 @@ import RightSection from './RightSection/rightSection.jsx'
 import {withRouter} from "react-router-dom";
 import LoaderPage from "../../Loader/loaderPage.jsx";
 import * as actions from "../../../store/ui/actions"
+import {loginCandidate} from "../../../store/landingPage/actions"
 import {
     customizeTemplate,
     fetchDefaultCustomization,
@@ -29,8 +30,11 @@ import {locationRouteChange, eventClicked} from '../../../store/googleAnalytics/
 
 class EditPreview extends Component {
 
-    componentDidMount() {
-        const {analytics: {locationPath}, fetchEntityInfo, history: {location: {pathname}}, locationRouteChange} = this.props
+    async componentDidMount() {
+        const {analytics: {locationPath}, fetchEntityInfo, history: {location: {pathname}}, locationRouteChange, loginCandidate} = this.props
+        if (!localStorage.getItem('candidateId')) {
+            await loginCandidate()
+        }
         fetchEntityInfo();
         if (localStorage.getItem('personalInfo')) {
             localStorage.setItem('newUser', true)
@@ -136,7 +140,12 @@ const mapDispatchToProps = (dispatch) => {
         },
         'eventClicked': (data) => {
             return dispatch(eventClicked(data))
-        }
+        },
+        "loginCandidate": (token = '') => {
+            return new Promise((resolve, reject) => {
+                dispatch(loginCandidate({payload: {alt: ''}, resolve, reject, isTokenAvail: false}))
+            })
+        },
     }
 }
 
