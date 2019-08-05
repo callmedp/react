@@ -186,6 +186,29 @@ function check_for_load_test(data){
     }
 }
 
+function update_test_info(email){
+    $.ajax({
+        url: "/api/v1/update_practice_info/?email="+ encodeURIComponent(email),
+        type: "GET",
+        success: function(data, textStatus, jqXHR) {
+          if(data['status'] == 'done'){
+            $("#neo-enroll-button").text('Buy Now');
+            $("#neo-enroll-button").attr('id', 'add-to-cart');
+              var ifrm = document.getElementById('iframe');
+              var doc = ifrm.contentDocument? ifrm.contentDocument: ifrm.contentWindow.document;
+              btn = $(doc).find('#neobackhomebutton');
+              btn.text('Enroll Now');
+              btn.css('color', 'black')
+              btn.css('background', '#ffcf26')
+
+          }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          console.log(errorThrown)
+        }
+    });
+}
+
 {% if request.session.candidate_id %}
   let email = "{{ request.session.email }}";
   let name = "{{request.session.full_name}}";
@@ -228,28 +251,6 @@ $('#neo-enroll-button').click(function(){
 });
 
 
-function update_test_info(email){
-    $.ajax({
-        url: "/api/v1/update_practice_info/?email="+ encodeURIComponent(email),
-        type: "GET",
-        success: function(data, textStatus, jqXHR) {
-          if(data['status'] == 'done'){
-            $("#neo-enroll-button").text('Buy Now');
-            $("#neo-enroll-button").attr('id', 'add-to-cart');
-              var ifrm = document.getElementById('iframe');
-              var doc = ifrm.contentDocument? ifrm.contentDocument: ifrm.contentWindow.document;
-              btn = $(doc).find('#neobackhomebutton');
-              btn.text('Enroll Now');
-              btn.css('color', 'black')
-              btn.css('background', '#ffcf26')
-
-          }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-          console.log(errorThrown)
-        }
-    });
-}
 
 $('#neo-test-modal').on('hidden.bs.modal', function () {
   $("#neo-test-form").hide();
