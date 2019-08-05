@@ -119,6 +119,7 @@ class Edit extends Component {
                 : []).map(value => (!!value ? error = true : false)))
             else Object.values(syncErrors || {}).map(value => (!!value ? error = true : false));
         }
+
         return (
             <div className="edit-section">
                 <MenuModal
