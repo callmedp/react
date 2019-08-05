@@ -102,7 +102,7 @@
         </div>
         <div class="take-test--button-wrap mt-15">
             <span class="btn btn-outline btn-round-30" id="skipBtn" onclick="skipQuestion();">Skip</span>
-            <span class="btn btn-outline btn-round-30" onclick="submitTest();">End test</span>
+            <span class="btn btn-outline btn-round-30" onclick="submitTest();">Submit</span>
         </div>
     </div>
 
@@ -392,6 +392,13 @@ $('.marked').click(function() {
         $('#skipBtn').text('De-Select');
 
     } else {
+            if(activeTab >=8){
+        $('#more_question').show();
+        }
+        else{
+                $('#more_question').hide();
+
+        }
 
         $('#nextQuestionBtn').show();
                $('#skipBtn').text('Skip');
@@ -415,6 +422,13 @@ function nextquestion(number) {
         $('#nextQuestionBtn').hide();
         $('#skipBtn').text('De-Select');
         } else {
+        if(activeTab >=8){
+        $('#more_question').show();
+        }
+        else{
+                $('#more_question').hide();
+
+        }
         $('#nextQuestionBtn').show();
       $('#skipBtn').text('Skip');
         }
