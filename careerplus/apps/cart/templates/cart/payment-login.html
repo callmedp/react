@@ -104,7 +104,7 @@
                     <strong class="personal-details-heading col-sm-12">Enter your email id</strong>
                     <p id="non-field-error" class="error">{{non_field_error}}</p>
                     <div class="form-group col-sm-12 {% if email_error %}error{% endif %}">
-                      <input type="email" name="email" class="form-control" placeholder="Enter your email id" value="{% if request.session.email%}{{request.session.email}}{% elif request.session.lead_email %}{{ request.session.lead_email }}{% endif %}" {% if request.session.email %} readonly {% endif %}>
+                      <input type="email" name="email" class="form-control" placeholder="Enter your email id" value="{% if neo_email %} {{ neo_email }} {% elif request.session.email%}{{request.session.email}}{% elif request.session.lead_email %}{{ request.session.lead_email }} {% endif %}" {% if request.session.email %}  {% endif %}" {% if neo_email %} readonly {% endif %}>
                       <span class="error-txt">{{email_error}}</span>
                     </div>
                     <div class="continue col-sm-12">
