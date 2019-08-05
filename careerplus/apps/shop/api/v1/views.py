@@ -7,7 +7,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from shared.rest_addons.mixins import FieldFilterMixin
 from rest_framework.response import Response
 from .tasks import delete_from_solr
-from shared.permissions import CanShowProducts
+from shared.permissions import HasGroupOrHasPermissions
+from shop.api.core.permissions import IsVendorAssociated
 import subprocess, os
 from django.conf import settings
 
@@ -16,7 +17,7 @@ class ProductListView(FieldFilterMixin, ListAPIView):
     serializer_class = ProductListSerializerForAuditHistory
     authentication_classes = (SessionAuthentication,)
     # filter_backends = (DjangoFilterBackend,)
-    permission_classes = (CanShowProducts,)
+    permission_classes = (HasGroupOrHasPermissions,IsVendorAssociated,)
     permission_groups = []
     permission_code_name = []
 
@@ -39,8 +40,8 @@ class ProductListView(FieldFilterMixin, ListAPIView):
         vendor_id = vendor_id if vendor_id else user.vendor_set.values_list('id',flat=True)
         if category_id:
             filter_dict.update({'categories__id': category_id})
-        if vendor_id:
-            vendor_id = vendor_id.split(',')
+        if vendor_id :
+            vendor_id = vendor_id.split(',') if isinstance(vendor_id,str) else vendor_id
             filter_dict.update({'vendor__id__in': vendor_id})
         # else:
         #     return Product.objects.none()
