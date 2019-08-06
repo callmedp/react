@@ -24,7 +24,7 @@
 
     <div class="back"></div>
 
-<h1>{{Category.heading}}</h1>
+<h1>{{Category.name}}</h1>
         {% block breadcrumb %}
          <div class="bread-crums">
             {% for bread in breadcrumbs %}
@@ -50,7 +50,7 @@
         <div class="popular_test_inside category">
             <a href="{% url 'assessment:vskill-subcategory' slug=cat.slug %}">
                 <span class="border border{{forloop.counter0}}"></span>
-                <span class="name">{{cat.heading}}</span>
+                <span class="name">{{cat.name}}</span>
                 <span class="test">{{cat.get_assessment_test}}
                     {% if cat.get_assessment_test < 1 %}Test {% else %}Tests{% endif %}</span>
             </a>
@@ -86,7 +86,7 @@
                 <a href = "/practice-tests/${json.results[fa].slug}/sub/"
 
                 <span class="border border{{forloop.counter0}}"></span>
-                <span class="name">${json.results[fa].heading}</span>
+                <span class="name">${json.results[fa].name}</span>
                 <span class="test">${json.results[fa].assessment_test}
                 ${json.results[fa].assessment_test < 1 ? 'Test':'Tests'}
                     </span>
