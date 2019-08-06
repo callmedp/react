@@ -216,7 +216,10 @@ function check_for_load_test(data){
         $('#iframe').show();
         $("#neo-test-form").hide();
         load_test(email, name, country_code, mobile_no);
-        $('#neo-test-modal').modal();
+        $('#neo-test-modal').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
       }
     }
 }
@@ -342,14 +345,20 @@ $('#take-test_button').click(function(){
 
     {% else %}
         $("#neo-test-form").show();
-        $('#neo-test-modal').modal();
+        $('#neo-test-modal').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
     {% endif %}
   });
 
 $('#neo-enroll-button').click(function(){
     var text = $(this).text()
     if(text=='Enroll now') {
-        $('#neo-info-modal').modal()
+        $('#neo-info-modal').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
     }
 })
 
