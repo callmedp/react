@@ -31,6 +31,11 @@ class PracticeTestInfoCreateSerializer(ModelSerializer):
         test_info = PracticeTestInfo.objects.filter(
             email=validated_data.get('email', None), order_item=None
         ).first()
+        completed_test_info = PracticeTestInfo.objects.filter(
+            email=validated_data.get('email', None)
+        ).exclude(order_item=None).first()
+        if completed_test_info:
+            validated_data['test_data'] = completed_test_info.test_data
         # For non authenticated user, save email as per session key
         # for later use in payment login screen.
         if test_info:
@@ -49,7 +54,6 @@ class PracticeTestInfoCreateSerializer(ModelSerializer):
 
     def get_cefr_level(self, obj):
         level = 'N.A'
-
         data = getattr(obj, 'test_data', '{}')
         if data:
             data = eval(data)
