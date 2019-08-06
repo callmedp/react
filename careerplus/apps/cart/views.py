@@ -278,7 +278,7 @@ class PaymentLoginView(TemplateView):
         cart_pk = self.request.session.get('cart_pk')  # required for calling self.get_context_data()
         cart_obj = Cart.objects.get(pk=cart_pk)
         # get neo item email from cache set after user submit neo test
-        if self.cart_obj.lineitems.filter(product__vendor__slug='neo').exists():
+        if cart_obj.lineitems.filter(product__vendor__slug='neo').exists():
             session_id = self.request.session.session_key
             email = cache.get('{}_neo_email_done'.format(session_id))
             context.update({'neo_email': email})

@@ -367,10 +367,13 @@
           <div class="form-group">
           <input type="text" class="form-control" name="name" placeholder="  " value=""/>
           <label for="">Name</label>
+          <span class="js-error"></span>
+
         </div>
         <div class="form-group">
           <input type="text" class="form-control" name="email" placeholder="  " value=""/>
           <label for="">Email</label>
+          <span class="js-error"></span>
         </div>
         <div class="form-group wdselect">
           <div class="country-code">
@@ -385,9 +388,11 @@
         <div class="form-group wd75">
           <input type="text" class="form-control" name="mobile" placeholder="  " value=""/>
           <label for="">Mobile</label>
+          <span class="js-error"></span>
+
         </div>
          <div class="form-group mt-30">
-            <button type="button" class="take-test-button" id="neo-form-btn"> Take test </button>
+            <button type="submit" class="take-test-button" id="neo-form-btn"> Take test </button>
         </div>
         </form>
         <iframe src="" sandbox="allow-scripts allow-same-origin" id="iframe" width="400" height="700" style="border:none;{% if not request.session.candidate_id %} display: none;{% endif %}"></iframe>

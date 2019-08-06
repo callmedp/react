@@ -20,6 +20,12 @@
     <link type="text/scss" href="{% static 'shinelearn/css/product/detail.scss' %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/skill/extra.css' %}" rel="stylesheet">
     {% endcompress %}
+    <style>
+      .js-error{
+        float:left;
+        color:red;
+      }
+    </style>
 {% endblock css_section %}
 
 
@@ -266,18 +272,62 @@ function check_if_user_exists_for_another_vendor(email) {
 
 
 {% if not request.session.candidate_id %}
-$("#neo-form-btn").click(function(e){
-  var $inputs = $('#neo-test-form :input');
-  var values = {};
-  $inputs.each(function() {
-      values[this.name] = $(this).val();
-  });
-  name = values['name'];
-  email = values['email'];
-  country_code = values['country_code'];
-  mobile_no = values['mobile'];
-  get_create_profile(email, name, country_code, mobile_no);
-});
+ $('#neo-test-form').validate({
+      submitHandler:function (form) {
+          var $inputs = $('#neo-test-form :input');
+          var values = {};
+          $inputs.each(function() {
+              values[this.name] = $(this).val();
+          });
+          name = values['name'];
+          email = values['email'];
+          country_code = values['country_code'];
+          mobile_no = values['mobile'];
+          get_create_profile(email, name, country_code, mobile_no);
+      },
+      rules:{
+          mobile:{
+              required:true,
+              number:true,
+              minlength:10,
+              maxlength:20,
+          },
+          email:{
+              email:true,
+              required:true,
+
+          },
+          name:{
+              required:true,
+              lettersonly:true,
+
+          },
+      },
+      messages:{
+          mobile:{
+             required:"Field is required",
+             number: "Please enter valid number only"
+          },
+          email:{
+              required:"Field is required"
+          },
+          name:{
+              required:"Field is required"
+          },
+
+      },
+      highlight:function(element, errorClass) {
+        $(element).closest('.form-group').addClass('error');
+      },
+      unhighlight:function(element, errorClass) {
+        $(element).closest('.form-group').removeClass('error');
+        $(element).siblings('.js-error').html("");
+      },
+      errorPlacement: function(error, element){
+        $(element).siblings('.js-error').html(error.text());
+      } 
+
+    });
 {% endif %}
 
 
