@@ -83,7 +83,7 @@
                      {{quest.question_text}}</h3>
                   </div>
                   <ul class="test-paper__question">
-                        {% for ans in quest.question_options %}
+                        {% for ans in quest.options %}
                      <li>
                         <label class="custom-radio">{{ans.option}}
                            <input type="radio" id="{{ans.option_id}}" disabled  name="radio{{ans.option_id}}">

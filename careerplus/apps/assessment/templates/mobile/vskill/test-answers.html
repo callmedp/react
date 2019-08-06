@@ -65,7 +65,7 @@
             <li>
                 {{quest.question_text}}
                 <ul>
-                    {% for ans in quest.question_options %}
+                    {% for ans in quest.options %}
                     <li>
                         <span id="check{{ans.option_id}}" class=""></span>
                         <input type="radio" id="{{ans.option_id}}" disabled  name="radio{{ans.option_id}}">
