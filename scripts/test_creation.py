@@ -48,8 +48,12 @@ if __name__ == "__main__":
         category = prod.category_main
         df = pandas.read_excel("/Users/gaurav/Desktop/20 files/"+file)
         logging.getLogger('info_log').info('Reading File  - {}'.format(file))
-        test_obj = Test.objects.create(category=category,product=prod,vendor=prod.vendor,\
-                                       duration=600,title=prod.name,is_active=True)
+        test_obj = Test.objects.create(product=prod,duration=600,title=prod.name,is_active=True)
+        if category:
+            test_obj.category = category
+        if prod.vendor:
+            test_obj.vendor = prod.vendor
+        test_obj.save()
 
         for question_array in df.get_values()[:df.values.size]:
             question_object = Question.objects.create()
