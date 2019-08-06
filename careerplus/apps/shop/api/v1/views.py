@@ -40,7 +40,7 @@ class ProductListView(FieldFilterMixin, ListAPIView):
         vendor_id = vendor_id if vendor_id else user.vendor_set.values_list('id',flat=True)
         if category_id:
             filter_dict.update({'categories__id': category_id})
-        if vendor_id :
+        if vendor_id and not user.is_superuser:
             vendor_id = vendor_id.split(',') if isinstance(vendor_id,str) else vendor_id
             filter_dict.update({'vendor__id__in': vendor_id})
         # else:
@@ -54,7 +54,7 @@ class ProductListView(FieldFilterMixin, ListAPIView):
             else:
                 filter_dict.update({type_query: self.request.GET.get(type_query)})
 
-        return Product.objects.filter(**filter_dict)
+        return Product.objects.filter(**filter_dict).exclude(type_flow=14)
 
 
 class ProductDeleteView(APIView):

@@ -36,7 +36,7 @@ from core.tasks import upload_resume_to_shine
 from console.mixins import ActionUserMixin
 from order.functions import create_short_url
 from linkedin.autologin import AutoLogin
-from shop.models import Product,ProductScreen
+from shop.models import Product,ProductScreen,ProductAttributeScreen,FAQProductScreen
 from blog.mixins import BlogMixin
 from shop.models import Category
 
@@ -907,12 +907,29 @@ class ProductCopyAPIView(View):
 
         if product_screen_obj:
             product_screen_copy_obj = deepcopy(product_screen_obj)
-            product_screen_copy_obj.pk =None
+            product_screen_copy_obj.pk = None
             product_screen_copy_obj.save()
-            return HttpResponse(json.dumps({'status': 1,'id': product_screen_copy_obj.id}), content_type="application/json")
+            if product_screen_obj.countries.all():
+                product_screen_copy_obj.countries.add(*product_screen_obj.countries.all())
+            for attr in product_screen_obj.screenattributes.all():
+                attr_copy = deepcopy(attr)
+                attr_copy.pk = None
+                attr_copy.product = product_screen_copy_obj
+                attr_copy.save()
+            for faq in product_screen_obj.screenfaqs.all():
+                faq_copy = deepcopy(faq)
+                faq_copy.pk = None
+                faq_copy.product = product_screen_copy_obj
+                faq_copy.save()
 
-        product_screen_obj = ProductScreen.objects.create()
-        return HttpResponse(json.dumps({'status': 1,'id':product_screen_obj.id}), content_type="application/json")
+            for skill in product_screen_obj.screenskills.all():
+                skill_copy = deepcopy(skill)
+                skill_copy.pk = None
+                skill_copy.product = product_screen_copy_obj
+                skill_copy.save()
+
+            return HttpResponse(json.dumps({'status': 1,'id': product_screen_copy_obj.id}), content_type="application/json")
+        return HttpResponse(json.dumps({'status': 0}), content_type="application/json")
 
 
 
