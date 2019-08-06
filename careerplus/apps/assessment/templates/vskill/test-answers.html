@@ -83,7 +83,7 @@
                      {{quest.question_text}}</h3>
                   </div>
                   <ul class="test-paper__question">
-                        {% for ans in quest.question_options %}
+                        {% for ans in quest.options %}
                      <li>
                         <label class="custom-radio">{{ans.option}}
                            <input type="radio" id="{{ans.option_id}}" disabled  name="radio{{ans.option_id}}">
@@ -208,6 +208,8 @@
                </div>
                  <input type="hidden" class="form-control" id="campaign" name="campaign" value="testprep" />
                   <input type="hidden" class="form-control" id="lsource" name="lsource" value="1" />
+                 <input type="hidden" class="form-control" id="prd" name="prd" value="{{object.product.name}}" />
+
 
                <div class="form-group">
                   <button class="blue_btn mr-20"  type="submit" id="leadCreationSubmit">Submit</button>
@@ -244,20 +246,29 @@ right=0,questionAttempt = null,total = {{questions_list.count}};
 $(document).ready(function() {
 
     {% if not request.session.is_lead_created %}
-      {% if request.session.candidate_id %}
-      $('#leadCreationSubmit').click();
-     {% else %}
-       $("#leadCreationModal").modal('show');
+         {% if request.session.candidate_id %}
+             $('#leadCreationSubmit').click();
+         {% else %}
+             $("#leadCreationModal").modal('show');
         {% endif %}
         {% else %}
         getCoptions();
         {% endif %}
 
+            $.validator.addMethod("customemail",function(value, element) {
+            if($.trim(value)!= ''){
+                var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                return regex.test(value);
+            }
+            return true;
+    });
+
+
 $('#leadCreationForm').validate({
   rules: {
             name: {
                 required: true,
-                maxlength: 80
+                maxlength: 80,
             },
             number: {
                 required: true,
@@ -268,6 +279,7 @@ $('#leadCreationForm').validate({
             email: {
                 required: true,
                 email:true,
+                customemail:true,
             }
         },
       highlight: function(element, errorClass) {

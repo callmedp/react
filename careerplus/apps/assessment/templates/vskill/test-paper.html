@@ -34,7 +34,7 @@
 
         <div class="row">
             <div class="col-sm-12 col-lg-12 col-md-12">
-                <h1>{{object.name}}</h1>
+                <h1>{{object.title}}</h1>
             </div>
             <!-- tests starts -->
             <div class="col-sm-9 mt-30">
@@ -60,7 +60,7 @@
                             <strong>{{forloop.counter}} of {{questions_list.count}}</strong>
                         </div>
                         <ul class="test-paper__question">
-                            {% for ans in quest.question_options %}
+                            {% for ans in quest.options %}
                             <li>
                                 <label class="custom-radio">{{ans.option}}
                                     <input type="radio" id="{{ans.option_id}}" name="radio">
@@ -290,6 +290,7 @@ $('.marked').click(function() {
      $('#skipBtn').text('De-Select');
 
     } else {
+
         $('#nextQuestionBtn').show();
            $('#skipBtn').text('Skip');
 

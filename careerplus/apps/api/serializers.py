@@ -395,7 +395,7 @@ class QuestionAnswerSerializer(ModelSerializer):
         return return_val
 
     def get_question_options(self,obj):
-        return [option.get('option_id') for option in obj.question_options \
+        return [option.get('option_id') for option in obj.options \
                 if option.get('is_correct') and bool(eval(option.get('is_correct')) \
                                     if isinstance(option.get('is_correct'), str) else option.get('is_correct'))]
 

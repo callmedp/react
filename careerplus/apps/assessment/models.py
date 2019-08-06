@@ -89,16 +89,23 @@ class Question(AbstractAutoDate):
     level = models.PositiveSmallIntegerField(choices=LEVELS_TYPE,default=1)
     question_type = models.PositiveSmallIntegerField(choices=QUESTION_TYPE,default=1)
     subsection = models.ForeignKey(SubSection,blank=True,null=True)
-    question_options = JSONField()
+    question_options = models.TextField(null=True,blank=True)
     extra_info = models.CharField(
         max_length=255, null=False, blank=False,default="")
 
 
     @property
     def correct_option(self):
-        return [option.get('option_id') for option in self.question_options\
+        return [option.get('option_id') for option in self.options\
                 if option.get('is_correct') and bool(eval(option.get('is_correct'))\
                 if isinstance(option.get('is_correct'), str) else option.get('is_correct'))]
+
+
+    @property
+    def options(self):
+        if self.question_options:
+            return eval(self.question_options)
+        return []
 
     def __str__(self):
         return '{}'.format(self.id)

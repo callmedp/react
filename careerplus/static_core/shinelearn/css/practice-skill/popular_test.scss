@@ -441,9 +441,8 @@ h2 {
             }
 
             &.skipped {
-                background-color: $p-orange;
-                border: 1px solid $p-orange;
-                color: $grey-color;
+                background-color: $white-bg;
+                border: 1px solid $border;
             }
 
             &.dirt {

@@ -82,7 +82,7 @@
 
 
         ul {
-            margin: 0 -10px;
+            margin: 0 -17px;
 
             display: flex;
             flex-wrap: wrap;
@@ -105,7 +105,7 @@
                 }
 
                 &.skip {
-                    background-color: #FBF5E3;
+                    // background-color: #FBF5E3;
                 }
 
                 &.active {
@@ -115,7 +115,7 @@
                 }
 
                 &.skipped {
-                    background-color: #FBF5E3;
+                    // background-color: #FBF5E3;
                 }
 
                 &.dirt{

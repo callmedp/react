@@ -39,7 +39,7 @@
                   <button type="submit" class=" skill-jobs-btn btn"></button>
                 </div>
             </div>
-            <h1>{{Category.heading}}</h1>
+            <h1>{{Category.name}}</h1>
          </div>
          <!-- Most popular tests starts -->
          <div class="col-sm-12 col-lg-12 col-md-12">
@@ -48,7 +48,7 @@
                <div class="testinside testinside-inner">
                   <span class="border-left"></span>
            <a class="test-box" href="{% url 'assessment:vskill-subcategory' slug=cat.slug %}">
-                     {{cat.heading}}
+                     {{cat.name}}
                      <span class="test"> {{cat.get_assessment_test}}
                  {% if cat.get_assessment_test < 1 %}Test {% else %}Tests{% endif %}
                      </span>
@@ -83,7 +83,7 @@
                }
                for (fa in json.results){
                 element.innerHTML=
-                element.innerHTML +'<div class="testinside testinside-inner"><span class="border-left"></span><a class="test-box" a href="/practice-tests/'+ json.results[fa].slug +'">'+ json.results[fa].heading +'<span class="test">22 Test</span></a></div>'
+                element.innerHTML +'<div class="testinside testinside-inner"><span class="border-left"></span><a class="test-box" a href="/practice-tests/'+ json.results[fa].slug +'">'+ json.results[fa].name +'<span class="test">22 Test</span></a></div>'
                }
                },
                error: function(xhr, ajaxOptions, thrownError) {
