@@ -1,0 +1,23 @@
+@import '../components/animatio-input';
+
+
+// New CSS for input group using felx
+.form--control {
+  @include border-radius(4px);
+  @include appearance(none);
+  @include size(100%, 48px, flex);
+  background-color: $bg-white;
+  font-family: $font-family;
+  border: 1px solid $border-grey-c1;
+  color: $txt-grey-999;
+  font-size: $font-size-base;
+  line-height: 1.42857;
+  padding: 6px 12px;
+  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+  flex: 1;
+  
+    &::-moz-placeholder {
+      color: $txt-grey-999;
+      opacity: 1;
+    }
+  }

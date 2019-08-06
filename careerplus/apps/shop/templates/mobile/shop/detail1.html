@@ -812,18 +812,12 @@ $('#take-test_button').click(function(){
 
     {% else %}
         $("#neo-test-form").show();
+        $('#iframe').hide();
         modal('neo-test-modal','block');
     {% endif %}
   });
 
 
-
-$('#neo-test-modal').on('hidden.bs.modal', function () {
-  $("#neo-test-form").hide();
-  $('#iframe').hide();
-
-    // do something…
-});
 
 // attache event handler to neo test submit button
 $('iframe').load(function(){
@@ -838,6 +832,8 @@ $('iframe').load(function(){
         update_test_info(email);
 
     });
+
+    $(doc).find('#neobox').css('max-width', '100%')
     $(doc).on('click', '#neoStartButton', function() {
         setTimeout(function(){
             check_if_user_exists_for_another_vendor(global_email)
@@ -886,13 +882,14 @@ function check_if_user_exists_for_another_vendor(email) {
 var neoClose = document.getElementById("neo-close");
 neoClose.onclick = function() {
     modal('neo-test-modal','none');
+
     // modal.style.display = "none";
 }
 
 // Get the <span> element that closes the modal
 var neoInfoClose = document.getElementById("neo-info-close")
 neoInfoClose.onclick = function() {
-    modal('neo-info-modal','none');
+    $("#neo-test-form").hide();
 }
 
 $('#neo-enroll-button').click(function(){
@@ -904,7 +901,7 @@ $('#neo-enroll-button').click(function(){
 
 $("#modal-take-test-btn").click(function(){
     modal('neo-info-modal', 'none');
-    modal('neo-test-modal','block');
+    $("#take-test_button").trigger('click')
 })
 document.getElementById('iframe');
   </script>
