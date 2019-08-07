@@ -898,6 +898,15 @@ class WelcomeServiceCallView(UserPermissionMixin,View):
 
 class ProductCopyAPIView(View):
 
+
+
+    def create_relation_m2m(self,attr_obj,new_object):
+        attr_copy = deepcopy(attr_obj)
+        attr_copy.pk = None
+        attr_copy.product = new_object
+        attr_copy.save()
+
+
     def post(self,request,*args,**kwargs):
         pid = self.request.POST.get('id')
         if not pid:
@@ -912,22 +921,13 @@ class ProductCopyAPIView(View):
             if product_screen_obj.countries.all():
                 product_screen_copy_obj.countries.add(*product_screen_obj.countries.all())
             for attr in product_screen_obj.screenattributes.all():
-                attr_copy = deepcopy(attr)
-                attr_copy.pk = None
-                attr_copy.product = product_screen_copy_obj
-                attr_copy.save()
+                self.create_relation_m2m(attr, product_screen_copy_obj)
             for faq in product_screen_obj.screenfaqs.all():
-                faq_copy = deepcopy(faq)
-                faq_copy.pk = None
-                faq_copy.product = product_screen_copy_obj
-                faq_copy.save()
-
+                self.create_relation_m2m(faq, product_screen_copy_obj)
             for skill in product_screen_obj.screenskills.all():
-                skill_copy = deepcopy(skill)
-                skill_copy.pk = None
-                skill_copy.product = product_screen_copy_obj
-                skill_copy.save()
-
+                self.create_relation_m2m(skill, product_screen_copy_obj)
+            for chap in product_screen_obj.chapter_product.all():
+                self.create_relation_m2m(chap, product_screen_copy_obj)
             return HttpResponse(json.dumps({'status': 1,'id': product_screen_copy_obj.id}), content_type="application/json")
         return HttpResponse(json.dumps({'status': 0}), content_type="application/json")
 
