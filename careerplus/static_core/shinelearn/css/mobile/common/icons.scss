@@ -152,21 +152,18 @@
 
 .icon-fb-2 {
   @include icon-inblock (10px, 18px, -48px -176px);
-  @extend %all-center;
 }
 
 .icon-tw-2 {
   @include icon-inblock (18px, 15px, -100px -177px);
-  @extend %all-center;
 }
 
 .icon-gp-2 {
-  @include icon-inblock (21px, 15px, -71px -177px);
-  @extend %all-center;
+  @include icon-inblock (18px, 18px, -69px -177px);
 }
 
 .icon-link-2 {
-  @include icon-inblock (21px, 34px, -73px -282px);
+  @include icon-inblock (21px, 19px, -73px -291px);
   }
 
 .icon-edit {
@@ -722,3 +719,29 @@
   background-position: -453px -427px;
   position: relative;
 }
+
+
+.icon-feedback {
+  background-position: 0 -460px;
+}
+
+.icon-inDepth {
+  background-position: -43px -460px;
+}
+
+.icon-checkQuestion {
+  background-position: -86px -460px;
+}
+
+.icon-getReal {
+  background-position: -129px -460px;
+}
+
+.icon-unlimitedAccess{
+  background-position: -173px -460px;
+}
+
+.icon-getTips {
+  background-position: -216px -460px;
+}
+
