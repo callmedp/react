@@ -195,7 +195,7 @@ class TestCacheUtil:
         timeout = None
         if not self.test_timeout:
             conn = get_redis_connection('test_lookup')
-            redis_key = str.encode(':' + str(settings.CACHES.get('test_lookup').get('LOCATION')[0][-1])+":"+key)
+            redis_key = str.encode(':' + str(settings.CACHES.get('test_lookup').get('LOCATION')[0].split("/")[-1])+":"+key)
             timeout = conn.pttl(redis_key)
         if not timeout or timeout == -2:
             timeout = self.VSKILL_CACHE_TIMEOUT
