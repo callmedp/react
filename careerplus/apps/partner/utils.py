@@ -613,7 +613,6 @@ class CertiticateParser:
                     value = self.get_actual_value(data, self.get_key_for_field(vendor_key, key, field))
                     if field in self.MULTIPLE_VALUES[vendor_key].keys():
                         multiple_fields = self.MULTIPLE_VALUES[vendor_key][field]
-                        print(field)
                         for val in value:
                             data_instance = getattr(parse_data, key).__class__()
                             if isinstance(multiple_fields, list):

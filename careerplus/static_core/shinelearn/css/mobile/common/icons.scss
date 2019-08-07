@@ -152,21 +152,18 @@
 
 .icon-fb-2 {
   @include icon-inblock (10px, 18px, -48px -176px);
-  @extend %all-center;
 }
 
 .icon-tw-2 {
   @include icon-inblock (18px, 15px, -100px -177px);
-  @extend %all-center;
 }
 
 .icon-gp-2 {
-  @include icon-inblock (21px, 15px, -71px -177px);
-  @extend %all-center;
+  @include icon-inblock (18px, 18px, -69px -177px);
 }
 
 .icon-link-2 {
-  @include icon-inblock (21px, 34px, -73px -282px);
+  @include icon-inblock (21px, 19px, -73px -291px);
   }
 
 .icon-edit {
@@ -677,4 +674,74 @@
 
 .icon-receive {
   background-position: -230px -405px;
+
 }
+
+.icon-user {
+  @include size(18px, 22px, inline-block);
+  background-position: -376px -310px;
+  position: relative;
+  top: -2px;
+}
+
+.icon-guest {
+  @include size(17px, 25px, inline-block);
+  background-position: -354px -310px;
+  position: relative;
+  top: -2px;
+}
+
+.icon-delivery {
+  @include size(25px, 17px, inline-block);
+  background-position: -398px -428px;
+  position: relative;
+  margin-right: 15px;
+}
+
+.icon-down-arrow {
+  @include size(7px, 9px, inline-block);
+  background-position: -100px -206px;
+  position: relative;
+
+  transform: rotate(90deg);
+}
+
+
+.icon-share-blue {
+  @include size(16px, 13px, inline-block);
+  background-position: -430px -430px;
+  position: relative;
+}
+
+
+.icon-share-social {
+  @include size(20px, 20px, inline-block);
+  background-position: -453px -427px;
+  position: relative;
+}
+
+
+.icon-feedback {
+  background-position: 0 -460px;
+}
+
+.icon-inDepth {
+  background-position: -43px -460px;
+}
+
+.icon-checkQuestion {
+  background-position: -86px -460px;
+}
+
+.icon-getReal {
+  background-position: -129px -460px;
+}
+
+.icon-unlimitedAccess{
+  background-position: -173px -460px;
+}
+
+.icon-getTips {
+  background-position: -216px -460px;
+}
+

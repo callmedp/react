@@ -56,7 +56,8 @@ from .serializers import (
     VendorCertificateSerializer,
     ImportCertificateSerializer,
     ShineDataFlowDataSerializer,
-    CertificateSerializer,TalentEconomySerializer,QuestionAnswerSerializer,OrderDetailSerializer)
+    CertificateSerializer,TalentEconomySerializer,QuestionAnswerSerializer,
+    OrderDetailSerializer, OrderListSerializer)
 
 from partner.models import Certificate, Vendor
 from shared.rest_addons.pagination import LearningCustomPagination
@@ -1392,6 +1393,40 @@ class OrderDetailApiView(FieldFilterMixin,RetrieveAPIView):
             logging.getLogger('info_log').info('Order Data Accessed - {},{},{},{},{},{}'.format(current_time,\
         user.id, user.get_full_name(), getattr(instance, 'number', 'None'), field, getattr(instance, field, 'None')))
         return self.retrieve(request, *args, **kwargs)
+
+
+class OrderListApiView(FieldFilterMixin, ListAPIView):
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = OrderListSerializer
+    pagination_class = LearningCustomPagination
+    page_size = 1
+
+    def get(self, request, *args, **kwargs):
+        allowed_status = ['0', '1', '3']
+        self.custom_status = self.request.query_params.get('status')
+        if self.custom_status:
+            self.custom_status = self.custom_status.split(',')
+            allowed = all([i in allowed_status for i in self.custom_status])
+            if not allowed:
+                return Response(
+                    {'message': 'Provide Valid Values for status'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        else:
+            self.custom_status = [1, 3]
+        self.custom_status = list(map(int, self.custom_status))
+        return super(OrderListApiView, self).get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        user = self.request.user
+        vendor_ids = list(user.vendor_set.values_list('id', flat=True))
+        items = OrderItem.objects.filter(
+            product__vendor__id__in=vendor_ids,
+            no_process=False,
+            order__status__in= self.custom_status
+        )
+        return items
 
 
 class CandidateInsight(APIView):

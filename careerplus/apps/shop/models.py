@@ -69,7 +69,6 @@ from .choices import (
     convert_gbp)
 from search.choices import EXP_DICT
 
-
 class ProductClass(AbstractAutoDate, AbstractSEO,):
     name = models.CharField(
         _('Name'), max_length=100,
@@ -3247,4 +3246,48 @@ class JobsLinks(AbstractCommonModel, AbstractAutoDate):
         schedule_date = self.schedule_date.strftime('%d-%m-%Y') if self.schedule_date else ''
         return str(self.company_name) + ' - ' + str(self.get_status_display()) +' ' + schedule_date
 
+
+class PracticeTestInfo(AbstractAutoDate):
+    email = models.CharField(
+        max_length=100,
+        verbose_name=_("Customer Email")
+    )
+    mobile_no = models.CharField(
+        max_length=15,
+        verbose_name=_('Mobile number'),
+        null=True,
+        blank=True
+    )
+    name = models.CharField(
+        max_length=70,
+        verbose_name=_('Name'),
+        null=True,
+        blank=True
+    )
+    test_data = models.TextField(
+        null=True,
+        blank=True,
+        verbose_name=_('test_data')
+    )
+    is_boarded = models.BooleanField(
+        default=False
+    )
+    order_item = models.ForeignKey(
+        'order.OrderItem', related_name='test_info',
+        verbose_name=_("Order Item"),
+        null=True,
+        blank=True
+    )
+
+    def __str__(self):
+        return self.email
+
+    @property
+    def has_completed(self):
+        if getattr(self, 'test_data', None):
+            datum = eval(getattr(self, 'test_data'))
+            status = datum.get('status', None)
+            if status.lower() == 'done':
+                return True
+        return False
 

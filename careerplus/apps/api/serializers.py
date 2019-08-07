@@ -497,3 +497,13 @@ class OrderDetailSerializer(SerializerFieldsMixin,ModelSerializer):
     #         logging.getLogger('info_log').info('{},{},{},{},{},{}'.format(current_time,\
     #     user.id, user.get_full_name(), getattr(instance, 'number', 'None'), field, getattr(instance, field, 'None')))
     #     return ret
+
+
+
+class OrderListSerializer(SerializerFieldsMixin, ModelSerializer):
+
+
+    class Meta:
+        model = OrderItem
+        fields = ('order_id', 'order_payment_date', 'product_name', 'created')
+

@@ -15,6 +15,7 @@ from django.utils import timezone
 from django_mysql.models import ListTextField
 from django.core.cache import cache
 from django.db.models.signals import post_save
+from django.core.cache import cache
 
 #local imports
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
@@ -24,7 +25,7 @@ from .choices import STATUS_CHOICES, SITE_CHOICES,\
     WC_FLOW_STATUS
 
 from .functions import get_upload_path_order_invoice, process_application_highlighter
-from .tasks import generate_resume_for_order
+from .tasks import generate_resume_for_order, board_user_on_neo
 
 #inter app imports
 from linkedin.models import Draft
@@ -183,6 +184,10 @@ class Order(AbstractAutoDate):
         items = self.orderitems.all()
         return any([item.product.type_flow == 17 for item in items])
 
+    def order_contains_neo_item(self):
+        items = self.orderitems.all()
+        return any([item.product.vendor.slug == 'neo' for item in items])
+
     @property
     def get_status(self):
         statusD = dict(STATUS_CHOICES)
@@ -284,6 +289,7 @@ class Order(AbstractAutoDate):
             return super(Order,self).save(**kwargs)
 
         existing_obj = Order.objects.get(id=self.id)
+
         if self.status == 1:
             assesment_items = self.orderitems.filter(
                 order__status__in=[0, 1],
@@ -292,12 +298,19 @@ class Order(AbstractAutoDate):
                 autologin_url=None
             )
             manually_generate_autologin_url(assesment_items=assesment_items)
-        
+        if self.status == 1 and existing_obj.status != 1 and self.order_contains_neo_item():
+            neo_items_id = list(self.orderitems.filter(
+                product__vendor__slug='neo',
+                no_process=False
+            ).values_list('id', flat=True))
+            board_user_on_neo.delay(neo_ids=neo_items_id)
+
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_resume_builder():
             generate_resume_for_order.delay(self.id)
+
             logging.getLogger('info_log').info("Generating resume for order {}".format(self.id))
 
-        return super(Order,self).save(**kwargs)
+        return super(Order, self).save(**kwargs)
 
 
 class OrderItem(AbstractAutoDate):
@@ -617,6 +630,11 @@ class OrderItem(AbstractAutoDate):
     def is_closed(self):
         if self.oi_status == 4:
             return True
+
+    @property
+    def neo_mail_sent(self):
+        sent = cache.get('neo_mail_sent_{}'.format(self.id))
+        return sent
 
     def get_weeks(self):
         weeks, weeks_till_now = None, None
