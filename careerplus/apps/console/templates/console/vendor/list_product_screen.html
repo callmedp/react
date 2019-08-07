@@ -289,7 +289,6 @@ $('#productCopy').click(function(){
 productId = $('#productSelect').val();
 if (productId){
  $.post("/ajax/copy-product/", {'id': productId}, function(result){
- debugger;
  if (result.status == 1){
  window.location.href =`/console/screenproduct/change/${result.id}/`;
  }

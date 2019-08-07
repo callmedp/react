@@ -209,6 +209,7 @@
                  <input type="hidden" class="form-control" id="campaign" name="campaign" value="testprep" />
                   <input type="hidden" class="form-control" id="lsource" name="lsource" value="1" />
                  <input type="hidden" class="form-control" id="prd" name="prd" value="{{object.product.name}}" />
+                 <input type="hidden" class="form-control" id="leadScorePercent" name="msg" value="" />
 
 
                <div class="form-group">
@@ -337,6 +338,8 @@ function getCoptions(){
               let scorePercent = (right/total)*100 ;
               let scoreMessage = "";
               $('#scoringPercent').text(scorePercent +"%");
+              $('#leadScorePercent').val('score is '+ scorePercent +" %");
+              ReCreateLead();
               if(scorePercent >80){
               scoreMessage =  ` Wow! Awesome Score.`;
                $('#resultImage').attr("src","{% static 'shinelearn/images/free_skill/test-result-bg.png' %}");
@@ -386,11 +389,25 @@ function reTestFunc(){
 }
 
 
-
+function ReCreateLead(){
+if(flag){
+    var form = $('#leadCreationForm');
+    $.ajax({
+         url   : '/lead/lead-management/',
+         type  : 'post',
+         data  : form.serialize(), // data to be submitted
+         success: function(response){
+         }
+    });
+    return false;
+    }
+}
 
 
 $("#leadCreationForm").submit(function(e){
 flag=$('#leadCreationForm').valid();
+getCoptions();
+
 if(flag){
     var form = $(this);
     $.ajax({
@@ -401,7 +418,7 @@ if(flag){
          }
     });
     testSession({'lead_created':true});
-    getCoptions();
+
     $('#leadCreationModal').modal('hide');
     return false;
 }

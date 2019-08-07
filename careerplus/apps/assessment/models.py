@@ -82,8 +82,8 @@ class Question(AbstractAutoDate):
 
     question_text = models.TextField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
-    weight = models.PositiveSmallIntegerField(default=1)
-    negative_marking = models.FloatField(default=0.00)
+    marks = models.FloatField(default=1)
+    negative_marks = models.FloatField(default=0.00)
     test = models.ForeignKey(Test, blank=True, null=True)
     section = models.ForeignKey(Section, blank=True, null=True)
     level = models.PositiveSmallIntegerField(choices=LEVELS_TYPE,default=1)
