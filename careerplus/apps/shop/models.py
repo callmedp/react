@@ -3172,14 +3172,15 @@ class ProductUserProfile(AbstractAutoDate):
         verbose_name=_("Order Item"))
     contact_number = models.CharField(
         _("Contact number"), max_length=50)
-    desired_industry = models.CharField(max_length=255, blank=True, null=True)
-    desired_location = models.CharField(max_length=255, blank=True, null=True)
-    desired_position = models.CharField(max_length=255, blank=True, null=True)
-    desired_salary = models.CharField(max_length=50, blank=True, null=True)
-    current_salary = models.CharField(max_length=50, blank=True, null=True)
-    experience = models.CharField(max_length=50, blank=True, null=True)
-    skills = models.CharField(max_length=100, blank=True, null=True)
+    desired_industry = models.CharField(max_length=300, blank=True, null=True)
+    desired_location = models.CharField(max_length=300, blank=True, null=True)
+    desired_position = models.CharField(max_length=300, blank=True, null=True)
+    desired_salary = models.CharField(max_length=200, blank=True, null=True)
+    current_salary = models.CharField(max_length=200, blank=True, null=True)
+    experience = models.CharField(max_length=300, blank=True, null=True)
+    skills = models.CharField(max_length=300, blank=True, null=True)
     approved = models.BooleanField(default=False)
+    onboard = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         user = kwargs.pop('user', None)

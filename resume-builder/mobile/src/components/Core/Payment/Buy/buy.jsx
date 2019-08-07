@@ -28,10 +28,10 @@ class Buy extends Component {
     }
 
 
-     redirectToCart() {
+    redirectToCart() {
         this.props.eventClicked({
-            'action':'PayNow',
-            'label':'Click'
+            'action': 'PayNow',
+            'label': 'Click'
         })
         if (!this.props.productIds[0])
             return;
@@ -80,10 +80,12 @@ class Buy extends Component {
         }
     }
 
-    editTemplate(){
-        const {eventClicked,history} = this.props;
-        eventClicked({'action':'EditTemplate',
-                    'label':'Click'})
+    editTemplate() {
+        const {eventClicked, history} = this.props;
+        eventClicked({
+            'action': 'EditTemplate',
+            'label': 'Click'
+        })
         history.push(`/resume-builder/edit/?type=profile`)
     }
 
@@ -94,20 +96,22 @@ class Buy extends Component {
             infinite: true,
             speed: 500,
             slidesToShow: 2,
-          };
-          const {ui:{mainloader},template:{thumbnailImages,templateImage},productIds,history} = this.props
-          const template = localStorage.getItem('selected_template') || 1;
-          const {checked,pay_button_clicked,modal_status} = this.state
-          const price1 = productIds[0] ?  productIds[0].inr_price: 999
-          const price2 = productIds[1] ?  productIds[1].inr_price: 1248
+        };
+        const {ui: {mainloader}, template: {thumbnailImages, templateImage}, productIds, history} = this.props
+        const template = localStorage.getItem('selected_template') || 1;
+        const {checked, pay_button_clicked, modal_status} = this.state
+        const price1 = productIds[0] ? productIds[0].inr_price : 999
+        const discount1 = Math.floor(((1499 - price1) / 1499) * 100)
+        const price2 = productIds[1] ? productIds[1].inr_price : 1248
+        const discount2 = Math.floor(((1999 - price2) / 1999) * 100)
         return (
 
             <div className="buy-container">
                 <Header page={"buy"} history={history}/>
-                {mainloader ? <Loader/> :""}
-                {modal_status ? <BuyTemplateModal modal_status={modal_status} 
-                    closeModalStatus={this.closeModalStatus}
-                    templateImage={templateImage}/>:''}
+                {mainloader ? <Loader/> : ""}
+                {modal_status ? <BuyTemplateModal modal_status={modal_status}
+                                                  closeModalStatus={this.closeModalStatus}
+                                                  templateImage={templateImage}/> : ''}
 
                 <div className="pay-now">
                     <div className="pay-now__price">
@@ -123,8 +127,8 @@ class Buy extends Component {
 
 
                 <div className="buy">
-                    <p className="buy--create">You can <strong>create/ edit and download</strong> multiple resume for 12
-                        months</p>
+                    <p className="buy--create">Use resume builder for 12 months
+                        to<strong> create/edit</strong> unlimited resume.</p>
                     <div className="buy__wrap mt-15">
                         <div className="buy__item">
                             <div className="buy__item--left">
@@ -137,7 +141,7 @@ class Buy extends Component {
                                     Buy your <br/>customised resume<br/>
                                     <strong>Rs. {price1}/-</strong>
                                     <span className="fs-14 line-through">Rs. 1499 </span>
-                                    <span className="fs-14 bold">Flat 50% off</span>
+                                    <span className="fs-14 bold">Flat {discount1}% off</span>
                                 </label>
                             </div>
                             <div className="buy__item--right">
@@ -167,7 +171,7 @@ class Buy extends Component {
                                     <div className="buy__item--price">
                                         <span className="fs-22 color-333 semi-bold">Rs. {price2}/-</span>
                                         <span className="fs-14 line-through">Rs. 1999</span>
-                                        <span className="fs-14 bold">Flat 50% off</span>
+                                        <span className="fs-14 bold">Flat {discount2}% off</span>
                                     </div>
                                 </label>
                             </div>

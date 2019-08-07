@@ -9,6 +9,7 @@ import renderAwards from "./renderAwards"
 import {siteDomain} from "../../../../../../Utils/domains";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 import BottomCTC from '../../../../../Common/BottomCTC/bottom-ctc';
+import Subscribe from "../../../RightSection/subscribe";
 
 
 class Award extends Component {
@@ -118,6 +119,7 @@ class Award extends Component {
         return(
             <div className="buildResume">
                 <PreviewModal {...this.props}/>
+                <Subscribe {...this.props}/>
                 <form onSubmit={handleSubmit((values)=>this.handleSubmit(values))}>
                     <FieldArray name="list" 
                                 handleSubmit={handleSubmit}

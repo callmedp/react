@@ -48,7 +48,7 @@ class Command(BaseCommand):
             else:
                 user_register(data={}, order=obj.order.pk)
 
-            featured_op = obj.orderitemoperation_set.filter(oi_status__in=[5,31]).order_by('id').order_by('id').first()
+            featured_op = obj.orderitemoperation_set.filter(oi_status__in=[5, 23]).order_by('id').order_by('id').first()
 
             try:
                 activation_date = featured_op.created
@@ -74,7 +74,7 @@ class Command(BaseCommand):
                         assigned_to=obj.assigned_to)
                     jobs_move_close_count += 1
                 else:
-                    sevice_started_op = obj.orderitemoperation_set.all().filter(oi_status__in=[5,31]).order_by('id').first()
+                    sevice_started_op = obj.orderitemoperation_set.all().filter(oi_status__in=[5,23]).order_by('id').first()
 
                     if sevice_started_op:
                         if obj.pending_links_count > 0 and obj.oi_status == 32:

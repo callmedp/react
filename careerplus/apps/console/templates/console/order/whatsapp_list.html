@@ -206,6 +206,15 @@
                           <span class="input-group-btn">
                                 <button type="submit" class="btn btn-primary" >Sort</button>
                           </span>
+                          {% if request.GET.oi_status %}
+                          <input type="hidden" name="oi_status" value="{{request.GET.oi_status}}">
+                          {% endif %}
+                          {% if request.GET.day_choice %}
+                          <input type="hidden" name="day_choice" value="{{request.GET.day_choice}}">
+                          {% endif %}
+                          {% if request.GET.payment_date %}
+                          <input type="hidden" name="payment_date" value="{{request.GET.payment_date}}">
+                          {% endif %}
                       </div>
                     </div>
                   </form>
@@ -258,7 +267,13 @@
                             </td>
                       {% endif %}
                     
-                     <td><b> <a target='_blank' href="{% url 'console:queue-whatsapp-schedule' obj.pk %}">{{obj.order.number}} <p>(#{{obj.pk}})</p></a></b></td>
+                     <td>
+                      <b>
+                         <a target='_blank' href="{% url 'console:queue-whatsapp-schedule' obj.pk %}">{{obj.order.number}} <p>(#{{obj.pk}})</p>
+                         </a>
+                         <button type="button" class="btn btn-primary btn-xs"><a target='_blank' style="color:#fff;" href="{% url "console:order-detail" obj.order.id %}"><i class="fa fa-search" aria-hidden="true"></i>View Order</a></button>
+                      </b>
+                    </td>
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
                                                          <td>
                          <div>
@@ -273,7 +288,7 @@
                         <td>
                     <div>
                         <div id="mobile_field{{obj.order.id}}_{{forloop.counter}}"> </div>
-                        {% if exoitel_status%}
+                        {% if exoitel_status %}
                         <button id="{{obj.order.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{obj.order.id}});"></button>
                         <span style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{obj.order.id}}callingbtn-error"></span>
                         {% endif %}
