@@ -574,13 +574,3 @@ WHATS_APP_MESSAGE_FORMAT = '''Here are our job recommendations for this week.<br
                         <br>{}Please do not call/reply directly to this message<br><br>In case of any queries, you can call us on  08047105151 or email us at resume@shine.com<br><br>Thanks,<br><br>Team Shine
                         '''
 
-# Neo Settings
-NEO_TOKEN = "xRm7FoiyQ221ZL7MV07zEOtcF3xrPcCTXYKmAnA5ylPtFWYCWJS6XqgXoHFsmuPR"
-NEO_URL = {
-    'pt_result': 'https://etestapi.dyned.com/pt/result',
-    'board_user': 'https://universaldashboard.id.dyned.com/api/v1/student/onboard',
-    'user_detail': 'https://universaldashboard.id.dyned.com/api/v1/student/',
-    'jwt_token': 'https://myneo.space/api/v1/jwt/token-request'
-}
-NEO_USERNAME = 'shineadmin@shine.com'
-NEO_PASSWORD = 'MPgddK5vpM'

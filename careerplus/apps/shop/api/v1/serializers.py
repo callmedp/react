@@ -25,7 +25,6 @@ class PracticeTestInfoCreateSerializer(ModelSerializer):
         session_id = session.session_key
         if data['status'] == 'done' and 'candidate_id' not in session:
             cache.set('{}_neo_email_done'.format(session_id), test_info.email, 3600 * 24 * 30)
-            print(cache.get('{}_neo_email_done'.format(session_id)))
 
     def clean_email(self, email ):
         if not email[0].isalnum():
