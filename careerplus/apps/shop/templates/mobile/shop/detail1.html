@@ -744,6 +744,12 @@ function update_test_info(email){
 
     {% endif %}
 {% endif %}
+
+jQuery.validator.addMethod("customEmail", function(value, element) {
+    var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    return regex.test(value);
+}, "Enter valid email");
+
  $('#neo-test-form').validate({
       submitHandler:function (form) {
           var $inputs = $('#neo-test-form :input');
@@ -767,6 +773,7 @@ function update_test_info(email){
           email:{
               email:true,
               required:true,
+              customEmail: true
 
           },
           name:{
