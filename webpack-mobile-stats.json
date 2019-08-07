@@ -1,19 +1,19 @@
 {
-  "status": "done",
-  "chunks": {
-    "main": [
-      {
-        "name": "main-1564137115197.css",
-        "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/react/dist/mobile/main-1564137115197.css"
-      },
-      {
-        "name": "main-1564137115197.js",
-        "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/react/dist/mobile/main-1564137115197.js"
-      },
-      {
-        "name": "main-1564137115197.js.map",
-        "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/react/dist/mobile/main-1564137115197.js.map"
-      }
-    ]
-  }
+    "status": "done",
+    "chunks": {
+        "main": [
+            {
+                "name": "main-1565161273511.css",
+                "path": "/home/hitesh/Documents/careerplus/careerplus/static_core/react/dist/mobile/main-1565161273511.css"
+            },
+            {
+                "name": "main-1565161273511.js",
+                "path": "/home/hitesh/Documents/careerplus/careerplus/static_core/react/dist/mobile/main-1565161273511.js"
+            },
+            {
+                "name": "main-1565161273511.js.map",
+                "path": "/home/hitesh/Documents/careerplus/careerplus/static_core/react/dist/mobile/main-1565161273511.js.map"
+            }
+        ]
+    }
 }
