@@ -39,7 +39,7 @@
 
         h1 {
 
-            font-size: 40px;
+            font-size: 32px;
             letter-spacing: -0.73px;
             color: $p-blue;
             font-weight: bold;
@@ -51,6 +51,14 @@
             font-size: 16px;
             margin-top: 0;
             font-style: normal;
+        }
+
+        .search_content {
+            width: 300px;
+
+            .skill-jobs-btn {
+                background-color: transparent;  
+            }
         }
     }
 }
@@ -108,7 +116,7 @@
     background: $btn-default-bg;
     box-shadow: 0 2px 8px 0 rgba(202, 202, 202, 0.50);
     border-radius: 42px;
-    margin: 60px 0 20px;
+    margin: 30px 0 20px;
     height: 49px;
     padding: 0 0 10px 10px;
 

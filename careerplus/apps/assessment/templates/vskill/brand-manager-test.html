@@ -20,7 +20,7 @@
    <div class="right_base"></div>
       <div class="container">
          {% block breadcrumb %}
-         <ol class="breadcrumb  black " itemscope="" itemtype="http://schema.org/BreadcrumbList">
+         <ol class="breadcrumb  black mb-0" itemscope="" itemtype="http://schema.org/BreadcrumbList">
             {% for bread in breadcrumbs %}
             {% if bread.url %}
             <li><a href='{{bread.url}}'>{{bread.name}}</a></li>
@@ -43,7 +43,7 @@
          </div>
          <!-- Most popular tests starts -->
          <div class="col-sm-12 col-lg-12 col-md-12">
-            <div class="popular_test row" id="funcDiv">
+            <div class="popular_test row mt-0" id="funcDiv">
 
                {% for test in all_test|slice:":8" %}
                <div class="testinside">
