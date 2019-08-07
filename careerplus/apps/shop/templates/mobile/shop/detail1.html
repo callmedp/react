@@ -846,7 +846,13 @@ $('iframe').load(function(){
         }, 1000);
     });
 
-    
+    $(doc).on('click', '#neoresettest', function() {
+        setTimeout(function(){
+           $(doc).find("#neomodalquit").css('position','absolute')
+           $(doc).find("#neomodalquit").css('height','200%')
+        }, 1000);
+    });
+
 
     $(doc).on('click', "#neobackhomebutton", function(){
       modal('neo-test-modal','none');

@@ -46,6 +46,10 @@ urlpatterns = [
         views.OrderDetailApiView.as_view(),
         name='order-detail'),
 
+    url(r'^v1/order-list/$',
+        views.OrderListApiView.as_view(),
+        name='order-detail'),
+
     url(r'^v1/media-upload/$',
         views.MediaUploadView.as_view(),
         name='v1.media-upload'),
