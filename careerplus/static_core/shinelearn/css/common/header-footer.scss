@@ -153,6 +153,19 @@ datalist {
 	}
 }
 
+.new {
+	font-size: 10px;
+	color: $primary-color;
+	padding: 0 3px;
+	background: $yellow-color;
+	position: absolute;
+	right: -32px;
+	top: 13px;
+	line-height: 12px;
+	display: inline-block;
+	border-radius: 3px;
+}
+
 .navbar-right {
 	margin-right: 3%;
 

@@ -1,0 +1,436 @@
+{% extends "basic/base1.html" %}
+{% load static meta thumbnail compress %}
+{% block title %}Practice test | online mock test – Shine Learning {% endblock title %}
+{% comment %}
+{% block head %}
+{{block.super}}
+{% endblock head %}
+{% endcomment %}
+{% block canonical_url %}
+<link rel="canonical" href="//{{ SITE_DOMAIN }}/">
+<link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}/">
+{% endblock canonical_url %}
+
+{% block django_meta %}
+{% include 'meta/meta.html' %}
+{% endblock django_meta %}
+{% block css_section %}
+{{block.super}}
+{% compress css %}
+<link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/practice-skill/practice-skill.scss' %}" rel="stylesheet">
+<link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
+{% endcompress %}
+{% endblock css_section %}
+{% block main_container %}
+<div class="practice-skill__wrap-inner">
+   <div class="right_base"></div>
+      <div class="container">
+         {% block breadcrumb %}
+         <ol class="breadcrumb  black " itemscope="" itemtype="http://schema.org/BreadcrumbList">
+            {% for bread in breadcrumbs %}
+            {% if bread.url %}
+            <li><a href='{{bread.url}}'>{{bread.name}}</a></li>
+            {% else %}
+            <li class="active">{{bread.name}}</li>
+            {% endif %}
+            {% endfor %}
+         </ol>
+         {% endblock breadcrumb %}
+      
+      <div class="row">
+         <div class="col-sm-12 col-lg-12 col-md-12">
+            <h1>Your Test Result</h1>
+         </div>
+
+         <!-- result header -->
+         <div class="col-sm-12 col-lg-12 col-md-12">
+            <div class="result-box mt-20">
+               <div class="col-md-2 col-lg-3">
+                  <img id="resultImage" src="{% static 'shinelearn/images/free_skill/test-result-bg.png' %}" class="img-responsive">
+               </div>
+               <div class="col-md-7 col-lg-7">
+                  <h2 id="resultRemark"></h2>
+
+                  <strong id="correctMsg"></strong>
+                  <p id="resultCourse"></p>
+                  <div class="flexbox mt-20 mb-20">
+                     <a data-toggle="modal"  href="#TestLimitModal" class="result_btn" >Next test &nbsp; &rsaquo;</a>
+                     <a href="/practice-tests/{{object.category.slug}}/sub" class="result_btn ml-20">Explore other test</a>
+
+                  </div>
+               </div>
+               <div class="col-md-3 col-lg-2">
+                  <div class="test-paper-box final-result pull-right">
+                     You scored
+                     <strong id="scoringPercent" ></strong>
+                  </div>
+                  <span class="time-taken pull-right mt-20">Time taken : <strong id="timeTaken"></strong></span>
+               </div>
+            </div>
+         </div>
+
+         <!-- tests starts -->
+         <div class="col-sm-9 mt-30">
+            <div class="test-paper-box white-box">
+               <h2>Test Answers</h2>
+
+               <!-- paper starts -->
+                 {% for quest in questions_list %}
+               <div class="test-paper">
+
+                  <div class="flexbox" id="{{quest.id}}">
+                     <h3 ><span class="test-paper-count">{{forloop.counter}}</span> 
+                     {{quest.question_text}}</h3>
+                  </div>
+                  <ul class="test-paper__question">
+                        {% for ans in quest.options %}
+                     <li>
+                        <label class="custom-radio">{{ans.option}}
+                           <input type="radio" id="{{ans.option_id}}" disabled  name="radio{{ans.option_id}}">
+                           <span class="checkmark"></span>
+                           <span id="check{{ans.option_id}}" class=""></span>
+                        </label>
+                     </li>
+                        {%endfor %}
+                  </ul>
+               </div>
+                   {% endfor %}
+               <!-- paper end -->
+            </div>
+
+            <div class="flexbox ml-20 mt-30">
+               <a class="blue_btn mr-20" data-toggle="modal"  href="#TestLimitModal">Next test&nbsp; &rsaquo;</a>
+               <a class="white_btn mr-20" href="/practice-tests/{{object.category.slug}}/sub" >Explore other test</a>
+                <button class="white_btn" onclick="reTestFunc();" >Re Test</button>
+
+            </div>
+         </div>
+
+         <!-- right section starts -->
+         <div class="col-sm-3 mt-30" id="test-product" style="{% if not object.product %} display:none {% endif %};">
+
+            <div class="white-box bdr-bottom">
+               <div class="test-benefits benefits-bg">
+               <span class="pad-15">
+                  <h3><a id="test-product-name" href="{{object.product.get_absolute_url}}">{{object.product.name}}</a></h3>
+                  <h4 class="mt-0" id="test-price">Rs. {{object.product.inr_price}}</h4>
+                  <strike id="fakeProductPrice"></strike>
+                  <span class="grey-border mt-15 mb-15"></span>
+                  <strong>Benefits</strong>
+                  <p>500+ questions</p>
+                  <p>Real exam & Practice environment</p>
+                  <p>Answers & Detailed Explanations</p>
+                  <span class="flexbox align-items-center mt-20">
+                     <button class="yellow_btn" onclick="updateToCart('{{object.product.id}}','cart')">Add to cart</button>
+                  </span>
+               </span>
+              </div>
+            </div>
+
+            <div class="white-box mt-20 bdr-bottom" id="testCourse" style="{% if not object.course %} display:none {% endif %};">
+               <div class="improve-skills">
+               <span class="pad-15">
+                  <h4 class="mt-0" >Improve your skills with this course</h4>
+                  <span class="grey-border mt-15 mb-15"></span>
+                  <i class="tcell"><img id="courseImg" src="{% if object.course.image %} {{object.course.image.url}} {% endif %}" class="img-responsive"></i>
+                  <span class="tcell">
+                     <h3><a href="{{object.course.get_absolute_url}}" id="courseName">{{object.course.name}}</a></h3>
+                     <p><strong id="courseBought">{{object.course.buy_count}}</strong> people bought</p>
+                     <p><strong id="courseJobsAvailable">{{object.course.num_jobs}}</strong> jobs available</p>
+                  </span>
+               </span>
+              </div>
+            </div>
+
+         </div>
+      </div>
+      </div>
+   </div>
+</div>
+
+<!------  Modal test limit ---------->
+   <div class="modal fade" id="TestLimitModal" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xs" role="document" style="width: 500px;">
+    <div class="modal-content test-limit-modal-box">
+      <div class="modal-header pb-0 test-limit-bg">
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h3>Oops!  Your free test limit for this skill has been exhausted. </h3>
+        <strong>Continue your learning, with our paid practice tests</strong>
+      </div>
+      <div class="modal-body">
+        <div class="col-sm-12">
+         <div class="test-limit-modal">
+               <strong>Benefits</strong>
+               <p>500+ questions</p>
+               <p>Real exam & Practice environment</p>
+               <p>Answers & Detailed Explanations</p>
+               <span class="flexbox mt-20 mb-30">
+                  <a class="blue_btn" id="viewPaidTest" href="{{object.product.get_absolute_url}}">View test</a>
+               </span>
+         </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!------  EndModal test limit ---------->
+
+<!------  Modal login ---------->
+   <div class="modal fade" data-keyboard="false" data-backdrop="static" id="leadCreationModal" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xs" role="document">
+    <div class="modal-content details-modal-box">
+      <div class="modal-header pb-0">
+         <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+          <!--<span aria-hidden="true">&times;</span>-->
+        <!--</button>-->
+        <h3 id="exampleModalLongTitle">Fill your details below</h3>
+      </div>
+      <div class="modal-body">
+        <div class="col-sm-7">
+         <form method = "post" id="leadCreationForm">
+            {% csrf_token %}
+            <div class="details-modal">
+               <div class="form-group">
+                  <input type="text" class="form-control" id="name" name="name" placeholder="   " value = "{{request.session.name}}"/>
+                  <label for="">Name</label>
+               </div>
+               <div class="form-group">
+                  <input type="text" class="form-control" id="email" name="email" value="{{request.session.email}}" placeholder="  "/>
+                  <label for="">Email</label>
+               </div>
+               <div class="form-group">
+                  <input type="text" class="form-control" id="number" name="number" value="{{request.session.mobile_no}}" placeholder="  "/>
+                  <label for="">Mobile</label>
+               </div>
+                 <input type="hidden" class="form-control" id="campaign" name="campaign" value="testprep" />
+                  <input type="hidden" class="form-control" id="lsource" name="lsource" value="1" />
+                 <input type="hidden" class="form-control" id="prd" name="prd" value="{{object.product.name}}" />
+                 <input type="hidden" class="form-control" id="leadScorePercent" name="msg" value="" />
+
+
+               <div class="form-group">
+                  <button class="blue_btn mr-20"  type="submit" id="leadCreationSubmit">Submit</button>
+               </div>
+            </div>
+         </form>
+        </div>
+        <div class="col-sm-5">
+         <div class="check-result">
+            <i><img src="{% static 'shinelearn/images/free_skill/details-list.png' %}" class="img-responsive"></i>
+            <p>Enter your details to check the Test result</p>
+         </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!------  EndModal login ---------->
+
+
+
+
+{% endblock main_container %}
+{% block js_section %}
+{{block.super}}
+<script src="{% static 'shinelearn/js/assessment/take_test.js' %}"></script>
+
+<script>
+var tKey = 'Test-' + '{{object.id}}',myStorage = window.localStorage,
+right=0,questionAttempt = null,total = {{questions_list.count}};
+
+$(document).ready(function() {
+
+    {% if not request.session.is_lead_created %}
+         {% if request.session.candidate_id %}
+             $('#leadCreationSubmit').click();
+         {% else %}
+             $("#leadCreationModal").modal('show');
+        {% endif %}
+        {% else %}
+        getCoptions();
+        {% endif %}
+
+            $.validator.addMethod("customemail",function(value, element) {
+            if($.trim(value)!= ''){
+                var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                return regex.test(value);
+            }
+            return true;
+    });
+
+
+$('#leadCreationForm').validate({
+  rules: {
+            name: {
+                required: true,
+                maxlength: 80,
+            },
+            number: {
+                required: true,
+                number: true,
+                minlength: 10,
+                maxlength: 10,
+            },
+            email: {
+                required: true,
+                email:true,
+                customemail:true,
+            }
+        },
+      highlight: function(element, errorClass) {
+            $(element).closest('.form-group').addClass('error');
+        },
+        unhighlight: function(element, errorClass) {
+            $(element).closest('.form-group').removeClass('error');
+            $(element).siblings('.error-txt').html('');
+        },
+        errorPlacement: function(error, element) {
+
+            $(element).siblings('.error-txt').html(error.text());
+
+},
+
+});
+
+
+});
+
+
+
+function getCoptions(){
+        questionAttempt = JSON.parse(myStorage.getItem(tKey));
+        if (questionAttempt != null) {
+            for (var id in Object.keys(questionAttempt)) {
+                if (Object.values(questionAttempt)[id] != "" && Object.keys(questionAttempt)[id] != "skippedQuestion") {
+
+                    $('#' + Object.values(questionAttempt)[id]).attr('checked',true);
+                }
+            }
+         }
+ $.ajax({
+         url   : '/api/v1/question/?test_id={{object.id}}',
+         type  : 'get',
+         success: function(response){
+         for(i of response){
+            $('#check'+i.question_options[0]).addClass('ans-right');
+            if(questionAttempt && Object.values(questionAttempt) && Object.values(questionAttempt).includes(i.question_options[0])){
+                  right+= 1 ;
+                     }
+                            }
+         if(questionAttempt){
+            for (i of Object.values(questionAttempt)){
+
+                if(! $("#check"+i).hasClass('ans-right')){
+                $("#check"+i).addClass('ans-wrong');
+                }
+
+
+            }
+            }
+
+              $('#correctMsg').text( right+ ' out of '+total+' correct answers ');
+              let scorePercent = (right/total)*100 ;
+              let scoreMessage = "";
+              $('#scoringPercent').text(scorePercent +"%");
+              $('#leadScorePercent').val('score is '+ scorePercent +" %");
+              ReCreateLead();
+              if(scorePercent >80){
+              scoreMessage =  ` Wow! Awesome Score.`;
+               $('#resultImage').attr("src","{% static 'shinelearn/images/free_skill/test-result-bg.png' %}");
+               $('#resultCourse').html('Take <a href= "{{object.course.get_absolute_url}}">{{object.course.name}} </a>to show off your skills to the recruiter');
+
+              }
+               else if(scorePercent <= 80 && scorePercent >=50){
+              scoreMessage =  ` Don’t worry! You are almost there.`;
+              $('#resultImage').attr("src","{% static 'shinelearn/images/free_skill/test-result-bg2.png' %}");
+              $('#resultCourse').html('Take our paid <a href= "{{object.product.get_absolute_url}}">{{object.product.name}} </a>to do better');
+
+              }
+               else{
+              $('#resultCourse').html('Take our paid <a href= "{{object.product.get_absolute_url}}">{{object.product.name}} </a>to do better');
+
+              scoreMessage =  ` Don’t panic! We ‘ve got you covered.`;
+                           $('#resultImage').attr("src","{% static 'shinelearn/images/free_skill/test-result-bg3.png' %}");
+
+              }
+              $('#resultRemark').html(scoreMessage);
+              if(questionAttempt && questionAttempt['testTime'+{{object.id}}]){
+              $('#timeTaken').text(secondsToMinutes(questionAttempt['testTime'+{{object.id}}]));
+              }else{
+               $('#timeTaken').text(secondsToMinutes({{object.duration}}));
+              }
+                 }
+    });
+
+
+
+}
+
+
+function secondsToMinutes(time){
+    return Math.floor(time / 60)+' Min:'+Math.floor(time % 60) +" Secs";
+}
+
+function reTestFunc(){
+ $.ajax({
+         url   : '/api/v1/remove-cache/',
+         type  : 'post',
+         data  : {'test_id':'{{object.id}}' }, // data to be submitted
+         success: function(response){
+         window.location.href = '/practice-tests/{{object.slug}}-test/'
+         }
+    });
+}
+
+
+function ReCreateLead(){
+if(flag){
+    var form = $('#leadCreationForm');
+    $.ajax({
+         url   : '/lead/lead-management/',
+         type  : 'post',
+         data  : form.serialize(), // data to be submitted
+         success: function(response){
+         }
+    });
+    return false;
+    }
+}
+
+
+$("#leadCreationForm").submit(function(e){
+flag=$('#leadCreationForm').valid();
+getCoptions();
+
+if(flag){
+    var form = $(this);
+    $.ajax({
+         url   : '/lead/lead-management/',
+         type  : 'post',
+         data  : form.serialize(), // data to be submitted
+         success: function(response){
+         }
+    });
+    testSession({'lead_created':true});
+
+    $('#leadCreationModal').modal('hide');
+    return false;
+}
+ });
+
+
+
+
+</script>
+
+{% endblock js_section %}
+{% block johukum %}
+{% endblock johukum %}
+{% block zendesk %}
+{% endblock zendesk %}

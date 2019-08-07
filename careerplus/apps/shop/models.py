@@ -407,6 +407,13 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
     def get_canonical_url(self):
         return self.get_absolute_url()
 
+    @property
+    def assessment_test(self):
+        return self.get_assessment_test()
+
+    def get_assessment_test(self):
+        return self.test_set.count()
+
 
     @classmethod
     def post_save_category(cls, sender, instance, **kwargs):
@@ -1183,6 +1190,11 @@ class Product(AbstractProduct, ModelMeta):
         return ''
 
 
+    @property
+    def absolute_url(self):
+        return self.get_url()
+
+
     def get_heading(self,no_cache=False):
         if self.is_course:
             return '%s ' % (
@@ -1594,8 +1606,9 @@ class Product(AbstractProduct, ModelMeta):
             return dd
         else:
             return ''
-
-
+    @property
+    def day_duration(self):
+        return self.get_duration_in_day()
 
     def get_duration_in_ddmmyy(self):
         if self.is_course:

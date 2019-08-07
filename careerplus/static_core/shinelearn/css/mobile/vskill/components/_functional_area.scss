@@ -1,0 +1,149 @@
+.functional_area {
+    display: flex;
+    flex-direction: column;
+
+    .functional_area_inside {
+        display: flex;
+        flex-direction: column;
+        border-left: solid 4px $prac-purple;
+        background: $bg-white;
+        box-shadow: $box-shadow-test;
+        border-radius: 4px;
+
+        margin: 10px 0 10px 30px;
+        align-items: start;
+
+        font-size: $font-size - 1;
+        position: relative;
+
+
+        &.border-0 {
+            border-left: solid 4px $prac-purple;
+        }
+
+        &.border-1 {
+            border-left: solid 4px $prac-sky;
+        }
+
+        &.border-2 {
+            border-left: solid 4px $prac-light_green;
+        }
+
+        &.border-3 {
+            border-left: solid 4px $prac-teal;
+        }
+
+        &.border-4 {
+            border-left: solid 4px $prac-pink;
+        }
+
+        &.border-5 {
+            border-left: solid 4px $prac-red;
+        }
+
+        &.border-6 {
+            border-left: solid 4px $prac-orange;
+        }
+
+        &.border-7 {
+            border-left: solid 4px $prac-yellow;
+        }
+
+        &.border-8 {
+            border-left: solid 4px $prac-cyan;
+        }
+
+
+        a {
+            display: flex;
+            width: 100%;
+            flex-direction: column;
+            padding: 10px 10px 10px 50px;
+            min-height: 100px;
+            justify-content: center;
+            color: $txt-grey-666;
+            &:hover {
+                box-shadow: 0 3px 24px 0 #DEE7F3;
+                background: $bg-white;
+            }
+
+        
+
+        .fa_name {
+            font-size: $font-size +3;
+            
+            font-weight: $font-weight ;
+            color: $txt-grey-333 !important;
+            margin-bottom: 5px;
+            line-height:$font-size +8; 
+           
+
+        }
+}
+
+        .icon {
+            background: url($practice-test) -10px -12px $bg-white;
+            box-shadow: $box-shadow-test;
+            width: 74px;
+            height: 74px;
+            border-radius: 50%;
+            position: absolute;
+            left: -40px;
+            top: 10%;
+
+
+            &.fa-17 { // Sales&Marketing
+                background-position: 3px -138px;
+            }
+
+            &.fa-19 { // Operations Management
+                background-position: 4px -324px;
+            }
+            
+            &.fa-20 { // Banking & Finance
+                background-position: 11px -259px;
+            }
+
+            &.fa-21 { // Personal Development
+                background-position: 4px -324px;
+            }
+
+            &.fa-22 {  // Information Technology
+                background-position: 3px -197px;
+            }
+
+            &.fa-23 { // Law
+                background-position: 4px -324px;
+            }
+
+            &.fa-25 { // Human Resources
+                background-position: 4px -324px;
+            }
+
+            &.fa-27 { // Management
+                background-position: 4px -324px;
+            }
+
+            &.fa-29 { // Mass Communication
+                background-position: 4px -324px;
+            }
+
+            &.fa-31 { // Others
+                background-position: 4px -324px;
+            }
+
+            &.fa-engineering { // Engineering
+                background-position: -41px 15px;
+            }
+
+            &.fa-testprep { // Testprep
+                background-position: -41px -53px;
+            }
+
+
+            &:hover {
+                box-shadow: 0 3px 14px 0 #BAD5F6, inset 0 1px 3px 0 #BAD5F6;
+            }
+        }
+    }
+}

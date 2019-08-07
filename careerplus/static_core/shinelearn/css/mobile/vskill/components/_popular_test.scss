@@ -1,0 +1,114 @@
+.popular_test {
+    display: flex;
+    flex-direction: column;
+    
+    .popular_test_inside {
+        background: $bg-white;
+        box-shadow: $box-shadow-test;
+        border-radius: 4px;
+        min-height: 95px;
+        margin: 10px 0;
+        
+        display: flex;
+       
+        a {
+            padding: 10px 15px 10px 20px;
+            color: $txt-grey-333;
+            width: 100%;
+            position: relative;
+
+            align-items: center;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        &.category {
+            position: relative;
+
+            a {
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: center;
+            }
+
+            .border {
+                position: absolute;
+                left: 0;
+
+            }
+
+            .test {
+                color: $txt-grey-666;
+                font-size: $font-size - 1;
+                padding-top: 5px;
+            }
+
+            .name {
+                display: block;
+                flex-basis: auto;
+                width: 100%;
+            }
+        }
+
+
+        .border {
+            width: 5px;
+            height: 45px;
+            position: absolute;
+            left: 0;
+
+            &.border0 {
+                background: $prac-purple;
+            }
+
+            &.border1 {
+                background: $prac-sky;
+            }
+
+            &.border2 {
+                background: $prac-light_green;
+            }
+
+            &.border3 {
+                background: $prac-blue;
+            }
+
+            &.border4 {
+                background: $prac-indigo;
+            }
+
+            &.border5 {
+                background: $prac-pink;
+            }
+
+            &.border6 {
+                background: $prac-sky;
+            }
+
+            &.border7 {
+                background: $prac-light_green;
+            }
+
+            &.border8 {
+                background: $prac-teal;
+            }
+
+            &.border9 {
+                background: $prac-cyan;
+            }
+
+
+        }
+
+        .name {
+            font-size: $font-size-md;
+            font-weight: $font-weight;
+            line-height: $font-size + 8;
+            display: flex;
+            flex-basis: 60%;
+        }
+
+    }
+
+
+}

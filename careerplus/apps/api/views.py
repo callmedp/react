@@ -3,10 +3,11 @@ import datetime
 
 import requests
 from decimal import Decimal
-
+from datetime import timedelta
 from django.db.models import Sum, Count, Subquery, OuterRef, F
 from django.utils import timezone
 from django.conf import settings
+from django.core.cache import cache
 from django.http import JsonResponse
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.views import APIView
@@ -16,7 +17,7 @@ from rest_framework.permissions import (
     IsAuthenticated,
     IsAdminUser, )
 
-from rest_framework.generics import ListAPIView, CreateAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView,RetrieveAPIView
 from rest_framework.authentication import SessionAuthentication
 from haystack import connections
 from haystack.query import SearchQuerySet
@@ -24,8 +25,6 @@ from core.library.haystack.query import SQS
 from partner.utils import CertiticateParser
 from partner.models import ProductSkill
 from rest_framework.generics import ListAPIView
-
-from rest_framework.generics import ListAPIView,RetrieveAPIView
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -57,7 +56,7 @@ from .serializers import (
     VendorCertificateSerializer,
     ImportCertificateSerializer,
     ShineDataFlowDataSerializer,
-    CertificateSerializer,TalentEconomySerializer,OrderDetailSerializer)
+    CertificateSerializer,TalentEconomySerializer,QuestionAnswerSerializer,OrderDetailSerializer)
 
 from partner.models import Certificate, Vendor
 from shared.rest_addons.pagination import LearningCustomPagination
@@ -71,6 +70,9 @@ from shared.utils import ShineCandidate
 from linkedin.autologin import AutoLogin
 from users.mixins import RegistrationLoginApi
 from .education_specialization import educ_list
+from assessment.models import Question
+from assessment.utils import TestCacheUtil
+
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
     authentication_classes = [OAuth2Authentication]
@@ -449,11 +451,11 @@ class EmailLTValueApiView(APIView):
 
         ltv_pks = list(Order.objects.filter(
             candidate_id=candidate_id,
-            status__in=[1, 2, 3]).values_list('pk', flat=True))
+            status__in=[1,2,3]).values_list('pk', flat=True))
         if ltv_pks:
             ltv_order_sum = Order.objects.filter(
                 pk__in=ltv_pks).aggregate(ltv_price=Sum('total_incl_tax'))
-            last_order = OrderItem.objects.select_related('order').filter(order__in=ltv_pks) \
+            last_order = OrderItem.objects.select_related('order').filter(order__in = ltv_pks)\
                 .exclude(oi_status=163).order_by('-order__payment_date').first()
             if last_order:
                 last_order = last_order.order.payment_date.strftime('%Y-%m-%d %H:%M:%S')
@@ -860,10 +862,10 @@ class ShineCandidateLoginAPIView(APIView):
         if not order_obj_list:
             return order_data
 
-        for order_obj in order_obj_list: 
+        for order_obj in order_obj_list:
             if product_found:
                 break
-                
+
             for item in order_obj.orderitems.all():
                 if item.product and item.product.type_flow == 17 and item.product.type_product == 2:
                     order_data = {"id":order_obj.id,
@@ -1236,6 +1238,18 @@ class ShineDataFlowDataApiView(ListAPIView):
     pagination_class = None
 
 
+class QuestionAnswerApiView(ListAPIView):
+    permission_classes = []
+    authentication_classes = []
+    serializer_class = QuestionAnswerSerializer
+    pagination_class = None
+
+    def get_queryset(self):
+        id = self.request.GET.get('test_id')
+        if not id:
+            return Question.objects.none()
+        return Question.objects.filter(test__id=id)
+
 class VendorCertificateMappingApiView(ListAPIView):
     authentication_classes = [OAuth2Authentication]
     permission_classes = [IsAuthenticated]
@@ -1365,7 +1379,7 @@ class OrderDetailApiView(FieldFilterMixin,RetrieveAPIView):
     authentication_classes = [SessionAuthentication]
     serializer_class = OrderDetailSerializer
     queryset = Order.objects.all()
-    
+
     def get(self, request, *args, **kwargs):
         instance = self.get_object()
         user = self.request.user
@@ -1391,3 +1405,100 @@ class CandidateInsight(APIView):
             "msg": "Data has been noted."},
             status=status.HTTP_201_CREATED
         )
+
+class TestTimer(APIView):
+    permission_classes = []
+    authentication_classes = []
+
+
+    def get(self,request, *args, **kwargs):
+        test_id = self.request.GET.get('test_id')
+        duration = int(self.request.GET.get('duration',0))
+        self.cache_test = TestCacheUtil(request=request)
+        test_start_time = self.cache_test.get_start_test_cache(key='test-'+test_id)
+        set_test_duration_cache = self.cache_test.get_test_duration_cache(key='test-'+test_id, duration=duration)
+        #
+        # if not timestamp:
+        #     timestamp_with_tduration = (datetime.now() + timedelta(seconds=duration)).strftime(timeformat)
+        #     test_ids = {'ongoing_' + str(test_id): timestamp_with_tduration}
+        #     cache.set(test_session_key, test_ids, 60 * 60 * 24)
+        #
+        # elif timestamp and not timestamp.get('ongoing_' + str(test_id)):
+        #     timestamp_with_tduration = (datetime.now() + timedelta(seconds=duration)).strftime(
+        #         "%m/%d/%Y, %H:%M:%S")
+        #     test_ids = {'ongoing_' + str(test_id): timestamp_with_tduration}
+        #     cache.set(test_session_key, test_ids, 60 * 60 * 24)
+        #
+        # if not cache.get(session_id + 'startTest-' + str(test_id)):
+        #     cache.set(session_id + 'startTest-' + str(test_id), datetime.now().strftime(timeformat),
+        #               60 * 60 * 24)
+        return Response({'testStartTime': test_start_time})
+
+
+class SetSession(APIView):
+    permission_classes = []
+    authentication_classes = []
+
+    def post(self,request,*args,**kwargs):
+        self.cache_test = TestCacheUtil(request=request)
+        session_id = self.request.session.session_key
+        data = {}
+        key = None
+        if not session_id:
+            data.update({'is_set': False})
+            return Response(data)
+        timeout = self.request.POST.get('timeout','')
+        submission = self.request.POST.get('submit','')
+        test_id = self.request.POST.get('test_id','')
+        lead_create = self.request.POST.get('lead_created','')
+        key = 'test-' + str(test_id)
+        # setting cache for timeout test sessions
+        if timeout and test_id:
+            self.cache_test.set_test_time_out(key)
+            data.update({'is_set': True})
+
+        # setting cache for submit test sessions
+
+        if submission and test_id:
+            key = 'test-' + test_id
+            self.cache_test.set_test_submit(key)
+            data.update({'is_set': True})
+
+        # creating lead for particular session_id
+        if lead_create:
+            self.request.session.update({'is_lead_created': 1})
+            return Response({'is_lead_created':True})
+
+        return Response({'timeout': self.cache_test.get_test_time_out(key),
+                         'submission': self.cache_test.get_test_submit(key)})
+
+class RemoveCache(APIView):
+    permission_classes = []
+    authentication_classes = []
+
+    def post(self,request,*args,**kwargs):
+        test_id = self.request.POST.get('test_id','')
+        session_key = self.request.session.session_key
+        key = session_key+'test-'+test_id
+        cache_delete = cache.delete(key)
+        return Response({'cache_delete': cache_delete})
+
+
+class ServerTimeAPIView(APIView):
+    permission_classes = []
+    authentication_classes = []
+
+    def get(self,request,*args,**kwargs):
+        self.time_format = "%m/%d/%Y, %H:%M:%S"
+        if self.request.GET.get('time_format'):
+            return Response({'time':datetime.datetime.now().strftime(self.request.GET.get('time_format'))})
+        if self.request.GET.get('time_stamp'):
+            return Response({'time': datetime.datetime.timestamp(datetime.datetime.now())})
+        return Response({'time':datetime.datetime.now().strftime(self.time_format)})
+
+
+
+
+
+
+
