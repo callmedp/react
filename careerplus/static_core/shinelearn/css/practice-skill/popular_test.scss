@@ -7,8 +7,8 @@ h2 {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    margin-top: 40px;
-    margin-bottom: 40px;
+    margin-top: 15px;
+    margin-bottom: 15px;
     flex-wrap: wrap;
 
 
@@ -22,7 +22,7 @@ h2 {
         box-shadow: $box-shadow;
         align-items: center;
         width: 22.4%;
-        min-height: 75px;
+        min-height: 100px;
         display: flex;
         position: relative;
         font-weight: $font-weight + 100;
@@ -135,6 +135,7 @@ h2 {
 
     .testinside-inner {
         box-shadow: $box-shadow;
+        margin-top: 0;
 
         &:hover {
             box-shadow: 0 3px 20px 0 #DEE7F3;
@@ -480,11 +481,12 @@ h2 {
     }
 
     h3 {
-        font-size: $font-size+9;
+        font-size: $font-size+7;
         color: $primary-color;
         margin: 0;
         flex: 1;
         display: flex;
+        line-height: 24px;
     }
 
     .test-paper-count {
@@ -821,6 +823,7 @@ h2 {
 .details-modal-box {
     overflow: hidden;
     background: $white-color;
+    margin-top: 20%;
 
     .modal-header {
         border-bottom: none;
@@ -920,6 +923,7 @@ h2 {
         font-size: $font-size+5;
         color: $primary-color;
         line-height: 22px;
+        padding: 0 12%;
     }
 }
 
@@ -1164,4 +1168,49 @@ h2 {
 
 input[type="button"] {
  outline: none;
+}
+
+.modal-open #testModal .close {
+    font-size: $font-size+14;
+    font-weight: $font-weight+100;
+}
+
+#testanswer {
+    li {
+        .custom-radio {
+            cursor: default;
+            .checkmark {
+              position: absolute;
+              top: 0;
+              left: 0;
+              bottom: 0;
+              margin: auto;
+              height: 8px;
+              width: 8px;
+              background-color: #c9c9c9;
+              border: 1px solid #c9c9c9;
+              border-radius: 100%;
+            }
+        }
+
+        .custom-radio input:checked ~ .checkmark {
+          background-color: #c9c9c9;
+          border: 1px solid #c9c9c9;
+          /*width: 9px;
+          height: 9px;*/
+        }
+
+        .custom-radio .checkmark:after {
+            top: 0;
+            left: -1px;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            width: 9px;
+            height: 9px;
+            border-radius: 100%;
+            background: transparent;
+            border: 1px solid transparent;
+        }
+    }
 }
