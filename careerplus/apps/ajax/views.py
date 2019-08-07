@@ -928,6 +928,8 @@ class ProductCopyAPIView(View):
                 self.create_relation_m2m(skill, product_screen_copy_obj)
             for chap in product_screen_obj.chapter_product.all():
                 self.create_relation_m2m(chap, product_screen_copy_obj)
+            product_screen_copy_obj.product = None
+            product_screen_copy_obj.save()
             return HttpResponse(json.dumps({'status': 1,'id': product_screen_copy_obj.id}), content_type="application/json")
         return HttpResponse(json.dumps({'status': 0}), content_type="application/json")
 
