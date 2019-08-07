@@ -300,7 +300,6 @@ class Order(AbstractAutoDate):
             manually_generate_autologin_url(assesment_items=assesment_items)
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_neo_item():
             neo_items_id = list(self.orderitems.filter(
-                order__status__in=[1],
                 product__vendor__slug='neo',
                 no_process=False
             ).values_list('id', flat=True))
