@@ -1,8 +1,10 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, ValidationError
 from rest_framework import serializers
 from shop.models import Product, PracticeTestInfo
 from shared.rest_addons.mixins import SerializerFieldsMixin
 from django.core.cache import cache
+
+
 class ProductListSerializerForAuditHistory(SerializerFieldsMixin, ModelSerializer):
 
     class Meta:
@@ -25,9 +27,14 @@ class PracticeTestInfoCreateSerializer(ModelSerializer):
             cache.set('{}_neo_email_done'.format(session_id), test_info.email, 3600 * 24 * 30)
             print(cache.get('{}_neo_email_done'.format(session_id)))
 
+    def clean_email(self, email ):
+        if not email[0].isalnum():
+            raise ValidationError(
+                'Email cannot start without an alphanumeric character, Enter valid email id.')
 
 
     def create(self, validated_data):
+        self.clean_email(validated_data.get('email'))
         test_info = PracticeTestInfo.objects.filter(
             email=validated_data.get('email', None), order_item=None
         ).first()
