@@ -28,5 +28,6 @@ PAYMENT_MODE = (
     (10, 'Net Banking'),
     (11, 'Paid Free'),
     (12, "EPAYLATER"),
-    (13, "PAYU")
+    (13, "PAYU"),
+    (14, "Zest Money")
 )
