@@ -13,7 +13,7 @@ from django.utils.decorators import method_decorator
 from django.template.response import TemplateResponse
 from django.conf import settings
 from users.forms import (
-    PasswordResetRequestForm,)
+    PasswordResetRequestForm, )
 
 from shine.core import ShineCandidateDetail
 from shop.models import Product, ProductClass
@@ -26,11 +26,9 @@ from search.helpers import get_recommendations
 from cart.tasks import cart_drop_out_mail, create_lead_on_crm
 from django.db.models import Q
 
-
 from .models import Cart
 from .mixins import CartMixin
 from .forms import ShippingDetailUpdateForm
-
 
 
 @Decorate(stop_browser_cache())
@@ -673,4 +671,3 @@ class UpdateDeliveryType(View, CartMixin):
                 })
 
         return HttpResponse(json.dumps(data), content_type="application/json")
-

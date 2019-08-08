@@ -1121,7 +1121,7 @@ class ShineCandidateLoginAPIView(APIView):
         email = request.data.get('email')
         password = request.data.get('password')
         alt = request.data.get('alt')
-        with_info = request.data.get('withInfo', False)
+        with_info = request.data.get('withInfo', True)
 
         if alt:
             return self._dispatch_via_autologin(alt, with_info)

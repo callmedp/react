@@ -52,6 +52,8 @@ const handleLoginCandidate = async () => {
         return obj;
     }, {});
 
+    formData['withInfo'] = false;
+
     // delete csrf token as we don't need it while login through drf api.
     if (formData['csrfmiddlewaretoken']) delete formData['csrfmiddlewaretoken'];
 
@@ -70,6 +72,7 @@ const handleLoginCandidate = async () => {
 
     const result = await handleResponse(loginResponse)
 
+    console.log('---result---', result);
     if (result['error']) {
         // Todo ***** error handling  *****
         $('#invalid-cred').show().delay(5000).fadeOut()
