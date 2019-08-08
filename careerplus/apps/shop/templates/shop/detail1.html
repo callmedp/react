@@ -206,7 +206,7 @@ function check_for_load_test(data){
       if(data['has_completed']){
         //pass
         $(".neo-enroll-button").each(function(){
-          $(this).text('Buy Now');
+          $(this).attr("data-neotest", '0')
           $(this).attr('id', 'add-to-cart');
         });
 
@@ -242,8 +242,8 @@ function update_test_info(email){
         success: function(data, textStatus, jqXHR) {
           if(data['status'] == 'done'){
             $(".neo-enroll-button").each(function(){
+              $(this).attr("data-neotest", '0')
               $(this).attr('id', 'add-to-cart');
-              $(this).text('Buy Now');
             })
               var ifrm = document.getElementById('iframe');
               var doc = ifrm.contentDocument? ifrm.contentDocument: ifrm.contentWindow.document;
@@ -365,8 +365,8 @@ $('#take-test_button').click(function(){
   });
 
 $('.neo-enroll-button').click(function(){
-    var text = $(this).text()
-    if(text=='Enroll now') {
+    neotest = $(this).attr("data-neotest")
+    if(neotest=='1') {
         $('#neo-info-modal').modal({
             backdrop: 'static',
             keyboard: false
@@ -403,7 +403,6 @@ $('iframe').load(function(){
     });
 
     $(doc).on('click', "#neobackhomebutton", function(){
-      $('#neo-test-modal').modal('hide');
       $('#add-to-cart').trigger('click');
     })
 });
