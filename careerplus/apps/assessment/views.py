@@ -30,8 +30,8 @@ class VskillTestView(DetailView):
         parent_category = category.get_parent().first() if category.get_parent() else None
         if parent_category:
             breadcrumbs.append({"url": '/practice-tests/' + parent_category.slug, "name": parent_category.name})
-        breadcrumbs.append({"url": '/practice-tests/' + category.slug, "name": category.name})
-        breadcrumbs.append({"url": '/practice-tests', "name": 'test'})
+        breadcrumbs.append({"url": '/practice-tests/' + category.slug +'/sub', "name": category.name})
+        breadcrumbs.append({"url": None, "name": 'test'})
         return breadcrumbs
 
 
