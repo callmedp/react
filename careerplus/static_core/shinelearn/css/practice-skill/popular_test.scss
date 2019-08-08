@@ -296,6 +296,8 @@ h2 {
         font-size: $font-size+9;
         font-weight: $font-weight+300;
         color: $anchor-color;
+        max-width: 305px;
+        word-break: break-word;
     }
 
     ul {
