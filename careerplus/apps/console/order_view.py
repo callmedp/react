@@ -3045,7 +3045,6 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
                     q_objects |= Q(orderitemoperation__oi_status=1, orderitemoperation__created__range=[d, d + relativedelta.relativedelta(days=1)])
             queryset = queryset.filter(q_objects)
         if self.sort_payment_date and int(self.sort_payment_date):
-            print(self.sort_payment_date)
             queryset = queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-order__payment_date')
         else:
             queryset = queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-pending_links_count')
@@ -3224,12 +3223,22 @@ class CertficationProductQueueView(PaginationMixin, ListView):
     def get_queryset(self):
         queryset = super(CertficationProductQueueView, self).get_queryset()
         queryset = queryset.filter(
-            order__status__in=[1, 3],
-            product__type_flow=16, no_process=False,
-            oi_status__in=[5, 4],
-            product__sub_type_flow__in=[1601, 1602],
-            order__welcome_call_done=True).exclude(
-            wc_sub_cat__in=[64, 65])
+            Q(
+                order__status__in=[1, 3],
+                product__type_flow=16, no_process=False,
+                oi_status__in=[5, 4],
+                product__sub_type_flow__in=[1601, 1602],
+                order__welcome_call_done=True)|
+            Q(
+                order__status__in=[1, 3],
+                product__type_flow=2, no_process=False,
+                oi_status__in=[5, 4],
+                product__vendor__slug='neo',
+                order__welcome_call_done=True
+            )
+        ).exclude(
+                wc_sub_cat__in=[64, 65]
+        )
 
         if self.query:
             if self.sel_opt == 'number':

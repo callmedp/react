@@ -18,6 +18,15 @@
 /* Assessment  */
 @import '../components/assessment';
 
+/* Neo  */
+@import '../components/neo';
+
+/* Animation input   */
+@import '../components/animatio-input';
+@import '../components/form-controls';
+@import '../components/phone';
+@import '../components/error-form';
+
 
 .detail-wrap {
 	position: relative;
@@ -149,7 +158,7 @@
 	}
 
 	.e-payLatter {
-		padding: 10px;
+		padding: 10px 10px 0;
 		width: 100%;
 		font-size: 12px;
 		text-align: left;
@@ -225,6 +234,11 @@
 			@include box (75px, 75px, inline-block);
 			background-color: $bg-blue;
 			position: relative;
+		}
+
+		p {
+			width: 60%;
+			margin: 0 auto;
 		}
 
 	}
@@ -345,3 +359,19 @@
  		font-weight: 600;
  	}
  }
+
+
+ .iframe-container {
+    position: relative;
+    overflow: hidden;
+	padding-top: 56.25%;
+	
+	iframe {
+		position: absolute;
+		  top: 0;
+		  left: 0;
+		  width: 100%;
+		  height: 100%;
+		  border: 0;
+	  }
+}

@@ -1,0 +1,160 @@
+.functional_test {
+
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+
+
+
+
+    .functional_test_inside {
+        display: flex;
+        width: 22.4%;
+        box-shadow: $box-shadow;
+        border-radius: 4px;
+        font-size: 16px;
+        font-weight: $font-weight + 300;
+        border-top: solid 4px $green;
+        margin: 50px 15px 20px 15px;
+        position: relative;
+        justify-content: center;
+        align-content: center;
+
+        @media (max-width: 1190px) {
+            width: 21.9%;
+        }
+
+
+        &.border-0 {
+            border-top: solid 4px $purple;
+        }
+
+        &.border-1 {
+            border-top: solid 4px $orange;
+        }
+
+        &.border-2 {
+            border-top: solid 4px $olive;
+        }
+
+        &.border-3 {
+            border-top: solid 4px $beige;
+        }
+
+        &.border-4 {
+            border-top: solid 4px $pink;
+        }
+
+        &.border-5 {
+            border-top: solid 4px $mint;
+        }
+
+        &.border-6 {
+            border-top: solid 4px $grey;
+        }
+           &.border-7 {
+            border-top: solid 4px $purple;
+        }
+
+   &.border-8 {
+         border-top: solid 4px $olive;
+            }
+
+
+
+        a {
+            display: flex;
+            width: 100%;
+            align-content: center;
+            justify-content: center;
+            color: $text-333;
+              padding: 50px 15px  30px;
+               overflow-wrap:break-word;
+
+
+
+
+
+
+
+
+            &:hover {
+                box-shadow: 0 3px 24px 0 #DEE7F3;
+                background: $white-bg;
+                color: $p-blue;
+            }
+
+
+        }
+    }
+
+    span {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        margin: 5px 0;
+        align-items: center;
+        position: absolute;
+        top: -37%;
+        left: 35%;
+        box-shadow: 0 3px 14px 0 rgba(213, 213, 213, 0.50);
+        background: $sprite-freeskill $white-bg;
+
+        &.span-0 {
+            background-position: 0px -161px;
+        }
+
+        &.span-1 {
+            background-position: 2px -214px;
+        }
+
+        &.span-2 {
+            background-position: -2px -281px;
+        }
+
+        &.span-3 {
+            background-position: -3px -343px;
+        }
+
+        &.span-4 {
+            background-position: -7px -408px;
+        }
+
+        &.span-5 {
+            background-position: -6px -651px;
+        }
+
+        &.span-6 {
+            background-position: -11px -461px;
+        }
+
+        &.span-7 {
+            background-position: -14px -520px;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        &:hover {
+
+            /*box-shadow: 0 3px 14px 0 #BAD5F6, inset 0 1px 3px 0 #BAD5F6;*/
+
+        }
+
+    }
+
+
+
+
+}

@@ -57,17 +57,21 @@
 }
 
 .social-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   a {
-    @include size (55px, 40px, inline-block);
+    @include size (55px, 40px, flex);
     border-radius: $global-radius;
     border-width: 1px;
     border-style: solid;
     position: relative;
     margin: 0 7px;
 
-    sup {
-      
-    }
+    justify-content: center;
+    align-items: center;
+
   }
 
   .fb {

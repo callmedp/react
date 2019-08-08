@@ -1,0 +1,558 @@
+{% extends "mobile/basic/base.html" %}
+{% load static compress %}
+{% load static thumbnail compress %}
+{% block title %}Shine learning{% endblock %}
+{% block css_section %}
+{{ block.super }}
+{% compress css %}
+<link type="text/scss" href="{% static 'shinelearn/css/mobile/vskill/practice_tests.scss' %}" rel="stylesheet">
+<link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
+<link type="text/css" href="{% static 'shinelearn/css/common/mobile/typeaheadjs.css' %}" rel="stylesheet">
+{% endcompress %}
+{% endblock css_section %}
+{% block canonical_url %}
+<link rel="canonical" href="//{{ SITE_DOMAIN }}/">
+{% endblock canonical_url %}
+{% block django_meta %}
+{% include 'meta/meta.html' %}
+{% endblock django_meta %}
+{% block header %}
+{% endblock header %}
+
+{% block container %}
+<div class="body-wrapper practice-test ">
+    <div class="practice-test-inside"></div>
+
+    <h1>{{object.title}}</h1>
+    <div class="bread-crums">
+        {% for bread in breadcrumbs %}
+                  {% if bread.url %}
+            <a href='{{bread.url}}'>{{bread.name}} </a>-
+
+            {% else %}
+          <a href="#">{{bread.name}}</a>
+            {% endif %}
+
+        {% endfor %}
+    </div>
+
+    <div class="row question-timer">
+        <div class="question-timer--wrap" >
+            <div class="question-timer__score-wrap">
+                <span class="question-timer__score-wrap--score" id="activeQuestion">1</span>
+                <span>/{{questions_list.count}}</span>
+            </div>
+    
+            <div class="question-timer--score-text">Time left</div>
+            <div class="question-timer__count-down" id="timeTest">
+                <div class="question-timer__count-down--time">
+                    <span id="testRemanMinutes"></span>
+                    <small>MINUTES</small>
+                </div>
+                <span>:</span>
+                <div class="question-timer__count-down--time">
+                    <span id="testRemanSeconds"></span>
+                    <small>SECONDS</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-timer__question-count">
+            <ul>
+              {% for quest in questions_list|slice:"7" %}
+            <li class="marked" id="markedquestion-{{forloop.counter}}" data-attr-value="{{forloop.counter}}">{{forloop.counter}}</li>
+                {% endfor %}
+            </ul>
+            {% if questions_list.count >= 7 %}
+            <div id="more_question">
+                <ul>
+                    {% for quest in questions_list %}
+                    {% if forloop.counter > 7%}
+                        <li class="marked" id="markedquestion-{{forloop.counter}}" data-attr-value="{{forloop.counter}}">{{forloop.counter}}</li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            <div class="pt-sprite icon-open-aarow" id="btn-more-question"></div>
+        </div>
+
+    </div><!-- /. question-timer -->
+
+    <div class="take-test">
+        <ol>
+        {% for quest in questions_list %}
+            <li class="take-test__wrap test-paper {% if forloop.counter == 1 %} actived {% else %}inactive{% endif %}" id="question-{{forloop.counter}}">
+                <h2 class="fs-16 d-flex"><span class="take-test__wrap--count">{{forloop.counter}}</span>{{quest.question_text}}</h2>
+                <ul>
+                    {% for ans in quest.options %}
+                    <li>
+                        <input type="radio" name="radio" value="test" id="{{ans.option_id}}">
+                        <label for="{{ans.option_id}}">{{ans.option}}</label>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+        </ol>
+        
+        <div class="btn btn-round-30 btn-blue w-100" id="nextQuestionBtn" onclick="nextquestion('1');">
+            Next question 
+            <span class="pt-sprite icon-arrow"></span>
+        </div>
+        <div class="take-test--button-wrap mt-15">
+            <span class="btn btn-outline btn-round-30" id="skipBtn" onclick="skipQuestion();">Skip</span>
+            <span class="btn btn-outline btn-round-30" onclick="submitTest();">Submit</span>
+        </div>
+    </div>
+
+    <div class="feature-test">
+        <h2 href="{{object.product.get_absolute_url}}" id="productName" > {{object.product.name}}</h2>
+        <div class="feature-test--price">
+            <strong id="productPrice">Rs. {{object.product.inr_price}}</strong>
+            <span class="stirke-through" id="fakeProductPrice"></span>
+        </div>
+
+        <div class="feature-test__benefits">
+            <p><strong>Benefits</strong></p>
+            <ul class="blue-bullet">
+                <li><span></span>500+ questions</li>
+                <li><span></span>Real exam & Practice environment
+                </li>
+                <li><span></span>Answers & Detailed Explanations</li>
+            </ul>
+
+            <div class="feature-test__btn-wrap">
+                <button class="btn btn-round-30 btn-yellow w-50" onclick="updateToCart('{{object.product.id}}')">Add to cart</button>
+            </div>
+
+        </div>
+    </div><!-- /. feature-test -->
+</div><!-- Practice test -->
+
+
+<div class="modal">
+    <span class="close-big close">+</span>
+    <div class="modal-content">
+       <div class="view-test">
+           <span class="overlay"></span>
+           <div class="view-test__content">
+            <h2>Oops!  Your free test limit for this skill has been exhausted.</h2>
+            <h3>Continue your learning, with our paid practice tests</h3>
+           </div>
+        <img src="{% static 'shinelearn/images/mobile/practice_test/view-test.png' %}" class="img-responsive"/>
+       </div>
+
+       <div class="p-15">
+           <p><strong>Benefits</strong></p>
+           <ul class="blue-bullet">
+                <li><span></span>500+ questions</li>
+                <li><span></span>Real exam & Practice environment
+                </li>
+                <li><span></span>Answers & Detailed Explanations</li>
+            </ul>
+            <a class="btn btn-round-30 btn-blue btn-lg mt-20" href="{{object.product.get_absolute_url}}" >View test</a>
+       </div>
+    </div>
+</div><!-- /. modal -->
+
+<!-- Are you sure! modal -->
+<div class="modal open" id="submitPermissionModal">
+    <span class="close-big">+</span>
+    <div class="modal-content">
+        <div class="sure text-center">
+            <span class="sure__icon-wrap mb-20">
+                <img src="{% static 'shinelearn/images/mobile/practice_test/shopping-list.svg' %}">
+            </span>
+
+            <p class="fs-20 pb-0"><strong>Are you sure!</strong></p>
+            <p class="fs-16">You want to submit the test?</p>
+            <div class="sure--btn-warp">
+            <button class="btn btn-slg btn-round-30 btn-blue btn-lg mt-20" onclick="submitTestFinal();">Submit</button>
+            <button class="btn btn-slg btn-round-30 btn-outline btn-lg mt-20 close" >Cancel</button>
+            </div>
+            
+        </div>
+    </div>
+</div><!-- /. Are you sure! modal -->
+
+<div class="practice-test check-result-wrap" id="check_results">
+    <div class="practice-test-inside"></div>
+    <h1>Check result</h1>
+    <div class="check-result mt-15">
+        <p class="fs-18">Enter your details to check the Test result</p>
+        <ul class="mt-10">
+            <li class="check-result__item input-effect error">
+                <span class="error-message">Required</span>
+                <input type="text" class="form-control" id="name" aria-describedby="name" placeholder="">
+                <label for="name">Name</label>
+            </li>
+            <li class="check-result__item input-effect">
+                <input type="email" class="form-control" id="email" aria-describedby="email" placeholder="">
+                <label for="email">Email</label>
+            </li>
+            <li class="check-result__item input-effect">
+                <input type="tel" class="form-control" id="mobile" aria-describedby="mobile" placeholder="">
+                <label for="mobile">Mobile</label>
+            </li>
+            <li class="mt-40 mb-20">
+                <!-- <button class="btn btn-round-30 btn-blue w-100">Submit</button> -->
+                <a href="result/" class="btn btn-round-30 btn-blue w-100">Submit</a>
+            </li>
+        </ul>
+    </div><!-- Check Result -->
+</div>
+
+<!-- loading start here -->
+<div class="loading" id="loading-test">
+    <div class="loading--content">
+        <img src="{% static 'shinelearn/images/test-loading.gif' %}"/>
+        <p>Loading...<br />Please wait!</p>
+    </div>
+</div>
+<!-- loading ends here -->
+<!--TIMEOUT DIV -->
+<div class="modal" id="timeOutModal" style="display:none">
+    <span class="close-big" id="close">+</span>
+    <div class="modal-content">
+       <div class="time-out">
+           <span class="time-out--circle">
+                <img src="{% static 'shinelearn/images/mobile/practice_test/out-of-time.png' %}"/>
+           </span>
+
+           <div class="text-center">
+            <h2>TimeOut!</h2>
+            <p>You will be redirecting to result page,<br/>
+             Please wait...</p>
+           </div>
+       </div>
+    </div>
+
+
+</div><!-- /. modal -->
+
+<!-- END TIMEOUT DIV -->
+
+
+{% endblock container %}
+{% block js_section %}
+{{block.super}}
+<script src="{% static 'shinelearn/js/assessment/take_test.js' %}"></script>
+
+<script>
+// JavaScript for label effects only
+	$(window).load(function(){
+		$(".check-result__item input").val("");
+
+		$(".input-effect input").focusout(function(){
+			if($(this).val() != ""){
+				$(this).addClass("has-content");
+			}else{
+				$(this).removeClass("has-content");
+			}
+		})
+    });
+
+    $("#btn_check_result").click(function(){
+     $("#check_results").addClass("open");
+    });
+
+    $(".close").click(function(){
+     $("#submitPermissionModal").removeClass("show");
+    });
+
+    // $('#btn-more-question').click(function(){
+    //     $('#more_question').toggleClass('open');
+    // });
+
+
+    $(function()
+    {
+        $("#btn-more-question").click(function()
+        {
+            $("#more_question").slideToggle();
+            return false;
+        });
+    });
+
+
+    $('#btn-more-question').click(function(){
+        $('#btn-more-question').toggleClass('icon-close-aarow');
+    });
+
+function getSystemTime(){
+let resp = NaN;
+  $.ajax({
+     url   : '/api/v1/get-server-time',
+     data  : {'time_format': '%m/%d/%Y, %H:%M:%S'},
+     type  : 'get',
+      async: false,
+     success: function(response){
+        resp= response.time;
+     }
+});
+return resp;
+}
+
+</script>
+<script>
+$('#timeTest').ready(function() {
+        $.ajax({
+         url   : '/api/v1/get-set-time/?test_id={{object.id}}&duration={{object.duration}}',
+         type  : 'get',
+         success: function(response){
+         startTestTime = new Date(response.testStartTime);
+         endTestTime = new Date(response.testStartTime);
+        endTestTime.setSeconds(endTestTime.getSeconds() + {{object.duration}});
+        if (endTestTime > new Date(getSystemTime())){
+           startTimer(Math.floor((endTestTime.getTime() - new Date(getSystemTime()).getTime())/1000));
+            $("#loading-test").hide();
+            $("body").removeClass("overflow-hidden");
+        }
+        else{
+           window.location.href = '/practice-tests/{{object.slug}}/result/';
+           $("#loading-test").show();
+           $("body").addClass("overflow-hidden");
+        }
+            return false;
+         }
+    });
+
+});
+</script>
+<script type="text/javascript">
+let page_number = 2, questionAttempt = {},
+maxCounter = parseInt({{questions_list.count}}),
+activeTab = 1,
+tKey = 'Test-' + '{{object.id}}',myStorage = window.localStorage,
+sec =0,testSec = 0,testMin =0,interval=0,testSubmission= false,
+delAns = {% if delete_ans %}true{% else %}false{% endif %},
+startTestTime = NaN,endTestTime = NaN,timeout =NaN,skippedQuest =[] ;
+
+$(document).ready(function() {
+
+    // removes local storage
+    if (delAns) {
+        myStorage.removeItem(tKey);
+    }
+    else {
+        questionAttempt = JSON.parse(myStorage.getItem(tKey));
+        if (questionAttempt != null) {
+        testSubmission = questionAttempt['testSubmission' + {{object.id}}];
+         skippedQuest =  questionAttempt['skippedQuestion'];
+
+        if (testSubmission == true) {
+
+            window.location.href = '/practice-tests/{{object.slug}}/result/';
+        }
+
+            for (var id in Object.keys(questionAttempt)) {
+             if (Object.values(questionAttempt)[id] != "" && Object.keys(questionAttempt)[id] != "skippedQuestion") {
+                    $('#' + Object.values(questionAttempt)[id]).click();
+                    $('#marked' + Object.keys(questionAttempt)[id]).removeClass();
+                    $('#marked' + Object.keys(questionAttempt)[id]).addClass('dirt');
+                }
+                 else if(Object.keys(questionAttempt)[id] == "skippedQuestion"){
+                  for(i of Object.values(questionAttempt)[id]){
+                  $(i).addClass('skipped');
+                  }
+                }
+            }
+            $('#' + questionAttempt['question-' + activeTab]).prop("checked", true);
+            $('#markedquestion-' + activeTab).addClass('active');
+
+
+        } else {
+            questionAttempt = {};
+        }
+    }
+    delAns =false;
+                $('#markedquestion-' + activeTab).addClass('active');
+
+
+});
+
+
+$('.marked').click(function() {
+    let value = parseInt(this.dataset.attrValue);
+    activeTab = value;
+    if (questionAttempt['question-' + activeTab]) {
+        $('#' + questionAttempt['question-' + activeTab]).prop("checked", true);
+    }
+    $('.test-paper').addClass('inactive');
+    $('.test-paper').removeClass('actived');
+    $('#question-' + value).removeClass('inactive');
+    $('#question-' + value).addClass('actived');
+    $('.active').removeClass('active');
+    $('#markedquestion-' + activeTab).addClass('active');
+            $('#activeQuestion').text(activeTab);
+         if(activeTab >=8){
+        $('#more_question').show();
+         $('#btn-more-question').addClass('icon-close-aarow')
+        }
+        else{
+                $('#more_question').hide();
+                 $('#btn-more-question').removeClass('icon-close-aarow')
+
+        }
+
+    if (activeTab >= maxCounter) {
+        $('#nextQuestionBtn').hide();
+        $('#skipBtn').text('Clear');
+
+    } else {
+
+        $('#nextQuestionBtn').show();
+               $('#skipBtn').text('Skip');
+    }
+});
+
+
+function nextquestion(number) {
+    if (activeTab < maxCounter && number > 0) {
+        $('#question-' + activeTab).removeClass("actived");
+        $('.test-paper').addClass('inactive');
+
+        activeTab = parseInt(activeTab) + parseInt(number);
+        if (questionAttempt['question-' + activeTab]) {
+            $('#' + questionAttempt['question-' + activeTab]).prop("checked", true);
+        }
+        $('#question-' + activeTab).removeClass('inactive');
+        $('#question-' + activeTab).addClass('actived');
+            if(activeTab >=8){
+        $('#more_question').show();
+        $('#btn-more-question').addClass('icon-close-aarow')
+        }
+        else{
+         $('#btn-more-question').removeClass('icon-close-aarow')
+
+        }
+
+        if (activeTab >= maxCounter) {
+        $('#nextQuestionBtn').hide();
+        $('#skipBtn').text('Clear');
+        } else {
+
+      $('#skipBtn').text('Skip');
+        }
+        $('#activeQuestion').text(activeTab);
+         $('.active').removeClass('active');
+            $('#markedquestion-' + activeTab).addClass('active');
+
+    }
+}
+
+$('input[name="radio"]').on("click", function(e) {
+if (!timeout){
+    let quest_id = $(e.target).closest(".test-paper")[0].id;
+    $('#marked' + quest_id).removeClass('');
+    $('#marked' + quest_id).addClass('dirt');
+        skippedQuest = skippedQuest.filter(item => item !== '#marked' + quest_id);
+    questionAttempt['skippedQuestion'] =skippedQuest;
+     $('#marked' + quest_id).addClass('active');
+    questionAttempt[quest_id] = e.target.id;
+
+    myStorage.setItem(tKey, JSON.stringify(questionAttempt));
+    }
+});
+
+function skipQuestion() {
+    $('#markedquestion-' + activeTab).removeClass('dirt');
+    $('#markedquestion-' + activeTab).addClass('skipped');
+        if (skippedQuest){
+    skippedQuest.push('#markedquestion-' + activeTab);
+    }
+    let quest_id = 'question-' + activeTab;
+    $('#' + questionAttempt[quest_id]).prop("checked", false);
+    delete questionAttempt[quest_id];
+        myStorage.setItem(tKey, JSON.stringify(questionAttempt));
+
+    nextquestion(1);
+}
+
+function startTimer(duration,) {
+    var timer = duration, minutes, seconds;
+     interval = setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        $('#testRemanMinutes').text(minutes);
+        $('#testRemanSeconds').text(seconds);
+
+        if(--timer<=0){
+            console.log('time out')
+                $('#timeOutModal').show();
+        }
+
+       if (minutes <= 0 && seconds <= 0) {
+            clearInterval(interval);
+              $('#testRemanMinutes').text("Time");
+            $('#testRemanSeconds').text("Out");
+            timeout = true;
+            submitTestFinal();
+        }
+    }, 1000);
+    $('#timeTest').show();
+
+}
+
+<!--$("#leadCreationForm").submit(function(e){-->
+    <!--var form = $(this);-->
+    <!--$.ajax({-->
+         <!--url   : '/lead/lead-management/',-->
+         <!--type  : 'post',-->
+         <!--data  : form.serialize(), // data to be submitted-->
+         <!--success: function(response){-->
+           <!--window.location.href = '/practice-tests/{{object.slug}}/result/';-->
+         <!--}-->
+    <!--});-->
+    <!--return false;-->
+    <!--testSession({'lead_create':true});-->
+
+ <!--});-->
+
+function submitTest(){
+                $("#submitPermissionModal").addClass("show");
+
+}
+
+
+
+
+function submitTestFinal(){
+  submitTime = new Date(getSystemTime()).getTime();
+      if (timeout){
+            testSession({'timeout':true,'test_id':{{object.id}} });
+      }
+      else{
+            testSession({'submit':true,'test_id':{{object.id}} });
+      }
+      $("#submitPermissionModal").removeClass("show");
+      clearInterval(interval);
+      testSubmission = true;
+      questionAttempt['testSubmission{{object.id}}'] = testSubmission;
+        questionAttempt['skippedQuestion'] = skippedQuest;
+        if (submitTime > endTestTime.getTime()){
+            questionAttempt['testTime'+{{object.id}}] = Math.floor((endTestTime.getTime() - startTestTime.getTime())/1000) ;
+      }
+      else{
+            questionAttempt['testTime'+{{object.id}}] = Math.floor((submitTime - startTestTime.getTime())/1000) ;
+
+      }
+      myStorage.setItem(tKey, JSON.stringify(questionAttempt));
+      window.location.href = '/practice-tests/{{object.slug}}/result/';
+
+}
+
+
+</script>
+{% endblock js_section %}
+
+
+{% block johukum %}
+{% endblock johukum %}
+{% block zendesk %}
+{% endblock zendesk %}
