@@ -164,7 +164,9 @@
 {% endblock container %}
 {% block js_section %}
 {{block.super}}
+    {% compress js %}
 <script src="{% static 'shinelearn/js/assessment/landing.js' %}"></script>
+{% endcompress %}
    <script type="text/javascript">
    var page_number= 2;
    var facolor = 0;
