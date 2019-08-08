@@ -403,3 +403,70 @@ class AmcatApiMixin(object):
 
 
         return None
+
+
+class NeoApiMixin(object):
+
+    def get_headers(self):
+        data = {
+            'username': settings.NEO_USERNAME,
+            'password': settings.NEO_PASSWORD,
+        }
+        url_to_hit = settings.NEO_URL['jwt_token']
+
+        resp = requests.post(url_to_hit, json=data)
+        if resp.status_code == 200:
+            json_rep = resp.json()
+            token = json_rep.get('token', None)
+            if token:
+                return {'x-DynEd-Tkn': token}
+
+    def get_user_neo_id(self, email):
+        url_to_hit = settings.NEO_URL['user_detail']
+        url_to_hit += 'email=' + email
+        headers = self.get_headers()
+        resp = requests.get(url_to_hit, headers=headers)
+        if resp.status_code == 200:
+            json_rep = resp.json()
+            if 'data' in json_rep and json_rep['data']:
+                user_id = json_rep['data'][0]['id']
+                return user_id
+
+    def board_user_on_neo(self, email):
+        user_id = self.get_user_neo_id(email)
+        headers = self.get_headers()
+        if user_id:
+            data = {
+                'user_id': user_id
+            }
+            url_to_hit = settings.NEO_URL['board_user']
+            resp = requests.post(url_to_hit, data=data, headers=headers)
+            if resp.status_code == 200:
+                return True
+        else:
+            logging.getLogger('error_log').error('Unable to board user {} as user id not found'.format(email))
+
+    def get_pt_result(self, email):
+        data = {
+            'token': settings.NEO_TOKEN,
+            'email': email
+        }
+        url_to_hit = settings.NEO_URL['pt_result']
+        resp = requests.post(url_to_hit, data=data)
+        if resp.status_code == 200:
+            json_rep = resp.json()
+            data = {'status': 200, 'data': json_rep}
+            return data
+        if resp.status_code == 400:
+            return {'status': 400}
+
+    def get_student_status_on_neo(self, email):
+        url_to_hit = settings.NEO_URL['user_detail']
+        url_to_hit += 'email=' + email
+        headers = self.get_headers()
+        resp = requests.get(url_to_hit, headers=headers)
+        if resp.status_code == 200:
+            json_rep = resp.json()
+            if 'data' in json_rep and json_rep['data']:
+                status = json_rep['data'][0]['status']
+                return status

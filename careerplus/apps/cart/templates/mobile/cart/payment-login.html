@@ -65,7 +65,7 @@
                    </p>
               {% else %}
                   <div class="form-group {% if email_error %}error{% endif %}">
-                    <input type="email" name="email" class="form-control" placeholder="Enter your email id" value="{% if request.session.email%}{{request.session.email}}{% endif %}" {% if request.session.email %} readonly {% endif %}>
+                    <input type="email" name="email" class="form-control" placeholder="Enter your email id" value=" {% if neo_email %} {{ neo_email }} {% elif request.session.email%}{{request.session.email}}{% endif %}" {% if request.session.email or neo_email%} readonly {% endif %}>
                     <p class="error-txt">{{email_error}}</p>
                   </div>
               {% endif %}
@@ -88,6 +88,7 @@
                 </div>
             </div><!-- call us and chat widget ends here -->
         </form>
+
     </div>
     <div class="line_wrap w100fl">
                             <span>or sign in with</span>
@@ -110,6 +111,7 @@
         <script src="{% static 'shinelearn/js/cart/payment-login.js' %}"></script>
         <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
         <script type="text/javascript" src="{% static 'shinelearn/js/users/forgot_password.js' %}"></script>
+
     {% endcompress %}
 
     {% block johukum %}

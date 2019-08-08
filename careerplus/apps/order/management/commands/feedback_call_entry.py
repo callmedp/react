@@ -55,11 +55,16 @@ def feedback_call_entry():
             total_feedbacks_updated.append(candidate_id)
             logging.getLogger('info_log').info("Feedback updated for {}".format(operation.order.id))
         
-        if customer_feedback.last_payment_date < payment_date:
+        if payment_date and ((not payment customer_feedback.last_payment_date) or \
+            payment customer_feedback.last_payment_date < payment_date):
             customer_feedback.last_payment_date = payment_date
         
         customer_feedback.ltv = ltv
-        customer_feedback.save()
+        try:
+            customer_feedback.save()
+        except Exception as e:
+            logging.getLogger('error_log').error(\
+                "Error in creating feedback {},{}".format(operation.order.id,e))
         assigned_to = customer_feedback.assigned_to
         
         for order_item in operation.order.orderitems.all():

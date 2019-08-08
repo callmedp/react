@@ -7,6 +7,7 @@ from dateutil import relativedelta
 from emailers.email import SendMail
 from emailers.sms import SendSMS
 from django.utils import timezone
+from django.db.models import Q
 
 def update_initiat_orderitem_sataus(order=None):
     if order:
@@ -34,6 +35,15 @@ def update_initiat_orderitem_sataus(order=None):
                     oi_status=oi.oi_status,
                     last_oi_status=last_oi_status,
                     assigned_to=oi.assigned_to)
+                # for neo attach oi wit test info
+                from shop.models import PracticeTestInfo
+                if oi.product.vendor.slug == 'neo':
+                    test_info = PracticeTestInfo.objects.filter(
+                        email=oi.order.email, order_item=None
+                    ).first()
+                    if test_info:
+                        test_info.order_item = oi
+                        test_info.save()
 
             elif oi.product.type_flow == 4:
                 if oi.order.orderitems.filter(product__type_flow=12, no_process=False).exists():
@@ -137,9 +147,9 @@ def update_initiat_orderitem_sataus(order=None):
                     last_oi_status=last_oi_status,
                     assigned_to=oi.assigned_to)
 
-        # for assesment if no orderitems other than assesment present
+        # for assesment/neo if no orderitems other than assesment/ neo present
         # then make welcome call done and update welcome call statuses.
-        oi = order.orderitems.exclude(product__type_flow=16)
+        oi = order.orderitems.exclude(Q(product__type_flow=16) | Q(product__vendor__slug='neo'))
 
         if not oi.exists():
             order.wc_cat = 21
@@ -154,6 +164,7 @@ def update_initiat_orderitem_sataus(order=None):
                 wc_status=order.wc_status,
                 assigned_to=order.assigned_to
             )
+
 
 
 

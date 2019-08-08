@@ -360,6 +360,7 @@ function reTestFunc(){
 		})
 
 function ReCreateLead(){
+var flag=$('#leadCreationForm').valid();
 if(flag){
     var form = $('#leadCreationForm');
     $.ajax({
@@ -375,7 +376,7 @@ if(flag){
 
 
 $("#leadCreationForm").submit(function(e){
-flag=$('#leadCreationForm').valid();
+var flag=$('#leadCreationForm').valid();
 if(flag){
     var form = $(this);
     $.ajax({

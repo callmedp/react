@@ -144,6 +144,10 @@ class ShineProfileDataAdmin(admin.ModelAdmin):
 class SkillAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
+class PracticeTestInfoAdmin(admin.ModelAdmin):
+    list_display = ['email', 'mobile_no', 'name', 'order_item', 'is_boarded']
+
+
 
 admin.site.register(models.Category, CategoryAdmin)
 admin.site.register(models.Attribute, AttributeAdmin)
@@ -155,4 +159,5 @@ admin.site.register(models.AttributeOptionGroup, OptionGroupAdmin)
 admin.site.register(models.DeliveryService, DeliveryServiceAdmin)
 admin.site.register(models.ShineProfileData, ShineProfileDataAdmin)
 admin.site.register(models.Skill, SkillAdmin)
+admin.site.register(models.PracticeTestInfo, PracticeTestInfoAdmin)
 # admin.site.register(models.ProductExtraInfo, ProductExtraInfoAdmin)

@@ -151,7 +151,34 @@
                 </ul>
             </div><!-- end of icons wrapper -->
 
-        <hr class="row">
+        <hr class="row mb-0">
+        {% if prd_vendor_slug == 'neo' %}
+
+        <!-- Neo Widgets start here -->
+        <div class="neo row" id="row_neo">
+            <span class="neo--image">
+                <img src="{% static 'shinelearn/images/mobile/neo/neo-widget.jpg' %}" class="img-responsive"/>
+            </span>
+            <div class="neo__content">
+                <p><strong>Know your current English CEFR level,</strong>corresponding TOEFL & IELTS score by taking this test.</p>
+                <a href="#" class="btn btn-sm btn-blue mt-5"  id="take-test_button" >Take free test</a>
+            </div>
+        </div> <!-- Neo Widgets ends here -->
+
+        <!-- Your Level starts here -->
+        <div class="neo-level mt-30" id="cefr_level_box" style="display: none">
+            <span class="neo-level--image">
+                <img src="{% static 'shinelearn/images/mobile/neo/neo-level.jpg' %}" class="img-responsive"/>
+            </span>
+            <div class="neo-level--content">
+                <h2 class="mb-0" id="cefr_level"></h2>
+                <p class="pb-0">Your CEFR level </p>
+            </div>
+
+        </div><!-- Your Level ends here -->
+
+        {% endif %}
+
         <article class="mt-20">
             {% if prd_service == 'course' or product.type_flow == 16 %}
             <span class="byvskills mb-30">
@@ -323,6 +350,82 @@
     {% block call_us %}
         {% include "shop/partials/call_us.html" %}
     {% endblock call_us %}
+
+<!--neo test modal-->
+{% if prd_vendor_slug == 'neo' %}
+{% csrf_token %}
+<div class="modal bs-example-modal-sm login-div" role="dialog" aria-labelledby="mySmallModalLabel" id="neo-test-modal">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content text-center neo-modal-content">
+      <div class="modal-header">
+        <span id="neo-close" class="icon-close" data-dismiss="modal"  aria-label="Close"></span>
+      </div>
+      <div class="modal-body" id="neo-modal-body">
+       
+        <form id="neo-test-form">
+            <h3 class="modal-title c3 mb-30 mt-20">Fill the form below to start the test</h3>
+            <ul class="neo-modal">
+                <li class="neo-modal__item input-effect form-group">
+                    <input type="text" name="name" class="form--control animation-input" id="name" aria-describedby="name" placeholder="">
+                    <label for="name">Name</label>
+                    <span class="error--mgs">Required</span>
+                </li>
+                
+                <li class="neo-modal__item input-effect form-group">
+                    <input type="email" name="email" class="form--control animation-input" id="email" aria-describedby="email" placeholder="">
+                    <label for="email">Email</label>
+                    <span class="error--mgs">Required</span>
+                </li>
+                
+                <li class="neo-modal__item form-group phone">
+                    <span class="phone--country-code">
+                        <input type="text" class="form--control" name="country_code" placeholder="+91" disabled/>
+                    </span>
+                    <div class="phone--number input-effect rel">
+                        <input type="tel" name="mobile" class="form--control animation-input" id="mobile" name="mobile" aria-describedby="mobile" placeholder="" maxlength="10">
+                        <label for="mobile">Mobile No.</label>
+                    </div>
+                    <span class="error--mgs">Required</span>
+                </li>
+
+                <li class="neo-modal__item input-effect form-group mt-40">
+                    <button type="submit" id="neo-form-btn" class="btn btn-yellow btn-round btn-slg"> Submit</button>
+                </li>
+            </ul>
+        </form>
+        <iframe src="" sandbox="allow-scripts allow-same-origin" id="iframe" height="500px"  style="border:none;{% if not request.session.candidate_id %} display: none;{% endif %}"></iframe>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Take test Modal Start here  -->
+<div class="modal bs-example-modal-sm login-div" role="dialog" aria-labelledby="mySmallModalLabel" id="neo-info-modal">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content text-center neo-takeTest-modal">
+        <div class="modal-header">
+          <span class="icon-close" id="neo-info-close" data-dismiss="modal" aria-label="Close"></span>
+        </div>
+        <div class="modal-body">
+            <span class="neo-takeTest-modal--image">
+                <img src="{% static 'shinelearn/images/mobile/neo/neo-pop.jpg' %}" class="img-responsive"/>
+            </span>
+
+            <p>Take Neo english test to enroll for this course. This test will show you, your CEFR level and help you to improve your skill</p>
+
+            <a href="https://www.coe.int/en/web/common-european-framework-reference-languages/table-1-cefr-3.3-common-reference-levels-global-scale" class="neo-takeTest-modal--share" target="_blank">
+                <span class="icon-share-blue"></span>
+                Official translations of CEFR global scale
+            </a>
+
+            <p class="mb-20"><a href="#" class="btn btn-yellow btn-round btn-slg" id="modal-take-test-btn">Take test</a></p>
+        </div>
+      </div>
+    </div>
+  </div><!-- Take test Modal Start here  -->
+{% endif %}
+
 {% endblock container %}
 
 {% block js_section %}
@@ -508,6 +611,322 @@ function close_review() {
         });
         
     </script>
+    <script>
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+function getCookie(name) {
+  var cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+          var cookie = jQuery.trim(cookies[i]);
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+          }
+      }
+  }
+  return cookieValue;
+}
+function modal(id,option){
+  document.getElementById(id).style.display = option;
+}
+  function load_test(email, name, country_code, mobile_no){
+      global_email = email
+      var iframe = document.getElementById('iframe'),
+      iframeWin = iframe.contentWindow || iframe,
+      iframeDoc = iframe.contentDocument || iframeWin.document;
+      var html =
+        '<html>' + 
+        '<head>' +
+        '<meta content="width=device-width,  initial-scale=1"  name="viewport" />' +
+        '<scr' + 'ipt src="https://etest.dyned.com/neowidget.min.js"></scr' + 'ipt>' +
+        '</head>' +
+        '<body>'+
+        '<neo id="widgetbyneo"data-neo-email="'+ email +'"data-neo-mode="pt" data-neo-token="xRm7FoiyQ221ZL7MV07zEOtcF3xrPcCTXYKmAnA5ylPtFWYCWJS6XqgXoHFsmuPR"data-neo-dial-code="'+country_code+'"data-neo-phone-number="'+mobile_no+'"data-neo-fullname="'+name+'"data-neo-autostart="false">' +
+        '</body>' + 
+        '</html>';
+
+        iframe.srcdoc = html;
+    }
+
+function get_create_profile(email, name, country_code, mobile) {
+    var data = {
+        'email': email,
+        'mobile_no': country_code + mobile ,
+        'name': name,
+    }
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+          if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+              xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+          }
+        }
+    });
+    $.ajax({
+        url: "/api/v1/create_practice_test_info/",
+        type: "POST",
+        data: data,
+        success: function(data, textStatus, jqXHR) {
+            check_for_load_test(data);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          console.log(errorThrown)
+           
+        }
+    });
+}
+
+function check_for_load_test(data){
+    if('has_completed' in data){
+      if(data['has_completed']){
+        //pass
+        $("#neo-enroll-button").text('Buy Now')
+        $("#neo-enroll-button").attr('id', 'add-to-cart')
+        $("#cefr_level").text(data['cefr_level'])
+        $("#cefr_level_box").show()
+        $("#row_neo").remove()
+        modal('neo-test-modal','none');
+      }
+      else{
+        $('#iframe').show();
+        $("#neo-test-form").hide();
+        load_test(email, name, country_code, mobile_no);
+        modal('neo-test-modal','block');
+      }
+    }
+}
+
+function update_test_info(email){
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+          if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+              xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+          }
+        }
+    });
+    $.ajax({
+        url: "/api/v1/update_practice_info/?email="+ encodeURIComponent(email),
+        type: "GET",
+        success: function(data, textStatus, jqXHR) {
+          if(data['status'] == 'done'){
+              $("#neo-enroll-button").text('Buy Now');
+              $("#neo-enroll-button").attr('id', 'add-to-cart');
+              var ifrm = document.getElementById('iframe');
+              var doc = ifrm.contentDocument? ifrm.contentDocument: ifrm.contentWindow.document;
+              btn = $(doc).find('#neobackhomebutton');
+              btn.text('Enroll Now');
+              btn.css('color', 'black')
+              btn.css('background', '#ffcf26')
+              $("#cefr_level").text(data['result']['pt_level'])
+              $("#cefr_level_box").show()
+              $("#row_neo").remove()
+
+          }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          console.log(errorThrown)
+        }
+    });
+}
+{% if prd_vendor_slug == 'neo' %}
+
+    {% if request.session.candidate_id %}
+      let email = "{{ request.session.email }}";
+      let name = "{{request.session.full_name}}";
+      let country_code = "{{request.session.country_code}}";
+      let mobile_no = "{{request.session.mobile_no}}";
+      get_create_profile(email, name, country_code, mobile_no)
+
+    {% endif %}
+{% endif %}
+ $('#neo-test-form').validate({
+      submitHandler:function (form) {
+          var $inputs = $('#neo-test-form :input');
+          var values = {};
+          $inputs.each(function() {
+              values[this.name] = $(this).val();
+          });
+          name = values['name'];
+          email = values['email'];
+          country_code = values['country_code'];
+          mobile_no = values['mobile'];
+          get_create_profile(email, name, country_code, mobile_no);
+      },
+      rules:{
+          mobile:{
+              required:true,
+              number:true,
+              minlength:10,
+              maxlength:20,
+          },
+          email:{
+              email:true,
+              required:true,
+
+          },
+          name:{
+              required:true,
+              lettersonly:true,
+
+          },
+      },
+      messages:{
+          mobile:{
+             required:"Field is required",
+             number: "Please enter valid number only"
+          },
+          email:{
+              required:"Field is required"
+          },
+          name:{
+              required:"Field is required"
+          },
+
+      },
+      highlight:function(element, errorClass) {
+        $(element).closest('.form-group').addClass('error');
+      },
+      unhighlight:function(element, errorClass) {
+        $(element).closest('.form-group').removeClass('error');
+        $(element).siblings('.js-error').html("");
+      },
+      errorPlacement: function(error, element){
+        $(element).siblings('.js-error').html(error.text());
+      } 
+    });
+ 
+
+$('#take-test_button').click(function(){
+  
+    {% if request.session.candidate_id %}
+        let email = "{{ request.session.email }}";
+        let name = "{{request.session.full_name}}";
+        let country_code = "{{request.session.country_code}}";
+        let mobile_no = "{{request.session.mobile_no}}";
+        get_create_profile(email, name, country_code, mobile_no)
+
+    {% else %}
+        $("#neo-test-form").show();
+        $('#iframe').hide();
+        modal('neo-test-modal','block');
+    {% endif %}
+  });
+
+
+
+// attache event handler to neo test submit button
+$('iframe').load(function(){
+    var ifrm = document.getElementById('iframe');
+    var doc = ifrm.contentDocument? ifrm.contentDocument: ifrm.contentWindow.document;
+    $(doc).on('click', '#neookbutton', function() {
+        {% if request.session.candidate_id %}
+            var email = "{{ request.session.email }}";
+        {% else %}
+            var email = $('#neo-test-form :input[name="email"]').val();
+        {% endif %}
+        update_test_info(email);
+
+    });
+
+    $(doc).find('#neobox').css('max-width', '100%')
+    $(doc).on('click', '#neoStartButton', function() {
+        setTimeout(function(){
+            check_if_user_exists_for_another_vendor(global_email)
+        }, 1000) 
+    });
+    $(doc).on('click', '#neonextquestion', function() {
+        setTimeout(function(){
+           $(doc).find("#neomodalquit").css('position','absolute')
+           $(doc).find("#neomodalquit").css('height','200%')
+        }, 1000);
+    });
+
+    $(doc).on('click', '#neoresettest', function() {
+        setTimeout(function(){
+           $(doc).find("#neomodalquit").css('position','absolute')
+           $(doc).find("#neomodalquit").css('height','200%')
+        }, 1000);
+    });
+
+
+    $(doc).on('click', "#neobackhomebutton", function(){
+      modal('neo-test-modal','none');
+      $('#add-to-cart').trigger('click');
+    })
+});
+
+function check_if_user_exists_for_another_vendor(email) {
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+          if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+              xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+          }
+        }
+    });
+  $.ajax({
+      url: "/api/v1/update_practice_info/?email="+ encodeURIComponent(email),
+      type: "GET",
+      success: function(data, textStatus, jqXHR) {
+        // do nothing if exists
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+      modal('neo-test-modal','none');
+      $("#neo-test-form").show();
+      $('#iframe').hide();
+      alert('This email already registered with another Neo Partner');
+      }
+  });
+}
+
+
+// Get the <span> element that closes the modal
+var neoClose = document.getElementById("neo-close");
+neoClose.onclick = function() {
+    modal('neo-test-modal','none');
+
+    // modal.style.display = "none";
+}
+
+// Get the <span> element that closes the modal
+var neoInfoClose = document.getElementById("neo-info-close")
+neoInfoClose.onclick = function() {
+    $("#neo-test-form").hide();
+}
+
+$('#neo-enroll-button').click(function(){
+    text = $(this).text()
+    if(text=='Enroll Now') {
+        modal('neo-info-modal', 'block')
+    }
+})
+
+$("#modal-take-test-btn").click(function(){
+    modal('neo-info-modal', 'none');
+    $("#take-test_button").trigger('click')
+})
+document.getElementById('iframe');
+  </script>
+
+<script>
+// JavaScript for label effects only
+    $(window).load(function(){
+        $(".input-effect input").val("");
+        
+        $(".input-effect input").focusout(function(){
+            if($(this).val() != ""){
+                $(this).addClass("has-content");
+            }else{
+                $(this).removeClass("has-content");
+            }
+        })
+    });
+    
+</script>
 
 
 
