@@ -56,7 +56,7 @@ function testSession(data){
                     if (json.status == 1){
 
                         window.location.href = json.cart_url ;
-//                        alert('Adding To Cart');
+
                     }
                     else if (json.status == -1){
                         alert("Something went wrong, Please try again.");
@@ -86,7 +86,6 @@ function testSession(data){
                     if (json.status == 1){
 
                         window.location.href = json.cart_url ;
-//                        alert('Adding To Cart');
 
                     }
                     else if (json.status == -1){
