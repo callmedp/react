@@ -94,6 +94,11 @@
                             </div>
                             <br/>
                         </div>
+                         <div class="form-group">
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">Vendor</label></br>
+                            <select id="vendor" name="vendor" class="form-control"><option value="">Select</option></select>
+                            <br/>
+                        </div>
                        {% if query %}
                            <input type="hidden" name="query" value="{{query}}">
                        {% endif %}
@@ -328,5 +333,15 @@
 
 
   {% endcompress %}
+  <script type="text/javascript">
+    let p =''
+    $.get('/partner/api/v1/vendor-list?fl=id,name', function(data){
+        result = data['results']
+        result.forEach(function(item){
+          p += '<option value="'+item['id']+'">'+ item['name']+'</option>'
+        })
+        $('select[name="vendor"]').append(p)
+    })
+  </script>
 
 {% endblock js_block %}
