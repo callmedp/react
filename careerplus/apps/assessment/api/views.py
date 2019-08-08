@@ -103,6 +103,8 @@ class TestApiView(FieldFilterMixin, ListAPIView):
             filter_dict.update({'category__id': self.request.query_params.get('category_id')})
         if self.request.query_params.get('active'):
             filter_dict.update({'is_active': True})
+        if self.request.query_params.get('title'):
+            filter_dict.update({'title__icontains': self.request.query_params.get('title')})
         return queryset.filter(**filter_dict)
 
     def get_queryset(self):
