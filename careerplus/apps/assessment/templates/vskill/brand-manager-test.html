@@ -14,6 +14,18 @@
 <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/practice-skill/practice-skill.scss' %}" rel="stylesheet">
 <link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
 {% endcompress %}
+<style type="text/css">
+  footer {
+     position: fixed;
+     left: 0;
+     right: 0;
+     bottom: 0;
+  }
+  footer::after {
+    margin-top: 220px;
+    content: '';
+  }
+</style>
 {% endblock css_section %}
 {% block main_container %}
 <div class="practice-skill__wrap-inner">
