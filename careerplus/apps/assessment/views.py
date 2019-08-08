@@ -166,7 +166,7 @@ class AssessmentSubCategoryPage(DetailView):
         parent = self.object.get_parent() if self.object.type_level == 3 else None
         if parent:
             breadcrumbs.append({
-                "url": '/practice-tests/'+parent[0].slug + '/sub', "name": parent[0].name,
+                "url": '/practice-tests/'+parent[0].slug, "name": parent[0].name,
             })
 
         breadcrumbs.append({"url": '', "name": self.object.name})
@@ -215,7 +215,7 @@ class AssessmentResultPage(TemplateView):
         if test.category.get_parent():
             breadcrumbs.append({"url": '/practice-tests/'+test.category.get_parent()[0].slug, "name": test.category.get_parent()[0].name})
         if test.category:
-            breadcrumbs.append({"url": '/practice-tests/'+test.category.slug, "name": test.category.name})
+            breadcrumbs.append({"url": '/practice-tests/'+test.category.slug +'/sub', "name": test.category.name})
         breadcrumbs.append({"url": '', "name": test.slug + '-test'})
         return breadcrumbs
 
