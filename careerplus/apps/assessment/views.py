@@ -166,7 +166,7 @@ class AssessmentSubCategoryPage(DetailView):
         parent = self.object.get_parent() if self.object.type_level == 3 else None
         if parent:
             breadcrumbs.append({
-                "url": '/practice-tests/'+parent[0].slug + '/', "name": parent[0].name,
+                "url": '/practice-tests/'+parent[0].slug + '/sub', "name": parent[0].name,
             })
 
         breadcrumbs.append({"url": '', "name": self.object.name})
