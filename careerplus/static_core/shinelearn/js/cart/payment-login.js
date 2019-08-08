@@ -1,3 +1,95 @@
+/*
+* *
+* * basic headers
+* */
+
+const defaultHeaders = {
+    "Content-Type": "application/json",
+};
+
+
+/*
+** @handle basic request flow
+* */
+
+
+async function handleResponse(response, isFetchingHTML) {
+
+    // handle all the status and conditions here
+    if (response['ok'] === false) {
+        let message = '';
+        let data = await response.json();
+        for (const key in data) {
+            message += `${data[key]} `;
+        }
+        if (response['status'] === 401) {
+            // Handle validation
+        }
+        return {
+            error: true,
+            errorMessage: message,
+            status: response['status'],
+        }
+    } else if (response['status'] === 204) {
+        return {data: {}};
+    } else {
+        let result = isFetchingHTML ? await response.text() : await response.json();
+        return {data: result};
+    }
+}
+
+
+/*
+* *
+* *  login Candidate using API
+* *
+* */
+
+const handleLoginCandidate = async () => {
+
+    const formData = $('#login_form').serializeArray().reduce((obj, item) => {
+        obj[item.name] = item.value
+        return obj;
+    }, {});
+
+    // delete csrf token as we don't need it while login through drf api.
+    if (formData['csrfmiddlewaretoken']) delete formData['csrfmiddlewaretoken'];
+
+    /*
+    * return if form is not valid.
+    * */
+    if (!$('#login_form').valid()) {
+        return;
+    }
+
+    const loginResponse = await fetch(`${site_domain}/api/v1/candidate-login/`, {
+        headers: defaultHeaders,
+        method: 'POST',
+        body: JSON.stringify(formData)
+    });
+
+    const result = await handleResponse(loginResponse)
+
+    if (result['error']) {
+        // Todo ***** error handling  *****
+        $('#invalid-cred').show().delay(5000).fadeOut()
+        return;
+    }
+    /*
+    *  update the cart
+    * */
+
+    const updateCartResponse = await fetch(`${site_domain}/api/v1/cart/update/`, {
+        headers: defaultHeaders,
+        method: 'POST',
+        body: JSON.stringify(formData)
+    });
+};
+
+
+/*
+*  continue as guest option handled
+* */
 const continueAsGuest = () => {
     $('#login_form').addClass('hidden');
     $('#guest_form').removeClass('hidden');
@@ -8,10 +100,11 @@ const continueAsGuest = () => {
     $('#guest_payment_login').removeClass('hide')
     $('#login_users').addClass('hide');
     $('#login_guests').removeClass('hide');
-
-
 };
 
+/*
+*  login as candidate option handled
+* */
 const loginAsCandidate = () => {
     $('#login_form').removeClass('hidden');
     $('#guest_form').addClass('hidden');
@@ -27,6 +120,10 @@ const loginAsCandidate = () => {
 
 };
 
+/*
+*  forgot password option handled
+* */
+
 const forgotPassword = () => {
     $('#login_form').addClass('hidden');
     $('#guest_form').addClass('hidden');
@@ -40,11 +137,11 @@ const forgotPassword = () => {
 }
 
 
-$().ready(function () {
-    $('#login_form').on('submit', function () {
-// hitGAContinue();
-    });
+/*
+*  login form validation
+* */
 
+$(document).ready(function () {
 
     $("#login_form").validate({
         rules: {
@@ -58,9 +155,11 @@ $().ready(function () {
             },
         },
         messages: {
-            email: {required: "Please enter a valid email address",},
+            email: {
+                required: "Email address is required",
+            },
             password: {
-                required: "Please enter valid password",
+                required: "Password is required",
             },
         },
         highlight: function (element) {
@@ -88,11 +187,11 @@ $().ready(function () {
 
         },
         errorPlacement: function (error, element) {
-             let  errorTextClass = '.error-txt';
-             if (window.CURRENT_FLAVOUR == 'mobile') {
-               errorTextClass = '.error--mgs';
-             }
-               $(element).siblings(errorTextClass).html(error.text());
+            let errorTextClass = '.error-txt';
+            if (window.CURRENT_FLAVOUR == 'mobile') {
+                errorTextClass = '.error--mgs';
+            }
+            $(element).siblings(errorTextClass).html(error.text());
         }
     });
 

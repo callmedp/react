@@ -35,21 +35,21 @@ $(document).ready(function () {
         }, {})
         hitGA();
         let email = guest_info['email'] || '';
-        let isEmailRegistered = await checkEmailExists(email)
-        if (isEmailRegistered) {
-            $('#email-error').html('This email already exists. Please register with some other email.');
-            $('#email-error').closest('.form-group').addClass('error1');
-            return;
-        }
-
         if ($('#guest_form').valid()) {
-            var input = document.createElement("input");
+            let isEmailRegistered = await checkEmailExists(email)
+            if (isEmailRegistered) {
+                $('#email-error').html('This email already exists. Please register with some other email.');
+                $('#email-error').closest('.form-group').addClass('error1');
+                return;
+            }
+            let input = document.createElement("input");
             input.setAttribute("type", "hidden");
             input.setAttribute("name", "login_with");
             input.setAttribute("value", "login_guest")
             form.appendChild(input);
             form.submit();
         }
+
 
     }
 

@@ -25,7 +25,7 @@ from partner.utils import CertiticateParser
 from partner.models import ProductSkill
 from rest_framework.generics import ListAPIView
 
-from rest_framework.generics import ListAPIView,RetrieveAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -57,7 +57,7 @@ from .serializers import (
     VendorCertificateSerializer,
     ImportCertificateSerializer,
     ShineDataFlowDataSerializer,
-    CertificateSerializer,TalentEconomySerializer,OrderDetailSerializer)
+    CertificateSerializer, TalentEconomySerializer, OrderDetailSerializer)
 
 from partner.models import Certificate, Vendor
 from shared.rest_addons.pagination import LearningCustomPagination
@@ -71,6 +71,7 @@ from shared.utils import ShineCandidate
 from linkedin.autologin import AutoLogin
 from users.mixins import RegistrationLoginApi
 from .education_specialization import educ_list
+
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
     authentication_classes = [OAuth2Authentication]
@@ -779,9 +780,9 @@ class ResumeBuilderProductView(ListAPIView):
 
     def get_queryset(self):
         type_flow = self.request.query_params.get('type_flow')
-        return Product.objects.filter(type_flow=type_flow, type_product=2,active=True).annotate(
-            parent=F('siblingproduct__main')).values(\
-            'id', 'parent', 'name','inr_price','usd_price','aed_price').order_by('inr_price')
+        return Product.objects.filter(type_flow=type_flow, type_product=2, active=True).annotate(
+            parent=F('siblingproduct__main')).values( \
+            'id', 'parent', 'name', 'inr_price', 'usd_price', 'aed_price').order_by('inr_price')
 
 
 class ShineDataFlowDataApiView(ListAPIView):
@@ -850,44 +851,50 @@ class ShineCandidateLoginAPIView(APIView):
 
         return data
 
-    def get_existing_order_data(self,candidate_id):
+    def get_existing_order_data(self, candidate_id):
         from order.models import Order
 
         product_found = False
         order_data = {}
-        order_obj_list = Order.objects.filter(candidate_id=candidate_id,status__in=[1,3])
+        order_obj_list = Order.objects.filter(candidate_id=candidate_id, status__in=[1, 3])
 
         if not order_obj_list:
             return order_data
 
-        for order_obj in order_obj_list: 
+        for order_obj in order_obj_list:
             if product_found:
                 break
-                
+
             for item in order_obj.orderitems.all():
                 if item.product and item.product.type_flow == 17 and item.product.type_product == 2:
-                    order_data = {"id":order_obj.id,
-                    "combo":True if item.product.id != settings.RESUME_BUILDER_NON_COMBO_PID else False
-                    }
+                    order_data = {"id": order_obj.id,
+                                  "combo": True if item.product.id != settings.RESUME_BUILDER_NON_COMBO_PID else False
+                                  }
                     product_found = True
                     break
 
         return order_data
 
-    def get_response_for_successful_login(self, candidate_id, login_response):
+    def get_response_for_successful_login(self, candidate_id, login_response, with_info):
         candidate_obj = ShineCandidate(**login_response)
         candidate_obj.id = candidate_id
         candidate_obj.candidate_id = candidate_id
         token = self.get_or_create_token(candidate_obj)
-
-        data_to_send = {"token": token,
-                        "candidate_id": candidate_id,
-                        "candidate_profile": self.customize_user_profile(login_response),
-                        "entity_status": self.get_entity_status_for_candidate(candidate_id),
-                        "order_data":self.get_existing_order_data(candidate_id)
-                        # TODO make param configurable
-                        }
+        if with_info:
+            data_to_send = {"token": token,
+                            "candidate_id": candidate_id,
+                            "candidate_profile": self.customize_user_profile(login_response),
+                            "entity_status": self.get_entity_status_for_candidate(candidate_id),
+                            "order_data": self.get_existing_order_data(candidate_id)
+                            # TODO make param configurable
+                            }
+        else:
+            data_to_send = {
+                "token": token,
+                "candidate_id": candidate_id
+            }
         self.request.session.update(login_response)
+
         return Response(data_to_send, status=status.HTTP_201_CREATED)
 
     def get_profile_info(self, profile):
@@ -1051,7 +1058,7 @@ class ShineCandidateLoginAPIView(APIView):
 
         return candidate_info
 
-    def _dispatch_via_autologin(self, alt):
+    def _dispatch_via_autologin(self, alt, with_info):
         try:
             email, candidate_id, valid = AutoLogin().decode(alt)
         except Exception as e:
@@ -1067,9 +1074,9 @@ class ShineCandidateLoginAPIView(APIView):
             logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
             return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
 
-        return self.get_response_for_successful_login(candidate_id, login_response)
+        return self.get_response_for_successful_login(candidate_id, login_response, with_info)
 
-    def _dispatch_via_email_password(self, email, password):
+    def _dispatch_via_email_password(self, email, password, with_info):
         login_data = {"email": email.strip(), "password": password}
 
         try:
@@ -1091,7 +1098,7 @@ class ShineCandidateLoginAPIView(APIView):
             logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
             return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
 
-        return self.get_response_for_successful_login(candidate_id, login_response)
+        return self.get_response_for_successful_login(candidate_id, login_response, with_info)
 
     def get(self, request, *args, **kwargs):
         user = request.user
@@ -1114,12 +1121,13 @@ class ShineCandidateLoginAPIView(APIView):
         email = request.data.get('email')
         password = request.data.get('password')
         alt = request.data.get('alt')
+        with_info = request.data.get('withInfo', False)
 
         if alt:
-            return self._dispatch_via_autologin(alt)
+            return self._dispatch_via_autologin(alt, with_info)
 
         if email and password:
-            return self._dispatch_via_email_password(email, password)
+            return self._dispatch_via_email_password(email, password, with_info)
 
         return Response({"data": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -1228,6 +1236,7 @@ class UpdateCertificateAndAssesment(APIView):
             status=status.HTTP_201_CREATED
         )
 
+
 class ShineDataFlowDataApiView(ListAPIView):
     permission_classes = []
     authentication_classes = []
@@ -1253,6 +1262,7 @@ class VendorCertificateMappingApiView(ListAPIView):
         response = self.list(request, *args, **kwargs)
 
         return response
+
 
 class ImportCertificateApiView(APIView, AmcatApiMixin):
     authentication_classes = [OAuth2Authentication]
@@ -1302,7 +1312,8 @@ class ImportCertificateApiView(APIView, AmcatApiMixin):
         else:
             return Response(data, status=data['code'])
 
-class TalentEconomyApiView(FieldFilterMixin,ListAPIView):
+
+class TalentEconomyApiView(FieldFilterMixin, ListAPIView):
     """
     Include params -
 
@@ -1360,12 +1371,12 @@ class TalentEconomyApiView(FieldFilterMixin,ListAPIView):
         return Blog.objects.filter(**filter_dict)
 
 
-class OrderDetailApiView(FieldFilterMixin,RetrieveAPIView):
-    permission_classes = [IsAuthenticated,OrderAccessPermission]
+class OrderDetailApiView(FieldFilterMixin, RetrieveAPIView):
+    permission_classes = [IsAuthenticated, OrderAccessPermission]
     authentication_classes = [SessionAuthentication]
     serializer_class = OrderDetailSerializer
     queryset = Order.objects.all()
-    
+
     def get(self, request, *args, **kwargs):
         instance = self.get_object()
         user = self.request.user
@@ -1375,8 +1386,14 @@ class OrderDetailApiView(FieldFilterMixin,RetrieveAPIView):
         for field in fields_to_log:
             if field not in fields_to_check:
                 continue
-            logging.getLogger('info_log').info('Order Data Accessed - {},{},{},{},{},{}'.format(current_time,\
-        user.id, user.get_full_name(), getattr(instance, 'number', 'None'), field, getattr(instance, field, 'None')))
+            logging.getLogger('info_log').info('Order Data Accessed - {},{},{},{},{},{}'.format(current_time, \
+                                                                                                user.id,
+                                                                                                user.get_full_name(),
+                                                                                                getattr(instance,
+                                                                                                        'number',
+                                                                                                        'None'), field,
+                                                                                                getattr(instance, field,
+                                                                                                        'None')))
         return self.retrieve(request, *args, **kwargs)
 
 
@@ -1386,7 +1403,7 @@ class CandidateInsight(APIView):
 
     def post(self, request, *args, **kwargs):
         data = request.data
-        logging.getLogger('info_log').info("Candidate Insight:- {}".format(str(data)) )
+        logging.getLogger('info_log').info("Candidate Insight:- {}".format(str(data)))
         return Response({
             "msg": "Data has been noted."},
             status=status.HTTP_201_CREATED

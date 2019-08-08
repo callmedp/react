@@ -92,35 +92,35 @@
                 <form class="personal-details col-sm-6 bdr-rt" method="post" action="" role="form"
                       id="login_form">{% csrf_token %}
                     <strong class="personal-details-heading ml-15">Login</strong>
+                    <span class="invalid-cred-err" style="display: none" id="invalid-cred">Invalid email or password</span>
                     {% if email_exist %}
-                        {% if non_field_error %}
-                            <span class="error" style="left:14px;">{{ non_field_error }}</span>
-                        {% endif %}
                         <div class="form-group clearfix">
                             <div class="col-sm-12 {% if email_error %} error1 {% endif %}">
                                 <input type="email" class="form-control" name="email" placeholder=" "
                                        value="{{ email }}"/>
                                 <label for="">Email id</label>
-                                <span class="error-txt">{{ email_error }}</span>
+                                <span class="error-txt"></span>
                             </div>
                         </div>
                     {% else %}
-                        {% if non_field_error %}
-                            <span class="error" style="left:14px;">{{ non_field_error }}</span>
-                        {% endif %}
                         <div class="form-group clearfix">
                             <div class="col-sm-12 {% if email_error %} error1 {% endif %}">
-                                <input type="email" name="email" class="form-control" placeholder=" " value="
-
-                                        {% if request.session.email %}{{ request.session.email }}{% elif request.session.lead_email %}{{ request.session.lead_email }}{% endif %}"
-                                {% if request.session.email %}  {% endif %}"/>
+                                <input type="email"
+                                       name="email"
+                                       class="form-control"
+                                       placeholder=" "
+                                       value="{% if request.session.email %}
+                                        {{ request.session.email }}
+                                        {% elif request.session.lead_email %}
+                                        {{ request.session.lead_email }}{% endif %}"
+                                />
                                 <label for="">Email id</label>
-                                <span class="error-txt">{{ email_error }}</span>
+                                <span class="error-txt"></span>
                             </div>
                         </div>
                     {% endif %}
                     <div class="form-group clearfix">
-                        <div class="col-sm-12 {% if form.first_name.errors %} error {% endif %}">
+                        <div class="col-sm-12">
                             <input type="password" class="form-control" required id="" name="password" placeholder=" "/>
                             <label for="">Password</label>
                             <span class="error-txt"></span>
@@ -129,7 +129,7 @@
 
                     <div class="continue">
                         <a class="pull-right mr-20" onclick="forgotPassword()">Forgot password?</a>
-                        <button type="submit">Continue</button>
+                        <button type="button" onclick="handleLoginCandidate()">Continue</button>
                     </div>
 
                     <div class="col-sm-12 text-right social-icon-new mt-20">
@@ -177,7 +177,7 @@
                             <div class="country-code">
                                 <div class="custom-select">
                                     <select class="form--control" id="country_code" name="country_code">
-                                        <option selected value="91" >+91</option>
+                                        <option selected value="91">+91</option>
                                         <option></option>
                                     </select>
                                 </div>
@@ -262,14 +262,15 @@
 
     {{ block.super }}
     <script type="text/javascript" src="{% static 'packages/select2/dist/js/select2.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
     <script src="{% static 'shinelearn/js/cart/guest_login.js' %}"></script>
     <script>
         var site_domain = "{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN}}";
     </script>
     {% compress js %}
         <script src="{% static 'shinelearn/js/common/jquery.autocomplete.min.js' %}"></script>
-        <script src="{% static 'shinelearn/js/cart/payment-shipping.js' %}"></script>
         <script src="{% static 'shinelearn/js/cart/payment-login.js' %}"></script>
+        <script src="{% static 'shinelearn/js/cart/payment-shipping.js' %}"></script>
         <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
 
 

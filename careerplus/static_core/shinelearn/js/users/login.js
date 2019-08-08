@@ -1,153 +1,154 @@
-var googleRedirectionUrl;
-window.fbAsyncInit = function () {
-    FB.init({
-        appId: '1482454715170390', // App ID
-        status: true, // check login status
-        cookie: true, // enable cookies to allow the server to access the session
-        xfbml: true, // parse XFBML
-        version: 'v2.10',
-    });
-};
+$(document).ready(function () {
 
-function Login(redirect_url) {
-    if (redirect_url == undefined) {
-        redirect_url = "/";
-    }
-    FB.login(function (response) {
-        if (response.status == 'connected') {
-            ajaxCallSocialLogin(response.authResponse.accessToken, response.authResponse.expiresIn, 'fb', redirect_url)
-        } else {
-            console.log('User cancelled login or did not fully authorize.');
-        }
-    }, {scope: 'email'});
-}
-
-// Load the SDK asynchronously
-(function (d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s);
-    js.id = id;
-    js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.10&appId=1482454715170390";
-    fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));
-
-// Social Gplus Login
-
-function loginCallback(result) {
-
-    if (result['status']['signed_in']) {
-        ajaxCallSocialLogin(result.access_token, result.expires_in, 'gplus', googleRedirectionUrl)
-    }
-}
-
-
-function glogin(redirect_url) {
-    if (redirect_url == undefined) {
-        redirect_url = "/";
-    }
-    googleRedirectionUrl = redirect_url;
-    var myParams = {
-        'clientid': '653414155457-ufec3m78n4ctcvfqn34jf8skn4mv909e.apps.googleusercontent.com',
-        'cookiepolicy': 'single_host_origin',
-        'callback': 'loginCallback', //callback function
-        'approvalprompt': 'force',
-        'scope': 'profile email',
-    };
-    gapi.auth.signIn(myParams);
-}
-
-var auth2;
-var startApp = function () {
-    gapi.load('auth2', function () {
-        /* Retrieve the singleton for the GoogleAuth library and set up the client.*/
-        auth2 = gapi.auth2.init({
-            client_id: '653414155457-ufec3m78n4ctcvfqn34jf8skn4mv909e.apps.googleusercontent.com',
-            cookiepolicy: 'single_host_origin',
-            /* Request scopes in addition to 'profile' and 'email'*/
-            scope: 'profile email'
+    let googleRedirectionUrl;
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: '1482454715170390', // App ID
+            status: true, // check login status
+            cookie: true, // enable cookies to allow the server to access the session
+            xfbml: true, // parse XFBML
+            version: 'v2.10',
         });
-    });
-};
+    };
 
-(function () {
-    var po = document.createElement('script');
-    po.type = 'text/javascript';
-    po.async = true;
-    po.src = 'https://apis.google.com/js/client.js?onload=startApp';
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(po, s);
-})();
-
-
-function validate_linkedin_login_terms() {
-    if ($('#accept-condition').is(":checked")) {
-        var mobile_attr = $('#linkedin_url_id').attr('mobile');
-        if (mobile_attr == 'mobile') {
-            $('.bs-example-modal-sm-linkedin').modal('show');
-            return false;
-        } else {
-            return true;
+    function Login(redirect_url) {
+        if (redirect_url == undefined) {
+            redirect_url = "/";
         }
-    } else {
-        $('#term-error').text('Please agree the terms and conditions.');
-        return false
-    }
-}
-
-function saveReviewFormDataToLocalStorage() {
-    var formData = $('#feedback-form').serialize();
-    if (formData) {
-        localStorage.setItem('formData', formData);
-    }
-}
-
-function googleLoginCallback(result) {
-
-    if (result['status']['signed_in']) {
-        saveReviewFormDataToLocalStorage()
-        ajaxCallSocialLogin(result.access_token, result.expires_in, 'gplus', window.location.href)
-    }
-}
-
-function reviewSocialLogin(next_url = undefined, social_id) {
-    if (social_id == 'fb') {
         FB.login(function (response) {
             if (response.status == 'connected') {
-                saveReviewFormDataToLocalStorage()
-                ajaxCallSocialLogin(response.authResponse.accessToken, response.authResponse.expiresIn, 'fb', next_url)
+                ajaxCallSocialLogin(response.authResponse.accessToken, response.authResponse.expiresIn, 'fb', redirect_url)
             } else {
                 console.log('User cancelled login or did not fully authorize.');
             }
         }, {scope: 'email'});
-    } else if (social_id == 'gplus') {
-        var myParams = {
+    }
+
+// Load the SDK asynchronously
+    (function (d, s, id) {
+        let js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.10&appId=1482454715170390";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+// Social Gplus Login
+
+    function loginCallback(result) {
+
+        if (result['status']['signed_in']) {
+            ajaxCallSocialLogin(result.access_token, result.expires_in, 'gplus', googleRedirectionUrl)
+        }
+    }
+
+
+    function glogin(redirect_url) {
+        if (redirect_url == undefined) {
+            redirect_url = "/";
+        }
+        googleRedirectionUrl = redirect_url;
+        let myParams = {
             'clientid': '653414155457-ufec3m78n4ctcvfqn34jf8skn4mv909e.apps.googleusercontent.com',
             'cookiepolicy': 'single_host_origin',
-            'callback': 'googleLoginCallback', //callback function
+            'callback': 'loginCallback', //callback function
             'approvalprompt': 'force',
             'scope': 'profile email',
         };
         gapi.auth.signIn(myParams);
     }
 
-}
+    let auth2;
+    let startApp = function () {
+        gapi.load('auth2', function () {
+            /* Retrieve the singleton for the GoogleAuth library and set up the client.*/
+            auth2 = gapi.auth2.init({
+                client_id: '653414155457-ufec3m78n4ctcvfqn34jf8skn4mv909e.apps.googleusercontent.com',
+                cookiepolicy: 'single_host_origin',
+                /* Request scopes in addition to 'profile' and 'email'*/
+                scope: 'profile email'
+            });
+        });
+    };
 
-function ajaxCallSocialLogin(accessToken, expiresIn, social_id, next_url = undefined) {
-    var sign_in_url = '/user/social/login/?accessToken=' + accessToken + '&expiresIn=' + expiresIn + '&key=' + social_id;
-    if (next_url) {
-        sign_in_url = sign_in_url + '&next_url=' + next_url;
+    (function () {
+        let po = document.createElement('script');
+        po.type = 'text/javascript';
+        po.async = true;
+        po.src = 'https://apis.google.com/js/client.js?onload=startApp';
+        let s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(po, s);
+    })();
+
+
+    function validate_linkedin_login_terms() {
+        if ($('#accept-condition').is(":checked")) {
+            let mobile_attr = $('#linkedin_url_id').attr('mobile');
+            if (mobile_attr == 'mobile') {
+                $('.bs-example-modal-sm-linkedin').modal('show');
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            $('#term-error').text('Please agree the terms and conditions.');
+            return false
+        }
     }
-    window.location.href = sign_in_url
-}
 
-const handleLogin = () => {
-    if ($('#login_form').valid()) {
-        document.getElementById('login_form').submit();
+    function saveReviewFormDataToLocalStorage() {
+        let formData = $('#feedback-form').serialize();
+        if (formData) {
+            localStorage.setItem('formData', formData);
+        }
     }
-}
 
-$(document).ready(function () {
+    function googleLoginCallback(result) {
+
+        if (result['status']['signed_in']) {
+            saveReviewFormDataToLocalStorage()
+            ajaxCallSocialLogin(result.access_token, result.expires_in, 'gplus', window.location.href)
+        }
+    }
+
+    function reviewSocialLogin(next_url = undefined, social_id) {
+        if (social_id == 'fb') {
+            FB.login(function (response) {
+                if (response.status == 'connected') {
+                    saveReviewFormDataToLocalStorage()
+                    ajaxCallSocialLogin(response.authResponse.accessToken, response.authResponse.expiresIn, 'fb', next_url)
+                } else {
+                    console.log('User cancelled login or did not fully authorize.');
+                }
+            }, {scope: 'email'});
+        } else if (social_id == 'gplus') {
+            let myParams = {
+                'clientid': '653414155457-ufec3m78n4ctcvfqn34jf8skn4mv909e.apps.googleusercontent.com',
+                'cookiepolicy': 'single_host_origin',
+                'callback': 'googleLoginCallback', //callback function
+                'approvalprompt': 'force',
+                'scope': 'profile email',
+            };
+            gapi.auth.signIn(myParams);
+        }
+
+    }
+
+    function ajaxCallSocialLogin(accessToken, expiresIn, social_id, next_url = undefined) {
+        let sign_in_url = '/user/social/login/?accessToken=' + accessToken + '&expiresIn=' + expiresIn + '&key=' + social_id;
+        if (next_url) {
+            sign_in_url = sign_in_url + '&next_url=' + next_url;
+        }
+        window.location.href = sign_in_url
+    }
+
+    const handleLogin = () => {
+        if ($('#login_form').valid()) {
+            document.getElementById('login_form').submit();
+        }
+    }
+
 
     $('#accept-condition').click(function () {
         if ($(this).is(":checked")) {
@@ -156,7 +157,7 @@ $(document).ready(function () {
     });
 
     /*try{
-        var mobile_attr = $('#linkedin_url_id').attr('mobile');
+        let mobile_attr = $('#linkedin_url_id').attr('mobile');
         if (mobile_attr == 'mobile') {
             $('.bs-example-modal-sm-linkedin').modal('show');
         }
@@ -165,7 +166,7 @@ $(document).ready(function () {
 
 
     // login and registration js 
-    var emailresponse;
+    let emailresponse;
     $.validator.addMethod("emailDoesNotExist",
         function (value, element) {
             $.ajax({
@@ -182,53 +183,58 @@ $(document).ready(function () {
         },
         "This email id does not exists."
     );
-    $("#login_form").validate({
-        submitHandler: function (form) {
-            debugger;
-            form.submit();
-            // e.preventDefault();
-            /*if($(this).val() != '')
-            {
-              $('button[type="submit"]').prop('disabled', false);  
-            }
-            else
-            {
-              $('button[type="submit"]').prop('disabled', true);
-            } */
-        },
-        rules: {
-            email: {
-                required: true,
-                email: true/*,
-                    emailDoesNotExist:true*/
 
-            },
-            password: {
-                required: true,
-                minlength: 6,
-                maxlength: 15
-            }
-        },
-        messages: {
-            email: {required: "Please enter a valid email address."},
-            password: {
-                required: "Please provide a password"
-            }
-        },
-        highlight: function (element, errorClass) {
-            $(element).closest('.form-group').addClass('error');
-        },
-        unhighlight: function (element, errorClass) {
-            $(element).closest('.form-group').removeClass('error');
-            $(element).siblings('.error-txt').html('');
-        },
-        errorPlacement: function (error, element) {
-            $(element).siblings('.error-txt').html(error.text());
-        },
-    });
+    /*
+    **
+    **  @duplicate code added.
+    * * same code added in  payment-login.html
+    * */
+    // $("#login_form").validate({
+    //     submitHandler: function (form) {
+    //         form.submit();
+    //         // e.preventDefault();
+    //         /*if($(this).val() != '')
+    //         {
+    //           $('button[type="submit"]').prop('disabled', false);
+    //         }
+    //         else
+    //         {
+    //           $('button[type="submit"]').prop('disabled', true);
+    //         } */
+    //     },
+    //     rules: {
+    //         email: {
+    //             required: true,
+    //             email: true/*,
+    //                 emailDoesNotExist:true*/
+    //
+    //         },
+    //         password: {
+    //             required: true,
+    //             minlength: 6,
+    //             maxlength: 15
+    //         }
+    //     },
+    //     messages: {
+    //         email: {required: "Please enter a valid email address."},
+    //         password: {
+    //             required: "Please provide a password"
+    //         }
+    //     },
+    //     highlight: function (element, errorClass) {
+    //         $(element).closest('.form-group').addClass('error');
+    //     },
+    //     unhighlight: function (element, errorClass) {
+    //         $(element).closest('.form-group').removeClass('error');
+    //         $(element).siblings('.error-txt').html('');
+    //     },
+    //     errorPlacement: function (error, element) {
+    //         $(element).siblings('.error-txt').html(error.text());
+    //     },
+    // });
 
     $.validator.addMethod("indiaMobile", function (value, element) {
-        var country_code = $('#id_country_code').val();
+        let country_code = $('#id_country_code').val();
         if (country_code == '91') {
             return value.length == 10;
         }
@@ -272,8 +278,8 @@ $(document).ready(function () {
     $("#forgot_form").validate({
         submitHandler: function (form) {
             debugger;
-            var formData = $(form).serialize();
-            var post_url = $(form).attr('action');
+            let formData = $(form).serialize();
+            let post_url = $(form).attr('action');
             $('#forgot_div').modal('hide');
             $('#forgot_form').addClass('hidden');
             $('#login_form').removeClass('hidden');
