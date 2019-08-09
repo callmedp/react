@@ -3200,6 +3200,7 @@ class CertficationProductQueueView(PaginationMixin, ListView):
         self.created = request.GET.get('created', '')
         self.sel_opt = request.GET.get('rad_search','number')
         self.modified = request.GET.get('modified', '')
+        self.vendor_id = request.GET.get('vendor', '')
         return super(CertficationProductQueueView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -3267,6 +3268,9 @@ class CertficationProductQueueView(PaginationMixin, ListView):
                 end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
             queryset = queryset.filter(
                 created__range=[start_date, end_date])
+
+        if self.vendor_id:
+            queryset = queryset.filter(product__vendor__id=self.vendor_id)
 
         return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
 
