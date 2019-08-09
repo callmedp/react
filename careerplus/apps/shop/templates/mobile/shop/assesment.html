@@ -199,35 +199,12 @@
             <div class="container mb-30 pt-0" style="margin-top:-15px;">
 
                 <div class="grey-bg border-bottom row pt-20 pb-20">
-                    <div class="content-box">
-                        <h2 class="fs-18">What you get?</h2>
-                        <ul class="what-get mt-20">
-                            <li>
-                                <span class="icon-feedback"></span>
-                                <p>Receive valuable feedback, from reliable exam reports, on your strong and weak areas</p>
-                            </li>
-                            <li>
-                                <span class="icon-inDepth"></span>
-                                <p>In depth and exhaustive explanation to every question to enhance your learning</p>
-                            </li>
-                            <li>
-                                <span class="icon-checkQuestion"></span>
-                                <p>500+ questions to test your learning on variety of topics</p>
-                            </li>
-                            <li>
-                                <span class="icon-getReal"></span>
-                                <p>Get real exam and practice environment</p>
-                            </li>
-                            <li>
-                                <span class="icon-unlimitedAccess"></span>
-                                <p>Unlimited access to the assessment platform</p>
-                            </li>
-                            <li>
-                                <span class="icon-getTips"></span>
-                                <p>Gets Tips & Tricks to crack the test</p>
-                            </li>
-                        </ul>
-                    </div>
+                    {% if prd_vendor_slug == 'amcat' %}
+                    {% include "mobile/shop/partials/what_you_get_amcat.html" %}
+
+                    {% else %}
+                        {% include "mobile/shop/partials/what_you_get.html" %}
+                    {% endif %}
                 </div><!-- /.What you get -->
 
                 <div class="content-box row pt-30 pb-30">
