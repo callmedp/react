@@ -53,7 +53,7 @@
                {% for test in all_test|slice:":8" %}
                <div class="testinside">
                   <span class="border-left border{{forloop.counter}}"></span>
-  <a id="{{test.id}}" class="testModal" data-toggle="modal" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}","courseName":"{{test.course.name}}","courseDuration":"{{test.course.get_duration_in_day}}","coursePrice":"{{test.course.inr_price}}","productName":"{{test.product.name}}","productDuration":"{{test.product.get_duration_day}}","productPrice":"{{test.product.inr_price}}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}"  }' data-target="#testModal">
+  <a id="{{test.id}}" class="testModal" data-toggle="modal" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}","courseName":"{{test.course.name}}","courseDuration":"{{test.course.get_duration_in_day}}","coursePrice":"{{test.course.inr_price}}","productName":"{{test.product.name}}","productDuration":"{{test.product.get_duration_day}}","productPrice":"{{test.product.inr_price}}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}","courseUrl":"{{test.course.get_absolute_url}}",,"productUrl":"{{test.product.absolute_url}}"  }' data-target="#testModal">
                      {{test.title}}
                      <div class="white_hover"></div>
                      <span class="taketest" >Take Free Test</span>
@@ -112,7 +112,7 @@
                <img src="{% static 'shinelearn/images/free_skill/practice-test-bg.jpg' %}" class="img-responsive">
             </i>
             <span class="pad-15">
-               <h3 id="productName">Practice Tests</h3>
+               <h3><a href="#" id="productName">Practice Tests</a></h3>
                <ul>
                   <li>
                      Test Format <strong>Practice Exam</strong>
@@ -137,7 +137,7 @@
                <img src="{% static 'shinelearn/images/free_skill/online-course-bg.jpg' %}" class="img-responsive">
             </i>
             <span class="pad-15">
-               <h3 id="courseName">Online Course</h3>
+               <h3><a href="#" id="courseName">Practice Tests</a></h3>
                <ul>
                   <li>
                      Duration <strong id="courseDuration">8 Days</strong>
@@ -192,7 +192,7 @@
                   <span class="border-left border border${color}"></span>
   <a id="${json.results[fa].id}" class="testModal" data-toggle="modal" data-attr-value='{"id":"${json.results[fa].id}","catid":"${json.results[fa].category}","quescount":"${json.results[fa].question_count}",
   "testSlug":"${json.results[fa].slug}","vendor":"${json.results[fa].vendor}",
-   "courseName":"${json.results[fa].course_id_data[0].name}","courseDuration":"${json.results[fa].course_id_data[0].day_duration}","coursePrice":"${json.results[fa].course_id_data[0].inr_price}","productName":"${json.results[fa].product_id_data[0].name}","productDuration":"${json.results[fa].product_id_data[0].day_duration}","productPrice":"${json.results[fa].product_id_data[0].inr_price}","productId":"${json.results[fa].product_id_data[0].id}","courseId":"${json.results[fa].course_id_data[0].id}"
+   "courseName":"${json.results[fa].course_id_data[0].name}","courseDuration":"${json.results[fa].course_id_data[0].day_duration}","coursePrice":"${json.results[fa].course_id_data[0].inr_price}","productName":"${json.results[fa].product_id_data[0].name}","productUrl":"${json.results[fa].product_id_data[0].absolute_url}","productDuration":"${json.results[fa].product_id_data[0].day_duration}","productPrice":"${json.results[fa].product_id_data[0].inr_price}","productId":"${json.results[fa].product_id_data[0].id}","courseId":"${json.results[fa].course_id_data[0].id}","courseUrl":"${json.results[fa].course_id_data[0].absolute_url}"
    }' data-target="#testModal">
                      ${json.results[fa].title}
                      <div class="white_hover"></div>

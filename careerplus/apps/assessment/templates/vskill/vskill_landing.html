@@ -73,7 +73,7 @@
          {% for test in test_list %}
                <div class="testinside">
                   <span class="border-left"></span>
-                  <a id="{{test.id}}" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","catname":"{{test.category.name}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}","courseName":"{{test.course.name}}","courseDuration":"{{test.course.get_duration_in_day}}","coursePrice":"{{test.course.inr_price}}","productName":"{{test.product.name}}","productDuration":"{{test.product.get_duration_day}}","productPrice":"{{test.product.inr_price}}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}" }' data-toggle="modal"  data-target="#testModal">
+                  <a id="{{test.id}}" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","catname":"{{test.category.name}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}","courseName":"{{test.course.name}}","courseDuration":"{{test.course.get_duration_in_day}}","coursePrice":"{{test.course.inr_price}}","productName":"{{test.product.name}}","productDuration":"{{test.product.get_duration_day}}","productPrice":"{{test.product.inr_price}}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}","courseUrl":"{{test.course.get_absolute_url}}","productUrl":"{{test.product.get_absolute_url}}" }' data-toggle="modal"  data-target="#testModal">
                      {{test.title}}
                      <div class="white_hover"></div>
                      <span class="taketest" >Take Free Test</span>
@@ -94,7 +94,11 @@
 
                <div class="functional_test_inside border-{{forloop.counter}}">
                   <a href="{% url 'assessment:vskill-category' slug=fa.slug %}">
-                  <span class="fa-{{fa.id}}"></span>
+                      {% if fa.icon %}
+                     <span><img class="img-responsive" src= "{{fa.icon.url}}"></span>
+                     {% else %}
+                     <span><img class="img-responsive" src="#"></span>
+                     {% endif %}
                   {{fa.name}}
                   </a>
                </div>
@@ -154,7 +158,7 @@
                         <img src="{% static 'shinelearn/images/free_skill/practice-test-bg.jpg' %}" class="img-responsive">
                      </i>
                      <span class="pad-15">
-                        <h3 id="productName">Practice Tests</h3>
+                        <h3><a id="productName">Practice Tests</a></h3>
                         <ul>
                            <li>
                               Test Format <strong>Practice Exam</strong>
@@ -177,7 +181,7 @@
                         <img src="{% static 'shinelearn/images/free_skill/online-course-bg.jpg' %}" class="img-responsive">
                      </i>
                      <span class="pad-15">
-                        <h3 id="courseName">Online Course</h3>
+                        <h3><a id="courseName">Practice Tests</a></h3>
                         <ul>
                            <li>
                               Duration <strong id="courseDuration">8 Days</strong>
@@ -225,7 +229,10 @@
                }
                for (fa in json.results){
                  color = counter(facolor)
-                element.innerHTML= element.innerHTML +'<div class="functional_test_inside border-'+color+'"><a href="/practice-tests/'+ json.results[fa].slug+ '"><span class= "fa-'+ json.results[fa].id + '"></span>'+ json.results[fa].name +'</a></div>';
+                element.innerHTML= element.innerHTML +
+                `<div class="functional_test_inside border-${color}"><a href="/practice-tests/${json.results[fa].slug}">
+                <span> <img class="img-responsive" src="${json.results[fa].icon}"></span>
+                 ${json.results[fa].name} </a></div>`;
                    facolor +=1;
                }
                },

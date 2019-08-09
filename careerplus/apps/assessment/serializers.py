@@ -11,8 +11,8 @@ class TestSerializer(SerializerFieldsMixin, ListSerializerContextMixin, ListSeri
 
 
     list_lookup_fields = ['course_id', 'product_id', 'category_id']
-    fields_required_mapping = {'course_id': ['name','inr_price'],
-                               'product_id': ['name','inr_price','day_duration'],
+    fields_required_mapping = {'course_id': ['name','inr_price','absolute_url'],
+                               'product_id': ['name','inr_price','day_duration','absolute_url'],
                                'category_id': ['name','inr_price','day_duration'],
                               }
     field_model_mapping = {'course_id': Product, 'product_id': Product, 'category_id': Category}
