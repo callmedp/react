@@ -63,7 +63,7 @@
         <ol>
                {% for quest in questions_list %}
             <li>
-                {{quest.question_text}}
+                {{ quest.question_text|linebreaksbr }}
                 <ul>
                     {% for ans in quest.options %}
                     <li>
