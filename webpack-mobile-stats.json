@@ -3,13 +3,16 @@
   "chunks": {
     "main": [
       {
-        "name": "../../../careerplus/static_core/react/dist/mobile/main-1565349317969.css"
+        "name": "letmain-1565349317969.css",
+        "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/react/dist/mobile/main-1565349317969.css"
       },
       {
-        "name": "../../../careerplus/static_core/react/dist/mobile/main-1565349317969.js"
+        "name": "letmain-1565349317969.js",
+        "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/react/dist/mobile/main-1565349317969.js"
       },
       {
-        "name": "../../../careerplus/static_core/react/dist/mobile/main-1565349317969.js.map"
+        "name": "letmain-1565349317969.js.map",
+        "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/react/dist/mobile/main-1565349317969.js.map"
       }
     ]
   }
