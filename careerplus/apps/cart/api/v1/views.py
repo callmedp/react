@@ -6,6 +6,7 @@ from datetime import datetime, date
 # django imports
 
 # local imports
+from cart.api.core.serializers import CartSerializer
 
 # inter app imports
 from users.mixins import RegistrationLoginApi
@@ -16,6 +17,7 @@ from cart.models import Cart
 
 # third party imports
 from rest_framework.views import APIView
+from rest_framework.generics import (RetrieveUpdateAPIView)
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -32,24 +34,11 @@ class EmailStatusView(APIView):
             email_status, status=status.HTTP_200_OK)
 
 
-class UpdateCartView(CartMixin, APIView):
+class CartRetrieveUpdateView(RetrieveUpdateAPIView):
     authentication_classes = ()
     permission_classes = ()
-    serializer_class = None
+    serializer_class = CartSerializer
 
-    def post(self, request, *args, **kwargs):
-        candidate_id = kwargs.get('candidate_id')
-        email = kwargs.get('email')
-        first_name = kwargs.get('first_name')
-
-        cart_pk = request.session.get('cart_pk')
-        if cart_pk:
-            cart_obj = Cart.objects.get(pk=cart_pk)
-            cart_obj.email = email
-            cart_obj.owner_id = candidate_id
-            cart_obj.owner_mail = email
-            cart_obj.first_name = first_name
-            cart_obj.save()
-        import ipdb;
-        ipdb.set_trace();
-        return Response({}, status=status.HTTP_200_OK)
+    def get_queryset(self):
+        cart_id = int(self.kwargs.get('pk'))
+        return Cart.objects.filter(id=cart_id)

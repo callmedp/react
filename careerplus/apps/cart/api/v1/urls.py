@@ -5,7 +5,7 @@ from django.conf.urls import url
 
 # local imports
 
-from .views import EmailStatusView, UpdateCartView
+from .views import EmailStatusView, CartRetrieveUpdateView
 #inter app imports
 
 # third party imports
@@ -15,6 +15,6 @@ router = routers.DefaultRouter()
 
 urlpatterns = [
         url(r'^email-status/(?P<email>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/$', EmailStatusView.as_view()),
-        url(r'^update/$', UpdateCartView.as_view()),
+        url(r'^(?P<pk>\d+)/$', CartRetrieveUpdateView.as_view()),
 
 ]

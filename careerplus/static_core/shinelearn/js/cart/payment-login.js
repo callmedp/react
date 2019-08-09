@@ -78,15 +78,37 @@ const handleLoginCandidate = async () => {
         $('#invalid-cred').show().delay(5000).fadeOut()
         return;
     }
+
+    const {data: {candidate_id, cart_pk, token, profile: {email, first_name}}} = result;
+
     /*
     *  update the cart
     * */
+    const updatedInfo = {
+        'email': email,
+        'owner_id': candidate_id,
+        'owner_email': email,
+        'first_name': first_name
+    }
 
-    const updateCartResponse = await fetch(`${site_domain}/api/v1/cart/update/`, {
+    const updateCartResponse = await fetch(`${site_domain}/api/v1/cart/${cart_pk}/`, {
         headers: defaultHeaders,
-        method: 'POST',
-        body: JSON.stringify(formData)
+        method: 'PUT',
+        body: JSON.stringify(updatedInfo)
     });
+
+    const cartData = await handleResponse(updateCartResponse);
+
+
+    if (cartData['error']) {
+        // Todo ***** error handling  *****
+        console.log('Some error has occur');
+        return;
+    }
+    console.log('--updatedCart----', cartData);
+
+    window.location.href = `/payment/payment-options/`;
+
 };
 
 

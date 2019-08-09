@@ -180,6 +180,8 @@ class PaymentLoginView(TemplateView, CartMixin):
         return super(self.__class__, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        import ipdb;
+        ipdb.set_trace();
         try:
             login_resp = {}
             login_dict = {}
@@ -241,69 +243,69 @@ class PaymentLoginView(TemplateView, CartMixin):
                     return HttpResponseRedirect(reverse('payment:payment-option'))
                 return HttpResponseRedirect(reverse('cart:payment-summary'))
 
-            if valid_email:
-                login_dict.update({
-                    "email": email,
-                    "password": password,
-                })
-                user_exist = RegistrationLoginApi.check_email_exist(login_dict['email'])
-
-                if user_exist.get('exists') and password:
-                    login_resp = RegistrationLoginApi.user_login(login_dict)
-
-                    if login_resp['response'] == 'login_user':
-                        resp_status = ShineCandidateDetail().get_status_detail(email=None,
-                                                                               shine_id=login_resp['candidate_id'])
-                        self.request.session.update(resp_status)
-                        cart_pk = self.request.session.get('cart_pk')
-                        if cart_pk:
-                            cart_obj = Cart.objects.get(pk=cart_pk)
-                            cart_obj.email = email
-                            cart_obj.owner_id = login_resp['candidate_id']
-                            cart_obj.owner_email = email
-                            cart_obj.first_name = self.request.session.get('first_name', '')
-                            cart_obj.save()
-                        if remember_me:
-                            self.request.session.set_expiry(
-                                settings.SESSION_COOKIE_AGE)  # 1 year
-                        return HttpResponseRedirect(reverse('payment:payment-option'))
-
-                    elif login_resp['response'] == 'error_pass':
-                        context = self.get_context_data()
-                        context.update({
-                            "non_field_error": login_resp.get("non_field_errors")[0],
-                            'email_exist': True,
-                            "email": email})
-                        return TemplateResponse(request, self.template_name, context)
-
-                elif user_exist.get('exists'):
-                    context = self.get_context_data()
-                    context.update({"guest_login": "guest_login"})
-                    cart_pk = self.request.session.get('cart_pk')
-                    if cart_pk:
-                        cart_obj = Cart.objects.get(pk=cart_pk)
-                        cart_obj.email = email
-                        cart_obj.save()
-                    context.update({
-                        'email': email,
-                        'email_exist': True})
-                    return TemplateResponse(request, self.template_name, context)
-
-                elif not user_exist.get('exists'):
-                    cart_pk = self.request.session.get('cart_pk')
-                    if cart_pk:
-                        cart_obj = Cart.objects.get(pk=cart_pk)
-                        cart_obj.email = email
-                        cart_obj.save()
-                        return HttpResponseRedirect(reverse('payment:payment-option'))
-                    return HttpResponseRedirect(reverse('cart:payment-summary'))
-            else:
-                email_error = "Please enter valid email address."
-                context = self.get_context_data()
-                context.update({
-                    "email_exist": False,
-                    "email_error": email_error})
-                return TemplateResponse(request, self.template_name, context)
+            # if valid_email:
+            #     login_dict.update({
+            #         "email": email,
+            #         "password": password,
+            #     })
+            #     user_exist = RegistrationLoginApi.check_email_exist(login_dict['email'])
+            #
+            #     if user_exist.get('exists') and password:
+            #         login_resp = RegistrationLoginApi.user_login(login_dict)
+            #
+            #         if login_resp['response'] == 'login_user':
+            #             resp_status = ShineCandidateDetail().get_status_detail(email=None,
+            #                                                                    shine_id=login_resp['candidate_id'])
+            #             self.request.session.update(resp_status)
+            #             cart_pk = self.request.session.get('cart_pk')
+            #             if cart_pk:
+            #                 cart_obj = Cart.objects.get(pk=cart_pk)
+            #                 cart_obj.email = email
+            #                 cart_obj.owner_id = login_resp['candidate_id']
+            #                 cart_obj.owner_email = email
+            #                 cart_obj.first_name = self.request.session.get('first_name', '')
+            #                 cart_obj.save()
+            #             if remember_me:
+            #                 self.request.session.set_expiry(
+            #                     settings.SESSION_COOKIE_AGE)  # 1 year
+            #             return HttpResponseRedirect(reverse('payment:payment-option'))
+            #
+            #         elif login_resp['response'] == 'error_pass':
+            #             context = self.get_context_data()
+            #             context.update({
+            #                 "non_field_error": login_resp.get("non_field_errors")[0],
+            #                 'email_exist': True,
+            #                 "email": email})
+            #             return TemplateResponse(request, self.template_name, context)
+            #
+            #     elif user_exist.get('exists'):
+            #         context = self.get_context_data()
+            #         context.update({"guest_login": "guest_login"})
+            #         cart_pk = self.request.session.get('cart_pk')
+            #         if cart_pk:
+            #             cart_obj = Cart.objects.get(pk=cart_pk)
+            #             cart_obj.email = email
+            #             cart_obj.save()
+            #         context.update({
+            #             'email': email,
+            #             'email_exist': True})
+            #         return TemplateResponse(request, self.template_name, context)
+            #
+            #     elif not user_exist.get('exists'):
+            #         cart_pk = self.request.session.get('cart_pk')
+            #         if cart_pk:
+            #             cart_obj = Cart.objects.get(pk=cart_pk)
+            #             cart_obj.email = email
+            #             cart_obj.save()
+            #             return HttpResponseRedirect(reverse('payment:payment-option'))
+            #         return HttpResponseRedirect(reverse('cart:payment-summary'))
+            # else:
+            #     email_error = "Please enter valid email address."
+            #     context = self.get_context_data()
+            #     context.update({
+            #         "email_exist": False,
+            #         "email_error": email_error})
+            #     return TemplateResponse(request, self.template_name, context)
 
         except Exception as e:
             logging.getLogger('error_log').error("payment login execution failed  %s " % str(e))

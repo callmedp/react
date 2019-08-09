@@ -880,6 +880,8 @@ class ShineCandidateLoginAPIView(APIView):
         candidate_obj.id = candidate_id
         candidate_obj.candidate_id = candidate_id
         token = self.get_or_create_token(candidate_obj)
+
+        self.request.session.update(login_response)
         if with_info:
             data_to_send = {"token": token,
                             "candidate_id": candidate_id,
@@ -891,9 +893,10 @@ class ShineCandidateLoginAPIView(APIView):
         else:
             data_to_send = {
                 "token": token,
-                "candidate_id": candidate_id
+                "candidate_id": candidate_id,
+                'cart_pk': self.request.session.get('cart_pk'),
+                'profile': login_response and login_response['personal_detail'][0]
             }
-        self.request.session.update(login_response)
 
         return Response(data_to_send, status=status.HTTP_201_CREATED)
 
