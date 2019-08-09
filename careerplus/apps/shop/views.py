@@ -1220,8 +1220,9 @@ class SkillToProductRedirectView(View):
     def get(self, request, *args, **kwargs):
         skill_name = self.kwargs.get('skill_name', '')
         pkskl = ProductSkill.objects.filter(skill__slug=skill_name).first()
-        if not pkskl:
-            pkskl = ProductSkill.objects.all().first()
-        url_ro_rirect = pkskl.product.get_absolute_url()
+        if pkskl:
+            url_ro_rirect = pkskl.product.get_absolute_url()
+        else:
+            url_ro_rirect = '/search/results/?fvid=59'
         return HttpResponseRedirect(url_ro_rirect)
 

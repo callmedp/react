@@ -3035,7 +3035,7 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
             q_objects = Q()
             if int(self.day_choice) == 1:
                 today = timezone.now()
-                date_list = [(today - relativedelta.relativedelta(days=i * 7)).date() for i in range(0,52) ]
+                date_list = [(today - relativedelta.relativedelta(days=i * 7)).date() for i in range(1,52) ]
                 for d in date_list:
                     q_objects |= Q(orderitemoperation__oi_status=1, orderitemoperation__created__range=[d, d + relativedelta.relativedelta(days=1)])
             elif int(self.day_choice) == 2:
