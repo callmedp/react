@@ -746,7 +746,7 @@ function update_test_info(email){
 {% endif %}
 
 jQuery.validator.addMethod("customEmail", function(value, element) {
-    var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    var regex = /^([a-zA-Z0-9]+[a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     return regex.test(value);
 }, "Enter valid email");
 
