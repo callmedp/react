@@ -341,20 +341,15 @@ class MidOutQueueView(TemplateView, PaginationMixin):
         form = ResumeUploadForm(request.POST, request.FILES)
         obj_pk = request.POST.get('oi_pk', None)
         if form.is_valid():
-            try:
-                order = Order.objects.get(pk=obj_pk)
-                orderitems = order.orderitems.filter(oi_status=2)  # filter(product__type_flow__in=[1])
-                for oi in orderitems:
-                    if not oi.oi_resume:
-                        data = {
-                            "candidate_resume": request.FILES.get('oi_resume', ''),
-                        }
+            order = Order.objects.get(pk=obj_pk)
+            orderitems = order.orderitems.filter(oi_status=2)  # filter(product__type_flow__in=[1])
+            data = {
+                "candidate_resume": request.FILES.get('oi_resume', ''),
+            }
 
-                        ActionUserMixin().upload_candidate_resume(
-                            oi=oi, data=data, user=request.user)
-                messages.add_message(request, messages.SUCCESS, 'resume uploaded Successfully')
-            except Exception as e:
-                messages.add_message(request, messages.ERROR, str(e))
+            ActionUserMixin().upload_candidate_resume(
+                order_items=orderitems, data=data, user=request.user)
+            messages.add_message(request, messages.SUCCESS, 'resume uploaded Successfully')
         else:
             error_message = form.errors.get('oi_resume')
             if error_message:
@@ -2674,10 +2669,10 @@ class ActionOrderItemView(View):
             orders = Order.objects.filter(id__in=selected_id)
             for order in orders:
                 ord_items = order.orderitems.first()
-                mid_out_sent = True
+                mid_out_pending = True
                 if order.midout_sent_on and timezone.now().date() == order.midout_sent_on.date():
-                    mid_out_sent = False
-                if mid_out_sent:
+                    mid_out_pending = False
+                if mid_out_pending:
                     # mail to user about writer information
                     to_emails = [order.email]
                     mail_type = "PENDING_ITEMS"

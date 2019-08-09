@@ -905,3 +905,9 @@ function roundone_edit(form, ajaxurl){
         }
     });
 }
+
+const uploadResumeShine = (checkbox,order_id)=>{
+    $(checkbox).attr("disabled", true);
+    $.get(`/`)
+    console.log(order_id)
+}

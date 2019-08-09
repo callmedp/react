@@ -53,13 +53,17 @@
 
                 {% elif obj.oi_status == 4 and obj.draft_counter == max_draft_limit %}
                     <p><strong>Status:</strong> Final Document is ready - <a href="{% url "dashboard:dashboard-resumedownload" obj.order.pk %}?path={{obj.oi_draft.name}}">Download</a></p>
+                    <div><input type="checkbox" onclick="uploadResumeShine(this,{{obj.order.pk}})">Upload Resume to Shine</button></div>
 
                 {% elif obj.oi_status == 4 and obj.draft_counter < max_draft_limit %}
                     <p><strong>Status:</strong> Service has been processed and Document is finalized - <a href="{% url "dashboard:dashboard-resumedownload" obj.order.pk %}?path={{obj.oi_draft.name}}">Download</a></p>
+                    <div><input type="checkbox" onclick="uploadResumeShine(this,{{obj.order.pk}})">Upload Resume to Shine</button></div>
                 {% elif obj.oi_status == 161 or obj.oi_status == 162 or obj.oi_status == 163 or obj.oi_status == 164  %}
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
                 {% elif obj.waiting_for_input %}
                     <p><strong>Status:</strong> Waiting for input</p>
+                {% elif obj.auto_upload %}
+                    <p><strong>Status:</strong> Service is under progress- <a role="button" class="upload-resume">Upload Resume</a></p>
                 {% else %}
                     <p><strong>Status:</strong> Service is under progress</p>
                 {% endif %}

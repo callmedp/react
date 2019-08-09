@@ -94,6 +94,7 @@ class DashboardView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         if request.session.get('candidate_id', None):
+            import ipdb; ipdb.set_trace()
             candidate_id = request.session.get('candidate_id')
             file = request.FILES.get('file', '')
             list_ids = request.POST.getlist('resume_pending', [])
@@ -104,65 +105,29 @@ class DashboardView(TemplateView):
                 response = ShineCandidateDetail().get_shine_candidate_resume(
                     candidate_id=candidate_id,
                     resume_id=request.session.get('resume_id'))
+                if not response:
+                    request.session.pop('resume_id')
+                    DashboardInfo().check_user_shine_resume(candidate_id=candidate_id,request=request)
+                    response = ShineCandidateDetail().get_shine_candidate_resume(
+                                                        candidate_id=candidate_id,
+                                                        resume_id=request.session.get('resume_id'))
                 if response.status_code == 200:
-                    default_name = 'shine_resume' + timezone.now().strftime('%d%m%Y')
-                    file_name = request.session.get('shine_resume_name', default_name)
-                    # file_name = file_name + '.' + resume_extn
-
-                    order_items = OrderItem.objects.filter(
-                        order__status=1,
-                        id__in=list_ids, order__candidate_id=candidate_id,
-                        no_process=False, oi_status=2).select_related('order')
-
-                    for obj in order_items:
-                        try:
-                            order = obj.order
-                            file = ContentFile(response.content)
-                            file_name = 'resumeupload_shine_resume_' + str(order.pk) + '_' + str(obj.pk) + '_' + str(
-                                int(random() * 9999)) \
-                                        + '_' + timezone.now().strftime('%Y%m%d') + '.' + resume_extn
-                            full_path = '%s/' % str(order.pk)
-                            if not settings.IS_GCP:
-                                if not os.path.exists(settings.RESUME_DIR + full_path):
-                                    os.makedirs(settings.RESUME_DIR + full_path)
-                                dest = open(
-                                    settings.RESUME_DIR + full_path + file_name, 'wb')
-                                for chunk in file.chunks():
-                                    dest.write(chunk)
-                                dest.close()
-                            else:
-                                GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
-                        except Exception as e:
-                            logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e)))
-                            continue
-
-                        # obj.oi_resume.save(file_name, ContentFile(response.content))
-                        obj.oi_resume = full_path + file_name
-                        last_oi_status = obj.oi_status
-                        obj.oi_status = 5
-                        obj.last_oi_status = 13
-                        obj.save()
-                        obj.orderitemoperation_set.create(
-                            oi_status=13,
-                            oi_resume=obj.oi_resume,
-                            last_oi_status=last_oi_status,
-                            assigned_to=obj.assigned_to)
-
-                        obj.orderitemoperation_set.create(
-                            oi_status=obj.oi_status,
-                            last_oi_status=obj.last_oi_status,
-                            assigned_to=obj.assigned_to)
-
-                    # with open(file_name, 'wb') as fd:
-                    #     for chunk in response.iter_content(chunk_size=128):
-                    #         fd.write(chunk)
-
+                    file = ContentFile(response.content)
+                    data = {
+                        "list_ids": list_ids,
+                        "candidate_resume": file,
+                        'last_oi_status': 13,
+                        'is_shine':True,
+                        'extension':request.session.get('resume_extn', '')
+                    }
+                    DashboardInfo().upload_candidate_resume(candidate_id=candidate_id, data=data)
             elif file:
                 extn = file.name.split('.')[-1]
                 if extn in ['doc', 'docx', 'pdf'] and list_ids:
                     data = {
                         "list_ids": list_ids,
                         "candidate_resume": file,
+                        'last_oi_status': 3
                     }
                     DashboardInfo().upload_candidate_resume(candidate_id=candidate_id, data=data)
                 elif not list_ids:

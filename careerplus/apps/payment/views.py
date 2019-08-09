@@ -19,7 +19,6 @@ from cart.models import Cart
 from order.mixins import OrderMixin
 from order.models import Order
 from console.decorators import Decorate, stop_browser_cache
-from dashboard.dashboard_mixin import DashboardInfo
 from django.core.files.base import ContentFile
 from django.utils import timezone
 from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
@@ -241,147 +240,88 @@ class ThankYouView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(ThankYouView, self).get_context_data(**kwargs)
         order_pk = self.request.session.get('order_pk')
-        if order_pk:
-            order = Order.objects.get(pk=order_pk)
-            order_items = []
-            if order:
-                parent_ois = order.orderitems.filter(parent=None).select_related('product', 'partner')
-                for p_oi in parent_ois:
-                    data = {}
-                    data['oi'] = p_oi
-                    data['addons'] = order.orderitems.filter(
-                        parent=p_oi,
-                        is_addon=True).select_related('product', 'partner')
-                    data['variations'] = order.orderitems.filter(
-                        parent=p_oi,
-                        is_variation=True).select_related('product', 'partner')
-                    order_items.append(data)
-                context.update({
-                    'orderitems': order_items,
-                    'order': order})
+        if not order_pk:
+            return
+        order = Order.objects.filter(pk=order_pk).first()
+        if not order:
+            return
+        order_items = []
+        parent_ois = order.orderitems.filter(parent=None).select_related('product', 'partner')
+        for p_oi in parent_ois:
+            data = {}
+            data['oi'] = p_oi
+            data['addons'] = order.orderitems.filter(
+                parent=p_oi,
+                is_addon=True).select_related('product', 'partner')
+            data['variations'] = order.orderitems.filter(
+                parent=p_oi,
+                is_variation=True).select_related('product', 'partner')
+            order_items.append(data)
+        context.update({
+            'orderitems': order_items,
+            'order': order})
 
-                pending_resume_items = order.orderitems.filter(
-                    order__status__in=[0, 1],
-                    no_process=False, oi_status=2)
+        pending_resume_items = order.orderitems.filter(
+            order__status__in=[0, 1],
+            no_process=False, oi_status=2)
 
-                assesment_items = order.orderitems.filter(
-                    order__status__in=[0],
-                    product__type_flow=16,
-                    product__sub_type_flow=1602
-                )
+        assesment_items = order.orderitems.filter(
+            order__status__in=[0],
+            product__type_flow=16,
+            product__sub_type_flow=1602
+        )
 
-                context.update({
-                    "pending_resume_items": pending_resume_items,
-                    "assesment_items": assesment_items
-                })
+        context.update({
+            "pending_resume_items": pending_resume_items,
+            "assesment_items": assesment_items
+        })
 
-                if not self.request.session.get('resume_id', None):
-                    DashboardInfo().check_user_shine_resume(
-                        candidate_id=self.request.session.get('candidate_id'),
-                        request=self.request)
+        if not self.request.session.get('resume_id', None):
+            DashboardInfo().check_user_shine_resume(
+                candidate_id=self.request.session.get('candidate_id'),
+                request=self.request)
         return context
 
     def post(self, request, *args, **kwargs):
+        import ipdb; ipdb.set_trace()
         action_type = request.POST.get('action_type', '').strip()
         order_pk = request.session.get('order_pk')
         resume_id = request.session.get('resume_id', None)
         candidate_id = request.session.get('candidate_id', None)
-        try:
-            order = Order.objects.get(pk=order_pk)
-        except Exception as e:
-            logging.getLogger('error_log').error('unable to get order object %s' % str(e))
-            return HttpResponseRedirect(reverse('payment:thank-you'))
+        order = Order.objects.filter(pk=order_pk).first()
+        if not order:
+            return
+        order_item_ids =list(order.orderitems.all().values_list('id',flat=True))
         file = request.FILES.get('resume_file', '')
 
         if action_type == 'upload_resume' and order_pk and file:
-            try:
-                filename = os.path.splitext(file.name)
-                extention = filename[len(filename) - 1] if len(
-                    filename) > 1 else ''
-                file_name = 'resumeupload_' + str(order.pk) + '_' + str(int(random() * 9999)) \
-                            + '_' + timezone.now().strftime('%Y%m%d') + extention
-                full_path = '%s/' % str(order.pk)
-                if not settings.IS_GCP:
-                    if not os.path.exists(settings.RESUME_DIR + full_path):
-                        os.makedirs(settings.RESUME_DIR + full_path)
-                    dest = open(
-                        settings.RESUME_DIR + full_path + file_name, 'wb')
-                    for chunk in file.chunks():
-                        dest.write(chunk)
-                    dest.close()
-                else:
-                    GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
-            except Exception as e:
-                logging.getLogger('error_log').error("unable to save resume %s-%s" % ('resume_upload', str(e)))
-                return HttpResponseRedirect(reverse('payment:thank-you'))
-
-            order = Order.objects.get(pk=order_pk)
-            pending_resumes = order.orderitems.filter(order__status__in=[0, 1], no_process=False, oi_status=2)
-            for obj in pending_resumes:
-                obj.oi_resume = full_path + file_name
-                last_oi_status = obj.oi_status
-                obj.oi_status = 5
-                obj.last_oi_status = 3
-                obj.save()
-                obj.orderitemoperation_set.create(
-                    oi_status=3,
-                    oi_resume=obj.oi_resume,
-                    last_oi_status=last_oi_status,
-                    assigned_to=obj.assigned_to)
-
-                obj.orderitemoperation_set.create(
-                    oi_status=obj.oi_status,
-                    last_oi_status=obj.last_oi_status,
-                    assigned_to=obj.assigned_to)
+            data = {
+                        "list_ids": order_item_ids,
+                        "candidate_resume": file,
+                        'last_oi_status': 3,
+                    }
+            DashboardInfo().upload_candidate_resume(candidate_id=candidate_id, data=data)
 
         elif action_type == "shine_reusme" and order_pk and candidate_id and resume_id:
-            order = Order.objects.get(pk=order_pk)
-            pending_resumes = order.orderitems.filter(
-                order__status__in=[0, 1],
-                no_process=False, oi_status=2)
             response = ShineCandidateDetail().get_shine_candidate_resume(
                 candidate_id=candidate_id,
                 resume_id=request.session.get('resume_id'))
+            if not response:
+                request.session.pop('resume_id')
+                DashboardInfo().check_user_shine_resume(candidate_id=candidate_id,request=request)
+                response = ShineCandidateDetail().get_shine_candidate_resume(
+                                                    candidate_id=candidate_id,
+                                                    resume_id=request.session.get('resume_id'))
             if response.status_code == 200:
-                default_name = 'shine_resume' + timezone.now().strftime('%d%m%Y')
-                file_name = request.session.get('shine_resume_name', default_name)
-                resume_extn = request.session.get('resume_extn', '')
-                try:
-                    file = ContentFile(response.content)
-                    file_name = 'resumeupload_' + str(order.pk) + '_' + str(int(random()*9999)) \
-                        + '_' + timezone.now().strftime('%Y%m%d') + '.' + resume_extn
-                    full_path = '%s/' % str(order.pk)
-                    if not settings.IS_GCP:
-                        if not os.path.exists(settings.RESUME_DIR + full_path):
-                            os.makedirs(settings.RESUME_DIR + full_path)
-                        dest = open(
-                            settings.RESUME_DIR + full_path + file_name, 'wb')
-                        for chunk in file.chunks():
-                            dest.write(chunk)
-                        dest.close()
-                    else:
-                        GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
-                except Exception as e:
-                    logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
-                    return HttpResponseRedirect(reverse('payment:thank-you'))
-                
-                for obj in pending_resumes:
-                    
-                    obj.oi_resume = full_path + file_name
-                    last_oi_status = obj.oi_status
-                    obj.oi_status = 5
-                    obj.last_oi_status = 13
-                    obj.save()
-                    obj.orderitemoperation_set.create(
-                        oi_status=13,
-                        oi_resume=obj.oi_resume,
-                        last_oi_status=last_oi_status,
-                        assigned_to=obj.assigned_to)
-
-                    obj.orderitemoperation_set.create(
-                        oi_status=obj.oi_status,
-                        last_oi_status=obj.last_oi_status,
-                        assigned_to=obj.assigned_to)
+                file = ContentFile(response.content)
+                data = {
+                        "list_ids": order_item_ids,
+                        "candidate_resume": file,
+                        'last_oi_status': 13,
+                        'is_shine':True,
+                        'extension':request.session.get('resume_extn', '')
+                    }
+                DashboardInfo().upload_candidate_resume(candidate_id=candidate_id, data=data)
 
         return HttpResponseRedirect(reverse('payment:thank-you'))
 

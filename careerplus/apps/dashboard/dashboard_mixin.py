@@ -15,6 +15,7 @@ from core.api_mixin import ShineCandidateDetail
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from order.models import Order, OrderItem
 from payment.models import PaymentTxn
+from django.db.models import Q
 
 
 class DashboardInfo(object):
@@ -118,68 +119,74 @@ class DashboardInfo(object):
 
     def get_pending_resume_items(self, candidate_id=None, email=None):
         if candidate_id:
-            resume_pending_items = OrderItem.objects.filter(order__candidate_id=candidate_id, order__status__in=[1, 3],
-                                                            no_process=False, oi_status=2)
+            resume_pending_items = OrderItem.objects.\
+                filter(order__candidate_id=candidate_id, order__status__in=[1, 3],no_process=False).\
+                filter(Q(oi_status=2) | Q(auto_upload=True)).exclude(oi_status__in=[4,24])
 
         elif email:
-            resume_pending_items = OrderItem.objects.filter(order__email=email, order__status__in=[1, 3],
-                                                            no_process=False, oi_status=2)
+            resume_pending_items = OrderItem.objects.\
+                filter(order__email=email, order__status__in=[1, 3],no_process=False).\
+                filter(Q(oi_status=2) | Q(auto_upload=True)).exclude(oi_status__in=[4,24])
 
         return resume_pending_items.select_related('order', 'partner', 'product')
 
-    def upload_candidate_resume(self, candidate_id=None, data={}):
-        if candidate_id:
-            file = data.get('candidate_resume', '')
-            list_ids = data.get('list_ids', [])
-            if file and list_ids:
-                pending_resumes = OrderItem.objects.filter(order__status=1, id__in=list_ids,
-                                                           order__candidate_id=candidate_id, no_process=False,
-                                                           oi_status=2)
-                path_dict = {}
-                for obj in pending_resumes:
+    def upload_candidate_resume(self, candidate_id=None, data={},request=None):
+        import ipdb; ipdb.set_trace()
+        file = data.get('candidate_resume', '')
+        list_ids = data.get('list_ids', [])
+        if not candidate_id and (not file and not list_ids):
+            return
+        
+        order_items = OrderItem.objects.filter(order__status__in=[0,1], id__in=list_ids,
+                                                    order__candidate_id=candidate_id, no_process=False)
+        resume_path = None
+        for oi in order_items:
+            order = oi.order
+            if not resume_path:
+                filename = os.path.splitext(file.name) if file.name else '' 
+                extention = filename[len(filename) - 1] if len(
+                    filename) > 1 else ''
+                if data.get('is_shine', ''):
+                    extention = '.' + data.get('extension','')
+                file_name = 'resumeupload_' + str(order.pk) + '_' + str(int(random() * 9999)) \
+                            + '_' + timezone.now().strftime('%Y%m%d') + extention
+                full_path = '%s/' % str(order.pk)
+                if not settings.IS_GCP:
+                    if not os.path.exists(settings.RESUME_DIR + full_path):
+                        os.makedirs(settings.RESUME_DIR + full_path)
+                    dest = open(
+                        settings.RESUME_DIR + full_path + file_name, 'wb')
+                    for chunk in file.chunks():
+                        dest.write(chunk)
+                    dest.close()
+                else:
                     try:
-                        order = obj.order
-                        if not path_dict.get(order.pk):
-                            filename = os.path.splitext(file.name)
-                            extention = filename[len(filename) - 1] if len(
-                                filename) > 1 else ''
-                            file_name = 'resumeupload_' + str(order.pk) + '_' + str(int(random() * 9999)) \
-                                        + '_' + timezone.now().strftime('%Y%m%d') + extention
-                            full_path = '%s/' % str(order.pk)
-                            if not settings.IS_GCP:
-                                if not os.path.exists(settings.RESUME_DIR + full_path):
-                                    os.makedirs(settings.RESUME_DIR + full_path)
-                                dest = open(
-                                    settings.RESUME_DIR + full_path + file_name, 'wb')
-                                for chunk in file.chunks():
-                                    dest.write(chunk)
-                                dest.close()
-                            else:
-                                GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
-                            path_dict[order.pk] = full_path + file_name
+                        GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
                     except Exception as e:
                         logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e)))
                         continue
+                resume_path = full_path + file_name
+            
+            oi.oi_resume = resume_path
+            last_oi_status = oi.oi_status
+            oi.oi_status = 5
+            oi.auto_upload = False
+            oi.last_oi_status = data.get('last_oi_status') #3
+            oi.save()
+            oi.orderitemoperation_set.create(
+                oi_status=data.get('last_oi_status'),
+                oi_resume=oi.oi_resume,
+                last_oi_status=last_oi_status,
+                assigned_to=oi.assigned_to)
 
-                    obj.oi_resume = path_dict[order.pk]
-                    last_oi_status = obj.oi_status
-                    obj.oi_status = 5
-                    obj.last_oi_status = 3
-                    obj.save()
-                    obj.orderitemoperation_set.create(
-                        oi_status=3,
-                        oi_resume=obj.oi_resume,
-                        last_oi_status=last_oi_status,
-                        assigned_to=obj.assigned_to)
-
-                    obj.orderitemoperation_set.create(
-                        oi_status=obj.oi_status,
-                        last_oi_status=obj.last_oi_status,
-                        assigned_to=obj.assigned_to)
+            oi.orderitemoperation_set.create(
+                oi_status=oi.oi_status,
+                last_oi_status=oi.last_oi_status,
+                assigned_to=oi.assigned_to)
 
     def check_user_shine_resume(self, candidate_id=None, request=None):
         if not request:
-            request = self.request
+            return
         if candidate_id and not request.session.get('resume_id', None):
             res = ShineCandidateDetail().get_candidate_detail(email=None, shine_id=candidate_id)
             resumes = res.get('resumes', [])

@@ -24,7 +24,7 @@ from .choices import STATUS_CHOICES, SITE_CHOICES,\
     WC_FLOW_STATUS
 
 from .functions import get_upload_path_order_invoice, process_application_highlighter
-from .tasks import generate_resume_for_order
+from .tasks import generate_resume_for_order,bypass_resume_midout
 
 #inter app imports
 from linkedin.models import Draft
@@ -151,6 +151,7 @@ class Order(AbstractAutoDate):
     crm_lead_id = models.CharField(
         max_length=255, null=True, blank=True)
     sales_user_info = models.TextField(default='', null=True, blank=True)
+
 
     class Meta:
         app_label = 'order'
@@ -292,9 +293,11 @@ class Order(AbstractAutoDate):
                 autologin_url=None
             )
             manually_generate_autologin_url(assesment_items=assesment_items)
+            bypass_resume_midout.delay(self.id)
+
         
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_resume_builder():
-            generate_resume_for_order.delay(self.id)
+            # generate_resume_for_order.delay(self.id)
             logging.getLogger('info_log').info("Generating resume for order {}".format(self.id))
 
         return super(Order,self).save(**kwargs)
@@ -442,6 +445,9 @@ class OrderItem(AbstractAutoDate):
         null=True,
         default=0
     )
+    #resume writing
+    auto_upload = models.BooleanField(default=False)
+
 
     class Meta:
         app_label = 'order'

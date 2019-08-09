@@ -21,6 +21,7 @@ from crmapi.config import (
 
 from shop.models import ProductUserProfile
 
+
 @task(name="invoice_generation_order")
 def invoice_generation_order(order_pk=None):
     from order.models import Order
@@ -34,309 +35,157 @@ def invoice_generation_order(order_pk=None):
 @task(name="pending_item_email")
 def pending_item_email(pk=None):
     from order.models import Order
-    order = None
-    try:
-        order = Order.objects.get(pk=pk)
-    except Exception as e:
-        logging.getLogger('error_log').error(" unable to get order object %s - %s" % (str(order), str(e)))
+    order = Order.objects.get(pk=pk)
+    order_items = order.orderitems.filter(no_process=False).select_related(
+        'order', 'product', 'partner')
+    # once mail send flags for product type flow 1,12,4    
+    mail_send_once_flow_12 = False
+    sms_send__once_flow_12 = False
+    resume_upload_pending_mail_once = False
+    mail_send_once_flow_4 = False
+    sms_send__once_flow_12 = False
 
-    if order:
-        orderitems = order.orderitems.filter(no_process=False).select_related(
-            'order', 'product', 'partner')
-        mail_flag_flow12 = False
-        sms_flag_flow12 = False
 
-        mail_flag_flow4 = False
-        sms_flag_flow4 = False
-        for oi in orderitems:
-            data = {}
-            mail_type = "PENDING_ITEMS"
-            to_emails = [oi.order.get_email()]
-            token = AutoLogin().encode(
-                oi.order.email, oi.order.candidate_id, days=None)
-            product_name = ''
-            if oi.product.type_flow in [4, 12]:
-                ois = orderitems.filter(
-                    product__type_flow__in=[4, 12])
-                for oi_item in ois:
-                    product_name = product_name + oi_item.product.name + ','
-            else:
-                product_name = oi.product.name
+    for oi in order_items:
+        data = {}
 
-            data.update({
-                'subject': 'To initiate your services fulfil these details',
-                'user': oi.order.first_name,
-                'type_flow': oi.product.type_flow,
-                'product_name': product_name,
-                'product_url': oi.product.get_url(),
-                'mobile': oi.order.get_mobile(),
-                'parent_name': oi.parent.product.name if oi.parent else ""
+        email_oi_status = None
+        sms_oi_status = None
 
+        mail_type = "PENDING_ITEMS"
+        to_emails = [oi.order.get_email()]
+        token = AutoLogin().encode(
+            oi.order.email, oi.order.candidate_id, days=None)
+        product_name = ''
+        if oi.product.type_flow in [4, 12]:   
+            oi_items = order_items.filter(
+                product__type_flow__in=[4, 12])
+            for oi_item in oi_items:
+                product_name = product_name + oi_item.product.name + ','
+        elif oi.product.type_flow in [1]:   
+            oi_items = order_items.filter(
+                product__type_flow__in=[1])
+            for oi_item in oi_items:
+                product_name = product_name + oi_item.product.name + ','
+        else:
+            product_name = oi.product.name
+
+        data.update({
+            'subject': 'To initiate your services fulfil these details',
+            'user': oi.order.first_name,
+            'type_flow': oi.product.type_flow,
+            'product_name': product_name,
+            'product_url': oi.product.get_url(),
+            'mobile': oi.order.get_mobile(),
+            'parent_name': oi.parent.product.name if oi.parent else ""
+        })
+        email_sets = list(oi.emailorderitemoperation_set.all().values_list(
+            'email_oi_status', flat=True).distinct())
+        sms_sets = list(oi.smsorderitemoperation_set.all().values_list(
+            'sms_oi_status', flat=True).distinct())
+
+        data.update({
+                'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
+                    settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
+                    token)
             })
-            email_sets = list(oi.emailorderitemoperation_set.all().values_list(
-                'email_oi_status', flat=True).distinct())
-            sms_sets = list(oi.smsorderitemoperation_set.all().values_list(
-                'sms_oi_status', flat=True).distinct())
-            try:
-                if oi.product.type_flow == 1:
-                    if 21 not in email_sets and 21 not in sms_sets:
-                        data.update({
-                            'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                                settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                                token)
-                        })
-                        send_email(to_emails, mail_type, data, 21, oi.pk)
-                        try:
-                            urlshortener = create_short_url(login_url=data)
-                            data.update({'url': urlshortener.get('url')})
-                            SendSMS().send(sms_type=mail_type, data=data)
-                            oi.smsorderitemoperation_set.create(
-                                sms_oi_status=21,
-                                to_mobile=data.get('mobile'),
-                                status=1)
-                        except Exception as e:
-                            logging.getLogger('error_log').error(
-                                "%s - %s" % (str(mail_type), str(e)))
+        urlshortener = create_short_url(login_url=data)
+        data.update({'url': urlshortener.get('url')})
+        
+        if not resume_upload_pending_mail_once and  oi.product.type_flow == 1 and 21 not in email_sets and 21 not in sms_sets:
+            send_email(to_emails, mail_type, data, 21, oi.pk)
+            SendSMS().send(sms_type=mail_type, data=data)
+            sms_oi_status=21
+            resume_upload_pending_mail_once = True
 
-                elif oi.product.type_flow == 3:
-                    data.update({
-                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token)
-                    })
-                    if 41 not in email_sets and 41 not in sms_sets:
-                        send_email(to_emails, mail_type, data, 41, oi.pk)
-                        try:
-                            urlshortener = create_short_url(login_url=data)
-                            data.update({'url': urlshortener.get('url')})
-                            SendSMS().send(sms_type=mail_type, data=data)
-                            oi.smsorderitemoperation_set.create(
-                                sms_oi_status=41,
-                                to_mobile=data.get('mobile'),
-                                status=1)
-                        except Exception as e:
-                            logging.getLogger('error_log').error(
-                                "%s - %s" % (str(mail_type), str(e)))
+        elif oi.product.type_flow == 3 and 41 not in email_sets and 41 not in sms_sets:
+            send_email(to_emails, mail_type, data, 41, oi.pk)
+            SendSMS().send(sms_type=mail_type, data=data)
+            sms_oi_status=41
 
-                elif oi.product.type_flow == 4:
-                    data.update({
-                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token)
-                    })
+        elif oi.product.type_flow == 4 and (61 not in email_sets or 61 not in sms_sets):
+            if not mail_send_once_flow_4:
+                send_email(to_emails, mail_type, data, 61, oi.pk)
+                mail_send_once_flow_4 = True
+            else:
+                email_oi_status=61
 
-                    if not mail_flag_flow4 and 61 not in email_sets:
-                        send_email(to_emails, mail_type, data, 61, oi.pk)
-                        mail_flag_flow4 = True
-                    elif 61 not in email_sets:
-                        to_email = to_emails[0] if to_emails else oi.order.get_email()
-                        oi.emailorderitemoperation_set.create(
-                            email_oi_status=61, to_email=to_email,
-                            status=1)
+            if not sms_send__once_flow_12:
+                SendSMS().send(sms_type=mail_type, data=data)
+                sms_oi_status=61
+                sms_send__once_flow_12 = True
+            else:
+                sms_oi_status=61
 
-                    if not sms_flag_flow4 and 61 not in sms_sets:
-                        try:
-                            urlshortener = create_short_url(login_url=data)
-                            data.update({'url': urlshortener.get('url')})
-                            SendSMS().send(sms_type=mail_type, data=data)
-                            oi.smsorderitemoperation_set.create(
-                                sms_oi_status=61,
-                                to_mobile=data.get('mobile'),
-                                status=1)
-                            sms_flag_flow4 = True
-                        except Exception as e:
-                            logging.getLogger('error_log').error("%s - %s" % (
-                                str(mail_type), str(e)))
-                    elif 61 not in sms_sets:
-                        oi.smsorderitemoperation_set.create(
-                            sms_oi_status=61,
-                            to_mobile=data.get('mobile'),
-                            status=1)
+        elif oi.product.type_flow == 5 and 71 not in email_sets and 71 not in sms_sets:
+            send_email(to_emails, mail_type, data, 71, oi.pk)
+            SendSMS().send(sms_type=mail_type, data=data)
+            sms_oi_status=71
 
+        elif oi.product.type_flow in [7, 15] and 91 not in email_sets and 91 not in sms_sets:
+            send_email(to_emails, mail_type, data, 91, oi.pk)
+            SendSMS().send(sms_type=mail_type, data=data)
+            sms_oi_status=91
 
-                    # if 61 not in email_sets and 61 not in sms_sets:
-                    #     send_email(to_emails, mail_type, data, 61, oi.pk)
-                    #     try:
-                    #         urlshortener = create_short_url(login_url=data)
-                    #         data.update({'url': urlshortener.get('url')})
-                    #         SendSMS().send(sms_type=mail_type, data=data)
-                    #         oi.smsorderitemoperation_set.create(
-                    #             sms_oi_status=61,
-                    #             to_mobile=data.get('mobile'),
-                    #             status=1)
-                    #     except Exception as e:
-                    #         logging.getLogger('error_log').error("%s - %s" % (
-                    #             str(mail_type), str(e)))
+        elif oi.product.type_flow == 12 and (141 not in email_sets or 141 not in sms_sets) :
+            if not mail_send_once_flow_12:
+                send_email(to_emails, mail_type, data, 141, oi.pk)
+                mail_send_once_flow_12 = True
+            else:
+                email_oi_status=141
 
-                elif oi.product.type_flow == 5:
-                    data.update({
-                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token)
-                    })
-                    if 71 not in email_sets and 71 not in sms_sets:
-                        send_email(to_emails, mail_type, data, 71, oi.pk)
-                        try:
-                            urlshortener = create_short_url(login_url=data)
-                            data.update({'url': urlshortener.get('url')})
-                            SendSMS().send(sms_type=mail_type, data=data)
-                            oi.smsorderitemoperation_set.create(
-                                sms_oi_status=71,
-                                to_mobile=data.get('mobile'),
-                                status=1)
-                        except Exception as e:
-                            logging.getLogger('error_log').error(
-                                "%s - %s" % (str(mail_type), str(e)))
+            if not sms_send__once_flow_12:
+                SendSMS().send(sms_type=mail_type, data=data)
+                sms_oi_status=141
+                sms_send__once_flow_12 = True
+            else:
+                sms_oi_status=141
 
-                elif oi.product.type_flow  in  [7, 15]:
-                    data.update({
-                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token)
-                    })
-                    if 91 not in email_sets and 91 not in sms_sets:
-                        send_email(to_emails, mail_type, data, 91, oi.pk)
-                        try:
-                            urlshortener = create_short_url(login_url=data)
-                            data.update({'url': urlshortener.get('url')})
-                            SendSMS().send(sms_type=mail_type, data=data)
-                            oi.smsorderitemoperation_set.create(
-                                sms_oi_status=91,
-                                to_mobile=data.get('mobile'),
-                                status=1)
-                        except Exception as e:
-                            logging.getLogger('error_log').error(
-                                "%s - %s" % (str(mail_type), str(e)))
+        elif oi.product.type_flow == 13 and 151 not in email_sets and 151 not in sms_sets:
+            send_email(to_emails, mail_type, data, 151, oi.pk)
+            SendSMS().send(sms_type=mail_type, data=data)
+            sms_oi_status=151
 
-                elif oi.product.type_flow == 12:
-                    data.update({
-                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token)
-                    })
+        elif oi.product.type_flow == 8 and 108 not in email_sets and 108 not in sms_sets:
+            send_email(to_emails, mail_type, data, 108, oi.pk)
+            SendSMS().send(sms_type=mail_type, data=data)
+            sms_oi_status=108
 
-                    if not mail_flag_flow12 and 141 not in email_sets:
-                        send_email(to_emails, mail_type, data, 141, oi.pk)
-                        mail_flag_flow12 = True
-                    elif 141 not in email_sets:
-                        to_email = to_emails[0] if to_emails else oi.order.get_email()
-                        oi.emailorderitemoperation_set.create(
-                            email_oi_status=141, to_email=to_email,
-                            status=1)
+        elif oi.product.type_flow == 9 and 121 not in email_sets and 121 not in sms_sets:
+            data.update({
+                'upload_url': "%s://%s/autologin/%s/?next=/dashboard/roundone/profile/" % (
+                    settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
+                    token)
+            })
+            send_email(to_emails, mail_type, data, 121, oi.pk)
+            urlshortener = create_short_url(login_url=data)
+            data.update({'url': urlshortener.get('url')})
+            SendSMS().send(sms_type=mail_type, data=data)
+            sms_oi_status=121
 
-                    if not sms_flag_flow12 and 141 not in sms_sets:
-                        try:
-                            urlshortener = create_short_url(login_url=data)
-                            data.update({'url': urlshortener.get('url')})
-                            SendSMS().send(sms_type=mail_type, data=data)
-                            oi.smsorderitemoperation_set.create(
-                                sms_oi_status=141,
-                                to_mobile=data.get('mobile'),
-                                status=1)
-                            sms_flag_flow12 = True
-                        except Exception as e:
-                            logging.getLogger('error_log').error(
-                                "%s - %s" % (str(mail_type), str(e)))
-                    elif 141 not in sms_sets:
-                        oi.smsorderitemoperation_set.create(
-                            sms_oi_status=141,
-                            to_mobile=data.get('mobile'),
-                            status=1)
+        elif oi.product.type_flow == 10 and 131 not in email_sets and 131 not in sms_sets:
+            data.pop('upload_url', None)
+            data.update({
+                'test_url': "%s/dashboard" % (settings.SITE_DOMAIN)
+            })
+            send_email(to_emails, mail_type, data, 131, oi.pk)
+            urlshortener = create_short_url(login_url=data)
+            data.update({'url': urlshortener.get('url')})   
+            SendSMS().send(sms_type=mail_type, data=data)
+            sms_oi_status=131
 
-                    # if 141 not in email_sets and 141 not in sms_sets:
-                    #     send_email(to_emails, mail_type, data, 141, oi.pk)
-                    #     try:
-                    #         urlshortener = create_short_url(login_url=data)
-                    #         data.update({'url': urlshortener.get('url')})
-                    #         SendSMS().send(sms_type=mail_type, data=data)
-                    #         oi.smsorderitemoperation_set.create(
-                    #             sms_oi_status=141,
-                    #             to_mobile=data.get('mobile'),
-                    #             status=1)
-                    #     except Exception as e:
-                    #         logging.getLogger('error_log').error(
-                    #             "%s - %s" % (str(mail_type), str(e)))
+        if sms_oi_status:
+            oi.smsorderitemoperation_set.create(
+                sms_oi_status=sms_oi_status,
+                to_mobile=data.get('mobile'),
+                status=1)
 
-                elif oi.product.type_flow == 13:
-                    data.update({
-                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token)
-                    })
-                    if 151 not in email_sets and 151 not in sms_sets:
-                        send_email(to_emails, mail_type, data, 151, oi.pk)
-                        try:
-                            urlshortener = create_short_url(login_url=data)
-                            data.update({'url': urlshortener.get('url')})
-                            SendSMS().send(sms_type=mail_type, data=data)
-                            oi.smsorderitemoperation_set.create(
-                                sms_oi_status=151,
-                                to_mobile=data.get('mobile'),
-                                status=1)
-                        except Exception as e:
-                            logging.getLogger('error_log').error(
-                                "%s - %s" % (str(mail_type), str(e)))
+        if email_oi_status:
+            to_email = to_emails[0] if to_emails else oi.order.get_email()
+            oi.emailorderitemoperation_set.create(
+                email_oi_status=141, to_email=to_email,
+                status=1)
 
-                elif oi.product.type_flow == 8:
-                    data.update({
-                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token)
-                    })
-                    if 108 not in email_sets and 108 not in sms_sets:
-                        send_email(to_emails, mail_type, data, 108, oi.pk)
-                        try:
-                            urlshortener = create_short_url(login_url=data)
-                            data.update({'url': urlshortener.get('url')})
-                            SendSMS().send(sms_type=mail_type, data=data)
-                            oi.smsorderitemoperation_set.create(
-                                sms_oi_status=108,
-                                to_mobile=data.get('mobile'),
-                                status=1)
-                        except Exception as e:
-                            logging.getLogger('error_log').error(
-                                "%s - %s" % (str(mail_type), str(e)))
-
-                elif oi.product.type_flow == 9:
-                    data.update({
-                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard/roundone/profile/" % (
-                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token)
-                    })
-                    if 121 not in email_sets and 121 not in sms_sets:
-                        send_email(to_emails, mail_type, data, 121, oi.pk)
-                        try:
-                            urlshortener = create_short_url(login_url=data)
-                            data.update({'url': urlshortener.get('url')})
-                            SendSMS().send(sms_type=mail_type, data=data)
-                            oi.smsorderitemoperation_set.create(
-                                sms_oi_status=121,
-                                to_mobile=data.get('mobile'),
-                                status=1)
-                        except Exception as e:
-                            logging.getLogger('error_log').error(
-                                "%s - %s" % (str(mail_type), str(e)))
-
-                elif oi.product.type_flow == 10:
-                    data.update({
-                        'test_url': "%s/dashboard" % (settings.SITE_DOMAIN)
-                    })
-                    if 131 not in email_sets and 131 not in sms_sets:
-                        send_email(to_emails, mail_type, data, 131, oi.pk)
-                        try:
-                            urlshortener = create_short_url(login_url=data)
-                            data.update({'url': urlshortener.get('url')})
-                            SendSMS().send(sms_type=mail_type, data=data)
-                            oi.smsorderitemoperation_set.create(
-                                sms_oi_status=131,
-                                to_mobile=data.get('mobile'),
-                                status=1)
-                        except Exception as e:
-                            logging.getLogger('error_log').error(
-                                "%s - %s" % (str(mail_type), str(e)))
-
-            except Exception as e:
-                logging.getLogger('error_log').error("%s" % (str(e)))
 
 
 @task(name="process_mailer")
@@ -748,8 +597,8 @@ def service_initiation(pk=None):
 
                 if oi.product.type_flow == 2 and 162 not in sms_sets:
                     try:
-                        urlshortener = create_short_url(login_url=data)
-                        data.update({'url': urlshortener.get('url')})
+                        
+                        
                         SendSMS().send(sms_type=sms_type, data=data)
                         oi.smsorderitemoperation_set.create(
                             sms_oi_status=162,
@@ -761,8 +610,8 @@ def service_initiation(pk=None):
 
                 elif oi.product.type_flow == 14 and 192 not in sms_sets:
                     try:
-                        urlshortener = create_short_url(login_url=data)
-                        data.update({'url': urlshortener.get('url')})
+                        
+                        
                         SendSMS().send(sms_type=sms_type, data=data)
                         oi.smsorderitemoperation_set.create(
                             sms_oi_status=192,
@@ -774,8 +623,8 @@ def service_initiation(pk=None):
 
                 elif oi.product.type_flow == 6 and 172 not in sms_sets:
                     try:
-                        urlshortener = create_short_url(login_url=data)
-                        data.update({'url': urlshortener.get('url')})
+                        
+                        
                         SendSMS().send(sms_type=sms_type, data=data)
                         oi.smsorderitemoperation_set.create(
                             sms_oi_status=172,
@@ -786,8 +635,8 @@ def service_initiation(pk=None):
                             str(sms_type), str(e)))
                 elif oi.product.type_flow == 10 and 133 not in sms_sets:
                     try:
-                        urlshortener = create_short_url(login_url=data)
-                        data.update({'url': urlshortener.get('url')})
+                        
+                        
                         SendSMS().send(sms_type=sms_type, data=data)
                         oi.smsorderitemoperation_set.create(
                             sms_oi_status=133,
@@ -913,6 +762,30 @@ def send_resume_in_mail_resume_builder(attachment,data):
     except Exception as e:
         logging.getLogger('error_log').error(
             "%s" % (str(e)))
+
+
+@task
+def bypass_resume_midout(order_id):
+    from order.models import OrderItem,Order
+    from datetime import timedelta
+    from django.utils import timezone
+    order = Order.objects.get(id=order_id)
+    update_resume_oi_ids = []
+    for order_item in order.orderitems.all():
+        if order_item.oi_status == 2:
+            update_resume_oi_ids.append(order_item.id)
+    if update_resume_oi_ids:
+        old_resume = None
+        start_date = timezone.now() -timedelta(days=90)
+        end_date = timezone.now()
+        for order_item in OrderItem.objects.filter(order__candidate_id=order.candidate_id,created__range=[start_date,end_date]).order_by('-id'):
+            if order_item.oi_resume:
+                old_resume = order_item.oi_resume
+                break
+        if old_resume:
+            OrderItem.objects.filter(id__in=update_resume_oi_ids).update(oi_status=3,oi_resume=old_resume,auto_upload = True)
+
+
 
 
 
