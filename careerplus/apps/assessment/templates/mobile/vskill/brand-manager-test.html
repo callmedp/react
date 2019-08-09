@@ -93,7 +93,7 @@
             </div>
         </div><!-- option test box-->
 
-        <div class="test-option-box">
+        <div class="test-option-box pt-40">
             <h2 class="fs-20"><a href="#" id="productName">Practice Tests</a></h2>
             <span class="test-option-box--recommended">
                 Recommended
@@ -258,7 +258,17 @@
         });
 
 
-
+        // sticky Header inner
+        $(window).scroll(function () {
+            var $this = $(this);
+            if ($this.scrollTop() > 50) {
+                $('.header.inner').addClass('sticky');
+                $('body').css('padding-top', '96px');
+            } else {
+                $('.header').removeClass('sticky');
+                $('body').css('padding-top', '0px');
+            }
+        });
     </script>
 
 {% endblock js_section %}

@@ -548,6 +548,19 @@ function submitTestFinal(){
 }
 
 
+// sticky Header inner
+$(window).scroll(function () {
+  var $this = $(this);
+  if ($this.scrollTop() > 160) {
+     $('.question-timer').addClass('sticky');
+     $('body').css('padding-top', '160px');
+  } else {
+    $('.question-timer').removeClass('sticky');
+    $('body').css('padding-top', '0px');
+  }
+});
+
+
 </script>
 {% endblock js_section %}
 
