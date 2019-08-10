@@ -2,7 +2,7 @@ import {siteDomain} from "../Utils/domains";
 
 const defaultHeaders = {
     "Content-Type": "application/json",
-    'Authorization': localStorage.getItem('token') || ''
+    'Authorization': (typeof localStorage !== 'undefined') ? localStorage.getItem('token') || '' : ''
 };
 
 // todo make seperate function for fetch request
@@ -67,7 +67,7 @@ async function handleResponse(response, isFetchingHTML) {
         for (const key in data) {
             message += `${data[key]} `;
         }
-        if(response['status'] === 401) {
+        if (response['status'] === 401) {
             window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
         }
         return {

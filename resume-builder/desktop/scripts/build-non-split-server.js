@@ -5,6 +5,7 @@ var sass = require("node-sass");
 var sassUtils = require("node-sass-utils")(sass);
 var path = require('path');
 var BundleTracker = require('webpack-bundle-tracker');
+const webpackNodeExternals = require('webpack-node-externals');
 
 
 config.optimization.splitChunks = {
@@ -19,12 +20,11 @@ config.optimization.runtimeChunk = false;
 const currentTimeStamp = +new Date();
 
 
-console.log('--<><><>--', config);
 
 // JS
-config.output.filename = `../../../careerplus/static_core/react/dist/desktop/client/main-${currentTimeStamp}.js`;
+config.output.filename = `../../../careerplus/static_core/react/dist/desktop/server/main-${currentTimeStamp}.js`;
 // CSS. "5" is MiniCssPlugin
-config.plugins[5].options.filename = `../../../careerplus/static_core/react/dist/desktop/client/main-${currentTimeStamp}.css`;
+config.plugins[5].options.filename = `../../../careerplus/static_core/react/dist/desktop/server/main-${currentTimeStamp}.css`;
 config.plugins.push(new BundleTracker({
     path: __dirname,
     filename: '../../../webpack-desktop-stats.json'
@@ -52,4 +52,8 @@ config.module.rules[2]['oneOf'][5]['use'][3]['options'] = {
         }
     }
 }
+
+
+config.externals = [webpackNodeExternals()]
+
 
