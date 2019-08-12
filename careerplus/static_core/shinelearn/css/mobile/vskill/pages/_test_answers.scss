@@ -100,6 +100,24 @@
             }
         }
     }
+
+    [type="radio"]:checked + label,
+    [type="radio"]:not(:checked) + label{
+      padding-left: 20px;
+    }
+  
+    [type="radio"]:checked + label:before,
+    [type="radio"]:not(:checked) + label:before {
+      @include square(10px, block);
+      background-color: $txt-grey-c9;
+      top: 6px;
+      border: 0;
+    }
+  
+    [type="radio"]:checked + label:after,
+    [type="radio"]:not(:checked) + label:after {
+      background: transparent;
+    }
 }
 
 .check-result {

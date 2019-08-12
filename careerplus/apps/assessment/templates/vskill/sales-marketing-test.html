@@ -14,13 +14,18 @@
 <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/practice-skill/practice-skill.scss' %}" rel="stylesheet">
 <link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
 {% endcompress %}
+<style type="text/css">
+  footer {
+     margin-top: 15%;
+  }
+</style>
 {% endblock css_section %}
 {% block main_container %}
 <div class="practice-skill__wrap-inner">
    <div class="right_base"></div>
       <div class="container">
          {% block breadcrumb %}
-         <ol class="breadcrumb  black " itemscope="" itemtype="http://schema.org/BreadcrumbList">
+         <ol class="breadcrumb  black mb-0" itemscope="" itemtype="http://schema.org/BreadcrumbList">
             {% for bread in breadcrumbs %}
             {% if bread.url %}
             <li><a href='{{bread.url}}'>{{bread.name}}</a></li>

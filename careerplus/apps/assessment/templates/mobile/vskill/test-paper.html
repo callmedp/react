@@ -83,7 +83,7 @@
         <ol>
         {% for quest in questions_list %}
             <li class="take-test__wrap test-paper {% if forloop.counter == 1 %} actived {% else %}inactive{% endif %}" id="question-{{forloop.counter}}">
-                <h2 class="fs-18 d-flex"><span class="take-test__wrap--count">{{forloop.counter}}</span>{{quest.question_text}}</h2>
+                <h2 class="fs-16 d-flex"><span class="take-test__wrap--count">{{forloop.counter}}</span>{{ quest.question_text|linebreaksbr }}</h2>
                 <ul>
                     {% for ans in quest.options %}
                     <li>

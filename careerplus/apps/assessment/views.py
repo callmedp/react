@@ -30,53 +30,30 @@ class VskillTestView(DetailView):
         parent_category = category.get_parent().first() if category.get_parent() else None
         if parent_category:
             breadcrumbs.append({"url": '/practice-tests/' + parent_category.slug, "name": parent_category.name})
-        breadcrumbs.append({"url": '/practice-tests/' + category.slug, "name": category.name})
-        breadcrumbs.append({"url": '/practice-tests', "name": 'test'})
+        breadcrumbs.append({"url": '/practice-tests/' + category.slug +'/sub', "name": category.name})
+        breadcrumbs.append({"url": None, "name": 'test'})
         return breadcrumbs
 
-
-    # def is_expired(self):
-    #     session_id = self.request.session.session_key
-    #     test = self.get_object()
-    #     test_session_key = session_id + 'test-' + str(test.id)
-    #     timestamp = cache.get(test_session_key)
-    #     time_format = "%m/%d/%Y, %H:%M:%S"
-    #
-    #     if not timestamp:
-    #         # timestamp_with_tduration = (datetime.now() + timedelta(seconds=test.duration)).strftime(timeformat)
-    #         # test_ids = {'ongoing_' + str(test.id): timestamp_with_tduration}
-    #         # cache.set(test_session_key, test_ids, 60 * 60 * 24)
-    #         return True, True
-    #
-    #     elif timestamp and not timestamp.get('ongoing_' + str(test.id)):
-    #         # timestamp_with_tduration = (datetime.now() + timedelta(seconds=test.duration)).strftime("%m/%d/%Y, %H:%M:%S")
-    #         # test_ids = {'ongoing_' + str(test.id): timestamp_with_tduration}
-    #         # cache.set(test_session_key, test_ids, 60 * 60 * 24)
-    #         return True, True
-    #     else:
-    #         timestamp = timestamp.get('ongoing_' + str(test.id))
-    #         timestamp_obj = datetime.strptime(timestamp,time_format)
-    #         if timestamp_obj < datetime.now():
-    #             return False, False
-    #     return True, False
-
     def dispatch(self,request,*args,**kwargs):
+        if not request.session.session_key:
+            request.session.cycle_key()
+        
         self.cache_test = TestCacheUtil(request=request)
         response = super(VskillTestView, self).dispatch(request, args, **kwargs)
-
         original_context = response.context_data
         test_object = original_context['object']
-        show_test, delete_ans = self.cache_test.show_test_remove_local_storage \
-            (key='test-' + str(test_object.id))
+        show_test, delete_ans = self.cache_test.show_test_remove_local_storage(\
+            key='test-' + str(test_object.id))
         if not show_test:
             return redirect(reverse('assessment:vskill-result', kwargs={'slug': test_object.slug}))
+        
         response.context_data = original_context
         return response
 
     def get_context_data(self, **kwargs):
         context = super(VskillTestView, self).get_context_data(**kwargs)
         context.update({'breadcrumbs': self.get_breadcrumbs()})
-        test_object = self.get_object()
+        test_object = context['object']
         show_test, delete_ans = self.cache_test.show_test_remove_local_storage\
             (key='test-'+str(test_object.id))
         if not show_test:
@@ -166,7 +143,7 @@ class AssessmentSubCategoryPage(DetailView):
         parent = self.object.get_parent() if self.object.type_level == 3 else None
         if parent:
             breadcrumbs.append({
-                "url": '/practice-tests/'+parent[0].slug + '/', "name": parent[0].name,
+                "url": '/practice-tests/'+parent[0].slug, "name": parent[0].name,
             })
 
         breadcrumbs.append({"url": '', "name": self.object.name})
@@ -204,6 +181,9 @@ class AssessmentResultPage(TemplateView):
              kwargs={'slug': test_slug}) if category else reverse("homepage")
 
     def get(self,request,*args,**kwargs):
+        if not request.session.session_key:
+            request.session.cycle_key()
+
         if self.get_redirection_path():
             return HttpResponseRedirect(self.get_redirection_path())
         return super(AssessmentResultPage, self).get(request, *args, **kwargs)
@@ -215,7 +195,7 @@ class AssessmentResultPage(TemplateView):
         if test.category.get_parent():
             breadcrumbs.append({"url": '/practice-tests/'+test.category.get_parent()[0].slug, "name": test.category.get_parent()[0].name})
         if test.category:
-            breadcrumbs.append({"url": '/practice-tests/'+test.category.slug, "name": test.category.name})
+            breadcrumbs.append({"url": '/practice-tests/'+test.category.slug +'/sub', "name": test.category.name})
         breadcrumbs.append({"url": '', "name": test.slug + '-test'})
         return breadcrumbs
 
@@ -229,3 +209,6 @@ class AssessmentResultPage(TemplateView):
         context.update({'questions_list': questions_list})
         context.update({'object': test})
         return context
+
+
+

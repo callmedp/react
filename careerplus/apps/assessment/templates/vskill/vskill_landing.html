@@ -14,6 +14,9 @@
 <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/practice-skill/practice-skill.scss' %}" rel="stylesheet">
 <link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
 {% endcompress %}
+
+
+
 {% endblock css_section %}
 {% spaceless %}
 {% block main_container %}
@@ -22,7 +25,7 @@
    <div class="right_base"></div>
       <div class="container">
          {% block breadcrumb %}
-         <ol class="breadcrumb  black " itemscope="" itemtype="http://schema.org/BreadcrumbList">
+         <ol class="breadcrumb  black mb-0" itemscope="" itemtype="http://schema.org/BreadcrumbList">
             {% for bread in breadcrumbs %}
             {% if bread.url %}
             <li><a href='{{bread.url}}'>{{bread.name}}</a></li>
@@ -202,7 +205,9 @@
 {% endspaceless %}
 {% block js_section %}
 {{block.super}}
+    {% compress js %}
 <script src="{% static 'shinelearn/js/assessment/landing.js' %}"></script>
+{% endcompress %}
 <script type="text/javascript">
    var page_number= 2;
    var facolor = 0;

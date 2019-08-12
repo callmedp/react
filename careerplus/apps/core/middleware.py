@@ -322,10 +322,6 @@ class RemoveSessionCookieMiddleware:
         return response
 
 
-
-
-
-
 def is_valid_ip(ip_address):
     """
     Check Validity of an IP address

@@ -26,7 +26,7 @@
    <div class="right_base"></div>
       <div class="container">
          {% block breadcrumb %}
-         <ol class="breadcrumb  black " itemscope="" itemtype="http://schema.org/BreadcrumbList">
+         <ol class="breadcrumb  black mb-10" itemscope="" itemtype="http://schema.org/BreadcrumbList">
             {% for bread in breadcrumbs %}
             {% if bread.url %}
             <li><a href='{{bread.url}}'>{{bread.name}}</a></li>
@@ -80,9 +80,9 @@
 
                   <div class="flexbox" id="{{quest.id}}">
                      <h3 ><span class="test-paper-count">{{forloop.counter}}</span> 
-                     {{quest.question_text}}</h3>
+                     {{ quest.question_text|linebreaksbr }}</h3>
                   </div>
-                  <ul class="test-paper__question">
+                  <ul class="test-paper__question" id="testanswer">
                         {% for ans in quest.options %}
                      <li>
                         <label class="custom-radio">{{ans.option}}
@@ -190,7 +190,7 @@
         <h3 id="exampleModalLongTitle">Fill your details below</h3>
       </div>
       <div class="modal-body">
-        <div class="col-sm-7">
+        <div class="col-sm-6">
          <form method = "post" id="leadCreationForm">
             {% csrf_token %}
             <div class="details-modal">
@@ -218,7 +218,7 @@
             </div>
          </form>
         </div>
-        <div class="col-sm-5">
+        <div class="col-sm-6">
          <div class="check-result">
             <i><img src="{% static 'shinelearn/images/free_skill/details-list.png' %}" class="img-responsive"></i>
             <p>Enter your details to check the Test result</p>
@@ -390,6 +390,7 @@ function reTestFunc(){
 
 
 function ReCreateLead(){
+var flag=$('#leadCreationForm').valid();
 if(flag){
     var form = $('#leadCreationForm');
     $.ajax({
@@ -405,7 +406,7 @@ if(flag){
 
 
 $("#leadCreationForm").submit(function(e){
-flag=$('#leadCreationForm').valid();
+var flag=$('#leadCreationForm').valid();
 getCoptions();
 
 if(flag){

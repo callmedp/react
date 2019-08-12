@@ -63,7 +63,7 @@
         <ol>
                {% for quest in questions_list %}
             <li>
-                {{quest.question_text}}
+                {{ quest.question_text|linebreaksbr }}
                 <ul>
                     {% for ans in quest.options %}
                     <li>
@@ -360,6 +360,7 @@ function reTestFunc(){
 		})
 
 function ReCreateLead(){
+var flag=$('#leadCreationForm').valid();
 if(flag){
     var form = $('#leadCreationForm');
     $.ajax({
@@ -375,7 +376,7 @@ if(flag){
 
 
 $("#leadCreationForm").submit(function(e){
-flag=$('#leadCreationForm').valid();
+var flag=$('#leadCreationForm').valid();
 if(flag){
     var form = $(this);
     $.ajax({

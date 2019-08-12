@@ -108,7 +108,7 @@ datalist {
 	cursor: pointer;
 	padding-left: 0;
 	padding-right: 0;
-	margin-left: 19px;
+	margin-left: 18px;
 	min-height: 54px;
 
 	@media (max-width: 1190px) {
@@ -1653,7 +1653,7 @@ footer {
     }
 
         .search:hover input, .search input:focus {
-            width: 188px;
+            width: 140px;
             margin-left: 0px;
             opacity: 1;
             transition: all 100ms ease;

@@ -14,13 +14,18 @@
 <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/practice-skill/practice-skill.scss' %}" rel="stylesheet">
 <link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
 {% endcompress %}
+<style type="text/css">
+  footer {
+     margin-top: 15%;
+  }
+</style>
 {% endblock css_section %}
 {% block main_container %}
 <div class="practice-skill__wrap-inner">
    <div class="right_base"></div>
       <div class="container">
          {% block breadcrumb %}
-         <ol class="breadcrumb  black " itemscope="" itemtype="http://schema.org/BreadcrumbList">
+         <ol class="breadcrumb  black mb-0" itemscope="" itemtype="http://schema.org/BreadcrumbList">
             {% for bread in breadcrumbs %}
             {% if bread.url %}
             <li><a href='{{bread.url}}'>{{bread.name}}</a></li>
@@ -43,7 +48,7 @@
          </div>
          <!-- Most popular tests starts -->
          <div class="col-sm-12 col-lg-12 col-md-12">
-            <div class="popular_test row" id="funcDiv">
+            <div class="popular_test row mt-0" id="funcDiv">
 
                {% for test in all_test|slice:":8" %}
                <div class="testinside">
@@ -160,7 +165,9 @@
 {% endblock main_container %}
 {% block js_section %}
    {{block.super}}
+    {% compress js %}
 <script src="{% static 'shinelearn/js/assessment/landing.js' %}"></script>
+{% endcompress %}
    <script type="text/javascript">
    var page_number= 2;
       var facolor = 0;

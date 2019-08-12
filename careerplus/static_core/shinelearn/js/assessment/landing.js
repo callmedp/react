@@ -1,11 +1,13 @@
        $('#testModal').on('show.bs.modal', function(e) {
         var modalobject = JSON.parse(e.relatedTarget.dataset.attrValue);
         $('#productName').text(modalobject.productName);
+//        $('#productName').attr("href",modalobject.productUrl);
         $('#productDuration').text(modalobject.productDuration);
         $('#productPrice').text('Rs. ' + modalobject.productPrice);
         $('#courseDuration').text(modalobject.courseDuration);
         $('#coursePrice').text('Rs. '+ modalobject.coursePrice);
         $('#courseName').text(modalobject.courseName);
+//        $('#courseName').attr("href",modalobject.courseUrl);
         $('#questCount').text(modalobject.quescount);
         $('#exampleModalLongTitle').text(modalobject.catname);
         $('#fakeCoursePrice').text('Rs. '+ parseInt(parseInt(modalobject.coursePrice)/0.9));
@@ -54,7 +56,7 @@ function testSession(data){
                     if (json.status == 1){
 
                         window.location.href = json.cart_url ;
-                        alert('Adding To Cart');
+
                     }
                     else if (json.status == -1){
                         alert("Something went wrong, Please try again.");
@@ -84,7 +86,6 @@ function testSession(data){
                     if (json.status == 1){
 
                         window.location.href = json.cart_url ;
-                        alert('Adding To Cart');
 
                     }
                     else if (json.status == -1){

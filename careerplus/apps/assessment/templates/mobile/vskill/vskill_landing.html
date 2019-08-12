@@ -164,7 +164,9 @@
 {% endblock container %}
 {% block js_section %}
 {{block.super}}
+    {% compress js %}
 <script src="{% static 'shinelearn/js/assessment/landing.js' %}"></script>
+{% endcompress %}
    <script type="text/javascript">
    var page_number= 2;
    var facolor = 0;
@@ -205,10 +207,12 @@
         $('body').addClass('overflow-hidden');
         $("#check_results").addClass("open");
          $('#productName').text(modalobject.productName);
+         <!--$('#productName').attr("href",modalobject.productUrl);-->
         $('#productDuration').text(modalobject.productDuration);
         $('#productPrice').text(modalobject.productPrice);
         $('#courseDuration').text(modalobject.courseDuration);
         $('#coursePrice').text(modalobject.coursePrice);
+        $('#exampleModalLongTitle').text(modalobject.catname);
               $('#fakeCoursePrice').text('Rs. '+ parseInt(parseInt(modalobject.coursePrice)/0.9));
                 $('#fakeProductPrice').text('Rs. '+parseInt(parseInt(modalobject.productPrice)/0.9));
         $('#courseName').text(modalobject.courseName);
