@@ -189,49 +189,49 @@ $(document).ready(function () {
     **  @duplicate code added.
     * * same code added in  payment-login.html
     * */
-    // $("#login_form").validate({
-    //     submitHandler: function (form) {
-    //         form.submit();
-    //         // e.preventDefault();
-    //         /*if($(this).val() != '')
-    //         {
-    //           $('button[type="submit"]').prop('disabled', false);
-    //         }
-    //         else
-    //         {
-    //           $('button[type="submit"]').prop('disabled', true);
-    //         } */
-    //     },
-    //     rules: {
-    //         email: {
-    //             required: true,
-    //             email: true/*,
-    //                 emailDoesNotExist:true*/
-    //
-    //         },
-    //         password: {
-    //             required: true,
-    //             minlength: 6,
-    //             maxlength: 15
-    //         }
-    //     },
-    //     messages: {
-    //         email: {required: "Please enter a valid email address."},
-    //         password: {
-    //             required: "Please provide a password"
-    //         }
-    //     },
-    //     highlight: function (element, errorClass) {
-    //         $(element).closest('.form-group').addClass('error');
-    //     },
-    //     unhighlight: function (element, errorClass) {
-    //         $(element).closest('.form-group').removeClass('error');
-    //         $(element).siblings('.error-txt').html('');
-    //     },
-    //     errorPlacement: function (error, element) {
-    //         $(element).siblings('.error-txt').html(error.text());
-    //     },
-    // });
+    $("#login_form").validate({
+        submitHandler: function (form) {
+            form.submit();
+            // e.preventDefault();
+            /*if($(this).val() != '')
+            {
+              $('button[type="submit"]').prop('disabled', false);
+            }
+            else
+            {
+              $('button[type="submit"]').prop('disabled', true);
+            } */
+        },
+        rules: {
+            email: {
+                required: true,
+                email: true/*,
+                    emailDoesNotExist:true*/
+
+            },
+            password: {
+                required: true,
+                minlength: 6,
+                maxlength: 15
+            }
+        },
+        messages: {
+            email: {required: "Please enter a valid email address."},
+            password: {
+                required: "Please provide a password"
+            }
+        },
+        highlight: function (element, errorClass) {
+            $(element).closest('.form-group').addClass('error');
+        },
+        unhighlight: function (element, errorClass) {
+            $(element).closest('.form-group').removeClass('error');
+            $(element).siblings('.error-txt').html('');
+        },
+        errorPlacement: function (error, element) {
+            $(element).siblings('.error-txt').html(error.text());
+        },
+    });
 
     $.validator.addMethod("indiaMobile", function (value, element) {
         let country_code = $('#id_country_code').val();
@@ -276,55 +276,54 @@ $(document).ready(function () {
     });
 
     $("#forgot_form").validate({
-        submitHandler: function (form) {
-            debugger;
-            let formData = $(form).serialize();
-            let post_url = $(form).attr('action');
+        submitHandler: function(form) {
+            var formData = $(form).serialize();
+            var post_url = $(form).attr('action' );
             $('#forgot_div').modal('hide');
-            $('#forgot_form').addClass('hidden');
-            $('#login_form').removeClass('hidden');
             $.ajax({
                 url: post_url,
                 type: "POST",
-                data: formData,
+                data : formData,
                 dataType: 'json',
-                success: function (json) {
+                success: function(json) {
                     $("#forgot_form")[0].reset();
-                    if (json.exist == true) {
+                    if (json.exist == true){
                         alert('Link has been sent to your registered email id');
                         // $("#msg_for_user").html("Link has been sent to your registered email id").show();
                         // $('#forgot_div').modal('show');
-                    } else if (json.notexist == true) {
+                    }
+                    else if (json.notexist == true){
                         $("#msg_for_user").html("your email does not exist on shine learning").show();
                         $('#forgot_div').modal('show');
-                    } else if (json.noresponse == true) {
+                    }
+                    else if (json.noresponse == true){
                         $("#msg_for_user").html("Something went wrong. Try again later").show();
                         $('#forgot_div').modal('show');
                     }
                 },
-                error: function (xhr, ajaxOptions, thrownError) {
+                error: function(xhr, ajaxOptions, thrownError) {
                     alert("Something went wrong. Try again later");
                 }
             });
         },
         rules: {
-            email: {
-                required: true,
-                email: true,
+            email:{
+                required:true,
+                email:true,
             }
         },
-        messages: {
-            email: {required: "Please enter a valid email address."},
+        messages:{
+            email: { required:"Please enter a valid email address"},
         },
-        highlight: function (element, errorClass) {
-            $(element).closest('li').addClass('error');
+        highlight:function(element, errorClass) {
+            $(element).closest('.form-group').addClass('error');
         },
-        unhighlight: function (element, errorClass) {
-            $(element).closest('li').removeClass('error');
-            $(element).siblings('.error--mgs').html('');
+        unhighlight:function(element, errorClass) {
+            $(element).closest('.form-group').removeClass('error');
+            $(element).siblings('.error-txt').html('');
         },
-        errorPlacement: function (error, element) {
-            $(element).siblings('.error--mgs').html(error.text());
+        errorPlacement: function(error, element){
+            $(element).siblings('.error-txt').html(error.text());
         },
     });
     // end login and registration js

@@ -13,6 +13,7 @@
     {{ block.super }}
     {% compress css %}
         <link href="{% static 'packages/select2/dist/css/select2.min.css' %}" rel="stylesheet" type="text/css">
+        <link href="{% static 'packages/sweetalert/dist/sweetalert2.min.css' %}" rel="stylesheet" type="text/css">
         <link type="text/scss" href="{% static 'shinelearn/css/cart/payment.scss' %}" rel="stylesheet">
     {% endcompress %}
     <style type="text/css">
@@ -95,7 +96,7 @@
                     <span class="invalid-cred-err" style="display: none" id="invalid-cred">Invalid email or password</span>
                     {% if email_exist %}
                         <div class="form-group clearfix">
-                            <div class="col-sm-12 {% if email_error %} error1 {% endif %}">
+                            <div class="col-sm-12">
                                 <input type="email" class="form-control" name="email" placeholder=" "
                                        value="{{ email }}"/>
                                 <label for="">Email id</label>
@@ -104,7 +105,7 @@
                         </div>
                     {% else %}
                         <div class="form-group clearfix">
-                            <div class="col-sm-12 {% if email_error %} error1 {% endif %}">
+                            <div class="col-sm-12">
                                 <input type="email"
                                        name="email"
                                        class="form-control"
@@ -201,23 +202,20 @@
                 <!-- Forgot Password  -->
                 <form class="personal-details col-sm-6 bdr-rt hidden"
                       method="post"
-                      id="forgot_form"
+                      id="forgot_form_1"
                       action="{% url 'users:forgot-email-sent' %}"
                 >{% csrf_token %}
                     <strong class="personal-details-heading ml-15">Forgot Password</strong>
-                    {% if form.non_field_errors %}
-                        <span class="error" style="left:14px;">{{ form.non_field_errors.0 }}</span>
-                    {% endif %}
                     <div class="form-group clearfix">
-                        <div class="col-sm-12 {% if form.first_name.errors %} error {% endif %}">
+                        <div class="col-sm-12 ">
                             <!-- {{form.first_name}} -->
                             <input type="text" class="form-control" id="" name="email" placeholder=" "/>
                             <label for="">Your email</label>
-                            <span class="error-txt">{{ form.first_name.errors.0 }}</span>
+                            <span class="error-txt"></span>
                         </div>
                     </div>
                     <div class="continue">
-                        <button type="submit">Submit</button>
+                        <button type="button" onclick="handleForgotPassword()">Submit</button>
                     </div>
                 </form>
 
@@ -262,8 +260,10 @@
 
     {{ block.super }}
     <script type="text/javascript" src="{% static 'packages/select2/dist/js/select2.min.js' %}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <script src="{% static 'packages/sweetalert/dist/sweetalert2.all.min.js' %}"></script>
+
     <script src="{% static 'shinelearn/js/cart/guest_login.js' %}"></script>
+
     <script>
         var site_domain = "{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN}}";
     </script>

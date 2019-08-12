@@ -72,7 +72,6 @@ const handleLoginCandidate = async () => {
 
     const result = await handleResponse(loginResponse)
 
-    console.log('---result---', result);
     if (result['error']) {
         // Todo ***** error handling  *****
         $('#invalid-cred').show().delay(5000).fadeOut()
@@ -105,12 +104,26 @@ const handleLoginCandidate = async () => {
         console.log('Some error has occur');
         return;
     }
-    console.log('--updatedCart----', cartData);
 
     window.location.href = `/payment/payment-options/`;
 
 };
 
+/*
+* handle forgot password
+* */
+
+const handleForgotPassword = async () => {
+
+    /*
+   * return if form is not valid.
+   * */
+    if (!$('#forgot_form_1').valid()) {
+        return;
+    }
+
+    $('#forgot_form_1').submit()
+}
 
 /*
 *  continue as guest option handled
@@ -120,7 +133,7 @@ const continueAsGuest = () => {
     $('#guest_form').removeClass('hidden');
     $('#continue-as-guest-button').addClass('hidden');
     $('#login-candidate-button').removeClass('hidden');
-    $('#forgot_form').addClass('hidden');
+    $('#forgot_form_1').addClass('hidden');
     $('#user_payment_login').addClass('hide');
     $('#guest_payment_login').removeClass('hide')
     $('#login_users').addClass('hide');
@@ -135,7 +148,7 @@ const loginAsCandidate = () => {
     $('#guest_form').addClass('hidden');
     $('#continue-as-guest-button').removeClass('hidden');
     $('#login-candidate-button').addClass('hidden');
-    $('#forgot_form').addClass('hidden');
+    $('#forgot_form_1').addClass('hidden');
     $('#user_payment_login').removeClass('hide');
     $('#guest_payment_login').addClass('hide');
     $('#user-forgot-password').addClass('hide');
@@ -157,7 +170,7 @@ const forgotPassword = () => {
     $('#user_payment_login').addClass('hide');
     $('#guest_payment_login').addClass('hide');
     $('#user-forgot-password').removeClass('hide');
-    $('#forgot_form').removeClass('hidden');
+    $('#forgot_form_1').removeClass('hidden');
 
 }
 
@@ -167,6 +180,9 @@ const forgotPassword = () => {
 * */
 
 $(document).ready(function () {
+    /*
+    * validate login form
+    * */
 
     $("#login_form").validate({
         rules: {
@@ -186,6 +202,107 @@ $(document).ready(function () {
             password: {
                 required: "Password is required",
             },
+        },
+        highlight: function (element) {
+
+            let className = '.form-group', addClass = 'error1';
+
+            if (window.CURRENT_FLAVOUR == 'mobile') {
+                className = 'li';
+                addClass = 'error'
+            }
+            $(element).closest(className).addClass(addClass);
+        },
+        unhighlight: function (element) {
+
+            let className = '.form-group', addClass = 'error1', errorTextClass = '.error-txt';
+
+            if (window.CURRENT_FLAVOUR == 'mobile') {
+                className = 'li';
+                addClass = 'error'
+                errorTextClass = '.error--mgs'
+            }
+            $(element).closest(className).removeClass(addClass);
+            $(element).siblings(errorTextClass).html('');
+
+
+        },
+        errorPlacement: function (error, element) {
+            let errorTextClass = '.error-txt';
+            if (window.CURRENT_FLAVOUR == 'mobile') {
+                errorTextClass = '.error--mgs';
+            }
+            $(element).siblings(errorTextClass).html(error.text());
+        }
+    });
+
+    /*
+    *  validate forget
+     *  */
+
+    $("#forgot_form_1").validate({
+        submitHandler: function (form) {
+            let formData = $(form).serialize();
+            let post_url = $(form).attr('action');
+            $.ajax({
+                url: post_url,
+                type: "POST",
+                data: formData,
+                dataType: 'json',
+                success: function (json) {
+                    if (json.exist == true) {
+                        $("#forgot_form_1")[0].reset();
+                        $('#forgot_div').modal('hide');
+                        $('#forgot_form_1').addClass('hidden');
+                        $('#login_form').removeClass('hidden');
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Link has been sent to your registered email id',
+                            type: 'success',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+
+                    } else if (json.notexist == true) {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Your email is not registered on shine learning. Please enter the register email',
+                            type: 'error',
+                            showConfirmButton: false,
+                            timer: 2000
+
+                        })
+                    } else if (json.noresponse == true) {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Something went wrong. Try again later',
+                            type: 'error',
+                            showConfirmButton: false,
+                            timer: 2000
+
+                        })
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Something went wrong. Try again later',
+                        type: 'error',
+                        showConfirmButton: false,
+                        timer: 2000
+
+                    })
+                }
+            });
+        },
+        rules: {
+            email: {
+                required: true,
+                email: true,
+            }
+        },
+        messages: {
+            email: {required: "Email address is required."},
         },
         highlight: function (element) {
 
