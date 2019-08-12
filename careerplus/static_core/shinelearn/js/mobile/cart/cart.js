@@ -38,6 +38,7 @@ function handleDeliveryUpdation(formData, lineId) {
         async: false,
         enctype: "multipart/form-data",
         success: function (data, textStatus, jqXHR) {
+            console.log('data -------',data);
             if (data.total_cart_amount != -1 && data.delivery_charge != -1) {
                 if (data.delivery_charge) {
                     var text_str = '+ Rs. ' + data.delivery_charge.toString() + '/-';
@@ -45,19 +46,20 @@ function handleDeliveryUpdation(formData, lineId) {
                 } else {
                     $('#delivery-charge' + lineId).text('');
                 }
-                const totalCartAmount = `Rs. ${data.total_cart_amount.toFixed(2).toString()}`
+
+                const totalCartAmount = `Rs. ${data.total_cart_amount.toFixed(2).toString()}`;
                 $('#total-cart-amount-id').text(totalCartAmount);
 
-                const totalPayableAmount = `Rs. ${data.total_payable_amount.toFixed(2).toString()}`
-                $('#total-payable-amount').text(totalPayableAmount)
+                const totalPayableAmount = `Rs. ${data.total_payable_amount.toFixed(2).toString()}`;
+                $('#total-payable-amount').text(totalPayableAmount);
 
                 let {
                     delivery_service_meta_desc: deliveryServiceDesc,
                     delivery_service_title: deliveryServiceTitle,
                     delivery_charge: deliveryCharge
                 } = data;
-                const str = `${deliveryServiceTitle}- ${Number(deliveryCharge) === 0 ? 'No extra cost' : 'Rs. ' + deliveryCharge.toFixed(2) + '/-'}`
-                $(`#active-delivery-title${lineId.trim()}`).text(str)
+                const str = `${deliveryServiceTitle}- ${Number(deliveryCharge) === 0 ? 'No extra cost' : 'Rs. ' + deliveryCharge.toFixed(2) + '/-'}`;
+                $(`#active-delivery-title${lineId.trim()}`).text(str);
 
                 $(`#active-delivery-description${lineId.trim()}`).text(`(${deliveryServiceDesc})`)
 
