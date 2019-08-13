@@ -19,11 +19,8 @@
 	<meta property="og:description" content="{{Category.name}} practice tests online through shine learning. Start preparing mock tests to obtain your score. 500+ Specialized Practice Tests">
 	<meta property="og:type" content="Website">
 	<meta property="og:site_name" content="ShineLearning">
-	<!--<meta property="og:image" content="https://static1.shine.com/l/m/images/blog/Prominent_People_And_Their_Resignation_Letter_Format.jpeg">-->
-	<meta property="practice-test:modified_time" content="{{Category.modified}}">
-	<!--<meta property="article:modified_time" content="2018-08-28 06:28:31.001117+00:00">-->
+	<meta property="og:image" content="{% static 'shinelearn/images/free_skill/submit-test.png' %}">
 	<meta property="fb:profile_id" content="282244838633660">
-
     <meta itemprop="name" content="{{Category.name}} Practice test | online mock test – Shine Learning">
     <meta itemprop="dateModified" content="{{Category.modified}}">
     <meta itemprop="url" content="https://{{ SITE_DOMAIN }}/practice-tests/{{Category.slug}}/">
@@ -56,12 +53,12 @@
       <div class="container">
          {% block breadcrumb %}
          <ol class="breadcrumb  black mb-0" itemscope="" itemtype="http://schema.org/BreadcrumbList">
-            {% for bread in breadcrumbs %}
-            {% if bread.url %}
-            <li><a href='{{bread.url}}'>{{bread.name}}</a></li>
-            {% else %}
-            <li class="active">{{bread.name}}</li>
-            {% endif %}
+            {% for bradcbs in breadcrumbs %}
+              {% if bradcbs.url %}
+                <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item"><span itemprop="name">{{bradcbs.name}}</span></a></li>
+              {% else %}
+                <li class="active">{{bradcbs.name}}</li>
+              {% endif %}
             {% endfor %}
          </ol>
          {% endblock breadcrumb %}

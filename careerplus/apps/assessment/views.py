@@ -196,7 +196,7 @@ class AssessmentResultPage(TemplateView):
             breadcrumbs.append({"url": '/practice-tests/'+test.category.get_parent()[0].slug, "name": test.category.get_parent()[0].name})
         if test.category:
             breadcrumbs.append({"url": '/practice-tests/'+test.category.slug + '/sub', "name": test.category.name})
-        breadcrumbs.append({"url": '', "name": test.slug + '-test'})
+        breadcrumbs.append({"url": '', "name": test.title})
         return breadcrumbs
 
     def get_context_data(self, **kwargs):

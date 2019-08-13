@@ -26,12 +26,12 @@
 
     <h1>Your Test Result</h1>
     <div class="bread-crums">
-        {% for bread in breadcrumbs %}
-                  {% if bread.url %}
-            <a href='{{bread.url}}'>{{bread.name}} </a>-
-            {% else %}
-          <a href="#">{{bread.name}}</a>
-            {% endif %}
+          {% for bradcbs in breadcrumbs %}
+              {% if bradcbs.url %}
+                <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item"><span itemprop="name">{{bradcbs.name}}</span></a></li>
+              {% else %}
+                <li class="active">{{bradcbs.name}}</li>
+              {% endif %}
 
         {% endfor %}
     </div>
