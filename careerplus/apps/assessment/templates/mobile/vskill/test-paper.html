@@ -94,10 +94,10 @@
         {% endfor %}
         </ol>
         
-        <a href="#" class="btn btn-round-30 btn-blue w-100" id="nextQuestionBtn" onclick="nextquestion('1');">
+        <div class="btn btn-round-30 btn-blue w-100" id="nextQuestionBtn" onclick="nextquestion('1');">
             Next question 
             <span class="pt-sprite icon-arrow"></span>
-        </a>
+        </div>
 
         <div class="take-test--button-wrap mt-15">
             <span class="btn btn-outline btn-round-30" id="skipBtn" onclick="skipQuestion();">Skip</span>
@@ -295,8 +295,7 @@ return resp;
 
 $("#nextQuestionBtn").click(function() {
     $('html,body').animate({
-        scrollTop: $("#ques").offset().top - $(".question-timer").height() - 15},
-        'slow');
+        scrollTop: $("#ques").offset().top - $(".question-timer").height() - 15}, 3000);
 });
 
 </script>
