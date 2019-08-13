@@ -397,7 +397,8 @@ const getOrderItemFeedbackOperation = (page_no) => {
                 `
             )
         }
-        for (let page=1;page<=total_pages_operations && page<=5;page++){
+        max_page = page_no>2 ? page_no+3 : page_no+6 -page_no
+        for (let page=page_no>2 ? page_no-2 : 1;page<=total_pages_operations && page< max_page;page++){
             $('.pagination').append(
                 `
                     <li ${page===page_no ? "class='active'" : ''} ><a ${page===page_no ? '' :`onclick="getOrderItemFeedbackOperation(${page})"`}>${page}</a></li>
