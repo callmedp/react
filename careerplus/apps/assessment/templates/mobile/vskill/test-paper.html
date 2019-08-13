@@ -77,7 +77,7 @@
 
     </div><!-- /. question-timer -->
 
-    <div class="take-test">
+    <div class="take-test" id="ques">
         <ol>
         {% for quest in questions_list %}
             <li class="take-test__wrap test-paper {% if forloop.counter == 1 %} actived {% else %}inactive{% endif %}" id="question-{{forloop.counter}}">
@@ -94,10 +94,11 @@
         {% endfor %}
         </ol>
         
-        <div class="btn btn-round-30 btn-blue w-100" id="nextQuestionBtn" onclick="nextquestion('1');">
+        <a href="#" class="btn btn-round-30 btn-blue w-100" id="nextQuestionBtn" onclick="nextquestion('1');">
             Next question 
             <span class="pt-sprite icon-arrow"></span>
-        </div>
+        </a>
+
         <div class="take-test--button-wrap mt-15">
             <span class="btn btn-outline btn-round-30" id="skipBtn" onclick="skipQuestion();">Skip</span>
             <span class="btn btn-outline btn-round-30" id="submitBtn" onclick="submitTest();">Submit</span>
@@ -291,6 +292,12 @@ let resp = NaN;
 });
 return resp;
 }
+
+$("#nextQuestionBtn").click(function() {
+    $('html,body').animate({
+        scrollTop: $("#ques").offset().top - $(".question-timer").height() - 15},
+        'slow');
+});
 
 </script>
 <script>
