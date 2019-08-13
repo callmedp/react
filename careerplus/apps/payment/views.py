@@ -214,8 +214,6 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         return HttpResponseRedirect(reverse('cart:payment-summary'))
 
     def get_context_data(self, **kwargs):
-        import ipdb;
-        ipdb.set_trace();
         context = super(PaymentOptionView, self).get_context_data(**kwargs)
         payment_dict = self.getPayableAmount(cart_obj=self.cart_obj)
         line_item = self.cart_obj.lineitems.filter(parent=None)[0]
