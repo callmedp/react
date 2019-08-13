@@ -1,25 +1,20 @@
 # import python module
 import logging
+from datetime import timedelta
+import datetime
 
 # import django module
 from django.core.management.base import BaseCommand
 from django.utils import timezone
-<<<<<<< HEAD
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.conf import settings
-=======
->>>>>>> master
-from datetime import timedelta
-import datetime
+
 
 # import apps module
 from order.models import WelcomeCallOperation,CustomerFeedback,OrderItemFeedback,OrderItemFeedbackOperation
 from order.utils import get_ltv
-<<<<<<< HEAD
 from emailers.tasks import send_email_task
-=======
->>>>>>> master
 
 
 class Command(BaseCommand):
@@ -27,27 +22,17 @@ class Command(BaseCommand):
         feedback_call_entry()
 
 def feedback_call_entry():
-<<<<<<< HEAD
     start_time = timezone.now()
-=======
->>>>>>> master
-    start_date = timezone.now() - timedelta(days=4)
+    start_date = timezone.now() - timedelta(days=7)
     end_date = timezone.now() - timedelta(days=3)
     
     total_feedbacks_created = []
     total_feedbacks_updated = []
-<<<<<<< HEAD
     total_feedbacks_failed = 0
 
     logging.getLogger("info_log").info("Feedback Cron Started for {},{}".format(start_date,end_date))
     welcome_operations = WelcomeCallOperation.objects.filter(\
         wc_status__in=[41,42,63],created__range=[start_date,end_date],order__status=1)
-=======
-
-    logging.getLogger("info_log").info("Feedback Cron Started for {},{}".format(start_date,end_date))
-    welcome_operations = WelcomeCallOperation.objects.filter(\
-        wc_status__in=[41,42,63],created__range=[start_date,end_date])
->>>>>>> master
     
     if not welcome_operations.exists():
         return
@@ -107,13 +92,14 @@ def feedback_call_entry():
                 "start_time": start_time,
                 "end_time":end_time,
     }
-    to_emails = ['hitesh.rexwal@hindustantimes.com','animesh.sharma@hindustantimes.com','vishal.gupta@hindustantimes.com']
+    to_emails = ['hitesh.rexwal@hindustantimes.com']
 
     mail_type = 'FEEDBACK_CALL_CRON'
     send_email_task(to_emails,mail_type,email_dict)
     body = render_to_string('emailers/console/feedback_call_cron.html', email_dict)
     try:
         emsg = EmailMessage(email_dict.get('subject'), body=body, to=to_emails, from_email=settings.CONSULTANTS_EMAIL)
+        emsg.content_subtype = 'html'
         emsg.send()
     except Exception as e:
         logging.getLogger('error_log').error("%s - %s" % ('Mail Failed', str(e)))

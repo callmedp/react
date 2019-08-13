@@ -390,7 +390,7 @@ const getOrderItemFeedbackOperation = (page_no) => {
             $('.pagination').append(
                 `
                     <li>
-                        <a onclick="customerList(${page_no -1})" aria-label="Previous">
+                        <a onclick="getOrderItemFeedbackOperation(${page_no -1})" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
@@ -409,7 +409,7 @@ const getOrderItemFeedbackOperation = (page_no) => {
             $('.pagination').append(
                 `
                     <li>
-                        <a onclick="customerList(${page_no +1})" aria-label="Next">
+                        <a onclick="getOrderItemFeedbackOperation(${page_no +1})" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
