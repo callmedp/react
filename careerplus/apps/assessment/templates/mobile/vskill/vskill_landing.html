@@ -11,15 +11,52 @@
 {% endcompress %}
 {% endblock css_section %}
 {% block canonical_url %}
-<link rel="canonical" href="//{{ SITE_DOMAIN }}/">
+<link rel="canonical" href="https://{{ SITE_DOMAIN }}/practice-tests/">
 {% endblock canonical_url %}
 {% block django_meta %}
-{% include 'meta/meta.html' %}
+ <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <link rel="shortcut icon" href="{% static 'shinelearn/images/fav_icon.png' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=0"/>
+    <meta name="description" content="Take practice tests for every skill & functional area online. Start preparing mock tests questions for competitive exams and job interviews on shine learning.">
+	<meta property="og:title" content="Practice Tests | Online Mock Tests | Exam Preparation Question @ Shine Learning">
+	<meta property="og:url" content="https://{{ SITE_DOMAIN }}/practice-tests/">
+	<meta property="og:description" content="Take practice tests for every skill & functional area online. Start preparing mock tests questions for competitive exams and job interviews on shine learning.">
+	<meta property="og:type" content="Website">
+	<meta property="og:site_name" content="ShineLearning">
+	<!--<meta property="og:image" content="https://static1.shine.com/l/m/images/blog/Prominent_People_And_Their_Resignation_Letter_Format.jpeg">-->
+	<meta property="practice-test:modified_time" content="{% if test_list %} {{test_list.0.modified}} {% endif %}">
+	<!--<meta property="article:modified_time" content="2018-08-28 06:28:31.001117+00:00">-->
+	<meta property="fb:profile_id" content="282244838633660">
+
+    <meta itemprop="name" content="Practice Tests | Online Mock Tests | Exam Preparation Question @ Shine Learning ">
+    <meta itemprop="dateModified" content="{% if test_list %} {{test_list.0.modified}} {% endif %}">
+    <meta itemprop="url" content="https://{{ SITE_DOMAIN }}/practice-tests/">
+    <meta itemprop="description" content="Take practice tests for every skill & functional area online. Start preparing mock tests questions for competitive exams and job interviews on shine learning.">
+      <meta name="twitter:card" content="summary">
+        <meta name="twitter:site" content="@shinelearning">
+
+        <meta name="twitter:domain" content="{{ SITE_DOMAIN }}">
+        <meta name="twitter:title" content="Practice Tests | Online Mock Tests | Exam Preparation Question @ Shine Learning">
+        <meta name="twitter:description" content="Take practice tests for every skill & functional area online. Start preparing mock tests questions for competitive exams and job interviews on shine learning." />
+        <!--<meta name="twitter:image:src" content="{{obj.image.url}}">-->
 {% endblock django_meta %}
 {% block container %}
 <div class="body-wrapper practice-test pt-0">
+    {% block breadcrumb %}
+<ol class="breadcrumb  black mb-0" itemscope="" itemtype="http://schema.org/BreadcrumbList">
+{% for bread in breadcrumbs %}
+{% if bread.url %}
+<li><a href='{{bread.url}}'>{{bread.name}}</a></li>
+{% else %}
+<li class="active">{{bread.name}}</li>
+{% endif %}
+{% endfor %}
+</ol>
+{% endblock breadcrumb %}
     <div class="headband_practice row">
-        <img src="{% static 'shinelearn/images/mobile/practice_test/home_banner.png' %}" class="img-responsive">
+        <img src="{% static 'shinelearn/images/mobile/practice_test/home_banner.png' %}" alt="banner" class="img-responsive">
         <div class="pl-15 pr-15">
             <ol class="breadcrumb mt-15">
                 <li><a href="#"><span itemprop="name"></span>Home</span></a></li>
@@ -65,11 +102,11 @@
            {% for fa in func_area|slice:":8" %}
 
             <div class="functional_area_inside border-{{forloop.counter0}}">
-            <a href="{% url 'assessment:vskill-category' slug=fa.slug %}">
+            <a title="{{fa.name}}" href="{% url 'assessment:vskill-category' slug=fa.slug %}">
                   {% if fa.icon %}
-                     <span class="icon"><img class="img-responsive" src= "{{fa.icon.url}}"></span>
+                     <span class="icon"><img class="img-responsive" alt="fa-icon" src= "{{fa.icon.url}}"></span>
                      {% else %}
-                     <span class="icon"><img class="img-responsive" src="#"></span>
+                     <span class="icon"><img  class="img-responsive" alt="fa-icon" src="#"></span>
                      {% endif %}
                 <span class="fa_name">{{fa.name}}</span></a> </div>
               {%endfor%}
@@ -88,7 +125,7 @@
         <p class="c6">Make your choice and go ahead</p>
 
         <div class="test-option-box">
-            <h2 class="fs-20"><a href="#">{{test.title}}</a></h2>
+            <h2 class="fs-20"><a title="{{test.title}}" href="#">{{test.title}}</a></h2>
             <div class="test-option-box--test-wrap">
                 <div class="test-option-box--content">
                     <span>Test Format</span>
@@ -194,7 +231,7 @@
                 element.innerHTML= element.innerHTML +
                 `<div class="functional_test_inside border-${color}">
                 <a href="/practice-tests/${json.results[fa].slug}">
-                <span class= "icon"><img src = "${json.results[fa].icon}"
+                <span class= "icon"><img alt="fa-icon" src = "${json.results[fa].icon}"
                 </span>${json.results[fa].name} </a></div>`;
                }
                },
@@ -220,6 +257,7 @@
         $("#check_results").addClass("open");
         $('#productName').text(modalobject.productName);
         $('#productName').attr("href",modalobject.productUrl);
+        $('#productName').attr("title",modalobject.productName);
         $('#productDuration').text(modalobject.productDuration);
         $('#productPrice').text(modalobject.productPrice);
         $('#courseDuration').text(modalobject.courseDuration);
@@ -229,6 +267,8 @@
         $('#fakeProductPrice').text('Rs. '+parseInt(parseInt(modalobject.productPrice)/0.9));
         $('#courseName').text(modalobject.courseName);
         $('#courseName').attr("href",modalobject.courseUrl);
+        $('#courseName').attr("title",modalobject.courseName);
+
 
         $('#questCount').text(modalobject.quescount);
        if(modalobject.courseName == ""|| modalobject.courseName == "undefined" ){

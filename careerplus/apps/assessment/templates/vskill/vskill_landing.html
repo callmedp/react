@@ -1,13 +1,39 @@
 {% extends "basic/base1.html" %}
 {% load static meta thumbnail compress %}
-{% block title %}Practice test | online mock test – Shine Learning	 {% endblock title %}
+{% block title %}Practice Tests | Online Mock Tests | Exam Preparation Question @ Shine Learning {% endblock title %}
 {% block canonical_url %}
-<link rel="canonical" href="//{{ SITE_DOMAIN }}/">
-<link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}/">
+<link rel="canonical" href="https://{{ SITE_DOMAIN }}/practice-tests/">
+<link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}/practice-tests/">
 {% endblock canonical_url %}
-{% block django_meta %}
-{% include 'meta/meta.html' %}
-{% endblock django_meta %}
+{% block meta_html %}
+ <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <link rel="shortcut icon" href="{% static 'shinelearn/images/fav_icon.png' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=0"/>
+    <meta name="description" content="Take practice tests for every skill & functional area online. Start preparing mock tests questions for competitive exams and job interviews on shine learning.">
+	<meta property="og:title" content="Practice Tests | Online Mock Tests | Exam Preparation Question @ Shine Learning">
+	<meta property="og:url" content="https://{{ SITE_DOMAIN }}/practice-tests/">
+	<meta property="og:description" content="Take practice tests for every skill & functional area online. Start preparing mock tests questions for competitive exams and job interviews on shine learning.">
+	<meta property="og:type" content="Website">
+	<meta property="og:site_name" content="ShineLearning">
+	<!--<meta property="og:image" content="https://static1.shine.com/l/m/images/blog/Prominent_People_And_Their_Resignation_Letter_Format.jpeg">-->
+	<meta property="practice-test:modified_time" content="{% if test_list %} {{test_list.0.modified}} {% endif %}">
+	<!--<meta property="article:modified_time" content="2018-08-28 06:28:31.001117+00:00">-->
+	<meta property="fb:profile_id" content="282244838633660">
+
+    <meta itemprop="name" content="Practice Tests | Online Mock Tests | Exam Preparation Question @ Shine Learning ">
+    <meta itemprop="dateModified" content="{% if test_list %} {{test_list.0.modified}} {% endif %}">
+    <meta itemprop="url" content="https://{{ SITE_DOMAIN }}/practice-tests/">
+    <meta itemprop="description" content="Take practice tests for every skill & functional area online. Start preparing mock tests questions for competitive exams and job interviews on shine learning.">
+      <meta name="twitter:card" content="summary">
+        <meta name="twitter:site" content="@shinelearning">
+
+        <meta name="twitter:domain" content="learning.shine.com">
+        <meta name="twitter:title" content="Practice Tests | Online Mock Tests | Exam Preparation Question @ Shine Learning">
+        <meta name="twitter:description" content="Take practice tests for every skill & functional area online. Start preparing mock tests questions for competitive exams and job interviews on shine learning." />
+        <!--<meta name="twitter:image:src" content="{{obj.image.url}}">-->
+{% endblock meta_html %}
 {% block css_section %}
 {{block.super}}
 {% compress css %}
@@ -93,11 +119,11 @@
                   {% for fa in func_area|slice:":8" %}
 
                <div class="functional_test_inside border-{{forloop.counter}}">
-                  <a href="{% url 'assessment:vskill-category' slug=fa.slug %}">
+                  <a title="{{fa.name}}" href="{% url 'assessment:vskill-category' slug=fa.slug %}">
                       {% if fa.icon %}
-                     <span><img class="img-responsive" src= "{{fa.icon.url}}"></span>
+                     <span><img class="img-responsive" src= "{{fa.icon.url}}" alt="fa-icons"></span>
                      {% else %}
-                     <span><img class="img-responsive" src="#"></span>
+                     <span><img class="img-responsive" src="#" alt="fa-icons"></span>
                      {% endif %}
                   {{fa.name}}
                   </a>
@@ -130,7 +156,7 @@
                <div class="pad-15">
                   <div class="vskill-modal">
                      <i>
-                        <img src="{% static 'shinelearn/images/free_skill/free-test-bg.jpg' %}" class="img-responsive">
+                        <img src="{% static 'shinelearn/images/free_skill/free-test-bg.jpg' %}" alt="test-bg" class="img-responsive">
                      </i>
                      <span class="pad-15">
                         <h3>Free Test</h3>
@@ -155,10 +181,10 @@
                   <div class="recommended-head">Recommended</div>
                   <div class="vskill-modal recommended">
                      <i>
-                        <img src="{% static 'shinelearn/images/free_skill/practice-test-bg.jpg' %}" class="img-responsive">
+                        <img src="{% static 'shinelearn/images/free_skill/practice-test-bg.jpg' %}" alt="practice-test-bg" class="img-responsive">
                      </i>
                      <span class="pad-15">
-                        <h3><a id="productName">Practice Tests</a></h3>
+                        <h3><a id="productName" title="">Practice Tests</a></h3>
                         <ul>
                            <li>
                               Test Format <strong>Practice Exam</strong>
@@ -178,7 +204,7 @@
                <div class="pad-15" id="testCourse"  style="display: none;">
                   <div class="vskill-modal">
                      <i>
-                        <img src="{% static 'shinelearn/images/free_skill/online-course-bg.jpg' %}" class="img-responsive">
+                        <img src="{% static 'shinelearn/images/free_skill/online-course-bg.jpg' %}" alt="course-bg" class="img-responsive">
                      </i>
                      <span class="pad-15">
                         <h3><a id="courseName">Practice Tests</a></h3>
@@ -228,10 +254,10 @@
                  $('#loadmorebtn').hide();
                }
                for (fa in json.results){
-                 color = counter(facolor)
+                color = counter(facolor)
                 element.innerHTML= element.innerHTML +
-                `<div class="functional_test_inside border-${color}"><a href="/practice-tests/${json.results[fa].slug}">
-                <span> <img class="img-responsive" src="${json.results[fa].icon}"></span>
+                `<div class="functional_test_inside border-${color}"><a title="${json.results[fa].name}" href="/practice-tests/${json.results[fa].slug}">
+                <span> <img class="img-responsive" alt="fa-icons" src="${json.results[fa].icon}"></span>
                  ${json.results[fa].name} </a></div>`;
                    facolor +=1;
                }

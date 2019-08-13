@@ -11,10 +11,35 @@
 {% endcompress %}
 {% endblock css_section %}
 {% block canonical_url %}
-<link rel="canonical" href="//{{ SITE_DOMAIN }}/">
+<link rel="canonical" href="https://{{ SITE_DOMAIN }}/practice-tests/{{Category.slug}}/sub">
 {% endblock canonical_url %}
 {% block django_meta %}
-{% include 'meta/meta.html' %}
+ <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <link rel="shortcut icon" href="{% static 'shinelearn/images/fav_icon.png' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=0"/>
+    <meta name="description" content="Take free practice tests for {{Category.name}} online. Start preparing {{Category.name}} mock tests on shine learning to obtain your score.">
+	<meta property="og:title" content="Free {{Category.name}} Practice Tests | Exam Preparation Question @ Shine Learning">
+	<meta property="og:url" content="https://{{ SITE_DOMAIN }}/practice-tests/{{Category.slug}}/sub">
+	<meta property="og:description" content="Take free practice tests for {{Category.name}} online. Start preparing {{Category.name}} mock tests on shine learning to obtain your score.">
+	<meta property="og:type" content="Website">
+	<meta property="og:site_name" content="ShineLearning">
+	<!--<meta property="og:image" content="https://static1.shine.com/l/m/images/blog/Prominent_People_And_Their_Resignation_Letter_Format.jpeg">-->
+	<meta property="practice-test:modified_time" content="{{Category.modified}}">
+	<!--<meta property="article:modified_time" content="2018-08-28 06:28:31.001117+00:00">-->
+	<meta property="fb:profile_id" content="282244838633660">
+    <meta itemprop="name" content="{{Category.name}} Practice test | online mock test – Shine Learning">
+    <meta itemprop="dateModified" content="{{Category.modified}}">
+    <meta itemprop="url" content="https://{{ SITE_DOMAIN }}/practice-tests/{{Category.slug}}/sub">
+    <meta itemprop="description" content="Take free practice tests for {{Category.name}} online. Start preparing {{Category.name}} mock tests on shine learning to obtain your score.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@shinelearning">
+    <meta name="twitter:domain" content="learning.shine.com">
+    <meta name="twitter:title" content="Free {{Category.name}} Practice Tests | Exam Preparation Question @ Shine Learning">
+    <meta name="twitter:description" content="Take free practice tests for {{Category.name}} online. Start preparing {{Category.name}} mock tests on shine learning to obtain your score.">
+        <!--<meta name="twitter:image:src" content="{{obj.image.url}}">-->
+
 {% endblock django_meta %}
 {% block header %}
 {% endblock header %}
@@ -23,7 +48,7 @@
 <div class="body-wrapper practice-test ">
     <div class="practice-test-inside"></div>
 
-    <div class="back"></div>
+    <div class="back" ></div>
 
 <h1>{{Category.heading}}</h1>
             {% block breadcrumb %}
