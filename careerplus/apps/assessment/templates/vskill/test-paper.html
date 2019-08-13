@@ -78,7 +78,7 @@
                             &rsaquo;
                         </button>
                         <button class="white_btn" id="skipBtn" onclick="skipQuestion();">Skip</button>
-                        <span class="flexbox align-self-mla mr-20"><button class="white_btn" onclick="submitTest();">Submit</button></span>
+                        <span class="flexbox align-self-mla mr-20"><button class="white_btn" id="submitBtn" onclick="submitTest();">Submit</button></span>
                     </div>
                 </div>
             </div>
@@ -288,11 +288,12 @@ $('.marked').click(function() {
     if (activeTab >= maxCounter) {
         $('#nextQuestionBtn').hide();
      $('#skipBtn').text('Clear');
+     $('#submitBtn').addClass('blue_btn');
 
     } else {
-
         $('#nextQuestionBtn').show();
-           $('#skipBtn').text('Skip');
+        $('#skipBtn').text('Skip');
+        $('#submitBtn').removeClass('blue_btn');
 
     }
 });
@@ -313,10 +314,12 @@ function nextquestion(number) {
         if (activeTab >= maxCounter) {
         $('#nextQuestionBtn').hide();
         $('#skipBtn').text('Clear');
+         $('#submitBtn').addClass('blue_btn');
 
         } else {
         $('#nextQuestionBtn').show();
           $('#skipBtn').text('Skip');
+           $('#submitBtn').removeClass('blue_btn');
 
         }
          $('.active').removeClass('active');

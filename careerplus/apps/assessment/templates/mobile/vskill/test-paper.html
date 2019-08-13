@@ -100,7 +100,7 @@
         </div>
         <div class="take-test--button-wrap mt-15">
             <span class="btn btn-outline btn-round-30" id="skipBtn" onclick="skipQuestion();">Skip</span>
-            <span class="btn btn-outline btn-round-30" onclick="submitTest();">Submit</span>
+            <span class="btn btn-outline btn-round-30" id="submitBtn" onclick="submitTest();">Submit</span>
         </div>
     </div>
 
@@ -397,11 +397,15 @@ $('.marked').click(function() {
     if (activeTab >= maxCounter) {
         $('#nextQuestionBtn').hide();
         $('#skipBtn').text('Clear');
+            $('#submitBtn').removeClass('btn-outline');
+               $('#submitBtn').addClass('btn-blue');
 
     } else {
 
         $('#nextQuestionBtn').show();
                $('#skipBtn').text('Skip');
+                                  $('#submitBtn').addClass('btn-outline');
+               $('#submitBtn').removeClass('btn-blue');
     }
 });
 
@@ -429,9 +433,13 @@ function nextquestion(number) {
         if (activeTab >= maxCounter) {
         $('#nextQuestionBtn').hide();
         $('#skipBtn').text('Clear');
+         $('#submitBtn').removeClass('btn-outline');
+               $('#submitBtn').addClass('btn-blue');
         } else {
 
       $('#skipBtn').text('Skip');
+       $('#submitBtn').removeClass('btn-outline');
+               $('#submitBtn').addClass('btn-blue');
         }
         $('#activeQuestion').text(activeTab);
          $('.active').removeClass('active');
