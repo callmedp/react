@@ -235,7 +235,10 @@
 {% endblock container %}
 {% block js_section %}
 {{block.super}}
+{% compress %}
 <script src="{% static 'shinelearn/js/assessment/take_test.js' %}"></script>
+
+{%  endcompress %}
 
 <script>
 // JavaScript for label effects only
