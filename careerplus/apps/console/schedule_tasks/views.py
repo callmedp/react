@@ -329,7 +329,7 @@ class GeneratePixelTracker(FormView, PaginationMixin):
     def generate_pixel_code(self, pixel_slug, landing_urls, conversion_url, days=90):
         pixel_file = open('pixel_tracker.js')
         content = jsmin(pixel_file.read())
-        pixel_url = settings.SITE_DOMAIN + '/pixel/' + pixel_slug
+        pixel_url = settings.SITE_PROTOCOL + '://' + settings.SITE_DOMAIN + '/pixel/' + pixel_slug
         content = content.replace('pixel_url', "'" + pixel_url + "'")
         content = content.replace('no_of_days', str(days))
         content = content.replace('createcookiurls', ",".join(["'" + url + "'" for url in landing_urls]))

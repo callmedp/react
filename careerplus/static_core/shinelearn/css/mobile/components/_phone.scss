@@ -1,0 +1,12 @@
+.phone {
+    display: flex;
+
+    &--country-code {
+        flex: 0 0 90px;
+        margin-right: 15px;
+    }
+
+    &--number {
+
+    }
+}

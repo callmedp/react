@@ -97,12 +97,16 @@
 
                     <!-- Add to cart button and redirect to cart add class- enrol-now -->
                     {% if sqs.id not in linkedin_resume_services %}
-                      <a role="button" class="enrol-now" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
+                        {% if prd_vendor_slug == 'neo' %}
+                      <a role="button" class="enrol-now neo-enroll-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
+
+                      {% else %}
+                        <a role="button" class="enrol-now" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
+                      {% endif %}
                     {% endif %}
 
                     <!--a href="#" class="enrol-now" data-toggle="modal" data-target=".bs-example-modal-sm">Enroll now</a-->
                   </div>
-
                 </div>
 
                   <ul >
@@ -167,6 +171,35 @@
             <!-- About course -->
               <div class="row">
                 <div class="col-sm-12 col-md-8 mt-40">
+                  {% if prd_vendor_slug == 'neo' %}
+
+                  <div id="row_neo">
+                    <div class="cefr_level mb-30">
+                    <span class="cefr_level__img ml-10 mt-5">
+                      <img src="{% static 'shinelearn/images/neo-course-img.jpg' %}" width="110" alt="" > 
+                    </span>
+                    <span class="cefr_level__txt">
+                      <strong>Know your current English CEFR level,</strong>
+                      corresponding TOEFL and IELTS score by taking this test.
+                    </span>
+                    <a class="cefr_level__link" data-toggle="modal" data-target="#myModal" id="take-test_button">Take free test</a>
+                    </div>
+                  </div>
+
+                  <div id="cefr_level_box" style="display: none">
+                    <div class="cefr_level cefr_level_level mb-10">
+                      <span class="cefr_level__img--level">
+                        <img src="{% static 'shinelearn/images/cefr-level-img.jpg' %}" width="78" alt="" > 
+                      </span>
+                      <span class="cefr_level__txt--level">
+                        <strong id="cefr_level">B1</strong>
+                        Your CEFR level
+                      </span>
+                    </div>
+                    <a class="mb-30 db" href="https://www.coe.int/en/web/common-european-framework-reference-languages/table-1-cefr-3.3-common-reference-levels-global-scale" target="_blank"><span class="link-icon mr-5"></span> Official translations of CEFR global scale</a>
+                  </div>
+                  {% endif %}
+
                 {% if prd_about %}
                   <h2 class="detail-heading">About {% if prd_service == 'course' %}course{% else %}service{% endif %}</h2>
                   <style>
@@ -257,6 +290,7 @@
                   <div class="row">
                     <div id="get" class="col-sm-12 col-md-8">
 
+                
                     <h2>{% if prd_service == 'course' %}Course {% else %}Service{% endif %}Highlights</h2>
 
                       {{prd_uget|safe}}
@@ -325,4 +359,77 @@
             {% endif %}
         </div><!-- ./ row -->
       </section><!-- main parent2 section end -->      
+<!-- modal for neo tests -->
+{% if prd_vendor_slug == 'neo' %}
+{% csrf_token %}
+<div class="modal fade bs-example-modal-sm login-div" role="dialog" aria-labelledby="mySmallModalLabel" id="neo-test-modal">
+  <div class="modal-dialog modal-md" role="document" style="width: 515px;">
+    <div class="modal-content neo-modal">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body text-center" id="neo-modal-body">
+        <form id="neo-test-form" style="display:none;" >
+          <h4 class="modal-title text-center mb-40" id="myModalLabel2">Fill the form below to start the test</h4>
+          <div class="form-group">
+          <input type="text" class="form-control" name="name" placeholder="  " value=""/>
+          <label for="">Name</label>
+          <span class="js-error"></span>
+
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" name="email" placeholder="  " value=""/>
+          <label for="">Email</label>
+          <span class="js-error"></span>
+        </div>
+        <div class="form-group wdselect">
+          <div class="country-code">
+            <div class="custom-select">
+              <select name="country_code" class="form-control" id="country_code">
+                <option value="+91">+91</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="form-group wd75">
+          <input type="text" class="form-control" name="mobile" placeholder="  " value=""/>
+          <label for="">Mobile</label>
+          <span class="js-error"></span>
+
+        </div>
+         <div class="form-group mt-30">
+            <button type="submit" class="take-test-button" id="neo-form-btn"> Take test </button>
+        </div>
+        </form>
+        <iframe src="" sandbox="allow-scripts allow-same-origin" id="iframe" width="400" height="600" style="border:none;{% if not request.session.candidate_id %} display: none;{% endif %}"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end modal for neo tests -->
+
+<!-- modal for take tests -->
+<div class="modal fade bs-example-modal-sm login-div" id="neo-info-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-md" role="document" style="width: 515px;">
+    <div class="modal-content neo-modal ">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body text-center pt-0" id="neo-modal-body">
+        <figure><img src="{% static 'shinelearn/images/neo-course-img.jpg' %}" alt="" > </figure>
+        <p class="mt-20">Take Neo english test to enroll for this course. This test will show you, your CEFR level and help you to improve your skill</p>
+        <a class="mt-20 db" href="https://www.coe.int/en/web/common-european-framework-reference-languages/table-1-cefr-3.3-common-reference-levels-global-scale" target="_blank"><span class="link-icon mr-5"></span> Official translations of CEFR global scale</a>
+         <div class=" mt-30">
+            <button type="button" class="take-test-button mb-20" id="modal-take-test-btn"> Take test </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<!-- end modal for take tests -->
     {% endblock section2 %}
+

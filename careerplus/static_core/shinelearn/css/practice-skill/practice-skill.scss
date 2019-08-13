@@ -1,0 +1,67 @@
+@import "../path";
+@import "../common/bootstrap/variables";
+@import "../common/bootstrap/mixins";
+
+//pages
+@import "landing.scss";
+@import "icons.scss";
+@import "popular_test.scss";
+@import "fa_test.scss";
+@import "loading.scss";
+
+
+
+.btn_white {
+	
+background:$white-bg;
+border: 1px solid #EBEAEA;
+box-shadow: 0 3px 24px 0 rgba(192,192,192,0.50);
+border-radius: 42px;
+text-align: center;
+font-size: 16px;
+
+display: block;
+ 
+
+ a {
+ 	display: block;
+ 	 color: $text-333;
+ 	 
+ 	&:hover{
+ 		color: $p-blue;
+ 	
+ }
+
+a:focus, a:active {
+    outline: 0;
+    border: none;
+    -moz-outline-style: none;
+}
+
+button:focus, button:active {
+    outline: 0;
+    border: none;
+    -moz-outline-style: none;
+}
+
+input[type="button"] {
+ outline: none;
+}
+}
+}
+.loadmore {
+	margin:20px auto;
+
+	width: 220px; 
+	height: 50px;
+
+	a {
+		padding-top: 13px;
+	}
+
+}
+
+
+:focus {
+outline: 0;
+}

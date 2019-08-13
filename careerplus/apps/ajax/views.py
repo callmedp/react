@@ -4,6 +4,8 @@ import datetime
 import requests
 from decimal import Decimal
 from core.library.haystack.query import SQS
+from copy import deepcopy
+
 
 #DJANGO IMPORTS
 from django.db.models import Sum
@@ -13,6 +15,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.conf import settings
+
+
 
 #LOCAL IMPORTS
 from.mixins import ExotelInteraction
@@ -32,9 +36,10 @@ from core.tasks import upload_resume_to_shine
 from console.mixins import ActionUserMixin
 from order.functions import create_short_url
 from linkedin.autologin import AutoLogin
-from shop.models import Product
+from shop.models import Product,ProductScreen,ProductAttributeScreen,FAQProductScreen
 from blog.mixins import BlogMixin
 from shop.models import Category
+
 
 # from order.mixins import OrderMixin
 
@@ -889,6 +894,50 @@ class WelcomeServiceCallView(UserPermissionMixin,View):
             return self.get_response_for_failure_reason(order)
         else:
             return self.make_call_to_user(order, user)
+
+
+class ProductCopyAPIView(View):
+
+
+
+    def create_relation_m2m(self,attr_obj,new_object):
+        attr_copy = deepcopy(attr_obj)
+        attr_copy.pk = None
+        attr_copy.product = new_object
+        attr_copy.save()
+
+
+    def post(self,request,*args,**kwargs):
+        pid = self.request.POST.get('id')
+        if not pid:
+            return HttpResponse(json.dumps({'status': 0}), content_type="application/json")
+
+        product_screen_obj = ProductScreen.objects.filter(product__id=pid).first()
+
+        if product_screen_obj:
+            product_screen_copy_obj = deepcopy(product_screen_obj)
+            product_screen_copy_obj.pk = None
+            product_screen_copy_obj.save()
+            if product_screen_obj.countries.all():
+                product_screen_copy_obj.countries.add(*product_screen_obj.countries.all())
+            for attr in product_screen_obj.screenattributes.all():
+                self.create_relation_m2m(attr, product_screen_copy_obj)
+            for faq in product_screen_obj.screenfaqs.all():
+                self.create_relation_m2m(faq, product_screen_copy_obj)
+            for skill in product_screen_obj.screenskills.all():
+                self.create_relation_m2m(skill, product_screen_copy_obj)
+            for chap in product_screen_obj.chapter_product.all():
+                self.create_relation_m2m(chap, product_screen_copy_obj)
+            product_screen_copy_obj.product = None
+            product_screen_copy_obj.save()
+            return HttpResponse(json.dumps({'status': 1,'id': product_screen_copy_obj.id}), content_type="application/json")
+        return HttpResponse(json.dumps({'status': 0}), content_type="application/json")
+
+
+
+
+
+
 
 
 

@@ -4,16 +4,22 @@ import logging
 # import django module
 from django.core.management.base import BaseCommand
 from django.utils import timezone
+<<<<<<< HEAD
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.conf import settings
+=======
+>>>>>>> master
 from datetime import timedelta
 import datetime
 
 # import apps module
 from order.models import WelcomeCallOperation,CustomerFeedback,OrderItemFeedback,OrderItemFeedbackOperation
 from order.utils import get_ltv
+<<<<<<< HEAD
 from emailers.tasks import send_email_task
+=======
+>>>>>>> master
 
 
 class Command(BaseCommand):
@@ -21,17 +27,27 @@ class Command(BaseCommand):
         feedback_call_entry()
 
 def feedback_call_entry():
+<<<<<<< HEAD
     start_time = timezone.now()
+=======
+>>>>>>> master
     start_date = timezone.now() - timedelta(days=4)
     end_date = timezone.now() - timedelta(days=3)
     
     total_feedbacks_created = []
     total_feedbacks_updated = []
+<<<<<<< HEAD
     total_feedbacks_failed = 0
 
     logging.getLogger("info_log").info("Feedback Cron Started for {},{}".format(start_date,end_date))
     welcome_operations = WelcomeCallOperation.objects.filter(\
         wc_status__in=[41,42,63],created__range=[start_date,end_date],order__status=1)
+=======
+
+    logging.getLogger("info_log").info("Feedback Cron Started for {},{}".format(start_date,end_date))
+    welcome_operations = WelcomeCallOperation.objects.filter(\
+        wc_status__in=[41,42,63],created__range=[start_date,end_date])
+>>>>>>> master
     
     if not welcome_operations.exists():
         return

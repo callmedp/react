@@ -469,3 +469,28 @@
 		}		
 	}
 }
+
+.confused-buying {
+ 	border: 1px solid $border;
+ 	text-align: center;
+ 	background: $white-color;
+ 	padding-bottom: 15px;
+
+ 	p {
+ 		padding: 10px;
+ 		color: $primary-color;
+ 		font-size: $font-size+5;
+
+ 		strong {
+ 			display: block;
+ 		}
+ 	}
+
+ 	a {
+ 		display: inline-block;
+ 		padding: 10px 15px;
+ 		color: $white-color;
+ 		background: $anchor-color;
+ 		font-size: $font-size+3;
+ 	}
+ }

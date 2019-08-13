@@ -1,0 +1,24 @@
+.loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba($white-bg, .9);
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+        width: 50px;
+        margin-bottom: 10px;
+    }
+
+    &--content {
+        text-align: center;
+        font-size: 18px;
+        line-height: 20px;
+    }
+}

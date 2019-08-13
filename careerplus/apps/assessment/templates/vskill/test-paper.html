@@ -1,6 +1,6 @@
 {% extends "basic/base1.html" %}
 {% load static meta thumbnail compress %}
-{% block title %}Job Assistance Services | Online Courses - Shine Learning {% endblock title %}
+{% block title %}Practice test | online mock test – Shine Learning{% endblock title %}
 {% block canonical_url %}
 <link rel="canonical" href="//{{ SITE_DOMAIN }}/">
 <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}/">
@@ -11,16 +11,17 @@
 {% block css_section %}
 {{block.super}}
 {% compress css %}
-<link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/practice-skill/practice-skill.scss' %}" rel="stylesheet">
+<link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/practice-skill/practice-skill.scss' %}"
+      rel="stylesheet">
 <link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
 {% endcompress %}
 {% endblock css_section %}
 {% block main_container %}
 <div class="practice-skill__wrap-inner">
-   <div class="right_base"></div>
-      <div class="container">
-         {% block breadcrumb %}
-         <ol class="breadcrumb  black " itemscope="" itemtype="http://schema.org/BreadcrumbList">
+    <div class="right_base"></div>
+    <div class="container">
+        {% block breadcrumb %}
+        <ol class="breadcrumb  black mb-0" itemscope="" itemtype="http://schema.org/BreadcrumbList">
             {% for bread in breadcrumbs %}
             {% if bread.url %}
             <li><a href='{{bread.url}}'>{{bread.name}}</a></li>
@@ -28,61 +29,388 @@
             <li class="active">{{bread.name}}</li>
             {% endif %}
             {% endfor %}
-         </ol>
-         {% endblock breadcrumb %}
-      
-      <div class="row">
-         <div class="col-sm-12 col-lg-12 col-md-12">
-            <h1>Search Engine Optimisation Test</h1>
-         </div>
-         <!-- tests starts -->
-         <div class="col-sm-9">
+        </ol>
+        {% endblock breadcrumb %}
 
-         </div>
+        <div class="row">
+            <div class="col-sm-12 col-lg-12 col-md-12">
+                <h1>{{object.title}}</h1>
+            </div>
+            <!-- tests starts -->
+            <div class="col-sm-9 mt-30">
+                <div class="test-paper-box white-box">
+                    <div class="pagination-box flexbox">
+                        <div class="paper-pagination">
+                            {% for quest in questions_list %}
+                            <span class="marked  {% if forloop.counter == 1 %} active {% endif %}" id="markedquestion-{{forloop.counter}}"
+                                  data-attr-value="{{forloop.counter}}">{{forloop.counter}}</span>
+                            {% endfor %}
+                        </div>
+                        <!--<div class="pagination-more">-->
+                            <!--<i class="pagination-down"></i>-->
+                        <!--</div>-->
+                    </div>
+                    <!-- paper starts -->
+                    {% for quest in questions_list %}
+                    <div class="test-paper {% if forloop.counter == 1 %} actived {% else %}inactive{% endif %}" id="question-{{forloop.counter}}">
 
-         <!-- right section starts -->
-         <div class="col-sm-3">
 
-         </div>
-      </div>
-      </div>
-   </div>
+                        <div class="flexbox">
+                            <h3><span class="test-paper-count">{{forloop.counter}}</span> {{quest.question_text|linebreaksbr}} </h3>
+                            <strong>{{forloop.counter}} of {{questions_list.count}}</strong>
+                        </div>
+                        <ul class="test-paper__question">
+                            {% for ans in quest.options %}
+                            <li>
+                                <label class="custom-radio">{{ans.option}}
+                                    <input type="radio" id="{{ans.option_id}}" name="radio">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </li>
+
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endfor %}
+                    <!-- paper end -->
+                    <div class="flexbox ml-20">
+                        <button class="blue_btn mr-20" id="nextQuestionBtn" onclick="nextquestion('1');">Next question&nbsp;
+                            &rsaquo;
+                        </button>
+                        <button class="white_btn" id="skipBtn" onclick="skipQuestion();">Skip</button>
+                        <span class="flexbox align-self-mla mr-20"><button class="white_btn" onclick="submitTest();">Submit</button></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- right section starts -->
+            <div class="col-sm-3 mt-30" >
+                <div class="white-box mb-20 bdr-bottom">
+                    <div class="time flexbox align-items-center" id="timeTest" >
+                        <strong>Time left</strong>
+                        <span class="minutes" id="testRemanMinutes"><!-- --<span>minutes</span> --></span>
+                        <span class="time-dot"></span>
+                        <span class="seconds" id="testRemanSeconds"><!-- --<span>seconds</span> --></span>
+                    </div>
+                </div>
+
+                <!------- Add to cart   ----->
+
+                <div class="white-box bdr-bottom" id="test-product" style="{% if not object.product %}display:none{% endif %}">
+                    <div class="test-benefits benefits-bg">
+               <span class="pad-15">
+                  <h3><a href="{{object.product.get_absolute_url}}" id="test-product-name">{{object.product.name}}</a></h3>
+                  <h4 class="mt-0" id="test-price">Rs. {{object.product.inr_price}}</h4>
+                  <strike id="fakeProductPrice"></strike>
+                  <span class="grey-border mt-15 mb-15"></span>
+                  <strong>Benefits</strong>
+                  <p>500+ questions</p>
+                  <p>Real exam & Practice environment</p>
+                  <p>Answers & Detailed Explanations</p>
+                  <span class="flexbox align-items-center mt-20">
+                     <button class="yellow_btn" onclick="updateToCart('{{object.product.id}}');">Add to cart</button>
+                  </span>
+               </span>
+                    </div>
+                </div>
+                <!----------- end add to cart  ------------>
+            </div>
+        </div>
+    </div>
 </div>
+</div>
+
+
+
+<!-- Modal  for submit permission-->
+<div id="submitPermissionModal" class="modal fade" role="dialog" aria-labelledby="ModalCenterTitled" aria-hidden="true">
+  <div class="modal-dialog submittest">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-body">
+        <i><img src="{% static 'shinelearn/images/free_skill/submit-test.png' %}" class="img-responsive"></i>
+        <p class="mt-20">
+          <strong>Are you sure,</strong> 
+          You want to submit the test ?
+        </p>
+        <div class="flexbox align-items-center mt-30">
+          <button type="button" class="blue_btn" onclick="submitTestFinal();">Submit</button>
+          <button type="button" data-dismiss="modal" class="white_btn ml-20" >Cancel</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- loading start here -->
+<div class="loading" id="loading-test">
+    <div class="loading--content">
+        <img src="{% static 'shinelearn/images/test-loading.gif' %}"/>
+        <p>Loading...<br />Please wait!</p>
+    </div>
+</div>
+<!-- loading ends here -->
+
+               <!--TIMEOUT MODAL-->
+<!-- /.<div class="modal" id="timeOutModal" style="display:block">
+    <div class="modal-content">
+       <div class="view-test">
+           <span class="overlay"></span>
+           <div class="view-test__content">
+            <h2>Time Out!!</h2>
+            <h3>You will be Redirecting to Result Page, Please Wait... </h3>
+           </div>
+       </div>
+    </div>
+</div> modal -->
+<div class="modal fade" data-keyboard="false" data-backdrop="static" style="display: none;" id="timeOutModal" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">  <div class="modal-dialog submittest">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-body">
+        <figure><img src="{% static 'shinelearn/images/free_skill/out-of-time.png' %}" class="img-responsive"></figure>
+        <p class="mt-20">
+          <strong class="mb-10">Timeout!</strong> 
+          You will be redirecting to result page, <br>Please wait...
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>
+               <!--END TIMEOUT MODAL-->
+
+
 {% endblock main_container %}
 {% block js_section %}
 {{block.super}}
-   <script type="text/javascript">
-   var page_number= 2;
-   function loadmore(){
-            page_number = page_number+1;
-             element = document.getElementById('funcDiv');
-           $.ajax({
-               url: '/api/get-category-level-products',
-               type: "GET",
-               data : {'tl': 2, 'page_size' : 4, 'page':page_number},
-               dataType: 'json',
-               success: function(json) {
-               if (json.next == null){
-                 $('#loadmorebtn').hide();
-               }
-               for (fa in json.results){
-                element.innerHTML= element.innerHTML +'<div class="functional_test_inside border-'+fa+'"><a href="#"><span class="sales"></span>'+ json.results[fa].heading +'</a></div>'
+<script src="{% static 'shinelearn/js/assessment/take_test.js' %}"></script>
+<script>
+function getSystemTime(){
+let resp = NaN;
+  $.ajax({
+     url   : '/api/v1/get-server-time',
+     data  : {'time_format': '%m/%d/%Y, %H:%M:%S'},
+     type  : 'get',
+      async: false,
+     success: function(response){
+        resp= response.time;
+     }
+});
+return resp;
+}
 
-               }
-               },
-               error: function(xhr, ajaxOptions, thrownError) {
-               if(xhr.status == 404){
-                     alert("No more Categories to show ");
-                     $('#loadmorebtn').hide();
-                     }
-                     else{
 
-                   alert("Something went wrong. Try again later");
-                   }
-               }
-           });
-   }
-   </script>
+$('#timeTest').ready(function() {
+        $.ajax({
+         url   : '/api/v1/get-set-time/?test_id={{object.id}}&duration={{object.duration}}',
+         type  : 'get',
+         success: function(response){
+         startTestTime = new Date(response.testStartTime);
+         endTestTime = new Date(response.testStartTime);
+        endTestTime.setSeconds(endTestTime.getSeconds() + {{object.duration}});
+        if (endTestTime > new Date(getSystemTime())){
+           startTimer(Math.floor((endTestTime.getTime() - new Date(getSystemTime()).getTime())/1000));
+           $("#loading-test").hide();
+        }
+        else{
+           window.location.href = '/practice-tests/{{object.slug}}/result/';
+           $("#loading-test").show();
+        }
+            return false;
+         }
+    });
+
+});
+</script>
+<script type="text/javascript">
+let page_number = 2, questionAttempt = {},
+maxCounter = parseInt({{questions_list.count}}),
+activeTab = 1,
+tKey = 'Test-' + '{{object.id}}',myStorage = window.localStorage,
+sec =0,testSec = 0,testMin =0,interval=0,testSubmission= false,
+delAns = {% if delete_ans %}true{% else %}false{% endif %},
+startTestTime = NaN,endTestTime = NaN,timeout =NaN,skippedQuest =[] ;
+
+$(document).ready(function() {
+    // removes local storage
+    if (delAns) {
+        myStorage.removeItem(tKey);
+    }
+    else {
+        questionAttempt = JSON.parse(myStorage.getItem(tKey));
+        if (questionAttempt != null) {
+        testSubmission = questionAttempt['testSubmission' + {{object.id}}];
+         skippedQuest =  questionAttempt['skippedQuestion'];
+        if (testSubmission == true) {
+
+            window.location.href = '/practice-tests/{{object.slug}}/result/';
+        }
+
+            for (var id in Object.keys(questionAttempt)) {
+                if (Object.values(questionAttempt)[id] != "" && Object.keys(questionAttempt)[id] != "skippedQuestion") {
+                    $('#' + Object.values(questionAttempt)[id]).click();
+                    $('#marked' + Object.keys(questionAttempt)[id]).removeClass();
+                    $('#marked' + Object.keys(questionAttempt)[id]).addClass('dirt');
+                }
+                else if(Object.keys(questionAttempt)[id] == "skippedQuestion"){
+                  for(i of Object.values(questionAttempt)[id]){
+                  $(i).addClass('skipped');
+                  }
+                }
+            }
+            $('#markedquestion-' + activeTab).addClass('active');
+            $('#' + questionAttempt['question-' + activeTab]).prop("checked", true);
+        } else {
+            questionAttempt = {};
+        }
+    }
+    delAns =false;
+});
+
+
+$('.marked').click(function() {
+    let value = parseInt(this.dataset.attrValue);
+    activeTab = value;
+    if (questionAttempt['question-' + activeTab]) {
+        $('#' + questionAttempt['question-' + activeTab]).prop("checked", true);
+    }
+    $('.test-paper').addClass('inactive');
+    $('.test-paper').removeClass('actived');
+    $('#question-' + value).removeClass('inactive');
+    $('#question-' + value).addClass('actived');
+    $('.active').removeClass('active');
+    $('#markedquestion-' + activeTab).addClass('active');
+    
+    if (activeTab >= maxCounter) {
+        $('#nextQuestionBtn').hide();
+     $('#skipBtn').text('Clear');
+
+    } else {
+
+        $('#nextQuestionBtn').show();
+           $('#skipBtn').text('Skip');
+
+    }
+});
+
+
+function nextquestion(number) {
+    if (activeTab < maxCounter && number > 0) {
+        $('#question-' + activeTab).removeClass("actived");
+        $('.test-paper').addClass('inactive');
+
+        activeTab = parseInt(activeTab) + parseInt(number);
+        if (questionAttempt['question-' + activeTab]) {
+            $('#' + questionAttempt['question-' + activeTab]).prop("checked", true);
+        }
+        $('#question-' + activeTab).removeClass('inactive');
+        $('#question-' + activeTab).addClass('actived');
+
+        if (activeTab >= maxCounter) {
+        $('#nextQuestionBtn').hide();
+        $('#skipBtn').text('Clear');
+
+        } else {
+        $('#nextQuestionBtn').show();
+          $('#skipBtn').text('Skip');
+
+        }
+         $('.active').removeClass('active');
+            $('#markedquestion-' + activeTab).addClass('active');
+
+    }
+}
+
+$('input[name="radio"]').on("click", function(e) {
+if (!timeout){
+    let quest_id = $(e.target).closest(".test-paper")[0].id;
+    $('#marked' + quest_id).removeClass();
+    $('#marked' + quest_id).addClass('dirt');
+    skippedQuest = skippedQuest.filter(item => item !== '#marked' + quest_id);
+    questionAttempt['skippedQuestion'] =skippedQuest;
+        $('#marked' + quest_id).addClass('active');
+    questionAttempt[quest_id] = e.target.id;
+
+    myStorage.setItem(tKey, JSON.stringify(questionAttempt));
+    }
+});
+
+function skipQuestion() {
+    $('#markedquestion-' + activeTab).removeClass('dirt');
+    $('#markedquestion-' + activeTab).addClass('skipped');
+    if (skippedQuest){
+    skippedQuest.push('#markedquestion-' + activeTab);
+    }
+    let quest_id = 'question-' + activeTab;
+    $('#' + questionAttempt[quest_id]).prop("checked", false);
+    delete questionAttempt[quest_id];
+    myStorage.setItem(tKey, JSON.stringify(questionAttempt));
+    nextquestion(1);
+}
+
+function startTimer(duration,) {
+        var timer = duration, minutes, seconds;
+        interval = setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        $('#testRemanMinutes').text(minutes);
+        $('#testRemanSeconds').text(seconds);
+
+        if(--timer<=0){
+            console.log('time out')
+            $('#timeOutModal').modal('show');
+        }
+
+       if (minutes <= 0 && seconds <= 0) {
+            clearInterval(interval);
+              $('#testRemanMinutes').text("Time");
+            $('#testRemanSeconds').text("Out");
+            timeout = true;
+            submitTestFinal();
+        }
+    }, 1000);
+    $('#timeTest').show();
+
+}
+
+function submitTest(){
+     $("#submitPermissionModal").modal('show');
+}
+
+
+
+function submitTestFinal(){
+      if (timeout){
+            testSession({'timeout':true,'test_id':{{object.id}} });
+      }
+      else{
+            testSession({'submit':true,'test_id':{{object.id}} });
+      }
+      submitTime = new Date(getSystemTime()).getTime();
+      $("#submitPermissionModal").modal('hide');
+      clearInterval(interval);
+      testSubmission = true;
+      questionAttempt['testSubmission{{object.id}}'] = testSubmission;
+      questionAttempt['skippedQuestion'] = skippedQuest;
+
+      if (submitTime > endTestTime.getTime()){
+            questionAttempt['testTime'+{{object.id}}] = Math.floor((endTestTime.getTime() - startTestTime.getTime())/1000) ;
+      }
+      else{
+            questionAttempt['testTime'+{{object.id}}] = Math.floor((submitTime - startTestTime.getTime())/1000) ;
+      }
+      myStorage.setItem(tKey, JSON.stringify(questionAttempt));
+      window.location.href = '/practice-tests/{{object.slug}}/result/';
+}
+</script>
 {% endblock js_section %}
 {% block johukum %}
 {% endblock johukum %}

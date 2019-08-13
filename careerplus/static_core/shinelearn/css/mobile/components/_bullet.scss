@@ -24,3 +24,24 @@
   }
 
 }
+
+.blue-bullet {
+  li {
+      position: relative;
+      padding-left: 15px;
+
+      &:not(:last-child){
+          margin-bottom: 5px;
+      }
+
+      span {
+          width: 5px;
+          height: 5px;
+          background-color: $blue;
+          position: absolute;
+          left: 0;
+          top: 8px;
+          border-radius: 50%;
+      }
+  }
+}

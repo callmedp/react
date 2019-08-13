@@ -276,7 +276,7 @@ class OIFilterForm(forms.Form):
                 (-1, 'Select Status'), (31, 'Pending Links'),
                 (32, 'Sent Links'), (33, 'Saved Links'),
                 (23, 'Pending Approval'), (4, 'Closed'),
-                (34, 'UnAssigned')
+                (34, 'UnAssigned',), (35, 'Not Boarded')
             )
 
             self.fields['day_choice'].choices = ( (-1, 'All'),(1, 'Today'), (2, 'Tommorrow'),)
@@ -534,7 +534,7 @@ class ProductUserProfileForm(forms.ModelForm):
         fields = (
             'contact_number', 'desired_industry', 'desired_location',
             'desired_position', 'desired_salary', 'current_salary',
-            'approved', 'experience', 'skills'
+            'approved', 'experience', 'skills', 'onboard'
         )
     contact_number = forms.CharField(
         max_length=500,
@@ -588,7 +588,11 @@ class ProductUserProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
         super(ProductUserProfileForm, self).__init__(*args, **kwargs)
-
+        if self.instance:
+            if self.instance.approved:
+                del self.fields['approved']
+            if self.instance.onboard:
+                del self.fields['onboard']
 
         self.fields['desired_industry'].widget.attrs['class'] = ' tagsinput tags form-control'
         self.fields['desired_location'].widget.attrs['class'] = ' tagsinput tags form-control'
@@ -596,7 +600,7 @@ class ProductUserProfileForm(forms.ModelForm):
 
 
     def save(self, commit=True):
-        instance = super(ProductUserProfileForm, self).save(commit=False)
+        instance = super(ProductUserProfileForm, self).save()
         if commit:
             instance.save(user=self.user)
         return instance

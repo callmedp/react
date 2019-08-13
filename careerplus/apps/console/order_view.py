@@ -2933,7 +2933,7 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
         context.update(self.pagination(paginator, self.page))
         var = self.sel_opt
         alert = messages.get_messages(self.request)
-        initial = {"oi_status": self.oi_status}
+        initial = {"oi_status": self.oi_status, "day_choice": self.day_choice}
 
         filter_form = OIFilterForm(initial, queue_name='queue-whatsappjoblist')
         context.update({"assignment_form": AssignmentActionForm(), "messages": alert, "query": self.query,
@@ -3004,8 +3004,13 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
                 )
             elif int(self.oi_status) == 34:
                 queryset = queryset.filter(assigned_to=None)
+            elif int(self.oi_status) == 35:
+                queryset = queryset.filter(whatsapp_profile_orderitem__onboard=False)
             else:
-                queryset = queryset.filter(oi_status=self.oi_status)
+                queryset = queryset.filter(
+                    oi_status=self.oi_status,
+                    whatsapp_profile_orderitem__onboard=True
+                )
 
         if self.payment_date:
             start_date, end_date = self.payment_date.split(' - ')
@@ -3040,7 +3045,6 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
                     q_objects |= Q(orderitemoperation__oi_status=1, orderitemoperation__created__range=[d, d + relativedelta.relativedelta(days=1)])
             queryset = queryset.filter(q_objects)
         if self.sort_payment_date and int(self.sort_payment_date):
-            print(self.sort_payment_date)
             queryset = queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-order__payment_date')
         else:
             queryset = queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-pending_links_count')
@@ -3219,12 +3223,22 @@ class CertficationProductQueueView(PaginationMixin, ListView):
     def get_queryset(self):
         queryset = super(CertficationProductQueueView, self).get_queryset()
         queryset = queryset.filter(
-            order__status__in=[1, 3],
-            product__type_flow=16, no_process=False,
-            oi_status__in=[5, 4],
-            product__sub_type_flow__in=[1601, 1602],
-            order__welcome_call_done=True).exclude(
-            wc_sub_cat__in=[64, 65])
+            Q(
+                order__status__in=[1, 3],
+                product__type_flow=16, no_process=False,
+                oi_status__in=[5, 4],
+                product__sub_type_flow__in=[1601, 1602],
+                order__welcome_call_done=True)|
+            Q(
+                order__status__in=[1, 3],
+                product__type_flow=2, no_process=False,
+                oi_status__in=[5, 4],
+                product__vendor__slug='neo',
+                order__welcome_call_done=True
+            )
+        ).exclude(
+                wc_sub_cat__in=[64, 65]
+        )
 
         if self.query:
             if self.sel_opt == 'number':
@@ -3327,6 +3341,7 @@ class WhatsAppScheduleView(UserPermissionMixin, DetailView, PaginationMixin):
         obj = self.object = self.get_object()
         user = self.request.user
         objects = []
+        saved_formset = []
         joblinkformset = modelformset_factory(
             JobsLinks,
             form=JobLinkForm,
@@ -3339,8 +3354,10 @@ class WhatsAppScheduleView(UserPermissionMixin, DetailView, PaginationMixin):
         if action_type != 3:
             formset = joblinkformset(post_data)
             if formset.is_valid():
-                saved_formset = formset.save()
-
+                try:
+                    saved_formset = formset.save()
+                except:
+                    pass
                 if getattr(formset, '_queryset', None) and not saved_formset:
                     objects = list(formset._queryset.filter(status=0, oi=obj))
                 elif getattr(formset, '_queryset', None) and saved_formset:
