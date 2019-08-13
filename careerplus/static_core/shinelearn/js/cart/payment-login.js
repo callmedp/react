@@ -72,6 +72,9 @@ const handleLoginCandidate = async () => {
 
     const result = await handleResponse(loginResponse)
 
+
+        console.log('---><><><><><>--',result);
+
     if (result['error']) {
         // Todo ***** error handling  *****
         $('#invalid-cred').show().delay(5000).fadeOut()
