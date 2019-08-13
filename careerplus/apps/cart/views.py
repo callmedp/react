@@ -226,19 +226,18 @@ class PaymentLoginView(TemplateView, CartMixin):
                         "name": guest_name,
                     })
                     candidate_id, error = user_register(data=data)
-
-                    if error:
-                        email_error = error
-                        context = self.get_context_data()
-                        context.update({
-                            "guest_email_error": email_error})
-                        return TemplateResponse(request, self.template_name, context)
+                        # if error:
+                        # email_error = error
+                        # context = self.get_context_data()
+                        # context.update({
+                        #     "guest_email_error": email_error})
+                        # return TemplateResponse(request, self.template_name, context)
 
                     # error handling
                     cart_obj.owner_id = candidate_id
-                    resp_status = ShineCandidateDetail().get_status_detail(email=None,
-                                                                           shine_id=candidate_id)
-                    self.request.session.update(resp_status)
+                    # resp_status = ShineCandidateDetail().get_status_detail(email=None,
+                    #                                                        shine_id=candidate_id)
+                    # self.request.session.update(resp_status)
                     cart_obj.save()
                     return HttpResponseRedirect(reverse('payment:payment-option'))
                 return HttpResponseRedirect(reverse('cart:payment-summary'))
