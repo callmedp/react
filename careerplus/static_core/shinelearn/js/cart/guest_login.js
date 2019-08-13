@@ -36,12 +36,12 @@ $(document).ready(function () {
         hitGA();
         let email = guest_info['email'] || '';
         if ($('#guest_form').valid()) {
-            let isEmailRegistered = await checkEmailExists(email)
-            if (isEmailRegistered) {
-                $('#email-error').html('This email already exists. Please register with some other email.');
-                $('#email-error').closest('.form-group').addClass('error1');
-                return;
-            }
+            // let isEmailRegistered = await checkEmailExists(email)
+            // if (isEmailRegistered) {
+            //     $('#email-error').html('This email already exists. Please register with some other email.');
+            //     $('#email-error').closest('.form-group').addClass('error1');
+            //     return;
+            // }
             let input = document.createElement("input");
             input.setAttribute("type", "hidden");
             input.setAttribute("name", "login_with");
