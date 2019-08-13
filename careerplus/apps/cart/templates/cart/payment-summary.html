@@ -227,9 +227,9 @@
                     <span class="col-sm-6">Rs. <span>{{amount_after_discount}}</span>/-</span>
               {% endif %}
               <span class="col-sm-6 text-right">SGST @ {{sgst}}%</span>
-              <span class="col-sm-6">+Rs. <span>{{sgst_amount}}</span>/-</span>
+              <span class="col-sm-6">+Rs. <span id="sgst-amount">{{sgst_amount}}</span>/-</span>
               <span class="col-sm-6 text-right">CGST @ {{cgst}}%</span>
-              <span class="col-sm-6">+Rs. <span>{{cgst_amount}}</span>/-</span>
+              <span class="col-sm-6">+Rs. <span id="cgst-amount">{{cgst_amount}}</span>/-</span>
               <!--span class="col-sm-6 text-right">IGST @ {{igst}}%</span>
               <span class="col-sm-6">+Rs. <span>{{igst_amount}}</span>/-</span-->
             </span>

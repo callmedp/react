@@ -189,7 +189,10 @@ class InvoiceGenerate(object):
                 cgst_amount = sgst_amount
                 igst_amount = Decimal(0.00)
 
-            elif cart_obj.country and cart_obj.country.phone == '91':
+            # Removed country check from here.
+            # elif cart_obj.country and cart_obj.country.phone == '91':
+
+            elif cart_obj:
                 sgst = round((tax_rate_per / 2), 0)
                 cgst = round((tax_rate_per / 2), 0)
                 igst = 0

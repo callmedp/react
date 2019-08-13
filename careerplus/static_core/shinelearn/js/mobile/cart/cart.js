@@ -38,7 +38,6 @@ function handleDeliveryUpdation(formData, lineId) {
         async: false,
         enctype: "multipart/form-data",
         success: function (data, textStatus, jqXHR) {
-            console.log('data -------',data);
             if (data.total_cart_amount != -1 && data.delivery_charge != -1) {
                 if (data.delivery_charge) {
                     var text_str = '+ Rs. ' + data.delivery_charge.toString() + '/-';
@@ -52,6 +51,11 @@ function handleDeliveryUpdation(formData, lineId) {
 
                 const totalPayableAmount = `Rs. ${data.total_payable_amount.toFixed(2).toString()}`;
                 $('#total-payable-amount').text(totalPayableAmount);
+                const {sgst_amount: sgstAmount, cgst_amount: cgstAmount} = data
+                // update sgst amount
+                $('#sgst-amount').text(sgstAmount);
+                // update cgst amountc
+                $('#cgst-amount').text(cgstAmount);
 
                 let {
                     delivery_service_meta_desc: deliveryServiceDesc,
@@ -98,10 +102,11 @@ const selectDeliveryType = (deliveryType, lineId, csrf) => {
     }
 }
 
-const toggleDeliveryItems  = (deliveryId) =>{
+const toggleDeliveryItems = (deliveryId) => {
     $(`#delivery-item${deliveryId}`).slideToggle();
     return false;
 }
+
 function cartScroller() {
 
 };

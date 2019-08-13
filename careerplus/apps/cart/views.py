@@ -180,8 +180,6 @@ class PaymentLoginView(TemplateView, CartMixin):
         return super(self.__class__, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        import ipdb;
-        ipdb.set_trace();
         try:
             login_resp = {}
             login_dict = {}
@@ -226,12 +224,12 @@ class PaymentLoginView(TemplateView, CartMixin):
                         "name": guest_name,
                     })
                     candidate_id, error = user_register(data=data)
-                        # if error:
-                        # email_error = error
-                        # context = self.get_context_data()
-                        # context.update({
-                        #     "guest_email_error": email_error})
-                        # return TemplateResponse(request, self.template_name, context)
+                    # if error:
+                    # email_error = error
+                    # context = self.get_context_data()
+                    # context.update({
+                    #     "guest_email_error": email_error})
+                    # return TemplateResponse(request, self.template_name, context)
 
                     # error handling
                     cart_obj.owner_id = candidate_id
@@ -551,8 +549,6 @@ class PaymentSummaryView(TemplateView, CartMixin):
         return super(self.__class__, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        import ipdb;
-        ipdb.set_trace();
         context = super(self.__class__, self).get_context_data(**kwargs)
         cart_obj, wal_obj = self.cart_obj, None
         cart_coupon, cart_wallet = None, None
@@ -666,11 +662,13 @@ class UpdateDeliveryType(View, CartMixin):
                 delivery_charge = delivery_obj.get_price()
                 payment_dict = self.getPayableAmount(cart_obj, cart_dict.get('total_amount'))
                 data.update({
-                    "total_payable_amount": int(payment_dict['total_payable_amount']),
-                    "total_cart_amount": int(total_cart_amount),
-                    "delivery_charge": int(delivery_charge),
+                    "total_payable_amount": float(payment_dict['total_payable_amount']),
+                    "total_cart_amount": float(total_cart_amount),
+                    "delivery_charge": float(delivery_charge),
                     "delivery_service_title": delivery_obj.title,
-                    "delivery_service_meta_desc": delivery_obj.meta_desc
+                    "delivery_service_meta_desc": delivery_obj.meta_desc,
+                    'sgst_amount': float(payment_dict['sgst_amount']),
+                    "cgst_amount": float(payment_dict['cgst_amount'])
                 })
 
         return HttpResponse(json.dumps(data), content_type="application/json")
