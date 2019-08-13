@@ -906,8 +906,11 @@ function roundone_edit(form, ajaxurl){
     });
 }
 
-const uploadResumeShine = (checkbox,order_id)=>{
+const uploadResumeShine = (checkbox,order_item_id)=>{
     $(checkbox).attr("disabled", true);
-    $.get(`/`)
-    console.log(order_id)
+    $.post(`/shine/api/v1/upload-to-shine/`,{
+        order_item_id:order_item_id
+    },(data)=>{
+        console.log(data)
+    })
 }

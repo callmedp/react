@@ -283,7 +283,6 @@ class ThankYouView(TemplateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        import ipdb; ipdb.set_trace()
         action_type = request.POST.get('action_type', '').strip()
         order_pk = request.session.get('order_pk')
         resume_id = request.session.get('resume_id', None)

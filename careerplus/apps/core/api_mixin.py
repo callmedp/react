@@ -8,6 +8,7 @@ import json
 from Crypto.Cipher import XOR
 
 from django.conf import settings
+from rest_framework import status
 
 
 class ShineToken(object):
@@ -180,7 +181,27 @@ class ShineCandidateDetail(ShineToken):
         except Exception as e:
             logging.getLogger('error_log').error('unable to return candidate resume response  %s'%str(e))
         return None
-
+    
+    def upload_resume_shine(self, data={},files={}, headers=None):
+        try:
+            candidate_id = data.get('candidate_id','')
+            if candidate_id :
+                if not headers:
+                    headers = self.get_api_headers()
+                    headers.update({
+                        "Accept": 'application/json',
+                    })
+                    api_url = settings.SHINE_SITE +\
+                        '/api/v2/candidate/' +\
+                        candidate_id + '/resumefiles/'
+                    response = requests.post(
+                        api_url,
+                        data=data,files=files, headers=headers)
+                    if  status.is_success(response.status_code):
+                        return response
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to return candidate resume response  %s'%str(e))
+        return None
 
 class FeatureProfileUpdate(ShineToken):
 

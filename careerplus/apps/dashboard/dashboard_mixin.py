@@ -131,7 +131,6 @@ class DashboardInfo(object):
         return resume_pending_items.select_related('order', 'partner', 'product')
 
     def upload_candidate_resume(self, candidate_id=None, data={},request=None):
-        import ipdb; ipdb.set_trace()
         file = data.get('candidate_resume', '')
         list_ids = data.get('list_ids', [])
         if not candidate_id and (not file and not list_ids):

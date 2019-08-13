@@ -60,3 +60,30 @@ $(document).ready(function() {
         
     });
 });
+
+const  getCookie = (name)=> {
+    var value = "; " + document.cookie;
+    var parts = value.split("; " + name + "=");
+    if (parts.length == 2) return parts.pop().split(";").shift();
+  }
+
+$(document).ready(function(){
+    $.ajaxSetup({ 
+        beforeSend: function(xhr, settings) {
+            if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+            }
+        } 
+    });
+})
+
+const uploadResumeShine = (checkbox,order_id)=>{
+    console.log(order_id)
+    // $(checkbox).attr("disabled", true);
+    $.post(`/shine/api/v1/upload-to-shine/`,{
+        order_id:order_id,
+        upload_after_service:true
+    },(data)=>{
+        console.log(data)
+    })
+}

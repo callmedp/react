@@ -447,6 +447,7 @@ class OrderItem(AbstractAutoDate):
     )
     #resume writing
     auto_upload = models.BooleanField(default=False)
+    service_resume_upload_shine = models.BooleanField(default=False)
 
 
     class Meta:
