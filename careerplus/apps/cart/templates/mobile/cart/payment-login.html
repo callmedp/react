@@ -237,7 +237,7 @@
         <script src="{% static 'shinelearn/js/cart/guest_login.js' %}"></script>
 
     <script>
-        var site_domain = "{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN}}";
+        var site_domain = "{{ SITE_PROTOCOL }}://{{MOBILE_SITE_DOMAIN}}";
         var request = "{{request}}"
     </script>
     {% compress js %}
