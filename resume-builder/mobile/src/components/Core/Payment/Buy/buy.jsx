@@ -9,6 +9,7 @@ import Slider from "react-slick";
 import Loader from '../../../Common/Loader/loader.jsx';
 import BuyTemplateModal from '../../../Common/BuyTemplateModal/buyTemplateModal.jsx';
 import {eventClicked} from '../../../../store/googleAnalytics/actions/index'
+import {loginCandidate} from "../../../../store/landingPage/actions";
 
 
 class Buy extends Component {
@@ -63,7 +64,10 @@ class Buy extends Component {
         this.setState({modal_status: true, template_id: index + 1})
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        if (!localStorage.getItem('candidateId')) {
+            await loginCandidate()
+        }
         this.props.getProductIds();
         this.props.fetchThumbNailImages();
     }
@@ -90,7 +94,6 @@ class Buy extends Component {
     }
 
     render() {
-
         const settings = {
             dots: false,
             infinite: true,
@@ -248,7 +251,12 @@ const mapDispatchToProps = (dispatch) => {
         },
         'eventClicked': (data) => {
             return dispatch(eventClicked(data))
-        }
+        },
+        "loginCandidate": (token) => {
+            return new Promise((resolve, reject) => {
+                dispatch(loginCandidate({payload: {alt: token}, resolve, reject, isTokenAvail: false}))
+            })
+        },
     }
 };
 

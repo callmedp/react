@@ -181,7 +181,6 @@ function* fetchImageUrl(action) {
 function* updateEntityPreference(action) {
     try {
         const {payload: {entity_preference_data, resolve, reject, showLoader}} = action;
-        debugger;
         const candidateId = localStorage.getItem('candidateId') || '';
 
         if (showLoader) yield put({type: UPDATE_UI, data: {loader: true}});

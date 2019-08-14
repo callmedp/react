@@ -2553,6 +2553,10 @@ class ProductFA(AbstractAutoDate):
 class Skill(AbstractAutoDate, ModelMeta):
     name = models.CharField(
         _('Name'), max_length=100, unique=True)
+    slug = models.CharField(
+        _('Slug'), max_length=100, unique=True,
+        null=True, blank=True, db_index=True
+    )
     skillproducts = models.ManyToManyField(
         'shop.Product',
         verbose_name=_('Skill Product'),
@@ -2580,6 +2584,14 @@ class Skill(AbstractAutoDate, ModelMeta):
         if self.active:
             return 'Active'
         return 'Inactive'
+
+    def save(self, *args, **kwargs):
+        exists = bool(getattr(self, "id"))
+        if not exists:
+            title = self.name
+            value = slugify(getattr(self, 'slug') or self.name)
+            self.slug = value
+        super().save(*args, **kwargs)
 
 
 class ProductSkill(AbstractAutoDate):

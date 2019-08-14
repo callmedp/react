@@ -17,8 +17,13 @@
 	}
 
 	.orange-button {
-		margin: 0 auto 20px auto;
+		margin: 8px auto 20px auto;
 		display: table;
+	}
+
+	.help-message-error{
+		padding-left: 50px;
+		color:#FF9494;
 	}
 
 	:local(.icon-close) {
