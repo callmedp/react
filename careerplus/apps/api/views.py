@@ -894,7 +894,7 @@ class ShineCandidateLoginAPIView(APIView):
             data_to_send = {
                 "token": token,
                 "candidate_id": candidate_id,
-                'cart_pk': self.request.session.get('cart_pk'),
+                'cart_pk': self.request.session.get('cart_pk') or self.request._request.session.get('cart_pk'),
                 'profile': login_response
             }
 

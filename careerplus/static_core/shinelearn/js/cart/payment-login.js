@@ -73,7 +73,7 @@ const handleLoginCandidate = async () => {
     const result = await handleResponse(loginResponse)
 
 
-        console.log('---><><><><><>--',result);
+    console.log('---><><><><><>--', result);
 
     if (result['error']) {
         // Todo ***** error handling  *****
@@ -81,6 +81,8 @@ const handleLoginCandidate = async () => {
         return;
     }
 
+
+    console.log('----request---', JSON.stringify(request));
     const {data: {candidate_id, cart_pk, token, profile: {email, first_name}}} = result;
 
     /*
@@ -139,6 +141,8 @@ const continueAsGuest = () => {
     $('#login-candidate-button').removeClass('hidden');
     $('#forgot_form_1').addClass('hidden');
     $('#forgot_form_1').trigger('reset');
+    $('#forgot_form').addClass('hidden');
+    $('#forgot_form').trigger('reset');
     $('#user_payment_login').addClass('hide');
     $('#guest_payment_login').removeClass('hide')
     $('#login_users').addClass('hide');
@@ -156,6 +160,8 @@ const loginAsCandidate = () => {
     $('#login-candidate-button').addClass('hidden');
     $('#forgot_form_1').addClass('hidden');
     $('#forgot_form_1').trigger('reset');
+    $('#forgot_form').addClass('hidden');
+    $('#forgot_form').trigger('reset');
     $('#user_payment_login').removeClass('hide');
     $('#guest_payment_login').addClass('hide');
     $('#user-forgot-password').addClass('hide');
@@ -180,6 +186,7 @@ const forgotPassword = () => {
     $('#guest_payment_login').addClass('hide');
     $('#user-forgot-password').removeClass('hide');
     $('#forgot_form_1').removeClass('hidden');
+    $('#forgot_form').removeClass('hidden');
 
 }
 
@@ -271,6 +278,9 @@ $(document).ready(function () {
                             showConfirmButton: false,
                             timer: 1500
                         })
+                        if (json.next != '') {
+                            window.location.href = json.next;
+                        }
 
                     } else if (json.notexist == true) {
                         Swal.fire({

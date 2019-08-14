@@ -1,51 +1,101 @@
-$(document).ready(function() {
+$(document).ready(function () {
     $("#forgot_form").validate({
-        submitHandler: function(form) {
+        submitHandler: function (form) {
             var formData = $(form).serialize();
-            var post_url = $(form).attr('action' );
+            var post_url = $(form).attr('action');
             $.ajax({
                 url: post_url,
                 type: "POST",
-                data : formData,
+                data: formData,
                 dataType: 'json',
-                success: function(json) {
+                success: function (json) {
 
-                    $("#forgot_form")[0].reset();
-                    if (json.exist == true){
-                        alert("Link has been sent to your registered email id");
-                        if (json.next != '')
-                        {window.location.href = json.next;}
-                    }
-                    else if (json.notexist == true){
-                        alert("your email does not exist on shine learning");
-                    }
-                    else if (json.noresponse == true){
-                        alert("Something went wrong. Try again later");
+                    console.log('--JSON--',json);
+                    if (json.exist == true) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Link has been sent to your registered email id',
+                            type: 'success',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        $("#forgot_form")[0].reset();
+                        loginAsCandidate()
+
+
+                        if (json.next != '') {
+                            window.location.href = json.next;
+                        }
+                    } else if (json.notexist == true) {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Your email is not registered on shine learning. Please enter the register email',
+                            type: 'error',
+                            showConfirmButton: false,
+                            timer: 2000
+
+                        })
+                    } else if (json.noresponse == true) {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Something went wrong. Try again later',
+                            type: 'error',
+                            showConfirmButton: false,
+                            timer: 2000
+
+                        })
                     }
                 },
-                error: function(xhr, ajaxOptions, thrownError) {
-                    alert("Something went wrong. Try again later");
+                error: function (xhr, ajaxOptions, thrownError) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Something went wrong. Try again later',
+                        type: 'error',
+                        showConfirmButton: false,
+                        timer: 2000
+
+                    })
                 }
             });
         },
         rules: {
-            email:{
-                required:true,
-                email:true,
+            email: {
+                required: true,
+                email: true,
             }
         },
-        messages:{
-            email: { required:"Please enter a valid email address"},
+        messages: {
+            email: {required: "Email address is required."},
         },
-         highlight: function (element, errorClass) {
-            $(element).closest('li').addClass('error');
+        highlight: function (element, errorClass) {
+
+            let className = '.form-group', addClass = 'error1';
+
+            if (window.CURRENT_FLAVOUR == 'mobile') {
+                className = 'li';
+                addClass = 'error'
+            }
+            $(element).closest(className).addClass(addClass);
         },
         unhighlight: function (element, errorClass) {
-            $(element).closest('li').removeClass('error');
-            $(element).siblings('.error--mgs').html('');
+            let className = '.form-group', addClass = 'error1', errorTextClass = '.error-txt';
+
+            if (window.CURRENT_FLAVOUR == 'mobile') {
+                className = 'li';
+                addClass = 'error'
+                errorTextClass = '.error--mgs'
+            }
+            $(element).closest(className).removeClass(addClass);
+            $(element).siblings(errorTextClass).html('');
+
         },
         errorPlacement: function (error, element) {
-            $(element).siblings('.error--mgs').html(error.text());
+
+            let errorTextClass = '.error-txt';
+            if (window.CURRENT_FLAVOUR == 'mobile') {
+                errorTextClass = '.error--mgs';
+            }
+            $(element).siblings(errorTextClass).html(error.text());
         },
     });
 });
