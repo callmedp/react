@@ -8,44 +8,48 @@ import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
 import * as profileActions from '../../../store/personalInfo/actions/index';
 import * as uiActions from '../../../store/ui/actions/index';
+import {loginCandidate} from '../../../store/landingPage/actions/index';
 import Loader from '../../Common/Loader/loader'
 import {eventClicked} from '../../../store/googleAnalytics/actions/index'
 import {formCategoryList} from '../../../Utils/formCategoryList'
 
 class EditPreview extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.changeLink = this.changeLink.bind(this)
         this.headingChange = this.headingChange.bind(this);
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        if (!localStorage.getItem('candidateId')) {
+            await loginCandidate()
+        }
         this.props.fetchLoaderStatus()
-        if(localStorage.getItem('personalInfo')){
-            localStorage.setItem('newUser',true)
+        if (localStorage.getItem('personalInfo')) {
+            localStorage.setItem('newUser', true)
         }
 
     }
 
-    changeLink(id,heading){
-        this.props.headingChange(this.props.personalInfo,id,heading)
+    changeLink(id, heading) {
+        this.props.headingChange(this.props.personalInfo, id, heading)
     }
 
-    headingChange(entity,heading,pos){
-        const {eventClicked,entityChange} = this.props
+    headingChange(entity, heading, pos) {
+        const {eventClicked, entityChange} = this.props
         eventClicked({
-            'action':'EditSection',
-            'label':formCategoryList[pos+1].name
+            'action': 'EditSection',
+            'label': formCategoryList[pos + 1].name
         })
-        entityChange(entity,heading,pos);
+        entityChange(entity, heading, pos);
     }
 
     render() {
-        const {history,ui:{mainloader}} = this.props;
+        const {history, ui: {mainloader}} = this.props;
         return (
             <div className="edit-section">
-                {mainloader ? <Loader/> :""}
+                {mainloader ? <Loader/> : ""}
                 <Header page={'edit'} history={history}/>
                 <LeftSideBar {...this.props}/>
                 <RightSection {...this.props} changeLink={this.changeLink} headingChange={this.headingChange}/>
@@ -54,12 +58,13 @@ class EditPreview extends Component {
         )
     }
 }
+
 const mapStateToProps = (state) => {
     return {
         initialValues: state.template,
         template: state.template,
         personalInfo: state.personalInfo,
-        ui:state.ui,
+        ui: state.ui,
     }
 };
 
@@ -80,10 +85,14 @@ const mapDispatchToProps = (dispatch) => {
         "fetchPersonalInfo": () => {
             return dispatch(profileActions.fetchPersonalInfo())
         },
-        'entityChange': (entity,heading,pos) => {
+        'entityChange': (entity, heading, pos) => {
             entity[pos].entity_text = heading
             return new Promise((resolve, reject) => {
-                return dispatch(profileActions.updateEntityPreference({"entity_preference_data": entity,resolve,reject}))
+                return dispatch(profileActions.updateEntityPreference({
+                    "entity_preference_data": entity,
+                    resolve,
+                    reject
+                }))
             })
         },
         "fetchLoaderStatus": () => {
@@ -100,7 +109,12 @@ const mapDispatchToProps = (dispatch) => {
         },
         'eventClicked': (data) => {
             return dispatch(eventClicked(data))
-        }
+        },
+        "loginCandidate": (token) => {
+            return new Promise((resolve, reject) => {
+                dispatch(loginCandidate({payload: {alt: token}, resolve, reject, isTokenAvail: false}))
+            })
+        },
     }
 };
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditPreview))

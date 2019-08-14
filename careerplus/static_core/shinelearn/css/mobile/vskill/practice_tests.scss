@@ -115,7 +115,10 @@ h2 {
     width: 240px;
     top: 0;
     right: 0;
-    background: url($path + 'images/mobile/practice_test/base_inside.png') right top no-repeat;
+    /*background: url($path + 'images/mobile/practice_test/base_inside.png') right top no-repeat;*/
+    img {
+    border-radius: 100%;
+    }
 }
 
 .back {

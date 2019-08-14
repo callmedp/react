@@ -11,6 +11,14 @@
     padding: 0;
     position: relative;
 
+    &.sticky {
+        position: fixed;
+        width: 100%;
+        top: -4px;
+        margin-top: 0;
+        z-index: 9;
+    }
+
     &--wrap {
         border-bottom: 1px solid $border-grey-d8;
 
@@ -254,7 +262,7 @@
 
 
 .sure {
-    padding: 50px 20px;
+    padding: 50px 0;
 
     &__icon-wrap {
         @include border-radius(50%);
@@ -267,7 +275,7 @@
 
     &--btn-warp {
         display: flex;
-        justify-content: space-evenly;
+        justify-content: space-around;
     }
 }
 

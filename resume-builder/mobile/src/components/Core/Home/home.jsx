@@ -26,8 +26,8 @@ class Home extends Component {
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
     }
 
-    componentDidMount() {
-        this.props.loginCandidate(this.state.token);
+    async componentDidMount() {
+        await this.props.loginCandidate(this.state.token);
     }
 
     scrollTo(elem, action, label) {
@@ -214,7 +214,9 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(actions.getCandidateId())
         },
         "loginCandidate": (token) => {
-            return dispatch(actions.loginCandidate({alt: token}))
+            return new Promise((resolve, reject) => {
+                dispatch(actions.loginCandidate({payload: {alt: token}, resolve, reject, isTokenAvail: true}))
+            })
         },
         'eventClicked': (data) => {
             return dispatch(eventClicked(data))
