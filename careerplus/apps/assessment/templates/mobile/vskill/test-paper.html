@@ -21,17 +21,18 @@
 <div class="body-wrapper practice-test ">
     <div class="practice-test-inside"></div>
 
-    <h1>{{object.title}}</h1>
-    <div class="bread-crums">
-               {% for bradcbs in breadcrumbs %}
-              {% if bradcbs.url %}
-                <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item"><span itemprop="name">{{bradcbs.name}}</span></a></li>
-              {% else %}
-                <li class="active">{{bradcbs.name}}</li>
-              {% endif %}
-
+    
+    <ol class="breadcrumb mt-0">
+        {% for bradcbs in breadcrumbs %}
+            {% if bradcbs.url %}
+            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item"><span itemprop="name">{{bradcbs.name}}</span></a></li>
+            {% else %}
+            <li class="active">{{bradcbs.name}}</li>
+            {% endif %}
         {% endfor %}
-    </div>
+    </ol>
+
+    <h1 class="mt-0">{{object.title}}</h1>
 
     <div class="row question-timer">
         <div class="question-timer--wrap" >
