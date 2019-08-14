@@ -81,7 +81,7 @@
         }
 }
 
-        .icon {
+        &--image {
             background: url($practice-test) -10px -12px $bg-white;
             box-shadow: $box-shadow-test;
             width: 74px;
@@ -90,6 +90,11 @@
             position: absolute;
             left: -40px;
             top: 10%;
+            overflow: hidden;
+
+                img {
+                    @include size(100%, 100%, block);
+                }
 
 
             &.fa-17 { // Sales&Marketing
