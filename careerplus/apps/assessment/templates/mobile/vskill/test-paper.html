@@ -1,7 +1,7 @@
 {% extends "mobile/basic/base.html" %}
 {% load static compress %}
 {% load static thumbnail compress %}
-{% block title %}Shine learning{% endblock %}
+{% block title %} {{object.title}} @Shine Learning{% endblock %}
 {% block css_section %}
 {{ block.super }}
 {% compress css %}
