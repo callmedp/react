@@ -35,6 +35,7 @@ from linkedin.autologin import AutoLogin
 from shop.models import Product
 from blog.mixins import BlogMixin
 from shop.models import Category
+from order.tasks import upload_Resume_shine
 
 # from order.mixins import OrderMixin
 
@@ -259,6 +260,8 @@ class ApproveByAdminDraft(View):
             obj.oi_status = 4
             obj.last_oi_status = 121
             obj.draft_counter += 1
+            if obj.draft_counter == settings.DRAFT_MAX_LIMIT:
+                upload_Resume_shine.delay(obj.id)
             obj.closed_on = timezone.now()
             obj.save()
 

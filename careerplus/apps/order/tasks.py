@@ -785,6 +785,39 @@ def bypass_resume_midout(order_id):
         if old_resume:
             OrderItem.objects.filter(id__in=update_resume_oi_ids).update(oi_status=3,oi_resume=old_resume,auto_upload = True)
 
+@task
+def upload_Resume_shine(order_item_id):
+    from shine.api.v1.views import UploadResumeShine
+    from order.models import OrderItem
+    from core.api_mixin import ShineCandidateDetail
+    import logging
+    import ipdb; ipdb.set_trace()
+    if not order_item_id:
+        return
+
+    order_item = OrderItem.objects.filter(id=order_item_id).first()
+    order_item.service_resume_upload_shine = True
+    order_item.save()
+
+    if not order_item:
+        return
+    candidate_id = order_item.order.candidate_id
+    data={
+        'candidate_id':candidate_id,
+        'upload_medium':'direct',
+        'upload_source':'web',
+        # 'resume_source':7,
+        # 'resume_medium':7,
+        # 'resume_trigger':7
+    }
+    file_path = settings.RESUME_DIR + order_item.oi_resume.name
+    response = ShineCandidateDetail().upload_resume_shine(data=data,file_path=file_path)
+    if response:
+        logging.getLogger('info_log').info("Uploaded to shine")
+        return
+    logging.getLogger('info_log').info("Upload to shine failed ")
+
+
 
 
 

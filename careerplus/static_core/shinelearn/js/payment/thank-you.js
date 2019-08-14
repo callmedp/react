@@ -78,12 +78,18 @@ $(document).ready(function(){
 })
 
 const uploadResumeShine = (checkbox,order_id)=>{
-    console.log(order_id)
-    // $(checkbox).attr("disabled", true);
+    $(checkbox).attr("disabled", true);
     $.post(`/shine/api/v1/upload-to-shine/`,{
         order_id:order_id,
         upload_after_service:true
-    },(data)=>{
-        console.log(data)
+    }).done(()=>{
+        location.reload()
+    }).fail(()=>{
+        Toast.fire({
+            type: 'error',
+            title: 'Something Went Wrong'
+        })
+        $(checkbox).attr("disabled", false);
+        $(checkbox).attr("checked", false);
     })
 }

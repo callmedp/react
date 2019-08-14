@@ -910,7 +910,14 @@ const uploadResumeShine = (checkbox,order_item_id)=>{
     $(checkbox).attr("disabled", true);
     $.post(`/shine/api/v1/upload-to-shine/`,{
         order_item_id:order_item_id
-    },(data)=>{
-        console.log(data)
+    }).done(()=>{
+        location.reload()
+    }).fail(()=>{
+        Toast.fire({
+            type: 'error',
+            title: 'Something Went Wrong'
+        })
+        $(checkbox).attr("disabled", false);
+        $(checkbox).attr("checked", false);
     })
 }
