@@ -97,9 +97,9 @@
             <div class="functional_area_inside border-{{forloop.counter0}}">
             <a title="{{fa.name}}" href="{% url 'assessment:vskill-category' slug=fa.slug %}">
                   {% if fa.icon %}
-                     <span class="icon"><img class="img-responsive" alt="fa-icon" src= "{{fa.icon.url}}"></span>
+                     <span class="functional_area_inside--image"><img class="img-responsive" alt="{{fa.name}}" src= "{{fa.icon.url}}"></span>
                      {% else %}
-                     <span class="icon"><img  class="img-responsive" alt="fa-icon" src="#"></span>
+                     <span class="functional_area_inside--image"><img  class="img-responsive" alt="{{fa.name}}" src="#"></span>
                      {% endif %}
                 <span class="fa_name">{{fa.name}}</span></a> </div>
               {%endfor%}
