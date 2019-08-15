@@ -329,7 +329,6 @@ class PartnerVarificationQueueView(ListView, PaginationMixin):
         except Exception as e:
             logging.getLogger('error_log').error('unable to get queryset within date range %s' % str(e))
 
-            pass
 
         try:
             if self.payment_date:

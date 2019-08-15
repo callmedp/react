@@ -1,5 +1,5 @@
 //global variables
-let page_size = 10
+let page_size = 25
 let total_pages = 0
 let feedback_id_selected = []
 
