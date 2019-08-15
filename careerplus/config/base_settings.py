@@ -574,4 +574,9 @@ HAYSTACK_ROUTERS = ['careerplus.config.haystack_routers.MasterSlaveRouter', 'hay
 WHATS_APP_MESSAGE_FORMAT = '''Here are our job recommendations for this week.<br>
                         <br>{}Please do not call/reply directly to this message<br><br>In case of any queries, you can call us on  08047105151 or email us at resume@shine.com<br><br>Thanks,<br><br>Team Shine
                         '''
-
+#Candidate Mongo Settings
+CANDIDATE_MONGO_PORT = ':27017'
+CANDIDATE_MONGO_USERNAME = 'candadmin'
+CANDIDATE_MONGO_PASSWORD = 'candadmin'
+CANDIDATE_MONGO_INSTANCE_STR = '172.22.67.226:27017'
+CANDIDATE_MONGO_DB = 'sumoplus'

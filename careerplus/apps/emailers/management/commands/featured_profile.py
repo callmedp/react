@@ -9,7 +9,7 @@ from django.db.models import Q
 from order.models import OrderItem, Order
 from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
-from emailers.utils import get_featured_profile_data_for_candidate
+from emailers.utils import BadgingMixin
 from users.tasks import user_register
 from core.api_mixin import FeatureProfileUpdate
 from shop.choices import S_ATTR_DICT, A_ATTR_DICT
@@ -30,7 +30,6 @@ def featured_updated():
     featured_orderitems = featured_orderitems.select_related('order')
 
     featured_count = 0
-
     for obj in featured_orderitems:
         candidate_id = None
         if obj.order.candidate_id:
@@ -44,10 +43,10 @@ def featured_updated():
 
         if candidate_id:
             try:
-                data = get_featured_profile_data_for_candidate(
-                    candidate_id=candidate_id, curr_order_item=obj, feature=True)
-                flag = FeatureProfileUpdate().update_feature_profile(
-                    candidate_id=candidate_id, data=data)
+                badge_data = BadgingMixin().get_badging_data(
+                    candidate_id=candidate_id, curr_order_item=obj, feature=True
+                )
+                flag = BadgingMixin().update_badging_data(candidate_id=candidate_id, data=badge_data)
                 if flag:
                     logging.getLogger('info_log').info(
                         'Feature:- Data sent to shine for order item %s is %s' % (str(obj.id), str(data))
@@ -111,6 +110,7 @@ def unfeature():
 
     for obj in featured_orderitems:
         candidate_id = None
+        flag = False
         if obj.order.candidate_id:
             candidate_id = obj.order.candidate_id
         else:
@@ -140,14 +140,21 @@ def unfeature():
 
         if candidate_id and delta_time < timezone.now():
             try:
-                data = {}
-                data = get_featured_profile_data_for_candidate(
-                    candidate_id=candidate_id, curr_order_item=obj, feature=False)
-                flag = FeatureProfileUpdate().update_feature_profile(
-                    candidate_id=candidate_id, data=data)
-                if flag:
+                other_item_exist = OrderItem.objects.filter(
+                    order__status__in=[1, 3], product__type_flow__in=[5],
+                    oi_status=28,
+                    product__sub_type_flow=obj.product.sub_type_flow).exists()
+                if not other_item_exist:
+                    badge_data = BadgingMixin().get_badging_data(
+                        candidate_id=candidate_id, curr_order_item=obj, feature=False
+                    )
+                    flag = BadgingMixin().update_badging_data(candidate_id=candidate_id, data=badge_data)
+
+                if flag or other_item_exist:
                     logging.getLogger('info_log').info(
-                        'Unfeature:- Data sent to shine for order item %s is %s' % (str(obj.id), str(data))
+                        'Unfeature:- Data sent to shine for order item {}'.format(
+                            (str(obj.id))
+                        )
                     )
                     unfeature_count += 1
                     last_oi_status = obj.oi_status
