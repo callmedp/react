@@ -61,7 +61,7 @@ class PartnerInboxQueueView(ListView, PaginationMixin):
         queryset = super(PartnerInboxQueueView, self).get_queryset()
         queryset = queryset.filter(
             order__status=1, no_process=False,
-            product__type_flow__in=[2, 6, 9, 10, 14],
+            product__type_flow__in=[2, 6, 9, 10, 14, 16],
             order__welcome_call_done=True).exclude(
             wc_sub_cat__in=[64, 65]).exclude(
             oi_status__in=[4, 10, 81, 161, 162, 163])
@@ -172,7 +172,7 @@ class PartnerHoldQueueView(ListView, PaginationMixin):
         queryset = queryset.filter(
             order__status=1, oi_status=10,
             no_process=False,
-            product__type_flow__in=[2, 6, 9, 10, 14],
+            product__type_flow__in=[2, 6, 9, 10, 14, 16],
             order__welcome_call_done=True).exclude(
             wc_sub_cat__in=[64, 65])
 
