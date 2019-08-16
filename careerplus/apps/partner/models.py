@@ -1,6 +1,7 @@
 # inbuilt imports
 from datetime import datetime
 from decimal import Decimal
+import logging
 
 # framework imports
 from django.db import models
@@ -23,6 +24,7 @@ from geolocation.models import (
     City,)
 from order.choices import BOOSTER_RECRUITER_TYPE
 from .choices import SCORE_TYPE_CHOICES
+
 
 class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
     name = models.CharField(
@@ -227,6 +229,35 @@ class UserCertificate(models.Model):
     def __str__(self):
         return '{}'.format(self.certificate.name)
 
+    def save(self, *args, **kwargs):
+        exists = bool(getattr(self, "id"))
+        obj = super(UserCertificate, self).save(**kwargs)
+        if not exists:
+            # if order_item exists and badging exists.
+            if self.order_item_id:
+                from order.models import OrderItem
+                obj = OrderItem.objects.filter(id=self.order_item_id).first()
+                if obj:
+                    from emailers.utils import BadgingMixin
+                    badge_data = BadgingMixin().get_badging_data(
+                        candidate_id=obj.order.candidate_id, curr_order_item=obj,
+                        feature=True
+                    )
+                    flag = BadgingMixin().update_badging_data(
+                        candidate_id=obj.order.candidate_id,
+                        data=badge_data
+                    )
+                    if flag:
+                        logging.getLogger('info_log').info(
+                            'Badging After parsing data is done for OrderItem  %s is %s' % (str(obj.id), str(badge_data))
+                        )
+                        if not obj.orderitemoperation_set.filter(oi_status=192).exists():
+                            obj.orderitemoperation_set.create(
+                                oi_status=192,
+                                last_oi_status=obj.oi_status,
+                                assigned_to=obj.assigned_to
+                            )
+        return obj
 
 class BoosterRecruiter(AbstractAutoDate):
     recruiter_list = models.TextField(help_text=_('Recruiter name'),)

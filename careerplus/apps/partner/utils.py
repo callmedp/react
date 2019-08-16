@@ -662,7 +662,7 @@ class CertiticateParser:
         if oi:
             candidate_id = oi.order.candidate_id
             data = BadgingMixin().get_badging_data(
-                candidate_id=candidate_id, curr_order_item=obj, feature=True
+                candidate_id=candidate_id, curr_order_item=oi, feature=True
             )
             flag = BadgingMixin().update_badging_data(candidate_id=candidate_id, data=data)
             if flag:
