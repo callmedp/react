@@ -14,7 +14,10 @@
     <link href="{% static 'packages/iCheck/skins/flat/green.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'packages/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet" type="text/css">
     <link type="text/css" href="{% static 'console/css/datepicker/daterangepicker.css' %}" rel="stylesheet">
+
     {% endcompress %}
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+
 
 {% endblock css_block %}
 
@@ -206,8 +209,10 @@
                           <span class="input-group-btn">
                                 <button type="submit" class="btn btn-primary" >Sort</button>
                           </span>
-                          {% if request.GET.oi_status %}
-                          <input type="hidden" name="oi_status" value="{{request.GET.oi_status}}">
+                          {% if oi_status_val %}
+                            {% for o in oi_status_val %}
+                            <input type="hidden" name="oi_status" value="{{o}}">
+                            {% endfor %}
                           {% endif %}
                           {% if request.GET.day_choice %}
                           <input type="hidden" name="day_choice" value="{{request.GET.day_choice}}">
@@ -435,6 +440,17 @@
   <script type="text/javascript" src = "{% static 'console/js/order-info.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/datepicker/daterangepicker.js' %}"></script>
 
+
   {% endcompress %}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
+      <script>
+    var selectedValues = {{ oi_status_val| safe }}
+    $("#id_oi_status").select2({
+      multiple: true,
+      width: '100%',
+    });
+    $("#id_oi_status").val(selectedValues).trigger("change");
+
+    </script>
 
 {% endblock js_block %}

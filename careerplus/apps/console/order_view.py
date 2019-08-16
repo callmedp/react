@@ -2909,6 +2909,14 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
     permission_to_check = ['Can view assigned jobs on the move', 'Can assign jobs on the move',
                            'Can send assigned jobs on the move']
     any_permission = True
+    filter_query_mapping = {
+        '23': Q(oi_status=23),
+        '31': Q(oi_status=31),
+        '32': Q(oi_status=32),
+        '33': Q(oi_status=31, save_link__gt=0),
+        '34': Q(assigned_to=None),
+        '35': Q(whatsapp_profile_orderitem__onboard=False),
+    }
 
     def __init__(self):
         self.page = 1
@@ -2920,7 +2928,7 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '').strip()
-        self.oi_status = request.GET.get('oi_status', '-1').strip()
+        self.oi_status = request.GET.getlist('oi_status', [])
         self.day_choice = request.GET.get('day_choice', '-1').strip()
         self.sel_opt = request.GET.get('rad_search', 'number')
         self.payment_date = self.request.GET.get('payment_date', '')
@@ -2933,12 +2941,12 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
         context.update(self.pagination(paginator, self.page))
         var = self.sel_opt
         alert = messages.get_messages(self.request)
-        initial = {"oi_status": self.oi_status, "day_choice": self.day_choice}
+        initial = {"day_choice": self.day_choice}
 
         filter_form = OIFilterForm(initial, queue_name='queue-whatsappjoblist')
         context.update({"assignment_form": AssignmentActionForm(), "messages": alert, "query": self.query,
             "message_form": MessageForm(), "filter_form": filter_form,
-            "action_form": OIActionForm(queue_name="queue-whatsappjoblist"), var: 'checked'})
+            "action_form": OIActionForm(queue_name="queue-whatsappjoblist"), var: 'checked', 'oi_status_val': self.oi_status})
 
         return context
 
@@ -2993,24 +3001,16 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
                 output_field=IntegerField()
             ))
         )
-        if int(self.oi_status) != -1:
-            if int(self.oi_status) == 33:
-                queryset = queryset.filter(
-                    oi_status=31, save_link__gt=0
-                )
-            elif int(self.oi_status) == 31:
-                queryset = queryset.filter(
-                    oi_status=31, save_link=0
-                )
-            elif int(self.oi_status) == 34:
-                queryset = queryset.filter(assigned_to=None)
-            elif int(self.oi_status) == 35:
-                queryset = queryset.filter(whatsapp_profile_orderitem__onboard=False)
-            else:
-                queryset = queryset.filter(
-                    oi_status=self.oi_status,
-                    whatsapp_profile_orderitem__onboard=True
-                )
+
+        new_query = Q()
+        if self.oi_status:
+            query = [self.filter_query_mapping.get(k) for k in self.oi_status if self.filter_query_mapping.get(k, None)]
+            for q in query:
+                new_query &= q
+            print(new_query)
+            queryset = queryset.filter(
+                new_query
+            )
 
         if self.payment_date:
             start_date, end_date = self.payment_date.split(' - ')
