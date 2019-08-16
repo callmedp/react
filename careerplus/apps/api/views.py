@@ -1168,14 +1168,21 @@ class UpdateCertificateAndAssesment(APIView):
                         (str(certificate.name), str(user_certificate.candidate_id))
                     )
         if getattr(parsed_data.user_certificate, 'order_item_id'):
-            if user_certificates:
-                flag = parser.update_order_and_badge_user(parsed_data, vendor=data['vendor'])
-            else:
+            if not user_certificates:
                 logging.getLogger('error_log').error(
                     "Order Item id present , Certificate not available, badging not done" % (data)
                 )
             orderitem_id = int(parsed_data.user_certificate.order_item_id)
             oi = OrderItem.objects.filter(id=orderitem_id).first()
+            if certificate_updated:
+                oi.orderitemoperation_set.create(
+                    oi_status=191,
+                    last_oi_status=oi.oi_status,
+                    assigned_to=oi.assigned_to
+                )
+                subject = "Congrats, {} on completing the certification on {}".format(
+                    oi.order.first_name, oi.product.name
+                )
             last_oi_status = oi.oi_status
             oi.oi_status = 4
             oi.closed_on = timezone.now()
@@ -1185,21 +1192,10 @@ class UpdateCertificateAndAssesment(APIView):
                 oi_status=6,
                 last_oi_status=last_oi_status,
                 assigned_to=oi.assigned_to)
-            if certificate_updated:
-                oi.orderitemoperation_set.create(
-                    oi_status=191,
-                    last_oi_status=last_oi_status,
-                    assigned_to=oi.assigned_to
-                )
-                if flag:
-                    oi.orderitemoperation_set.create(
-                        oi_status=192,
-                        last_oi_status=last_oi_status,
-                        assigned_to=oi.assigned_to
-                    )
-                    subject = "Congrats, {} on completing the certification on {}".format(
-                        oi.order.first_name, oi.product.name
-                    )
+            oi.orderitemoperation_set.create(
+                oi_status=oi.oi_status,
+                last_oi_status=oi.last_oi_status,
+                assigned_to=oi.assigned_to)
             to_emails = [oi.order.get_email()]
             mail_type = "CERTIFICATE_AND_ASSESMENT"
             data = {}
@@ -1216,10 +1212,6 @@ class UpdateCertificateAndAssesment(APIView):
             })
             create_assignment_lead.delay(obj_id=oi.id)
             send_email_task.delay(to_emails, mail_type, data, status=201, oi=oi.pk)
-            oi.orderitemoperation_set.create(
-                oi_status=oi.oi_status,
-                last_oi_status=oi.last_oi_status,
-                assigned_to=oi.assigned_to)
         else:
             logging.getLogger('error_log').error(
                 "Order Item id not present , so unable close item related to this data ( %s ) " % (data)

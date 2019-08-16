@@ -29,8 +29,10 @@ class BadgingMixin(object):
         candidate = self.coll.find_one({"_id": candidate_id}, {"scp": 1})
 
         if candidate:
-            print(candidate)
-            return candidate.get('scp')
+            if candidate.get('scp'):
+                return candidate.get('scp')
+            else:
+                return {}
 
 
     def get_badging_value_for_order(self, candidate_id, curr_order_item):
