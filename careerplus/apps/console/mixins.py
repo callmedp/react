@@ -336,7 +336,7 @@ class ActionUserMixin(object):
                 logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
                 raise
 
-            if oi.product.type_flow in [2, 10, 14]:
+            if oi.product.type_flow in [2, 10, 14, 16]:
                 last_oi_status = oi.last_oi_status
                 oi.oi_status = 4  # closed orderitem
                 oi.oi_draft = oi_draft
