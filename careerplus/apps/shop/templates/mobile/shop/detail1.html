@@ -525,10 +525,13 @@ $('#enquire_form').click(function(event) {
             data: formData,
             success: function(data, textStatus, jqXHR) {
                 gaEventFunc(typeOfProduct,'success');
+                {% if prd_vendor_slug != 'neo' %}
+
             pop('Your Query Submitted Successfully.');
                $('#enquire_form').removeAttr("disabled");
 
                 $('#enquireform')[0].reset();
+                {% endif %}
 
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -762,6 +765,9 @@ jQuery.validator.addMethod("customEmail", function(value, element) {
           country_code = values['country_code'];
           mobile_no = values['mobile'];
           get_create_profile(email, name, country_code, mobile_no);
+          $('#enquireform').find('input[name="name"]').val(name)
+          $('#enquireform').find('input[name="number"]').val(mobile_no)
+          $('#enquire_form').trigger('click')
       },
       rules:{
           mobile:{
