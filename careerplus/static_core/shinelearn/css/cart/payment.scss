@@ -1367,7 +1367,7 @@
   border-radius: 100%;
   text-align: center;
   background: #ecf8fc;
-  margin: 27% auto 0 auto;
+  margin: 27% auto 0;
   display: table;
 
   span {
@@ -1385,6 +1385,13 @@
         margin: 0 auto 7px auto;
       }
     }
+  }
+}
+
+
+.forget-password {
+  .login-guest {
+    margin-top: 9%;
   }
 }
 
