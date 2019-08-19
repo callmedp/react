@@ -523,7 +523,7 @@ def generate_pixel_report(task=None, url_slug=None, days=None):
         up_task.status = 3
         up_task.save()
         timestr = time.strftime("%Y_%m_%d")
-    header_fields = ['Email', 'Name', 'Contact']
+    header_fields = ['Email', 'Name', 'Contact','Date']
     while yesterday.date() < today.date():
         yesterday_as_str = yesterday.strftime('%Y%m%d')
         file_name = ''
@@ -554,7 +554,7 @@ def generate_pixel_report(task=None, url_slug=None, days=None):
             decrypted_data = encode_decode_obj.decode(udata)
             if decrypted_data and decrypted_data[0]:
                 output.append(decrypted_data)
-                uniques_dict[decrypted_data[0]] = (decrypted_data[1], decrypted_data[2])
+                uniques_dict[decrypted_data[0]] = (decrypted_data[1], decrypted_data[2],yesterday.date())
             ccount += 1
 
         yesterday = yesterday + datetime.timedelta(days=1)
@@ -580,7 +580,9 @@ def generate_pixel_report(task=None, url_slug=None, days=None):
         row['Email'] = key
         row['Name'] = value[0]
         row['Contact'] = value[1]
+        row['Date'] = value[2]
         csvwriter.writerow(row)
+        
     up_task.percent_done = 100
     up_task.status = 2
     up_task.completed_on = timezone.now()

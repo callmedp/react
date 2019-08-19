@@ -6,35 +6,33 @@
 {{ block.super }}
 {% compress css %}
 <link type="text/scss" href="{% static 'shinelearn/css/mobile/vskill/practice_tests.scss' %}" rel="stylesheet">
-<link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
+<!--<link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">-->
 <link type="text/css" href="{% static 'shinelearn/css/common/mobile/typeaheadjs.css' %}" rel="stylesheet">
 {% endcompress %}
 {% endblock css_section %}
 {% block canonical_url %}
-<link rel="canonical" href="//{{ SITE_DOMAIN }}/">
+<link rel="canonical" href="https://{{ SITE_DOMAIN }}/practice-tests/{{object.slug}}-test/">
 {% endblock canonical_url %}
 {% block django_meta %}
-{% include 'meta/meta.html' %}
+    <meta name="description" content="{{object.title }} practice test, answer these {{questions_list.count}} questions to obtain your score for free.">
 {% endblock django_meta %}
-{% block header %}
-{% endblock header %}
 
 {% block container %}
 <div class="body-wrapper practice-test ">
     <div class="practice-test-inside"></div>
 
-    <h1>{{object.title}}</h1>
-    <div class="bread-crums">
-        {% for bread in breadcrumbs %}
-                  {% if bread.url %}
-            <a href='{{bread.url}}'>{{bread.name}} </a>-
-
+    
+    <ol class="breadcrumb mt-0">
+        {% for bradcbs in breadcrumbs %}
+            {% if bradcbs.url %}
+            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item"><span itemprop="name">{{bradcbs.name}}</span></a></li>
             {% else %}
-          <a href="#">{{bread.name}}</a>
+            <li class="active">{{bradcbs.name}}</li>
             {% endif %}
-
         {% endfor %}
-    </div>
+    </ol>
+
+    <h1 class="mt-0">{{object.title}}</h1>
 
     <div class="row question-timer">
         <div class="question-timer--wrap" >
@@ -79,7 +77,7 @@
 
     </div><!-- /. question-timer -->
 
-    <div class="take-test">
+    <div class="take-test" id="ques">
         <ol>
         {% for quest in questions_list %}
             <li class="take-test__wrap test-paper {% if forloop.counter == 1 %} actived {% else %}inactive{% endif %}" id="question-{{forloop.counter}}">
@@ -100,9 +98,10 @@
             Next question 
             <span class="pt-sprite icon-arrow"></span>
         </div>
+
         <div class="take-test--button-wrap mt-15">
             <span class="btn btn-outline btn-round-30" id="skipBtn" onclick="skipQuestion();">Skip</span>
-            <span class="btn btn-outline btn-round-30" onclick="submitTest();">Submit</span>
+            <span class="btn btn-outline btn-round-30" id="submitBtn" onclick="submitTest();">Submit</span>
         </div>
     </div>
 
@@ -237,7 +236,10 @@
 {% endblock container %}
 {% block js_section %}
 {{block.super}}
+{% compress js %}
 <script src="{% static 'shinelearn/js/assessment/take_test.js' %}"></script>
+
+{% endcompress %}
 
 <script>
 // JavaScript for label effects only
@@ -293,6 +295,11 @@ let resp = NaN;
 });
 return resp;
 }
+
+$("#nextQuestionBtn").click(function() {
+    $('html,body').animate({
+        scrollTop: $("#ques").offset().top - $(".question-timer").height() - 15}, 3000);
+});
 
 </script>
 <script>
@@ -399,11 +406,15 @@ $('.marked').click(function() {
     if (activeTab >= maxCounter) {
         $('#nextQuestionBtn').hide();
         $('#skipBtn').text('Clear');
+            $('#submitBtn').removeClass('btn-outline');
+               $('#submitBtn').addClass('btn-blue');
 
     } else {
 
         $('#nextQuestionBtn').show();
                $('#skipBtn').text('Skip');
+             $('#submitBtn').addClass('btn-outline');
+               $('#submitBtn').removeClass('btn-blue');
     }
 });
 
@@ -431,9 +442,13 @@ function nextquestion(number) {
         if (activeTab >= maxCounter) {
         $('#nextQuestionBtn').hide();
         $('#skipBtn').text('Clear');
+         $('#submitBtn').removeClass('btn-outline');
+               $('#submitBtn').addClass('btn-blue');
         } else {
 
       $('#skipBtn').text('Skip');
+       $('#submitBtn').addClass('btn-outline');
+               $('#submitBtn').removeClass('btn-blue');
         }
         $('#activeQuestion').text(activeTab);
          $('.active').removeClass('active');
@@ -546,6 +561,19 @@ function submitTestFinal(){
       window.location.href = '/practice-tests/{{object.slug}}/result/';
 
 }
+
+
+// sticky Header inner
+$(window).scroll(function () {
+  var $this = $(this);
+  if ($this.scrollTop() > 160) {
+     $('.question-timer').addClass('sticky');
+     $('body').css('padding-top', '160px');
+  } else {
+    $('.question-timer').removeClass('sticky');
+    $('body').css('padding-top', '0px');
+  }
+});
 
 
 </script>

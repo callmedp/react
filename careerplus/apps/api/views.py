@@ -1493,7 +1493,7 @@ class SetSession(APIView):
 
         # creating lead for particular session_id
         if lead_create:
-            self.request.session.update({'is_lead_created': 1})
+            self.request._request.session.update({'is_lead_created': 1})
             return Response({'is_lead_created':True})
 
         return Response({'timeout': self.cache_test.get_test_time_out(key),

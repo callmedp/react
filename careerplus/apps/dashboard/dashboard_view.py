@@ -39,7 +39,8 @@ from search.helpers import get_recommendations
 from .dashboard_mixin import DashboardInfo
 from linkedin.autologin import AutoLogin
 from core.library.gcloud.custom_cloud_storage import \
-GCPPrivateMediaStorage, GCPInvoiceStorage, GCPMediaStorage,GCPResumeBuilderStorage
+    GCPPrivateMediaStorage, GCPInvoiceStorage, GCPMediaStorage, GCPResumeBuilderStorage
+
 
 @Decorate(stop_browser_cache())
 class DashboardView(TemplateView):
@@ -846,7 +847,7 @@ class DashboardResumeTemplateDownload(View):
         product_id = request.POST.get('product_id', None)
         is_combo = True if product_id != str(settings.RESUME_BUILDER_NON_COMBO_PID) else False
         order_pk = request.POST.get('order_pk', None)
-        candidate_obj = Candidate.objects.filter(candidate_id = candidate_id).first()
+        candidate_obj = Candidate.objects.filter(candidate_id=candidate_id).first()
         selected_template = candidate_obj.selected_template if candidate_obj.selected_template else 1
         order = Order.objects.get(pk=order_pk)
 
@@ -854,23 +855,23 @@ class DashboardResumeTemplateDownload(View):
                 or not (order.candidate_id == candidate_id):
             return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))
 
-        filename_prefix = "{}_{}".format(order.first_name,order.last_name)
-        file_path = "resume-builder/{}/pdf/{}.pdf".format(candidate_obj.id,selected_template)
+        filename_prefix = "{}_{}".format(order.first_name, order.last_name)
+        file_path = settings.RESUME_TEMPLATE_DIR + "/{}/pdf/{}.pdf".format(candidate_obj.id, selected_template)
         content_type = "application/pdf"
         filename_suffix = ".pdf"
-        
+
         if is_combo:
-            file_path = "resume-builder/{}/zip/combo.zip".format(candidate_obj.id)
+            file_path = settings.RESUME_TEMPLATE_DIR + "/{}/zip/combo.zip".format(candidate_obj.id)
             content_type = "application/zip"
             filename_suffix = ".zip"
-        
+
         try:
             if not settings.IS_GCP:
-                file_path = "{}/{}".format(settings.MEDIA_ROOT,file_path)
+                file_path = "{}/{}".format(settings.MEDIA_ROOT, file_path)
                 fsock = FileWrapper(open(file_path, 'rb'))
             else:
                 fsock = GCPResumeBuilderStorage().open(file_path)
-            
+
             filename = filename_prefix + filename_suffix
             response = HttpResponse(fsock, content_type=content_type)
             response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)

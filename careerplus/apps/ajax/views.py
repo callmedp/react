@@ -423,7 +423,7 @@ class UploadDraftView(View):
                 logging.getLogger('error_log').error("Making flow=0 explicitly failed: %s " % str(e))
                 flow = 0
 
-            if flow in [2, 6, 10, 14]:
+            if flow in [2, 6, 10, 14,16]:
                 form = VendorFileUploadForm(request.POST, request.FILES)
             else:
                 form = FileUploadForm(request.POST, request.FILES)

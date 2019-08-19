@@ -23,21 +23,18 @@
 <div class="body-wrapper practice-test ">
     <div class="practice-test-inside"></div>
     <div class="menu-blue" id="sidebar-main-trigger"></div>
-
-    <h1>Your Test Result</h1>
-    <div class="bread-crums">
-        {% for bread in breadcrumbs %}
-                  {% if bread.url %}
-            <a href='{{bread.url}}'>{{bread.name}} </a>-
-
-            {% else %}
-          <a href="#">{{bread.name}}</a>
-            {% endif %}
+    <ol class="breadcrumb mt-0">
+          {% for bradcbs in breadcrumbs %}
+              {% if bradcbs.url %}
+                <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item"><span itemprop="name">{{bradcbs.name}}</span></a></li>
+              {% else %}
+                <li class="active">{{bradcbs.name}}</li>
+              {% endif %}
 
         {% endfor %}
-    </div>
+    </ol>
 
-
+    <h1 class="mt-0">Your Test Result</h1>
     <div class="test-result">
         <span class="text-center mt-10">
             <img id="resultImage" src="">
@@ -48,7 +45,7 @@
             <p class="test-result__you-scored--text">You scored</p>
             <p class="test-result__you-scored--percentage"><strong id="scoringPercent"></strong>%</p>
             <a href="#answers" class="btn btn-blue btn-lg2 btn-round-30" id="btn-checkAnswers">Check answers</a>
-            <p class="mt-15 fs-16 pb-0 mb-30"><strong id="correctMsg"> </strong></p>
+            <p class="mt-15 fs-16 pb-0 mb-20"><strong id="correctMsg"> </strong></p>
             <p id="resultCourse"></p>
         </div>
 

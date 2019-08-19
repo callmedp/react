@@ -79,7 +79,7 @@ class FileUploadForm(forms.Form):
                 raise forms.ValidationError(
                     "only pdf, doc, docx, rar, zip ppt and pptx formats are allowed.")
 
-            elif file.size > 15 * 1024 * 1000:
+            elif file.size > 15 * 1024 * 1024:
                 raise forms.ValidationError(
                     "file is too large ( > 15 MB ).")
         return file
@@ -102,9 +102,9 @@ class VendorFileUploadForm(forms.Form):
             if extn not in ['pdf', 'doc', 'docx', 'png', 'jpg']:
                 raise forms.ValidationError(
                     "only pdf, doc, docx, png and jpg formats are allowed.")
-            elif file.size > 500 * 1024:
+            elif file.size > 10 * 1024 * 1024:
                 raise forms.ValidationError(
-                    "file is too large ( > 500kb ).")
+                    "file is too large ( > 10 MB ).")
         return file
 
 

@@ -5,9 +5,9 @@ export const getCandidateId = () => ({
 });
 
 
-export const loginCandidate = (payload) => ({
+export const loginCandidate = (data) => ({
     type: LOGIN_CANDIDATE,
-    payload
+    data
 });
 
 export const feedbackSubmit = (payload) => ({

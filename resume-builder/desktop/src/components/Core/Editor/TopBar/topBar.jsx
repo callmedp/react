@@ -33,7 +33,7 @@ export default class TopBar extends Component {
         if (localStorage.getItem('selected_template')) {
             selected_template = localStorage.getItem('selected_template')
         }
-        const newUser = localStorage.getItem('newUser')
+        const newUser = localStorage.getItem('newUser');
         return (
             <section className="flex-container">
                 <div className="top-banner">
@@ -66,7 +66,7 @@ export default class TopBar extends Component {
                             </div> :
                             page === 'buy' ?
                                 '' :
-                                !(order_data && order_data.id) ?
+                                !!(!(order_data && order_data.id)) ?
                                     <div className="top-banner--banner-right">
                                         <div>
                                             <button className="orange-button mr-10"
@@ -79,12 +79,12 @@ export default class TopBar extends Component {
                                             </button>
                                         </div>
                                         <span className="top-banner--banner-right--banner-thumb">
-                                    <img
-                                        src={`${this.staticUrl}react/assets/images/resume-thumb-${selected_template}.jpg`}
-                                        alt=""/>
-                		            </span>
+                                            <img
+                                                src={`${this.staticUrl}react/assets/images/resume-thumb-${selected_template}.jpg`}
+                                                alt=""/>
+                		                </span>
                                     </div> :
-                                    (order_data && order_data.id && order_data.isCombo) ?
+                                    (order_data && order_data.id && order_data.combo) ?
                                         <div className="top-banner--banner-right">
                                             <div>
                                                 <button className="white-button mr-20" onClick={() => {
