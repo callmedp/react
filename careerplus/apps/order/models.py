@@ -636,6 +636,13 @@ class OrderItem(AbstractAutoDate):
         sent = cache.get('neo_mail_sent_{}'.format(self.id))
         return sent
 
+
+    def get_due_date(self):
+        profile = getattr(self, 'whatsapp_profile_orderitem', None)
+        if profile and profile.due_date:
+            return profile.due_date.strftime('%d-%m-%Y')
+        return 'N.A'
+
     def get_weeks(self):
         weeks, weeks_till_now = None, None
         sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5, 23]).order_by('id').first()
@@ -667,6 +674,7 @@ class OrderItem(AbstractAutoDate):
                     break
                 links_count += links_per_week
         return links_count
+
 
     def has_saved_links(self):
         saved_links = self.jobs_link.filter(status=0)
@@ -706,6 +714,26 @@ class OrderItem(AbstractAutoDate):
             links_pending = 0
         self.pending_links_count = links_pending
         self.save()
+
+    def set_due_date(self):
+        today = timezone.now()
+        profile = getattr(self, 'whatsapp_profile_orderitem', None)
+
+        if profile:
+            if profile.due_date and profile.due_date > today:
+                profile.due_date = profile.due_date + relativedelta.relativedelta(days=7)
+                profile.save()
+            else:
+                day_of_week = profile.day_of_week
+                if today.weekday() == day_of_week:
+                    profile.due_date = today + relativedelta.relativedelta(days=7)
+                elif today.weekday() > day_of_week:
+                    profile.due_date = today +\
+                        relativedelta.relativedelta(days=7 - (today.weekday() - day_of_week))
+                elif today.weekday() < day_of_week:
+                    profile.due_date = today +\
+                        relativedelta.relativedelta(days=(day_of_week - today.weekday()))
+                profile.save()
 
     def get_oi_communications(self):
         communications = self.message_set.all().select_related('added_by')
