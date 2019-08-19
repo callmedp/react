@@ -21,7 +21,7 @@ class BadgingMixin(object):
             self.CANDIDATE_MONGO_INSTANCE_STR, self.CANDIDATE_MONGO_DB
         )
         conn = MongoClient(connection_string)
-        database = conn['sumoplus']
+        database = conn[self.CANDIDATE_MONGO_DB]
         self.coll = database['CandidateStatic']
 
     def get_existing_badge_value(self, candidate_id):
@@ -33,7 +33,6 @@ class BadgingMixin(object):
                 return candidate.get('scp')
             else:
                 return {}
-
 
     def get_badging_value_for_order(self, candidate_id, curr_order_item):
         if curr_order_item.product.sub_type_flow in [1602]:
