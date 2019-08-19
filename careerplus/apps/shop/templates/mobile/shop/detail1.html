@@ -743,6 +743,8 @@ function update_test_info(email){
       let name = "{{request.session.full_name}}";
       let country_code = "{{request.session.country_code}}";
       let mobile_no = "{{request.session.mobile_no}}";
+      var global_name = "{{request.session.full_name}}";
+      var global_mobile_no = "{{request.session.mobile_no}}";
       get_create_profile(email, name, country_code, mobile_no)
 
     {% endif %}
@@ -850,6 +852,12 @@ $('iframe').load(function(){
     $(doc).on('click', '#neoStartButton', function() {
         setTimeout(function(){
             check_if_user_exists_for_another_vendor(global_email)
+                {% if request.session.candidate_id %}
+
+              $('#enquireform').find('input[name="name"]').val(global_name)
+              $('#enquireform').find('input[name="number"]').val(global_mobile_no)
+              $('#enquire_form').trigger('click')
+              {% endif %}
         }, 1000) 
     });
     $(doc).on('click', '#neonextquestion', function() {
