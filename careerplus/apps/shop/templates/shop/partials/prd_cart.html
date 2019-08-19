@@ -117,7 +117,7 @@
             <input type="hidden" name="path" value="{{product.get_absolute_url}}">
 
           </form>
-          <button type="button" id="id_callback" class="callback-button mt-10">Request a call back</button>
+          <button type="button" {% if prd_vendor_slug == "neo" %} id="id_callback_neo"  {% else %}id="id_callback" {% endif %}class="callback-button mt-10">Request a call back</button>
           <!--button type="button" id="id_callback" class="submit-button">
             Submit
           </button-->
