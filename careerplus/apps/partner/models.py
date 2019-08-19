@@ -236,8 +236,9 @@ class UserCertificate(models.Model):
             # if order_item exists and badging exists.
             if self.order_item_id:
                 from order.models import OrderItem
+                from shop.models import ShineProfileData
                 obj = OrderItem.objects.filter(id=self.order_item_id).first()
-                if obj:
+                if obj and ShineProfileData.objects.filter(sub_type_flow=obj.product.sub_type_flow).exists():
                     from emailers.utils import BadgingMixin
                     badge_data = BadgingMixin().get_badging_data(
                         candidate_id=obj.order.candidate_id, curr_order_item=obj,
