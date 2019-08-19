@@ -15,7 +15,7 @@ from partner.models import Certificate, UserCertificate, UserCertificateOperatio
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 
 from core.api_mixin import ShineCandidateDetail, ShineToken, ShineCertificateUpdate
-from order.models import Order
+from order.models import OrderItem
 
 User = get_user_model()
 
@@ -220,7 +220,7 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None,  vendor
             upload_path)
     if exist_file:
         f = True
-        fieldnames = ['year', 'candidate_email', 'candidate_mobile', 'certificate_name', 'certificate_file_url' , 'order']
+        fieldnames = ['year', 'candidate_email', 'candidate_mobile', 'certificate_name', 'certificate_file_url' , 'order_item']
         if not settings.IS_GCP:
             with open(
                 settings.MEDIA_ROOT + '/' + upload_path,
@@ -283,9 +283,9 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None,  vendor
                 certificate_name = row.get('certificate_name')
                 certi_yr_passing = row.get('year')
                 certi_file_url = row.get('certificate_file_url')
-                order = row.get('order')
-                if order:
-                    order = Order.objects.filter(id=order).first()
+                order_item = row.get('order_item')
+                if order_item:
+                    order_item = OrderItem.objects.filter(id=order_item).first()
                 headers = ShineToken().get_api_headers()
                 shineid = ShineCandidateDetail().get_shine_id(
                     email=email, headers=headers)
@@ -308,10 +308,17 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None,  vendor
                         row['status'] = "Failure"
                     else:
                         logging.getLogger("error_log").info("working for,{}".format(certificate_name))
+                        create_kwargs = {
+                            'user': user,
+                            'certificate': certificate,
+                            'year': certi_yr_passing,
+                            'candidate_id': shineid
+                        }
+                        if order_item:
+                            create_kwargs['order_item'] = order_item
                         obj, created = UserCertificate.objects.get_or_create(
-                            user=user, certificate=certificate,
-                            year=certi_yr_passing,
-                            candidate_id=shineid)
+                            **create_kwargs
+                        )
                         if created:
                             obj.candidate_mobile = mobile
                             obj.candidate_email = email
