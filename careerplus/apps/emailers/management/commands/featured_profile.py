@@ -143,10 +143,10 @@ def unfeature():
                     order__status__in=[1, 3], product__type_flow__in=[5],
                     oi_status=28,
                     product__sub_type_flow=obj.product.sub_type_flow,
-                    order__candidate_id=obj.order.candidate_id).exists()
+                    order__candidate_id=obj.order.candidate_id).exclude(id=obj.id).exists()
                 if not other_item_exist:
                     badge_data = BadgingMixin().get_badging_data(
-                        candidate_id=candidate_id, curr_order_item=obj, feature=False
+                        candidate_id=obj.order.candidate_id, curr_order_item=obj, feature=False
                     )
                     flag = BadgingMixin().update_badging_data(candidate_id=candidate_id, data=badge_data)
 
