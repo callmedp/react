@@ -446,6 +446,7 @@
       &:after {
         right: 20px;
         top: 19px;
+        display: none;
       }
 
       select {
@@ -459,6 +460,22 @@
 
       .form-control {
         width: 85%;
+      }
+
+      .select2-container {
+        height: 52px;
+
+        .select2-selection--single {
+          height: 47px;
+          border-color: #e1e1e1;
+          display: flex;
+          align-items: center;
+
+          .select2-selection__arrow b {
+            margin-top: 8px;
+          }
+          
+        }
       }
     }
 
