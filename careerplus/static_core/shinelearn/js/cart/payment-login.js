@@ -146,6 +146,8 @@ const continueAsGuest = () => {
     $('#guest_payment_login').removeClass('hide')
     $('#login_users').addClass('hide');
     $('#login_guests').removeClass('hide');
+    $('#continue-as-guest-button').removeClass('forget-password');
+
 };
 
 /*
@@ -166,6 +168,7 @@ const loginAsCandidate = () => {
     $('#user-forgot-password').addClass('hide');
     $('#login_users').removeClass('hide');
     $('#login_guests').addClass('hide');
+    $('#continue-as-guest-button').removeClass('forget-password');
 
 
 };
@@ -184,9 +187,9 @@ const forgotPassword = () => {
     $('#user_payment_login').addClass('hide');
     $('#guest_payment_login').addClass('hide');
     $('#user-forgot-password').removeClass('hide');
+    $('#continue-as-guest-button').addClass('forget-password');
     $('#forgot_form_1').removeClass('hidden');
     $('#forgot_form').removeClass('hidden');
-
 }
 
 
