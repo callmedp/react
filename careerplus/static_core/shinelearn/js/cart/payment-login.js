@@ -82,7 +82,6 @@ const handleLoginCandidate = async () => {
     }
 
 
-    console.log('----request---', JSON.stringify(request));
     const {data: {candidate_id, cart_pk, token, profile: {email, first_name}}} = result;
 
     /*
