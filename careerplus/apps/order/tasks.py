@@ -805,9 +805,9 @@ def upload_Resume_shine(order_item_id):
         'candidate_id':candidate_id,
         'upload_medium':'direct',
         'upload_source':'web',
-        # 'resume_source':7,
-        # 'resume_medium':7,
-        # 'resume_trigger':7
+        'resume_source':7,
+        'resume_medium':7,
+        'resume_trigger':7
     }
     file_path = settings.RESUME_DIR + order_item.oi_resume.name
     response = ShineCandidateDetail().upload_resume_shine(data=data,file_path=file_path)
