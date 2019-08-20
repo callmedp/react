@@ -107,6 +107,10 @@
                         <div class="form-group">
                             <label class="control-label col-md-12 col-sm-12 col-xs-12"> Payment Date<input class="form-control datepicker " id="id_filter_date" name="payment_date" placeholder="Payment Date"  value="{{ request.GET.payment_date}}" /></label></br>
                         </div>
+
+                         <div class="form-group">
+                            <label class="control-label col-md-12 col-sm-12 col-xs-12"> Due Date<input class="form-control datepicker " id="id_due_date" name="due_date" placeholder="Due Date"  value="{{ request.GET.due_date}}" /></label></br>
+                        </div>
                        {% if query %}
                            <input type="hidden" name="query" value="{{query}}">
                        {% endif %}
@@ -219,6 +223,9 @@
                           {% endif %}
                           {% if request.GET.payment_date %}
                           <input type="hidden" name="payment_date" value="{{request.GET.payment_date}}">
+                          {% endif %}
+                          {% if request.GET.due_date %}
+                          <input type="hidden" name="due_date" value="{{request.GET.due_date}}">
                           {% endif %}
                       </div>
                     </div>
@@ -425,7 +432,17 @@
         },
         autoUpdateInput: false,
       });
+    $('#id_due_date').daterangepicker({
+        'opens': 'center',
+        "dateLimit": {
+           "month": 2
+        },
+        autoUpdateInput: false,
+      });
       $('input[name="payment_date"]').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+    });
+      $('input[name="due_date"]').on('apply.daterangepicker', function(ev, picker) {
         $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
     });
   </script>

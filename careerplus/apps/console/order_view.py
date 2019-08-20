@@ -2933,6 +2933,7 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
         self.day_choice = request.GET.get('day_choice', '-1').strip()
         self.sel_opt = request.GET.get('rad_search', 'number')
         self.payment_date = self.request.GET.get('payment_date', '')
+        self.due_date = self.request.GET.get('due_date', '')
         self.sort_payment_date = self.request.GET.get('sort_payment_date', '0')
         return super(WhatsappListQueueView, self).get(request, args, **kwargs)
 
@@ -3019,6 +3020,13 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
             end_date = datetime.datetime.strptime(end_date, "%m/%d/%Y")
             end_date = end_date + relativedelta.relativedelta(days=1)
             queryset = queryset.filter(order__payment_date__range=[start_date, end_date])
+
+        if self.due_date:
+            start_date, end_date = self.due_date.split(' - ')
+            start_date = datetime.datetime.strptime(start_date, "%m/%d/%Y")
+            end_date = datetime.datetime.strptime(end_date, "%m/%d/%Y")
+            end_date = end_date + relativedelta.relativedelta(days=1)
+            queryset = queryset.filter(whatsapp_profile_orderitem__due_date__range=[start_date, end_date])
 
         # data for whats app links:
         queryset = queryset.annotate(
