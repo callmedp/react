@@ -300,3 +300,5 @@ DAYS_CHOICES = (
     (5, 'Saturday'),
     (6, 'Sunday'),
 )
+
+DAYS_CHOICES_DICT = dict(DAYS_CHOICES)

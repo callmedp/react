@@ -37,7 +37,8 @@ from order.utils import get_ltv
 
 #third party imports
 from payment.utils import manually_generate_autologin_url
-from shop.choices import S_ATTR_DICT
+from shop.choices import S_ATTR_DICT, DAYS_CHOICES_DICT
+
 
 #Global Constants
 CURRENCY_SYMBOL_CODE_MAPPING = {0:"INR",1:"USD",2:"AED",3:"GBP"}
@@ -641,6 +642,12 @@ class OrderItem(AbstractAutoDate):
         profile = getattr(self, 'whatsapp_profile_orderitem', None)
         if profile and profile.due_date:
             return profile.due_date.strftime('%d-%m-%Y')
+        return 'N.A'
+
+    def get_due_date_weekday(self):
+        profile = getattr(self, 'whatsapp_profile_orderitem', None)
+        if profile and profile.due_date:
+            return DAYS_CHOICES_DICT.get(profile.due_date.weekday())
         return 'N.A'
 
     def get_weeks(self):

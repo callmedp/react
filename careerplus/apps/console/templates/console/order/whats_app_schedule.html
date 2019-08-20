@@ -80,6 +80,8 @@
                <table class="table table-striped jambo_table bulk_action" id="inbox-table">
                  <thead>
                   <tr class="headings">
+                    <th class="column-title">Email</th>
+                    <th class="column-title">Mobile</th>
                     <th class="column-title">Weeks</th>
                     <th class="column-title">Sent Links</th>
                     <th class="column-title">Total Supposed to be sent</th>
@@ -90,11 +92,28 @@
                  <tbody id="body-table-list">
                    <tr class="even pointer">
                     {% with orderitem.get_weeks as weeks%}
+                      <td>
+                         <div>
+                            <div id="email_field{{orderitem.order.id}}_1"></div>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-primary btn-xs" onclick="order_get_details('{{orderitem.order.id}}','email,alt_email','email');"><i class="fa fa-search" aria-hidden="true"></i>ClickToView</button>
+                        </div>
+
+                      </td>
+                      <td>
+                    <div>
+                        <div id="mobile_field{{orderitem.order.id}}_1"> </div>
+                        <button type="button" onclick="order_get_details('{{orderitem.order.id}}','mobile,alt_mobile','mobile');" class="btn btn-primary btn-xs"><i class="fa fa-phone" aria-hidden="true"></i>ClickToView</button>
+                   </div>
+
+
+                      </td>
                       <td>{{ weeks.1 }}/{{ weeks.0 }}</td>
                       <td>{{ orderitem.sent_link_count }} / {{ orderitem.get_total_links_needs_to_sent }}</td>
                       <td>{{ orderitem.get_links_needed_till_now }}</td>
                       <td>{{ orderitem.pending_links_count }}</td>
-                      <td>{{ orderitem.get_due_date }}</td>
+                      <td>{{ orderitem.get_due_date }} ({{ orderitem.get_due_date_weekday }})</td>
                     {% endwith %}
                    </tr>
                  </tbody>
@@ -325,14 +344,17 @@
               <div class="form-group col-md-3">
                 <label> Desired Industry</label>
                 {{profile_form.desired_industry}}
+                <button  type="button" class="copy-tag" data-copy-tag-id="id_desired_industry">Copy</button>
               </div>
               <div class="form-group col-md-3">
                 <label> Desired Location</label>
                 {{profile_form.desired_location}}
+                <button  type="button" class="copy-tag" data-copy-tag-id="id_desired_location">Copy</button>
               </div>
               <div class="form-group col-md-3">
                 <label> Desired Position</label>
                 {{profile_form.desired_position}}
+                <button type="button" class="copy-tag" data-copy-tag-id="id_desired_position">Copy</button>
               </div>
                <div class="form-group col-md-3">
                 <label> Desired Salary</label>
@@ -345,6 +367,7 @@
               <div class="form-group col-md-3">
                 <label> Skills</label>
                 {{profile_form.skills}}
+                <button type="button" class="copy-tag" data-copy-tag-id="id_skills">Copy</button>
               </div>
               <div class="form-group col-md-3">
                 <label> Experience</label>
@@ -353,12 +376,15 @@
               <br>
               {% if not orderitem.is_onboard and perms.order.can_approve_jobs_on_the_move %}
               <div class="form-group col-md-12">
+                <label> Day of Week {{profile_form.day_of_week}}</label>
+              </div>
+              <br>
+              <br>
+              <div class="form-group col-md-4">
                 <label> Board User {{profile_form.onboard}}</label>
               </div>
 
-              <div class="form-group col-md-12">
-                <label> Day of Week {{profile_form.day_of_week}}</label>
-              </div>
+              
               {% endif %}
               {% if not orderitem.is_approved and orderitem.is_onboard and perms.order.can_approve_jobs_on_the_move %}
               <div class="form-group col-md-12">
@@ -366,6 +392,7 @@
               </div>
               {% endif %}
               <input type="hidden" name="action_type" value="3">
+              <br>
               <br>
               <br>
               <div class="form-group col-md-12">
@@ -430,6 +457,7 @@
   <script type="text/javascript" src="{% static 'packages/iCheck/icheck.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/moment/moment.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/order/filter.js' %}"></script>
+  <script type="text/javascript" src = "{% static 'console/js/order-info.js' %}"></script>
   <script type="text/javascript" src="{% static 'packages/jquery.tagsinput/src/jquery.tagsinput.js' %}"></script>
   <script type="text/javascript">
     $('.action_btn').click(function(){
@@ -466,6 +494,19 @@
         width: 'auto',
         'delimiter': [','],   // Or a string with a single delimiter. Ex: ';'
     });
+
+    $('.copy-tag').click(function(){
+      let elem_id = $(this).attr('data-copy-tag-id');
+      let k = $("#"+elem_id).siblings(".tagsinput").children('.tag')
+      let tags = [];
+      for (var i = k.length; i--;) {  
+          tags.push($(k[i]).text().substring(0, $(k[i]).text().length -  1).trim());  
+      }
+      element = $('<textarea>').appendTo('body').val(tags.join(',')).select()
+      document.execCommand('copy')
+      element.remove()
+    })
+
   </script>
 
 {% endblock js_block %}

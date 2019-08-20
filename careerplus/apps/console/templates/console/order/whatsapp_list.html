@@ -260,6 +260,7 @@
                     <th class="column-title">Saved Links</th>
                     <th class="column-title">Total Supposed to be sent</th>
                     <th class="column-title">Pending Links Count</th>
+                    <th class="column-title">Due Date</th>
                   </tr>
                 </thead>
 
@@ -336,6 +337,7 @@
                       <td>{{ obj.save_link }}</td>
                       <td>{{ obj.get_links_needed_till_now }}</td>
                       <td>{{ obj.pending_links_count }}</td>
+                      <td>{{ obj.get_due_date }} ({{ obj.get_due_date_weekday }})</td>
                       {% endwith %}
                     </tr>
                   {% endfor %}
