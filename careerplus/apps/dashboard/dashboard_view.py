@@ -497,7 +497,6 @@ class DashboardAcceptService(APIView):
     permission_classes = ()
 
     def post(self, request, *args, **kwargs):
-        import ipdb; ipdb.set_trace()
         candidate_id = request.session.get('candidate_id', None)
         oi_pk = request.POST.get('oi_pk', None)
         if not candidate_id and oi_pk:

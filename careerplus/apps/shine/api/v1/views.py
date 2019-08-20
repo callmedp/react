@@ -15,8 +15,6 @@ class UploadResumeShine(APIView):
     permission_classes = ()
 
     def post(self,*args, **kwargs):
-        return HttpResponseBadRequest()
-        import ipdb; ipdb.set_trace()
         upload_after_service = self.request.POST.get('upload_after_service','')
 
         if upload_after_service:

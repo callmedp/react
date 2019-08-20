@@ -791,7 +791,6 @@ def upload_Resume_shine(order_item_id):
     from order.models import OrderItem
     from core.api_mixin import ShineCandidateDetail
     import logging
-    import ipdb; ipdb.set_trace()
     if not order_item_id:
         return
 

@@ -12,6 +12,7 @@
 
 {% block css_section %}
     {{ block.super }}
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.min.css" rel="stylesheet" />
     {% compress css %}
         <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/checkbox.scss' %}" rel="stylesheet">
         <link type="text/scss" href="{% static 'shinelearn/css/mobile/payment/payment.scss' %}" rel="stylesheet">
@@ -111,6 +112,9 @@
 
                <div class="text-center">  
                 <input type="hidden" id="action-type-id" name="action_type" value="upload_resume">
+                 <div>
+                    <input type="checkbox" class="upload-checkbox" onclick="uploadResumeShine(this,{{order.id}})" /> <span>Upload service resume to shine</span>
+                  </div>
                 <button type="button" class="btn btn-blue mt-0" id="resume-sumbmit-button">Proceed</button>
                </div>
          </form>
@@ -208,9 +212,10 @@
 
 {% block js_section %}
     {{block.super}}
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.all.min.js"></script>
     {% compress js %}
         <script src="{% static 'shinelearn/js/mobile/payment/thank-you.js' %}"></script>
+        <script type="text/javascript" src="{% static "shinelearn/js/common/toast.js" %}"></script>
     {% endcompress %}
 
     {% block johukum %}
