@@ -412,9 +412,8 @@ if(flag){
 
 $("#leadCreationForm").submit(function(e){
 var flag=$('#leadCreationForm').valid();
-getCoptions();
-
 if(flag){
+    getCoptions();
     var form = $(this);
     $.ajax({
          url   : '/lead/lead-management/',
