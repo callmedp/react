@@ -125,7 +125,7 @@ def lead_creation_function(filter_dict=None, cndi_name=None):
             data_dict.update({"extra_info": json.dumps(extra_info)})
 
             #Create resume lead if resume items present in cart
-            if cart_obj.lineitems.exclude(product__type_flow__in=[2,14]):
+            if cart_obj.lineitems.exclude(product__type_flow__in=[2,14,16]):
                 data_dict.update({
                     "campaign_slug": "cartleads",
                     'lead_type': lead_type,
@@ -133,7 +133,7 @@ def lead_creation_function(filter_dict=None, cndi_name=None):
                 # create lead on crm
                 lead_create_on_crm(cart_obj, data_dict=data_dict)
             
-            if not cart_obj.lineitems.filter(product__type_flow__in=[2,14]):
+            if not cart_obj.lineitems.filter(product__type_flow__in=[2,14,16]):
                 return
 
             #Create course lead if course items present in cart

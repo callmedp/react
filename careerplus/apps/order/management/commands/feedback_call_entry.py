@@ -10,11 +10,10 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.conf import settings
 
-
 # import apps module
-from order.models import WelcomeCallOperation,CustomerFeedback,OrderItemFeedback,OrderItemFeedbackOperation
 from order.utils import get_ltv
 from emailers.tasks import send_email_task
+from order.models import WelcomeCallOperation,CustomerFeedback,OrderItemFeedback,OrderItemFeedbackOperation
 
 
 class Command(BaseCommand):
@@ -24,7 +23,7 @@ class Command(BaseCommand):
 def feedback_call_entry():
     start_time = timezone.now()
     start_date = timezone.now() - timedelta(days=7)
-    end_date = timezone.now() - timedelta(days=3)
+    end_date = start_date + timedelta(days=1)
     
     total_feedbacks_created = []
     total_feedbacks_updated = []
@@ -81,8 +80,9 @@ def feedback_call_entry():
             if assigned_to:
                 logging.getLogger("info_log").info(\
                     "Feedback was already assigned {},{}".format(customer_feedback.id,assigned_to))
-                OrderItemFeedbackOperation.create(order_item=order_item,\
+                OrderItemFeedbackOperation.objects.create(order_item=order_item,\
                     customer_feedback=customer_feedback,assigned_to=assigned_to)
+    
     end_time = timezone.now()
     email_dict = {
                 "subject": 'Feedback Call Cron completed',
@@ -92,7 +92,8 @@ def feedback_call_entry():
                 "start_time": start_time,
                 "end_time":end_time,
     }
-    to_emails = ['hitesh.rexwal@hindustantimes.com']
+    to_emails = ['hitesh.rexwal@hindustantimes.com',"animesh.sharma@hindustantimes.com",\
+        "vishal.gupta@hindustantimes.com","vinod@shine.com","purnima.ganguly@shine.com"]
 
     mail_type = 'FEEDBACK_CALL_CRON'
     send_email_task(to_emails,mail_type,email_dict)
