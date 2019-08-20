@@ -20,10 +20,9 @@ config.optimization.runtimeChunk = false;
 const currentTimeStamp = +new Date();
 
 
-
 // JS
 
-config.entry[0]= path.join(__dirname,'..','server/index.js')
+config.entry[0] = path.join(__dirname, '..', 'server/config.js')
 config.output.filename = `../../../careerplus/static_core/react/dist/desktop/server/main.js`;
 // CSS. "5" is MiniCssPlugin
 config.plugins[5].options.filename = `../../../careerplus/static_core/react/dist/desktop/server/main.css`;
@@ -57,5 +56,6 @@ config.module.rules[2]['oneOf'][5]['use'][3]['options'] = {
 
 
 config.externals = [webpackNodeExternals()]
+config.target = 'node'
 
-
+config.module.rules[2]['oneOf'][1]['test'] = /\.jsx$/
