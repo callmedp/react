@@ -81,10 +81,9 @@ class AssessmentLandingPage(TemplateView):
         return breadcrumbs
 
     def get_func_area_ids(self):
-        if cache.get('TestCategory'):
-            pass
-        category_ids = list(set(Test.objects.filter(category__categoryproducts__type_flow=16,category__active=True)\
-            .values_list('category__id', flat=True)))
+        # category_ids = list(set(Test.objects.filter(category__categoryproducts__type_flow=16,category__active=True)\
+        #     .values_list('category__id', flat=True)))
+        category_ids = list(set(Test.objects.exclude(category=None).values_list('category__id',flat=True)))
         return category_ids
 
     def get_test(self):
