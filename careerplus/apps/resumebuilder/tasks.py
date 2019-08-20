@@ -191,7 +191,7 @@ def generate_and_upload_resume_pdf(data):
     from order.models import Order
     from resumebuilder.utils import store_resume_file
     from order.tasks import send_resume_in_mail_resume_builder
-    from order.api_mixin import UploadResumeToShine
+    from core.api_mixin import UploadResumeToShine
     data = json.loads(data)
     order = Order.objects.get(id=data.get('order_id'))
     template_no = data.get('template_no')
@@ -316,8 +316,11 @@ def generate_and_upload_resume_pdf(data):
             'resume_medium': 5,
             'resume_trigger': 7
         }
-
-        response = UploadResumeToShine.sync_candidate_resume_to_shine(candidate_id, pdf_file, info)
+        resume_files = {
+            'resume_file': pdf_file
+        }
+        upload_obj = UploadResumeToShine()
+        response = upload_obj.sync_candidate_resume_to_shine(candidate_id, resume_files, info)
         if response:
             logging.getLogger('info_log').info("RESUME BUILDER: Upload to shine successful.")
             return
