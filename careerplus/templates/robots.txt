@@ -1,3 +1,4 @@
+
 {% if IS_LIVE %}
 User-agent: *
  	
@@ -8,7 +9,6 @@ Disallow: /console/
 Disallow: /dashboard/
 Disallow: /autologin/
 Disallow: /design/
-Disallow: /practice-tests/
 
 
 sitemap: https://learning.shine.com/certification_course_sitemap.xml

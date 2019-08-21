@@ -450,9 +450,11 @@ class EmailLTValueApiView(APIView):
                 {"status": "FAIL", "msg": "Email or User Doesn't Exists"},
                 status=status.HTTP_400_BAD_REQUEST)
 
-        ltv_pks = list(Order.objects.filter(
-            candidate_id=candidate_id,
-            status__in=[1,2,3]).values_list('pk', flat=True))
+        date_one_year_ago = timezone.now() - timedelta(days=365)
+        #Consider only last 1 year's orders for LTV.
+        ltv_pks = list(Order.objects.filter(candidate_id=candidate_id,\
+            status__in=[1,2,3],payment_date__gte=date_one_year_ago).values_list('pk', flat=True))
+        
         if ltv_pks:
             ltv_order_sum = Order.objects.filter(
                 pk__in=ltv_pks).aggregate(ltv_price=Sum('total_incl_tax'))
