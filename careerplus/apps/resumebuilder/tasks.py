@@ -307,7 +307,6 @@ def generate_and_upload_resume_pdf(data):
         send_resume_in_mail_resume_builder(['resume', pdf_file], data)
 
     if template_id == int(candidate.selected_template) and candidate.upload_resume:
-
         info = {
             'candidate_id': candidate_id,
             'upload_medium': 'direct',
@@ -320,7 +319,7 @@ def generate_and_upload_resume_pdf(data):
             'resume_file': pdf_file
         }
         upload_obj = UploadResumeToShine()
-        response = upload_obj.sync_candidate_resume_to_shine(candidate_id, resume_files, info)
+        response = upload_obj.sync_candidate_resume_to_shine(candidate_id=candidate_id,files=resume_files, data=info)
         if response:
             logging.getLogger('info_log').info("RESUME BUILDER: Upload to shine successful.")
             return
