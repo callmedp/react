@@ -430,12 +430,18 @@
         "dateLimit": {
            "month": 2
         },
+        locale: {
+          cancelLabel: 'Clear'
+        },
         autoUpdateInput: false,
       });
     $('#id_due_date').daterangepicker({
         'opens': 'center',
         "dateLimit": {
            "month": 2
+        },
+        locale: {
+          cancelLabel: 'Clear'
         },
         autoUpdateInput: false,
       });
@@ -444,6 +450,14 @@
     });
       $('input[name="due_date"]').on('apply.daterangepicker', function(ev, picker) {
         $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+    });
+    $('input[name="payment_date"]').on('cancel.daterangepicker', function(ev, picker) {
+      //do something, like clearing an input
+      $(this).val('');
+    });
+    $('input[name="due_date"]').on('cancel.daterangepicker', function(ev, picker) {
+      //do something, like clearing an input
+      $(this).val('');
     });
   </script>
   {% compress js %}
