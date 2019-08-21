@@ -318,8 +318,7 @@ def generate_and_upload_resume_pdf(data):
         resume_files = {
             'resume_file': pdf_file
         }
-        upload_obj = UploadResumeToShine()
-        response = upload_obj.sync_candidate_resume_to_shine(candidate_id=candidate_id,files=resume_files, data=info)
+        response = UploadResumeToShine().sync_candidate_resume_to_shine(candidate_id=candidate_id,files=resume_files, data=info)
         if response:
             logging.getLogger('info_log').info("RESUME BUILDER: Upload to shine successful.")
             return
