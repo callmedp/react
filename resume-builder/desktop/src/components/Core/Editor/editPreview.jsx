@@ -61,6 +61,22 @@ class EditPreview extends Component {
                         <LeftSideBar {...this.props}/>
                         <RightSection {...this.props}/>
                     </section>
+                    <div className="sticky-msg">
+                        <span className="pt-20">
+                            <figure>
+                                <i className="icon-thumbsup"></i>
+                                Well Done!
+                            </figure>
+                        </span>
+                        <span>
+                            <strong>Update Resume</strong>
+                            <p>Your resume is ready to help you
+                            search best jobs, update it on your
+                            shine profile</p>
+                            <button className="orange-button">Update</button>
+                        </span>
+                        <i className="icon-close"></i>
+                    </div>
                 </div>
                 <Footer/>
 
