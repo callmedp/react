@@ -202,6 +202,14 @@ class Preview extends Component {
                
                {mainloader ? <Loader/> :""}
 
+               <div class="toss-widget">
+                    <div className="checkbox-wrap">
+                        <input type="checkbox" name="update" id="update" />
+                        <label htmlFor="update">
+                        Update resume on shine profile
+                        </label>
+                    </div>
+                </div>
 
                  <div className="iframe__wrap">
                     <span className="sprite icon--zoom" onClick={this.handleZoomTemplate}></span>
