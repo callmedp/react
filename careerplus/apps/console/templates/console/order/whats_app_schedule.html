@@ -482,19 +482,51 @@
         width: 'auto',
         'delimiter': [','],   // Or a string with a single delimiter. Ex: ';'
     });
+    paste_tage('id_desired_industry')
+
      $('#id_desired_location').tagsInput({
         width: 'auto',
         'delimiter': [','],   // Or a string with a single delimiter. Ex: ';'
     });
-      $('#id_desired_position').tagsInput({
+    paste_tage('id_desired_location')
+
+    $('#id_desired_position').tagsInput({
         width: 'auto',
         'delimiter': [','],   // Or a string with a single delimiter. Ex: ';'
     });
-       $('#id_skills').tagsInput({
+    paste_tage('id_desired_position')
+
+    $('#id_skills').tagsInput({
         width: 'auto',
         'delimiter': [','],   // Or a string with a single delimiter. Ex: ';'
+    });
+    paste_tage('id_skills')
+
+
+    
+
+    function paste_tage(tag_id){
+      $("#"+tag_id+"_tag").on('paste',function(e){
+        var element=this;
+        setTimeout(function () {
+            var text = $(element).val();
+            var target=$("#"+tag_id);
+            var tags = (text).split(/[ ,]+/);
+            for (var i = 0, z = tags.length; i<z; i++) {
+                  var tag = $.trim(tags[i]);
+                  if (!target.tagExist(tag)) {
+                        target.addTag(tag);
+                  }
+                  else
+                  {
+                      $("#"+tag_id+"_tag").val('');
+                  }
+             }
+        }, 0);
     });
 
+
+    }  
     $('.copy-tag').click(function(){
       let elem_id = $(this).attr('data-copy-tag-id');
       let k = $("#"+elem_id).siblings(".tagsinput").children('.tag')
