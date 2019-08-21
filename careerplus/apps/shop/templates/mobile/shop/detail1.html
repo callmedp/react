@@ -741,7 +741,14 @@ function update_test_info(email){
       let country_code = "{{request.session.country_code}}";
       let mobile_no = "{{request.session.mobile_no}}";
       get_create_profile(email, name, country_code, mobile_no)
-
+    {% else %}
+      window.location.href.includes('&iframe')
+      curr_url = window.location.href
+      if(curr_url.includes('?iframe=')||curr_url.includes('&iframe=')){
+        $("#neo-test-form").show();
+        $('#iframe').hide();
+        modal('neo-test-modal','block');
+      }
     {% endif %}
 {% endif %}
 

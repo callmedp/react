@@ -414,6 +414,16 @@ $('iframe').load(function(){
   let mobile_no = "{{request.session.mobile_no}}";
   get_create_profile(email, name, country_code, mobile_no)
 
+{% else %}
+window.location.href.includes('&iframe')
+curr_url = window.location.href
+if(curr_url.includes('?iframe=')||curr_url.includes('&iframe=')){
+  $("#neo-test-form").show();
+  $('#neo-test-modal').modal({
+      backdrop: 'static',
+      keyboard: false
+  });
+}
 {% endif %}
 
 
