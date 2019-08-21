@@ -40,7 +40,7 @@ export default class Preview extends Component {
     }
 
 
-    toggleUploadResume(event) {
+    toggleUploadResume() {
         let {userInfo: {upload_resume: uploadResume}, userInfo, updateSelectedTemplate} = this.props;
         userInfo['upload_resume'] = !uploadResume;
         updateSelectedTemplate(userInfo);

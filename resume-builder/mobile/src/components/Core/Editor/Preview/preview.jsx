@@ -48,6 +48,7 @@ class Preview extends Component {
         this.getResume = this.getResume.bind(this);
         this.themeChange = this.themeChange.bind(this);
         this.fontChange = this.fontChange.bind(this);
+        this.toggleUploadResume = this.toggleUploadResume.bind(this);
     }
 
     componentWillUpdate(prevProps){
@@ -79,6 +80,13 @@ class Preview extends Component {
         if(reorderFailToast !== prevProps.template.reorderFailToast){
             this.showReorderErrorToast()
         }
+    }
+
+
+    toggleUploadResume(event) {
+        let {personalInfo: {upload_resume: uploadResume}, personalInfo, updateSelectedTemplate} = this.props;
+        personalInfo['upload_resume'] = !uploadResume;
+        updateSelectedTemplate(personalInfo);
     }
 
     showReorderErrorToast(){
@@ -193,7 +201,7 @@ class Preview extends Component {
 
     render(){
         const {customize,currentTab,selectedColor,headingFontSize,textFontSize,sectionEntityName,startingReorderUpDowmIndex,zoomIn} = this.state
-        const {template:{html,zoomInHtml,entity_position,entity_id_count_mapping},ui:{mainloader,alertModalStatus,generateResumeModal},personalInfo:{selected_template,order_data},history,eventClicked} = this.props
+        const {template:{html,zoomInHtml,entity_position,entity_id_count_mapping},ui:{mainloader,alertModalStatus,generateResumeModal},personalInfo:{selected_template,order_data, upload_resume: uploadResume},history,eventClicked} = this.props
         return(
             <div className="preview">
                <Header page={'preview'} {...this.props} order_data={order_data} eventClicked={eventClicked} />
@@ -204,7 +212,7 @@ class Preview extends Component {
 
                <div class="toss-widget">
                     <div className="checkbox-wrap">
-                        <input type="checkbox" name="update" id="update" />
+                        <input type="checkbox" name="update" id="update"  onClick={this.toggleUploadResume} defaultChecked={uploadResume}/>
                         <label htmlFor="update">
                         Update resume on shine profile
                         </label>
