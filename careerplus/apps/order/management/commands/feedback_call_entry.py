@@ -80,7 +80,7 @@ def feedback_call_entry():
             if assigned_to:
                 logging.getLogger("info_log").info(\
                     "Feedback was already assigned {},{}".format(customer_feedback.id,assigned_to))
-                OrderItemFeedbackOperation.create(order_item=order_item,\
+                OrderItemFeedbackOperation.objects.create(order_item=order_item,\
                     customer_feedback=customer_feedback,assigned_to=assigned_to)
     
     end_time = timezone.now()

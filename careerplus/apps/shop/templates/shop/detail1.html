@@ -134,6 +134,92 @@ $(document).ready(function() {
 {% if prd_vendor_slug == 'neo' %}
 
 <script>
+  $(document).on('click', '#id_callback_neo', function() {
+    $('#callback_form').validate({
+      rules:{
+        name:{
+            maxlength: 80,
+        },
+        number:{
+            required: true,
+            number: true,
+            indiaMobile: true,
+            // minlength: 4,
+            maxlength: 10
+        },
+        msg:{
+          required: true,
+          maxlength: 500,
+        },
+        email:{
+          required: true,
+          maxlength: 100,
+          email: true,
+        }
+      },
+      messages:{
+        name:{
+          required: "Name is Mandatory.",
+          maxlength: "Maximum 80 characters.",
+        },
+        email:{
+          required: "Email is Mandatory.",
+          maxlength: "Please enter at most 100 characters.",
+          email: "Please enter valid email"
+        },
+        number:{
+          required: "Mobile Number is Mandatory",
+          number: "Enter only number",
+          indiaMobile: "Please enter 10 digits only",
+          maxlength: "Please enter 10 digits",
+          // minlength: "Please enter atleast 4 digits"
+        },
+      },
+      highlight:function(element, errorClass) {
+          $(element).closest('.form-group').addClass('error');
+      },
+      unhighlight:function(element, errorClass) {
+          $(element).closest('.form-group').removeClass('error');
+          $(element).siblings('.error-txt').html('');
+      },
+      errorPlacement: function(error, element){
+          $(element).siblings('.error-txt').html(error.text());
+      },
+      ignore : '',
+      submitHandler: function(form){
+        // ga code
+        var path = window.location.pathname,
+            action = '';
+        if (path.indexOf('/course/') > -1) {
+          action = 'Course Enquiry';
+        } else if (path.indexOf('/services/') > -1) {
+          action = 'Service Enquiry';
+        }
+        MyGA.SendEvent('QueryForm', 'Form Interactions', action, 'success');
+        //form.submit();
+        var formData = $(form).serialize();
+        $.ajax({
+          url : "/lead/lead-management/",
+          type: "POST",
+          data : formData,
+          success: function(data, textStatus, jqXHR)
+          {
+            
+          },
+          error: function (jqXHR, textStatus, errorThrown)
+          {
+            alert('Oops Some error has occured. Kindly try again later.');
+            $("#detailpage").modal('toggle');
+            form.reset();
+          }
+        });
+      }
+    });
+
+    var flag = $('#callback_form').valid();
+    if (flag){
+      $('#callback_form').submit();}
+  });
   function load_test(email, name, country_code, mobile_no){
       global_email = email
       var iframe = document.getElementById('iframe'),
@@ -174,6 +260,8 @@ function getCookie(name) {
   return cookieValue;
 }
 function get_create_profile(email, name, country_code, mobile) {
+
+
     var data = {
         'email': email,
         'mobile_no': country_code + mobile ,
@@ -298,6 +386,11 @@ jQuery.validator.addMethod("customEmail", function(value, element) {
           country_code = values['country_code'];
           mobile_no = values['mobile'];
           get_create_profile(email, name, country_code, mobile_no);
+          $('#callback_form').find('input[name="name"]').val(name)
+          $('#callback_form').find('input[name="email"]').val(email)
+          $('#callback_form').find('input[name="number"]').val(mobile_no)
+          $('#id_callback_neo').trigger('click')
+
       },
       rules:{
           mobile:{
@@ -398,6 +491,13 @@ $('iframe').load(function(){
     $(doc).on('click', '#neoStartButton', function() {
     setTimeout(function(){
         check_if_user_exists_for_another_vendor(global_email)
+        {% if request.session.candidate_id %}
+        $('#callback_form').find('input[name="name"]').val(global_name)
+        $('#callback_form').find('input[name="email"]').val(global_email)
+        $('#callback_form').find('input[name="number"]').val(global_mobile_no)
+        $('#id_callback_neo').trigger('click')
+        {% endif %}
+
     }, 1000) 
 
     });
@@ -412,6 +512,8 @@ $('iframe').load(function(){
   let name = "{{request.session.full_name}}";
   let country_code = "{{request.session.country_code}}";
   let mobile_no = "{{request.session.mobile_no}}";
+  var global_name = "{{request.session.full_name}}";
+  var global_mobile_no = "{{request.session.mobile_no}}";
   get_create_profile(email, name, country_code, mobile_no)
 
 {% else %}
