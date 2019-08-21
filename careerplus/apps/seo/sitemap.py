@@ -183,7 +183,7 @@ class PracticeTestExamSitemap(CustomSitemap):
         return "/practice-tests/{}-test/".format(obj.slug)
 
     def priority(self, item):
-        return 0.7
+        return 0.6
 
     def items(self):
         return Test.objects.all()
