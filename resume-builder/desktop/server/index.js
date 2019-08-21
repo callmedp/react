@@ -14,7 +14,7 @@ const app = express();
 app.use('/dist',express.static('dist'));
 
 app.get('*', (req, res) => {
-  const content = render(req.path, store, context);
+  const content = render(req.path, store, {});
   res.send(content);
 });
 //

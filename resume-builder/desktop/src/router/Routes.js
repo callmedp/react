@@ -1,5 +1,5 @@
-import Countries from "../components/Countries/index.jsx";
-import Country from "../components/Country/index.jsx";
+import Countries from "../components/Countries/index.js";
+import Country from "../components/Country/index.js";
 
 
 export default [
