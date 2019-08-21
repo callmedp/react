@@ -2909,6 +2909,15 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
     permission_to_check = ['Can view assigned jobs on the move', 'Can assign jobs on the move',
                            'Can send assigned jobs on the move']
     any_permission = True
+    filter_query_mapping = {
+        '23': Q(oi_status=23),
+        '31': Q(oi_status=31),
+        '32': Q(oi_status=32),
+        '33': Q(oi_status=31, save_link__gt=0),
+        '34': Q(assigned_to=None),
+        '35': Q(whatsapp_profile_orderitem__onboard=False),
+        '4':  Q(oi_status=4)
+    }
 
     def __init__(self):
         self.page = 1
@@ -2920,10 +2929,11 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '').strip()
-        self.oi_status = request.GET.get('oi_status', '-1').strip()
+        self.oi_status = request.GET.getlist('oi_status', [])
         self.day_choice = request.GET.get('day_choice', '-1').strip()
         self.sel_opt = request.GET.get('rad_search', 'number')
         self.payment_date = self.request.GET.get('payment_date', '')
+        self.due_date = self.request.GET.get('due_date', '')
         self.sort_payment_date = self.request.GET.get('sort_payment_date', '0')
         return super(WhatsappListQueueView, self).get(request, args, **kwargs)
 
@@ -2933,12 +2943,12 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
         context.update(self.pagination(paginator, self.page))
         var = self.sel_opt
         alert = messages.get_messages(self.request)
-        initial = {"oi_status": self.oi_status, "day_choice": self.day_choice}
+        initial = {"day_choice": self.day_choice}
 
         filter_form = OIFilterForm(initial, queue_name='queue-whatsappjoblist')
         context.update({"assignment_form": AssignmentActionForm(), "messages": alert, "query": self.query,
             "message_form": MessageForm(), "filter_form": filter_form,
-            "action_form": OIActionForm(queue_name="queue-whatsappjoblist"), var: 'checked'})
+            "action_form": OIActionForm(queue_name="queue-whatsappjoblist"), var: 'checked', 'oi_status_val': self.oi_status})
 
         return context
 
@@ -2993,24 +3003,16 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
                 output_field=IntegerField()
             ))
         )
-        if int(self.oi_status) != -1:
-            if int(self.oi_status) == 33:
-                queryset = queryset.filter(
-                    oi_status=31, save_link__gt=0
-                )
-            elif int(self.oi_status) == 31:
-                queryset = queryset.filter(
-                    oi_status=31, save_link=0
-                )
-            elif int(self.oi_status) == 34:
-                queryset = queryset.filter(assigned_to=None)
-            elif int(self.oi_status) == 35:
-                queryset = queryset.filter(whatsapp_profile_orderitem__onboard=False)
-            else:
-                queryset = queryset.filter(
-                    oi_status=self.oi_status,
-                    whatsapp_profile_orderitem__onboard=True
-                )
+
+        new_query = Q()
+        if self.oi_status:
+            query = [self.filter_query_mapping.get(k) for k in self.oi_status if self.filter_query_mapping.get(k, None)]
+            for q in query:
+                new_query &= q
+            print(new_query)
+            queryset = queryset.filter(
+                new_query
+            )
 
         if self.payment_date:
             start_date, end_date = self.payment_date.split(' - ')
@@ -3018,6 +3020,13 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
             end_date = datetime.datetime.strptime(end_date, "%m/%d/%Y")
             end_date = end_date + relativedelta.relativedelta(days=1)
             queryset = queryset.filter(order__payment_date__range=[start_date, end_date])
+
+        if self.due_date:
+            start_date, end_date = self.due_date.split(' - ')
+            start_date = datetime.datetime.strptime(start_date, "%m/%d/%Y")
+            end_date = datetime.datetime.strptime(end_date, "%m/%d/%Y")
+            end_date = end_date + relativedelta.relativedelta(days=1)
+            queryset = queryset.filter(whatsapp_profile_orderitem__due_date__range=[start_date, end_date])
 
         # data for whats app links:
         queryset = queryset.annotate(
@@ -3033,21 +3042,37 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
         )
         if int(self.day_choice) != -1:
             q_objects = Q()
+            today_date_start = datetime.datetime(
+                day=timezone.now().day,
+                month=timezone.now().month,
+                year=timezone.now().year
+            )
+            tomorrow_date_start = today_date_start + relativedelta.relativedelta(days=1)
+
             if int(self.day_choice) == 1:
-                today = timezone.now()
-                date_list = [(today - relativedelta.relativedelta(days=i * 7)).date() for i in range(1,52) ]
-                for d in date_list:
-                    q_objects |= Q(orderitemoperation__oi_status=1, orderitemoperation__created__range=[d, d + relativedelta.relativedelta(days=1)])
+                queryset = queryset.filter(
+                    whatsapp_profile_orderitem__due_date__gt=today_date_start,
+                    whatsapp_profile_orderitem__due_date__lt=tomorrow_date_start,
+                    pending_links_count__gt=0)
             elif int(self.day_choice) == 2:
-                tommorrow = timezone.now() + relativedelta.relativedelta(days=1)
-                date_list = [(tommorrow - relativedelta.relativedelta(days=i * 7)).date() for i in range(0,52) ]
-                for d in date_list:
-                    q_objects |= Q(orderitemoperation__oi_status=1, orderitemoperation__created__range=[d, d + relativedelta.relativedelta(days=1)])
+                queryset = queryset.filter(
+                    whatsapp_profile_orderitem__due_date__lt=today_date_start,
+                    pending_links_count__gt=0
+                )
+            elif int(self.day_choice) == 3:
+                queryset = queryset.filter(whatsapp_profile_orderitem__due_date__gt=tomorrow_date_start,
+                    whatsapp_profile_orderitem__due_date__lt=tomorrow_date_start + relativedelta.relativedelta(days=1),
+                    pending_links_count__gt=0
+                )
             queryset = queryset.filter(q_objects)
         if self.sort_payment_date and int(self.sort_payment_date):
-            queryset = queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-order__payment_date')
+            queryset = queryset.select_related(
+                'order', 'product', 'assigned_to', 'assigned_by'
+            ).order_by('-order__payment_date')
         else:
-            queryset = queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-pending_links_count')
+            queryset = queryset.select_related(
+                'order', 'product', 'assigned_to', 'assigned_by'
+            ).order_by('-pending_links_count')
 
         return queryset
 
@@ -3383,6 +3408,7 @@ class WhatsAppScheduleView(UserPermissionMixin, DetailView, PaginationMixin):
                             last_oi_status = obj.oi_status
                             obj.oi_status = 32
                             obj.save()
+                            obj.set_due_date()
                             obj.orderitemoperation_set.create(
                                 oi_status=obj.oi_status,
                                 last_oi_status=last_oi_status,
@@ -3390,6 +3416,7 @@ class WhatsAppScheduleView(UserPermissionMixin, DetailView, PaginationMixin):
                                 added_by=request.user
                             )
                     obj.update_pending_links_count()
+                    obj.refresh_from_db()
                     context = self.get_context_data()
                     messages.success(self.request, "Job Link marked as Sent")
                 elif action_type == 4:

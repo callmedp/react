@@ -63,11 +63,13 @@ from .choices import (
     SHINE_FLOW_ACTION,
     convert_to_month,
     LINK_STATUS_CHOICES,
+    DAYS_CHOICES,
     convert_inr,
     convert_usd,
     convert_aed,
     convert_gbp)
 from search.choices import EXP_DICT
+
 
 class ProductClass(AbstractAutoDate, AbstractSEO,):
     name = models.CharField(
@@ -3205,7 +3207,12 @@ class ProductUserProfile(AbstractAutoDate):
     skills = models.CharField(max_length=300, blank=True, null=True)
     approved = models.BooleanField(default=False)
     onboard = models.BooleanField(default=False)
-
+    due_date = models.DateTimeField(
+        _('Due Date'), blank=True, null=True)
+    day_of_week = models.PositiveSmallIntegerField(
+        null=True, blank=True,
+        choices=DAYS_CHOICES
+    )
     def save(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super(ProductUserProfile, self).save(*args, **kwargs)
@@ -3302,4 +3309,5 @@ class PracticeTestInfo(AbstractAutoDate):
             if status.lower() == 'done':
                 return True
         return False
+
 

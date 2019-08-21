@@ -115,6 +115,9 @@
             <input type="hidden" name="product" value="{{product.pk}}">
             <input type="hidden" name="prd" value="{{product.heading}}">
             <input type="hidden" name="path" value="{{product.get_absolute_url}}">
+            {% if prd_vendor_slug == "neo" %}
+               <input type="hidden" name="campaign" value="neo">
+            {% endif %}
 
           </form>
           <button type="button" {% if prd_vendor_slug == "neo" %} id="id_callback_neo"  {% else %}id="id_callback" {% endif %}class="callback-button mt-10">Request a call back</button>

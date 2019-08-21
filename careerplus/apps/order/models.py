@@ -37,7 +37,8 @@ from order.utils import get_ltv
 
 #third party imports
 from payment.utils import manually_generate_autologin_url
-from shop.choices import S_ATTR_DICT
+from shop.choices import S_ATTR_DICT, DAYS_CHOICES_DICT
+
 
 #Global Constants
 CURRENCY_SYMBOL_CODE_MAPPING = {0:"INR",1:"USD",2:"AED",3:"GBP"}
@@ -636,9 +637,22 @@ class OrderItem(AbstractAutoDate):
         sent = cache.get('neo_mail_sent_{}'.format(self.id))
         return sent
 
+
+    def get_due_date(self):
+        profile = getattr(self, 'whatsapp_profile_orderitem', None)
+        if profile and profile.due_date:
+            return profile.due_date.strftime('%d-%m-%Y')
+        return 'N.A'
+
+    def get_due_date_weekday(self):
+        profile = getattr(self, 'whatsapp_profile_orderitem', None)
+        if profile and profile.due_date:
+            return DAYS_CHOICES_DICT.get(profile.due_date.weekday())
+        return 'N.A'
+
     def get_weeks(self):
         weeks, weeks_till_now = None, None
-        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5, 23]).order_by('id').first()
+        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5, 23, 31]).order_by('id').first()
         if sevice_started_op:
             started = sevice_started_op.created
             day = self.product.get_duration_in_day()
@@ -653,7 +667,7 @@ class OrderItem(AbstractAutoDate):
     def get_links_needed_till_now(self):
         start, end = None, None
         links_count = 0
-        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5,23]).order_by('id').first()
+        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5,23, 31]).order_by('id').first()
         links_per_week = getattr(self.product.attr, S_ATTR_DICT.get('LC'), 2)
         if sevice_started_op:
             links_count = 0
@@ -668,6 +682,7 @@ class OrderItem(AbstractAutoDate):
                 links_count += links_per_week
         return links_count
 
+
     def has_saved_links(self):
         saved_links = self.jobs_link.filter(status=0)
         return saved_links.count()
@@ -681,7 +696,7 @@ class OrderItem(AbstractAutoDate):
         return None
 
     def get_sent_link_count_for_current_week(self):
-        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5,23]).order_by('id').first()
+        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5,23, 31]).order_by('id').first()
         started = sevice_started_op.created
         day = self.product.get_duration_in_day()
         weeks = math.floor(day / 7)
@@ -706,6 +721,26 @@ class OrderItem(AbstractAutoDate):
             links_pending = 0
         self.pending_links_count = links_pending
         self.save()
+
+    def set_due_date(self):
+        today = timezone.now()
+        profile = getattr(self, 'whatsapp_profile_orderitem', None)
+
+        if profile:
+            if profile.due_date and profile.due_date > today:
+                profile.due_date = profile.due_date + relativedelta.relativedelta(days=7)
+                profile.save()
+            else:
+                day_of_week = profile.day_of_week
+                if today.weekday() == day_of_week:
+                    profile.due_date = today + relativedelta.relativedelta(days=7)
+                elif today.weekday() > day_of_week:
+                    profile.due_date = today +\
+                        relativedelta.relativedelta(days=7 - (today.weekday() - day_of_week))
+                elif today.weekday() < day_of_week:
+                    profile.due_date = today +\
+                        relativedelta.relativedelta(days=(day_of_week - today.weekday()))
+                profile.save()
 
     def get_oi_communications(self):
         communications = self.message_set.all().select_related('added_by')
