@@ -22,7 +22,7 @@ from .choices import STATUS_CHOICES, SITE_CHOICES,\
     PAYMENT_MODE, OI_OPS_STATUS, OI_LINKEDIN_FLOW_STATUS,\
     OI_USER_STATUS, OI_EMAIL_STATUS, REFUND_MODE, REFUND_OPS_STATUS,\
     TYPE_REFUND, OI_SMS_STATUS, WC_CATEGORY, WC_SUB_CATEGORY,\
-    WC_FLOW_STATUS
+    WC_FLOW_STATUS, OI_OPS_TRANSFORMATION_DICT
 
 from .functions import get_upload_path_order_invoice, process_application_highlighter
 from .tasks import generate_resume_for_order, board_user_on_neo
@@ -909,6 +909,8 @@ class OrderItemOperation(AbstractAutoDate):
 
     @property
     def get_oi_status(self):
+        if self.oi_status in [28, 29, 30]:
+            return self.oi_status_transform()
         dict_status = dict(OI_OPS_STATUS)
         return dict_status.get(self.oi_status)
 
@@ -916,6 +918,16 @@ class OrderItemOperation(AbstractAutoDate):
     def get_user_oi_status(self):
         dict_status = dict(OI_USER_STATUS)
         return dict_status.get(self.oi_status)
+
+    def oi_status_transform(self):
+        key = int(str(self.oi_status) + str(self.oi.product.sub_type_flow))
+        val = OI_OPS_TRANSFORMATION_DICT.get(key, '')
+        if val:
+            return val
+        else:
+            dict_status = dict(OI_OPS_STATUS)
+            return dict_status.get(self.oi_status)
+
 
 
 
