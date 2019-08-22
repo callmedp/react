@@ -305,7 +305,7 @@ function check_for_load_test(data){
         let description = 'Share your neo tag '
         url = window.location.href + "?title="+title + "&description=" + description + "&level=" + data['cefr_level']
         url = encodeURI(url);
-        $("#id_share").attr('href', url)
+        $("#id_share").attr('data-href', url)
         $("#cefr_level_box").show()
         $("#row_neo").remove()
       }
@@ -513,7 +513,7 @@ $('iframe').load(function(){
 });
 
 $("#id_share").click(function(){
-  url = $("#id_share").attr('href')
+  url = $("#id_share").attr('data-href')
   FB.ui({
     method: 'share',
     href: url,
