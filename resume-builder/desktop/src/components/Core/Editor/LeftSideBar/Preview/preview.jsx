@@ -616,7 +616,7 @@ export default class Preview extends Component {
                     </div>
                 </Accordion>
                 <div className={"upload-resume-section"}>
-                    <input type="checkbox" className={"upload-resume-checkbox"} defaultChecked={uploadResume}
+                    <input type="checkbox" className={"upload-resume-checkbox"} checked={uploadResume}
                            onClick={this.toggleUploadResume} name={"uploadResumeOnShine"}/>
                     <span className="upload-resume">Upload resume on Shine</span>
                 </div>

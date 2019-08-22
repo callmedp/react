@@ -27,8 +27,17 @@ import {
 } from '../../../store/ui/actions/index'
 import moment from 'moment'
 import {locationRouteChange, eventClicked} from '../../../store/googleAnalytics/actions/index'
+import queryString from "query-string";
 
 class EditPreview extends Component {
+    constructor(props) {
+        super(props);
+        this.removeNote = this.removeNote.bind(this);
+        this.allowUploadResume = this.allowUploadResume.bind(this);
+        this.state={
+            visibleNote: true
+        }
+    }
 
     async componentDidMount() {
         const {analytics: {locationPath}, fetchEntityInfo, history: {location: {pathname}}, locationRouteChange, loginCandidate} = this.props
@@ -41,8 +50,23 @@ class EditPreview extends Component {
         }
     }
 
+    removeNote() {
+        localStorage.setItem('showNote', 'false')
+        this.setState({
+            visibleNote: false
+        })
+    }
+
+    allowUploadResume() {
+        let {userInfo: {upload_resume: uploadResume}, userInfo, updateSelectedTemplate} = this.props;
+        userInfo['upload_resume'] = !uploadResume
+        updateSelectedTemplate(userInfo)
+    }
+
     render() {
-        const {ui: {loader}, userInfo: {first_name, last_name, number, email}} = this.props;
+        const {ui: {loader}, userInfo: {first_name, last_name, number, email, upload_resume: uploadResume}, history: {location: {pathname}}} = this.props;
+        const showNote = localStorage.getItem('showNote') || '';
+        const {visibleNote} = this.state;
         return (
             <div>
                 {
@@ -61,22 +85,25 @@ class EditPreview extends Component {
                         <LeftSideBar {...this.props}/>
                         <RightSection {...this.props}/>
                     </section>
-                    <div className="sticky-msg">
+                    {
+                        pathname === '/resume-builder/preview/' && !!(!uploadResume) && !!(!showNote.length) && !!(visibleNote) &&
+                        <div className="sticky-msg">
                         <span className="pt-20">
                             <figure>
                                 <i className="icon-thumbsup"></i>
                                 Well Done!
                             </figure>
                         </span>
-                        <span>
+                            <span>
                             <strong>Update Resume</strong>
                             <p>Your resume is ready to help you
                             search best jobs, update it on your
                             shine profile</p>
-                            <button className="orange-button">Update</button>
+                            <button className="orange-button" onClick={this.allowUploadResume}>Update</button>
                         </span>
-                        <i className="icon-close"></i>
-                    </div>
+                            <i className="icon-close" onClick={this.removeNote}></i>
+                        </div>
+                    }
                 </div>
                 <Footer/>
 
