@@ -301,6 +301,11 @@ function check_for_load_test(data){
        
         $('#neo-test-modal').modal('hide')
         $("#cefr_level").text(data['cefr_level'])
+        let title = 'Congrats, You are ' + data['cefr_level']
+        let description = 'Share your neo tag '
+        url = window.location.href + "?title="+title + "&description=" + description + "&level=" + data['cefr_level']
+        url = encodeURI(url);
+        $("#id_share").attr('href', url)
         $("#cefr_level_box").show()
         $("#row_neo").remove()
       }
@@ -506,6 +511,15 @@ $('iframe').load(function(){
       $('#add-to-cart').trigger('click');
     })
 });
+
+$("#id_share").click(function(){
+  url = $("#id_share").attr('href')
+  FB.ui({
+    method: 'share',
+    href: url,
+  }, function(response){});
+})
+
 
 {% if request.session.candidate_id %}
   let email = "{{ request.session.email }}";
