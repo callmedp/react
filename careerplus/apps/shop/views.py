@@ -762,9 +762,9 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             useragent = request.META['HTTP_USER_AGENT']
             if'facebookexternalhit' in useragent:
 
-                title = unquote(request.GET.get('title'))
-                description = unquote(request.GET.get('description'))
-                level = request.GET.get('level', 0)
+                title = unquote(request.GET.get('title', ''))
+                description = unquote(request.GET.get('description', ''))
+                level = request.GET.get('level', 'Starter')
                 img = NEO_LEVEL_OG_IMAGES.get(level)
                 curr_url = '{}://{}{}'.format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN, request.get_full_path())
                 setattr(ctx['meta'], 'og_description', description)
