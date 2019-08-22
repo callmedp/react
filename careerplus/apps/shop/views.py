@@ -51,7 +51,7 @@ from .mixins import (CourseCatalogueMixin, \
 from users.forms import (
     ModalLoginApiForm
 )
-from shop.choices import APPLICATION_PROCESS, BENEFITS
+from shop.choices import APPLICATION_PROCESS, BENEFITS, NEO_LEVEL_OG_IMAGES
 from review.forms import ReviewForm
 from .models import Skill
 from homepage.config import UNIVERSITY_COURSE
@@ -656,6 +656,8 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             product_detail_content = render_to_string(
                 'shop/product-detail.html', product_data,
                 request=self.request)
+        ctx.update(self.get_og_meta_tag(self.request))
+
         ctx.update({
             'product_detail': product_detail_content,
             "ggn_contact_full": settings.GGN_CONTACT_FULL,
@@ -663,9 +665,6 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         })
         ctx.update(product_data)
         return ctx
-
-
-
         # pk = self.kwargs.get('pk')
         # product = self.product_obj
         # ctx['product'] = product
@@ -755,6 +754,26 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         #     navigation = False
         # ctx['navigation'] = navigation
         # return ctx
+
+    def get_og_meta_tag(self, request):
+        useragent = request.META['HTTP_USER_AGENT']
+        if'facebookexternalhit' in useragent:
+            title = request.GET.get('title')
+            description = request.GET.get('description')
+            level = request.GET.get('level', 0)
+            img = NEO_LEVEL_OG_IMAGES.get(level)
+            og_dict = {
+                'og_tag': True,
+                'neo_sharing_title': 'Hey This is title',
+                'neo_sharing_description': 'Hey this is description',
+                'neo_sharing_img': img
+            }
+            print(og_dict)
+            return og_dict
+        # email = request.GET.get('email', '')
+        # pt = PracticeTestInfo.objects.filter(order_item=None).order_by('-id').first()
+        return {}
+
 
     def redirect_if_necessary(self, current_path, product):
         if self._enforce_paths:

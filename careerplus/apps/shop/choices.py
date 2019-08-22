@@ -290,3 +290,7 @@ LINK_STATUS_CHOICES = (
     (0, 'Save'),
     (2, 'Sent'),
 )
+NEO_LEVEL_OG_IMAGES = {
+    '0': 'neo_b1.jpg',
+    '1': 'article-listing5.jpg'
+}
