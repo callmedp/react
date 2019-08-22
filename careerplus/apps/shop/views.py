@@ -765,10 +765,11 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                 description = request.GET.get('description')
                 level = request.GET.get('level', 0)
                 img = NEO_LEVEL_OG_IMAGES.get(level)
-                ctx['og_tag'] = True
+                curr_url = settings.SITE_PROTOCOL +'://' +   settings.SITE_DOMAIN +  request.get_full_path()
                 setattr(ctx['meta'], 'og_description', description)
                 setattr(ctx['meta'], 'title', title)
                 setattr(ctx['meta'], 'image', img)
+                setattr(ctx['meta'], '_url', + curr_url)
         return ctx
 
 
