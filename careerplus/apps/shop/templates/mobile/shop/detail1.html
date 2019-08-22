@@ -174,9 +174,9 @@
                 <h2 class="mb-0" id="cefr_level"></h2>
                 <p class="pb-0">Your CEFR level </p>
             </div>
-            <a href="#" class="neo-level--share">
-+                <i class="icon-share-social"></i>
-+            </a>
+            <div href="#" id="id_share" class="neo-level--share">
+                <i class="icon-share-social"></i>
+            </div>
 
         </div><!-- Your Level ends here -->
 
@@ -694,6 +694,15 @@ function check_for_load_test(data){
         $("#neo-enroll-button").attr("data-neotest", '0')
         $("#neo-enroll-button").attr('id', 'add-to-cart')
         $("#cefr_level").text(data['cefr_level'])
+        let title = 'Congrats, You are ' + data['cefr_level']
+        let description = 'Share your neo tag '
+        let url = window.location.href + "?title=" + title + "&description=" + description + "&level=" + data['cefr_level']
+        
+        var attr = $("#id_share").attr('data-href');
+
+        if (attr == undefined) {
+            $("#id_share").attr('data-href', encodeURI(url))
+        }
         $("#cefr_level_box").show()
         $("#row_neo").remove()
         modal('neo-test-modal','none');
@@ -882,6 +891,15 @@ $('iframe').load(function(){
       $('#add-to-cart').trigger('click');
     })
 });
+
+$("#id_share").click(function(){
+
+  let url = $("#id_share").attr('data-href')
+  FB.ui({
+    method: 'share',
+    href: url,
+  }, function(response){});
+})
 
 function check_if_user_exists_for_another_vendor(email) {
     $.ajaxSetup({
