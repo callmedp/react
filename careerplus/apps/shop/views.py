@@ -481,7 +481,8 @@ class ProductInformationMixin(object):
     def get_product_detail_context(self, product, sqs, product_main, sqs_main):
         main_ctx = {}
         key = "context_product_detail_"+ str(product.pk)
-        if cache.get(key):
+        useragent = self.request.META['HTTP_USER_AGENT']
+        if cache.get(key) and 'facebookexternalhit' not in useragent:
             main_ctx.update(cache.get(key))
         else:
             data = self.get_product_information(product, sqs, product_main, sqs_main)
