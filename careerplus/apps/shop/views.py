@@ -3,7 +3,7 @@ import logging
 
 from collections import OrderedDict
 from decimal import Decimal
-
+from urllib.parse import unquote
 from django.core.paginator import Paginator
 from django.http import (
     Http404,
@@ -761,8 +761,9 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         if ctx['prd_vendor_slug'] == 'neo':
             useragent = request.META['HTTP_USER_AGENT']
             if'facebookexternalhit' in useragent:
-                title = request.GET.get('title')
-                description = request.GET.get('description')
+
+                title = unquote(request.GET.get('title'))
+                description = unquote(request.GET.get('description'))
                 level = request.GET.get('level', 0)
                 img = NEO_LEVEL_OG_IMAGES.get(level)
                 curr_url = '{}://{}{}'.format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN, request.get_full_path())
