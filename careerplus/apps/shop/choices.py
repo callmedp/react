@@ -291,6 +291,6 @@ LINK_STATUS_CHOICES = (
     (2, 'Sent'),
 )
 NEO_LEVEL_OG_IMAGES = {
-    '0': 'neo_b1.jpg',
-    '1': 'article-listing5.jpg'
+    '0': 'shinelearn/images/neo_b1.jpg',
+    '1': 'shinelearn/images/article-listing5.jpg'
 }
