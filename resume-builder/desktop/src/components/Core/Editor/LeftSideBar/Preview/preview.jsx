@@ -41,9 +41,7 @@ export default class Preview extends Component {
 
 
     toggleUploadResume() {
-        let {userInfo: {upload_resume: uploadResume}, userInfo, updateSelectedTemplate} = this.props;
-        userInfo['upload_resume'] = !uploadResume;
-        updateSelectedTemplate(userInfo);
+        this.props.onChange({})
     }
 
     handleCustomization(data, color) {
@@ -87,7 +85,7 @@ export default class Preview extends Component {
 
     static getDerivedStateFromProps(nextProp, prevState) {
 
-        const {template: {color, heading_font_size, text_font_size}, userInfo: {upload_resume: uploadResume}} = nextProp;
+        const {template: {color, heading_font_size, text_font_size}} = nextProp;
         let obj = prevState;
 
         if (color !== prevState['selectedColor']) {
@@ -387,7 +385,7 @@ export default class Preview extends Component {
 
 
     render() {
-        const {userInfo: {selected_template, upload_resume: uploadResume}, template: {entity_position, entity_id_count_mapping}} = this.props;
+        const {userInfo: {selected_template, upload_resume}, template: {entity_position, entity_id_count_mapping}} = this.props;
         const {currentTab, selectedColor, activeSection, sectionEntityName, selectedEntity} = this.state;
         const [currentEntity] = this.getEntityName(entity_position, activeSection);
 
@@ -616,8 +614,8 @@ export default class Preview extends Component {
                     </div>
                 </Accordion>
                 <div className={"upload-resume-section"}>
-                    <input type="checkbox" className={"upload-resume-checkbox"} checked={uploadResume}
-                           onClick={this.toggleUploadResume} name={"uploadResumeOnShine"}/>
+                    <input type="checkbox" className={"upload-resume-checkbox"}  checked={upload_resume|| false}
+                           onChange={this.toggleUploadResume} />
                     <span className="upload-resume">Upload resume on Shine</span>
                 </div>
                 < button

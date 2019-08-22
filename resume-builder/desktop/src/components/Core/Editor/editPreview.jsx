@@ -79,10 +79,10 @@ class EditPreview extends Component {
                     number={number}
                     email={email}/>
                 <div className="page-container">
-                    <SelectTemplateModal {...this.props} page={'edit'}/>
+                    <SelectTemplateModal {...this.props}  page={'edit'}/>
                     <TopBar {...this.props}/>
                     <section className={'flex-container mt-30'}>
-                        <LeftSideBar {...this.props}/>
+                        <LeftSideBar {...this.props} onChange={this.allowUploadResume}/>
                         <RightSection {...this.props}/>
                     </section>
                     {
