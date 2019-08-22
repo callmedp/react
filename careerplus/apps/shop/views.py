@@ -656,14 +656,15 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             product_detail_content = render_to_string(
                 'shop/product-detail.html', product_data,
                 request=self.request)
-        ctx.update(self.get_og_meta_tag(self.request))
 
         ctx.update({
             'product_detail': product_detail_content,
             "ggn_contact_full": settings.GGN_CONTACT_FULL,
             "ggn_contact": settings.GGN_CONTACT,
         })
+
         ctx.update(product_data)
+        ctx = self.update_og_meta_tag(self.request, ctx)
         return ctx
         # pk = self.kwargs.get('pk')
         # product = self.product_obj
@@ -755,24 +756,19 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         # ctx['navigation'] = navigation
         # return ctx
 
-    def get_og_meta_tag(self, request):
-        useragent = request.META['HTTP_USER_AGENT']
-        if'facebookexternalhit' in useragent:
-            title = request.GET.get('title')
-            description = request.GET.get('description')
-            level = request.GET.get('level', 0)
-            img = NEO_LEVEL_OG_IMAGES.get(level)
-            og_dict = {
-                'og_tag': True,
-                'neo_sharing_title': 'Hey This is title',
-                'neo_sharing_description': 'Hey this is description',
-                'neo_sharing_img': img
-            }
-            print(og_dict)
-            return og_dict
-        # email = request.GET.get('email', '')
-        # pt = PracticeTestInfo.objects.filter(order_item=None).order_by('-id').first()
-        return {}
+    def update_og_meta_tag(self, request, ctx):
+        if ctx['prd_vendor_slug'] == 'neo':
+            useragent = request.META['HTTP_USER_AGENT']
+            if'facebookexternalhit' in useragent:
+                title = request.GET.get('title')
+                description = request.GET.get('description')
+                level = request.GET.get('level', 0)
+                img = NEO_LEVEL_OG_IMAGES.get(level)
+                ctx['og_tag'] = True
+                setattr(ctx['meta'], 'og_description', description)
+                setattr(ctx['meta'], 'title', title)
+                setattr(ctx['meta'], 'image', img)
+        return ctx
 
 
     def redirect_if_necessary(self, current_path, product):

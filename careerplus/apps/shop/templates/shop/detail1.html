@@ -4,16 +4,6 @@
 {% block title %}
   {% if meta.title %}{{ meta.title }}{% else %}{{prd_H1}}{% endif %}
 {% endblock title %}
-  {% block meta_html %}
-        {{block.super}}
-        {% if prd_vendor_slug == 'neo' and og_tag %}
-          <meta property="og:title"  content="{{neo_sharing_title}}" />
-          <meta property="og:description" content="{{ neo_sharing_description }}" />
-          {% with '/shinelearn/images/'|add:neo_sharing_img as imagePath %}
-          <meta property="og:image" content="https://{{ SITE_DOMAIN }}{% static imagePath  %}" />
-          {% endwith %}
-        {% endif %}
-  {% endblock meta_html %}
 {% block canonical_url %}
   <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{canonical_url}}">
   <link rel="alternate" media="only screen and (maxwidth:640px)" href="https://{{ MOBILE_SITE_DOMAIN }}{{ request.path }}">
