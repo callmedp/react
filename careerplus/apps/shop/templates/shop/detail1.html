@@ -4,7 +4,7 @@
 {% block title %}
   {% if meta.title %}{{ meta.title }}{% else %}{{prd_H1}}{% endif %}
 {% endblock title %}
-{% if prd_vendor_slug == 'neo' %}
+{% if prd_vendor_slug == 'neo' and og_tag %}
   {% block meta_html %}
         {{block.super}}
         <meta property="og:title"  content="{{neo_sharing_title}}" />
