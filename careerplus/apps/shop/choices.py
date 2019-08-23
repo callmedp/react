@@ -290,6 +290,7 @@ LINK_STATUS_CHOICES = (
     (0, 'Save'),
     (2, 'Sent'),
 )
+
 NEO_LEVEL_OG_IMAGES = {
     'Starter': 'shinelearn/images/starter.jpg',
     'A1': 'shinelearn/images/A1.jpg',
@@ -300,3 +301,15 @@ NEO_LEVEL_OG_IMAGES = {
     'C2': 'shinelearn/images/C2.jpg'
 
 }
+
+DAYS_CHOICES = (
+    (0, 'Monday'),
+    (1, 'Tuesday'),
+    (2, 'Wednesday'),
+    (3, 'Thursday'),
+    (4, 'Friday'),
+    (5, 'Saturday'),
+    (6, 'Sunday'),
+)
+
+DAYS_CHOICES_DICT = dict(DAYS_CHOICES)

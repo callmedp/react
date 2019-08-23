@@ -1,7 +1,7 @@
 {% extends "mobile/basic/base.html" %}
 {% load static compress %}
 {% load static thumbnail compress %}
-{% block title %}Shine learning{% endblock %}
+{% block title %}Practice test | online mock test @ Shine Learning{% endblock %}
 {% block css_section %}
 {{ block.super }}
 {% compress css %}
@@ -23,20 +23,23 @@
 <div class="body-wrapper practice-test ">
     <div class="practice-test-inside"></div>
     <div class="menu-blue" id="sidebar-main-trigger"></div>
-
-    <h1>Your Test Result</h1>
-    <div class="bread-crums">
+    <ol class="breadcrumb mt-0">
           {% for bradcbs in breadcrumbs %}
               {% if bradcbs.url %}
-                <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item"><span itemprop="name">{{bradcbs.name}}</span></a></li>
+                <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                    <a href="{{bradcbs.url}}" itemprop="item">
+                        <span itemprop="name">{{bradcbs.name}}</span>
+                    </a>
+                 <meta itemprop="position" content="{{forloop.counter}}" />
+                </li>
               {% else %}
                 <li class="active">{{bradcbs.name}}</li>
               {% endif %}
 
         {% endfor %}
-    </div>
+    </ol>
 
-
+    <h1 class="mt-0">Your Test Result</h1>
     <div class="test-result">
         <span class="text-center mt-10">
             <img id="resultImage" src="">

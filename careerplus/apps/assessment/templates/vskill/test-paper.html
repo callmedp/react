@@ -1,6 +1,6 @@
 {% extends "basic/base1.html" %}
 {% load static meta thumbnail compress %}
-{% block title %}Practice test | online mock test – Shine Learning{% endblock title %}
+{% block title %}{{object.title}} @ Shine Learning{% endblock title %}
 {% block canonical_url %}
 <link rel="canonical" href="https://{{ SITE_DOMAIN }}/practice-tests/{{object.slug}}-test/">
 <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}/practice-tests/{{object.slug}}-test/">
@@ -24,7 +24,12 @@
         <ol class="breadcrumb  black mb-0" itemscope="" itemtype="http://schema.org/BreadcrumbList">
           {% for bradcbs in breadcrumbs %}
               {% if bradcbs.url %}
-                <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item"><span itemprop="name">{{bradcbs.name}}</span></a></li>
+                <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                    <a href="{{bradcbs.url}}" itemprop="item">
+                        <span itemprop="name">{{bradcbs.name}}</span>
+                    </a>
+                <meta itemprop="position" content="{{forloop.counter}}" />
+                </li>
               {% else %}
                 <li class="active">{{bradcbs.name}}</li>
               {% endif %}

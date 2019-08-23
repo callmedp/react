@@ -48,7 +48,10 @@
             <ol class="breadcrumb mt-15">
                    {% for bradcbs in breadcrumbs %}
               {% if bradcbs.url %}
-                <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item"><span itemprop="name">{{bradcbs.name}}</span></a></li>
+                <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item">
+                    <span itemprop="name">{{bradcbs.name}}</span></a>
+                    <meta itemprop="position" content="{{forloop.counter}}" />
+                </li>
               {% else %}
                 <li class="active">{{bradcbs.name}}</li>
               {% endif %}
