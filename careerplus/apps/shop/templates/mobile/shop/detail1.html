@@ -738,6 +738,15 @@ function update_test_info(email){
               btn.css('color', 'black')
               btn.css('background', '#ffcf26')
               $("#cefr_level").text(data['result']['pt_level'])
+              let title = 'Congrats, You are ' + data['result']['pt_level']
+              let description = 'Share your neo tag '
+              let url = window.location.href + "?title=" + title + "&description=" + description + "&level=" + data['result']['pt_level']
+                
+              var attr = $("#id_share").attr('data-href');
+
+              if (attr == undefined) {
+                $("#id_share").attr('data-href', encodeURI(url))
+              }
               $("#cefr_level_box").show()
               $("#row_neo").remove()
 
