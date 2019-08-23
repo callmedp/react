@@ -920,8 +920,9 @@ class OrderItemOperation(AbstractAutoDate):
         return dict_status.get(self.oi_status)
 
     def oi_status_transform(self):
-        key = int(str(self.oi_status) + str(self.oi.product.sub_type_flow))
-        val = OI_OPS_TRANSFORMATION_DICT.get(key, '')
+        val = OI_OPS_TRANSFORMATION_DICT.get(
+            self.oi.product.sub_type_flow, {}
+        ).get(self.oi_status, None)
         if val:
             return val
         else:

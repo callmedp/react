@@ -465,7 +465,9 @@ BOOSTER_RECRUITER_TYPE = (
 )
 
 OI_OPS_TRANSFORMATION_DICT = {
-    28503: 'Service Initiated',
-    29503: 'Service Expired',
-    30503: 'Service Updated'
+    503: {
+        28: 'Service Initiated',
+        29: 'Service Expired',
+        30: 'Service Updated'
+    }
 }
