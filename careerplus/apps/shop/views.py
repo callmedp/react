@@ -791,18 +791,15 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         return True
 
     def redirect_for_neo(self, request):
-        from urllib.parse import urlparse
-        parsed = urlparse(request.get_full_path())
-        import urllib.parse as qparser
-        query_params = qparser.parse_qs(parsed.query)
-        if 'title' in query_params or 'description' in query_params or 'level' in query_params:
-            try:
-                [query_params.pop(k) for k in ['title', 'description', 'level'] ]
-            except KeyError:
-                pass
-            if query_params.keys():
-                redirect_url = parsed.path + '?' + '&'.join([k + '=' + v[0] for k, v in query_params.items()])
-                return redirect_url
+        from copy import deepcopy
+        path = request.path
+        query_params = deepcopy(request.GET)
+        if not any(x in query_params.keys() for x in ['title', 'description','level']):
+            return
+        [query_params.pop(k, None) for k in ['title', 'description', 'level'] ]
+        if query_params.keys():
+            redirect_url = path + '?' + '&'.join([k + '=' + v for k, v in query_params.items()])
+            return redirect_url
 
     def get(self, request, **kwargs):
         useragent = self.request.META['HTTP_USER_AGENT']
