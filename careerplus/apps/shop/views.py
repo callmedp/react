@@ -790,7 +790,26 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             return False
         return True
 
+    def redirect_for_neo(self, request):
+        from urllib.parse import urlparse
+        parsed = urlparse(request.get_full_path())
+        import urllib.parse as qparser
+        query_params = qparser.parse_qs(parsed.query)
+        if 'title' in query_params or 'description' in query_params or 'level' in query_params:
+            try:
+                [query_params.pop(k) for k in ['title', 'description', 'level'] ]
+            except KeyError:
+                pass
+            if query_params.keys():
+                redirect_url = parsed.path + '?' + '&'.join([k + '=' + v[0] for k, v in query_params.items()])
+                return redirect_url
+
     def get(self, request, **kwargs):
+        useragent = self.request.META['HTTP_USER_AGENT']
+        if 'facebookexternalhit' not in useragent:
+            redirect_url = self.redirect_for_neo(request)
+            if redirect_url:
+                return HttpResponsePermanentRedirect(redirect_url)
         pk = self.kwargs.get('pk')
         self.prd_key = 'detail_db_product_'+pk
         self.prd_solr_key = 'detail_solr_product_'+pk
