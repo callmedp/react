@@ -18,13 +18,13 @@ from order.models import Order
 #django imports
 from django.core.cache import cache
 
-ORG_EMAIL   = "@gmail.com"
-USER  = "hiteshrexwal003" + ORG_EMAIL
-PASSWD    = "hidden@leaf"
+ORG_EMAIL   = "@shine.com"
+USER  = "contactus" + ORG_EMAIL
+PASSWD    = "security!1"
 IMAP_SERVER = "imap.gmail.com"
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT   = 587
-TO_ADDRESS = 'hitesh.rexwal@hindustantimes.com'
+TO_ADDRESS = 'resume' + ORG_EMAIL
 
 def auto_forward_emails():
     try:
