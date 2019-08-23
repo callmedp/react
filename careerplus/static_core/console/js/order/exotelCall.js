@@ -7,7 +7,7 @@ $('#' + id + 'callingBtn').attr('title','');
     if (id) {
         queue = $('#queueName').val();
         if (!queue){
-        queue = "";
+        queue = 0;
         }
         $('#' + id + 'callingBtn').css('color','orange');
         $.ajax({
@@ -54,7 +54,7 @@ $('#' + id + 'callingBtn').attr('title','');
 function fetchReason(id){
    queue = $('#queueName').val();
         if (!queue){
-        queue = "";
+        queue = 0;
         }
  if (id) {
         $.ajax({

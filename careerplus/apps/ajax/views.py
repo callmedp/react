@@ -877,7 +877,7 @@ class WelcomeServiceCallView(UserPermissionMixin,View):
         order.welcome_call_records = json.dumps(json_records)
         order.save()
         recording_id_in_json = json.dumps({recording_id : ""})
-        self.exotel_object.create_user_agent_interaction(order,user,recording_id,queue_name)
+        self.exotel_object.create_user_agent_interaction(order,user,recording_id_in_json,queue_name)
         data.update({'msg': "Connected", 'status': 1})
         return HttpResponse(json.dumps(data), content_type="application/json")
 

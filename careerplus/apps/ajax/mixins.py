@@ -47,10 +47,12 @@ class ExotelInteraction(object):
         order = order if order else ""
         candidate_id = order.candidate_id if order else ""
         create_dict = {'recording_url':recording_url, 'candidate_id':candidate_id,\
-                       'called_by':user, 'queue_name':queue_name, 'order' : order}
+                       'called_by':user, 'queue_name':queue_name,}
+        if order:
+            create_dict.update({'order': order})
         if recording_url:
             create_dict.update({'connected': True})
-        caid=CandidateAgentInteraction(**create_dict)
+        caid = CandidateAgentInteraction(**create_dict)
         caid.save()
 
 
