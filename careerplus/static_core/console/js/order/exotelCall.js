@@ -5,12 +5,17 @@ $('#' + id + 'callingBtn').attr('title','');
 
 
     if (id) {
+        queue = $('#queueName').val();
+        if (!queue){
+        queue = "";
+        }
         $('#' + id + 'callingBtn').css('color','orange');
         $.ajax({
             type: 'post',
             url: '/ajax/service-call/',
             data: {
-                'o_id': id
+                'o_id': id,
+                'queue_name':queue
             },
             success: function(response) {
                 if (response.status == 1) {
@@ -47,12 +52,16 @@ $('#' + id + 'callingBtn').attr('title','');
 }
 //this is calling again the welcomeserviceview to get the in case of getting response 403
 function fetchReason(id){
+   queue = $('#queueName').val();
+        if (!queue){
+        queue = "";
+        }
  if (id) {
         $.ajax({
             type: 'post',
             url: '/ajax/service-call/',
             data: {
-                'action': id,'o_id': id
+                'action': id,'o_id': id,'queue_name':queue,
             },      success: function(response) {
                  $('#' + id + 'callingBtn').removeAttr('disabled')
                  $('#' + id + 'callingBtn').attr('title',response.msg);
