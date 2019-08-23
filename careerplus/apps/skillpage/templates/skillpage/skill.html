@@ -290,8 +290,7 @@
 				    		{% for product in certifications %}
 						        <li class="box-panel" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
 						        	<meta itemprop="position" content="{{forloop.counter}}" />
-						        	<a itemprop="url" title="{{product.pNm}}" 
-						        	href="{{product.pURL}}">
+						        	
 
 							            <div class="media" >
 							            	<div class="media-left">
@@ -312,7 +311,8 @@
 							                  		</span>jobs available</span>
 							                  	{% endif %}
 							                	</div>
-							                	<h3 itemprop="name" class="listing-heading">{{product.pNm}}</h3>
+							                	<h3 itemprop="name" class="listing-heading"><a itemprop="url" title="{{product.pNm}}" 
+						        	href="{{product.pURL}}">{{product.pNm}}</a></h3>
 
 								                <div class="rating-review-box">
 								                {% for rating in product.pStar %}
@@ -348,21 +348,22 @@
 								                   Providers
 								                   <span>{{product.pPvn}}</span>
 								                </div>
+								                <ul class="que-duration">
+													{% if product.pAsft|get_value_from_dict:'number_of_questions' %}	<li>No. of questions : <span>{{ product.pAsft|get_value_from_dict:'number_of_questions' }}</span></li> {% endif %}
+													{% if product.pAsft|get_value_from_dict:'test_duration' %}	<li>Duration: <span>{{ product.pAsft|get_value_from_dict:'test_duration' }} mins</span></li> {% endif %}
+													</ul>
 
 								                <div class="pricing-box">
 								                	<div class="pull-left">
 														Starting at <strong>Rs. {{ product.pPin |floatformat:'0' }}/-</strong>{% if product.pPfin|floatformat:0|add:"0" %}<strike>Rs. {{ product.pPfin|floatformat:"0" }}/-</strike> <span class="discount">{{ product.discount }}% OFF</span>{% endif %}
 													</div>
 													
-													<ul class="pull-right pricing-box__lists">
-													{% if product.pAsft|get_value_from_dict:'number_of_questions' %}	<li>No. of questions : <span>{{ product.pAsft|get_value_from_dict:'number_of_questions' }}</span></li> {% endif %}
-													{% if product.pAsft|get_value_from_dict:'test_duration' %}	<li>Duration: <span>{{ product.pAsft|get_value_from_dict:'test_duration' }} mins</span></li> {% endif %}
-													</ul>
+													<a href="#" class="take-test-link pull-right mt-5 mr-20">Take free test</a>
+													
 								                </div>
 
 							              	</div>
 							            </div>
-						          	</a>
 						        </li>
 					    	{% endfor %}
 					    	{% if products.has_next %}
@@ -487,17 +488,17 @@
         9am to 7pm ist monday-saturday
       </div>
 	</div> 
-	<!--<div class="mt-30 confused-buying">-->
-	    <!--<figure>-->
-	      <!--<img src="{% static 'shinelearn/images/free_skill/take-test-bannerbg.png' %}" class="img-responsive">-->
-	    <!--</figure>-->
-	    <!--<p>-->
-	      <!--Take our free practice test in-->
-	      <!--<strong>Digital Marketing,</strong>-->
-	      <!--to know where you stand-->
-	    <!--</p>-->
-	    <!--<a href="#">Take free test</a>-->
-	<!--</div>-->
+	<div class="mt-30 confused-buying">
+	    <figure>
+	      <img src="{% static 'shinelearn/images/free_skill/take-test-bannerbg.png' %}" class="img-responsive">
+	    </figure>
+	    <p>
+	      Take our free practice test in
+	      <strong>Digital Marketing,</strong>
+	      to know where you stand
+	    </p>
+	    <a href="#">Take free test</a>
+	</div>
 	<!-- request a call --> 
 	<!-- right content end -->
 	{% if widget_objs %}
