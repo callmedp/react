@@ -301,8 +301,8 @@ function check_for_load_test(data){
        
         $('#neo-test-modal').modal('hide')
         $("#cefr_level").text(data['cefr_level'])
-        let title = 'Congrats, You are ' + data['cefr_level']
-        let description = 'Share your neo tag '
+        let title = 'Hey, I got ' + data['cefr_level'] +'. What about you?'
+        let description = 'I got CEFR' + data['cefr_level'] + 'in this internationally recognized English Test. Check yours now'
         let url = window.location.href + "?title=" + title + "&description=" + description + "&level=" + data['cefr_level']
         
         var attr = $("#id_share").attr('data-href');
@@ -349,8 +349,8 @@ function update_test_info(email){
               btn.css('color', 'black')
               btn.css('background', '#ffcf26')
               $("#cefr_level").text(data['result']['pt_level'])
-              let title = 'Congrats, You are ' + data['result']['pt_level']
-              let description = 'Share your neo tag '
+              let title = 'Hey, I got ' + data['result']['pt_level'] +'. What about you?'
+              let description = 'I got CEFR' + data['result']['pt_level'] + 'in this internationally recognized English Test. Check yours now'
               let url = window.location.href + "?title=" + title + "&description=" + description + "&level=" + data['result']['pt_level']
               var attr = $("#id_share").attr('data-href');
 
