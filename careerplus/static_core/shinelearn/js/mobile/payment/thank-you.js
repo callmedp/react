@@ -93,7 +93,11 @@ const uploadResumeShine = (checkbox,order_id)=>{
         order_id:order_id,
         upload_after_service:true
     }).done(()=>{
-        location.reload()
+        Toast.fire({
+            type: 'success',
+            title: 'Resume will be uploaded to shine when service will complete'
+        })
+        $(checkbox).parent().hide()
     }).fail(()=>{
         Toast.fire({
             type: 'error',

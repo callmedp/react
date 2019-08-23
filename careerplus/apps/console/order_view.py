@@ -339,10 +339,9 @@ class MidOutQueueView(TemplateView, PaginationMixin):
 
     def post(self, request, *args, **kwargs):
         form = ResumeUploadForm(request.POST, request.FILES)
-        obj_pk = request.POST.get('oi_pk', None)
+        oi_ids = request.POST.get('oi_ids', None)
         if form.is_valid():
-            order = Order.objects.get(pk=obj_pk)
-            orderitems = order.orderitems.filter(oi_status=2)  # filter(product__type_flow__in=[1])
+            orderitems = OrderItem.objects.filter(id__in=oi_ids.split())
             data = {
                 "candidate_resume": request.FILES.get('oi_resume', ''),
             }

@@ -776,14 +776,26 @@ def bypass_resume_midout(order_id):
             update_resume_oi_ids.append(order_item.id)
     if update_resume_oi_ids:
         old_resume = None
-        start_date = timezone.now() -timedelta(days=90)
+        start_date = timezone.now() -timedelta(days=180)
         end_date = timezone.now()
         for order_item in OrderItem.objects.filter(order__candidate_id=order.candidate_id,created__range=[start_date,end_date]).order_by('-id'):
             if order_item.oi_resume:
                 old_resume = order_item.oi_resume
                 break
         if old_resume:
-            OrderItem.objects.filter(id__in=update_resume_oi_ids).update(oi_status=3,oi_resume=old_resume,auto_upload = True)
+            order_items = OrderItem.objects.filter(id__in=update_resume_oi_ids)
+            for oi in order_items:
+                oi.oi_resume = old_resume
+                last_oi_status = oi.oi_status
+                oi.oi_status = 3
+                oi.last_oi_status = last_oi_status
+                oi.auto_upload = True
+                oi.save()
+                oi.orderitemoperation_set.create(
+                    oi_status=3,
+                    oi_resume=oi.oi_resume,
+                    last_oi_status=last_oi_status,
+                    assigned_to=oi.assigned_to)
 
 @task
 def upload_Resume_shine(order_item_id):

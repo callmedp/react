@@ -1,3 +1,5 @@
+let current_oi = null, selected_order_items = []
+
 $(function(){
 
 	$('#action_button_go').click(function(){
@@ -143,3 +145,71 @@ function redirectToShineProfile(oi_id){
         });
     }
 };
+
+const getOrderItems = (order_id)=>{
+    $('.loader-div').show()
+    $('body').addClass('body-overflow')
+    selected_order_items =[]
+    current_oi = order_id
+    $.get(`/order/api/v1/order/${current_oi}/items`,(data)=>{
+        $('#order-items').empty()
+        if(data['count']){
+            for(let oi of data['results']){
+                
+                $('#order-items').append(
+                    `
+                        <div>
+                            <input type="checkbox" checked onclick="updateSelectedOI(this,${oi.id})" value="${oi.id}">${oi.product_name}
+                        </div>
+                    `
+                )
+                selected_order_items.push(oi.id)
+            }   
+            $('#oi_item_error').hide()
+            $('#upload-doc-modal').modal('show')
+            $('.loader-div').hide()
+            $('body').removeClass('body-overflow')
+        }
+        
+        
+    }).fail(()=>{
+        Toast.fire({
+            type: 'error',
+            title: 'OrderItems not loaded'
+        })
+    })
+}
+
+$(document).ready(function(){
+    $.ajaxSetup({ 
+        beforeSend: function(xhr, settings) {
+            if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+            }
+        } 
+    });
+    
+    
+})
+
+const updateSelectedOI = (checkbox,oi_id)=>{
+    $('#oi_item_error').hide()
+    if(checkbox.checked){
+        selected_order_items.push(oi_id)
+    }
+    else{
+        let index = selected_order_items.indexOf(oi_id)
+        if (index !== -1) selected_order_items.splice(index, 1);  
+    }
+    if(!selected_order_items.length){
+        $('#oi_item_error').show()
+    }
+}
+
+const upload_click = ()=>{
+    if(!selected_order_items.length)
+        return
+    $('#oi_ids').attr("value",()=>{return selected_order_items.join(" ")})
+    $("#resume-upload-form").submit();
+    $('#upload-doc-modal').modal('hide')
+ }

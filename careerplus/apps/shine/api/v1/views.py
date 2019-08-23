@@ -18,7 +18,7 @@ class UploadResumeShine(APIView):
         upload_after_service = self.request.POST.get('upload_after_service','')
 
         if upload_after_service:
-            order_id = self.request.POST.get('order_id','')
+            order_id = self.request.POST.get('order_id','-1')
             order = Order.objects.filter(id =order_id).first()
             if not  order:
                 return HttpResponseBadRequest(json.dumps({'result':'No Order'}), content_type="application/json")
