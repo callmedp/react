@@ -2917,7 +2917,8 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
         '34': Q(assigned_to=None),
         '35': Q(whatsapp_profile_orderitem__onboard=False),
         '4':  Q(oi_status=4),
-        '36': Q(whatsapp_profile_orderitem__onboard=True)
+        '36': Q(whatsapp_profile_orderitem__onboard=True),
+        '37': Q(whatsapp_profile_orderitem__approved=True)
     }
 
     def __init__(self):

@@ -278,7 +278,7 @@ class OIFilterForm(forms.Form):
                 (32, 'Sent Links'), (33, 'Saved Links'),
                 (23, 'Pending Approval'), (4, 'Closed'),
                 (34, 'UnAssigned',), (35, 'Not Boarded'),
-                (36, 'Boarded')
+                (36, 'Boarded'), (37, 'Approved')
             )
 
             self.fields['day_choice'].choices = ( (-1, 'All'), (1, 'Today'), (2, 'Delayed'), (3, 'Tommorrow'),)
