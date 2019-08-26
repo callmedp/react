@@ -33,37 +33,41 @@ class DashboardInfo(object):
         return True
 
     def get_inbox_list(self, candidate_id=None, request=None, last_month_from=18, select_type=0, page=1):
-        if candidate_id:
-            days = last_month_from * 30
-            last_payment_date = timezone.now() - datetime.timedelta(days=days)
-            orderitems = OrderItem.objects.filter(
-                order__status__in=[1, 3],
-                order__candidate_id=candidate_id,
-                order__payment_date__gte=last_payment_date, no_process=False)
-            if select_type == 1:
-                orderitems = orderitems.exclude(oi_status=4)
-            elif select_type == 2:
-                orderitems = orderitems.filter(oi_status=4)
+        if not candidate_id:
+            return
 
-            orderitems = orderitems.select_related(
-                'order', 'product', 'partner').order_by('-order__payment_date')
-            paginator = Paginator(orderitems, 10)
-            try:
-                orderitems = paginator.page(page)
-            except PageNotAnInteger:
-                orderitems = paginator.page(1)
-            except EmptyPage:
-                orderitems = paginator.page(paginator.num_pages)
-            
-            context = {
-                "orderitems": orderitems,
-                "max_draft_limit": settings.DRAFT_MAX_LIMIT,
-                "csrf_token_value": get_token(request),
-                "last_month_from": last_month_from,
-                "select_type": select_type,
-            }
+        days = last_month_from * 30
+        last_payment_date = timezone.now() - datetime.timedelta(days=days)
+        orderitems = OrderItem.objects.filter(
+            order__status__in=[1, 3],
+            order__candidate_id=candidate_id,
+            order__payment_date__gte=last_payment_date, no_process=False)
 
-            return render_to_string('partial/user-inboxlist.html',context)
+        if select_type == 1:
+            orderitems = orderitems.exclude(oi_status=4)
+        elif select_type == 2:
+            orderitems = orderitems.filter(oi_status=4)
+
+        orderitems = orderitems.select_related(
+            'order', 'product', 'partner').order_by('-order__payment_date')
+        paginator = Paginator(orderitems, 10)
+
+        try:
+            orderitems = paginator.page(page)
+        except PageNotAnInteger:
+            orderitems = paginator.page(1)
+        except EmptyPage:
+            orderitems = paginator.page(paginator.num_pages)
+        
+        context = {
+            "orderitems": orderitems,
+            "max_draft_limit": settings.DRAFT_MAX_LIMIT,
+            "csrf_token_value": get_token(request),
+            "last_month_from": last_month_from,
+            "select_type": select_type,
+        }
+
+        return render_to_string('partial/user-inboxlist.html',context)
 
     def get_myorder_list(self, candidate_id=None, request=None):
         if not candidate_id:
@@ -184,15 +188,18 @@ class DashboardInfo(object):
                 assigned_to=oi.assigned_to)
 
     def check_user_shine_resume(self, candidate_id=None, request=None):
-        if not request:
+        if not request and not candidate_id and request.session.get('resume_id', None):
             return
-        if candidate_id and not request.session.get('resume_id', None):
-            res = ShineCandidateDetail().get_candidate_detail(email=None, shine_id=candidate_id)
-            resumes = res.get('resumes', [])
-            default_resumes = [resume for resume in resumes if resume['is_default']]
-            if default_resumes:
-                request.session.update({
-                    "resume_id": default_resumes[0].get('id', ''),
-                    "shine_resume_name": default_resumes[0].get('resume_name', ''),
-                    "resume_extn": default_resumes[0].get('extension', ''),
-                })
+
+        res = ShineCandidateDetail().get_candidate_detail(email=None, shine_id=candidate_id)
+        resumes = res.get('resumes', [])
+        default_resumes = [resume for resume in resumes if resume['is_default']]
+
+        if not default_resumes:
+            return
+        
+        request.session.update({
+            "resume_id": default_resumes[0].get('id', ''),
+            "shine_resume_name": default_resumes[0].get('resume_name', ''),
+            "resume_extn": default_resumes[0].get('extension', ''),
+        })

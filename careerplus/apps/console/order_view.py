@@ -384,39 +384,28 @@ class MidOutQueueView(TemplateView, PaginationMixin):
             'orderitems').filter(
             status=1, orderitems__oi_status=2,
             orderitems__no_process=False).distinct()
-        # queryset = OrderItem.objects.all().select_related('order', 'product')
-        # queryset = queryset.filter(
-        #     order__status=1, no_process=False, oi_status=2)
 
-        try:
-            if self.query:
-                if self.sel_opt == 'id':
-                    if self.query[:2]=='cp' or self.query[:2]=='CP':
-                        queryset=queryset.filter(number__iexact=self.query)
-                    else:
-                        queryset = queryset.filter(id__iexact=self.query)
-                elif self.sel_opt == 'email':
-                    queryset = queryset.filter(email__iexact=self.query)
-                elif self.sel_opt == 'mobile':
-                        queryset = queryset.filter(mobile__iexact=self.query)
+        if self.query:
+            if self.sel_opt == 'id':
+                if self.query[:2]=='cp' or self.query[:2]=='CP':
+                    queryset=queryset.filter(number__iexact=self.query)
+                else:
+                    queryset = queryset.filter(id__iexact=self.query)
+            elif self.sel_opt == 'email':
+                queryset = queryset.filter(email__iexact=self.query)
+            elif self.sel_opt == 'mobile':
+                    queryset = queryset.filter(mobile__iexact=self.query)
 
-        except Exception as e:
-            logging.getLogger('error_log').error("%s " % str(e))
-            pass
-        try:
-            if self.payment_date:
-                date_range = self.payment_date.split('-')
-                start_date = date_range[0].strip()
-                start_date = datetime.datetime.strptime(
-                    start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
-                end_date = date_range[1].strip()
-                end_date = datetime.datetime.strptime(
-                    end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
-                queryset = queryset.filter(
-                    payment_date__range=[start_date, end_date])
-        except Exception as e:
-            logging.getLogger('error_log').error("%s " % str(e))
-            pass
+        if self.payment_date:
+            date_range = self.payment_date.split('-')
+            start_date = date_range[0].strip()
+            start_date = datetime.datetime.strptime(
+                start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
+            end_date = date_range[1].strip()
+            end_date = datetime.datetime.strptime(
+                end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
+            queryset = queryset.filter(
+                payment_date__range=[start_date, end_date])
 
         return queryset.order_by('-payment_date')
 
@@ -2120,11 +2109,7 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
 
 class ActionOrderItemView(View):
     def post(self, request, *args, **kwargs):
-        try:
-            action = int(request.POST.get('action', '0'))
-        except:
-            action = 0
-
+        action = int(request.POST.get('action', '0'))
         selected = request.POST.get('selected_id', '')
         selected_id = json.loads(selected)
         queue_name = request.POST.get('queue_name', '')

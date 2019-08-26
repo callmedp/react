@@ -294,6 +294,7 @@ class ActionUserMixin(object):
                     except Exception as e:
                         logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
                 resume_path = full_path + file_name
+            
             if not oi.oi_resume:
                 oi.oi_resume = resume_path
                 last_oi_status = oi.oi_status
