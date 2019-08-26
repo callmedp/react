@@ -114,6 +114,10 @@
                        {% if query %}
                            <input type="hidden" name="query" value="{{query}}">
                        {% endif %}
+                       {% if request.GET.rad_search %}
+                          <input type="hidden" name="rad_search" value="{{request.GET.rad_search}}">
+                       {% endif %}
+
                        <input type="hidden" name="sort_payment_date" value="{{request.GET.sort_payment_date}}">
                     </form>
                 </div>
@@ -226,6 +230,9 @@
                           {% endif %}
                           {% if request.GET.due_date %}
                           <input type="hidden" name="due_date" value="{{request.GET.due_date}}">
+                          {% endif %}
+                          {% if request.GET.rad_search %}
+                          <input type="hidden" name="rad_search" value="{{request.GET.rad_search}}">
                           {% endif %}
                       </div>
                     </div>
