@@ -47,7 +47,13 @@
       <a role="button" class="enrol-now neo-enroll-button" data-neotest="1" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" >Enroll now</a>
 
       {% else %}
-        <a role="button" class="enrol-now" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
+        <a role="button" class="enrol-now" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">
+            {% if product.is_assesment %}
+            BuyNow
+            {% else %}
+            Enroll now
+        {% endif %}
+        </a>
       {% endif %}
     {% endif %}
     <!--div class="cart-message"><span class="cart-success" id="id-cart-message"></span></div-->
@@ -125,18 +131,23 @@
             Submit
           </button-->
       </div>
+      {% else %}
+      {% if product.take_free_test %}
       <div class="mt-20 confused-about-buying">
         <!-- <figure>
           <img src="{% static 'shinelearn/images/free_skill/take-test-bannerbg.png' %}" class="img-responsive">
         </figure> -->
+
         <p>
           <b>Confused about buying?</b>
           Take our free practice test in
           <strong>Digital Marketing,</strong>
           to know where you stand
         </p>
-        <a href="#">Take free test</a>
+        <a href="{{product.take_free_test.get_absolute_url}}">Take free test</a>
       </div>
+
+  {% endif %}
   {% endif %}
       {% if widget_objs %}
       <div class="box-panel free-sample">

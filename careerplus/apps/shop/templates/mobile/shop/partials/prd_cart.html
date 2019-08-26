@@ -36,8 +36,13 @@
                   </li>
                       {% else %}
                     <li>
-                        <!-- add-to_cart_class = btn btn-outline w100fl-->
-                        <a  class="btn btn-yellow w100fl" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="#">Enroll Now</a>
+                                <a class="btn btn-yellow w100fl" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="#">
+            {% if product.is_assesment %}
+            BuyNow
+            {% else %}
+            Enroll now
+        {% endif %}
+        </a>
                     </li>
                     {% endif %}
                 {% endif %}
