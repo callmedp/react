@@ -69,6 +69,20 @@
 <label class="radio-inline"><input type="radio" name="rad_search" value="email" {{email}}><b>Email</b></label>
 <label class="radio-inline"><input type="radio" name="rad_search" value="mobile" {{mobile}}><b>Mobile</b></label>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label class="radio-inline"><input type="radio" name="rad_search"value="product" {{product}}><b>product</b></label>
+{% if oi_status_val %}
+  {% for o in oi_status_val %}
+  <input type="hidden" name="oi_status" value="{{o}}">
+  {% endfor %}
+{% endif %}
+{% if request.GET.day_choice %}
+<input type="hidden" name="day_choice" value="{{request.GET.day_choice}}">
+{% endif %}
+{% if request.GET.payment_date %}
+<input type="hidden" name="payment_date" value="{{request.GET.payment_date}}">
+{% endif %}
+{% if request.GET.due_date %}
+<input type="hidden" name="due_date" value="{{request.GET.due_date}}">
+{% endif %}
 
 
                       </div>
