@@ -248,6 +248,9 @@
                           {% if request.GET.rad_search %}
                           <input type="hidden" name="rad_search" value="{{request.GET.rad_search}}">
                           {% endif %}
+                          {% if query %}
+                           <input type="hidden" name="query" value="{{query}}">
+                          {% endif %}
                       </div>
                     </div>
                   </form>
