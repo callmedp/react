@@ -2910,13 +2910,14 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
                            'Can send assigned jobs on the move']
     any_permission = True
     filter_query_mapping = {
-        '23': Q(oi_status=23),
+        '23': Q(oi_status=23)|Q(whatsapp_profile_orderitem__approved=False),
         '31': Q(oi_status=31),
         '32': Q(oi_status=32),
         '33': Q(oi_status=31, save_link__gt=0),
         '34': Q(assigned_to=None),
         '35': Q(whatsapp_profile_orderitem__onboard=False),
-        '4':  Q(oi_status=4)
+        '4':  Q(oi_status=4),
+        '36': Q(whatsapp_profile_orderitem__onboard=True)
     }
 
     def __init__(self):
