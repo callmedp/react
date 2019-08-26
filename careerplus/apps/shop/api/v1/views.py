@@ -163,6 +163,8 @@ class UpdatePracticeInfoApiView(APIView):
                 if data['status'] == 'done':
                     session_id = request.session.session_key
                     cache.set('{}_neo_email_done'.format(session_id), email, 3600 * 24 * 30)
+                    from .tasks import create_neo_lead
+                    create_neo_lead.delay(email)
                 return Response(data)
             else:
                 return Response({'message': 'Already Registered'.format(email)}, status=status.HTTP_404_NOT_FOUND)
