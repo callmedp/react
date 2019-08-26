@@ -573,6 +573,12 @@ class OrderItem(AbstractAutoDate):
         return payment_date
 
     @property
+    def assigned_to_name(self):
+        if self.assigned_to:
+            return getattr(self.assigned_to, 'name', 'N.A')
+        return 'N.A'
+
+    @property
     def product_name(self):
         return self.product.name
 
@@ -714,7 +720,9 @@ class OrderItem(AbstractAutoDate):
 
     def update_pending_links_count(self):
         links_needed_till_now = self.get_links_needed_till_now()
+
         links_sent_till_now = self.jobs_link.filter(status=2).count()
+
         links_pending = links_needed_till_now - links_sent_till_now
 
         if links_pending < 0:
