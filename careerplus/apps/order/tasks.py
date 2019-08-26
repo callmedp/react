@@ -771,31 +771,47 @@ def bypass_resume_midout(order_id):
     from django.utils import timezone
     order = Order.objects.get(id=order_id)
     update_resume_oi_ids = []
-    for order_item in order.orderitems.all():
+
+    #update order item id to upload previous resume
+    order_items = order.orderitems.all()
+    for order_item in order_items:
         if order_item.oi_status == 2:
             update_resume_oi_ids.append(order_item.id)
-    if update_resume_oi_ids:
-        old_resume = None
-        start_date = timezone.now() -timedelta(days=180)
-        end_date = timezone.now()
-        for order_item in OrderItem.objects.filter(order__candidate_id=order.candidate_id,created__range=[start_date,end_date]).order_by('-id'):
-            if order_item.oi_resume:
-                old_resume = order_item.oi_resume
-                break
-        if old_resume:
-            order_items = OrderItem.objects.filter(id__in=update_resume_oi_ids)
-            for oi in order_items:
-                oi.oi_resume = old_resume
-                last_oi_status = oi.oi_status
-                oi.oi_status = 3
-                oi.last_oi_status = last_oi_status
-                oi.auto_upload = True
-                oi.save()
-                oi.orderitemoperation_set.create(
-                    oi_status=3,
-                    oi_resume=oi.oi_resume,
-                    last_oi_status=last_oi_status,
-                    assigned_to=oi.assigned_to)
+    
+    if not update_resume_oi_ids:
+        logging.getLogger('error_log').info("No order Id found to update resume")
+        return
+    
+    old_resume = None
+    start_date = timezone.now() -timedelta(days=180)
+    end_date = timezone.now()
+    #order items to get previous resume in previous 180 days
+    order_items = OrderItem.objects.filter(order__candidate_id=order.candidate_id,created__range=[start_date,end_date]).order_by('-id')
+
+    for order_item in order_items:
+        if order_item.oi_resume:
+            old_resume = order_item.oi_resume
+            break
+    
+    if not old_resume:
+        logging.getLogger('info_log').info("Old Resume Not Found")
+        return
+    
+    #order items to update old resume in new order ->(order items)
+    order_items = OrderItem.objects.filter(id__in=update_resume_oi_ids)
+
+    for oi in order_items:
+        oi.oi_resume = old_resume
+        last_oi_status = oi.oi_status
+        oi.oi_status = 3
+        oi.last_oi_status = last_oi_status
+        oi.auto_upload = True
+        oi.save()
+        oi.orderitemoperation_set.create(
+            oi_status=3,
+            oi_resume=oi.oi_resume,
+            last_oi_status=last_oi_status,
+            assigned_to=oi.assigned_to)
 
 @task
 def upload_Resume_shine(order_item_id):
@@ -807,9 +823,6 @@ def upload_Resume_shine(order_item_id):
         return
 
     order_item = OrderItem.objects.filter(id=order_item_id).first()
-    order_item.service_resume_upload_shine = True
-    order_item.save()
-
     if not order_item:
         return
     candidate_id = order_item.order.candidate_id
@@ -825,8 +838,10 @@ def upload_Resume_shine(order_item_id):
     response = ShineCandidateDetail().upload_resume_shine(data=data,file_path=file_path)
     if response:
         logging.getLogger('info_log').info("Uploaded to shine")
+        order_item.service_resume_upload_shine = True
+        order_item.save()
         return
-    logging.getLogger('info_log').info("Upload to shine failed ")
+    logging.getLogger('error_log').info("Upload to shine failed ")
 
 
 
