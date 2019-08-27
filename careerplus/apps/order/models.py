@@ -152,6 +152,10 @@ class Order(AbstractAutoDate):
         max_length=255, null=True, blank=True)
     sales_user_info = models.TextField(default='', null=True, blank=True)
 
+    #resume writing
+    auto_upload = models.BooleanField(default=False)
+    service_resume_upload_shine = models.BooleanField(default=True)
+
 
     class Meta:
         app_label = 'order'
@@ -293,15 +297,17 @@ class Order(AbstractAutoDate):
                 autologin_url=None
             )
             manually_generate_autologin_url(assesment_items=assesment_items)
-            bypass_resume_midout.delay(self.id)
-
         
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_resume_builder():
-            # generate_resume_for_order.delay(self.id)
+            generate_resume_for_order.delay(self.id)
             logging.getLogger('info_log').info("Generating resume for order {}".format(self.id))
 
-        return super(Order,self).save(**kwargs)
+        obj = super(Order,self).save(**kwargs)
 
+        if self.status == 1:
+            bypass_resume_midout.delay(self.id)
+        
+        return obj
 
 class OrderItem(AbstractAutoDate):
     coi_id = models.IntegerField(
@@ -445,9 +451,6 @@ class OrderItem(AbstractAutoDate):
         null=True,
         default=0
     )
-    #resume writing
-    auto_upload = models.BooleanField(default=False)
-    service_resume_upload_shine = models.BooleanField(default=False)
 
 
     class Meta:

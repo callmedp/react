@@ -209,7 +209,6 @@ class DashboardDetailView(TemplateView):
             return HttpResponseForbidden()
 
     def get_context_data(self, **kwargs):
-        import ipdb; ipdb.set_trace()
         context = super(DashboardDetailView, self).get_context_data(**kwargs)
         if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
             ops = []

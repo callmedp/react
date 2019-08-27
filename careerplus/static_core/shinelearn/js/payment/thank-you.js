@@ -78,17 +78,18 @@ $(document).ready(function(){
     
 })
 
-const uploadResumeShine = (checkbox,order_id,e)=>{
-    $(checkbox).attr("disabled", true);
+const uploadResumeShine = (checkbox,order_id)=>{
     $.post(`/shine/api/v1/upload-to-shine/`,{
         order_id:order_id,
-        upload_after_service:true
-    }).done(()=>{
-        Toast.fire({
-            type: 'success',
-            title: 'Resume will be uploaded to shine when service will complete'
-        })
-        $(checkbox).parent().hide()
+        upload_after_service:true,
+        upload_flag_value: $(checkbox).is(':checked')
+    },(data)=>{
+        if(data.result){
+            Toast.fire({
+                type: data.upload_to_shine ?'success' : 'error',
+                title: data.result
+            })
+        }
     }).fail(()=>{
         Toast.fire({
             type: 'error',

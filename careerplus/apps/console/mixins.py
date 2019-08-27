@@ -300,7 +300,6 @@ class ActionUserMixin(object):
                 last_oi_status = oi.oi_status
                 oi.oi_status = 5
                 oi.last_oi_status = 3
-                oi.auto_upload = True
                 oi.save()
                 oi.orderitemoperation_set.create(
                     oi_status=3,
@@ -314,6 +313,10 @@ class ActionUserMixin(object):
                     last_oi_status=oi.last_oi_status,
                     assigned_to=oi.assigned_to,
                     added_by=user)
+        # all order item id's are for a particular order so taken first and added auto_upload True
+        order = order_items.first().order
+        order.auto_upload = True
+        order.save()
             
 
     def upload_draft_orderitem(self, oi=None, data={}, user=None):

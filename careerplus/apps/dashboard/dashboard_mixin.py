@@ -125,12 +125,12 @@ class DashboardInfo(object):
         if candidate_id:
             resume_pending_items = OrderItem.objects.\
                 filter(order__candidate_id=candidate_id, order__status__in=[1, 3],no_process=False).\
-                filter(Q(oi_status=2) | Q(auto_upload=True)).exclude(oi_status__in=[4,24])
+                filter(Q(oi_status=2) | Q(order__auto_upload=True)).exclude(oi_status__in=[4,24])
 
         elif email:
             resume_pending_items = OrderItem.objects.\
                 filter(order__email=email, order__status__in=[1, 3],no_process=False).\
-                filter(Q(oi_status=2) | Q(auto_upload=True)).exclude(oi_status__in=[4,24])
+                filter(Q(oi_status=2) | Q(order__auto_upload=True)).exclude(oi_status__in=[4,24])
 
         return resume_pending_items.select_related('order', 'partner', 'product')
 
@@ -173,7 +173,6 @@ class DashboardInfo(object):
             oi.oi_resume = resume_path
             last_oi_status = oi.oi_status
             oi.oi_status = 5
-            oi.auto_upload = False
             oi.last_oi_status = data.get('last_oi_status') #3
             oi.save()
             oi.orderitemoperation_set.create(
@@ -186,6 +185,10 @@ class DashboardInfo(object):
                 oi_status=oi.oi_status,
                 last_oi_status=oi.last_oi_status,
                 assigned_to=oi.assigned_to)
+
+            order = oi.order
+            order.auto_upload = False
+            order.save()
 
     def check_user_shine_resume(self, candidate_id=None, request=None):
         if not request and not candidate_id and request.session.get('resume_id', None):
