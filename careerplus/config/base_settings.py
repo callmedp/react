@@ -574,4 +574,4 @@ WHATS_APP_MESSAGE_FORMAT = '''Here are our job recommendations for this week.<br
                         <br>{}Please do not call/reply directly to this message<br><br>In case of any queries, you can call us on  08047105151 or email us at resume@shine.com<br><br>Thanks,<br><br>Team Shine
                         '''
 
-MAIL_COUNTDOWN = 900
+MAIL_COUNTDOWN = 60
