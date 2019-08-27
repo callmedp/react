@@ -279,7 +279,7 @@
                     {% endif %}
                     <th class="column-title">OrderId</th>
                     <th class="column-title">Name</th>
-                    <th class="column-title">Email</th>
+                    <th class="column-title">Contact</th>
                     <th class="column-title">Item Name</th>
                     <th class="column-title">Flow Status</th>
                     <th class="column-title"> Payment Date</th>
@@ -288,9 +288,9 @@
                     <th class="column-title">Weeks</th>
                     <th class="column-title">Sent Links</th>
                     <th class="column-title">Saved Links</th>
-                    <th class="column-title">Total Supposed to be sent</th>
-                    <th class="column-title">Pending Links Count</th>
                     <th class="column-title">Due Date</th>
+                    <th class="column-title">Pending Links Count</th>
+                    <th class="column-title">Total Supposed to be sent</th>
                   </tr>
                 </thead>
 
@@ -316,7 +316,7 @@
                             <div id="email_field{{obj.order.id}}_{{forloop.counter}}"></div>
                         </div>
                         <div>
-                            <button type="button" class="btn btn-primary btn-xs" onclick="order_get_details('{{obj.order.id}}','email,alt_email','email','{{forloop.counter}}');"><i class="fa fa-search" aria-hidden="true"></i>ClickToView</button>
+                            <button type="button" class="btn btn-primary btn-xs" onclick="order_get_details('{{obj.order.id}}','email,alt_email','email','{{forloop.counter}}');"><i class="fa fa-search" aria-hidden="true"></i>View Email</button>
                         </div>
 
 
@@ -326,7 +326,7 @@
                         <button id="{{obj.order.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{obj.order.id}});"></button>
                         <span style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{obj.order.id}}callingbtn-error"></span>
                         {% endif %}
-                        <button type="button" onclick="order_get_details('{{obj.order.id}}','mobile,alt_mobile','mobile','{{forloop.counter}}');" class="btn btn-primary btn-xs"><i class="fa fa-phone" aria-hidden="true"></i>ClickToView</button>
+                        <button type="button" onclick="order_get_details('{{obj.order.id}}','mobile,alt_mobile','mobile','{{forloop.counter}}');" class="btn btn-primary btn-xs"><i class="fa fa-phone" aria-hidden="true"></i>View Mobile</button>
                    </div>
                                                        
 
@@ -362,9 +362,9 @@
                       <td>{{ weeks.1 }}/{{ weeks.0 }}</td>
                       <td>{{ obj.sent_link }}/{{ obj.get_total_links_needs_to_sent }} </td>
                       <td>{{ obj.save_link }}</td>
-                      <td>{{ obj.get_links_needed_till_now }}</td>
-                      <td>{{ obj.pending_links_count }}</td>
                       <td>{{ obj.get_due_date }} ({{ obj.get_due_date_weekday }})</td>
+                      <td>{{ obj.pending_links_count }}</td>
+                      <td>{{ obj.get_links_needed_till_now }}</td>
                       {% endwith %}
                     </tr>
                   {% endfor %}
