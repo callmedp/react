@@ -3213,6 +3213,9 @@ class ProductUserProfile(AbstractAutoDate):
         null=True, blank=True,
         choices=DAYS_CHOICES
     )
+    force_update_links_count = models.BooleanField(
+        default=False
+    )
     def save(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super(ProductUserProfile, self).save(*args, **kwargs)

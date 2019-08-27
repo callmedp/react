@@ -720,14 +720,18 @@ class OrderItem(AbstractAutoDate):
 
     def update_pending_links_count(self):
         links_needed_till_now = self.get_links_needed_till_now()
-
         links_sent_till_now = self.jobs_link.filter(status=2).count()
-
         links_pending = links_needed_till_now - links_sent_till_now
-
-        if links_pending < 0:
-            links_pending = 0
-        self.pending_links_count = links_pending
+        force_update_links_count = None
+        profile = getattr(self, 'whatsapp_profile_orderitem', None)
+        if profile:
+            force_update_links_count = profile.force_update_links_count
+        if force_update_links_count:
+            self.pending_links_count = self.pending_links_count - links_sent_till_now
+        else:
+            if links_pending < 0:
+                links_pending = 0
+            self.pending_links_count = links_pending
         self.save()
 
     def set_due_date(self):
