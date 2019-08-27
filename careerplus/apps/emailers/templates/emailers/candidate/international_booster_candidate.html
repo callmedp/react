@@ -11,30 +11,21 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" style="max-width: 600px; border: 1px solid #efefef; font-family: arial; font-size: 13px; color: #666666; line-height: 20px;">
   <tbody>
     <tr>
-      <td bgcolor="#9ff8d4">
-      	<img src="{% static 'shinelearn/images/emailers/final_document.jpg' %}" alt="Shine Learning" style="display: block; border: 0; max-width: 100%">
+      <td bgcolor="#fcc574">
+      	<img src="{% static 'shinelearn/images/emailers/booster_candidate.jpg' %}" alt="Shine Learning" style="display: block; border: 0; max-width: 100%">
       	<strong style="text-align: center; display: block; font-size: 19px; font-weight: bold; color: #002d66; padding: 5px 10px 15px 10px;">
-      		{{subject}}
+      		{{subject}} 
       	</strong>
       </td>
     </tr>
     <tr>
       <td style="padding: 10px">
-      	<strong style="font-size: 14px; display: block; font-weight: normal; color: #333333; padding-bottom: 5px; padding-top: 2px;">Dear {% if first_name %}{{first_name}} {% else %}Candidate{% endif %},</strong>
+      	<strong style="font-size: 14px; display: block; font-weight: normal; color: #333333; padding-bottom: 5px; padding-top: 2px;">Dear {% if username %}{{username}} {% else %}Candidate{% endif %},</strong>
       	<span style="fon">
-          Congratulations! The final copy of your document is ready and has been uploaded in your shine learning profile.<br><br>
-          Kindly click on the link below to review your document.
+         Congratulations! Your resume has been sent out to our database of 1000+ top consultants all across world. <br><br>
+         Our service enables your resume to gain better visibility among some of the best consultants in the country that are recruiting for profiles in your domain, thereby increasing your chances of getting better career opportunities. <br><br>
+          However, we do not guarantee a response by these consultants as they will contact you on the basis of availability of job opportunities with them that suit your profile. 
         </span>
-      </td>
-    </tr>
-    <tr>
-      <td style="padding: 10px;">
-      	<a href="{{upload_url}}" style="text-decoration: none; font-size: 14px; background: #3c5b9b; color: #ffffff; display: inline-block; padding: 7px 20px; border-radius: 3px;">Review Document</a>
-      </td>
-    </tr>
-    <tr>
-      <td style="padding: 10px">
-        <span>Thank you for availing Shine Learning services. Soon we will be initiating post development services, if any.</span>
       </td>
     </tr>
     <tr>
@@ -46,6 +37,7 @@
     	</td>
     </tr>
     {%  include "emailers/includes/mailer_footer.html" %}
+
   </tbody>
 </table>
 
