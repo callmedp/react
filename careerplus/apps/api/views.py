@@ -398,8 +398,8 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                     invoice_generation_order.delay(order_pk=order.pk)
 
                     # email for order
-                    process_mailer.apply_async((order.pk,), countdown=900)
-                    pending_item_email.apply_async((order.pk,), countdown=900)
+                    process_mailer.apply_async((order.pk,), countdown=settings.MAIL_COUNTDOWN)
+                    pending_item_email.apply_async((order.pk,), countdown=settings.MAIL_COUNTDOWN)
 
                     return Response(
                         {"status": 1, "msg": 'order created successfully.'},
