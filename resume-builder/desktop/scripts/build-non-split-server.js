@@ -21,11 +21,9 @@ const currentTimeStamp = +new Date();
 
 
 // JS
-
-config.entry[0] = path.join(__dirname, '..', 'server/config.js')
-config.output.filename = `../../../careerplus/static_core/react/dist/desktop/server/main.js`;
+config.output.filename = `../../../careerplus/static_core/react/dist/desktop/server/main-${currentTimeStamp}.js`;
 // CSS. "5" is MiniCssPlugin
-config.plugins[5].options.filename = `../../../careerplus/static_core/react/dist/desktop/server/main.css`;
+config.plugins[5].options.filename = `../../../careerplus/static_core/react/dist/desktop/server/main-${currentTimeStamp}.css`;
 config.plugins.push(new BundleTracker({
     path: __dirname,
     filename: '../../../webpack-desktop-stats.json'
@@ -55,7 +53,7 @@ config.module.rules[2]['oneOf'][5]['use'][3]['options'] = {
 }
 
 
-config.externals = [webpackNodeExternals()]
-config.target = 'node'
+// config.externals = [webpackNodeExternals()]
+// config.target = 'node'
 
-config.module.rules[2]['oneOf'][1]['test'] = /\.jsx$/
+// config.module.rules[2]['oneOf'][1]['test'] = /\.jsx$/

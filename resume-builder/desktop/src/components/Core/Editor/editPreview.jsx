@@ -15,7 +15,7 @@ import {
     reorderSection,
     reGeneratePDF
 } from "../../../store/template/actions"
-import * as profileActions from "../../../store/personalInfo/actions"
+import {fetchPersonalInfo, updatePersonalInfo} from "../../../store/personalInfo/actions"
 import SelectTemplateModal from '../../Modal/selectTemplateModal';
 import {
     showAlertModal,
@@ -26,6 +26,7 @@ import {
 } from '../../../store/ui/actions/index'
 import moment from 'moment'
 import {locationRouteChange, eventClicked} from '../../../store/googleAnalytics/actions/index'
+import {loginCandidate} from "../../../store/landingPage/actions";
 
 class EditPreview extends Component {
 
@@ -35,6 +36,21 @@ class EditPreview extends Component {
         if (localStorage.getItem('personalInfo')) {
             localStorage.setItem('newUser', true)
         }
+    }
+
+
+    static getActions() {
+        return [fetchPersonalInfo]
+    }
+
+    static async fetching({dispatch}, params) {
+        const actionList = EditPreview.getActions()
+        const results = [];
+        for (const [index, value] of actionList.entries()) {
+            console.log('----index---', index, value);
+            results[index] = await new Promise((resolve, reject) => dispatch(value({info: params, resolve, reject})))
+        }
+        return results;
     }
 
     render() {
@@ -78,7 +94,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         "fetchEntityInfo": () => {
-            return dispatch(profileActions.fetchPersonalInfo())
+            return new Promise((resolve, reject) => {
+                return dispatch(fetchPersonalInfo({info: '', resolve, reject}))
+            })
+
         },
         "showSelectTemplateModal": () => {
             return dispatch(actions.showSelectTemplateModal())
@@ -107,7 +126,7 @@ const mapDispatchToProps = (dispatch) => {
                 }
             }
             return new Promise((resolve, reject) => {
-                dispatch(profileActions.updatePersonalInfo({personalDetails, resolve, reject}));
+                dispatch(updatePersonalInfo({personalDetails, resolve, reject}));
             })
         },
         "reorderSection": (payload) => {

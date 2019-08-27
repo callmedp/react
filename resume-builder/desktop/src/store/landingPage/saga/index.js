@@ -6,6 +6,7 @@ import {UPDATE_UI} from '../../ui/actions/actionTypes'
 import {entityList} from "../../../Utils/formCategoryList";
 import {SAVE_USER_INFO} from "../../personalInfo/actions/actionTypes";
 import {Toast, LandingPageToast} from "../../../services/ErrorToast";
+import {SubmissionError} from 'redux-form'
 
 
 function* getCandidateId() {
@@ -27,12 +28,12 @@ function* getCandidateId() {
 
 function* loginCandidate(action) {
     try {
-        let {payload} = action;
+        let {payload: {info, resolve, reject}} = action;
 
         yield put({type: UPDATE_UI, data: {loader: true}});
 
 
-        let result = yield call(Api.loginCandidate, payload);
+        let result = yield call(Api.loginCandidate, info);
 
         if (result['error']) {
             result = yield call(Api.getInformation)
@@ -42,6 +43,7 @@ function* loginCandidate(action) {
             localStorage.clear();
             window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
             yield put({type: UPDATE_UI, data: {loader: false}})
+            reject(new Error(result['errorMessage']));
             return;
             //redirect code here
         }
@@ -78,6 +80,8 @@ function* loginCandidate(action) {
         localStorage.setItem('token', (token) || '');
 
         yield put({type: UPDATE_UI, data: {loader: false}})
+
+        resolve('Login Successful')
 
 
     } catch (e) {

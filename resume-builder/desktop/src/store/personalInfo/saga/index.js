@@ -45,6 +45,7 @@ function* getPersonalDetails(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
 
+        const {payload: {resolve, reject}} = action;
 
         if (localStorage.getItem('personalInfo')) {
             yield put({
@@ -59,6 +60,7 @@ function* getPersonalDetails(action) {
 
         const result = yield call(Api.fetchPersonalInfo, candidateId);
         if (result['error']) {
+            reject(new Error(result['errorMessage']));
             Toast.fire({
                 type: 'error',
                 title: result['errorMessage']
@@ -69,6 +71,7 @@ function* getPersonalDetails(action) {
         let {data} = result;
         data = modifyPersonalInfo(data)
         yield put({type: Actions.SAVE_USER_INFO, data: data})
+        resolve('Information successfully fetched.')
     } catch (e) {
         console.log(e);
     }

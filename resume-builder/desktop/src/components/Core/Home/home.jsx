@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './home.scss'
-import * as actions from "../../../store/landingPage/actions";
+import {getCandidateId, loginCandidate, feedbackSubmit} from "../../../store/landingPage/actions";
 import {connect} from "react-redux";
 import Banner from "./Banner/banner.jsx";
 import ResumeSlider from "./ResumeSlider/resumeSlider.jsx";
@@ -28,10 +28,11 @@ class Home extends Component {
         const values = queryString.parse(this.props.location.search);
         const token = (values && values.token) || '';
         this.state.token = token;
-        this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
+        this.staticUrl =  (window && window.config && window.config.staticUrl) || '/media/static/'
     }
 
-    scrollTo(elem,action,label) {
+
+    scrollTo(elem, action, label) {
         scroller.scrollTo(elem, {
             duration: 800,
             delay: 0,
@@ -62,16 +63,30 @@ class Home extends Component {
 
     }
 
+    static getActions() {
+        return [loginCandidate]
+    }
+
+    static async fetching({dispatch},params) {
+        const actionList = Home.getActions()
+        const results= [];
+        for (const [index,value] of actionList.entries()) {
+                console.log('----index---', index, value);
+                results[index] = await  new Promise((resolve, reject) => dispatch(value({info: params, resolve,reject})))
+        }
+        return results;
+    }
 
     render() {
-        const {ui: {loader},userInfo, userInfo: {first_name},feedback,eventClicked} = this.props;
+        const {ui: {loader}, userInfo, userInfo: {first_name}, feedback, eventClicked} = this.props;
         return (
             <div className="nav-fixed">
                 {
                     !!(loader) &&
                     <LoaderPage/>
                 }
-                <Header userName={first_name} page={'home'} userInfo={userInfo} eventClicked={eventClicked}  feedback={feedback} getclass={this.state.scrolled ? 'color-change' : ''}/>
+                <Header userName={first_name} page={'home'} userInfo={userInfo} eventClicked={eventClicked}
+                        feedback={feedback} getclass={this.state.scrolled ? 'color-change' : ''}/>
                 <Banner userName={first_name} eventClicked={eventClicked}/>
                 <section className="section-container">
                     <h2>Resume builder advantages</h2>
@@ -85,8 +100,8 @@ class Home extends Component {
                             <div className="advantages--content">
                                 <h3>Visually Striking Resume</h3>
                                 <p>Our resume layout optimizer makes sure all your
-                                content is aligned and organized so your resume looks
-                                like a work of art.</p>
+                                    content is aligned and organized so your resume looks
+                                    like a work of art.</p>
                             </div>
                         </li>
                         <li className="advantages--list">
@@ -96,7 +111,7 @@ class Home extends Component {
                             <div className="advantages--content">
                                 <h3>Unlimited Downloads</h3>
                                 <p>Our Resume Builder subscription gives you the
-                                flexibility to edit and download your resume unlimited time</p>
+                                    flexibility to edit and download your resume unlimited time</p>
                             </div>
                         </li>
                         <li className="advantages--list">
@@ -105,7 +120,8 @@ class Home extends Component {
                             </div>
                             <div className="advantages--content">
                                 <h3>Higher Recruiter Views</h3>
-                                <p>Each job has on average of 500 applicants with 95% of resume never read. Our resume builder increases the chances of your resume getting read.</p>
+                                <p>Each job has on average of 500 applicants with 95% of resume never read. Our resume
+                                    builder increases the chances of your resume getting read.</p>
                             </div>
                         </li>
                         <li className="advantages--list">
@@ -114,7 +130,8 @@ class Home extends Component {
                             </div>
                             <div className="advantages--content">
                                 <h3>Get your CV past screening software</h3>
-                                <p>Most of the resume filtering is done by machine. So, it becomes very important to design your CV as per the ATS</p>
+                                <p>Most of the resume filtering is done by machine. So, it becomes very important to
+                                    design your CV as per the ATS</p>
                             </div>
                         </li>
                     </ul>
@@ -131,7 +148,8 @@ class Home extends Component {
                             </div>
                             <div className="works--content">
                                 <h3>Choose your resume template</h3>
-                                <p>Our professional resume templates are designed strictly following all industry guidelines and best practices employers are looking for.</p>
+                                <p>Our professional resume templates are designed strictly following all industry
+                                    guidelines and best practices employers are looking for.</p>
                             </div>
                         </li>
                         <li className="works--list">
@@ -141,7 +159,8 @@ class Home extends Component {
                             </div>
                             <div className="works--content">
                                 <h3>Verify your profile imported from Shine</h3>
-                                <p>We import your Shine Profile to create your resume automatically. You may edit the details, if required</p>
+                                <p>We import your Shine Profile to create your resume automatically. You may edit the
+                                    details, if required</p>
                             </div>
                         </li>
                         <li className="works--list">
@@ -151,7 +170,8 @@ class Home extends Component {
                             </div>
                             <div className="works--content">
                                 <h3>Start impressing employers</h3>
-                                <p>Download your awesome resume from you email and land the job you are looking for, effortlessly.</p>
+                                <p>Download your awesome resume from you email and land the job you are looking for,
+                                    effortlessly.</p>
                             </div>
                         </li>
                     </ul>
@@ -219,7 +239,8 @@ class Home extends Component {
                         </li>
                     </ul>
 
-                    <button className="orange-button" onClick={() => this.scrollTo('templates','BuildResume','Features')}>Build your resume
+                    <button className="orange-button"
+                            onClick={() => this.scrollTo('templates', 'BuildResume', 'Features')}>Build your resume
                     </button>
 
                 </section>
@@ -241,7 +262,8 @@ class Home extends Component {
                     <div className="shinelearning">
                         <span className="icon-shinelearning"></span>
                         <p>Shine Learning is India’s largest professional courses and career skills portal. Launched by
-                            Shine.com, Shine Learning has a vision to up-skill the Indian talent pool to adapt to the changing job market.</p>
+                            Shine.com, Shine Learning has a vision to up-skill the Indian talent pool to adapt to the
+                            changing job market.</p>
                         <ul>
                             <li>Explore courses</li>
                             <li>Job assistance</li>
@@ -271,10 +293,13 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         "getCandidateId": () => {
-            return dispatch(actions.getCandidateId())
+            return dispatch(getCandidateId())
         },
         "loginCandidate": (token) => {
-            return dispatch(actions.loginCandidate({alt: token}))
+            return new Promise((resolve, reject) => {
+                return dispatch(loginCandidate({info: {alt: token}, resolve, reject}))
+            })
+
         },
         'showModal': () => {
             return dispatch(showModal())
@@ -286,7 +311,7 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(displaySelectedTemplate(templateId))
         },
         'feedback': (values) => {
-            return dispatch(actions.feedbackSubmit(values))
+            return dispatch(feedbackSubmit(values))
         },
         'eventClicked': (data) => {
             return dispatch(eventClicked(data))

@@ -1,4 +1,4 @@
-import Countries from "../components/Countries/index.js";
+import Countries from "../components/Countries/index.jsx";
 import Country from "../components/Country/index.js";
 
 

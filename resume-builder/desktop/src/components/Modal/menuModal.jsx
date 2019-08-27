@@ -2,7 +2,10 @@ import React from 'react';
 import Modal from 'react-modal';
 import "./menuModal.scss"
 
-Modal.setAppElement(document.getElementById('react-app'));
+if (typeof document !== 'undefined') {
+
+    Modal.setAppElement(document.getElementById('react-app'));
+}
 
 export default class MenuModal extends React.Component {
 
@@ -46,12 +49,12 @@ export default class MenuModal extends React.Component {
 
     async saveMenuItems() {
         this.setState({loader: true});
-        const {updateCategoryEntity, closeMenuModal,eventClicked} = this.props;
+        const {updateCategoryEntity, closeMenuModal, eventClicked} = this.props;
         const {preferenceList} = this.state
         await updateCategoryEntity(preferenceList, false);
         eventClicked({
-            'action':'CompletedAddRemove',
-            'label':'Click'
+            'action': 'CompletedAddRemove',
+            'label': 'Click'
         })
         this.setState({loader: false});
         closeMenuModal()

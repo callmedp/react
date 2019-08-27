@@ -1,6 +1,5 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-
 export default ({ name, flag, capital, population })  => {
   return (
     <NavLink to={`/${name}`} className="countries-item">

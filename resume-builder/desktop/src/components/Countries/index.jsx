@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchCountries } from "../../action/countries";
-import CountriesItem from './CountriesItem.js';
+import CountriesItem from './CountriesItem.jsx';
 
 const m = ({ countries }) => ({ countries });
 
