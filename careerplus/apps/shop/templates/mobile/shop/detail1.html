@@ -809,6 +809,7 @@ jQuery.validator.addMethod("customEmail", function(value, element) {
           get_create_profile(email, name, country_code, mobile_no);
           $('#enquireform').find('input[name="name"]').val(name)
           $('#enquireform').find('input[name="number"]').val(mobile_no)
+          $('#enquireform').find('input[name="email"]').val(email)
           $('#enquire_form').trigger('click')
       },
       rules:{
@@ -896,6 +897,7 @@ $('iframe').load(function(){
 
               $('#enquireform').find('input[name="name"]').val(global_name)
               $('#enquireform').find('input[name="number"]').val(global_mobile_no)
+              $('#enquireform').find('input[name="email"]').val(global_email)
               $('#enquire_form').trigger('click')
               {% endif %}
         }, 1000) 
