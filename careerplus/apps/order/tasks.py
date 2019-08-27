@@ -227,113 +227,102 @@ def process_mailer(pk=None):
         })
         email_status,sms_status = None,None
 
-        if oi.product.type_flow in [1, 12, 13]:
+        if oi.product.type_flow in [1, 12, 13] and (25 not in email_sets and 25 not in sms_sets):
             data.update({
                 'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                     settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                     token),
             })
-            if 25 not in email_sets and 25 not in sms_sets:
-                email_status = 25
-                sms_status = 25
+            email_status = 25
+            sms_status = 25
 
-        elif oi.product.type_flow == 3:
+        elif oi.product.type_flow == 3 and (44 not in email_sets and 44 not in sms_sets):
             data.update({
                 'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                     settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                     token),
             })
-            if 44 not in email_sets and 44 not in sms_sets:
-                email_status = 25
-                sms_status = 25
+            email_status = 44
+            sms_status = 44
 
-        elif oi.product.type_flow == 4:
+        elif oi.product.type_flow == 4 and (64 not in email_sets and 64 not in sms_sets):
             data.update({
                 'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                     settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                     token),
             })
-            if 64 not in email_sets and 64 not in sms_sets:
-                email_status = 25
-                sms_status = 25
+            email_status = 64
+            sms_status = 64
 
-        elif oi.product.type_flow == 5:
+        elif oi.product.type_flow == 5 and (74 not in email_sets and 74 not in sms_sets):
             data.update({
                 'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                     settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                     token),
             })
-            if 74 not in email_sets and 74 not in sms_sets:
-                email_status = 25
-                sms_status = 25
+            email_status = 74
+            sms_status = 74
 
-        elif oi.product.type_flow == 12:
+        elif oi.product.type_flow == 12 and (145 not in email_sets and 145 not in sms_sets):
             data.update({
                 'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                     settings.SITE_DOMAIN, settings.SITE_DOMAIN,
                     token),
             })
-            if 145 not in email_sets and 145 not in sms_sets:
-                email_status = 25
-                sms_status = 25
+            email_status = 145
+            sms_status = 145
 
-        elif oi.product.type_flow == 13:
+        elif oi.product.type_flow == 13 and (155 not in email_sets and 155 not in sms_sets):
             data.update({
                 'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                     settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                     token),
             })
-            if 155 not in email_sets and 155 not in sms_sets:
-                email_status = 25
-                sms_status = 25
+            email_status = 155
+            sms_status = 155
 
-        elif oi.product.type_flow in [7, 15]:
+        elif oi.product.type_flow in [7, 15] and (94 not in email_sets and 94 not in sms_sets):
             data.update({
                 'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                     settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                     token),
             })
-            if 94 not in email_sets and 94 not in sms_sets:
-                email_status = 25
-                sms_status = 25
+            email_status = 94
+            sms_status = 94
 
-        elif oi.product.type_flow == 2:
-            if 161 not in email_sets and 161 not in sms_sets:
-                email_status = 25
-                sms_status = 25
+        elif oi.product.type_flow == 2 and (161 not in email_sets and 161 not in sms_sets):
+            email_status = 161
+            sms_status = 161
 
-        elif oi.product.type_flow == 14:
-            if 191 not in email_sets and 191 not in sms_sets:
-                email_status = 25
-                sms_status = 25
+        elif oi.product.type_flow == 14 and (191 not in email_sets and 191 not in sms_sets):
+            email_status = 191
+            sms_status = 191
         
-        elif oi.product.type_flow == 6:
-            if 171 not in email_sets and 171 not in sms_sets:
-                email_status = 25
-                sms_status = 25
+        elif oi.product.type_flow == 6 and (171 not in email_sets and 171 not in sms_sets):
+            email_status = 171
+            sms_status = 171
 
-        elif oi.product.type_flow == 8:
+        elif oi.product.type_flow == 8 and (105 not in email_sets and 105 not in sms_sets):
             data.update({
                 'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                     settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                     token),
             })
-            if 105 not in email_sets and 105 not in sms_sets:
-                email_status = 25
-                sms_status = 25
+            email_status = 105
+            sms_status = 105
 
-        elif oi.product.type_flow == 9:
+        elif oi.product.type_flow == 9 and (122 not in email_sets and 122 not in sms_sets):
             data.update({
                 'upload_url': "%s://%s/autologin/%s/?next=/dashboard/roundone/profile/" % (
                     settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                     token)
             })
-            if 122 not in email_sets and 122 not in sms_sets:
-                email_status = 25
-                sms_status = 25
+            email_status = 122
+            sms_status = 122
         
         if email_status:
             send_email(to_emails, mail_type, data, email_status, oi.pk)
+
         if sms_status:
             SendSMS().send(sms_type=mail_type, data=data)
             oi.smsorderitemoperation_set.create(
