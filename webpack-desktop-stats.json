@@ -1,1 +1,20 @@
-{"status":"done","publicPath":"/","chunks":{"main":[{"name":"../../../careerplus/static_core/react/dist/desktop/client/main-1566912650874.css","publicPath":"/../../../careerplus/static_core/react/dist/desktop/client/main-1566912650874.css","path":"/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/react/dist/desktop/client/main-1566912650874.css"},{"name":"../../../careerplus/static_core/react/dist/desktop/client/main-1566912650874.js","publicPath":"/../../../careerplus/static_core/react/dist/desktop/client/main-1566912650874.js","path":"/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/react/dist/desktop/client/main-1566912650874.js"},{"name":"../../../careerplus/static_core/react/dist/desktop/client/main-1566912650874.js.map","publicPath":"/../../../careerplus/static_core/react/dist/desktop/client/main-1566912650874.js.map","path":"/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/react/dist/desktop/client/main-1566912650874.js.map"}]}}
+{
+  "status": "done",
+  "publicPath": "/",
+  "chunks": {
+    "main": [
+      {
+        "name": "main-1566914318392.css",
+        "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/react/dist/desktop/main-1566914318392.css"
+      },
+      {
+        "name": "main-1566914318392.js",
+        "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/react/dist/desktop/main-1566914318392.js"
+      },
+      {
+        "name": "main-1566914318392.js.map",
+        "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/react/dist/desktop/main-1566914318392.js.map"
+      }
+    ]
+  }
+}

@@ -22,9 +22,9 @@ const currentTimeStamp = +new Date();
 console.log('--<><><>--', config);
 
 // JS
-config.output.filename = `../../../careerplus/static_core/react/dist/desktop/client/main-${currentTimeStamp}.js`;
+config.output.filename = `../../../careerplus/static_core/react/dist/desktop/main-${currentTimeStamp}.js`;
 // CSS. "5" is MiniCssPlugin
-config.plugins[5].options.filename = `../../../careerplus/static_core/react/dist/desktop/client/main-${currentTimeStamp}.css`;
+config.plugins[5].options.filename = `../../../careerplus/static_core/react/dist/desktop/main-${currentTimeStamp}.css`;
 config.plugins.push(new BundleTracker({
     path: __dirname,
     filename: '../../../webpack-desktop-stats.json'

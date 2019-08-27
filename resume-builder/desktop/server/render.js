@@ -26,6 +26,7 @@ export default (pathname, store, context, timeStamp) => {
       <html lang="en">
       <head>
         <base href="${"/"}" />
+         <link type="text/css" href="https://learning1.shine.com/careerplus/static_core/react/dist/desktop/client/main-1566912650874.css" rel="stylesheet" />
          <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
               integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
               crossorigin="anonymous">
@@ -43,7 +44,7 @@ export default (pathname, store, context, timeStamp) => {
       <script>
         window.INITIAL_STATE = ${JSON.stringify(store.getState())}
       </script>
-      <script type="text/javascript"   src="https://static1.shine.com/l/s/react/dist/desktop/main-1565349222785.js" defer></script>
+      <script type="text/javascript"   src="https://learning-static-staging-189607.storage.googleapis.com/l1/s/react/dist/desktop/main-1566912650874.js" defer></script>
       </body>
       </html>
   `;
