@@ -97,6 +97,9 @@ def send_booster_recruiter_mail_task(to_emails, mail_type, email_dict, ois_to_up
             'subject': 'Your resume has been shared with relevant consultants',
             "username": oi.order.first_name,
         }
+        # updating the template for international booster
+        if oi.product.type_flow == 15:
+            candidate_data.update({'template_name': 'international_booster_candidate.html'})
         try:
             # send mail to candidate
             if email_sets.count(93) <= 2:
