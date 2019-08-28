@@ -86,7 +86,7 @@ class EditPreview extends Component {
                         <RightSection {...this.props}/>
                     </section>
                     {
-                        pathname === '/resume-builder/preview/' && !!(!uploadResume) && !!(!showNote.length) && !!(visibleNote) && !!(!loader) &&
+                        pathname === '/resume-builder/preview/' && !!(!uploadResume) && !!(!showNote.length) && !!(visibleNote) && 
                         < div className="sticky-msg">
                         <span className="pt-20">
                         <figure>
