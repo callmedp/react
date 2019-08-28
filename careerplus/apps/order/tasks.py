@@ -38,141 +38,103 @@ def pending_item_email(pk=None):
     order = Order.objects.get(pk=pk)
     order_items = order.orderitems.filter(no_process=False).select_related(
         'order', 'product', 'partner')
-    # once mail send flags for product type flow 1,12,4    
-    mail_send_once_flow_12 = False
-    sms_send__once_flow_12 = False
-    resume_upload_pending_mail_once = False
-    mail_send_once_flow_4 = False
-    sms_send__once_flow_12 = False
 
+    data = {}
+    token = AutoLogin().encode(
+            order.email, order.candidate_id, days=None)
+    data.update({
+            'subject': 'To initiate your services fulfil these details',
+            'username': order.first_name,
+            'mobile': order.get_mobile(),
+            'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
+                    settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
+                    token),
+            'url': create_short_url(login_url=data).get('url')
+    })
+    
+    to_emails = [order.get_email()]
+    mail_type = "PENDING_ITEMS"
+    product_names = []
+    oi_status_mapping = {}
 
     for oi in order_items:
-        data = {}
-
-        email_oi_status = None
-        sms_oi_status = None
-
-        mail_type = "PENDING_ITEMS"
-        to_emails = [oi.order.get_email()]
-        token = AutoLogin().encode(
-            oi.order.email, oi.order.candidate_id, days=None)
-        product_name = ''
-        if oi.product.type_flow in [4, 12]:   
-            oi_items = order_items.filter(
-                product__type_flow__in=[4, 12])
-            for oi_item in oi_items:
-                product_name = product_name + oi_item.product.name + ','
-        elif oi.product.type_flow in [1]:   
-            oi_items = order_items.filter(
-                product__type_flow__in=[1])
-            for oi_item in oi_items:
-                product_name = product_name + oi_item.product.name + ','
-        else:
-            product_name = oi.product.name
-
-        data.update({
-            'subject': 'To initiate your services fulfil these details',
-            'user': oi.order.first_name,
-            'type_flow': oi.product.type_flow,
-            'product_name': product_name,
-            'product_url': oi.product.get_url(),
-            'mobile': oi.order.get_mobile(),
-            'parent_name': oi.parent.product.name if oi.parent else ""
-        })
         email_sets = list(oi.emailorderitemoperation_set.all().values_list(
             'email_oi_status', flat=True).distinct())
         sms_sets = list(oi.smsorderitemoperation_set.all().values_list(
             'sms_oi_status', flat=True).distinct())
+        sms_oi_status = None
 
-        data.update({
-                'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                    settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                    token)
-            })
-        urlshortener = create_short_url(login_url=data)
-        data.update({'url': urlshortener.get('url')})
-        
-        if (not resume_upload_pending_mail_once) and  (oi.product.type_flow == 1) and (21 not in email_sets) and (21 not in sms_sets) and (oi.oi_status==2):
-            send_email(to_emails, mail_type, data, 21, oi.pk)
-            SendSMS().send(sms_type=mail_type, data=data)
-            sms_oi_status=21
-            resume_upload_pending_mail_once = True
-
-        elif oi.product.type_flow == 3 and 41 not in email_sets and 41 not in sms_sets:
-            send_email(to_emails, mail_type, data, 41, oi.pk)
-            SendSMS().send(sms_type=mail_type, data=data)
-            sms_oi_status=41
-
-        elif oi.product.type_flow == 4 and (61 not in email_sets or 61 not in sms_sets):
-            if not mail_send_once_flow_4:
-                send_email(to_emails, mail_type, data, 61, oi.pk)
-                mail_send_once_flow_4 = True
-            else:
-                email_oi_status=61
-
-            if not sms_send__once_flow_12:
-                SendSMS().send(sms_type=mail_type, data=data)
-                sms_oi_status=61
-                sms_send__once_flow_12 = True
-            else:
-                sms_oi_status=61
-
-        elif oi.product.type_flow == 5 and 71 not in email_sets and 71 not in sms_sets:
-            send_email(to_emails, mail_type, data, 71, oi.pk)
-            SendSMS().send(sms_type=mail_type, data=data)
-            sms_oi_status=71
-
-        elif oi.product.type_flow in [7, 15] and 91 not in email_sets and 91 not in sms_sets:
-            send_email(to_emails, mail_type, data, 91, oi.pk)
-            SendSMS().send(sms_type=mail_type, data=data)
-            sms_oi_status=91
-
-        elif oi.product.type_flow == 12 and (141 not in email_sets or 141 not in sms_sets) :
-            if not mail_send_once_flow_12:
-                send_email(to_emails, mail_type, data, 141, oi.pk)
-                mail_send_once_flow_12 = True
-            else:
-                email_oi_status=141
-
-            if not sms_send__once_flow_12:
-                SendSMS().send(sms_type=mail_type, data=data)
-                sms_oi_status=141
-                sms_send__once_flow_12 = True
-            else:
-                sms_oi_status=141
-
-        elif oi.product.type_flow == 13 and 151 not in email_sets and 151 not in sms_sets:
-            send_email(to_emails, mail_type, data, 151, oi.pk)
-            SendSMS().send(sms_type=mail_type, data=data)
-            sms_oi_status=151
-
-        elif oi.product.type_flow == 8 and 108 not in email_sets and 108 not in sms_sets:
-            send_email(to_emails, mail_type, data, 108, oi.pk)
-            SendSMS().send(sms_type=mail_type, data=data)
-            sms_oi_status=108
-
-        elif oi.product.type_flow == 9 and 121 not in email_sets and 121 not in sms_sets:
-            data.update({
+        if (oi.product.type_flow == 9) and (121 not in email_sets) and (121 not in sms_sets):
+            type_flow_9_data = data
+            type_flow_9_data.update({
                 'upload_url': "%s://%s/autologin/%s/?next=/dashboard/roundone/profile/" % (
                     settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                    token)
+                    token),
+                'type_flow':9,
+                'product_url': oi.product.get_url(),
             })
-            send_email(to_emails, mail_type, data, 121, oi.pk)
-            urlshortener = create_short_url(login_url=data)
-            data.update({'url': urlshortener.get('url')})
-            SendSMS().send(sms_type=mail_type, data=data)
+            send_email(to_emails, mail_type, type_flow_9_data, 121, oi.pk)
+            urlshortener = create_short_url(login_url=type_flow_9_data)
+            type_flow_9_data.update({'url': urlshortener.get('url')})
+            SendSMS().send(sms_type=mail_type, data=type_flow_9_data)
             sms_oi_status=121
 
-        elif oi.product.type_flow == 10 and 131 not in email_sets and 131 not in sms_sets:
-            data.pop('upload_url', None)
-            data.update({
-                'test_url': "%s/dashboard" % (settings.SITE_DOMAIN)
+        elif (oi.product.type_flow == 10) and (131 not in email_sets) and (131 not in sms_sets):
+            type_flow_10_data = data
+            type_flow_10_data.pop('upload_url', None)
+            type_flow_10_data.update({
+                'test_url': "%s/dashboard" % (settings.SITE_DOMAIN),
+                'type_flow':10,
+                'product_url': oi.product.get_url(),
             })
-            send_email(to_emails, mail_type, data, 131, oi.pk)
-            urlshortener = create_short_url(login_url=data)
-            data.update({'url': urlshortener.get('url')})   
-            SendSMS().send(sms_type=mail_type, data=data)
+            send_email(to_emails, mail_type, type_flow_10_data, 131, oi.pk)
+            urlshortener = create_short_url(login_url=type_flow_10_data)
+            type_flow_10_data.update({'url': urlshortener.get('url')})   
+            SendSMS().send(sms_type=mail_type, data=type_flow_10_data)
             sms_oi_status=131
+        
+        if not oi.oi_status == 2:
+            continue
+        
+        if (oi.product.type_flow == 1) and (21 not in email_sets) and (21 not in sms_sets):
+            oi_status_mapping.update({oi.id:21})
+            product_names.append(oi.product.name)
+            sms_oi_status=21
+
+        elif (oi.product.type_flow == 3) and (41 not in email_sets) and (41 not in sms_sets):
+            oi_status_mapping.update({oi.id:41})
+            product_names.append(oi.product.name)
+            sms_oi_status=41
+
+        elif (oi.product.type_flow == 4) and (61 not in email_sets or 61 not in sms_sets):
+            oi_status_mapping.update({oi.id:61})
+            product_names.append(oi.product.name)
+            sms_oi_status=61
+
+        elif (oi.product.type_flow == 5) and (71 not in email_sets) and (71 not in sms_sets):
+            oi_status_mapping.update({oi.id:71})
+            product_names.append(oi.product.name)
+            sms_oi_status=71
+
+        elif (oi.product.type_flow in [7, 15]) and (91 not in email_sets) and (91 not in sms_sets):
+            oi_status_mapping.update({oi.id:91})
+            product_names.append(oi.product.name)
+            sms_oi_status=91
+
+        elif (oi.product.type_flow == 12) and (141 not in email_sets or 141 not in sms_sets) :
+            oi_status_mapping.update({oi.id:141})
+            product_names.append(oi.product.name)
+            sms_oi_status=141
+
+        elif (oi.product.type_flow == 13) and (151 not in email_sets) and (151 not in sms_sets):
+            oi_status_mapping.update({oi.id:151})
+            product_names.append(oi.product.name)
+            sms_oi_status=151
+
+        elif (oi.product.type_flow == 8) and (108 not in email_sets) and (108 not in sms_sets):
+            oi_status_mapping.update({oi.id:108})
+            product_names.append(oi.product.name)
+            sms_oi_status=108
 
         if sms_oi_status:
             oi.smsorderitemoperation_set.create(
@@ -180,18 +142,19 @@ def pending_item_email(pk=None):
                 to_mobile=data.get('mobile'),
                 status=1)
 
-        if email_oi_status:
-            to_email = to_emails[0] if to_emails else oi.order.get_email()
-            oi.emailorderitemoperation_set.create(
-                email_oi_status=141, to_email=to_email,
-                status=1)
+    if oi_status_mapping:
+        data.update({
+                'product_names':product_names,
+                'combined_mail':True  # for type flow type_flow = [1,3,4,5,12,13,7,8,15]
+            })
+        SendSMS().send(sms_type=mail_type, data=data)
+        send_email(to_emails=to_emails,mail_type=mail_type, email_dict=data,oi_status_mapping=oi_status_mapping)
 
 
 
 @task(name="process_mailer")
 def process_mailer(pk=None):
     from order.models import Order
-    order = None
     order = Order.objects.filter(pk=pk).first()
 
     if (not order) or (not order.status == 1):

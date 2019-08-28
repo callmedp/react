@@ -181,21 +181,24 @@ def create_short_url(login_url={}):
     
     return short_url
 
-def send_email(to_emails, mail_type, email_dict, status=None, oi=None):
-    try:
-        SendMail().send(to_emails, mail_type, email_dict)
-        if oi:
-            from order.models import OrderItem
-            obj = OrderItem.objects.filter(pk=oi)
-            for oi_item in obj:
-                to_email = to_emails[0] if to_emails else oi_item.order.get_email()
-                oi_item.emailorderitemoperation_set.create(
-                    email_oi_status=status, to_email=to_email,
-                    status=1)
-    except Exception as e:
-        logging.getLogger('error_log').error(
-            "email sending failed %s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+def send_email(to_emails, mail_type, email_dict, status=None, oi=None,oi_status_mapping={}):
+    from order.models import OrderItem
+    SendMail().send(to_emails, mail_type, email_dict)
 
+    if oi:
+        order_item = OrderItem.objects.filter(pk=oi).first()
+        to_email = to_emails[0] if to_emails else order_item.order.get_email()
+        order_item.emailorderitemoperation_set.create(
+            email_oi_status=status, to_email=to_email,
+            status=1)
+    
+    if oi_status_mapping:
+        order_items = OrderItem.objects.filter(id__in=list(oi_status_mapping.keys()))
+        for order_item in order_items:
+            to_email = to_emails[0] if to_emails else order_item.order.get_email()
+            order_item.emailorderitemoperation_set.create(
+                email_oi_status=oi_status_mapping.get(order_item.id), to_email=to_email,
+                status=1)
 
 def send_email_from_base(subject=None, body=None, to=[], headers=None, oi=None, status=None):
     try:
