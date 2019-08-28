@@ -34,7 +34,7 @@ class EditPreview extends Component {
         super(props);
         this.removeNote = this.removeNote.bind(this);
         this.allowUploadResume = this.allowUploadResume.bind(this);
-        this.state={
+        this.state = {
             visibleNote: true
         }
     }
@@ -79,29 +79,29 @@ class EditPreview extends Component {
                     number={number}
                     email={email}/>
                 <div className="page-container">
-                    <SelectTemplateModal {...this.props}  page={'edit'}/>
+                    <SelectTemplateModal {...this.props} page={'edit'}/>
                     <TopBar {...this.props}/>
                     <section className={'flex-container mt-30'}>
                         <LeftSideBar {...this.props} onChange={this.allowUploadResume}/>
                         <RightSection {...this.props}/>
                     </section>
                     {
-                        pathname === '/resume-builder/preview/' && !!(!uploadResume) && !!(!showNote.length) && !!(visibleNote) &&
-                        <div className="sticky-msg">
+                        pathname === '/resume-builder/preview/' && !!(!uploadResume) && !!(!showNote.length) && !!(visibleNote) && !!(!loader) &&
+                        < div className="sticky-msg">
                         <span className="pt-20">
-                            <figure>
-                                <i className="icon-thumbsup"></i>
-                                Well Done!
-                            </figure>
+                        <figure>
+                        <i className="icon-thumbsup"></i>
+                        Well Done!
+                        </figure>
                         </span>
-                            <span>
-                            <strong>Update Resume</strong>
-                            <p>Your resume is ready to help you
-                            search best jobs, update it on your
-                            shine profile</p>
-                            <button className="orange-button" onClick={this.allowUploadResume}>Update</button>
+                        <span>
+                        <strong>Update Resume</strong>
+                        <p>Your resume is ready to help you
+                        search best jobs, update it on your
+                        shine profile</p>
+                        <button className="orange-button" onClick={this.allowUploadResume}>Update</button>
                         </span>
-                            <i className="icon-close" onClick={this.removeNote}></i>
+                        <i className="icon-close" onClick={this.removeNote}></i>
                         </div>
                     }
                 </div>
