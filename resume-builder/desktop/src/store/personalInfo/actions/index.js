@@ -1,9 +1,8 @@
 import {FETCH_PERSONAL_INFO, UPDATE_PERSONAL_INFO, FETCH_IMAGE_URL, UPDATE_ENTITY_PREFERENCE, FETCH_INTEREST_LIST,UPDATE_SUMMARY_WITH_SUGGESTION} from './actionTypes';
 
 
-export const fetchPersonalInfo = (payload) => ({
-    type: FETCH_PERSONAL_INFO,
-    payload
+export const fetchPersonalInfo = () => ({
+    type: FETCH_PERSONAL_INFO
 });
 
 
