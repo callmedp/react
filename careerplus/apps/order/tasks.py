@@ -93,9 +93,6 @@ def pending_item_email(pk=None):
             SendSMS().send(sms_type=mail_type, data=type_flow_10_data)
             sms_oi_status=131
         
-        if not oi.oi_status == 2:
-            continue
-        
         if (oi.product.type_flow == 1) and (21 not in email_sets) and (21 not in sms_sets):
             oi_status_mapping.update({oi.id:21})
             product_names.append(oi.product.name)
