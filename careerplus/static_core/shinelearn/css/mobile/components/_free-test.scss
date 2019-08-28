@@ -1,0 +1,19 @@
+.freeTest-widget {
+    border: 1px solid $border-grey-d8;
+
+    &--image {
+        position: relative;
+
+        h2 {
+            position: absolute;
+            text-align: center;
+            color: $txt-white;
+            width: 100%;
+            top: 15px;
+        }
+    }
+
+    &__content {
+        padding: 15px;
+    }
+}
