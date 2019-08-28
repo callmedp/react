@@ -631,7 +631,8 @@ class OrderItem(AbstractAutoDate):
 
     @property
     def sent_link_count(self):
-        return self.jobs_link.filter(status=2).count()
+        manual_links_count = self.get_manual_sent_link()
+        return self.jobs_link.filter(status=2).count() + manual_links_count
 
     @property
     def is_closed(self):
@@ -669,8 +670,7 @@ class OrderItem(AbstractAutoDate):
 
         return weeks, weeks_till_now
 
-
-    def get_links_needed_till_now(self, update_pending_link=False):
+    def get_links_needed_till_now(self):
         start, end = None, None
         links_count = 0
         sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5,23, 31]).order_by('id').first()
@@ -686,18 +686,18 @@ class OrderItem(AbstractAutoDate):
                 if start > today:
                     break
                 links_count += links_per_week
+        return links_count
 
+    def get_manual_sent_link(self):
         manual_change = None
         profile = getattr(self, 'whatsapp_profile_orderitem', None)
-        if profile and update_pending_link:
+        if profile:
             if profile.manual_change == 1:
                 manual_changes_data = eval(profile.manual_changes_data) if \
                     profile.manual_changes_data else {}
                 already_sent_link = manual_changes_data.get('already_sent_link', 0)
-                links_count = links_count - already_sent_link
-
-        return links_count
-
+                return already_sent_link
+        return 0
 
     def has_saved_links(self):
         saved_links = self.jobs_link.filter(status=0)
@@ -729,8 +729,8 @@ class OrderItem(AbstractAutoDate):
         return links.count()
 
     def update_pending_links_count(self):
-        links_needed_till_now = self.get_links_needed_till_now(update_pending_link=True)
-        links_sent_till_now = self.jobs_link.filter(status=2).count()
+        links_needed_till_now = self.get_links_needed_till_now()
+        links_sent_till_now = self.sent_link_count
         links_pending = links_needed_till_now - links_sent_till_now
         self.pending_links_count = links_pending
         if self.pending_links_count < 0:
