@@ -83,7 +83,9 @@
 {% if request.GET.due_date %}
 <input type="hidden" name="due_date" value="{{request.GET.due_date}}">
 {% endif %}
-
+{% if request.GET.sort_payment_date %}
+<input type="hidden" name="sort_payment_date" value="{{request.GET.sort_payment_date}}">
+{% endif %}
 
                       </div>
 </div>
@@ -327,9 +329,7 @@
                         <span style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{obj.order.id}}callingbtn-error"></span>
                         {% endif %}
                         <button type="button" onclick="order_get_details('{{obj.order.id}}','mobile,alt_mobile','mobile','{{forloop.counter}}');" class="btn btn-primary btn-xs"><i class="fa fa-phone" aria-hidden="true"></i>View Mobile</button>
-                   </div>
-                                                       
-
+                   </div>                                                       
                       <td>
                             {% if obj.parent and obj.is_variation %}
                               <strong>{{obj.parent.product.get_name}}{% if obj.parent.product.get_exp_db %} - Exp: {{obj.parent.product.get_exp_db}}{% endif %}:</strong><br/>
