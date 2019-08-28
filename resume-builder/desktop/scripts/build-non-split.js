@@ -15,6 +15,7 @@ config.optimization.splitChunks = {
 // Move runtime into bundle instead of separate file
 config.optimization.runtimeChunk = false;
 
+console.log('Here');
 
 const currentTimeStamp = +new Date();
 
