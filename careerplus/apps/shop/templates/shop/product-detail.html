@@ -130,7 +130,11 @@
                     <li>
                      <a href="#review" class="cls_review">
                       <figure class="review-icon"></figure>
-                      <span>{% if prd_num_rating %}&nbsp;<strong class="anchor-color" >{{prd_num_rating}}</strong>&nbsp;{% if prd_num_rating == 1 %}review {% else %}reviews {% endif %}{% else %}Write a review{% endif %}</span>
+                      <span>
+                          {% if prd_num_rating.count > 15 %}&nbsp;<strong class="anchor-color" >{{prd_num_rating}}</strong>Reviews
+                          {% else %}
+                           Write a review
+                          {% endif %}</span>
                      </a> 
                     </li>
                     <li>

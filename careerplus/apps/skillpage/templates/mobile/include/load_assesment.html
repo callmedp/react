@@ -56,7 +56,9 @@
                 <p class="pb-0 fs-12">
                     Starting at <strong>Rs. {{ product.pPin |floatformat:'0' }}/-</strong>{% if product.pPfin|floatformat:0|add:"0" %}<strike>Rs. {{ product.pPfin|floatformat:"0" }}/-</strike> <span class="discount">{{ product.discount }}% OFF</span>{% endif %}
                 </p>
-                <a href="#" class="btn btn-sm btn-blue mt-15">Take free test</a>
+                	{% if product.id|get_value:prod_tests %}
+                <a href="{% url 'assessment:vskill-exam' slug=product.id|get_value:prod_tests  %}"  class="btn btn-sm btn-blue mt-15">Take free test</a>
+                {% endif %}
             </div><!-- end of media body -->
         </div><!-- end of media -->
     </div><!-- end of box -->

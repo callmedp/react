@@ -171,7 +171,7 @@
                         </ul>
                     </div>
                 </div><!-- end of Recommended for -->
-
+		{% if category_obj.assessment_test_count %}
                 <div class="container">
                     <div class="freeTest-widget">
                         <div class="freeTest-widget--image">
@@ -180,12 +180,12 @@
                         </div>
 
                         <div class="freeTest-widget__content text-center mt-15">
-                            <p>Take our free practice test in <strong>Digital Marketing</strong>, to know where you stand</p>
-                            <a href="#" class="btn btn-blue mt-15">Take free test</a>
+                            <p>Take our free practice test in <strong>{{category_obj.heading}}</strong>, to know where you stand</p>
+                            <a href="{% url 'assessment:vskill-subcategory' slug=category_obj.slug %}" class="btn btn-blue mt-15">Take free test</a>
                         </div>
                     </div>
                 </div>
-
+         {% endif %}
 
                  {% if widget_objs %}
                     <div class="w100fl">
