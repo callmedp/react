@@ -11,6 +11,7 @@
     right: 5%;
     bottom: -1%;
     background: $white;
+    animation: 1s ease-out 0s 1 slideInFromRight;
 
 	span {
 		display: table-cell;
@@ -61,3 +62,11 @@
 	}
 }
 
+@keyframes slideInFromRight {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
