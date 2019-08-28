@@ -78,21 +78,36 @@
         </div>
     </div><!-- /. searc -->
 
+           {% if test_prep %}
 
-    <div class="popular_test">
-        <h2>Most popular tests</h2>
-         {% for test in test_list %}
+       {% for testPrep in test_prep %}
+      <div class="functional_area mt-40" id="funcDivi">
+            <h2>{{testPrep.heading}}</h2>
+           {% for fa in testPrep.get_childrens|slice:":8" %}
 
-            <div class="popular_test_inside">
-     <a id="{{test.id}}" onclick="testModal(event);" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","catname":"{{test.category.name}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}","courseName":"{{test.course.name}}","courseDuration":"{{test.course.get_duration_in_day}}","coursePrice":"{{test.course.inr_price}}","productName":"{{test.product.name}}","productDuration":"{{test.product.get_duration_day}}","productPrice":"{{test.product.inr_price}}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}","courseUrl":"{{test.course.get_absolute_url}}","productUrl":"{{test.product.get_absolute_url}}" }'>
-                <span class="border border{{forloop.counter0}}"></span>
-                <span class="name">{{test.title}}</span>
-                <span class="btn btn-md btn-round-30 btn-blue" >Take free test</span>
-            </a>
-            </div>
-            {% endfor %}
-    </div><!-- /. popular test -->
-      
+            <div class="functional_area_inside border-{{forloop.counter0}}">
+            <a title="{{fa.name}}" href="{% url 'assessment:vskill-category' slug=fa.slug %}">
+                  {% if fa.icon %}
+                     <span class="functional_area_inside--image"><img class="img-responsive" alt="{{fa.name}}" src= "{{fa.icon.url}}"></span>
+                     {% else %}
+                     <span class="functional_area_inside--image"><img  class="img-responsive" alt="{{fa.name}}" src="#"></span>
+                     {% endif %}
+                <span class="fa_name">{{fa.name}}</span></a> </div>
+              {%endfor%}
+
+         {% if  testPrep.get_childrens.count > 8  %}
+
+            <a class="load_more_button" id="testPrepLoadMore" href="{% url 'assessment:vskill-category' slug=testPrep.slug %}">View All</a>
+        {% endif %}
+    </div>
+              {% endfor %}
+                  {% endif %}
+
+
+
+
+
+
     <div class="functional_area mt-40" id="funcDiv">
             <h2>Tests by functional area</h2>
            {% for fa in func_area|slice:":8" %}
@@ -112,6 +127,22 @@
             <div class="load_more_button" id="loadmorebtn" onclick="loadmore();">Load more</div>
         {% endif %}
     </div>
+
+        <div class="popular_test">
+        <h2>Most popular tests</h2>
+         {% for test in test_list %}
+
+            <div class="popular_test_inside">
+     <a id="{{test.id}}" onclick="testModal(event);" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","catname":"{{test.category.name}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}","courseName":"{{test.course.name}}","courseDuration":"{{test.course.get_duration_in_day}}","coursePrice":"{{test.course.inr_price}}","productName":"{{test.product.name}}","productDuration":"{{test.product.get_duration_day}}","productPrice":"{{test.product.inr_price}}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}","courseUrl":"{{test.course.get_absolute_url}}","productUrl":"{{test.product.get_absolute_url}}" }'>
+                <span class="border border{{forloop.counter0}}"></span>
+                <span class="name">{{test.title}}</span>
+                <span class="btn btn-md btn-round-30 btn-blue" >Take free test</span>
+            </a>
+            </div>
+            {% endfor %}
+    </div><!-- /. popular test -->
+
+
 </div>
 
     <div class="practice-test check-result-wrap pt-30" id="check_results">

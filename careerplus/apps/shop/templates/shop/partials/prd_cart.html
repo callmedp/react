@@ -8,7 +8,7 @@
     </form>
 </div>
 
-  <div class="box-panel enrol-cart{% if product.is_assesment %} pb-65 {% endif %}  ">
+  <div class="box-panel enrol-cart{% if product.inr_price < 5001 %} pb-65 {% endif %}  ">
      <strong id="total-price" class="total-price" name="price_total" sum-price="{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}" >Rs. {% if selected_var %}
      {{var_list.0.inr_price|floatformat}}{% else %}
      {{sqs.pPinb|floatformat}}{% endif %}/- <small>(+taxes)</small></strong>
@@ -66,23 +66,25 @@
         <figure class="calling-icon"></figure> {{ggn_contact}}
       </a>
     </div-->
-    {% if product.is_assesment %}
+         {% if product.inr_price < 5001 %}
     <div class="e-payLatter">
       <span class="mr-15">
         <img aria-label="ePayLater" src="{% static "shinelearn/images/epaylatter.png" %}"/>
       </span>
       <p>Buy test now and <span class="bold">make payment within 14 days</span> using ePayLater </p>
     </div><!-- ./ e-payLatter -->
-    {% endif %}
+          {% endif %}
   </div>
-  {%if not product.is_assesment %}
-  <!-- check free sample start -->
   <div class="cls_samples_enquiry samples_enquiry">
+ {%if product.inr_price > 501 %}
+  <!-- check free sample start -->
       <!-- Interested in this course? -->
       <div class="course-query box-panel mb-40 cleafix">
           <h2 class="heading-right">
             {% if product.is_course %}
               Interested in this course?
+            {% elif product.is_assesment %}
+               Interested
             {% else %}
               Interested in this service?
             {% endif %}
@@ -131,7 +133,7 @@
             Submit
           </button-->
       </div>
-      {% else %}
+  {% endif %}
       {% if product.take_free_test %}
       <div class="mt-20 confused-about-buying">
         <!-- <figure>
@@ -141,13 +143,13 @@
         <p>
           <b>Confused about buying?</b>
           Take our free practice test in
-          <strong>Digital Marketing,</strong>
+          <strong>{{product.take_free_test.title}}</strong>
           to know where you stand
         </p>
         <a href="{{product.take_free_test.get_absolute_url}}">Take free test</a>
       </div>
 
-  {% endif %}
+
   {% endif %}
       {% if widget_objs %}
       <div class="box-panel free-sample">

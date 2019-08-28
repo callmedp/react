@@ -246,12 +246,14 @@
                     <!-- Accordion end -->
                     <!-- Accordion FAQ’s Starts here  -->
                     <div class="accordion_example1 faq-wrap row mt-40">
+                        {% if faq %}
                         <h2>FAQ’s</h2>
                         <div class="accordion_in">
 
                             {% include "mobile/shop/partials/faq.html" %}
 
                         </div>
+                        {% endif %}
                     </div>
                     <!-- Accordion FAQ’s Ends here  -->
                 </div><!-- end of container -->

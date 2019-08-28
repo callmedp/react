@@ -137,12 +137,13 @@
                             <strong>{{prd_num_jobs}} Jobs</strong>
                         </li>
                     {% endif %}
-                    <li>
+                 {% if prd_num_bought > 100 %}
+                       <li>
                         <figure class="icon-jobs"></figure>
-                        <strong>
-                            {{prd_num_bought}}
-                        </strong> bought
+           <strong>&nbsp;{{prd_num_bought}}</strong> people bought
+
                     </li>
+                    {% endif %}
                     {% if prd_cert %}
                         <li>
                             <figure class="icon-certificate"></figure>
@@ -154,7 +155,7 @@
         <hr class="row">
         <article class="mt-20">
         {% if prd_about %}
-            <h2>Overview</h2>
+            <h2>{% if prd_service == 'assessment' %} Test {% elif prd_service == 'course' %}Course Overview {% else %}Service Overview{% endif %}</h2>
             {{prd_about|safe}}
             <style>
                 .morecontent span {
