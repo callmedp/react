@@ -3319,4 +3319,14 @@ class PracticeTestInfo(AbstractAutoDate):
                 return True
         return False
 
+    @property
+    def latest_level(self):
+        if getattr(self, 'test_data', None):
+            datum = eval(getattr(self, 'test_data'))
+            result = datum.get('result', None)
+            if 'pt_level' in result:
+                return result['pt_level']
+        return None
+    
+
 
