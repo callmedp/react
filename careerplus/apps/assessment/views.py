@@ -98,9 +98,11 @@ class AssessmentLandingPage(TemplateView):
             category_ids = Category.objects.filter(id__in=category_ids, from_category__active=True).values_list\
                 ('from_category__related_to__id', flat=True)
         if category_ids:
-            category_ids = Category.objects.filter(id__in=category_ids)
+            category_ids = Category.objects.filter(id__in=category_ids).exclude(id__in=settings.TEST_PREP_ID)
+        test_prep = Category.objects.filter(id__in=settings.TEST_PREP_ID)
         context.update({'func_area': category_ids})
         context.update({'test_list': self.get_test()})
+        context.update({'test_prep':test_prep})
         return context
 
 

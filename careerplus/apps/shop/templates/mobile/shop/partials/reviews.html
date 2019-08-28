@@ -1,13 +1,12 @@
 <div class="container">
     <div class="w100fl" id="review" style="position:relative">
-
              {% if not prd_review_list %}
            <h2 class="pull-left">Write a Review </h2>
-          {% else %}<h2 class="pull-left"> {% if prd_review_list == 1 %} Review {% else %} Reviews {% endif %}</h2>
+          {% else %}
+        <h2 class="pull-left">
+            {% if prd_review_list > 15 %} Review {% else %} Reviews {% endif %}</h2>
             <a class="write-review pull-right mt-5" role="button" data-toggle="collapse" id="write_review_btn" href="#collapseExampleform" aria-expanded="true" onclick="toggle_review({% if review_obj%}'Update your review'{%else%}'Write a review'{%endif%});">{% if review_obj%}Update your review{%else%}Write a review{%endif%}</a>
          {% endif %}
-
-
 
 
     </div>
@@ -84,6 +83,7 @@
     <div class="box row pb-30">
         <div class="review-container rel">
             <ul class="review-slide">
+
               {% include 'mobile/shop/partials/review_snippet.html'%}
             </ul>
         </div><!-- end of review wrap -->
@@ -151,4 +151,5 @@
   </div><!-- end of modal-helper -->
 </div>
 
-{% endif %}   
+{% endif %}
+

@@ -359,6 +359,13 @@ h2 {
     border: 3px solid $yellow;
     border-bottom-left-radius: 7px;
     border-bottom-right-radius: 7px;
+
+    .pad-15 {
+        padding-top: 0;
+        padding-right: 15px;
+        padding-left: 15px;
+        padding-bottom: 0;
+    }
 }
 .recommended-head {
     background: $yellow;
