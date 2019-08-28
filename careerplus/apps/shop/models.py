@@ -63,6 +63,7 @@ from .choices import (
     SHINE_FLOW_ACTION,
     convert_to_month,
     LINK_STATUS_CHOICES,
+    MANUAL_CHANGES_CHOICES,
     DAYS_CHOICES,
     convert_inr,
     convert_usd,
@@ -3222,6 +3223,11 @@ class ProductUserProfile(AbstractAutoDate):
         null=True, blank=True,
         choices=DAYS_CHOICES
     )
+    manual_change = models.PositiveSmallIntegerField(
+        null=True, blank=True, choices=MANUAL_CHANGES_CHOICES
+    )
+    manual_changes_data = models.CharField(max_length=200, null=True, blank=True)
+
     def save(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super(ProductUserProfile, self).save(*args, **kwargs)
