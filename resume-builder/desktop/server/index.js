@@ -44,7 +44,7 @@ app.use(function (req, res, next) {
     console.log('----', req.path);
     next();
 });
-app.use('/media', express.static('public'));
+app.use('/resume-builder/dist', express.static('dist'));
 
 app.get('*', async (req, res) => {
     const result = []

@@ -25,8 +25,8 @@ export default (pathname, store, context, timeStamp) => {
   <!DOCTYPE html>
       <html lang="en">
       <head>
-        <base href="${"/"}" />
-         <link type="text/css" href="https://learning1.shine.com/careerplus/static_core/react/dist/desktop/client/main-1566912650874.css" rel="stylesheet" />
+        <base href="${"/resume-builder/"}" />
+         <link type="text/css" href="dist/main.css" rel="stylesheet" />
          <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
               integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
               crossorigin="anonymous">
@@ -34,7 +34,7 @@ export default (pathname, store, context, timeStamp) => {
               href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"/>
         <link rel="stylesheet" type="text/css"
           href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"/>
-        <link type="text/css" href="{% static 'shinelearn/css/resume-builder/resume6.css' %}" rel="stylesheet">
+        <link type="text/css" href="https://static1.shine.com/l/s/shinelearn/css/resume-builder/resume6.css" rel="stylesheet">
         <meta charset="UTF-8">
         <title>Title</title>
       </head>
@@ -44,7 +44,7 @@ export default (pathname, store, context, timeStamp) => {
       <script>
         window.INITIAL_STATE = ${JSON.stringify(store.getState())}
       </script>
-      <script type="text/javascript"   src="https://learning-static-staging-189607.storage.googleapis.com/l1/s/react/dist/desktop/main-1566912650874.js" defer></script>
+      <script type="text/javascript" src="dist/main.js"></script>
       </body>
       </html>
   `;
