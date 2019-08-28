@@ -670,7 +670,7 @@ class OrderItem(AbstractAutoDate):
         return weeks, weeks_till_now
 
 
-    def get_links_needed_till_now(self):
+    def get_links_needed_till_now(self, update_pending_link=False):
         start, end = None, None
         links_count = 0
         sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5,23, 31]).order_by('id').first()
@@ -686,6 +686,16 @@ class OrderItem(AbstractAutoDate):
                 if start > today:
                     break
                 links_count += links_per_week
+
+        manual_change = None
+        profile = getattr(self, 'whatsapp_profile_orderitem', None)
+        if profile and update_pending_link:
+            if profile.manual_change == 1:
+                manual_changes_data = eval(profile.manual_changes_data) if \
+                    profile.manual_changes_data else {}
+                already_sent_link = manual_changes_data.get('already_sent_link', 0)
+                links_count = links_count - already_sent_link
+
         return links_count
 
 
@@ -719,19 +729,12 @@ class OrderItem(AbstractAutoDate):
         return links.count()
 
     def update_pending_links_count(self):
-        links_needed_till_now = self.get_links_needed_till_now()
+        links_needed_till_now = self.get_links_needed_till_now(update_pending_link=True)
         links_sent_till_now = self.jobs_link.filter(status=2).count()
         links_pending = links_needed_till_now - links_sent_till_now
-        force_update_links_count = None
-        profile = getattr(self, 'whatsapp_profile_orderitem', None)
-        if profile:
-            force_update_links_count = profile.force_update_links_count
-        if force_update_links_count:
-            self.pending_links_count = self.pending_links_count - links_sent_till_now
-        else:
-            if links_pending < 0:
-                links_pending = 0
-            self.pending_links_count = links_pending
+        self.pending_links_count = links_pending
+        if self.pending_links_count < 0:
+            self.pending_links_count = 0
         self.save()
 
     def set_due_date(self):

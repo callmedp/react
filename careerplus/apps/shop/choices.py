@@ -313,3 +313,7 @@ DAYS_CHOICES = (
 )
 
 DAYS_CHOICES_DICT = dict(DAYS_CHOICES)
+
+MANUAL_CHANGES_CHOICES = (
+    (1, 'Update Pending Links Count'),
+)
