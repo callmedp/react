@@ -95,8 +95,7 @@ class AssessmentLandingPage(TemplateView):
         context.update({'breadcrumbs': self.get_breadcrumbs()})
         category_ids = self.get_func_area_ids()
         if category_ids:
-            category_ids = Category.objects.filter(id__in=category_ids, from_category__active=True,
-                                          from_category__is_main_parent=True).values_list\
+            category_ids = Category.objects.filter(id__in=category_ids, from_category__active=True).values_list\
                 ('from_category__related_to__id', flat=True)
         if category_ids:
             category_ids = Category.objects.filter(id__in=category_ids)

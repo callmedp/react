@@ -4,6 +4,8 @@ import logging
 from requests import Response
 from django.conf import settings
 
+from console.models import CandidateAgentInteraction
+
 class ExotelInteraction(object):
     url = settings.EXOTEL_DICT.get('url', '')
     token = settings.EXOTEL_DICT.get('token', '')
@@ -37,6 +39,21 @@ class ExotelInteraction(object):
 
         res_in_json = resp.json()
         return bool(res_in_json.get('Numbers', {}).get('DND',"").lower() == "yes")
+
+    def create_user_agent_interaction(self,order,user,recording_url=None,queue_name=0):
+        if not order or not user:
+            return
+        user = user if user else ""
+        order = order if order else ""
+        candidate_id = order.candidate_id if order else ""
+        create_dict = {'recording_url':recording_url, 'candidate_id':candidate_id,\
+                       'called_by':user, 'queue_name':queue_name,}
+        if order:
+            create_dict.update({'order': order})
+        if recording_url:
+            create_dict.update({'connected': True})
+        caid = CandidateAgentInteraction(**create_dict)
+        caid.save()
 
 
 
