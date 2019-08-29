@@ -103,16 +103,21 @@
             <h2 class="text-center">{{testPrep.heading}}</h2>
 
             <div class="popular_test row" id="funcDivi">
-
+              <p class="txt mt-10 mb-30">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type.</p>
                   {% for fa in testPrep.get_childrens|slice:":8" %}
 
-                   <div class="testinside testinside-inner">
+                   <div class="testinside-home testinside-inner">
+                    <a class="test-box" href="{% url 'assessment:vskill-category' slug=fa.slug %}" title="{{fa.name}}">
                   <span class="border-left {% cycle 'default' 'purple' 'olive' 'green' %}"></span>
-           <a class="test-box" href="{% url 'assessment:vskill-category' slug=fa.slug %}" title="{{fa.name}}">
+                    <span>
                      {{fa.name}}
                      <span class="test"> {{fa.get_assessment_test_count}}
                  {% if fa.get_assessment_test_count < 1 %}Test {% else %}Tests{% endif %}
                      </span>
+                   </span>
+                   <figure class="company-icons">
+                     <img class="img-responsive" src= "https://static1.shine.com/l/m/product_image/1665/1509120908_7316.png" alt="company-icons">
+                   </figure>
                   </a>
                </div>
                   {% endfor %}
@@ -130,7 +135,7 @@
          <div class="col-sm-12 col-lg-12 col-md-12">
             <h2 class="text-center">Tests by functional area</h2>
 
-
+            <p class="txt mt-20">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type.</p>
             <div class="functional_test row" id="funcDiv">
                   {% for fa in func_area|slice:":8" %}
                <div class="functional_test_inside border-{{forloop.counter}}">
