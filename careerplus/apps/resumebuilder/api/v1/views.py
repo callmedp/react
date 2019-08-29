@@ -674,6 +674,7 @@ class ResumeImagePreviewView(APIView):
     serializer_class = None
 
     def get_image_base_64_encoded_data(self,candidate,template_no):
+
         current_config = candidate.ordercustomisation_set.filter(template_no=template_no).first()
         entity_position = current_config.entity_position_eval
         entity_preference = eval(candidate.entity_preference_data)
@@ -732,9 +733,9 @@ class ResumeImagePreviewView(APIView):
 
         file_name = 'resumetemplate-' + str(template_no) + '.jpg'
         rendered_template = rendered_template.decode()
-        rendered_template = rendered_template.replace("\n","")
+        rendered_template = rendered_template.replace("\n", "<br />")
         options = {'quiet':'',
-                'quality':self.request.GET.get('quality',40),
+                'quality':self.request and self.request.GET.get('quality',40),
                 'format':'JPG',
                 'disable-smart-width': '',
                 }
@@ -743,6 +744,8 @@ class ResumeImagePreviewView(APIView):
         return Response(base64.b64encode(file_obj))
 
     def get(self, request, *args, **kwargs):
+        import ipdb;
+        ipdb.set_trace();
         candidate_id = kwargs.get('candidate_id')
         template_no = kwargs.get('template_no')
         tsize = request.GET.get('tsize', '')

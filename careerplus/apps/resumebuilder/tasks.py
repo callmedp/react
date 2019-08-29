@@ -95,7 +95,7 @@ def generate_image_for_resume(candidate_id, template_no):
 
     file_name = 'resumetemplate-' + str(template_no) + '.jpg'
     rendered_template = rendered_template.decode()
-    rendered_template = rendered_template.replace("\n", "")
+    # rendered_template = rendered_template.replace("\n", "")
 
     file = imgkit.from_string(rendered_template, False, {'quiet': '', 'quality': '80', 'format': 'JPG'})
     in_mem_file = BytesIO(file)
@@ -204,6 +204,8 @@ def generate_and_upload_resume_pdf(data):
 
         html_template = get_template(template_src)
         rendered_html = html_template.render(context_dict).encode(encoding='UTF-8')
+        rendered_html = rendered_html.decode()
+
         if file_type == 'pdf':
             options = {
                 'page-size': 'Letter',
@@ -216,7 +218,8 @@ def generate_and_upload_resume_pdf(data):
                 'image-dpi': 135,
                 'quiet': '',
             }
-            rendered_html = rendered_html.decode().replace("\n", "")
+
+            # rendered_html = rendered_html.decode().replace("\n", "")
             file = pdfkit.from_string(rendered_html, False, options=options)
 
         elif file_type == 'png':
