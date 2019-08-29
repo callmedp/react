@@ -79,66 +79,36 @@
     </div><!-- /. searc -->
 
     <!-- Testpreps -->
+         {% if testPrep %}
+
+       {% for testPrep in test_prep %}
+     <h2>{{testPrep.heading}}</h2>
     <div class="popular_test mb-30">
-        <h2>Testpreps</h2>
         <p class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+          {% for fa in testPrep.get_childrens|slice:":8" %}
         <div class="popular_test_inside">
-            <a href="#">
+            <a href="{% url 'assessment:vskill-category' slug=fa.slug %}">
                 <span class="border border0"></span>
                 <div>
-                    <h2 class="name bold mb-0">Google</h2>
-                    <p class="fs-14 mb-0">25 Tests</p>
+                    <h2 class="name bold mb-0">{{fa.name}}</h2>
+                    <p class="fs-14 mb-0">{{get_assessment_test}}  {% if fa.get_assessment_test < 1 %}Test {% else %}Tests{% endif %}</p>
                 </div>
                 <span>
-                    <img src="{% static 'shinelearn/images/mobile/practice_test/google.png' %}" alt="...">
+                    {% if fa.icon %}
+                    <img src="{{fa.icon.url}}" alt="{{fa.name}}">
+                    {% endif %}
                 </span>
             </a>
         </div><!-- // popular_test_inside -->
-        
-        <div class="popular_test_inside">
-            <a href="#">
-                <span class="border border0"></span>
-                <div>
-                    <h2 class="name bold mb-0">Microsoft</h2>
-                    <p class="fs-14 mb-0">10 Tests</p>
-                </div>
-                <span>
-                    <img src="{% static 'shinelearn/images/mobile/practice_test/microsoft.png' %}" alt="...">
-                </span>
-            </a>
-        </div><!-- // popular_test_inside -->
-        
-        <div class="popular_test_inside">
-            <a href="#">
-                <span class="border border0"></span>
-                <div>
-                    <h2 class="name bold mb-0">Amazon (AWS)</h2>
-                    <p class="fs-14 mb-0">21 Tests</p>
-                </div>
-                <span>
-                    <img src="{% static 'shinelearn/images/mobile/practice_test/aws.png' %}" alt="...">
-                </span>
-            </a>
-        </div><!-- // popular_test_inside -->
-        
-        <div class="popular_test_inside">
-            <a href="#">
-                <span class="border border0"></span>
-                <div>
-                    <h2 class="name bold mb-0">PMI</h2>
-                    <p class="fs-14 mb-0">21 Tests</p>
-                </div>
-                <span>
-                    <img src="{% static 'shinelearn/images/mobile/practice_test/pmi.png' %}" alt="...">
-                </span>
-            </a>
-        </div><!-- // popular_test_inside -->
-
+                      {%endfor%}
+         {% if  testPrep.get_childrens.count > 8  %}
         <div class="text-center mt-30 mb-15">
-            <a href="#" class="btn btn-slg btn-round-30 btn-white">View all</a>
+            <a href="{% url 'assessment:vskill-category' slug=testPrep.slug %}" class="btn btn-slg btn-round-30 btn-white">View all</a>
         </div>
+                {% endif %}
     </div><!-- /. Testpreps -->
-
+             {%endfor%}
+         {% endif %}
     <!-- Tests by functional area -->
     <div class="functional_area mt-15" id="funcDiv">
         <h2>Tests by functional area</h2>
