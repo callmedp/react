@@ -560,7 +560,6 @@ class DashboardAcceptService(APIView):
                 sms_oi_status=4,
                 to_mobile=email_dict.get('mobile'),
                 status=1)
-            upload_Resume_shine.delay(oi_pk)
 
         elif oi.product.type_flow == 8 and (9 not in email_sets and 4 not in sms_sets):
             send_email_task.delay(

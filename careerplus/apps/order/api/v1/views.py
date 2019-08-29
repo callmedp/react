@@ -1,8 +1,11 @@
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.generics import CreateAPIView,ListAPIView
+from rest_framework.generics import ListAPIView,UpdateAPIView
 from order.api.core.mixins import OrderItemViewMixin
 from order.models import Order
 from order.api.v1.serializers import OrderItemListSerializer
+from shared.rest_addons.authentication import ShineUserAuthentication
+from rest_framework.permissions import IsAuthenticated
+from .serializers import OrderSerializer
 import json
 
 
@@ -23,6 +26,16 @@ class OrderItemsListView(ListAPIView):
         order = Order.objects.filter(id=order_id).first()
         queryset = order.orderitems.filter(oi_status=2,no_process=False) if order else None
         return queryset
+
+
+
+class OrderUpdateView(UpdateAPIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = OrderSerializer
+    queryset = Order.objects.all()
+    lookup_field = "id"
+    lookup_url_kwarg = "pk"
     
         
 

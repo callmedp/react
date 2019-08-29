@@ -87,23 +87,29 @@ $(document).ready(function(){
 })
 
 const uploadResumeShine = (checkbox,order_id)=>{
-    $.post(`/shine/api/v1/upload-to-shine/`,{
-        order_id:order_id,
-        upload_after_service:true,
-        upload_flag_value: $(checkbox).is(':checked')
-    },(data)=>{
-        if(data.result){
-            Toast.fire({
-                type: data.upload_to_shine ?'success' : 'error',
-                title: data.result
-            })
-        }
-    }).fail(()=>{
+    let request = fetch(`/order/api/v1/order/${order_id}/update/`,{
+        headers: {
+            "Content-Type": "application/json"
+        },
+        method: 'PATCH',  
+        body: JSON.stringify({
+                    service_resume_upload_shine: $(checkbox).is(':checked')
+                }),
+    });
+
+    request.then((resp) =>resp.json())
+    .then(response => {
+        console.log('--response', response);
+        title = response['service_resume_upload_shine'] ? 'Resume will be updated' : 'Resume will not be updated'
+        Toast.fire({
+                    type: response['service_resume_upload_shine'] ?'success' : 'error',
+                    title
+        })
+    })
+    .catch(e =>{
         Toast.fire({
             type: 'error',
-            title: 'Something Went Wrong'
+            title:'Something went wrong'
         })
-        $(checkbox).attr("disabled", false);
-        $(checkbox).attr("checked", false);
     })
 }

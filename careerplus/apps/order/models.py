@@ -24,7 +24,7 @@ from .choices import STATUS_CHOICES, SITE_CHOICES,\
     WC_FLOW_STATUS
 
 from .functions import get_upload_path_order_invoice, process_application_highlighter
-from .tasks import generate_resume_for_order,bypass_resume_midout
+from .tasks import generate_resume_for_order,bypass_resume_midout,upload_Resume_shine
 
 #inter app imports
 from linkedin.models import Draft
@@ -283,6 +283,13 @@ class Order(AbstractAutoDate):
                 return 'pink'
         return ''
 
+    def upload_service_resume_shine(self,existing_obj):
+        if self.service_resume_upload_shine and self.service_resume_upload_shine  != existing_obj.service_resume_upload_shine:
+            order_items = self.orderitems.filter(oi_status=4,product__type_flow__in=[1,12,13,8,3,4])
+            for order_item in order_items:
+                upload_Resume_shine.delay(order_item.id)
+
+
     def save(self,**kwargs):
         created = not bool(getattr(self,"id"))
         if created:
@@ -302,6 +309,8 @@ class Order(AbstractAutoDate):
             generate_resume_for_order.delay(self.id)
             logging.getLogger('info_log').info("Generating resume for order {}".format(self.id))
 
+        
+        self.upload_service_resume_shine(existing_obj)
         obj = super(Order,self).save(**kwargs)
 
         if self.status == 1:
@@ -756,11 +765,16 @@ class OrderItem(AbstractAutoDate):
         if assigned_op:
             return assigned_op.created
 
+    def upload_service_resume_shine(self):
+        existing_obj = OrderItem.objects.get(self.id)
+        if self.oi_status == 4 and self.oi_status !=existing_obj.oi_status  and self.order.service_resume_upload_shine:
+            upload_Resume_shine.delay(self.id)
 
     def save(self, *args, **kwargs):
         created = not bool(getattr(self, "id"))
         orderitem = OrderItem.objects.filter(id=self.pk).first()
         self.oi_status = 4 if orderitem and orderitem.oi_status == 4 else self.oi_status
+        self.upload_service_resume_shine()
         # handling combo case getting parent and updating child
         super().save(*args, **kwargs)  # Call the "real" save() method.        
 
