@@ -78,8 +78,92 @@
         </div>
     </div><!-- /. searc -->
 
+    <!-- Testpreps -->
+    <div class="popular_test mb-30">
+        <h2>Testpreps</h2>
+        <p class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+        <div class="popular_test_inside">
+            <a href="#">
+                <span class="border border0"></span>
+                <div>
+                    <h2 class="name bold mb-0">Google</h2>
+                    <p class="fs-14 mb-0">25 Tests</p>
+                </div>
+                <span>
+                    <img src="{% static 'shinelearn/images/mobile/practice_test/google.png' %}" alt="...">
+                </span>
+            </a>
+        </div><!-- // popular_test_inside -->
+        
+        <div class="popular_test_inside">
+            <a href="#">
+                <span class="border border0"></span>
+                <div>
+                    <h2 class="name bold mb-0">Microsoft</h2>
+                    <p class="fs-14 mb-0">10 Tests</p>
+                </div>
+                <span>
+                    <img src="{% static 'shinelearn/images/mobile/practice_test/microsoft.png' %}" alt="...">
+                </span>
+            </a>
+        </div><!-- // popular_test_inside -->
+        
+        <div class="popular_test_inside">
+            <a href="#">
+                <span class="border border0"></span>
+                <div>
+                    <h2 class="name bold mb-0">Amazon (AWS)</h2>
+                    <p class="fs-14 mb-0">21 Tests</p>
+                </div>
+                <span>
+                    <img src="{% static 'shinelearn/images/mobile/practice_test/aws.png' %}" alt="...">
+                </span>
+            </a>
+        </div><!-- // popular_test_inside -->
+        
+        <div class="popular_test_inside">
+            <a href="#">
+                <span class="border border0"></span>
+                <div>
+                    <h2 class="name bold mb-0">PMI</h2>
+                    <p class="fs-14 mb-0">21 Tests</p>
+                </div>
+                <span>
+                    <img src="{% static 'shinelearn/images/mobile/practice_test/pmi.png' %}" alt="...">
+                </span>
+            </a>
+        </div><!-- // popular_test_inside -->
 
-    <div class="popular_test">
+        <div class="text-center mt-30 mb-15">
+            <a href="#" class="btn btn-slg btn-round-30 btn-white">View all</a>
+        </div>
+    </div><!-- /. Testpreps -->
+
+    <!-- Tests by functional area -->
+    <div class="functional_area mt-15" id="funcDiv">
+        <h2>Tests by functional area</h2>
+        <p class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+        {% for fa in func_area|slice:":8" %}
+
+        <div class="functional_area_inside border-{{forloop.counter0}}">
+        <a title="{{fa.name}}" href="{% url 'assessment:vskill-category' slug=fa.slug %}">
+                {% if fa.icon %}
+                    <span class="functional_area_inside--image"><img class="img-responsive" alt="{{fa.name}}" src= "{{fa.icon.url}}"></span>
+                    {% else %}
+                    <span class="functional_area_inside--image"><img  class="img-responsive" alt="{{fa.name}}" src="#"></span>
+                    {% endif %}
+            <span class="fa_name">{{fa.name}}</span></a> </div>
+            {%endfor%}
+        
+        {% if  func_area.count > 8  %}
+
+        <div class="load_more_button" id="loadmorebtn" onclick="loadmore();">Load more</div>
+    {% endif %}
+    </div><!-- /. Tests by functional area -->
+
+
+    <!-- Most popular tests -->
+    <div class="popular_test mt-40">
         <h2>Most popular tests</h2>
          {% for test in test_list %}
 
@@ -91,27 +175,10 @@
             </a>
             </div>
             {% endfor %}
-    </div><!-- /. popular test -->
+    </div><!-- /. Most popular tests -->
       
-    <div class="functional_area mt-40" id="funcDiv">
-            <h2>Tests by functional area</h2>
-           {% for fa in func_area|slice:":8" %}
 
-            <div class="functional_area_inside border-{{forloop.counter0}}">
-            <a title="{{fa.name}}" href="{% url 'assessment:vskill-category' slug=fa.slug %}">
-                  {% if fa.icon %}
-                     <span class="functional_area_inside--image"><img class="img-responsive" alt="{{fa.name}}" src= "{{fa.icon.url}}"></span>
-                     {% else %}
-                     <span class="functional_area_inside--image"><img  class="img-responsive" alt="{{fa.name}}" src="#"></span>
-                     {% endif %}
-                <span class="fa_name">{{fa.name}}</span></a> </div>
-              {%endfor%}
-            
-            {% if  func_area.count > 8  %}
 
-            <div class="load_more_button" id="loadmorebtn" onclick="loadmore();">Load more</div>
-        {% endif %}
-    </div>
 </div>
 
     <div class="practice-test check-result-wrap pt-30" id="check_results">
