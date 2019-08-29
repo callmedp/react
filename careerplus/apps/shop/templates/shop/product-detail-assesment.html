@@ -108,7 +108,15 @@
                     <li>
                      <a href="#review" class="cls_review">
                       <figure class="review-icon"></figure>
-                      <span>{% if prd_num_rating %}&nbsp;<strong class="anchor-color" >{{prd_num_rating}}</strong>&nbsp;{% if prd_num_rating == 1 %}review {% else %}reviews {% endif %}{% else %}Write a review{% endif %}</span>
+                      <span>{% if prd_num_rating > 15 %}
+                          &nbsp;<strong class="anchor-color" >
+                              {{prd_num_rating}}
+                          </strong>
+                          &nbsp;
+                          Reviews
+                          {% else %}
+                          <strong class="anchor-color" >Write a review </strong>
+                          {% endif %}</span>
                      </a> 
                     </li>
                                                {% if prd_num_bought > 100 %}
@@ -187,7 +195,7 @@
                   <div class="row">
                     <div class="col-sm-12 col-md-8">
                     <h2>{{product.take_free_test.title}}</h2>
-                        {{prd_desc}}
+                        {{prd_desc|safe}}
                     </div>
                   </div>
                 </div>

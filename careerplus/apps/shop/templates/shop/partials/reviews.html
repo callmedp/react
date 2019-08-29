@@ -7,7 +7,7 @@
             {% if not prd_review_list %}
               <h2>Write a Review </h2>
               {% else %}
-          {% if prd_review_list1 > 15 %}
+          {% if prd_num_rating > 15 %}
                 <h2> 
                 Reviews
                 </h2>
@@ -15,9 +15,9 @@
                         <h2>Write a Review </h2>
                 {% endif %}
 
-   {% endif %}
               <a class="write-review pull-right" role="button" data-toggle="collapse" href="#collapseExampleform" aria-expanded="true" aria-controls="collapseExampleform" onclick="toggle_review({% if review_obj%}'Update your review'{%else%}'Write a review'{%endif%});">{% if review_obj%}Update your review{%else%}Write a review{%endif%}</a>
 
+   {% endif %}
 
           <input type="hidden" name="page" id="id_review_page" value="{{prd_rv_page}}">
           <div class="collapse {% if not prd_review_list %}in{% endif %}" id="collapseExampleform" aria-expanded="true">
@@ -92,7 +92,7 @@
             </div>
           </div>
           <ul id="id_review_list">
-          {% if prd_review_list > 15 %}
+          {% if prd_num_rating > 15 %}
           {% include 'shop/partials/review_snippet.html' %}
               {% endif %}
 

@@ -119,17 +119,14 @@
                 <ul class="inline-block fs-12 jobs-icon-wrap">
                     <li>
                         <figure class="icon-comments"></figure>
-                        {% if prd_num_rating %}
-                        <a href="javascript:void(0);">{{prd_num_rating}}
-                        {%if prd_num_rating == 1 %}
-                            review
+                            <a href="javascript:void(0);">
+                        {% if prd_num_rating > 15 %}
+                            {{prd_num_rating}}
+                            Reviews
                             {%else%}
-                            reviews
+                          <span class="fs-11">Write a review</span>
                             {% endif %}
-                        </a>
-                        {% else %}
-                        <span class="fs-11">Write a review</span>
-                        {% endif %}
+                                   </a>
                     </li>
                     {% if prd_num_jobs %}
                         <li>
