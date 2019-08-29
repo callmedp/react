@@ -95,32 +95,49 @@
                 </div>
             </div>
          </div>
-         <!-- Most popular tests starts -->
-         <div class="col-sm-12 col-lg-12 col-md-12">
-            <h2 class="text-center">Most popular tests</h2>
-            <div class="popular_test row">
-         {% for test in test_list %}
-               <div class="testinside">
-                  <span class="border-left"></span>
-                  <a id="{{test.id}}" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","catname":"{{test.category.name}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}","courseName":"{{test.course.name}}","courseDuration":"{{test.course.get_duration_in_day}}","coursePrice":"{{test.course.inr_price}}","productName":"{{test.product.name}}","productDuration":"{{test.product.get_duration_day}}","productPrice":"{{test.product.inr_price}}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}","courseUrl":"{{test.course.get_absolute_url}}","productUrl":"{{test.product.get_absolute_url}}" }' data-toggle="modal"  data-target="#testModal">
-                     {{test.title}}
-                     <div class="white_hover"></div>
-                     <span class="taketest" >Take Free Test</span>
+             <!--test by prep-->
+
+           {% if test_prep %}
+           {% for testPrep in test_prep %}
+                    <div class="col-sm-12 col-lg-12 col-md-12">
+            <h2 class="text-center">{{testPrep.heading}}</h2>
+
+            <div class="popular_test row" id="funcDivi">
+              <p class="txt mt-10 mb-30">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type.</p>
+                  {% for fa in test_prep_children %}
+
+                   <div class="testinside-home testinside-inner">
+                    <a class="test-box" href="{% url 'assessment:vskill-category' slug=fa.slug %}" title="{{fa.name}}">
+                  <span class="border-left {% cycle 'default' 'purple' 'olive' 'green' %}"></span>
+                    <span>
+                     {{fa.name}}
+                     <span class="test"> {{fa.get_assessment_test_count}}
+                 {% if fa.get_assessment_test_count < 1 %}Test {% else %}Tests{% endif %}
+                     </span>
+                   </span>
+                   <figure class="company-icons">
+                     <img class="img-responsive" src= "https://static1.shine.com/l/m/product_image/1665/1509120908_7316.png" alt="company-icons">
+                   </figure>
                   </a>
                </div>
-               {% endfor %}
+                  {% endfor %}
+
+               </div>
+                {% if  testPrep.get_childrens.count > 8  %}
+            <a class="btn btn_white loadmore" id="testPrepLoadMore" href="{% url 'assessment:vskill-category' slug=testPrep.slug %}" >View All</a>
+                  {% endif %}
 
             </div>
-         </div>
+  {% endfor %}
+                  {% endif %}
          <!-- Most popular tests starts -->
          <!-- Tests by functional area starts -->
          <div class="col-sm-12 col-lg-12 col-md-12">
             <h2 class="text-center">Tests by functional area</h2>
 
-
+            <p class="txt mt-20">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type.</p>
             <div class="functional_test row" id="funcDiv">
                   {% for fa in func_area|slice:":8" %}
-
                <div class="functional_test_inside border-{{forloop.counter}}">
                   <a title="{{fa.name}}" href="{% url 'assessment:vskill-category' slug=fa.slug %}">
                       {% if fa.icon %}
@@ -138,6 +155,25 @@
             <button class="btn_white loadmore" id="loadmorebtn" onclick="loadmore();">Load more</button>
                 {% endif %}
             </div>
+
+                <!-- Most popular tests starts -->
+         <div class="col-sm-12 col-lg-12 col-md-12">
+            <h2 class="text-center">Most popular tests</h2>
+            <div class="popular_test row">
+         {% for test in test_list %}
+               <div class="testinside">
+                  <span class="border-left"></span>
+                  <a id="{{test.id}}" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","catname":"{{test.category.name}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}","courseName":"{{test.course.name}}","courseDuration":"{{test.course.get_duration_in_day}}","coursePrice":"{{test.course.inr_price}}","productName":"{{test.product.name}}","productDuration":"{{test.product.get_duration_day}}","productPrice":"{{test.product.inr_price}}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}","courseUrl":"{{test.course.get_absolute_url}}","productUrl":"{{test.product.get_absolute_url}}" }' data-toggle="modal"  data-target="#testModal">
+                     {{test.title}}
+                     <div class="white_hover"></div>
+                     <span class="taketest" >Take Free Test</span>
+                  </a>
+               </div>
+               {% endfor %}
+
+            </div>
+         </div>
+
          </div>
          <!-- Tests by functional area ends -->
       </div>

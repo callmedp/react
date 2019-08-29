@@ -130,7 +130,11 @@
                     <li>
                      <a href="#review" class="cls_review">
                       <figure class="review-icon"></figure>
-                      <span>{% if prd_num_rating %}&nbsp;<strong class="anchor-color" >{{prd_num_rating}}</strong>&nbsp;{% if prd_num_rating == 1 %}review {% else %}reviews {% endif %}{% else %}Write a review{% endif %}</span>
+                      <span>
+                          {% if prd_num_rating > 15 %}&nbsp;<strong class="anchor-color" >{{prd_num_rating}}</strong>Reviews
+                          {% else %}
+                           Write a review
+                          {% endif %}</span>
                      </a> 
                     </li>
                     <li>
@@ -202,7 +206,7 @@
                   {% endif %}
 
                 {% if prd_about %}
-                  <h2 class="detail-heading">About {% if prd_service == 'course' %}course{% else %}service{% endif %}</h2>
+                  <h2 class="detail-heading">{% if prd_service == 'course' %}Course Overview{% else %}Service Overview{% endif %}</h2>
                   <style>
                     .morecontent span {
                           display: none;
@@ -259,7 +263,7 @@
                       {% endif %}
 
                         {% if product.visibility %}
-                    <a title="About Product" class=" cls_tab_child" href="#course">About Product</a>
+                    <a title="About Product" class=" cls_tab_child" href="#course">About {% if prd_service == 'course' %} Course {% else %} Service {% endif %}</a>
                     {% else %}
                         {% if prd_desc %}
                         <a title="Shine Advantage" class=" cls_tab_child" href="#course">Shine Advantage</a>

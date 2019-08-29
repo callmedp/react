@@ -79,13 +79,13 @@
     </div><!-- /. searc -->
 
     <!-- Testpreps -->
-         {% if testPrep %}
+         {% if test_prep %}
 
        {% for testPrep in test_prep %}
      <h2>{{testPrep.heading}}</h2>
     <div class="popular_test mb-30">
         <p class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-          {% for fa in testPrep.get_childrens|slice:":8" %}
+          {% for fa in test_prep_children %}
         <div class="popular_test_inside">
             <a href="{% url 'assessment:vskill-category' slug=fa.slug %}">
                 <span class="border border0"></span>
@@ -115,25 +115,24 @@
         <p class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
         {% for fa in func_area|slice:":8" %}
 
-        <div class="functional_area_inside border-{{forloop.counter0}}">
-        <a title="{{fa.name}}" href="{% url 'assessment:vskill-category' slug=fa.slug %}">
-                {% if fa.icon %}
-                    <span class="functional_area_inside--image"><img class="img-responsive" alt="{{fa.name}}" src= "{{fa.icon.url}}"></span>
-                    {% else %}
-                    <span class="functional_area_inside--image"><img  class="img-responsive" alt="{{fa.name}}" src="#"></span>
-                    {% endif %}
-            <span class="fa_name">{{fa.name}}</span></a> </div>
-            {%endfor%}
-        
-        {% if  func_area.count > 8  %}
+            <div class="functional_area_inside border-{{forloop.counter0}}">
+            <a title="{{fa.name}}" href="{% url 'assessment:vskill-category' slug=fa.slug %}">
+                  {% if fa.icon %}
+                     <span class="functional_area_inside--image"><img class="img-responsive" alt="{{fa.name}}" src= "{{fa.icon.url}}"></span>
+                     {% else %}
+                     <span class="functional_area_inside--image"><img  class="img-responsive" alt="{{fa.name}}" src="#"></span>
+                     {% endif %}
+                <span class="fa_name">{{fa.name}}</span></a> </div>
+              {%endfor%}
 
-        <div class="load_more_button" id="loadmorebtn" onclick="loadmore();">Load more</div>
-    {% endif %}
-    </div><!-- /. Tests by functional area -->
+            {% if  func_area.count > 8  %}
 
+            <div class="load_more_button" id="loadmorebtn" onclick="loadmore();">Load more</div>
+        {% endif %}
+    </div>
+</div>
 
-    <!-- Most popular tests -->
-    <div class="popular_test mt-40">
+  <div class="popular_test">
         <h2>Most popular tests</h2>
          {% for test in test_list %}
 
@@ -145,11 +144,7 @@
             </a>
             </div>
             {% endfor %}
-    </div><!-- /. Most popular tests -->
-      
-
-
-</div>
+    </div><!-- /. popula
 
     <div class="practice-test check-result-wrap pt-30" id="check_results">
         <div class="practice-test-inside"></div>

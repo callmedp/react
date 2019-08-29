@@ -171,7 +171,21 @@
                         </ul>
                     </div>
                 </div><!-- end of Recommended for -->
+		{% if category_obj.assessment_test_count %}
+                <div class="container">
+                    <div class="freeTest-widget">
+                        <div class="freeTest-widget--image">
+                            <h2 class="fs-18">Confused about buying?</h2>
+                            <img src="{% static 'shinelearn/images/mobile/practice_test/free-test.png' %}" alt="banner" class="img-responsive">
+                        </div>
 
+                        <div class="freeTest-widget__content text-center mt-15">
+                            <p>Take our free practice test in <strong>{{category_obj.heading}}</strong>, to know where you stand</p>
+                            <a href="{% url 'assessment:vskill-subcategory' slug=category_obj.slug %}" class="btn btn-blue mt-15">Take free test</a>
+                        </div>
+                    </div>
+                </div>
+         {% endif %}
 
                  {% if widget_objs %}
                     <div class="w100fl">
