@@ -259,7 +259,6 @@ class ApproveByAdminDraft(View):
             obj.oi_status = 4
             obj.last_oi_status = 121
             obj.draft_counter += 1
-            if obj.draft_counter == settings.DRAFT_MAX_LIMIT:
             obj.closed_on = timezone.now()
             obj.save()
 
