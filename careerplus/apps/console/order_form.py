@@ -281,7 +281,9 @@ class OIFilterForm(forms.Form):
                 (36, 'Boarded'), (37, 'Approved')
             )
 
-            self.fields['day_choice'].choices = ( (-1, 'All'), (1, 'Today'), (2, 'Delayed'), (3, 'Tommorrow'),)
+            self.fields['day_choice'].choices = (
+                (-1, 'All'), (1, 'Today'), (2, 'Delayed'), (3, 'Tommorrow'), (4, 'Today\' On time')
+            )
         self.fields['oi_status'].choices = NEW_OI_OPS_STATUS
 
         draft_choices = [(-1, "Select Draft Level")]

@@ -3053,7 +3053,6 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
 
             if int(self.day_choice) == 1:
                 queryset = queryset.filter(
-                    whatsapp_profile_orderitem__due_date__gt=today_date_start,
                     whatsapp_profile_orderitem__due_date__lt=tomorrow_date_start,
                     pending_links_count__gt=0).exclude(oi_status=4)
             elif int(self.day_choice) == 2:
@@ -3062,8 +3061,16 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
                     pending_links_count__gt=0
                 ).exclude(oi_status=4)
             elif int(self.day_choice) == 3:
-                queryset = queryset.filter(whatsapp_profile_orderitem__due_date__gt=tomorrow_date_start,
+                queryset = queryset.filter(
+                    whatsapp_profile_orderitem__due_date__gt=tomorrow_date_start,
                     whatsapp_profile_orderitem__due_date__lt=tomorrow_date_start + relativedelta.relativedelta(days=1),
+                    pending_links_count__gt=0
+                ).exclude(oi_status=4)
+
+            elif int(self.day_choice) == 4:
+                queryset = queryset.filter(
+                    whatsapp_profile_orderitem__due_date__gt=today_date_start,
+                    whatsapp_profile_orderitem__due_date__lt=tomorrow_date_start,
                     pending_links_count__gt=0
                 ).exclude(oi_status=4)
             queryset = queryset.filter(q_objects)
