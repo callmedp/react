@@ -1,19 +1,23 @@
+#django addons
 from rest_framework.views import APIView
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from django.http import HttpResponse,HttpResponseBadRequest
+from django.conf import settings
+
+#in apps import 
 from core.api_mixin import ShineCandidateDetail 
 from order.models import OrderItem,Order
-from django.conf import settings
 from order.tasks import upload_Resume_shine
+from shared.rest_addons.authentication import ShineUserAuthentication
+
+#python imports
 import json,logging
 
-
-
-
 class UploadResumeShine(APIView):
-    authentication_classes = ()
-    permission_classes = ()
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def post(self,*args, **kwargs):
         upload_after_service = self.request.POST.get('upload_after_service','')

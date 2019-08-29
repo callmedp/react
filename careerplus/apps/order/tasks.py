@@ -48,9 +48,10 @@ def pending_item_email(pk=None):
             'mobile': order.get_mobile(),
             'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                     settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                    token),
-            'url': create_short_url(login_url=data).get('url')
+                    token)
     })
+    urlshortener = create_short_url(login_url=data)
+    data.update({'url':urlshortener.get('url')})
     
     to_emails = [order.get_email()]
     mail_type = "PENDING_ITEMS"
@@ -92,6 +93,9 @@ def pending_item_email(pk=None):
             type_flow_10_data.update({'url': urlshortener.get('url')})   
             SendSMS().send(sms_type=mail_type, data=type_flow_10_data)
             sms_oi_status=131
+        
+        if oi.oi_resume and (not oi.oi_status == 61):
+            continue
         
         if (oi.product.type_flow == 1) and (21 not in email_sets) and (21 not in sms_sets):
             oi_status_mapping.update({oi.id:21})
@@ -639,7 +643,7 @@ def bypass_resume_midout(order_id):
     #update order item id to upload previous resume
     order_items = order.orderitems.all()
     for order_item in order_items:
-        if order_item.oi_status == 2:
+        if order_item.oi_status == 2 and order_item.product.type_flow == 8 and (not order_item.product.type_flow in [7,15,5] ):
             update_resume_oi_ids.append(order_item.id)
     
     if not update_resume_oi_ids:
@@ -667,14 +671,19 @@ def bypass_resume_midout(order_id):
     for oi in order_items:
         oi.oi_resume = old_resume
         last_oi_status = oi.oi_status
-        oi.oi_status = 3
-        oi.last_oi_status = last_oi_status
+        oi.oi_status = 5
+        oi.last_oi_status = 3
         oi.save()
         oi.orderitemoperation_set.create(
             oi_status=3,
             oi_resume=oi.oi_resume,
             last_oi_status=last_oi_status,
             assigned_to=oi.assigned_to)
+        oi.orderitemoperation_set.create(
+            oi_status=oi.oi_status,
+            last_oi_status=oi.last_oi_status,
+            assigned_to=oi.assigned_to)
+    
     order.auto_upload = True
     order.save()
 

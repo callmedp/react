@@ -100,6 +100,8 @@
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
                 {% elif obj.waiting_for_input %}
                     <p><strong>Status:</strong> Waiting for input</p>
+                {% elif obj.auto_upload %}
+                    <p><strong>Status:</strong> Service is under progress- <a role="button" class="upload-resume">Upload Resume</a></p>
                 {% else %}
                     <p><strong>Status:</strong> Service is under progress</p>
 
@@ -115,6 +117,8 @@
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
                 {% elif obj.waiting_for_input %}
                     <p><strong>Status:</strong> Waiting for input</p>
+                {% elif obj.auto_upload %}
+                    <p><strong>Status:</strong> Service is under progress- <a role="button" class="upload-resume">Upload Resume</a></p>
                 {% else %}
                     <p><strong>Status:</strong> Service is under progress</p>
                 
@@ -146,7 +150,8 @@
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
                 {% elif obj.waiting_for_input %}
                     <p><strong>Status:</strong> Waiting for input</p>
-
+                {% elif obj.auto_upload %}
+                    <p><strong>Status:</strong> Service is under progress- <a role="button" class="upload-resume">Upload Resume</a></p>
                 {% else %}
                    <p><strong>Status:</strong> Service is under progress</p>
 
@@ -164,7 +169,6 @@
 
                 {% elif obj.oi_status == 161 or obj.oi_status == 162 or obj.oi_status == 163 or obj.oi_status == 164  %}
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
-
                 {% else %}
                    <p><strong>Status:</strong> Service is under progress</p>
                 {% endif %}
