@@ -94,7 +94,7 @@ def pending_item_email(pk=None):
             SendSMS().send(sms_type=mail_type, data=type_flow_10_data)
             sms_oi_status=131
         
-        if oi.oi_resume and (not oi.oi_status == 61):
+        if oi.oi_resume or  oi.oi_status == 61:
             continue
         
         if (oi.product.type_flow == 1) and (21 not in email_sets) and (21 not in sms_sets):
@@ -630,7 +630,6 @@ def send_resume_in_mail_resume_builder(attachment,data):
 
 @task
 def bypass_resume_midout(order_id):
-    import ipdb; ipdb.set_trace()
     from order.models import OrderItem,Order
     from datetime import timedelta
     from django.utils import timezone
@@ -648,9 +647,9 @@ def bypass_resume_midout(order_id):
             update_resume_oi_ids.append(order_item.id)
     
     if not update_resume_oi_ids:
-        logging.getLogger('error_log').info("No order Id found to update resume")
+        logging.getLogger('error_log').error("No orderitem Id found to update resume")
         return
-    
+    logging.getLogger('info_log').info("Order item to update resume : {} ".format(' '.join(map(str,update_resume_oi_ids))))
     old_resume = None
     start_date = timezone.now() -timedelta(days=180)
     end_date = timezone.now()
@@ -708,7 +707,7 @@ def upload_Resume_shine(order_item_id):
         'resume_medium':7,
         'resume_trigger':7
     }
-    file_path = settings.RESUME_DIR + order_item.oi_resume.name
+    file_path = settings.RESUME_DIR + order_item.oi_draft.name
     response = ShineCandidateDetail().upload_resume_shine(data=data,file_path=file_path)
     if response:
         logging.getLogger('info_log').info("Uploaded to shine")
