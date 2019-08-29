@@ -630,6 +630,7 @@ def send_resume_in_mail_resume_builder(attachment,data):
 
 @task
 def bypass_resume_midout(order_id):
+    import ipdb; ipdb.set_trace()
     from order.models import OrderItem,Order
     from datetime import timedelta
     from django.utils import timezone
@@ -643,7 +644,7 @@ def bypass_resume_midout(order_id):
     #update order item id to upload previous resume
     order_items = order.orderitems.all()
     for order_item in order_items:
-        if order_item.oi_status == 2 and order_item.product.type_flow == 8 and (not order_item.product.type_flow in [7,15,5] ):
+        if order_item.oi_status == 2 and order_item.product.type_flow in [1,12,13,8,3,4]:
             update_resume_oi_ids.append(order_item.id)
     
     if not update_resume_oi_ids:
