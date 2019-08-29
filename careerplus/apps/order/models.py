@@ -765,8 +765,7 @@ class OrderItem(AbstractAutoDate):
         if assigned_op:
             return assigned_op.created
 
-    def upload_service_resume_shine(self):
-        existing_obj = OrderItem.objects.get(self.id)
+    def upload_service_resume_shine(self,existing_obj):
         if self.oi_status == 4 and self.oi_status !=existing_obj.oi_status  and self.order.service_resume_upload_shine:
             upload_Resume_shine.delay(self.id)
 
@@ -774,7 +773,7 @@ class OrderItem(AbstractAutoDate):
         created = not bool(getattr(self, "id"))
         orderitem = OrderItem.objects.filter(id=self.pk).first()
         self.oi_status = 4 if orderitem and orderitem.oi_status == 4 else self.oi_status
-        self.upload_service_resume_shine()
+        self.upload_service_resume_shine(orderitem)
         # handling combo case getting parent and updating child
         super().save(*args, **kwargs)  # Call the "real" save() method.        
 

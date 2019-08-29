@@ -689,7 +689,6 @@ def bypass_resume_midout(order_id):
 
 @task
 def upload_Resume_shine(order_item_id):
-    from shine.api.v1.views import UploadResumeShine
     from order.models import OrderItem
     from core.api_mixin import ShineCandidateDetail
     import logging

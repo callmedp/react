@@ -32,7 +32,6 @@ from emailers.email import SendMail
 from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from wallet.models import Wallet
-from order.tasks import upload_Resume_shine
 from core.api_mixin import ShineCandidateDetail
 from core.mixins import InvoiceGenerate
 from console.decorators import Decorate, stop_browser_cache
