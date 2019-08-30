@@ -13,3 +13,4 @@
 /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py featured_profile --settings=careerplus.config.settings_live
 /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py jobs_move_closing_update --settings=careerplus.config.settings_live
 export DJANGO_SETTINGS_MODULE="careerplus.config.settings_live" && /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/scripts/welcome_recording.py
+export DJANGO_SETTINGS_MODULE="careerplus.config.settings_live" && /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/scripts/candidate_agent_interaction_recording.py

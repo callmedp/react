@@ -94,7 +94,7 @@ class AssessmentLandingPage(TemplateView):
         context = super(AssessmentLandingPage, self).get_context_data(**kwargs)
         context.update({'breadcrumbs': self.get_breadcrumbs()})
         category_ids = self.get_func_area_ids()
-        test_prep_children = None
+        test_prep_children = []
         if category_ids:
             category_ids = Category.objects.filter(id__in=category_ids, from_category__active=True).values_list\
                 ('from_category__related_to__id', flat=True)
@@ -103,7 +103,7 @@ class AssessmentLandingPage(TemplateView):
         test_prep = Category.objects.filter(id__in=settings.TEST_PREP_ID)
         test_children_id = Test.objects.filter(category__id__in=settings.TEST_PREP_CHILDREN_ID).values_list('category__id',flat=True)
         if test_children_id:
-            test_prep_children = Category.objects.filter(id__in=settings.test_children_id)
+            test_prep_children = Category.objects.filter(id__in=test_children_id)
 
         context.update({'func_area': category_ids})
         context.update({'test_list': self.get_test()})
