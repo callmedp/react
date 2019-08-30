@@ -579,6 +579,7 @@ $(document).ready(function(){
 
 
     $(document).on( "click", "#add-to-cart", function(e){
+        ga('send', 'event', 'Buy Flow', 'Enroll Now');
         e.preventDefault();
         $('#add-to-cart').attr('disabled', true);
 
