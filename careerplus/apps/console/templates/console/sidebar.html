@@ -7,7 +7,7 @@
         
       <ul class="nav side-menu">
         
-      <li><a><i class="fa fa-edit"></i> Blog <span class="fa fa-chevron-down"></span></a>
+      <li><a><i class="fa icon-blog"></i> Blog <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
           <li><a href="{% url 'console:blog-article-list' %}">Article</a></li>
           <li><a href="{% url 'console:blog-category-list' %}">Category</a></li>
@@ -22,7 +22,7 @@
     {% if request.user|has_group:WELCOMECALL_GROUP_LIST or request.user|has_group:OPS_HEAD_GROUP_LIST %}
       <h3>Welcome Call</h3>   
       <ul class="nav side-menu">
-        <li><a><i class="fa fa-list-alt"></i> Welcome call <span class="fa fa-chevron-down"></span></a>
+        <li><a><i class="fa icon-call"></i> Welcome call <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
               {% if request.user|has_group:OPS_HEAD_GROUP_LIST %}
               <li><a href="{% url "console:welcomecall:queue" %}">Welcome Queue {% if ops_badges_dict.welcome_call_inbox %}({{ops_badges_dict.welcome_call_inbox}}){% endif %}</a></li>
@@ -50,7 +50,7 @@
     {% if request.user|has_group:WELCOMECALL_GROUP_LIST or request.user|has_group:OPS_HEAD_GROUP_LIST %}
       <h3>Feedback Call</h3>   
       <ul class="nav side-menu">
-        <li><a><i class="fa fa-list-alt"></i> Feedback call <span class="fa fa-chevron-down"></span></a>
+        <li><a><i class="fa icon-feedbackcall"></i> Feedback call <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
               <li><a href="{% url "console:feedbackcall:queue" %}">Feedback Queue</a></li>
             </ul>
@@ -62,7 +62,7 @@
       <h3>User Query</h3>
         
       <ul class="nav side-menu">
-        <li><a><i class="fa fa-list-alt"></i> User Query <span class="fa fa-chevron-down"></span></a>
+        <li><a><i class="fa icon-userquery"></i> User Query <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
               {% if request.user|has_group:CMS_GROUP_LIST %}
                   <li><a href="{% url 'console:userquery:user-query' query_listing='cms-leads' %}">Cms Leads</a></li>
@@ -91,7 +91,7 @@
       <h3>Tasks</h3>
         
       <ul class="nav side-menu">
-        <li><a><i class="fa fa-list-alt"></i> Task <span class="fa fa-chevron-down"></span></a>
+        <li><a><i class="fa icon-task"></i> Task <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
               {% if request.user|has_group:MARKETING_GROUP_LIST %}
               <li><a href="{% url 'console:tasks:generate-autologintoken' %}">Generate AutoLogin</a></li>
@@ -110,7 +110,7 @@
       <h3>Badge User</h3>
         
       <ul class="nav side-menu">
-        <li><a><i class="fa fa-list-alt"></i> Badge User <span class="fa fa-chevron-down"></span></a>
+        <li><a><i class="fa icon-badgeuser"></i> Badge User <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
               <li><a href="{% url 'console:badge:upload-certificate' upload_type='upload-certificate' %}">
               Upload Certificate</a></li>
@@ -125,7 +125,7 @@
     <h3>University Faculty</h3>
     <ul class="nav side-menu">
 
-      <li><a><i class="fa fa-university"></i> Faculty <span class="fa fa-chevron-down"></span></a>
+      <li><a><i class="fa icon-faculty"></i> Faculty <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
           <li><a href="{% url 'console:faculty-list' %}">Faculty</a></li>
         </ul>
@@ -143,14 +143,14 @@
             </ul>
           </li-->
 
-          <li><a><i class="fa fa-certificate"></i> Skill <span class="fa fa-chevron-down"></span></a>
+          <li><a><i class="fa icon-skill"></i> Skill <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
               <li><a href="{% url 'console:skill-list' %}">Skill</a></li>
             </ul>
           </li>
 
           {% if perms.shop.console_change_category %}
-            <li><a><i class="fa fa-bookmark"></i> Category <span class="fa fa-chevron-down"></span></a>
+            <li><a><i class="fa icon-category"></i> Category <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
                 <li><a href="{% url 'console:category-list' %}">Category</a></li>
                   <li><a href="{% url 'console:subcategory-list' %}">SubCategory</a></li>
@@ -161,7 +161,7 @@
           
           {% if perms.shop.console_change_product %}
           
-            <li><a><i class="fa fa-book"></i> Product <span class="fa fa-chevron-down"></span></a>
+            <li><a><i class="fa icon-product"></i> Product <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
                 <li><a href="{% url 'console:product-list' %}">Product</a></li>
                 <li><a href="{% url 'console:product-audit-history'%}">Product Audit History</a></li>
@@ -169,7 +169,7 @@
 
               </ul>
             </li>
-            <li><a><i class="fa fa-edit"></i> Product Content <span class="fa fa-chevron-down"></span></a>
+            <li><a><i class="fa icon-productcontent"></i> Product Content <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
               {% if perms.faq.console_change_faq %}
                 <li><a href="{% url 'console:faq-list' %}">FAQs</a></li>
@@ -188,7 +188,7 @@
             </li>
 
 
-            <li><a><i class="fa fa-edit"></i>Country<span class="fa fa-chevron-down"></span></a>
+            <li><a><i class="fa icon-country"></i>Country<span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
               <li><a href="{% url "console:geo-country" %}">Country</a></li>
             </ul>
@@ -200,7 +200,7 @@
         <ul class="nav side-menu">
           {% if perms.shop.console_change_product %}
           
-            <li><a><i class="fa fa-book"></i> Product Moderation <span class="fa fa-chevron-down"></span></a>
+            <li><a><i class="fa icon-productmoderation"></i> Product Moderation <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
                 <li><a href="{% url 'console:screenproduct-list' %}">Product Screens</a></li>
                 <li><a href="{% url 'console:screenproduct-moderationlist' %}">Moderation List</a></li>
@@ -208,7 +208,7 @@
                 
               </ul>
             </li>
-            <li><a><i class="fa fa-book"></i> FAQ Moderation <span class="fa fa-chevron-down"></span></a>
+            <li><a><i class="fa icon-faqmoderation"></i> FAQ Moderation <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
                 
                 <li><a href="{% url 'console:screenfaq-list' %}">FAQ Screens</a></li>
@@ -261,7 +261,7 @@
         <h3>REVIEW MODERATIONS</h3>
    
         <ul class="nav side-menu"> 
-          <li><a><i class="fa fa-edit"></i> Review Moderations <span class="fa fa-chevron-down"></span></a>
+          <li><a><i class="fa icon-reviewmoderation"></i> Review Moderations <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
               <li><a href="{% url 'console:review-to-moderate' %}">Review</a></li>
             </ul>
@@ -272,7 +272,7 @@
     <h3>Orders</h3>
       {% if perms.order.can_download_discount_report or perms.order.can_generate_compliance_report or perms.order.can_download_upsell_report %}
       <ul class="nav side-menu">
-        <li><a><i class="fa fa fa-file-excel-o"></i> Reports <span class="fa fa-chevron-down"></span></a>
+        <li><a><i class="fa fa icon-reports"></i> Reports <span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
 
             {% if perms.order.can_download_discount_report %}
@@ -298,7 +298,7 @@
           <ul class="nav side-menu">
        
             {% if perms.wallet.console_add_remove_wallet_point %}
-             <li><a><i class="fa fa-list-alt"></i> Wallet <span class="fa fa-chevron-down"></span></a>
+             <li><a><i class="fa icon-wallet"></i> Wallet <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
               <li>
                 <a href="{% url 'console:walletrewards' %}"><i class="fa fa-wallet"></i>Add/Remove Points</a>
@@ -333,7 +333,7 @@
     
         {% if request.user|has_group:REFUND_GROUP_LIST %}
             <ul class="nav side-menu">
-                <li><a><i class="fa fa-edit"></i> Refund Operation <span class="fa fa-chevron-down"></span></a>
+                <li><a><i class="fa icon-refundoperation"></i> Refund Operation <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu">
                     {% if perms.order.can_view_refund_approval_queue %}
                     <li><a href="{% url 'console:refund-request-approval' %}">Refund Approval</a></li>
@@ -348,7 +348,7 @@
       {% if request.user|has_group:WRITING_GROUP_LIST %}
       <li>
       <a>
-        <i class="fa fa-edit"></i>Linkedin Queue<span class="fa fa-chevron-down"></span>
+        <i class="fa icon-linkedinqueue"></i>Linkedin Queue<span class="fa fa-chevron-down"></span>
       </a>
       <ul class="nav child_menu">
         {% if perms.order.can_show_linkedin_inbox_queue %}
@@ -386,7 +386,7 @@
       {% endif %}
 
       {% if perms.order.can_show_order_queue or perms.order.can_show_midout_queue or perms.order.can_show_inbox_queue or perms.order.can_show_approval_queue or perms.order.can_show_rejectedbyadmin_queue  or perms.order.can_show_rejectedbycandidate_queue or perms.order.can_show_booster_queue or perms.order.can_show_domestic_profile_update_queue or perms.order.can_show_domestic_profile_approval_queue or perms.order.can_show_international_profile_update_queue or perms.order.can_show_international_profile_approval_queue or perms.order.can_show_allocated_queue or perms.order.can_show_closed_oi_queue or perms.order.can_show_partner_inbox_queue or perms.order.can_show_hold_orderitem_queue or perms.order.can_show_varification_report_queue %}
-        <li><a><i class="fa fa-list-alt"></i> Queue <span class="fa fa-chevron-down"></span></a>
+        <li><a><i class="fa icon-queue"></i> Queue <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
 
             {% if perms.order.can_show_order_queue %}

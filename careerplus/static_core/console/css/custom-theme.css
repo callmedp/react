@@ -1,0 +1,278 @@
+/* custom theme for new added pages */
+
+/* global css */
+
+.mt-10 {
+    margin-top: 10px;
+}
+
+.mb-10 {
+    margin-bottom: 10px;
+}
+
+.mb-15 {
+    margin-bottom: 15px;
+}
+
+/* side menu css */
+.side-menu i {
+    vertical-align: middle;
+}
+
+.nav-sm .menu_section > ul {
+    margin-top: 0;
+}
+
+.nav-md .menu_section > ul {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.menu_section h3 {
+    text-shadow: none;
+    font-weight: 600;
+    margin-bottom: 3px;
+    font-size: 12px;
+}
+
+/* button css */
+.blue_btn {
+    background: #4576BA;
+    border-radius: 100px;
+    font-size: 1.2rem;
+    color: #fff;
+    display: inline-block;
+    padding: 5px 10px;
+    border: none;
+}
+
+.round_btn {
+    border: 1px solid #4576BA;
+    border-radius: 100px;
+    font-size: 1.2rem;
+    color: #4576BA;
+    display: inline-block;
+    padding: 5px 10px;
+    background: transparent;
+}
+
+/* icon css */
+.icon-blog:before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    display: block;
+    background: url(../images/icon-sprite.png) no-repeat 0 0;
+    margin: 0 auto;
+}
+
+.icon-call:before {
+    content: '';
+    width: 20px;
+    height: 21px;
+    display: block;
+    background: url(../images/icon-sprite.png) no-repeat 0 -32px;
+    margin: 0 auto;
+}
+
+.icon-feedbackcall:before {
+    content: '';
+    width: 20px;
+    height: 21px;
+    display: block;
+    background: url(../images/icon-sprite.png) no-repeat 0 -32px;
+    margin: 0 auto;
+}
+
+.icon-userquery:before {
+    content: '';
+    width: 23px;
+    height: 23px;
+    display: block;
+    background: url(../images/icon-sprite.png) no-repeat 0 -68px;
+    margin: 0 auto;
+}
+
+.icon-task:before {
+    content: '';
+    width: 20px;
+    height: 27px;
+    display: block;
+    background: url(../images/icon-sprite.png) no-repeat 0 -106px;
+    margin: 0 auto;
+}
+
+.icon-badgeuser:before {
+    content: '';
+    width: 22px;
+    height: 30px;
+    display: block;
+    background: url(../images/icon-sprite.png) no-repeat 0 -148px;
+    margin: 0 auto;
+}
+
+.icon-faculty:before {
+    content: '';
+    width: 24px;
+    height: 25px;
+    display: block;
+    background: url(../images/icon-sprite.png) no-repeat 0 -192px;
+    margin: 0 auto;
+}
+
+.icon-skill:before {
+    content: '';
+    width: 23px;
+    height: 23px;
+    display: block;
+    background: url(../images/icon-sprite.png) no-repeat 0 -231px;
+    margin: 0 auto;
+}
+
+.icon-category:before {
+    content: '';
+    width: 23px;
+    height: 19px;
+    display: block;
+    background: url(../images/icon-sprite.png) no-repeat 0 -267px;
+    margin: 0 auto;
+}
+
+.icon-product:before {
+    content: '';
+    width: 22px;
+    height: 21px;
+    display: block;
+    background: url(../images/icon-sprite.png) no-repeat 0 -298px;
+    margin: 0 auto;
+}
+
+.icon-productcontent:before {
+    content: '';
+    width: 23px;
+    height: 30px;
+    display: block;
+    background: url(../images/icon-sprite.png) no-repeat 0 -330px;
+    margin: 0 auto;
+}
+
+.icon-country:before {
+    content: '';
+    width: 21px;
+    height: 19px;
+    display: block;
+    background: url(../images/icon-sprite.png) no-repeat 0 -370px;
+    margin: 0 auto;
+}
+
+.icon-productmoderation:before {
+    content: '';
+    width: 20px;
+    height: 24px;
+    display: block;
+    background: url(../images/icon-sprite.png) no-repeat 0 -401px;
+    margin: 0 auto;
+}
+
+.icon-faqmoderation:before {
+    content: '';
+    width: 22px;
+    height: 22px;
+    display: block;
+    background: url(../images/icon-sprite.png) no-repeat 0 -439px;
+    margin: 0 auto;
+}
+
+.icon-reviewmoderation:before {
+    content: '';
+    width: 24px;
+    height: 24px;
+    display: block;
+    background: url(../images/icon-sprite.png) no-repeat 0 -475px;
+    margin: 0 auto;
+}
+
+.icon-reports:before {
+    content: '';
+    width: 24px;
+    height: 21px;
+    display: block;
+    background: url(../images/icon-sprite.png) no-repeat 0 -511px;
+    margin: 0 auto;
+}
+
+.icon-wallet:before {
+    content: '';
+    width: 25px;
+    height: 22px;
+    display: block;
+    background: url(../images/icon-sprite.png) no-repeat 0 -545px;
+    margin: 0 auto;
+}
+
+.icon-refundoperation:before {
+    content: '';
+    width: 29px;
+    height: 29px;
+    display: block;
+    background: url(../images/icon-sprite.png) no-repeat 0 -579px;
+    margin: 0 auto;
+}
+
+.icon-linkedinqueue:before {
+    content: '';
+    width: 18px;
+    height: 18px;
+    display: block;
+    background: url(../images/icon-sprite.png) no-repeat 0 -616px;
+    margin: 0 auto;
+}
+
+.icon-queue:before {
+    content: '';
+    width: 24px;
+    height: 25px;
+    display: block;
+    background: url(../images/icon-sprite.png) no-repeat 0 -646px;
+    margin: 0 auto;
+}
+
+.icon-orderid {
+    width: 42px;
+    height: 53px;
+    display: block;
+    background: url(../images/icon-sprite.png) no-repeat 0 -687px;
+}
+
+/* order details page css */
+
+.order_details {
+    background: #F8FBFF;
+    box-shadow: 0 3px 8px 0 rgba(226,226,226,0.50);
+    border-radius: 4px;
+    border-top: 4px solid #4576BA;
+    padding: 15px 20px;
+}
+
+.order_details__heading {
+    font-size: 2.2rem;
+    color: #333;
+    font-weight: 600;
+}
+
+.order_details__id {
+    background: #FFFFFF;
+    box-shadow: 0 2px 9px 0 rgba(238,238,238,0.50);
+    border-radius: 4px;
+    display: block;
+    font-size: 1.3rem;
+    color: #666;
+    padding: 20px;
+}
+
+.order_details__id strong {
+    font-size: 1.8rem;
+    color: #666;
+    font-weight: 600;
+    display: block;
+}
