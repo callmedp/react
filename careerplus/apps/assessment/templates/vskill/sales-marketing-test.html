@@ -120,7 +120,7 @@
                }
                for (fa in json.results){
                 element.innerHTML=
-                element.innerHTML +'<div class="testinside testinside-inner"><span class="border-left"></span><a class="test-box" a title="'+ json.results[fa].name + '" href="/practice-tests/'+ json.results[fa].slug +'">'+ json.results[fa].name +'<span class="test">22 Test</span></a></div>'
+                element.innerHTML +'<div class="testinside testinside-inner"><span class="border-left"></span><a class="test-box" a title="'+ json.results[fa].name + '" href="/practice-tests/'+ json.results[fa].slug +'">'+ json.results[fa].name +'<span class="test"> ${json.results[fa].assessment_test_count < 1 ? 'Test':'Tests'}</span></a></div>'
                }
                },
                error: function(xhr, ajaxOptions, thrownError) {
