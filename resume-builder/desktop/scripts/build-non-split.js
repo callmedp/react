@@ -15,7 +15,6 @@ config.optimization.splitChunks = {
 // Move runtime into bundle instead of separate file
 config.optimization.runtimeChunk = false;
 
-
 const currentTimeStamp = +new Date();
 
 // JS
@@ -29,8 +28,7 @@ config.plugins.push(new BundleTracker({
 
 const result = {
     'staticUrl': process.env.REACT_APP_ENV === 'staging' ?
-        'https://learning-static-staging-189607.storage.googleapis.com/l/s/' : '',
-
+        'https://learning-static-staging-189607.storage.googleapis.com/l1/s/' : 'https://static1.shine.com/l/s/',
 }
 
 

@@ -2,6 +2,7 @@
 import os, json
 from io import BytesIO
 from datetime import date
+import logging
 
 # django imports
 from django.conf import settings
@@ -94,7 +95,7 @@ def generate_image_for_resume(candidate_id, template_no):
 
     file_name = 'resumetemplate-' + str(template_no) + '.jpg'
     rendered_template = rendered_template.decode()
-    rendered_template = rendered_template.replace("\n", "")
+    # rendered_template = rendered_template.replace("\n", "")
 
     file = imgkit.from_string(rendered_template, False, {'quiet': '', 'quality': '80', 'format': 'JPG'})
     in_mem_file = BytesIO(file)
@@ -190,6 +191,7 @@ def generate_and_upload_resume_pdf(data):
     from order.models import Order
     from resumebuilder.utils import store_resume_file
     from order.tasks import send_resume_in_mail_resume_builder
+    from core.api_mixin import UploadResumeToShine
     data = json.loads(data)
     order = Order.objects.get(id=data.get('order_id'))
     template_no = data.get('template_no')
@@ -202,6 +204,8 @@ def generate_and_upload_resume_pdf(data):
 
         html_template = get_template(template_src)
         rendered_html = html_template.render(context_dict).encode(encoding='UTF-8')
+        rendered_html = rendered_html.decode()
+
         if file_type == 'pdf':
             options = {
                 'page-size': 'Letter',
@@ -214,7 +218,8 @@ def generate_and_upload_resume_pdf(data):
                 'image-dpi': 135,
                 'quiet': '',
             }
-            rendered_html = rendered_html.decode().replace("\n", "")
+
+            # rendered_html = rendered_html.decode().replace("\n", "")
             file = pdfkit.from_string(rendered_html, False, options=options)
 
         elif file_type == 'png':
@@ -303,3 +308,21 @@ def generate_and_upload_resume_pdf(data):
 
     if send_mail:
         send_resume_in_mail_resume_builder(['resume', pdf_file], data)
+
+    if template_id == int(candidate.selected_template) and candidate.upload_resume:
+        info = {
+            'candidate_id': candidate_id,
+            'upload_medium': 'direct',
+            'upload_source': 'web',
+            'resume_source': 7,
+            'resume_medium': 5,
+            'resume_trigger': 7
+        }
+        resume_files = {
+            'resume_file': pdf_file
+        }
+        response = UploadResumeToShine().sync_candidate_resume_to_shine(candidate_id=candidate_id,files=resume_files, data=info)
+        if response:
+            logging.getLogger('info_log').info("RESUME BUILDER: Upload to shine successful.")
+            return
+        logging.getLogger('info_log').info("RESUME BUILDER: Upload to shine failed.")

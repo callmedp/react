@@ -898,9 +898,9 @@ class ShineCandidateLoginAPIView(APIView):
     def get_profile_info(self, profile):
         candidate_profile_keys = ['first_name', 'last_name', 'email', 'number', 'date_of_birth', 'location', 'gender',
                                   'candidate_id']
-        candidate_profile_values = [profile['first_name'], profile['last_name'], profile['email'],
-                                    profile['cell_phone'], profile['date_of_birth'],
-                                    profile['candidate_location'], profile['gender'], profile['id']]
+        candidate_profile_values = [profile.get('first_name',''), profile.get('last_name', ''), profile.get('email',''),
+                                    profile.get('cell_phone',''), profile.get('date_of_birth',''),
+                                    profile.get('candidate_location',''), profile.get('gender',''), profile.get('id','')]
         candidate_profile = dict(zip(candidate_profile_keys, candidate_profile_values))
 
         return candidate_profile

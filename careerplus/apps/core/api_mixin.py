@@ -285,26 +285,34 @@ class ShineProfileDataUpdate(ShineToken):
 class UploadResumeToShine(ShineToken):
 
     def sync_candidate_resume_to_shine(self, candidate_id=None, files={}, data={}, headers=None):
+        if not candidate_id:
+            return False
+
+        if headers:
+            return False
+
+        headers = self.get_api_headers()
+        if not data:
+            return False
+        if not headers:
+            return False
+
+        headers.update({
+            "Accept": 'application/json',
+        })
+        api_url = settings.SHINE_SITE + \
+                  '/api/v2/candidate/' + \
+                  candidate_id + '/resumefiles/'
         try:
-            if candidate_id:
-                if not headers:
-                    headers = self.get_api_headers()
-                    if data and headers:
-                        headers.update({
-                            "Accept": 'application/json',
-                        })
-                        api_url = settings.SHINE_SITE +\
-                            '/api/v2/candidate/' +\
-                            candidate_id + '/resumefiles/'
-                        response = requests.post(
-                            api_url, files=files,
-                            data=data, headers=headers)
-                        if response.status_code in [200, 201]:
-                            return True
+            response = requests.post(
+                api_url, files=files,
+                data=data, headers=headers)
+            if response.status_code in [200, 201]:
+                return True
         except Exception as e:
             logging.getLogger('error_log').error(
                 "%s error in sync_candidate_resume_to_shine function" % (str(e)))
-        return False
+            return False
 
 
 class AdServerShine(object):
