@@ -2918,7 +2918,8 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
         '35': Q(whatsapp_profile_orderitem__onboard=False),
         '4':  Q(oi_status=4),
         '36': Q(whatsapp_profile_orderitem__onboard=True),
-        '37': Q(whatsapp_profile_orderitem__approved=True)
+        '37': Q(whatsapp_profile_orderitem__approved=True),
+        '38': ~Q(oi_status=4)
     }
 
     def __init__(self):
@@ -3011,7 +3012,6 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
             query = [self.filter_query_mapping.get(k) for k in self.oi_status if self.filter_query_mapping.get(k, None)]
             for q in query:
                 new_query &= q
-            print(new_query)
             queryset = queryset.filter(
                 new_query
             )
