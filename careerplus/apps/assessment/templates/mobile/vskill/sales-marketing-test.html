@@ -111,9 +111,9 @@
                for (fa in json.results){
                 element.innerHTML=
                 element.innerHTML + `<div class="popular_test_inside category">
-                <a title = "${json.results[fa].name}" href = "/practice-tests/${json.results[fa].slug}/sub/"
+                <a title = "${json.results[fa].name}" href = "/practice-tests/${json.results[fa].slug}/sub/">
 
-                <span class="border border{{forloop.counter0}}"></span>
+                <span class="border border${fa}"></span>
                 <span class="name">${json.results[fa].name}</span>
                 <span class="test">${json.results[fa].assessment_test_count}
                 ${json.results[fa].assessment_test_count < 1 ? 'Test':'Tests'}

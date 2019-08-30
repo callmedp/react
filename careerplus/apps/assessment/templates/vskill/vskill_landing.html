@@ -108,7 +108,7 @@ Shine learning brings to you one of the largest collection of test preps for all
                   {% for fa in test_prep_children %}
 
                    <div class="testinside-home testinside-inner">
-                    <a class="test-box" href="{% url 'assessment:vskill-category' slug=fa.slug %}" title="{{fa.name}}">
+                    <a class="test-box" href="{% url 'assessment:vskill-subcategory' slug=fa.slug %}" title="{{fa.name}}">
                   <span class="border-left {% cycle 'default' 'purple' 'olive' 'green' %}"></span>
                     <span>
                      {{fa.name}}

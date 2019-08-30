@@ -41,16 +41,12 @@ class CategoryApiView(FieldFilterMixin,ListAPIView):
     def get_level3_test_category(self,val=False):
         queryset = Category.objects.all()
         filter_dict = {}
-        if self.request.query_params.get('only_test_level3category') or val:
-            filter_dict.update({'category__categoryproducts__type_flow': 16,'category__active': True})
+        level3_ids = list(set(Test.objects.exclude(category=None).values_list('category__id',flat=True)))
 
         if self.request.query_params.get('test_category_id'):
-            filter_dict.update({'category__related_to':self.request.query_params.get('test_category_id')})
+            filter_dict.update({'related_to__id':self.request.query_params.get('test_category_id')})
 
-        level3_ids = list(set(Test.objects.filter(**filter_dict).\
-                             values_list('category__id',flat=True)))
-
-        return queryset.filter(id__in=level3_ids)
+        return queryset.filter(id__in=level3_ids).filter(**filter_dict)
 
     def get_level2_test_category(self):
         filter_dict = {}
@@ -73,9 +69,7 @@ class CategoryApiView(FieldFilterMixin,ListAPIView):
         if self.request.query_params.get('type_flow'):
             type_flow = self.request.query_params.get('type_flow').split(',')
             filter_dict.update({'type_flow__in': type_flow})
-        if self.request.query_params.get('only_test_level2category'):
-            pass
-        return queryset
+        return queryset.filter(**filter_dict)
 
 
 class TestApiView(FieldFilterMixin, ListAPIView):
