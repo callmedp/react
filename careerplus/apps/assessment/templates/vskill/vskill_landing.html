@@ -124,7 +124,7 @@ Shine learning brings to you one of the largest collection of test preps for all
                   {% endfor %}
 
                </div>
-                {% if  testPrep.get_childrens.count > 8  %}
+                {% if  testPrep.get_test_category_ids.count > 8  %}
                         <a style="color:#333333" href="{% url 'assessment:vskill-category' slug=testPrep.slug %}">
                                         <button class="btn_white loadmore" id="testPrepLoadMore" >View All</button>
 

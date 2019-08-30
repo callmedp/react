@@ -102,7 +102,7 @@ Shine learning brings to you one of the largest collection of test preps for all
             </a>
         </div><!-- // popular_test_inside -->
                       {%endfor%}
-         {% if  testPrep.get_childrens.count > 8  %}
+         {% if  testPrep.get_test_category_ids.count > 8  %}
         <div class="text-center mt-30 mb-15">
             <a href="{% url 'assessment:vskill-category' slug=testPrep.slug %}" class="btn btn-slg btn-round-30 btn-white">View all</a>
         </div>

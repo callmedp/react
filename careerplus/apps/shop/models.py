@@ -28,6 +28,7 @@ from mongoengine import Document, ListField, FloatField,\
 from partner.models import Vendor
 from core.models import AbstractCommonModel
 from order.functions import create_short_url
+
 from review.models import Review
 from faq.models import (
     FAQuestion, ScreenFAQ)
@@ -308,6 +309,13 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
                 type_level=4,
                 active=True)
         return []
+
+    def get_test_category_ids(self):
+        from assessment.models import Test
+        category_ids = self.get_childrens().values_list('id',flat=True) if self.get_childrens() else None
+        return [] if not category_ids else\
+            Test.objects.filter(category__id__in =category_ids).values_list('category__id').distinct()
+
 
     def get_products(self):
 
