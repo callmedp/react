@@ -37,7 +37,13 @@ def auto_forward_emails():
         mail.select('inbox')
         # searching query
         current_date = date.today().strftime('%d-%b-%Y')
-        status, data = mail.uid('SEARCH',None, 'ON '+current_date)
+        search_status, data = mail.uid('SEARCH',None, 'ON '+current_date)
+        unseen_status, unseen_data = mail.uid('SEARCH',None, 'UNSEEN ON '+current_date)
+
+        if search_status != 'OK' and unseen_status !='OK':
+            logging.getLogger('error_log').error("Search query failed")
+            return
+        
     except Exception as e:
         logging.getLogger('error_log').error("login in imap or smtp/quering mailbox failed - %s" % (str(e)))
         return
@@ -46,6 +52,7 @@ def auto_forward_emails():
     # in cache we store a set of all message uid's done on that day
     all_day_ids = mail_ids.split()
     id_list = list(set(mail_ids.split())- cache.get('message_uids_done',set()))
+    unseen_id_list = list(set(unseen_data[0].split())- cache.get('message_uids_done',set()))
 
     #varaibles for logging
     total_msg_forwarded = 0
@@ -54,6 +61,9 @@ def auto_forward_emails():
     for id in id_list:
         try:
             mail_status, mail_data = mail.uid('FETCH',id, '(RFC822)' ) #fetching mail from uid
+            if mail_status != 'OK':
+                logging.getLogger('error_log').error("Fetch mail query failed")
+                return
         except Exception as e:
             logging.getLogger('error_log').error("mail fetch failed - %s" % (str(e)))
             continue
@@ -88,7 +98,10 @@ def auto_forward_emails():
                     mail.uid('STORE',id,'-FLAGS','\SEEN')
                     continue
             else:
-                mail.uid('STORE',id,'-FLAGS','\SEEN')
+                if id in unseen_id_list:
+                    mail.uid('STORE',id,'-FLAGS','\SEEN')
+                else:
+                    mail.uid('STORE',id,'+FLAGS','\SEEN')
 
     
     cache.set('message_uids_done',set(all_day_ids),3600)
@@ -99,4 +112,7 @@ def auto_forward_emails():
     logging.getLogger('error_log').error("total messages forward failed - %s" % (str(total_msg_forward_failed)))
 
 auto_forward_emails()
+
+
+
 
