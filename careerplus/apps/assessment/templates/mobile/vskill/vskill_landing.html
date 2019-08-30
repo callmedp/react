@@ -88,11 +88,11 @@
 Shine learning brings to you one of the largest collection of test preps for all  business and tech certifications. Say good bye to anxiety and crack the certification exams in the first attempt !        </p>
           {% for fa in test_prep_children %}
         <div class="popular_test_inside">
-            <a href="{% url 'assessment:vskill-category' slug=fa.slug %}">
+            <a href="{% url 'assessment:vskill-subcategory' slug=fa.slug %}">
                 <span class="border border0"></span>
                 <div>
                     <h2 class="name bold mb-0">{{fa.name}}</h2>
-                    <p class="fs-14 mb-0">{{get_assessment_test}}  {% if fa.get_assessment_test < 1 %}Test {% else %}Tests{% endif %}</p>
+                    <p class="fs-14 mb-0">{{fa.get_assessment_test}}  {% if fa.get_assessment_test < 1 %}Test {% else %}Tests{% endif %}</p>
                 </div>
                 <span>
                     {% if fa.icon %}
