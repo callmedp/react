@@ -103,7 +103,8 @@
             <h2 class="text-center">{{testPrep.heading}}</h2>
 
             <div class="popular_test row" id="funcDivi">
-              <p class="txt mt-10 mb-30">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type.</p>
+              <p class="txt mt-10 mb-30">
+Shine learning brings to you one of the largest collection of test preps for all  business and tech certifications. Say good bye to anxiety and crack the certification exams in the first attempt !              </p>
                   {% for fa in test_prep_children %}
 
                    <div class="testinside-home testinside-inner">
@@ -124,7 +125,10 @@
 
                </div>
                 {% if  testPrep.get_childrens.count > 8  %}
-            <a class="btn btn_white loadmore" id="testPrepLoadMore" href="{% url 'assessment:vskill-category' slug=testPrep.slug %}" >View All</a>
+                        <a style="color:#333333" href="{% url 'assessment:vskill-category' slug=testPrep.slug %}">
+                                        <button class="btn_white loadmore" id="testPrepLoadMore" >View All</button>
+
+                        </a>
                   {% endif %}
 
             </div>
@@ -135,7 +139,9 @@
          <div class="col-sm-12 col-lg-12 col-md-12">
             <h2 class="text-center">Tests by functional area</h2>
 
-            <p class="txt mt-20">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type.</p>
+            <p class="txt mt-20">
+Shine learning brings to you one of the largest collection of functional tests. Test your skills on these free tests and know which is the course most suitable for you to grow in your career !
+            </p>
             <div class="functional_test row" id="funcDiv">
                   {% for fa in func_area|slice:":8" %}
                <div class="functional_test_inside border-{{forloop.counter}}">

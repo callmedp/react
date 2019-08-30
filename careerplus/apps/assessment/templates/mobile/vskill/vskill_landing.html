@@ -84,7 +84,8 @@
        {% for testPrep in test_prep %}
      <h2>{{testPrep.heading}}</h2>
     <div class="popular_test mb-30">
-        <p class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+        <p class="text-center">
+Shine learning brings to you one of the largest collection of test preps for all  business and tech certifications. Say good bye to anxiety and crack the certification exams in the first attempt !        </p>
           {% for fa in test_prep_children %}
         <div class="popular_test_inside">
             <a href="{% url 'assessment:vskill-category' slug=fa.slug %}">
@@ -112,7 +113,9 @@
     <!-- Tests by functional area -->
     <div class="functional_area mt-15" id="funcDiv">
         <h2>Tests by functional area</h2>
-        <p class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+        <p class="text-center">
+Shine learning brings to you one of the largest collection of functional tests. Test your skills on these free tests and know which is the course most suitable for you to grow in your career !
+        </p>
         {% for fa in func_area|slice:":8" %}
 
             <div class="functional_area_inside border-{{forloop.counter0}}">
@@ -144,8 +147,7 @@
             </a>
             </div>
             {% endfor %}
-    </div><!-- /. popula
-
+    </div>
     <div class="practice-test check-result-wrap pt-30" id="check_results">
         <div class="practice-test-inside"></div>
         <div class="back" id="close"></div>
