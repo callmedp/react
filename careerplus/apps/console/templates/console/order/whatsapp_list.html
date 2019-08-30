@@ -83,8 +83,8 @@
 {% if request.GET.due_date %}
 <input type="hidden" name="due_date" value="{{request.GET.due_date}}">
 {% endif %}
-{% if request.GET.sort_payment_date %}
-<input type="hidden" name="sort_payment_date" value="{{request.GET.sort_payment_date}}">
+{% if request.GET.sort_value %}
+<input type="hidden" name="sort_value" value="{{request.GET.sort_value}}">
 {% endif %}
 
                       </div>
@@ -134,7 +134,7 @@
                           <input type="hidden" name="rad_search" value="{{request.GET.rad_search}}">
                        {% endif %}
 
-                       <input type="hidden" name="sort_payment_date" value="{{request.GET.sort_payment_date}}">
+                       <input type="hidden" name="sort_value" value="{{request.GET.sort_value}}">
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -226,9 +226,10 @@
                   <form autocomplete="off" method="GET" role="form" action="{% url "console:queue-whatsappjoblist" %}">
                     <div class="col-md-8">
                       <div class="input-group">
-                          <select class="form-control" name="sort_payment_date">
-                            <option value="0" {% if request.GET.sort_payment_date == '0' %} selected {% endif %}>Select</option>
-                            <option value="1"  {% if request.GET.sort_payment_date == '1' %} selected {% endif %}>Payment Date</option>
+                          <select class="form-control" name="sort_value">
+                            <option value="0" {% if request.GET.sort_value == '0' %} selected {% endif %}>Select</option>
+                            <option value="1"  {% if request.GET.sort_value == '1' %} selected {% endif %}>Payment Date</option>
+                            <option value="2"  {% if request.GET.sort_value == '2' %} selected {% endif %}>Due Date</option>
                           </select>
                           <span class="input-group-btn">
                                 <button type="submit" class="btn btn-primary" >Sort</button>
@@ -362,7 +363,13 @@
                       <td>{{ weeks.1 }}/{{ weeks.0 }}</td>
                       <td>{{ obj.sent_link_count }}/{{ obj.get_total_links_needs_to_sent }} </td>
                       <td>{{ obj.save_link }}</td>
-                      <td>{{ obj.get_due_date }} ({{ obj.get_due_date_weekday }})</td>
+                      <td>{{ obj.get_due_date }} ({{ obj.get_due_date_weekday }})
+                        {% if obj.delayed %}
+                        <div class="text-center" title="Delayed Order">
+                          <i class="fa fa-warning" style="font-size:15px;color:red"></i>
+                        </div>
+                        {% endif %}
+                      </td>
                       <td>{{ obj.pending_links_count }}</td>
                       <td>{{ obj.get_links_needed_till_now }}</td>
                       {% endwith %}

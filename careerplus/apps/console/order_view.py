@@ -2936,7 +2936,7 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
         self.sel_opt = request.GET.get('rad_search', 'number')
         self.payment_date = self.request.GET.get('payment_date', '')
         self.due_date = self.request.GET.get('due_date', '')
-        self.sort_payment_date = self.request.GET.get('sort_payment_date', '0')
+        self.sort_value = self.request.GET.get('sort_value', '0')
         return super(WhatsappListQueueView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -3040,8 +3040,13 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
             save_link=Count(Case(
                 When(jobs_link__status=0, then=1),
                 output_field=IntegerField())
+            ),
+            delayed=Case(
+                When(
+                    whatsapp_profile_orderitem__due_date__lt=timezone.now().date(), then=1),
+                output_field=IntegerField())
+
             )
-        )
         if int(self.day_choice) != -1:
             q_objects = Q()
             today_date_start = datetime.datetime(
@@ -3074,10 +3079,15 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
                     pending_links_count__gt=0
                 ).exclude(oi_status=4)
             queryset = queryset.filter(q_objects)
-        if self.sort_payment_date and int(self.sort_payment_date):
-            queryset = queryset.select_related(
-                'order', 'product', 'assigned_to', 'assigned_by'
-            ).order_by('-order__payment_date')
+        if self.sort_value:
+            if int(self.sort_value) == 1:
+                queryset = queryset.select_related(
+                    'order', 'product', 'assigned_to', 'assigned_by'
+                ).order_by('-order__payment_date')
+            elif int(self.sort_value) == 2:
+                queryset = queryset.select_related(
+                    'order', 'product', 'assigned_to', 'assigned_by'
+                ).order_by('-whatsapp_profile_orderitem__due_date')
         else:
             queryset = queryset.select_related(
                 'order', 'product', 'assigned_to', 'assigned_by'
