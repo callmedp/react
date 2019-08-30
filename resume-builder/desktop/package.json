@@ -46,7 +46,7 @@
   "scripts": {
     "start:dev": "REACT_APP_ENV=development npm run start",
     "start": "react-app-rewired start",
-    "build": "sh -ac 'rm -rf ../../careerplus/static_core/react/dist/desktop/*;node ./scripts/build-non-split.js'",
+    "build": "webpack --env=12345 --config  scripts/webpack.server.config.js ",
     "build:staging": "REACT_APP_ENV=staging npm run build",
     "build:production": "REACT_APP_ENV=production npm run build",
     "test": "react-scripts test",

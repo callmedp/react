@@ -39,7 +39,6 @@ export default (pathname, store, context, timeStamp) => {
         <title>Title</title>
       </head>
       <body>
-      <div>Time Stamp is ${timeStamp}</div>
       <div id="react-app">${content}</div>
       <script>
         window.INITIAL_STATE = ${JSON.stringify(store.getState())}

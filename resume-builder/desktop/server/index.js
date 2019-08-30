@@ -16,8 +16,15 @@ const timestamp = fs.readFileSync('/tmp/react_build_version.txt', "utf8");
 
 
 if (typeof window == 'undefined') {
-    global.window = {}
+    global.window = {
+        config: {
+            staticUrl: process.env.STATIC_URL || '',
+            siteDomain: process.env.SITE_DOMAIN || '',
+            msiteDomain: process.env.MSITE_DOMAIN || ''
+        },
+    }
 }
+
 
 if (typeof fetch == 'undefined') {
     global.fetch = require('node-fetch');
@@ -48,16 +55,20 @@ app.use('/resume-builder/dist', express.static('dist'));
 
 app.get('*', async (req, res) => {
     const result = []
-    for (const [index, {route}] of (matchRoutes(routes, req.path)||[]).entries()) {
+    for (const [index, {route}] of (matchRoutes(routes, req.path) || []).entries()) {
         if (route && route.component && route.component.fetching) {
             console.log('---routes----', route.component.fetching);
-            if (index == 0) {
-                await route.component.fetching(store, {
-                    "email": 'kharbpriya5@gmail.com',
-                    "password": "qwerty"
-                });
-            } else {
-                await route.component.fetching(store)
+            try {
+                if (index == 0) {
+                    await route.component.fetching(store, {
+                        "email": 'kharbpriya5@gmail.com',
+                        "password": "qwerty"
+                    });
+                } else {
+                    await route.component.fetching(store)
+                }
+            } catch (e) {
+                console.log("Error in Api", e);
             }
         }
     }
