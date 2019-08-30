@@ -171,6 +171,7 @@ urlpatterns += [
                    # cart rest apis
                    # url(r'^api/v1/cart/', include('cart.api.v1.urls', namespace="cart-api")),
                    url(r'api/v1/', include('shop.api.v1.urls', namespace='shop-api')),
+                   url(r'api/', include('skillpage.api.v1.urls', namespace='skillpage-api')),
                    url(r'^$', homepage_view.HomePageView.as_view(), name='homepage'),
                    url(r'^console/', include('console.urls', namespace='console')),
                    url(r'^shop/', include('shop.urls', namespace='shop')),

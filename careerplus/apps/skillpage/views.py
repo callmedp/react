@@ -130,7 +130,7 @@ class SkillPageView(DetailView, SkillPageMixin):
             content_type=prd_obj,
             status=1)
 
-        prod_page = Paginator(all_results, 5)
+        prod_page = Paginator(all_results, 1)
 
         try:
             products = prod_page.page(self.page)
@@ -139,6 +139,18 @@ class SkillPageView(DetailView, SkillPageMixin):
         except EmptyPage:
             products = prod_page.page(prod_page.num_pages)
         for product in products:
+            if float(product.pPfin):
+                product.discount = round((float(product.pPfin) - float(product.pPin)) * 100 / float(product.pPfin), 2)
+
+        all_cert = certifications
+        cert_page = Paginator(all_cert, 5)
+        try:
+            certifications = cert_page.page(self.page)
+        except PageNotAnInteger:
+            certifications = cert_page.page(1)
+        except EmptyPage:
+            certifications = cert_page.page(cert_page.num_pages)
+        for product in certifications:
             if float(product.pPfin):
                 product.discount = round((float(product.pPfin) - float(product.pPin)) * 100 / float(product.pPfin), 2)
 

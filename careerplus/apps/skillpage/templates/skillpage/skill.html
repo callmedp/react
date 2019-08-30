@@ -271,22 +271,27 @@
 						        </li>
 					    	{% endfor %}
 					    	{% if products.has_next %}
+					    	    <div id = "prod_loader" style ="display:none">
+					    	<img aria-label="loader" id="loadingimg" src="{% static 'shinelearn/images/loader.gif' %}" >
+					        </div>
+					    	    <div id="product_load_more">
 						        <a href="javascript:void(0)" 
-						        id="product_load_more" class="load-more loadmore"> 
+						         class="load-more loadmore"> 
 						        Load more</a>
 			            		<div id="prod_load_more">
 				      				<input type="hidden" name="page" 
-				      				value="{{products.next_page_number}}" id="page_id">
+				      				value="{{products.next_page_number}}" id="prod_page_id">
 				      				<input type="hidden" name="slug" value="{{category_obj.pk}}" 
 				      				id="slug_id">
 					    		</div>
+					    	</div>
 						    {% endif %}
 				      	</ul>
 					</div>
 					{% if certifications %}
 					
 				    <div role="tabpanel" class="tab-pane" id="assessments-tab">
-				    	<ul class="listing1" id="product_list">
+				    	<ul class="listing1" id="certification_list">
 				    		{% for product in certifications %}
 						        <li class="box-panel" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
 						        	<meta itemprop="position" content="{{forloop.counter}}" />
@@ -366,15 +371,21 @@
 						        </li>
 					    	{% endfor %}
 					    	{% if products.has_next %}
+
+					    	<div id = "cert_loader" style ="display:none">
+					    	<img aria-label="loader" id="loadingimg" src="{% static 'shinelearn/images/loader.gif' %}" >
+					        </div>
+					    	    <div id="certification_load_more">
 						        <a href="javascript:void(0)" 
-						        id="product_load_more" class="load-more loadmore"> 
+						         class="load-more loadmore">
 						        Load more</a>
-			            		<div id="prod_load_more">
+			            		<div id="cert_load_more">
 				      				<input type="hidden" name="page" 
-				      				value="{{products.next_page_number}}" id="page_id">
-				      				<input type="hidden" name="slug" value="{{category_obj.pk}}" 
-				      				id="slug_id">
+				      				value="{{products.next_page_number}}" id="cert_page_id">
+				      				<input type="hidden" name="pCtg" value="{{category_obj.pk}}" 
+				      				id="Ctg_id">
 					    		</div>
+					    	</div>
 						    {% endif %}
 				      	</ul>
 				    </div>
@@ -427,8 +438,8 @@
 			          		<a href="javascript:void(0);" id="review_load_more" class="load-more loadreview">Load more</a>
 				      		<input type="hidden" name="page" 
 				      		value="{{page_reviews.next_page_number}}" id="page_id1">
-				      		<input type="hidden" name="slug" value="{{category_obj.pk}}" 
-		      				id="slug_id1">
+				      		<input type="hidden" name="category_pk" value="{{category_obj.pk}}" 
+		      				id="category_pk">
 				      	</div>
 		          	{% endif %}
 		        </ul>	    	
