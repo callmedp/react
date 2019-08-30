@@ -3088,10 +3088,10 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
                 queryset = queryset.select_related(
                     'order', 'product', 'assigned_to', 'assigned_by'
                 ).order_by('-whatsapp_profile_orderitem__due_date')
-        else:
-            queryset = queryset.select_related(
-                'order', 'product', 'assigned_to', 'assigned_by'
-            ).order_by('-pending_links_count')
+            else:
+                queryset = queryset.select_related(
+                    'order', 'product', 'assigned_to', 'assigned_by'
+                ).order_by('-pending_links_count')
 
         return queryset
 
