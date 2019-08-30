@@ -25,7 +25,7 @@ from .choices import STATUS_CHOICES, SITE_CHOICES,\
     WC_FLOW_STATUS, OI_OPS_TRANSFORMATION_DICT
 
 from .functions import get_upload_path_order_invoice, process_application_highlighter
-from .tasks import generate_resume_for_order, board_user_on_neo
+from .tasks import generate_resume_for_order,bypass_resume_midout,upload_Resume_shine,board_user_on_neo
 
 #inter app imports
 from linkedin.models import Draft
@@ -153,6 +153,11 @@ class Order(AbstractAutoDate):
     crm_lead_id = models.CharField(
         max_length=255, null=True, blank=True)
     sales_user_info = models.TextField(default='', null=True, blank=True)
+
+    #resume writing
+    auto_upload = models.BooleanField(default=False)
+    service_resume_upload_shine = models.BooleanField(default=True)
+
 
     class Meta:
         app_label = 'order'
@@ -284,6 +289,13 @@ class Order(AbstractAutoDate):
                 return 'pink'
         return ''
 
+    def upload_service_resume_shine(self,existing_obj):
+        if self.service_resume_upload_shine and self.service_resume_upload_shine  != existing_obj.service_resume_upload_shine:
+            order_items = self.orderitems.filter(oi_status=4,product__type_flow__in=[1,12,13,8,3,4])
+            for order_item in order_items:
+                upload_Resume_shine.delay(order_item.id)
+
+
     def save(self,**kwargs):
         created = not bool(getattr(self,"id"))
         if created:
@@ -310,9 +322,14 @@ class Order(AbstractAutoDate):
             generate_resume_for_order.delay(self.id)
 
             logging.getLogger('info_log').info("Generating resume for order {}".format(self.id))
+    
+        self.upload_service_resume_shine(existing_obj)
+        obj = super(Order,self).save(**kwargs)
 
-        return super(Order, self).save(**kwargs)
-
+        if self.status == 1:
+            bypass_resume_midout.delay(self.id)
+        
+        return obj
 
 class OrderItem(AbstractAutoDate):
     coi_id = models.IntegerField(
@@ -456,6 +473,7 @@ class OrderItem(AbstractAutoDate):
         null=True,
         default=0
     )
+
 
     class Meta:
         app_label = 'order'
@@ -814,19 +832,25 @@ class OrderItem(AbstractAutoDate):
         if assigned_op:
             return assigned_op.created
 
+    def upload_service_resume_shine(self,existing_obj):
+        if self.oi_status == 4 and self.oi_status !=existing_obj.oi_status  and self.order.service_resume_upload_shine:
+            upload_Resume_shine.delay(self.id)
 
     def save(self, *args, **kwargs):
         created = not bool(getattr(self, "id"))
         orderitem = OrderItem.objects.filter(id=self.pk).first()
         self.oi_status = 4 if orderitem and orderitem.oi_status == 4 else self.oi_status
         # handling combo case getting parent and updating child
-        super().save(*args, **kwargs)  # Call the "real" save() method.        
+        obj = super().save(*args, **kwargs)  # Call the "real" save() method.       
+        self.upload_service_resume_shine(orderitem)
+        return obj 
 
         # # for resume booster create orderitem
         # if self.product.type_flow in [7, 15] and obj.oi_status != last_oi_status:
         #     if obj.oi_status == 5:
         #         self.orderitemoperation_set.create(
-        #             oi_draft=self.oi_draft,
+        #             
+        # oi_draft=self.oi_draft,
         #             draft_counter=self.draft_counter,
         #             oi_status=self.oi_status,
         #             last_oi_status=self.last_oi_status,

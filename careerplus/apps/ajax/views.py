@@ -669,10 +669,10 @@ class MarkedPaidOrderView(View):
                     # OrderMixin().addRewardPointInWallet(order=obj)
 
                     # pending item email send
-                    pending_item_email.apply_async((obj.pk,), countdown=900)
+                    pending_item_email.apply_async((obj.pk,), countdown=settings.MAIL_COUNTDOWN)
 
                     # send email through process mailers
-                    process_mailer.apply_async((obj.pk,), countdown=900)
+                    process_mailer.apply_async((obj.pk,), countdown=settings.MAIL_COUNTDOWN)
                     # process_mailer(obj.pk)
 
                     # roundone order

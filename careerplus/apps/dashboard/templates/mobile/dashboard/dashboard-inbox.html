@@ -12,6 +12,7 @@
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/dashboard/dashboard.scss' %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/common/mobile/typeaheadjs.css' %}" rel="stylesheet">
     {% endcompress %}
+     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.min.css" rel="stylesheet" />
 {% endblock css_section %}
 
 {% block header %}
@@ -71,9 +72,11 @@
 
 {% block js_section %}
     {{block.super}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.all.min.js"></script>
     {% compress js %}
     <script src="{% static 'shinelearn/js/dashboard/dashboard.js' %}"></script>
     <script src="{% static 'shinelearn/js/mobile/dashboard/dashboard.js' %}"></script>
+    <script type="text/javascript" src="{% static "shinelearn/js/common/toast.js" %}"></script>
     {% endcompress %}
 {% endblock js_section %}
 
