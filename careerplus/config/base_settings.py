@@ -576,3 +576,6 @@ WHATS_APP_MESSAGE_FORMAT = '''Here are our job recommendations for this week.<br
                         '''
 
 MAIL_COUNTDOWN = 900
+TEST_PREP_ID = [556]
+TEST_PREP_CHILDREN_ID = [564,557,558,561,562,559,560,563]
+

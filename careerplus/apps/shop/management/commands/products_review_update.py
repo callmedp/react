@@ -47,15 +47,26 @@ class Command(BaseCommand):
         all_products = Product.objects.filter(id__in=pid_rating_mapping.keys())
 
         for product in all_products:
+
             logging.getLogger('info_log').info("Updated ratings for product {}".format(product.id))
-            mul = product.avg_rating * product.no_review
+            num_reviews_to_consider = 1 if not product.no_review else product.no_review
+            mul = num_reviews_to_consider * product.avg_rating
+            # mul = product.avg_rating * product.no_review if product.no_review else product.avg_rating
             ratings = pid_rating_mapping[product.id]
             
             for rating in ratings:
                 mul += Decimal(rating)
 
-            new_avg_rating = round(mul / (product.no_review + len(ratings)),2)
+            new_avg_rating = round(mul / (num_reviews_to_consider + len(ratings)),2)
             product.avg_rating = new_avg_rating
+            if product.type_flow == 1:
+                prd_variations = product.variation.filter(siblingproduct__active=True,active=True)
+                for prod in prd_variations:
+                    product.no_review += prod.no_review
+            elif product.type_flow == 3:
+                prd_childs = product.childs.filter(childrenproduct__active=True,active=True)
+                for prd in prd_childs:
+                    product.no_review += prd.no_review
             product.no_review = product.no_review + len(ratings)
             product.save()
 

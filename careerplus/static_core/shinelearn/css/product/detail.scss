@@ -2001,19 +2001,31 @@ footer {
  	}
  }
 
- .confused-buying {
- 	border: 1px solid $border;
- 	text-align: center;
+ .confused-about-buying {
+ 	border: 1px solid #e1e1e1;
  	background: $white-color;
- 	padding-bottom: 15px;
+ 	padding: 15px 20px;
+ 	height: 183px;
+ 	background: url(#{$imagePath}images/free_skill/take-test-bannerbg1.png) no-repeat right top $white-color;
 
  	p {
- 		padding: 10px;
+ 		padding: 0;
  		color: $primary-color;
- 		font-size: $font-size+5;
+ 		font-size: $font-size+3;
+
+ 		b {
+ 			display: block;
+ 			font-size: $font-size+7;
+ 			margin: 0 0 10px 0;
+ 		}
 
  		strong {
  			display: block;
+ 			width: 215px;
+ 			height: 21px;
+ 			white-space: nowrap;
+			overflow: hidden;
+		  	text-overflow: ellipsis;
  		}
  	}
 
@@ -2023,6 +2035,8 @@ footer {
  		color: $white-color;
  		background: $anchor-color;
  		font-size: $font-size+3;
+ 		margin-top: 5px;
+ 		border-radius: 3px;
  	}
  }
   

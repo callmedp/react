@@ -119,16 +119,12 @@
                 <ul class="inline-block fs-12 jobs-icon-wrap">
                     <li>
                         <figure class="icon-comments"></figure>
-                        {% if prd_num_rating %}
+                        {% if prd_num_rating > 15 %}
                         <a href="javascript:void(0);">{{prd_num_rating}}
-                        {%if prd_num_rating == 1 %}
-                            review
-                            {%else%}
-                            reviews
-                            {% endif %}
+                            Reviews
                         </a>
                         {% else %}
-                        <span class="fs-11">Write a review</span>
+                        <span class="fs-11"><a href="#review">Write a review</a></span>
                         {% endif %}
                     </li>
                     {% if prd_num_jobs %}
@@ -190,7 +186,7 @@
             </span>
             {% endif %}
         {% if prd_about %}
-            <h2>Overview</h2>
+            <h2> Course Overview</h2>
             <style>
                 .morecontent span {
                       display: none;
@@ -249,12 +245,14 @@
                     <!-- Accordion end -->
                     <!-- Accordion FAQ’s Starts here  -->
                     <div class="accordion_example1 faq-wrap row mt-40">
+                        {% if faq %}
                         <h2>FAQ’s</h2>
                         <div class="accordion_in">
 
                             {% include "mobile/shop/partials/faq.html" %}
 
                         </div>
+                        {% endif %}
                     </div>
                     <!-- Accordion FAQ’s Ends here  -->
                 </div><!-- end of container -->
@@ -637,18 +635,14 @@ function close_review() {
 </script>
 
     <script type="text/javascript">
-        
-        $(document).ready(function(){  
-            funcAreaSet = {{ func_area_set|safe }}
-            if(commonJs.getParameterByName('type') == 'autoEnrol'){
-               $('#enrol-now-button').trigger('click'); 
+          $(document).ready(function(){
+           if(commonJs.getParameterByName('type') == 'autoEnrol'){
+               $('#enrol-now-button').trigger('click');
             }
             if(commonJs.getParameterByName('type') == 'autoCart'){
                $('#add-to-cart').trigger('click');
-            } 
-            
+            }
         });
-        
     </script>
     <script>
 function csrfSafeMethod(method) {

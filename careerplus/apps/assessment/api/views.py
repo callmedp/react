@@ -1,3 +1,4 @@
+from django.conf import settings
 from rest_framework.generics import ListAPIView
 from shop.api.v1.serializers import CategorySerializer
 from shop.models import Category
@@ -54,11 +55,11 @@ class CategoryApiView(FieldFilterMixin,ListAPIView):
     def get_level2_test_category(self):
         filter_dict = {}
         queryset = self.get_level3_test_category(val=True)
-        filter_dict.update({'from_category__active': True,'from_category__is_main_parent': True})
+        filter_dict.update({'from_category__active': True})
 
         queryset = list(set(queryset.filter(**filter_dict).\
                             values_list('from_category__related_to__id', flat=True)))
-        return Category.objects.filter(id__in=queryset, active=True)
+        return Category.objects.filter(id__in=queryset, active=True).exclude(id__in=settings.TEST_PREP_ID)
 
     def get_queryset(self):
         queryset = None
