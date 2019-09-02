@@ -119,16 +119,12 @@
                 <ul class="inline-block fs-12 jobs-icon-wrap">
                     <li>
                         <figure class="icon-comments"></figure>
-                        {% if prd_num_rating %}
+                        {% if prd_num_rating > 15 %}
                         <a href="javascript:void(0);">{{prd_num_rating}}
-                        {%if prd_num_rating == 1 %}
-                            review
-                            {%else%}
-                            reviews
-                            {% endif %}
+                            Reviews
                         </a>
                         {% else %}
-                        <span class="fs-11">Write a review</span>
+                        <span class="fs-11"><a href="#review">Write a review</a></span>
                         {% endif %}
                     </li>
                     {% if prd_num_jobs %}
@@ -161,7 +157,7 @@
             </span>
             <div class="neo__content">
                 <p><strong>Know your current English CEFR level,</strong>corresponding TOEFL & IELTS score by taking this test.</p>
-                <a href="#" class="btn btn-sm btn-blue mt-5"  id="take-test_button" >Take free test</a>
+                <a role="button" class="btn btn-sm btn-blue mt-5"  id="take-test_button" >Take free test</a>
             </div>
         </div> <!-- Neo Widgets ends here -->
 
@@ -173,6 +169,9 @@
             <div class="neo-level--content">
                 <h2 class="mb-0" id="cefr_level"></h2>
                 <p class="pb-0">Your CEFR level </p>
+            </div>
+            <div  id="id_share" class="neo-level--share">
+                <i class="icon-share-social"></i>
             </div>
 
         </div><!-- Your Level ends here -->
@@ -187,7 +186,7 @@
             </span>
             {% endif %}
         {% if prd_about %}
-            <h2>Overview</h2>
+            <h2> Course Overview</h2>
             <style>
                 .morecontent span {
                       display: none;
@@ -246,12 +245,14 @@
                     <!-- Accordion end -->
                     <!-- Accordion FAQ’s Starts here  -->
                     <div class="accordion_example1 faq-wrap row mt-40">
+                        {% if faq %}
                         <h2>FAQ’s</h2>
                         <div class="accordion_in">
 
                             {% include "mobile/shop/partials/faq.html" %}
 
                         </div>
+                        {% endif %}
                     </div>
                     <!-- Accordion FAQ’s Ends here  -->
                 </div><!-- end of container -->
@@ -419,13 +420,46 @@
                 Official translations of CEFR global scale
             </a>
 
-            <p class="mb-20"><a href="#" class="btn btn-yellow btn-round btn-slg" id="modal-take-test-btn">Take test</a></p>
+            <p class="mb-20"><a role="button" class="btn btn-yellow btn-round btn-slg" id="modal-take-test-btn">Take test</a></p>
         </div>
       </div>
     </div>
   </div><!-- Take test Modal Start here  -->
 {% endif %}
+{% if prd_vendor_slug == 'neo' %}
+  <!-- Facebook Pixel Code -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '379551866029481');
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=379551866029481&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Facebook Pixel Code -->
+   
+   
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-N6D4P34');</script>
+  <!-- End Google Tag Manager -->
 
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N6D4P34"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  {% endif %}
 {% endblock container %}
 
 {% block js_section %}
@@ -525,10 +559,13 @@ $('#enquire_form').click(function(event) {
             data: formData,
             success: function(data, textStatus, jqXHR) {
                 gaEventFunc(typeOfProduct,'success');
+                {% if prd_vendor_slug != 'neo' %}
+
             pop('Your Query Submitted Successfully.');
                $('#enquire_form').removeAttr("disabled");
 
                 $('#enquireform')[0].reset();
+                {% endif %}
 
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -598,18 +635,14 @@ function close_review() {
 </script>
 
     <script type="text/javascript">
-        
-        $(document).ready(function(){  
-            funcAreaSet = {{ func_area_set|safe }}
-            if(commonJs.getParameterByName('type') == 'autoEnrol'){
-               $('#enrol-now-button').trigger('click'); 
+          $(document).ready(function(){
+           if(commonJs.getParameterByName('type') == 'autoEnrol'){
+               $('#enrol-now-button').trigger('click');
             }
             if(commonJs.getParameterByName('type') == 'autoCart'){
                $('#add-to-cart').trigger('click');
-            } 
-            
+            }
         });
-        
     </script>
     <script>
 function csrfSafeMethod(method) {
@@ -688,6 +721,15 @@ function check_for_load_test(data){
         $("#neo-enroll-button").attr("data-neotest", '0')
         $("#neo-enroll-button").attr('id', 'add-to-cart')
         $("#cefr_level").text(data['cefr_level'])
+        let title = 'Hey, I got ' + data['cefr_level'] +'. What about you?'
+        let description = 'I got CEFR ' + data['cefr_level'] + ' in this internationally recognized English Test. Check yours now'
+        let url = window.location.href + "?title=" + title + "&description=" + description + "&level=" + data['cefr_level'] + '&iframe=true&utm_campaign=scoreshare'
+        
+        var attr = $("#id_share").attr('data-href');
+
+        if (attr == undefined) {
+            $("#id_share").attr('data-href', encodeURI(url))
+        }
         $("#cefr_level_box").show()
         $("#row_neo").remove()
         modal('neo-test-modal','none');
@@ -723,6 +765,15 @@ function update_test_info(email){
               btn.css('color', 'black')
               btn.css('background', '#ffcf26')
               $("#cefr_level").text(data['result']['pt_level'])
+              let title = 'Hey, I got ' + data['result']['pt_level'] +'. What about you?'
+              let description = 'I got CEFR ' + data['result']['pt_level'] + ' in this internationally recognized English Test. Check yours now'
+              let url = window.location.href + "?title=" + title + "&description=" + description + "&level=" + data['result']['pt_level'] + '&iframe=true&utm_campaign=scoreshare'
+                
+              var attr = $("#id_share").attr('data-href');
+
+              if (attr == undefined) {
+                $("#id_share").attr('data-href', encodeURI(url))
+              }
               $("#cefr_level_box").show()
               $("#row_neo").remove()
 
@@ -740,8 +791,17 @@ function update_test_info(email){
       let name = "{{request.session.full_name}}";
       let country_code = "{{request.session.country_code}}";
       let mobile_no = "{{request.session.mobile_no}}";
+      var global_name = "{{request.session.full_name}}";
+      var global_mobile_no = "{{request.session.mobile_no}}";
       get_create_profile(email, name, country_code, mobile_no)
-
+    {% else %}
+      window.location.href.includes('&iframe')
+      curr_url = window.location.href
+      if(curr_url.includes('?iframe=')||curr_url.includes('&iframe=')){
+        $("#neo-test-form").show();
+        $('#iframe').hide();
+        modal('neo-test-modal','block');
+      }
     {% endif %}
 {% endif %}
 
@@ -762,6 +822,10 @@ jQuery.validator.addMethod("customEmail", function(value, element) {
           country_code = values['country_code'];
           mobile_no = values['mobile'];
           get_create_profile(email, name, country_code, mobile_no);
+          $('#enquireform').find('input[name="name"]').val(name)
+          $('#enquireform').find('input[name="number"]').val(mobile_no)
+          $('#enquireform').find('input[name="email"]').val(email)
+          $('#enquire_form').trigger('click')
       },
       rules:{
           mobile:{
@@ -844,6 +908,13 @@ $('iframe').load(function(){
     $(doc).on('click', '#neoStartButton', function() {
         setTimeout(function(){
             check_if_user_exists_for_another_vendor(global_email)
+                {% if request.session.candidate_id %}
+
+              $('#enquireform').find('input[name="name"]').val(global_name)
+              $('#enquireform').find('input[name="number"]').val(global_mobile_no)
+              $('#enquireform').find('input[name="email"]').val(global_email)
+              $('#enquire_form').trigger('click')
+              {% endif %}
         }, 1000) 
     });
     $(doc).on('click', '#neonextquestion', function() {
@@ -865,6 +936,15 @@ $('iframe').load(function(){
       $('#add-to-cart').trigger('click');
     })
 });
+
+$("#id_share").click(function(){
+
+  let url = $("#id_share").attr('data-href')
+  FB.ui({
+    method: 'share',
+    href: url,
+  }, function(response){});
+})
 
 function check_if_user_exists_for_another_vendor(email) {
     $.ajaxSetup({

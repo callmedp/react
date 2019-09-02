@@ -1,6 +1,6 @@
 {% extends "basic/base1.html" %}
 {% load static meta thumbnail compress %}
-{% block title %} {{Category.name}} Practice test | online mock test – Shine Learning	{% endblock title %}
+{% block title %} {{Category.name}} Practice test | online mock test @ Shine Learning	{% endblock title %}
 {% block canonical_url %}
 <link rel="canonical" href="https://{{ SITE_DOMAIN }}/practice-tests/{{Category.slug}}/">
 <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}/practice-tests/{{Category.slug}}/">
@@ -55,7 +55,12 @@
          <ol class="breadcrumb  black mb-0" itemscope="" itemtype="http://schema.org/BreadcrumbList">
             {% for bradcbs in breadcrumbs %}
               {% if bradcbs.url %}
-                <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item"><span itemprop="name">{{bradcbs.name}}</span></a></li>
+                <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                    <a href="{{bradcbs.url}}" itemprop="item">
+                        <span itemprop="name">{{bradcbs.name}}</span>
+                    </a>
+                 <meta itemprop="position" content="{{forloop.counter}}" />
+                </li>
               {% else %}
                 <li class="active">{{bradcbs.name}}</li>
               {% endif %}
@@ -81,8 +86,8 @@
                   <span class="border-left"></span>
            <a class="test-box" href="{% url 'assessment:vskill-subcategory' slug=cat.slug %}" title="{{cat.name}}">
                      {{cat.name}}
-                     <span class="test"> {{cat.get_assessment_test}}
-                 {% if cat.get_assessment_test < 1 %}Test {% else %}Tests{% endif %}
+                     <span class="test"> {{cat.get_assessment_test_count}}
+                 {% if cat.get_assessment_test_count < 1 %}Test {% else %}Tests{% endif %}
                      </span>
                   </a>
                </div>
@@ -115,7 +120,7 @@
                }
                for (fa in json.results){
                 element.innerHTML=
-                element.innerHTML +'<div class="testinside testinside-inner"><span class="border-left"></span><a class="test-box" a title="'+ json.results[fa].name + '" href="/practice-tests/'+ json.results[fa].slug +'">'+ json.results[fa].name +'<span class="test">22 Test</span></a></div>'
+                element.innerHTML +'<div class="testinside testinside-inner"><span class="border-left"></span><a class="test-box" a title="'+ json.results[fa].name + '" href="/practice-tests/'+ json.results[fa].slug +'">'+ json.results[fa].name +'<span class="test"> ${json.results[fa].assessment_test_count < 1 ? 'Test':'Tests'}</span></a></div>'
                }
                },
                error: function(xhr, ajaxOptions, thrownError) {

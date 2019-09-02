@@ -31,12 +31,8 @@ class SendSMS(object):
             mobile = data.get('mobile', '')
             if len(mobile) > 10:
                 mobile = str(mobile)[-10:]
-            try:
-                send_sms_for_base_task.delay(mobile, self.render_template(
-                    send_dict.get('template'), data))
-            except Exception as e:
-                logging.getLogger('error_log').error("%s - %s" % (
-                    str(mobile), str(e)))
+            send_sms_for_base_task.delay(mobile, self.render_template(
+                send_dict.get('template'), data))
         else:
             return False
 

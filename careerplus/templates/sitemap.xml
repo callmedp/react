@@ -26,6 +26,16 @@
           <changefreq>daily</changefreq>
           <priority>0.7</priority>
          </url>
+
+   {% elif request.path == '/practice-tests.xml' %}
+      	<url>
+          <loc>https://learning.shine.com/practice-tests/</loc>
+          <xhtml:link rel="alternate" media="only screen and (max-width: 640px)" href="https://mlearning.shine.com/practice-tests/" />
+          {% if url.lastmod %}<lastmod>{{ url.lastmod|date:"Y-m-d" }}</lastmod>{% endif %}
+          <changefreq>daily</changefreq>
+          <priority>0.8</priority>
+         </url>
+
   {% endif %}   
   {% for url in urlset %}
     <url>

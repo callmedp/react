@@ -130,7 +130,11 @@
                     <li>
                      <a href="#review" class="cls_review">
                       <figure class="review-icon"></figure>
-                      <span>{% if prd_num_rating %}&nbsp;<strong class="anchor-color" >{{prd_num_rating}}</strong>&nbsp;{% if prd_num_rating == 1 %}review {% else %}reviews {% endif %}{% else %}Write a review{% endif %}</span>
+                      <span>
+                          {% if prd_num_rating > 15 %}&nbsp;<strong class="anchor-color" >{{prd_num_rating}}</strong>Reviews
+                          {% else %}
+                           Write a review
+                          {% endif %}</span>
                      </a> 
                     </li>
                     <li>
@@ -195,13 +199,14 @@
                         <strong id="cefr_level">B1</strong>
                         Your CEFR level
                       </span>
+                      <a class="cefr_level__link--level" id="id_share" role="button"><span class="share-icon"></span></a>
                     </div>
                     <a class="mb-30 db" href="https://www.coe.int/en/web/common-european-framework-reference-languages/table-1-cefr-3.3-common-reference-levels-global-scale" target="_blank"><span class="link-icon mr-5"></span> Official translations of CEFR global scale</a>
                   </div>
                   {% endif %}
 
                 {% if prd_about %}
-                  <h2 class="detail-heading">About {% if prd_service == 'course' %}course{% else %}service{% endif %}</h2>
+                  <h2 class="detail-heading">{% if prd_service == 'course' %}Course Overview{% else %}Service Overview{% endif %}</h2>
                   <style>
                     .morecontent span {
                           display: none;
@@ -258,7 +263,7 @@
                       {% endif %}
 
                         {% if product.visibility %}
-                    <a title="About Product" class=" cls_tab_child" href="#course">About Product</a>
+                    <a title="About Product" class=" cls_tab_child" href="#course">About {% if prd_service == 'course' %} Course {% else %} Service {% endif %}</a>
                     {% else %}
                         {% if prd_desc %}
                         <a title="Shine Advantage" class=" cls_tab_child" href="#course">Shine Advantage</a>

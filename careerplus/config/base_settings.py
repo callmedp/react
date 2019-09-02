@@ -104,7 +104,7 @@ LOCAL_APPS = [
     'hrinsider',
     'scheduler',
     'resumebuilder',
-    'assessment',
+    'assessment'
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -580,3 +580,7 @@ CANDIDATE_MONGO_USERNAME = 'candadmin'
 CANDIDATE_MONGO_PASSWORD = 'candadmin'
 CANDIDATE_MONGO_INSTANCE_STR = '172.22.67.226:27017'
 CANDIDATE_MONGO_DB = 'sumoplus'
+
+MAIL_COUNTDOWN = 900
+TEST_PREP_ID = [556]
+TEST_PREP_CHILDREN_ID = [564,529,558,561,562,559,560,563]

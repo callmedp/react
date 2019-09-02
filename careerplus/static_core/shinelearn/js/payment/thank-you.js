@@ -60,3 +60,48 @@ $(document).ready(function() {
         
     });
 });
+
+const  getCookie = (name)=> {
+    var value = "; " + document.cookie;
+    var parts = value.split("; " + name + "=");
+    if (parts.length == 2) return parts.pop().split(";").shift();
+  }
+
+$(document).ready(function(){
+    $.ajaxSetup({ 
+        beforeSend: function(xhr, settings) {
+            if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+            }
+        } 
+    });
+    
+})
+
+const uploadResumeShine = (checkbox,order_id)=>{
+    let request = fetch(`/order/api/v1/${order_id}/update/`,{
+        headers: {
+            "Content-Type": "application/json"
+        },
+        method: 'PATCH',  
+        body: JSON.stringify({
+                    service_resume_upload_shine: $(checkbox).is(':checked')
+                }),
+    });
+
+    request.then((resp) =>resp.json())
+    .then(response => {
+        console.log('--response', response);
+        title = response['service_resume_upload_shine'] ? 'Resume will be updated' : 'Resume will not be updated'
+        Toast.fire({
+                    type: response['service_resume_upload_shine'] ?'success' : 'error',
+                    title
+        })
+    })
+    .catch(e =>{
+        Toast.fire({
+            type: 'error',
+            title:'Something went wrong'
+        })
+    })
+}

@@ -18,7 +18,7 @@ class ProductListSerializerForAuditHistory(SerializerFieldsMixin, ModelSerialize
 
 class CategorySerializer(SerializerFieldsMixin,ModelSerializer):
 
-    assessment_test = serializers.CharField(read_only=True)
+    assessment_test_count = serializers.CharField(read_only=True)
     class Meta:
         model = Category
         fields = '__all__'

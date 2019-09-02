@@ -463,3 +463,11 @@ BOOSTER_RECRUITER_TYPE = (
     (0, 'Resume Booster India'),
     (1, 'Resume Booster International'),
 )
+
+OI_OPS_TRANSFORMATION_DICT = {
+    503: {
+        28: 'Service Initiated',
+        29: 'Service Expired',
+        30: 'Service Updated'
+    }
+}

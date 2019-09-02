@@ -28,6 +28,7 @@ from mongoengine import Document, ListField, FloatField,\
 from partner.models import Vendor
 from core.models import AbstractCommonModel
 from order.functions import create_short_url
+
 from review.models import Review
 from faq.models import (
     FAQuestion, ScreenFAQ)
@@ -63,11 +64,14 @@ from .choices import (
     SHINE_FLOW_ACTION,
     convert_to_month,
     LINK_STATUS_CHOICES,
+    MANUAL_CHANGES_CHOICES,
+    DAYS_CHOICES,
     convert_inr,
     convert_usd,
     convert_aed,
     convert_gbp)
 from search.choices import EXP_DICT
+
 
 class ProductClass(AbstractAutoDate, AbstractSEO,):
     name = models.CharField(
@@ -306,6 +310,13 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
                 active=True)
         return []
 
+    def get_test_category_ids(self):
+        from assessment.models import Test
+        category_ids = self.get_childrens().values_list('id',flat=True) if self.get_childrens() else None
+        return [] if not category_ids else\
+            Test.objects.filter(category__id__in =category_ids).values_list('category__id').distinct()
+
+
     def get_products(self):
 
         # if self.type_level == 3:
@@ -407,12 +418,15 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         return self.get_absolute_url()
 
     @property
-    def assessment_test(self):
-        return self.get_assessment_test()
+    def assessment_test_count(self):
+        return self.get_assessment_test_count()
 
-    def get_assessment_test(self):
+    def get_assessment_test_count(self):
         return self.test_set.count()
 
+    @property
+    def get_free_test(self):
+        return self.test_set.first() if self.test_set.first() else None
 
     @classmethod
     def post_save_category(cls, sender, instance, **kwargs):
@@ -1187,6 +1201,12 @@ class Product(AbstractProduct, ModelMeta):
         if self.sub_type_flow > 0:
             return self.get_sub_type_flow_display()
         return ''
+
+    @property
+    def take_free_test(self):
+        if self.test_set.all():
+            return self.test_set.first()
+
 
 
     @property
@@ -3205,6 +3225,16 @@ class ProductUserProfile(AbstractAutoDate):
     skills = models.CharField(max_length=300, blank=True, null=True)
     approved = models.BooleanField(default=False)
     onboard = models.BooleanField(default=False)
+    due_date = models.DateTimeField(
+        _('Due Date'), blank=True, null=True)
+    day_of_week = models.PositiveSmallIntegerField(
+        null=True, blank=True,
+        choices=DAYS_CHOICES
+    )
+    manual_change = models.PositiveSmallIntegerField(
+        null=True, blank=True, choices=MANUAL_CHANGES_CHOICES
+    )
+    manual_changes_data = models.CharField(max_length=200, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -3302,4 +3332,15 @@ class PracticeTestInfo(AbstractAutoDate):
             if status.lower() == 'done':
                 return True
         return False
+
+    @property
+    def latest_level(self):
+        if getattr(self, 'test_data', None):
+            datum = eval(getattr(self, 'test_data'))
+            result = datum.get('result', None)
+            if 'pt_level' in result:
+                return result['pt_level']
+        return None
+    
+
 

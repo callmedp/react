@@ -1,3 +1,11 @@
+%checkbox {
+  @include square(16px);
+  position: absolute;
+  border: 1px solid $blue;
+  background-color: $white;
+  border-radius: 2px;
+}
+
 /* Base for label styling */
 [type="checkbox"]:not(:checked),
 [type="checkbox"]:checked {
@@ -7,33 +15,36 @@
 [type="checkbox"]:not(:checked) + label,
 [type="checkbox"]:checked + label {
   position: relative;
-  padding-left: 1.95rem;
+  padding-left: 2.5rem;
   cursor: pointer;
+  color: $grey-333;
+  font-size: 1.4rem;
 }
 
 /* checkbox aspect */
 [type="checkbox"]:not(:checked) + label:before,
 [type="checkbox"]:checked + label:before {
+  @extend %checkbox;
   content: '';
-  position: absolute;
-  left: -5px; 
+  left: 0; 
   top: 2px;
-  width: 1.4rem; 
-  height: 1.4rem;
-  background: #fff;
-  border-radius: 2px;
+  
 }
 /* checked mark aspect */
 [type="checkbox"]:not(:checked) + label:after,
 [type="checkbox"]:checked + label:after {
+  @extend %checkbox;
   content: '\2713';
-  position: absolute;
-  top: 0.45rem; 
-  left: -0.08rem;
-  font-size: 1rem;
+  top: 2px; 
+  left: 0;
+  font-size: 1.3rem;
   line-height: 0.8;
-  color: #09ad7e;
+  color: $white;
+  background-color: $blue;
   transition: all .2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 /* checked mark aspect changes */
 [type="checkbox"]:not(:checked) + label:after {

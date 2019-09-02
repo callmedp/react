@@ -206,6 +206,7 @@
 .iframe {
     &__wrap {
         position: relative;
+        border: 10px solid $white;
 
         .icon--zoom {
             position: absolute;
@@ -236,4 +237,31 @@
 
 .input-range__track {
     height: 70%;
+}
+
+.toss-widget {
+    margin-bottom: 15px;
+    width: 110%;
+    padding: 10px;
+    top: -14px;
+    position: relative;
+    background-color: #DBEBF9;
+    left: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @media only screen and (max-width: 320px) {
+        width: 100%;
+    }
+
+    &--text {
+        font-size: 1.4rem;
+        flex: 1;
+
+        @media only screen and (max-width : 320px) {
+            font-size: 1.2rem;
+        }
+    }
 }

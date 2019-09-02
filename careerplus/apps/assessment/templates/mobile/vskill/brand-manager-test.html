@@ -49,15 +49,20 @@
 
 <h1>{{Category.heading}}</h1>
             {% block breadcrumb %}
-         <div class="bread-crums">
+         <ol class="breadcrumb mt-0">
                 {% for bradcbs in breadcrumbs %}
               {% if bradcbs.url %}
-                <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item"><span itemprop="name">{{bradcbs.name}}</span></a></li>
+                <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                    <a href="{{bradcbs.url}}" itemprop="item">
+                        <span itemprop="name">{{bradcbs.name}}</span>
+                    </a>
+                 <meta itemprop="position" content="{{forloop.counter}}" />
+                </li>
               {% else %}
                 <li class="active">{{bradcbs.name}}</li>
               {% endif %}
             {% endfor %}
-         </div>
+         </ol>
          {% endblock breadcrumb %}
 
 

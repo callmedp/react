@@ -55,6 +55,9 @@
             {% else %}
               <input type="hidden" name="lsource" value="8">
             {% endif %}
+            {% if prd_vendor_slug == "neo" %}
+               <input type="hidden" name="campaign" value="neo">
+            {% endif %}
             <input type="hidden" name="product" value="{{product.pk}}">
             <input type="hidden" name="prd" value="{{product.heading}}">
             <input type="hidden" name="path" value="{{product.get_absolute_url}}">
