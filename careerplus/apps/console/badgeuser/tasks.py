@@ -329,9 +329,16 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None,  vendor
                             UserCertificateOperations.objects.create(
                                 user_certificate=obj
                             )
+                            today_date = timezone.now().strftime('%Y-%m-%d')
                             post_data = {
-                                'certification_name': certificate_name,
-                                'certification_year': certi_yr_passing
+                                'certification_name': obj.certificate.name,
+                                'certification_year': obj.year,
+                                'vendor_certificate_id': obj.certificate.vendor_certificate_id,
+                                'is_validated': True,
+                                'validation_date': today_date,
+                                'active_date': today_date,
+                                'skills': obj.certificate.skill.split(','),
+                                'provider': obj.certificate.provider
                             }
                             flag, jsonrsp = ShineCertificateUpdate().update_shine_certificate_data(
                                 candidate_id=shineid, data=post_data, headers=headers
