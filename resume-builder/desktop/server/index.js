@@ -54,8 +54,7 @@ let context = {
 }, result;
 
 app.use(function (req, res, next) {
-
-    console.log('----', req.path);
+    req.pathname = `/resume-builder${req.pathname}`;
     next();
 });
 app.use('/resume-builder/dist', express.static('dist'));
@@ -63,7 +62,7 @@ app.use('/media/static/react/assets/images', express.static('assets/images'));
 app.use('/media/static/resumebuilder/images', express.static('assets/resumebuilder/images'));
 
 app.get('*', async (req, res) => {
-    for (const [index, {route}] of (matchRoutes(routes, req.path) || []).entries()) {
+    for (const [index, {route}] of (matchRoutes(routes, req.pathname) || []).entries()) {
         console.log('-----index, route', index, route);
         if (route && route.component && route.component.fetching) {
             try {
