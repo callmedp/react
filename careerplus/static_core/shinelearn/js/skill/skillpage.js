@@ -438,9 +438,9 @@ $(function() {
             dataType: 'json',
             success: function(data){
                 for(d in data.results){
-                    cert_detail =  cert_detail + `<li class="box-panel" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a title="${data.results[d].name}" href="${data.results[d].pURL}"><div class="media"><div class="media-left"><img aria-label="${data.results[d].name}" class="media-object" src="${data.results[d].pImg}" alt="${data.results[d].pNm}" height="130px" width="130px"></div><div class="media-body"><div class="certification-jobs-box">`;
+                    cert_detail =  cert_detail + `<li class="box-panel" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><div class="media"><div class="media-left"><img aria-label="${data.results[d].name}" class="media-object" src="${data.results[d].pImg}" alt="${data.results[d].pNm}" height="130px" width="130px"></div><div class="media-body"><div class="certification-jobs-box">`;
                     var cert_list = data.results[d].pCert; 
-                    for(var i=0; i<cert_list.length ; i++){itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"
+                    for(var i=0; i<cert_list.length ; i++){
                         if(cert_list[i] == 'true'){
                             cert_detail += `<span class="certification-jobs"><figure class="certification-icon"></figure>Certification</span>`; break;
                         }
@@ -449,7 +449,7 @@ $(function() {
                         cert_detail +=  `<span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">${data.results[d].pNJ}</span> jobs available</span>`;
                     }
                     cert_detail += `</div>
-                                        <h3 class="listing-heading">${ data.results[d].pHd != "" ? data.results[d].pHd : data.results[d].pNm }</h3>
+                                        <h3 class="listing-heading"><a title="${data.results[d].name}" href="${data.results[d].pURL}">${ data.results[d].pHd != "" ? data.results[d].pHd : data.results[d].pNm }</a></h3>
                                         <div class="rating-review-box">`;
                                             for(star in data.results[d].pStar){
                                                 if(data.results[d].pStar[star] == '*'){ cert_detail += `<figure class="full-star"></figure>`}
