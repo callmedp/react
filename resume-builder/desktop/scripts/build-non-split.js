@@ -33,7 +33,7 @@ config.plugins.push(new BundleTracker({
 console.log('----<<><>>>>>--', JSON.stringify(config))
 const result = {
     'staticUrl': process.env.REACT_APP_ENV === 'staging' ?
-        'https://learning-static-staging-189607.storage.googleapis.com/l/s/' : '',
+        'https://learning-static-staging-189607.storage.googleapis.com/l1/s/' : '',
 
 }
 

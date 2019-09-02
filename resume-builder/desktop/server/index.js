@@ -33,46 +33,50 @@ if (typeof fetch == 'undefined') {
 if (typeof localStorage == 'undefined') {
     global.localStorage = {
         setItem: (param1, param2) => {
-            return null;
+            return global.localStorage[param1] = param2;
         },
         getItem: (param1) => {
-            return null;
+            console.log('-----', param1, global.localStorage[param1]);
+            return global.localStorage[param1];
         },
         clear: () => {
             return null;
-        }
+        },
+        candidateId: "53461c6e6cca0763532d4b09",
+        token: "da3b4f42ce9c2c5cd1d2d81750ca7db51c71e645"
     }
 }
 console.log('000000', process.argv[0]);
 const PORT = process.env.PORT || 8079;
 const app = express();
+let context = {
+    'title': ''
+}, result;
 
 app.use(function (req, res, next) {
+
     console.log('----', req.path);
     next();
 });
 app.use('/resume-builder/dist', express.static('dist'));
+app.use('/media/static/react/assets/images', express.static('assets/images'));
+app.use('/media/static/resumebuilder/images', express.static('assets/resumebuilder/images'));
 
 app.get('*', async (req, res) => {
-    const result = []
     for (const [index, {route}] of (matchRoutes(routes, req.path) || []).entries()) {
+        console.log('-----index, route', index, route);
         if (route && route.component && route.component.fetching) {
-            console.log('---routes----', route.component.fetching);
             try {
-                if (index == 0) {
-                    await route.component.fetching(store, {
-                        "email": 'kharbpriya5@gmail.com',
-                        "password": "qwerty"
-                    });
-                } else {
-                    await route.component.fetching(store)
-                }
+                result = await route.component.fetching(store, {
+                    "alt": "Ew4ZExoWCggBB00hHwsZCBRIGw4VGk1STFBJAk4DTgIbB0hWTlVNUkoCTANIXwRTSFdBUUFXSVNIU0tVSBoABwAH"
+                });
+                context['title'] = result[1];
             } catch (e) {
                 console.log("Error in Api", e);
             }
         }
     }
-    const context = {}
+    // console.log('result ====', result, context);
 
     const content = render(req.path, store, context, timestamp);
     res.send(content);

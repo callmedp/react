@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './home.scss'
-import {getCandidateId, loginCandidate, feedbackSubmit} from "../../../store/landingPage/actions";
+import {getCandidateId, loginCandidate, feedbackSubmit, getComponentTitle} from "../../../store/landingPage/actions";
 import {connect} from "react-redux";
 import Banner from "./Banner/banner.jsx";
 import ResumeSlider from "./ResumeSlider/resumeSlider.jsx";
@@ -64,7 +64,7 @@ class Home extends Component {
     }
 
     static getActions() {
-        return [loginCandidate]
+        return [loginCandidate,getComponentTitle]
     }
 
     static async fetching({dispatch},params) {

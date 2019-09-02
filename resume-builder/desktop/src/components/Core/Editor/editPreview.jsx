@@ -15,7 +15,7 @@ import {
     reorderSection,
     reGeneratePDF
 } from "../../../store/template/actions"
-import {fetchPersonalInfo, updatePersonalInfo} from "../../../store/personalInfo/actions"
+import {fetchPersonalInfo, updatePersonalInfo, getComponentTitle} from "../../../store/personalInfo/actions"
 import SelectTemplateModal from '../../Modal/selectTemplateModal';
 import {
     showAlertModal,
@@ -40,14 +40,13 @@ class EditPreview extends Component {
 
 
     static getActions() {
-        return [fetchPersonalInfo]
+        return [fetchPersonalInfo, getComponentTitle]
     }
 
     static async fetching({dispatch}, params) {
         const actionList = EditPreview.getActions()
         const results = [];
         for (const [index, value] of actionList.entries()) {
-            console.log('----index---', index, value);
             results[index] = await new Promise((resolve, reject) => dispatch(value({info: params, resolve, reject})))
         }
         return results;

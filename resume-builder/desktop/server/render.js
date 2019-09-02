@@ -36,7 +36,7 @@ export default (pathname, store, context, timeStamp) => {
           href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"/>
         <link type="text/css" href="https://static1.shine.com/l/s/shinelearn/css/resume-builder/resume6.css" rel="stylesheet">
         <meta charset="UTF-8">
-        <title>Title</title>
+        <title>${context.title}</title>
       </head>
       <body>
       <div id="react-app">${content}</div>
