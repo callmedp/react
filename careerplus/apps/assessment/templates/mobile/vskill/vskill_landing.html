@@ -310,6 +310,7 @@ Shine learning brings to you one of the largest collection of functional tests. 
         $('#startTestLink').attr('href','/practice-tests/'+ modalobject.testSlug +'-test/');
         $('#testAddToCart').click( function()
          {
+            ga('send', 'event', 'Buy Flow', 'Enroll Now',modalobject.productId);
             updateToCart(modalobject.productId,'cart');
          }
       );

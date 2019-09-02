@@ -270,10 +270,16 @@ class ThankYouView(TemplateView):
             product__type_flow=16,
             product__sub_type_flow=1602
         )
+        booster_item_exist = True if order.orderitems.filter(   #for single booster element in order
+                                    order__status__in=[0, 1],
+                                    product__type_flow__in=[7,15],
+                                    no_process=False,oi_status=2).count()\
+                            else False
 
         context.update({
             "pending_resume_items": pending_resume_items,
-            "assesment_items": assesment_items
+            "assesment_items": assesment_items,
+            'booster_item_exist':booster_item_exist
         })
 
         if not self.request.session.get('resume_id', None):
