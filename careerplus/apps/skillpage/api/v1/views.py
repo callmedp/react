@@ -1,6 +1,6 @@
 from rest_framework.generics import ListAPIView
 from shared.rest_addons.pagination import LearningCustomPagination
-from .serializers import CertificationLoadMoreSerializerSolr
+from .serializers import LoadMoreSerializerSolr
 from django.conf import settings
 from core.library.haystack.query import SQS
 from rest_framework.permissions import (
@@ -11,8 +11,8 @@ from shared.rest_addons.mixins import FieldFilterMixin
 from django_filters.rest_framework import DjangoFilterBackend
 
 
-class CertificationLoadMoreApiView(FieldFilterMixin, ListAPIView):
-    serializer_class = CertificationLoadMoreSerializerSolr
+class LoadMoreApiView(FieldFilterMixin, ListAPIView):
+    serializer_class = LoadMoreSerializerSolr
     pagination_class = LearningCustomPagination
     permission_classes = []
     authentication_classes = []

@@ -44,18 +44,14 @@ def send_email_for_base_task(subject=None, body=None, to=[], headers=None, oi=No
 
 @task(name="send_sms_for_base_task")
 def send_sms_for_base_task(mob=None, message=None, oi=None, status=None):
-    try:
-        SendSMS().base_send_sms(mob, message)
-        if oi:
-            obj = Order.objects.get(pk=oi)
-            oi_objs = obj.orderitems.all()
-            for oi in oi_objs:
-                oi.smsorderitemoperation_set.create(
-                    sms_oi_status=status,
-                    to_mobile=mob, status=1)
-    except Exception as e:
-        logging.getLogger('error_log').error(
-            "sms from base task failed%s - %s" % (str(mob), str(e)))
+    SendSMS().base_send_sms(mob, message)
+    if oi:
+        obj = Order.objects.get(pk=oi)
+        oi_objs = obj.orderitems.all()
+        for oi in oi_objs:
+            oi.smsorderitemoperation_set.create(
+                sms_oi_status=status,
+                to_mobile=mob, status=1)
 
 
 @task(name="send_booster_recruiter_mail_task")
@@ -97,6 +93,9 @@ def send_booster_recruiter_mail_task(to_emails, mail_type, email_dict, ois_to_up
             'subject': 'Your resume has been shared with relevant consultants',
             "username": oi.order.first_name,
         }
+        # updating the template for international booster
+        if oi.product.type_flow == 15:
+            candidate_data.update({'template_name': 'international_booster_candidate.html'})
         try:
             # send mail to candidate
             if email_sets.count(93) <= 2:

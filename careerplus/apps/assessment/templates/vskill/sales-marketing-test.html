@@ -86,8 +86,8 @@
                   <span class="border-left"></span>
            <a class="test-box" href="{% url 'assessment:vskill-subcategory' slug=cat.slug %}" title="{{cat.name}}">
                      {{cat.name}}
-                     <span class="test"> {{cat.get_assessment_test}}
-                 {% if cat.get_assessment_test < 1 %}Test {% else %}Tests{% endif %}
+                     <span class="test"> {{cat.get_assessment_test_count}}
+                 {% if cat.get_assessment_test_count < 1 %}Test {% else %}Tests{% endif %}
                      </span>
                   </a>
                </div>
@@ -120,7 +120,7 @@
                }
                for (fa in json.results){
                 element.innerHTML=
-                element.innerHTML +'<div class="testinside testinside-inner"><span class="border-left"></span><a class="test-box" a title="'+ json.results[fa].name + '" href="/practice-tests/'+ json.results[fa].slug +'">'+ json.results[fa].name +'<span class="test">22 Test</span></a></div>'
+                element.innerHTML +'<div class="testinside testinside-inner"><span class="border-left"></span><a class="test-box" a title="'+ json.results[fa].name + '" href="/practice-tests/'+ json.results[fa].slug +'">'+ json.results[fa].name +'<span class="test"> ${json.results[fa].assessment_test_count < 1 ? 'Test':'Tests'}</span></a></div>'
                }
                },
                error: function(xhr, ajaxOptions, thrownError) {

@@ -3,7 +3,7 @@ import logging
 
 from collections import OrderedDict
 from decimal import Decimal
-
+from urllib.parse import unquote
 from django.core.paginator import Paginator
 from django.http import (
     Http404,
@@ -51,7 +51,7 @@ from .mixins import (CourseCatalogueMixin, \
 from users.forms import (
     ModalLoginApiForm
 )
-from shop.choices import APPLICATION_PROCESS, BENEFITS
+from shop.choices import APPLICATION_PROCESS, BENEFITS, NEO_LEVEL_OG_IMAGES
 from review.forms import ReviewForm
 from .models import Skill
 from homepage.config import UNIVERSITY_COURSE
@@ -481,7 +481,8 @@ class ProductInformationMixin(object):
     def get_product_detail_context(self, product, sqs, product_main, sqs_main):
         main_ctx = {}
         key = "context_product_detail_"+ str(product.pk)
-        if cache.get(key):
+        useragent = self.request.META['HTTP_USER_AGENT']
+        if cache.get(key) and 'facebookexternalhit' not in useragent:
             main_ctx.update(cache.get(key))
         else:
             data = self.get_product_information(product, sqs, product_main, sqs_main)
@@ -656,16 +657,16 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             product_detail_content = render_to_string(
                 'shop/product-detail.html', product_data,
                 request=self.request)
+
         ctx.update({
             'product_detail': product_detail_content,
             "ggn_contact_full": settings.GGN_CONTACT_FULL,
             "ggn_contact": settings.GGN_CONTACT,
         })
+
         ctx.update(product_data)
+        ctx = self.update_og_meta_tag(self.request, ctx)
         return ctx
-
-
-
         # pk = self.kwargs.get('pk')
         # product = self.product_obj
         # ctx['product'] = product
@@ -756,6 +757,23 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         # ctx['navigation'] = navigation
         # return ctx
 
+    def update_og_meta_tag(self, request, ctx):
+        if ctx['prd_vendor_slug'] == 'neo':
+            useragent = request.META['HTTP_USER_AGENT']
+            if'facebookexternalhit' in useragent:
+
+                title = unquote(request.GET.get('title', ''))
+                description = unquote(request.GET.get('description', ''))
+                level = request.GET.get('level', 'Starter')
+                img = NEO_LEVEL_OG_IMAGES.get(level)
+                curr_url = '{}://{}{}'.format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN, request.get_full_path())
+                setattr(ctx['meta'], 'og_description', description)
+                setattr(ctx['meta'], 'title', title)
+                setattr(ctx['meta'], 'image', img)
+                setattr(ctx['meta'], '_url', curr_url)
+        return ctx
+
+
     def redirect_if_necessary(self, current_path, product):
         if self._enforce_paths:
             expected_path = product.pURL
@@ -772,7 +790,23 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             return False
         return True
 
+    def redirect_for_neo(self, request):
+        from copy import deepcopy
+        path = request.path
+        query_params = deepcopy(request.GET)
+        if not any(x in query_params.keys() for x in ['title', 'description','level']):
+            return
+        [query_params.pop(k, None) for k in ['title', 'description', 'level'] ]
+        if query_params.keys():
+            redirect_url = path + '?' + '&'.join([k + '=' + v for k, v in query_params.items()])
+            return redirect_url
+
     def get(self, request, **kwargs):
+        useragent = self.request.META['HTTP_USER_AGENT']
+        if 'facebookexternalhit' not in useragent:
+            redirect_url = self.redirect_for_neo(request)
+            if redirect_url:
+                return HttpResponsePermanentRedirect(redirect_url)
         pk = self.kwargs.get('pk')
         self.prd_key = 'detail_db_product_'+pk
         self.prd_solr_key = 'detail_solr_product_'+pk

@@ -339,22 +339,16 @@ class MidOutQueueView(TemplateView, PaginationMixin):
 
     def post(self, request, *args, **kwargs):
         form = ResumeUploadForm(request.POST, request.FILES)
-        obj_pk = request.POST.get('oi_pk', None)
+        oi_ids = request.POST.get('oi_ids', None)
         if form.is_valid():
-            try:
-                order = Order.objects.get(pk=obj_pk)
-                orderitems = order.orderitems.filter(oi_status=2)  # filter(product__type_flow__in=[1])
-                for oi in orderitems:
-                    if not oi.oi_resume:
-                        data = {
-                            "candidate_resume": request.FILES.get('oi_resume', ''),
-                        }
+            orderitems = OrderItem.objects.filter(id__in=oi_ids.split())
+            data = {
+                "candidate_resume": request.FILES.get('oi_resume', ''),
+            }
 
-                        ActionUserMixin().upload_candidate_resume(
-                            oi=oi, data=data, user=request.user)
-                messages.add_message(request, messages.SUCCESS, 'resume uploaded Successfully')
-            except Exception as e:
-                messages.add_message(request, messages.ERROR, str(e))
+            ActionUserMixin().upload_candidate_resume(
+                order_items=orderitems, data=data, user=request.user)
+            messages.add_message(request, messages.SUCCESS, 'resume uploaded Successfully')
         else:
             error_message = form.errors.get('oi_resume')
             if error_message:
@@ -390,39 +384,28 @@ class MidOutQueueView(TemplateView, PaginationMixin):
             'orderitems').filter(
             status=1, orderitems__oi_status=2,
             orderitems__no_process=False).distinct()
-        # queryset = OrderItem.objects.all().select_related('order', 'product')
-        # queryset = queryset.filter(
-        #     order__status=1, no_process=False, oi_status=2)
 
-        try:
-            if self.query:
-                if self.sel_opt == 'id':
-                    if self.query[:2]=='cp' or self.query[:2]=='CP':
-                        queryset=queryset.filter(number__iexact=self.query)
-                    else:
-                        queryset = queryset.filter(id__iexact=self.query)
-                elif self.sel_opt == 'email':
-                    queryset = queryset.filter(email__iexact=self.query)
-                elif self.sel_opt == 'mobile':
-                        queryset = queryset.filter(mobile__iexact=self.query)
+        if self.query:
+            if self.sel_opt == 'id':
+                if self.query[:2]=='cp' or self.query[:2]=='CP':
+                    queryset=queryset.filter(number__iexact=self.query)
+                else:
+                    queryset = queryset.filter(id__iexact=self.query)
+            elif self.sel_opt == 'email':
+                queryset = queryset.filter(email__iexact=self.query)
+            elif self.sel_opt == 'mobile':
+                    queryset = queryset.filter(mobile__iexact=self.query)
 
-        except Exception as e:
-            logging.getLogger('error_log').error("%s " % str(e))
-            pass
-        try:
-            if self.payment_date:
-                date_range = self.payment_date.split('-')
-                start_date = date_range[0].strip()
-                start_date = datetime.datetime.strptime(
-                    start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
-                end_date = date_range[1].strip()
-                end_date = datetime.datetime.strptime(
-                    end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
-                queryset = queryset.filter(
-                    payment_date__range=[start_date, end_date])
-        except Exception as e:
-            logging.getLogger('error_log').error("%s " % str(e))
-            pass
+        if self.payment_date:
+            date_range = self.payment_date.split('-')
+            start_date = date_range[0].strip()
+            start_date = datetime.datetime.strptime(
+                start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
+            end_date = date_range[1].strip()
+            end_date = datetime.datetime.strptime(
+                end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
+            queryset = queryset.filter(
+                payment_date__range=[start_date, end_date])
 
         return queryset.order_by('-payment_date')
 
@@ -2126,11 +2109,7 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
 
 class ActionOrderItemView(View):
     def post(self, request, *args, **kwargs):
-        try:
-            action = int(request.POST.get('action', '0'))
-        except:
-            action = 0
-
+        action = int(request.POST.get('action', '0'))
         selected = request.POST.get('selected_id', '')
         selected_id = json.loads(selected)
         queue_name = request.POST.get('queue_name', '')
@@ -2674,10 +2653,10 @@ class ActionOrderItemView(View):
             orders = Order.objects.filter(id__in=selected_id)
             for order in orders:
                 ord_items = order.orderitems.first()
-                mid_out_sent = True
+                mid_out_pending = True
                 if order.midout_sent_on and timezone.now().date() == order.midout_sent_on.date():
-                    mid_out_sent = False
-                if mid_out_sent:
+                    mid_out_pending = False
+                if mid_out_pending:
                     # mail to user about writer information
                     to_emails = [order.email]
                     mail_type = "PENDING_ITEMS"
@@ -2910,13 +2889,16 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
                            'Can send assigned jobs on the move']
     any_permission = True
     filter_query_mapping = {
-        '23': Q(oi_status=23),
+        '23': Q(oi_status=23)|Q(whatsapp_profile_orderitem__approved=False),
         '31': Q(oi_status=31),
         '32': Q(oi_status=32),
-        '33': Q(oi_status=31, save_link__gt=0),
+        '33': Q(save_link__gt=0),
         '34': Q(assigned_to=None),
         '35': Q(whatsapp_profile_orderitem__onboard=False),
-        '4':  Q(oi_status=4)
+        '4':  Q(oi_status=4),
+        '36': Q(whatsapp_profile_orderitem__onboard=True),
+        '37': Q(whatsapp_profile_orderitem__approved=True),
+        '38': ~Q(oi_status=4)
     }
 
     def __init__(self):
@@ -2934,7 +2916,7 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
         self.sel_opt = request.GET.get('rad_search', 'number')
         self.payment_date = self.request.GET.get('payment_date', '')
         self.due_date = self.request.GET.get('due_date', '')
-        self.sort_payment_date = self.request.GET.get('sort_payment_date', '0')
+        self.sort_value = self.request.GET.get('sort_value', '0')
         return super(WhatsappListQueueView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -3009,7 +2991,6 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
             query = [self.filter_query_mapping.get(k) for k in self.oi_status if self.filter_query_mapping.get(k, None)]
             for q in query:
                 new_query &= q
-            print(new_query)
             queryset = queryset.filter(
                 new_query
             )
@@ -3038,8 +3019,13 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
             save_link=Count(Case(
                 When(jobs_link__status=0, then=1),
                 output_field=IntegerField())
+            ),
+            delayed=Case(
+                When(
+                    whatsapp_profile_orderitem__due_date__lt=timezone.now().date(), then=1),
+                output_field=IntegerField())
+
             )
-        )
         if int(self.day_choice) != -1:
             q_objects = Q()
             today_date_start = datetime.datetime(
@@ -3051,28 +3037,40 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
 
             if int(self.day_choice) == 1:
                 queryset = queryset.filter(
-                    whatsapp_profile_orderitem__due_date__gt=today_date_start,
                     whatsapp_profile_orderitem__due_date__lt=tomorrow_date_start,
-                    pending_links_count__gt=0)
+                    pending_links_count__gt=0).exclude(oi_status=4)
             elif int(self.day_choice) == 2:
                 queryset = queryset.filter(
                     whatsapp_profile_orderitem__due_date__lt=today_date_start,
                     pending_links_count__gt=0
-                )
+                ).exclude(oi_status=4)
             elif int(self.day_choice) == 3:
-                queryset = queryset.filter(whatsapp_profile_orderitem__due_date__gt=tomorrow_date_start,
+                queryset = queryset.filter(
+                    whatsapp_profile_orderitem__due_date__gt=tomorrow_date_start,
                     whatsapp_profile_orderitem__due_date__lt=tomorrow_date_start + relativedelta.relativedelta(days=1),
                     pending_links_count__gt=0
-                )
+                ).exclude(oi_status=4)
+
+            elif int(self.day_choice) == 4:
+                queryset = queryset.filter(
+                    whatsapp_profile_orderitem__due_date__gt=today_date_start,
+                    whatsapp_profile_orderitem__due_date__lt=tomorrow_date_start,
+                    pending_links_count__gt=0
+                ).exclude(oi_status=4)
             queryset = queryset.filter(q_objects)
-        if self.sort_payment_date and int(self.sort_payment_date):
-            queryset = queryset.select_related(
-                'order', 'product', 'assigned_to', 'assigned_by'
-            ).order_by('-order__payment_date')
-        else:
-            queryset = queryset.select_related(
-                'order', 'product', 'assigned_to', 'assigned_by'
-            ).order_by('-pending_links_count')
+        if self.sort_value:
+            if int(self.sort_value) == 1:
+                queryset = queryset.select_related(
+                    'order', 'product', 'assigned_to', 'assigned_by'
+                ).order_by('-order__payment_date')
+            elif int(self.sort_value) == 2:
+                queryset = queryset.select_related(
+                    'order', 'product', 'assigned_to', 'assigned_by'
+                ).order_by('-whatsapp_profile_orderitem__due_date')
+            else:
+                queryset = queryset.select_related(
+                    'order', 'product', 'assigned_to', 'assigned_by'
+                ).order_by('-pending_links_count')
 
         return queryset
 

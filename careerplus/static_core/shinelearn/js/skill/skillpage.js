@@ -1,4 +1,3 @@
-
 $.validator.addMethod("numbercheck", function (value, element) {
     if( $('#id_country_code').val() == "91" && $('#id_cell_phone').val().length != 10){
          $('#enquire_form').removeAttr("disabled");
@@ -174,6 +173,85 @@ $(function() {
 		}
     });
 
+    $(document).on('click','#product_load_more_mobile',function(event){
+        var page = parseInt($("#prod_page_id").val());
+        var pCtg = parseInt($("#ctg_id").val());
+        var prod_detail = '';
+        $('#prod_loader_mobile').show();
+        var loader = document.getElementById('prod_loader_mobile').innerHTML;
+        $.get('api/v1/load-more/',{"page": page, "page_size": 1, "pCtg" : pCtg, "pTF" : 16 ,"pTF_include" : false,  "fl" : "name,pCert,pURL,pImg,pNm,pNJ,pHd,pStar,pARx,pPin,pPfin,pPvn,pRC,discount"},
+            (data)=>{
+                for(d in data.results){
+                    prod_detail += `<div class="box row mb-15">
+                                        <div class="media">
+                                            <div class="media-left">
+                                                <a href="#" class="sigma-pro">`;
+                    if(request_amp == "True"){
+                        prod_detail += `<amp-img src="${data.results[d].pImg}" width="50" height="50"></amp-img>`
+                    }else{
+                        prod_detail += `<img aria-label="product image" src="${data.results[d].pImg}">`
+                    }
+                    var pARx = Number(Number(data.results[d].pARx).toFixed(1));
+                    prod_detail += `</a>
+                                         </div>
+                                            <div class="media-body">
+                                                <p class="pb-0"><a href="${data.results[d].pURL}">
+                                                    <strong>${data.results[d].pNm}</strong></a>
+                                                </p>
+                                                <div class="mb-10 c6">div
+                                                    <div class="rating inline-block ml-0 fs-12">
+                                                        <sup class="fill-star"></sup>
+                                                        ${pARx}/5
+                                                    </div>
+                                                    <div class="inline-block fs-12">`;
+                    if(data.results[d].pRC > 0){ prod_detail +=`<figure class="icon-comments"></figure><a href="#">${data.results[d].pRC}</a>` }
+                    if(data.results[d].pNJ >0){ prod_detail += `<strong>${data.results[d].pNJ}</strong> Jobs` }
+                    var list = data.results[d].pCert;
+                    for(var i=0;i<list.length;i++)
+                    {if(list[i]=='true'){prod_detail +=`<figure class="icon-certificate ml-10"></figure>Certification`; break;}}
+                    var pPin = Number(Number(data.results[d].pPin).toFixed(0));
+                    var pPfin = Number(Number(data.results[d].pPfin).toFixed(0));
+                    prod_detail += `</div>
+                                        </div>
+                                    <p class="pb-5 fs-12 c6">
+                                        Providers
+                                        <a href="#" class="tag-bg fs-11 ml-5">
+                                        ${data.results[d].pPvn}
+                                        </a>
+                                    </p>
+                                    <p class="pb-0 fs-12">
+                                    Starting at <strong>Rs. ${pPin}/-</strong>`
+                    if(pPfin){
+                        prod_detail +=`<strike>Rs. ${pPfin}/-</strike> <span class="discount">${data.results[d].discount}% OFF</span>`
+                    }
+                    prod_detail += `</p>
+                            </div><!-- end of media body -->
+                        </div><!-- end of media -->
+                    </div><!-- end of box -->`;
+                }
+                page = page + 1;
+                if(data.next != null)
+                { prod_detail +=`
+                    <div id='prod_load_more_mobile' class="loadmore">
+                        <div id = "prod_loader_mobile" style ="display:none" class="loadmore__loader">${loader}</div>
+                        <p class="text-center pb-0">
+                            <a role="button" id="product_load_more_mobile" class="load-more loadmore">
+                                <strong>Load More</strong></a>
+                        </p>
+                        <div id="prod_load_more">
+                            <input type="hidden" name="page"
+                            value="${page}" id="prod_page_id">
+                            <input type="hidden" name="slug" value="${pCtg}" id="ctg_id">
+                        </div>
+                                </div>`;
+                }
+                $('#prod_load_more_mobile').remove();
+                document.getElementById('tab-1').innerHTML += prod_detail;
+            }).fail(function() {
+                    alert( "$.get failed!" );
+                  });
+
+    });
 
     $(document).on('click', '#product_load_more', function(event) {
         var page = parseInt($("#prod_page_id").val());
@@ -182,15 +260,17 @@ $(function() {
         $('#product_load_more').remove();
         $('#prod_loader').show();
         $.ajax({
-            url: 'api/v1/Certification-load-more/', //change the name
+            url: 'api/v1/load-more/', //change the name
             type: "GET",
-            data : {"page": page, "page_size": 1, "pCtg" : pCtg, "pTF" : 16 ,"pTF_include" : false,  "fl" : "name,pCert,pURL,pImg,pNm,pNJ,pHd,pStar,pARx,pPin,pPfin,pPvn"},
+            data : {"page": page, "page_size": 5, "pCtg" : pCtg, "pTF" : 16 ,"pTF_include" : false,  "fl" : "name,pCert,pURL,pImg,pNm,pNJ,pHd,pStar,pARx,pPin,pPfin,pPvn,discount"},
             dataType: 'json',
             success: function(data){
                 for(d in data.results){
                     prod_detail += `<li class="box-panel" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a title="${data.results[d].name}" href="${data.results[d].pURL}"><div class="media"><div class="media-left"><img aria-label="${data.results[d].name}" class="media-object" src="${data.results[d].pImg}" alt="${data.results[d].pNm}" height="130px" width="130px"></div><div class="media-body"><div class="certification-jobs-box">`;
-                    if("true" in data.results[d].pCert){
-                        prod_detail += `<span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>`;
+                    var list = data.results[d].pCert;
+                    for(var i=0;i<list.length;i++)
+                    {
+                        if(list[i]=='true'){prod_detail +=`<span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>`; break;}
                     }
                     if(data.results[d].pNJ){
                         prod_detail +=  `<span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">${data.results[d].pNJ}</span> jobs available</span>`;
@@ -203,9 +283,9 @@ $(function() {
                         else if(star == '+'){ prod_detail += `<figure class="half-star"></figure>`}
                         else { prod_detail += `<figure class="blank-star"></figure>`}
                     }
-                    var pARx = parseInt(data.results[d].pARx).toFixed(1);
-                    var pPin = parseInt(data.results[d].pPin).toFixed(0);
-                    var pPfin = parseInt(data.results[d].pPfin).toFixed(0);
+                    var pARx = Number(Number(data.results[d].pARx).toFixed(1));
+                    var pPin = Number(Number(data.results[d].pPin).toFixed(0));
+                    var pPfin = Number(Number(data.results[d].pPfin).toFixed(0));
                     prod_detail += `<strong>${pARx}/5</strong> 
                     </div>
                     <div class="providers">
@@ -252,11 +332,99 @@ $(function() {
             {
                 alert("Can't load more comments.");
             }
-        }); 
+        });
 
   
     });
 
+    $(document).on('click','#certification_load_more_mobile',function(event){
+        var page = parseInt($("#cert_page_id").val());
+        var pCtg = parseInt($("#ctg_id").val());
+        var cert_detail = '';
+        $('#cert_loader_mobile').show();
+        var loader = document.getElementById('cert_loader_mobile').innerHTML;
+        $.get('api/v1/load-more/',{"page": page, "page_size": 5, "pCtg" : pCtg, "pTF" : 16 ,"pTF_include" : true,  "fl" : "name,pCert,pURL,pImg,pNm,pNJ,pHd,pStar,pARx,pPin,pPfin,pPvn,pRC,pAsft,discount"},
+            (data)=>{
+                for(d in data.results){
+                    cert_detail += `<div class="box row mb-15">
+                                        <div class="media">
+                                            <div class="media-left">
+                                                <a href="#" class="sigma-pro">`;
+                    if(request_amp == "True"){
+                        cert_detail += `<amp-img src="${data.results[d].pImg}" width="50" height="50"></amp-img>`
+                    }else{
+                        cert_detail += `<img aria-label="product image" src="${data.results[d].pImg}">`
+                    }
+                    var pARx = Number(Number(data.results[d].pARx).toFixed(1));
+                    cert_detail += `</a>
+                                         </div>
+                                            <div class="media-body">
+                                                <p class="pb-0"><a href="${data.results[d].pURL}">
+                                                    <strong>${data.results[d].pNm}</strong></a>
+                                                </p>
+                                                <div class="mb-10 c6">
+                                                    <div class="rating inline-block ml-0 fs-12">
+                                                        <sup class="fill-star"></sup>
+                                                        ${pARx}/5
+                                                    </div>
+                                                    <div class="inline-block fs-12">`;
+                    if(data.results[d].pRC > 0){ cert_detail +=`<figure class="icon-comments"></figure><a href="#">${data.results[d].pRC}</a>` }
+                    if(data.results[d].pNJ >0){ cert_detail += `<strong>${data.results[d].pNJ}</strong> Jobs` }
+                    var list = data.results[d].pCert;
+                    for(var i=0;i<list.length;i++)
+                    {if(list[i]=='true'){cert_detail +=`<figure class="icon-certificate ml-10"></figure>Certification`; break;}}
+                    var pPin = Number(Number(data.results[d].pPin).toFixed(0));
+                    var pPfin = Number(Number(data.results[d].pPfin).toFixed(0));
+                    cert_detail += `</div>
+                                        </div>
+                                    <p class="pb-5 fs-12 c6">
+                                        Providers
+                                        <a href="#" class="tag-bg fs-11 ml-5">
+                                        ${data.results[d].pPvn}
+                                        </a>
+                                    </p>
+                                    <p class="pb-5 fs-11">`
+                    var pAsft = JSON.parse(data.results[d].pAsft[0]);
+                    if(pAsft["number_of_questions"]){
+                        cert_detail += `No. of questions : <strong>${pAsft["number_of_questions"]}</strong> `}
+                    if(pAsft["test_duration"]){
+                        cert_detail += `<span class="pl-5 pr-5">|</span> Duration: <strong>${pAsft["test_duration"]} mins</strong> `}
+                    cert_detail += `</p>
+                                    <p class="pb-0 fs-12">
+                                    Starting at <strong>Rs. ${pPin}/-</strong>`
+                    if(pPfin){
+                        cert_detail +=`<strike>Rs. ${pPfin}/-</strike> <span class="discount">${data.results[d].discount}% OFF</span>`
+                    }
+                    cert_detail += `</p>
+                            </div><!-- end of media body -->
+                        </div><!-- end of media -->
+                    </div><!-- end of box -->`;
+                }
+                page = page + 1;
+                if(data.next != null)
+                { cert_detail +=`
+                                <div id='cert_load_more_mobile' class="loadmore">
+                                    <div id = "cert_loader_mobile" style ="display:none" class="loadmore__loader">${loader}</div>
+                                    <p class="text-center pb-0">
+                                        <a role="button" id="certification_load_more_mobile"
+                                        class="load-more loadmore">
+                                        <strong>Load More</strong></a>
+                                    </p>
+                                    <div id="cert_load_more">
+                                            <input type="hidden" name="page"
+                                            value="${page}" id="cert_page_id">
+                                            <input type="hidden" name="slug" value="${pCtg}" id="ctg_id">
+                                    </div>
+                                </div>`;
+                }
+                $('#cert_load_more_mobile').remove();
+                document.getElementById('tab-2').innerHTML += cert_detail;
+            }).fail(function() {
+                    alert( "$.get failed!" );
+                  });
+
+    });
+    
     $(document).on('click', '#certification_load_more', function(event) {
         var page = parseInt($("#cert_page_id").val());
         var pCtg = parseInt($("#Ctg_id").val());
@@ -264,9 +432,9 @@ $(function() {
         $('#certification_load_more').remove();
         $('#cert_loader').show();
         $.ajax({
-            url: '/api/v1/Certification-load-more/',
+            url: '/api/v1/load-more/',
             type: "GET",
-            data : {"page": page, "page_size": 5, "pCtg" : pCtg, "pTF" : 16, "pTF_include" : true, "fl" : "name,pCert,pURL,pImg,pNm,pNJ,pHd,pStar,pARx,pPin,pPfin,pPvn,pAsft,pPOP"},
+            data : {"page": page, "page_size": 5, "pCtg" : pCtg, "pTF" : 16, "pTF_include" : true, "fl" : "name,pCert,pURL,pImg,pNm,pNJ,pHd,pStar,pARx,pPin,pPfin,pPvn,pAsft,discount"},
             dataType: 'json',
             success: function(data){
                 for(d in data.results){
@@ -326,7 +494,7 @@ $(function() {
                     cert_detail += `
                      <div id = "cert_loader" style ="display:none">${img}</div>
                     <div id="certification_load_more">
-                        <a href="javascript:void(0)" id="certification_load_more" class="load-more loadmore">Load more</a> 
+                        <a href="javascript:void(0)" class="load-more loadmore">Load more</a> 
                         <div id="cert_load_more">
                             <input type="hidden" name="page" 
                             value="${page}" id="cert_page_id">
@@ -349,6 +517,7 @@ $(function() {
                 alert("Can't load more comments.");
             }
         }); 
+
   
     });
 

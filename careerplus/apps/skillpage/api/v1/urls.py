@@ -1,10 +1,10 @@
 from django.conf.urls import url
 from django.conf import settings
 
-from .views import CertificationLoadMoreApiView
+from .views import LoadMoreApiView
 
 urlpatterns = [
-    url(r'^v1/Certification-load-more/$',
-        CertificationLoadMoreApiView.as_view(),
-        name='certification-load-more'),
+    url(r'^v1/load-more/$',
+        LoadMoreApiView.as_view(),
+        name='load-more'),
 ]

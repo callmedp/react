@@ -7,7 +7,7 @@ from rest_framework import serializers
 
 from shared.rest_addons.mixins import SerializerFieldsMixin
 
-class CertificationLoadMoreSerializerSolr(SerializerFieldsMixin,Serializer):
+class LoadMoreSerializerSolr(SerializerFieldsMixin,Serializer):
     id = serializers.CharField()
     django_ct = serializers.CharField()
     django_id = serializers.CharField()

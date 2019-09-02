@@ -79,6 +79,10 @@ urlpatterns = [
         views.ServerTimeAPIView.as_view(),
         name='get-server-time'
         ),
+    url(r'^v1/claim-order/$',
+        views.ClaimOrderAPIView.as_view(),
+        name='claim-order'
+        ),
 ]
 
 if settings.DEBUG:

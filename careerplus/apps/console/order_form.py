@@ -277,10 +277,14 @@ class OIFilterForm(forms.Form):
                 (-1, 'Select Status'), (31, 'Pending Links'),
                 (32, 'Sent Links'), (33, 'Saved Links'),
                 (23, 'Pending Approval'), (4, 'Closed'),
-                (34, 'UnAssigned',), (35, 'Not Boarded')
+                (34, 'UnAssigned',), (35, 'Not Boarded'),
+                (36, 'Boarded'), (37, 'Approved'),
+                (38, 'Not Closed')
             )
 
-            self.fields['day_choice'].choices = ( (-1, 'All'), (1, 'Today'), (2, 'Delayed'), (3, 'Tommorrow'),)
+            self.fields['day_choice'].choices = (
+                (-1, 'All'), (1, 'Today'), (2, 'Delayed'), (3, 'Tommorrow'), (4, 'Today\' On time')
+            )
         self.fields['oi_status'].choices = NEW_OI_OPS_STATUS
 
         draft_choices = [(-1, "Select Draft Level")]

@@ -669,10 +669,10 @@ class MarkedPaidOrderView(View):
                     # OrderMixin().addRewardPointInWallet(order=obj)
 
                     # pending item email send
-                    pending_item_email.apply_async((obj.pk,), countdown=900)
+                    pending_item_email.apply_async((obj.pk,), countdown=settings.MAIL_COUNTDOWN)
 
                     # send email through process mailers
-                    process_mailer.apply_async((obj.pk,), countdown=900)
+                    process_mailer.apply_async((obj.pk,), countdown=settings.MAIL_COUNTDOWN)
                     # process_mailer(obj.pk)
 
                     # roundone order
@@ -822,12 +822,13 @@ class UniversityCourseLoadMoreView(TemplateView):
             'PRODUCT_PAGE_SIZE': self.PRODUCT_PAGE_SIZE})
         return context
 
-
+# THIS VIEW IS RESPONSIBLE FOR MAKING EXOTEL CALL AND CREATING USER AGENT INTERACTION
 class WelcomeServiceCallView(UserPermissionMixin,View):
     permission_to_check = ['can do exotel call']
     exotel_object = ExotelInteraction()
 
-    def get_response_for_failure_reason(self,order):
+    def get_response_for_failure_reason(self,order,queue_name):
+        user = self.request.user
         is_dnd = self.exotel_object.is_number_dnd(order.mobile)
         data = {}
         if is_dnd:
@@ -835,9 +836,11 @@ class WelcomeServiceCallView(UserPermissionMixin,View):
                                 'in click to call for DND numbers.', 'status': 0})
         else:
             data.update({'msg': 'Something went wrong', 'status': 0})
+        self.exotel_object.create_user_agent_interaction(order=order,user=user,\
+                                                         recording_id=None,queue_name=queue_name)
         return HttpResponse(json.dumps(data), content_type="application/json")
 
-    def make_call_to_user(self, order, user):
+    def make_call_to_user(self, order, user,queue_name=None):
         data = {'msg': "Failure", 'status': 0}
         prev_records = None
         resp = self.exotel_object.make_call(order.mobile, user.contact_number)
@@ -873,14 +876,16 @@ class WelcomeServiceCallView(UserPermissionMixin,View):
         json_records.update({recording_id: ""})
         order.welcome_call_records = json.dumps(json_records)
         order.save()
+        recording_id_in_json = json.dumps({recording_id : ""})
+        self.exotel_object.create_user_agent_interaction(order,user,recording_id_in_json,queue_name)
         data.update({'msg': "Connected", 'status': 1})
         return HttpResponse(json.dumps(data), content_type="application/json")
 
     def post(self, request, *args, **kwargs):
-
         data = {'msg': 'Failure', 'status': 0}
         order_id = self.request.POST.get('o_id', '')
         action = self.request.POST.get('action', None)
+        queue_name = self.request.POST.get('queue_name',0)
         user = request.user
 
         if not request.is_ajax():
@@ -891,9 +896,9 @@ class WelcomeServiceCallView(UserPermissionMixin,View):
             return HttpResponse(json.dumps(data), content_type="application/json")
 
         if action:
-            return self.get_response_for_failure_reason(order)
+            return self.get_response_for_failure_reason(order,queue_name)
         else:
-            return self.make_call_to_user(order, user)
+            return self.make_call_to_user(order, user,queue_name)
 
 
 class ProductCopyAPIView(View):
@@ -932,9 +937,6 @@ class ProductCopyAPIView(View):
             product_screen_copy_obj.save()
             return HttpResponse(json.dumps({'status': 1,'id': product_screen_copy_obj.id}), content_type="application/json")
         return HttpResponse(json.dumps({'status': 0}), content_type="application/json")
-
-
-
 
 
 

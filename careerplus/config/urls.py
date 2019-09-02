@@ -174,6 +174,7 @@ urlpatterns += [
                    url(r'api/', include('skillpage.api.v1.urls', namespace='skillpage-api')),
                    url(r'^$', homepage_view.HomePageView.as_view(), name='homepage'),
                    url(r'^console/', include('console.urls', namespace='console')),
+                   url(r'^shine/', include('shine.urls', namespace='shine')),
                    url(r'^shop/', include('shop.urls', namespace='shop')),
                    url(r'^user/', include('users.urls', namespace='users')),
                    url(r'^cms/', include('cms.urls', namespace='cms')),
