@@ -49,7 +49,8 @@ from seo.sitemap import (
     CategorySitemap, ServiceSitemap,
     ArticleSitemap, ArticleCategorySitemap,
     CMSSitemap, TalentEconomySitemap, TalentCategorySitemap,
-    TalentAuthorSitemap)
+    TalentAuthorSitemap,PracticeTestCategorySitemap,PracticeTestExamSitemap,
+    PracticeTestSubCategorySitemap)
 
 handler404 = 'users.views.page_not_found'
 handler500 = 'users.views.server_error'
@@ -78,7 +79,11 @@ talent_sitemap = {
     'category': TalentCategorySitemap,
     'author': TalentAuthorSitemap
 }
-
+practicetest_sitemap = {
+    'category':     PracticeTestCategorySitemap,
+    'sub-category': PracticeTestSubCategorySitemap,
+    'practice-test-exam': PracticeTestExamSitemap
+}
 
 # Library Patches
 from .startup_script import apply_patch
@@ -106,6 +111,9 @@ urlpatterns += [
         'template_name': 'sitemap.xml'}, name='sitemap'),
     url(r'^te_sitemap\.xml$', cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
         'sitemaps': talent_sitemap,
+        'template_name': 'sitemap.xml'}, name='sitemap'),
+    url(r'^practice-tests\.xml$', cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
+        'sitemaps': practicetest_sitemap,
         'template_name': 'sitemap.xml'}, name='sitemap'),
 
     url(r'^course/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
@@ -165,6 +173,7 @@ urlpatterns += [
                    url(r'api/v1/', include('shop.api.v1.urls', namespace='shop-api')),
                    url(r'^$', homepage_view.HomePageView.as_view(), name='homepage'),
                    url(r'^console/', include('console.urls', namespace='console')),
+                   url(r'^shine/', include('shine.urls', namespace='shine')),
                    url(r'^shop/', include('shop.urls', namespace='shop')),
                    url(r'^user/', include('users.urls', namespace='users')),
                    url(r'^cms/', include('cms.urls', namespace='cms')),

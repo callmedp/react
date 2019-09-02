@@ -9,6 +9,7 @@ import RightSection from './RightSection/rightSection.jsx'
 import {withRouter} from "react-router-dom";
 import LoaderPage from "../../Loader/loaderPage.jsx";
 import * as actions from "../../../store/ui/actions"
+import {loginCandidate} from "../../../store/landingPage/actions"
 import {
     customizeTemplate,
     fetchDefaultCustomization,
@@ -26,12 +27,23 @@ import {
 } from '../../../store/ui/actions/index'
 import moment from 'moment'
 import {locationRouteChange, eventClicked} from '../../../store/googleAnalytics/actions/index'
-import {loginCandidate} from "../../../store/landingPage/actions";
+import queryString from "query-string";
 
 class EditPreview extends Component {
+    constructor(props) {
+        super(props);
+        this.removeNote = this.removeNote.bind(this);
+        this.allowUploadResume = this.allowUploadResume.bind(this);
+        this.state = {
+            visibleNote: true
+        }
+    }
 
-    componentDidMount() {
-        const {analytics: {locationPath}, fetchEntityInfo, history: {location: {pathname}}, locationRouteChange} = this.props
+    async componentDidMount() {
+        const {analytics: {locationPath}, fetchEntityInfo, history: {location: {pathname}}, locationRouteChange, loginCandidate} = this.props
+        if (!localStorage.getItem('candidateId')) {
+            await loginCandidate()
+        }
         fetchEntityInfo();
         if (localStorage.getItem('personalInfo')) {
             localStorage.setItem('newUser', true)
@@ -52,8 +64,23 @@ class EditPreview extends Component {
         return results;
     }
 
+
+    removeNote() {
+        localStorage.setItem('showNote', 'false')
+        this.setState({
+            visibleNote: false
+        })
+    }
+
+    allowUploadResume() {
+        let {userInfo: {upload_resume: uploadResume}, userInfo, updateSelectedTemplate} = this.props;
+        userInfo['upload_resume'] = !uploadResume
+        updateSelectedTemplate(userInfo)
+    }
     render() {
-        const {ui: {loader}, userInfo: {first_name, last_name, number, email}} = this.props;
+        const {ui: {loader}, userInfo: {first_name, last_name, number, email, upload_resume: uploadResume}, history: {location: {pathname}}} = this.props;
+        const showNote = localStorage.getItem('showNote') || '';
+        const {visibleNote} = this.state;
         return (
             <div>
                 {
@@ -69,9 +96,28 @@ class EditPreview extends Component {
                     <SelectTemplateModal {...this.props} page={'edit'}/>
                     <TopBar {...this.props}/>
                     <section className={'flex-container mt-30'}>
-                        <LeftSideBar {...this.props}/>
+                        <LeftSideBar {...this.props} onChange={this.allowUploadResume}/>
                         <RightSection {...this.props}/>
                     </section>
+                    {
+                        pathname === '/resume-builder/preview/' && !!(!uploadResume) && !!(!showNote.length) && !!(visibleNote) &&
+                        < div className="sticky-msg">
+                        <span className="pt-20">
+                        <figure>
+                        <i className="icon-thumbsup"></i>
+                        Well Done!
+                        </figure>
+                        </span>
+                        <span>
+                        <strong>Update Resume</strong>
+                        <p>Your resume is ready to help you
+                        search best jobs, update it on your
+                        shine profile</p>
+                        <button className="orange-button" onClick={this.allowUploadResume}>Update</button>
+                        </span>
+                        <i className="icon-close" onClick={this.removeNote}></i>
+                        </div>
+                    }
                 </div>
                 <Footer/>
 
@@ -154,7 +200,12 @@ const mapDispatchToProps = (dispatch) => {
         },
         'eventClicked': (data) => {
             return dispatch(eventClicked(data))
-        }
+        },
+        "loginCandidate": (token = '') => {
+            return new Promise((resolve, reject) => {
+                dispatch(loginCandidate({info: {alt: ''}, resolve, reject, isTokenAvail: false}))
+            })
+        },
     }
 }
 

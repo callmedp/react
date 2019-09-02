@@ -45,6 +45,7 @@ from order.tasks import (
 from shop.models import Skill, DeliveryService, ShineProfileData
 from blog.models import Blog
 from emailers.tasks import send_email_task
+from payment.models import PaymentTxn
 
 from .serializers import (
     OrderListHistorySerializer,
@@ -401,8 +402,8 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                     invoice_generation_order.delay(order_pk=order.pk)
 
                     # email for order
-                    process_mailer.apply_async((order.pk,), countdown=900)
-                    pending_item_email.apply_async((order.pk,), countdown=900)
+                    process_mailer.apply_async((order.pk,), countdown=settings.MAIL_COUNTDOWN)
+                    pending_item_email.apply_async((order.pk,), countdown=settings.MAIL_COUNTDOWN)
 
                     return Response(
                         {"status": 1, "msg": 'order created successfully.'},
@@ -450,9 +451,11 @@ class EmailLTValueApiView(APIView):
                 {"status": "FAIL", "msg": "Email or User Doesn't Exists"},
                 status=status.HTTP_400_BAD_REQUEST)
 
-        ltv_pks = list(Order.objects.filter(
-            candidate_id=candidate_id,
-            status__in=[1,2,3]).values_list('pk', flat=True))
+        date_one_year_ago = timezone.now() - timedelta(days=365)
+        #Consider only last 1 year's orders for LTV.
+        ltv_pks = list(Order.objects.filter(candidate_id=candidate_id,\
+            status__in=[1,2,3],payment_date__gte=date_one_year_ago).values_list('pk', flat=True))
+        
         if ltv_pks:
             ltv_order_sum = Order.objects.filter(
                 pk__in=ltv_pks).aggregate(ltv_price=Sum('total_incl_tax'))
@@ -1501,7 +1504,7 @@ class SetSession(APIView):
 
         # creating lead for particular session_id
         if lead_create:
-            self.request.session.update({'is_lead_created': 1})
+            self.request._request.session.update({'is_lead_created': 1})
             return Response({'is_lead_created':True})
 
         return Response({'timeout': self.cache_test.get_test_time_out(key),
@@ -1530,6 +1533,43 @@ class ServerTimeAPIView(APIView):
         if self.request.GET.get('time_stamp'):
             return Response({'time': datetime.datetime.timestamp(datetime.datetime.now())})
         return Response({'time':datetime.datetime.now().strftime(self.time_format)})
+
+
+class ClaimOrderAPIView(APIView):
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    def post(self,request):
+        txn_id = self.request.POST.get('txn_id')
+        email = self.request.POST.get('email')
+        alt_email = self.request.POST.get('alt_email')
+        mobile = self.request.POST.get('mobile')
+        alt_mobile = self.request.POST.get('alt_mobile')
+        user_id = self.request.POST.get('user_id')
+        lead_id = self.request.POST.get('lead_id')
+        sales_user_info = self.request.POST.get('sales_user_info')
+        data = {'claim_order': False}
+        if not txn_id:
+            return Response(data)
+        payment_object = PaymentTxn.objects.filter(txn=txn_id).first()
+        if not payment_object:
+            return Response(data)
+        order = payment_object.order
+        if not order:
+            return Response(data)
+        if getattr(order, 'email') == email or getattr(order, 'alt_email') == alt_email \
+           or getattr(order, 'mobile') == mobile or getattr(order, 'alt_mobile') == alt_mobile:
+            if order.sales_user_info or order.crm_lead_id or order.crm_sales_id:
+                return Response(data)
+            if not user_id or not lead_id or not sales_user_info:
+                return Response(data)
+            order.crm_lead_id = lead_id
+            order.crm_sales_id = user_id
+            order.sales_user_info = sales_user_info
+            order.save()
+            return Response({'claim_order': True})
+        return Response(data)
+
 
 
 

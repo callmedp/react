@@ -9,37 +9,48 @@ import {Toast, LandingPageToast} from "../../../services/ErrorToast";
 import {SubmissionError} from 'redux-form'
 
 
-function* getCandidateId() {
+function* getCandidateId(action) {
     try {
+        const {payload: {resolve, reject}} = action;
+
+        yield put({type: UPDATE_UI, data: {loader: true}});
         const result = yield call(Api.getCandidateId);
+
+        yield put({type: UPDATE_UI, data: {loader: false}});
+
         if (result['error']) {
             Toast.fire({
                 type: 'error',
                 title: result['errorMessage']
             });
+            return reject(new SubmissionError({_error: result['errorMessage']}));
+
         }
 
+
         localStorage.setItem('candidateId', JSON.parse((result.data && result.data['candidate_id'])) || '');
+        resolve();
 
     } catch (e) {
         console.log(e);
     }
 }
 
+
 function* loginCandidate(action) {
     try {
-        let {payload: {info, resolve, reject}} = action;
+        let {payload: {info, resolve, reject, isTokenAvail}} = action;
 
         yield put({type: UPDATE_UI, data: {loader: true}});
 
-
-        let result = yield call(Api.loginCandidate, info);
-
-        if (result['error']) {
+        let result;
+        if (isTokenAvail) {
+            result = yield call(Api.loginCandidate, info);
+        }
+        if (result && result['error'] || !isTokenAvail) {
             result = yield call(Api.getInformation)
         }
-
-        if (result['error']) {
+        if (result && result['error']) {
             localStorage.clear();
             window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
             yield put({type: UPDATE_UI, data: {loader: false}})

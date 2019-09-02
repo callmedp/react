@@ -77,7 +77,6 @@
 
             ul {
                 margin-top: 15px;
-                margin-left: 5px;
 
                 li {
                     list-style: none;
@@ -108,16 +107,30 @@
   
     [type="radio"]:checked + label:before,
     [type="radio"]:not(:checked) + label:before {
-      @include square(10px, block);
-      background-color: $txt-grey-c9;
-      top: 6px;
-      border: 0;
+        border:3px solid rgba($bg-white, 1);
+        @include square(10px, block);
+        background-color: $txt-grey-c9;
+        top: 2px;
     }
   
     [type="radio"]:checked + label:after,
     [type="radio"]:not(:checked) + label:after {
       background: transparent;
     }
+
+    
+
+    [type="radio"]:checked + label:before {
+        border:3px solid rgba($blue, .5);
+        top: 1px;
+        left: 1px;
+    }
+
+    [type="radio"]:checked + label:after {
+        background-color: $blue;
+    }
+
+
 }
 
 .check-result {

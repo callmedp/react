@@ -1,5 +1,5 @@
 //global variables
-let page_size = 10
+let page_size = 25
 let total_pages = 0
 let feedback_id_selected = []
 
@@ -143,7 +143,8 @@ const customerFeedbackList = (page_no,filter_data) => {
                 `
             )
         }
-        for (let page=1;page<=total_pages && page<=5;page++){
+        max_page = page_no>2 ? page_no+3 : page_no+6 -page_no
+        for (let page=page_no>2 ? page_no-2 : 1;page<=total_pages && page< max_page;page++){
             $('.pagination').append(
                 `
                     <li ${page===page_no ? "class='active'" : ''} ><a ${page===page_no ? '' :`onclick="customerFeedbackList(${page})"`}>${page}</a></li>

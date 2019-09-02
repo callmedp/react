@@ -1,13 +1,14 @@
 import {GET_CANDIDATE_ID, LOGIN_CANDIDATE, FEEDBACK_SUBMIT, GET_HOME_COMPONENT_TITLE} from "./actionTypes";
 
-export const getCandidateId = () => ({
-    type: GET_CANDIDATE_ID
+export const getCandidateId = (payload) => ({
+    type: GET_CANDIDATE_ID,
+    payload
 });
 
 
-export const loginCandidate = (payload) => ({
+export const loginCandidate = (data) => ({
     type: LOGIN_CANDIDATE,
-    payload
+    data
 });
 
 export const feedbackSubmit = (payload) => ({

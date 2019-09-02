@@ -9,6 +9,18 @@ import {showAlertModal, hideAlertModal} from '../../../../../store/ui/actions/in
 import AlertModal from '../../../../Modal/alertModal.jsx'
 import MenuModal from '../../../../Modal/menuModal';
 
+
+const isSame = (initialField, formField) => {
+    let isSame = true;
+    if (initialField instanceof Array && formField instanceof Array) {
+        (initialField || []).map((el, index) => (initialField[index] === formField[index] ? true : isSame = false))
+        return isSame;
+    }
+    if (initialField === formField) return true;
+    return false;
+
+}
+
 class Edit extends Component {
     constructor(props) {
         super(props);
@@ -110,15 +122,47 @@ class Edit extends Component {
     render() {
         const {type, preferenceList, nextLink, elemToDelete, menu_modal_status} = this.state;
         let {formData, ui: {formName}, updateCategoryEntity, showAlertModal, userInfo: {order_data}, eventClicked} = this.props;
-        let error = false;
+        let error = [], filled = [], isError = false, isFilled = false;
         const obj = (formData && formData[formName]) || {};
         let syncErrors = obj['syncErrors'] || {};
+        let values = obj['values'] || {};
+        let initial = obj['initial'] || {};
         const newUser = localStorage.getItem('newUser');
         if ('fields' in obj) {
-            if ('list' in syncErrors) ((syncErrors && syncErrors['list']) || []).map(el => (el ? Object.values(el)
-                : []).map(value => (!!value ? error = true : false)))
-            else Object.values(syncErrors || {}).map(value => (!!value ? error = true : false));
+            if ('list' in syncErrors) ((syncErrors && syncErrors['list']) || []).map((el, ind) => {
+                error[ind] = false;
+                return (el ? Object.values(el)
+                    : []).map(value => (!!value ? error[ind] = true : false))
+            });
+            else {
+                error[0] = false;
+                Object.values(syncErrors || {}).map(value => (!!value ? error[0] = true : false));
+            }
+            if ('list' in initial) {
+                initial = initial && initial['list'][0]
+            }
+            if ('list' in values) ((values && values['list'] || [])).map((el, index) => {
+                    filled[index] = false;
+                    return (el ? Object.keys(el) : []).map(
+                        key => (isSame(initial[key], el[key]) ? false : filled[index] = true)
+                    )
+                }
+            )
+            else {
+                filled[0] = false;
+                Object.keys(values || {}).map(key => (isSame(initial[key], values[key]) ? false : filled[0] = true))
+            }
+
+            // Currently only feasible for single item in any list
+            for (let ind = 0; ind < error.length; ind++) {
+                if (error[ind] && filled[ind]) {
+                    isError = true;
+                    isFilled = true;
+                    break;
+                }
+            }
         }
+
         return (
             <div className="edit-section">
                 <MenuModal
@@ -144,33 +188,33 @@ class Edit extends Component {
                                 <li key={index}
                                     className={(type === itemType ? ' edit-section--active' : '')}>
                                     {
-                                        !!(error || newUser) ?
+                                        !!((isError && isFilled) || newUser) ?
                                             (
-                                                    <div onClick={() => this.showErrorMessage(link)}
-                                                             className={"non-link"}>
-                                                        <span className={'mr-20 ' + icon}></span>
-                                                        {elem['entity_text']}
-                                                    </div>
+                                                <div onClick={() => this.showErrorMessage(link)}
+                                                     className={"non-link"}>
+                                                    <span className={'mr-20 ' + icon}></span>
+                                                    {elem['entity_text']}
+                                                </div>
 
                                             )
 
                                             :
 
                                             (
-                                                    <Link to={link}
-                                                          onClick={() => {
-                                                              eventClicked({
-                                                                  'action': 'SelectSection',
-                                                                  'label': name
-                                                              })
-                                                          }}>
-                                                        <span className={'mr-20 ' + icon}></span>
-                                                        {elem['entity_text']}
-                                                    </Link>
+                                                <Link to={link}
+                                                      onClick={() => {
+                                                          eventClicked({
+                                                              'action': 'SelectSection',
+                                                              'label': name
+                                                          })
+                                                      }}>
+                                                    <span className={'mr-20 ' + icon}></span>
+                                                    {elem['entity_text']}
+                                                </Link>
                                             )
                                     }
                                     {
-                                         !!(elem['entity_id'] !== 1 && elem['entity_id'] !== 6) ?
+                                        !!(elem['entity_id'] !== 1 && elem['entity_id'] !== 6) ?
                                             <span onClick={() => this.deleteFromVisibleList(elem)}
                                                   className="icon-closemenu pull-right mt-20"/> : ''
                                     }

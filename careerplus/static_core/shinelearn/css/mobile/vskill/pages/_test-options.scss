@@ -1,6 +1,7 @@
 .test-option-box {
     @extend %white-box;
     position: relative;
+    margin-top: 20px !important;
 
     &--test-wrap,
     &--cta {

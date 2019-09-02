@@ -1,7 +1,7 @@
 {% extends "mobile/basic/base.html" %}
 {% load static compress %}
 {% load static thumbnail compress %}
-{% block title %}Shine learning{% endblock %}
+{% block title %} {{Category.name}} Practice Tests | Free Mock Tests @ Shine Learning {% endblock %}
 {% block css_section %}
 {{ block.super }}
 {% compress css %}
@@ -11,10 +11,34 @@
 {% endcompress %}
 {% endblock css_section %}
 {% block canonical_url %}
-<link rel="canonical" href="//{{ SITE_DOMAIN }}/">
+<link rel="canonical" href="https://{{ SITE_DOMAIN }}/practice-tests/{{Category.slug}}/">
 {% endblock canonical_url %}
+
 {% block django_meta %}
-{% include 'meta/meta.html' %}
+ <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <link rel="shortcut icon" href="{% static 'shinelearn/images/fav_icon.png' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=0"/>
+    <meta name="description" content="{{ Category.name }} practice tests online through shine learning. Start preparing mock tests to obtain your score. 500+ Specialized Practice Tests">
+	<meta property="og:title" content="Practice Tests | Online Mock Tests | Exam Preparation Question @ Shine Learning">
+	<meta property="og:url" content="https://{{ SITE_DOMAIN }}/practice-tests/{{Category.slug}}/">
+	<meta property="og:description" content="{{Category.name}} practice tests online through shine learning. Start preparing mock tests to obtain your score. 500+ Specialized Practice Tests">
+	<meta property="og:type" content="Website">
+	<meta property="og:site_name" content="ShineLearning">
+	<meta property="og:image" content="{% static 'shinelearn/images/free_skill/submit-test.png' %}">
+	<meta property="fb:profile_id" content="282244838633660">
+
+    <meta itemprop="name" content="{{Category.name}} Practice test | online mock test – Shine Learning">
+    <meta itemprop="url" content="https://{{ SITE_DOMAIN }}/practice-tests/{{Category.slug}}/">
+    <meta itemprop="description" content="{{Category.name}} practice tests online through shine learning. Start preparing mock tests to obtain your score. 500+ Specialized Practice Tests">
+      <meta name="twitter:card" content="summary">
+        <meta name="twitter:site" content="@shinelearning">
+
+        <meta name="twitter:domain" content="{{ SITE_DOMAIN }}">
+        <meta name="twitter:title" content="{{Category.name}} Practice Tests | Free Mock Tests @ Shine Learning">
+        <meta name="twitter:description" content="{{Category.name}} practice tests online through shine learning. Start preparing mock tests to obtain your score. 500+ Specialized Practice Tests" />
+        <!--<meta name="twitter:image:src" content="{{obj.image.url}}">-->
 {% endblock django_meta %}
 {% block header %}
 {% endblock header %}
@@ -22,19 +46,24 @@
 <div class="body-wrapper practice-test ">
     <div class="practice-test-inside"></div>
 
-    <div class="back"></div>
+    <div class="back" onclick="goBack();"></div>
 
 <h1>{{Category.name}}</h1>
         {% block breadcrumb %}
-         <div class="bread-crums">
-            {% for bread in breadcrumbs %}
-            {% if bread.url %}
-            <a href='{{bread.url}}'>{{bread.name}} -</a>
-            {% else %}
-            <a>{{bread.name}}</a>
-            {% endif %}
+         <ol class="breadcrumb mt-0" itemscope="" itemtype="http://schema.org/BreadcrumbList">
+                {% for bradcbs in breadcrumbs %}
+              {% if bradcbs.url %}
+                <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                    <a href="{{bradcbs.url}}" itemprop="item">
+                        <span itemprop="name">{{bradcbs.name}}</span>
+                    </a>
+                        <meta itemprop="position" content="{{forloop.counter}}" />
+                </li>
+              {% else %}
+                <li class="active">{{bradcbs.name}}</li>
+              {% endif %}
             {% endfor %}
-         </div>
+         </ol>
          {% endblock breadcrumb %}
 
     <div class="search">
@@ -46,16 +75,15 @@
 
     <div class="popular_test" id="funcDiv">
                        {% for cat in category|slice:":8"  %}
-
         <div class="popular_test_inside category">
-            <a href="{% url 'assessment:vskill-subcategory' slug=cat.slug %}">
+            <a href="{% url 'assessment:vskill-subcategory' slug=cat.slug %}" title="{{cat.name}}">
                 <span class="border border{{forloop.counter0}}"></span>
                 <span class="name">{{cat.name}}</span>
-                <span class="test">{{cat.get_assessment_test}}
-                    {% if cat.get_assessment_test < 1 %}Test {% else %}Tests{% endif %}</span>
+                <span class="test">{{cat.get_assessment_test_count}}
+                    {% if cat.get_assessment_test_count < 1 %}Test {% else %}Tests{% endif %}</span>
             </a>
         </div>
-                       {% endfor %}
+        {% endfor %}
 
     </div>
         {%if category.count > 8 %}
@@ -83,12 +111,12 @@
                for (fa in json.results){
                 element.innerHTML=
                 element.innerHTML + `<div class="popular_test_inside category">
-                <a href = "/practice-tests/${json.results[fa].slug}/sub/"
+                <a title = "${json.results[fa].name}" href = "/practice-tests/${json.results[fa].slug}/sub/">
 
-                <span class="border border{{forloop.counter0}}"></span>
+                <span class="border border${fa}"></span>
                 <span class="name">${json.results[fa].name}</span>
-                <span class="test">${json.results[fa].assessment_test}
-                ${json.results[fa].assessment_test < 1 ? 'Test':'Tests'}
+                <span class="test">${json.results[fa].assessment_test_count}
+                ${json.results[fa].assessment_test_count < 1 ? 'Test':'Tests'}
                     </span>
             </a>
         </div>`

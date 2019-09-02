@@ -43,6 +43,9 @@ class Test(AbstractAutoDate):
     def get_question_count(self):
         return self.question_set.all().count()
 
+    def get_absolute_url(self):
+        return "/practice-tests/{}-test/".format(self.slug)
+
     @property
     def question_count(self):
         return self.get_question_count()

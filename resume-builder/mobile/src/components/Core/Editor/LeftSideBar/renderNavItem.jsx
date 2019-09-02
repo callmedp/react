@@ -4,11 +4,11 @@ import { Link} from 'react-router-dom';
 export default class  RenderNavItem extends Component {
 
     render(){
-        const {label,type,sidenavStatus,title,exist,listOfLinks,changeLink,iconClass,
+        const {label,type,sidenavStatus,title,exist,listOfLinks, filled,changeLink,iconClass,
             error,showErrorMessage,newUser,pos} = this.props
         return( 
             <React.Fragment>
-               {error || newUser ?
+               {(error && filled) || newUser ?
                     <li className={"sidebar__item " + (type === title ? 'sidebar--active' : '') 
                         + (exist || sidenavStatus ? '' : 'hide')} onClick={()=>{showErrorMessage(title)}}>
                             <div 

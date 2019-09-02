@@ -264,15 +264,18 @@ class ActionUserMixin(object):
 
                         # sms to writer in case of express and super express delivery
 
-    def upload_candidate_resume(self, oi=None, data={}, user=None):
+    def upload_candidate_resume(self, order_items=None, data={}, user=None):
         oi_resume = data.get('candidate_resume', '')
-        if oi and oi_resume:
-            try:
+        resume_path = None
+        if not oi_resume:
+            return
+        for oi in order_items:
+            if not resume_path:
                 order = oi.order
                 filename = os.path.splitext(oi_resume.name)
                 extention = filename[len(filename) - 1] if len(
                     filename) > 1 else ''
-                file_name = 'resumeupload_' + str(order.pk) + '_' + str(oi.pk) + '_' + str(int(random()*9999)) \
+                file_name = 'resumeupload_' + str(order.pk)  + '_' + str(int(random()*9999)) \
                     + '_' + timezone.now().strftime('%Y%m%d') + extention
                 full_path = '%s/' % str(order.pk)
                 oi_resume = UploadedFile(oi_resume)
@@ -286,9 +289,14 @@ class ActionUserMixin(object):
                         dest.write(chunk)
                     dest.close()
                 else:
-                    GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, oi_resume)
-
-                oi.oi_resume = full_path + file_name
+                    try:
+                        GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, oi_resume)
+                    except Exception as e:
+                        logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
+                resume_path = full_path + file_name
+            
+            if not oi.oi_resume:
+                oi.oi_resume = resume_path
                 last_oi_status = oi.oi_status
                 oi.oi_status = 5
                 oi.last_oi_status = 3
@@ -305,8 +313,11 @@ class ActionUserMixin(object):
                     last_oi_status=oi.last_oi_status,
                     assigned_to=oi.assigned_to,
                     added_by=user)
-            except Exception as e:
-                logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
+        # all order item id's are for a particular order so taken first and added auto_upload True
+        order = order_items.first().order
+        order.auto_upload = True
+        order.save()
+            
 
     def upload_draft_orderitem(self, oi=None, data={}, user=None):
         oi_draft = data.get('oi_draft', '')
@@ -336,7 +347,7 @@ class ActionUserMixin(object):
                 logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
                 raise
 
-            if oi.product.type_flow in [2, 10, 14]:
+            if oi.product.type_flow in [2, 10, 14, 16]:
                 last_oi_status = oi.last_oi_status
                 oi.oi_status = 4  # closed orderitem
                 oi.oi_draft = oi_draft

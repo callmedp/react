@@ -36,7 +36,7 @@ ANSWER_MAPPING_DICT = {
 }
 
 if __name__ == "__main__":
-    for file in os.listdir("/Users/gaurav/Desktop/20 files/"):
+    for file in os.listdir("/Users/gaurav/Desktop/newtest/"):
         product_id = file.split('_')[0]
         if not product_id.isnumeric():
             continue
@@ -46,7 +46,7 @@ if __name__ == "__main__":
             continue
 
         category = prod.category_main
-        df = pandas.read_excel("/Users/gaurav/Desktop/20 files/"+file)
+        df = pandas.read_excel("/Users/gaurav/Desktop/newtest/"+file)
         logging.getLogger('info_log').info('Reading File  - {}'.format(file))
         test_obj = Test.objects.create(product=prod,duration=600,title=prod.name,is_active=True)
         if category:

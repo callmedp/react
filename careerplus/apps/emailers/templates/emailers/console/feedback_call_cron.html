@@ -1,0 +1,50 @@
+{% load static %}
+{% spaceless %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Shine Learning</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+
+<body style="margin: 0; padding: 0;">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" style="max-width: 600px; border: 1px solid #efefef; font-family: arial; font-size: 13px; color: #666666; line-height: 20px;">
+  <tbody>
+    <tr>
+      <td bgcolor="#ffb48f">
+      	<strong style="text-align: center; display: block; font-size: 19px; font-weight: bold; color: #18549e; padding: 5px 10px 15px 10px;">
+      		Status Report of Feedback Call Entry Cron
+      	</strong>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 10px; background-color: #f8f8f8;">
+      	<strong style="font-size: 14px; display: block; font-weight: normal; color: #333333; padding-bottom: 5px; padding-top: 2px;">Hi All,</strong>
+      	<strong>Status Report:</strong>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:10px;background-color: #f8f8f8;">
+      	<table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding:15px 10px; background-color: #fff;">
+          <tbody>
+          <tr>
+           <td style=" padding:10px 0;">
+            	<ol style="margin: 0px; padding: 0px 15px;font-size: 14px;">
+            		<li style="padding-bottom: 10px;">  Feedback call entries created : {{new_feedback_entries}}.</li>
+                    <li style="padding-bottom: 10px;">  Feedback call entries updated : {{updated_feedback_entries}}.</li>
+                    <li style="padding-bottom: 10px;">  Feedback call entries failed : {{failed_feedback_entries}}.</li>
+                    <li style="padding-bottom: 10px;">  Feedback call cron start time : {{start_time}}.</li>
+                    <li style="padding-bottom: 10px;">  Feedback call cron end time : {{end_time}}.</li>
+            	</ol>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+</body>
+</html>
+{% endspaceless %}

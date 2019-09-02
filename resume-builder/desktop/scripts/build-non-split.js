@@ -15,11 +15,7 @@ config.optimization.splitChunks = {
 // Move runtime into bundle instead of separate file
 config.optimization.runtimeChunk = false;
 
-
 const currentTimeStamp = +new Date();
-
-
-console.log('--<><><>--', config);
 
 // JS
 config.output.filename = `../../../careerplus/static_core/react/dist/desktop/main-${currentTimeStamp}.js`;
@@ -30,11 +26,9 @@ config.plugins.push(new BundleTracker({
     filename: '../../../webpack-desktop-stats.json'
 }))
 
-console.log('----<<><>>>>>--', JSON.stringify(config))
 const result = {
     'staticUrl': process.env.REACT_APP_ENV === 'staging' ?
-        'https://learning-static-staging-189607.storage.googleapis.com/l1/s/' : '',
-
+        'https://learning-static-staging-189607.storage.googleapis.com/l1/s/' : 'https://static1.shine.com/l/s/',
 }
 
 

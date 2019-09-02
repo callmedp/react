@@ -14,7 +14,10 @@
     <link href="{% static 'packages/iCheck/skins/flat/green.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'packages/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet" type="text/css">
     <link type="text/css" href="{% static 'console/css/datepicker/daterangepicker.css' %}" rel="stylesheet">
+
     {% endcompress %}
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+
 
 {% endblock css_block %}
 
@@ -66,7 +69,23 @@
 <label class="radio-inline"><input type="radio" name="rad_search" value="email" {{email}}><b>Email</b></label>
 <label class="radio-inline"><input type="radio" name="rad_search" value="mobile" {{mobile}}><b>Mobile</b></label>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label class="radio-inline"><input type="radio" name="rad_search"value="product" {{product}}><b>product</b></label>
-
+{% if oi_status_val %}
+  {% for o in oi_status_val %}
+  <input type="hidden" name="oi_status" value="{{o}}">
+  {% endfor %}
+{% endif %}
+{% if request.GET.day_choice %}
+<input type="hidden" name="day_choice" value="{{request.GET.day_choice}}">
+{% endif %}
+{% if request.GET.payment_date %}
+<input type="hidden" name="payment_date" value="{{request.GET.payment_date}}">
+{% endif %}
+{% if request.GET.due_date %}
+<input type="hidden" name="due_date" value="{{request.GET.due_date}}">
+{% endif %}
+{% if request.GET.sort_value %}
+<input type="hidden" name="sort_value" value="{{request.GET.sort_value}}">
+{% endif %}
 
                       </div>
 </div>
@@ -104,10 +123,18 @@
                         <div class="form-group">
                             <label class="control-label col-md-12 col-sm-12 col-xs-12"> Payment Date<input class="form-control datepicker " id="id_filter_date" name="payment_date" placeholder="Payment Date"  value="{{ request.GET.payment_date}}" /></label></br>
                         </div>
+
+                         <div class="form-group">
+                            <label class="control-label col-md-12 col-sm-12 col-xs-12"> Due Date<input class="form-control datepicker " id="id_due_date" name="due_date" placeholder="Due Date"  value="{{ request.GET.due_date}}" /></label></br>
+                        </div>
                        {% if query %}
                            <input type="hidden" name="query" value="{{query}}">
                        {% endif %}
-                       <input type="hidden" name="sort_payment_date" value="{{request.GET.sort_payment_date}}">
+                       {% if request.GET.rad_search %}
+                          <input type="hidden" name="rad_search" value="{{request.GET.rad_search}}">
+                       {% endif %}
+
+                       <input type="hidden" name="sort_value" value="{{request.GET.sort_value}}">
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -199,21 +226,33 @@
                   <form autocomplete="off" method="GET" role="form" action="{% url "console:queue-whatsappjoblist" %}">
                     <div class="col-md-8">
                       <div class="input-group">
-                          <select class="form-control" name="sort_payment_date">
-                            <option value="0" {% if request.GET.sort_payment_date == '0' %} selected {% endif %}>Select</option>
-                            <option value="1"  {% if request.GET.sort_payment_date == '1' %} selected {% endif %}>Payment Date</option>
+                          <select class="form-control" name="sort_value">
+                            <option value="0" {% if request.GET.sort_value == '0' %} selected {% endif %}>Select</option>
+                            <option value="1"  {% if request.GET.sort_value == '1' %} selected {% endif %}>Payment Date</option>
+                            <option value="2"  {% if request.GET.sort_value == '2' %} selected {% endif %}>Due Date</option>
                           </select>
                           <span class="input-group-btn">
                                 <button type="submit" class="btn btn-primary" >Sort</button>
                           </span>
-                          {% if request.GET.oi_status %}
-                          <input type="hidden" name="oi_status" value="{{request.GET.oi_status}}">
+                          {% if oi_status_val %}
+                            {% for o in oi_status_val %}
+                            <input type="hidden" name="oi_status" value="{{o}}">
+                            {% endfor %}
                           {% endif %}
                           {% if request.GET.day_choice %}
                           <input type="hidden" name="day_choice" value="{{request.GET.day_choice}}">
                           {% endif %}
                           {% if request.GET.payment_date %}
                           <input type="hidden" name="payment_date" value="{{request.GET.payment_date}}">
+                          {% endif %}
+                          {% if request.GET.due_date %}
+                          <input type="hidden" name="due_date" value="{{request.GET.due_date}}">
+                          {% endif %}
+                          {% if request.GET.rad_search %}
+                          <input type="hidden" name="rad_search" value="{{request.GET.rad_search}}">
+                          {% endif %}
+                          {% if query %}
+                           <input type="hidden" name="query" value="{{query}}">
                           {% endif %}
                       </div>
                     </div>
@@ -243,8 +282,7 @@
                     {% endif %}
                     <th class="column-title">OrderId</th>
                     <th class="column-title">Name</th>
-                    <th class="column-title">Email</th>
-                    <th class="column-title">Mobile</th>
+                    <th class="column-title">Contact</th>
                     <th class="column-title">Item Name</th>
                     <th class="column-title">Flow Status</th>
                     <th class="column-title"> Payment Date</th>
@@ -253,8 +291,9 @@
                     <th class="column-title">Weeks</th>
                     <th class="column-title">Sent Links</th>
                     <th class="column-title">Saved Links</th>
-                    <th class="column-title">Total Supposed to be sent</th>
+                    <th class="column-title">Due Date</th>
                     <th class="column-title">Pending Links Count</th>
+                    <th class="column-title">Total Supposed to be sent</th>
                   </tr>
                 </thead>
 
@@ -275,28 +314,23 @@
                       </b>
                     </td>
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
-                                                         <td>
+                                                        <td>
                          <div>
                             <div id="email_field{{obj.order.id}}_{{forloop.counter}}"></div>
                         </div>
                         <div>
-                            <button type="button" class="btn btn-primary btn-xs" onclick="order_get_details('{{obj.order.id}}','email,alt_email','email','{{forloop.counter}}');"><i class="fa fa-search" aria-hidden="true"></i>ClickToView</button>
+                            <button type="button" class="btn btn-primary btn-xs" onclick="order_get_details('{{obj.order.id}}','email,alt_email','email','{{forloop.counter}}');"><i class="fa fa-search" aria-hidden="true"></i>View Email</button>
                         </div>
 
-                      </td>
 
-                        <td>
                     <div>
                         <div id="mobile_field{{obj.order.id}}_{{forloop.counter}}"> </div>
                         {% if exoitel_status %}
                         <button id="{{obj.order.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{obj.order.id}});"></button>
                         <span style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{obj.order.id}}callingbtn-error"></span>
                         {% endif %}
-                        <button type="button" onclick="order_get_details('{{obj.order.id}}','mobile,alt_mobile','mobile','{{forloop.counter}}');" class="btn btn-primary btn-xs"><i class="fa fa-phone" aria-hidden="true"></i>ClickToView</button>
-					         </div>
-
-
-                      </td>
+                        <button type="button" onclick="order_get_details('{{obj.order.id}}','mobile,alt_mobile','mobile','{{forloop.counter}}');" class="btn btn-primary btn-xs"><i class="fa fa-phone" aria-hidden="true"></i>View Mobile</button>
+                   </div>                                                       
                       <td>
                             {% if obj.parent and obj.is_variation %}
                               <strong>{{obj.parent.product.get_name}}{% if obj.parent.product.get_exp_db %} - Exp: {{obj.parent.product.get_exp_db}}{% endif %}:</strong><br/>
@@ -324,13 +358,20 @@
                           <b>Assigned On: {{obj.get_assigned_operation_date}}</b>
                       </td>
                       
-                      <td>{{obj.assigned_to}}</td>
+                      <td>{{obj.assigned_to_name}}</td>
                       {% with obj.get_weeks as weeks%}
                       <td>{{ weeks.1 }}/{{ weeks.0 }}</td>
-                      <td>{{ obj.sent_link }}/{{ obj.get_total_links_needs_to_sent }} </td>
+                      <td>{{ obj.sent_link_count }}/{{ obj.get_total_links_needs_to_sent }} </td>
                       <td>{{ obj.save_link }}</td>
-                      <td>{{ obj.get_links_needed_till_now }}</td>
+                      <td>{{ obj.get_due_date }} ({{ obj.get_due_date_weekday }})
+                        {% if obj.delayed %}
+                        <div class="text-center" title="Delayed Order">
+                          <i class="fa fa-warning" style="font-size:15px;color:red"></i>
+                        </div>
+                        {% endif %}
+                      </td>
                       <td>{{ obj.pending_links_count }}</td>
+                      <td>{{ obj.get_links_needed_till_now }}</td>
                       {% endwith %}
                     </tr>
                   {% endfor %}
@@ -416,10 +457,34 @@
         "dateLimit": {
            "month": 2
         },
+        locale: {
+          cancelLabel: 'Clear'
+        },
+        autoUpdateInput: false,
+      });
+    $('#id_due_date').daterangepicker({
+        'opens': 'center',
+        "dateLimit": {
+           "month": 2
+        },
+        locale: {
+          cancelLabel: 'Clear'
+        },
         autoUpdateInput: false,
       });
       $('input[name="payment_date"]').on('apply.daterangepicker', function(ev, picker) {
         $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+    });
+      $('input[name="due_date"]').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+    });
+    $('input[name="payment_date"]').on('cancel.daterangepicker', function(ev, picker) {
+      //do something, like clearing an input
+      $(this).val('');
+    });
+    $('input[name="due_date"]').on('cancel.daterangepicker', function(ev, picker) {
+      //do something, like clearing an input
+      $(this).val('');
     });
   </script>
   {% compress js %}
@@ -435,6 +500,17 @@
   <script type="text/javascript" src = "{% static 'console/js/order-info.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/datepicker/daterangepicker.js' %}"></script>
 
+
   {% endcompress %}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
+      <script>
+    var selectedValues = {{ oi_status_val| safe }}
+    $("#id_oi_status").select2({
+      multiple: true,
+      width: '100%',
+    });
+    $("#id_oi_status").val(selectedValues).trigger("change");
+
+    </script>
 
 {% endblock js_block %}

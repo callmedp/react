@@ -64,6 +64,41 @@
         <input id="skill" type="hidden" value=" {{skill}} ">
 
    </div>
+
+{% if prd_vendor_slug == 'neo' %}
+  <!-- Facebook Pixel Code -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '379551866029481');
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=379551866029481&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Facebook Pixel Code -->
+   
+   
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-N6D4P34');</script>
+  <!-- End Google Tag Manager -->
+
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N6D4P34"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  {% endif %}
 {% endblock main_container %}
 
 
@@ -134,6 +169,92 @@ $(document).ready(function() {
 {% if prd_vendor_slug == 'neo' %}
 
 <script>
+  $(document).on('click', '#id_callback_neo', function() {
+    $('#callback_form').validate({
+      rules:{
+        name:{
+            maxlength: 80,
+        },
+        number:{
+            required: true,
+            number: true,
+            indiaMobile: true,
+            // minlength: 4,
+            maxlength: 10
+        },
+        msg:{
+          required: true,
+          maxlength: 500,
+        },
+        email:{
+          required: true,
+          maxlength: 100,
+          email: true,
+        }
+      },
+      messages:{
+        name:{
+          required: "Name is Mandatory.",
+          maxlength: "Maximum 80 characters.",
+        },
+        email:{
+          required: "Email is Mandatory.",
+          maxlength: "Please enter at most 100 characters.",
+          email: "Please enter valid email"
+        },
+        number:{
+          required: "Mobile Number is Mandatory",
+          number: "Enter only number",
+          indiaMobile: "Please enter 10 digits only",
+          maxlength: "Please enter 10 digits",
+          // minlength: "Please enter atleast 4 digits"
+        },
+      },
+      highlight:function(element, errorClass) {
+          $(element).closest('.form-group').addClass('error');
+      },
+      unhighlight:function(element, errorClass) {
+          $(element).closest('.form-group').removeClass('error');
+          $(element).siblings('.error-txt').html('');
+      },
+      errorPlacement: function(error, element){
+          $(element).siblings('.error-txt').html(error.text());
+      },
+      ignore : '',
+      submitHandler: function(form){
+        // ga code
+        var path = window.location.pathname,
+            action = '';
+        if (path.indexOf('/course/') > -1) {
+          action = 'Course Enquiry';
+        } else if (path.indexOf('/services/') > -1) {
+          action = 'Service Enquiry';
+        }
+        MyGA.SendEvent('QueryForm', 'Form Interactions', action, 'success');
+        //form.submit();
+        var formData = $(form).serialize();
+        $.ajax({
+          url : "/lead/lead-management/",
+          type: "POST",
+          data : formData,
+          success: function(data, textStatus, jqXHR)
+          {
+            
+          },
+          error: function (jqXHR, textStatus, errorThrown)
+          {
+            alert('Oops Some error has occured. Kindly try again later.');
+            $("#detailpage").modal('toggle');
+            form.reset();
+          }
+        });
+      }
+    });
+
+    var flag = $('#callback_form').valid();
+    if (flag){
+      $('#callback_form').submit();}
+  });
   function load_test(email, name, country_code, mobile_no){
       global_email = email
       var iframe = document.getElementById('iframe'),
@@ -174,6 +295,8 @@ function getCookie(name) {
   return cookieValue;
 }
 function get_create_profile(email, name, country_code, mobile) {
+
+
     var data = {
         'email': email,
         'mobile_no': country_code + mobile ,
@@ -206,13 +329,22 @@ function check_for_load_test(data){
       if(data['has_completed']){
         //pass
         $(".neo-enroll-button").each(function(){
-          $(this).text('Buy Now');
+          $(this).attr("data-neotest", '0')
           $(this).attr('id', 'add-to-cart');
         });
 
        
         $('#neo-test-modal').modal('hide')
         $("#cefr_level").text(data['cefr_level'])
+        let title = 'Hey, I got ' + data['cefr_level'] +'. What about you?'
+        let description = 'I got CEFR ' + data['cefr_level'] + ' in this internationally recognized English Test. Check yours now'
+        let url = window.location.href + "?title=" + title + "&description=" + description + "&level=" + data['cefr_level'] + '&iframe=true&utm_campaign=scoreshare'
+        
+        var attr = $("#id_share").attr('data-href');
+
+        if (attr == undefined) {
+            $("#id_share").attr('data-href', encodeURI(url))
+        }
         $("#cefr_level_box").show()
         $("#row_neo").remove()
       }
@@ -242,8 +374,8 @@ function update_test_info(email){
         success: function(data, textStatus, jqXHR) {
           if(data['status'] == 'done'){
             $(".neo-enroll-button").each(function(){
+              $(this).attr("data-neotest", '0')
               $(this).attr('id', 'add-to-cart');
-              $(this).text('Buy Now');
             })
               var ifrm = document.getElementById('iframe');
               var doc = ifrm.contentDocument? ifrm.contentDocument: ifrm.contentWindow.document;
@@ -252,6 +384,14 @@ function update_test_info(email){
               btn.css('color', 'black')
               btn.css('background', '#ffcf26')
               $("#cefr_level").text(data['result']['pt_level'])
+              let title = 'Hey, I got ' + data['result']['pt_level'] +'. What about you?'
+              let description = 'I got CEFR ' + data['result']['pt_level'] + ' in this internationally recognized English Test. Check yours now'
+              let url = window.location.href + "?title=" + title + "&description=" + description + "&level=" + data['result']['pt_level'] + '&iframe=true&utm_campaign=scoreshare'
+              var attr = $("#id_share").attr('data-href');
+
+        if (attr == undefined) {
+            $("#id_share").attr('data-href', encodeURI(url))
+        }
               $("#cefr_level_box").show()
               $("#row_neo").remove()
 
@@ -280,6 +420,11 @@ function check_if_user_exists_for_another_vendor(email) {
 }
 
 
+jQuery.validator.addMethod("customEmail", function(value, element) {
+    var regex = /^([a-zA-Z0-9]+[a-zA-Z0-9_.+-]+)+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    return regex.test(value);
+}, "Enter valid email");
+
 {% if not request.session.candidate_id %}
  $('#neo-test-form').validate({
       submitHandler:function (form) {
@@ -293,6 +438,11 @@ function check_if_user_exists_for_another_vendor(email) {
           country_code = values['country_code'];
           mobile_no = values['mobile'];
           get_create_profile(email, name, country_code, mobile_no);
+          $('#callback_form').find('input[name="name"]').val(name)
+          $('#callback_form').find('input[name="email"]').val(email)
+          $('#callback_form').find('input[name="number"]').val(mobile_no)
+          $('#id_callback_neo').trigger('click')
+
       },
       rules:{
           mobile:{
@@ -304,6 +454,7 @@ function check_if_user_exists_for_another_vendor(email) {
           email:{
               email:true,
               required:true,
+              customEmail: true
 
           },
           name:{
@@ -359,8 +510,8 @@ $('#take-test_button').click(function(){
   });
 
 $('.neo-enroll-button').click(function(){
-    var text = $(this).text()
-    if(text=='Enroll now') {
+    neotest = $(this).attr("data-neotest")
+    if(neotest=='1') {
         $('#neo-info-modal').modal({
             backdrop: 'static',
             keyboard: false
@@ -392,23 +543,51 @@ $('iframe').load(function(){
     $(doc).on('click', '#neoStartButton', function() {
     setTimeout(function(){
         check_if_user_exists_for_another_vendor(global_email)
+        {% if request.session.candidate_id %}
+        $('#callback_form').find('input[name="name"]').val(global_name)
+        $('#callback_form').find('input[name="email"]').val(global_email)
+        $('#callback_form').find('input[name="number"]').val(global_mobile_no)
+        $('#id_callback_neo').trigger('click')
+        {% endif %}
+
     }, 1000) 
 
     });
 
     $(doc).on('click', "#neobackhomebutton", function(){
-      $('#neo-test-modal').modal('hide');
       $('#add-to-cart').trigger('click');
     })
 });
+
+$("#id_share").click(function(){
+
+  let url = $("#id_share").attr('data-href')
+  FB.ui({
+    method: 'share',
+    href: url,
+  }, function(response){});
+})
+
 
 {% if request.session.candidate_id %}
   let email = "{{ request.session.email }}";
   let name = "{{request.session.full_name}}";
   let country_code = "{{request.session.country_code}}";
   let mobile_no = "{{request.session.mobile_no}}";
+  var global_name = "{{request.session.full_name}}";
+  var global_mobile_no = "{{request.session.mobile_no}}";
   get_create_profile(email, name, country_code, mobile_no)
 
+{% else %}
+window.location.href.includes('&iframe')
+curr_url = window.location.href
+if(curr_url.includes('?iframe=')||curr_url.includes('&iframe=')){
+  $("#neo-test-form").show();
+  $('#neo-test-modal').modal({
+      backdrop: 'static',
+      keyboard: false
+  });
+}
 {% endif %}
 
 

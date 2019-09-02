@@ -144,6 +144,129 @@ h2 {
             color: $p-blue;
         }
     }
+
+    .testinside-home {
+
+        border: 1px solid $border;
+        background: $white-bg;
+        border-radius: $border-radius;
+        padding: 10px 10px 10px 0;
+        font-size: 16px;
+        box-shadow: $box-shadow;
+        align-items: center;
+        width: 22.4%;
+        min-height: 100px;
+        display: flex;
+        position: relative;
+        font-weight: $font-weight + 100;
+        margin: 20px 15px;
+        justify-content: center;
+        align-content: center;
+
+        @media(max-width: 1191px) {
+            width: 21.9%;
+        }
+
+        .border-left {
+            background: #BCF5E8;
+            height: 45px;
+            position: absolute;
+            top: 25%;
+            left: 0;
+            z-index: 1;
+            width: 5px;
+        }
+
+        .purple {
+            background: $purple;
+
+
+        }
+
+        .olive {
+            background: $olive;
+        }
+
+        .green {
+            background: $green;
+
+        }
+
+
+
+
+        a {
+            color: $btn-default-color;
+            display: flex;
+            padding-left: 15px;
+            min-height: 45px;
+            flex-direction: row;
+            /*flex-grow: 1;*/
+            justify-content: flex-start;
+            align-items: center;
+
+            &:hover{box-shadow: 0 3px 24px 0 #DEE7F3;
+            }
+
+
+
+            .white_hover {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                display: none;
+                background: $white-bg;
+                opacity: .8;
+                z-index: 3;
+                left: 0px;
+                box-shadow: 0 3px 24px 0 #DEE7F3;
+                top: 0;
+            }
+
+
+
+
+            .taketest {
+
+                display: none;
+                color: $white-bg;
+                border-radius: 42px;
+                font-size: 13px;
+                background: $p-blue;
+                width: 114px;
+                padding: 5px;
+                text-align: center;
+                position: absolute;
+                top: 35%;
+                left: 25%;
+                z-index: 10;
+
+            }
+
+            .test {
+
+                color: $primary-color;
+                font-size: 13px;
+                display: block;
+            }
+
+            &:hover .taketest,
+            &:hover .white_hover {
+                display: block;
+                cursor: pointer;
+
+            }
+
+        }
+
+        .test-box {
+            &:hover {
+                box-shadow: none;
+                color: $p-blue;
+            }
+        }
+
+    }
 }
 
 
@@ -292,13 +415,12 @@ h2 {
     padding-bottom: 20px;
     border-bottom-left-radius: 7px;
     border-bottom-right-radius: 7px;
+    max-width: 340px;
 
     h3 {
         font-size: $font-size+9;
         font-weight: $font-weight+300;
         color: $anchor-color;
-        max-width: 305px;
-        word-break: break-word;
     }
 
     ul {
@@ -360,6 +482,13 @@ h2 {
     border: 3px solid $yellow;
     border-bottom-left-radius: 7px;
     border-bottom-right-radius: 7px;
+
+    .pad-15 {
+        padding-top: 0;
+        padding-right: 15px;
+        padding-left: 15px;
+        padding-bottom: 0;
+    }
 }
 .recommended-head {
     background: $yellow;
@@ -1188,32 +1317,25 @@ input[type="button"] {
               left: 0;
               bottom: 0;
               margin: auto;
-              height: 8px;
-              width: 8px;
+              height: 10px;
+              width: 10px;
               background-color: #c9c9c9;
               border: 1px solid #c9c9c9;
               border-radius: 100%;
             }
         }
-
-        .custom-radio input:checked ~ .checkmark {
-          background-color: #c9c9c9;
-          border: 1px solid #c9c9c9;
-          /*width: 9px;
-          height: 9px;*/
-        }
-
-        .custom-radio .checkmark:after {
-            top: 0;
-            left: -1px;
-            right: 0;
-            bottom: 0;
-            margin: auto;
-            width: 9px;
-            height: 9px;
-            border-radius: 100%;
-            background: transparent;
-            border: 1px solid transparent;
-        }
     }
+}
+
+.txt {
+    font-size: 1.4rem;
+    color: #666;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 15%;
+    text-align: center;
+}
+
+.company-icons {
+    max-width: 100px;
 }

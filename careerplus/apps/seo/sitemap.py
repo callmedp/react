@@ -6,6 +6,7 @@ from django.conf import settings
 from shop.models import Product, Category, ProductCategory
 from cms.models import Page
 from blog.models import Blog, Category as BlogCategory, Author
+from assessment.models import Test
 
 EXCULDE_CATEGORY = [247, 176, 170, 145, 139, 87, 147, 132, 76, 73, 69, 65, 61, 249]
 
@@ -171,3 +172,77 @@ class TalentAuthorSitemap(CustomSitemap):
 
     def lastmod(self, item):
         return datetime.date.today() - datetime.timedelta(1)
+
+
+
+class PracticeTestExamSitemap(CustomSitemap):
+    changefreq = lambda x, y: random.choice(['daily', 'daily'])
+
+
+    def location(self, obj):
+        return "/practice-tests/{}-test/".format(obj.slug)
+
+    def priority(self, item):
+        return 0.6
+
+    def items(self):
+        return Test.objects.all()
+
+    def lastmod(self, item):
+        return datetime.date.today() - datetime.timedelta(1)
+
+
+class PracticeTestCategorySitemap(CustomSitemap):
+    changefreq = lambda x, y: random.choice(['daily', 'daily'])
+
+
+    def location(self, obj):
+        return '/practice-tests/{}/'.format(obj.slug)
+
+    def priority(self, item):
+        return 0.8
+
+    def items(self):
+        level3_category_ids = list(set(Test.objects.exclude(category=None).\
+                                       values_list('category__id',flat=True)))
+        if not level3_category_ids:
+            return Category.objects.none()
+        category_ids = Category.objects.filter(id__in=level3_category_ids, from_category__active=True,
+                                               from_category__is_main_parent=True).values_list \
+            ('from_category__related_to__id', flat=True)
+        if not category_ids:
+            return Category.objects.none()
+
+        return Category.objects.filter(id__in=category_ids)
+
+    def lastmod(self, item):
+        return datetime.date.today() - datetime.timedelta(1)
+
+
+
+class PracticeTestSubCategorySitemap(CustomSitemap):
+    changefreq = lambda x, y: random.choice(['daily', 'daily'])
+
+
+    def location(self, obj):
+        return '/practice-tests/{}/sub'.format(obj.slug)
+
+    def priority(self, item):
+        return 0.8
+
+    def items(self):
+        level3_category_ids = list(set(Test.objects.exclude(category=None).\
+                                       values_list('category__id',flat=True)))
+        if not level3_category_ids:
+            return Category.objects.none()
+        return Category.objects.filter(id__in=level3_category_ids)
+
+    def lastmod(self, item):
+        return datetime.date.today() - datetime.timedelta(1)
+
+
+
+
+
+
+
