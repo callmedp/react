@@ -136,7 +136,7 @@ class SkillPageView(DetailView, SkillPageMixin):
             content_type=prd_obj,
             status=1)
 
-        prod_page = Paginator(all_results, 1)
+        prod_page = Paginator(all_results, 5)
 
         try:
             products = prod_page.page(self.page)

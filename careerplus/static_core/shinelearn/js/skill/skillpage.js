@@ -179,7 +179,7 @@ $(function() {
         var prod_detail = '';
         $('#prod_loader_mobile').show();
         var loader = document.getElementById('prod_loader_mobile').innerHTML;
-        $.get('api/v1/load-more/',{"page": page, "page_size": 1, "pCtg" : pCtg, "pTF" : 16 ,"pTF_include" : false,  "fl" : "name,pCert,pURL,pImg,pNm,pNJ,pHd,pStar,pARx,pPin,pPfin,pPvn,pRC,discount"},
+        $.get('api/v1/load-more/',{"page": page, "page_size": 5, "pCtg" : pCtg, "pTF" : 16 ,"pTF_include" : false,  "fl" : "name,pCert,pURL,pImg,pNm,pNJ,pHd,pStar,pARx,pPin,pPfin,pPvn,pRC,discount"},
             (data)=>{
                 for(d in data.results){
                     prod_detail += `<div class="box row mb-15">
@@ -204,8 +204,8 @@ $(function() {
                                                         ${pARx}/5
                                                     </div>
                                                     <div class="inline-block fs-12">`;
-                    if(data.results[d].pRC > 0){ prod_detail +=`<figure class="icon-comments"></figure><a href="#">${data.results[d].pRC}</a>` }
-                    if(data.results[d].pNJ >0){ prod_detail += `<strong>${data.results[d].pNJ}</strong> Jobs` }
+                    if(Number(data.results[d].pRC) > 0){ prod_detail +=`<figure class="icon-comments"></figure><a href="#">${data.results[d].pRC}</a>` }
+                    if(Number(data.results[d].pNJ) > 0){ prod_detail += `<strong>${data.results[d].pNJ}</strong> Jobs` }
                     var list = data.results[d].pCert;
                     for(var i=0;i<list.length;i++)
                     {if(list[i]=='true'){prod_detail +=`<figure class="icon-certificate ml-10"></figure>Certification`; break;}}
@@ -221,7 +221,7 @@ $(function() {
                                     </p>
                                     <p class="pb-0 fs-12">
                                     Starting at <strong>Rs. ${pPin}/-</strong>`
-                    if(pPfin){
+                    if(pPfin > 0){
                         prod_detail +=`<strike>Rs. ${pPfin}/-</strike> <span class="discount">${data.results[d].discount}% OFF</span>`
                     }
                     prod_detail += `</p>
@@ -272,7 +272,7 @@ $(function() {
                     {
                         if(list[i]=='true'){prod_detail +=`<span class="certification-jobs"><figure class="certification-icon"></figure> Certification</span>`; break;}
                     }
-                    if(data.results[d].pNJ){
+                    if(Number(data.results[d].pNJ) > 0){
                         prod_detail +=  `<span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">${data.results[d].pNJ}</span> jobs available</span>`;
                     }
                     prod_detail += `</div>
@@ -294,7 +294,7 @@ $(function() {
                     </div>
                   <div class="pricing-box">
                     Starting at <strong>Rs. ${pPin}/-</strong>`;
-                    if(pPfin){
+                    if(pPfin > 0){
                         prod_detail += `<strike>Rs. ${pPfin}/-</strike> <span class="discount">${data.results[d].discount}% OFF</span>`
                     }
                     prod_detail += `
@@ -368,8 +368,8 @@ $(function() {
                                                         ${pARx}/5
                                                     </div>
                                                     <div class="inline-block fs-12">`;
-                    if(data.results[d].pRC > 0){ cert_detail +=`<figure class="icon-comments"></figure><a href="#">${data.results[d].pRC}</a>` }
-                    if(data.results[d].pNJ >0){ cert_detail += `<strong>${data.results[d].pNJ}</strong> Jobs` }
+                    if(Number(data.results[d].pRC) > 0){ cert_detail +=`<figure class="icon-comments"></figure><a href="#">${data.results[d].pRC}</a>` }
+                    if(Number(data.results[d].pNJ) >0){ cert_detail += `<strong>${data.results[d].pNJ}</strong> Jobs` }
                     var list = data.results[d].pCert;
                     for(var i=0;i<list.length;i++)
                     {if(list[i]=='true'){cert_detail +=`<figure class="icon-certificate ml-10"></figure>Certification`; break;}}
@@ -392,7 +392,7 @@ $(function() {
                     cert_detail += `</p>
                                     <p class="pb-0 fs-12">
                                     Starting at <strong>Rs. ${pPin}/-</strong>`
-                    if(pPfin){
+                    if(pPfin > 0 ){
                         cert_detail +=`<strike>Rs. ${pPfin}/-</strike> <span class="discount">${data.results[d].discount}% OFF</span>`
                     }
                     cert_detail += `</p>
@@ -438,9 +438,9 @@ $(function() {
             dataType: 'json',
             success: function(data){
                 for(d in data.results){
-                    cert_detail =  cert_detail + `<li class="box-panel"><a title="${data.results[d].name}" href="${data.results[d].pURL}"><div class="media"><div class="media-left"><img aria-label="${data.results[d].name}" class="media-object" src="${data.results[d].pImg}" alt="${data.results[d].pNm}" height="130px" width="130px"></div><div class="media-body"><div class="certification-jobs-box">`;
+                    cert_detail =  cert_detail + `<li class="box-panel" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a title="${data.results[d].name}" href="${data.results[d].pURL}"><div class="media"><div class="media-left"><img aria-label="${data.results[d].name}" class="media-object" src="${data.results[d].pImg}" alt="${data.results[d].pNm}" height="130px" width="130px"></div><div class="media-body"><div class="certification-jobs-box">`;
                     var cert_list = data.results[d].pCert; 
-                    for(var i=0; i<cert_list.length ; i++){
+                    for(var i=0; i<cert_list.length ; i++){itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"
                         if(cert_list[i] == 'true'){
                             cert_detail += `<span class="certification-jobs"><figure class="certification-icon"></figure>Certification</span>`; break;
                         }
@@ -465,26 +465,25 @@ $(function() {
                                                Providers
                                                <span>${data.results[d].pPvn}</span>
                                             </div>
-                                          <div class="pricing-box">
-                                          <div class="pull-left">
-                                            Starting at <strong>Rs. ${pPin}/-</strong>`;
-                                            if(pPfin){
-                                                cert_detail += `<strike>Rs. ${pPfin}/-</strike> <span class="discount">${data.results[d].discount}% OFF</span>`;
-                                            }
-                                            cert_detail += `</div>
-                                            <ul class="pull-right pricing-box__lists">`;
-                                            var pAsft = JSON.parse(data.results[d].pAsft[0]);
+                                             <ul class="que-duration">`;
+                                             var pAsft = JSON.parse(data.results[d].pAsft[0]);
                                             if(pAsft["number_of_questions"]){
                                                 cert_detail +=`<li>No. of questions : <span>${pAsft["number_of_questions"]}</span></li>`
                                             }
                                             if(pAsft["test_duration"]){
                                                 cert_detail += `<li>Duration: <span>${pAsft["test_duration"]}mins</span></li>`
-                                            }
+                                            }  
                                             cert_detail+=`</ul>
+                                          <div class="pricing-box">
+                                          <div class="pull-left">
+                                            Starting at <strong>Rs. ${pPin}/-</strong>`;
+                                            if(pPfin > 0){
+                                                cert_detail += `<strike>Rs. ${pPfin}/-</strike> <span class="discount">${data.results[d].discount}% OFF</span>`;
+                                            }
+                                            cert_detail += `</div>
                                           </div>
                                         </div>
                                         </div>
-                                        </a>
                                         </li> `
                 }
                 var img = document.getElementById('cert_loader').innerHTML;
