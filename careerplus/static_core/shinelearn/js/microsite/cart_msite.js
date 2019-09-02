@@ -2,6 +2,7 @@ $(document).ready(function() {
 
     $('.enrol-now-button').click(function() {
         var prod_id = $('.enrol-now-button').attr('prod-id');
+        ga('send', 'event', 'Buy Flow', 'Enroll Now',prod_id);
         if (prod_id){
 
             var cart_type = "express";
