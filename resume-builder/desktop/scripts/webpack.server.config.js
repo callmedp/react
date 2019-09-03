@@ -7,7 +7,6 @@ const fs = require('fs');
 
 module.exports = env => {
 
-    fs.writeFileSync("/tmp/react_build_version.txt", `${env}`, 'utf8');
 
     return {
         mode: 'development',
@@ -45,14 +44,7 @@ module.exports = env => {
 
         resolve: {
             extensions: [".js", ".jsx", ".json", ".wasm", ".mjs", "*"]
-        }
-        ,
-        plugins: [
-            new webpack.DefinePlugin({
-                    'process.env.TEMPLATE': JSON.stringify(env)
-                }
-            )
-        ],
+        },
         externals:
             [webpackNodeExternals()]
     };

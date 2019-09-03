@@ -11,8 +11,7 @@ import {matchRoutes} from 'react-router-config';
 
 const fs = require('fs');
 
-export default (pathname, store, context, timeStamp) => {
-
+export default (pathname, store, context, timeStamp, staticUrl) => {
     const content = renderToString( < Provider
     store = {store} >
         < StaticRouter
@@ -26,7 +25,7 @@ export default (pathname, store, context, timeStamp) => {
       <html lang="en">
       <head>
         <base href="${"/resume-builder/"}" />
-         <link type="text/css" href="dist/main.css" rel="stylesheet" />
+         <link type="text/css" href="${staticUrl}react/dist/desktop/main-${timeStamp}.css" rel="stylesheet" />
          <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
               integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
               crossorigin="anonymous">
@@ -34,7 +33,7 @@ export default (pathname, store, context, timeStamp) => {
               href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"/>
         <link rel="stylesheet" type="text/css"
           href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"/>
-        <link type="text/css" href="https://static1.shine.com/l/s/shinelearn/css/resume-builder/resume6.css" rel="stylesheet">
+        <link type="text/css" href="${staticUrl}shinelearn/css/resume-builder/resume6.css" rel="stylesheet">
         <meta charset="UTF-8">
         <title>${context.title}</title>
       </head>
@@ -43,7 +42,7 @@ export default (pathname, store, context, timeStamp) => {
       <script>
         window.INITIAL_STATE = ${JSON.stringify(store.getState())}
       </script>
-      <script type="text/javascript" src="dist/main.js"></script>
+      <script type="text/javascript" src="${staticUrl}react/dist/desktop/main-${timeStamp}.js"></script>
       </body>
       </html>
   `;

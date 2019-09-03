@@ -12,7 +12,7 @@ import render from './render';
 
 const fs = require('fs');
 
-const timestamp = fs.readFileSync('/tmp/react_build_version.txt', "utf8");
+const timestamp = process.argv && process.argv.length && process.argv[2] || null;
 
 
 if (typeof window == 'undefined') {
@@ -24,8 +24,6 @@ if (typeof window == 'undefined') {
         },
     }
 }
-
-console.log('======', window.config);
 
 if (typeof fetch == 'undefined') {
     global.fetch = require('node-fetch');
@@ -46,7 +44,6 @@ if (typeof localStorage == 'undefined') {
         token: "da3b4f42ce9c2c5cd1d2d81750ca7db51c71e645"
     }
 }
-console.log('000000', process.argv[0]);
 const PORT = process.env.PORT || 8079;
 const app = express();
 let context = {
@@ -76,7 +73,7 @@ app.get('*', async (req, res) => {
     }
     // console.log('result ====', result, context);
 
-    const content = render(req.path, store, context, timestamp);
+    const content = render(req.path, store, context, timestamp, window.config.staticUrl);
     res.send(content);
 });
 
