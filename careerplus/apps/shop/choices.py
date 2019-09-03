@@ -72,6 +72,9 @@ SUB_FLOWS = {
     16: (
         (1601, "Free Test"),
         (1602, "Paid Test")
+    ),
+    2: (
+        (201, "Certificate Product")
     )
 
 }
