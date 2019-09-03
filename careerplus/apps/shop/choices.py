@@ -74,6 +74,7 @@ SUB_FLOWS = {
         (1602, "Paid Test")
     ),
     2: (
+        (200, "Default"),
         (201, "Certificate Product"),
     ),
 
