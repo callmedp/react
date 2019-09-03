@@ -35,7 +35,7 @@ class BadgingMixin(object):
                 return {}
 
     def get_badging_value_for_order(self, candidate_id, curr_order_item):
-        if curr_order_item.product.sub_type_flow in [1602]:
+        if curr_order_item.product.sub_type_flow in [1602, 201]:
             filter_kwargs = {
                 'vendor': curr_order_item.product.vendor,
                 'sub_type_flow': curr_order_item.product.sub_type_flow

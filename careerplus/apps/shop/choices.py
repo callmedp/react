@@ -74,8 +74,13 @@ SUB_FLOWS = {
         (1602, "Paid Test")
     ),
     2: (
+<<<<<<< Updated upstream
         (201, "Certificate Product")
     )
+=======
+        (201, "Certificate Product"),
+    ),
+>>>>>>> Stashed changes
 
 }
 
