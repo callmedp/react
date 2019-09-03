@@ -36,7 +36,7 @@ ANSWER_MAPPING_DICT = {
 }
 
 if __name__ == "__main__":
-    for file in os.listdir("/Users/gaurav/Desktop/newtest/"):
+    for file in os.listdir("/Users/gaurav/Desktop/newtestproducts/"):
         product_id = file.split('_')[0]
         if not product_id.isnumeric():
             continue
@@ -44,9 +44,8 @@ if __name__ == "__main__":
         if not prod:
             logging.getLogger('info_log').info('No Product found for - {}'.format(product_id))
             continue
-
         category = prod.category_main
-        df = pandas.read_excel("/Users/gaurav/Desktop/newtest/"+file)
+        df = pandas.read_excel("/Users/gaurav/Desktop/newtestproducts/"+file, dtype=str)
         logging.getLogger('info_log').info('Reading File  - {}'.format(file))
         test_obj = Test.objects.create(product=prod,duration=600,title=prod.name,is_active=True)
         if category:
@@ -65,10 +64,10 @@ if __name__ == "__main__":
                 if index == 0:
                     question_dict.update({'question_text': value})
                     continue
-                if question_array[-1] == index or question_array[-1] == ANSWER_MAPPING_DICT.get(question_array[-1]):
-                    option_dict.update({'is_correct': 1})
+                if question_array[-1] == str(index) or question_array[-1] == str(ANSWER_MAPPING_DICT.get(question_array[-1])):
+                    option_dict.update({'is_correct': '1'})
                 else:
-                    option_dict.update({'is_correct': 0})
+                    option_dict.update({'is_correct': '0'})
                 option_dict.update({'option': value, 'option_id': str(question_object.id) +
                                     ANSWER_MAPPING_DICT.get(index), 'option_image': ''})
                 option_list.append(option_dict)
