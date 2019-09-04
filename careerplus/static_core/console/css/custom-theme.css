@@ -510,6 +510,11 @@
     width: 100%;
 }
 
+.order_details_table__message form textarea:focus {
+    outline-width: 0;
+    outline-style: none;
+}
+
 .order_details_table__message form label {
     color: #666;
     font-size: 1.2rem;
@@ -517,3 +522,92 @@
     display: bl
 }
 
+/* modal css*/
+.alternatecontact__bg {
+    width: 211px;
+    height: 147px;
+    display: block;
+    background: url(../images/add-contact.png) no-repeat;
+    margin: 0 auto;
+}
+
+.alternatecontact__header {
+    padding: 15px 15px 0 15px;
+    border-bottom: none;
+}
+
+.alternatecontact__close {
+    font-size: 2.8rem;
+    color: #333;
+    font-weight: 300;
+}
+
+.alternatecontact .modal-body {
+    padding-top: 0;
+}
+
+.alternatecontact__heading {
+    font-weight: 600;
+    font-size: 2rem;
+    color: #333;
+}
+#alternatecontact_modal .modal-dialog {
+    width: 440px;
+}
+.alternatecontact .form-group{
+    position: relative;
+    margin: 0 20px 20px 20px;
+}
+.alternatecontact .form-group label{
+    position: absolute;
+    left: 10px;
+    top:8px;
+    font-weight: 400;
+    font-size: 1.3rem;
+    background: #fff;
+    padding: 3px;
+    pointer-events: none;
+}
+.alternatecontact .form-group .form-control{
+    
+    border-radius: 5px;
+    box-shadow: none;
+}
+.alternatecontact .form-group input:focus + label,.alternatecontact .form-group input:not(:placeholder-shown) + label{
+    opacity:1;
+    transform: scale(.9) translateY(-100%) translateX(-10px);
+    color: #4576BA;
+}
+.alternatecontact .form-group input:focus{
+    border:1px solid #4576BA;
+    outline-color: #4576BA;
+}
+
+.alternatecontact .form-group input{
+    width:100%;
+    padding-left: 10px;
+    height: 45px;
+}
+.alternatecontact .form-group label,.alternatecontact .form-group input{
+    transition: all 0.2s;
+    transition-timing-function: ease;
+    transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    opacity:0.5;
+}
+
+.alternatecontact form .error{
+    position: relative;
+}
+.alternatecontact form .error input{
+    border: 1px solid #ff0000 !important;
+}
+.alternatecontact form .error .error-txt{
+    display: block;
+    color: #ff0000;
+    font-size: 1.1rem;
+    position: absolute;
+    left: 0;
+    bottom: -13px;
+    z-index: 9;
+    font-weight: 400;
+}
