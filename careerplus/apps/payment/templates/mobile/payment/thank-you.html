@@ -115,6 +115,10 @@
                  <div>
                     <input type="checkbox" checked class="upload-checkbox" onclick="uploadResumeShine(this,{{order.id}})" /> <span>Upload new resume post service completion</span>
                   </div>
+                  {% if booster_item_exist %}
+                    <div class="resume-booster-msg">* Uploaded resume will be boosted</div>
+                  {% endif %}
+                  
                 <button type="button" class="btn btn-blue mt-0" id="resume-sumbmit-button">Proceed</button>
                </div>
          </form>

@@ -140,7 +140,7 @@ class DashboardInfo(object):
         if not candidate_id and (not file and not list_ids):
             return
         
-        order_items = OrderItem.objects.filter(order__status__in=[0,1], id__in=list_ids,
+        order_items = OrderItem.objects.filter(order__status__in=[0,1], id__in=list_ids,oi_status=2,
                                                     order__candidate_id=candidate_id, no_process=False)
         resume_path = None
         for oi in order_items:

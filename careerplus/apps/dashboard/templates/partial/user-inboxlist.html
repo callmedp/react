@@ -216,6 +216,7 @@
             {% elif obj.product.type_flow == 7 or obj.product.type_flow == 15 %}
                 {% if obj.oi_status == 2 %}
                 <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a role="button" class="upload-resume">Upload Resume</a></p>
+                <div class="booster-msg">* Uploaded resume will be boosted</div>
                 {% else %}
                     <p><strong>Status:-</strong> {{obj.get_user_oi_status}} {% if obj.oi_draft.name %} - <a href="{% url "dashboard:dashboard-resumedownload" obj.order.pk %}?path={{obj.oi_draft.name}}">Download</a></p> {% endif %}
                 {% endif %}
