@@ -1540,35 +1540,45 @@ class ClaimOrderAPIView(APIView):
     permission_classes = [IsAuthenticated, IsAdminUser]
 
     def post(self,request):
-        txn_id = self.request.POST.get('txn_id')
-        email = self.request.POST.get('email')
-        alt_email = self.request.POST.get('alt_email')
-        mobile = self.request.POST.get('mobile')
-        alt_mobile = self.request.POST.get('alt_mobile')
-        user_id = self.request.POST.get('user_id')
-        lead_id = self.request.POST.get('lead_id')
+        txn_id = self.request.POST.get('txn_id',None)
+        email = self.request.POST.get('email',None)
+        alt_email = self.request.POST.get('alt_email',None)
+        mobile = self.request.POST.get('mobile',"")[-10:]
+        alt_mobile = self.request.POST.get('alt_mobile',"")[-10:]
+        user_id = self.request.POST.get('user_id',None)
+        lead_id = self.request.POST.get('lead_id',None)
+        name = self.request.POST.get('name',None)
+
         sales_user_info = self.request.POST.get('sales_user_info')
         data = {'claim_order': False}
         if not txn_id:
-            return Response(data)
+            data.update({'msg': "Transaction id not found"})
+            return Response(data, status=400)
         payment_object = PaymentTxn.objects.filter(txn=txn_id).first()
         if not payment_object:
-            return Response(data)
+            data.update({'msg': "Transaction object not found "})
+            return Response(data, status=400)
         order = payment_object.order
         if not order:
-            return Response(data)
-        if getattr(order, 'email') == email or getattr(order, 'alt_email') == alt_email \
-           or getattr(order, 'mobile') == mobile or getattr(order, 'alt_mobile') == alt_mobile:
+            data.update({'msg': "Order object not found "})
+            return Response(data,  status=400)
+        if (email and getattr(order, 'email') == email) or (alt_email and getattr(order, 'alt_email') == alt_email) or\
+                (mobile and getattr(order, 'mobile') == mobile) or\
+                (alt_mobile and getattr(order, 'alt_mobile') == alt_mobile)\
+                or (name and order.full_name == name):
             if order.sales_user_info or order.crm_lead_id or order.crm_sales_id:
-                return Response(data)
+                data.update({'msg': "Order is already claimed"})
+                return Response(data, status=400)
             if not user_id or not lead_id or not sales_user_info:
-                return Response(data)
+                return Response(data, status=400)
             order.crm_lead_id = lead_id
             order.crm_sales_id = user_id
             order.sales_user_info = sales_user_info
             order.save()
+            data.update({'msg': 'Order claimed successfully'})
             return Response({'claim_order': True})
-        return Response(data)
+        data.update({"msg": "Invalid details"})
+        return Response(data, status=400)
 
 
 
