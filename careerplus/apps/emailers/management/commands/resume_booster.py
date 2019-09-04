@@ -52,7 +52,6 @@ def booster():
                     last_oi_status=oi.last_oi_status,
                     assigned_to=oi.assigned_to,
                 )
-            continue
         elif oi.oi_status == 62:
             last_oi_status = oi.oi_status
             oi.oi_status = 4
