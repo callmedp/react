@@ -83,7 +83,10 @@ class AssessmentLandingPage(TemplateView):
     def get_func_area_ids(self):
         # category_ids = list(set(Test.objects.filter(category__categoryproducts__type_flow=16,category__active=True)\
         #     .values_list('category__id', flat=True)))
-        category_ids = list(set(Test.objects.exclude(category=None).values_list('category__id',flat=True)))
+        category_ids = set(Test.objects.exclude(category=None).values_list('category__id',flat=True))
+        all_categories_ids = set(Test.objects.values_list('categories',flat=True)\
+            .exclude(categories=None).exclude(category=None))
+        category_ids = list(filter(None,category_ids|all_categories_ids))
         return category_ids
 
     def get_test(self):
@@ -129,11 +132,13 @@ class AssessmentCategoryPage(DetailView):
         context = super(AssessmentCategoryPage, self).get_context_data(**kwargs)
         context.update({'breadcrumbs': self.get_breadcrumbs()})
         category = self.object.get_childrens()
-        cat_ids = Test.objects.exclude(category=None).values_list('category__id', flat=True)
+        cat_ids = set(Test.objects.exclude(category=None).values_list('category__id', flat=True))
+        all_cat_ids = set(Test.objects.exclude(category=None,categories=None)
+                          .values_list('categories__id',flat=True))
+        cat_ids = list(filter(None,cat_ids|all_cat_ids))
         category = category.filter(id__in=cat_ids)
         context.update({'category': category})
         return context
-
 
 class AssessmentSubCategoryPage(DetailView):
     template_name = 'vskill/brand-manager-test.html'
@@ -157,7 +162,7 @@ class AssessmentSubCategoryPage(DetailView):
 
     def get_free_test(self):
         category = self.object
-        all_test = category.test_set.all()
+        all_test = category.testcategories.all()
         return all_test
 
     def get_context_data(self, **kwargs):
