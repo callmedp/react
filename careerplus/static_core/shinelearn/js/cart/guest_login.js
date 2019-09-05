@@ -84,8 +84,8 @@ $(document).ready(function () {
                 required: true,
                 digits: true,
                 indiaMobile: true,
-                minlength: 3,
-                maxlength: 15,
+                minlength: 6,
+                maxlength: 13,
                 messages : { 
                     required: 'Contact is required.',
                     digits: 'only digit accepted.',
