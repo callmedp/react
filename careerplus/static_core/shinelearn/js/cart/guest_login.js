@@ -60,6 +60,42 @@ $(document).ready(function () {
         return exists
 
     };
+
+    $('#country_code').on('select2:select', function (e) {
+        let data = e.params.data
+        if(data && data.id && data.id === "91"){
+            $("#guest-mobile").rules("add", {
+                required: true,
+                digits: true,
+                indiaMobile: true,
+                minlength: 10,
+                maxlength: 10,
+                messages : { 
+                    required: 'Contact is required.',
+                    digits: 'only digit accepted.',
+                    indiaMobile: 'length must be 10 digits.',
+                    minlength: 'length must be greater than 10 digits.',
+                    maxlength: 'length must be less than 10 digits.',
+                 }
+             });
+        }
+        else{
+            $("#guest-mobile").rules("add", {
+                required: true,
+                digits: true,
+                indiaMobile: true,
+                minlength: 3,
+                maxlength: 15,
+                messages : { 
+                    required: 'Contact is required.',
+                    digits: 'only digit accepted.',
+                    indiaMobile: 'length must be 10 digits.',
+                    minlength: 'length must be greater than 3 digits.',
+                    maxlength: 'length must be less than 15 digits.',
+                 }
+             });
+        }
+    });
     /*
     * Fetch Country List
     * */
@@ -70,11 +106,12 @@ $(document).ready(function () {
                 delay: 300,
                 url: `${site_domain}/api/v1/geolocation/country/`,
                 data: function (params) {
-
+                    params.term = (params.term || '').trim()
+                    params.term =  params.term && params.term[0] === '+' ? params.term.substring(1) : params.term
                     let query = {
                         page: params.page || 1,
                         page_size: 10,
-                        search: (params.term || '').trim()
+                        search: params.term
                     };
                     return query;
                 },

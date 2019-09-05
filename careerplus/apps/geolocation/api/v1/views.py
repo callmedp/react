@@ -8,6 +8,7 @@ from django.conf import settings
 from django.template.loader import get_template
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django_redis import get_redis_connection
+from django.db.models import Q
 
 # local imports
 from geolocation.models import Country
@@ -82,7 +83,8 @@ class CountryListView(ListAPIView):
         query_value_list = []
 
         if search_text is not None:
-            return Country.objects.only('id', 'name', ).filter(active=True, name__icontains=search_text)
+            return Country.objects.only('id', 'name','phone', ).filter(active=True).\
+                    filter(Q(name__icontains=search_text)| Q(phone__icontains=search_text) )
 
         else:
             return Country.objects.only('id', 'name', ).filter(active=True)

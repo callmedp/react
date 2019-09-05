@@ -35,8 +35,8 @@ $().ready(function() {
                     required: true,
                     digits: true,
                     indiaMobile: true,
-                    minlength: 4,
-                    maxlength: 15,
+                    minlength: 10,
+                    maxlength: 10,
                 },
                 country_code:{
                     required: true,
@@ -72,8 +72,8 @@ $().ready(function() {
                 required: 'Contact is required.',
                 digits: 'only digit accepted.',
                 indiaMobile: 'length must be 10 digits.',
-                minlength: 'length must be greater than 3 digits.',
-                maxlength: 'length must be less than 15 digits.',
+                minlength: 'length must be greater than 10 digits.',
+                maxlength: 'length must be less than 10 digits.',
             },
             country_code:{
                 required: 'this value is required.',
