@@ -117,7 +117,11 @@ Shine learning brings to you one of the largest collection of test preps for all
                      </span>
                    </span>
                    <figure class="company-icons">
-                     <img class="img-responsive" src= "https://static1.shine.com/l/m/product_image/1665/1509120908_7316.png" alt="company-icons">
+                             {% if fa.icon %}
+                     <img class="img-responsive" src= "{{fa.icon.url}}" alt="fa-icons"></span>
+                          {% else %}
+                        <span><img class="img-responsive" src="#" alt="fa-icons"></span>
+                       {% endif %}
                    </figure>
                   </a>
                </div>
