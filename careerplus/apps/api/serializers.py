@@ -18,7 +18,7 @@ from users.models import User
 from geolocation.models import Country
 
 from shared.rest_addons.mixins import (SerializerFieldsMixin,
-ListSerializerContextMixin, ListSerializerDataMixin)
+ListSerializerContextMixin, ListSerializerDataMixin,ImageThumbnailMixin)
 from django.core.cache import cache
 
 from django.utils.text import slugify
@@ -446,7 +446,8 @@ class ImportCertificateSerializer(Serializer):
     def get_vendor_provider(self, obj):
         return self.vendor_provider
 
-class TalentEconomySerializer(SerializerFieldsMixin, ListSerializerContextMixin, ListSerializerDataMixin,ModelSerializer):
+class TalentEconomySerializer(ImageThumbnailMixin,SerializerFieldsMixin,
+                              ListSerializerContextMixin, ListSerializerDataMixin,ModelSerializer):
 
 
     list_lookup_fields = ['p_cat_id', 'sec_cat_id', 'tags_id', 'author_id', 'user_id', 'speakers_id', ]

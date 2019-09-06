@@ -1,4 +1,12 @@
+#python imports
+import logging
+import rest_framework
+
 from collections import OrderedDict
+
+#3rd party imports
+from sorl.thumbnail import get_thumbnail
+
 
 
 class SerializerFieldsMixin(object):
@@ -284,3 +292,38 @@ class ListSerializerDataMixin(object):
                 item_id_mapping.update({str(parent_item.id): data})
 
         return item_id_mapping
+
+
+class ImageThumbnailMixin(object):
+
+    def to_representation(self, instance):
+        ret = super(ImageThumbnailMixin, self).to_representation(instance)
+
+        image_fields = [im for im in self.fields if type(self.fields.get(im)) ==
+                        rest_framework.fields.ImageField]
+        if not image_fields:
+            return ret
+
+        request = self.context.get('request')
+        if not request:
+            return ret
+
+        images_to_be_processed = [field for field in image_fields if
+                                  request.query_params.get(field + '_size')]
+        if not images_to_be_processed:
+            return ret
+
+        for img in images_to_be_processed:
+            if not ret.get(img):
+                continue
+            for size in request.query_params.get(img + '_size').split(','):
+                try:
+                    ret.update({img + '_' + str(size): get_thumbnail(ret.get(
+                                    img),size,crop='center',quality=99).url})
+                except Exception as e:
+                    logging.getLogger('error_log').error(str(e))
+        return ret
+
+
+
+
