@@ -186,26 +186,22 @@
                 |
                 <a href="javascript:void(0)" onclick="toggler('shineCredit','showCoupon',false) ;">Redeem Shine credit</a>
                 {% endif %}
-                  <form action="." id="discountForm">
-                    <div id="showCoupon" class="hidden-div">
-                      <div class="form-group pr">
-                        <input id="discount_code" type="text" placeholder="Enter coupon code" name="code" maxlength="15">
-                         <span class="error-txt" id="discount-alert"></span>
-                        <button type="button" onclick="JSApplyDiscount();">Apply</button>
-                      </div>
+                  <div id="showCoupon" class="hidden-div">
+                    <div class="form-group pr">
+                      <input id="discount_code" type="text" placeholder="Enter coupon code" name="code" maxlength="15">
+                        <span class="error-txt" id="discount-alert"></span>
+                      <button type="button" id="discount-apply" onclick="JSApplyDiscount();">Apply</button>
                     </div>
-                  </form>
-
-                  <form action="." id="walletForm">
-                    <div id="shineCredit" class="hidden-div">
-                      You have {{wallet_total}} shine loyalty points.
-                      <div class="form-group">
-                        <input id="loyalty_point" type="number" placeholder="Enter loyalty points" min="0" max="{{wallet_total}}" name="point">
-                        <span class="error-txt" id="point-alert" ></span>
-                        <button type="button" class="add-redeem-button" onclick="JSApplyPoint();">Redeem</button>
-                      </div>
+                  </div>
+                
+                  <div id="shineCredit" class="hidden-div">
+                    You have {{wallet_total}} shine loyalty points.
+                    <div class="form-group">
+                      <input id="loyalty_point" type="number" placeholder="Enter loyalty points" min="0" max="{{wallet_total}}" name="point">
+                      <span class="error-txt" id="point-alert" ></span>
+                      <button type="button" class="add-redeem-button" id="loyalty-point-apply" onclick="JSApplyPoint();">Redeem</button>
                     </div>
-                  </form>
+                  </div>
 
               {% endif %}
               </span>

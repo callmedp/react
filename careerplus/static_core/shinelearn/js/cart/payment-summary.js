@@ -259,4 +259,18 @@ $(document).ready(function () {
     $('#payment-summary-continue-id').click(function () {
         $('#payment-summary-continue-id').attr('disabled', true);
     });
+
+    $("#discount_code").keyup(function(event) {
+        event.preventDefault()
+        if (event.keyCode === 13) {
+            $("#discount-apply").click();
+        }
+    });
+
+    $("#loyalty_point").keyup(function(event) {
+        event.preventDefault()
+        if (event.keyCode === 13) {
+            $("#loyalty-point-apply").click();
+        }
+    });
 });

@@ -145,7 +145,7 @@
       <div class="apply border-top mt-15 pt-30">
           <div class="apply__wrap">
               <input id="discount_code" type="text" placeholder="Enter coupon code" name="code" maxlength="15" class="apply__wrap--input">
-              <button class="btn btn-lg btn-round btn-blue" type="button" onclick="JSApplyDiscount();">Apply</button>
+              <button class="btn btn-lg btn-round btn-blue" id="discount-apply" type="button" onclick="JSApplyDiscount();">Apply</button>
           </div>
               <p class="error-txt" id="discount-alert"> </p>
       </div>
@@ -160,7 +160,7 @@
                          min="0"
                          max="{{wallet_total}}"
                          class="apply__wrap--input">
-                  <button class="btn btn-lg btn-round btn-blue" type="button" onclick="JSApplyPoint();">Reedem</button>
+                  <button class="btn btn-lg btn-round btn-blue" id="loyalty-point-apply" type="button" onclick="JSApplyPoint();">Reedem</button>
               </div>
              <p class="error-txt" id="point-alert">Required</p>
          </div>
