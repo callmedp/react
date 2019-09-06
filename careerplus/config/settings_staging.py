@@ -413,6 +413,13 @@ NEO_URL = {
 NEO_USERNAME = 'shineadmin@shine.com'
 NEO_PASSWORD = 'MPgddK5vpM'
 
+#Candidate Mongo Settings
+CANDIDATE_MONGO_PORT = ':27017'
+CANDIDATE_MONGO_USERNAME = 'candadmin'
+CANDIDATE_MONGO_PASSWORD = 'candadmin'
+CANDIDATE_MONGO_INSTANCE_STR = '172.22.67.226:27017'
+CANDIDATE_MONGO_DB = 'sumoplus'
+
 try:
     from .settings_local import *
 except:

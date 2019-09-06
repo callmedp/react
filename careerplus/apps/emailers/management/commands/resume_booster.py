@@ -21,8 +21,9 @@ class Command(BaseCommand):
 def booster():
     ''' Resume Boosters mail sending'''
 
-    booster_ois = OrderItem.objects.filter(
+    booster_ois = OrderItem.objects.filter(order__welcome_call_done=True,
         order__status__in=[1, 3], product__type_flow__in=[7,15], oi_status__in=[0, 5, 61, 62])
+
     booster_ois = booster_ois.select_related('order').order_by('created')
     days = 7
     candidate_data = {}
@@ -51,7 +52,6 @@ def booster():
                     last_oi_status=oi.last_oi_status,
                     assigned_to=oi.assigned_to,
                 )
-            continue
         elif oi.oi_status == 62:
             last_oi_status = oi.oi_status
             oi.oi_status = 4

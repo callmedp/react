@@ -52,6 +52,9 @@
             {% if pending_resume_items %}
 
                 <p>To proceed further please upload your resume or fill the questionnaire.</p>
+                {% if booster_item_exist %}
+                    <div>* Uploaded resume will be boosted</div>
+                {% endif %}
                 <form id="upload-order-resume-form" method="POST" action="{% url "payment:thank-you" %}" enctype='multipart/form-data'>
                     {% csrf_token %}
                     <div class="latest-resume selected" id="upload-resume-box">
