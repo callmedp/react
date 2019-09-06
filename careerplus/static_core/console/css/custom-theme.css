@@ -115,10 +115,10 @@
 
 .icon-feedbackcall:before {
     content: '';
-    width: 20px;
-    height: 21px;
+    width: 22px;
+    height: 26px;
     display: block;
-    background: url(../images/icon-sprite.png) no-repeat 0 -32px;
+    background: url(../images/icon-sprite.png) no-repeat 0 -787px;
     margin: 0 auto;
 }
 
@@ -308,6 +308,13 @@
     height: 7px;
     display: inline-block;
     background: url(../images/icon-sprite.png) no-repeat -42px -748px;
+}
+
+.icon-download {
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+    background: url(../images/icon-sprite.png) no-repeat 0 -766px;
 }
 
 /* order details page css */
@@ -540,6 +547,7 @@
     font-size: 2.8rem;
     color: #333;
     font-weight: 300;
+    line-height: 20px;
 }
 
 .alternatecontact .modal-body {
@@ -610,4 +618,50 @@
     bottom: -13px;
     z-index: 9;
     font-weight: 400;
+}
+
+#alternatecontact_modal .modal-dialog, #allmessages_modal .modal-dialog, #allactions_modal .modal-dialog {
+    width: 440px;
+}
+
+.allmessages__box {
+    border-radius: 4px;
+    background: #F3F3F3;
+    padding: 15px;
+    margin-top: 10px;
+}
+
+.allmessages__box p {
+    font-size: 1.3rem;
+    color: #666;
+}
+
+.allmessages__box span {
+    font-size: 1.1rem;
+    color: #999;
+    font-weight: 600;
+}
+
+.allmessages__box span strong {
+    font-weight: 600;
+    color: #666;
+}
+
+.allactions__box {
+    border-radius: 4px;
+    background: #F3F3F3;
+    padding: 15px;
+    margin-top: 10px;
+}
+
+.allactions__box p {
+    font-size: 1.4rem;
+    color: #666;
+    margin-bottom: 0;
+}
+
+.allactions__box span {
+    font-size: 1.2rem;
+    color: #999;
+    display: block;
 }
