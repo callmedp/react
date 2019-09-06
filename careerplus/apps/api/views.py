@@ -1335,6 +1335,17 @@ class TalentEconomyApiView(FieldFilterMixin,ListAPIView):
         include fl= id,title, (include fields with ',' separated)
     To view all articles do not include status and visibility in parameter
 
+    To get the images for a particular size:
+        Note:
+            If you are using fl (include imagefield in it)
+            Dimensions should be like 100 x 100
+
+        For a particular size image
+               add &image_fieldname_size=100x100
+        For multiple size image
+            add &image_fieldname_size=100x100,200x200,300x300
+
+
     pagination params-
             nopage -  get all results(unpaginated)
             page_size  - to get the how many result to be display per page
