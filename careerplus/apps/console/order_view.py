@@ -556,7 +556,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
 
-        return queryset.select_related('order').order_by('-modified')
+        return queryset.select_related('order').order_by('-modified').select_related('delivery_service').order_by('-delivery_service__inr_price')
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
