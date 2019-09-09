@@ -362,6 +362,9 @@
     color: #666;
     padding-left: 25px;
 }
+.order_details__by .round_btn{
+    padding: 2px 10px;
+}
 
 .order_details__name {
     font-size: 1.8rem;
