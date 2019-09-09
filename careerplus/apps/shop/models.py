@@ -810,6 +810,7 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
     name = models.CharField(
         _('Name'), max_length=100,
         help_text=_('Unique name going to decide the slug'))
+    short_description = models.CharField(max_length=300,blank=True,null=True)
     cp_id = models.IntegerField(
         _('CP Variation'),
         blank=True,

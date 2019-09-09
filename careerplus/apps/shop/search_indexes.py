@@ -835,7 +835,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                         'aed_price': float(pv.aed_price),
                         'fake_aed_price': float(pv.fake_aed_price),
                         'gbp_price': float(pv.gbp_price),
-                        'fake_gbp_price': float(pv.fake_gbp_price)})
+                        'fake_gbp_price': float(pv.fake_gbp_price),
+                        "short_description":pv.short_description})
                 elif pv.is_writing or pv.is_service:
                     fbt_list.append({
                         'id': pv.id,
@@ -850,7 +851,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                         'aed_price': float(pv.aed_price),
                         'fake_aed_price': float(pv.fake_aed_price),
                         'gbp_price': float(pv.gbp_price),
-                        'fake_gbp_price': float(pv.fake_gbp_price)})
+                        'fake_gbp_price': float(pv.fake_gbp_price),
+                        "short_description":pv.short_description})
                 fbt_dict.update({
                     'fbt_list': fbt_list
                 })
@@ -883,7 +885,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                         'aed_price': float(pv.aed_price),
                         'fake_aed_price': float(pv.fake_aed_price),
                         'gbp_price': float(pv.gbp_price),
-                        'fake_gbp_price': float(pv.fake_gbp_price)})
+                        'fake_gbp_price': float(pv.fake_gbp_price),
+                        "short_description":pv.short_description})
                 pop_dict.update({
                     'pop_list': pop_list
                 })
@@ -906,7 +909,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                         'aed_price': float(pv.aed_price),
                         'fake_aed_price': float(pv.fake_aed_price),
                         'gbp_price': float(pv.gbp_price),
-                        'fake_gbp_price': float(pv.fake_gbp_price)})
+                        'fake_gbp_price': float(pv.fake_gbp_price),
+                        "short_description":pv.short_description})
                 pop_dict.update({
                     'pop_list': pop_list
                 })
