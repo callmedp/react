@@ -39,7 +39,7 @@ function* getCandidateId(action) {
 
 function* loginCandidate(action) {
     try {
-        let {payload: {info, resolve, reject, isTokenAvail}} = action;
+        let {data: {info, resolve, reject, isTokenAvail}} = action;
 
         yield put({type: UPDATE_UI, data: {loader: true}});
 
@@ -50,6 +50,7 @@ function* loginCandidate(action) {
         if (result && result['error'] || !isTokenAvail) {
             result = yield call(Api.getInformation)
         }
+        console.log('------', result['error']);
         if (result && result['error']) {
             localStorage.clear();
             window.location.href = `${siteDomain}/login/?next=/resume-builder/`;

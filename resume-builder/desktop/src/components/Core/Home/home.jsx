@@ -28,7 +28,7 @@ class Home extends Component {
         const values = queryString.parse(this.props.location.search);
         const token = (values && values.token) || '';
         this.state.token = token;
-        this.staticUrl =  (window && window.config && window.config.staticUrl) || '/media/static/'
+        this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
     }
 
 
@@ -64,15 +64,20 @@ class Home extends Component {
     }
 
     static getActions() {
-        return [loginCandidate,getComponentTitle]
+        return [loginCandidate, getComponentTitle]
     }
 
-    static async fetching({dispatch},params) {
+    static async fetching({dispatch}, params) {
         const actionList = Home.getActions()
-        const results= [];
-        for (const [index,value] of actionList.entries()) {
-                console.log('----index---', index, value);
-                results[index] = await  new Promise((resolve, reject) => dispatch(value({info: params, resolve,reject})))
+        const results = [];
+        for (const [index, value] of actionList.entries()) {
+            console.log('----index---', index, value);
+            results[index] = await new Promise((resolve, reject) => dispatch(value({
+                info: params,
+                resolve,
+                reject,
+                isTokenAvail: true
+            })))
         }
         return results;
     }

@@ -10,7 +10,6 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-register": "^6.26.0",
-    "babel-eslint": "^9.0.0",
     "bootstrap": "^4.3.1",
     "dotenv": "^7.0.0",
     "express": "^4.17.1",
@@ -48,7 +47,7 @@
   "scripts": {
     "start:dev": "REACT_APP_ENV=development npm run start",
     "start": "react-app-rewired start",
-    "build": "webpack --env=12345 --config  scripts/webpack.server.config.js ",
+    "build": "sh -ac 'rm -rf ../../careerplus/static_core/react/dist/desktop/*;node ./scripts/build-non-split.js'",
     "build:staging": "REACT_APP_ENV=staging npm run build",
     "build:production": "REACT_APP_ENV=production npm run build",
     "test": "react-scripts test",
@@ -64,18 +63,6 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@babel/core": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
-    "@babel/preset-react": "^7.0.0",
-    "@babel/register": "^7.5.5",
-    "babel-eslint": "^10.0.2",
-    "babel-loader": "^8.0.6",
-    "babel-plugin-transform-decorators-legacy": "^1.3.5",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "ignore-loader": "^0.1.2",
-    "react-app-rewired": "^2.1.3",
-    "webpack": "^4.39.2",
-    "webpack-cli": "^3.3.7"
+    "react-app-rewired": "^2.1.3"
   }
 }

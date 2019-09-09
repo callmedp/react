@@ -25,6 +25,7 @@ if (typeof window == 'undefined') {
     }
 }
 
+console.log('======', window.config);
 
 if (typeof fetch == 'undefined') {
     global.fetch = require('node-fetch');
@@ -36,7 +37,6 @@ if (typeof localStorage == 'undefined') {
             return global.localStorage[param1] = param2;
         },
         getItem: (param1) => {
-            console.log('-----', param1, global.localStorage[param1]);
             return global.localStorage[param1];
         },
         clear: () => {
@@ -54,7 +54,6 @@ let context = {
 }, result;
 
 app.use(function (req, res, next) {
-    req.pathname = `/resume-builder${req.pathname}`;
     next();
 });
 app.use('/resume-builder/dist', express.static('dist'));
@@ -62,7 +61,7 @@ app.use('/media/static/react/assets/images', express.static('assets/images'));
 app.use('/media/static/resumebuilder/images', express.static('assets/resumebuilder/images'));
 
 app.get('*', async (req, res) => {
-    for (const [index, {route}] of (matchRoutes(routes, req.pathname) || []).entries()) {
+    for (const [index, {route}] of (matchRoutes(routes, req.path) || []).entries()) {
         console.log('-----index, route', index, route);
         if (route && route.component && route.component.fetching) {
             try {
