@@ -43,12 +43,13 @@ class WriterInvoiceMixin(object):
     super_express_slug_list = settings.SUPER_EXPRESS_DELIVERY_SLUG
     delivery_slug_list = express_slug_list + super_express_slug_list
 
-    def __init__(self):
+    def __init__(self,invoice_date=None):
         self.combo_discount_object = set()  # for discount combo, eithr resume or linkedin
         self.item_list = []
         self.added_base_object = []  # for country specific resume
         self.added_delivery_object = []  # for delivery price only for parent item 
         self.user_type = 1 
+        self.invoice_date = invoice_date
 
     def _get_combo_discount(self, oi):
         # linked + resume bought by same user assigned to same writer
@@ -618,15 +619,16 @@ class WriterInvoiceMixin(object):
 
 
         for oi in orderitems:
-            oi_sum,oi_combo_discount,success_closure = self.get_writer_details_per_oi(oi,user)
+            oi_sum,oi_combo_discount,oi_success_closure = self.get_writer_details_per_oi(oi,user)
             total_sum += oi_sum
             total_combo_discount += oi_combo_discount
+            success_closure += oi_success_closure
             
 
         # penalty and incentive calc
         total = total_sum - total_combo_discount
         total_item = orderitems.count()
-        penalty,incentive,total_payable = self._get_writer_payable_amount(success_closure,total_item,total)
+        penalty,incentive,total_payable = self.get_writer_payable_amount(success_closure,total_item,total)
 
         invoice_no = 'INV' + str(user.pk) + '-' + self.invoice_date.strftime('%d%m%Y')
         data.update({
@@ -646,7 +648,7 @@ class WriterInvoiceMixin(object):
 
         return data
 
-    def _get_writer_payable_amount(self,success_closure,total_item,total):
+    def get_writer_payable_amount(self,success_closure,total_item,total):
         penalty = 0
         incentive = 0
         total_payable = total
