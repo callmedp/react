@@ -316,7 +316,7 @@ class ArticleListView(ListView, PaginationMixin):
 
         try:
             if self.sel_writer:
-                queryset = queryset.filter(user__pk=self.sel_writer)
+                queryset = queryset.filter(author__pk=self.sel_writer)
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
