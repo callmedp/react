@@ -37,13 +37,22 @@ PORTFOLIO_PRODUCT_LIST = settings.PORTFOLIO_PRODUCT_LIST
 
 
 class WriterInvoiceMixin(object):
+    writing_dict = RESUME_WRITING_MATRIX_DICT
+    linkedin_dict = LINKEDIN_WRITING_MATRIX_DICT
+    express_slug_list = settings.EXPRESS_DELIVERY_SLUG
+    super_express_slug_list = settings.SUPER_EXPRESS_DELIVERY_SLUG
+    delivery_slug_list = express_slug_list + super_express_slug_list
+
     def __init__(self):
         self.combo_discount_object = set()  # for discount combo, eithr resume or linkedin
+        self.item_list = []
+        self.added_base_object = []  # for country specific resume
+        self.added_delivery_object = []  # for delivery price only for parent item 
+        self.user_type = 1 
 
-    def get_combo_discount(self, oi, invoice_date, user_type):
+    def _get_combo_discount(self, oi):
         # linked + resume bought by same user assigned to same writer
         combo_discount = 0
-        linkedin_dict = LINKEDIN_WRITING_MATRIX_DICT
         if oi.assigned_to:
             assigned_to = oi.assigned_to
             assigned_date = oi.assigned_date
@@ -72,7 +81,7 @@ class WriterInvoiceMixin(object):
 
         if assigned_date:
             if oi.product and oi.product.type_flow in [1, 12, 13]:
-                prev_month = invoice_date.replace(day=1)
+                prev_month = self.invoice_date.replace(day=1)
                 prev_month = prev_month - datetime.timedelta(days=1)
                 _, last_day = calendar.monthrange(
                     prev_month.year, prev_month.month)
@@ -124,12 +133,12 @@ class WriterInvoiceMixin(object):
                             if not exp_code:
                                 exp_code = 'FR'
 
-                            value_dict = linkedin_dict.get(exp_code, {})
+                            value_dict = self.linkedin_dict.get(exp_code, {})
                             starter_value = LINKEDIN_STARTER_VALUE
                             linkedin_amount = starter_value
                             
-                            if value_dict and value_dict.get(user_type):
-                                linkedin_amount = (starter_value * value_dict.get(user_type)) / 100
+                            if value_dict and value_dict.get(self.user_type):
+                                linkedin_amount = (starter_value * value_dict.get(self.user_type)) / 100
                                 linkedin_amount = int(linkedin_amount)
 
                             combo_discount = linkedin_amount * (COMBO_DISCOUNT / 100)
@@ -143,12 +152,12 @@ class WriterInvoiceMixin(object):
 
                 if not exp_code:
                     exp_code = 'FR'
-                value_dict = linkedin_dict.get(exp_code, {})
+                value_dict = self.linkedin_dict.get(exp_code, {})
                 starter_value = LINKEDIN_STARTER_VALUE
                 linkedin_amount = starter_value
 
-                if value_dict and value_dict.get(user_type):
-                    linkedin_amount = (starter_value * value_dict.get(user_type)) / 100
+                if value_dict and value_dict.get(self.user_type):
+                    linkedin_amount = (starter_value * value_dict.get(self.user_type)) / 100
                     linkedin_amount = int(linkedin_amount)
 
                 if writing_ois.exists() and oi.pk not in self.combo_discount_object:
@@ -156,9 +165,9 @@ class WriterInvoiceMixin(object):
                     self.combo_discount_object.add(oi.pk)
                 else:
                     _, last_day = calendar.monthrange(
-                        invoice_date.year, invoice_date.month) 
+                        self.invoice_date.year, self.invoice_date.month) 
                     last_invoice_date = datetime.date(
-                        invoice_date.year, invoice_date.month, last_day)
+                        self.invoice_date.year, self.invoice_date.month, last_day)
                     writing_ois = OrderItem.objects.filter(
                         order__candidate_id=oi.order.candidate_id,
                         product__type_flow__in=[1, 12, 13],
@@ -174,8 +183,7 @@ class WriterInvoiceMixin(object):
 
         return int(combo_discount)
 
-    def get_context_writer_invoice(self, user, invoice_date):
-        item_list = []
+    def check_user_profile(self,user):
         error = ''
         # data = {'item_list': item_list, "error": error}
         data = {}
@@ -197,7 +205,7 @@ class WriterInvoiceMixin(object):
             valid_to = userprofile.valid_to
 
             if valid_from and valid_to and valid_from < valid_to \
-                and invoice_date >= valid_from and invoice_date <= valid_to:
+                and self.invoice_date >= valid_from and self.invoice_date <= valid_to:
                 pass
             elif not error:
                 error = 'Update writer Po Number validity'
@@ -211,22 +219,383 @@ class WriterInvoiceMixin(object):
                 "writer_po_number": writer_po_number,
                 "error": error
             })
+            return data
 
-        else:
-            error = msg
-            data.update({
-                "error":error
+        data.update({
+            "error":msg
+        })
+        return data
+
+    def _get_oi_variation_writer_amount_details(self,oi):
+        variation_combo_discount,variation_sum = 0,0 
+        oi_dict = {}
+        p_oi = oi.parent
+        variations = p_oi.orderitem_set.filter(
+            is_variation=True, no_process=False)
+        closed_variations = p_oi.orderitem_set.filter(
+            is_variation=True, no_process=False, oi_status=4).order_by('-closed_on')
+
+        if variations.count() == closed_variations.count() and p_oi.pk not in self.added_base_object:
+            p_oi_dict = {}
+            pk = p_oi.pk
+            product_name = p_oi.product.get_name
+            closed_on = closed_variations[0].closed_on.date()
+            combo_discount = 0
+            exp_code = p_oi.product.get_exp()
+            if not exp_code:
+                exp_code = 'FR'
+            value_dict = self.writing_dict.get(exp_code, {})
+            starter_value = WRITING_STARTER_VALUE
+            amount = starter_value
+            if value_dict and value_dict.get(self.user_type):
+                amount = (starter_value * value_dict.get(self.user_type)) / 100
+                amount = int(amount)
+
+            # combo discount calculation
+            combo_discount = self._get_combo_discount(
+                oi=p_oi)
+            variation_combo_discount += combo_discount
+
+            self.added_base_object.append(pk)
+
+            p_oi_dict.update({
+                "item_id": pk,
+                "product_name": product_name,
+                "closed_on": closed_on,
+                "combo_discount": combo_discount,
+                "amount": amount,
+                "item_type": "variation_parent",
             })
+            variation_sum += amount
 
-        if error:
+            self.item_list.append(p_oi_dict)
+
+            if p_oi.delivery_service and p_oi.delivery_service.slug in self.delivery_slug_list and p_oi.pk not in self.added_delivery_object:
+                amount = 0
+                if p_oi.delivery_service.slug in self.express_slug_list:
+                    amount = EXPRESS
+                elif p_oi.delivery_service.slug in self.super_express_slug_list:
+                    amount = SUPER_EXPRESS
+                product_name = p_oi.product.get_name + ' - ' + p_oi.delivery_service.name
+                d_dict = {
+                    "item_id": p_oi.pk,
+                    "product_name": product_name,
+                    "closed_on": closed_on,
+                    "combo_discount": 0,
+                    "amount": amount,
+                    "item_type": "delivery_service",
+                }
+                self.item_list.append(d_dict)
+                self.added_delivery_object.append(p_oi.pk)
+                variation_sum += amount
+
+        pk = oi.pk
+        product_name = oi.parent.product.get_name + " - " + oi.product.get_name
+        closed_on = oi.closed_on.date()
+        combo_discount = 0
+        amount = COUNTRY_SPCIFIC_VARIATION
+
+        oi_dict.update({
+            "item_id": pk,
+            "product_name": product_name,
+            "closed_on": closed_on,
+            "combo_discount": combo_discount,
+            "amount": amount,
+            "item_type": "variation",
+        })
+        self.item_list.append(oi_dict)
+        variation_sum += amount
+        process = True
+        return process,variation_sum,variation_combo_discount
+
+    def _get_oi_addon_writer_amount_details(self,oi):
+        addon_sum,addon_combo_discount = 0,0
+        pk = oi.pk
+        product_name = oi.product.get_name
+        closed_on = oi.closed_on.date()
+        combo_discount = 0
+        product_pk = oi.product.pk
+        amount = 0
+        if product_pk in VISUAL_RESUME_PRODUCT_LIST:
+            amount = VISUAL_RESUME
+            # combo discount calculation
+            combo_discount = self._get_combo_discount(
+                oi=oi)
+            addon_combo_discount += combo_discount
+            process = True
+        elif product_pk in COVER_LETTER_PRODUCT_LIST:
+            amount = COVER_LETTER
+            process = True
+        elif product_pk in SECOND_REGULAR_RESUME_PRODUCT_LIST:
+            amount = SECOND_REGULAR_RESUME
+            # combo discount calculation
+            combo_discount = self._get_combo_discount(
+                oi=oi)
+            addon_combo_discount += combo_discount
+            process = True
+        elif product_pk in PORTFOLIO_PRODUCT_LIST:
+            amount = PORTFOLIO_PRICE
+            process = True
+        
+        if process:
+            oi_dict = {
+                "item_id": pk,
+                "product_name": product_name,
+                "closed_on": closed_on,
+                "combo_discount": combo_discount,
+                "amount": amount,
+                "item_type": "addon",
+            }
+            self.item_list.append(oi_dict)
+            addon_sum += amount
+
+        return process,addon_combo_discount,addon_sum
+
+    def _get_oi_combo_writer_amount_details(self,oi):
+        combo_sum,oi_combo_discount = 0,0
+        pk = oi.pk
+        product_name = oi.product.get_name
+        closed_on = oi.closed_on.date()
+        combo_discount = 0
+        product_pk = oi.product.pk
+        resuem_writing_ois = oi.order.orderitems.filter(
+            product__type_flow__in=[1, 12])
+        amount = 0
+        if product_pk in VISUAL_RESUME_PRODUCT_LIST and resuem_writing_ois.exists():
+            amount = VISUAL_RESUME
+            # combo discount calculation
+            combo_discount = self._get_combo_discount(
+                oi=oi)
+            oi_combo_discount += combo_discount
+        elif product_pk in COVER_LETTER_PRODUCT_LIST and resuem_writing_ois.exists():
+            amount = COVER_LETTER
+        elif product_pk in SECOND_REGULAR_RESUME_PRODUCT_LIST and resuem_writing_ois.exists():
+            amount = SECOND_REGULAR_RESUME
+            # combo discount calculation
+            combo_discount = self._get_combo_discount(
+                oi=oi)
+            oi_combo_discount += combo_discount
+        elif product_pk in PORTFOLIO_PRODUCT_LIST:
+            amount = PORTFOLIO_PRICE
+        else:
+            exp_code = oi.product.get_exp()
+            if not exp_code:
+                exp_code = 'FR'
+            if oi.product.type_flow == 8:
+                value_dict = self.linkedin_dict.get(exp_code, {})
+                starter_value = LINKEDIN_STARTER_VALUE
+            else:
+                value_dict = self.writing_dict.get(exp_code, {})
+                starter_value = WRITING_STARTER_VALUE
+
+            amount = starter_value
+            if value_dict and value_dict.get(self.user_type):
+                amount = (starter_value * value_dict.get(self.user_type)) / 100
+
+            if product_pk in VISUAL_RESUME_PRODUCT_LIST:
+                amount += VISUAL_RESUME
+            elif product_pk in COVER_LETTER_PRODUCT_LIST:
+                amount = COVER_LETTER
+            elif product_pk in SECOND_REGULAR_RESUME_PRODUCT_LIST:
+                amount += SECOND_REGULAR_RESUME
+
+            amount = int(amount)
+
+            # combo discount calculation
+            combo_discount = self._get_combo_discount(
+                oi=oi)
+            oi_combo_discount += combo_discount
+
+        oi_dict = {
+            "item_id": pk,
+            "product_name": product_name,
+            "closed_on": closed_on,
+            "combo_discount": combo_discount,
+            "amount": amount,
+            "item_type": "combo",
+        }
+        combo_sum += amount
+
+        self.item_list.append(oi_dict)
+        p_oi = oi.parent
+        child_items = p_oi.orderitem_set.filter(
+            no_process=False)
+        closed_child_items = p_oi.orderitem_set.filter(
+            no_process=False, oi_status=4).order_by('-closed_on')
+
+        if oi.delivery_service and oi.delivery_service.slug in self.delivery_slug_list:
+            amount = 0
+            if oi.delivery_service.slug in self.express_slug_list:
+                amount = EXPRESS
+            elif oi.delivery_service.slug in self.super_express_slug_list:
+                amount = SUPER_EXPRESS
+            product_name = oi.product.get_name + ' - ' + oi.delivery_service.name
+            d_dict = {
+                "item_id": oi.pk,
+                "product_name": product_name,
+                "closed_on": oi.closed_on.date(),
+                "combo_discount": 0,
+                "amount": amount,
+                "item_type": "delivery_service",
+            }
+            self.item_list.append(d_dict)
+            self.added_delivery_object.append(oi.pk)
+            combo_sum += amount
+        process = True
+        return process,oi_combo_discount,combo_sum
+
+    def _get_writer_amount_details_no_process(self,oi,user):
+        no_process_sum,no_process_combo_discount=0,0
+        pk = oi.pk
+        product_name = oi.product.get_name
+        closed_on = oi.closed_on.date()
+        combo_discount = 0
+        product_pk = oi.product.pk
+        resuem_writing_ois = oi.order.orderitems.filter(
+            product__type_flow__in=[1,12],assigned_to=user)
+        
+        if product_pk in VISUAL_RESUME_PRODUCT_LIST and resuem_writing_ois.exists():
+            amount = VISUAL_RESUME
+            # combo discount calculation
+            combo_discount = self._get_combo_discount(
+                oi=oi)
+            no_process_combo_discount += combo_discount
+        elif product_pk in COVER_LETTER_PRODUCT_LIST:
+            amount = COVER_LETTER
+        elif product_pk in SECOND_REGULAR_RESUME_PRODUCT_LIST and resuem_writing_ois.exists():
+            amount = SECOND_REGULAR_RESUME
+            # combo discount calculation
+            combo_discount = self._get_combo_discount(
+                oi=oi)
+            no_process_combo_discount += combo_discount
+        elif product_pk in PORTFOLIO_PRODUCT_LIST:
+            amount = PORTFOLIO_PRICE
+        else:
+            exp_code = oi.product.get_exp()
+            if not exp_code:
+                exp_code = 'FR'
+            if oi.product.type_flow == 8:
+                value_dict = self.linkedin_dict.get(exp_code, {})
+                starter_value = LINKEDIN_STARTER_VALUE
+            else:
+                value_dict = self.writing_dict.get(exp_code, {})
+                starter_value = WRITING_STARTER_VALUE
+
+            amount = starter_value
+            if value_dict and value_dict.get(self.user_type):
+                amount = (starter_value * value_dict.get(self.user_type)) / 100
+
+            if product_pk in VISUAL_RESUME_PRODUCT_LIST:
+                amount += VISUAL_RESUME
+            elif product_pk in COVER_LETTER_PRODUCT_LIST:
+                amount = COVER_LETTER
+            elif product_pk in SECOND_REGULAR_RESUME_PRODUCT_LIST:
+                amount += SECOND_REGULAR_RESUME
+
+            amount = int(amount)
+            # combo discount calculation
+            combo_discount = self._get_combo_discount(
+                oi=oi)
+            no_process_combo_discount += combo_discount
+
+        oi_dict ={
+            "item_id": pk,
+            "product_name": product_name,
+            "closed_on": closed_on,
+            "combo_discount": combo_discount,
+            "amount": amount,
+            "item_type": "standalone",
+        }
+        self.item_list.append(oi_dict)
+        no_process_sum += amount
+
+        if oi.delivery_service and oi.delivery_service.slug in self.delivery_slug_list:
+            amount = 0
+            if oi.delivery_service.slug in self.express_slug_list:
+                amount = EXPRESS
+            elif oi.delivery_service.slug in self.super_express_slug_list:
+                amount = SUPER_EXPRESS
+            product_name = oi.product.get_name + ' - ' + oi.delivery_service.name
+            d_dict = {
+                "item_id": oi.pk,
+                "product_name": product_name,
+                "closed_on": closed_on,
+                "combo_discount": 0,
+                "amount": amount,
+                "item_type": "delivery_service",
+            }
+            self.item_list.append(d_dict)
+            no_process_sum += amount
+
+        process = True
+        return process,no_process_combo_discount,no_process_sum
+
+    def get_writer_details_per_oi(self,oi,user):
+        process = False
+        total_sum,total_combo_discount,success_closure = 0,0,0
+
+        # sla incentive or penalty calculation
+        if oi.assigned_date and oi.closed_on and oi.assigned_date < oi.closed_on:
+            finish_days = (oi.closed_on - oi.assigned_date).days
+            if oi.delivery_service and oi.delivery_service.slug in self.express_slug_list:
+                if finish_days <= EXPRESS_SLA:
+                    success_closure += 1
+            elif oi.delivery_service and oi.delivery_service.slug in self.super_express_slug_list:
+                if finish_days <= SUPER_EXPRESS_SLA:
+                    success_closure += 1
+            else:
+                if finish_days <= REGULAR_SLA:
+                    success_closure += 1
+        
+        if oi.is_variation:
+            process,variation_sum,variation_combo_discount = self._get_oi_variation_writer_amount_details(oi)
+            total_sum += variation_sum
+            total_combo_discount += variation_combo_discount
+        elif oi.is_addon:
+            process,addon_combo_discount,addon_sum = self._get_oi_addon_writer_amount_details(oi)
+            total_sum += addon_sum
+            total_combo_discount += addon_combo_discount
+        
+        elif oi.is_combo:
+            process,oi_combo_discount,combo_sum = self._get_oi_combo_writer_amount_details(oi) 
+            total_sum += combo_sum
+            total_combo_discount += oi_combo_discount
+        
+        if not process:
+            process,no_process_combo_discount,no_process_sum = self._get_writer_amount_details_no_process(oi,user)
+            total_sum += no_process_sum
+            total_combo_discount += no_process_combo_discount
+
+        return total_sum,total_combo_discount,success_closure
+
+    def set_user_type(self,user):
+        userprofile = user.userprofile
+        user_type = 1
+        if userprofile.wt_changed_date:
+            changed_date = userprofile.wt_changed_date
+            changed_date = changed_date.replace(day=1)
+            changed_date = changed_date + datetime.timedelta(days=31)
+            changed_date = changed_date.replace(day=1)
+            if self.invoice_date >= changed_date:
+                user_type = userprofile.writer_type
+            else:
+                user_type = userprofile.last_writer_type
+        else:
+            user_type = userprofile.writer_type if userprofile else 1
+
+        self.user_type = user_type
+
+    def _get_context_writer_invoice(self, user):
+        data = self.check_user_profile(user)
+        if data['error']:
             return data
         
         _, last_day = calendar.monthrange(
-            invoice_date.year, invoice_date.month)  #  _  return weekday of first day of the month
+            self.invoice_date.year, self.invoice_date.month)  #  _  return weekday of first day of the month
         last_invoice_date = datetime.date(
-            invoice_date.year, invoice_date.month, last_day)
+            self.invoice_date.year, self.invoice_date.month, last_day)
         first_invoice_date = datetime.date(
-            invoice_date.year, invoice_date.month, 1)
+            self.invoice_date.year, self.invoice_date.month, 1)
         last_invoice_date = last_invoice_date + datetime.timedelta(
             days=1)
 
@@ -237,371 +606,49 @@ class WriterInvoiceMixin(object):
             closed_on__range=[first_invoice_date, last_invoice_date],
             no_process=False).select_related('product').order_by('id')
 
-        writing_dict = RESUME_WRITING_MATRIX_DICT
-        linkedin_dict = LINKEDIN_WRITING_MATRIX_DICT
-        express_slug_list = settings.EXPRESS_DELIVERY_SLUG
-        super_express_slug_list = settings.SUPER_EXPRESS_DELIVERY_SLUG
-        delivery_slug_list = express_slug_list + super_express_slug_list
+        self.item_list = []
+        self.added_base_object = []  # for country specific resume
+        self.added_delivery_object = []  # for delivery price only for parent item 
 
-        added_base_object = []  # for country specific resume
-        added_delivery_object = []  # for delivery price only for parent item 
-
-        user_type = 1
-        if userprofile.wt_changed_date:
-            changed_date = userprofile.wt_changed_date
-            changed_date = changed_date.replace(day=1)
-            changed_date = changed_date + datetime.timedelta(days=31)
-            changed_date = changed_date.replace(day=1)
-            if invoice_date >= changed_date:
-                user_type = userprofile.writer_type
-            else:
-                user_type = userprofile.last_writer_type
-        else:
-            user_type = userprofile.writer_type if userprofile else 1
+        self.set_user_type(user)
 
         total_combo_discount = 0
         total_sum = 0
         success_closure = 0
 
-        order_before = datetime.date(2017, 11, 3)
 
         for oi in orderitems:
-            process = False
-            oi_dict = {}
-            # sla incentive or penalty calculation
-            if oi.assigned_date and oi.closed_on and oi.assigned_date < oi.closed_on:
-                finish_days = (oi.closed_on - oi.assigned_date).days
-                if oi.delivery_service and oi.delivery_service.slug in express_slug_list:
-                    if finish_days <= EXPRESS_SLA:
-                        success_closure += 1
-                elif oi.delivery_service and oi.delivery_service.slug in super_express_slug_list:
-                    if finish_days <= SUPER_EXPRESS_SLA:
-                        success_closure += 1
-                else:
-                    if finish_days <= REGULAR_SLA:
-                        success_closure += 1
-
-            if oi.created.date() < order_before:
-                oi_dict = {}
-                oi_dict.update({
-                    "item_id": oi.pk,
-                    "product_name": oi.product.get_name,
-                    "closed_on": oi.closed_on.date(),
-                    "combo_discount": 0,
-                    "amount": 0,
-                    "item_type": "older",
-                })
-                item_list.append(oi_dict)
-                continue
-
-            if oi.is_variation:
-                p_oi = oi.parent
-                variations = p_oi.orderitem_set.filter(
-                    is_variation=True, no_process=False)
-                closed_variations = p_oi.orderitem_set.filter(
-                    is_variation=True, no_process=False, oi_status=4).order_by('-closed_on')
-
-                if variations.count() == closed_variations.count() and p_oi.pk not in added_base_object:
-                    p_oi_dict = {}
-                    pk = p_oi.pk
-                    product_name = p_oi.product.get_name
-                    closed_on = closed_variations[0].closed_on.date()
-                    combo_discount = 0
-                    exp_code = p_oi.product.get_exp()
-                    if not exp_code:
-                        exp_code = 'FR'
-                    value_dict = writing_dict.get(exp_code, {})
-                    starter_value = WRITING_STARTER_VALUE
-                    amount = starter_value
-                    if value_dict and value_dict.get(user_type):
-                        amount = (starter_value * value_dict.get(user_type)) / 100
-                        amount = int(amount)
-
-                    # combo discount calculation
-                    combo_discount = self.get_combo_discount(
-                        oi=p_oi, invoice_date=invoice_date,
-                        user_type=user_type)
-                    total_combo_discount += combo_discount
-
-                    added_base_object.append(pk)
-
-                    p_oi_dict.update({
-                        "item_id": pk,
-                        "product_name": product_name,
-                        "closed_on": closed_on,
-                        "combo_discount": combo_discount,
-                        "amount": amount,
-                        "item_type": "variation_parent",
-                    })
-                    total_sum += amount
-
-                    item_list.append(p_oi_dict)
-
-                    if p_oi.delivery_service and p_oi.delivery_service.slug in delivery_slug_list and p_oi.pk not in added_delivery_object:
-                        amount = 0
-                        if p_oi.delivery_service.slug in express_slug_list:
-                            amount = EXPRESS
-                        elif p_oi.delivery_service.slug in super_express_slug_list:
-                            amount = SUPER_EXPRESS
-                        product_name = p_oi.product.get_name + ' - ' + p_oi.delivery_service.name
-                        d_dict = {
-                            "item_id": p_oi.pk,
-                            "product_name": product_name,
-                            "closed_on": closed_on,
-                            "combo_discount": 0,
-                            "amount": amount,
-                            "item_type": "delivery_service",
-                        }
-                        item_list.append(d_dict)
-                        added_delivery_object.append(p_oi.pk)
-                        total_sum += amount
-
-                pk = oi.pk
-                product_name = oi.parent.product.get_name + " - " + oi.product.get_name
-                closed_on = oi.closed_on.date()
-                combo_discount = 0
-                amount = COUNTRY_SPCIFIC_VARIATION
-
-                oi_dict.update({
-                    "item_id": pk,
-                    "product_name": product_name,
-                    "closed_on": closed_on,
-                    "combo_discount": combo_discount,
-                    "amount": amount,
-                    "item_type": "variation",
-                })
-                item_list.append(oi_dict)
-                total_sum += amount
-
-                process = True
-
-            elif oi.is_addon:
-                pk = oi.pk
-                product_name = oi.product.get_name
-                closed_on = oi.closed_on.date()
-                combo_discount = 0
-                product_pk = oi.product.pk
-                amount = 0
-                if product_pk in VISUAL_RESUME_PRODUCT_LIST:
-                    amount = VISUAL_RESUME
-                    # combo discount calculation
-                    combo_discount = self.get_combo_discount(
-                        oi=oi, invoice_date=invoice_date,
-                        user_type=user_type)
-                    total_combo_discount += combo_discount
-                    process = True
-                elif product_pk in COVER_LETTER_PRODUCT_LIST:
-                    amount = COVER_LETTER
-                    process = True
-                elif product_pk in SECOND_REGULAR_RESUME_PRODUCT_LIST:
-                    amount = SECOND_REGULAR_RESUME
-                    # combo discount calculation
-                    combo_discount = self.get_combo_discount(
-                        oi=oi, invoice_date=invoice_date,
-                        user_type=user_type)
-                    total_combo_discount += combo_discount
-                    process = True
-                elif product_pk in PORTFOLIO_PRODUCT_LIST:
-                    amount = PORTFOLIO_PRICE
-                    process = True
-                
-                if process:
-                    oi_dict.update({
-                        "item_id": pk,
-                        "product_name": product_name,
-                        "closed_on": closed_on,
-                        "combo_discount": combo_discount,
-                        "amount": amount,
-                        "item_type": "addon",
-                    })
-                    item_list.append(oi_dict)
-                    total_sum += amount
-            elif oi.is_combo:
-                pk = oi.pk
-                product_name = oi.product.get_name
-                closed_on = oi.closed_on.date()
-                combo_discount = 0
-                product_pk = oi.product.pk
-                resuem_writing_ois = oi.order.orderitems.filter(
-                    product__type_flow__in=[1, 12])
-                amount = 0
-                if product_pk in VISUAL_RESUME_PRODUCT_LIST and resuem_writing_ois.exists():
-                    amount = VISUAL_RESUME
-                    # combo discount calculation
-                    combo_discount = self.get_combo_discount(
-                        oi=oi, invoice_date=invoice_date,
-                        user_type=user_type)
-                    total_combo_discount += combo_discount
-                elif product_pk in COVER_LETTER_PRODUCT_LIST and resuem_writing_ois.exists():
-                    amount = COVER_LETTER
-                elif product_pk in SECOND_REGULAR_RESUME_PRODUCT_LIST and resuem_writing_ois.exists():
-                    amount = SECOND_REGULAR_RESUME
-                    # combo discount calculation
-                    combo_discount = self.get_combo_discount(
-                        oi=oi, invoice_date=invoice_date,
-                        user_type=user_type)
-                    total_combo_discount += combo_discount
-                elif product_pk in PORTFOLIO_PRODUCT_LIST:
-                    amount = PORTFOLIO_PRICE
-                else:
-                    exp_code = oi.product.get_exp()
-                    if not exp_code:
-                        exp_code = 'FR'
-                    if oi.product.type_flow == 8:
-                        value_dict = linkedin_dict.get(exp_code, {})
-                        starter_value = LINKEDIN_STARTER_VALUE
-                    else:
-                        value_dict = writing_dict.get(exp_code, {})
-                        starter_value = WRITING_STARTER_VALUE
-
-                    amount = starter_value
-                    if value_dict and value_dict.get(user_type):
-                        amount = (starter_value * value_dict.get(user_type)) / 100
-
-                    if product_pk in VISUAL_RESUME_PRODUCT_LIST:
-                        amount += VISUAL_RESUME
-                    elif product_pk in COVER_LETTER_PRODUCT_LIST:
-                        amount = COVER_LETTER
-                    elif product_pk in SECOND_REGULAR_RESUME_PRODUCT_LIST:
-                        amount += SECOND_REGULAR_RESUME
-
-                    amount = int(amount)
-
-                    # combo discount calculation
-                    combo_discount = self.get_combo_discount(
-                        oi=oi, invoice_date=invoice_date,
-                        user_type=user_type)
-                    total_combo_discount += combo_discount
-
-                oi_dict.update({
-                    "item_id": pk,
-                    "product_name": product_name,
-                    "closed_on": closed_on,
-                    "combo_discount": combo_discount,
-                    "amount": amount,
-                    "item_type": "combo",
-                })
-                total_sum += amount
-
-                item_list.append(oi_dict)
-                p_oi = oi.parent
-                child_items = p_oi.orderitem_set.filter(
-                    no_process=False)
-                closed_child_items = p_oi.orderitem_set.filter(
-                    no_process=False, oi_status=4).order_by('-closed_on')
-
-                if oi.delivery_service and oi.delivery_service.slug in delivery_slug_list:
-                    amount = 0
-                    if oi.delivery_service.slug in express_slug_list:
-                        amount = EXPRESS
-                    elif oi.delivery_service.slug in super_express_slug_list:
-                        amount = SUPER_EXPRESS
-                    product_name = oi.product.get_name + ' - ' + oi.delivery_service.name
-                    d_dict = {
-                        "item_id": oi.pk,
-                        "product_name": product_name,
-                        "closed_on": oi.closed_on.date(),
-                        "combo_discount": 0,
-                        "amount": amount,
-                        "item_type": "delivery_service",
-                    }
-                    item_list.append(d_dict)
-                    added_delivery_object.append(oi.pk)
-                    total_sum += amount
-                process = True
+            oi_sum,oi_combo_discount,success_closure = self.get_writer_details_per_oi(oi,user)
+            total_sum += oi_sum
+            total_combo_discount += oi_combo_discount
             
-            if not process:
-                pk = oi.pk
-                product_name = oi.product.get_name
-                closed_on = oi.closed_on.date()
-                combo_discount = 0
-                product_pk = oi.product.pk
-                resuem_writing_ois = oi.order.orderitems.filter(
-                    product__type_flow__in=[1,12],assigned_to=user)
-                
-                if product_pk in VISUAL_RESUME_PRODUCT_LIST and resuem_writing_ois.exists():
-                    amount = VISUAL_RESUME
-                    # combo discount calculation
-                    combo_discount = self.get_combo_discount(
-                        oi=oi, invoice_date=invoice_date,
-                        user_type=user_type)
-                    total_combo_discount += combo_discount
-                elif product_pk in COVER_LETTER_PRODUCT_LIST:
-                    amount = COVER_LETTER
-                elif product_pk in SECOND_REGULAR_RESUME_PRODUCT_LIST and resuem_writing_ois.exists():
-                    amount = SECOND_REGULAR_RESUME
-                    # combo discount calculation
-                    combo_discount = self.get_combo_discount(
-                        oi=oi, invoice_date=invoice_date,
-                        user_type=user_type)
-                    total_combo_discount += combo_discount
-                elif product_pk in PORTFOLIO_PRODUCT_LIST:
-                    amount = PORTFOLIO_PRICE
-                else:
-                    exp_code = oi.product.get_exp()
-                    if not exp_code:
-                        exp_code = 'FR'
-                    if oi.product.type_flow == 8:
-                        value_dict = linkedin_dict.get(exp_code, {})
-                        starter_value = LINKEDIN_STARTER_VALUE
-                    else:
-                        value_dict = writing_dict.get(exp_code, {})
-                        starter_value = WRITING_STARTER_VALUE
-
-                    amount = starter_value
-                    if value_dict and value_dict.get(user_type):
-                        amount = (starter_value * value_dict.get(user_type)) / 100
-
-                    if product_pk in VISUAL_RESUME_PRODUCT_LIST:
-                        amount += VISUAL_RESUME
-                    elif product_pk in COVER_LETTER_PRODUCT_LIST:
-                        amount = COVER_LETTER
-                    elif product_pk in SECOND_REGULAR_RESUME_PRODUCT_LIST:
-                        amount += SECOND_REGULAR_RESUME
-
-                    amount = int(amount)
-                    # combo discount calculation
-                    combo_discount = self.get_combo_discount(
-                        oi=oi, invoice_date=invoice_date,
-                        user_type=user_type)
-                    total_combo_discount += combo_discount
-
-                oi_dict.update({
-                    "item_id": pk,
-                    "product_name": product_name,
-                    "closed_on": closed_on,
-                    "combo_discount": combo_discount,
-                    "amount": amount,
-                    "item_type": "standalone",
-                })
-                item_list.append(oi_dict)
-                total_sum += amount
-
-                if oi.delivery_service and oi.delivery_service.slug in delivery_slug_list:
-                    amount = 0
-                    if oi.delivery_service.slug in express_slug_list:
-                        amount = EXPRESS
-                    elif oi.delivery_service.slug in super_express_slug_list:
-                        amount = SUPER_EXPRESS
-                    product_name = oi.product.get_name + ' - ' + oi.delivery_service.name
-                    d_dict = {
-                        "item_id": oi.pk,
-                        "product_name": product_name,
-                        "closed_on": closed_on,
-                        "combo_discount": 0,
-                        "amount": amount,
-                        "item_type": "delivery_service",
-                    }
-                    item_list.append(d_dict)
-                    total_sum += amount
-
-                process = True
 
         # penalty and incentive calc
+        total = total_sum - total_combo_discount
+        total_item = orderitems.count()
+        penalty,incentive,total_payable = self._get_writer_payable_amount(success_closure,total_item,total)
+
+        invoice_no = 'INV' + str(user.pk) + '-' + self.invoice_date.strftime('%d%m%Y')
+        data.update({
+            "item_list": self.item_list,
+            "sub_total": total_sum,
+            "total_combo_discount": total_combo_discount,
+            "total": total,
+            "total_payable": total_payable,
+            "penalty": penalty,
+            "incentive": incentive,
+            "penalty_per": PENALTY_PERCENTAGE,
+            "incentive_per": INCENTIVE_PERCENTAGE,
+            "invoice_date": self.invoice_date,
+            "invoice_no": invoice_no,
+        })
+
+
+        return data
+
+    def _get_writer_payable_amount(self,success_closure,total_item,total):
         penalty = 0
         incentive = 0
-        total_item = orderitems.count()
-        total = total_sum - total_combo_discount
         total_payable = total
         if total_item:
             success_per = (success_closure / total_item) * 100
@@ -616,23 +663,7 @@ class WriterInvoiceMixin(object):
                 penalty = int(penalty)
                 total_payable -= penalty
 
-        invoice_no = 'INV' + str(user.pk) + '-' + invoice_date.strftime('%d%m%Y')
-        data.update({
-            "item_list": item_list,
-            "sub_total": total_sum,
-            "total_combo_discount": total_combo_discount,
-            "total": total,
-            "total_payable": total_payable,
-            "penalty": penalty,
-            "incentive": incentive,
-            "penalty_per": PENALTY_PERCENTAGE,
-            "incentive_per": INCENTIVE_PERCENTAGE,
-            "invoice_date": invoice_date,
-            "invoice_no": invoice_no,
-        })
-
-
-        return data
+        return penalty,incentive,total_payable
 
     def calculate_writer_invoice(self, user=None, invoice_date=None):
         if not user:
@@ -646,11 +677,12 @@ class WriterInvoiceMixin(object):
             today_date = today_date.replace(day=1)
             prev_month = today_date - datetime.timedelta(days=1)
             invoice_date = prev_month
+        self.invoice_date = invoice_date
 
         data = {}
         if user:
-            data = self.get_context_writer_invoice(
-                user=user, invoice_date=invoice_date)
+            data = self._get_context_writer_invoice(
+                user=user)
         return data
 
     def save_writer_invoice_pdf(self, user=None, invoice_date=None):
@@ -661,9 +693,10 @@ class WriterInvoiceMixin(object):
             today_date = datetime.datetime.now().date()
             prev_month = today_date.replace(day=1) - datetime.timedelta(days=1)
             invoice_date = prev_month
+        self.invoice_date = invoice_date
         
-        data = self.get_context_writer_invoice(
-            user=user, invoice_date=invoice_date)
+        data = self._get_context_writer_invoice(
+            user=user)
         error = data.get("error", "")
 
         item_list = data.get('item_list', [])

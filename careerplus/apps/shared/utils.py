@@ -25,6 +25,7 @@ from payment.models import PaymentTxn
 from shop.choices import DURATION_DICT,EXP_DICT
 from order.models import Order,OrderItem,CouponOrder, RefundItem
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
+from users.mixins import WriterInvoiceMixin
 
 #third party imports
 
@@ -180,7 +181,7 @@ class DiscountReportUtil:
                     "Delivery Service","Delivery Price Incl Tax","Delivery Price Excl Tax",\
                     "Price of item on site","Transaction_Amount","coupon_id",\
                     "Payment_mode","Combo", "Combo Parent","Variation","Refunded","Refund Amount",\
-                    "No Process", "Replaced", "Replaced With", "Replacement Of"])
+                    "No Process", "Replaced", "Replaced With", "Replacement Of","Price of Writer","Writer's name"])
 
         transactions = PaymentTxn.objects.filter(status=1,\
             payment_date__gte=self.start_date,payment_date__lte=self.end_date)
@@ -292,6 +293,21 @@ class DiscountReportUtil:
                 if total_items == 1 and item_selling_price == 0:
                     item_selling_price = float(float(order.total_excl_tax) - forced_coupon_amount)*1.18
 
+                writer_price = 0
+                if item.order.status in [1,3] and item.product.type_flow in [1, 8, 12, 13] and \
+                        item.oi_status == 4 and item.assigned_to and item.closed_on >= self.start_date\
+                            and item.closed_on <= self.end_date:
+                    writer_invoice = WriterInvoiceMixin()
+                    user_profile = writer_invoice.check_user_profile(item.assigned_to)
+                    if not user_profile['error']:
+                        writer_invoice.set_user_type(item.assigned_to)
+                        total_sum,total_combo_discount,success_closure = writer_invoice.get_writer_details_per_oi(item,item.assigned_to) 
+                        penalty,incentive,total_payable = self.get_writer_payable_amount(success_closure,1,total_sum - total_combo_discount)
+                        writer_price = total_payable
+
+                writer_name = item.assigned_to if item.assigned_to else ''
+
+
                 try:
                     row_data = [
                         order.id,order.candidate_id,item.partner.name,order.date_placed.date(),\
@@ -308,7 +324,7 @@ class DiscountReportUtil:
                         float(item.delivery_price_excl_tax),item_cost_price,order.total_incl_tax,\
                         coupon_code,txn_obj.get_payment_mode(),item.is_combo, combo_parent,item.is_variation,\
                         bool(item_refund_request_list),refund_amount,item.no_process, replaced, replacement_id,\
-                        order.replaced_order
+                        order.replaced_order,writer_price,writer_name
                     ]
 
                     csv_writer.writerow(row_data)
