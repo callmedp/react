@@ -1554,7 +1554,7 @@ class ClaimOrderAPIView(APIView):
         if not txn_id:
             data.update({'msg': "Transaction id not found"})
             return Response(data, status=400)
-        payment_object = PaymentTxn.objects.filter(txn=txn_id).first()
+        payment_object = PaymentTxn.objects.filter(txn=txn_id,status=1).first()
         if not payment_object:
             data.update({'msg': "Transaction object not found "})
             return Response(data, status=400)
