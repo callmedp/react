@@ -104,7 +104,9 @@ class AssessmentLandingPage(TemplateView):
         if category_ids:
             category_ids = Category.objects.filter(id__in=category_ids).exclude(id__in=settings.TEST_PREP_ID)
         test_prep = Category.objects.filter(id__in=settings.TEST_PREP_ID)
-        test_children_id = Test.objects.filter(category__id__in=settings.TEST_PREP_CHILDREN_ID).values_list('category__id',flat=True)
+        test_children_id = Test.objects.filter(
+            categories__id__in=settings.TEST_PREP_CHILDREN_ID).values_list(
+            'categories__id',flat=True).distinct()
         if test_children_id:
             test_prep_children = Category.objects.filter(id__in=test_children_id)
 
@@ -133,7 +135,7 @@ class AssessmentCategoryPage(DetailView):
         context.update({'breadcrumbs': self.get_breadcrumbs()})
         category = self.object.get_childrens()
         cat_ids = set(Test.objects.exclude(category=None).values_list('category__id', flat=True))
-        all_cat_ids = set(Test.objects.exclude(category=None,categories=None)
+        all_cat_ids = set(Test.objects.exclude(category=None).exclude(categories=None)
                           .values_list('categories__id',flat=True))
         cat_ids = list(filter(None,cat_ids|all_cat_ids))
         category = category.filter(id__in=cat_ids)
