@@ -4,6 +4,7 @@ import logging
 import os
 import datetime
 import calendar
+from dateutil import relativedelta
 
 from django.contrib.gis.geoip import GeoIP
 from django.conf import settings
@@ -574,9 +575,7 @@ class WriterInvoiceMixin(object):
         user_type = 1
         if userprofile.wt_changed_date:
             changed_date = userprofile.wt_changed_date
-            changed_date = changed_date.replace(day=1)
-            changed_date = changed_date + datetime.timedelta(days=31)
-            changed_date = changed_date.replace(day=1)
+            changed_date = changed_date.replace(day=1) + relativedelta.relativedelta(months=1)
             if self.invoice_date >= changed_date:
                 user_type = userprofile.writer_type
             else:

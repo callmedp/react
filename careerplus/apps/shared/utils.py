@@ -2,6 +2,7 @@
 import logging
 from decimal import Decimal
 from datetime import datetime, timedelta
+from dateutil import relativedelta
 import ast,os,django,sys,csv
 
 #Settings imports
@@ -298,15 +299,15 @@ class DiscountReportUtil:
                 if item.order.status in [1,3] and item.product.type_flow in [1, 8, 12, 13] and \
                         item.oi_status == 4 and item.assigned_to and item.closed_on >= self.start_date\
                             and item.closed_on <= self.end_date:
-                    invoice_date = item.closed_on.replace(day=1).date()
+                    invoice_date = item.closed_on.replace(day=1).date()  
                     invoice_date = invoice_date - timedelta(days=1)
+                    invoice_date =invoice_date + relativedelta.relativedelta(months=1)
                     writer_invoice = WriterInvoiceMixin(invoice_date)
                     user_profile = writer_invoice.check_user_profile(item.assigned_to)
                     if not user_profile['error']:
                         writer_invoice.set_user_type(item.assigned_to)
                         total_sum,total_combo_discount,success_closure = writer_invoice.get_writer_details_per_oi(item,item.assigned_to) 
-                        penalty,incentive,total_payable = writer_invoice.get_writer_payable_amount(success_closure,1,total_sum - total_combo_discount)
-                        writer_price = total_payable
+                        writer_price = total_sum - total_combo_discount
                         writer_name = item.assigned_to if item.assigned_to else ''
 
 
