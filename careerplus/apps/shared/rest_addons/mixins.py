@@ -305,8 +305,6 @@ class ImageThumbnailMixin(object):
             return ret
 
         request = self.context.get('request')
-        if not request:
-            return ret
 
         images_to_be_processed = [field for field in image_fields if
                                   request.query_params.get(field + '_size')]
@@ -319,9 +317,10 @@ class ImageThumbnailMixin(object):
             for size in request.query_params.get(img + '_size').split(','):
                 try:
                     ret.update({img + '_' + str(size): get_thumbnail(ret.get(
-                                    img),size,crop='center',quality=99).url})
+                                    img),size,crop='center',quality=70).url})
                 except Exception as e:
-                    logging.getLogger('error_log').error(str(e))
+                    logging.getLogger('error_log').error("error in "
+                    "get_thumbnail for {}".format(img, str(e)))
         return ret
 
 
