@@ -1575,8 +1575,9 @@ class ClaimOrderAPIView(APIView):
             order.crm_sales_id = user_id
             order.sales_user_info = sales_user_info
             order.save()
-            data.update({'msg': 'Order claimed successfully'})
-            return Response({'claim_order': True})
+            data.update({'claim_order': True,'msg': 'Order claimed '
+                         'successfully','order_amount':order.total_incl_tax})
+            return Response(data)
         data.update({"msg": "Invalid details"})
         return Response(data, status=400)
 
