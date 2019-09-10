@@ -178,7 +178,7 @@
 
                 <tbody id="body-table-list">
                   {% for obj in page %}
-                    <tr class="even pointer">
+                    <tr class="even pointer" style='{% if obj.delivery_service.name == "super express" %}background-color:rgba(255, 0, 0,0.2);{% elif obj.delivery_service.name == "express" %}background-color:rgba(255, 165, 0,0.2);{% endif %}'>
                       <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><b style="text-decoration: underline;">{{obj.order.number}}</b></a>
                       </br>
                        <span id="orderitempk">({{obj.pk}})</span>

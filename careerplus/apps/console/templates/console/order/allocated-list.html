@@ -248,7 +248,7 @@
 
                 <tbody id="body-table-list">
                   {% for obj in page %}
-                    <tr class="even pointer">
+                    <tr class="even pointer" style='{% if obj.delivery_service.name == "super express" %}background-color:rgba(255, 0, 0,0.2);{% elif obj.delivery_service.name == "express" %}background-color:rgba(255, 165, 0,0.2);{% endif %}'>
                       {% if perms.order.writer_inbox_assigner %}
                           <td class="a-center ">
                               <input autocomplete="off" type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
@@ -304,7 +304,7 @@
                         <a href="{% url "console:queue-resume-download" %}?path={{obj.oi_resume.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-download"></i> View Doc</button></a>
                         {% endif %}
                       </td>
-                      <td>Delivery Type</td>
+                      <td>{% if obj.delivery_service %}{{obj.delivery_service.name}}{% endif %}</td>
                       <td>{{obj.modified|naturaltime}}</td>
                       <td>{% if obj.assigned_to %}{{obj.assigned_to.name}} {% else %} Not Assigned{% endif %}</td>
 

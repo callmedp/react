@@ -903,7 +903,7 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
 
         return queryset.select_related(
             'order', 'product', 'assigned_by',
-            'assigned_to', 'delivery_service').order_by('-modified')
+            'assigned_to', 'delivery_service').order_by('-modified').select_related('delivery_service').order_by('-delivery_service__inr_price')
 
 
 @Decorate(stop_browser_cache())
@@ -1039,7 +1039,7 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
 
         return queryset.select_related(
             'order', 'product', 'assigned_by',
-            'assigned_to', 'delivery_service').order_by('-modified')
+            'assigned_to', 'delivery_service').order_by('-modified').select_related('delivery_service').order_by('-delivery_service__inr_price')
 
 
 @Decorate(stop_browser_cache())
@@ -1178,7 +1178,7 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
             pass
         return queryset.select_related(
             'order', 'product', 'assigned_by',
-            'assigned_to', 'delivery_service').order_by('-modified')
+            'assigned_to', 'delivery_service').order_by('-modified').select_related('delivery_service').order_by('-delivery_service__inr_price')
 
 
 @Decorate(stop_browser_cache())
@@ -1320,7 +1320,7 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
 
         return queryset.select_related(
             'order', 'product', 'assigned_by',
-            'assigned_to', 'delivery_service').order_by('-modified')
+            'assigned_to', 'delivery_service').order_by('-modified').select_related('delivery_service').order_by('-delivery_service__inr_price')
 
 
 @Decorate(stop_browser_cache())
@@ -1453,7 +1453,7 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
 
         return queryset.select_related(
             'order', 'product', 'assigned_to',
-            'assigned_by', 'delivery_service').order_by('-modified')
+            'assigned_by', 'delivery_service').order_by('-modified').select_related('delivery_service').order_by('-delivery_service__inr_price')
 
 
 @Decorate(stop_browser_cache())
@@ -1710,7 +1710,7 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
+        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified').select_related('delivery_service').order_by('-delivery_service__inr_price')
 
 @Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_show_domestic_profile_initiated_queue', login_url='/console/login/'), name='dispatch')
@@ -1851,7 +1851,7 @@ class DomesticProfileInitiatedQueueView(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
+        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified').order_by('-modified').select_related('delivery_service').order_by('-delivery_service__inr_price')
 
 
 @Decorate(stop_browser_cache())
@@ -1958,7 +1958,7 @@ class DomesticProfileApprovalQueue(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
+        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified').order_by('-modified').select_related('delivery_service').order_by('-delivery_service__inr_price')
 
 
 @Decorate(stop_browser_cache())
