@@ -182,7 +182,7 @@ class DiscountReportUtil:
                     "Delivery Service","Delivery Price Incl Tax","Delivery Price Excl Tax",\
                     "Price of item on site","Transaction_Amount","coupon_id",\
                     "Payment_mode","Combo", "Combo Parent","Variation","Refunded","Refund Amount",\
-                    "No Process", "Replaced", "Replaced With", "Replacement Of","Price of Writer","Writer's name"])
+                    "No Process", "Replaced", "Replaced With", "Replacement Of","Writer price excluding Incentives","Writer's name"])
 
         transactions = PaymentTxn.objects.filter(status=1,\
             payment_date__gte=self.start_date,payment_date__lte=self.end_date)
