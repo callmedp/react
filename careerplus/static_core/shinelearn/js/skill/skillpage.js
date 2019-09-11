@@ -383,7 +383,7 @@ $(function() {
                                         ${data.results[d].pPvn}
                                         </a>
                                     </p>
-                                    <p class="pb-5 fs-11">`
+                                    <p class="pb-5 fs-11">`;
                     var pAsft = JSON.parse(data.results[d].pAsft[0]);
                     if(pAsft["number_of_questions"]){
                         cert_detail += `No. of questions : <strong>${pAsft["number_of_questions"]}</strong> `;}
