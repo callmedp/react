@@ -13,6 +13,7 @@
     {% compress css %}
     <link href="{% static 'packages/iCheck/skins/flat/green.css' %}" rel="stylesheet" type="text/css">
     <link type="text/css" href="{% static 'console/css/datepicker/daterangepicker.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'console/css/custom.css' %}" rel="stylesheet">
     {% endcompress %}
 
 {% endblock css_block %}
@@ -266,7 +267,7 @@
 
                 <tbody id="body-table-list">
                   {% for obj in page %}
-                    <tr class="even pointer" style='{% if obj.delivery_service.name == "super express" %}background-color:rgba(255, 0, 0,0.2);{% elif obj.delivery_service.name == "express" %}background-color:rgba(255, 165, 0,0.2);{% endif %}'>
+                    <tr class="even pointer {% if obj.delivery_service.name == 'super express' %}super_express{% elif obj.delivery_service.name == 'express' %}express{% endif %}">
                       {% if perms.order.domestic_profile_update_assigner or perms.order.oi_action_permission %}
                             <td class="a-center ">
                               <input autocomplete="off" type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
