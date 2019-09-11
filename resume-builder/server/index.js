@@ -65,8 +65,8 @@ app.get('*', async (req, res) => {
     }
     if (checkIsMobile(userAgents)) {
         console.log('<><><><>in mobile');
-        store = require('../desktop/src/store/index').default;
-        routes = require('../desktop/src/routes/index').routes;
+        store = require('../mobile/src/store/index').default;
+        routes = require('../mobile/src/routes/index').routes;
         isMobile = true;
 
     } else {

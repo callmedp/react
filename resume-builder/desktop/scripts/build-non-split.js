@@ -6,7 +6,6 @@ var sassUtils = require("node-sass-utils")(sass);
 var path = require('path');
 var BundleTracker = require('webpack-bundle-tracker');
 
-
 config.optimization.splitChunks = {
     cacheGroups: {
         default: false,
@@ -17,6 +16,7 @@ config.optimization.runtimeChunk = false;
 
 const currentTimeStamp = process.argv && process.argv[2] || +new Date();
 
+console.log('login in here');
 // JS
 config.output.filename = `../../../careerplus/static_core/react/dist/desktop/main-${currentTimeStamp}.js`;
 // CSS. "5" is MiniCssPlugin
