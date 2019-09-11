@@ -1,5 +1,6 @@
 const rewire = require('rewire');
 const defaults = rewire('react-scripts/scripts/build.js');
+
 let config = defaults.__get__('config');
 var sass = require("node-sass");
 var sassUtils = require("node-sass-utils")(sass);

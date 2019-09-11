@@ -5,7 +5,7 @@ import Slider from "react-slick";
 
 export default class ResumeSlider extends Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.customise = this.customise.bind(this);
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
     }

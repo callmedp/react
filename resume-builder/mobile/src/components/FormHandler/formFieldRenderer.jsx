@@ -1,10 +1,10 @@
 import React from 'react'
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+//import "react-datepicker/dist/react-datepicker.css";
 import Multiselect from 'react-widgets/lib/Multiselect'
 import moment from 'moment'
 import addDays from "date-fns/addDays";
-import AsyncCreatableSelect from 'react-select/async-creatable';
+import AsyncCreatableSelect from 'react-select/lib/AsyncCreatable';
 
 
 export const renderField = ({

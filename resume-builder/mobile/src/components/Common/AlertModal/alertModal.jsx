@@ -2,8 +2,9 @@ import React,{Component} from 'react';
 import Modal from 'react-modal';
 import './alert.scss'
 
-
-Modal.setAppElement(document.getElementById('react-app'));
+if(typeof document !== 'undefined') {
+    Modal.setAppElement(document.getElementById('react-app'));
+}
 
 export default class AlertModal extends Component{
 

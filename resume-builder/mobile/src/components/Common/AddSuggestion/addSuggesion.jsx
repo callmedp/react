@@ -3,7 +3,9 @@ import Modal from 'react-modal';
 import './addSuggestion.scss';
 import {renderAsyncCreatableSelect} from '../../FormHandler/formFieldRenderer';
 
-Modal.setAppElement(document.getElementById('react-app'));
+if(typeof document !== 'undefined') {
+    Modal.setAppElement(document.getElementById('react-app'));
+}
 
 export default class AddSuggesion extends Component {
     constructor(props) {
