@@ -1547,7 +1547,7 @@ class ClaimOrderAPIView(APIView):
         alt_mobile = self.request.POST.get('alt_mobile',"")[-10:]
         user_id = self.request.POST.get('user_id',None)
         lead_id = self.request.POST.get('lead_id',None)
-        name = self.request.POST.get('name',None)
+        name = self.request.POST.get('name', None)
 
         sales_user_info = self.request.POST.get('sales_user_info')
         data = {'claim_order': False}
@@ -1562,10 +1562,9 @@ class ClaimOrderAPIView(APIView):
         if not order:
             data.update({'msg': "Order object not found "})
             return Response(data,  status=400)
-        if (email and getattr(order, 'email') == email) or (alt_email and getattr(order, 'alt_email') == alt_email) or\
+        if (email and getattr(order, 'email') == email) or\
                 (mobile and getattr(order, 'mobile') == mobile) or\
-                (alt_mobile and getattr(order, 'alt_mobile') == alt_mobile)\
-                or (name and order.full_name == name):
+                 (name and order.full_name == name):
             if order.sales_user_info or order.crm_lead_id or order.crm_sales_id:
                 data.update({'msg': "Order is already claimed"})
                 return Response(data, status=400)
