@@ -11,13 +11,13 @@ from . import mobile_view
 
 
 urlpatterns = [
-    url(r'^$', CartView.as_view(), name='cart-product-list'),
+    # url(r'^$', CartView.as_view(), name='cart-product-list'),
     url(r'^add-to-cart/$', AddToCartView.as_view(), name='add-to-cart'),
     url(r'^remove-from-cart/$', RemoveFromCartView.as_view(), name='remove-form-cart'),
     url(r'^update-deliverytype/$', UpdateDeliveryType.as_view(), name='update-deliverytype'),
 
     url(r'^payment-login/$', PaymentLoginView.as_view(), name='payment-login'),
-    url(r'^payment-shipping/$', PaymentShippingView.as_view(), name='payment-shipping'),
+    # url(r'^payment-shipping/$', PaymentShippingView.as_view(), name='payment-shipping'),
     url(r'^payment-summary/$', PaymentSummaryView.as_view(), name='payment-summary'),
 
     url(r'^applycoupon/$', CouponRedeemView.as_view(), name='coupon-apply'),

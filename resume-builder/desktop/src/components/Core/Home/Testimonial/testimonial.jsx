@@ -31,20 +31,18 @@ export default class Testimonial extends Component {
                         (testimonials || []).map((el, key) => {
                             return(
                                 <div className="testimonials--list" key={key}>
+                                    <span class="icon-quote"></span>
                                     <div className="testimonials--wrap">
 
-                                        <div className="testimonials--image">
-                                        <span className="mr-20">
-                                            <img alt={"Testimonial 1"}
-                                                 src={`${this.staticUrl}react/assets/images/user-${key+1}.jpg`}/>
-                                        </span>
-                                            <span>
-                                            <strong>{el.name}</strong>
-                                        </span>
-                                        </div>
+                                        
                                         <div className="testimonials--content">
+                                            <p>{el.review}</p>
                                         </div>
-                                        <p>{el.review}</p>
+                                        
+                                        <div className="testimonials--author">
+                                            <strong>{el.name}</strong>
+                                            <span>{el.profile}</span>
+                                        </div>
                                     </div>
                                 </div>
                             )

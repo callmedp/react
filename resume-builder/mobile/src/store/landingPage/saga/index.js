@@ -26,7 +26,6 @@ function* getCandidateId() {
 function* loginCandidate(action) {
     try {
         let {payload} = action;
-        localStorage.clear();
 
         yield put({type: uiAction.UPDATE_MAIN_PAGE_LOADER, payload: {mainloader: true}})
         let result = yield call(Api.loginCandidate, payload);
@@ -36,6 +35,7 @@ function* loginCandidate(action) {
         }
         if (result['error']) {
             apiError('login')
+            localStorage.clear();
             window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
             return;
             //redirect code here

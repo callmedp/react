@@ -1,5 +1,6 @@
 {% extends "basic/base.html" %}
 {% load static compress search_tags %}
+{% load cart_tags %}
 
 {% block meta_html %}
     {{block.super}}
@@ -27,7 +28,7 @@
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          
+
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown have-query">
               <a href="tel:{{ggn_contact}}">Have a query? Call us at <strong>{{ggn_contact}}</strong></a>
@@ -44,106 +45,118 @@
 {% block container %}
     <section class="container mt-53">
         <!-- page content body start -->
-        <div class="row">
+        <div class="row greybg2 pad-25">
 
         <!-- left content start -->
           <div class="col-sm-3 payment-summary-tab">
-          <a href="{% url "cart:payment-login" %}"><span class="yellow-circle">1</span> Login</a>
-          <a href="{% url "cart:payment-shipping" %}"><span class="yellow-circle">2</span> Shipping</a>
-          <a href="{% url "cart:payment-summary" %}" class="active"><span>3</span> Summary</a>
-          <a><span>4</span> Payment</a>
+          <a href="{% url "cart:payment-summary" %}" class="active"><span>1</span> Summary</a>
+          <a href="{% url "cart:payment-login" %}"><span {% if candidate_in_session %} class="green-circle" {% endif %}>2</span> Login</a>
+          <a><span>3</span> Payment</a>
 
           <!-- secure payment -->
-          <div class="secure-payment">
+          <!-- <div class="secure-payment">
             <figure class="secure-icon-payment"></figure>
             <strong>100% SECURE PAYMENT</strong>
             All major Credit and Debit cards accepted
             <figure class="cards-payment-icon mt-20"></figure>
-          </div>
+          </div> -->
 
-          </div>  
+          </div>
         <!-- left content end -->
 
         <!-- right content start -->
-        <div class="col-sm-9 bdr payment-summary">
-        {% if request.session.checkout_type == 'cart' %}
-        <div class="edit-cart">
-          <a href="{% url "cart:cart-product-list" %}">Edit cart</a>
-        </div>
-        {% endif %}
+        <div class="col-sm-9 payment-summary box-shadow">
+    <ul>
 
         {% for item in cart_items %}
 
-        {% with addons=item.addons variations=item.variations %}
+            {% with addons=item.addons variations=item.variations delivery_types=item.delivery_types product=item.li.product delivery_service=item.delivery_obj  %}
             <!-- prdduct 1 -->
-            <ul>
-              {% if forloop.counter == 1 %}
-                <li class="bdr-tp-btm">
-                    <strong class="col-sm-8 col-md-9 item-heading">Item</strong>
-                    <strong class="col-sm-4 col-md-3 item-heading">Price</strong>
-                </li>
-              {% endif %}
 
-              {% if item.product_class == 'course' and variations and item.is_available and variations.0.is_available %}
+              {% if item.is_available %}
                     <li>
-                        <span class="col-sm-8 col-md-9 item-sub-heading"><strong>{{item.name}}</strong>{% if item.experience %}{{item.experience|get_choice_display:"EXP_DICT"}}{% endif %}
+                        <span class="col-sm-8 col-md-9 item-sub-heading"><figure class="mr-10">
+                            {% if product and  product.image %}
+                         <img class="img-responsive"  src="{{ product.image.url }}">
+                            {% endif %}
+                        </figure><strong>{{item.name}}</strong>{% if item.experience %}{{item.experience|get_choice_display:"EXP_DICT"}}{% endif %}
                         </span>
-                        <strong class="col-sm-4 col-md-3">Rs. {{variations.0.price}}/-</strong>
+                        <strong class="col-sm-4 col-md-3">Rs. {% if variations|length and item.product_class == 'course' or item.type_flow == 17  %} {{variations.0.price}} {% else %} {{item.price}} {% endif %}/-</strong>
+                         <form role="form" id="cart_remove_form{{item.id}}">{% csrf_token %}
+                                <input type="hidden" name="product_reference" value="{% if variations|length and item.product_class == 'course' or item.type_flow == 17 %}{{variations.0.reference}}{% else %}{{item.reference}}{% endif %}">
+                                        <span class="close-icon"  onclick="removeFromCartMobile('{{item.id}}')" id="id-remove-cart{{item.id}}"></span>
+                        </form>
                     </li>
                     {% if variations.0.delivery_obj and variations.0.delivery_obj.get_price %}
                         <li>
                             <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure>{{variations.0.delivery_obj.name}}</span>
                             <span class="col-sm-4 col-md-3">Rs. {{variations.0.delivery_obj.get_price|floatformat:0}}/-</span>
+
+
                         </li>
                     {% endif %}
-                  {% for addon in addons %}
-                       {% if addon.is_available %}
+                  
                        <li>
-                            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure> {{addon.name}}</span>
-                            <span class="col-sm-4 col-md-3">Rs. {{addon.price}}/-</span>
-                        </li>
-                       {% endif %}
-                  {% endfor %}
+                           {% if addons|length or variations|length %}
+                            <span class="addons">Addons</span>
 
-              {% elif item.is_available %}
-                  <li>
-                    <span class="col-sm-8 col-md-9 item-sub-heading"><strong>{{item.name}}</strong>{% if item.experience %}{{item.experience|get_choice_display:"EXP_DICT"}}{% endif %}
-                    </span>
-                    <strong class="col-sm-4 col-md-3">Rs. {{item.price}}/-</strong>
-                  </li>
-                  {% if item.delivery_obj and item.delivery_obj.get_price %}
-                        <li>
-                            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure> {{item.delivery_obj.name}}</span>
-                            <span class="col-sm-4 col-md-3">Rs. {{item.delivery_obj.get_price|floatformat:0}}/-</span>
-                        </li>
-                  {% endif %}
-                  {% for var in variations %}
-                       {% if var.is_available %}
-                       <li>
-                            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure> {{var.name}}</span>
-                            <span class="col-sm-4 col-md-3">Rs. {{var.price}}/-</span>
-                        </li>
-                        {% endif %}
-                  {% endfor %}
-                  {% for addon in addons %}
-                       {% if addon.is_available %}
-                       <li>
-                            <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure> {{addon.name}}</span>
-                            <span class="col-sm-4 col-md-3">Rs. {{addon.price}}/-</span>
-                        </li>
-                        {% endif %}
-                  {% endfor %}
+                               {% for var in variations %}
+                                    {% if var.is_available %}
+                                    <div class="addons-box">
+                                          <span class="col-sm-8 col-md-9 item-sub-heading">
+                                          <figure class="mr-10"></figure> <b>{{var.name}}</b></span>
+                                          <span class="col-sm-4 col-md-3">Rs. {{var.price}}/-</span>
+                                          <span class="close-icon" onclick="removeVariationsOrAddons('{{csrf_token}}','{{var.reference}}','{{var.id}}')" ></span>
+                                    </div>
+                                    {% else %}
+                                            <p class="pb-0 red-text text-right mt-sub-10">Not available</p>
+                                    {% endif %}
+                               {% endfor %}
+                               {% for addon in addons %}
+                                    {% if addon.is_available %}
+                                         <div class="addons-box">
+                                          <span class="col-sm-8 col-md-9 item-sub-heading">
+                                          <figure class="mr-10"></figure> <b>{{addon.name}}</b></span>
+                                          <span class="col-sm-4 col-md-3">Rs. {{addon.price}}/-</span>
+                                          <span class="close-icon" onclick="removeVariationsOrAddons('{{csrf_token}}','{{var.reference}}','{{addon.id}}')" ></span>
+                                         </div>
+                                    {% endif %}
 
-              {% endif %}
-            </ul>
-        {% endwith %}
+                               {% endfor %}
+                           {% endif %}
+
+                            {% if delivery_types %}
+                                     <div class="delivery-speed mt-30 mb-15"  id="btn-delivery" onclick="toggleDeliveryItems('{{item.id}}')">
+                                      <span class="delivery-icon"></span>
+                                      <p class="pb-0">
+                                          <strong class="block" id="active-delivery-title{{item.id}}">{%if delivery_service %} {{delivery_service.title}}- {% if delivery_service.inr_price|is_free %}No extra cost {% else %}Rs. {{delivery_service.inr_price}}/- {% endif %} {%else%}Normal - No extra cost{%endif%}</strong>
+                                          <span id="active-delivery-description{{item.id}}"> ({%if delivery_service %} {{delivery_service.meta_desc}} {%else%}get it in 5 working days{%endif%})</span>
+                                      </p>
+                                      <span class="down-arrow-icon mt-10"></span>
+                                  </div><!-- /. select delivery options -->
+
+                                 <div class="pr"> <ul class="delivery-list cls_delivery-content" id="delivery-item{{item.id}}" style="display: none;">
+                                      {% for delivery_obj in delivery_types %}
+                                      <li>
+                                          <input type="radio" name="{{item.id}}" id="{{delivery_obj.slug}}{{item.id}}" {% if forloop.counter0 == delivery_service|get_count %} checked {%endif %} name="delivery-list" onclick="selectDeliveryType('{{delivery_obj.id}}', '{% if variations|length  %} {{variations.0.id}} {% else %} {{item.id}} {% endif %}', '{{csrf_token}}')" value="19">
+                                          <label for="{{delivery_obj.slug}}{{item.id}}"><strong class="block">{{delivery_obj.title}}- {% if delivery_obj.inr_price|is_free %}No extra cost {% else %}Rs. {{delivery_obj.inr_price}}/- {% endif %}</strong> ({{delivery_obj.meta_desc}})</label>
+                                      </li>
+                                      {% endfor %}
+                                  </ul>
+                                 </div>
+                           {% endif %}
+                        </li>
+                {% endif %}
+            {% endwith %}
         {% endfor %}
+    </ul>
+
 
         <!-- coupon & amount -->
         <ul>
           <li>
-            <span class="col-sm-8 col-md-9 text-right total-amount">Total amount</span>
-            <span class="col-sm-4 col-md-3 total-amount">Rs. {{total_amount}}/-</span>
+            <span class="col-sm-8 col-md-9 text-right subtotal-amount">Subtotal</span>
+            <span class="col-sm-4 col-md-3 total-amount" id="total-cart-amount-id">Rs. {{total_amount}}/-</span>
             <style type="text/css">
               .error{
                   color:red;
@@ -168,36 +181,32 @@
                 </div>
                 </div>
               {% else %}
-                <a href="javascript:void(0)" onclick="toggler('showCoupon',true);" id="show_hide_coupon">Apply coupon</a>
-                {% if wallet %}
-                  or
-                  <a href="javascript:void(0)" onclick="toggler('shineCredit',false);">Redeem Shine credit</a>
-                  
+                {% if candidate_in_session %}
+                <a href="javascript:void(0)" onclick="toggler('showCoupon','shineCredit',true);" id="show_hide_coupon">Apply coupon</a>
+                |
+                <a href="javascript:void(0)" onclick="toggler('shineCredit','showCoupon',false) ;">Redeem Shine credit</a>
                 {% endif %}
                   <form action="." id="discountForm">
                     <div id="showCoupon" class="hidden-div">
-                      Enter discount code
-                      <div class="form-group">
-                        <input id="discount_code" type="text" placeholder="Discount code" name="code" maxlength="15">
+                      <div class="form-group pr">
+                        <input id="discount_code" type="text" placeholder="Enter coupon code" name="code" maxlength="15">
                          <span class="error-txt" id="discount-alert"></span>
                         <button type="button" onclick="JSApplyDiscount();">Apply</button>
                       </div>
                     </div>
                   </form>
-                {% if wallet %}
-                  
+
                   <form action="." id="walletForm">
                     <div id="shineCredit" class="hidden-div">
                       You have {{wallet_total}} shine loyalty points.
                       <div class="form-group">
                         <input id="loyalty_point" type="number" placeholder="Enter loyalty points" min="0" max="{{wallet_total}}" name="point">
                         <span class="error-txt" id="point-alert" ></span>
-                        <button type="button" onclick="JSApplyPoint();">Redeem</button>
+                        <button type="button" class="add-redeem-button" onclick="JSApplyPoint();">Redeem</button>
                       </div>
                     </div>
                   </form>
-                {% endif %}
-                
+
               {% endif %}
               </span>
 
@@ -209,20 +218,20 @@
               {% elif cart_wallet %}
                     <!--span class="col-sm-6 text-right">Your Shine cash</span>
                     <span class="col-sm-6">-Rs. 2000/-</span-->
-                
+
                     <span class="col-sm-6 text-right">Shine loyalty points</span>
-                    <span class="col-sm-6">-Rs. <span>{{redeemed_reward_point}}</span>/-</span>  
+                    <span class="col-sm-6">-Rs. <span>{{redeemed_reward_point}}</span>/-</span>
               {% endif %}
               {% if cart_coupon or cart_wallet %}
                     <span class="col-sm-6 text-right">Total</span>
                     <span class="col-sm-6">Rs. <span>{{amount_after_discount}}</span>/-</span>
               {% endif %}
               <span class="col-sm-6 text-right">SGST @ {{sgst}}%</span>
-              <span class="col-sm-6">+Rs. <span>{{sgst_amount}}</span>/-</span>
+              <span class="col-sm-6">+Rs. <span id="sgst-amount">{{sgst_amount}}</span>/-</span>
               <span class="col-sm-6 text-right">CGST @ {{cgst}}%</span>
-              <span class="col-sm-6">+Rs. <span>{{cgst_amount}}</span>/-</span>
+              <span class="col-sm-6">+Rs. <span id="cgst-amount">{{cgst_amount}}</span>/-</span>
               <!--span class="col-sm-6 text-right">IGST @ {{igst}}%</span>
-              <span class="col-sm-6">+Rs. <span>{{igst_amount}}</span>/-</span--> 
+              <span class="col-sm-6">+Rs. <span>{{igst_amount}}</span>/-</span-->
             </span>
           </li>
         </ul>
@@ -230,17 +239,17 @@
         <!-- Payable amount -->
         <ul>
           <li class="payable-amount">
-            <span class="col-sm-8 col-md-9 text-right">Payable amount</span>
-            <span class="col-sm-4 col-md-3">Rs. {{total_payable_amount}}/-</span>
+            <span class="col-sm-8 col-md-9 text-right">Total</span>
+            <span class="col-sm-4 col-md-3" id="total-payable-amount">Rs. {{total_payable_amount}}/-</span>
           </li>
         </ul>
 
         <!-- Make payment -->
-        <span class="col-sm-8 col-md-9"></span>
-        <span class="col-sm-4 col-md-3 continue">
-          <a href="{% url "payment:payment-option" %}"><button type="button" id="payment-summary-continue-id">Make payment</button></a>
-          <figure class="secure-payment-icon"></figure>
-          <span>100% Secure Payment</span>
+        <span class="col-sm-7 col-md-8"></span>
+        <span class="col-sm-3 col-md-4 continue">
+          <a href="{% url "cart:payment-login" %}"><button type="button" id="payment-summary-continue-id">Proceed to payment</button></a>
+          <!-- <figure class="secure-payment-icon"></figure>
+          <span>100% Secure Payment</span> -->
         </span>
 
         </div>
@@ -251,12 +260,14 @@
     </section>
     <!-- main section end -->
 {% endblock container %}
-  
+
 
 {% block js_section %}
    {{ block.super }}
     {% compress js %}
     <script type="text/javascript" src="{% static 'shinelearn/js/cart/payment-summary.js' %}"></script>
+    <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
+    <script type="text/javascript" src="{% static 'shinelearn/js/mobile/cart/cart.js' %}"></script>
     {% endcompress %}
 {% endblock js_section %}
 

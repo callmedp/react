@@ -1,9 +1,25 @@
+# python imports
+
+
+# django imports
+from django.conf.urls import url
+
+# local imports
+
+from .views import (CountryListView, CurrencyViewSet, CityViewSet)
+# inter app imports
+
+# third party imports
 from rest_framework import routers
-from . import views
 
-router = routers.SimpleRouter()
+router = routers.DefaultRouter()
 
-router.register(r'currency', views.CurrencyViewSet)
-router.register(r'city', views.CityViewSet)
+router.register(r'currency', CurrencyViewSet)
+router.register(r'city', CityViewSet)
 
 urlpatterns = router.urls
+
+urlpatterns = [
+    url(r'^country/$', CountryListView.as_view())
+
+]

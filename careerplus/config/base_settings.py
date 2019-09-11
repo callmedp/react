@@ -122,7 +122,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'core.middleware.UpgradedMobileDetectionMiddleware',
-    'core.middleware.UpgradedSetFlavourMiddleware',
+    'core.middleware.UpgradedSetFlavourMiddleware',   
     'core.middleware.LearningShineMiddleware',
     'core.middleware.LoginMiddleware',
     'core.middleware.TrackingMiddleware',
@@ -230,11 +230,13 @@ COMPRESS_PRECOMPILERS = (
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+GCP_MEDIA_LOCATION = "l/m/"
 
 LEAD_UPLOAD = os.path.join(BASE_DIR, 'media/uploads/lead_file/')
 
 STATIC_ROOT = os.path.join(MEDIA_ROOT, 'static')
 STATIC_URL = '/media/static/'
+GCP_STATIC_LOCATION = "l/s/"
 
 DOWNLOAD_ROOT = os.path.join(BASE_DIR, 'download')
 DOWNLOAD_URL = '/download/'
@@ -486,7 +488,8 @@ CMS_GROUP_LIST = ['CMS_USER']
 SKILL_GROUP_LIST = ['SKILL_USER']
 COURSE_GROUP_LIST = ['COURSE_USER']
 SERVICE_GROUP_LIST = ['SERVICE_USER']
-USER_QUERY_GROUP_LIST = CMS_GROUP_LIST + SKILL_GROUP_LIST + COURSE_GROUP_LIST + SERVICE_GROUP_LIST
+ASSIGNMENT_GROUP_LIST = ['ASSIGNMENT_USER']
+USER_QUERY_GROUP_LIST = CMS_GROUP_LIST + SKILL_GROUP_LIST + COURSE_GROUP_LIST + SERVICE_GROUP_LIST + ASSIGNMENT_GROUP_LIST
 
 # Marketing User Auto login token Generation
 MARKETING_GROUP_LIST = ['MARKETING']
@@ -534,7 +537,8 @@ URL_MAPPING_TO_PRODUCT = {"resume-writing-services-1": ([1921, 1922, 1923, 1924,
                           "gst-certification": ([1810], 1810),
                           "data-science": ([3417], 3417),
                           "six-sigma": ([3400], 3400),
-                          "linkedin": ([1926], 1926)
+                          "linkedin": ([1926], 1926),
+                          'devops-professional': ([4131],4131),
 
                           }
 

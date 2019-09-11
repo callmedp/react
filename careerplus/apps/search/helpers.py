@@ -89,7 +89,8 @@ def clean_list_fields(param):
         "fduration": "DM",
         "fmode": "SM",
         "skills": "",
-        "fprice": "P"
+        "fprice": "P",
+        "fvid": ""
     }
     for key, prefix in param_prefix_mapping.items():
         val = param.getlist(key)

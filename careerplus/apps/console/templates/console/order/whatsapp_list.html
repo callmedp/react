@@ -12,6 +12,7 @@
 
     {% compress css %}
     <link href="{% static 'packages/iCheck/skins/flat/green.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'packages/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet" type="text/css">
     <link type="text/css" href="{% static 'console/css/datepicker/daterangepicker.css' %}" rel="stylesheet">
     {% endcompress %}
 
@@ -93,16 +94,20 @@
                 <div class="modal-body">
                   <form autocomplete="off" class="form-group" method="GET" action="{% url "console:queue-whatsappjoblist" %}" id="list-filter-form">
                         <div class="form-group">
-                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.oi_status}}</label></br>
+                            <label class="control-label col-md-12 col-sm-12 col-xs-12"> Status {{ filter_form.oi_status}}</label></br>
                             <br/>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.day_choice}}</label></br>
+                            <label class="control-label col-md-12 col-sm-12 col-xs-12">{{ filter_form.day_choice}}</label></br>
                             <br/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-12 col-sm-12 col-xs-12"> Payment Date<input class="form-control datepicker " id="id_filter_date" name="payment_date" placeholder="Payment Date"  value="{{ request.GET.payment_date}}" /></label></br>
                         </div>
                        {% if query %}
                            <input type="hidden" name="query" value="{{query}}">
                        {% endif %}
+                       <input type="hidden" name="sort_payment_date" value="{{request.GET.sort_payment_date}}">
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -143,51 +148,79 @@
               </li>
             </ul>
 
-            <div class="col-lg-12">
+            <div class="col-lg-5">
 
-            <div class="pull-right">
-                {% if perms.order.can_assign_jobs_on_the_move %}
+              <div class="pull-right">
+                  {% if perms.order.can_assign_jobs_on_the_move %}
 
-                    <form autocomplete="off" method="POST" role="form" id="assignment_form" action="{% url "console:assignment-orderitem-view" %}">{% csrf_token %}
-                    <div class="col-sm-4">
-                        <div class="input-group">
-                            {{assignment_form.assign_to}}
-                            <input type="hidden" id="selected-id-assign" name="selected_id" />
-                            <input type="hidden" name="queue_name" value="whatsappjoblist" />
-                            <span class="input-group-btn">
-                              <button type="button" class="btn btn-primary" id="assignment_button_go">Assign To!</button>
-                            </span>
+                      <form autocomplete="off" method="POST" role="form" id="assignment_form" action="{% url "console:assignment-orderitem-view" %}">{% csrf_token %}
+                      <div class="col-md-12">
+                          <div class="input-group">
+                              {{assignment_form.assign_to}}
+                              <input type="hidden" id="selected-id-assign" name="selected_id" />
+                              <input type="hidden" name="queue_name" value="whatsappjoblist" />
+                              <span class="input-group-btn">
+                                <button type="button" class="btn btn-primary" id="assignment_button_go">Assign To!</button>
+                              </span>
+                          </div>
+                      </div>
+                      </form>
+
+                  {% endif %}
+                  <!--h2>Select Comment to Change</h2-->
+                  <!-- large modal -->
+
+                  <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="assignmentModal">
+                      <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                            </button>
+                            <h4 class="modal-title" id="myModalLabel">Action On Inbox</h4>
+                          </div>
+                          <div class="modal-body" id="assignmentModalbody">
+                            Are You Sure???
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="assignment_action_yes">Yes</button>
+                          </div>
+
                         </div>
-                    </div>
-                    </form>
+                      </div>
+                  </div>
+              </div>
 
-                {% endif %}
-                <!--h2>Select Comment to Change</h2-->
-                <!-- large modal -->
+            </div>
+            <div class="col-lg-5">
+                <div class="pull-right">
 
-                <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="assignmentModal">
-                    <div class="modal-dialog modal-lg">
-                      <div class="modal-content">
-
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                          </button>
-                          <h4 class="modal-title" id="myModalLabel">Action On Inbox</h4>
-                        </div>
-                        <div class="modal-body" id="assignmentModalbody">
-                          Are You Sure???
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                          <button type="button" class="btn btn-primary" id="assignment_action_yes">Yes</button>
-                        </div>
-
+                  <form autocomplete="off" method="GET" role="form" action="{% url "console:queue-whatsappjoblist" %}">
+                    <div class="col-md-8">
+                      <div class="input-group">
+                          <select class="form-control" name="sort_payment_date">
+                            <option value="0" {% if request.GET.sort_payment_date == '0' %} selected {% endif %}>Select</option>
+                            <option value="1"  {% if request.GET.sort_payment_date == '1' %} selected {% endif %}>Payment Date</option>
+                          </select>
+                          <span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary" >Sort</button>
+                          </span>
+                          {% if request.GET.oi_status %}
+                          <input type="hidden" name="oi_status" value="{{request.GET.oi_status}}">
+                          {% endif %}
+                          {% if request.GET.day_choice %}
+                          <input type="hidden" name="day_choice" value="{{request.GET.day_choice}}">
+                          {% endif %}
+                          {% if request.GET.payment_date %}
+                          <input type="hidden" name="payment_date" value="{{request.GET.payment_date}}">
+                          {% endif %}
                       </div>
                     </div>
+                  </form>
                 </div>
             </div>
 
-            </div>
 
             <div class="clearfix"></div>
           </div>
@@ -214,7 +247,8 @@
                     <th class="column-title">Mobile</th>
                     <th class="column-title">Item Name</th>
                     <th class="column-title">Flow Status</th>
-                    <th class="column-title">Payment Date</th>
+                    <th class="column-title"> Payment Date</th>
+                    <th class="column-title">Assigned Date</th>
                     <th class="column-title">Assigned To</th>
                     <th class="column-title">Weeks</th>
                     <th class="column-title">Sent Links</th>
@@ -233,7 +267,13 @@
                             </td>
                       {% endif %}
                     
-                     <td><b> <a target='_blank' href="{% url 'console:queue-whatsapp-schedule' obj.pk %}">{{obj.order.number}} <p>(#{{obj.pk}})</p></a></b></td>
+                     <td>
+                      <b>
+                         <a target='_blank' href="{% url 'console:queue-whatsapp-schedule' obj.pk %}">{{obj.order.number}} <p>(#{{obj.pk}})</p>
+                         </a>
+                         <button type="button" class="btn btn-primary btn-xs"><a target='_blank' style="color:#fff;" href="{% url "console:order-detail" obj.order.id %}"><i class="fa fa-search" aria-hidden="true"></i>View Order</a></button>
+                      </b>
+                    </td>
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
                                                          <td>
                          <div>
@@ -248,12 +288,12 @@
                         <td>
                     <div>
                         <div id="mobile_field{{obj.order.id}}_{{forloop.counter}}"> </div>
-                        {% if exoitel_status%}
+                        {% if exoitel_status %}
                         <button id="{{obj.order.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{obj.order.id}});"></button>
                         <span style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{obj.order.id}}callingbtn-error"></span>
                         {% endif %}
                         <button type="button" onclick="order_get_details('{{obj.order.id}}','mobile,alt_mobile','mobile','{{forloop.counter}}');" class="btn btn-primary btn-xs"><i class="fa fa-phone" aria-hidden="true"></i>ClickToView</button>
-					</div>
+					         </div>
 
 
                       </td>
@@ -276,9 +316,12 @@
                             {% endif %}
                       </td>
                       <td>{{obj.get_oi_status}}</td>
+
                       <td>
-                          {{obj.payment_date|naturaltime}}
-                          <b>Updated On: {{obj.modified}}</b>
+                          <b>Paid On: {{obj.order.payment_date}}</b>
+                      </td>
+                      <td>
+                          <b>Assigned On: {{obj.get_assigned_operation_date}}</b>
                       </td>
                       
                       <td>{{obj.assigned_to}}</td>
@@ -367,7 +410,18 @@
         
 {% block js_block %}
   {{ block.super }}
-
+  <script type="text/javascript">
+    $('#id_filter_date').daterangepicker({
+        'opens': 'center',
+        "dateLimit": {
+           "month": 2
+        },
+        autoUpdateInput: false,
+      });
+      $('input[name="payment_date"]').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+    });
+  </script>
   {% compress js %}
   <!-- Parsley Validate Scripts -->
   <script type="text/javascript" src="{% static 'console/js/order/exotelCall.js' %}"></script>
@@ -379,6 +433,7 @@
   <script type="text/javascript" src="{% static 'console/js/order/orderitem-action.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/order/filter.js' %}"></script>
   <script type="text/javascript" src = "{% static 'console/js/order-info.js' %}"></script>
+  <script type="text/javascript" src="{% static 'console/js/datepicker/daterangepicker.js' %}"></script>
 
   {% endcompress %}
 

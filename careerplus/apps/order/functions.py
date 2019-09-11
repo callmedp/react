@@ -69,7 +69,7 @@ def update_initiat_orderitem_sataus(order=None):
                 else:
                     last_oi_status = oi.oi_status
                     if oi.product.sub_type_flow == 502:
-                        oi.oi_status = 31
+                        oi.oi_status = 23
                     elif oi.product.sub_type_flow == 503:
                         oi.oi_status = 5
                     else:

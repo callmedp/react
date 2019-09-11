@@ -72,153 +72,157 @@
 
       <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
-           <div class="x_title">
-            Details
-           </div>
-           <div class="x_content">
-             <table class="table table-striped jambo_table bulk_action" id="inbox-table">
-               <thead>
-                <tr class="headings">
-                  <th class="column-title">Weeks</th>
-                  <th class="column-title">Sent Links</th>
-                  <th class="column-title">Total Supposed to be sent</th>
-                  <th class="column-title">Pending Links Count</th>
-                </tr>
-              </thead>
-               <tbody id="body-table-list">
-                 <tr class="even pointer">
-                  {% with orderitem.get_weeks as weeks%}
-                    <td>{{ weeks.1 }}/{{ weeks.0 }}</td>
-                    <td>{{ orderitem.sent_link_count }} / {{ orderitem.get_total_links_needs_to_sent }}</td>
-                    <td>{{ orderitem.get_links_needed_till_now }}</td>
-                    <td>{{ orderitem.pending_links_count }}</td>
-                  {% endwith %}
-                 </tr>
-               </tbody>
-             </table>
-           </div>
+          {% if orderitem.is_onboard %}
+            <div class="x_title">
+              Details
+            </div>
+            <div class="x_content">
+               <table class="table table-striped jambo_table bulk_action" id="inbox-table">
+                 <thead>
+                  <tr class="headings">
+                    <th class="column-title">Weeks</th>
+                    <th class="column-title">Sent Links</th>
+                    <th class="column-title">Total Supposed to be sent</th>
+                    <th class="column-title">Pending Links Count</th>
+                  </tr>
+                </thead>
+                 <tbody id="body-table-list">
+                   <tr class="even pointer">
+                    {% with orderitem.get_weeks as weeks%}
+                      <td>{{ weeks.1 }}/{{ weeks.0 }}</td>
+                      <td>{{ orderitem.sent_link_count }} / {{ orderitem.get_total_links_needs_to_sent }}</td>
+                      <td>{{ orderitem.get_links_needed_till_now }}</td>
+                      <td>{{ orderitem.pending_links_count }}</td>
+                    {% endwith %}
+                   </tr>
+                 </tbody>
+               </table>
+            </div>
+          {% endif %}
           {% if not orderitem.is_closed %}
-          <div class="x_title">
-            <h2>Jobs Links</h2>
-            <ul class="nav navbar-right panel_toolbox">
-              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-              </li>
-            </ul>
-            <div class="clearfix"></div>
-          </div>
-          <div class="x_content">
-            <div class="accordion" id="accordion40" role="tablist" aria-multiselectable="true">
-                <form class="form-horizontal form-label-left" method="POST" action="{% url 'console:queue-whatsapp-schedule' orderitem.pk %}" novalidate enctype="multipart/form-data" id="link-form">
+            {% if orderitem.is_onboard %}
+              <div class="x_title">
+                <h2>Jobs Links</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                  </li>
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+                <div class="accordion" id="accordion40" role="tablist" aria-multiselectable="true">
+                    <form class="form-horizontal form-label-left" method="POST" action="{% url 'console:queue-whatsapp-schedule' orderitem.pk %}" novalidate enctype="multipart/form-data" id="link-form">
                       {% csrf_token %}
                       {{ formset.management_form }}
-                  {% if formset.non_form_errors %}
-                    <div class="alert alert-danger alert-dismissible fade in" role="alert">
-                      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
-                      </button>
-                      {{ formset.non_form_errors }}
-                    </div>
-                  {% endif %}
-                <div class="inter-related-parent-div">    
-                {% for inline_admin_form in formset.forms %}
-                <div class="panel {% if forloop.last %} {% endif %}">
-                  <a class="panel-heading {% if not inline_admin_form.errors %}collapsed{% endif %}" role="tab" id="heading2{{forloop.counter}}40" data-toggle="collapse" data-parent="#accordion40" href="#collapse2{{forloop.counter}}40" 
-                  {% if inline_admin_form.errors %}aria-expanded="true"{% else %}aria-expanded="false"{% endif %} aria-controls="collapse2{{forloop.counter}}40">
-                    {% if  inline_admin_form.instance.id %}
-                    <h4 class="panel-title">Job Link:&nbsp;{{inline_admin_form|get_instance}}</h4>
+                      {% if formset.non_form_errors %}
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                          </button>
+                          {{ formset.non_form_errors }}
+                        </div>
+                      {% endif %}
+                      <div class="inter-related-parent-div">    
+                        {% for inline_admin_form in formset.forms %}
+                        <div class="panel {% if forloop.last %} {% endif %}">
+                          <a class="panel-heading {% if not inline_admin_form.errors %}collapsed{% endif %}" role="tab" id="heading2{{forloop.counter}}40" data-toggle="collapse" data-parent="#accordion40" href="#collapse2{{forloop.counter}}40" 
+                          {% if inline_admin_form.errors %}aria-expanded="true"{% else %}aria-expanded="false"{% endif %} aria-controls="collapse2{{forloop.counter}}40">
+                            {% if  inline_admin_form.instance.id %}
+                            <h4 class="panel-title">Job Link:&nbsp;{{inline_admin_form|get_instance}}</h4>
 
-                    {% else %}
-                    <h4 class="panel-title">Job Link: Add New
-                    </h4>{% endif %}
+                            {% else %}
+                            <h4 class="panel-title">Job Link: Add New
+                            </h4>{% endif %}
 
-                      
-                  </a>
-                  <div id="collapse2{{forloop.counter}}40" class="panel-collapse collapse {% if inline_admin_form.errors %}in{% endif %}" role="tabpanel" aria-labelledby="heading2{{forloop.counter}}40"
-                  {% if inline_admin_form.errors %}aria-expanded="true"{% else %}aria-expanded="false" style="height: 0px;"{% endif %}>
-                    <div class="panel-body">
-                        {% if  inline_admin_form.DELETE %}
-                          <div class="pull-left">
-                            {{inline_admin_form.DELETE}}<label for="{{ inline_admin_form.DELETE.id_for_label }}" style="color:#d9534f !important;">&nbsp;&nbsp;Delete
-                            </label>
+                              
+                          </a>
+                          <div id="collapse2{{forloop.counter}}40" class="panel-collapse collapse {% if inline_admin_form.errors %}in{% endif %}" role="tabpanel" aria-labelledby="heading2{{forloop.counter}}40"
+                          {% if inline_admin_form.errors %}aria-expanded="true"{% else %}aria-expanded="false" style="height: 0px;"{% endif %}>
+                            <div class="panel-body">
+                                {% if  inline_admin_form.DELETE %}
+                                  <div class="pull-left">
+                                    {{inline_admin_form.DELETE}}<label for="{{ inline_admin_form.DELETE.id_for_label }}" style="color:#d9534f !important;">&nbsp;&nbsp;Delete
+                                    </label>
+                                    
+                                  </div>
+                                  </br>
+                                    <div class="clearfix"></div>
+                                {% endif %}
+
+                                {% for hidden in inline_admin_form.hidden_fields %}
+                                    {{ hidden }}
+                                {% endfor %}
                             
+                                <div class="item form-group {% if inline_admin_form.company_name.errors %}bad{% endif %}">
+                                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ inline_admin_form.company_name.id_for_label }}">Company Name <span class="required">*</span>
+                                </label>
+                                <div class="col-md-7 col-sm-7 col-xs-12">
+                                  {{inline_admin_form.company_name}}
+                                </div>
+                                <div class="alert">{{inline_admin_form.company_name.errors}}</div>
+                              </div>
+                              
+                              <div class="item form-group {% if inline_admin_form.location.errors %}bad{% endif %}">
+                                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ inline_admin_form.location.id_for_label }}">Location <span class="required"></span>
+                                </label>
+                                <div class="col-md-7 col-sm-7 col-xs-12">
+                                  {{inline_admin_form.location}}
+                                </div>
+                                <div class="alert">{{inline_admin_form.location.errors}}</div>
+                              </div>
+                              
+                              <div class="item form-group {% if inline_admin_form.job_title.errors %}bad{% endif %}">
+                                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ inline_admin_form.job_title.id_for_label }}">Job Title <span class="required"></span>
+                                </label>
+                                <div class="col-md-7 col-sm-7 col-xs-12">
+                                  {{inline_admin_form.job_title}}
+                                </div>
+                                <div class="alert">{{inline_admin_form.job_title.errors}}</div>
+                              </div>
+                              
+                              <div class="item form-group {% if inline_admin_form.link.errors %}bad{% endif %}">
+                                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ inline_admin_form.link.id_for_label }}">Link<span class="required"></span>
+                                </label>
+                                <div class="col-md-7 col-sm-7 col-xs-12">
+                                  {{inline_admin_form.link}}
+                                </div>
+                                <div class="alert">{{inline_admin_form.link.errors}}</div>
+                              </div>                        
+                           </div>
                           </div>
-                          </br>
-                            <div class="clearfix"></div>
+                        </div>
+                        {% endfor %}
+                      </div>
+                   
+
+                      <input type="hidden" name="action_type" value="0">
+                      <input type="hidden" name="oi" value="{{ orderitem.pk }}">
+                      <br>
+                      <div class="form-group row">
+                        <div class="col-md-2 col-sm-2 col-xs-2 row">
+                          <button type="submit" class="btn btn-success action_btn">Save</button>
+                        </div>
+                        {% if perms.order.can_send_jobs_on_the_move and orderitem.is_approved %}
+
+                        <div class="col-md-2 col-sm-2 col-xs-2 row">
+                          <button type="submit" class="btn btn-success action_btn">Send</button>
+                        </div>
                         {% endif %}
 
-                        {% for hidden in inline_admin_form.hidden_fields %}
-                            {{ hidden }}
-                        {% endfor %}
-                    
-                        <div class="item form-group {% if inline_admin_form.company_name.errors %}bad{% endif %}">
-                        <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ inline_admin_form.company_name.id_for_label }}">Company Name <span class="required">*</span>
-                        </label>
-                        <div class="col-md-7 col-sm-7 col-xs-12">
-                          {{inline_admin_form.company_name}}
+                        {%if orderitem.has_saved_links %}
+
+                        <div class="col-md-2 col-sm-2 col-xs-2 row">
+                          <button type="submit" class="btn btn-success action_btn">View Message</button>
                         </div>
-                        <div class="alert">{{inline_admin_form.company_name.errors}}</div>
+                        {% endif %}
                       </div>
-                      
-                      <div class="item form-group {% if inline_admin_form.location.errors %}bad{% endif %}">
-                        <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ inline_admin_form.location.id_for_label }}">Location <span class="required"></span>
-                        </label>
-                        <div class="col-md-7 col-sm-7 col-xs-12">
-                          {{inline_admin_form.location}}
-                        </div>
-                        <div class="alert">{{inline_admin_form.location.errors}}</div>
-                      </div>
-                      
-                      <div class="item form-group {% if inline_admin_form.job_title.errors %}bad{% endif %}">
-                        <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ inline_admin_form.job_title.id_for_label }}">Job Title <span class="required"></span>
-                        </label>
-                        <div class="col-md-7 col-sm-7 col-xs-12">
-                          {{inline_admin_form.job_title}}
-                        </div>
-                        <div class="alert">{{inline_admin_form.job_title.errors}}</div>
-                      </div>
-                      
-                      <div class="item form-group {% if inline_admin_form.link.errors %}bad{% endif %}">
-                        <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ inline_admin_form.link.id_for_label }}">Link<span class="required"></span>
-                        </label>
-                        <div class="col-md-7 col-sm-7 col-xs-12">
-                          {{inline_admin_form.link}}
-                        </div>
-                        <div class="alert">{{inline_admin_form.link.errors}}</div>
-                      </div>                        
-<!--                       <input type="hidden" value="{{orderitem.pk}}" name="form-{{forloop.counter0}}-oi"  >
- -->                    </div>
-                  </div>
-                </div>
-                {% endfor %}
-                </div>
-               
-
-                  <input type="hidden" name="action_type" value="0">
-                  <input type="hidden" name="oi" value="{{ orderitem.pk }}">
-                  <br>
-                  <div class="form-group row">
-                    <div class="col-md-2 col-sm-2 col-xs-2 row">
-                      <button type="submit" class="btn btn-success action_btn">Save</button>
-                    </div>
-                    {% if perms.order.can_send_jobs_on_the_move %}
-
-                    <div class="col-md-2 col-sm-2 col-xs-2 row">
-                      <button type="submit" class="btn btn-success action_btn">Send</button>
-                    </div>
-                    {% endif %}
-
-                    {%if orderitem.has_saved_links %}
-
-                    <div class="col-md-2 col-sm-2 col-xs-2 row">
-                      <button type="submit" class="btn btn-success action_btn">View Message</button>
-                    </div>
-                    {% endif %}
-                  </div>
-                </form>
-            </div> 
-          </div>
+                    </form>
+                </div> 
+              </div>
+            {% endif %}
           {% endif %}
 
 <!--  Previous Link -->
+        {% if orderitem.is_onboard %}
           <br>
           <br>
           <div class="x_title">
@@ -299,10 +303,12 @@
               <h5 class="text-center">No Previous Links</h5>
             {% endif %}
           </div>
+        {% endif %}
 <!--  End Previous Link -->
 
 
 <!--  Profile Data -->
+  
           <div class="x_title">
             <h2>Profile</h2>
             <div class="clearfix"></div>
@@ -334,9 +340,31 @@
                 <label> Current Salary</label>
                 {{profile_form.current_salary}}
               </div>
-              <input type="hidden" name="action_type" value="3">
+              <div class="form-group col-md-3">
+                <label> Skills</label>
+                {{profile_form.skills}}
+              </div>
+              <div class="form-group col-md-3">
+                <label> Experience</label>
+                {{profile_form.experience}}
+              </div>
+              <br>
+              {% if not orderitem.is_onboard and perms.order.can_approve_jobs_on_the_move %}
               <div class="form-group col-md-12">
-                <button type="submit" class="btn btn-primary">Save Profile</button>
+                <label> Board User {{profile_form.onboard}}</label>
+              </div>
+              {% endif %}
+              {{orderitem.is_approved}}
+              {% if not orderitem.is_approved and orderitem.is_onboard and perms.order.can_approve_jobs_on_the_move %}
+              <div class="form-group col-md-12">
+                <label> Approved {{profile_form.approved}}</label>
+              </div>
+              {% endif %}
+              <input type="hidden" name="action_type" value="3">
+              <br>
+              <br>
+              <div class="form-group col-md-12">
+                <button type="submit" class="btn btn-primary">Update </button>
               </div>
             </form>
           </div>
@@ -411,6 +439,7 @@
       else if(text=='View Message'){
         $('input[name="action_type"]').val(4)
       }
+      $(this).attr("disabled", true);
       $("#link-form").submit()
     });
   </script>
@@ -425,6 +454,10 @@
         'delimiter': [','],   // Or a string with a single delimiter. Ex: ';'
     });
       $('#id_desired_position').tagsInput({
+        width: 'auto',
+        'delimiter': [','],   // Or a string with a single delimiter. Ex: ';'
+    });
+       $('#id_skills').tagsInput({
         width: 'auto',
         'delimiter': [','],   // Or a string with a single delimiter. Ex: ';'
     });

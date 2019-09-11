@@ -93,7 +93,7 @@ class Header extends Component {
 
                         <div className="header__right">
                         <span className="header--off">
-                            <img src={`${this.staticUrl}react/assets/images/mobile/50percentage-off.png`} alt=""/>
+                            <img src={`${this.staticUrl}react/assets/images/mobile/launch-offer.png`} alt=""/>
                         </span>
                         </div>
 

@@ -181,6 +181,7 @@ function* fetchImageUrl(action) {
 function* updateEntityPreference(action) {
     try {
         const {payload: {entity_preference_data, resolve, reject, showLoader}} = action;
+        debugger;
         const candidateId = localStorage.getItem('candidateId') || '';
 
         if (showLoader) yield put({type: UPDATE_UI, data: {loader: true}});
@@ -197,7 +198,7 @@ function* updateEntityPreference(action) {
         const data = modifyPersonalInfo(result['data']);
 
         yield put({type: Actions.SAVE_USER_INFO, data: data});
-        return resolve("ENtity Updated")
+        return resolve("Entity Updated")
 
     } catch (e) {
         console.log('error', e);

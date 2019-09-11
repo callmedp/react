@@ -1,0 +1,39 @@
+%has-content {
+    top: -10px; 
+    left: 15px; 
+    font-size: 12px; 
+    padding: 0px 5px;
+    background-color: $bg-white;
+    color: $txt-blue; 
+    transition: 0.3s;
+}
+
+.animation-input {
+    &~ label{
+        position: absolute; 
+        left: 12px;
+        top: 13px; 
+        color: #aaa; 
+        transition: 0.3s;
+        pointer-events: none;
+
+    }
+
+    &:focus ~ label{
+      @extend %has-content;
+    }
+}
+
+.has-content {
+    &.animation-input {
+        border: 2px solid $bg-blue !important;
+
+        &~ label {
+            @extend %has-content;
+        }
+    }
+}
+
+input:-internal-autofill-selected {
+    background-color: $bg-white;  
+}

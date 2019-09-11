@@ -24,6 +24,7 @@ from geolocation.models import Country
 from users.tasks import user_register
 from search.helpers import get_recommendations
 from cart.tasks import cart_drop_out_mail, create_lead_on_crm
+from django.db.models import Q
 
 from .models import Cart
 from .mixins import CartMixin
@@ -79,7 +80,7 @@ class AddToCartView(View, CartMixin):
     def post(self, request, *args, **kwargs):
         data = {"status": -1}
         cart_type = request.POST.get('cart_type')
-        prod_id = request.POST.get('prod_id','')
+        prod_id = request.POST.get('prod_id', '')
         cart_pk = request.session.get('cart_pk', '')
         is_resume_template = request.POST.get('add_resume', False)
         candidate_id = request.session.get('candidate_id', '')
@@ -118,7 +119,7 @@ class AddToCartView(View, CartMixin):
             data['redirect_url'] = reverse('cart:payment-login')
 
         data['cart_count'] = str(self.get_cart_count())
-        data['cart_url'] = reverse('cart:cart-product-list')
+        data['cart_url'] = reverse('cart:payment-summary')
 
         return HttpResponse(json.dumps(data), content_type="application/json")
 
@@ -161,7 +162,7 @@ class RemoveFromCartView(View, CartMixin):
 
 
 @Decorate(stop_browser_cache())
-class PaymentLoginView(TemplateView):
+class PaymentLoginView(TemplateView, CartMixin):
     template_name = "cart/payment-login.html"
 
     def get(self, request, *args, **kwargs):
@@ -169,11 +170,13 @@ class PaymentLoginView(TemplateView):
         cart_pk = request.session.get('cart_pk')
         try:
             self.cart_obj = Cart.objects.get(pk=cart_pk)
+            self.cart_obj.shipping_done = True
+            self.cart_obj.save()
         except Exception as e:
             logging.getLogger('error_log').error("unable to assign cart object to self %s " % str(e))
             return HttpResponseRedirect(reverse('homepage'))
         if candidate_id:
-            return HttpResponseRedirect(reverse('cart:payment-shipping'))
+            return HttpResponseRedirect(reverse('payment:payment-option'))
         return super(self.__class__, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -184,6 +187,8 @@ class PaymentLoginView(TemplateView):
             email = self.request.POST.get('email', '').strip()
             password = self.request.POST.get('password', '')
             login_with = self.request.POST.get('login_with', '')
+            mobile_number = ''
+            guest_name = ''
 
             valid_email = False
             try:
@@ -195,73 +200,109 @@ class PaymentLoginView(TemplateView):
 
             if valid_email and login_with:
                 cart_pk = self.request.session.get('cart_pk')
+                mobile_number = self.request.POST.get('mobile', '')
+                guest_name = self.request.POST.get('name', '')
+                country_code = self.request.POST.get('country_code')
+
+                if guest_name:
+                    first_name = guest_name.strip().split(' ')[0]
+                    last_name = ' '.join((guest_name + ' ').split(' ')[1:]).strip()
                 if cart_pk:
                     cart_obj = Cart.objects.get(pk=cart_pk)
                     cart_obj.email = email
+                    cart_obj.owner_email = email
+                    cart_obj.mobile = mobile_number
+                    cart_obj.first_name = first_name
+                    cart_obj.last_name = last_name
+                    cart_obj.country_code = country_code
+                    # registering user into shine (for getting candidate/owner id
+                    data = {}
+                    data.update({
+                        "email": cart_obj.email,
+                        "country_code": cart_obj.country_code,
+                        "cell_phone": cart_obj.mobile,
+                        "name": guest_name,
+                    })
+                    candidate_id, error = user_register(data=data)
+                    # if error:
+                    # email_error = error
+                    # context = self.get_context_data()
+                    # context.update({
+                    #     "guest_email_error": email_error})
+                    # return TemplateResponse(request, self.template_name, context)
+
+                    # error handling
+                    cart_obj.owner_id = candidate_id
+                    # resp_status = ShineCandidateDetail().get_status_detail(email=None,
+                    #                                                        shine_id=candidate_id)
+                    # self.request.session.update(resp_status)
                     cart_obj.save()
-                    return HttpResponseRedirect(reverse('cart:payment-shipping'))
-                return HttpResponseRedirect(reverse('cart:cart-product-list'))
+                    return HttpResponseRedirect(reverse('payment:payment-option'))
+                return HttpResponseRedirect(reverse('cart:payment-summary'))
 
-            if valid_email:
-                login_dict.update({
-                    "email": email,
-                    "password": password,
-                })
-                user_exist = RegistrationLoginApi.check_email_exist(login_dict['email'])
-
-                if user_exist.get('exists') and password:
-                    login_resp = RegistrationLoginApi.user_login(login_dict)
-
-                    if login_resp['response'] == 'login_user':
-                        resp_status = ShineCandidateDetail().get_status_detail(email=None,
-                                                                               shine_id=login_resp['candidate_id'])
-                        self.request.session.update(resp_status)
-                        cart_pk = self.request.session.get('cart_pk')
-                        if cart_pk:
-                            cart_obj = Cart.objects.get(pk=cart_pk)
-                            cart_obj.email = email
-                            cart_obj.save()
-                        if remember_me:
-                            self.request.session.set_expiry(
-                                settings.SESSION_COOKIE_AGE)  # 1 year
-                        return HttpResponseRedirect(reverse('cart:payment-shipping'))
-
-                    elif login_resp['response'] == 'error_pass':
-                        context = self.get_context_data()
-                        context.update({
-                            "non_field_error": login_resp.get("non_field_errors")[0],
-                            'email_exist': True,
-                            "email": email})
-                        return TemplateResponse(request, self.template_name, context)
-
-                elif user_exist.get('exists'):
-                    context = self.get_context_data()
-                    context.update({"guest_login": "guest_login"})
-                    cart_pk = self.request.session.get('cart_pk')
-                    if cart_pk:
-                        cart_obj = Cart.objects.get(pk=cart_pk)
-                        cart_obj.email = email
-                        cart_obj.save()
-                    context.update({
-                        'email': email,
-                        'email_exist': True})
-                    return TemplateResponse(request, self.template_name, context)
-
-                elif not user_exist.get('exists'):
-                    cart_pk = self.request.session.get('cart_pk')
-                    if cart_pk:
-                        cart_obj = Cart.objects.get(pk=cart_pk)
-                        cart_obj.email = email
-                        cart_obj.save()
-                        return HttpResponseRedirect(reverse('cart:payment-shipping'))
-                    return HttpResponseRedirect(reverse('cart:cart-product-list'))
-            else:
-                email_error = "Please enter valid email address."
-                context = self.get_context_data()
-                context.update({
-                    "email_exist": False,
-                    "email_error": email_error})
-                return TemplateResponse(request, self.template_name, context)
+            # if valid_email:
+            #     login_dict.update({
+            #         "email": email,
+            #         "password": password,
+            #     })
+            #     user_exist = RegistrationLoginApi.check_email_exist(login_dict['email'])
+            #
+            #     if user_exist.get('exists') and password:
+            #         login_resp = RegistrationLoginApi.user_login(login_dict)
+            #
+            #         if login_resp['response'] == 'login_user':
+            #             resp_status = ShineCandidateDetail().get_status_detail(email=None,
+            #                                                                    shine_id=login_resp['candidate_id'])
+            #             self.request.session.update(resp_status)
+            #             cart_pk = self.request.session.get('cart_pk')
+            #             if cart_pk:
+            #                 cart_obj = Cart.objects.get(pk=cart_pk)
+            #                 cart_obj.email = email
+            #                 cart_obj.owner_id = login_resp['candidate_id']
+            #                 cart_obj.owner_email = email
+            #                 cart_obj.first_name = self.request.session.get('first_name', '')
+            #                 cart_obj.save()
+            #             if remember_me:
+            #                 self.request.session.set_expiry(
+            #                     settings.SESSION_COOKIE_AGE)  # 1 year
+            #             return HttpResponseRedirect(reverse('payment:payment-option'))
+            #
+            #         elif login_resp['response'] == 'error_pass':
+            #             context = self.get_context_data()
+            #             context.update({
+            #                 "non_field_error": login_resp.get("non_field_errors")[0],
+            #                 'email_exist': True,
+            #                 "email": email})
+            #             return TemplateResponse(request, self.template_name, context)
+            #
+            #     elif user_exist.get('exists'):
+            #         context = self.get_context_data()
+            #         context.update({"guest_login": "guest_login"})
+            #         cart_pk = self.request.session.get('cart_pk')
+            #         if cart_pk:
+            #             cart_obj = Cart.objects.get(pk=cart_pk)
+            #             cart_obj.email = email
+            #             cart_obj.save()
+            #         context.update({
+            #             'email': email,
+            #             'email_exist': True})
+            #         return TemplateResponse(request, self.template_name, context)
+            #
+            #     elif not user_exist.get('exists'):
+            #         cart_pk = self.request.session.get('cart_pk')
+            #         if cart_pk:
+            #             cart_obj = Cart.objects.get(pk=cart_pk)
+            #             cart_obj.email = email
+            #             cart_obj.save()
+            #             return HttpResponseRedirect(reverse('payment:payment-option'))
+            #         return HttpResponseRedirect(reverse('cart:payment-summary'))
+            # else:
+            #     email_error = "Please enter valid email address."
+            #     context = self.get_context_data()
+            #     context.update({
+            #         "email_exist": False,
+            #         "email_error": email_error})
+            #     return TemplateResponse(request, self.template_name, context)
 
         except Exception as e:
             logging.getLogger('error_log').error("payment login execution failed  %s " % str(e))
@@ -277,9 +318,28 @@ class PaymentLoginView(TemplateView):
 
         cart_pk = self.request.session.get('cart_pk')  # required for calling self.get_context_data()
         cart_obj = Cart.objects.get(pk=cart_pk)
+        type_flow = -1
+
+        line_item_list = cart_obj.lineitems.filter(parent=None)
+
+        if len(line_item_list):
+            line_item = line_item_list[0]
+            type_flow = int(line_item.product.type_flow)
+        # resume builder flow handle
+        if type_flow == 17:
+            cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
+        else:
+            cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
+        cart_items = cart_dict.get('cart_items', [])
+        payment_dict = self.getPayableAmount(cart_obj, cart_dict.get('total_amount'))
+        country_list = Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact='') | Q(active__exact=False))
+
+        context.update(payment_dict)
+        context.update({'country_list': country_list})
+
         if cart_obj.email == email:
             context['email_exist'] = True
-            context.update({'email': email, })
+            context.update({'email': email})
         return context
 
 
@@ -287,7 +347,7 @@ class PaymentLoginView(TemplateView):
 class PaymentShippingView(UpdateView, CartMixin):
     model = Cart
     template_name = "cart/payment-shipping.html"
-    success_url = "/cart/payment-summary/"
+    success_url = "/payment/payment-options/"
     http_method_names = [u'get', u'post']
     form_class = ShippingDetailUpdateForm
 
@@ -470,11 +530,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
             cart_pk = self.request.session.get('cart_pk')
             try:
                 self.cart_obj = Cart.objects.get(pk=cart_pk)
-                # cart_dict = self.get_solr_cart_items(cart_obj=self.cart_obj)
-                if not self.cart_obj.shipping_done or not self.cart_obj.owner_id:
-                    return HttpResponseRedirect(reverse('cart:payment-shipping'))
-
-                elif not self.cart_obj.lineitems.all().exists():
+                if not self.cart_obj.lineitems.all().exists():
                     return HttpResponseRedirect(reverse('homepage'))
 
             except Exception as e:
@@ -563,8 +619,10 @@ class PaymentSummaryView(TemplateView, CartMixin):
                     wal_obj = None
 
         context.update({
-            'cart_coupon': cart_coupon, 'cart_wallet': cart_wallet, 'wallet': wal_obj,
-            'cart': cart_obj, 'wallet_total': wal_total, 'wallet_point': wal_point})
+            'cart_coupon': cart_coupon, 'cart_wallet': cart_wallet,
+            'wallet': wal_obj, 'type_flow': type_flow,
+            'cart': cart_obj, 'wallet_total': wal_total, 'wallet_point': wal_point,
+            'candidate_in_session': self.request.session.get('candidate_id')})
 
         context.update({
             "cart_items": cart_items,
@@ -602,9 +660,15 @@ class UpdateDeliveryType(View, CartMixin):
                     cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
                 total_cart_amount = cart_dict.get('total_amount')
                 delivery_charge = delivery_obj.get_price()
+                payment_dict = self.getPayableAmount(cart_obj, cart_dict.get('total_amount'))
                 data.update({
-                    "total_cart_amount": int(total_cart_amount),
-                    "delivery_charge": int(delivery_charge),
+                    "total_payable_amount": float(payment_dict['total_payable_amount']),
+                    "total_cart_amount": float(total_cart_amount),
+                    "delivery_charge": float(delivery_charge),
+                    "delivery_service_title": delivery_obj.title,
+                    "delivery_service_meta_desc": delivery_obj.meta_desc,
+                    'sgst_amount': float(payment_dict['sgst_amount']),
+                    "cgst_amount": float(payment_dict['cgst_amount'])
                 })
 
         return HttpResponse(json.dumps(data), content_type="application/json")

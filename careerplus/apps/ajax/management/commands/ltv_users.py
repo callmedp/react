@@ -6,22 +6,6 @@ from shinecpcrm.config.celery import app as celery_app  # noqa
 from ajax.views import *
 from order.models import *
 
-def get_ltv(c_id):
-    candidate_id = c_id
-    ltv_pks = list(Order.objects.filter(candidate_id = candidate_id, status__in=[1, 2, 3]).values_list('pk', flat=True))
-    ltv = Decimal(0)
-    if ltv_pks:
-        ltv_order_sum = Order.objects.filter(pk__in=ltv_pks).aggregate(ltv_price=Sum('total_incl_tax'))
-        ltv = ltv_order_sum.get('ltv_price') if ltv_order_sum.get('ltv_price') else Decimal(0)
-        rf_ois = list(OrderItem.objects.filter(order__in=ltv_pks, oi_status = 163).values_list('order', flat=True))
-        rf_sum = RefundRequest.objects.filter(order__in=rf_ois).aggregate(rf_price=Sum('refund_amount'))
-        if rf_sum.get('rf_price'):
-            ltv = ltv - rf_sum.get('rf_price')
-    if ltv >= 200000:
-        return True, ltv
-    else:
-        return False, ltv
-
 
 import csv
 

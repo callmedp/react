@@ -69,7 +69,7 @@
 
                    <!--a class="icon-search pull-left" href="search-listing.html">search</a-->
 
-                   <!--a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a-->
+                   <!--a class="icon-cart" href="{% url "cart:payment-summary" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a-->
                 </div><!-- / Right side Icon ends here -->
             </div><!-- header menu Icon ends here -->
         {% else %}
@@ -79,7 +79,7 @@
                 </div>
                 <div class="pull-right" style="width:90%;">
 
-                   <a class="icon-cart pull-right" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+                   <a class="icon-cart pull-right" href="{% url "cart:payment-summary" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
                    <form method='get' id="search-form">
                     <div class="searchbox">
                         <input id='id_q' type="text" placeholder="Search here" name="search" class="searchbox-input" autocomplete="off">
@@ -120,7 +120,7 @@
                     <li>
                         <figure class="icon-comments"></figure>
                         {% if prd_num_rating %}
-                        <a href="javascript:void(0);">{{prd_num_rating}}
+                        <a href="#review">{{prd_num_rating}}
                         {%if prd_num_rating == 1 %}
                             review
                             {%else%}
@@ -133,12 +133,12 @@
                     </li>
                     {% if prd_num_jobs %}
                         <li>
-                            <figure class="icon-bag"></figure>
+                            <figure class="icon-jobs"></figure>
                             <strong>{{prd_num_jobs}} Jobs</strong>
                         </li>
                     {% endif %}
                     <li>
-                        <figure class="icon-jobs"></figure>
+                        <figure class="icon-bag"></figure>
                         <strong>
                             {{prd_num_bought}}
                         </strong> bought
@@ -153,10 +153,12 @@
 
         <hr class="row">
         <article class="mt-20">
+            {% if prd_service == 'course' or product.type_flow == 16 %}
             <span class="byvskills mb-30">
-              <strong><a href="/search/results/?q={{prd_vendor}}">All courses/ certification ({{prd_vendor_count}})</a></strong>
+              <strong><a onclick="gaEvent('Search','{{prd_vendor}}','ViewAllProductVendor');" href="/search/results/?fvid={{product.vendor.id}}">All courses/ certifications ({{prd_vendor_count}})</a></strong>
               By {{prd_vendor}}
             </span>
+            {% endif %}
         {% if prd_about %}
             <h2>Overview</h2>
             <style>
@@ -336,7 +338,6 @@
 
 <script type="text/javascript">
 
-
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
               (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
               m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -494,6 +495,7 @@ function close_review() {
 </script>
 
     <script type="text/javascript">
+        
         $(document).ready(function(){  
             funcAreaSet = {{ func_area_set|safe }}
             if(commonJs.getParameterByName('type') == 'autoEnrol'){

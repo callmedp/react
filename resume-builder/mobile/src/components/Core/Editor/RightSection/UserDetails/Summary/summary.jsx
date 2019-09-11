@@ -14,6 +14,7 @@ import validate from "../../../../../FormHandler/validtaions/summary/validate"
 import {siteDomain} from "../../../../../../Utils/domains";
 import AddSuggesion from '../../../../../Common/AddSuggestion/addSuggesion';
 import BottomCTC from '../../../../../Common/BottomCTC/bottom-ctc';
+import Subscribe from '../../../RightSection/subscribe';
 
 
 class Summary extends Component {
@@ -143,6 +144,7 @@ class Summary extends Component {
         return (
             <div className="buildResume">
                 <PreviewModal {...this.props}/>
+                <Subscribe {...this.props}/>
                 <AddSuggesion label={'Summary'} modal_status={modal_status} length={extra_info.length} maxLength="1000"
                               closeModal={this.closeModal} suggestions={suggestions}/>
                 <div className="buildResume__wrap pb-0">

@@ -18,23 +18,19 @@ $().ready(function() {
     });
 
 
-    $("#shipping_form").validate({
+    $("#guest_form").validate({
         // errorClass: 'error-txt',
         rules: {
-                first_name:{
+                name:{
                     required: true,
-                    maxlength: 50,
+                    maxlength: 60,
                 },
-                last_name:{
-                    required: true,
-                    maxlength: 50,
-                },
-                // email:{
-                //     required: true,
-                //     email: true,
-                //     maxlength: 100,
 
-                // },
+                email:{
+                    required: true,
+                    email: true,
+                    maxlength: 100,
+                },
                 mobile:{
                     required: true,
                     digits: true,
@@ -45,39 +41,35 @@ $().ready(function() {
                 country_code:{
                     required: true,
                 },
-                address:{
-                    required: false,
-                    maxlength: 200, 
-                },
-                pincode:{
-                    required: false,
-                    digits: true,
-                    indiaPin: false,
-                },
-                state:{
-                    required: false,
-                    maxlength: 100,
-                }
+                // address:{
+                //     required: false,
+                //     maxlength: 200,
+                // },
+                // pincode:{
+                //     required: false,
+                //     digits: true,
+                //     indiaPin: false,
+                // },
+                // state:{
+                //     required: false,
+                //     maxlength: 100,
+                // }
                       
         },
         messages:{
-            first_name:{
-                required: 'this value is required.',
-                maxlength: 'length should be less than 50 characters',
+            name:{
+                required: 'Name is required.',
+                maxlength: 'length should be less than 60 characters',
             },
-            last_name:{
-                required: 'this value is required.',
-                maxlength: 'length should be less than 50 characters',
+            email:{
+                required: 'Email is required.',
+                email: 'enter only valid email id',
+                maxlength: 'length should be less than 100 characters',
             },
-            // email:{
-            //     required: 'this value is required.',
-            //     email: 'enter only valid email id',
-            //     maxlength: 'length should be less than 100 characters',
-            // },
 
             
             mobile:{
-                required: 'this value is required.',
+                required: 'Contact is required.',
                 digits: 'only digit accepted.',
                 indiaMobile: 'length must be 10 digits.',
                 minlength: 'length must be greater than 3 digits.',
@@ -86,19 +78,19 @@ $().ready(function() {
             country_code:{
                 required: 'this value is required.',
             },
-            address:{
-                required: 'this value is required.',
-                maxlength: 'length must be less than 200 characters.',
-            },
-            pincode:{
-                required: 'this value is required.',
-                digits: 'only digit accepted.',
-                indiaPin: 'length must be 6 digits.',
-            },
-            state:{
-                required: 'this value is required.',
-                maxlength: 'length must be less than 200 characters.',
-            }
+            // address:{
+            //     required: 'this value is required.',
+            //     maxlength: 'length must be less than 200 characters.',
+            // },
+            // pincode:{
+            //     required: 'this value is required.',
+            //     digits: 'only digit accepted.',
+            //     indiaPin: 'length must be 6 digits.',
+            // },
+            // state:{
+            //     required: 'this value is required.',
+            //     maxlength: 'length must be less than 200 characters.',
+            // }
         },
         highlight: function(element) {
             /*if (window.CURRENT_FLAVOUR == 'mobile'){
@@ -108,25 +100,35 @@ $().ready(function() {
                 $(element).closest('.col-sm-6').addClass('error');
             }*/
 
-            var className = '.col-sm-6';
+            let className = '.form-group', addClass = 'error1';
+
             if (window.CURRENT_FLAVOUR == 'mobile'){
-                className = '.form-group';
+                className = 'li';
+                addClass = 'error'
             }
-            $(element).closest(className).addClass('error');
+            $(element).closest(className).addClass(addClass);
         },
         unhighlight: function(element) {
             if (window.CURRENT_FLAVOUR == 'mobile'){
-                $(element).closest('.form-group').removeClass('error');
+                $(element).closest('li').removeClass('error');
+                $(element).siblings('.error--mgs').html('');
+
             }
             else{
-                if ($(element).attr('name') != "country_code"){
-                    $(element).closest('.col-sm-6').removeClass('error');
-                }
+                 $(element).closest('.form-group').removeClass('error1');
+                 $(element).siblings('.error-txt').html('');
+                // if ($(element).attr('name') != "country_code"){
+                // }
             }
         },
+        invalidHandler: function(event, validator) {
+        },
         errorPlacement: function(error, element){
-
-            $(element).siblings('.error-txt').html(error.text());
+            let  errorTextClass = '.error-txt';
+             if (window.CURRENT_FLAVOUR == 'mobile'){
+               errorTextClass = '.error--mgs';
+             }
+             $(element).siblings(errorTextClass).html(error.text());
         }
     });
 

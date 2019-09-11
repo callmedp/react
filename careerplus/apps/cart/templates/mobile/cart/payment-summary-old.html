@@ -1,0 +1,274 @@
+{% extends "mobile/basic/base.html" %}
+{% load static compress search_tags %}
+{% load static compress %}
+{% load thumbnail %}
+
+
+{% block canonical_url %}
+    <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
+{% endblock canonical_url %}
+
+{% block title %}Summary Payment | Shine learning{% endblock %}
+
+{% block css_section %}
+    {{ block.super }}
+    {% compress css %}
+        <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/checkbox.scss' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/mobile/payment/payment.scss' %}" rel="stylesheet">
+    {% endcompress %}
+    
+{% endblock css_section %}
+
+{% block header %}
+
+    <header class="w100fl he-auto">
+        <!-- header menu Icon Starts here -->
+        <div class="main-menu w100fl">
+            <div class="pull-left">
+                
+                <a class="icon-back pull-left" role="button"  onclick="goBack()"></a> 
+            </div><!-- / Left side Icon ends here -->
+        </div><!-- header menu Icon ends here -->
+
+        <ul class="payment-nav">
+            <li id="log"><a href="{% url "cart:payment-login" %}">Login</a></li>
+            <li id="detail"><a href="{% url "cart:payment-shipping" %}">Details</a></li>
+            <li id="summary" class="active"><a href="{% url "cart:payment-summary" %}">Summary</a></li>
+            <li  id="payment" class="bg-none"><a role="button">Payment</a></li>
+        </ul>
+    </header><!-- header ends here -->
+{% endblock header %}
+
+{% block container %}
+
+<div class="body-wrapper pb-80">
+      <!-- Tab content Satrts here -->
+      <div class="content-box mt-20">
+        <!-- Payment summary starts here -->
+        <div class="payment-summary">
+          <!-- heading -->
+          <div class="heading w100fl">
+            <div class="item">Item</div>
+            <div class="price">price</div>
+          </div><!-- /.heading -->
+
+
+
+        {% for item in cart_items %}
+        {% with addons=item.addons variations=item.variations %}
+            <!-- Item wrap -->
+            {% if variations and item.is_available and variations.0.is_available %}
+              {% if item.product_class == 'course' or item.type_flow == 17%}
+                <div class="w100fl item-wrap c6">
+                    <div class="w100fl">
+                      <span class="item">
+                        <strong class="block">{{item.name}}</strong>
+                        <span class="fs-12">{% if item.experience %}{{item.experience|get_choice_display:"EXP_DICT"}}{% endif %}</span>
+                      </span>
+                      <span class="price bold">
+                        Rs. {{variations.0.price}}/-
+                      </span>
+                    </div>
+
+                    <ul class="w100fl mt-20 list-item fs-12">
+                      {% if variations.0.delivery_obj and variations.0.delivery_obj.get_price %}
+                          <li>
+                            <span class="item">{{variations.0.delivery_obj.name}}</span>
+                            <span class="price">Rs. {{variations.0.delivery_obj.get_price|floatformat:0}}/-</span>
+                          </li>
+                      {% endif %}
+
+                      {% for addon in addons %}
+                         {% if addon.is_available %}
+                          <li>
+                            <span class="item">{{addon.name}}</span>
+                            <span class="price">Rs. {{addon.price}}/-</span>
+                          </li>
+                         {% endif %}
+                      {% endfor %}
+
+                    </ul>
+                </div><!-- /.Item wrap -->
+              {% endif %}
+              {% elif item.is_available %}
+                <div class="w100fl item-wrap c6">
+                    <div class="w100fl">
+                      <span class="item">
+                        <strong class="block">{{item.name}}</strong>
+                        <span class="fs-12">{% if item.experience %}{{item.experience|get_choice_display:"EXP_DICT"}}{% endif %}</span>
+                      </span>
+                      <span class="price bold">
+                        Rs. {{item.price}}/-
+                      </span>
+                    </div>
+
+                    <ul class="w100fl mt-20 list-item fs-12">
+                      {% if item.delivery_obj and item.delivery_obj.get_price %}
+                          <li>
+                            <span class="item">{{item.delivery_obj.name}}</span>
+                            <span class="price">Rs. {{item.delivery_obj.get_price|floatformat:0}}/-</span>
+                          </li>
+                      {% endif %}
+
+                      {% for var in variations %}
+                          {% if var.is_available %}
+                              <li>
+                                <span class="item">{{var.name}}</span>
+                                <span class="price">Rs. {{var.price}}/-</span>
+                              </li>
+                          {% endif %}
+                      {% endfor %}
+
+                      {% for addon in addons %}
+                        {% if addon.is_available %}
+                          <li>
+                            <span class="item">{{addon.name}}</span>
+                            <span class="price">Rs. {{addon.price}}/-</span>
+                          </li>
+                        {% endif %}
+                      {% endfor %}
+                    </ul>
+                </div><!-- /.Item wrap -->
+            {% endif %}
+          {% endwith %}
+          {% endfor %}
+          {% if cart_coupon %}
+                <div  id="showCoupon" class="loyalty-points">
+                  <div class="input-group mb-0">
+                    <input id="discount_code" type="text" value="Coupon {{cart_coupon.code}} is applied!" name="code" maxlength="15" class="form-control fs-12" disabled>
+                    <span class="input-group-btn">
+                      <button class="btn btn-blue" type="button" onclick="JSRemoveDiscount();" >Remove</button>
+                    </span>
+                  </div><!-- /input-group -->
+                  <p class="error-txt" id="discount-alert"> </p>
+                </div>
+             {% elif cart_wallet %}
+                <div id="shineCredit" class="loyalty-points">
+                  <div class="input-group mb-0">
+                    <input id="loyalty_point" type="text" placeholder="{{wallet_point}} loyalty points redeemed!" class="form-control fs-12" disabled>
+
+                    <span class="input-group-btn">
+                      <button class="btn btn-blue" type="button" onclick="JSRemovePoint();">Remove</button>
+                    </span>
+                  </div><!-- /input-group -->
+                  <p class="error-txt" id="point-alert">Required</p>
+                </div><!-- loyalty ends here -->
+
+              {% else %}
+                <a href="javascript:void(0)" onclick="toggler('showCoupon');">Apply coupon</a>
+                {% if wallet %}
+                  or
+                  <a href="javascript:void(0)" onclick="toggler('shineCredit');">Redeem Shine credit</a>
+                  
+                {% endif %}
+                  <form action="." id="discountForm">
+                    <div  id="showCoupon" class="loyalty-points hidden-div">
+                      <div class="input-group mb-0">
+                        <input id="discount_code" type="text" placeholder="Enter discount code" name="code" maxlength="15" class="form-control fs-12">
+                        <span class="input-group-btn">
+                          <button class="btn btn-blue" type="button" onclick="JSApplyDiscount();" >Apply</button>
+                        </span>
+                      </div><!-- /input-group -->
+                      <p class="error-txt" id="discount-alert"> </p>
+                    </div>
+                  </form>
+                {% if wallet %}
+                  
+                  <form action="." id="walletForm">
+                    <div id="shineCredit" class="loyalty-points hidden-div">
+                      <div class="input-group mb-0">
+                        <input id="loyalty_point" type="text"placeholder="You have {{wallet_total}} shine loyalty points." min="0" max="{{wallet_total}}" name="point" class="form-control fs-12">
+
+                        <span class="input-group-btn">
+                          <button class="btn btn-blue" type="button" onclick="JSApplyPoint();">Redeem</button>
+                        </span>
+                      </div><!-- /input-group -->
+                      <p class="error-txt" id="point-alert">Required</p>
+                    </div><!-- loyalty ends here -->
+
+                    
+                  </form>
+                {% endif %}
+                
+              {% endif %}
+              
+
+          
+          
+           <!-- Total amount starts here -->
+        <div class="total-amount w100fl mt-15">
+          <!-- Item wrap -->
+          <div class="w100fl item-wrap c6">
+            <div class="w100fl">
+              <span class="item">
+                <strong class="block">Total amount</strong>
+              </span>
+              <span class="price bold">Rs. {{total_amount}}/-</span>
+            </div>
+
+            <ul class="w100fl mt-20 list-item fs-12">
+              {% if cart_coupon %}
+                  <li>
+                    <span class="item">Coupon applied</span>
+                    <span class="price">-Rs. {{coupon_amount}}/-</span>
+                  </li>
+              {% elif cart_wallet %}
+                  <li>
+                    <span class="item">Shine loyalty points</span>
+                    <span class="price">-Rs. {{redeemed_reward_point}}/-</span>
+                  </li>
+              {% endif %}
+              {% if cart_coupon or cart_wallet %}
+                  <li>
+                    <span class="item">Total</span>
+                    <span class="price">Rs. {{amount_after_discount}}/-</span>
+                  </li>
+              {% endif %}
+              <li>
+                    <span class="item">SGST @ {{sgst}}%</span>
+                    <span class="price">+Rs. {{sgst_amount}}/-</span>
+              </li>
+              <li>
+                    <span class="item">CGST @ {{cgst}}%</span>
+                    <span class="price">+Rs. {{cgst_amount}}/-</span>
+              </li>
+            </ul>
+          </div><!-- /.Item wrap -->
+
+          <p class="text-center bold c9 mt-10 w100fl"><span class="icon-lock"></span>100% Secure Payment</p>
+        </div><!-- Total amount ends here -->
+
+        </div><!-- Payment summary ends here -->
+      </div><!-- Tab content ends here -->
+
+    <!-- call us and chat widget starts here -->
+    <div class="stick_bottom">
+        <div class="content-box">
+            <div class="wf100">  
+              <div class="pull-left">
+                <p class="c9 fs-12 pb-0">Payable Amount</p>
+                  <span class="fs-22 c3">Rs. {{total_payable_amount}}/-</span>
+              </div>        
+              <a href="{% url "payment:payment-option" %}" class="btn btn-slg btn-orange pull-right" id="payment-summary-continue-id">Continue</a>
+            </div>
+        <div class="clearfix"></div>    
+        </div>
+    </div><!-- call us and chat widget ends here -->
+    <div class="clearfix"></div>
+
+
+</div>
+
+{% endblock container %}
+
+
+{% block js_section %}
+    {{block.super}}
+
+    {% compress js %}
+        <script type="text/javascript" src="{% static 'shinelearn/js/cart/payment-summary.js' %}"></script>
+    {% endcompress %}
+    
+    {% block johukum %}
+    {% endblock johukum %}
+{% endblock js_section %}

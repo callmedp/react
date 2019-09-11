@@ -1,0 +1,236 @@
+{% extends "mobile/basic/base.html" %}
+{% load static compress %}
+{% load thumbnail compress %}
+
+{% block django_meta %}
+    {% include 'meta/meta.html' %}
+<meta property="og:image" content="{{main_article.image.url}}">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@shinelearning">
+
+<meta name="twitter:domain" content="mlearning.shine.com">
+<meta name="twitter:title" content="{{main_article.title}}">
+<meta name="twitter:description" content="{{ main_article.get_description }}" />
+<meta name="twitter:image:src" content="{{main_article.image.url}}">
+    
+{%  endblock django_meta %}
+{% block canonical_url %}
+  <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ object.get_absolute_url }}">
+  <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{ object.get_absolute_url}}?type=amp">
+{% endblock canonical_url %}
+
+{% block title %}
+   {{main_article.title}} - Talent Economy
+{% endblock title %}
+
+{% block css_section %}
+    {{ block.super }}
+    {% compress css %}
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/blog/blog.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'shinelearn/css/common/mobile/typeaheadjs.css' %}" rel="stylesheet">
+    {% endcompress %}
+<style>
+    #related-container ul li {
+    list-style:inside;
+    }
+</style>
+{% endblock css_section %}
+
+{% block header %}
+
+<header class="w100fl">
+    <div class="main-menu w100fl">
+        <div class="pull-left">
+            <a id="sidebar-main-trigger" class="icon-bar pull-left"  href="#" ></a> 
+            <a href="/" class="icon-logo pull-left"></a>
+        </div>
+       
+        <div class="pull-right" style="width:30%;">       
+          <a class="icon-cart pull-right" href="{% url "cart:payment-summary" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+          <form method='get' id="search-form">
+            <div class="searchbox">
+              <input id='id_q' type="text" placeholder="Search here" name="search" class="searchbox-input" autocomplete="off">
+              <span class="searchbox-icon"></span>
+            </div>
+          </form>
+        </div>
+    </div>
+</header>
+
+{% endblock header %}
+
+{% block container %}
+<div class="body-wrapper ">
+    <section class="content-box">
+        <ul class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
+          {% for bradcbs in breadcrumbs %}
+            {% if bradcbs.url %}
+              <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item"><span itemprop="name">{{bradcbs.name}}</span></a></li>
+            {% else %}
+              <li class="active">{{bradcbs.name}}</li>
+            {% endif %}
+          {% endfor %} 
+        </ul>
+        <div id="related-container">
+            {{detail_article}}
+        </div>
+        <div id="id_ajax_article"></div>
+    </section>
+    
+    {% if popular_courses %}
+        <section>
+            {% include './include/popular.tmpl.html' with popular_courses=popular_courses page='talenteconomy-article-details' %}
+        </section>
+    {% endif %}
+    
+    {% comment %}
+    <section>
+        <!-- box panel starts here -->
+        <div class="box-panel ">
+            <p class="semi-head mt-5 mb-5">You may also like</p>
+            
+            {% for i in '1234' %}
+            <div class="media article-list">
+                <a title="Government Jobs" href="blog-detail.html">
+                    <figure class="media-left">
+                        <img class="media-object w-auto" src="images/article-list-1.jpg" alt="...">
+                    </figure>
+                    <div class="media-body rel">
+                        <span class="article-tag">Project Management</span>
+                        <h4 class="media-heading">8 Reasons to consider a career change</h4>
+
+                        <div class="blog-author fs-11">
+                            <span class="editor">Ajay Mishra</span>
+                            <span class="view-forward pull-right">
+                              <figure class="icon-forward"></figure> 43 
+                              <figure class="icon-view icon-grey-view ml-10"></figure> 21
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endcomment %}
+
+    <div class="share-wrap">
+        <ul id="share-icon">
+            <!-- <li class="wp-bg"><a href="#"><span class="icon-wp"></span></a></li> -->
+            <li class="gp-bg"><a href="https://plus.google.com/share?url={{SITEDOMAIN}}{{main_article.get_absolute_url}}" id="article_share" article-slug="{{main_article.slug}}" target="_blank">><span class="icon-gp"></span></a></li>
+            <li class="tw-bg"><a href="https://www.twitter.com/share?url=https://{{SITEDOMAIN}}{{main_article.get_absolute_url}}" id="article_share" article-slug="{{main_article.slug}}" target="_blank">><span class="icon-tw"></span></a></li>
+            <li class="fb-bg"><a href="https://www.facebook.com/sharer/sharer.php?u={{SITEDOMAIN}}{{main_article.get_absolute_url}}" id="article_share" article-slug="{{main_article.slug}}" target="_blank">><span class="icon-fb"></span></a></li>
+            <li class="share-bg"><a href="#">{{main_article.no_shares}}<br>{% if main_article.no_shares > 1 %} Shares {% else %}Share{% endif %}</a></li>
+        </ul>
+        <a href="JavaScript:Void(0);" id="share-btn" class="blue-circle-60"><span class="icon-share"></span></a>
+    </div>
+</div>
+
+{% block call_us %}
+ <div class="stick_bottom call-us">
+    <div class="ui-grid-a block-3 text-center">
+        {% if not product.is_assesment %}
+        <div class="ui-block-a">
+
+            <a href="javascript:void(0)" id="enquire_btn"><span></span>Enquire</a>
+        </div>
+        {% endif %}
+        <div class="ui-block-b" {% if product.is_assesment %} style="width:100%;"{% endif %}>
+            <a href="tel:{{ggn_contact_full}}"><span></span>Call Us</a>
+        </div>
+        {% if not product.is_assesment %}
+        {% if not request.amp %}
+        <div class="ui-block-c"><a href="JavaScript:void(0);"> <span></span>Chat </a></div>
+        {% endif %}
+        {% endif %}
+    </div><!-- call us and chat widget ends here -->
+</div>
+
+{% if not product.is_assesment %}
+<div class="enquire" id="enquire">
+    <header>
+        <a class="icon-back pull-left" id="back_btn"></a>
+    </header>
+    <div id="snackbar"></div>
+    <div class="enquire__wrap">
+        <h2 class="enquire__wrap--head">WANT TO HIRE TOP TALENTS?</h2>
+        <p class="enquire__wrap--subhead">Ask for a call back</p>
+        <div class="content-box login-form">
+            <form id="enquireform" name="enq">
+                <div class="form-group">
+                    <input type="text" name="name" placeholder="Name" class="form-control" maxlength="60" inputmode="name" value="{{request.session.full_name}}" id="id_name" aria-required="true">
+                </div>
+                 <div class="form-group">
+         <input type="text" name="cname" placeholder="Company Name" class="form-control" maxlength="60" value="{{request.session.full_name}}"  id="id_cname" aria-required="true">
+        </div>
+                <div class="form-group enquire__flex">
+
+                    <div class="code">
+                        <select name="country_code" class="form-control" id="id_country_code">
+                          {% for country in country_choices %}
+                            <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.0}}</option>
+                          {% endfor %}
+                        </select>
+                    </div>
+                    <span class="mobile_input">
+                        <input type="tel" name="number" class="form-control number" inputmode="numeric" required="" id="id_cell_phone" aria-required="true" placeholder="Mobile" value="{{request.session.mobile_no|safe}}">
+                    </span>
+
+                </div>
+
+
+                <div class="form-group mb-30">
+                    <textarea class="form-control" rows="2" name="msg" placeholder="Message"></textarea>
+                </div>
+             <input type="hidden" name="lsource" value="29">
+                 <input type="hidden" name="campaign" value="humanresource">
+            <input type="hidden" name="product" value="{{product.pk}}">
+            <input type="hidden" name="prd" value="{{product.heading}}">
+            <input type="hidden" name="path" value="{{product.get_absolute_url}}">
+            <input type="hidden" name="email" class="form-control" value="{{request.session.email}}">
+            <div class="form-group">
+                <button type="submit" id="enquire_form" class="btn btn-blue w100 btn-round">Submit</button>
+            </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock call_us %}
+
+{% endblock container %}
+
+
+{% block js_section %}
+    {{block.super}}
+    {% compress js %}
+    <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/blog/blog-detail.js' %}"></script>
+    <script type="text/javascript" src="{% static 'shinelearn/js/mobile/talenteconomy/article.js' %}"></script>
+    <script type="text/javascript" src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
+
+    <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
+    {% endcompress %}
+    {% compress js inline %}
+        <script>
+            $(function() {
+                Article.init();
+            });
+            if (window.location.hash == '#_=_') {
+                open(location, '_self').close();
+            }
+            showArticleOnScroll.scroll(); /* for calling infinite articles */
+        </script>
+
+    {% endcompress %}
+
+
+
+{% endblock js_section %}
+
+{% block johukum %}
+
+{% endblock johukum %}

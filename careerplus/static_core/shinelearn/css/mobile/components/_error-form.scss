@@ -3,7 +3,8 @@
   color: $error;
   font-size: 11px;
   
-  .form-control {
+  .form-control,
+  .form--control {
     border-color: $error;
     /*color: $error;*/
   }
@@ -14,6 +15,18 @@
     color: $error;
     display: block;
     padding-bottom: 0;
+  }
+  
+  .form--control {
+    box-shadow: 0 0 10px rgba($error, .3);
+  }
+
+  &--mgs {
+    font-size: $font-size-xs;
+    color: $error;
+    position: absolute;
+    right: 10px;
+    top: 13px;
   }
 }
 

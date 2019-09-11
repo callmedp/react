@@ -165,6 +165,9 @@ class Assesment(AbstractAutoDate):
         default=Decimal('0.00'), decimal_places=2,
         max_digits=12, null=True, blank=True
     )
+    order_item = models.OneToOneField(
+        'order.OrderItem', related_name='assesment',
+        verbose_name=_("Order Item"), blank=True, null=True)
 
 
 class Certificate(AbstractAutoDate):

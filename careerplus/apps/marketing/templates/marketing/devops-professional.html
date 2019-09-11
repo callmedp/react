@@ -33,9 +33,10 @@
       ga('send', 'pageview');
 
     </script>
-
-
+    <!-- Global site tag (gtag.js) - Google Ads: 991709191 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-991709191"></script>
   </head>
+
   <body>
     <div class="main-wrapper" id="cls_landing-page">
     <div class="container-fluid banner-bg">
@@ -103,7 +104,7 @@
 
                     <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}3101{% endif %}">
 
-                                   <input type="hidden" name="prd" value="Data Scientist - Rs. 19,995/-">
+                                   <input type="hidden" name="prd" value="{{products_lists.0.pHd}} - Rs. {{products_lists.0.pPinb}}">
 
 
                   <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
@@ -131,7 +132,7 @@
                 </li>
                 <li>
                   <span class="icon-courses sprite"></span>
-                  <span class="pointer">Java & Linux Fundamentals courses to brush up your skills</span>
+                  <span class="pointer">Java Fundamentals course to brush up your skills</span>
                 </li>
               </ul>
               </div><!-- Right Header -->
@@ -157,6 +158,7 @@
                     </li>
                     
                     <li class="form-group">
+                       <select class="form-control" id="selection" name="selection">
                          {%for prd in products_lists %}
 							 <option {% if prd.pk == select %} select="selected" {% endif %} value={{prd.pk}} >Fees - Rs. {{prd.pPinb}} /- </option>
                               {%endfor%}
@@ -166,7 +168,7 @@
 
                   <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}3101{% endif %}">
 
-                   <input type="hidden" name="prd" value="Data Scientist - Rs. 19,995/-">
+                   <input type="hidden" name="prd" value="{{products_lists.0.pHd}} - Rs. {{products_lists.0.pPinb}}" >
 
 
                   <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
@@ -374,11 +376,11 @@
                       <div class="text-center btn-wrap">
                           <a href="tel:01244312500" class="btn-white">
                               <span class="phone-icon"></span>
-                              0124-4312500
+                              9535298159
                           </a>
                           <a href="mailto:contactus@shine.com" class="btn-white">
                               <span class="mail-icon"></span>
-                              contactus@shine.com
+                              education@shine.com
                           </a>
                       </div>
                   </div>
@@ -447,6 +449,8 @@
     {% compress js inline %}
     <script type="text/javascript">
     var _gaq = _gaq || [];
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
 
     $.validator.addMethod("lettersonly", function (value, element){
         return this.optional(element) || /^[a-z\s]*$/i.test(value);
@@ -548,6 +552,8 @@
                        document.getElementById('gif-loader').style.display = "none";
                        $('#cls_landing-page').addClass("fadeOut");
                        $('#cls-thank-you').addClass("fadeIn");
+                       gtag('js', new Date());
+                       gtag('config', 'AW-991709191',{ 'send_page_view': false });
                         return false;
                     }
                 }, 'json');
