@@ -36,7 +36,7 @@ class TestForm(forms.ModelForm):
 class test(admin.ModelAdmin):
     form = TestForm
     raw_id_fields = ('product','course','vendor')
-    list_display = ['category']
+    list_display = ['id','slug','title','category','product']
 
 admin.site.register(Test,test)
 admin.site.register(Question)
