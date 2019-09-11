@@ -187,9 +187,9 @@ $(function() {
                                             <div class="media-left">
                                                 <a href="#" class="sigma-pro">`;
                     if(request_amp == "True"){
-                        prod_detail += `<amp-img src="${data.results[d].pImg}" width="50" height="50"></amp-img>`
+                        prod_detail += `<amp-img src="${data.results[d].pImg}" width="50" height="50"></amp-img>`;
                     }else{
-                        prod_detail += `<img aria-label="product image" src="${data.results[d].pImg}">`
+                        prod_detail += `<img aria-label="product image" src="${data.results[d].pImg}">`;
                     }
                     var pARx = Number(Number(data.results[d].pARx).toFixed(1));
                     prod_detail += `</a>
@@ -204,8 +204,8 @@ $(function() {
                                                         ${pARx}/5
                                                     </div>
                                                     <div class="inline-block fs-12">`;
-                    if(Number(data.results[d].pRC) > 0){ prod_detail +=`<figure class="icon-comments"></figure><a href="#">${data.results[d].pRC}</a>` }
-                    if(Number(data.results[d].pNJ) > 0){ prod_detail += `<strong>${data.results[d].pNJ}</strong> Jobs` }
+                    if(Number(data.results[d].pRC) > 0){ prod_detail +=`<figure class="icon-comments"></figure><a href="#">${data.results[d].pRC}</a>` ;}
+                    if(Number(data.results[d].pNJ) > 0){ prod_detail += `<strong>${data.results[d].pNJ}</strong> Jobs`; }
                     var list = data.results[d].pCert;
                     for(var i=0;i<list.length;i++)
                     {if(list[i]=='true'){prod_detail +=`<figure class="icon-certificate ml-10"></figure>Certification`; break;}}
@@ -220,9 +220,9 @@ $(function() {
                                         </a>
                                     </p>
                                     <p class="pb-0 fs-12">
-                                    Starting at <strong>Rs. ${pPin}/-</strong>`
+                                    Starting at <strong>Rs. ${pPin}/-</strong>`;
                     if(pPfin > 0){
-                        prod_detail +=`<strike>Rs. ${pPfin}/-</strike> <span class="discount">${data.results[d].discount}% OFF</span>`
+                        prod_detail +=`<strike>Rs. ${pPfin}/-</strike> <span class="discount">${data.results[d].discount}% OFF</span>`;
                     }
                     prod_detail += `</p>
                             </div><!-- end of media body -->
@@ -279,9 +279,9 @@ $(function() {
                     <h3 class="listing-heading">${ data.results[d].pHd != "" ? data.results[d].pHd : data.results[d].pNm }</h3>
                   <div class="rating-review-box">`;
                     for(star in data.results[d].pStar){
-                        if(star == '*'){ prod_detail += `<figure class="full-star"></figure>`}
-                        else if(star == '+'){ prod_detail += `<figure class="half-star"></figure>`}
-                        else { prod_detail += `<figure class="blank-star"></figure>`}
+                        if(star == '*'){ prod_detail += `<figure class="full-star"></figure>`;}
+                        else if(star == '+'){ prod_detail += `<figure class="half-star"></figure>`;}
+                        else { prod_detail += `<figure class="blank-star"></figure>`;}
                     }
                     var pARx = Number(Number(data.results[d].pARx).toFixed(1));
                     var pPin = Number(Number(data.results[d].pPin).toFixed(0));
@@ -295,14 +295,14 @@ $(function() {
                   <div class="pricing-box">
                     Starting at <strong>Rs. ${pPin}/-</strong>`;
                     if(pPfin > 0){
-                        prod_detail += `<strike>Rs. ${pPfin}/-</strike> <span class="discount">${data.results[d].discount}% OFF</span>`
+                        prod_detail += `<strike>Rs. ${pPfin}/-</strike> <span class="discount">${data.results[d].discount}% OFF</span>`;
                     }
                     prod_detail += `
                   </div>
                 </div>
                 </div>
                 </a>
-                </li> `   
+                </li> `;  
                 }
                 page = page + 1; 
                 var img = document.getElementById('prod_loader').innerHTML;
@@ -319,7 +319,7 @@ $(function() {
                                     value="${page}" id="prod_page_id">
                                     <input type="hidden" name="pCtg" value="${pCtg}" 
                                     id="slug_id">
-                                </div></div>`
+                                </div></div>`;
                 }
                 $('#prod_loader').remove();
 
@@ -351,9 +351,9 @@ $(function() {
                                             <div class="media-left">
                                                 <a href="#" class="sigma-pro">`;
                     if(request_amp == "True"){
-                        cert_detail += `<amp-img src="${data.results[d].pImg}" width="50" height="50"></amp-img>`
+                        cert_detail += `<amp-img src="${data.results[d].pImg}" width="50" height="50"></amp-img>`;
                     }else{
-                        cert_detail += `<img aria-label="product image" src="${data.results[d].pImg}">`
+                        cert_detail += `<img aria-label="product image" src="${data.results[d].pImg}">`;
                     }
                     var pARx = Number(Number(data.results[d].pARx).toFixed(1));
                     cert_detail += `</a>
@@ -368,8 +368,8 @@ $(function() {
                                                         ${pARx}/5
                                                     </div>
                                                     <div class="inline-block fs-12">`;
-                    if(Number(data.results[d].pRC) > 0){ cert_detail +=`<figure class="icon-comments"></figure><a href="#">${data.results[d].pRC}</a>` }
-                    if(Number(data.results[d].pNJ) >0){ cert_detail += `<strong>${data.results[d].pNJ}</strong> Jobs` }
+                    if(Number(data.results[d].pRC) > 0){ cert_detail +=`<figure class="icon-comments"></figure><a href="#">${data.results[d].pRC}</a>`;}
+                    if(Number(data.results[d].pNJ) >0){ cert_detail += `<strong>${data.results[d].pNJ}</strong> Jobs`;}
                     var list = data.results[d].pCert;
                     for(var i=0;i<list.length;i++)
                     {if(list[i]=='true'){cert_detail +=`<figure class="icon-certificate ml-10"></figure>Certification`; break;}}
@@ -386,14 +386,14 @@ $(function() {
                                     <p class="pb-5 fs-11">`
                     var pAsft = JSON.parse(data.results[d].pAsft[0]);
                     if(pAsft["number_of_questions"]){
-                        cert_detail += `No. of questions : <strong>${pAsft["number_of_questions"]}</strong> `}
+                        cert_detail += `No. of questions : <strong>${pAsft["number_of_questions"]}</strong> `;}
                     if(pAsft["test_duration"]){
-                        cert_detail += `<span class="pl-5 pr-5">|</span> Duration: <strong>${pAsft["test_duration"]} mins</strong> `}
+                        cert_detail += `<span class="pl-5 pr-5">|</span> Duration: <strong>${pAsft["test_duration"]} mins</strong> `;}
                     cert_detail += `</p>
                                     <p class="pb-0 fs-12">
-                                    Starting at <strong>Rs. ${pPin}/-</strong>`
+                                    Starting at <strong>Rs. ${pPin}/-</strong>`;
                     if(pPfin > 0 ){
-                        cert_detail +=`<strike>Rs. ${pPfin}/-</strike> <span class="discount">${data.results[d].discount}% OFF</span>`
+                        cert_detail +=`<strike>Rs. ${pPfin}/-</strike> <span class="discount">${data.results[d].discount}% OFF</span>`;
                     }
                     cert_detail += `</p>
                             </div><!-- end of media body -->
@@ -452,9 +452,9 @@ $(function() {
                                         <h3 class="listing-heading"><a title="${data.results[d].name}" href="${data.results[d].pURL}">${ data.results[d].pHd != "" ? data.results[d].pHd : data.results[d].pNm }</a></h3>
                                         <div class="rating-review-box">`;
                                             for(star in data.results[d].pStar){
-                                                if(data.results[d].pStar[star] == '*'){ cert_detail += `<figure class="full-star"></figure>`}
-                                                else if(data.results[d].pStar[star] == '+'){ cert_detail += `<figure class="half-star"></figure>`}
-                                                else { cert_detail += `<figure class="blank-star"></figure>`}
+                                                if(data.results[d].pStar[star] == '*'){ cert_detail += `<figure class="full-star"></figure>`;}
+                                                else if(data.results[d].pStar[star] == '+'){ cert_detail += `<figure class="half-star"></figure>`;}
+                                                else { cert_detail += `<figure class="blank-star"></figure>`;}
                                             }
                                             var pARx = Number(Number(data.results[d].pARx).toFixed(1));
                                             var pPin = Number(Number(data.results[d].pPin).toFixed(0));
@@ -468,10 +468,10 @@ $(function() {
                                              <ul class="que-duration">`;
                                              var pAsft = JSON.parse(data.results[d].pAsft[0]);
                                             if(pAsft["number_of_questions"]){
-                                                cert_detail +=`<li>No. of questions : <span>${pAsft["number_of_questions"]}</span></li>`
+                                                cert_detail +=`<li>No. of questions : <span>${pAsft["number_of_questions"]}</span></li>`;
                                             }
                                             if(pAsft["test_duration"]){
-                                                cert_detail += `<li>Duration: <span>${pAsft["test_duration"]}mins</span></li>`
+                                                cert_detail += `<li>Duration: <span>${pAsft["test_duration"]}mins</span></li>`;
                                             }  
                                             cert_detail+=`</ul>
                                           <div class="pricing-box">
@@ -484,7 +484,7 @@ $(function() {
                                           </div>
                                         </div>
                                         </div>
-                                        </li> `
+                                        </li> `;
                 }
                 var img = document.getElementById('cert_loader').innerHTML;
                 // 
@@ -500,7 +500,7 @@ $(function() {
                             <input type="hidden" name="pCtg" value="${pCtg}" 
                             id="Ctg_id">
                         </div>
-                    </div>`
+                    </div>`;
                 }
 
                 $('#cert_loader').remove();
