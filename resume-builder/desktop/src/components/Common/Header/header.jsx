@@ -70,7 +70,6 @@ class Header extends Component {
                         <span className="signin--user-pic">
             				<img alt="user info" src={`${this.staticUrl}react/assets/images/user-pic.jpg`}/>
             			</span>
-                        Hello {userName || 'User'}
                     </div>
                 </div>
             </header>

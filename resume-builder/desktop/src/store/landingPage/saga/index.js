@@ -64,6 +64,7 @@ function* loginCandidate(action) {
             //redirect code here
         }
 
+        console.log('result i s=', result);
         const {data: {candidate_id, candidate_profile, token, entity_status}} = result;
         localStorage.setItem('candidateId', (candidate_id) || '');
         for (const key in candidate_profile) {

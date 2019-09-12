@@ -16,7 +16,9 @@ const timestamp = fs.readFileSync(`${process.env.STATIC_FILE_PATH}`, "utf8");
 console.log('time stamp value is -----', timestamp, process.env.STATIC_URL);
 
 
-let userAgents = '', store, routes, isMobile = false;
+let userAgents = '', store, routes, isMobile = false,paramObj = {
+    alt:''
+};
 
 if (typeof window == 'undefined') {
     global.window = {
@@ -85,9 +87,10 @@ app.get('*', async (req, res) => {
         console.log('-----index, route', index, route);
         if (route && route.component && route.component.fetching) {
             try {
-                result = await route.component.fetching(store, {
-                    "alt": "Ew4ZExoWCggBB00hHwsZCBRIGw4VGk0FSFFJU0sHGgRIVkBWHgQcVx5XGlcZBwRTSFdBUEhWTVNIVk1SSBoABwAH"
-                });
+                if(req.query && req.query.token) {
+                    paramObj['alt'] = req.query.token 
+                }
+                result = await route.component.fetching(store, paramObj);
                 context['title'] = result[1];
             } catch (e) {
                 console.log("Error in Api", e);
@@ -101,3 +104,4 @@ app.get('*', async (req, res) => {
 });
 
 app.listen(PORT, () => console.log(`Frontend service listening on port: ${PORT}`));
+

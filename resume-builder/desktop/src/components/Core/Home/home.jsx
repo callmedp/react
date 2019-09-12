@@ -59,7 +59,9 @@ class Home extends Component {
     }
 
     async componentDidMount() {
-        await this.props.loginCandidate(this.state.token);
+        if(this.state.token){
+            await this.props.loginCandidate(this.state.token);
+        }
     }
 
     static getActions() {
