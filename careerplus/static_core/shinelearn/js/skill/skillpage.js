@@ -384,11 +384,13 @@ $(function() {
                                         </a>
                                     </p>
                                     <p class="pb-5 fs-11">`;
+                    if(data.results[d].pAsft){
                     var pAsft = JSON.parse(data.results[d].pAsft[0]);
                     if(pAsft["number_of_questions"]){
                         cert_detail += `No. of questions : <strong>${pAsft["number_of_questions"]}</strong> `;}
                     if(pAsft["test_duration"]){
                         cert_detail += `<span class="pl-5 pr-5">|</span> Duration: <strong>${pAsft["test_duration"]} mins</strong> `;}
+                    }
                     cert_detail += `</p>
                                     <p class="pb-0 fs-12">
                                     Starting at <strong>Rs. ${pPin}/-</strong>`;
@@ -466,13 +468,15 @@ $(function() {
                                                <span>${data.results[d].pPvn}</span>
                                             </div>
                                              <ul class="que-duration">`;
-                                             var pAsft = JSON.parse(data.results[d].pAsft[0]);
+                                            if(data.results[d].pAsft){
+                                            var pAsft = JSON.parse(data.results[d].pAsft[0]);
                                             if(pAsft["number_of_questions"]){
                                                 cert_detail +=`<li>No. of questions : <span>${pAsft["number_of_questions"]}</span></li>`;
                                             }
                                             if(pAsft["test_duration"]){
                                                 cert_detail += `<li>Duration: <span>${pAsft["test_duration"]}mins</span></li>`;
-                                            }  
+                                            } 
+                                            }
                                             cert_detail+=`</ul>
                                           <div class="pricing-box">
                                           <div class="pull-left">
