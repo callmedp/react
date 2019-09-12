@@ -148,6 +148,18 @@ class SkillPageView(DetailView, SkillPageMixin):
             if float(product.pPfin):
                 product.discount = round((float(product.pPfin) - float(product.pPin)) * 100 / float(product.pPfin), 2)
 
+        all_cert = certifications
+        cert_page = Paginator(all_cert, 5)
+        try:
+            certifications = cert_page.page(self.page)
+        except PageNotAnInteger:
+            certifications = cert_page.page(1)
+        except EmptyPage:
+            certifications = cert_page.page(cert_page.num_pages)
+        for product in certifications:
+            if float(product.pPfin):
+                product.discount = round((float(product.pPfin) - float(product.pPin)) * 100 / float(product.pPfin), 2)
+
         prod_review = Paginator(prod_reviews, 5)
 
         try:
