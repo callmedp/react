@@ -253,7 +253,7 @@ class ArticleListView(ListView, PaginationMixin):
         self.sel_status = int(request.GET.get('status', '-1'))
         self.sel_p_cat = request.GET.get('p_cat', '')
         self.sel_writer = request.GET.get('author', '')
-        self.visibility = request.GET.get('visibility', '')
+        self.visibility = int(request.GET.get('visibility', '-1'))
         return super(self.__class__, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -290,6 +290,7 @@ class ArticleListView(ListView, PaginationMixin):
             visibility.append(4)
             visibility.append(5)
 
+
         queryset = queryset.filter(visibility__in=visibility)
 
         try:
@@ -322,7 +323,7 @@ class ArticleListView(ListView, PaginationMixin):
             pass
 
         try:
-            if self.visibility:
+            if self.visibility and self.visibility != -1:
                 queryset = queryset.filter(visibility=self.visibility)
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
