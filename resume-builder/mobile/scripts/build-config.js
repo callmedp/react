@@ -17,7 +17,7 @@ config.optimization.runtimeChunk = false;
 const currentTimeStamp = process.argv && process.argv[2] || +new Date();
 
 // JS
-config.output.filename = `../../../careerplus/static_core/react/dist/mobile/main-${currentTimeStamp}.js`;
+config.output.filename = `../../../careerplus/static_core/react/dist/mobile/main-${currentTimeStamp}.min.js`;
 // CSS. "5" is MiniCssPlugin
 config.plugins[5].options.filename = `../../../careerplus/static_core/react/dist/mobile/main-${currentTimeStamp}.css`;
 config.plugins.push(new BundleTracker({
