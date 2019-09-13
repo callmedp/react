@@ -96,6 +96,7 @@
 {{block.super}}
    <script type="text/javascript">
    var page_number= 2;
+   var counter = 0;
    function loadmore(){
             page_number = page_number+1;
              element = document.getElementById('funcDiv');
@@ -112,13 +113,14 @@
                 element.innerHTML=
                 element.innerHTML + `<div class="popular_test_inside category">
                 <a title = "${json.results[fa].name} " href = "/practice-tests/${json.results[fa].slug}/sub">
-                <span class="border border${fa}"></span>
+                <span class="border border${counter % 8}"></span>
                 <span class="name">${json.results[fa].name}</span>
                 <span class="test">${json.results[fa].assessment_test_count}
                 ${json.results[fa].assessment_test_count < 2 ? 'Test': 'Tests'}
                     </span>
             </a>
         </div>`
+        counter += 1;
                }
                },
                error: function(xhr, ajaxOptions, thrownError) {
@@ -133,6 +135,7 @@
                }
            });
    }
+
    </script>
 <script src="{% static 'shinelearn/js/assessment/assessment_search.js' %}"></script>
 
