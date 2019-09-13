@@ -26,7 +26,9 @@ class Home extends Component {
     }
 
     async componentDidMount() {
+        if (this.state.token){
         await this.props.loginCandidate(this.state.token);
+        }
     }
 
     scrollTo(elem, action, label) {
@@ -42,7 +44,7 @@ class Home extends Component {
         })
     }
 
-      static getActions() {
+    static getActions() {
         return [loginCandidate, getComponentTitle]
     }
 
@@ -51,6 +53,9 @@ class Home extends Component {
         const results = [];
         for (const [index, value] of actionList.entries()) {
             console.log('----index---', index, value);
+            if(index == 0 && !(params && params.alt)) {
+                continue;
+            }
             results[index] = await new Promise((resolve, reject) => dispatch(value({
                 info: params,
                 resolve,
@@ -234,7 +239,7 @@ const mapDispatchToProps = (dispatch) => {
         },
         "loginCandidate": (token) => {
             return new Promise((resolve, reject) => {
-                dispatch(loginCandidate({payload: {alt: token}, resolve, reject, isTokenAvail: true}))
+                dispatch(loginCandidate({info: {alt: token}, resolve, reject, isTokenAvail: true}))
             })
         },
         'eventClicked': (data) => {

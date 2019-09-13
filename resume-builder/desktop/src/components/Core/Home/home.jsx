@@ -11,8 +11,8 @@ import LoaderPage from '../../Loader/loaderPage.jsx'
 import {scroller} from 'react-scroll';
 import queryString from "query-string";
 import {hideModal, showModal} from "../../../store/ui/actions";
-import {displaySelectedTemplate} from '../../../store/template/actions'
-import {eventClicked} from '../../../store/googleAnalytics/actions/index'
+import {displaySelectedTemplate} from '../../../store/template/actions';
+import {eventClicked} from '../../../store/googleAnalytics/actions/index';
 
 
 class Home extends Component {

@@ -254,7 +254,7 @@ const mapDispatchToProps = (dispatch) => {
         },
         "loginCandidate": (token) => {
             return new Promise((resolve, reject) => {
-                dispatch(loginCandidate({payload: {alt: token}, resolve, reject, isTokenAvail: false}))
+                dispatch(loginCandidate({info: {alt: token}, resolve, reject, isTokenAvail: false}))
             })
         },
     }

@@ -1,31 +1,37 @@
 import React from 'react';
-import {renderToString} from 'react-dom/server';
-import {Provider} from 'react-redux';
-import {StaticRouter} from 'react-router-dom';
-import {renderRoutes} from 'react-router-config';
+import { renderToString } from 'react-dom/server';
+import { Provider } from 'react-redux';
+import { StaticRouter } from 'react-router-dom';
+import { renderRoutes } from 'react-router-config';
 
 var path = require('path');
 const fs = require('fs');
 
 export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile) => {
 
-    const content = renderToString( < Provider
-    store = {store} >
-        < StaticRouter
-    location = {pathname}
-    context = {context} >
-        < div > {renderRoutes(routes)} < /div>
-        < /StaticRouter>
-        < /Provider>);
-    const cssUrl = isMobile ? `${staticUrl}react/dist/mobile/main-${timeStamp}.css` : `https://learning-static-staging-189607.storage.googleapis.com/l1/s/react/dist/desktop/main-${timeStamp}.css`
-    const jsBuildUrl = isMobile ? `${staticUrl}react/dist/mobile/main-${timeStamp}.js` : `https://learning-static-staging-189607.storage.googleapis.com/l1/s/react/dist/desktop/main-${timeStamp}.js`
+  const content = renderToString(< Provider
+    store={store} >
+    < StaticRouter
+      location={pathname}
+      context={context} >
+      < div >
+        {renderRoutes(routes)}
+      </div>
+    </StaticRouter>
+  </Provider>);
 
-    return `
+  // const cssUrl = isMobile ? `${staticUrl}react/dist/mobile/main-${timeStamp}.css` : `${staticUrl}react/dist/desktop/main-${timeStamp}.css`
+  // const jsBuildUrl = isMobile ? `${staticUrl}react/dist/mobile/main-${timeStamp}.js` : `${staticUrl}react/dist/desktop/main-${timeStamp}.js`
+  const cssUrl = isMobile ? `dist/main-mobile.css` : `dist/main-desktop.css`
+  const jsBuildUrl = isMobile ? `dist/main-mobile.js` : `dist/main-desktop.js`
+
+  return `
   <!DOCTYPE html>
       <html lang="en">
       <head>
-        <base href="${"/resume-builder/"}" />
-         <link type="text/css" href="dist/main.css" rel="stylesheet" />
+        <base href="/resume-builder/" />
+         <link type="text/css" href="${cssUrl}" rel="stylesheet" />
+         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
          <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
               integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
               crossorigin="anonymous">
@@ -51,7 +57,7 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
         ga('create', 'UA-3537905-41', 'auto');
         ga('send', 'pageview');
        </script>
-      <script type="text/javascript" src="dist/main.js"></script>
+      <script type="text/javascript" src="${jsBuildUrl}"></script>
       </body>
       </html>
   `;

@@ -12,10 +12,6 @@ const fs = require('fs');
 
 const timestamp = fs.readFileSync(`${process.env.STATIC_FILE_PATH}`, "utf8");
 
-
-console.log('time stamp value is -----', timestamp, process.env.STATIC_URL);
-
-
 let userAgents = '', store, routes, isMobile = false,paramObj = {
     alt:''
 };
@@ -84,7 +80,6 @@ app.get('*', async (req, res) => {
     }
 
     for (const [index, {route}] of (matchRoutes(routes, req.path) || []).entries()) {
-        console.log('-----index, route', index, route);
         if (route && route.component && route.component.fetching) {
             try {
                 if(req.query && req.query.token) {
@@ -97,7 +92,6 @@ app.get('*', async (req, res) => {
             }
         }
     }
-    // console.log('result ====', result, context);
 
     const content = render(req.path, store, routes, context, timestamp, window.config.staticUrl, isMobile);
     res.send(content);

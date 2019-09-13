@@ -13,7 +13,6 @@ function* getCandidateId() {
         const result = yield call(Api.getCandidateId);
         if (result['error']) {
             apiError();
-
         }
 
         localStorage.setItem('candidateId', JSON.parse((result.data && result.data['candidate_id'])) || '');
@@ -42,7 +41,10 @@ function* loginCandidate(action) {
         }
 
         if (result && result['error']) {
+
+            if(typeof document !== 'undefined'){
             apiError('login');
+            }
             localStorage.clear();
             window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
             reject(new Error(result['errorMessage']));
@@ -82,7 +84,8 @@ function* loginCandidate(action) {
         yield put({type: uiAction.UPDATE_MAIN_PAGE_LOADER, payload: {mainloader: false}})
     } catch
         (e) {
-        apiError();
+            if(typeof document !== 'undefined') apiError();
+            else console.log(e);
     }
 }
 
@@ -104,10 +107,21 @@ function* feedbackSubmit(action) {
     }
 }
 
+function* getComponentTitle(action) {
+    try {
+        let {payload: {resolve, reject}} = action;
+        resolve('Resume Builder | Shine Learning')
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 
 export default function* watchLandingPage() {
     yield takeLatest(Actions.GET_CANDIDATE_ID, getCandidateId);
     yield takeLatest(Actions.LOGIN_CANDIDATE, loginCandidate);
     yield takeLatest(Actions.FEEDBACK_SUBMIT, feedbackSubmit);
+    yield takeLatest(Actions.GET_HOME_COMPONENT_TITLE, getComponentTitle);
+
 
 }
