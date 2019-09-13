@@ -131,14 +131,20 @@ class AssessmentCategoryPage(DetailView):
         return breadcrumbs
 
     def get_context_data(self, **kwargs):
+        filter_dict ={}
         context = super(AssessmentCategoryPage, self).get_context_data(**kwargs)
         context.update({'breadcrumbs': self.get_breadcrumbs()})
         category = self.object.get_childrens()
+        if category:
+            category = set(category.values_list('id',flat=True))
+            filter_dict.update({"id__in": category})
         cat_ids = set(Test.objects.exclude(category=None).values_list('category__id', flat=True))
         all_cat_ids = set(Test.objects.exclude(category=None).exclude(categories=None)
                           .values_list('categories__id',flat=True))
+
         cat_ids = list(filter(None,cat_ids|all_cat_ids))
-        category = category.filter(id__in=cat_ids)
+        category = Category.objects.filter(**filter_dict).filter(
+            id__in=cat_ids).order_by('created')
         context.update({'category': category})
         return context
 
