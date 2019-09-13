@@ -229,6 +229,7 @@ class WriterInvoiceMixin(object):
         return data
 
     def _get_oi_variation_writer_amount_details(self,oi):
+        process = False
         variation_combo_discount,variation_sum = 0,0 
         oi_dict = {}
         p_oi = oi.parent
@@ -311,6 +312,7 @@ class WriterInvoiceMixin(object):
         return process,variation_sum,variation_combo_discount
 
     def _get_oi_addon_writer_amount_details(self,oi):
+        process = False
         addon_sum,addon_combo_discount = 0,0
         pk = oi.pk
         product_name = oi.product.get_name
@@ -354,6 +356,7 @@ class WriterInvoiceMixin(object):
         return process,addon_combo_discount,addon_sum
 
     def _get_oi_combo_writer_amount_details(self,oi):
+        process = False
         combo_sum,oi_combo_discount = 0,0
         pk = oi.pk
         product_name = oi.product.get_name
@@ -447,6 +450,7 @@ class WriterInvoiceMixin(object):
         return process,oi_combo_discount,combo_sum
 
     def _get_writer_amount_details_no_process(self,oi,user):
+        process = False
         no_process_sum,no_process_combo_discount=0,0
         pk = oi.pk
         product_name = oi.product.get_name
