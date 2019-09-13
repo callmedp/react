@@ -68,6 +68,19 @@
 		<div class="row top_tiles">
 			<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
 				<button type="button" class="btn btn-app" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-filter"></i>Filter By</button>
+				<div class="dropdown" id="sort_dropdown">
+			  <button class="btn  btn-app dropdown-toggle" type="button" data-toggle="dropdown">Sort By</button>
+			  <ul class="dropdown-menu">
+			<li id="delivery_speed" {% if sort_type == 'delivery_speed'%} class="selected" {% endif %}><a>Delivery Speed</a></li>
+			<li value='date' id='Date' {% if sort_type == 'Date' %} class="selected" {% endif %}><a>Date</a></li>
+			  </ul>
+			</div>
+		  	<form id="delivery_form" action="{% url "console:queue-inbox" %}" method='GET'>
+			  	<input  type="text" id='sort_type' name='sort_type' value="delivery_speed" style="visibility: hidden;"> 
+			</form>
+			<form id="date_form" action="{% url "console:queue-inbox" %}" method='GET'>
+				<input  type="text" id='sort_type' name='sort_type' value="Date" style="visibility: hidden;"> 
+			</form>
 			</div>
 			<div class="modal fade bs-example-modal-sm filter" tabindex="-1" role="dialog" aria-hidden="true">
 				<div class="modal-dialog modal-sm">

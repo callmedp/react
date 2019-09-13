@@ -425,6 +425,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         self.writer, self.created = '', ''
         self.delivery_type = ''
         self.sel_opt = 'number'
+        self.sort_type = 'delivery_speed'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
@@ -433,6 +434,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         self.created = request.GET.get('created', '')
         self.delivery_type = request.GET.get('delivery_type', '')
         self.sel_opt = request.GET.get('rad_search','number')
+        self.sort_type = request.GET.get('sort_type','delivery_speed')
         return super(InboxQueueVeiw, self).get(request, args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -480,6 +482,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
             "message_form": MessageForm(),
             "filter_form": filter_form,
             "query": self.query,
+            "sort_type": self.sort_type,
             var: "checked",
         })
         return context
@@ -556,7 +559,14 @@ class InboxQueueVeiw(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
 
-        return queryset.select_related('order').order_by('-modified').select_related('delivery_service').order_by('-delivery_service__inr_price')
+        try:
+            if self.sort_type == 'Date':
+               return queryset.select_related('order').order_by('-modified')
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
+            pass
+
+        return queryset.select_related('delivery_service').order_by('-delivery_service__inr_price','-modified')
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):

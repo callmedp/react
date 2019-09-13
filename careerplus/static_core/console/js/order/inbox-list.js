@@ -81,4 +81,12 @@ $(function(){
       
     });
 
+    $('#Date').click(function(){
+        $('#date_form').submit();
+    });
+
+    $('#delivery_speed').click(function(){
+        $('#delivery_form').submit();
+    });
+
 });
