@@ -17,9 +17,9 @@ config.optimization.runtimeChunk = false;
 
 const currentTimeStamp = process.argv && process.argv[2] || +new Date();
 
-console.log('login in here');
+console.log('login in here', config);
 // JS
-config.output.filename = `../../../careerplus/static_core/react/dist/desktop/main-${currentTimeStamp}.min.js`;
+config.output.filename = `../../../careerplus/static_core/react/dist/desktop/main-${currentTimeStamp}.js`;
 // CSS. "5" is MiniCssPlugin
 config.plugins[5].options.filename = `../../../careerplus/static_core/react/dist/desktop/main-${currentTimeStamp}.css`;
 config.plugins.push(new BundleTracker({
