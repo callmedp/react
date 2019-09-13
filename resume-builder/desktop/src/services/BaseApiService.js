@@ -76,7 +76,6 @@ async function handleResponse(response, isFetchingHTML) {
             }
             if (response['status'] === 401) {
                 window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
-                return;
             }
             return {
                 error: true,

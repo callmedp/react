@@ -23,6 +23,9 @@ if (typeof window == 'undefined') {
             siteDomain: process.env.SITE_DOMAIN || '',
             msiteDomain: process.env.MSITE_DOMAIN || ''
         },
+        location: {
+            href: ''
+        }
     }
 }
 

@@ -27,6 +27,7 @@ class Home extends Component {
 
     async componentDidMount() {
         if (this.state.token){
+            console.log('in herer ', this.state.token);
         await this.props.loginCandidate(this.state.token);
         }
     }
@@ -52,7 +53,6 @@ class Home extends Component {
         const actionList = Home.getActions()
         const results = [];
         for (const [index, value] of actionList.entries()) {
-            console.log('----index---', index, value);
             if(index == 0 && !(params && params.alt)) {
                 continue;
             }
@@ -73,7 +73,10 @@ class Home extends Component {
             <div className="home">
                 <Header eventClicked={eventClicked}/>
                 <Banner userName={first_name} eventClicked={eventClicked}/>
-                {mainloader ? <Loader/> : ""}
+                {
+                   !!( mainloader)
+                    &&<Loader/>
+                }
 
 
                 <section className="section professional">

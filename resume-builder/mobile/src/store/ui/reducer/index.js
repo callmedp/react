@@ -12,7 +12,7 @@ import {
 } from "../actions/actionTypes";
 
 const initialState = {
-    'mainloader': true,
+    'mainloader': false,
     'dataloader': false,
     'formName': '',
     'suggestions': [],
