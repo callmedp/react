@@ -67,9 +67,16 @@ class Header extends Component {
                             </button>
                         </React.Fragment>
                         }
+                        {!!(page !== 'home') &&
+                        <React.Fragment>
                         <span className="signin--user-pic">
-            				<img alt="user info" src={`${this.staticUrl}react/assets/images/user-pic.jpg`}/>
-            			</span>
+                        <img alt="user info" src={`${this.staticUrl}react/assets/images/user-pic.jpg`}/>
+                     </span>
+                        <span>
+                        Hello {userName || 'User'}
+                       </span>
+                       </React.Fragment>
+                        }
                     </div>
                 </div>
             </header>
