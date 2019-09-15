@@ -15,6 +15,8 @@ config.optimization.splitChunks = {
 // Move runtime into bundle instead of separate file
 config.optimization.runtimeChunk = false;
 
+console.log('====', process.argv);
+
 const currentTimeStamp = process.argv && process.argv[2] || +new Date();
 
 console.log('login in here');

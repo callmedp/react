@@ -14,7 +14,9 @@ config.optimization.splitChunks = {
 // Move runtime into bundle instead of separate file
 config.optimization.runtimeChunk = false;
 
-const currentTimeStamp = +new Date();
+console.log('====', process.argv);
+
+const currentTimeStamp = process.argv && process.argv[2] || +new Date();
 
 // JS
 config.output.filename = `../../../careerplus/static_core/react/dist/mobile/main-${currentTimeStamp}.js`;

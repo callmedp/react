@@ -9,7 +9,12 @@ import render from './render';
 
 const fs = require('fs');
 
-const timestamp = process.argv && process.argv.length && process.argv[2] || null;
+
+const timestamp = fs.readFileSync(`${process.env.STATIC_FILE_PATH}`, 'utf8')
+
+
+console.log('time stamp value is -----', timestamp);
+
 
 let userAgents = '', store, routes, isMobile = false;
 
@@ -91,7 +96,7 @@ app.get('*', async (req, res) => {
     }
     // console.log('result ====', result, context);
 
-    const content = render(req.path, store,routes, context, timestamp, window.config.staticUrl, isMobile);
+    const content = render(req.path, store, routes, context, timestamp, window.config.staticUrl, isMobile);
     res.send(content);
 });
 
