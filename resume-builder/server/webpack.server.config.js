@@ -36,10 +36,6 @@ module.exports = env => {
                 {
                     test: /\.(scss|css)$/,
                     loader: "ignore-loader"
-                },
-                {
-                    test: /\.css$/,
-                    use: ['style-loader', 'css-loader']
                 }
 
             ]
