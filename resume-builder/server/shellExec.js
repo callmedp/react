@@ -31,7 +31,9 @@ shell.echo('<><><><><><>< Created mobile build ><><><><><><>');
 /*create server build */
 shell.cd('..');
 
-shell.exec(`webpack --config  ./server/webpack.server.config.js`);
+// shell.exec(`webpack --config  ./server/webpack.server.config.js`);
+
+shell.exec('npm run build')
 
 
 shell.echo('<><><><><><>< created server build ><><><><><>');
