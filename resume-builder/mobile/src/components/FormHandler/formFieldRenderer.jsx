@@ -1,6 +1,6 @@
 import React from 'react'
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import "../../../node_modules/react-datepicker/dist/react-datepicker.css";
 import Multiselect from 'react-widgets/lib/Multiselect'
 import moment from 'moment'
 import addDays from "date-fns/addDays";

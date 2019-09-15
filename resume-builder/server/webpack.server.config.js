@@ -13,7 +13,7 @@ module.exports = env => {
         target:
             'node',
         entry:
-            path.join(__dirname,'config.js'),
+            path.join(__dirname, 'config.js'),
         output:
             {
                 path: path.resolve(__dirname),
@@ -36,6 +36,10 @@ module.exports = env => {
                 {
                     test: /\.(scss|css)$/,
                     loader: "ignore-loader"
+                },
+                {
+                    test: /\.css$/,
+                    use: ['style-loader', 'css-loader']
                 }
 
             ]

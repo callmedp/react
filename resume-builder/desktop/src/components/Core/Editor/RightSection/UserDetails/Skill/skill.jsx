@@ -11,7 +11,7 @@ import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 /*
 styles
 * */
-import 'react-accessible-accordion/dist/fancy-example.css';
+import '../../../../../../../node_modules/react-accessible-accordion/dist/fancy-example.css';
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
 import {siteDomain} from '../../../../../../Utils/domains'
 
