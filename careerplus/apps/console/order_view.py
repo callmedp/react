@@ -73,6 +73,24 @@ from .order_form import (
 from .mixins import ActionUserMixin
 from users.mixins import UserPermissionMixin
 
+def sorting(sort_type, queryset):
+    try:
+        if sort_type == 'delivery_speed':
+            return queryset.select_related(
+                'order', 'product', 'assigned_by',
+                'assigned_to', 'delivery_service').order_by('-delivery_service__inr_price', '-modified')
+        elif sort_type == 'payment_date':
+           return queryset.select_related(
+                'order', 'product', 'assigned_by',
+                'assigned_to', 'delivery_service').order_by('-order__payment_date')
+    except Exception as e:
+        logging.getLogger('error_log').error("%s " % str(e))
+        pass
+
+    return queryset.select_related(
+        'order', 'product', 'assigned_by',
+        'assigned_to', 'delivery_service').order_by('-modified')
+
 @Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_show_order_queue', login_url='/console/login/'), name='dispatch')
 class OrderListView(ListView, PaginationMixin):
@@ -425,7 +443,6 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         self.writer, self.created = '', ''
         self.delivery_type = ''
         self.sel_opt = 'number'
-        self.sort_type = 'delivery_speed'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
@@ -433,8 +450,8 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         self.writer = request.GET.get('writer', '')
         self.created = request.GET.get('created', '')
         self.delivery_type = request.GET.get('delivery_type', '')
-        self.sel_opt = request.GET.get('rad_search','number')
-        self.sort_type = request.GET.get('sort_type','delivery_speed')
+        self.sel_opt = request.GET.get('rad_search', 'number')
+        self.sort_type = request.GET.get('sort_type', 'Date')
         return super(InboxQueueVeiw, self).get(request, args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -559,14 +576,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
 
-        try:
-            if self.sort_type == 'Date':
-               return queryset.select_related('order').order_by('-modified')
-        except Exception as e:
-            logging.getLogger('error_log').error("%s " % str(e))
-            pass
-
-        return queryset.select_related('delivery_service').order_by('-delivery_service__inr_price','-modified')
+        return sorting(self.sort_type, queryset)
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -805,6 +815,7 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
         except:
             self.draft_level = -1
         self.delivery_type = request.GET.get('delivery_type', '')
+        self.sort_type = request.GET.get('sort_type','Date')
         return super(ApprovalQueueVeiw, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -827,6 +838,7 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
             "max_limit_draft": max_limit_draft,
             "filter_form": filter_form,
             "query": self.query,
+            "sort_type": self.sort_type,
             "action_form": OIActionForm(),
              var: "checked",
         })
@@ -911,10 +923,7 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
 
-        return queryset.select_related(
-            'order', 'product', 'assigned_by',
-            'assigned_to', 'delivery_service').order_by('-modified').select_related('delivery_service').order_by('-delivery_service__inr_price')
-
+        return sorting(self.sort_type, queryset)
 
 @Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_show_approved_queue', login_url='/console/login/'), name='dispatch')
@@ -943,6 +952,7 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
         except:
             self.draft_level = -1
         self.delivery_type = request.GET.get('delivery_type', '')
+        self.sort_type = request.GET.get('sort_type','Date')
         return super(ApprovedQueueVeiw, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -962,6 +972,7 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
             "messages": alert,
             "max_limit_draft": max_limit_draft,
             "query": self.query,
+            "sort_type": self.sort_type,
             "filter_form": filter_form,
              var: "checked",
         })
@@ -1047,9 +1058,7 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
 
-        return queryset.select_related(
-            'order', 'product', 'assigned_by',
-            'assigned_to', 'delivery_service').order_by('-modified').select_related('delivery_service').order_by('-delivery_service__inr_price')
+        return sorting(self.sort_type, queryset)
 
 
 @Decorate(stop_browser_cache())
@@ -1066,19 +1075,20 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
         self.query = ''
         self.modified, self.draft_level = '', -1
         self.writer, self.delivery_type = '', ''
-        self.sel_opt ='number'
+        self.sel_opt = 'number'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '').strip()
         self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
-        self.sel_opt =request.GET.get('rad_search','number')
+        self.sel_opt =request.GET.get('rad_search', 'number')
         try:
             self.draft_level = int(request.GET.get('draft_level', -1))
         except:
             self.draft_level = -1
         self.delivery_type = request.GET.get('delivery_type', '')
+        self.sort_type = request.GET.get('sort_type', 'Date')
         return super(RejectedByAdminQueue, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1099,6 +1109,7 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
             "max_limit_draft": max_limit_draft,
             "draft_form": FileUploadForm(),
             "message_form": MessageForm(),
+            "sort_type": self.sort_type,
             "filter_form": filter_form,
             "query": self.query,
             "action_form": OIActionForm(),
@@ -1186,9 +1197,10 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
-        return queryset.select_related(
-            'order', 'product', 'assigned_by',
-            'assigned_to', 'delivery_service').order_by('-modified').select_related('delivery_service').order_by('-delivery_service__inr_price')
+
+        return sorting(self.sort_type, queryset)
+
+        
 
 
 @Decorate(stop_browser_cache())
@@ -1218,6 +1230,7 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
         except:
             self.draft_level = -1
         self.delivery_type = request.GET.get('delivery_type', '')
+        self.sort_type = request.GET.get('sort_type','Date')
         return super(RejectedByCandidateQueue, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1240,6 +1253,7 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
             "message_form": MessageForm(),
             "filter_form": filter_form,
             "query": self.query,
+            "sort_type": self.sort_type,
             "action_form": OIActionForm(),
             var:'checked',
         })
@@ -1328,13 +1342,14 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
 
-        return queryset.select_related(
-            'order', 'product', 'assigned_by',
-            'assigned_to', 'delivery_service').order_by('-modified').select_related('delivery_service').order_by('-delivery_service__inr_price')
+        return sorting(self.sort_type, queryset)
+
+        
 
 
 @Decorate(stop_browser_cache())
-@method_decorator(permission_required('order.can_show_allocated_queue', login_url='/console/login/'), name='dispatch')
+@method_decorator(permission_required('order.can_show_allocated_queue', 
+    login_url='/console/login/'), name='dispatch')
 class AllocatedQueueVeiw(ListView, PaginationMixin):
     context_object_name = 'allocated_list'
     template_name = 'console/order/allocated-list.html'
@@ -1357,6 +1372,7 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
         self.created = request.GET.get('created', '')
         self.oi_status = request.GET.get('oi_status', '')
         self.delivery_type = request.GET.get('delivery_type', '')
+        self.sort_type = request.GET.get('sort_type','Date')
         return super(AllocatedQueueVeiw, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1376,6 +1392,7 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
             "messages": alert,
             "query": self.query,
             "filter_form": filter_form,
+            "sort_type": self.sort_type,
             var: 'checked',
         })
 
@@ -1461,11 +1478,9 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
 
-        return queryset.select_related(
-            'order', 'product', 'assigned_to',
-            'assigned_by', 'delivery_service').order_by('-modified').select_related('delivery_service').order_by('-delivery_service__inr_price')
+        return sorting(self.sort_type, queryset)
 
-
+        
 @Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_show_closed_oi_queue', login_url='/console/login/'), name='dispatch')
 class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
@@ -1577,8 +1592,8 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
             pass
 
         return queryset.select_related(
-            'order', 'product', 'assigned_to',
-            'assigned_by', 'delivery_service').order_by('-modified')
+            'order', 'product', 'assigned_by',
+            'assigned_to', 'delivery_service').order_by('-modified')
 
 
 @Decorate(stop_browser_cache())
@@ -1602,6 +1617,7 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
         self.payment_date = request.GET.get('payment_date', '')
         self.sel_opt=request.GET.get('rad_search','number')
         self.modified = request.GET.get('modified', '')
+        self.sort_type = request.GET.get('sort_type', 'Date')
         return super(DomesticProfileUpdateQueueView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1619,6 +1635,7 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
             "messages": alert,
             "query": self.query,
             "message_form": MessageForm(),
+            "sort_type": self.sort_type,
             "filter_form": filter_form,
             "action_form": OIActionForm(queue_name="domesticprofileupdate"),
             var:'checked',
@@ -1720,7 +1737,7 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified').select_related('delivery_service').order_by('-delivery_service__inr_price')
+        return sorting(self.sort_type, queryset)
 
 @Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_show_domestic_profile_initiated_queue', login_url='/console/login/'), name='dispatch')
@@ -1744,6 +1761,7 @@ class DomesticProfileInitiatedQueueView(ListView, PaginationMixin):
         self.sel_opt = request.GET.get('rad_search','number')
         self.modified = request.GET.get('modified', '')
         self.status = request.GET.get('status', '')
+        self.sort_type = request.GET.get('sort_type','Date')
         return super(DomesticProfileInitiatedQueueView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1760,6 +1778,7 @@ class DomesticProfileInitiatedQueueView(ListView, PaginationMixin):
             "messages": alert,
             "query": self.query,
             "filter_form": filter_form,
+            "sort_type": self.sort_type,
             var: 'checked',
         })
 
@@ -1861,7 +1880,7 @@ class DomesticProfileInitiatedQueueView(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified').order_by('-modified').select_related('delivery_service').order_by('-delivery_service__inr_price')
+        return sorting(self.sort_type, queryset)        
 
 
 @Decorate(stop_browser_cache())
@@ -1885,6 +1904,7 @@ class DomesticProfileApprovalQueue(ListView, PaginationMixin):
         self.payment_date = request.GET.get('payment_date', '')
         self.modified = request.GET.get('modified', '')
         self.sel_opt = request.GET.get('rad_search','number')
+        self.sort_type = request.GET.get('sort_type','Date')
         return super(DomesticProfileApprovalQueue, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1902,6 +1922,7 @@ class DomesticProfileApprovalQueue(ListView, PaginationMixin):
             "query": self.query,
             "message_form": MessageForm(),
             "filter_form": filter_form,
+            "sort_type": self.sort_type,
             "action_form": OIActionForm(queue_name="domesticprofileapproval"),
              var:'checked',
         })
@@ -1968,8 +1989,7 @@ class DomesticProfileApprovalQueue(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified').order_by('-modified').select_related('delivery_service').order_by('-delivery_service__inr_price')
-
+        return sorting(self.sort_type, queryset)
 
 @Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_show_booster_queue', login_url='/console/login/'), name='dispatch')

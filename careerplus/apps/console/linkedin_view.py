@@ -964,9 +964,10 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '').strip()
-        self.sel_opt=request.GET.get('rad_search','number')
+        self.sel_opt = request.GET.get('rad_search','number')
         self.payment_date = request.GET.get('payment_date', '')
         self.modified = request.GET.get('modified', '')
+        self.sort_type = request.GET.get('sort_type','Date')
         return super(InterNationalUpdateQueueView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -985,6 +986,7 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
             "query": self.query,
             "message_form": MessageForm(),
             "filter_form": filter_form,
+            "sort_type": self.sort_type,
             "action_form": OIActionForm(queue_name="internationalprofileupdate"),
             var:'checked',
         })
@@ -1078,7 +1080,22 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
             logging.getLogger('error_log').error("date:", str(e))
             pass
 
-        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
+        try:
+            if self.sort_type == 'delivery_speed':
+                return queryset.select_related(
+                    'order', 'product', 'assigned_to', 
+                    'assigned_by', 'delivery_service').order_by('-delivery_service__inr_price','-modified')
+            elif self.sort_type == 'payment_date':
+                return queryset.select_related(
+                    'order', 'product', 'assigned_by',
+                    'assigned_to', 'delivery_service').order_by('-order__payment_date')
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
+            pass
+
+        return queryset.select_related(
+            'order', 'product', 'assigned_to', 
+            'assigned_by').order_by('-modified')
 
 
 @method_decorator(permission_required('order.can_show_international_profile_approval_queue', login_url='/console/login/'), name='dispatch')
@@ -1101,6 +1118,7 @@ class InterNationalApprovalQueue(ListView, PaginationMixin):
         self.payment_date = request.GET.get('payment_date', '')
         self.sel_opt = request.GET.get('rad_search','number')
         self.modified = request.GET.get('modified', '')
+        self.sort_type = request.GET.get('sort_type','Date')
         return super(InterNationalApprovalQueue, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1118,6 +1136,7 @@ class InterNationalApprovalQueue(ListView, PaginationMixin):
             "query": self.query,
             "message_form": MessageForm(),
             "filter_form": filter_form,
+            "sort_type": self.sort_type,
             "action_form": OIActionForm(queue_name="internationalapproval"),
              var: 'checked',
         })
@@ -1176,7 +1195,22 @@ class InterNationalApprovalQueue(ListView, PaginationMixin):
         except Exception as e:
             logging.getLogger('error_log').error("Delivery date:", str(e))
 
-        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
+        try:
+            if self.sort_type == 'delivery_speed':
+                return queryset.select_related(
+                    'order', 'product', 'assigned_to', 
+                    'assigned_by', 'delivery_service').order_by('-delivery_service__inr_price', '-modified')
+            elif self.sort_type == 'payment_date':
+                return queryset.select_related(
+                    'order', 'product', 'assigned_by',
+                    'assigned_to', 'delivery_service').order_by('-order__payment_date')
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
+            pass
+
+        return queryset.select_related(
+            'order', 'product', 'assigned_to', 
+            'assigned_by').order_by('-modified')
 
 
 class ProfileUpdationView(DetailView):

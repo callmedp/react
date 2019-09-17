@@ -21,4 +21,17 @@ $(document).ready(function() {
     $('#id_filter').click(function(){
         $('#list-filter-form').submit();
     });
+
 });
+
+function sort(){
+      if($('#sort_type').val() == 'delivery_speed'){
+        $('#delivery_form').submit();
+      }
+      else if($('#sort_type').val() == 'Date'){
+        $('#date_form').submit();
+      }
+      else if($('#sort_type').val() == 'payment_date'){
+        $('#payment_date_form').submit();
+      }
+    };

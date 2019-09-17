@@ -66,20 +66,24 @@
 			</form>
 		</div>
 		<div class="row top_tiles">
-			<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-				<button type="button" class="btn btn-app" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-filter"></i>Filter By</button>
-				<div class="dropdown" id="sort_dropdown">
-			  <button class="btn  btn-app dropdown-toggle" type="button" data-toggle="dropdown">Sort By</button>
-			  <ul class="dropdown-menu">
-			<li id="delivery_speed" {% if sort_type == 'delivery_speed'%} class="selected" {% endif %}><a>Delivery Speed</a></li>
-			<li value='date' id='Date' {% if sort_type == 'Date' %} class="selected" {% endif %}><a>Date</a></li>
-			  </ul>
+			<div class="col-lg-12 col-md-3 col-sm-6 col-xs-12">
+				<button type="button" class="btn btn-app pull-left" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-filter"></i>Filter By</button>
+			<div class="dropdown pull-left" style="margin-left:20px;" id="sort_dropdown">
+				<strong>Sort By</strong>
+			<select class="form-control" id="sort_type" onchange="sort();">
+				<option value="Date" {% if sort_type == 'Date'%} selected {% endif %}>Modified Date</option>
+				<option value="delivery_speed" {% if sort_type == 'delivery_speed'%} selected {% endif %}>Delivery Speed</option>
+				<option value="payment_date" {% if sort_type == 'payment_date'%} selected {% endif %}>Payment Date</option>
+			</select>
 			</div>
-		  	<form id="delivery_form" action="{% url "console:queue-inbox" %}" method='GET'>
+		  	<form class='hidden' id="delivery_form" action="{% url "console:queue-inbox" %}" method='GET'>
 			  	<input  type="text" id='sort_type' name='sort_type' value="delivery_speed" style="visibility: hidden;"> 
 			</form>
-			<form id="date_form" action="{% url "console:queue-inbox" %}" method='GET'>
+			<form class='hidden' id="date_form" action="{% url "console:queue-inbox" %}" method='GET'>
 				<input  type="text" id='sort_type' name='sort_type' value="Date" style="visibility: hidden;"> 
+			</form>
+			<form class='hidden' id="payment_date_form" action="{% url "console:queue-inbox" %}" method='GET'>
+				<input  type="text" id='sort_type' name='sort_type' value="payment_date" style="visibility: hidden;"> 
 			</form>
 			</div>
 			<div class="modal fade bs-example-modal-sm filter" tabindex="-1" role="dialog" aria-hidden="true">
@@ -264,6 +268,8 @@
 									<td>
 										{{obj.modified|naturaltime}}
 										<b>Updated On: {{obj.modified}}</b>
+										<hr>
+										<b>Payment made On: {{obj.order.payment_date}}</b>
 									</td>
 									<td>{% if obj.assigned_to %}{{obj.assigned_to.name}} {% else %} Not Assigned{% endif %}</td>
 									<td>{{obj.created}}</td>
