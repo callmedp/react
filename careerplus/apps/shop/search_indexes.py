@@ -948,4 +948,4 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             objs = obj.productattributes.filter(active=True)
             for obj in objs:
                 detail[obj.attribute.name] = obj.value
-            return detail
+            return json.dumps(detail)

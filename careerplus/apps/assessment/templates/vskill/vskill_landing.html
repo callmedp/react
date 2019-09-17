@@ -113,11 +113,16 @@ Shine learning brings to you one of the largest collection of test preps for all
                     <span>
                      {{fa.name}}
                      <span class="test"> {{fa.get_assessment_test_count}}
-                 {% if fa.get_assessment_test_count < 1 %}Test {% else %}Tests{% endif %}
+                 {% if fa.get_assessment_test_count < 2 %}Test {% else %}Tests{% endif %}
                      </span>
                    </span>
+
                    <figure class="company-icons">
-                     <img class="img-responsive" src= "https://static1.shine.com/l/m/product_image/1665/1509120908_7316.png" alt="company-icons">
+                              <span>
+                             {% if fa.icon %}
+                <img class="img-responsive" src= "{{fa.icon.url}}" alt="fa-icons">
+                                               {% endif %}
+                                  </span>
                    </figure>
                   </a>
                </div>
@@ -285,7 +290,7 @@ Shine learning brings to you one of the largest collection of functional tests. 
 {% endcompress %}
 <script type="text/javascript">
    var page_number= 2;
-   var facolor = 0;
+   var facolor = 7;
    function loadmore(){
             page_number = page_number+1;
              element = document.getElementById('funcDiv');
@@ -318,11 +323,6 @@ Shine learning brings to you one of the largest collection of functional tests. 
                    }
                }
            });
-   }
-      function counter(facolor){
-
-    return facolor%8;
-
    }
 
 

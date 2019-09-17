@@ -92,7 +92,7 @@ Shine learning brings to you one of the largest collection of test preps for all
                 <span class="border border0"></span>
                 <div>
                     <h2 class="name bold mb-0">{{fa.name}}</h2>
-                    <p class="fs-14 mb-0">{{fa.get_assessment_test_count}}  {% if fa.get_assessment_test_count < 1 %}Test {% else %}Tests{% endif %}</p>
+                    <p class="fs-14 mb-0">{{fa.get_assessment_test_count}}  {% if fa.get_assessment_test_count < 2 %}Test {% else %}Tests{% endif %}</p>
                 </div>
                 <span>
                     {% if fa.icon %}
@@ -128,11 +128,10 @@ Shine learning brings to you one of the largest collection of functional tests. 
                 <span class="fa_name">{{fa.name}}</span></a> </div>
               {%endfor%}
 
-            {% if  func_area.count > 8  %}
-
+    </div>
+                {% if  func_area.count > 8  %}
             <div class="load_more_button" id="loadmorebtn" onclick="loadmore();">Load more</div>
         {% endif %}
-    </div>
 </div>
 
   <div class="popular_test">
@@ -258,11 +257,18 @@ Shine learning brings to you one of the largest collection of functional tests. 
                  $('#loadmorebtn').hide();
                }
                for (fa in json.results){
-                element.innerHTML= element.innerHTML +
-                `<div class="functional_test_inside border-${color}">
-                <a href="/practice-tests/${json.results[fa].slug}">
-                <span class= "icon"><img alt="fa-icon" src = "${json.results[fa].icon}"
-                </span>${json.results[fa].name} </a></div>`;
+               color = counter(facolor);
+               element.innerHTML= element.innerHTML +
+                `<div class="functional_area_inside border-${color}">
+               <a title="${json.results[fa].name}" href="/practice-tests/${json.results[fa].slug}">
+                <span class="functional_area_inside--image">
+                <img class="image-responsive" alt="fa-icon" src="${json.results[fa].icon}"></span>
+                <span class="fa_name">
+                ${json.results[fa].name}
+                </span>
+                </a>
+                </div>`;
+                facolor +=1;
                }
                },
                error: function(xhr, ajaxOptions, thrownError) {
@@ -310,6 +316,7 @@ Shine learning brings to you one of the largest collection of functional tests. 
         $('#startTestLink').attr('href','/practice-tests/'+ modalobject.testSlug +'-test/');
         $('#testAddToCart').click( function()
          {
+            ga('send', 'event', 'Buy Flow', 'Enroll Now',modalobject.productId);
             updateToCart(modalobject.productId,'cart');
          }
       );

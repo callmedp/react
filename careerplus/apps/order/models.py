@@ -237,6 +237,16 @@ class Order(AbstractAutoDate):
         mobile = str(self.alt_mobile)
         return mobile[:2] + "".join(["*" for i in list(mobile[2:len(mobile)-2])]) + mobile[-2:]
 
+
+    @property
+    def full_name(self):
+        name = ""
+        if self.first_name:
+            name += self.first_name + " "
+        if self.last_name:
+            name += self.last_name
+        return name
+
     def get_currency_code(self):
         return CURRENCY_SYMBOL_CODE_MAPPING.get(self.currency)
 

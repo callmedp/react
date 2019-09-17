@@ -45,7 +45,7 @@
 <div class="body-wrapper practice-test ">
     <div class="practice-test-inside"></div>
 
-    <div class="back" ></div>
+    <div class="back" onclick="goBack();"></div>
 
 <h1>{{Category.heading}}</h1>
             {% block breadcrumb %}
@@ -79,7 +79,7 @@
 
         <div class="popular_test_inside">
            <a id="{{test.id}}" onclick="testModal(event);" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}","courseName":"{{test.course.name}}","courseDuration":"{{test.course.get_duration_in_day}}","coursePrice":"{{test.course.inr_price}}","productName":"{{test.product.name}}","productDuration":"{{test.product.get_duration_day}}","productPrice":"{{test.product.inr_price}}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}","courseUrl":"{{test.course.get_absolute_url}}","productUrl":"{{test.product.get_absolute_url}}" }'>
-                <span class=" border border{{forloop.counter0}}"></span>
+                <span class="border border{{forloop.counter0}}"></span>
                 <span class="name">{{test.title}}</span>
                 <span class="btn btn-md btn-round-30 btn-blue" id="btn_check_result">Take free test</span>
             </a>
@@ -88,13 +88,13 @@
 
       
     </div>
-       {%if category.count > 8 %}
+       {%if all_test.count > 8 %}
         <button class="load_more_button" id="loadmorebtn" onclick="loadmore();">Load more</button>
       {% endif %}
     </div>
 
       <!--start Test Modal-->
-    <div class="practice-test check-result-wrap pt-30" id="check_results">
+    <div class="practice-test check-result-wrap pt-30 w-100" id="check_results">
         <div class="practice-test-inside"></div>
         <div class="back" id="close"></div>
         <h1 class="mt-30">{{Category.heading}}</h1>
@@ -213,8 +213,8 @@
                 element.innerHTML= element.innerHTML + `<div class="popular_test_inside">
            <a id="${json.results[fa].id}" onclick="testModal(event);" data-attr-value='{"id":"${json.results[fa].id}","catid":"${json.results[fa].category}","quescount":"${json.results[fa].question_count}",
   "testSlug":"${json.results[fa].slug}","vendor":"${json.results[fa].vendor}",
-   "courseName":"${json.results[fa].course_id_data[0].name}","courseDuration":"${json.results[fa].course_id_data[0].day_duration}","coursePrice":"${json.results[fa].course_id_data[0].inr_price}","productName":"${json.results[fa].product_id_data[0].name}","productDuration":"${json.results[fa].product_id_data[0].day_duration}","productPrice":"${json.results[fa].product_id_data[0].inr_price}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}"
-   }' data-target="#testModal">
+   "courseName":"${json.results[fa].course_id_data[0].name}","courseDuration":"${json.results[fa].course_id_data[0].day_duration}","coursePrice":"${json.results[fa].course_id_data[0].inr_price}","productName":"${json.results[fa].product_id_data[0].name}","productDuration":"${json.results[fa].product_id_data[0].day_duration}","productPrice":"${json.results[fa].product_id_data[0].inr_price}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}",
+   "productUrl":"${json.results[fa].product_id_data[0].absolute_url}","courseUrl":"${json.results[fa].course_id_data[0].absolute_url}" }' data-target="#testModal">
                   <span class=" border border${color}"></span>
                 <span class="name">${json.results[fa].title}</span>
                 <span class="btn btn-md btn-round-30 btn-blue" id="btn_check_result">Take free test</span>
@@ -250,13 +250,19 @@
     modalobject = JSON.parse(e.currentTarget.dataset.attrValue);
         $('body').addClass('overflow-hidden');
         $("#check_results").addClass("open");
-         $('#productName').text(modalobject.productName);
+        $('#productName').text(modalobject.productName);
+        $('#productName').attr("href",modalobject.productUrl);
         $('#productDuration').text(modalobject.productDuration);
         $('#productPrice').text(modalobject.productPrice);
         $('#courseDuration').text(modalobject.courseDuration);
         $('#coursePrice').text(modalobject.coursePrice);
         $('#courseName').text(modalobject.courseName);
+        $('#courseName').attr("href",modalobject.courseUrl);
+        $('#courseName').attr("title",modalobject.courseName);
         $('#questCount').text(modalobject.quescount);
+        $('#fakeCoursePrice').text('Rs. '+ parseInt(parseInt(modalobject.coursePrice)/0.9));
+        $('#fakeProductPrice').text('Rs. '+parseInt(parseInt(modalobject.productPrice)/0.9));
+
        if(modalobject.courseName == ""|| modalobject.courseName == "undefined" ){
         $('#testCourse').hide();
         }
@@ -266,6 +272,7 @@
         $('#startTestLink').attr('href','/practice-tests/'+ modalobject.testSlug +'-test/');
         $('#testAddToCart').click( function()
          {
+           ga('send', 'event', 'Buy Flow', 'Enroll Now',modalobject.productId);
            updateToCart(modalobject.productId,'cart');
          }
       );

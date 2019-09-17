@@ -34,11 +34,20 @@ class Test(AbstractAutoDate):
     description = models.TextField(null=True, blank=True)
     category = models.ForeignKey(Category, null=True, blank=True)
     product = models.ForeignKey(Product, null=True, blank=True)
+    categories = models.ManyToManyField(Category, null=True, blank=True,related_name='testcategories')
     course = models.ForeignKey(Product, null=True, blank=True,related_name='testcourse')
     vendor = models.ForeignKey(Vendor,blank=True, null=True)
 
     def __str__(self):
         return self.title + "-" + str(self.max_score)
+
+    def get_all_categories(self):
+        cat_ids = set()
+        if self.category:
+            cat_ids.add(self.category.id)
+        scat_ids = set(self.categories.values_list('id', flat=True)\
+            .exclude(categories=None))
+        return list(filter(None,cat_ids|scat_ids))
 
     def get_question_count(self):
         return self.question_set.all().count()
