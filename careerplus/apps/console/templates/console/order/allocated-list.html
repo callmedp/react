@@ -105,6 +105,12 @@
                     {% if request.GET.delivery_type %}
                         <input type="hidden" name="delivery_type" value="{{request.GET.delivery_type}}">
                     {% endif %}
+                    {% if query %}
+                           <input type="hidden" name="query" value="{{query}}">
+                       {% endif %}
+                       {% if request.GET.rad_search %}
+                            <input type="hidden" name="rad_search" value="{{request.GET.rad_search}}">
+                       {% endif %}
           </form>
       </div>
       </div>
@@ -149,6 +155,9 @@
                         </div>
                        {% if query %}
                            <input type="hidden" name="query" value="{{query}}">
+                       {% endif %}
+                       {% if request.GET.rad_search %}
+                            <input type="hidden" name="rad_search" value="{{request.GET.rad_search}}">
                        {% endif %}
                        {% if request.GET.sort_type %}
                           <input type="hidden" name="sort_type" value="{{request.GET.sort_type}}">
