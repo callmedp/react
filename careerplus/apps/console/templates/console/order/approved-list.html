@@ -65,6 +65,21 @@
 							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label class="radio-inline"><input type="radio" name="rad_search"value="product" {{product}}><b>product</b></label>
 						</div>
 					</div>
+					{% if request.GET.writer %}
+                        <input type="hidden" name="writer" value="{{request.GET.writer}}">
+                    {% endif %}
+                    {% if request.GET.modified %}
+                        <input type="hidden" name="modified" value="{{request.GET.modified}}">
+                    {% endif %}
+                    {% if request.GET.draft_level %}
+                        <input type="hidden" name="draft_level" value="{{request.GET.draft_level}">
+                    {% endif %}
+                    {% if request.GET.delivery_type %}
+                        <input type="hidden" name="delivery_type" value="{{request.GET.delivery_type}}">
+                    {% endif %}
+                    {% if request.GET.sort_type %}
+		                        <input type="hidden" name="sort_type" value="{{request.GET.sort_type}}">
+		            {% endif %}
 				</div>
 			</div>
 			</form>
@@ -83,8 +98,11 @@
 				    {% if request.GET.writer %}
                         <input type="hidden" name="writer" value="{{request.GET.writer}}">
                     {% endif %}
-                    {% if request.GET.created %}
-                        <input type="hidden" name="created" value="{{request.GET.created}}">
+                    {% if request.GET.modified %}
+                        <input type="hidden" name="modified" value="{{request.GET.modified}}">
+                    {% endif %}
+                    {% if request.GET.draft_level %}
+                        <input type="hidden" name="draft_level" value="{{request.GET.draft_level}">
                     {% endif %}
                     {% if request.GET.delivery_type %}
                         <input type="hidden" name="delivery_type" value="{{request.GET.delivery_type}}">

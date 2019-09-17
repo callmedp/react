@@ -68,7 +68,16 @@
 
 
                       </div>
-</div>
+</div> 
+                {% if request.GET.payment_date %}
+                        <input type="hidden" name="payment_date" value="{{request.GET.payment_date}}">
+                    {% endif %}
+                    {% if request.GET.modified %}
+                        <input type="hidden" name="modified" value="{{request.GET.modified}}">
+                    {% endif %}
+                    {% if request.GET.sort_type %}
+                            <input type="hidden" name="sort_type" value="{{request.GET.sort_type}}">
+                {% endif %}
             </div>
           </div>
       </form>
@@ -85,14 +94,11 @@
             <option value="delivery_speed" {% if sort_type == 'delivery_speed'%} selected {% endif %}>Delivery Speed</option>
             <option value="payment_date" {% if sort_type == 'payment_date'%} selected {% endif %}>Payment Date</option>
             </select>
-            {% if request.GET.writer %}
-                        <input type="hidden" name="writer" value="{{request.GET.writer}}">
+            {% if request.GET.payment_date %}
+                        <input type="hidden" name="payment_date" value="{{request.GET.payment_date}}">
                     {% endif %}
-                    {% if request.GET.created %}
-                        <input type="hidden" name="created" value="{{request.GET.created}}">
-                    {% endif %}
-                    {% if request.GET.delivery_type %}
-                        <input type="hidden" name="delivery_type" value="{{request.GET.delivery_type}}">
+                    {% if request.GET.modified %}
+                        <input type="hidden" name="modified" value="{{request.GET.modified}}">
                     {% endif %}
                     {% if query %}
                         <input type="hidden" name="query" value="{{query}}">
