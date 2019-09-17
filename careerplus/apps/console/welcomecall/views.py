@@ -684,15 +684,15 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
         try:
             cat = int(request.POST.get('cat'))
             enddt = timezone.now()
-            startdt = enddt - datetime.timedelta(hours = 24)
-            ops = order.welcomecalloperation_set.filter(wc_cat = cat, created__range = (startdt,enddt))
+            startdt = enddt - datetime.timedelta(hours=24)
+            ops = order.welcomecalloperation_set.filter(wc_cat=cat, created__range=(startdt,enddt))
             if cat == 23 and len(ops) == 0:
                 mail_type = "WELCOME_CALL_BACK"
                 email_dict = {
-                "first_name": order.first_name,
-                "mobile": order.mobile,
+                    "first_name": order.first_name,
+                    "mobile": order.mobile,
                  }
-                SendSMS().send(sms_type = mail_type, data = email_dict)
+                SendSMS().send(sms_type=mail_type, data=email_dict)
         except:
             valid = False
             error = 'Enter valid category'
