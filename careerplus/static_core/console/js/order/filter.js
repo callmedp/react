@@ -25,13 +25,5 @@ $(document).ready(function() {
 });
 
 function sort(){
-      if($('#sort_type').val() == 'delivery_speed'){
-        $('#delivery_form').submit();
-      }
-      else if($('#sort_type').val() == 'Date'){
-        $('#date_form').submit();
-      }
-      else if($('#sort_type').val() == 'payment_date'){
-        $('#payment_date_form').submit();
-      }
+      $('#sort_form').submit();
     };

@@ -81,21 +81,23 @@
         <button type="button" class="btn btn-app pull-left" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-filter"></i>Filter By</button>
       <div class="dropdown pull-left" style="margin-left:20px;" id="sort_dropdown">
         <strong>Sort By</strong>
-      <select class="form-control" id="sort_type" onchange="sort();">
-        <option value="Date" {% if sort_type == 'Date'%} selected {% endif %}>Modified Date</option>
-        <option value="delivery_speed" {% if sort_type == 'delivery_speed'%} selected {% endif %}>Delivery Speed</option>
-        <option value="payment_date" {% if sort_type == 'payment_date'%} selected {% endif %}>Payment Date</option>
-      </select>
+      <form id="sort_form" action="{% url "console:queue-domesticprofileapproval" %}" method='GET'>
+            <select class="form-control" name="sort_type" id="sort_type" onchange="sort();" >
+              <option value="Date" {% if sort_type == 'Date'%} selected {% endif %}>Modified Date</option>
+            <option value="delivery_speed" {% if sort_type == 'delivery_speed'%} selected {% endif %}>Delivery Speed</option>
+            <option value="payment_date" {% if sort_type == 'payment_date'%} selected {% endif %}>Payment Date</option>
+            </select>
+            {% if request.GET.writer %}
+                        <input type="hidden" name="writer" value="{{request.GET.writer}}">
+                    {% endif %}
+                    {% if request.GET.created %}
+                        <input type="hidden" name="created" value="{{request.GET.created}}">
+                    {% endif %}
+                    {% if request.GET.delivery_type %}
+                        <input type="hidden" name="delivery_type" value="{{request.GET.delivery_type}}">
+                    {% endif %}
+      </form>
       </div>
-        <form class='hidden' id="delivery_form" action="{% url "console:queue-domesticprofileapproval" %}" method='GET'>
-          <input  type="text" id='sort_type' name='sort_type' value="delivery_speed" style="visibility: hidden;"> 
-      </form>
-      <form class='hidden' id="date_form" action="{% url "console:queue-domesticprofileapproval" %}" method='GET'>
-        <input  type="text" id='sort_type' name='sort_type' value="Date" style="visibility: hidden;"> 
-      </form>
-      <form class='hidden' id="payment_date_form" action="{% url "console:queue-domesticprofileapproval" %}" method='GET'>
-        <input  type="text" id='sort_type' name='sort_type' value="payment_date" style="visibility: hidden;"> 
-      </form>
       </div>
       <div class="modal fade bs-example-modal-sm filter" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-sm">
@@ -124,6 +126,9 @@
                         </div>
                        {% if query %}
                            <input type="hidden" name="query" value="{{query}}">
+                       {% endif %}
+                       {% if request.GET.sort_type %}
+                          <input type="hidden" name="sort_type" value="{{request.GET.sort_type}}">
                        {% endif %}
                     </form>
                 </div>
