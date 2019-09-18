@@ -1,5 +1,6 @@
 {% extends "basic/base.html" %}
 {% load static compress %}
+{% load cart_tags %}
 
 {% block meta_html %}
     {{ block.super }}
@@ -282,12 +283,13 @@
     <script type="text/javascript" src="{% static 'packages/select2/dist/js/select2.min.js' %}"></script>
     <script src="{% static 'packages/sweetalert/dist/sweetalert2.all.min.js' %}"></script>
 
-    <script src="{% static 'shinelearn/js/cart/guest_login.js' %}"></script>
 
     <script>
         var site_domain = "{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN}}";
+        var cartData    = "{{request | get_cart_info}}";
     </script>
     {% compress js %}
+        <script src="{% static 'shinelearn/js/cart/guest_login.js' %}"></script>
         <script src="{% static 'shinelearn/js/common/jquery.autocomplete.min.js' %}"></script>
         <script src="{% static 'shinelearn/js/cart/payment-login.js' %}"></script>
         <script src="{% static 'shinelearn/js/cart/payment-shipping.js' %}"></script>

@@ -137,5 +137,30 @@ $(document).ready(function () {
 
 
     fetchCountryList();
+    
+    /*
+     - auto fill the fields of the guest page, if the details of the user is available in the current cart. 
+    */
+    const autoFillGuestDetails = () =>{ 
+        
+        console.log("cart data", cartData);
+
+        let info = cartData.split(',');
+                
+        const formObj = {
+            'name': info[0],
+            'email': info[1],
+            'country_code':info[2],
+            'mobile': info[3]
+        }
+        document.forms[].element[].value = 
+        
+    }
+
+    // auto fill the form if we have person details
+    autoFillGuestDetails()
+
+    
+    
 
 })

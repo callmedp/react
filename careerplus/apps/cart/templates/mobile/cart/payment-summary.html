@@ -216,12 +216,7 @@
 
         <div class="subtotal mb-10">
             <ul class="subtotal__items">
-                <li class="subtotal__item mb-10">
-                    <span class="subtotal__item--tax fs-14">Subtotal</span>
-                    <span class="subtotal__item--tax-price fs-20 semi-bold" id="total-cart-amount-id">Rs.
-                        {{total_amount}}</span>
-                </li>
-
+                
                 {% if cart_coupon %}
                 <li>
                     <span class="item">Coupon applied</span>
@@ -238,6 +233,12 @@
                     <span class="subtotal__item--subtotal">Subtotal</span>
                     <span class="subtotal__item--price">Rs. {{amount_after_discount}}</span>
                 </li>
+                {% else %}
+                <li class="subtotal__item mb-10">
+                        <span class="subtotal__item--tax fs-14">Subtotal</span>
+                        <span class="subtotal__item--tax-price fs-20 semi-bold" id="total-cart-amount-id">Rs.
+                            {{total_amount}}</span>
+                    </li>
                 {% endif %}
                 <li class="subtotal__item">
                     <span class="subtotal__item--tax">SGST @ {{sgst}}%</span>
