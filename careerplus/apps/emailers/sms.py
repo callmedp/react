@@ -94,3 +94,8 @@ class SendSMS(object):
             template_name = data.get('template_name', 'service_initiation.html')
             send_dict['template'] = 'sms/' + template_name
             self.process(send_dict, data)
+
+        elif sms_type == "WELCOME_CALL_BACK":
+            template_name = data.get('template_name','welcome_call_back.html')
+            send_dict['template'] = 'sms/' + template_name
+            self.process(send_dict, data)
