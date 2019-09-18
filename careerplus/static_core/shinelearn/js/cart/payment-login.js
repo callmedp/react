@@ -127,6 +127,8 @@ const handleForgotPassword = async () => {
     $('#forgot_form_1').submit()
 }
 
+
+
 /*
 *  continue as guest option handled
 * */
@@ -145,7 +147,6 @@ const continueAsGuest = () => {
     $('#login_users').addClass('hide');
     $('#login_guests').removeClass('hide');
     $('#continue-as-guest-button').removeClass('forget-password');
-
 };
 
 /*

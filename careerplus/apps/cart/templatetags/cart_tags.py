@@ -22,9 +22,7 @@ def get_cart_info(request):
         return ""
     cart_obj =  Cart.objects.filter(id=cart_pk).first()
     if cart_obj:
-        import ipdb;
-        ipdb.set_trace()
-        return 'name=' + str(cart_obj.first_name) + ' ' + str(cart_obj.last_name) + ',email='+  str(cart_obj.email) + ',country_code='+ str(cart_obj.country_code) + ',mobile='+ str(cart_obj.mobile)
+        return str(cart_obj.first_name or '') + ' ' + str(cart_obj.last_name or '') + ','+  str(cart_obj.email or '') + ','+ str(cart_obj.country_code or '') + ','+ str(cart_obj.mobile or '')
     else: 
         return ""
          

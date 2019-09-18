@@ -147,7 +147,7 @@
                 </form>
 
                 <!-- Continue as guest -->
-                <form class="personal-details col-sm-6 bdr-rt hidden" method="post" action=""
+                <form name='guest_form' class="personal-details col-sm-6 bdr-rt hidden" method="post" action=""
                       id="guest_form">{% csrf_token %}
                     <strong class="personal-details-heading ml-15">Continue as guest</strong>
                     {% if form.non_field_errors %}
@@ -286,10 +286,12 @@
 
     <script>
         var site_domain = "{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN}}";
-        var cartData    = "{{request | get_cart_info}}";
+        var cartData    = "{{request|get_cart_info}}";
     </script>
+    
+
     {% compress js %}
-        <script src="{% static 'shinelearn/js/cart/guest_login.js' %}"></script>
+    <script src="{% static 'shinelearn/js/cart/guest_login.js' %}"></script>
         <script src="{% static 'shinelearn/js/common/jquery.autocomplete.min.js' %}"></script>
         <script src="{% static 'shinelearn/js/cart/payment-login.js' %}"></script>
         <script src="{% static 'shinelearn/js/cart/payment-shipping.js' %}"></script>
