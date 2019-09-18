@@ -132,7 +132,7 @@
             {% endif %}
           {% endwith %}
           {% endfor %}
-          {% if cart_coupon %}
+             {% if cart_coupon %}
                 <div  id="showCoupon" class="loyalty-points">
                   <div class="input-group mb-0">
                     <input id="discount_code" type="text" value="Coupon {{cart_coupon.code}} is applied!" name="code" maxlength="15" class="form-control fs-12" disabled>
@@ -160,7 +160,7 @@
                   or
                   <a href="javascript:void(0)" onclick="toggler('shineCredit');">Redeem Shine credit</a>
                   
-                {% endif %}
+                 {% endif %}
                   <form action="." id="discountForm">
                     <div  id="showCoupon" class="loyalty-points hidden-div">
                       <div class="input-group mb-0">

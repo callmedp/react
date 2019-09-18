@@ -409,6 +409,7 @@ class SocialLoginView(View):
                         email=None,
                         shine_id=candidateid)
                     request.session.update(resp_status)
+                    
                     return HttpResponseRedirect(self.success_url)
                 elif fb_user['prefill_details'].get('email'):
                     cart_pk = self.request.session.get('cart_pk')
