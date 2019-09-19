@@ -4,7 +4,8 @@ from django.conf import settings
 
 from seo.models import AbstractAutoDate
 
-from .config import PAGECHOICES
+from .config import PAGECHOICES, PAGENAME
+from ckeditor.fields import RichTextField
 
 
 class TopTrending(AbstractAutoDate):
@@ -91,3 +92,10 @@ class Testimonial(AbstractAutoDate):
         if self.image:
             return self.image.url
         return settings.STATIC_URL + 'shinelearn/images/executive/default-user-pic.jpg'
+
+class TermAndAgreement(models.Model):
+    page_id = models.PositiveIntegerField(
+        default=0, choices=PAGENAME , help_text=_('page id'))
+
+    content = RichTextField(
+        verbose_name=_('content'), help_text=_('html content'))

@@ -13,8 +13,9 @@ from core.library.haystack.query import SQS
 from core.api_mixin import ShineCandidateDetail
 from geolocation.models import Country
 from meta.views import MetadataMixin
-
 from .models import TopTrending, Testimonial
+
+from .config import PAGESLUG
 
 redis_conn = get_redis_connection("search_lookup")
 
@@ -176,23 +177,6 @@ class AboutUsView(TemplateView):
         context = super(AboutUsView, self).get_context_data(**kwargs)
         return context
 
-
-class PrivacyPolicyView(TemplateView):
-    template_name = 'homepage/privacy-policy.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(PrivacyPolicyView, self).get_context_data(**kwargs)
-        return context
-
-
-class TermsConditionsView(TemplateView):
-    template_name = 'homepage/tnc.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(TermsConditionsView, self).get_context_data(**kwargs)
-        return context
-
-
 class ContactUsView(TemplateView):
     template_name = 'homepage/contact-us.html'
 
@@ -205,10 +189,19 @@ class ContactUsView(TemplateView):
         })
         return context
 
-
-class DisclaimerView(TemplateView):
-    template_name = 'homepage/disclaimer.html'
-
+class ImportantInformationView(TemplateView):
+    template_name = 'homepage/important-information.html'
+    
     def get_context_data(self, **kwargs):
-        context = super(DisclaimerView, self).get_context_data(**kwargs)
+        page_slug = kwargs['page_slug']
+        context = super(ImportantInformationView, self).get_context_data(**kwargs)
+        context.update({
+            "page_id": int(PAGESLUG[page_slug][0]),
+            "page_name": PAGESLUG[page_slug][1]
+            })
         return context
+
+    
+    
+
+

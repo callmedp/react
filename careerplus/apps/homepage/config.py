@@ -11,3 +11,15 @@ PAGECHOICES = (
 	(UNIVERSITY_PAGE, 'University Page'),
 	(UNIVERSITY_COURSE, 'University Course')
 )
+
+PAGENAME = (
+    (1, 'Privacy Policy'),
+    (2, 'Terms and Condition'),
+    (3, 'Disclaimer')
+)
+
+PAGESLUG = {
+    'privacy-policy':(1,'Privacy Policy'),
+    'tnc':(2,'Terms and Condition'),
+    'disclaimer':(3,'Disclaimer')
+}

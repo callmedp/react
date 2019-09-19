@@ -1,0 +1,81 @@
+{% extends "basic/base1.html" %}
+{% load static %}
+{% load thumbnail %}
+
+{% block title %}Terms and Conditions - Shine Learning{% endblock title %}
+    {% block meta_html %}
+        {{block.super}}
+        <meta name="description" content="Pick up the Best Resume Services - Check out the Latest Resume Format or Templates - Online Professional Certification Courses">
+        {% block canonical %}
+            <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
+        {% endblock canonical %}
+
+    {% endblock meta_html %}
+
+{% block main_container %}
+    {% block page_heading %}
+        <!-- breadcrums -->
+        <section class="container">
+          <ol class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li class="active">{{ page_name }}</li>
+          </ol>
+        </section>
+    {% endblock page_heading %}
+    
+    <!-- main section start -->
+    <section class="container">
+
+        <!-- page content body start -->
+        <div class="row">
+
+        <!-- left content start -->
+          <div class="col-sm-12">
+
+          <!-- content start -->
+          <div class="static-page-content">
+            <!-- page heading -->
+          <div class="page-header">
+            <h1>{{ page_name }}</h1>
+          </div>
+          
+          <div id = "loader" style ="display:none; text-align: center;">
+              <img aria-label="loader" id="loadingimg" src="{% static 'shinelearn/images/loader.gif' %}" >
+          </div>
+
+          </div>
+          <!-- content end -->
+
+          </div>  
+        <!-- left content end -->
+
+        </div>
+        <!-- page content body end -->
+
+    </section>
+    <!-- main section end -->
+
+{% endblock main_container %}
+
+{% block johukum %}
+{% endblock johukum %}
+
+{% block zendesk %}
+{% endblock zendesk %}
+
+{% block js_section %}
+  {{block.super}}
+<script>
+  $('#loader').show();
+  var page_id = {{page_id}};
+  $( document ).ready(function() {
+      $.get('/api/v1/TermAndAgreement/',{"page_id": page_id},
+              (data)=>{
+                $('#loader').hide();
+                document.getElementsByClassName('static-page-content')[0].innerHTML += data.results[0].content;
+              }).fail(function() {
+                      alert( "$.get failed!" );
+                    });
+});
+</script>
+{% endblock js_section %}

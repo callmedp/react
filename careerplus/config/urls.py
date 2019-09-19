@@ -97,24 +97,30 @@ urlpatterns = [url(r'^services/%s/%s/$' % (cat_slug, cat_id),
 urlpatterns += [
     url(r'^robots.txt$', TemplateView.as_view(
         template_name='robots.txt', content_type='text/plain')),
-    url(r'^certification_course_sitemap\.xml$', cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
-        'sitemaps': course_sitemap,
-        'template_name': 'sitemap.xml'}, name='sitemap'),
-    url(r'^job_services_sitemap\.xml$', cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
-        'sitemaps': service_sitemap,
-        'template_name': 'sitemap.xml'}, name='sitemap'),
-    url(r'^article_sitemap\.xml$', cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
-        'sitemaps': article_sitemap,
-        'template_name': 'sitemap.xml'}, name='sitemap'),
-    url(r'^cms_sitemap\.xml$', cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
-        'sitemaps': cms_sitemap,
-        'template_name': 'sitemap.xml'}, name='sitemap'),
-    url(r'^te_sitemap\.xml$', cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
-        'sitemaps': talent_sitemap,
-        'template_name': 'sitemap.xml'}, name='sitemap'),
-    url(r'^practice-tests\.xml$', cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
-        'sitemaps': practicetest_sitemap,
-        'template_name': 'sitemap.xml'}, name='sitemap'),
+    url(r'^certification_course_sitemap\.xml$',
+        cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
+            'sitemaps': course_sitemap,
+            'template_name': 'sitemap.xml'}, name='sitemap'),
+    url(r'^job_services_sitemap\.xml$', 
+        cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
+            'sitemaps': service_sitemap,
+            'template_name': 'sitemap.xml'}, name='sitemap'),
+    url(r'^article_sitemap\.xml$', 
+        cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
+            'sitemaps': article_sitemap,
+            'template_name': 'sitemap.xml'}, name='sitemap'),
+    url(r'^cms_sitemap\.xml$', 
+        cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
+            'sitemaps': cms_sitemap,
+            'template_name': 'sitemap.xml'}, name='sitemap'),
+    url(r'^te_sitemap\.xml$', 
+        cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
+            'sitemaps': talent_sitemap,
+            'template_name': 'sitemap.xml'}, name='sitemap'),
+    url(r'^practice-tests\.xml$', 
+        cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
+            'sitemaps': practicetest_sitemap,
+            'template_name': 'sitemap.xml'}, name='sitemap'),
 
     url(r'^course/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='course-detail'),
@@ -132,13 +138,11 @@ urlpatterns += [
     url(r'^online-courses.html$',
         CourseCatalogueView.as_view(), name='course-catalogoue'),
 
-    url(r'^courses/(?P<sc_slug>[a-z\-]+)/$', LocationSkillPageView.as_view(), name='location-skillpage'),
+    url(r'^courses/(?P<sc_slug>[a-z\-]+)/$', 
+        LocationSkillPageView.as_view(), 
+        name='location-skillpage'),
 
     url(r'^', include('assessment.urls', namespace='assessment')),
-
-
-
-
 
     # url(r'^job-assistance/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
     #     ProductDetailView.as_view(), name='job-assist-detail'),
@@ -165,73 +169,69 @@ def get_urls():
 admin.site.get_urls = get_urls
 
 urlpatterns += [
-                   url(r'^admin/', include(admin.site.urls)),
-                   url(r'^api-auth/',
-                       include('rest_framework.urls', namespace='rest_framework')),
-                   # cart rest apis
-                   # url(r'^api/v1/cart/', include('cart.api.v1.urls', namespace="cart-api")),
-                   url(r'api/v1/', include('shop.api.v1.urls', namespace='shop-api')),
-                   url(r'api/', include('skillpage.api.v1.urls', namespace='skillpage-api')),
-                   url(r'^$', homepage_view.HomePageView.as_view(), name='homepage'),
-                   url(r'^console/', include('console.urls', namespace='console')),
-                   url(r'^shine/', include('shine.urls', namespace='shine')),
-                   url(r'^shop/', include('shop.urls', namespace='shop')),
-                   url(r'^user/', include('users.urls', namespace='users')),
-                   url(r'^cms/', include('cms.urls', namespace='cms')),
-                   url(r'^article/', include('blog.urls', namespace='blog')),
-                   url(r'^talenteconomy/', include('talenteconomy.urls', namespace='talent')),
-                   url(r'^hr-insider/', include('hrinsider.urls', namespace='hrinsider')),
-                   url(r'^cart/', include('cart.urls', namespace='cart')),
-                   url(r'^order/', include('order.urls', namespace='order')),
-                   url(r'^geolocation/', include('geolocation.urls', namespace='geolocation')),
-                   url(r'^payment/', include('payment.urls', namespace='payment')),
-                   url(r'^ajax/', include('ajax.urls', namespace='ajax')),
-                   url(r'^design/', include('design.urls', namespace='design')),
-                   url(r'^ckeditor/upload/', login_required(ckeditor_views.upload), name='ckeditor_upload'),
-                   url(r'^ckeditor/bbrowse/', login_required(ckeditor_views.browse), name='ckeditor_browse'),
-                   url(r'^search/', include('search.urls', namespace='search')),
-                   url(r'^partner/', include('partner.urls')),
-                   url(r'^partner/', include('microsite.urls')),
-                   url(r'^linkedin/', include('linkedin.urls')),
-                   url(r'^register/$', RegistrationApiView.as_view(), name='register'),
-                   url(r'^login/$', LoginApiView.as_view(), name='login'),
-                   url(r'^logout/$', LogoutApiView.as_view(), name='logout'),
-                   url(r'^dashboard/', include('dashboard.urls', namespace='dashboard')),
-                   url(r'^autologin/(?P<token>.+)/$', AutoLoginView.as_view(), name='autologin'),
-                   url(r'^linkedin/login/$',
-                       LinkedinCallbackView.as_view(), name='linkedin-login'),
-                   url(r'^api/v1/resume/', include('resumebuilder.api.v1.urls', namespace='resume_builder')),
+     url(r'^admin/', include(admin.site.urls)),
+     url(r'^api-auth/',
+         include('rest_framework.urls', namespace='rest_framework')),
+     # cart rest apis
+     # url(r'^api/v1/cart/', include('cart.api.v1.urls', namespace="cart-api")),
+     url(r'api/v1/', include('shop.api.v1.urls', namespace='shop-api')),
+     url(r'api/', include('skillpage.api.v1.urls', namespace='skillpage-api')),
+     url(r'^$', homepage_view.HomePageView.as_view(), name='homepage'),
+     url(r'^console/', include('console.urls', namespace='console')),
+     url(r'^shine/', include('shine.urls', namespace='shine')),
+     url(r'^shop/', include('shop.urls', namespace='shop')),
+     url(r'^user/', include('users.urls', namespace='users')),
+     url(r'^cms/', include('cms.urls', namespace='cms')),
+     url(r'^article/', include('blog.urls', namespace='blog')),
+     url(r'^talenteconomy/', include('talenteconomy.urls', namespace='talent')),
+     url(r'^hr-insider/', include('hrinsider.urls', namespace='hrinsider')),
+     url(r'^cart/', include('cart.urls', namespace='cart')),
+     url(r'^order/', include('order.urls', namespace='order')),
+     url(r'^geolocation/', include('geolocation.urls', namespace='geolocation')),
+     url(r'^payment/', include('payment.urls', namespace='payment')),
+     url(r'^ajax/', include('ajax.urls', namespace='ajax')),
+     url(r'^design/', include('design.urls', namespace='design')),
+     url(r'^ckeditor/upload/', login_required(ckeditor_views.upload), name='ckeditor_upload'),
+     url(r'^ckeditor/bbrowse/', login_required(ckeditor_views.browse), name='ckeditor_browse'),
+     url(r'^search/', include('search.urls', namespace='search')),
+     url(r'^partner/', include('partner.urls')),
+     url(r'^partner/', include('microsite.urls')),
+     url(r'^linkedin/', include('linkedin.urls')),
+     url(r'^register/$', RegistrationApiView.as_view(), name='register'),
+     url(r'^login/$', LoginApiView.as_view(), name='login'),
+     url(r'^logout/$', LogoutApiView.as_view(), name='logout'),
+     url(r'^dashboard/', include('dashboard.urls', namespace='dashboard')),
+     url(r'^autologin/(?P<token>.+)/$', AutoLoginView.as_view(), name='autologin'),
+     url(r'^linkedin/login/$',
+         LinkedinCallbackView.as_view(), name='linkedin-login'),
+     url(r'^api/v1/resume/', include('resumebuilder.api.v1.urls', namespace='resume_builder')),
 
-                   url(r'^api/', include('api.urls', namespace='api')),
+     url(r'^api/', include('api.urls', namespace='api')),
+     url(r'^api/', include('homepage.api.urls', namespace='homepage-api')),
 
-                   url(r'^lead/', include('crmapi.urls', namespace='crmapi')),
+     url(r'^lead/', include('crmapi.urls', namespace='crmapi')),
 
-                   url(r'^', include('marketing.urls', namespace='marketing')),
+     url(r'^', include('marketing.urls', namespace='marketing')),
 
-                   url(r'^about-us$',
-                       homepage_view.AboutUsView.as_view(), name='about-us'),
-                   url(r'^disclaimer$',
-                       homepage_view.DisclaimerView.as_view(), name='disclaimer'),
+     url(r'^about-us$',
+         homepage_view.AboutUsView.as_view(), name='about-us'),
 
-                   url(r'^privacy-policy$',
-                       homepage_view.PrivacyPolicyView.as_view(),
-                       name='privacy-policy'),
-                   url(r'^tnc$',
-                       homepage_view.TermsConditionsView.as_view(),
-                       name='tnc'),
-                   url(r'^contact-us$',
-                       homepage_view.ContactUsView.as_view(),
-                       name='contact-us'),
+     url(r'^(?P<page_slug>[\w-]+)/$',
+         homepage_view.ImportantInformationView.as_view(),
+         name='important-information'),
+     url(r'^contact-us$',
+         homepage_view.ContactUsView.as_view(),
+         name='contact-us'),
 
-                   url(r'^article-categories/(?P<slug>[-\w]+)/$',
-                       blog_view.BlogCategoryListView.as_view(),
-                       name='articles-by-category'),
+     url(r'^article-categories/(?P<slug>[-\w]+)/$',
+         blog_view.BlogCategoryListView.as_view(),
+         name='articles-by-category'),
 
-                   # django-oauth-toolkit
-                   url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+     # django-oauth-toolkit
+     url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 
-                   # entry point for react template
-                   url(r'^resume-builder/', WriteResumeView.as_view()),
+     # entry point for react template
+     url(r'^resume-builder/', WriteResumeView.as_view()),
 
                ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
