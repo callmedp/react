@@ -371,12 +371,13 @@
                 <label> Experience</label>
                 {{profile_form.experience}}
               </div>
+              {% if perms.order.can_update_manual_links %}
               <div class="form-group col-md-3">
                 <label> Manual Links Count</label>
                 {{profile_form.manual_links_count}}
               </div>
               <div class="alert">{{profile_form.errors.manual_links_count}}</div>
-
+              {% endif %}
               
               <br>
               {% if not orderitem.is_onboard and perms.order.can_approve_jobs_on_the_move %}
