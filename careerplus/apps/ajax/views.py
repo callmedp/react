@@ -4,6 +4,8 @@ import datetime
 import requests
 from decimal import Decimal
 from core.library.haystack.query import SQS
+from copy import deepcopy
+
 
 #DJANGO IMPORTS
 from django.db.models import Sum
@@ -13,6 +15,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.conf import settings
+
+
 
 #LOCAL IMPORTS
 from.mixins import ExotelInteraction
@@ -32,9 +36,10 @@ from core.tasks import upload_resume_to_shine
 from console.mixins import ActionUserMixin
 from order.functions import create_short_url
 from linkedin.autologin import AutoLogin
-from shop.models import Product
+from shop.models import Product,ProductScreen,ProductAttributeScreen,FAQProductScreen
 from blog.mixins import BlogMixin
 from shop.models import Category
+
 
 # from order.mixins import OrderMixin
 
@@ -418,7 +423,7 @@ class UploadDraftView(View):
                 logging.getLogger('error_log').error("Making flow=0 explicitly failed: %s " % str(e))
                 flow = 0
 
-            if flow in [2, 6, 10, 14]:
+            if flow in [2, 6, 10, 14,16]:
                 form = VendorFileUploadForm(request.POST, request.FILES)
             else:
                 form = FileUploadForm(request.POST, request.FILES)
@@ -664,10 +669,10 @@ class MarkedPaidOrderView(View):
                     # OrderMixin().addRewardPointInWallet(order=obj)
 
                     # pending item email send
-                    pending_item_email.apply_async((obj.pk,), countdown=900)
+                    pending_item_email.apply_async((obj.pk,), countdown=settings.MAIL_COUNTDOWN)
 
                     # send email through process mailers
-                    process_mailer.apply_async((obj.pk,), countdown=900)
+                    process_mailer.apply_async((obj.pk,), countdown=settings.MAIL_COUNTDOWN)
                     # process_mailer(obj.pk)
 
                     # roundone order
@@ -817,12 +822,13 @@ class UniversityCourseLoadMoreView(TemplateView):
             'PRODUCT_PAGE_SIZE': self.PRODUCT_PAGE_SIZE})
         return context
 
-
+# THIS VIEW IS RESPONSIBLE FOR MAKING EXOTEL CALL AND CREATING USER AGENT INTERACTION
 class WelcomeServiceCallView(UserPermissionMixin,View):
     permission_to_check = ['can do exotel call']
     exotel_object = ExotelInteraction()
 
-    def get_response_for_failure_reason(self,order):
+    def get_response_for_failure_reason(self,order,queue_name):
+        user = self.request.user
         is_dnd = self.exotel_object.is_number_dnd(order.mobile)
         data = {}
         if is_dnd:
@@ -830,9 +836,11 @@ class WelcomeServiceCallView(UserPermissionMixin,View):
                                 'in click to call for DND numbers.', 'status': 0})
         else:
             data.update({'msg': 'Something went wrong', 'status': 0})
+        self.exotel_object.create_user_agent_interaction(order=order,user=user,\
+                                                         recording_id=None,queue_name=queue_name)
         return HttpResponse(json.dumps(data), content_type="application/json")
 
-    def make_call_to_user(self, order, user):
+    def make_call_to_user(self, order, user,queue_name=None):
         data = {'msg': "Failure", 'status': 0}
         prev_records = None
         resp = self.exotel_object.make_call(order.mobile, user.contact_number)
@@ -868,14 +876,16 @@ class WelcomeServiceCallView(UserPermissionMixin,View):
         json_records.update({recording_id: ""})
         order.welcome_call_records = json.dumps(json_records)
         order.save()
+        recording_id_in_json = json.dumps({recording_id : ""})
+        self.exotel_object.create_user_agent_interaction(order,user,recording_id_in_json,queue_name)
         data.update({'msg': "Connected", 'status': 1})
         return HttpResponse(json.dumps(data), content_type="application/json")
 
     def post(self, request, *args, **kwargs):
-
         data = {'msg': 'Failure', 'status': 0}
         order_id = self.request.POST.get('o_id', '')
         action = self.request.POST.get('action', None)
+        queue_name = self.request.POST.get('queue_name',0)
         user = request.user
 
         if not request.is_ajax():
@@ -886,9 +896,50 @@ class WelcomeServiceCallView(UserPermissionMixin,View):
             return HttpResponse(json.dumps(data), content_type="application/json")
 
         if action:
-            return self.get_response_for_failure_reason(order)
+            return self.get_response_for_failure_reason(order,queue_name)
         else:
-            return self.make_call_to_user(order, user)
+            return self.make_call_to_user(order, user,queue_name)
+
+
+class ProductCopyAPIView(View):
+
+
+
+    def create_relation_m2m(self,attr_obj,new_object):
+        attr_copy = deepcopy(attr_obj)
+        attr_copy.pk = None
+        attr_copy.product = new_object
+        attr_copy.save()
+
+
+    def post(self,request,*args,**kwargs):
+        pid = self.request.POST.get('id')
+        if not pid:
+            return HttpResponse(json.dumps({'status': 0}), content_type="application/json")
+
+        product_screen_obj = ProductScreen.objects.filter(product__id=pid).first()
+
+        if product_screen_obj:
+            product_screen_copy_obj = deepcopy(product_screen_obj)
+            product_screen_copy_obj.pk = None
+            product_screen_copy_obj.save()
+            if product_screen_obj.countries.all():
+                product_screen_copy_obj.countries.add(*product_screen_obj.countries.all())
+            for attr in product_screen_obj.screenattributes.all():
+                self.create_relation_m2m(attr, product_screen_copy_obj)
+            for faq in product_screen_obj.screenfaqs.all():
+                self.create_relation_m2m(faq, product_screen_copy_obj)
+            for skill in product_screen_obj.screenskills.all():
+                self.create_relation_m2m(skill, product_screen_copy_obj)
+            for chap in product_screen_obj.chapter_product.all():
+                self.create_relation_m2m(chap, product_screen_copy_obj)
+            product_screen_copy_obj.product = None
+            product_screen_copy_obj.save()
+            return HttpResponse(json.dumps({'status': 1,'id': product_screen_copy_obj.id}), content_type="application/json")
+        return HttpResponse(json.dumps({'status': 0}), content_type="application/json")
+
+
+
 
 
 

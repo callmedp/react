@@ -6,39 +6,51 @@ import {UPDATE_UI} from '../../ui/actions/actionTypes'
 import {entityList} from "../../../Utils/formCategoryList";
 import {SAVE_USER_INFO} from "../../personalInfo/actions/actionTypes";
 import {Toast, LandingPageToast} from "../../../services/ErrorToast";
+import {SubmissionError} from 'redux-form'
 
 
-function* getCandidateId() {
+function* getCandidateId(action) {
     try {
+        const {payload: {resolve, reject}} = action;
+
+        yield put({type: UPDATE_UI, data: {loader: true}});
         const result = yield call(Api.getCandidateId);
+
+        yield put({type: UPDATE_UI, data: {loader: false}});
+
         if (result['error']) {
             Toast.fire({
                 type: 'error',
                 title: result['errorMessage']
             });
+            return reject(new SubmissionError({_error: result['errorMessage']}));
+
         }
 
+
         localStorage.setItem('candidateId', JSON.parse((result.data && result.data['candidate_id'])) || '');
+        resolve();
 
     } catch (e) {
         console.log(e);
     }
 }
 
+
 function* loginCandidate(action) {
     try {
-        let {payload} = action;
+        let {data: {payload, resolve, reject, isTokenAvail}} = action;
 
         yield put({type: UPDATE_UI, data: {loader: true}});
 
-
-        let result = yield call(Api.loginCandidate, payload);
-
-        if (result['error']) {
+        let result;
+        if (isTokenAvail) {
+            result = yield call(Api.loginCandidate, payload);
+        }
+        if (result && result['error'] || !isTokenAvail) {
             result = yield call(Api.getInformation)
         }
-
-        if (result['error']) {
+        if (result && result['error']) {
             localStorage.clear();
             window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
             yield put({type: UPDATE_UI, data: {loader: false}})
@@ -77,6 +89,7 @@ function* loginCandidate(action) {
         }
         localStorage.setItem('token', (token) || '');
 
+        resolve('Login Successfully');
         yield put({type: UPDATE_UI, data: {loader: false}})
 
 

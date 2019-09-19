@@ -36,6 +36,24 @@ function viewCommentOrderitem(oi_pk, ) {
     }
 };
 
+function boardNeoUser(oi_pk, ) {
+    if (oi_pk){
+        $.ajax({
+            url: '/api/v1/neo_board_user/',
+            type: "POST",
+            data : {'oi_pk': oi_pk, },
+            dataType: 'html',
+            success: function(html) {
+                window.location.reload();
+                alert('Please check you mail to confirm boarding on Neo')
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                alert("Something went wrong");
+            }
+        });
+    }
+};
+
 function giveFeedbackOrderitem(oi_pk,rating) {
 
     if (oi_pk){
@@ -161,7 +179,7 @@ function downloadOrderInvoice(order_pk) {
 
 function downloadOrderTemplate(order_pk) {
     if(order_pk){
-        $('#download-resume-form' + order_pk).submit();
+        $('#download-resume-form' + order_pk)   .submit();
     }
 }
 
@@ -904,4 +922,32 @@ function roundone_edit(form, ajaxurl){
             alert("Error while editing, Please retry");
         }
     });
+}
+
+const uploadResumeShine = (checkbox,order_id)=>{
+    let request = fetch(`/order/api/v1/${order_id}/update/`,{
+        headers: {
+            "Content-Type": "application/json"
+        },
+        method: 'PATCH',  
+        body: JSON.stringify({
+                    service_resume_upload_shine: $(checkbox).is(':checked')
+                }),
+    });
+
+    request.then((resp) =>resp.json())
+    .then(response => {
+        console.log('--response', response);
+        title = response['service_resume_upload_shine'] ? 'Resume will be updated' : 'Resume will not be updated'
+        Toast.fire({
+                    type: response['service_resume_upload_shine'] ?'success' : 'error',
+                    title
+        })
+    })
+    .catch(e =>{
+        Toast.fire({
+            type: 'error',
+            title:'Something went wrong'
+        })
+    })
 }

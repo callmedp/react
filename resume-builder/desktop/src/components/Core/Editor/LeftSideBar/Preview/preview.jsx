@@ -23,6 +23,7 @@ export default class Preview extends Component {
         this.moveDownSection = this.moveDownSection.bind(this);
         this.moveUpSection = this.moveUpSection.bind(this);
         this.getEntityName = this.getEntityName.bind(this);
+        this.toggleUploadResume = this.toggleUploadResume.bind(this);
 
 
         this.state = {
@@ -33,19 +34,24 @@ export default class Preview extends Component {
             activeSection: 'left',
             sectionEntityName: '',
             selectedEntity: '',
+            allowUploadResume: true
 
         }
     }
 
 
+    toggleUploadResume() {
+        this.props.onChange({})
+    }
+
     handleCustomization(data, color) {
         this.setState({
             selectedColor: color
         })
-        const {eventClicked,customizeTemplate} = this.props;
+        const {eventClicked, customizeTemplate} = this.props;
         eventClicked({
-            'action':'ChangeTheme',
-            'label':data['color_name']
+            'action': 'ChangeTheme',
+            'label': data['color_name']
         })
         customizeTemplate(data)
     }
@@ -58,23 +64,22 @@ export default class Preview extends Component {
 
 
     goToBuyPage() {
-        const {userInfo:{order_data},history,showGenerateResumeModal,reGeneratePDF,hideGenerateResumeModal,eventClicked} = this.props;
+        const {userInfo: {order_data}, history, showGenerateResumeModal, reGeneratePDF, hideGenerateResumeModal, eventClicked} = this.props;
         eventClicked({
-            'action':'GetYourResume',
-            'label':'Click'
+            'action': 'GetYourResume',
+            'label': 'Click'
         })
-        if(order_data && order_data.id){
+        if (order_data && order_data.id) {
             showGenerateResumeModal()
             reGeneratePDF(order_data.id)
-            setTimeout(function() {
+            setTimeout(function () {
                 window.location.href = `${siteDomain}/dashboard`
                 hideGenerateResumeModal()
             }, 5000);
-        }
-        else{
+        } else {
             history.push('/resume-builder/buy')
         }
-        
+
     }
 
 
@@ -92,6 +97,7 @@ export default class Preview extends Component {
         if (text_font_size !== prevState['textFontSize']) {
             obj['textFontSize'] = text_font_size;
         }
+
         return obj;
 
     }
@@ -217,7 +223,7 @@ export default class Preview extends Component {
 
         slider1.onmousedown = (event) => {
             event.preventDefault();
-            const {userInfo: {selected_template},eventClicked} = self.props;
+            const {userInfo: {selected_template}, eventClicked} = self.props;
             const elementValue = event.screenX - slider1.getBoundingClientRect().left;
             const rightEdge = slider1.offsetWidth - elem1.offsetWidth;
             let size = 1;
@@ -233,8 +239,8 @@ export default class Preview extends Component {
                 size = 2;
             }
             eventClicked({
-                'action':'ChangeFont',
-                'label': size===1 ? 'S' : size===2 ? 'M' : 'L'
+                'action': 'ChangeFont',
+                'label': size === 1 ? 'S' : size === 2 ? 'M' : 'L'
             })
 
             self.props.customizeTemplate({
@@ -246,7 +252,7 @@ export default class Preview extends Component {
         };
         slider2.onmousedown = (event) => {
             event.preventDefault();
-            const {userInfo: {selected_template},eventClicked} = self.props;
+            const {userInfo: {selected_template}, eventClicked} = self.props;
             let size = 1;
 
             const elementValue = event.screenX - slider2.getBoundingClientRect().left;
@@ -265,8 +271,8 @@ export default class Preview extends Component {
 
             }
             eventClicked({
-                'action':'ChangeFont',
-                'label': size===1 ? 'S' : size===2 ? 'M' : 'L'
+                'action': 'ChangeFont',
+                'label': size === 1 ? 'S' : size === 2 ? 'M' : 'L'
             })
             self.props.customizeTemplate({
                 'text_font_size': size,
@@ -315,26 +321,26 @@ export default class Preview extends Component {
     }
 
     moveUpSection(selectedEntity, selectedTemplate) {
-        const {eventClicked,reorderSection} = this.props;
+        const {eventClicked, reorderSection} = this.props;
         eventClicked({
-            'action':'ReorderSection',
-            'label':formCategoryList[selectedEntity['entity_id']].name
+            'action': 'ReorderSection',
+            'label': formCategoryList[selectedEntity['entity_id']].name
         })
         reorderSection({
             templateId: selectedTemplate,
-            info: {entity_id: selectedEntity['entity_id'], step: -1,pos:selectedEntity['pos']}
+            info: {entity_id: selectedEntity['entity_id'], step: -1, pos: selectedEntity['pos']}
         })
     }
 
     moveDownSection(selectedEntity, selectedTemplate) {
-        const {eventClicked,reorderSection} = this.props;
+        const {eventClicked, reorderSection} = this.props;
         eventClicked({
-            'action':'ReorderSection',
-            'label':formCategoryList[selectedEntity['entity_id']].name
+            'action': 'ReorderSection',
+            'label': formCategoryList[selectedEntity['entity_id']].name
         })
         reorderSection({
             templateId: selectedTemplate,
-            info: {entity_id: selectedEntity['entity_id'], step: 1,pos:selectedEntity['pos']}
+            info: {entity_id: selectedEntity['entity_id'], step: 1, pos: selectedEntity['pos']}
         })
     }
 
@@ -349,7 +355,7 @@ export default class Preview extends Component {
             || [];
         const currentEntity = entityElementSectionList && entityElementSectionList.length && entityElementSectionList[0]
         const entityName = currentEntity && currentEntity['entity_text'] || 'Personal Info'
-        return [currentEntity,entityName ];
+        return [currentEntity, entityName];
 
     }
 
@@ -359,7 +365,7 @@ export default class Preview extends Component {
         if (this.state.activeSection !== prevState.activeSection) {
             const {template: {entity_position}} = this.props;
             const {activeSection} = this.state;
-            const [currentEntity,entityName ] = this.getEntityName(entity_position, activeSection)
+            const [currentEntity, entityName] = this.getEntityName(entity_position, activeSection)
             this.setState({
                 sectionEntityName: entityName,
                 selectedEntity: currentEntity
@@ -368,24 +374,24 @@ export default class Preview extends Component {
         if (this.state.currentTab === 2) {
             this.handleFontSize()
         }
-        if(entity_position !== prevProps.template.entity_position){
-            (entity_position && eval(entity_position) || []).map((el)=>{
-                if(selectedEntity && selectedEntity['entity_id'] === el.entity_id){
-                    this.setState({selectedEntity:el})
-                } 
+        if (entity_position !== prevProps.template.entity_position) {
+            (entity_position && eval(entity_position) || []).map((el) => {
+                if (selectedEntity && selectedEntity['entity_id'] === el.entity_id) {
+                    this.setState({selectedEntity: el})
+                }
             })
         }
     }
 
 
     render() {
-        const {userInfo: {selected_template}, template: {entity_position,entity_id_count_mapping}} = this.props;
+        const {userInfo: {selected_template, upload_resume}, template: {entity_position, entity_id_count_mapping}} = this.props;
         const {currentTab, selectedColor, activeSection, sectionEntityName, selectedEntity} = this.state;
         const [currentEntity] = this.getEntityName(entity_position, activeSection);
 
         return (
             <div className="preview-section">
-                <AlertModal {...this.props} isPreview={true}  />
+                <AlertModal {...this.props} isPreview={true}/>
                 <strong>Complete your customisation</strong>
                 <Accordion
                     preExpanded={["1"]}>
@@ -409,7 +415,7 @@ export default class Preview extends Component {
                                                 onClick={() => this.handleCustomization({
                                                     color: 1,
                                                     template: selected_template,
-                                                    color_name:'Green'
+                                                    color_name: 'Green'
                                                 }, 1)}
                                                 readOnly
                                                 type="radio"
@@ -421,7 +427,7 @@ export default class Preview extends Component {
                                             <input
                                                 onClick={() => this.handleCustomization({
                                                     color: 2, template: selected_template,
-                                                    color_name:'Blue'
+                                                    color_name: 'Blue'
                                                 }, 2)}
                                                 type="radio"
                                                 name="radio1"
@@ -437,7 +443,7 @@ export default class Preview extends Component {
                                                 onClick={() => this.handleCustomization({
                                                     color: 3,
                                                     template: selected_template,
-                                                    color_name:'Red'
+                                                    color_name: 'Red'
                                                 }, 3)}
                                                 type="radio"
                                                 name="radio1"
@@ -453,7 +459,7 @@ export default class Preview extends Component {
                                                 onClick={() => this.handleCustomization({
                                                     color: 4,
                                                     template: selected_template,
-                                                    color_name:'Black'
+                                                    color_name: 'Black'
                                                 }, 4)}
                                                 type="radio"
                                                 readOnly
@@ -466,7 +472,7 @@ export default class Preview extends Component {
                                                 onClick={() => this.handleCustomization({
                                                     color: 5,
                                                     template: selected_template,
-                                                    color_name:'Brown'
+                                                    color_name: 'Brown'
                                                 }, 5)}
                                                 type="radio"
                                                 name="radio1"
@@ -481,7 +487,7 @@ export default class Preview extends Component {
                                                 onClick={() => this.handleCustomization({
                                                     color: 6,
                                                     template: selected_template,
-                                                    color_name:'Violet'
+                                                    color_name: 'Violet'
                                                 }, 6)}
                                                 type="radio"
                                                 readOnly
@@ -607,6 +613,11 @@ export default class Preview extends Component {
                         </AccordionItem>
                     </div>
                 </Accordion>
+                <div className={"upload-resume-section"}>
+                    <input type="checkbox" className={"upload-resume-checkbox"}  checked={upload_resume|| false}
+                           onChange={this.toggleUploadResume} />
+                    <span className="upload-resume">Upload resume on Shine</span>
+                </div>
                 < button
                     className="orange-button preview-section__orange-button mt-20 mb-20"
                     onClick={this.goToBuyPage}> Get your resume

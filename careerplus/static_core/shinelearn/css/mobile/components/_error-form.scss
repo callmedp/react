@@ -1,7 +1,6 @@
 
 .error {
   color: $error;
-  font-size: 11px;
   
   .form-control,
   .form--control {
@@ -16,7 +15,6 @@
     display: block;
     padding-bottom: 0;
   }
-  
   .form--control {
     box-shadow: 0 0 10px rgba($error, .3);
   }
@@ -27,8 +25,15 @@
     position: absolute;
     right: 10px;
     top: 13px;
+    display: none;
+  }
+
+  .error--mgs {
+    display: block;
   }
 }
+
+
 
 .mgs {
   display: none;

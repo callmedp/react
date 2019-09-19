@@ -5,13 +5,14 @@ from django.conf import settings
 from order.models import OrderItem, Message,Order
 from order.choices import STATUS_CHOICES
 from shop.models import DeliveryService, JobsLinks, ProductUserProfile
-from shop.choices import LINK_STATUS_CHOICES
+from shop.choices import LINK_STATUS_CHOICES, DAYS_CHOICES
 # from cart.choices import DELIVERY_TYPE
 from order.choices import OI_OPS_STATUS
 from review.models import Review, STATUS_CHOICES
 from django.core.validators import validate_email,validate_integer
 from django.core.exceptions import ValidationError
-
+from django.utils import timezone
+from dateutil import relativedelta
 User = get_user_model()
 
 
@@ -79,7 +80,7 @@ class FileUploadForm(forms.Form):
                 raise forms.ValidationError(
                     "only pdf, doc, docx, rar, zip ppt and pptx formats are allowed.")
 
-            elif file.size > 15 * 1024 * 1000:
+            elif file.size > 15 * 1024 * 1024:
                 raise forms.ValidationError(
                     "file is too large ( > 15 MB ).")
         return file
@@ -102,9 +103,9 @@ class VendorFileUploadForm(forms.Form):
             if extn not in ['pdf', 'doc', 'docx', 'png', 'jpg']:
                 raise forms.ValidationError(
                     "only pdf, doc, docx, png and jpg formats are allowed.")
-            elif file.size > 500 * 1024:
+            elif file.size > 10 * 1024 * 1024:
                 raise forms.ValidationError(
-                    "file is too large ( > 500kb ).")
+                    "file is too large ( > 10 MB ).")
         return file
 
 
@@ -276,10 +277,14 @@ class OIFilterForm(forms.Form):
                 (-1, 'Select Status'), (31, 'Pending Links'),
                 (32, 'Sent Links'), (33, 'Saved Links'),
                 (23, 'Pending Approval'), (4, 'Closed'),
-                (34, 'UnAssigned',), (35, 'Not Boarded')
+                (34, 'UnAssigned',), (35, 'Not Boarded'),
+                (36, 'Boarded'), (37, 'Approved'),
+                (38, 'Not Closed')
             )
 
-            self.fields['day_choice'].choices = ( (-1, 'All'),(1, 'Today'), (2, 'Tommorrow'),)
+            self.fields['day_choice'].choices = (
+                (-1, 'All'), (1, 'Today'), (2, 'Delayed'), (3, 'Tommorrow'), (4, 'Today\' On time')
+            )
         self.fields['oi_status'].choices = NEW_OI_OPS_STATUS
 
         draft_choices = [(-1, "Select Draft Level")]
@@ -288,7 +293,7 @@ class OIFilterForm(forms.Form):
                 level = "Draft Level " + "Final"
             else:
                 level = "Draft Level " + str(i)
-            draft_choices.append((i, level))
+            draft_choices.append((i - 1, level))
 
         self.fields['draft_level'].choices = draft_choices
 
@@ -534,7 +539,7 @@ class ProductUserProfileForm(forms.ModelForm):
         fields = (
             'contact_number', 'desired_industry', 'desired_location',
             'desired_position', 'desired_salary', 'current_salary',
-            'approved', 'experience', 'skills', 'onboard'
+            'approved', 'experience', 'skills', 'onboard', 'day_of_week'
         )
     contact_number = forms.CharField(
         max_length=500,
@@ -584,6 +589,12 @@ class ProductUserProfileForm(forms.ModelForm):
             'class': 'form-control col-md-3 col-xs-12'}),
         required=False
     )
+    day_of_week = forms.ChoiceField(
+        choices=DAYS_CHOICES,
+        widget=forms.Select(attrs={
+            'class': 'form-control col-md-3 col-xs-12'}),
+        required=True
+    )
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
@@ -593,6 +604,9 @@ class ProductUserProfileForm(forms.ModelForm):
                 del self.fields['approved']
             if self.instance.onboard:
                 del self.fields['onboard']
+                del self.fields['day_of_week']
+        if self.fields.get('day_of_week', None) and not self.instance:
+            self.initial['day_of_week'] = timezone.now().weekday()
 
         self.fields['desired_industry'].widget.attrs['class'] = ' tagsinput tags form-control'
         self.fields['desired_location'].widget.attrs['class'] = ' tagsinput tags form-control'
@@ -600,12 +614,11 @@ class ProductUserProfileForm(forms.ModelForm):
 
 
     def save(self, commit=True):
+        existing_obj = ProductUserProfile.objects.filter(id=self.instance.id).first()
         instance = super(ProductUserProfileForm, self).save()
         if commit:
             instance.save(user=self.user)
+        if not existing_obj.onboard and instance.onboard:
+            instance.order_item.set_due_date()
         return instance
-
-
-
-
 

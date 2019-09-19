@@ -374,7 +374,10 @@
     {% compress js %}
         <script src="{% static 'shinelearn/js/mobile/cart/cart.js' %}"></script>
     {% endcompress %}
-    
+
+{% endblock js_section %}
     {% block johukum %}
     {% endblock johukum %}
-{% endblock js_section %}
+
+    {% block zendesk %}
+    {% endblock zendesk %}

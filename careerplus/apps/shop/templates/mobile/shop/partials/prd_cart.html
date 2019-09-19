@@ -25,20 +25,35 @@
 
                 {% if sqs.id in linkedin_resume_services %}
                 <li>
-                    <a class="btn btn-yellow w100fl" id="enrol-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="#">Enroll now</a>
+                    <a class="btn btn-yellow w100fl" id="enrol-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" role="button">Enroll now</a>
                 </li>
                 {% endif %}
 
                 {% if sqs.id not in linkedin_resume_services %}
-                <li>
-                    <!-- add-to_cart_class = btn btn-outline w100fl-->
-                    <a class="btn btn-yellow w100fl" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="#">Enroll Now</a>
-                </li>
+                    {% if prd_vendor_slug == 'neo' %}
+                    <li>
+                      <a  class="btn btn-yellow w100fl" id="neo-enroll-button" data-neotest="1" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" role="button">Enroll Now</a>
+                  </li>
+                      {% else %}
+                    <li>
+                                <a class="btn btn-yellow w100fl" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="#">
+                                {% if product.is_assesment %}
+                                    BuyNow
+                                {% else %}
+                                    Enroll now
+                                {% endif %}
+                                </a>
+
+                    </li>
+                    {% endif %}
                 {% endif %}
 
+
+
+
             </ul>
-            {% if product.is_assesment %}
-            <div class="e-payLatter mt-15">
+         {% if product.inr_price < 5001 %}
+            <div class="e-payLatter">
                 <span class="mr-15">
                   <img aria-label="epay latter" class="img-responsive" src="{% static "shinelearn/images/mobile/shop/epaylatter.png" %}"/>
                 </span>

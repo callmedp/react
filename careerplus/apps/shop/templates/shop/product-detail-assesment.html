@@ -108,14 +108,24 @@
                     <li>
                      <a href="#review" class="cls_review">
                       <figure class="review-icon"></figure>
-                      <span>{% if prd_num_rating %}&nbsp;<strong class="anchor-color" >{{prd_num_rating}}</strong>&nbsp;{% if prd_num_rating == 1 %}review {% else %}reviews {% endif %}{% else %}Write a review{% endif %}</span>
+                      <span>{% if prd_num_rating > 15 %}
+                          &nbsp;<strong class="anchor-color" >
+                              {{prd_num_rating}}
+                          </strong>
+                          &nbsp;
+                          Reviews
+                          {% else %}
+                          <strong class="anchor-color" >Write a review </strong>
+                          {% endif %}</span>
                      </a> 
                     </li>
+                                               {% if prd_num_bought > 100 %}
                     <li>
                     <figure class="bought-icon"></figure>
                     <span>
-                    {% if prd_num_bought %}<strong>&nbsp;{{prd_num_bought}}</strong>{% else %}<strong>&nbsp;10</strong>{% endif %}&nbsp;people bought</span>
+                   <strong>&nbsp;{{prd_num_bought}}</strong> people bought &nbsp;</span>
                     </li>
+                      {% endif %}
                     {% if prd_service == 'course' or prd_service == 'assessment'  %}
                   
                     {% if prd_num_jobs %}
@@ -150,7 +160,7 @@
               <div class="row">
                 <div class="col-sm-12 col-md-8 mt-40">
                 {% if prd_about %}
-                  <h2 class="detail-heading">About{% if prd_service == 'assessment' %} Test {% elif prd_service == 'course' %}course{% else %}service{% endif %}</h2>
+                  <h2 class="detail-heading">About{% if prd_service == 'assessment' %} Test {% elif prd_service == 'course' %}Course Overview {% else %}service{% endif %}</h2>
                  {{prd_about|safe}}
                  {% if prd_asft %}
                   <div class="test-wrap mt-30">
@@ -176,7 +186,22 @@
                 </div>
               </div>
           </div>
+          </div>
       </section>
+       {% if prd_desc %}
+
+       <section class="container-fluid detail-box">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm-12 col-md-8">
+                    <h2>{{product.take_free_test.title}}</h2>
+                        {{prd_desc|safe}}
+                    </div>
+                  </div>
+                </div>
+              </section>
+                {% endif %}
+
       <!-- main parent1 section end -->
 
 
@@ -187,39 +212,13 @@
       <section class="container-fluid cls_scroller_parent pr">
         <div class="row">
           <section class="detail-box" style="padding:0;"></section>
-            <section class="container-fluid detail-box">
-            <div class="container">
-              <div class="row">
-                <div id="course" class="col-sm-12 col-md-8">
-                  <h2>What you get if you pass??</h2>                     
-                    <ul class="what-get row">
-                      <li class="col-md-6">
-                        <span class="icon-industry"></span>
-                        <p>Industry recognized certification after clearing the test</p>
-                      </li>
+            {% if prd_vendor_slug == 'testpreptraining' %}
+              {% include "shop/partials/what_you_get_testprep.html" %}
 
-                      <li class="col-md-6">
-                        <span class="icon-badge"></span>
-                        <p>Get badge on shine.com and showcase your knowledge to the recruiters</p>
-                      </li>
+            {% else %}
+              {% include "shop/partials/what_you_get.html" %}
+            {% endif %}
 
-                      <li class="col-md-6">
-                          <span class="icon-skills"></span>
-                        <p>Shine shows your skills as validated and certification as verified which build high trust among recruiters</p>
-                      </li>
-                      <li class="col-md-6">
-                          <span class="icon-receive"></span>
-                        <p>Receive valuable feedback on your strong and weak areas to improve yourself</p>
-                      </li>
-                      <li class="col-md-6">
-                          <span class="icon-certified"></span>
-                        <p>Certified candidates gets higher salary as compared to non certified candidate</p>
-                      </li>
-                    </ul>
-                  </div>
-              </div>
-            </div>
-            </section>
 
             {% if chapter_list %}
               <section class="container-fluid detail-box">

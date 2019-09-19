@@ -52,8 +52,7 @@
                     <!-- <span class="tick"></span> -->
                     Login
                 </a>
-            </li>
-            
+            </li>            
             <li class="payment__steps__item">
                 <a href="{% url "payment:payment-option" %}">
                     <span class="dot">3</span>
@@ -69,27 +68,27 @@
                     <span class="icon-user mr-10"></span>
                     User login
                 </div>
-        <form class="personal-details col-sm-6 bdr-rt"  method="post" action="" role="form" id="login_form">{% csrf_token %}
-        
-                <ul>
-                    <li class="login__item input-effect">
-                        <input type="email" class="form--control animation-input" name="email" id="email-id" aria-describedby="email-id" placeholder="">
-                        <label for="email-id">Email id</label>
-                        <span class="error--mgs"></span>
-                    </li>
-                    <li class="login__item input-effect">
-                        <input type="password"
-                               class="form--control animation-input"
-                               value="{% if request.session.email%}{{request.session.email}}{% elif request.session.lead_email %}{{ request.session.lead_email }}{% endif %}" {% if request.session.email %}  {% endif %}"
-                               name="password"
-                               id="password" aria-describedby="password"
-                               placeholder="">
-                        <label for="password">Password</label>
-                        <span class="error--mgs"></span>
+                <form class="personal-details col-sm-6 bdr-rt"  method="post" action="" role="form" id="login_form">{% csrf_token %}
+                
+                        <ul>
+                            <li class="login__item input-effect">
+                                <input type="email" class="form--control animation-input" name="email" id="email-id" aria-describedby="email-id" placeholder="" value=" {% if neo_email %} {{ neo_email }} {% elif request.session.email%}{{request.session.email}}{% endif %}" {% if request.session.email or neo_email%} readonly {% endif %}>
+                                <label for="email-id">Email id</label>
+                                <span class="error--mgs"></span>
+                            </li>
+                            <li class="login__item input-effect">
+                                <input type="password"
+                                    class="form--control animation-input"
+                                    value="{% if request.session.email%}{{request.session.email}}{% elif request.session.lead_email %}{{ request.session.lead_email }}{% endif %}" {% if request.session.email %}  {% endif %}"
+                                    name="password"
+                                    id="password" aria-describedby="password"
+                                    placeholder="">
+                                <label for="password">Password</label>
+                                <span class="error--mgs"></span>
 
-                    </li>
-                </ul>
-        </form>
+                            </li>
+                        </ul>
+                </form>
                 <a onclick="forgotPassword()" class="mt-10 fw600 block">Forget password</a>
             </div><!-- /. p-15 -->
             <span class="invalid-cred-err" style="display: none" id="invalid-cred">Invalid email or password</span>
@@ -170,7 +169,17 @@
             <div class="p-15">
                 <div class="login__user mb-20">
                     Forget password
-                </div>
+
+            </div>
+    <!-- <div class="line_wrap w100fl">
+        <span>or sign in with</span>
+        <div class="line"></div>
+    </div>
+    <div class="social-login w100fl text-center">
+            <a class="facebook" onclick="Login('/cart/payment-shipping/');"><sup class="icon-fb-2"></sup></a>
+            <a class="linkedin" href="{% url 'users:linkedin-code' %}?next=/cart/payment-shipping/"><sup class="icon-link-2"></sup></a>
+            <a class="gplus" onclick="glogin('/cart/payment-shipping/');"><sup class="icon-gp-2"></a>
+    </div> -->
                 <form
                         class="personal-details col-sm-6 bdr-rt hidden"
                         id="forgot_form"
@@ -248,7 +257,10 @@
             
         </script>
     {% endcompress %}
+{% endblock js_section %}
 
     {% block johukum %}
     {% endblock johukum %}
-{% endblock js_section %}
+
+    {% block zendesk %}
+    {% endblock zendesk %}

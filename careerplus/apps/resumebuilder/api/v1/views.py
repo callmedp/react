@@ -361,7 +361,7 @@ class CandidateResumePreview(APIView):
         certifications = candidate.candidatecertification_set.all().order_by('order')
         languages = candidate.candidatelanguage_set.all().order_by('order')
         current_exp = experience.filter(is_working=True).order_by('-start_date').first()
-        
+
         entity_id_count_mapping = {
             2: bool(education.count()),
             3: bool(experience.count()),
@@ -673,7 +673,8 @@ class ResumeImagePreviewView(APIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = None
 
-    def get_image_base_64_encoded_data(self,candidate,template_no):
+    def get_image_base_64_encoded_data(self, candidate, template_no):
+
         current_config = candidate.ordercustomisation_set.filter(template_no=template_no).first()
         entity_position = current_config.entity_position_eval
         entity_preference = eval(candidate.entity_preference_data)
@@ -689,20 +690,20 @@ class ResumeImagePreviewView(APIView):
         current_exp = experience.filter(is_working=True).order_by('-start_date').first()
 
         entity_id_count_mapping = {
-                    2:bool(education.count()),
-                    3:bool(experience.count()),
-                    4:bool(projects.count()),
-                    5:bool(skills.count()),
-                    7:bool(achievements.count()),
-                    8:bool(certifications.count()),
-                    9:bool(languages.count()),
-                    10:bool(references.count()),
-                    11:bool(len(extracurricular)),
-                }
+            2: bool(education.count()),
+            3: bool(experience.count()),
+            4: bool(projects.count()),
+            5: bool(skills.count()),
+            7: bool(achievements.count()),
+            8: bool(certifications.count()),
+            9: bool(languages.count()),
+            10: bool(references.count()),
+            11: bool(len(extracurricular)),
+        }
         updated_entity_position = []
 
         for item in entity_position:
-            item.update({"count":entity_id_count_mapping.get(item['entity_id'])})
+            item.update({"count": entity_id_count_mapping.get(item['entity_id'])})
             updated_entity_position.append(item)
 
         latest_experience, latest_end_date = '', None
@@ -723,23 +724,22 @@ class ResumeImagePreviewView(APIView):
 
         rendered_template = template.render(
             {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,
-            'achievements': achievements, 'references': references, 'projects': projects,
-            'certifications': certifications, 'extracurricular': extracurricular, 'languages': languages,
-            'current_exp': current_exp, 'latest_exp': latest_experience,
-            'preference_list': entity_preference,'current_config': current_config,
-            'entity_position': updated_entity_position, 'width': 100, 'activate_water_mark': True
-            }).encode(encoding='UTF-8')
+             'achievements': achievements, 'references': references, 'projects': projects,
+             'certifications': certifications, 'extracurricular': extracurricular, 'languages': languages,
+             'current_exp': current_exp, 'latest_exp': latest_experience,
+             'preference_list': entity_preference, 'current_config': current_config,
+             'entity_position': updated_entity_position, 'width': 100, 'activate_water_mark': True
+             }).encode(encoding='UTF-8')
 
         file_name = 'resumetemplate-' + str(template_no) + '.jpg'
         rendered_template = rendered_template.decode()
-        rendered_template = rendered_template.replace("\n","")
-        options = {'quiet':'',
-                'quality':self.request.GET.get('quality',40),
-                'format':'JPG',
-                'disable-smart-width': '',
-                }
+        options = {'quiet': '',
+                   'quality': self.request and self.request.GET.get('quality', 40),
+                   'format': 'JPG',
+                   'disable-smart-width': '',
+                   }
 
-        file_obj = imgkit.from_string(rendered_template,False,options=options)
+        file_obj = imgkit.from_string(rendered_template, False, options=options)
         return Response(base64.b64encode(file_obj))
 
     def get(self, request, *args, **kwargs):
@@ -865,35 +865,29 @@ class PDFRefreshAPIView(APIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = None
 
-    def post(self,request,*args,**kwargs):
+    def post(self, request, *args, **kwargs):
         from order.models import Order
         from order.tasks import generate_resume_for_order
 
         order_id = kwargs.get('order_id')
         candidate_id = request.user.id
         product_found = False
-        order_obj_list = Order.objects.filter(id=order_id,candidate_id=candidate_id,status__in=[1,3])
+        order_obj_list = Order.objects.filter(id=order_id, candidate_id=candidate_id, status__in=[1, 3])
 
         if not order_obj_list:
-            return Response({"detail":"Invalid Order id"},status=status.HTTP_400_BAD_REQUEST)
+            return Response({"detail": "Invalid Order id"}, status=status.HTTP_400_BAD_REQUEST)
 
-        for order_obj in order_obj_list: 
+        for order_obj in order_obj_list:
             if product_found:
                 break
-                
+
             for item in order_obj.orderitems.all():
                 if item.product and item.product.type_flow == 17 and item.product.type_product == 2:
                     product_found = True
                     break
 
         if not product_found:
-            return Response({"detail":"Invalid Order id"},status=status.HTTP_400_BAD_REQUEST)
+            return Response({"detail": "Invalid Order id"}, status=status.HTTP_400_BAD_REQUEST)
 
         generate_resume_for_order.delay(order_obj.id)
-        return Response({"detail":"Resume successfully Updated"},status=status.HTTP_200_OK)
-
-
-
-
-
-
+        return Response({"detail": "Resume successfully Updated"}, status=status.HTTP_200_OK)

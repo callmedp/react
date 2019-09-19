@@ -40,6 +40,7 @@ from order.choices import (
     WC_SUB_CATEGORY2, WC_SUB_CATEGORY3,
     WC_SUB_CAT2
 )
+from emailers.sms import SendSMS
 
 User = get_user_model()
 
@@ -51,7 +52,7 @@ class WelcomeCallInfo(object):
             data_dict = {}
             oi = data.get('oi')
             # Do not consider assesment items in welcome call
-            if oi.product.type_flow == 16:
+            if oi.product.type_flow == 16 or oi.product.vendor.slug == 'neo':
                 continue
             addons = data.get('addons')
             variations = data.get('variations')
@@ -682,6 +683,16 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
 
         try:
             cat = int(request.POST.get('cat'))
+            enddt = timezone.now()
+            startdt = enddt - datetime.timedelta(hours=24)
+            ops = order.welcomecalloperation_set.filter(wc_cat=cat, created__range=(startdt,enddt))
+            if cat == 23 and len(ops) == 0:
+                mail_type = "WELCOME_CALL_BACK"
+                email_dict = {
+                    "first_name": order.first_name,
+                    "mobile": order.mobile,
+                 }
+                SendSMS().send(sms_type=mail_type, data=email_dict)
         except:
             valid = False
             error = 'Enter valid category'

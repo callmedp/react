@@ -1,0 +1,166 @@
+* {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+
+.practice-skill {
+    &__wrap {
+
+
+        background: url(#{$imagePath}images/free_skill/Banner_top_free_skill.png) top right no-repeat,
+        linear-gradient(-1deg, #FFFFFF 27%, #F2F2F2 89%);
+        font-family: $font-family;
+
+
+        h1 {
+
+            font-size: 40px;
+            letter-spacing: -0.73px;
+            color: $p-blue;
+            font-weight: bold;
+            margin-bottom: 5px;
+
+        }
+
+        em {
+            font-size: 16px;
+            margin-top: 0;
+            font-style: normal;
+        }
+    }
+
+    &__wrap-inner {
+        background: url(#{$imagePath}images/free_skill/right_side.png) top right no-repeat,
+        linear-gradient(-1deg, #FFFFFF 27%, #F2F2F2 89%);
+
+
+
+        h1 {
+
+            font-size: 32px;
+            letter-spacing: -0.73px;
+            color: $p-blue;
+            font-weight: bold;
+            margin-bottom: 5px;
+
+        }
+
+        em {
+            font-size: 16px;
+            margin-top: 0;
+            font-style: normal;
+        }
+
+        .search_content {
+            width: 300px;
+
+            .skill-jobs-btn {
+                background-color: transparent;  
+            }
+        }
+    }
+}
+
+.practice_test {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+
+
+    li {
+        text-align: left;
+        font-size: 15px;
+        line-height: 23px;
+
+
+
+        strong {
+            display: block;
+
+
+        }
+
+        .round {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            background: linear-gradient(17deg, #BDB7EA 0%, #5B86C3 71%);
+            border-radius: 50%;
+            margin: 5px 0;
+            align-items: center;
+
+
+
+            span {
+                width: 58px;
+                height: 42px;
+
+            }
+
+        }
+    }
+}
+
+.form-inline {
+    display: flex;
+}
+
+
+.search_content {
+    width: 400px;
+    display: block;
+    background: $btn-default-bg;
+    box-shadow: 0 2px 8px 0 rgba(202, 202, 202, 0.50);
+    border-radius: 42px;
+    margin: 30px 0 20px;
+    height: 49px;
+    padding: 0 0 10px 10px;
+
+
+    .form-control {
+        border: none;
+        border-radius: 0px;
+        box-shadow: none;
+        width: 100%;
+    }
+
+    .skill-jobs-btn {
+        height: 49px;
+        flex: 0 0 50px;
+        border-radius: 0 42px 42px 0;
+        background: $sprite-freeskill -21px -591px  $yellow;
+    }
+    .no-bgcol {
+        background-color: transparent;
+    }
+
+    .twitter-typeahead {
+        border-bottom-left-radius: 15px;
+        border-top-left-radius: 15px;
+    }
+
+    .form-control {
+        top: 0 !important;
+        height: 49px !important;
+        border-bottom-left-radius: 15px;
+        border-top-left-radius: 15px;
+    }
+
+}
+
+.left_base {
+    background:  url(#{$imagePath}images/free_skill/left_side.png) top left no-repeat,;
+    width: 210px;
+    height: 255px;
+    position: absolute;
+    top:300px;
+}
+
+span.twitter-typeahead .tt-menu, span.twitter-typeahead .tt-dropdown-menu {
+    width: 100%;
+    min-width: auto;
+}

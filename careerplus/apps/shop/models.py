@@ -28,6 +28,7 @@ from mongoengine import Document, ListField, FloatField,\
 from partner.models import Vendor
 from core.models import AbstractCommonModel
 from order.functions import create_short_url
+
 from review.models import Review
 from faq.models import (
     FAQuestion, ScreenFAQ)
@@ -63,6 +64,8 @@ from .choices import (
     SHINE_FLOW_ACTION,
     convert_to_month,
     LINK_STATUS_CHOICES,
+    MANUAL_CHANGES_CHOICES,
+    DAYS_CHOICES,
     convert_inr,
     convert_usd,
     convert_aed,
@@ -307,6 +310,13 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
                 active=True)
         return []
 
+    def get_test_category_ids(self):
+        from assessment.models import Test
+        category_ids = self.get_childrens().values_list('id',flat=True) if self.get_childrens() else None
+        return [] if not category_ids else\
+            Test.objects.filter(category__id__in =category_ids).values_list('category__id').distinct()
+
+
     def get_products(self):
 
         # if self.type_level == 3:
@@ -407,6 +417,16 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
     def get_canonical_url(self):
         return self.get_absolute_url()
 
+    @property
+    def assessment_test_count(self):
+        return self.get_assessment_test_count()
+
+    def get_assessment_test_count(self):
+        return self.testcategories.count()
+
+    @property
+    def get_free_test(self):
+        return self.test_set.first() if self.test_set.first() else None
 
     @classmethod
     def post_save_category(cls, sender, instance, **kwargs):
@@ -1182,6 +1202,17 @@ class Product(AbstractProduct, ModelMeta):
             return self.get_sub_type_flow_display()
         return ''
 
+    @property
+    def take_free_test(self):
+        if self.test_set.all():
+            return self.test_set.first()
+
+
+
+    @property
+    def absolute_url(self):
+        return self.get_url()
+
 
     def get_heading(self,no_cache=False):
         if self.is_course:
@@ -1594,8 +1625,9 @@ class Product(AbstractProduct, ModelMeta):
             return dd
         else:
             return ''
-
-
+    @property
+    def day_duration(self):
+        return self.get_duration_in_day()
 
     def get_duration_in_ddmmyy(self):
         if self.is_course:
@@ -2541,6 +2573,10 @@ class ProductFA(AbstractAutoDate):
 class Skill(AbstractAutoDate, ModelMeta):
     name = models.CharField(
         _('Name'), max_length=100, unique=True)
+    slug = models.CharField(
+        _('Slug'), max_length=100, unique=True,
+        null=True, blank=True, db_index=True
+    )
     skillproducts = models.ManyToManyField(
         'shop.Product',
         verbose_name=_('Skill Product'),
@@ -2568,6 +2604,14 @@ class Skill(AbstractAutoDate, ModelMeta):
         if self.active:
             return 'Active'
         return 'Inactive'
+
+    def save(self, *args, **kwargs):
+        exists = bool(getattr(self, "id"))
+        if not exists:
+            title = self.name
+            value = slugify(getattr(self, 'slug') or self.name)
+            self.slug = value
+        super().save(*args, **kwargs)
 
 
 class ProductSkill(AbstractAutoDate):
@@ -3172,15 +3216,25 @@ class ProductUserProfile(AbstractAutoDate):
         verbose_name=_("Order Item"))
     contact_number = models.CharField(
         _("Contact number"), max_length=50)
-    desired_industry = models.CharField(max_length=255, blank=True, null=True)
-    desired_location = models.CharField(max_length=255, blank=True, null=True)
-    desired_position = models.CharField(max_length=255, blank=True, null=True)
-    desired_salary = models.CharField(max_length=50, blank=True, null=True)
-    current_salary = models.CharField(max_length=50, blank=True, null=True)
-    experience = models.CharField(max_length=50, blank=True, null=True)
-    skills = models.CharField(max_length=100, blank=True, null=True)
+    desired_industry = models.CharField(max_length=300, blank=True, null=True)
+    desired_location = models.CharField(max_length=300, blank=True, null=True)
+    desired_position = models.CharField(max_length=300, blank=True, null=True)
+    desired_salary = models.CharField(max_length=200, blank=True, null=True)
+    current_salary = models.CharField(max_length=200, blank=True, null=True)
+    experience = models.CharField(max_length=300, blank=True, null=True)
+    skills = models.CharField(max_length=300, blank=True, null=True)
     approved = models.BooleanField(default=False)
     onboard = models.BooleanField(default=False)
+    due_date = models.DateTimeField(
+        _('Due Date'), blank=True, null=True)
+    day_of_week = models.PositiveSmallIntegerField(
+        null=True, blank=True,
+        choices=DAYS_CHOICES
+    )
+    manual_change = models.PositiveSmallIntegerField(
+        null=True, blank=True, choices=MANUAL_CHANGES_CHOICES
+    )
+    manual_changes_data = models.CharField(max_length=200, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -3233,5 +3287,60 @@ class JobsLinks(AbstractCommonModel, AbstractAutoDate):
     def __str__(self):
         schedule_date = self.schedule_date.strftime('%d-%m-%Y') if self.schedule_date else ''
         return str(self.company_name) + ' - ' + str(self.get_status_display()) +' ' + schedule_date
+
+
+class PracticeTestInfo(AbstractAutoDate):
+    email = models.CharField(
+        max_length=100,
+        verbose_name=_("Customer Email")
+    )
+    mobile_no = models.CharField(
+        max_length=15,
+        verbose_name=_('Mobile number'),
+        null=True,
+        blank=True
+    )
+    name = models.CharField(
+        max_length=70,
+        verbose_name=_('Name'),
+        null=True,
+        blank=True
+    )
+    test_data = models.TextField(
+        null=True,
+        blank=True,
+        verbose_name=_('test_data')
+    )
+    is_boarded = models.BooleanField(
+        default=False
+    )
+    order_item = models.ForeignKey(
+        'order.OrderItem', related_name='test_info',
+        verbose_name=_("Order Item"),
+        null=True,
+        blank=True
+    )
+
+    def __str__(self):
+        return self.email
+
+    @property
+    def has_completed(self):
+        if getattr(self, 'test_data', None):
+            datum = eval(getattr(self, 'test_data'))
+            status = datum.get('status', None)
+            if status.lower() == 'done':
+                return True
+        return False
+
+    @property
+    def latest_level(self):
+        if getattr(self, 'test_data', None):
+            datum = eval(getattr(self, 'test_data'))
+            result = datum.get('result', None)
+            if 'pt_level' in result:
+                return result['pt_level']
+        return None
+    
 
 

@@ -8,7 +8,7 @@
     </form>
 </div>
 
-  <div class="box-panel enrol-cart{% if product.is_assesment %} pb-65 {% endif %}  ">
+  <div class="box-panel enrol-cart{% if product.inr_price < 5001 %} pb-65 {% endif %}  ">
      <strong id="total-price" class="total-price" name="price_total" sum-price="{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}" >Rs. {% if selected_var %}
      {{var_list.0.inr_price|floatformat}}{% else %}
      {{sqs.pPinb|floatformat}}{% endif %}/- <small>(+taxes)</small></strong>
@@ -40,9 +40,21 @@
     <a role="button" class="enrol-now" id="enrol-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
     {% endif %}
 
+
     <!-- Add to cart button and redirect to cart add class- enrol-now -->
     {% if sqs.id not in linkedin_resume_services %}
-      <a role="button" class="enrol-now" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
+        {% if prd_vendor_slug == 'neo' %}
+      <a role="button" class="enrol-now neo-enroll-button" data-neotest="1" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" >Enroll now</a>
+
+      {% else %}
+        <a role="button" class="enrol-now" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">
+            {% if product.is_assesment %}
+            BuyNow
+            {% else %}
+            Enroll now
+        {% endif %}
+        </a>
+      {% endif %}
     {% endif %}
     <!--div class="cart-message"><span class="cart-success" id="id-cart-message"></span></div-->
 
@@ -54,23 +66,25 @@
         <figure class="calling-icon"></figure> {{ggn_contact}}
       </a>
     </div-->
-    {% if product.is_assesment %}
+         {% if product.inr_price < 5001 %}
     <div class="e-payLatter">
       <span class="mr-15">
         <img aria-label="ePayLater" src="{% static "shinelearn/images/epaylatter.png" %}"/>
       </span>
       <p>Buy test now and <span class="bold">make payment within 14 days</span> using ePayLater </p>
     </div><!-- ./ e-payLatter -->
-    {% endif %}
+          {% endif %}
   </div>
-  {%if not product.is_assesment %}
-  <!-- check free sample start -->
   <div class="cls_samples_enquiry samples_enquiry">
+ {%if product.inr_price > 501 %}
+  <!-- check free sample start -->
       <!-- Interested in this course? -->
       <div class="course-query box-panel mb-40 cleafix">
           <h2 class="heading-right">
             {% if product.is_course %}
               Interested in this course?
+            {% elif product.is_assesment %}
+               Interested?
             {% else %}
               Interested in this service?
             {% endif %}
@@ -109,13 +123,33 @@
             <input type="hidden" name="product" value="{{product.pk}}">
             <input type="hidden" name="prd" value="{{product.heading}}">
             <input type="hidden" name="path" value="{{product.get_absolute_url}}">
+            {% if prd_vendor_slug == "neo" %}
+               <input type="hidden" name="campaign" value="neo">
+            {% endif %}
 
           </form>
-          <button type="button" id="id_callback" class="callback-button mt-10">Request a call back</button>
+          <button type="button" {% if prd_vendor_slug == "neo" %} id="id_callback_neo"  {% else %}id="id_callback" {% endif %}class="callback-button mt-10">Request a call back</button>
           <!--button type="button" id="id_callback" class="submit-button">
             Submit
           </button-->
       </div>
+  {% endif %}
+      {% if product.take_free_test %}
+      <div class="mt-20 confused-about-buying">
+        <!-- <figure>
+          <img src="{% static 'shinelearn/images/free_skill/take-test-bannerbg.png' %}" class="img-responsive">
+        </figure> -->
+
+        <p>
+          <b>Confused about buying?</b>
+          Take our free practice test in
+          <strong>{{product.take_free_test.title}}</strong>
+          to know where you stand
+        </p>
+        <a href="{{product.take_free_test.get_absolute_url}}">Take free test</a>
+      </div>
+
+
   {% endif %}
       {% if widget_objs %}
       <div class="box-panel free-sample">

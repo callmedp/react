@@ -14,6 +14,7 @@ from django.http import (
     HttpResponseForbidden, HttpResponseBadRequest)
 # from django.contrib import messages
 from django.views.generic import TemplateView, View
+from rest_framework.views import APIView
 from django.core.urlresolvers import reverse
 from django.template.response import TemplateResponse
 from django.conf import settings
@@ -31,7 +32,6 @@ from emailers.email import SendMail
 from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from wallet.models import Wallet
-from core.tasks import upload_resume_to_shine
 from core.api_mixin import ShineCandidateDetail
 from core.mixins import InvoiceGenerate
 from console.decorators import Decorate, stop_browser_cache
@@ -39,7 +39,8 @@ from search.helpers import get_recommendations
 from .dashboard_mixin import DashboardInfo
 from linkedin.autologin import AutoLogin
 from core.library.gcloud.custom_cloud_storage import \
-GCPPrivateMediaStorage, GCPInvoiceStorage, GCPMediaStorage,GCPResumeBuilderStorage
+    GCPPrivateMediaStorage, GCPInvoiceStorage, GCPMediaStorage, GCPResumeBuilderStorage
+
 
 @Decorate(stop_browser_cache())
 class DashboardView(TemplateView):
@@ -104,65 +105,29 @@ class DashboardView(TemplateView):
                 response = ShineCandidateDetail().get_shine_candidate_resume(
                     candidate_id=candidate_id,
                     resume_id=request.session.get('resume_id'))
+                if not response:
+                    request.session.pop('resume_id')
+                    DashboardInfo().check_user_shine_resume(candidate_id=candidate_id,request=request)
+                    response = ShineCandidateDetail().get_shine_candidate_resume(
+                                                        candidate_id=candidate_id,
+                                                        resume_id=request.session.get('resume_id'))
                 if response.status_code == 200:
-                    default_name = 'shine_resume' + timezone.now().strftime('%d%m%Y')
-                    file_name = request.session.get('shine_resume_name', default_name)
-                    # file_name = file_name + '.' + resume_extn
-
-                    order_items = OrderItem.objects.filter(
-                        order__status=1,
-                        id__in=list_ids, order__candidate_id=candidate_id,
-                        no_process=False, oi_status=2).select_related('order')
-
-                    for obj in order_items:
-                        try:
-                            order = obj.order
-                            file = ContentFile(response.content)
-                            file_name = 'resumeupload_shine_resume_' + str(order.pk) + '_' + str(obj.pk) + '_' + str(
-                                int(random() * 9999)) \
-                                        + '_' + timezone.now().strftime('%Y%m%d') + '.' + resume_extn
-                            full_path = '%s/' % str(order.pk)
-                            if not settings.IS_GCP:
-                                if not os.path.exists(settings.RESUME_DIR + full_path):
-                                    os.makedirs(settings.RESUME_DIR + full_path)
-                                dest = open(
-                                    settings.RESUME_DIR + full_path + file_name, 'wb')
-                                for chunk in file.chunks():
-                                    dest.write(chunk)
-                                dest.close()
-                            else:
-                                GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
-                        except Exception as e:
-                            logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e)))
-                            continue
-
-                        # obj.oi_resume.save(file_name, ContentFile(response.content))
-                        obj.oi_resume = full_path + file_name
-                        last_oi_status = obj.oi_status
-                        obj.oi_status = 5
-                        obj.last_oi_status = 13
-                        obj.save()
-                        obj.orderitemoperation_set.create(
-                            oi_status=13,
-                            oi_resume=obj.oi_resume,
-                            last_oi_status=last_oi_status,
-                            assigned_to=obj.assigned_to)
-
-                        obj.orderitemoperation_set.create(
-                            oi_status=obj.oi_status,
-                            last_oi_status=obj.last_oi_status,
-                            assigned_to=obj.assigned_to)
-
-                    # with open(file_name, 'wb') as fd:
-                    #     for chunk in response.iter_content(chunk_size=128):
-                    #         fd.write(chunk)
-
+                    file = ContentFile(response.content)
+                    data = {
+                        "list_ids": list_ids,
+                        "candidate_resume": file,
+                        'last_oi_status': 13,
+                        'is_shine':True,
+                        'extension':request.session.get('resume_extn', '')
+                    }
+                    DashboardInfo().upload_candidate_resume(candidate_id=candidate_id, data=data)
             elif file:
                 extn = file.name.split('.')[-1]
                 if extn in ['doc', 'docx', 'pdf'] and list_ids:
                     data = {
                         "list_ids": list_ids,
                         "candidate_resume": file,
+                        'last_oi_status': 3
                     }
                     DashboardInfo().upload_candidate_resume(candidate_id=candidate_id, data=data)
                 elif not list_ids:
@@ -527,97 +492,85 @@ class DashboardRejectService(View):
         return HttpResponseForbidden()
 
 
-class DashboardAcceptService(View):
+class DashboardAcceptService(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+
     def post(self, request, *args, **kwargs):
         candidate_id = request.session.get('candidate_id', None)
         oi_pk = request.POST.get('oi_pk', None)
-        if request.is_ajax() and candidate_id and oi_pk:
-            data = {
-                "display_message": '',
-            }
-            try:
-                oi = OrderItem.objects.select_related('order').get(pk=oi_pk)
-                if oi and oi.order.candidate_id == candidate_id and oi.order.status in [1, 3]:
-                    if oi.oi_status in [24, 46]:
-                        last_oi_status = oi.oi_status
-                        oi.oi_status = 4
-                        oi.closed_on = timezone.now()
-                        oi.last_oi_status = 27
-                        oi.save()
+        if not candidate_id and oi_pk:
+            return HttpResponseBadRequest(json.dumps({'result':'Candidate or order_item pk not available'}), content_type="application/json")
+        data = {
+            "display_message": '',
+        }
+        oi = OrderItem.objects.filter(id=oi_pk).first()
 
-                        oi.orderitemoperation_set.create(
-                            oi_status=27,
-                            oi_draft=oi.oi_draft,
-                            draft_counter=oi.draft_counter,
-                            last_oi_status=last_oi_status,
-                            assigned_to=oi.assigned_to
-                        )
+        if not oi and (not oi.order.candidate_id == candidate_id and not oi.order.status in [1, 3]) and oi.oi_status in [24, 46]:
+            return HttpResponseBadRequest(json.dumps({'result':'Valid Actions Only'}), content_type="application/json")
 
-                        oi.orderitemoperation_set.create(
-                            oi_status=oi.oi_status,
-                            last_oi_status=oi.last_oi_status,
-                            assigned_to=oi.assigned_to
-                        )
+        last_oi_status = oi.oi_status
+        oi.oi_status = 4
+        oi.closed_on = timezone.now()
+        oi.last_oi_status = 27
+        oi.save()
+        
+        oi.orderitemoperation_set.create(
+            oi_status=27,
+            oi_draft=oi.oi_draft,
+            draft_counter=oi.draft_counter,
+            last_oi_status=last_oi_status,
+            assigned_to=oi.assigned_to
+        )
 
-                        data['display_message'] = "You Accept draft successfully"
+        oi.orderitemoperation_set.create(
+            oi_status=oi.oi_status,
+            last_oi_status=oi.last_oi_status,
+            assigned_to=oi.assigned_to
+        )
 
-                        to_emails = [oi.order.get_email()]
-                        email_sets = list(
-                            oi.emailorderitemoperation_set.all().values_list(
-                                'email_oi_status', flat=True).distinct())
-                        sms_sets = list(
-                            oi.smsorderitemoperation_set.all().values_list(
-                                'sms_oi_status', flat=True).distinct())
-                        mail_type = 'WRITING_SERVICE_CLOSED'
-                        email_dict = {}
-                        token = AutoLogin().encode(
-                            oi.order.email, oi.order.candidate_id, days=None)
-                        email_dict.update({
-                            "subject": 'Closing your ' + oi.product.name + ' service',
-                            "username": oi.order.first_name,
-                            'draft_added': oi.draft_added_on,
-                            'mobile': oi.order.get_mobile(),
-                            'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                                settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
-                        })
+        data['display_message'] = "You Accept draft successfully"
 
-                        if oi.product.type_flow in [1, 12, 13] and (9 not in email_sets and 4 not in sms_sets):
-                            send_email_task.delay(
-                                to_emails, mail_type, email_dict,
-                                status=9, oi=oi.pk)
-                            try:
-                                SendSMS().send(sms_type=mail_type, data=data)
-                                oi.smsorderitemoperation_set.create(
-                                    sms_oi_status=4,
-                                    to_mobile=email_dict.get('mobile'),
-                                    status=1)
-                            except Exception as e:
-                                logging.getLogger('error_log').error(
-                                    "%s - %s" % (str(mail_type), str(e)))
+        to_emails = [oi.order.get_email()]
+        email_sets = list(
+            oi.emailorderitemoperation_set.all().values_list(
+                'email_oi_status', flat=True).distinct())
+        sms_sets = list(
+            oi.smsorderitemoperation_set.all().values_list(
+                'sms_oi_status', flat=True).distinct())
+        mail_type = 'WRITING_SERVICE_CLOSED'
+        email_dict = {}
+        token = AutoLogin().encode(
+            oi.order.email, oi.order.candidate_id, days=None)
+        email_dict.update({
+            "subject": 'Closing your ' + oi.product.name + ' service',
+            "username": oi.order.first_name,
+            'draft_added': oi.draft_added_on,
+            'mobile': oi.order.get_mobile(),
+            'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
+                settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
+        })
 
-                            upload_resume_to_shine.delay(oi_pk=oi.pk)
+        if oi.product.type_flow in [1, 12, 13] and (9 not in email_sets and 4 not in sms_sets):
+            send_email_task.delay(
+                to_emails, mail_type, email_dict,
+                status=9, oi=oi.pk)
+            SendSMS().send(sms_type=mail_type, data=data)
+            oi.smsorderitemoperation_set.create(
+                sms_oi_status=4,
+                to_mobile=email_dict.get('mobile'),
+                status=1)
 
-                        elif oi.product.type_flow == 8 and (9 not in email_sets and 4 not in sms_sets):
-                            send_email_task.delay(
-                                to_emails, mail_type, email_dict,
-                                status=9, oi=oi.pk)
-                            try:
-                                SendSMS().send(sms_type=mail_type, data=data)
-                                oi.smsorderitemoperation_set.create(
-                                    sms_oi_status=4,
-                                    to_mobile=email_dict.get('mobile'),
-                                    status=1)
-                            except Exception as e:
-                                logging.getLogger('error_log').error(
-                                    "%s - %s" % (str(mail_type), str(e)))
-                    else:
-                        data['display_message'] = "please do valid action only"
-            except Exception as e:
-                logging.getLogger('error_log').error(str(e))
-                data['display_message'] = "please do valid action only"
-            return HttpResponse(json.dumps(data), content_type="application/json")
-
-        return HttpResponseForbidden()
+        elif oi.product.type_flow == 8 and (9 not in email_sets and 4 not in sms_sets):
+            send_email_task.delay(
+                to_emails, mail_type, email_dict,
+                status=9, oi=oi.pk)
+            SendSMS().send(sms_type=mail_type, data=data)
+            oi.smsorderitemoperation_set.create(
+                sms_oi_status=4,
+                to_mobile=email_dict.get('mobile'),
+                status=1)
+        return HttpResponse(json.dumps(data), content_type="application/json")
 
 
 class DashboardInboxLoadmoreView(View):
@@ -846,7 +799,7 @@ class DashboardResumeTemplateDownload(View):
         product_id = request.POST.get('product_id', None)
         is_combo = True if product_id != str(settings.RESUME_BUILDER_NON_COMBO_PID) else False
         order_pk = request.POST.get('order_pk', None)
-        candidate_obj = Candidate.objects.filter(candidate_id = candidate_id).first()
+        candidate_obj = Candidate.objects.filter(candidate_id=candidate_id).first()
         selected_template = candidate_obj.selected_template if candidate_obj.selected_template else 1
         order = Order.objects.get(pk=order_pk)
 
@@ -854,23 +807,23 @@ class DashboardResumeTemplateDownload(View):
                 or not (order.candidate_id == candidate_id):
             return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))
 
-        filename_prefix = "{}_{}".format(order.first_name,order.last_name)
-        file_path = "resume-builder/{}/pdf/{}.pdf".format(candidate_obj.id,selected_template)
+        filename_prefix = "{}_{}".format(order.first_name, order.last_name)
+        file_path = settings.RESUME_TEMPLATE_DIR + "/{}/pdf/{}.pdf".format(candidate_obj.id, selected_template)
         content_type = "application/pdf"
         filename_suffix = ".pdf"
-        
+
         if is_combo:
-            file_path = "resume-builder/{}/zip/combo.zip".format(candidate_obj.id)
+            file_path = settings.RESUME_TEMPLATE_DIR + "/{}/zip/combo.zip".format(candidate_obj.id)
             content_type = "application/zip"
             filename_suffix = ".zip"
-        
+
         try:
             if not settings.IS_GCP:
-                file_path = "{}/{}".format(settings.MEDIA_ROOT,file_path)
+                file_path = "{}/{}".format(settings.MEDIA_ROOT, file_path)
                 fsock = FileWrapper(open(file_path, 'rb'))
             else:
                 fsock = GCPResumeBuilderStorage().open(file_path)
-            
+
             filename = filename_prefix + filename_suffix
             response = HttpResponse(fsock, content_type=content_type)
             response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)

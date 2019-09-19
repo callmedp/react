@@ -119,17 +119,14 @@
                 <ul class="inline-block fs-12 jobs-icon-wrap">
                     <li>
                         <figure class="icon-comments"></figure>
-                        {% if prd_num_rating %}
-                        <a href="javascript:void(0);">{{prd_num_rating}}
-                        {%if prd_num_rating == 1 %}
-                            review
+                            <a href="javascript:void(0);">
+                        {% if prd_num_rating > 15 %}
+                            {{prd_num_rating}}
+                            Reviews
                             {%else%}
-                            reviews
+                          <span class="fs-11">Write a review</span>
                             {% endif %}
-                        </a>
-                        {% else %}
-                        <span class="fs-11">Write a review</span>
-                        {% endif %}
+                                   </a>
                     </li>
                     {% if prd_num_jobs %}
                         <li>
@@ -137,12 +134,13 @@
                             <strong>{{prd_num_jobs}} Jobs</strong>
                         </li>
                     {% endif %}
-                    <li>
+                 {% if prd_num_bought > 100 %}
+                       <li>
                         <figure class="icon-jobs"></figure>
-                        <strong>
-                            {{prd_num_bought}}
-                        </strong> bought
+           <strong>&nbsp;{{prd_num_bought}}</strong> people bought
+
                     </li>
+                    {% endif %}
                     {% if prd_cert %}
                         <li>
                             <figure class="icon-certificate"></figure>
@@ -154,7 +152,7 @@
         <hr class="row">
         <article class="mt-20">
         {% if prd_about %}
-            <h2>Overview</h2>
+            <h2>{% if prd_service == 'assessment' %} Test {% elif prd_service == 'course' %}Course Overview {% else %}Service Overview{% endif %}</h2>
             {{prd_about|safe}}
             <style>
                 .morecontent span {
@@ -199,31 +197,12 @@
             <div class="container mb-30 pt-0" style="margin-top:-15px;">
 
                 <div class="grey-bg border-bottom row pt-20 pb-20">
-                    <div class="content-box">
-                        <h2 class="fs-18">What you get if you pass?</h2>
-                        <ul class="what-get">
-                            <li>
-                                <span class="icon-industry"></span>
-                                <p>Get Industry recognized certification after clearing the test</p>
-                            </li>
-                            <li>
-                                <span class="icon-verified"></span>
-                                <p>Shine shows your skills as validated and certification as verified which build high trust among recruiters</p>
-                            </li>
-                            <li>
-                                <span class="icon-certificate"></span>
-                                <p>Certified candidates gets higher salary as compared to non certified candidate</p>
-                            </li>
-                            <li>
-                                <span class="icon-badge"></span>
-                                <p>Get badge on shine.com and showcase your knowledge to the recruiters </p>
-                            </li>
-                            <li>
-                                <span class="icon-receive"></span>
-                                <p>Receive valuable feedback on your strong and weak areas to improve yourself</p>
-                            </li>
-                        </ul>
-                    </div>
+                    {% if prd_vendor_slug == 'testpreptraining' %}
+                    {% include "mobile/shop/partials/what_you_get_testprep.html" %}
+
+                    {% else %}
+                        {% include "mobile/shop/partials/what_you_get.html" %}
+                    {% endif %}
                 </div><!-- /.What you get -->
 
                 <div class="content-box row pt-30 pb-30">

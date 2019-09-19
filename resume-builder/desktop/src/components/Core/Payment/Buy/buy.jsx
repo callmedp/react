@@ -20,6 +20,7 @@ import {
     fetchThumbNailImages
 } from "../../../../store/template/actions";
 import {eventClicked} from '../../../../store/googleAnalytics/actions/index'
+import {loginCandidate} from "../../../../store/landingPage/actions";
 
 
 export class Buy extends Component {
@@ -74,7 +75,10 @@ export class Buy extends Component {
         window.location.href = '/cart'
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        if (!localStorage.getItem('candidateId')) {
+            await loginCandidate()
+        }
         this.props.fetchThumbNailImages();
         this.props.fetchSelectedTemplateImage(localStorage.getItem('selected_template') || 1);
         this.props.getProductIds();
@@ -318,7 +322,13 @@ const mapDispatchToProps = (dispatch) => {
         },
         'eventClicked': (data) => {
             return dispatch(eventClicked(data))
-        }
+        },
+
+        "loginCandidate": (token = '') => {
+            return new Promise((resolve, reject) => {
+                dispatch(loginCandidate({payload: {alt: ''}, resolve, reject, isTokenAvail: false}))
+            })
+        },
     }
 };
 

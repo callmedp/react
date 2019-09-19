@@ -1,3 +1,4 @@
+
 {% if IS_LIVE %}
 User-agent: *
  	
@@ -15,6 +16,7 @@ sitemap: https://learning.shine.com/article_sitemap.xml
 sitemap: https://learning.shine.com/cms_sitemap.xml
 sitemap: https://learning.shine.com/job_services_sitemap.xml
 sitemap: https://learning.shine.com/te_sitemap.xml
+sitemap: https://learning.shine.com/practice-tests.xml
 
 {% else %}
 User-agent: *

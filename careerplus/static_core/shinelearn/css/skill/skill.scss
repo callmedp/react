@@ -316,12 +316,36 @@
 		}
 	}
 
+	.que-duration {
+		margin: 5px 0 0 0;
+		padding: 0;
+		
+		li {
+			display: inline-block;
+			margin: 0 15px 0 0;
+			padding: 0;
+
+			&:not(:last-child) {
+				border-right: 1px solid #ddd;
+				padding-right: 15px;
+			}
+
+			span {
+				font-weight: 700;
+			}
+
+			&:hover {
+				box-shadow: none;
+			}
+		}
+	}
+
 	.pricing-box {
 		border-top: 1px solid #f6f6f6;
 		display: block;
 		font-size: $font-size+1;
 		color: $grey-color;
-		margin-top: 15px;
+		margin-top: 10px;
 		padding-top: 5px;
 		clear: both;
 
@@ -338,27 +362,13 @@
 		.discount {
 			color: #45b34e;
 		}
+	}
 
-		&__lists {
-			width: 43%;
-			text-align: right;
-			margin-top: 8px;
-			
-			li {
-				display: inline-block;
-				margin: 0 15px 0 0;
-				padding: 0;
-
-				&:not(:last-child) {
-					border-right: 1px solid #ddd;
-					padding-right: 15px;
-				}
-
-				span {
-					font-weight: 700;
-				}
-			}
-		}
+	.take-test-link {
+		border: 1px solid $anchor-color;
+		padding: 5px 10px;
+		color: $anchor-color;
+		border-radius: 3px;
 	}
 }
 
@@ -469,3 +479,29 @@
 		}		
 	}
 }
+
+.confused-buying {
+ 	border: 1px solid #e1e1e1;
+ 	text-align: center;
+ 	background: $white-color;
+ 	padding-bottom: 15px;
+
+ 	p {
+ 		padding: 10px;
+ 		color: $primary-color;
+ 		font-size: $font-size+5;
+
+ 		strong {
+ 			display: block;
+ 		}
+ 	}
+
+ 	a {
+ 		display: inline-block;
+ 		padding: 10px 15px;
+ 		color: $white-color;
+ 		background: $anchor-color;
+ 		font-size: $font-size+3;
+ 		border-radius: 3px;
+ 	}
+ }

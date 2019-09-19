@@ -1,0 +1,135 @@
+@import '../../path';
+@import '../library/variables';
+@import '../library/mixin';
+
+// PAGES
+@import 'pages/home';
+@import 'pages/test_answers';
+@import 'pages/test-options';
+@import 'pages/take_test';
+
+// COMPONENTS
+@import 'components/utilities';
+@import 'components/loading';
+
+.practice-test {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 15px 0;
+    background: linear-gradient(-1deg, #FFFFFF 27%, #F2F2F2 89%);
+    padding-bottom: 100px;
+    position: relative;
+
+    h1 {
+        color: $txt-grey-333;
+        font-size: $font-size-xlg;
+        margin-top: 15px;
+        line-height: 35px;
+        margin-bottom: 10px;
+    }    
+}
+
+h2 {
+    font-size: $font-size + 9;
+    font-weight: $font-weight-medium;
+    color: $txt-grey-333;
+    align-self: center;
+}
+
+
+.bread-crums {
+    font-size: $font-size-xs;
+    color: $txt-grey-666;
+
+    a {
+        color: $txt-grey-333;
+    }
+}
+
+.search {
+    position: relative;
+    display: flex;
+    width: 100%;
+    margin-bottom: 10px;
+
+
+    &__searchbox {
+        background: $bg-white;
+        box-shadow: 0 2px 8px 0 rgba(202, 202, 202, 0.50);
+        border-radius: 42px;
+        margin: 20px auto 0;
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        padding: 0 20px;
+        height: 50px;
+        justify-content: center;
+        position: relative;
+
+        input {
+            color: $txt-grey-999;
+            font-size: $font-size;
+            display: flex;
+            width: 90%;
+            height: 100%;
+            border: none;
+            top: -50px;
+            height: 50px;
+            background-color: transparent;
+        }
+
+        .icon_search {
+            display: flex;
+            width: 27px;
+            height: 28px;
+            background: url($practice-test) -10px -114px;
+            content: "";
+            align-self: center;
+
+        }
+
+    }
+}
+
+
+.load_more_button {
+    background: $bg-white;
+    box-shadow: $box-shadow-test;
+    border-radius: 42px;
+    font-size: $font-size;
+    margin: 20px auto;
+    align-content: center;
+    width: 50%;
+    padding: 10px 0;
+    text-align: center;
+
+    a {
+        color: $txt-grey-333;
+    }
+
+}
+
+.practice-test-inside {
+    position: absolute;
+    height: 130px;
+    width: 240px;
+    top: 0;
+    right: 0;
+    /*background: url($path + 'images/mobile/practice_test/base_inside.png') right top no-repeat;*/
+    img {
+    border-radius: 100%;
+    }
+}
+
+.back {
+    background: url($practice-test) 0 -413px;
+    width: 35px;
+    height: 35px;
+}
+
+.menu-blue {
+    background: url($practice-test) -61px -126px;
+    width: 20px;
+    height: 14px;
+    margin-top: 5px;
+}

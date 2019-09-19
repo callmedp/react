@@ -8,6 +8,8 @@ import json
 from Crypto.Cipher import XOR
 
 from django.conf import settings
+from rest_framework import status
+from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 
 
 class ShineToken(object):
@@ -180,7 +182,41 @@ class ShineCandidateDetail(ShineToken):
         except Exception as e:
             logging.getLogger('error_log').error('unable to return candidate resume response  %s'%str(e))
         return None
+    
+    def upload_resume_shine(self, data={},file_path='', headers=None):
+        file = None
+        try:
+            if not settings.IS_GCP:
+                file = open(file_path,'rb')
+            else:
+                file = GCPPrivateMediaStorage().open(file_path)
+        except Exception as e:
+            logging.getLogger('error_log').error("%s" % str(e))
+        files={
+            'resume_file':file
+        }
 
+        try:
+            candidate_id = data.get('candidate_id','')
+            if candidate_id :
+                if not headers:
+                    headers = self.get_api_headers()
+                    headers.update({
+                        "Accept": 'application/json',
+                    })
+                    api_url = settings.SHINE_SITE +\
+                        '/api/v2/candidate/' +\
+                        candidate_id + '/resumefiles/'
+                    response = requests.post(
+                        api_url,
+                        data=data,files=files, headers=headers)
+                    if  status.is_success(response.status_code):
+                        if not settings.IS_GCP:
+                            file.close()
+                        return True
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to return candidate resume response  %s'%str(e))
+        return None
 
 class FeatureProfileUpdate(ShineToken):
 
@@ -249,26 +285,34 @@ class ShineProfileDataUpdate(ShineToken):
 class UploadResumeToShine(ShineToken):
 
     def sync_candidate_resume_to_shine(self, candidate_id=None, files={}, data={}, headers=None):
+        if not candidate_id:
+            return False
+
+        if headers:
+            return False
+
+        headers = self.get_api_headers()
+        if not data:
+            return False
+        if not headers:
+            return False
+
+        headers.update({
+            "Accept": 'application/json',
+        })
+        api_url = settings.SHINE_SITE + \
+                  '/api/v2/candidate/' + \
+                  candidate_id + '/resumefiles/'
         try:
-            if candidate_id:
-                if not headers:
-                    headers = self.get_api_headers()
-                    if data and headers:
-                        headers.update({
-                            "Accept": 'application/json',
-                        })
-                        api_url = settings.SHINE_SITE +\
-                            '/api/v2/candidate/' +\
-                            candidate_id + '/resumefiles/'
-                        response = requests.post(
-                            api_url, files=files,
-                            data=data, headers=headers)
-                        if response.status_code in [200, 201]:
-                            return True
+            response = requests.post(
+                api_url, files=files,
+                data=data, headers=headers)
+            if response.status_code in [200, 201]:
+                return True
         except Exception as e:
             logging.getLogger('error_log').error(
                 "%s error in sync_candidate_resume_to_shine function" % (str(e)))
-        return False
+            return False
 
 
 class AdServerShine(object):
@@ -403,3 +447,70 @@ class AmcatApiMixin(object):
 
 
         return None
+
+
+class NeoApiMixin(object):
+
+    def get_headers(self):
+        data = {
+            'username': settings.NEO_USERNAME,
+            'password': settings.NEO_PASSWORD,
+        }
+        url_to_hit = settings.NEO_URL['jwt_token']
+
+        resp = requests.post(url_to_hit, json=data)
+        if resp.status_code == 200:
+            json_rep = resp.json()
+            token = json_rep.get('token', None)
+            if token:
+                return {'x-DynEd-Tkn': token}
+
+    def get_user_neo_id(self, email):
+        url_to_hit = settings.NEO_URL['user_detail']
+        url_to_hit += 'email=' + email
+        headers = self.get_headers()
+        resp = requests.get(url_to_hit, headers=headers)
+        if resp.status_code == 200:
+            json_rep = resp.json()
+            if 'data' in json_rep and json_rep['data']:
+                user_id = json_rep['data'][0]['id']
+                return user_id
+
+    def board_user_on_neo(self, email):
+        user_id = self.get_user_neo_id(email)
+        headers = self.get_headers()
+        if user_id:
+            data = {
+                'user_id': user_id
+            }
+            url_to_hit = settings.NEO_URL['board_user']
+            resp = requests.post(url_to_hit, data=data, headers=headers)
+            if resp.status_code == 200:
+                return True
+        else:
+            logging.getLogger('error_log').error('Unable to board user {} as user id not found'.format(email))
+
+    def get_pt_result(self, email):
+        data = {
+            'token': settings.NEO_TOKEN,
+            'email': email
+        }
+        url_to_hit = settings.NEO_URL['pt_result']
+        resp = requests.post(url_to_hit, data=data)
+        if resp.status_code == 200:
+            json_rep = resp.json()
+            data = {'status': 200, 'data': json_rep}
+            return data
+        if resp.status_code == 400:
+            return {'status': 400}
+
+    def get_student_status_on_neo(self, email):
+        url_to_hit = settings.NEO_URL['user_detail']
+        url_to_hit += 'email=' + email
+        headers = self.get_headers()
+        resp = requests.get(url_to_hit, headers=headers)
+        if resp.status_code == 200:
+            json_rep = resp.json()
+            if 'data' in json_rep and json_rep['data']:
+                status = json_rep['data'][0]['status']
+                return status

@@ -1443,3 +1443,5 @@ class ActionScreenProductView(View, ProductModeration):
 
         data = {'error': 'True'}
         return HttpResponse(json.dumps(data), content_type="application/json")
+
+

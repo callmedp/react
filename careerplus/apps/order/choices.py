@@ -43,7 +43,7 @@ OI_OPS_STATUS = (
     (13, 'Shine Resume'),
     (OI_CANCELLED, 'Cancelled'),
 
-    # flow1, flow3, flow12, flow13, and flow 5 status 21 - 40
+    # flow1, flow3, flow12, flow13, flow2, and flow 5 status 21 - 40
     (21, 'Upload Draft'),
     (22, 'Draft Uploaded'),
     (23, 'Pending Approval'),
@@ -56,6 +56,7 @@ OI_OPS_STATUS = (
     (30, 'Feature profile updated'),
     (31, 'Jobs Link Pending'),
     (32, 'Jobs Link Sent'),
+    (33, 'Boarded on Neo'),
 
     # for linkedin flow8 41 - 60
     (42, 'Counselling Form Submitted'),
@@ -462,3 +463,11 @@ BOOSTER_RECRUITER_TYPE = (
     (0, 'Resume Booster India'),
     (1, 'Resume Booster International'),
 )
+
+OI_OPS_TRANSFORMATION_DICT = {
+    503: {
+        28: 'Service Initiated',
+        29: 'Service Expired',
+        30: 'Service Updated'
+    }
+}

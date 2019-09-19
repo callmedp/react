@@ -15,16 +15,17 @@ from django.utils import timezone
 from django_mysql.models import ListTextField
 from django.core.cache import cache
 from django.db.models.signals import post_save
+from django.core.cache import cache
 
 #local imports
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
     PAYMENT_MODE, OI_OPS_STATUS, OI_LINKEDIN_FLOW_STATUS,\
     OI_USER_STATUS, OI_EMAIL_STATUS, REFUND_MODE, REFUND_OPS_STATUS,\
     TYPE_REFUND, OI_SMS_STATUS, WC_CATEGORY, WC_SUB_CATEGORY,\
-    WC_FLOW_STATUS
+    WC_FLOW_STATUS, OI_OPS_TRANSFORMATION_DICT
 
 from .functions import get_upload_path_order_invoice, process_application_highlighter
-from .tasks import generate_resume_for_order
+from .tasks import generate_resume_for_order,bypass_resume_midout,upload_Resume_shine,board_user_on_neo
 
 #inter app imports
 from linkedin.models import Draft
@@ -36,7 +37,8 @@ from order.utils import get_ltv
 
 #third party imports
 from payment.utils import manually_generate_autologin_url
-from shop.choices import S_ATTR_DICT
+from shop.choices import S_ATTR_DICT, DAYS_CHOICES_DICT
+
 
 #Global Constants
 CURRENCY_SYMBOL_CODE_MAPPING = {0:"INR",1:"USD",2:"AED",3:"GBP"}
@@ -152,6 +154,11 @@ class Order(AbstractAutoDate):
         max_length=255, null=True, blank=True)
     sales_user_info = models.TextField(default='', null=True, blank=True)
 
+    #resume writing
+    auto_upload = models.BooleanField(default=False)
+    service_resume_upload_shine = models.BooleanField(default=True)
+
+
     class Meta:
         app_label = 'order'
         ordering = ['-date_placed']
@@ -182,6 +189,10 @@ class Order(AbstractAutoDate):
     def order_contains_resume_builder(self):
         items = self.orderitems.all()
         return any([item.product.type_flow == 17 for item in items])
+
+    def order_contains_neo_item(self):
+        items = self.orderitems.all()
+        return any([item.product.vendor.slug == 'neo' for item in items])
 
     @property
     def get_status(self):
@@ -225,6 +236,16 @@ class Order(AbstractAutoDate):
             return ""
         mobile = str(self.alt_mobile)
         return mobile[:2] + "".join(["*" for i in list(mobile[2:len(mobile)-2])]) + mobile[-2:]
+
+
+    @property
+    def full_name(self):
+        name = ""
+        if self.first_name:
+            name += self.first_name + " "
+        if self.last_name:
+            name += self.last_name
+        return name
 
     def get_currency_code(self):
         return CURRENCY_SYMBOL_CODE_MAPPING.get(self.currency)
@@ -278,12 +299,20 @@ class Order(AbstractAutoDate):
                 return 'pink'
         return ''
 
+    def upload_service_resume_shine(self,existing_obj):
+        if self.service_resume_upload_shine and self.service_resume_upload_shine  != existing_obj.service_resume_upload_shine:
+            order_items = self.orderitems.filter(oi_status=4,product__type_flow__in=[1,12,13,8,3,4])
+            for order_item in order_items:
+                upload_Resume_shine.delay(order_item.id)
+
+
     def save(self,**kwargs):
         created = not bool(getattr(self,"id"))
         if created:
             return super(Order,self).save(**kwargs)
 
         existing_obj = Order.objects.get(id=self.id)
+
         if self.status == 1:
             assesment_items = self.orderitems.filter(
                 order__status__in=[0, 1],
@@ -292,13 +321,25 @@ class Order(AbstractAutoDate):
                 autologin_url=None
             )
             manually_generate_autologin_url(assesment_items=assesment_items)
-        
+        if self.status == 1 and existing_obj.status != 1 and self.order_contains_neo_item():
+            neo_items_id = list(self.orderitems.filter(
+                product__vendor__slug='neo',
+                no_process=False
+            ).values_list('id', flat=True))
+            board_user_on_neo.delay(neo_ids=neo_items_id)
+
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_resume_builder():
             generate_resume_for_order.delay(self.id)
+
             logging.getLogger('info_log').info("Generating resume for order {}".format(self.id))
+    
+        self.upload_service_resume_shine(existing_obj)
+        obj = super(Order,self).save(**kwargs)
 
-        return super(Order,self).save(**kwargs)
-
+        if self.status == 1:
+            bypass_resume_midout.delay(self.id)
+        
+        return obj
 
 class OrderItem(AbstractAutoDate):
     coi_id = models.IntegerField(
@@ -443,6 +484,7 @@ class OrderItem(AbstractAutoDate):
         default=0
     )
 
+
     class Meta:
         app_label = 'order'
         # Enforce sorting in order of creation.
@@ -559,6 +601,12 @@ class OrderItem(AbstractAutoDate):
         return payment_date
 
     @property
+    def assigned_to_name(self):
+        if self.assigned_to:
+            return getattr(self.assigned_to, 'name', 'N.A')
+        return 'N.A'
+
+    @property
     def product_name(self):
         return self.product.name
 
@@ -611,16 +659,35 @@ class OrderItem(AbstractAutoDate):
 
     @property
     def sent_link_count(self):
-        return self.jobs_link.filter(status=2).count()
+        manual_links_count = self.get_manual_sent_link()
+        return self.jobs_link.filter(status=2).count() + manual_links_count
 
     @property
     def is_closed(self):
         if self.oi_status == 4:
             return True
 
+    @property
+    def neo_mail_sent(self):
+        sent = cache.get('neo_mail_sent_{}'.format(self.id))
+        return sent
+
+
+    def get_due_date(self):
+        profile = getattr(self, 'whatsapp_profile_orderitem', None)
+        if profile and profile.due_date:
+            return profile.due_date.strftime('%d-%m-%Y')
+        return 'N.A'
+
+    def get_due_date_weekday(self):
+        profile = getattr(self, 'whatsapp_profile_orderitem', None)
+        if profile and profile.due_date:
+            return DAYS_CHOICES_DICT.get(profile.due_date.weekday())
+        return 'N.A'
+
     def get_weeks(self):
         weeks, weeks_till_now = None, None
-        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5, 23]).order_by('id').first()
+        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5, 23, 31]).order_by('id').first()
         if sevice_started_op:
             started = sevice_started_op.created
             day = self.product.get_duration_in_day()
@@ -631,11 +698,10 @@ class OrderItem(AbstractAutoDate):
 
         return weeks, weeks_till_now
 
-
     def get_links_needed_till_now(self):
         start, end = None, None
         links_count = 0
-        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5,23]).order_by('id').first()
+        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5,23, 31]).order_by('id').first()
         links_per_week = getattr(self.product.attr, S_ATTR_DICT.get('LC'), 2)
         if sevice_started_op:
             links_count = 0
@@ -650,6 +716,17 @@ class OrderItem(AbstractAutoDate):
                 links_count += links_per_week
         return links_count
 
+    def get_manual_sent_link(self):
+        manual_change = None
+        profile = getattr(self, 'whatsapp_profile_orderitem', None)
+        if profile:
+            if profile.manual_change == 1:
+                manual_changes_data = eval(profile.manual_changes_data) if \
+                    profile.manual_changes_data else {}
+                already_sent_link = manual_changes_data.get('already_sent_link', 0)
+                return already_sent_link
+        return 0
+
     def has_saved_links(self):
         saved_links = self.jobs_link.filter(status=0)
         return saved_links.count()
@@ -663,7 +740,7 @@ class OrderItem(AbstractAutoDate):
         return None
 
     def get_sent_link_count_for_current_week(self):
-        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5,23]).order_by('id').first()
+        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5,23, 31]).order_by('id').first()
         started = sevice_started_op.created
         day = self.product.get_duration_in_day()
         weeks = math.floor(day / 7)
@@ -681,13 +758,32 @@ class OrderItem(AbstractAutoDate):
 
     def update_pending_links_count(self):
         links_needed_till_now = self.get_links_needed_till_now()
-        links_sent_till_now = self.jobs_link.filter(status=2).count()
+        links_sent_till_now = self.sent_link_count
         links_pending = links_needed_till_now - links_sent_till_now
-
-        if links_pending < 0:
-            links_pending = 0
         self.pending_links_count = links_pending
+        if self.pending_links_count < 0:
+            self.pending_links_count = 0
         self.save()
+
+    def set_due_date(self):
+        today = timezone.now()
+        profile = getattr(self, 'whatsapp_profile_orderitem', None)
+
+        if profile:
+            if profile.due_date and profile.due_date > today:
+                profile.due_date = profile.due_date + relativedelta.relativedelta(days=7)
+                profile.save()
+            else:
+                day_of_week = profile.day_of_week
+                if today.weekday() == day_of_week:
+                    profile.due_date = today + relativedelta.relativedelta(days=7)
+                elif today.weekday() > day_of_week:
+                    profile.due_date = today +\
+                        relativedelta.relativedelta(days=7 - (today.weekday() - day_of_week))
+                elif today.weekday() < day_of_week:
+                    profile.due_date = today +\
+                        relativedelta.relativedelta(days=(day_of_week - today.weekday()))
+                profile.save()
 
     def get_oi_communications(self):
         communications = self.message_set.all().select_related('added_by')
@@ -746,19 +842,25 @@ class OrderItem(AbstractAutoDate):
         if assigned_op:
             return assigned_op.created
 
+    def upload_service_resume_shine(self,existing_obj):
+        if self.oi_status == 4 and self.oi_status !=existing_obj.oi_status  and self.order.service_resume_upload_shine:
+            upload_Resume_shine.delay(self.id)
 
     def save(self, *args, **kwargs):
         created = not bool(getattr(self, "id"))
         orderitem = OrderItem.objects.filter(id=self.pk).first()
         self.oi_status = 4 if orderitem and orderitem.oi_status == 4 else self.oi_status
         # handling combo case getting parent and updating child
-        super().save(*args, **kwargs)  # Call the "real" save() method.        
+        obj = super().save(*args, **kwargs)  # Call the "real" save() method.       
+        self.upload_service_resume_shine(orderitem)
+        return obj 
 
         # # for resume booster create orderitem
         # if self.product.type_flow in [7, 15] and obj.oi_status != last_oi_status:
         #     if obj.oi_status == 5:
         #         self.orderitemoperation_set.create(
-        #             oi_draft=self.oi_draft,
+        #             
+        # oi_draft=self.oi_draft,
         #             draft_counter=self.draft_counter,
         #             oi_status=self.oi_status,
         #             last_oi_status=self.last_oi_status,
@@ -856,6 +958,8 @@ class OrderItemOperation(AbstractAutoDate):
 
     @property
     def get_oi_status(self):
+        if self.oi_status in [28, 29, 30]:
+            return self.oi_status_transform()
         dict_status = dict(OI_OPS_STATUS)
         return dict_status.get(self.oi_status)
 
@@ -863,6 +967,17 @@ class OrderItemOperation(AbstractAutoDate):
     def get_user_oi_status(self):
         dict_status = dict(OI_USER_STATUS)
         return dict_status.get(self.oi_status)
+
+    def oi_status_transform(self):
+        val = OI_OPS_TRANSFORMATION_DICT.get(
+            self.oi.product.sub_type_flow, {}
+        ).get(self.oi_status, None)
+        if val:
+            return val
+        else:
+            dict_status = dict(OI_OPS_STATUS)
+            return dict_status.get(self.oi_status)
+
 
 
 

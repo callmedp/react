@@ -14,7 +14,7 @@ from emailers.sms import SendSMS
 from core.api_mixin import (
     ShineCandidateDetail, ShineToken, ShineCertificateUpdate
 )
-from emailers.utils import get_featured_profile_data_for_candidate
+from emailers.utils import BadgingMixin
 from core.api_mixin import FeatureProfileUpdate
 from order.models import OrderItem
 '''
@@ -613,7 +613,6 @@ class CertiticateParser:
                     value = self.get_actual_value(data, self.get_key_for_field(vendor_key, key, field))
                     if field in self.MULTIPLE_VALUES[vendor_key].keys():
                         multiple_fields = self.MULTIPLE_VALUES[vendor_key][field]
-                        print(field)
                         for val in value:
                             data_instance = getattr(parse_data, key).__class__()
                             if isinstance(multiple_fields, list):
@@ -662,10 +661,10 @@ class CertiticateParser:
         oi = OrderItem.objects.filter(id=orderitem_id).first()
         if oi:
             candidate_id = oi.order.candidate_id
-            data = get_featured_profile_data_for_candidate(
-                candidate_id=candidate_id, curr_order_item=oi, feature=True)
-            flag = FeatureProfileUpdate().update_feature_profile(
-                candidate_id=candidate_id, data=data)
+            data = BadgingMixin().get_badging_data(
+                candidate_id=candidate_id, curr_order_item=oi, feature=True
+            )
+            flag = BadgingMixin().update_badging_data(candidate_id=candidate_id, data=data)
             if flag:
                 logging.getLogger('info_log').info(
                     'Badging After parsing data is done for OrderItem  %s is %s' % (str(oi.id), str(data))

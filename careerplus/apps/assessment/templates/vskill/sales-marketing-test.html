@@ -1,0 +1,159 @@
+{% extends "basic/base1.html" %}
+{% load static meta thumbnail compress %}
+{% block title %} {{Category.name}} Practice test | online mock test @ Shine Learning	{% endblock title %}
+{% block canonical_url %}
+<link rel="canonical" href="https://{{ SITE_DOMAIN }}/practice-tests/{{Category.slug}}/">
+<link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}/practice-tests/{{Category.slug}}/">
+{% endblock canonical_url %}
+{% block django_meta %}
+
+{% block meta_html %}
+ <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <link rel="shortcut icon" href="{% static 'shinelearn/images/fav_icon.png' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=0"/>
+    <meta name="description" content="{{ Category.name }} practice tests online through shine learning. Start preparing mock tests to obtain your score. 500+ Specialized Practice Tests">
+	<meta property="og:title" content="Practice Tests | Online Mock Tests | Exam Preparation Question @ Shine Learning">
+	<meta property="og:url" content="https://{{ SITE_DOMAIN }}/practice-tests/{{Category.slug}}/">
+	<meta property="og:description" content="{{Category.name}} practice tests online through shine learning. Start preparing mock tests to obtain your score. 500+ Specialized Practice Tests">
+	<meta property="og:type" content="Website">
+	<meta property="og:site_name" content="ShineLearning">
+	<meta property="og:image" content="{% static 'shinelearn/images/free_skill/submit-test.png' %}">
+	<meta property="fb:profile_id" content="282244838633660">
+    <meta itemprop="name" content="{{Category.name}} Practice test | online mock test – Shine Learning">
+    <meta itemprop="dateModified" content="{{Category.modified}}">
+    <meta itemprop="url" content="https://{{ SITE_DOMAIN }}/practice-tests/{{Category.slug}}/">
+    <meta itemprop="description" content="{{Category.name}} practice tests online through shine learning. Start preparing mock tests to obtain your score. 500+ Specialized Practice Tests">
+      <meta name="twitter:card" content="summary">
+        <meta name="twitter:site" content="@shinelearning">
+
+        <meta name="twitter:domain" content="learning.shine.com">
+        <meta name="twitter:title" content="{{Category.name}} Practice Tests | Free Mock Tests @ Shine Learning">
+        <meta name="twitter:description" content="{{Category.name}} practice tests online through shine learning. Start preparing mock tests to obtain your score. 500+ Specialized Practice Tests" />
+        <!--<meta name="twitter:image:src" content="{{obj.image.url}}">-->
+{% endblock meta_html %}
+
+{% endblock django_meta %}
+{% block css_section %}
+{{block.super}}
+{% compress css %}
+<link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/practice-skill/practice-skill.scss' %}" rel="stylesheet">
+<link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
+{% endcompress %}
+<style type="text/css">
+  footer {
+     margin-top: 15%;
+  }
+</style>
+{% endblock css_section %}
+{% block main_container %}
+<div class="practice-skill__wrap-inner">
+   <div class="right_base"></div>
+      <div class="container">
+         {% block breadcrumb %}
+         <ol class="breadcrumb  black mb-0" itemscope="" itemtype="http://schema.org/BreadcrumbList">
+            {% for bradcbs in breadcrumbs %}
+              {% if bradcbs.url %}
+                <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                    <a href="{{bradcbs.url}}" itemprop="item">
+                        <span itemprop="name">{{bradcbs.name}}</span>
+                    </a>
+                 <meta itemprop="position" content="{{forloop.counter}}" />
+                </li>
+              {% else %}
+                <li class="active">{{bradcbs.name}}</li>
+              {% endif %}
+            {% endfor %}
+         </ol>
+         {% endblock breadcrumb %}
+      
+      <div class="row">
+         <div class="col-sm-12 col-lg-12 col-md-12">
+            <div class="search_content pull-right mt-0">
+            <div id="bloodhound" class="form-inline">
+                   <input type="text" class="typeahead form-control" placeholder="Search popular tests">
+                  <button type="submit" class=" skill-jobs-btn btn"></button>
+                </div>
+            </div>
+            <h1>{{Category.name}}</h1>
+         </div>
+         <!-- Most popular tests starts -->
+         <div class="col-sm-12 col-lg-12 col-md-12">
+            <div class="popular_test row" id="funcDiv">
+               {% for cat in category|slice:":8"  %}
+
+               <div class="testinside testinside-inner">
+                  <span class="border-left {% cycle 'default' 'purple' 'olive' 'green' %}"></span>
+           <a class="test-box" href="{% url 'assessment:vskill-subcategory' slug=cat.slug %}" title="{{cat.name}}">
+                     {{cat.name}}
+                     <span class="test"> {{cat.get_assessment_test_count}}
+                 {% if cat.get_assessment_test_count < 2 %}Test {% else %}Tests{% endif %}
+                     </span>
+                  </a>
+               </div>
+               {% endfor %}
+            </div>
+            {%if category.count > 8 %}
+            <button class="btn_white loadmore" id="loadmorebtn" onclick="loadmore();">Load more</button>
+            {% endif %}
+         </div>
+      </div>
+      </div>
+   </div>
+</div>
+{% endblock main_container %}
+{% block js_section %}
+{{block.super}}
+   <script type="text/javascript">
+   var page_number= 2;
+   function loadmore(){
+            page_number = page_number+1;
+             element = document.getElementById('funcDiv');
+           $.ajax({
+               url: '/api/get-category-level-products',
+               type: "GET",
+               data : {'page_size' : 4,'test_category_id':'{{Category.id}}' ,'page':page_number,'only_test_level3category':true},
+               dataType: 'json',
+               success: function(json) {
+               if (json.next == null){
+                 $('#loadmorebtn').hide();
+               }
+               for (fa in json.results){
+                element.innerHTML=
+                element.innerHTML +`
+                <div class="testinside testinside-inner">
+                <span class="${'border-left ' +colorTile(fa)}">
+                </span>
+                <a class="test-box" title="${json.results[fa].name}" href="/practice-tests/${json.results[fa].slug}/sub">
+                ${json.results[fa].name}
+                <span class="test">${json.results[fa].assessment_test_count}
+                 ${json.results[fa].assessment_test_count < 2 ? 'Test': 'Tests' }
+                </span></a></div>`
+               }
+               },
+               error: function(xhr, ajaxOptions, thrownError) {
+               if(xhr.status == 404){
+                     alert("No more Categories to show ");
+                     $('#loadmorebtn').hide();
+                     }
+                     else{
+
+                   alert("Something went wrong. Try again later");
+                   }
+               }
+           });
+   }
+   function colorTile(i){
+   let tile = ['default','purple','olive' ,'green']
+    return tile[i%4];
+   }
+
+   </script>
+<script src="{% static 'shinelearn/js/assessment/assessment_search.js' %}"></script>
+
+{% endblock js_section %}
+{% block johukum %}
+{% endblock johukum %}
+{% block zendesk %}
+{% endblock zendesk %}

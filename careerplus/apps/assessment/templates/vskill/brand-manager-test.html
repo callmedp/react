@@ -1,0 +1,257 @@
+{% extends "basic/base1.html" %}
+{% load static meta thumbnail compress %}
+{% block title %}Free {{Category.name}} Practice Tests Online | Exam Preparation Question @ Shine Learning {% endblock title %}
+{% block canonical_url %}
+<link rel="canonical" href="https://{{ SITE_DOMAIN }}/practice-tests/{{Category.slug}}/sub">
+<link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}/practice-tests/{{Category.slug}}/sub">
+{% endblock canonical_url %}
+{% block django_meta %}
+ <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <link rel="shortcut icon" href="{% static 'shinelearn/images/fav_icon.png' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=0"/>
+    <meta name="description" content="Take free practice tests for {{Category.name}} online. Start preparing {{Category.name}} mock tests on shine learning to obtain your score.">
+	<meta property="og:title" content="Free {{Category.name}} Practice Tests | Exam Preparation Question @ Shine Learning">
+	<meta property="og:url" content="https://{{ SITE_DOMAIN }}/practice-tests/{{Category.slug}}/sub">
+	<meta property="og:description" content="Take free practice tests for {{Category.name}} online. Start preparing {{Category.name}} mock tests on shine learning to obtain your score.">
+	<meta property="og:type" content="Website">
+	<meta property="og:site_name" content="ShineLearning">
+	<meta property="og:image" content="{% static 'shinelearn/images/free_skill/submit-test.png' %}">
+	<meta property="fb:profile_id" content="282244838633660">
+    <meta itemprop="name" content="{{Category.name}} Practice test | online mock test – Shine Learning">
+    <meta itemprop="url" content="https://{{ SITE_DOMAIN }}/practice-tests/{{Category.slug}}/sub">
+    <meta itemprop="description" content="Take free practice tests for {{Category.name}} online. Start preparing {{Category.name}} mock tests on shine learning to obtain your score.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@shinelearning">
+    <meta name="twitter:domain" content="learning.shine.com">
+    <meta name="twitter:title" content="Free {{Category.name}} Practice Tests | Exam Preparation Question @ Shine Learning">
+    <meta name="twitter:description" content="Take free practice tests for {{Category.name}} online. Start preparing {{Category.name}} mock tests on shine learning to obtain your score.">
+        <!--<meta name="twitter:image:src" content="{{obj.image.url}}">-->
+{% endblock django_meta %}
+{% block css_section %}
+{{block.super}}
+{% compress css %}
+<link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/practice-skill/practice-skill.scss' %}" rel="stylesheet">
+<link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
+{% endcompress %}
+<style type="text/css">
+  footer {
+     margin-top: 15%;
+  }
+</style>
+{% endblock css_section %}
+{% block main_container %}
+<div class="practice-skill__wrap-inner">
+   <div class="right_base"></div>
+      <div class="container">
+         {% block breadcrumb %}
+         <ol class="breadcrumb  black mb-0" itemscope="" itemtype="http://schema.org/BreadcrumbList">
+         {% for bradcbs in breadcrumbs %}
+              {% if bradcbs.url %}
+                <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                    <a href="{{bradcbs.url}}" itemprop="item">
+                        <span itemprop="name">{{bradcbs.name}}</span>
+                    </a>
+                        <meta itemprop="position" content="{{forloop.counter}}" />
+                </li>
+              {% else %}
+                <li class="active">{{bradcbs.name}}</li>
+              {% endif %}
+            {% endfor %}
+         </ol>
+         {% endblock breadcrumb %}
+      
+      <div class="row">
+         <div class="col-sm-12 col-lg-12 col-md-12">
+            <div class="search_content pull-right mt-0">
+                <div id="bloodhound" class="form-inline">
+                   <input type="text" class="typeahead form-control" placeholder="Search popular tests">
+                  <button type="submit" class=" skill-jobs-btn btn"></button>
+                </div>
+            </div>
+            <h1>{{Category.name}}</h1>
+         </div>
+         <!-- Most popular tests starts -->
+         <div class="col-sm-12 col-lg-12 col-md-12">
+            <div class="popular_test row mt-0" id="funcDiv">
+
+               {% for test in all_test|slice:":8" %}
+               <div class="testinside">
+                  <span class="border-left border{{forloop.counter}}"></span>
+  <a id="{{test.id}}" class="testModal" data-toggle="modal" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}","courseName":"{{test.course.name}}","courseDuration":"{{test.course.get_duration_in_day}}","coursePrice":"{{test.course.inr_price}}","productName":"{{test.product.name}}","productDuration":"{{test.product.get_duration_day}}","productPrice":"{{test.product.inr_price}}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}","courseUrl":"{{test.course.get_absolute_url}}","productUrl":"{{test.product.absolute_url}}"  }' data-target="#testModal">
+                     {{test.title}}
+                     <div class="white_hover"></div>
+                     <span class="taketest" >Take Free Test</span>
+                  </a>
+               </div>
+             {% endfor %}
+
+            </div>
+             {% if all_test.count > 8 %}
+            <button class="btn_white loadmore" id="loadmorebtn" onclick="loadmore();">Load more</button>
+             {% endif %}
+         </div>
+      </div>
+      </div>
+
+
+     <div class="modal fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content vskill-modal-box">
+      <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h2 class="text-center" id="exampleModalLongTitle">{{Category.name}}</h2>
+        <strong class="text-center">Make your choice and go ahead</strong>
+      </div>
+      <div class="modal-body">
+        <!-- <a >start free test</a> -->
+        <div class="pad-15">
+           <div class="vskill-modal">
+            <i>
+               <img src="{% static 'shinelearn/images/free_skill/free-test-bg.jpg' %}" alt="test-bg" class="img-responsive">
+            </i>
+            <span class="pad-15">
+               <h3>Free Test</h3>
+               <ul>
+                  <li>
+                     Test Format <strong>Practice Exam</strong>
+                  </li>
+                  <li>
+                     No. of Questions <strong id="questCount">{{test.get_question_count}}</strong>
+                  </li>
+               </ul>
+               <span>
+               <a class="blue_btn pull-right" id="startTestLink" >Start test</a>
+               <h4 class="mt-10">FREE</h4>
+               </span>
+            </span>
+           </div>
+        </div>
+
+        <div class="pad-15">
+         <div class="recommended-head">Recommended</div>
+           <div class="vskill-modal recommended">
+            <i>
+               <img src="{% static 'shinelearn/images/free_skill/practice-test-bg.jpg' %}" alt="test-product-bg" class="img-responsive">
+            </i>
+            <span class="pad-15">
+               <h3><a href="#" id="productName">Practice Tests</a></h3>
+               <ul>
+                  <li>
+                     Test Format <strong>Practice Exam</strong>
+                  </li>
+                  <li>
+                     No. of Questions <strong>500+ Questions</strong>
+                  </li>
+               </ul>
+               <p>Real exam & Practice environment</p>
+               <p class="pb-30">Explanation to every questions</p>
+               <button class="yellow_btn pull-right" id="testAddToCart" >Add to cart</button>
+               <strike id="fakeProductPrice"></strike>
+               <h4 class="mt-0" id="productPrice">Rs.</h4>
+            </span>
+           </div>
+        </div>
+
+
+        <div class="pad-15" id="testCourse" style="display:none;">
+           <div class="vskill-modal">
+            <i>
+               <img src="{% static 'shinelearn/images/free_skill/online-course-bg.jpg' %}" alt="test-course-bh" class="img-responsive">
+            </i>
+            <span class="pad-15">
+               <h3><a href="#" id="courseName">Practice Tests</a></h3>
+               <ul>
+                  <li>
+                     Duration <strong id="courseDuration">8 Days</strong>
+                  </li>
+                  <li>
+                     Availability <strong>Unlimited</strong>
+                  </li>
+               </ul>
+               <button class="blue_btn pull-right" id="courseCartBtn">Add to cart</button>
+               <strike id="fakeCoursePrice"></strike>
+               <h4 class="mt-0" id="coursePrice">Rs. 1699</h4>
+            </span>
+           </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+   </div>
+{% endblock main_container %}
+{% block js_section %}
+   {{block.super}}
+    {% compress js %}
+<script src="{% static 'shinelearn/js/assessment/landing.js' %}"></script>
+{% endcompress %}
+   <script type="text/javascript">
+   var page_number= 2;
+      var facolor = 0;
+   function loadmore(){
+            page_number = page_number+1;
+             element = document.getElementById('funcDiv');
+           $.ajax({
+               url: '/api/get-test',
+               type: "GET",
+               data : {'page_size' : 4, 'page':page_number,'category_id':'{{Category.id}}','include_product_id':1,
+                'include_course_id':1},
+               dataType: 'json',
+               success: function(json) {
+               if (json.next == null){
+                 $('#loadmorebtn').hide();
+               }
+               for (fa in json.results){
+            color = counter(facolor)
+                element.innerHTML= element.innerHTML +
+
+                `      <div class="testinside">
+                  <span class="border-left border border${color}"></span>
+  <a id="${json.results[fa].id}" class="testModal" data-toggle="modal" data-attr-value='{"id":"${json.results[fa].id}","catid":"${json.results[fa].category}","quescount":"${json.results[fa].question_count}",
+  "testSlug":"${json.results[fa].slug}","vendor":"${json.results[fa].vendor}",
+   "courseName":"${json.results[fa].course_id_data[0].name}","courseDuration":"${json.results[fa].course_id_data[0].day_duration}","coursePrice":"${json.results[fa].course_id_data[0].inr_price}","productName":"${json.results[fa].product_id_data[0].name}","productUrl":"${json.results[fa].product_id_data[0].absolute_url}","productDuration":"${json.results[fa].product_id_data[0].day_duration}","productPrice":"${json.results[fa].product_id_data[0].inr_price}","productId":"${json.results[fa].product_id_data[0].id}","courseId":"${json.results[fa].course_id_data[0].id}","courseUrl":"${json.results[fa].course_id_data[0].absolute_url}"
+   }' data-target="#testModal">
+                     ${json.results[fa].title}
+                     <div class="white_hover"></div>
+                     <span class="taketest" >Take Free Test</span>
+                  </a>
+               </div>`
+             facolor +=1;
+
+               }
+               },
+               error: function(xhr, ajaxOptions, thrownError) {
+               if(xhr.status == 404){
+                     alert("No more Categories to show ");
+                     $('#loadmorebtn').hide();
+                     }
+                     else{
+
+                   alert("Something went wrong. Try again later");
+                   }
+               }
+           });
+   }
+
+       function counter(facolor){
+
+    return facolor%8;
+
+   }
+   </script>
+<script src="{% static 'shinelearn/js/assessment/assessment_search.js' %}"></script>
+
+{% endblock js_section %}
+{% block johukum %}
+{% endblock johukum %}
+{% block zendesk %}
+{% endblock zendesk %}

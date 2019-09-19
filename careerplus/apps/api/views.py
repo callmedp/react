@@ -3,10 +3,11 @@ import datetime
 
 import requests
 from decimal import Decimal
-
+from datetime import timedelta
 from django.db.models import Sum, Count, Subquery, OuterRef, F
 from django.utils import timezone
 from django.conf import settings
+from django.core.cache import cache
 from django.http import JsonResponse
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.views import APIView
@@ -16,15 +17,13 @@ from rest_framework.permissions import (
     IsAuthenticated,
     IsAdminUser, )
 
-from rest_framework.generics import ListAPIView, CreateAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView,RetrieveAPIView
 from rest_framework.authentication import SessionAuthentication
 from haystack import connections
 from haystack.query import SearchQuerySet
 from core.library.haystack.query import SQS
 from partner.utils import CertiticateParser
 from partner.models import ProductSkill
-from rest_framework.generics import ListAPIView
-
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from django_filters.rest_framework import DjangoFilterBackend
@@ -46,6 +45,7 @@ from order.tasks import (
 from shop.models import Skill, DeliveryService, ShineProfileData
 from blog.models import Blog
 from emailers.tasks import send_email_task
+from payment.models import PaymentTxn
 
 from .serializers import (
     OrderListHistorySerializer,
@@ -57,7 +57,8 @@ from .serializers import (
     VendorCertificateSerializer,
     ImportCertificateSerializer,
     ShineDataFlowDataSerializer,
-    CertificateSerializer, TalentEconomySerializer, OrderDetailSerializer)
+    CertificateSerializer,TalentEconomySerializer,QuestionAnswerSerializer,
+    OrderDetailSerializer, OrderListSerializer)
 
 from partner.models import Certificate, Vendor
 from shared.rest_addons.pagination import LearningCustomPagination
@@ -71,6 +72,9 @@ from shared.utils import ShineCandidate
 from linkedin.autologin import AutoLogin
 from users.mixins import RegistrationLoginApi
 from .education_specialization import educ_list
+from assessment.models import Question
+from assessment.utils import TestCacheUtil
+
 
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
@@ -399,8 +403,8 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                     invoice_generation_order.delay(order_pk=order.pk)
 
                     # email for order
-                    process_mailer.apply_async((order.pk,), countdown=900)
-                    pending_item_email.apply_async((order.pk,), countdown=900)
+                    process_mailer.apply_async((order.pk,), countdown=settings.MAIL_COUNTDOWN)
+                    pending_item_email.apply_async((order.pk,), countdown=settings.MAIL_COUNTDOWN)
 
                     return Response(
                         {"status": 1, "msg": 'order created successfully.'},
@@ -448,13 +452,15 @@ class EmailLTValueApiView(APIView):
                 {"status": "FAIL", "msg": "Email or User Doesn't Exists"},
                 status=status.HTTP_400_BAD_REQUEST)
 
-        ltv_pks = list(Order.objects.filter(
-            candidate_id=candidate_id,
-            status__in=[1, 2, 3]).values_list('pk', flat=True))
+        date_one_year_ago = timezone.now() - timedelta(days=365)
+        #Consider only last 1 year's orders for LTV.
+        ltv_pks = list(Order.objects.filter(candidate_id=candidate_id,\
+            status__in=[1,2,3],payment_date__gte=date_one_year_ago).values_list('pk', flat=True))
+        
         if ltv_pks:
             ltv_order_sum = Order.objects.filter(
                 pk__in=ltv_pks).aggregate(ltv_price=Sum('total_incl_tax'))
-            last_order = OrderItem.objects.select_related('order').filter(order__in=ltv_pks) \
+            last_order = OrderItem.objects.select_related('order').filter(order__in = ltv_pks)\
                 .exclude(oi_status=163).order_by('-order__payment_date').first()
             if last_order:
                 last_order = last_order.order.payment_date.strftime('%Y-%m-%d %H:%M:%S')
@@ -903,9 +909,9 @@ class ShineCandidateLoginAPIView(APIView):
     def get_profile_info(self, profile):
         candidate_profile_keys = ['first_name', 'last_name', 'email', 'number', 'date_of_birth', 'location', 'gender',
                                   'candidate_id']
-        candidate_profile_values = [profile['first_name'], profile['last_name'], profile['email'],
-                                    profile['cell_phone'], profile['date_of_birth'],
-                                    profile['candidate_location'], profile['gender'], profile['id']]
+        candidate_profile_values = [profile.get('first_name',''), profile.get('last_name', ''), profile.get('email',''),
+                                    profile.get('cell_phone',''), profile.get('date_of_birth',''),
+                                    profile.get('candidate_location',''), profile.get('gender',''), profile.get('id','')]
         candidate_profile = dict(zip(candidate_profile_keys, candidate_profile_values))
 
         return candidate_profile
@@ -1179,14 +1185,21 @@ class UpdateCertificateAndAssesment(APIView):
                         (str(certificate.name), str(user_certificate.candidate_id))
                     )
         if getattr(parsed_data.user_certificate, 'order_item_id'):
-            if user_certificates:
-                flag = parser.update_order_and_badge_user(parsed_data, vendor=data['vendor'])
-            else:
+            if not user_certificates:
                 logging.getLogger('error_log').error(
                     "Order Item id present , Certificate not available, badging not done" % (data)
                 )
             orderitem_id = int(parsed_data.user_certificate.order_item_id)
             oi = OrderItem.objects.filter(id=orderitem_id).first()
+            if certificate_updated:
+                oi.orderitemoperation_set.create(
+                    oi_status=191,
+                    last_oi_status=oi.oi_status,
+                    assigned_to=oi.assigned_to
+                )
+                subject = "Congrats, {} on completing the certification on {}".format(
+                    oi.order.first_name, oi.product.name
+                )
             last_oi_status = oi.oi_status
             oi.oi_status = 4
             oi.closed_on = timezone.now()
@@ -1196,21 +1209,10 @@ class UpdateCertificateAndAssesment(APIView):
                 oi_status=6,
                 last_oi_status=last_oi_status,
                 assigned_to=oi.assigned_to)
-            if certificate_updated:
-                oi.orderitemoperation_set.create(
-                    oi_status=191,
-                    last_oi_status=last_oi_status,
-                    assigned_to=oi.assigned_to
-                )
-                if flag:
-                    oi.orderitemoperation_set.create(
-                        oi_status=192,
-                        last_oi_status=last_oi_status,
-                        assigned_to=oi.assigned_to
-                    )
-                    subject = "Congrats, {} on completing the certification on {}".format(
-                        oi.order.first_name, oi.product.name
-                    )
+            oi.orderitemoperation_set.create(
+                oi_status=oi.oi_status,
+                last_oi_status=oi.last_oi_status,
+                assigned_to=oi.assigned_to)
             to_emails = [oi.order.get_email()]
             mail_type = "CERTIFICATE_AND_ASSESMENT"
             data = {}
@@ -1227,10 +1229,6 @@ class UpdateCertificateAndAssesment(APIView):
             })
             create_assignment_lead.delay(obj_id=oi.id)
             send_email_task.delay(to_emails, mail_type, data, status=201, oi=oi.pk)
-            oi.orderitemoperation_set.create(
-                oi_status=oi.oi_status,
-                last_oi_status=oi.last_oi_status,
-                assigned_to=oi.assigned_to)
         else:
             logging.getLogger('error_log').error(
                 "Order Item id not present , so unable close item related to this data ( %s ) " % (data)
@@ -1250,6 +1248,18 @@ class ShineDataFlowDataApiView(ListAPIView):
     serializer_class = ShineDataFlowDataSerializer
     pagination_class = None
 
+
+class QuestionAnswerApiView(ListAPIView):
+    permission_classes = []
+    authentication_classes = []
+    serializer_class = QuestionAnswerSerializer
+    pagination_class = None
+
+    def get_queryset(self):
+        id = self.request.GET.get('test_id')
+        if not id:
+            return Question.objects.none()
+        return Question.objects.filter(test__id=id)
 
 class VendorCertificateMappingApiView(ListAPIView):
     authentication_classes = [OAuth2Authentication]
@@ -1403,6 +1413,40 @@ class OrderDetailApiView(FieldFilterMixin, RetrieveAPIView):
         return self.retrieve(request, *args, **kwargs)
 
 
+class OrderListApiView(FieldFilterMixin, ListAPIView):
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = OrderListSerializer
+    pagination_class = LearningCustomPagination
+    page_size = 1
+
+    def get(self, request, *args, **kwargs):
+        allowed_status = ['0', '1', '3']
+        self.custom_status = self.request.query_params.get('status')
+        if self.custom_status:
+            self.custom_status = self.custom_status.split(',')
+            allowed = all([i in allowed_status for i in self.custom_status])
+            if not allowed:
+                return Response(
+                    {'message': 'Provide Valid Values for status'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        else:
+            self.custom_status = [1, 3]
+        self.custom_status = list(map(int, self.custom_status))
+        return super(OrderListApiView, self).get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        user = self.request.user
+        vendor_ids = list(user.vendor_set.values_list('id', flat=True))
+        items = OrderItem.objects.filter(
+            product__vendor__id__in=vendor_ids,
+            no_process=False,
+            order__status__in= self.custom_status
+        )
+        return items
+
+
 class CandidateInsight(APIView):
     authentication_classes = [OAuth2Authentication]
     permission_classes = [IsAuthenticated]
@@ -1414,3 +1458,147 @@ class CandidateInsight(APIView):
             "msg": "Data has been noted."},
             status=status.HTTP_201_CREATED
         )
+
+class TestTimer(APIView):
+    permission_classes = []
+    authentication_classes = []
+
+
+    def get(self,request, *args, **kwargs):
+        test_id = self.request.GET.get('test_id')
+        duration = int(self.request.GET.get('duration',0))
+        self.cache_test = TestCacheUtil(request=request)
+        test_start_time = self.cache_test.get_start_test_cache(key='test-'+test_id)
+        set_test_duration_cache = self.cache_test.get_test_duration_cache(key='test-'+test_id, duration=duration)
+        #
+        # if not timestamp:
+        #     timestamp_with_tduration = (datetime.now() + timedelta(seconds=duration)).strftime(timeformat)
+        #     test_ids = {'ongoing_' + str(test_id): timestamp_with_tduration}
+        #     cache.set(test_session_key, test_ids, 60 * 60 * 24)
+        #
+        # elif timestamp and not timestamp.get('ongoing_' + str(test_id)):
+        #     timestamp_with_tduration = (datetime.now() + timedelta(seconds=duration)).strftime(
+        #         "%m/%d/%Y, %H:%M:%S")
+        #     test_ids = {'ongoing_' + str(test_id): timestamp_with_tduration}
+        #     cache.set(test_session_key, test_ids, 60 * 60 * 24)
+        #
+        # if not cache.get(session_id + 'startTest-' + str(test_id)):
+        #     cache.set(session_id + 'startTest-' + str(test_id), datetime.now().strftime(timeformat),
+        #               60 * 60 * 24)
+        return Response({'testStartTime': test_start_time})
+
+
+class SetSession(APIView):
+    permission_classes = []
+    authentication_classes = []
+
+    def post(self,request,*args,**kwargs):
+        self.cache_test = TestCacheUtil(request=request)
+        session_id = self.request.session.session_key
+        data = {}
+        key = None
+        if not session_id:
+            data.update({'is_set': False})
+            return Response(data)
+        timeout = self.request.POST.get('timeout','')
+        submission = self.request.POST.get('submit','')
+        test_id = self.request.POST.get('test_id','')
+        lead_create = self.request.POST.get('lead_created','')
+        key = 'test-' + str(test_id)
+        # setting cache for timeout test sessions
+        if timeout and test_id:
+            self.cache_test.set_test_time_out(key)
+            data.update({'is_set': True})
+
+        # setting cache for submit test sessions
+
+        if submission and test_id:
+            key = 'test-' + test_id
+            self.cache_test.set_test_submit(key)
+            data.update({'is_set': True})
+
+        # creating lead for particular session_id
+        if lead_create:
+            self.request._request.session.update({'is_lead_created': 1})
+            return Response({'is_lead_created':True})
+
+        return Response({'timeout': self.cache_test.get_test_time_out(key),
+                         'submission': self.cache_test.get_test_submit(key)})
+
+class RemoveCache(APIView):
+    permission_classes = []
+    authentication_classes = []
+
+    def post(self,request,*args,**kwargs):
+        test_id = self.request.POST.get('test_id','')
+        session_key = self.request.session.session_key
+        key = session_key+'test-'+test_id
+        cache_delete = cache.delete(key)
+        return Response({'cache_delete': cache_delete})
+
+
+class ServerTimeAPIView(APIView):
+    permission_classes = []
+    authentication_classes = []
+
+    def get(self,request,*args,**kwargs):
+        self.time_format = "%m/%d/%Y, %H:%M:%S"
+        if self.request.GET.get('time_format'):
+            return Response({'time':datetime.datetime.now().strftime(self.request.GET.get('time_format'))})
+        if self.request.GET.get('time_stamp'):
+            return Response({'time': datetime.datetime.timestamp(datetime.datetime.now())})
+        return Response({'time':datetime.datetime.now().strftime(self.time_format)})
+
+
+class ClaimOrderAPIView(APIView):
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    def post(self,request):
+        txn_id = self.request.POST.get('txn_id',None)
+        email = self.request.POST.get('email',None)
+        alt_email = self.request.POST.get('alt_email',None)
+        mobile = self.request.POST.get('mobile',"")[-10:]
+        alt_mobile = self.request.POST.get('alt_mobile',"")[-10:]
+        user_id = self.request.POST.get('user_id',None)
+        lead_id = self.request.POST.get('lead_id',None)
+        name = self.request.POST.get('name', None)
+
+        sales_user_info = self.request.POST.get('sales_user_info')
+        data = {'claim_order': False}
+        if not txn_id:
+            data.update({'msg': "Transaction id not found"})
+            return Response(data, status=400)
+        payment_object = PaymentTxn.objects.filter(txn=txn_id,status=1).first()
+        if not payment_object:
+            data.update({'msg': "Transaction object not found "})
+            return Response(data, status=400)
+        order = payment_object.order
+        if not order:
+            data.update({'msg': "Order object not found "})
+            return Response(data,  status=400)
+        if (email and getattr(order, 'email') == email) or\
+                (mobile and getattr(order, 'mobile') == mobile) or\
+                 (name and order.full_name == name):
+            if order.sales_user_info or order.crm_lead_id or order.crm_sales_id:
+                data.update({'msg': "Order is already claimed"})
+                return Response(data, status=400)
+            if not user_id or not lead_id or not sales_user_info:
+                return Response(data, status=400)
+            order.crm_lead_id = lead_id
+            order.crm_sales_id = user_id
+            order.sales_user_info = sales_user_info
+            order.save()
+            data.update({'claim_order': True,'msg': 'Order claimed '
+                         'successfully','order_amount':order.total_incl_tax})
+            return Response(data)
+        data.update({"msg": "Invalid details"})
+        return Response(data, status=400)
+
+
+
+
+
+
+
+

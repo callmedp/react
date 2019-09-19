@@ -7,6 +7,7 @@ from dateutil import relativedelta
 from emailers.email import SendMail
 from emailers.sms import SendSMS
 from django.utils import timezone
+from django.db.models import Q
 
 def update_initiat_orderitem_sataus(order=None):
     if order:
@@ -34,6 +35,15 @@ def update_initiat_orderitem_sataus(order=None):
                     oi_status=oi.oi_status,
                     last_oi_status=last_oi_status,
                     assigned_to=oi.assigned_to)
+                # for neo attach oi wit test info
+                from shop.models import PracticeTestInfo
+                if oi.product.vendor.slug == 'neo':
+                    test_info = PracticeTestInfo.objects.filter(
+                        email=oi.order.email, order_item=None
+                    ).first()
+                    if test_info:
+                        test_info.order_item = oi
+                        test_info.save()
 
             elif oi.product.type_flow == 4:
                 if oi.order.orderitems.filter(product__type_flow=12, no_process=False).exists():
@@ -137,9 +147,9 @@ def update_initiat_orderitem_sataus(order=None):
                     last_oi_status=last_oi_status,
                     assigned_to=oi.assigned_to)
 
-        # for assesment if no orderitems other than assesment present
+        # for assesment/neo if no orderitems other than assesment/ neo present
         # then make welcome call done and update welcome call statuses.
-        oi = order.orderitems.exclude(product__type_flow=16)
+        oi = order.orderitems.exclude(Q(product__type_flow=16) | Q(product__vendor__slug='neo'))
 
         if not oi.exists():
             order.wc_cat = 21
@@ -154,6 +164,7 @@ def update_initiat_orderitem_sataus(order=None):
                 wc_status=order.wc_status,
                 assigned_to=order.assigned_to
             )
+
 
 
 
@@ -181,21 +192,24 @@ def create_short_url(login_url={}):
     
     return short_url
 
-def send_email(to_emails, mail_type, email_dict, status=None, oi=None):
-    try:
-        SendMail().send(to_emails, mail_type, email_dict)
-        if oi:
-            from order.models import OrderItem
-            obj = OrderItem.objects.filter(pk=oi)
-            for oi_item in obj:
-                to_email = to_emails[0] if to_emails else oi_item.order.get_email()
-                oi_item.emailorderitemoperation_set.create(
-                    email_oi_status=status, to_email=to_email,
-                    status=1)
-    except Exception as e:
-        logging.getLogger('error_log').error(
-            "email sending failed %s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+def send_email(to_emails, mail_type, email_dict, status=None, oi=None,oi_status_mapping={}):
+    from order.models import OrderItem
+    SendMail().send(to_emails, mail_type, email_dict)
 
+    if oi:
+        order_item = OrderItem.objects.filter(pk=oi).first()
+        to_email = to_emails[0] if to_emails else order_item.order.get_email()
+        order_item.emailorderitemoperation_set.create(
+            email_oi_status=status, to_email=to_email,
+            status=1)
+    
+    if oi_status_mapping:
+        order_items = OrderItem.objects.filter(id__in=list(oi_status_mapping.keys()))
+        for order_item in order_items:
+            to_email = to_emails[0] if to_emails else order_item.order.get_email()
+            order_item.emailorderitemoperation_set.create(
+                email_oi_status=oi_status_mapping.get(order_item.id), to_email=to_email,
+                status=1)
 
 def send_email_from_base(subject=None, body=None, to=[], headers=None, oi=None, status=None):
     try:

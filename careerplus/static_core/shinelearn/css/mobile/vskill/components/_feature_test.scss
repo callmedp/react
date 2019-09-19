@@ -1,0 +1,41 @@
+.feature-test {
+    @extend %white-box;
+    border-bottom: 5px solid $blue;
+    background-image: url($path + 'images/mobile/practice_test/feature-bg.png');
+    background-position: bottom;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    h2 {
+        color: $blue;
+        font-size: $font-size-lg;
+        font-weight: $font-weight-normal;
+    }
+
+    &--price {
+        display: flex;
+        margin-top: 15px;
+        border-bottom: 1px solid $border-grey-f5;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+
+        strong {
+            font-size: $font-size-lg + .2;
+            margin-right: 10px;
+        }
+
+        span {
+            text-decoration: line-through;
+            font-size: $font-size-md;
+            color: $txt-grey-666;
+        }
+    }
+
+
+    &__btn-wrap {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+        margin-bottom: 5px;
+    }
+}

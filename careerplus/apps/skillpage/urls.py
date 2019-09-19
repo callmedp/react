@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 
 from .views import (
     SkillPageView, ServiceDetailPage,
@@ -12,6 +12,7 @@ urlpatterns = [
         FuncAreaPageView.as_view(), name='func_area_results'),
     url(r'^(?P<fa_slug>[-\w]+)/(?P<skill_slug>[-\w]+)/(?P<pk>\d+)/$',
         SkillPageView.as_view(), name='skill-page-listing'),
+    url(r'^api/',include('skillpage.api.v1.urls', namespace='skillpage-api')),
 
     ## NOT IN USE
     # url(r'^admin/skill-add/$', SkillAddFormView.as_view(),

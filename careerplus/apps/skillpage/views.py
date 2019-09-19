@@ -31,6 +31,7 @@ from review.models import Review
 from crmapi.models import UNIVERSITY_LEAD_SOURCE
 from .mixins import SkillPageMixin
 from review.models import DetailPageWidget
+from assessment.models import Test
 
 # Create your views here.
 
@@ -89,10 +90,15 @@ class SkillPageView(DetailView, SkillPageMixin):
         prd_text = None
         meta_desc = None
         prod_id_list = []
+        prod_tests = []
 
         try:
             products = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=self.pk).exclude(pTF=16)
             certifications = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=self.pk, pTF=16)
+            if certifications:
+                prod_tests = certifications.values_list('id',flat=True)
+                prod_tests = Test.objects.filter(product__id__in=prod_tests).values_list('product__id','slug')
+                prod_tests = dict(prod_tests)
 
             for prd in products:
                 if prd.pTP == 1:
@@ -142,6 +148,18 @@ class SkillPageView(DetailView, SkillPageMixin):
             if float(product.pPfin):
                 product.discount = round((float(product.pPfin) - float(product.pPin)) * 100 / float(product.pPfin), 2)
 
+        all_cert = certifications
+        cert_page = Paginator(all_cert, 5)
+        try:
+            certifications = cert_page.page(self.page)
+        except PageNotAnInteger:
+            certifications = cert_page.page(1)
+        except EmptyPage:
+            certifications = cert_page.page(cert_page.num_pages)
+        for product in certifications:
+            if float(product.pPfin):
+                product.discount = round((float(product.pPfin) - float(product.pPin)) * 100 / float(product.pPfin), 2)
+
         prod_review = Paginator(prod_reviews, 5)
 
         try:
@@ -184,7 +202,8 @@ class SkillPageView(DetailView, SkillPageMixin):
             'country_choices': country_choices,
             'initial_country': initial_country,
             'show_chat': True,
-            'amp': self.request.amp
+            'amp': self.request.amp,
+            'prod_tests':prod_tests
         })
         try:
             widget_obj = DetailPageWidget.objects.get(

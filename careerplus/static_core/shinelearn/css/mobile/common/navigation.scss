@@ -184,7 +184,7 @@ nav {
   &:after {
     content: '';
     position: absolute;
-    top: 14px;
+    top: 18px;
     right: 16px;
     background-repeat: no-repeat;
     background-position: -184px -71px;
@@ -239,9 +239,24 @@ nav {
     background-position: -192px -150px;
   }
 
+  &-practice-test {
+    background-position: -239px -346px;
+  }
+
   &-talentEco {
     background-position: -143px -346px;
   }
+}
+
+.new-tag {
+  @include border-radius(3px);
+  background-color: $bg-yellow ;
+  padding: 0px 6px 1px;
+  color: $txt-grey-333;
+  font-size: 10px;
+  font-weight: 600;
+  position: relative;
+  top: -6px;
 }
 
 .sidebar {

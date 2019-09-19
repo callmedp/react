@@ -18,7 +18,7 @@ export default class ResumeSlider extends Component {
             'label':'HomePage'
         })
         const templateId = parseInt(document.getElementsByClassName('slick-current slick-center')[0].getAttribute('data-index')) + 1;
-        const {page, fetchSelectedTemplateImage} = this.props;
+        const {page, fetchSelectedTemplateImage, history} = this.props;
         localStorage.setItem('selected_template', (templateId))
         const select_template_modal = this.props.ui ? this.props.ui.select_template_modal : false
         if (select_template_modal) {
@@ -31,8 +31,7 @@ export default class ResumeSlider extends Component {
                 this.props.fetchSelectedTemplateImage(templateId, false)
             }
         } else {
-
-            window.location = '/resume-builder/edit/?type=profile'
+           history.push('/resume-builder/edit/?type=profile')
         }
 
     }

@@ -1,0 +1,348 @@
+{% extends "mobile/basic/base.html" %}
+{% load static compress %}
+{% load static thumbnail compress %}
+{% block title %} Practice Tests | Online Mock Tests | Exam Preparation Question @ Shine Learning  {% endblock %}
+{% block css_section %}
+{{ block.super }}
+{% compress css %}
+<link type="text/scss" href="{% static 'shinelearn/css/mobile/vskill/practice_tests.scss' %}" rel="stylesheet">
+<link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
+<link type="text/css" href="{% static 'shinelearn/css/common/mobile/typeaheadjs.css' %}" rel="stylesheet">
+{% endcompress %}
+{% endblock css_section %}
+{% block canonical_url %}
+<link rel="canonical" href="https://{{ SITE_DOMAIN }}/practice-tests/">
+{% endblock canonical_url %}
+{% block django_meta %}
+ <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <link rel="shortcut icon" href="{% static 'shinelearn/images/fav_icon.png' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=0"/>
+    <meta name="description" content="Take practice tests for every skill & functional area online. Start preparing mock tests questions for competitive exams and job interviews on shine learning.">
+	<meta property="og:title" content="Practice Tests | Online Mock Tests | Exam Preparation Question @ Shine Learning">
+	<meta property="og:url" content="https://{{ SITE_DOMAIN }}/practice-tests/">
+	<meta property="og:description" content="Take practice tests for every skill & functional area online. Start preparing mock tests questions for competitive exams and job interviews on shine learning.">
+	<meta property="og:type" content="Website">
+	<meta property="og:site_name" content="ShineLearning">
+	<meta property="og:image" content="{% static 'shinelearn/images/free_skill/submit-test.png' %}">
+	<meta property="fb:profile_id" content="282244838633660">
+
+    <meta itemprop="name" content="Practice Tests | Online Mock Tests | Exam Preparation Question @ Shine Learning ">
+    <meta itemprop="url" content="https://{{ SITE_DOMAIN }}/practice-tests/">
+    <meta itemprop="description" content="Take practice tests for every skill & functional area online. Start preparing mock tests questions for competitive exams and job interviews on shine learning.">
+      <meta name="twitter:card" content="summary">
+        <meta name="twitter:site" content="@shinelearning">
+
+        <meta name="twitter:domain" content="{{ SITE_DOMAIN }}">
+        <meta name="twitter:title" content="Practice Tests | Online Mock Tests | Exam Preparation Question @ Shine Learning">
+        <meta name="twitter:description" content="Take practice tests for every skill & functional area online. Start preparing mock tests questions for competitive exams and job interviews on shine learning." />
+        <!--<meta name="twitter:image:src" content="{{obj.image.url}}">-->
+{% endblock django_meta %}
+{% block container %}
+<div class="body-wrapper practice-test pt-0">
+    <div class="headband_practice row">
+        <img src="{% static 'shinelearn/images/mobile/practice_test/home_banner.png' %}" alt="banner" class="img-responsive">
+        <div class="pl-15 pr-15">
+         {% block breadcrumb %}
+            <ol class="breadcrumb mt-15">
+                   {% for bradcbs in breadcrumbs %}
+              {% if bradcbs.url %}
+                <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item">
+                    <span itemprop="name">{{bradcbs.name}}</span></a>
+                    <meta itemprop="position" content="{{forloop.counter}}" />
+                </li>
+              {% else %}
+                <li class="active">{{bradcbs.name}}</li>
+              {% endif %}
+{% endfor %}
+            </ol>
+            {% endblock breadcrumb %}
+            <h1 class="mt-5">Take free practice tests</h1>
+            <h2><strong>Start preparing</strong> for competitive exams and job interviews</h2>
+            <ul>
+                <li><strong>500+ Specialized </strong> Tests
+                </li>
+                <li class="strength">Strength & Weakness <strong>analysis</strong></li>
+                <li class="recommendation">Custom course <strong>Recommendations</strong></li>
+            </ul>
+        </div>
+        
+    </div>
+
+     <div class="search mb-50">
+        <div class="search_base"></div>
+        <div class="search__searchbox" id="bloodhound" >
+            <input type="text" class="typeahead"  name="" placeholder="Search popular tests">
+            <span class="icon_search"></span>
+        </div>
+    </div><!-- /. searc -->
+
+    <!-- Testpreps -->
+         {% if test_prep %}
+
+       {% for testPrep in test_prep %}
+     <h2>{{testPrep.heading}}</h2>
+    <div class="popular_test mb-30">
+        <p class="text-center">
+Shine learning brings to you one of the largest collection of test preps for all  business and tech certifications. Say good bye to anxiety and crack the certification exams in the first attempt !        </p>
+          {% for fa in test_prep_children %}
+        <div class="popular_test_inside">
+            <a href="{% url 'assessment:vskill-subcategory' slug=fa.slug %}">
+                <span class="border border0"></span>
+                <div>
+                    <h2 class="name bold mb-0">{{fa.name}}</h2>
+                    <p class="fs-14 mb-0">{{fa.get_assessment_test_count}}  {% if fa.get_assessment_test_count < 2 %}Test {% else %}Tests{% endif %}</p>
+                </div>
+                <span>
+                    {% if fa.icon %}
+                    <img src="{{fa.icon.url}}" alt="{{fa.name}}">
+                    {% endif %}
+                </span>
+            </a>
+        </div><!-- // popular_test_inside -->
+                      {%endfor%}
+         {% if  testPrep.get_test_category_ids.count > 8  %}
+        <div class="text-center mt-30 mb-15">
+            <a href="{% url 'assessment:vskill-category' slug=testPrep.slug %}" class="btn btn-slg btn-round-30 btn-white">View all</a>
+        </div>
+                {% endif %}
+    </div><!-- /. Testpreps -->
+             {%endfor%}
+         {% endif %}
+    <!-- Tests by functional area -->
+    <div class="functional_area mt-15" id="funcDiv">
+        <h2>Tests by functional area</h2>
+        <p class="text-center">
+Shine learning brings to you one of the largest collection of functional tests. Test your skills on these free tests and know which is the course most suitable for you to grow in your career !
+        </p>
+        {% for fa in func_area|slice:":8" %}
+
+            <div class="functional_area_inside border-{{forloop.counter0}}">
+            <a title="{{fa.name}}" href="{% url 'assessment:vskill-category' slug=fa.slug %}">
+                  {% if fa.icon %}
+                     <span class="functional_area_inside--image"><img class="img-responsive" alt="{{fa.name}}" src= "{{fa.icon.url}}"></span>
+                     {% else %}
+                     <span class="functional_area_inside--image"><img  class="img-responsive" alt="{{fa.name}}" src="#"></span>
+                     {% endif %}
+                <span class="fa_name">{{fa.name}}</span></a> </div>
+              {%endfor%}
+
+    </div>
+                {% if  func_area.count > 8  %}
+            <div class="load_more_button" id="loadmorebtn" onclick="loadmore();">Load more</div>
+        {% endif %}
+</div>
+
+  <div class="popular_test">
+        <h2>Most popular tests</h2>
+         {% for test in test_list %}
+
+            <div class="popular_test_inside">
+     <a id="{{test.id}}" onclick="testModal(event);" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","catname":"{{test.category.name}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}","courseName":"{{test.course.name}}","courseDuration":"{{test.course.get_duration_in_day}}","coursePrice":"{{test.course.inr_price}}","productName":"{{test.product.name}}","productDuration":"{{test.product.get_duration_day}}","productPrice":"{{test.product.inr_price}}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}","courseUrl":"{{test.course.get_absolute_url}}","productUrl":"{{test.product.get_absolute_url}}" }'>
+                <span class="border border{{forloop.counter0}}"></span>
+                <span class="name">{{test.title}}</span>
+                <span class="btn btn-md btn-round-30 btn-blue" >Take free test</span>
+            </a>
+            </div>
+            {% endfor %}
+    </div>
+    <div class="practice-test check-result-wrap pt-30" id="check_results">
+        <div class="practice-test-inside"></div>
+        <div class="back" id="close"></div>
+        <h1 class="mt-30" id="exampleModalLongTitle">Digital Marketing Scientist Test</h1>
+        <p class="c6">Make your choice and go ahead</p>
+
+        <div class="test-option-box">
+            <h2 class="fs-20"><a title="{{test.title}}" href="#">{{test.title}}</a></h2>
+            <div class="test-option-box--test-wrap">
+                <div class="test-option-box--content">
+                    <span>Test Format</span>
+                    <p>Practice Exam</p>
+                </div>
+
+                <div class="test-option-box--content">
+                    <span>No. of Questions</span>
+                    <p id="questCount">25 Questions</p>
+                </div>
+            </div>
+
+            <div class="test-option-box--cta">
+                <strong class="fs-20">FREE</strong>
+                <a class="btn btn-lg btn-round-30 btn-blue semi-bold" id="startTestLink">Take free test</a>
+            </div>
+        </div><!-- option test box-->
+
+        <div class="test-option-box pt-40">
+            <h2 class="fs-20"><a href="#" id="productName">Practice Tests</a></h2>
+            <span class="test-option-box--recommended">
+                Recommended
+            </span>
+            <div class="test-option-box--test-wrap">
+                <div class="test-option-box--content">
+                    <span>Test Format</span>
+                    <p>Practice Exam</p>
+                </div>
+
+                <div class="test-option-box--content">
+                    <span>No. of Questions</span>
+                    <p>500+ Questions</p>
+                </div>
+            </div>
+
+            <ul class="blue-bullet mt-20">
+                <li>
+                    <span></span>
+                    Real exam & Practice environment
+                </li>
+                <li>
+                    <span></span>
+                    Answers and Detailed Explanations
+                </li>
+            </ul>
+
+            <div class="test-option-box--cta mt-20">
+                <div class="test-option-box--price">
+                    <span id="fakeProductPrice"></span>
+                    <strong id="productPrice">Rs. </strong>
+                </div>
+                <button class="btn btn-lg btn-round-30 btn-yellow semi-bold" id="testAddToCart">Add to cart</button>
+            </div>
+        </div><!-- Practice Tests box-->
+
+        <div class="test-option-box" id="testCourse" style="display:none">
+            <h2 class="fs-20"><a href="#" id="courseName">Online Course</a></h2>
+            <div class="test-option-box--test-wrap">
+                <div class="test-option-box--content">
+                    <span>Duration</span>
+                    <p id="courseDuration">8 Days</p>
+                </div>
+
+                <div class="test-option-box--content">
+                    <span>Availability</span>
+                    <p>Unlimited</p>
+                </div>
+            </div>
+
+            <div class="test-option-box--cta mt-20">
+                <div class="test-option-box--price">
+                    <span id="fakeCoursePrice"></span>
+                    <strong id="coursePrice"></strong>
+                </div>
+                <button class="btn btn-lg btn-round-30 btn-blue semi-bold" id="courseCartBtn">Add to cart</button>
+            </div>
+        </div><!-- option test box-->
+    </div>
+
+
+{% endblock container %}
+{% block js_section %}
+{{block.super}}
+    {% compress js %}
+<script src="{% static 'shinelearn/js/assessment/landing.js' %}"></script>
+{% endcompress %}
+   <script type="text/javascript">
+   var page_number= 2;
+   var facolor = 0;
+   function loadmore(){
+            page_number = page_number+1;
+             element = document.getElementById('funcDiv');
+           $.ajax({
+               url: '/api/get-category-level-products',
+               type: "GET",
+               data : {'tl': 2, 'page_size' : 4, 'page':page_number,'only_test_level2category':true },
+               dataType: 'json',
+               success: function(json) {
+               if (json.next == null){
+                 $('#loadmorebtn').hide();
+               }
+               for (fa in json.results){
+               color = counter(facolor);
+               element.innerHTML= element.innerHTML +
+                `<div class="functional_area_inside border-${color}">
+               <a title="${json.results[fa].name}" href="/practice-tests/${json.results[fa].slug}">
+                <span class="functional_area_inside--image">
+                <img class="image-responsive" alt="fa-icon" src="${json.results[fa].icon}"></span>
+                <span class="fa_name">
+                ${json.results[fa].name}
+                </span>
+                </a>
+                </div>`;
+                facolor +=1;
+               }
+               },
+               error: function(xhr, ajaxOptions, thrownError) {
+               if(xhr.status == 404){
+                     alert("No more Categories to show ");
+                     $('#loadmorebtn').hide();
+                     }
+                     else{
+
+                   alert("Something went wrong. Try again later");
+                   }
+               }
+           });
+   }
+
+
+   </script>
+   <script>
+    function testModal(e){
+    modalobject = JSON.parse(e.currentTarget.dataset.attrValue);
+        $('body').addClass('overflow-hidden');
+        $("#check_results").addClass("open");
+        $('#productName').text(modalobject.productName);
+        $('#productName').attr("href",modalobject.productUrl);
+        $('#productName').attr("title",modalobject.productName);
+        $('#productDuration').text(modalobject.productDuration);
+        $('#productPrice').text(modalobject.productPrice);
+        $('#courseDuration').text(modalobject.courseDuration);
+        $('#coursePrice').text(modalobject.coursePrice);
+        $('#exampleModalLongTitle').text(modalobject.catname);
+        $('#fakeCoursePrice').text('Rs. '+ parseInt(parseInt(modalobject.coursePrice)/0.9));
+        $('#fakeProductPrice').text('Rs. '+parseInt(parseInt(modalobject.productPrice)/0.9));
+        $('#courseName').text(modalobject.courseName);
+        $('#courseName').attr("href",modalobject.courseUrl);
+        $('#courseName').attr("title",modalobject.courseName);
+
+
+        $('#questCount').text(modalobject.quescount);
+       if(modalobject.courseName == ""|| modalobject.courseName == "undefined" ){
+        $('#testCourse').hide();
+        }
+        else{
+         $('#testCourse').show();
+        }
+        $('#startTestLink').attr('href','/practice-tests/'+ modalobject.testSlug +'-test/');
+        $('#testAddToCart').click( function()
+         {
+            ga('send', 'event', 'Buy Flow', 'Enroll Now',modalobject.productId);
+            updateToCart(modalobject.productId,'cart');
+         }
+      );
+        $('#courseCartBtn').click(function(){
+        courseUpdateToCart(modalobject.courseId,'cart');
+        });
+
+    }
+
+
+        $("#btn_check_result").click(function(){
+            $("#check_results").addClass("open");
+        });
+
+        $("#close").click(function(){
+            $("#check_results").removeClass("open");
+            $('body').removeClass('overflow-hidden');
+        });
+
+
+
+    </script>
+<script src="{% static 'shinelearn/js/assessment/assessment_search.js' %}"></script>
+{% endblock js_section %}
+
+{% block johukum %}
+{% endblock johukum %}
+{% block zendesk %}
+{% endblock zendesk %}
