@@ -134,14 +134,14 @@ const handleForgotPassword = async () => {
 * */
 const continueAsGuest = () => {
     $('#login_form').addClass('hidden');
-    $('#login_form').trigger('reset');
+    // $('#login_form').trigger('reset');
     $('#guest_form').removeClass('hidden');
     $('#continue-as-guest-button').addClass('hidden');
     $('#login-candidate-button').removeClass('hidden');
     $('#forgot_form_1').addClass('hidden');
-    $('#forgot_form_1').trigger('reset');
+    // $('#forgot_form_1').trigger('reset');
     $('#forgot_form').addClass('hidden');
-    $('#forgot_form').trigger('reset');
+    // $('#forgot_form').trigger('reset');
     $('#user_payment_login').addClass('hide');
     $('#guest_payment_login').removeClass('hide')
     $('#login_users').addClass('hide');
@@ -155,13 +155,13 @@ const continueAsGuest = () => {
 const loginAsCandidate = () => {
     $('#login_form').removeClass('hidden');
     $('#guest_form').addClass('hidden');
-    $('#guest_form').trigger('reset');
+    // $('#guest_form').trigger('reset');
     $('#continue-as-guest-button').removeClass('hidden');
     $('#login-candidate-button').addClass('hidden');
     $('#forgot_form_1').addClass('hidden');
-    $('#forgot_form_1').trigger('reset');
+    // $('#forgot_form_1').trigger('reset');
     $('#forgot_form').addClass('hidden');
-    $('#forgot_form').trigger('reset');
+    // $('#forgot_form').trigger('reset');
     $('#user_payment_login').removeClass('hide');
     $('#guest_payment_login').addClass('hide');
     $('#user-forgot-password').addClass('hide');
@@ -178,9 +178,9 @@ const loginAsCandidate = () => {
 
 const forgotPassword = () => {
     $('#login_form').addClass('hidden');
-    $('#login_form').trigger('reset');
+    // $('#login_form').trigger('reset');
     $('#guest_form').addClass('hidden');
-    $('#guest_form').trigger('reset');
+    // $('#guest_form').trigger('reset');
     $('#login_users').addClass('hide');
     $('#login_guests').addClass('hide');
     $('#user_payment_login').addClass('hide');

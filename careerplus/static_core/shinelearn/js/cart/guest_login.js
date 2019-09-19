@@ -90,8 +90,8 @@ $(document).ready(function () {
                     required: 'Contact is required.',
                     digits: 'only digit accepted.',
                     indiaMobile: 'length must be 10 digits.',
-                    minlength: 'length must be greater than 3 digits.',
-                    maxlength: 'length must be less than 15 digits.',
+                    minlength: 'length must be greater than 5 digits.',
+                    maxlength: 'length must be less than 14 digits.',
                 }
             });
         }
