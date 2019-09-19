@@ -3483,6 +3483,7 @@ class WhatsAppScheduleView(UserPermissionMixin, DetailView, PaginationMixin):
                     messages.success(
                         self.request,
                         "Profile Changes Saved")
+                    context.update({'profile_form': profile_form})
                 else:
                     messages.error(
                         self.request,
