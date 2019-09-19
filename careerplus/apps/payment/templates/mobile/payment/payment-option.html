@@ -53,7 +53,7 @@
             <a href="{% url "cart:payment-login" %}">
                 <!-- <span class="dot">2</span> -->
                 <span class="tick"></span>
-                Login
+                {%if guest_login%}Guest{%else%}Login{%endif%}
             </a>
         </li>
 
