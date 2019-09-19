@@ -638,7 +638,7 @@ class ProductUserProfileForm(forms.ModelForm):
             instance.save(user=self.user)
         if not existing_obj.onboard and instance.onboard:
             instance.order_item.set_due_date()
-        if self.cleaned_data['manual_change'] and self.cleaned_data['manual_data']:
+        if self.cleaned_data.get('manual_change', None) and self.cleaned_data.get('manual_data', None):
             instance.manual_change = self.cleaned_data['manual_change']
             instance.manual_changes_data = str(self.cleaned_data['manual_data'])
             instance.save()
