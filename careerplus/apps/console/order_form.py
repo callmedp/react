@@ -623,9 +623,9 @@ class ProductUserProfileForm(forms.ModelForm):
 
     def clean_manual_links_count(self):
         manual_links_count = self.cleaned_data['manual_links_count']
-        if manual_links_count < 0:
-            raise forms.ValidationError('Please Provide positive values only')
         if manual_links_count:
+            if manual_links_count < 0:
+                raise forms.ValidationError('Please Provide positive values only')
             manual_change = 1
             already_sent_link = {'already_sent_link': manual_links_count}
             self.cleaned_data['manual_change'] = manual_change
