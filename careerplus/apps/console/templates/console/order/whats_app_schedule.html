@@ -15,9 +15,7 @@
     <link href="{% static 'packages/iCheck/skins/flat/green.css' %}" rel="stylesheet" type="text/css">
     <link type="text/css" href="{% static 'console/css/datepicker/daterangepicker.css' %}" rel="stylesheet">
     <style>
-    ul.errorlist {
-      color: #fff !important;
-    }
+
     .tag:after {
       border-left: 0px;
     }
@@ -373,6 +371,13 @@
                 <label> Experience</label>
                 {{profile_form.experience}}
               </div>
+              <div class="form-group col-md-3">
+                <label> Manual Links Count</label>
+                {{profile_form.manual_links_count}}
+              </div>
+              <div class="alert">{{profile_form.errors.manual_links_count}}</div>
+
+              
               <br>
               {% if not orderitem.is_onboard and perms.order.can_approve_jobs_on_the_move %}
               <div class="form-group col-md-12">
