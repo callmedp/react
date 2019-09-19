@@ -64,13 +64,13 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
                 return HttpResponsePermanentRedirect(reverse('homepage'))
             try:
                 self.cart_obj = Cart.objects.get(pk=cart_pk)
-                if not self.cart_obj.shipping_done or not self.cart_obj.owner_id:
+                if not self.cart_obj.owner_id:
                     return HttpResponsePermanentRedirect(reverse('cart:payment-summary'))
             except Exception as e:
                 logging.getLogger('error_log').error('unable to get cart object%s' % str(e))
                 return HttpResponsePermanentRedirect(reverse('homepage'))
-        if self.cart_obj and not (self.cart_obj.shipping_done):
-            return HttpResponsePermanentRedirect(reverse('cart:payment-login'))
+        # if self.cart_obj and not (self.cart_obj.shipping_done):
+        #     return HttpResponsePermanentRedirect(reverse('cart:payment-login'))
 
         elif not self.cart_obj:
             return HttpResponsePermanentRedirect(reverse('homepage'))
@@ -220,6 +220,10 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         email_id = self.cart_obj.owner_email,
         first_name = self.cart_obj.first_name or self.request.session.get('first_name')
         state_list = self.get_state_list()
+        guest_login = True
+        if self.request.session.get('candidate_id',''):
+            guest_login = False
+
         context.update({
             "state_form": StateForm(),
             "check_form": PayByCheckForm(),
@@ -228,7 +232,9 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
             "type_flow": type_flow,
             "email_id": ''.join(email_id),
             "first_name": first_name,
-            "state_list": state_list
+            "state_list": state_list,
+            "guest_login": guest_login
+
         })
         return context
 

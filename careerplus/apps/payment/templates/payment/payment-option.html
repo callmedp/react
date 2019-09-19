@@ -62,7 +62,7 @@
             <!-- left content start -->
             <div class="col-sm-3 payment-summary-tab">
                 <a href="{% url "cart:payment-summary" %}"><span class="green-circle">1</span> Summary</a>
-                <a href="{% url "cart:payment-login" %}"><span class="green-circle">2</span> Logged in <strong>as {%if first_name%}{{first_name}}{% else %}{{email_id}}{% endif %}</strong></a>
+                <a href="{% url "cart:payment-login" %}"><span class="green-circle">2</span> Logged in <strong>as {%if guest_login%} Guest {%else%}{%if first_name%}{{first_name}}{% else %}{{email_id}}{% endif %}{%endif%}</strong></a>
                 <a href="{% url "payment:payment-option" %}" class="active"><span>3</span> Payment</a>
 
                 <!-- secure payment -->
