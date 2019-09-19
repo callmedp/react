@@ -618,7 +618,7 @@ class ProductUserProfileForm(forms.ModelForm):
         self.fields['desired_location'].widget.attrs['class'] = ' tagsinput tags form-control'
         self.fields['desired_position'].widget.attrs['class'] = ' tagsinput tags form-control'
 
-        if self.instance and self.instance.manual_change == 1:
+        if self.instance:
             self.initial['manual_links_count'] = self.instance.order_item.get_manual_sent_link()
 
     def clean_manual_links_count(self):
