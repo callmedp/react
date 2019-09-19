@@ -72,7 +72,7 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         # if self.cart_obj and not (self.cart_obj.shipping_done):
         #     return HttpResponsePermanentRedirect(reverse('cart:payment-login'))
 
-        elif not self.cart_obj:
+        if not self.cart_obj:
             return HttpResponsePermanentRedirect(reverse('homepage'))
         elif self.cart_obj and not self.cart_obj.lineitems.filter(no_process=False).exists():
             return HttpResponsePermanentRedirect(reverse('homepage'))
