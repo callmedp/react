@@ -55,7 +55,7 @@
 
 
 {% block container %}
-    <section class="container mt-53">
+    <section class="container mt-53" id="containerBlock">
         <!-- page content body start -->
         <div class="row greybg2 pad-25">
 
@@ -214,12 +214,61 @@
                       </h4>
                     </div>
                   </div>
+
+                  <div class="panel panel-default box-shadow1">
+                    <div class="panel-heading" role="tab" id="headingThree">
+                      <h4 class="panel-title">
+                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#zestMoneyAccordion" aria-expanded="false" aria-controls="collapseTwo">
+                          Zest Money Emi
+                        </a>
+                      </h4>
+                    </div>
+                    <div id="zestMoneyAccordion" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                      <div class="panel-body other-payment" id="zestMoney">
+
+                             <div class="form-group col-md-12 bg-primary" id="zest_emi_div" style="text-align:center;display: none;">
+                            <div class="control-group">
+                                <div class="controls">
+                                    <label class="control-label" id="zest-emi-head">Loading EMI Options ..</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="emi-block-0" class="col-md-6 zest_emi_div" style="display:block;">
+                            <span id="emi-0-months"></span><br>
+                            <span id="emi-0-monthly-amount"></span><br>
+                            <span id="emi-0-interest"></span><br>
+                            <span id="emi-0-interest-rate"></span><br>
+                            <span id="emi-0-down-payment"></span><br>
+                            <span id="emi-0-total-amount"></span><br>
+                        </div>
+                        <div id="emi-block-1" class="col-md-6 zest_emi_div" style="display:none;">
+                            <span id="emi-1-months"></span><br>
+                            <span id="emi-1-monthly-amount"></span><br>
+                            <span id="emi-1-interest"></span><br>
+                            <span id="emi-1-interest-rate"></span><br>
+                            <span id="emi-1-down-payment"></span><br>
+                            <span id="emi-1-total-amount"></span><br>
+                        </div>
+                        <hr />
+                        <div class="buttons wrap-none mt-20" style="clear: both; margin-top: 40px; margin-left: 15px;overflow:hidden;">
+
+                        <strong>Rs. {{ total_amount }}
+                            <small>(amount payable)</small>
+                        </strong>
+
+                        <div class="continue">
+                            <button type="button" class="make-payment" id="zestMakePaymentBtn">
+                               <a> Make Payment</a></button>
+                        </div>
+
+                        </div>
+                        <!-- cheque payment method -->
+                      </div>
+                    </div>
+                  </div>
                 </div>
-
-
             </div>
             <!-- right content end -->
-
         </div>
         <!-- page content body end -->
     </section>
@@ -232,6 +281,8 @@
         <script type="text/javascript" src="{% static 'packages/select2/dist/js/select2.min.js' %}"></script>
     <script>
         var site_domain = "{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN}}";
+        var totalAmount = "{{total_amount}}";
+        var cart_id     = "{{cart_id}}"
     </script>
     {% compress js %}
         <script src="{% static 'shinelearn/js/common/bootstrap-datepicker.min.js' %}"></script>

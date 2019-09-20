@@ -8,8 +8,9 @@ import mimetypes
 from random import random
 from datetime import datetime
 
+
 # django imports
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView,View
 from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.urls import reverse
 from django.conf import settings
@@ -21,14 +22,16 @@ from order.models import Order
 from console.decorators import Decorate, stop_browser_cache
 from django.core.files.base import ContentFile
 from django.utils import timezone
-from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect,\
+    HttpResponseForbidden,Http404
+
 
 # local imports
 from core.api_mixin import ShineCandidateDetail
 from .models import PaymentTxn
 from .mixin import PaymentMixin
 from .forms import StateForm, PayByCheckForm
-from .utils import EpayLaterEncryptDecryptUtil
+from .utils import EpayLaterEncryptDecryptUtil,ZestMoneyUtil
 from .tasks import put_epay_for_successful_payment
 
 # inter app imports
@@ -46,6 +49,9 @@ from geolocation.models import Country
 
 
 # third party imports
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 
 
 @Decorate(stop_browser_cache())
@@ -508,3 +514,161 @@ class EPayLaterResponseView(PaymentMixin, CartMixin, TemplateView):
         else:
             self._handle_failed_transaction(txn_obj, decrypted_data.get('statusDesc'))
             return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure&txn_id=' + txn_id)
+
+
+class ZestMoneyRequestApiView(OrderMixin, APIView):
+
+    '''
+    After the payment option page for zest money emi it will be redirected to this
+    view and following will be done
+    1) order is created
+    2) cart object will be closed
+    3) payment txn will be created
+    4) user will be redirected to the zestmoney site
+
+    '''
+
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self,request,*args,**kwargs):
+        data = {'url':''}
+        cart_pk = kwargs.get('cart_id')
+        if not cart_pk:
+            return Response(data,status=status.HTTP_400_BAD_REQUEST)
+        cart = Cart.objects.filter(id=cart_pk).first()
+        if not cart:
+            return Response(data,status=status.HTTP_400_BAD_REQUEST)
+        #creating order
+        order = self.createOrder(cart)
+        #closing the cart object
+        self.closeCartObject(cart)
+
+        if not order:
+            logging.getLogger('error_log').error('order is not created for '
+                                                 'cart id- {}'.format(cart_pk))
+            return Response(data,status=status.HTTP_400_BAD_REQUEST)
+
+        txn = 'CP%d%s' % (order.pk, int(time.time()))
+       #creating txn object
+        pay_txn = PaymentTxn.objects.create(
+            txn=txn,
+            order=order,
+            cart=cart,
+            status=0,
+            payment_mode=14,
+            currency=order.currency,
+            txn_amount=order.total_incl_tax,
+        )
+        zest_object = ZestMoneyUtil()
+        redirect_url = zest_object.create_application_and_fetch_logon_url(
+            pay_txn)
+        if not redirect_url:
+            return Response(data, status=status.HTTP_400_BAD_REQUEST)
+        data.update({'url': redirect_url})
+        return Response(data, status=status.HTTP_200_OK)
+
+
+class ZestMoneyResponseView(View):
+
+    status_text_mapping = {
+        'applicationinprogress'     : 'Loan application is in progress',
+        'approved'                  : 'Loan application has been approved',
+        'bankaccountdetailscomplete': 'Customer has completed his bank '
+                                      'account details',
+        'cancelled'                 : 'Loan application has been cancelled',
+        'customercancelled'         : 'Loan application has been cancelled by '
+                                      'the customer',
+        'declined'                  : 'Loan application was declined',
+        'depositpaid'               : 'The customer has either made the '
+                                      'downpayment, or chose to pay on '
+                                      'delivery (if available)',
+        'documentscomplete'         : 'The customer has uploaded all the '
+                                      'required documents',
+        'loanagreementaccepted'     : 'The customer has signed the loan '
+                                      'agreement',
+        'merchantcancelled'         : 'Loan application was cancelled by the '
+                                      'merchant',
+        'outofstock'                : 'Some of the items in the order are out '
+                                      'of stock and the loan application was '
+                                      'cancelled',
+        'preaccepted'               : 'Loan application was pre-accepted by '
+                                      'automated risk process',
+        'riskpending'               : 'Risk decision pending',
+        'timeoutcancelled'          : 'Loan application was cancelled by a '
+                                      'timeout mechanism (customer did not '
+                                      'complete the application in time)'
+    }
+
+    zest_status_payment_status_mapping = {"cancelled"        : 5,
+                                          "customercancelled": 5,
+                                          "declined"         : 2,
+                                          "merchantcancelled": 5,
+                                          "outofstock"       : 5,
+                                          "timeoutcancelled" : 3,
+                                          }
+
+    approval_pending_status = ["bankaccountdetailscomplete",
+                               "applicationinprogress", "depositpaid", \
+                               "documentscomplete", "loanagreementaccepted",
+                               "riskpending"]
+
+
+    def update_txn_info(self,order_status,txn_obj):
+        success_text = self.status_text_mapping.get(order_status, "")
+        success_text = json.dumps(success_text)
+        txn_obj.txn_info = success_text
+        txn_obj.save()
+
+    def get(self, request, *args, **kwargs):
+        txn_id = kwargs.get('txn_id')
+        if not txn_id:
+            return HttpResponseForbidden()
+        txn_obj = PaymentTxn.objects.filter(id=txn_id).first()
+
+        if not txn_obj:
+            raise Http404()
+
+        zest_obj = ZestMoneyUtil()
+        order_status = zest_obj.fetch_order_status(txn_obj).lower()
+        logging.getLogger('info_log').info('order_status - {}'.format(
+            order_status)) 
+
+        if order_status in ["preaccepted", "approved", "active"]:
+            payment_date = datetime.now()
+            txn_obj.status = 1
+            txn_obj.payment_date = payment_date
+            txn_obj.payment_mode = 14
+            self.update_txn_info(order_status, txn_obj)
+
+            order = txn_obj.order
+            order.payment_date = payment_date
+            order.status = 1
+            order.save()
+
+            logging.getLogger('info_log').info (
+                "Zest Order Successfully updated {},{}". \
+                format(order_status, txn_obj.id))
+            return HttpResponseRedirect(reverse('payment:thank-you'))
+
+        if order_status in self.approval_pending_status:
+            txn_obj.status = 0
+            self.update_txn_info(order_status, txn_obj)
+            return HttpResponseRedirect(reverse('payment:thank-you'))
+
+        failure_text = self.status_text_mapping.get(order_status, "")
+        failure_status = self.zest_status_payment_status_mapping.get (
+            order_status, 0)
+        logging.getLogger('info_log').info("Zest Order Update {},{}". \
+                                             format (order_status,
+                                                     txn_obj.id))
+
+        txn_obj.status = failure_status
+        failure_text = json.dumps(failure_text)
+        txn_obj.txn_info = failure_text
+        txn_obj.save()
+        return HttpResponseRedirect (reverse ('payment:thank-you'))
+
+
+
+

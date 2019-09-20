@@ -115,4 +115,57 @@ $(document).ready(function () {
     })
 
 
+ $('#headingThree').click(function(){
+ $('#zest_emi_div').show();
+ $("#emi-block-0" ).hide();
+ $("#emi-block-1" ).hide();
+      $.ajax({
+        url: '/payment/api/zest-money/emi-plans/',
+        type: 'get',
+        data: {'amount' :totalAmount },
+        dataType: 'json',
+        success: function(data) {
+            if (data.length > 0) {;
+                $("#zest-emi-head").text("EMI Options");
+                $.each(data, function(index, plan) {
+                    $("#emi-" + index + "-months").text("No. Of Months : " + plan['number_of_months']);
+                    $("#emi-" + index + "-monthly-amount").text("Monthly Amount : " + (plan['total_monthly_amount'] - plan['interest_amount'] / plan['number_of_months']));
+                    $("#emi-" + index + "-interest").text("Interest : " + plan['interest_amount']);
+                    $("#emi-" + index + "-interest-rate").text("Interest rate : " + plan['interest_rate']);
+                    $("#emi-" + index + "-down-payment").text("Down Payment : " + plan['down_payment_amount']);
+                    $("#emi-" + index + "-total-amount").text("Loan Amount : " + (plan['loan_amount']));
+                    $("#emi-block-" + index ).show();
+                });
+            }
+        },
+        failure: function() {
+            $(".zest_emi_div").hide();
+        }
+    });
+
+ })
+
+
+ $('#zestMakePaymentBtn').click(function(){
+ $.get( "/payment/zestmoney/request/"+cart_id+'/', function(data) {
+ if(hasOwnProperty.call(data, 'url')){
+ window.location.replace(data.url);
+ }
+})
+  .done(function(data) {
+    $('#containerBlock').html(`
+    <html>
+<head>
+    <title>Redirecting to Zest Money for Payment</title>
+</head>
+<body>
+    <h3>Redirecting to Payment gateway. Please do not Refresh or close this window.</h3>
+</body>
+    `)
+  })
+  .fail(function(data) {
+    alert( "Error in making a request" );
+  })
+ })
+
 });

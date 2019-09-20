@@ -34,6 +34,7 @@ from geolocation.models import Country, CURRENCY_SYMBOL
 from users.models import User
 from console.feedbackCall.choices import FEEDBACK_RESOLUTION_CHOICES,FEEDBACK_CATEGORY_CHOICES,FEEDBACK_STATUS,FEEDBACK_OPERATION_TYPE
 from order.utils import get_ltv
+from coupon.models import Coupon
 
 #third party imports
 from payment.utils import manually_generate_autologin_url
@@ -190,10 +191,6 @@ class Order(AbstractAutoDate):
         items = self.orderitems.all()
         return any([item.product.type_flow == 17 for item in items])
 
-    def order_contains_neo_item(self):
-        items = self.orderitems.all()
-        return any([item.product.vendor.slug == 'neo' for item in items])
-
     @property
     def get_status(self):
         statusD = dict(STATUS_CHOICES)
@@ -305,6 +302,101 @@ class Order(AbstractAutoDate):
             for order_item in order_items:
                 upload_Resume_shine.delay(order_item.id)
 
+    def get_oi_actual_price_mapping(self):
+        amt_dict = {}
+        order_items = OrderItem.objects.filter(order=self)
+        if not order_items:
+            return amt_dict
+        coupon_order = CouponOrder.objects.filter(order=self).first()
+        coupon_code = coupon_order.coupon_code if coupon_order else ""
+        order_discount = sum(
+            order_items.values_list('discount_amount', flat=True))
+        coupon_objs = Coupon.objects.filter ( \
+            id__in=self.couponorder_set.values_list('coupon', flat=True))
+        forced_coupon_amount = 0
+
+        for obj in coupon_objs:
+            amount = float (obj.value) if obj.coupon_type == "flat" else \
+                float ((obj.value * self.total_excl_tax) / 100)
+            forced_coupon_amount += amount
+
+        for item in order_items:
+            if not item.product:
+                continue
+            combo_parent = False
+            item_selling_price = item.selling_price
+            item_cost_price = float(item.cost_price)
+            if not item_cost_price:
+                item_cost_price = float(item.product.inr_price)
+            if item.product.type_product == 0 and item_selling_price == 0 \
+                    and not item.is_combo and not item.no_process:
+                item_selling_price = float((float(item.product.inr_price) -
+                                            forced_coupon_amount)) * 1.18
+
+            item_refund_request_list = RefundItem.objects.filter(oi_id=item.id,
+                                refund_request__status__in=[1, 3, 5,7, 8, 11])
+            refund_amount = item_refund_request_list.first().amount \
+                if item_refund_request_list else 0
+
+            if item.is_combo and item.parent:
+                parent_sum = float (item.parent.cost_price)
+                if not parent_sum:
+                    # Assuming price remains unchanged
+                    parent_sum = float (item.parent.product.inr_price)
+                    order_discount = float (forced_coupon_amount)
+
+                actual_sum_of_child_combos = 0
+                child_combos = item.order.orderitems.filter (parent=item.parent)
+
+                for child_combo in child_combos:
+                    child_cost_price = float (child_combo.cost_price)
+                    if not child_cost_price:
+                        child_cost_price = float (child_combo.product.inr_price)
+                    actual_sum_of_child_combos += child_cost_price
+
+                virtual_decrease_in_price = actual_sum_of_child_combos - parent_sum
+                virtual_decrease_part_of_this_item = virtual_decrease_in_price * \
+                                                     (float (
+                                                         item_cost_price) / actual_sum_of_child_combos)
+                actual_price_of_item_after_virtual_decrease = float (
+                    item_cost_price) - virtual_decrease_part_of_this_item
+
+                if order_discount > 0:
+                    combo_discount_amount = (float(order_discount) /
+                                    float(order.total_excl_tax)) * \
+                                    actual_price_of_item_after_virtual_decrease
+                    actual_price_of_item_after_virtual_decrease -= combo_discount_amount
+
+                item_selling_price = round (
+                    (actual_price_of_item_after_virtual_decrease * 1.18), 2)
+                item_refund_request_list = RefundItem.objects.filter(
+                    oi_id=item.parent.id, \
+                    refund_request__status__in=[1, 3, 5, 7, 8, 11])
+                total_refund = float (item_refund_request_list.first ().amount) \
+                    if item_refund_request_list else 0
+
+                if item.parent.selling_price:
+                    refund_amount = round(total_refund * (item_selling_price /
+                                    float(item.parent.selling_price)), 2)
+                else:
+                    refund_amount = 0
+
+            if item.is_combo and not item.parent:
+                combo_parent = True
+                item_selling_price = 0
+                refund_amount = 0
+
+            if item.wc_sub_cat == 65:
+                replaced = True
+                replacement_id = item.get_replacement_order_id
+
+            total_items = item.order.orderitems.count ()
+            if total_items == 1 and item_selling_price == 0:
+                item_selling_price = float(float(self.total_excl_tax) -
+                                           forced_coupon_amount) * 1.18
+            if item_selling_price :
+                amt_dict.update({item.id: item_selling_price})
+        return amt_dict
 
     def save(self,**kwargs):
         created = not bool(getattr(self,"id"))
