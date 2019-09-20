@@ -13,7 +13,7 @@ const fs = require('fs');
 const timestamp = fs.readFileSync(`/var/www/config/resume_builder_unique_timestamp.txt`, "utf8");
 
 
-console.log('time stamp value is -----', timestamp);
+console.log('time stamp value is -----', timestamp, process.env.STATIC_URL);
 
 
 let userAgents = '', store, routes, isMobile = false;
