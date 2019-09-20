@@ -70,8 +70,7 @@ class Home extends Component {
         const actionList = Home.getActions();
         const results = [];
         for (const [index, value] of actionList.entries()) {
-            console.log('----index---', index, value);
-            results[index] = await new Promise((resolve, reject) => dispatch(value({
+              results[index] = await new Promise((resolve, reject) => dispatch(value({
                 info: params,
                 resolve,
                 reject,

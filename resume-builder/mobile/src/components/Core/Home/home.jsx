@@ -3,7 +3,7 @@ import Header from '../../Common/Header/header.jsx';
 import Footer from '../../Common/Footer/footer.jsx';
 import {connect} from "react-redux";
 import './home.scss'
-import { loginCandidate, feedbackSubmit} from "../../../store/landingPage/actions";
+import { loginCandidate, feedbackSubmit, getComponentTitle} from "../../../store/landingPage/actions";
 import Banner from './Banner/banner.jsx';
 import ResumeSlider from './ResumeSlider/resumeSlider.jsx';
 import Testimonial from './Testimonial/testimonial.jsx';
@@ -11,8 +11,6 @@ import queryString from "query-string";
 import {scroller} from 'react-scroll';
 import Loader from '../../Common/Loader/loader.jsx';
 import {eventClicked} from '../../../store/googleAnalytics/actions/index'
-import {getComponentTitle} from "../../../../../desktop/src/store/landingPage/actions";
-
 class Home extends Component {
 
     constructor(props) {
