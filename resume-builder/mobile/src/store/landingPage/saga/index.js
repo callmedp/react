@@ -25,23 +25,27 @@ function* getCandidateId() {
 
 function* loginCandidate(action) {
     try {
-        let {data: {payload, resolve, reject, isTokenAvail}} = action;
+        let {data: {info, resolve, reject, isTokenAvail}} = action;
 
-        yield put({type: uiAction.UPDATE_MAIN_PAGE_LOADER, payload: {mainloader: true}})
+        yield put({type: uiAction.UPDATE_MAIN_PAGE_LOADER, data: {mainloader: true}})
 
         let result;
         if (isTokenAvail) {
-            result = yield call(Api.loginCandidate, payload);
+            result = yield call(Api.loginCandidate, info);
         }
+
+          // if some error comes or token not available then
+        // get new information using session.
+
         if (result && result['error'] || !isTokenAvail) {
             result = yield call(Api.getInformation)
         }
 
-
         if (result && result['error']) {
-            apiError('login')
+            apiError('login');
             localStorage.clear();
             window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
+            reject(new Error(result['errorMessage']));
             return;
             //redirect code here
         }

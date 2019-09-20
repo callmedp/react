@@ -10,7 +10,7 @@ import render from './render';
 const fs = require('fs');
 
 
-const timestamp = fs.readFileSync(`${process.env.STATIC_FILE_PATH}`, "utf8")
+const timestamp = fs.readFileSync(`${process.env.STATIC_FILE_PATH}`, "utf8");
 
 
 console.log('time stamp value is -----', timestamp);

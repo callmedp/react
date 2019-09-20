@@ -44,13 +44,17 @@ function* loginCandidate(action) {
         yield put({type: UPDATE_UI, data: {loader: true}});
 
         let result;
+        // if token avail pass it in body and login the candidate
         if (isTokenAvail) {
             result = yield call(Api.loginCandidate, info);
         }
+        // if some error comes or token not available then
+        // get new information using session.
+
         if (result && result['error'] || !isTokenAvail) {
             result = yield call(Api.getInformation)
         }
-        console.log('------', result['error']);
+
         if (result && result['error']) {
             localStorage.clear();
             window.location.href = `${siteDomain}/login/?next=/resume-builder/`;

@@ -3,7 +3,7 @@ import Header from '../../Common/Header/header.jsx';
 import Footer from '../../Common/Footer/footer.jsx';
 import {connect} from "react-redux";
 import './home.scss'
-import * as actions from "../../../store/landingPage/actions";
+import { loginCandidate, feedbackSubmit} from "../../../store/landingPage/actions";
 import Banner from './Banner/banner.jsx';
 import ResumeSlider from './ResumeSlider/resumeSlider.jsx';
 import Testimonial from './Testimonial/testimonial.jsx';
@@ -11,6 +11,7 @@ import queryString from "query-string";
 import {scroller} from 'react-scroll';
 import Loader from '../../Common/Loader/loader.jsx';
 import {eventClicked} from '../../../store/googleAnalytics/actions/index'
+import {getComponentTitle} from "../../../../../desktop/src/store/landingPage/actions";
 
 class Home extends Component {
 
@@ -18,7 +19,7 @@ class Home extends Component {
         super(props);
         this.state = {
             'token': ''
-        }
+        };
         const values = queryString.parse(this.props.location.search);
         this.scrollTo = this.scrollTo.bind(this);
         const token = (values && values.token) || '';
@@ -36,12 +37,32 @@ class Home extends Component {
             delay: 0,
             smooth: 'easeInOutQuad',
             offset: -50
-        })
+        });
         this.props.eventClicked({
             action,
             label
         })
     }
+
+      static getActions() {
+        return [loginCandidate, getComponentTitle]
+    }
+
+     static async fetching({dispatch}, params) {
+        const actionList = Home.getActions()
+        const results = [];
+        for (const [index, value] of actionList.entries()) {
+            console.log('----index---', index, value);
+            results[index] = await new Promise((resolve, reject) => dispatch(value({
+                info: params,
+                resolve,
+                reject,
+                isTokenAvail: true
+            })))
+        }
+        return results;
+    }
+
 
     render() {
         const {ui: {mainloader}, userInfo: {first_name}, eventClicked} = this.props;

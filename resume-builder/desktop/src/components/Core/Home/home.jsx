@@ -23,7 +23,7 @@ class Home extends Component {
         this.state = {
             'scrolled': false,
             'token': '',
-        }
+        };
 
         const values = queryString.parse(this.props.location.search);
         const token = (values && values.token) || '';
@@ -38,7 +38,7 @@ class Home extends Component {
             delay: 0,
             smooth: 'easeInOutQuad',
             offset: -10
-        })
+        });
         this.props.eventClicked({
             action,
             label
@@ -60,7 +60,6 @@ class Home extends Component {
 
     async componentDidMount() {
         await this.props.loginCandidate(this.state.token);
-
     }
 
     static getActions() {
@@ -68,7 +67,7 @@ class Home extends Component {
     }
 
     static async fetching({dispatch}, params) {
-        const actionList = Home.getActions()
+        const actionList = Home.getActions();
         const results = [];
         for (const [index, value] of actionList.entries()) {
             console.log('----index---', index, value);
