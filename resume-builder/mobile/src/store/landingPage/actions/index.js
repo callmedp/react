@@ -1,5 +1,4 @@
 import {GET_CANDIDATE_ID, LOGIN_CANDIDATE,FEEDBACK_SUBMIT, GET_HOME_COMPONENT_TITLE} from "./actionTypes";
-import {GET_HOME_COMPONENT_TITLE} from "../../../../../desktop/src/store/landingPage/actions/actionTypes";
 
 export const getCandidateId = () => ({
     type: GET_CANDIDATE_ID
