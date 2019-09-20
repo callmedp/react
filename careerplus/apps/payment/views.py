@@ -569,7 +569,7 @@ class ZestMoneyRequestApiView(OrderMixin, APIView):
         return Response(data, status=status.HTTP_200_OK)
 
 
-class ZestMoneyResponseView(View):
+class ZestMoneyResponseView(PaymentMixin,View):
 
     status_text_mapping = {
         'applicationinprogress'     : 'Loan application is in progress',
@@ -635,21 +635,12 @@ class ZestMoneyResponseView(View):
             order_status)) 
 
         if order_status in ["preaccepted", "approved", "active"]:
-            payment_date = datetime.now()
-            txn_obj.status = 1
-            txn_obj.payment_date = payment_date
-            txn_obj.payment_mode = 14
-            self.update_txn_info(order_status, txn_obj)
-
-            order = txn_obj.order
-            order.payment_date = payment_date
-            order.status = 1
-            order.save()
-
+            return_parameter = self.process_payment_method(
+                'ZESTMONEY', request, txn_obj)
             logging.getLogger('info_log').info (
                 "Zest Order Successfully updated {},{}". \
                 format(order_status, txn_obj.id))
-            return HttpResponseRedirect(reverse('payment:thank-you'))
+            return HttpResponseRedirect(return_parameter)
 
         if order_status in self.approval_pending_status:
             txn_obj.status = 0
@@ -667,7 +658,7 @@ class ZestMoneyResponseView(View):
         failure_text = json.dumps(failure_text)
         txn_obj.txn_info = failure_text
         txn_obj.save()
-        return HttpResponseRedirect (reverse ('payment:thank-you'))
+        return HttpResponseRedirect(reverse('payment:thank-you'))
 
 
 
