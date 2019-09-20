@@ -270,7 +270,7 @@
 
     &--tax {
       font-size: $font-size-xs;
-      flex-basis: 60%;
+      flex-basis: 50%;
     }
 
     &--tax-price {
@@ -278,6 +278,9 @@
       margin-left: auto;
     }
   }
+.fs-18 {
+  font-size: 1.125rem;
+}
 }// Subtotal
 
 .bottom-cta {
@@ -291,7 +294,7 @@
   display: flex;
 
   a {
-    color: $txt-white;
+    color: $txt-grey-333;
   }
 
   &__price {
@@ -332,7 +335,8 @@
     display: flex;
 
     &:not(:last-child) {
-      margin-bottom: 25px;
+      /*margin-bottom: 25px;*/
+      margin-bottom: 30px;
     }
 
     &--code {

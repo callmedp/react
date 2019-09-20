@@ -236,10 +236,15 @@
                 {% else %}
                 <li class="subtotal__item mb-10">
                         <span class="subtotal__item--tax fs-14">Subtotal</span>
-                        <span class="subtotal__item--tax-price fs-20 semi-bold" id="total-cart-amount-id">Rs.
+                        <span class="subtotal__item--tax-price fs-18 semi-bold" id="total-cart-amount-id">Rs.
                             {{total_amount}}</span>
                     </li>
                 {% endif %}
+                <li class="subtotal__item">
+                    <span class="subtotal__item--tax">TOTAL</span>
+                    <span class="subtotal__item--tax-price">+Rs. </span>
+                </li>
+
                 <li class="subtotal__item">
                     <span class="subtotal__item--tax">SGST @ {{sgst}}%</span>
                     <span class="subtotal__item--tax-price">+Rs. {{sgst_amount}}</span>
