@@ -3,7 +3,7 @@ import Header from '../../Common/Header/header.jsx';
 import Footer from '../../Common/Footer/footer.jsx';
 import {connect} from "react-redux";
 import './home.scss'
-import { loginCandidate, feedbackSubmit, getComponentTitle} from "../../../store/landingPage/actions";
+import {getCandidateId, loginCandidate, feedbackSubmit, getComponentTitle} from "../../../store/landingPage/actions/index.js";
 import Banner from './Banner/banner.jsx';
 import ResumeSlider from './ResumeSlider/resumeSlider.jsx';
 import Testimonial from './Testimonial/testimonial.jsx';
@@ -230,11 +230,11 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         "getCandidateId": () => {
-            return dispatch(actions.getCandidateId())
+            return dispatch(getCandidateId())
         },
         "loginCandidate": (token) => {
             return new Promise((resolve, reject) => {
-                dispatch(actions.loginCandidate({payload: {alt: token}, resolve, reject, isTokenAvail: true}))
+                dispatch(loginCandidate({payload: {alt: token}, resolve, reject, isTokenAvail: true}))
             })
         },
         'eventClicked': (data) => {

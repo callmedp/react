@@ -86,7 +86,7 @@ app.get('*', async (req, res) => {
         if (route && route.component && route.component.fetching) {
             try {
                 result = await route.component.fetching(store, {
-                    "alt": "Ew4ZExoWCggBB00hHwsZCBRIGw4VGk1STFBJAk4DTgIbB0hWTlVNUkoCTANIXwRTSFdBUUFXSVNIU0tVSBoABwAH"
+                    "alt": "Ew4ZExoWCggBB00hHwsZCBRIGw4VGk1STFBJAk4DTgIbB0hWTlVNUkoCTANIXwRTSFdBUEhWTVBPVElTTRoABwAH"
                 });
                 context['title'] = result[1];
             } catch (e) {
