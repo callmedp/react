@@ -522,9 +522,8 @@ class ZestMoneyRequestApiView(OrderMixin, APIView):
     After the payment option page for zest money emi it will be redirected to this
     view and following will be done
     1) order is created
-    2) cart object will be closed
-    3) payment txn will be created
-    4) user will be redirected to the zestmoney site
+    2) payment txn will be created
+    3) user will be redirected to the zestmoney site
 
     '''
 
@@ -541,9 +540,6 @@ class ZestMoneyRequestApiView(OrderMixin, APIView):
             return Response(data,status=status.HTTP_400_BAD_REQUEST)
         #creating order
         order = self.createOrder(cart)
-        #closing the cart object
-        self.closeCartObject(cart)
-
         if not order:
             logging.getLogger('error_log').error('order is not created for '
                                                  'cart id- {}'.format(cart_pk))
@@ -569,7 +565,7 @@ class ZestMoneyRequestApiView(OrderMixin, APIView):
         return Response(data, status=status.HTTP_200_OK)
 
 
-class ZestMoneyResponseView(PaymentMixin,View):
+class ZestMoneyResponseView(CartMixin,PaymentMixin,View):
 
     status_text_mapping = {
         'applicationinprogress'     : 'Loan application is in progress',
@@ -638,8 +634,9 @@ class ZestMoneyResponseView(PaymentMixin,View):
             return_parameter = self.process_payment_method(
                 'ZESTMONEY', request, txn_obj)
             logging.getLogger('info_log').info (
-                "Zest Order Successfully updated {},{}". \
+                "Zest Order Successfully updated {},{}".\
                 format(order_status, txn_obj.id))
+            self.closeCartObject(self.txn_obj.cart)
             return HttpResponseRedirect(return_parameter)
 
         if order_status in self.approval_pending_status:

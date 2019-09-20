@@ -261,7 +261,7 @@ class ZestMoneyUtil:
             self.zestmoney_dict.get('api_base_url'),
             "ApplicationFlow/LoanApplications")
         data = {}
-        data.update({"BasketAmount": float(math.ceil(order.total_incl_tax))})
+        data.update({"BasketAmount": float((order.total_incl_tax))})
         data.update({
             "OrderId"           : order.id,
             "DeliveryPostCode"  : '122011',
@@ -285,13 +285,12 @@ class ZestMoneyUtil:
         basket_data = [{"Id"         : x.product.id,
                         "Description": x.product_name,
                         "Quantity"   : int(x.quantity),
-                        "TotalPrice" : float(math.ceil(oi_dict.get(x.id))),
+                        "TotalPrice" : float((oi_dict.get(x.id))),
                         "Category"   : "Services"
                         }for x in OrderItem.objects.filter(
                                         id__in= oi_dict.keys())]
 
         data['Basket'] = basket_data
-
         try:
             response = requests.post(end_point, data=json.dumps(data),
                                       headers=headers)

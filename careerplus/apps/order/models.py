@@ -191,6 +191,10 @@ class Order(AbstractAutoDate):
         items = self.orderitems.all()
         return any([item.product.type_flow == 17 for item in items])
 
+    def order_contains_neo_item(self):
+        items = self.orderitems.all()
+        return any([item.product.vendor.slug == 'neo' for item in items])
+
     @property
     def get_status(self):
         statusD = dict(STATUS_CHOICES)
@@ -363,7 +367,7 @@ class Order(AbstractAutoDate):
 
                 if order_discount > 0:
                     combo_discount_amount = (float(order_discount) /
-                                    float(order.total_excl_tax)) * \
+                                    float(self.total_excl_tax)) * \
                                     actual_price_of_item_after_virtual_decrease
                     actual_price_of_item_after_virtual_decrease -= combo_discount_amount
 
@@ -372,7 +376,7 @@ class Order(AbstractAutoDate):
                 item_refund_request_list = RefundItem.objects.filter(
                     oi_id=item.parent.id, \
                     refund_request__status__in=[1, 3, 5, 7, 8, 11])
-                total_refund = float (item_refund_request_list.first ().amount) \
+                total_refund = float(item_refund_request_list.first().amount) \
                     if item_refund_request_list else 0
 
                 if item.parent.selling_price:
@@ -390,18 +394,19 @@ class Order(AbstractAutoDate):
                 replaced = True
                 replacement_id = item.get_replacement_order_id
 
-            total_items = item.order.orderitems.count ()
+            total_items = item.order.orderitems.count()
             if total_items == 1 and item_selling_price == 0:
                 item_selling_price = float(float(self.total_excl_tax) -
-                                           forced_coupon_amount) * 1.18
-            if item_selling_price :
-                amt_dict.update({item.id: item_selling_price})
+                                           float(forced_coupon_amount)) * 1.18
+            if item_selling_price:
+                amt_dict.update({item.id: float(item_selling_price) + float(
+                    item.delivery_price_incl_tax)})
         return amt_dict
 
     def save(self,**kwargs):
-        created = not bool(getattr(self,"id"))
+        created = not bool(getattr(self, "id"))
         if created:
-            return super(Order,self).save(**kwargs)
+            return super(Order, self).save(**kwargs)
 
         existing_obj = Order.objects.get(id=self.id)
 
