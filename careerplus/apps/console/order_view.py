@@ -3483,7 +3483,7 @@ class WhatsAppScheduleView(UserPermissionMixin, DetailView, PaginationMixin):
                     messages.success(
                         self.request,
                         "Profile Changes Saved")
-                    context.update({'profile_form': profile_form})
+                    return HttpResponseRedirect(reverse("console:queue-whatsapp-schedule", kwargs={'pk': obj.pk}))
                 else:
                     messages.error(
                         self.request,
