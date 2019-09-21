@@ -17,14 +17,15 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
         < div > {renderRoutes(routes)} < /div>
         < /StaticRouter>
         < /Provider>);
-    const cssUrl = isMobile ? `${staticUrl}react/dist/mobile/main-${timeStamp}.css` : `${staticUrl}react/dist/desktop/main-${timeStamp}.css`
-    const jsBuildUrl = isMobile ? `${staticUrl}react/dist/mobile/main-${timeStamp}.js` : `${staticUrl}react/dist/desktop/main-${timeStamp}.js`
+    const cssUrl = isMobile ? `${staticUrl}react/dist/mobile/main-${timeStamp}.css` : `https://learning-static-staging-189607.storage.googleapis.com/l1/s/react/dist/desktop/main-${timeStamp}.css`
+    const jsBuildUrl = isMobile ? `${staticUrl}react/dist/mobile/main-${timeStamp}.js` : `https://learning-static-staging-189607.storage.googleapis.com/l1/s/react/dist/desktop/main-${timeStamp}.js`
+
     return `
   <!DOCTYPE html>
       <html lang="en">
       <head>
         <base href="${"/resume-builder/"}" />
-         <link type="text/css" href="${cssUrl}" rel="stylesheet" />
+         <link type="text/css" href="dist/main.css" rel="stylesheet" />
          <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
               integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
               crossorigin="anonymous">
@@ -39,9 +40,18 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
       <body>
       <div id="react-app">${content}</div>
       <script>
-        window.INITIAL_STATE = ${JSON.stringify(store.getState())}
+        window.__PRELOADED_STATE__ = ${JSON.stringify(store.getState()).replace(/</g, '\\u003c')}
       </script>
-      <script type="text/javascript" src="${jsBuildUrl}"></script>
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-3537905-41', 'auto');
+        ga('send', 'pageview');
+       </script>
+      <script type="text/javascript" src="dist/main.js"></script>
       </body>
       </html>
   `;

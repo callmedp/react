@@ -10,7 +10,7 @@ import render from './render';
 const fs = require('fs');
 
 
-const timestamp = fs.readFileSync(`/var/www/config/resume_builder_unique_timestamp.txt`, "utf8");
+const timestamp = fs.readFileSync(`${process.env.STATIC_FILE_PATH}`, "utf8");
 
 
 console.log('time stamp value is -----', timestamp, process.env.STATIC_URL);
@@ -86,7 +86,7 @@ app.get('*', async (req, res) => {
         if (route && route.component && route.component.fetching) {
             try {
                 result = await route.component.fetching(store, {
-                    "alt": "Ew4ZExoWCggBB00hHwsZCBRIGw4VGk1STFBJAk4DTgIbB0hWTlVNUkoCTANIXwRTSFdBUEhWTVBPVElTTRoABwAH"
+                    "alt": "Ew4ZExoWCggBB00hHwsZCBRIGw4VGk0FSFFJU0sHGgRIVkBWHgQcVx5XGlcZBwRTSFdBUEhWTVNIVk1SSBoABwAH"
                 });
                 context['title'] = result[1];
             } catch (e) {

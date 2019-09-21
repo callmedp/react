@@ -10,7 +10,7 @@ const rootElement = document.getElementById('react-app');
 
 
 
-hydrate( < Provider store = {store} >
+hydrate( < Provider store = {store}>
     < App/>
     </Provider>, rootElement)
 ;
