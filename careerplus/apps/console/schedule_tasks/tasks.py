@@ -234,7 +234,7 @@ def gen_auto_login_token_task(task=None, user=None, next_url=None, exp_days=None
     return f
 
 @task
-def generate_discount_report(sid,start_date,end_date):
+def generate_discount_report(sid,start_date,end_date,filter_type):
     from shared.utils import DiscountReportUtil
     from datetime import datetime, timedelta
 
@@ -247,7 +247,7 @@ def generate_discount_report(sid,start_date,end_date):
     logging.getLogger('info_log').info(\
         "Disount Report Task Started for {},{},{}".format(sid,start_date,end_date))
     util_obj = DiscountReportUtil(\
-        start_date=start_date,end_date=end_date+timedelta(days=1),file_name=file_name)
+        start_date=start_date,end_date=end_date+timedelta(days=1),file_name=file_name,filter_type=filter_type) 
     util_obj.generate_report()
     logging.getLogger('info_log').info(\
         "Disount Report Task Complete for {},{},{}".format(sid,start_date,end_date))
