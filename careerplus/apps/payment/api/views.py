@@ -1,23 +1,21 @@
 # python imports
 
 # django imports
-from django.conf import settings
-
-# local imports
-
-from payment.utils import ZestMoneyUtil
 from django.http import HttpResponse, HttpResponseForbidden
 
 
+# local imports
+from payment.utils import ZestMoneyUtil
+
 # inter app imports
 
+
 # third party imports
+
 import requests
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import SessionAuthentication
 
 
 class ZestMoneyFetchEMIPlansApi(APIView):

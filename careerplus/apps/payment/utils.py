@@ -261,7 +261,7 @@ class ZestMoneyUtil:
             self.zestmoney_dict.get('api_base_url'),
             "ApplicationFlow/LoanApplications")
         data = {}
-        data.update({"BasketAmount": float((order.total_incl_tax))})
+        data.update({"BasketAmount": float(order.total_incl_tax)})
         data.update({
             "OrderId"           : order.id,
             "DeliveryPostCode"  : '122011',
@@ -288,7 +288,7 @@ class ZestMoneyUtil:
                         "TotalPrice" : float((oi_dict.get(x.id))),
                         "Category"   : "Services"
                         }for x in OrderItem.objects.filter(
-                                        id__in= oi_dict.keys())]
+                                        id__in=oi_dict.keys())]
 
         data['Basket'] = basket_data
         try:

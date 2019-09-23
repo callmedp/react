@@ -14,6 +14,7 @@
     {{ block.super }}
     {% compress css %}
         <link href="{% static 'shinelearn/css/bootstrap-datepicker.min.css' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/global.scss' %}" rel="stylesheet">
         <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/checkbox.scss' %}" rel="stylesheet">
         <link type="text/scss" href="{% static 'shinelearn/css/mobile/payment/payment.scss' %}" rel="stylesheet">
         <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/smk-accordion.scss' %}" rel="stylesheet">
@@ -210,10 +211,45 @@
 
           <div class="payment-type--item">
             <span></span>
-            <a href="{% url "payment:epaylater-request" cart_id %}" >Card & Netbanking
+            <a href="{% url "payment:epaylater-request" cart_id %}" >Epay Later
               <img src="{% static 'shinelearn/images/mobile/common/epaylater.jpg' %}" class="payment-type--item--img"/>
             </a>
           </div>
+
+                      <div class="accordion_example1 smk_accordion" id="zestMoneyAccordion" >
+              <div class="accordion_in">
+                <div class="acc_head payment-type--item">
+                  <span></span>
+                     Zest Money Emi
+                </div>
+                  <div class="acc_content d-flex">
+                      <div id="emi-block-0" class=" zest_emi_div mr-40">
+                            <span id="emi-0-months"></span><br>
+                            <span id="emi-0-monthly-amount"></span><br>
+                            <span id="emi-0-interest"></span><br>
+                            <span id="emi-0-interest-rate"></span><br>
+                            <span id="emi-0-down-payment"></span><br>
+                            <span id="emi-0-total-amount"></span><br>
+                        </div>
+                        <div id="emi-block-1" class="zest_emi_div">
+                            <span id="emi-1-months"></span><br>
+                            <span id="emi-1-monthly-amount"></span><br>
+                            <span id="emi-1-interest"></span><br>
+                            <span id="emi-1-interest-rate"></span><br>
+                            <span id="emi-1-down-payment"></span><br>
+                            <span id="emi-1-total-amount"></span><br>
+
+                        </div>
+
+
+                  </div><!-- /. accordion content -->
+                  <p class="mt-20">
+                        <button type="button" class="btn btn-yellow btn-round w100" id="zestMakePaymentBtn">Make Payment</button>
+                    </p>
+              </div><!-- /. cash accordion item -->
+          </div><!-- /. accordion wrap -->
+
+
         </div><!-- /. payment type -->
     </div><!-- /. payment white-box -->
 </div><!-- /. payment -->
@@ -231,6 +267,10 @@
 
 
 {% block js_section %}
+<script type="text/javascript">
+        var totalAmount = "{{total_amount}}";
+        var cart_id     = "{{cart_id}}"
+        </script>
     {{block.super}}
     {% compress js %}
         <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script>
