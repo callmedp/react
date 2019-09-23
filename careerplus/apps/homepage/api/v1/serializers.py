@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from homepage.models import TermAndAgreement
+from homepage.models import StaticSiteContent
 
-class TermsAndAgreementSerializer(serializers.ModelSerializer):
+class StaticSiteContentSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = TermAndAgreement
-        fields = ['page_id','content']
+        model = StaticSiteContent
+        fields = ['page_type','content','page_name']

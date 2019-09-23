@@ -15,10 +15,13 @@
 {% block main_container %}
     {% block page_heading %}
         <!-- breadcrums -->
-        <section class="container">
+        <div id = "loader" style ="display:none; text-align: center;">
+              <img aria-label="loader" id="loadingimg" src="{% static 'shinelearn/images/loader.gif' %}" >
+        </div>
+        <section class="container" id="home" style ="display:none;">
           <ol class="breadcrumb">
             <li><a href="/">Home</a></li>
-            <li class="active">{{ page_name }}</li>
+            <li class="active" id="page_name"></li>
           </ol>
         </section>
     {% endblock page_heading %}
@@ -36,11 +39,7 @@
           <div class="static-page-content">
             <!-- page heading -->
           <div class="page-header">
-            <h1>{{ page_name }}</h1>
-          </div>
-          
-          <div id = "loader" style ="display:none; text-align: center;">
-              <img aria-label="loader" id="loadingimg" src="{% static 'shinelearn/images/loader.gif' %}" >
+            <h1 id="heading"></h1>
           </div>
 
           </div>
@@ -67,11 +66,14 @@
   {{block.super}}
 <script>
   $('#loader').show();
-  var page_id = {{page_id}};
+  var page_type = {{page_type}};
   $( document ).ready(function() {
-      $.get('/api/v1/TermAndAgreement/',{"page_id": page_id},
+      $.get('/api/v1/static-site-page/',{"page_type": page_type},
               (data)=>{
                 $('#loader').hide();
+                $('#home').show();
+                document.getElementById('page_name').innerHTML += data.results[0].page_name;
+                document.getElementById('heading').innerHTML += data.results[0].page_name;
                 document.getElementsByClassName('static-page-content')[0].innerHTML += data.results[0].content;
               }).fail(function() {
                       alert( "$.get failed!" );

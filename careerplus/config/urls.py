@@ -217,8 +217,8 @@ urlpatterns += [
          homepage_view.AboutUsView.as_view(), name='about-us'),
 
      url(r'^(?P<page_slug>[\w-]+)/$',
-         homepage_view.ImportantInformationView.as_view(),
-         name='important-information'),
+         homepage_view.StaticSiteContentView.as_view(),
+         name='static-site-content'),
      url(r'^contact-us$',
          homepage_view.ContactUsView.as_view(),
          name='contact-us'),

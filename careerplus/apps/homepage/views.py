@@ -15,7 +15,7 @@ from geolocation.models import Country
 from meta.views import MetadataMixin
 from .models import TopTrending, Testimonial
 
-from .config import PAGESLUG
+from .config import STATIC_SITE_SLUG_TO_ID_MAPPING, STATIC_PAGE_NAME_CHOICES
 
 redis_conn = get_redis_connection("search_lookup")
 
@@ -189,15 +189,14 @@ class ContactUsView(TemplateView):
         })
         return context
 
-class ImportantInformationView(TemplateView):
-    template_name = 'homepage/important-information.html'
+class StaticSiteContentView(TemplateView):
+    template_name = 'homepage/static-site-content.html'
     
     def get_context_data(self, **kwargs):
         page_slug = kwargs['page_slug']
-        context = super(ImportantInformationView, self).get_context_data(**kwargs)
+        context = super(StaticSiteContentView, self).get_context_data(**kwargs)
         context.update({
-            "page_id": int(PAGESLUG[page_slug][0]),
-            "page_name": PAGESLUG[page_slug][1]
+            "page_type": int(STATIC_SITE_SLUG_TO_ID_MAPPING[page_slug]),
             })
         return context
 
