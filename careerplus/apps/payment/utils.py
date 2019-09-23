@@ -208,7 +208,7 @@ class ZestMoneyUtil:
         end_point = "{}/{}?merchantId={}&basketAmount={}".format( \
             self.zestmoney_dict.get('api_base_url'),
             "Pricing/v2/quote/availableemiplans", \
-            self.zestmoney_dict['client_id'], float(math.ceil(amount)))
+            self.zestmoney_dict['client_id'], float(math.floor(amount)))
 
         # Map external response to standard underscored key convention.
         # Maintain code convention and API response integrity.
@@ -261,7 +261,7 @@ class ZestMoneyUtil:
             self.zestmoney_dict.get('api_base_url'),
             "ApplicationFlow/LoanApplications")
         data = {}
-        data.update({"BasketAmount": float(order.total_incl_tax)})
+        # data.update({"BasketAmount": float(math.ceil(order.total_incl_tax))})
         data.update({
             "OrderId"           : order.id,
             "DeliveryPostCode"  : '122011',
@@ -278,14 +278,20 @@ class ZestMoneyUtil:
             "MobileNumber"      : order.mobile,
         })
 
+
         oi_dict = order.get_oi_actual_price_mapping()
         if not oi_dict:
             return
         from order.models import OrderItem
+        basketAmount = sum([float (math.floor (oi_dict.get (x.id, 0))) for x in
+                        OrderItem.objects.filter(
+                            id__in=oi_dict.keys ())])
+        data.update({'BasketAmount' : float(math.floor(basketAmount))})
+
         basket_data = [{"Id"         : x.product.id,
                         "Description": x.product_name,
                         "Quantity"   : int(x.quantity),
-                        "TotalPrice" : float((oi_dict.get(x.id))),
+                        "TotalPrice" : float(math.floor(oi_dict.get(x.id,0))),
                         "Category"   : "Services"
                         }for x in OrderItem.objects.filter(
                                         id__in=oi_dict.keys())]
