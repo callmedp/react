@@ -1,0 +1,21 @@
+{% load render_bundle from webpack_loader %}
+{% load static humanize compress %}
+
+{% block head %}
+    {% block css_section %}
+        {% render_bundle 'main' 'css' %}
+    {% endblock css_section %}
+    <script>
+        profileInfo = 'info is requeired';
+    </script>
+{% endblock head %}
+
+
+{% block container %}
+    <div id="react-app"></div>
+    <!-- Webpack rendered JS -->
+{% endblock container %}
+
+{% block js_section %}
+    {% render_bundle 'main' 'js' %}
+{% endblock js_section %}

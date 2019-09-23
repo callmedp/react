@@ -210,7 +210,8 @@ label:hover:before {
 }
 
 [type="radio"]:checked + label,
-[type="radio"]:not(:checked) + label{
+[type="radio"]:not(:checked) + label
+{
   position: relative;
   padding-left: 28px;
   cursor: pointer;

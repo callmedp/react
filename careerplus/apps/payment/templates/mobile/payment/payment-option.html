@@ -13,25 +13,15 @@
 {% block css_section %}
     {{ block.super }}
     {% compress css %}
-        <link type="text/scss" href="{% static 'shinelearn/css/common/bootstrap.scss' %}" rel="stylesheet">
         <link href="{% static 'shinelearn/css/bootstrap-datepicker.min.css' %}" rel="stylesheet">
         <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/checkbox.scss' %}" rel="stylesheet">
         <link type="text/scss" href="{% static 'shinelearn/css/mobile/payment/payment.scss' %}" rel="stylesheet">
         <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/smk-accordion.scss' %}" rel="stylesheet">
     {% endcompress %}
 
-    {% compress css inline %}
-        <style type="text/css">
-            .error{
-                color:red;
-            }
-        </style>
-    {% endcompress %}
-
 {% endblock css_section %}
 
 {% block header %}
-
     <!-- header menu Icon Starts here -->
     <header class="w100fl he-auto">
 
@@ -42,189 +32,202 @@
               <a class="icon-back pull-left" role="button" onclick="goBack()"></a>
           </div><!-- / Left side Icon ends here -->
       </div><!-- header menu Icon ends here -->
-
-      <ul class="payment-nav">
-          <li id="log"><a href="{% url "cart:payment-login" %}">Login</a></li>
-          <li id="detail"><a href="{% url "cart:payment-shipping" %}">Details</a></li>
-          <li id="summary"><a href="{% url "cart:payment-summary" %}">Summary</a></li>
-          <li  id="payment" class="bg-none active"><a href="{% url "payment:payment-option" %}">Payment</a></li>
-      </ul>
   </header><!-- header ends here -->
 
 {% endblock header %}
 
 {% block container %}
+<div class="clearfix"></div>
+<div class="payment">
+    <div class="payment--bg"></div>
+    <ul class="payment__steps">
+        <li class="payment__steps__item">
+            <a  href="{% url "cart:payment-summary" %}">
+                <!-- <span class="dot">1</span> -->
+                <span class="tick"></span>
+                Summary
+            </a>
+        </li>
 
-<div class="body-wrapper ">
-  <!-- Tab content Satrts here -->
-  <div class="content-box payment">
-    <h2 class="c9 fs-16">Select mode of payment</h2>
-    <!-- Accordion begin -->
-    <div class="accordion_example1 accordion-wrap box row p-0 mt-20">
+        <li class="payment__steps__item">
+            <a href="{% url "cart:payment-login" %}">
+                <!-- <span class="dot">2</span> -->
+                <span class="tick"></span>
+                {%if guest_login%}Guest{%else%}Login{%endif%}
+            </a>
+        </li>
 
-      <!-- Credit card / Debit card / Net banking -->
-      <div class="accordion_in acc_active">
-        <div class="acc_head fs-14">Credit card / Debit card / Net banking</div>
-        <div class="acc_content c6">
-          <p>You will be redirected to a secure page where you can choose your bank, and make your payment</p>
+        <li class="payment__steps__item">
+            <a href="{% url "payment:payment-option" %}" class="active">
+                <span class="dot">3</span>
+                <!-- <span class="tick"></span> -->
+                Payment
+            </a>
+        </li>
+    </ul><!-- payment setps-->
 
-          <ul class="payment-mode">
-            <li><a href="{% url "payment:ccavenue_request" cart_id 'creditcard' %}" class="cc">Credit Card</a></li>
-            <li><a href="{% url "payment:ccavenue_request" cart_id 'debit' %}" class="dc">Debit Card</a></li>
-            <li><a href="{% url "payment:ccavenue_request" cart_id 'netbanking' %}" class="nb">Net Banking</a></li>
-            <li><a href="{% url "payment:ccavenue_request" cart_id 'international' %}" class="ic">International Card</a></li>
-            <li><a href="{% url "payment:ccavenue_request" cart_id 'emi' %}" class="emi">EMI</a></li>
-          </ul>
-        </div><!-- /. acc content -->
-      </div><!-- /. Credit card / Debit card / Net banking -->
-{% comment %}
-      <!--&lt;!&ndash; /. Mobilwik &ndash;&gt;-->
-      <!--<div class="accordion_in">-->
-        <!--<div class="acc_head fs-14">Mobikwik</div>-->
-        <!--<div class="acc_content">-->
-          <!--<table class="fs-12 c9 w100 mobilwik">-->
-            <!--<tr>-->
-              <!--<td>Order ID:</td>-->
-              <!--<td>0982764</td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-              <!--<td class="item">Order amount</td>-->
-              <!--<td class="price">Rs. 2099/-</td>-->
-            <!--</tr>-->
-
-            <!--<tr>-->
-              <!--<td class="item">your email ID</td>-->
-              <!--<td class="price">brijeshranu@gmail.com</td>-->
-            <!--</tr>-->
-
-          <!--</table>-->
-          <!--<a id="mobikwik_id" href="{% url "payment:mobikwik_request" %}" class="btn btn-slg btn-orange">Make Payment</a>-->
-        <!--</div>&lt;!&ndash; /. acc content &ndash;&gt;-->
-      <!--</div>&lt;!&ndash; /. Mobilwik &ndash;&gt;-->
-        {% endcomment %}
-
-      <!-- EMI  -->
-      <div class="accordion_in">
-        <div class="acc_head fs-14">EMI</div>
-        <div class="acc_content">
-          <p class="fs-12">For EMI, you will be redirected to a secure page where you can choose your bank, and make your payment.</p>
-          <a href="{% url "payment:ccavenue_request" cart_id 'emi' %}" class="btn btn-slg btn-orange">Make Payment</a>
-        </div><!-- /. acc content -->
-      </div><!-- /. EMI  -->
-
-      <!-- Cheque  -->
-    {% if type_flow != 17 %}
-      <div class="accordion_in">
-        <div class="acc_head fs-14">Cheque</div>
-        <div class="acc_content fs-12">
-          <div class="cheque">
-            <form id="check-pay-form" method="post" action="">{% csrf_token %}
-                {% for field in check_form %}
-                    <div class="form-group {% if field.errors %}error{% endif %}">
-                      {{ field }}
-                      <p class="error-txt"></p>
-                    </div>
-                {% endfor %}
-                <input type="hidden" name="payment_type" value="cheque">
-            </form>
-
-            <div class="bank-detail text-center mt-30 mb-30">
-              <p><strong>Our Account Details with ICICI Bank</strong></p>
-              <p class="pb-0">Account Name : HT Media Limited <br />Account No. : 000705038629</p>
-            </div><!-- /.bank detail -->
-
-            <p>Step to follow</p>
-            <ul class="c9">
-              <li>Confirm the payment below to generate your Transaction ID</li>
-              <li>Deposit the cash at the nearest ICICI Bank branch</li>
-              <li>Mail us a scanned copy of the deposit slip at <a href="#">resumeservices@shine.com</a></li>
-            </ul><!-- /.Steps -->
-          </div><!-- /. cheque -->
-          <a role="button" id="check-sumit-button" class="btn btn-slg btn-orange">Make Payment</a>
-        </div><!-- /. acc content -->
-      </div><!-- /. Cheque  -->
-
-      <!-- cash  -->
-      <div class="accordion_in">
-        <div class="acc_head fs-14">Cash</div>
-        <div class="acc_content fs-12">
-          <div class="cheque">
-            <strong>Deposit your cash at ICICI bank branches accross the country!</strong>
-            <p class="pt-10">Step to follow</p>
-            <ul class="c9">
-              <li>Confirm the payment below to generate your Transaction ID</li>
-              <li>Deposit the cash at the nearest ICICI Bank branch</li>
-              <li>Mail us a scanned copy of the deposit slip at <a href="#">resumeservices@shine.com</a></li>
-            </ul><!-- /.Steps -->
-
-            <div class="bank-detail text-center mt-30 mb-30">
-              <p><strong>Our Account Details with ICICI Bank</strong></p>
-              <p class="pb-0">Account Name : HT Media Limited <br />Account No. : 000705038629</p>
-            </div><!-- /.bank detail -->
-            <form role="form" id="id-cash-form" method="post" action="." >{% csrf_token %}
-              <div class="form-group {% if state_form.state.errors %}error{% endif %}">
-                <!--select class="form-control {% if state_form.state.errors %}error{% endif %}" id="id_state" name="state" required aria-required="true" aria-invalid="true">
-                  <option value="-1" selected="selected">Please select your state</option>
-                  <option value="1">Delhi</option><option value="2">Haryana</option>
-                  <option value="4">MP</option><option value="3">West Bengal</option>
-                </select-->
-                {{state_form.state}}
-                <p class="error-txt">{{state_form.state.errors.0}}</p>
-
-                <input type="hidden" name="payment_type" value="cash">
-
-              </div>
-
-              <button type="submit" class="btn btn-slg btn-orange">Make Payment</a>
-            </form>
-
-
-          </div><!-- /. cheque -->
-        </div><!-- /. acc content -->
-      </div><!-- /. cash  -->
-     {% endif %}
-      <!-- UPI  -->
-      <div class="accordion_in">
-        <div class="acc_head fs-14">UPI</div>
-        <div class="acc_content">
-          <p class="fs-12">For UPI, you will be redirected to a secure page where you can enter your UPI address, and complete your payment.</p>
-          <a href="{% url "payment:ccavenue_request" cart_id 'upi' %}" class="btn btn-slg btn-orange">Make Payment</a>
-        </div><!-- /. acc content -->
-      </div><!-- /. UPI  -->
-
-      <div class="accordion_in">
-        <div class="acc_head fs-14">Buy Now And Pay Later</div>
-        <div class="acc_content c6">
-          <p>You will be redirected to a secure page where you can fill up some details and pay at a later date.</p>
-
-          <ul class="payment-mode">
-            <li><a href="{% url "payment:epaylater-request" cart_id %}" class="cc"><img width="100px" src="{% static 'shinelearn/images/payments/epaylater-logo.svg' %}" alt="EPayLater" title="EPayLater"></a></li>
-          </ul>
-        </div><!-- /. acc content -->
+    <div class="payment--white-box">
+      <div class="p-15">
+        <p class="fs-18">Choose your mode of payment</p>
       </div>
 
-    </div><!-- /. accordion-wrap -->
-    <!-- Accordion end -->
-    <p class="text-center bold c9 mt-20"><span class="icon-lock"></span>100% Secure Payment</p>
-  </div><!-- Tab content ends here -->
-
-<!-- call us and chat widget starts here -->
-<div class="stick_bottom">
-    <div class="content-box">
-        <div class="wf100">
-          <div class="pull-left">
-            <p class="c9 fs-12 pb-0">Payable Amount</p>
-              <span class="fs-22 c3">Rs. {{total_amount}}/-</span>
+        <div class="payment-type">
+          <div class="payment-type--item">
+            <span></span>
+            <a href="{% url "payment:ccavenue_request" cart_id 'all' %}">Card & Netbanking</a>
           </div>
-          <!--a href="payment-thanks.html" class="btn btn-slg btn-orange pull-right">Make Payment</a-->
-        </div>
-    <div class="clearfix"></div>
+
+
+          <div class="accordion_example1 smk_accordion">
+              <div class="accordion_in">
+                <div class="acc_head payment-type--item">
+                  <span></span>
+                  Cash
+                </div>
+                  <div class="acc_content" style="display: none;">
+                    <p class="fs-16">Deposit your cash at ICICI bank branches accross the country!</p>
+
+                    <p class="fw600 c3">Step to follow</p>
+                    <ul class="bullet-blue">
+                      <li>Confirm the payment below to generate your Transaction ID</li>
+                      <li>Deposit the cash at the nearest ICICI Bank branch</li>
+                      <li>Mail us a scanned copy of the deposit slip at resumeservices@shine.com</li>
+                    </ul>
+
+                    <div class="payment-type__account">
+                      <p class="fw600 c3 payment-type__account--head">Our Account Details with ICICI Bank</p>
+                      <div class="payment-type__account--detail c3">
+                        <div class="payment-type__account--item mb-10">
+                          <span class="payment-type__account--name">Account Name</span>
+                          <span>: HT Media Limited</span>
+                        </div>
+
+                        <div class="payment-type__account--item">
+                          <span class="payment-type__account--name">Account No.</span>
+                          <span>: 00705038629</span>
+                        </div>
+                      </div>
+                    </div><!-- /. Account Details -->
+                <form role="form" id="id-cash-form" method="post" action="." >{% csrf_token %}
+                    <div class="mt-15">
+                        <select class="form--control" id="states_list" name="state">
+                            <option disabled>Select State</option>
+                             {% for state in state_list %}
+                                 <option value="{{state.0}}" >{{ state.1}}</option>
+                             {% endfor  %}
+                         </select>
+                        <p class="error--mgs"></p>
+                        <input type="hidden" name="payment_type" value="cash">
+                    </div>
+
+                    <p class="fs-18 mt-10 c3"><strong>Rs. {{total_amount}}</strong> (amount payable)</p>
+                    <p class="mt-20">
+                        <button type="submit" class="btn btn-yellow btn-round w100">Make Payment</button>
+                    </p>
+                </form>
+
+                  </div><!-- /. accordion content -->
+              </div><!-- /. cash accordion item -->
+
+              <div class="accordion_in">
+                <div class="acc_head payment-type--item">
+                  <span></span>
+                  Cheque
+                </div>
+
+                  <div class="acc_content" style="display: none;">
+                   <form id="check-pay-form" method="post" action="">{% csrf_token %}
+
+                    <p class="fs-16">Pay by Cheque</p>
+
+                    <ul class="p-0 mt-15 mb-15 ">
+
+                          <li class="login__item input-effect ">
+                             <input maxlength="100" placeholder="" name="cheque_no" required class="animation-input form--control" type="text">
+                             <label for="cheque">Cheque no. *</label>
+                             <p class="error--mgs"></p>
+                          </li>
+                          <li class="login__item input-effect ">
+                             <input maxlength="255" placeholder="" name="drawn_bank" required class="animation-input form--control" type="text">
+                             <label for="cheque">Drawn on bank *</label>
+                             <p class="error--mgs"></p>
+                          </li>
+                          <li class="login__item input-effect ">
+                             <input name="deposit_date" data-date="" data-date-format="MM/DD/YYYY" required class="form--control" type="date" placeholder="Date of deposit *">
+                             <!-- <label for="cheque">Date of deposit *</label> -->
+                             <p class="error--mgs"></p>
+
+                          </li>
+                    </ul>
+                        <input type="hidden" name="payment_type" value="cheque">
+
+<!--
+                      <ul class="p-0 mt-15 mb-15">
+                          <li class="login__item input-effect">
+                              <input type="text" class="form--control animation-input" id="cheque" aria-describedby="cheque" placeholder="">
+                              <label for="cheque">Cheque no. *</label>
+                          </li>
+                          <li class="login__item input-effect">
+                              <input type="text" class="form--control animation-input" id="drawn" aria-describedby="drawn" placeholder="">
+                              <label for="drawn">Drawn on bank *</label>
+                          </li>
+                          <li class="login__item input-effect">
+                              <input type="text" class="form--control animation-input" id="deposit" aria-describedby="deposit" placeholder="">
+                              <label for="deposit">Date of Desposit *</label>
+                          </li>
+                      </ul>
+-->
+
+
+                    <div class="payment-type__account">
+                      <p class="payment-type__account--head fw600 c3 ">Our Account Details with ICICI Bank</p>
+                      <div class="payment-type__account--detail c3">
+                        <div class="payment-type__account--item mb-10">
+                          <span class="payment-type__account--name">Account Name</span>
+                          <span>: HT Media Limited</span>
+                        </div>
+
+                        <div class="payment-type__account--item">
+                          <span class="payment-type__account--name">Account No.</span>
+                          <span>: 00705038629</span>
+                        </div>
+                      </div>
+                    </div><!-- /. Account Details -->
+
+                    <p class="fw600 c3 mt-20">Step to follow</p>
+                    <ul class="bullet-blue">
+                      <li>Confirm the payment below to generate your Transaction ID</li>
+                      <li>Deposit the cash at the nearest ICICI Bank branch</li>
+                      <li>Mail us a scanned copy of the deposit slip at resumeservices@shine.com</li>
+                    </ul>
+
+                    <p class="fs-18 mt-20 c3"><strong>Rs. {{total_amount}}</strong> (amount payable)</p>
+                    <p class="mt-20"><a href="javascript:{}" id='check-sumit-button' class="btn btn-yellow btn-round w100">Make Payment</a></p>
+                     </form>
+                  </div><!-- /. accordion content -->
+              </div><!-- /. Cheque accordion item -->
+          </div><!-- /. accordion wrap -->
+
+          <div class="payment-type--item">
+            <span></span>
+            <a href="{% url "payment:epaylater-request" cart_id %}" >Buy now, Pay Later
+              <img src="{% static 'shinelearn/images/mobile/common/epaylater.jpg' %}" class="payment-type--item--img"/>
+            </a>
+          </div>
+        </div><!-- /. payment type -->
+    </div><!-- /. payment white-box -->
+</div><!-- /. payment -->
+
+<div class="bottom-cta">
+    <div class="bottom-cta__price">
+        <p class="fs-12 pb-0 c6">Payable Amount</p>
+        <strong class="fs-22">Rs. {{total_amount}}</strong>
     </div>
-</div><!-- call us and chat widget ends here -->
-
 </div>
-
 {% endblock container %}
+{% block footer %}
+
+{% endblock footer %}
 
 
 {% block js_section %}
@@ -244,6 +247,18 @@
                 closeAble: true, //boolean
                 slideSpeed: 200 //integer, miliseconds
               });
+            });
+
+            $(window).load(function(){
+                $(".input-effect input").val("");
+                
+                $(".input-effect input").focusout(function(){
+                    if($(this).val() != ""){
+                        $(this).addClass("has-content");
+                    }else{
+                        $(this).removeClass("has-content");
+                    }
+                })
             });
         </script>
     {% endcompress js %}

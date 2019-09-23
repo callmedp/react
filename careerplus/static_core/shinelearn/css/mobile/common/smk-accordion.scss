@@ -30,11 +30,12 @@
             }
 
             .acc_icon_expand {
-                @include icon-block (13px, 7px, -38px -202px);
+                @include icon-block (13px, 8px, -405px -321px);
                 margin-top: -4px;
                 position: absolute;
                 right: 10px;
                 top: 50%;
+                transition: all .3s;
             }
 
         }/* acc head ends here */
@@ -49,7 +50,7 @@
 
     .accordion_in.acc_active {
         .acc_head .acc_icon_expand {
-            background-position: -52px -201px;
+            transform: rotate(180deg);
         }
 
         .acc_content{ 

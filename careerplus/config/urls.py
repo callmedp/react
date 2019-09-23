@@ -168,8 +168,6 @@ urlpatterns += [
                    url(r'^admin/', include(admin.site.urls)),
                    url(r'^api-auth/',
                        include('rest_framework.urls', namespace='rest_framework')),
-                   # cart rest apis
-                   # url(r'^api/v1/cart/', include('cart.api.v1.urls', namespace="cart-api")),
                    url(r'api/v1/', include('shop.api.v1.urls', namespace='shop-api')),
                    url(r'api/', include('skillpage.api.v1.urls', namespace='skillpage-api')),
                    url(r'^$', homepage_view.HomePageView.as_view(), name='homepage'),
@@ -201,6 +199,10 @@ urlpatterns += [
                    url(r'^linkedin/login/$',
                        LinkedinCallbackView.as_view(), name='linkedin-login'),
                    url(r'^api/v1/resume/', include('resumebuilder.api.v1.urls', namespace='resume_builder')),
+
+                   url(r'^api/v1/geolocation/', include('geolocation.api.v1.urls', namespace='geolocation')),
+
+                   url(r'^api/v1/cart/', include('cart.api.v1.urls', namespace='cart')),
 
                    url(r'^api/', include('api.urls', namespace='api')),
 
@@ -253,7 +255,7 @@ if settings.DEBUG:
 
     class SwaggerSchemaView(APIView):
         renderer_classes = [
-        #     renderers.OpenAPIRenderer,
+            #     renderers.OpenAPIRenderer,
             renderers.SwaggerUIRenderer
         ]
 

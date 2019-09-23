@@ -786,9 +786,11 @@ class RegistrationLoginApi(object):
     def user_registration(post_data):
         response_json = {"response": "exist_user"}
         post_url = "{}/api/v2/web/candidate-profiles/?format=json".format(settings.SHINE_SITE)
-        try:
-            country_obj = Country.objects.get(phone=post_data['country_code'])
-        except Country.DoesNotExist:
+
+        country_obj = Country.objects.filter(phone=post_data['country_code'])
+        if len(country_obj):
+            country_obj = country_obj[0]
+        else:
             country_obj = Country.objects.get(phone='91')
 
         headers = ShineCandidateDetail().get_api_headers_non_auth()
@@ -810,7 +812,7 @@ class RegistrationLoginApi(object):
                 response_json.update({'response': "form_error"})
             else:
                 logging.getLogger('error_log').error("Error getting response from shine for"
-                                                 " registration. {}".format(response))
+                                                     " registration. {}".format(response))
 
         except Exception as e:
             logging.getLogger('error_log').error("Error getting response from shine for"
@@ -841,7 +843,7 @@ class RegistrationLoginApi(object):
                 response_json.update({'response': "form_error"})
             else:
                 logging.getLogger('error_log').error("Error getting response from shine for"
-                                                 " login. {}".format(response))
+                                                     " login. {}".format(response))
 
         except Exception as e:
             logging.getLogger('error_log').error("Error in getting response from shine for login. %s " % str(e))
@@ -875,25 +877,25 @@ class RegistrationLoginApi(object):
 
         post_data.update({
             'email': data_dict.get('email').lower(),
-            'password':data_dict.get('new_password1'),
-            'confirm_password':data_dict.get('new_password2')
+            'password': data_dict.get('new_password1'),
+            'confirm_password': data_dict.get('new_password2')
         })
         request_header = ShineCandidateDetail().get_api_headers(token=None)
-        request_header.update({'Content-Type':'application/json'})
+        request_header.update({'Content-Type': 'application/json'})
         try:
             response = requests.post(post_url, data=json.dumps(post_data), headers=request_header)
             if response.status_code == 201:
                 response_json = response.json()
-                response_json.update({'response':True})
+                response_json.update({'response': True})
 
             elif response.status_code == 400:
                 response_json = response.json()
-                response_json.update({'status_code':response.status_code})
+                response_json.update({'status_code': response.status_code})
                 logging.getLogger('error_log').error(
                     "Error in getting response from shine for existing email check. ""%s " % str(response.status_code))
             else:
                 logging.getLogger('error_log').error("Error getting response from shine for"
-                                                 " reset update. {}".format(response))
+                                                     " reset update. {}".format(response))
         except Exception as e:
             logging.getLogger('error_log').error("Error in getting response from shine for existing email check. "
                                                  "%s " % str(e))
@@ -927,7 +929,7 @@ class RegistrationLoginApi(object):
 
         try:
             request_header = ShineCandidateDetail().get_api_headers(token=None)
-            request_header.update({'Content-Type':'application/json'})
+            request_header.update({'Content-Type': 'application/json'})
             response = requests.post(post_url, data=json.dumps(post_data), headers=request_header)
             if response.status_code == 201:
                 response_json = response.json()
@@ -935,12 +937,12 @@ class RegistrationLoginApi(object):
 
             elif response.status_code == 400:
                 response_json = response.json()
-                response_json.update({'status_code':response.status_code})
+                response_json.update({'status_code': response.status_code})
                 logging.getLogger('error_log').error(
                     "Error in getting response from shine for existing email check. ""%s " % str(response.status_code))
             else:
                 logging.getLogger('error_log').error("Error getting response from shine for"
-                                                 " social login. {}".format(response))
+                                                     " social login. {}".format(response))
         except Exception as e:
             logging.getLogger('error_log').error("Error in getting response from shine for existing email check. "
                                                  "%s " % str(e))
@@ -990,8 +992,8 @@ class UserMixin(object):
 
 class UserGroupMixin(object):
     user_check_failure_path = '/console'  # can be path, url name or reverse_lazy
-    group_names = []    # use group_names if any one out of list is enough
-    group_list = []     # use group_list if all elements of list is required
+    group_names = []  # use group_names if any one out of list is enough
+    group_list = []  # use group_list if all elements of list is required
 
     def check_group(self, user):
         if user.is_superuser:
@@ -1017,6 +1019,7 @@ class UserGroupMixin(object):
             return self.user_check_failed(request, *args, **kwargs)
         return super(UserGroupMixin, self).dispatch(request, *args, **kwargs)
 
+
 class UserPermissionMixin(object):
     permission_to_check = []
     any_permission = False
@@ -1033,4 +1036,3 @@ class UserPermissionMixin(object):
         if not self.check_permission(request.user):
             raise PermissionDenied()
         return super(UserPermissionMixin, self).dispatch(request, *args, **kwargs)
-

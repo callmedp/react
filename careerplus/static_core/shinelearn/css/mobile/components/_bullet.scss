@@ -1,7 +1,6 @@
 .bullet {
 
   li {
-
     list-style-type: circle;
     list-style-position: inside;
     padding-bottom: 10px;
@@ -22,26 +21,28 @@
       padding-bottom: 0;
     }
   }
-
 }
 
-.blue-bullet {
+.bullet-blue {
+  padding: 0 !important;
+
   li {
-      position: relative;
-      padding-left: 15px;
+    position: relative;
+    padding-left: 20px;
+    list-style-type: none !important;
 
-      &:not(:last-child){
-          margin-bottom: 5px;
-      }
+    &:not(:last-child) {
+      margin-bottom: 15px;
+    }
 
-      span {
-          width: 5px;
-          height: 5px;
-          background-color: $blue;
-          position: absolute;
-          left: 0;
-          top: 8px;
-          border-radius: 50%;
-      }
+    &::before {
+      @include size(6px, 6px, inline-block);
+      @include border-radius(50%);
+      content: '';
+      background-color: $blue;
+      position: absolute;
+      left: 0;
+      top: 7px;
+    }
   }
 }
