@@ -93,6 +93,10 @@ class CartMixin(object):
                         cart_obj.email = email
                     cart_obj.save()
 
+                if self.request.session.get('first_name') and not cart_obj.first_name:
+                    cart_obj.first_name = self.request.session.get('first_name',None)
+                    cart_obj.save()
+
                 if country_code and not cart_obj.country_code:
                     try:
                         country_obj = Country.objects.get(phone=country_code, active=True)
