@@ -166,13 +166,13 @@ class PayuPaymentUtil():
             'lastname'   : order.last_name,
             'email'      : order.email,
             'phone'      : order.mobile,
-            'productinfo': ",".join(str([{"Id"         : x.product.id,
+            'productinfo': str([{"Id"         : x.product.id,
                               "Description": x.product_name,
                               "Quantity"   : int(x.quantity),
                               "TotalPrice" : float(math.floor(oi_dict.get(x.id,0))),
                               "Category"   : "Services"
                               }for x in OrderItem.objects.filter(
-                                id__in=oi_dict.keys())]))[:100]
+                                id__in=oi_dict.keys())])[:100]
             ,'udf1'       : "Orderid - {}".format(order.id),
             'amount'     : order.total_incl_tax,
             "pg": 'CC',

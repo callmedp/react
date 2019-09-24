@@ -234,7 +234,6 @@ const removalAjax = (formData) => {
 
 function removeFromCart(line_id) {
     if (line_id) {
-        debugger;
         $('#id-remove-cart' + line_id).addClass('disabled').removeAttr("onclick");
         var formData = $('#cart_remove_form' + line_id).serialize();
         removalAjax(formData)
