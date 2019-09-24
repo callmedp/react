@@ -380,10 +380,12 @@
               {% endif %}
               
               <br>
-              {% if not orderitem.is_onboard and perms.order.can_approve_jobs_on_the_move %}
+              {% if orderitem.is_onboard and not orderitem.is_approved and perms.order.can_approve_jobs_on_the_move %}
               <div class="form-group col-md-12">
                 <label> Day of Week {{profile_form.day_of_week}}</label>
               </div>
+              {% endif %}
+              {% if not orderitem.is_onboard and perms.order.can_approve_jobs_on_the_move %}
               <br>
               <br>
               <div class="form-group col-md-4">
