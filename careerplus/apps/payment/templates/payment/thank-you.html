@@ -76,10 +76,12 @@ Thank You - Shine Learning
                         Use latest shine resume
                     </div>
                     {% endif %}
+                    {% if candidate_id %}
                     <div>
                         <input type="checkbox" checked onclick="uploadResumeShine(this,{{order.id}})" /> <span>Upload
                             new resume post service completion</span>
                     </div>
+                    {% endif %}
                     <input type="hidden" id="action-type-id" name="action_type" value="upload_resume">
                     <a role="button" class="blue-button mt-20" id="resume-sumbmit-button">Proceed</a>
                 </form>
