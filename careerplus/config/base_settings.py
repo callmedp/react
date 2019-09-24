@@ -591,3 +591,8 @@ CANDIDATE_MONGO_USERNAME = 'candadmin'
 CANDIDATE_MONGO_PASSWORD = 'candadmin'
 CANDIDATE_MONGO_INSTANCE_STR = '172.22.67.226:27017'
 CANDIDATE_MONGO_DB = 'sumoplus'
+
+PAYU_INFO = {'merchant_salt':'JN7rUoRe',
+            'merchant_key':'ng7s88',
+            'payment_url':'https://test.payu.in/_payment',
+            'web_api_url':'https://test.payu.in/merchant/postservice.php?form=2'}
