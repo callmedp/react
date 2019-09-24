@@ -167,12 +167,10 @@ class PayuPaymentUtil():
             'lastname'   : order.last_name if order.last_name else "",
             'email'      : order.email,
             'phone'      : order.mobile,
-            'productinfo': str([{"Description": x.product_name,
+            'productinfo': ''.join(str([{"Description": x.product_name,
                               "Quantity"   : int(x.quantity),
-                              # "TotalPrice" : float(math.floor(oi_dict.get(x.id,0))),
-                              # "Category"   : "Services"
                               }for x in OrderItem.objects.filter(
-                                id__in=oi_dict.keys())])[:100]
+                                id__in=oi_dict.keys())]))[:100]
             ,'udf1'       : "Orderid - {}".format(order.id),
             'amount'     : float(order.total_incl_tax),
             "pg": 'CC',
@@ -180,8 +178,8 @@ class PayuPaymentUtil():
         initial_dict.update \
             ({'txnid':txn.txn,
               'key':settings.PAYU_INFO['merchant_key'],
-              'surl':"{}/payment/payu/response/success/".format(settings.SITE_DOMAIN),
-              'furl':"{}/payment/payu/response/failure/".format(settings.SITE_DOMAIN),
-              'curl':"{}/payment/payu/response/cancel/".format(settings.SITE_DOMAIN),
+              'surl':"{}/payment/payu/response/success/".format('https://learning1.shine.com'),
+              'furl':"{}/payment/payu/response/failure/".format('https://learning1.shine.com'),
+              'curl':"{}/payment/payu/response/cancel/".format('https://learning1.shine.com'),
               })
         return initial_dict
