@@ -180,8 +180,7 @@ class PayuPaymentUtil():
         initial_dict.update \
             ({'txnid':txn.txn,
               'key'  :settings.PAYU_INFO['merchant_key'],
-              'surl' :"{}/payment/payu/response/success/".format(
-                  settings.SITE_DOMAIN),
+              'surl' :"learning1.shine.com/payu/response/success",
               'furl' :"{}/payment/payu/response/failure/".format(
                   settings.SITE_DOMAIN),
               'curl' :"{}/payment/payu/response/cancel/".format(
