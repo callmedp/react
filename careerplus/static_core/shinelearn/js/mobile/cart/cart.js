@@ -26,7 +26,7 @@ function removeFromCartMobile(line_id) {
 
 };
 
-function handleDeliveryUpdation(formData, lineId) {
+function handleDeliveryUpdation(formData, lineId,itemId) {
 
     $.ajax({
         url: '/cart/update-deliverytype/',
@@ -67,6 +67,8 @@ function handleDeliveryUpdation(formData, lineId) {
 
                 $(`#active-delivery-description${lineId.trim()}`).text(`(${deliveryServiceDesc})`)
 
+                $(`#delivery-item${itemId}`).slideToggle();
+
 
             }
 
@@ -80,25 +82,25 @@ function handleDeliveryUpdation(formData, lineId) {
     });
 }
 
-function deliveryOptionUpdate(line_id) {
+function deliveryOptionUpdate(line_id,itemId) {
     if (line_id) {
         //var formData = $('#delivery-option-form' + line_id).serialize();
         var formData = new FormData();
         formData.append("csrfmiddlewaretoken", $('input[name="csrfmiddlewaretoken"]').val());
         formData.append("delivery_type", $('select[name="delivery_type"]').val());
         formData.append("lineid", $('input[name="lineid"]').val());
-        handleDeliveryUpdation(formData, line_id)
+        handleDeliveryUpdation(formData, line_id, itemId)
     }
 }
 
-const selectDeliveryType = (deliveryType, lineId, csrf) => {
+const selectDeliveryType = (deliveryType, lineId, csrf,itemId) => {
     if (lineId) {
         var formData = new FormData();
         formData.append("csrfmiddlewaretoken", csrf);
         formData.append("delivery_type", deliveryType);
         formData.append("lineid", lineId);
 
-        handleDeliveryUpdation(formData, lineId);
+        handleDeliveryUpdation(formData, lineId,itemId);
     }
 }
 

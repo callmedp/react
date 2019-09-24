@@ -183,7 +183,7 @@ $().ready(function() {
         });        
     }
 
-    init_autocomplete();
+   // init_autocomplete();
 
 
 });

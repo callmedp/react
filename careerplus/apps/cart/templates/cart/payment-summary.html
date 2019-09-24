@@ -138,7 +138,7 @@
                                  <div class="pr"> <ul class="delivery-list cls_delivery-content" id="delivery-item{{item.id}}" style="display: none;">
                                       {% for delivery_obj in delivery_types %}
                                       <li>
-                                          <input type="radio" name="{{item.id}}" id="{{delivery_obj.slug}}{{item.id}}" {% if forloop.counter0 == delivery_service|get_count %} checked {%endif %} name="delivery-list" onclick="selectDeliveryType('{{delivery_obj.id}}', '{% if variations|length  %} {{variations.0.id}} {% else %} {{item.id}} {% endif %}', '{{csrf_token}}')" value="19">
+                                          <input type="radio" name="{{item.id}}" id="{{delivery_obj.slug}}{{item.id}}" {% if forloop.counter0 == delivery_service|get_count %} checked {%endif %} name="delivery-list" onclick="selectDeliveryType('{{delivery_obj.id}}', '{% if variations|length  %} {{variations.0.id}} {% else %} {{item.id}} {% endif %}', '{{csrf_token}}', '{{item.id}}')" value="19">
                                           <label for="{{delivery_obj.slug}}{{item.id}}"><strong class="block">{{delivery_obj.title}}- {% if delivery_obj.inr_price|is_free %}No extra cost {% else %}Rs. {{delivery_obj.inr_price}}/- {% endif %}</strong> ({{delivery_obj.meta_desc}})</label>
                                       </li>
                                       {% endfor %}

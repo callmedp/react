@@ -97,6 +97,13 @@
     }
   }
 
+  
+  .invalid-cred-err {
+    display: block;
+    margin: 15px;
+    color: #ff9494;
+  }
+
   &--white-box {
     @include border-radius(4px);
     background-color: $bg-white;

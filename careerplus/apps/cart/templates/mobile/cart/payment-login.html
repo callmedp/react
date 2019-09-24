@@ -38,7 +38,7 @@
         <div class="payment--bg"></div>
         <ul class="payment__steps">
             <li class="payment__steps__item">
-                <a href="#">
+                <a href="{% url "cart:payment-summary" %}">
                     <!-- <span class="dot">1</span> -->
                     <span class="tick"></span>
                     Summary
@@ -46,7 +46,7 @@
             </li>
 
             <li class="payment__steps__item">
-                <a href="#" class="active">
+                <a href="{% url "cart:payment-login" %}" class="active">
                     <span class="dot">2</span>
                     <!-- <span class="tick"></span> -->
                     Login
@@ -54,7 +54,7 @@
             </li>
             
             <li class="payment__steps__item">
-                <a href="#">
+                <a href="{% url "payment:payment-option" %}">
                     <span class="dot">3</span>
                     <!-- <span class="tick"></span> -->
                     Payment
@@ -69,7 +69,7 @@
                     User login
                 </div>
         <form class="personal-details col-sm-6 bdr-rt" method="post" action="" role="form" id="login_form">{% csrf_token %}
-
+        
                 <ul>
                     <li class="login__item input-effect">
                         <input type="email" class="form--control animation-input" name="email" id="email-id" aria-describedby="email-id" placeholder="">
@@ -91,6 +91,8 @@
         </form>
                 <a onclick="forgotPassword()" class="mt-10 fw600 block">Forget password</a>
             </div><!-- /. p-15 -->
+            <span class="invalid-cred-err" style="display: none" id="invalid-cred">Invalid email or password</span>
+
 
             <div class="line_wrap"><span>Login with</span><div class="line"></div></div>
 
@@ -154,20 +156,6 @@
             </form>
 
             </div><!-- /. p-15 -->
-
-            <div class="line_wrap"><span>Login with</span><div class="line"></div></div>
-
-                <div class="login__social text-center">
-                    <a onclick="Login();">
-                        <sup class="icon-fb-2"></sup>
-                    </a>
-                    <a href="/user/linkedin/code/" class="link">
-                        <sup class="icon-link-2"></sup>
-                    </a>
-                    <a onclick="glogin()">
-                        <sup class="icon-gp-2"></sup>
-                    </a>
-                </div><!-- Login social -->
 
             <div class="login__guest">
                 <a onclick="loginAsCandidate()" class="fs-18">

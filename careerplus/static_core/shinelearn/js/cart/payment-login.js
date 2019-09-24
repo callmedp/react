@@ -63,24 +63,22 @@ const handleLoginCandidate = async () => {
     if (!$('#login_form').valid()) {
         return;
     }
-
-    const loginResponse = await fetch(`${site_domain}/api/v1/candidate-login/`, {
+    
+    loginResponse = await fetch(`${site_domain}/api/v1/candidate-login/`, {
         headers: defaultHeaders,
         method: 'POST',
         body: JSON.stringify(formData)
-    });
+    })
+    
+    let result;
 
-    const result = await handleResponse(loginResponse)
-
-
-    console.log('---><><><><><>--', result);
-
+    result = await handleResponse(loginResponse)
+    
     if (result['error']) {
         // Todo ***** error handling  *****
         $('#invalid-cred').show().delay(5000).fadeOut()
         return;
     }
-
 
     const {data: {candidate_id, cart_pk, token, profile: {email, first_name}}} = result;
 
