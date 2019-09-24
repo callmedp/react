@@ -641,6 +641,14 @@ class OrderItem(AbstractAutoDate):
                 return profile.approved
 
     @property
+    def has_due_date(self):
+        if self.product.sub_type_flow == 502:
+            profile = getattr(self, 'whatsapp_profile_orderitem', None)
+            if profile:
+                return bool(profile.due_date)
+    
+
+    @property
     def is_onboard(self):
         if self.product.sub_type_flow == 502:
             profile = getattr(self, 'whatsapp_profile_orderitem', None)
