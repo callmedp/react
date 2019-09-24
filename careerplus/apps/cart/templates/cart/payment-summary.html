@@ -204,14 +204,14 @@ Payment Summary - Shine Learning
                 <input id="discount_code" type="text" value="Coupon {{cart_coupon.code}} is applied!" name="code"
                   maxlength="15" disabled>
                 <span class="error-txt" id="discount-alert"></span>
-                <button type="button" id='remove-discount' onclick="JSRemoveDiscount();">Remove</button>
+                <button type="button" id='remove-discount' onclick="JSRemoveDiscount(event);">Remove</button>
               </div>
             </div>
             {% elif cart_wallet %}
             <div id="shineCredit">
               <div class="coupon__wrap">
                 <input id="loyalty_point" type="text" placeholder="{{wallet_point}} loyalty points redeemed!" disabled>
-                <button type="button" id='remove-point' onclick="JSRemovePoint();">Remove</button>
+                <button type="button" id='remove-point' onclick="JSRemovePoint(event);">Remove</button>
               </div><!-- // coupon__wrap -->
               <span class="error-txt" id="point-alert"></span>
             </div><!-- // shineCredit -->
@@ -226,7 +226,7 @@ Payment Summary - Shine Learning
               <div class="form-group pr">
                 <div class="coupon__wrap">
                   <input id="discount_code" type="text" placeholder="Enter coupon code" name="code" maxlength="15">
-                  <button type="button" id="discount-apply" onclick="JSApplyDiscount();">Apply</button>
+                  <button type="button" id="discount-apply" onclick="JSApplyDiscount(event);">Apply</button>
                 </div><!-- // coupon wrap -->
                 <span class="error-txt" id="discount-alert"></span>
               </div><!-- // form-group -->
@@ -239,7 +239,7 @@ Payment Summary - Shine Learning
                   <input id="loyalty_point" type="number" placeholder="Enter loyalty points" min="0"
                     max="{{wallet_total}}" name="point">
                   <button type="button" class="add-redeem-button" id="loyalty-point-apply"
-                    onclick="JSApplyPoint();">Redeem</button>
+                    onclick="JSApplyPoint(event);">Redeem</button>
                 </div><!-- // coupon wrap -->
                 <span class="error-txt" id="point-alert"></span>
               </div><!-- // form-group -->

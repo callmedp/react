@@ -11,7 +11,13 @@ function toggler(divId, show_hide_coupon) {
     $("#" + divId).toggle();
 }
 
-function JSApplyDiscount() {
+function JSApplyDiscount(e) {
+    var attr = $('#discount-apply').attr('disabled');
+    if(typeof attr !== typeof undefined && attr !== false){
+        e.preventDefault();
+        return ;
+    }
+
     $('#discount-apply').prop('disabled',true);
     var alert_message = '';
     if ($('#discount_code').val().trim()) {
@@ -74,9 +80,16 @@ function JSApplyDiscount() {
     }
 };
 
-function JSApplyPoint() {
-    
+function JSApplyPoint(e) {
+    var attr = $('#loyalty-point-apply').attr('disabled');
+    if(typeof attr !== typeof undefined && attr !== false){
+        e.preventDefault();
+        return ;
+    }
+
     $('#loyalty-point-apply').prop('disabled',true);
+
+   
     var alert_message = '';
     if ($('#loyalty_point').val().trim()) {
         $('#loyalty_point').parent().removeClass('error');
@@ -155,8 +168,14 @@ function JSApplyPoint() {
     }
 };
 
-function JSRemoveDiscount() {
+function JSRemoveDiscount(e) {
+    var attr = $('#remove-discount').attr('disabled');
+    if(typeof attr !== typeof undefined && attr !== false){
+        e.preventDefault();
+        return ;
+    }
     $('#remove-discount').prop('disabled',true);
+
     $.ajax({
         url: '/cart/removecoupon/',
         type: 'post',
@@ -194,8 +213,14 @@ function JSRemoveDiscount() {
 
 };
 
-function JSRemovePoint() {
+function JSRemovePoint(e) {
+    var attr = $('#remove-point').attr('disabled');
+    if(typeof attr !== typeof undefined && attr !== false){
+        e.preventDefault();
+        return ;
+    }
     $('#remove-point').prop('disabled',true);
+
     $.ajax({
         url: '/cart/removepoint/',
         type: 'post',
