@@ -194,9 +194,11 @@ class StaticSiteContentView(TemplateView):
     
     def get_context_data(self, **kwargs):
         page_slug = kwargs['page_slug']
+        page_type = int(STATIC_SITE_SLUG_TO_ID_MAPPING[page_slug])
         context = super(StaticSiteContentView, self).get_context_data(**kwargs)
         context.update({
-            "page_type": int(STATIC_SITE_SLUG_TO_ID_MAPPING[page_slug]),
+            "page_type": page_type,
+            "page_name": STATIC_PAGE_NAME_CHOICES[page_type-1][1]
             })
         return context
 
