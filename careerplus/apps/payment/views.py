@@ -556,14 +556,14 @@ class PayUResponseView(PaymentMixin,View):
         if not txn_id:
             logging.getLogger('error_log').error(
                 "PayU No txn id - {}".format(payu_data))
-            return HttpResponseRedirect(reverse('PaymentSummaryView'))
+            return HttpResponseRedirect(reverse('payment:payment_oops'))
 
         txn_obj = PaymentTxn.objects.filter(txn=txn_id,status=0,
                                             site_choice=0).first()
         if not txn_obj:
             logging.getLogger('error_log').error(
                 "PayU No txn obj - {}".format(payu_data))
-            return HttpResponseRedirect(reverse('PaymentSummaryView'))
+            return HttpResponseRedirect(reverse('payment:payment_oops'))
         extra_info_dict ={
                     'bank_ref_no' : payu_data.get('bank_ref_num', ''),
                     'bank_gateway_txn_id' : payu_data.get('mihpayid', ''),
