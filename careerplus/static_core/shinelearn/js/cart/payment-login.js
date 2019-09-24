@@ -3,6 +3,13 @@
 * * basic headers
 * */
 
+const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000
+})
+
 const defaultHeaders = {
     "Content-Type": "application/json",
 };
@@ -31,10 +38,10 @@ async function handleResponse(response, isFetchingHTML) {
             status: response['status'],
         }
     } else if (response['status'] === 204) {
-        return {data: {}};
+        return { data: {} };
     } else {
         let result = isFetchingHTML ? await response.text() : await response.json();
-        return {data: result};
+        return { data: result };
     }
 }
 
@@ -63,24 +70,24 @@ const handleLoginCandidate = async () => {
     if (!$('#login_form').valid()) {
         return;
     }
-    
+
     loginResponse = await fetch(`${site_domain}/api/v1/candidate-login/`, {
         headers: defaultHeaders,
         method: 'POST',
         body: JSON.stringify(formData)
     })
-    
+
     let result;
 
     result = await handleResponse(loginResponse)
-    
+
     if (result['error']) {
         // Todo ***** error handling  *****
         $('#invalid-cred').show().delay(5000).fadeOut()
         return;
     }
 
-    const {data: {candidate_id, cart_pk, token, profile: {email, first_name}}} = result;
+    const { data: { candidate_id, cart_pk, token, profile: { email, first_name } } } = result;
 
     /*
     *  update the cart
@@ -103,7 +110,11 @@ const handleLoginCandidate = async () => {
 
     if (cartData['error']) {
         // Todo ***** error handling  *****
-        console.log('Some error has occur');
+        Toast.fire({
+            type: 'error',
+            title: cartData['error']
+        })
+        window.location.href = '/logout/';
         return;
     }
 
@@ -147,6 +158,7 @@ const continueAsGuest = () => {
     $('#login_users').addClass('hide');
     $('#login_guests').removeClass('hide');
     $('#continue-as-guest-button').removeClass('forget-password');
+
 };
 
 /*
@@ -157,6 +169,7 @@ const loginAsCandidate = () => {
     $('#guest_form').addClass('hidden');
     // $('#guest_form').trigger('reset');
     $('#continue-as-guest-button').removeClass('hidden');
+
     $('#login-candidate-button').addClass('hidden');
     $('#forgot_form_1').addClass('hidden');
     // $('#forgot_form_1').trigger('reset');
@@ -322,7 +335,7 @@ $(document).ready(function () {
             }
         },
         messages: {
-            email: {required: "Email address is required."},
+            email: { required: "Email address is required." },
         },
         highlight: function (element) {
 

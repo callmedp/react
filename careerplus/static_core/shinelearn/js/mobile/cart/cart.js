@@ -27,7 +27,6 @@ function removeFromCartMobile(line_id) {
 };
 
 function handleDeliveryUpdation(formData, lineId,itemId) {
-
     $.ajax({
         url: '/cart/update-deliverytype/',
         type: 'POST',
@@ -39,7 +38,6 @@ function handleDeliveryUpdation(formData, lineId,itemId) {
         enctype: "multipart/form-data",
         success: function (data, textStatus, jqXHR) {
             if (data.total_cart_amount != -1 && data.delivery_charge != -1) {
-                
                 let {
                     delivery_service_meta_desc: deliveryServiceDesc,
                     delivery_service_title: deliveryServiceTitle,
@@ -50,7 +48,6 @@ function handleDeliveryUpdation(formData, lineId,itemId) {
 
                 $(`#active-delivery-description${lineId.trim()}`).text(`(${deliveryServiceDesc})`)
 
-                $(`#delivery-item${itemId}`).slideToggle();
 
 
                 if (data.delivery_charge) {
@@ -97,12 +94,12 @@ function deliveryOptionUpdate(line_id,itemId) {
 }
 
 const selectDeliveryType = (deliveryType, lineId, csrf,itemId) => {
+    $(`#delivery-item${itemId}`).slideToggle();
     if (lineId) {
         var formData = new FormData();
         formData.append("csrfmiddlewaretoken", csrf);
         formData.append("delivery_type", deliveryType);
         formData.append("lineid", lineId);
-
         handleDeliveryUpdation(formData, lineId,itemId);
     }
 }

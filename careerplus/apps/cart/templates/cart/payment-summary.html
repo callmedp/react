@@ -68,8 +68,7 @@
         <div class="col-sm-9 payment-summary box-shadow">
     <ul>
 
-        {% for item in cart_items %}
-
+        {% for item in cart_items %}  
             {% with addons=item.addons variations=item.variations delivery_types=item.delivery_types product=item.li.product delivery_service=item.delivery_obj  %}
             <!-- prdduct 1 -->
 
@@ -91,8 +90,6 @@
                         <li>
                             <span class="col-sm-8 col-md-9"><figure class="checked-icon"></figure>{{variations.0.delivery_obj.name}}</span>
                             <span class="col-sm-4 col-md-3">Rs. {{variations.0.delivery_obj.get_price|floatformat:0}}/-</span>
-
-
                         </li>
                     {% endif %}
                   
@@ -126,7 +123,7 @@
                            {% endif %}
 
                             {% if delivery_types %}
-                                     <div class="delivery-speed mt-30 mb-15"  id="btn-delivery" onclick="toggleDeliveryItems('{{item.id}}')">
+                                     <div class="delivery-speed mb-15"  id="btn-delivery" onclick="toggleDeliveryItems('{{item.id}}')">
                                       <span class="delivery-icon"></span>
                                       <p class="pb-0">
                                           <strong class="block" id="active-delivery-title{{item.id}}">{%if delivery_service %} {{delivery_service.title}}- {% if delivery_service.inr_price|is_free %}No extra cost {% else %}Rs. {{delivery_service.inr_price}}/- {% endif %} {%else%}Normal - No extra cost{%endif%}</strong>
@@ -169,7 +166,7 @@
                   <div class="form-group">
                     <input id="discount_code" type="text" value="Coupon {{cart_coupon.code}} is applied!" name="code" maxlength="15" disabled>
                     <span class="error-txt" id="discount-alert"></span>
-                    <button type="button" onclick="JSRemoveDiscount();">Remove</button>
+                    <button type="button" id='remove-discount' onclick="JSRemoveDiscount();">Remove</button>
                   </div>
                 </div>
               {% elif cart_wallet %}
@@ -177,7 +174,7 @@
                 <div class="form-group">
                   <input id="loyalty_point" type="text" placeholder="{{wallet_point}} loyalty points redeemed!" disabled>
                   <span class="error-txt" id="point-alert" ></span>
-                  <button type="button" onclick="JSRemovePoint();">Remove</button>
+                  <button type="button" id='remove-point' onclick="JSRemovePoint();">Remove</button>
                 </div>
                 </div>
               {% else %}
@@ -189,8 +186,8 @@
                   <div id="showCoupon" class="hidden-div">
                     <div class="form-group pr">
                       <input id="discount_code" type="text" placeholder="Enter coupon code" name="code" maxlength="15">
-                        <span class="error-txt" id="discount-alert"></span>
                       <button type="button" id="discount-apply" onclick="JSApplyDiscount();">Apply</button>
+                      <span class="error-txt" id="discount-alert"></span>
                     </div>
                   </div>
                 
@@ -198,8 +195,8 @@
                     You have {{wallet_total}} shine loyalty points.
                     <div class="form-group">
                       <input id="loyalty_point" type="number" placeholder="Enter loyalty points" min="0" max="{{wallet_total}}" name="point">
-                      <span class="error-txt" id="point-alert" ></span>
                       <button type="button" class="add-redeem-button" id="loyalty-point-apply" onclick="JSApplyPoint();">Redeem</button>
+                      <span class="error-txt" id="point-alert" ></span>
                     </div>
                   </div>
 

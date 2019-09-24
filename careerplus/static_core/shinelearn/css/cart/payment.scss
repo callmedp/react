@@ -233,7 +233,7 @@
           color: $grey-color;
           padding: 7px 10px;
           margin-right: 10px;
-          width: 80%;
+          width: 83%;
           height: 49px;
           border-radius: 4px;
 
@@ -1393,6 +1393,7 @@ input:-webkit-autofill:active {
   background: #ecf8fc;
   margin: 27% auto 0;
   display: table;
+  cursor: pointer;
 
   span {
     display: table-cell;
@@ -1411,7 +1412,9 @@ input:-webkit-autofill:active {
     }
   }
 }
-
+.guest-selection {
+  margin: 17% auto 0;
+}
 
 .forget-password {
   .login-guest {

@@ -1,26 +1,26 @@
 {% extends "basic/base.html" %}
 {% load static humanize compress %}
-    {% block meta_html %}
-        {{block.super}}
-    {% endblock meta_html %}
+{% block meta_html %}
+{{block.super}}
+{% endblock meta_html %}
 
-    {% block title %}
-    Thank You - Shine Learning
-    {% endblock title %}
-    
-    {% block css_section %}
-        {{block.super}}
-        {% compress css %}
-        <link type="text/scss" href="{% static 'shinelearn/css/cart/payment.scss' %}" rel="stylesheet">
-        {% endcompress %}
-        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.min.css" rel="stylesheet" />
-        <style type="text/css">
-            .error{
-                color: red;
-            }
-        </style>
-    {% endblock css_section %}
-    
+{% block title %}
+Thank You - Shine Learning
+{% endblock title %}
+
+{% block css_section %}
+{{block.super}}
+{% compress css %}
+<link type="text/scss" href="{% static 'shinelearn/css/cart/payment.scss' %}" rel="stylesheet">
+{% endcompress %}
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.min.css" rel="stylesheet" />
+<style type="text/css">
+    .error {
+        color: red;
+    }
+</style>
+{% endblock css_section %}
+
 
 {% block container %}
 
@@ -30,135 +30,193 @@
     <!-- page content body start -->
     <div class="row">
 
-    <!-- left content start -->
-    <div class="col-sm-7">
+        <!-- left content start -->
+        <div class="col-sm-7">
 
-        <div class="text-center payment-done">
-            
+            <div class="text-center payment-done">
 
-            <h1>
-                {% if order.status == 1 %}
+
+                <h1>
+                    {% if order.status == 1 %}
                     <figure class="greenTick-icon"></figure>
                     You have made the payment <br />successfully!
-                {% else %}
+                    {% else %}
                     <figure class="waiting-icon"></figure>
                     Waiting for payment to be made, meanwhile order has been created!
-                {% endif %}
-            </h1>
+                    {% endif %}
+                </h1>
 
-            <article>Your transaction ID is <strong>{{order.ordertxns.last.txn}}</strong></article>
-            <article>An email, along with all the details, has been sent to <a href="mailto:{{order.email}}">{{order.email}}</a> For any further assistance, you can get in touch with us on on 0120-6545354/55 or write to us on <a href="mailto:resume@shine.com">resume@shine.com</a></article>
+                <article>Your transaction ID is <strong>{{order.ordertxns.last.txn}}</strong></article>
+                <article>An email, along with all the details, has been sent to <a
+                        href="mailto:{{order.email}}">{{order.email}}</a> For any further assistance, you can get in
+                    touch with us on on 0120-6545354/55 or write to us on <a
+                        href="mailto:resume@shine.com">resume@shine.com</a></article>
 
-            {% if pending_resume_items %}
+                {% if pending_resume_items %}
 
                 <p>To proceed further please upload your resume or fill the questionnaire.</p>
                 {% if booster_item_exist %}
-                    <div>* Uploaded resume will be boosted</div>
+                <div>* Uploaded resume will be boosted</div>
                 {% endif %}
-                <form id="upload-order-resume-form" method="POST" action="{% url "payment:thank-you" %}" enctype='multipart/form-data'>
+                <form id="upload-order-resume-form" method="POST" action="{% url "payment:thank-you" %}"
+                    enctype='multipart/form-data'>
                     {% csrf_token %}
                     <div class="latest-resume selected" id="upload-resume-box">
                         <figure></figure>
                         <a href="javascript:void();">Upload</a> new resume
                         <input type="file" name="resume_file">
                         <span class="db">or</span>
-                        fill this <a href="{% url "dashboard:dashboard-downloadquestionnaire" %}">questionnaire</a> and upload
+                        fill this <a href="{% url "dashboard:dashboard-downloadquestionnaire" %}">questionnaire</a> and
+                        upload
                     </div>
 
                     {% if request.session.resume_id %}
-                        <div class="latest-resume" id="shine-resume-box">
-                            <figure></figure>
-                            Use latest shine resume
-                        </div>
+                    <div class="latest-resume" id="shine-resume-box">
+                        <figure></figure>
+                        Use latest shine resume
+                    </div>
                     {% endif %}
                     <div>
-                        <input type="checkbox" checked onclick="uploadResumeShine(this,{{order.id}})" /> <span>Upload new resume post service completion</span>
+                        <input type="checkbox" checked onclick="uploadResumeShine(this,{{order.id}})" /> <span>Upload
+                            new resume post service completion</span>
                     </div>
                     <input type="hidden" id="action-type-id" name="action_type" value="upload_resume">
                     <a role="button" class="blue-button mt-20" id="resume-sumbmit-button">Proceed</a>
                 </form>
 
+                {% endif %}
+
+            </div>
+
+        </div>
+        <!-- left content end -->
+
+        <!-- right content start -->
+        <div class="col-sm-5">
+            {% if candidate_id %}
+            <div class="new-test text-right">
+                <a href="/dashboard/"
+                    style="background-color: #2f5ea6;padding: 5px 15px;color: #fff;position: relative;right: 0;font-size: 13px;bottom:16px;">Go
+                    To DashBoard</a>
+            </div>
             {% endif %}
-
-        </div>
-
-    </div>    
-    <!-- left content end -->
-
-    <!-- right content start -->
-    <div class="col-sm-5">
-        <div class="new-test text-right" >
-            <a href="/dashboard/" style="background-color: #2f5ea6;padding: 5px 15px;color: #fff;position: relative;right: 0;font-size: 13px;bottom:16px;">Go To DashBoard</a>
-        </div>
-      <div class="box-panel subcribe-box">
-        <h2>You have subscribed to the following services</h2>
-        {% for item in orderitems %}
-            {% with oi=item.oi addons=item.addons variations=item.variations %}
+            <div class="box-panel subcribe-box">
+                <h2>You have subscribed to the following services</h2>
+                {% for item in orderitems %}
+                {% with oi=item.oi addons=item.addons variations=item.variations %}
                 {% if oi.product.is_course and variations %}
-                    <div class="subcribe-services">
-                         <strong>{{oi.product.get_name}}</strong>
-                        <ul>
-                            {% for addon in addons %}
-                                <li>{{addon.product.name}}</li>
-                            {% endfor %}
+                <div class="subcribe-services">
+                    <strong>{{oi.product.get_name}}</strong>
+                    <ul>
+                        {% for addon in addons %}
+                        <li>{{addon.product.name}}</li>
+                        {% endfor %}
 
-                            {% if variations.first.delivery_service %}
-                                <li>{{variations.first.delivery_service.name}}</li>
-                            {% endif %}
-                        </ul>
-                    </div>
+                        {% if variations.first.delivery_service %}
+                        <li>{{variations.first.delivery_service.name}}</li>
+                        {% endif %}
+                    </ul>
+                </div>
 
 
                 {% elif oi.product.is_assesment and oi.product.sub_type_flow == 1602 %}
 
-                    <div class="subcribe-services">
-                        <div class="new-test">
-                            <strong>{{oi.product.get_name}}</strong>
-                            {% if oi.order.status == 1 %}<a target='_blank' href="{{ oi.autologin_url }}">Take Test</a>{% endif %}
-                        </div>
+                <div class="subcribe-services">
+                    <div class="new-test">
+                        <strong>{{oi.product.get_name}}</strong>
+                        {% if oi.order.status == 1 %}<a target='_blank' href="{{ oi.autologin_url }}">Take
+                            Test</a>{% endif %}
                     </div>
+                </div>
 
                 {% else %}
-                    <div class="subcribe-services">
-                        <strong>{{oi.product.get_name}}</strong>
-                        <ul>
-                            {% for var in variations %}
-                                <li>{{var.product.name}}</li>
-                            {% endfor %}
+                <div class="subcribe-services">
+                    <strong>{{oi.product.get_name}}</strong>
+                    <ul>
+                        {% for var in variations %}
+                        <li>{{var.product.name}}</li>
+                        {% endfor %}
 
-                            {% for addon in addons %}
-                                <li>{{addon.product.name}}</li>
-                            {% endfor %}
+                        {% for addon in addons %}
+                        <li>{{addon.product.name}}</li>
+                        {% endfor %}
 
-                            {% if oi.delivery_service %}
-                                <li>{{oi.delivery_service.name}}</li>
-                            {% endif %}
-                        </ul>
-                    </div>
+                        {% if oi.delivery_service %}
+                        <li>{{oi.delivery_service.name}}</li>
+                        {% endif %}
+                    </ul>
+                </div>
                 {% endif %}
-            {% endwith %}
-        {% endfor %}
+                {% endwith %}
+                {% endfor %}
+            </div>
+        </div>
+        <!-- right content end -->
+<!--modals-->
+<!--login-->
+<div class="modal fade bs-example-modal-sm login-div" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="login-modal">
+        <div class="modal-dialog modal-sm" role="document">
+          <div class="modal-content">
+           <div class="register">
+             <div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <span class="modal-title" id="myModalLabel">Login</span>
+                <label id="non-field-error" class="error"></label>
+              </div>
+      
+               <form autocomplete="off" role method="post" id="login_form" >{% csrf_token %}
+                  
+                  <div class="form-group {% if loginform.email.errors %} error {% endif %}">
+                    {{loginform.email}}
+                    <span class="error-txt">{{loginform.email.errors.0}}</span>
+                  </div>
+                  <div class="form-group {% if loginform.password.errors %} error {% endif %}">
+                       {{loginform.password}}
+                       <span class="error-txt">{{loginform.password.errors.0}}</span>
+                  </div>
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input type="checkbox" name="remember_me" class="form-check-input">
+                      Remember me
+                    </label>
+                  </div>
+                  <button type="button" id="login-button" class="btn btn-primary submit">Login and submit</button>
+                  <small class="form-text text-muted text-center">
+                    <a href="javascript:void(0)" data-toggle="modal" data-dismiss="modal" 
+                    id="modalforgot">
+                      Forgot Password?
+                    </a>
+                  </small>
+                  <div class="social-login">
+                    <span>or login with</span>
+                    <a class="facebook" onclick="reviewSocialLogin(window.location.href,'fb');"></a>
+                    <a class="linkedin" onclick="reviewLinkedInLogin()"></a>
+                    <a class="gplus" onclick="reviewSocialLogin(window.location.href,'gplus');"></a>
+                  </div>
+                  <small class="form-text text-muted text-center">Don’t have an account yet? <a role="button" data-toggle="modal" data-target=".bs-example-modal-sm2" data-dismiss="modal">Register Now</a></small>
+                </form>
+      
+              </div>
+          </div>
+        </div>
       </div>
-    </div>    
-    <!-- right content end -->
-
     </div>
     <!-- page content body end -->
 
 </section>
 <!-- main section end -->
-    
+
 
 {% endblock container %}
-  
+
 
 {% block js_section %}
-    {{ block.super }}
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.all.min.js"></script>
-    {% compress js %}
-        <script src="{% static 'shinelearn/js/payment/thank-you.js' %}"></script>
-        <script type="text/javascript" src="{% static "shinelearn/js/common/toast.js" %}"></script>
-    {% endcompress %}
+{{ block.super }}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.all.min.js"></script>
+{% compress js %}
+<script src="{% static 'shinelearn/js/payment/thank-you.js' %}"></script>
+<script type="text/javascript" src="{% static "shinelearn/js/common/toast.js" %}"></script>
+{% endcompress %}
 {% endblock js_section %}
 
 {% block johukum %}

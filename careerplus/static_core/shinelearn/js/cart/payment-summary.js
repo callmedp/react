@@ -12,6 +12,7 @@ function toggler(divId, show_hide_coupon) {
 }
 
 function JSApplyDiscount() {
+    $('#discount-apply').prop('disabled',true);
     var alert_message = '';
     if ($('#discount_code').val().trim()) {
         $('#discount_code').parent().removeClass('error');
@@ -31,6 +32,8 @@ function JSApplyDiscount() {
                     $('#discount-alert').empty();
                     $('#discount-alert').text(alert_message);
                     $('#discount-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
+                    $('#discount-apply').prop('disabled',false);
+
 
                 },
                 error: function (result, status, err) {
@@ -45,6 +48,8 @@ function JSApplyDiscount() {
                     $('#discount-alert').empty();
                     $('#discount-alert').text(alert_message);
                     $('#discount-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
+                    $('#discount-apply').prop('disabled',false);
+
 
                 }
             });
@@ -63,11 +68,15 @@ function JSApplyDiscount() {
         $('#discount-alert').empty();
         $('#discount-alert').text(alert_message);
         $('#discount-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
+        $('#discount-apply').prop('disabled',false);
+
 
     }
 };
 
 function JSApplyPoint() {
+    
+    $('#loyalty-point-apply').prop('disabled',true);
     var alert_message = '';
     if ($('#loyalty_point').val().trim()) {
         $('#loyalty_point').parent().removeClass('error');
@@ -99,6 +108,8 @@ function JSApplyPoint() {
                     $('#point-alert').empty();
                     $('#point-alert').text(alert_message);
                     $('#point-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
+                    $('#loyalty-point-apply').prop('disabled',false);
+
                 },
                 error: function (result, status, err) {
                     if (result && result.status == 400) {
@@ -111,6 +122,8 @@ function JSApplyPoint() {
                     $('#point-alert').empty();
                     $('#point-alert').text(alert_message);
                     $('#point-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
+                    $('#loyalty-point-apply').prop('disabled',false);
+
                 }
             });
         } catch (e) {
@@ -127,6 +140,8 @@ function JSApplyPoint() {
             $('#point-alert').empty();
             $('#point-alert').text(alert_message);
             $('#point-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
+            $('#loyalty-point-apply').prop('disabled',false);
+
         }
 
     } else {
@@ -135,11 +150,13 @@ function JSApplyPoint() {
         $('#point-alert').empty();
         $('#point-alert').text(alert_message);
         $('#point-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
+        $('#loyalty-point-apply').prop('disabled',false);
 
     }
 };
 
 function JSRemoveDiscount() {
+    $('#remove-discount').prop('disabled',true);
     $.ajax({
         url: '/cart/removecoupon/',
         type: 'post',
@@ -153,6 +170,8 @@ function JSRemoveDiscount() {
             $('#discount-alert').empty();
             $('#discount-alert').text(alert_message);
             $('#discount-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
+            $('#remove-discount').prop('disabled',false);
+
 
         },
         error: function (result, status, err) {
@@ -167,6 +186,8 @@ function JSRemoveDiscount() {
             $('#discount-alert').empty();
             $('#discount-alert').text(alert_message);
             $('#discount-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
+            $('#remove-discount').prop('disabled',false);
+
 
         }
     });
@@ -174,6 +195,7 @@ function JSRemoveDiscount() {
 };
 
 function JSRemovePoint() {
+    $('#remove-point').prop('disabled',true);
     $.ajax({
         url: '/cart/removepoint/',
         type: 'post',
@@ -187,6 +209,8 @@ function JSRemovePoint() {
             $('#point-alert').empty();
             $('#point-alert').text(alert_message);
             $('#point-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
+            $('#remove-point').prop('disabled',false);
+
 
         },
         error: function (result, status, err) {
@@ -201,6 +225,8 @@ function JSRemovePoint() {
             $('#point-alert').empty();
             $('#point-alert').text(alert_message);
             $('#point-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
+            $('#remove-point').prop('disabled',false);
+
 
         }
     });
@@ -234,7 +260,6 @@ const removalAjax = (formData) => {
 
 function removeFromCart(line_id) {
     if (line_id) {
-        debugger;
         $('#id-remove-cart' + line_id).addClass('disabled').removeAttr("onclick");
         var formData = $('#cart_remove_form' + line_id).serialize();
         removalAjax(formData)
@@ -255,7 +280,6 @@ function removeVariationsOrAddons(csrfToken, reference, lineId) {
 
 
 $(document).ready(function () {
-
     $('#payment-summary-continue-id').click(function () {
         $('#payment-summary-continue-id').attr('disabled', true);
     });

@@ -224,6 +224,11 @@ class PaymentLoginView(TemplateView, CartMixin):
                         "name": guest_name,
                     })
                     candidate_id, error = user_register(data=data)
+                    
+                    # setting guest candidate id for thank you upload fix
+                    self.request.session['guest_candidate_id'] = candidate_id
+
+                    
                     # if error:
                     # email_error = error
                     # context = self.get_context_data()
