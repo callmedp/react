@@ -153,6 +153,8 @@ class PayuPaymentUtil():
             txn_obj.failure_desc = order_desc
             txn_obj.save()
             return False
+
+
     def generate_payu_dict(self, txn):
         order = txn.order
         if not order:
@@ -172,16 +174,17 @@ class PayuPaymentUtil():
                               }for x in OrderItem.objects.filter(
                                 id__in=oi_dict.keys())]))[:100]
             ,'udf1'       : "Orderid - {}".format(order.id),
-            'amount'     : order.total_incl_tax, "pg": 'cc'
+            'amount'     : order.total_incl_tax,
+            "pg": 'CC',
         }
-        initial_dict.update\
-            ({'txnid': txn.txn,
-                 'key'  : settings.PAYU_INFO['merchant_key'],
-                 'surl' : "{}/payment/payu/response/success/".format(
-                 settings.SITE_DOMAIN),
-                 'furl' : "{}/payment/payu/response/failure/".format(
-                        settings.SITE_DOMAIN),
-                 'curl' : "{}/payment/payu/response/cancel/".format(
-                                 settings.SITE_DOMAIN)
-            })
+        initial_dict.update \
+            ({'txnid':txn.txn,
+              'key'  :settings.PAYU_INFO['merchant_key'],
+              'surl' :"{}/payment/payu/response/success/".format(
+                  settings.SITE_DOMAIN),
+              'furl' :"{}/payment/payu/response/failure/".format(
+                  settings.SITE_DOMAIN),
+              'curl' :"{}/payment/payu/response/cancel/".format(
+                  settings.SITE_DOMAIN)
+              })
         return initial_dict
