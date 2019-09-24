@@ -80,7 +80,7 @@
                     {% endif %}
                     <div class="payment__summary__item--wrap">
                         <p class="payment__summary__item--course-title">{{item.name}}
-                            <strong class="mt-10">Rs.
+                            <strong>Rs.
                                 {% if variations|length and item.product_class == 'course' or item.type_flow == 17  %}
                                 {{variations.0.price}} {% else %} {{item.price}} {% endif %} </strong>
                         </p>
