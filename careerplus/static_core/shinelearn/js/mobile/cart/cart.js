@@ -65,10 +65,7 @@ function handleDeliveryUpdation(formData, lineId,itemId) {
                 $('#sgst-amount').text(sgstAmount);
                 // update cgst amountc
                 $('#cgst-amount').text(cgstAmount);
-                
-
-                
-
+        
             }
 
         },
@@ -93,14 +90,16 @@ function deliveryOptionUpdate(line_id,itemId) {
 }
 
 const selectDeliveryType = (deliveryType, lineId, csrf,itemId) => {
-    $(`#delivery-item${itemId}`).slideToggle();
-    if (lineId) {
-        var formData = new FormData();
-        formData.append("csrfmiddlewaretoken", csrf);
-        formData.append("delivery_type", deliveryType);
-        formData.append("lineid", lineId);
-        handleDeliveryUpdation(formData, lineId,itemId);
-    }
+    $(`#delivery-item${itemId}`).slideToggle(500,function (){
+        if (lineId) {
+            var formData = new FormData();
+            formData.append("csrfmiddlewaretoken", csrf);
+            formData.append("delivery_type", deliveryType);
+            formData.append("lineid", lineId);
+            handleDeliveryUpdation(formData, lineId,itemId);
+        }
+    });
+    
 }
 
 const toggleDeliveryItems = (deliveryId) => {
