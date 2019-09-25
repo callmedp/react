@@ -561,7 +561,7 @@ class PayUResponseView(CartMixin,PaymentMixin,View):
         txn_obj = PaymentTxn.objects.filter(txn=txn_id,status=0).first()
         if not txn_obj:
             logging.getLogger('error_log').error(
-                "PayU No txn obj - {}".format(payu_data))
+                "PayU No txn obj for txnid - {}".format(txn_id))
             return HttpResponseRedirect(reverse('payment:payment_oops'))
         extra_info_dict ={
                     'bank_ref_no' : payu_data.get('bank_ref_num', ''),
@@ -571,7 +571,7 @@ class PayUResponseView(CartMixin,PaymentMixin,View):
                     'error': payu_data.get('error_Message',''),
         }
         extra_info_json = json.dumps(extra_info_dict)
-        txn_obj.extra_info = extra_info_json
+        txn_obj.txn_info = extra_info_json
         txn_obj.save()
 
         if transaction_status == "SUCCESS":
