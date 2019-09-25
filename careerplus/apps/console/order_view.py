@@ -5,6 +5,7 @@ import math
 import logging
 import mimetypes
 import textwrap
+import os
 
 from io import StringIO
 from dateutil import relativedelta
@@ -41,6 +42,7 @@ from linkedin.autologin import AutoLogin
 from order.functions import send_email, date_timezone_convert, create_short_url
 from .schedule_tasks.tasks import generate_compliance_report
 from scheduler.models import Scheduler
+from order.utils import LTVReportUtil
 
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from review.models import Review
@@ -3497,4 +3499,61 @@ class WhatsAppScheduleView(UserPermissionMixin, DetailView, PaginationMixin):
                 "console/order/whats_app_schedule.html"
             ], context)
 
+
+
+class LTVReportView(TemplateView):
+    template_name = 'console/order/ltv_report.html'
+
+    def dispatch(self,request,*args,**kwargs):
+        if not request.user.is_authenticated():
+            return HttpResponseForbidden()
+        if 'order.can_download_ltv_report' not in request.user.get_all_permissions():
+            return HttpResponseForbidden()
+        return super(LTVReportView,self).dispatch(request,*args,**kwargs)
+
+    def get_response_for_file_download(self):
+        report_date = self.request.POST.get('date')
+
+        if not report_date and len(report_date.split('-'))<2:
+            messages.add_message(self.request, messages.ERROR, "No Month Selected")
+            return render(self.request,template_name=self.template_name)
+
+        month,year = report_date.split('-') 
+
+        csvfile = StringIO()
+        metawriter = csv.writer(
+            csvfile, delimiter=',', quotechar="'", quoting=csv.QUOTE_MINIMAL)
+        metawriter.writerow([
+                'LTV Bracket', 'Total Users', 'Total Orders', 'Total Items', 'CRM orders',
+                'CRM items', 'Learning Orders', 'Learning Items'])
+
+        records = LTVReportUtil().get_monthly_ltv_record(year,month)
+        if not records:
+            messages.add_message(self.request, messages.ERROR, "No record found.")
+            return render(self.request,template_name=self.template_name)
+        
+        for record in records:
+            metawriter.writerow([
+                str(record.ltv_bracket_text),
+                str(record.total_users),
+                str(record.total_order_count),
+                str(record.total_item_count),
+                str(record.crm_order_count),
+                str(record.crm_item_count),
+                str(record.learning_order_count),
+                str(record.learning_item_count),
+               ])
+
+        response = HttpResponse(csvfile.getvalue())
+        response["Content-Disposition"] = "attachment; filename=%s.csv" % 'ltv-report'
+        return response
+
+    def post(self,request,*args,**kwargs):
+        if not request.user.is_authenticated():
+            return HttpResponseForbidden()
+        if 'order.can_download_ltv_report' not in request.user.get_all_permissions():
+            return HttpResponseForbidden()
+
+        action = request.POST.get('action')
+        return self.get_response_for_file_download()
 

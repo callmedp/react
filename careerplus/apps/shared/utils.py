@@ -17,6 +17,7 @@ django.setup()
 from django.conf import settings
 from django.core.mail import EmailMessage
 from django.core.exceptions import ImproperlyConfigured
+from django.core.cache import cache
 
 #local imports
 
@@ -324,29 +325,8 @@ class DiscountReportUtil:
                     if 'is_upsell' in sales_user_info:
                         lead_type = 'Upsell' if sales_user_info['is_upsell'] else 'Fresh'
 
-                LTV_BRACKETS = [(0,5000),
-                                (5001,10000),
-                                (10001,20000),
-                                (20001,40000),
-                                (40001,60000),
-                                (60001,80000),
-                                (80001,100000),
-                                (100001,125000),
-                                (125001,150000),
-                                (150001,175000),
-                                (175001,10000000)
-                            ]
-                                    
-                LTV_BRACKET_LABELS = ["0-5k","5-10k","10-20k","20-40k","40-60k","60-80k",\
-                    "80-100k","100-125k","125-150k","150-175k","175k+"]
-
-                ltv = get_ltv(order.candidate_id) if order.candidate_id else 0
-                ltv_bracket = ''
-                for count,bracket in enumerate(LTV_BRACKETS):
-                    if bracket[0]<=int(ltv) and bracket[1]>=int(ltv):
-                        ltv_bracket = LTV_BRACKET_LABELS[count]
-                        break
-
+                
+                ltv_bracket = LTVReportUtil().get_ltv_bracket(candidate_id=order.candidate_id)
                 product = item.product
                 main_category = product.category_main
                 lv2_parent = 'NA'   #default
@@ -380,6 +360,12 @@ class DiscountReportUtil:
                         "Discount Report | Order {} | {}".format(order.id,repr(e)))
                     continue
         file_obj.close()
+
+
+
+    
+
+    
 
 
 
