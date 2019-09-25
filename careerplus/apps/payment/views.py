@@ -558,8 +558,7 @@ class PayUResponseView(PaymentMixin,View):
                 "PayU No txn id - {}".format(payu_data))
             return HttpResponseRedirect(reverse('payment:payment_oops'))
 
-        txn_obj = PaymentTxn.objects.filter(txn=txn_id,status=0,
-                                            site_choice=0).first()
+        txn_obj = PaymentTxn.objects.filter(txn=txn_id,status=0).first()
         if not txn_obj:
             logging.getLogger('error_log').error(
                 "PayU No txn obj - {}".format(payu_data))

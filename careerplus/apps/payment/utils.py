@@ -178,8 +178,8 @@ class PayuPaymentUtil():
         initial_dict.update \
             ({'txnid':txn.txn,
               'key':settings.PAYU_INFO['merchant_key'],
-              'surl':"{}/payment/payu/response/success/".format('https://learning1.shine.com'),
-              'furl':"{}/payment/payu/response/failure/".format('https://learning1.shine.com'),
-              'curl':"{}/payment/payu/response/cancel/".format('https://learning1.shine.com'),
+              'surl':"{}/payment/payu/response/success/".format(settings.SITE_DOMAIN),
+              'furl':"{}/payment/payu/response/failure/".format(settings.SITE_DOMAIN),
+              'curl':"{}/payment/payu/response/cancel/".format(settings.SITE_DOMAIN),
               })
         return initial_dict
