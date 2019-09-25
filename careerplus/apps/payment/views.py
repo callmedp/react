@@ -547,7 +547,7 @@ class PayuRequestView(OrderMixin,View):
             'payment_url']})
         return render(request, 'payment/payu_submission_form.html',payu_dict)
 
-class PayUResponseView(PaymentMixin,View):
+class PayUResponseView(CartMixin,PaymentMixin,View):
 
     def post(self, request, *args, **kwargs):
         payu_data = request.POST.copy()
@@ -578,6 +578,7 @@ class PayUResponseView(PaymentMixin,View):
             payment_type = "PAYU"
             return_parameter = self.process_payment_method(
                 payment_type, request, txn_obj)
+            self.closeCartObject(self.cart_obj)
             try:
                 del request.session['cart_pk']
                 del request.session['checkout_type']
