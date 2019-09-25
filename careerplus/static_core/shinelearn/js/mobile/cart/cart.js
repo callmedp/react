@@ -128,9 +128,9 @@ function cartScroller() {
 
 $(document).ready(function ($) {
 
-
+    // hide slide toggle 
     $(document).click(function (event) {
-        if ($(event.target).hasClass('delivery-toggle-desk')) {
+        if ($(event.target).hasClass('delivery-toggle-action')) {
             return;
         }
         $('.delivery-dropdown').map(el =>{
