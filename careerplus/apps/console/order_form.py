@@ -609,7 +609,7 @@ class ProductUserProfileForm(forms.ModelForm):
             if self.instance.approved:
                 del self.fields['approved']
 
-            if self.instance.approved or not self.instance.onboard or self.instance.day_of_week:
+            if self.instance.approved or not self.instance.onboard or self.instance.due_date:
                 del self.fields['day_of_week']
 
             if self.instance.onboard:
