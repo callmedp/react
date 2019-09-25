@@ -48,13 +48,11 @@ function handleDeliveryUpdation(formData, lineId,itemId) {
 
                 $(`#active-delivery-description${lineId.trim()}`).text(`(${deliveryServiceDesc})`)
 
-
-
                 if (data.delivery_charge) {
                     var text_str = '+ Rs. ' + data.delivery_charge.toString() + '/-';
-                    $('#delivery-charge' + lineId).text(text_str);
+                    $('#delivery-charge' + itemId).text(text_str);
                 } else {
-                    $('#delivery-charge' + lineId).text('');
+                    $('#delivery-charge' + itemId).text('');
                 }
 
                 const totalCartAmount = `Rs. ${data.total_cart_amount.toFixed(2).toString()}`;
@@ -67,6 +65,7 @@ function handleDeliveryUpdation(formData, lineId,itemId) {
                 $('#sgst-amount').text(sgstAmount);
                 // update cgst amountc
                 $('#cgst-amount').text(cgstAmount);
+                
 
                 
 

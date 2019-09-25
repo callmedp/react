@@ -81,8 +81,10 @@
                     <div class="payment__summary__item--wrap">
                         <p class="payment__summary__item--course-title">{{item.name}}
                             <strong>Rs.
-                                {% if variations|laength and item.product_class == 'course' or item.type_flow == 17  %}
-                                {{variations.0.price}} {% else %} {{item.price}} {% endif %} </strong>
+                                {% if variations|length and item.product_class == 'course' or item.type_flow == 17  %}
+                                {{variations.0.price}} {% else %} {{item.price}} {% endif %} 
+                            </strong>
+                            <span id="delivery-charge{{item.id}}">{%if delivery_service.inr_price %}Rs. {{delivery_service.inr_price}}/-{% endif %}</span>
                         </p>
                         {% if addons|length or variations|length %}
                         <div class="payment__summary__item__addons mt-20">

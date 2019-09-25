@@ -130,9 +130,9 @@ Payment Summary - Shine Learning
                       </ul>
                     </div><!-- delivery dropdown -->
               </div><!-- // COL 9 -->
-
               <div class="col-sm-3">
-                <span>Rs. dropdown price</span>
+              <span id="delivery-charge{{item.id}}">{%if delivery_service.inr_price %}
+                Rs. {{delivery_service.inr_price}}/- {% endif %}</span>
               </div><!-- // COL 3 -->
           </div><!-- // ROW -->
           {% endif %} <!-- // delivery section -->

@@ -86,8 +86,9 @@ const handleLoginCandidate = async () => {
         $('#invalid-cred').show().delay(5000).fadeOut()
         return;
     }
+    debugger;
 
-    const { data: { candidate_id, cart_pk, token, profile: { email, first_name } } } = result;
+    const { data: { candidate_id, cart_pk, token, profile: { email, first_name ,last_name, mobile_no, country_code} } } = result;
 
     /*
     *  update the cart
@@ -96,7 +97,10 @@ const handleLoginCandidate = async () => {
         'email': email,
         'owner_id': candidate_id,
         'owner_email': email,
-        'first_name': first_name
+        'first_name': first_name,
+        'last_name': last_name,
+        'mobile': mobile_no ,
+        'country_code': country_code
     }
 
     const updateCartResponse = await fetch(`${site_domain}/api/v1/cart/${cart_pk}/`, {
