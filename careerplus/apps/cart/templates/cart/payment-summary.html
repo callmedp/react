@@ -44,6 +44,9 @@ Payment Summary - Shine Learning
 
 {% block container %}
 <section class="container mt-53">
+    <div id = "loader" class="overlay-background"  text-align: center;">
+        <img aria-label="loader" id="loadingimg" class="loader-position" src="{% static 'shinelearn/images/loader.gif' %}" >
+  </div>
   <!-- page content body start -->
   <div class="row greybg2 pad-25">
 
@@ -102,27 +105,27 @@ Payment Summary - Shine Learning
           {% if delivery_types %}
           <div class="row">
               <div class="col-sm-9">
-                  <div class="delivery-speed mb-15" id="btn-delivery" onclick="toggleDeliveryItems('{{item.id}}')">
-                      <span class="delivery-icon"></span>
-                      <p class="pb-0">
-                        <strong class="block" id="active-delivery-title{{item.id}}">{%if delivery_service %}
+                  <div class="delivery-speed mb-15 delivery-toggle-desk" id="btn-delivery" onclick="toggleDeliveryItems('{{item.id}}')">
+                      <span class="delivery-icon delivery-toggle-desk"></span>
+                      <p class="pb-0  delivery-toggle-desk">
+                        <strong class="block delivery-toggle-desk" id="active-delivery-title{{item.id}}">{%if delivery_service %}
                           {{delivery_service.title}}- {% if delivery_service.inr_price|is_free %}No extra cost {% else %}Rs.
                           {{delivery_service.inr_price}}/- {% endif %} {%else%}Normal - No extra cost{%endif%}</strong>
-                        <span id="active-delivery-description{{item.id}}"> ({%if delivery_service %}
+                        <span id="active-delivery-description{{item.id}}" class='delivery-toggle-desk'> ({%if delivery_service %}
                           {{delivery_service.meta_desc}} {%else%}get it in 5 working days{%endif%})</span>
                       </p>
-                      <span class="down-arrow-icon mt-10"></span>
+                      <span class="down-arrow-icon delivery-toggle-desk delivery-dropdown-arrow mt-10"></span>
                     </div><!-- /. select delivery options -->
           
-                    <div class="pr">
-                      <ul class="delivery-list cls_delivery-content" id="delivery-item{{item.id}}" style="display: none;">
+                    <div class="pr delivery-toggle-desk">
+                      <ul class="delivery-list cls_delivery-content delivery-toggle-desk delivery-dropdown"id="delivery-item{{item.id}}" style="display: none;">
                         {% for delivery_obj in delivery_types %}
-                        <li>
-                          <input type="radio" name="{{item.id}}" id="{{delivery_obj.slug}}{{item.id}}"
+                        <li class='delivery-toggle-desk'>
+                          <input type="radio" name="{{item.id}}"  class = "delivery-toggle-desk" id="{{delivery_obj.slug}}{{item.id}}"
                             {% if forloop.counter0 == delivery_service|get_count %} checked {%endif %} name="delivery-list"
                             onclick="selectDeliveryType('{{delivery_obj.id}}', '{% if variations|length  %} {{variations.0.id}} {% else %} {{item.id}} {% endif %}', '{{csrf_token}}', '{{item.id}}')"
                             value="19">
-                          <label for="{{delivery_obj.slug}}{{item.id}}"><strong class="block">{{delivery_obj.title}}-
+                          <label class="delivery-toggle-desk" for="{{delivery_obj.slug}}{{item.id}}"><strong class="block delivery-toggle-desk">{{delivery_obj.title}}-
                               {% if delivery_obj.inr_price|is_free %}No extra cost {% else %}Rs. {{delivery_obj.inr_price}}/-
                               {% endif %}</strong> ({{delivery_obj.meta_desc}})</label>
                         </li>

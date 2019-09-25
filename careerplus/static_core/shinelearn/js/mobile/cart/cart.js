@@ -26,7 +26,7 @@ function removeFromCartMobile(line_id) {
 
 };
 
-function handleDeliveryUpdation(formData, lineId,itemId) {
+function handleDeliveryUpdation(formData, lineId, itemId) {
     $.ajax({
         url: '/cart/update-deliverytype/',
         type: 'POST',
@@ -37,6 +37,10 @@ function handleDeliveryUpdation(formData, lineId,itemId) {
         async: false,
         enctype: "multipart/form-data",
         success: function (data, textStatus, jqXHR) {
+            $('.overlay-background').hide()
+            $('body').removeClass('body-noscroll')
+
+
             if (data.total_cart_amount != -1 && data.delivery_charge != -1) {
                 let {
                     delivery_service_meta_desc: deliveryServiceDesc,
@@ -60,25 +64,29 @@ function handleDeliveryUpdation(formData, lineId,itemId) {
 
                 const totalPayableAmount = `Rs. ${data.total_payable_amount.toFixed(2).toString()}`;
                 $('#total-payable-amount').text(totalPayableAmount);
-                const {sgst_amount: sgstAmount, cgst_amount: cgstAmount} = data
+                const { sgst_amount: sgstAmount, cgst_amount: cgstAmount } = data
                 // update sgst amount
                 $('#sgst-amount').text(sgstAmount);
                 // update cgst amountc
                 $('#cgst-amount').text(cgstAmount);
-        
+
             }
 
         },
         failure: function (response) {
+            $('.overlay-background').hide()
+            $('body').removeClass('body-noscroll')
             alert("Something went wrong, Please try again")
         },
         error: function (xhr, ajaxOptions, thrownError) {
+            $('.overlay-background').hide()
+            $('body').removeClass('body-noscroll')
             alert("Something went wrong, Please try again")
         }
     });
 }
 
-function deliveryOptionUpdate(line_id,itemId) {
+function deliveryOptionUpdate(line_id, itemId) {
     if (line_id) {
         //var formData = $('#delivery-option-form' + line_id).serialize();
         var formData = new FormData();
@@ -89,17 +97,24 @@ function deliveryOptionUpdate(line_id,itemId) {
     }
 }
 
-const selectDeliveryType = (deliveryType, lineId, csrf,itemId) => {
-    $(`#delivery-item${itemId}`).slideToggle(500,function (){
+const selectDeliveryType = (deliveryType, lineId, csrf, itemId) => {
+    $('.overlay-background').show()
+    $('body').addClass('body-noscroll')
+    $(`#delivery-item${itemId}`).slideToggle(500, function () {
         if (lineId) {
             var formData = new FormData();
             formData.append("csrfmiddlewaretoken", csrf);
             formData.append("delivery_type", deliveryType);
             formData.append("lineid", lineId);
-            handleDeliveryUpdation(formData, lineId,itemId);
+            handleDeliveryUpdation(formData, lineId, itemId);
+        }
+        else {
+            $('.overlay-background').hide()
+            $('body').removeClass('body-noscroll')
+
         }
     });
-    
+
 }
 
 const toggleDeliveryItems = (deliveryId) => {
@@ -113,6 +128,15 @@ function cartScroller() {
 
 $(document).ready(function ($) {
 
+
+    $(document).click(function (event) {
+        if ($(event.target).hasClass('delivery-toggle-desk')) {
+            return;
+        }
+        $('.delivery-dropdown').map(el =>{
+            $('.delivery-dropdown')[el].style.display !== 'none' ?   $($('.delivery-dropdown')[el]).slideToggle(500):''
+        }) 
+    });
     if (window.CURRENT_FLAVOUR == 'mobile') {
         $(".accordion_example1").smk_Accordion({
             showIcon: true, //boolean
