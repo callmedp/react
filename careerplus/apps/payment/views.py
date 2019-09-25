@@ -578,7 +578,7 @@ class PayUResponseView(CartMixin,PaymentMixin,View):
             payment_type = "PAYU"
             return_parameter = self.process_payment_method(
                 payment_type, request, txn_obj)
-            self.closeCartObject(self.cart_obj)
+            self.closeCartObject(txn_obj.cart)
             try:
                 del request.session['cart_pk']
                 del request.session['checkout_type']
