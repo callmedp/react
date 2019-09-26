@@ -103,8 +103,9 @@ def common_context_processor(request):
         "ggn_contact": settings.GGN_CONTACT,
         "IS_MAINTENANCE": settings.IS_MAINTENANCE,
         "MAINTENANCE_MESSAGE": settings.MAINTENANCE_MESSAGE,
-        "exoitel_status": cache.get('exoitel_status',False)
-    })
+        "exoitel_status": cache.get('exoitel_status', False),
+        "WHATSAPP_BTN": cache.get('whatsapp_btn', False)
+     })
     return context
 
 

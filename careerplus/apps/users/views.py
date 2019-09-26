@@ -6,7 +6,8 @@ import calendar
 from time import strptime
 from wsgiref.util import FileWrapper
 from dateutil.relativedelta import relativedelta
-
+from django.core.cache import  cache
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 from django.http import (
     HttpResponse,
@@ -29,6 +30,7 @@ from users.mixins import WriterInvoiceMixin,UserGroupMixin
 from users.models import User
 from cart.models import Cart
 from emailers.tasks import send_email_task
+from shop.models import ProductClass
 
 
 from .forms import (
@@ -756,3 +758,27 @@ class UserLoginTokenView(UserPassesTestMixin,TemplateView):
             request, self.template_name,
             {'has_permission': has_permission, 'login_url': self.login_url}
         )
+
+
+class CourseServiceWhatsappBtn(View):
+    template_name = "admin/whatsapp.html"
+
+    def get(self, request, *args, **kwargs):
+
+        has_permission = request.user.is_superuser
+        whatsapp_btn = cache.get('whatsapp_visibility_class', [])
+        if not has_permission:
+            raise PermissionDenied()
+        p_class = ProductClass.objects.all()
+        return render(request, self.template_name, {'whatsappBtn':
+                                        whatsapp_btn,'productClass':p_class})
+
+    def post(self,request,*args,**kwargs):
+        p_class =None
+        value = self.request.POST.getlist('pclass', [])
+        value = [int(i) for i in value if i]
+        cache.set(''
+                  'whatsapp_visibility_class', value,timeout=None)
+        p_class = ProductClass.objects.all()
+        return render(request, self.template_name, {'whatsappBtn':value,
+                                                    'productClass':p_class})

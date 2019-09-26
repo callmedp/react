@@ -32,7 +32,7 @@ from console.welcomecall.views import ShowNumberField
 from homepage import views as homepage_view
 from linkedin.views import AutoLoginView
 from shop.views import ProductDetailView, CourseCatalogueView
-from users.views import LinkedinCallbackView, UserLoginTokenView
+from users.views import LinkedinCallbackView, UserLoginTokenView,CourseServiceWhatsappBtn
 from search.views import FuncAreaPageView
 from blog import views as blog_view
 from skillpage.views import (
@@ -157,7 +157,8 @@ def get_urls():
     urls += [
         url(r'^autologintoken/$',
             admin.site.admin_view(UserLoginTokenView.as_view())),
-        url(r'^shownumberfield/$', admin.site.admin_view(ShowNumberField.as_view()))
+        url(r'^shownumberfield/$', admin.site.admin_view(ShowNumberField.as_view())),
+        url(r'^whatsappbtn/$', admin.site.admin_view(CourseServiceWhatsappBtn.as_view())),
     ]
     return urls
 
