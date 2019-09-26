@@ -571,9 +571,9 @@ input:-webkit-autofill:active {
 
 
 .overlay-background {
-  background: #e9e9e9;  
+  background: #000000;  
   display: none;        
-  position: absolute;   
+  position: fixed;   
   top: 0;                 
   right: 0;             
   bottom: 0;
@@ -584,7 +584,7 @@ input:-webkit-autofill:active {
 }
 
 .loader-position {
-  transform: translate(800%, 400%);
+  transform: translate(900%, 500%);
 }
 
 .body-noscroll {
