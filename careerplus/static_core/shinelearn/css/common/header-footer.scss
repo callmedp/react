@@ -2256,13 +2256,6 @@ footer {
   vertical-align: sub;
 }
 
-.delivery-icon {
-  width: 25px;
-  height: 17px;
-  background: $sprite -325px -483px;
-  display: inline-block;
-  vertical-align: sub;
-}
 
 
 .close-icon {
@@ -2324,10 +2317,11 @@ footer {
 .delivery-icon {
 	width: 25px;
 	height: 17px;
-	background: $sprite -325px -483px;
+	background: $sprite -325px -497px;
 	display: inline-block;
 	vertical-align: sub;
 }
+
 
 .link-icon {
 	width: 20px;
