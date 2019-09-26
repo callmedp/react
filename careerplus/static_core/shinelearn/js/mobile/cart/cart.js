@@ -39,8 +39,6 @@ function handleDeliveryUpdation(formData, lineId, itemId) {
         success: function (data, textStatus, jqXHR) {
             $('.overlay-background').hide()
             $('body').removeClass('body-noscroll')
-
-
             if (data.total_cart_amount != -1 && data.delivery_charge != -1) {
                 let {
                     delivery_service_meta_desc: deliveryServiceDesc,

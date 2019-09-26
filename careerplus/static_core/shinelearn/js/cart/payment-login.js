@@ -70,7 +70,8 @@ const handleLoginCandidate = async () => {
     if (!$('#login_form').valid()) {
         return;
     }
-
+    $('.overlay-background').show()
+    $('body').addClass('body-noscroll')
     loginResponse = await fetch(`${site_domain}/api/v1/candidate-login/`, {
         headers: defaultHeaders,
         method: 'POST',
@@ -83,11 +84,12 @@ const handleLoginCandidate = async () => {
 
     if (result['error']) {
         // Todo ***** error handling  *****
+        $('.overlay-background').hide()
+        $('body').removeClass('body-noscroll')
         $('#invalid-cred').show().delay(5000).fadeOut()
+        
         return;
     }
-    debugger;
-
     const { data: { candidate_id, cart_pk, token, profile: { email, first_name ,last_name, mobile_no, country_code} } } = result;
 
     /*
@@ -113,6 +115,8 @@ const handleLoginCandidate = async () => {
 
 
     if (cartData['error']) {
+        $('.overlay-background').hide()
+        $('body').removeClass('body-noscroll')
         // Todo ***** error handling  *****
         Toast.fire({
             type: 'error',
@@ -121,7 +125,9 @@ const handleLoginCandidate = async () => {
         window.location.href = '/logout/';
         return;
     }
-
+    $('.overlay-background').hide()
+    $('body').removeClass('body-noscroll')
+    
     window.location.href = `/payment/payment-options/`;
 
 };
