@@ -1,14 +1,15 @@
 #python imports
 
 #django imports
-from django.conf.urls import url
+from django.conf.urls import url,include
 from django.views.decorators.csrf import csrf_exempt
 
 #local imports
 from .ccavenue import Ccavenue
 from .mobikwik import MobikwikRequestView, MobikwikResponseView
-from .views import PaymentOptionView, ThankYouView, PaymentOopsView,\
-EPayLaterRequestView, EPayLaterResponseView
+from .views import (PaymentOptionView, ThankYouView, PaymentOopsView,\
+EPayLaterRequestView, EPayLaterResponseView,ZestMoneyRequestApiView,\
+    ZestMoneyResponseView )
 
 #inter app imports
 
@@ -30,6 +31,14 @@ urlpatterns = [
         csrf_exempt(EPayLaterResponseView.as_view()), name="epaylater-response"),
 
     url(r'^oops/$', PaymentOopsView.as_view(), name='payment_oops'),
+
+    url(r'^api/', include('payment.api.urls'), name='payment_api'),
+
+    url(r'^zestmoney/request/(?P<cart_id>[-\w]+)/$',
+        ZestMoneyRequestApiView.as_view(), name="zestmoney-request"),
+
+    url (r'^zest-money/(?P<txn_id>\d+)/callback/$',
+         ZestMoneyResponseView.as_view(),name='zestmoney-response')
 
     # url("^mobikwik/request?$", MobikwikRequestView.as_view(), name='mobikwik_request'),
     # url("^mobikwik/response/$", MobikwikResponseView.as_view(), name='mobikwik_response'),

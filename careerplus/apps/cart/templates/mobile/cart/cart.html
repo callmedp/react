@@ -32,7 +32,7 @@
                 
                 <!--a class=" pull-left" href="#">search</a-->
                 
-                <a class=" pull-left" href="{% url "cart:cart-product-list" %}">cart</a>
+                <a class=" pull-left" href="{% url "cart:payment-summary" %}">cart</a>
             </div><!-- / Right side Icon ends here -->
         </div><!-- header menu Icon ends here -->
 
@@ -57,19 +57,19 @@
                         {% if item.product_class == 'course' or item.type_flow == 17 and variations %}
                             <li class="box row">
                                 <form role="form" method="post" id="cart_remove_form{{item.id}}">{% csrf_token %}
-                                <div class="table{% if not item.is_available %} disbale{% endif %}">
-                                    <div class="table-cell">
-                                        <strong class="c6">{{item.name}}</strong>
-                                        <p class="c9 fs-12">Provided by <a href="#">{{item.vendor}}</a></p>
-                                    </div><!-- /.table cell -->
+                                    <div class="table{% if not item.is_available %} disbale{% endif %}">
+                                        <div class="table-cell">
+                                            <strong class="c6">{{item.name}}</strong>
+                                                <p class="c9 fs-12">Provided by <a href="#">{{item.vendor}}</a></p>
+                                        </div><!-- /.table cell -->
 
-                                    <div class="fs-13 c6 bold table-cell text-right">
-                                        <p>Rs. {{variations.0.price}}/-</p>
-                                        {% if not item.is_available %}
-                                            <p class="pb-0 red-text">Not available</p>
-                                        {% endif %}
-                                    </div><!-- /.table cell -->
-                                </div><!-- /.table -->
+                                        <div class="fs-13 c6 bold table-cell text-right">
+                                         <p>Rs. {{variations.0.price}}/-</p>
+                                                {% if not item.is_available %}
+                                                   <p class="pb-0 red-text">Not available</p>
+                                                {% endif %}
+                                        </div><!-- /.table cell -->
+                                    </div><!-- /.table -->
                                 {% if addons %}
                                     <div class="addons">
                                         <h4>Addons</h4>
@@ -374,7 +374,10 @@
     {% compress js %}
         <script src="{% static 'shinelearn/js/mobile/cart/cart.js' %}"></script>
     {% endcompress %}
-    
+
+{% endblock js_section %}
     {% block johukum %}
     {% endblock johukum %}
-{% endblock js_section %}
+
+    {% block zendesk %}
+    {% endblock zendesk %}

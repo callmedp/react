@@ -10,4 +10,5 @@ router = routers.DefaultRouter()
 
 urlpatterns = [
     url(r'^get-users/$', GetUsersView.as_view()),
+
 ]

@@ -105,3 +105,10 @@ function testSession(data){
                 }
             });
         }
+
+
+      function counter(facolor){
+
+    return facolor%9;
+
+   }

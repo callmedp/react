@@ -1,21 +1,23 @@
-#python imports
+# python imports
 
-#django imports
+# django imports
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 #local imports
 
-#inter app imports
+# inter app imports
 
-#third party imports
+# third party imports
 from rest_framework.permissions import BasePermission, SAFE_METHODS
+
 
 class IsObjectOwner(BasePermission):
     """
     Works for all RUD views.
     Generic permission for handling single objects.
     """
-    def has_permission(self,request,view):
+
+    def has_permission(self, request, view):
 
         user = request.user
 
@@ -30,8 +32,8 @@ class IsObjectOwner(BasePermission):
 
         return True
 
-    def has_object_permission(self,request,view,obj):
-        owner_fields = getattr(view,'owner_fields',['owner_id','candidate_id'])
+    def has_object_permission(self, request, view, obj):
+        owner_fields = getattr(view, 'owner_fields', ['owner_id', 'candidate_id'])
         permission_granted = False
 
         user = request.user
@@ -40,7 +42,7 @@ class IsObjectOwner(BasePermission):
             return False
 
         for field in owner_fields:
-            object_data = getattr(obj,field,'')
+            object_data = getattr(obj, field, '')
             if object_data == str(user.id):
                 permission_granted = True
                 break
@@ -50,13 +52,13 @@ class IsObjectOwner(BasePermission):
 
 class IsActiveUser(BasePermission):
 
-    def has_permission(self,request,view):
+    def has_permission(self, request, view):
         return request.user.is_active
 
 
 class InFeedbackGroup(BasePermission):
 
-    def has_permission(self,request,view):
+    def has_permission(self, request, view):
         user = request.user
         if user.is_superuser:
             return True
@@ -68,6 +70,14 @@ class InFeedbackGroup(BasePermission):
             return True
         return False
 
+
+class IsOwner(BasePermission):
+
+    def has_permission(self, request, view):
+        if not request.session.get('candidate_id', None):
+            return False
+        return True
+        
 class HasGroupOrHasPermissions(BasePermission):
     """can pass when has the permission or has group """
 

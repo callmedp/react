@@ -669,7 +669,7 @@ class ArticleFilterForm(forms.ModelForm):
         self.request = kwargs.pop('request', None)
         super(ArticleFilterForm, self).__init__(*args, **kwargs)
         visibility = [3]
-        site_type = []
+        site_type = [(-1,"----")]
         if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(1)
             site_type.append((1, "ShineLearning"))

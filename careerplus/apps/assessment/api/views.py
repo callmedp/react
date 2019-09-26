@@ -40,13 +40,15 @@ class CategoryApiView(FieldFilterMixin,ListAPIView):
 
     def get_level3_test_category(self,val=False):
         queryset = Category.objects.all()
-        filter_dict = {}
-        level3_ids = list(set(Test.objects.exclude(category=None).values_list('category__id',flat=True)))
-
+        filter_dict = {'active': True}
+        level3_ids = set(Test.objects.exclude(category=None).values_list('category__id',flat=True))
+        categories = set(Test.objects.values_list('categories__id',flat=True).exclude(categories=None))
+        level3_ids = list(filter(None,level3_ids|categories))
         if self.request.query_params.get('test_category_id'):
             filter_dict.update({'related_to__id':self.request.query_params.get('test_category_id')})
 
-        return queryset.filter(id__in=level3_ids).filter(**filter_dict)
+        return queryset.filter(id__in=level3_ids).filter(
+            **filter_dict).order_by('created')
 
     def get_level2_test_category(self):
         filter_dict = {}

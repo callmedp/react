@@ -130,7 +130,7 @@ class LoginApiView(FormView):
     template_name = "users/login.html"
     success_url = "/"
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs):    
         context = super(LoginApiView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
         form = self.get_form()
@@ -372,7 +372,6 @@ class ForgotHtmlView(TemplateView):
 class ForgotPasswordEmailView(View):
 
     def post(self, request, *args, **kwargs):
-
         if request.is_ajax():
             email = request.POST.get('email')
             user_exist = RegistrationLoginApi.check_email_exist(email)
@@ -410,6 +409,7 @@ class SocialLoginView(View):
                         email=None,
                         shine_id=candidateid)
                     request.session.update(resp_status)
+                    
                     return HttpResponseRedirect(self.success_url)
                 elif fb_user['prefill_details'].get('email'):
                     cart_pk = self.request.session.get('cart_pk')
