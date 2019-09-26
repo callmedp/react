@@ -8,7 +8,7 @@
     </form>
 </div>
 
-  <div class="box-panel enrol-cart{% if product.inr_price < 5001 %} pb-65 {% endif %}  ">
+  <div class="box-panel enrol-cart{% if product.inr_price < 5001 %} pb-65 {% else %} pb-83  {% endif %}">
      <strong id="total-price" class="total-price" name="price_total" sum-price="{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}" >Rs. {% if selected_var %}
      {{var_list.0.inr_price|floatformat}}{% else %}
      {{sqs.pPinb|floatformat}}{% endif %}/- <small>(+taxes)</small></strong>

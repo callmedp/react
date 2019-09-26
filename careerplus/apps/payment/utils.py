@@ -265,10 +265,10 @@ class ZestMoneyUtil:
         data.update({
             "OrderId"           : order.id,
             "DeliveryPostCode"  : '122011',
-            "ReturnUrl"         : "{}/payment/zest-money/{}/callback/".format(
-                settings.SITE_DOMAIN, txn_obj.id),
-            "ApprovedUrl"       : "{}/payment/zest-money/{}/callback/".format(
-                settings.SITE_DOMAIN, txn_obj.id),
+            "ReturnUrl"         : "{}//:{}/payment/zest-money/{}/callback/".format(
+                settings.SITE_PROTOCOL,settings.SITE_DOMAIN, txn_obj.id),
+            "ApprovedUrl"       : "{}//:{}/payment/zest-money/{}/callback/".
+                 format(settings.SITE_PROTOCOL,settings.SITE_DOMAIN, txn_obj.id),
             "MerchantCustomerId": order.email.lower().strip(),
             "EmailAddress"      : order.email.lower().strip(),
             "FullName"          : order.first_name + order.last_name if
