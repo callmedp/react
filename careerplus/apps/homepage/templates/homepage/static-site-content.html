@@ -1,0 +1,83 @@
+{% extends "basic/base1.html" %}
+{% load static %}
+{% load thumbnail %}
+
+{% block title %}{{page_name}}- Shine Learning{% endblock title %}
+    {% block meta_html %}
+        {{block.super}}
+        <meta name="description" content="Pick up the Best Resume Services - Check out the Latest Resume Format or Templates - Online Professional Certification Courses">
+        {% block canonical %}
+            <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
+        {% endblock canonical %}
+
+    {% endblock meta_html %}
+
+{% block main_container %}
+    {% block page_heading %}
+        <!-- breadcrums -->
+        <div id = "loader" style ="display:none; text-align: center;">
+              <img aria-label="loader" id="loadingimg" src="{% static 'shinelearn/images/loader.gif' %}" >
+        </div>
+        <section class="container" id="home" style ="display:none;">
+          <ol class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li class="active" id="page_name"></li>
+          </ol>
+        </section>
+    {% endblock page_heading %}
+    
+    <!-- main section start -->
+    <section class="container">
+
+        <!-- page content body start -->
+        <div class="row">
+
+        <!-- left content start -->
+          <div class="col-sm-12">
+
+          <!-- content start -->
+          <div class="static-page-content">
+            <!-- page heading -->
+          <div class="page-header">
+            <h1 id="heading"></h1>
+          </div>
+
+          </div>
+          <!-- content end -->
+
+          </div>  
+        <!-- left content end -->
+
+        </div>
+        <!-- page content body end -->
+
+    </section>
+    <!-- main section end -->
+
+{% endblock main_container %}
+
+{% block johukum %}
+{% endblock johukum %}
+
+{% block zendesk %}
+{% endblock zendesk %}
+
+{% block js_section %}
+  {{block.super}}
+<script>
+  $('#loader').show();
+  var page_type = {{page_type}};
+  $( document ).ready(function() {
+      $.get('/api/v1/static-site-page/',{"page_type": page_type},
+              (data)=>{
+                $('#loader').hide();
+                $('#home').show();
+                document.getElementById('page_name').innerHTML += data.results[0].page_name;
+                document.getElementById('heading').innerHTML += data.results[0].page_name;
+                document.getElementsByClassName('static-page-content')[0].innerHTML += data.results[0].content;
+              }).fail(function() {
+                      alert( "$.get failed!" );
+                    });
+});
+</script>
+{% endblock js_section %}

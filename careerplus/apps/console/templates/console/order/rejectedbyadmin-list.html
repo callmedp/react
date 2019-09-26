@@ -77,9 +77,21 @@
 
                       </div>
 </div>
-
-
-
+               {% if request.GET.writer %}
+                        <input type="hidden" name="writer" value="{{request.GET.writer}}">
+                    {% endif %}
+                    {% if request.GET.modified %}
+                        <input type="hidden" name="modified" value="{{request.GET.modified}}">
+                    {% endif %}
+                    {% if request.GET.draft_level %}
+                        <input type="hidden" name="draft_level" value="{{request.GET.draft_level}}">
+                    {% endif %}
+                    {% if request.GET.delivery_type %}
+                        <input type="hidden" name="delivery_type" value="{{request.GET.delivery_type}}">
+                    {% endif %}
+                    {% if request.GET.sort_type %}
+                            <input type="hidden" name="sort_type" value="{{request.GET.sort_type}}">
+                {% endif %}
             </div>
           </div>
       </form>
@@ -88,8 +100,36 @@
 
     <div class="row top_tiles">
 
-      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <button type="button" class="btn btn-app" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-filter"></i>Filter By</button>
+      <div class="col-lg-12 col-md-3 col-sm-6 col-xs-12">
+        <button type="button" class="btn btn-app pull-left" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-filter"></i>Filter By</button>
+        <div class="dropdown pull-left" style="margin-left:20px;" id="sort_dropdown">
+        <strong>Sort By</strong>
+      <form id="sort_form" action="{% url "console:queue-rejectedbyadmin" %}" method='GET'>
+            <select class="form-control" name="sort_type" id="sort_type" onchange="sort();" >
+              <option value="Date" {% if sort_type == 'Date'%} selected {% endif %}>Modified Date</option>
+            <option value="delivery_speed" {% if sort_type == 'delivery_speed'%} selected {% endif %}>Delivery Speed</option>
+            <option value="payment_date" {% if sort_type == 'payment_date'%} selected {% endif %}>Payment Date</option>
+            </select>
+            {% if request.GET.writer %}
+                        <input type="hidden" name="writer" value="{{request.GET.writer}}">
+                    {% endif %}
+                    {% if request.GET.modified %}
+                        <input type="hidden" name="modified" value="{{request.GET.modified}}">
+                    {% endif %}
+                    {% if request.GET.draft_level %}
+                        <input type="hidden" name="draft_level" value="{{request.GET.draft_level}}">
+                    {% endif %}
+                    {% if request.GET.delivery_type %}
+                        <input type="hidden" name="delivery_type" value="{{request.GET.delivery_type}}">
+                    {% endif %}
+                    {% if query %}
+                        <input type="hidden" name="query" value="{{query}}">
+                    {% endif %}
+                    {% if request.GET.rad_search %}
+                            <input type="hidden" name="rad_search" value="{{request.GET.rad_search}}">
+                    {% endif %}
+          </form>
+      </div>
       </div>
       <div class="modal fade bs-example-modal-sm filter" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-sm">
@@ -131,8 +171,14 @@
                             <br/>
                         </div>
                        {% if query %}
-                           <input type="hidden" name="query" value="{{query}}">
-                       {% endif %}
+                        <input type="hidden" name="query" value="{{query}}">
+                    {% endif %}
+                    {% if request.GET.rad_search %}
+                            <input type="hidden" name="rad_search" value="{{request.GET.rad_search}}">
+                    {% endif %}
+                       {% if request.GET.sort_type %}
+                          <input type="hidden" name="sort_type" value="{{request.GET.sort_type}}">
+                        {% endif %}
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -301,6 +347,8 @@
                       <td>{{obj.draft_added_on}}</td>
                       <td>{{obj.modified|naturaltime}}
                           <b>Updated On: {{obj.modified}}</b>
+                          <hr>
+                    <b>Payment made On: {{obj.order.payment_date}}</b>
                       </td>
 
                       <td>Draft Level {% if obj.draft_counter|add:"1" == max_limit_draft %}Final{% else %}{{obj.draft_counter|add:"1"}} {% endif %}</td>

@@ -293,7 +293,7 @@ class OIFilterForm(forms.Form):
                 level = "Draft Level " + "Final"
             else:
                 level = "Draft Level " + str(i)
-            draft_choices.append((i, level))
+            draft_choices.append((i - 1, level))
 
         self.fields['draft_level'].choices = draft_choices
 
