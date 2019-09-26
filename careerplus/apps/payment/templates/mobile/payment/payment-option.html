@@ -154,8 +154,8 @@
                              <p class="error--mgs"></p>
                           </li>
                           <li class="login__item input-effect ">
-                             <input name="deposit_date" data-date="" data-date-format="MM/DD/YYYY" required class="animation-input form--control" type="date" placeholder="">
-                             <label for="cheque">Date of deposit *</label>
+                             <input name="deposit_date" data-date="" data-date-format="MM/DD/YYYY" required class="form--control" type="date" placeholder="Date of deposit *">
+                             <!-- <label for="cheque">Date of deposit *</label> -->
                              <p class="error--mgs"></p>
 
                           </li>
@@ -211,7 +211,7 @@
 
           <div class="payment-type--item">
             <span></span>
-            <a href="{% url "payment:epaylater-request" cart_id %}" >Epay Later
+            <a href="{% url "payment:epaylater-request" cart_id %}" >Buy now, Pay Later
               <img src="{% static 'shinelearn/images/mobile/common/epaylater.jpg' %}" class="payment-type--item--img"/>
             </a>
           </div>

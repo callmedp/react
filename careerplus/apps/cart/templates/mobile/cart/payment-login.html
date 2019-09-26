@@ -89,7 +89,7 @@
                             </li>
                         </ul>
                 </form>
-                <a onclick="forgotPassword()" class="mt-10 fw600 block">Forget password</a>
+                <a onclick="forgotPassword()" class="mt-20 fw600 inline-block">Forget password</a>
             </div><!-- /. p-15 -->
             <span class="invalid-cred-err" style="display: none" id="invalid-cred">Invalid email or password</span>
 
@@ -138,22 +138,30 @@
 
                         </li>
 
-                        <li class="login__item">
-                            <span class="login__item--code" id='country_selection_code'>
-                                <select class="form--control" id="country_code" name="country_code">
-                                    <option selected value="91" >+91</option>
-                                        <option></option>
-                                </select>
-
-                                </select>
-                            </span>
-                            <div class="input-effect login__item--mobile">
-                                <input type="number" class="form--control animation-input" id="guest-mobile" name="mobile" aria-describedby="mobile" placeholder="">
-                                <label for="guest-mobile">Mobile</label>
-                                <span class="error--mgs"></span>
-
-                            </div>
+                        <li>
+                            <ul class="login__item">
+                                <li class="login__item  input-effect">
+                                    <span class="login__item--code" id='country_selection_code'>
+                                        <select class="form--control" id="country_code" name="country_code">
+                                            <option selected value="91" >+91</option>
+                                                <option></option>
+                                        </select>
+                                        </select>
+                                    </span>
+                                    <span class="error--mgs"></span>
+                                </li>
+                                <li class="login__item  input-effect">
+                                    <div class="input-effect login__item--mobile">
+                                        <input type="number" class="form--control animation-input" id="guest-mobile" name="mobile" aria-describedby="mobile" placeholder="">
+                                        <label for="guest-mobile">Mobile</label>
+                                        <span class="error--mgs"></span>
+        
+                                    </div>
+                                </li>
+                            </ul>
                         </li>
+
+                        
                     </ul>
             </form>
 
@@ -195,7 +203,7 @@
                             <label for="guest-name">Email</label>
                             <span class="error--mgs"></span>
                         </li>
-                        <li class="fs-12 c6 mb-30">Enter the Email Id which you are registered on Shine.com</li>
+                        <li class="fs-12 c6 mb-30">Enter the Email Id with which you are registered on Shine.com</li>
                         <li>
                             <button class="btn btn-round btn-blue w100" type="submit">Submit</button>
                         </li>

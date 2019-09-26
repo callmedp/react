@@ -6,7 +6,7 @@ from django.conf.urls import url
 
 # local imports
 
-from .views import (CountryListView, CurrencyViewSet, CityViewSet)
+from .views import (CountryListView, CurrencyViewSet, CityViewSet, CountryValidationView)
 # inter app imports
 
 # third party imports
@@ -20,6 +20,6 @@ router.register(r'city', CityViewSet)
 urlpatterns = router.urls
 
 urlpatterns = [
-    url(r'^country/$', CountryListView.as_view())
-
+    url(r'^country/$', CountryListView.as_view()),
+    url(r'^validate/$',CountryValidationView.as_view())
 ]

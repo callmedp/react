@@ -130,7 +130,7 @@ class LoginApiView(FormView):
     template_name = "users/login.html"
     success_url = "/"
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs):    
         context = super(LoginApiView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
         form = self.get_form()

@@ -34,6 +34,9 @@
 
 {% block container %}
 <div class="clearfix"></div>
+<div id = "loader" class="overlay-background"  text-align: center;">
+        <img aria-label="loader" id="loadingimg" class="loader-position-mobile" src="{% static 'shinelearn/images/loader.gif' %}" >
+  </div>
 <div class="payment">
     <div class="payment--bg"></div>
     <ul class="payment__steps">
@@ -80,9 +83,11 @@
                     {% endif %}
                     <div class="payment__summary__item--wrap">
                         <p class="payment__summary__item--course-title">{{item.name}}
-                            <strong class="mt-10">Rs.
+                            <strong>Rs.
                                 {% if variations|length and item.product_class == 'course' or item.type_flow == 17  %}
-                                {{variations.0.price}} {% else %} {{item.price}} {% endif %} </strong>
+                                {{variations.0.price}} {% else %} {{item.price}} {% endif %} 
+                            </strong>
+                            <span id="delivery-charge{{item.id}}">{%if delivery_service.inr_price %}Rs. {{delivery_service.inr_price}}/-{% endif %}</span>
                         </p>
                         {% if addons|length or variations|length %}
                         <div class="payment__summary__item__addons mt-20">
@@ -118,32 +123,32 @@
                         {% endif %}
 
                         {% if delivery_types %}
-                        <div class="payment__summary__item__addons mt-20">
-                            <div class="delivery-speed mb-15" id="btn-delivery"
+                        <div class="payment__summary__item__addons delivery-toggle-action mt-20">
+                            <div class="delivery-speed mb-15 delivery-toggle-action" id="btn-delivery"
                                 onclick="toggleDeliveryItems('{{item.id}}')">
-                                <span class="icon-delivery"></span>
-                                <p class="pb-0">
-                                    <strong class="block" id="active-delivery-title{{item.id}}">{%if delivery_service %}
+                                <span class="icon-delivery delivery-toggle-action"></span>
+                                <p class="pb-0 delivery-toggle-action">
+                                    <strong class="block delivery-toggle-action" id="active-delivery-title{{item.id}}">{%if delivery_service %}
                                         {{delivery_service.title}}- {% if delivery_service.inr_price|is_free %}No extra
                                         cost {% else %}Rs. {{delivery_service.inr_price}}/- {% endif %} {%else%}Normal -
                                         No extra cost{%endif%}</strong>
-                                    <span id="active-delivery-description{{item.id}}"> ({%if delivery_service %}
+                                    <span id="active-delivery-description{{item.id}}" class="delivery-toggle-action"> ({%if delivery_service %}
                                         {{delivery_service.meta_desc}} {%else%}get it in 5 working days{%endif%})</span>
                                 </p>
-                                <span class="icon-down-arrow"></span>
+                                <span class="icon-down-arrow delivery-toggle-action"></span>
                             </div><!-- /. select delivery options -->
 
-                            <ul class="delivery-list cls_delivery-content" id="delivery-item{{item.id}}"
+                            <ul class="delivery-list delivery-dropdown delivery-toggle-action cls_delivery-content" id="delivery-item{{item.id}}"
                                 style="display: none;">
                                 {% for delivery_obj in delivery_types %}
                                 <li>
-                                    <input type="radio" name="{{item.id}}" id="{{delivery_obj.slug}}{{item.id}}"
+                                    <input type="radio" class="delivery-toggle-action" name="{{item.id}}" id="{{delivery_obj.slug}}{{item.id}}"
                                         {% if forloop.counter0 == delivery_service|get_count %} checked {%endif %}
                                         name="delivery-list"
                                         onclick="selectDeliveryType('{{delivery_obj.id}}', '{% if variations|length  %} {{variations.0.id}} {% else %} {{item.id}} {% endif %}', '{{csrf_token}}', '{{item.id}}')"
                                         value="19">
-                                    <label for="{{delivery_obj.slug}}{{item.id}}"><strong
-                                            class="block">{{delivery_obj.title}}-
+                                    <label class="delivery-toggle-action" for="{{delivery_obj.slug}}{{item.id}}"><strong
+                                            class="block delivery-toggle-action">{{delivery_obj.title}}-
                                             {% if delivery_obj.inr_price|is_free %}No extra cost {% else %}Rs.
                                             {{delivery_obj.inr_price}}/- {% endif %}</strong>
                                         ({{delivery_obj.meta_desc}})</label>
@@ -164,90 +169,94 @@
             {% endfor %}
         </ul>
         {% if candidate_in_session %}
-        
-            {% if cart_coupon %}
-                    <div  id="showCoupon" class="loyalty-points">
-                        <div class="input-group mb-0">
-                        <input id="discount_code" type="text" value="Coupon {{cart_coupon.code}} is applied!" name="code" maxlength="15" class="form-control fs-12" disabled>
-                        <span class="input-group-btn">
-                            <button class="btn btn-blue" type="button" onclick="JSRemoveDiscount();" >Remove</button>
-                        </span>
-                        </div><!-- /input-group -->
-                        <p class="error-txt" id="discount-alert"> </p>
+
+        {% if cart_coupon %}
+        <div class="apply mb-10 pt-0">
+                <div id="redeem-content">
+                    <div class="apply__wrap">
+                        <input id="loyalty_point" type="text" placeholder="{{cart_coupon.code}} points redeemed."
+                            name="point"  disabled class="apply__wrap--input">
+                        <button class="btn btn-lg btn-round btn-blue" id="loyalty-point-apply" type="button"
+                            onclick="JSRemoveDiscount(event);">Remove</button>
                     </div>
-            {% elif cart_wallet %}
-                    <div id="shineCredit" class="loyalty-points">
-                            <div class="input-group mb-0">
-                            <input id="loyalty_point" type="text" placeholder="{{wallet_point}} loyalty points redeemed!" class="form-control fs-12" disabled>
-        
-                            <span class="input-group-btn">
-                                <button class="btn btn-blue" type="button" onclick="JSRemovePoint();">Remove</button>
-                            </span>
-                            </div><!-- /input-group -->
-                            <p class="error-txt" id="point-alert">Required</p>
-                    </div><!-- loyalty ends here -->
-            {% else %}
-                    <div class="apply border-top mt-15 pt-30">
-                        <div class="apply__wrap">
-                            <input id="discount_code" type="text" placeholder="Enter coupon code" name="code" maxlength="15"
-                                class="apply__wrap--input">
-                            <button class="btn btn-lg btn-round btn-blue" id="discount-apply" type="button"
-                                onclick="JSApplyDiscount();">Apply</button>
-                        </div>
-                        <p class="error-txt" id="discount-alert"> </p>
-                    </div>
-                    {%if wallet%}
-                        <div class="apply mb-10 pt-0">
-                            <p><a href="javascript:void(0)" id="btn-reedem">Reedem Shine Credit</a></p>
-                            <div id="redeem-content" style="display: none;">
-                                <div class="apply__wrap">
-                                    <input id="loyalty_point" type="text" placeholder="{{wallet_total}} shine loyalty points."
-                                        name="point" min="0" max="{{wallet_total}}" class="apply__wrap--input">
-                                    <button class="btn btn-lg btn-round btn-blue" id="loyalty-point-apply" type="button"
-                                        onclick="JSApplyPoint();">Reedem</button>
-                                </div>
-                                <p class="error-txt" id="point-alert">Required</p>
-                            </div>
-                        </div>
-                    {% endif %}
-            {% endif %}
-                    
+                    <p class="error-txt" id="point-alert">Required</p>
+                </div>
+    
+            </div>
+        {% elif cart_wallet %}
+        <div class="apply mb-10 pt-0">
+            <div id="redeem-content">
+                <div class="apply__wrap">
+                    <input id="loyalty_point" type="text" placeholder="{{wallet_point}} points redeemed."
+                        name="point" disabled class="apply__wrap--input">
+                    <button class="btn btn-lg btn-round btn-blue" id="loyalty-point-apply" type="button"
+                        onclick="JSRemovePoint(event);">Remove</button>
+                </div>
+                <p class="error-txt" id="point-alert">Required</p>
+            </div>
+
+        </div>
+        {% else %}
+        <div class="apply border-top mt-15 pt-30">
+            <div class="apply__wrap">
+                <input id="discount_code" type="text" placeholder="Enter coupon code" name="code" maxlength="15"
+                    class="apply__wrap--input">
+                <button class="btn btn-lg btn-round btn-blue" id="discount-apply" type="button"
+                    onclick="JSApplyDiscount(event);">Apply</button>
+            </div>
+            <p class="error-txt" id="discount-alert"> </p>
+        </div>
+        {%if wallet%}
+        <div class="apply mb-10 pt-0">
+            <p><a href="javascript:void(0)" id="btn-reedem">Reedem Shine Credit</a></p>
+            <div id="redeem-content" style="display: none;">
+                <div class="apply__wrap">
+                    <input id="loyalty_point" type="text" placeholder="{{wallet_total}} loyalty points." name="point"
+                        min="0" max="{{wallet_total}}" class="apply__wrap--input">
+                    <button class="btn btn-lg btn-round btn-blue" id="loyalty-point-apply" type="button"
+                        onclick="JSApplyPoint(event);">Reedem</button>
+                </div>
+                <p class="error-txt" id="point-alert">Required</p>
+            </div>
+        </div>
+        {% endif %}
+        {% endif %}
+
         {% endif %}
 
         <div class="subtotal mb-10">
             <ul class="subtotal__items">
-                
+
+                <li class="subtotal__item mb-10">
+                    <span class="subtotal__item--tax fs-14">Subtotal</span>
+                    <span class="subtotal__item--tax-price fs-18 semi-bold" id="total-cart-amount-id">Rs.
+                        {{total_amount}}</span>
+                </li>
                 {% if cart_coupon %}
-                <li>
-                    <span class="item">Coupon applied</span>
-                    <span class="price">-Rs. {{coupon_amount}}/-</span>
+                <li class="subtotal__item">
+                    <span class="subtotal__item--tax">Coupon applied</span>
+                    <span class="subtotal__item--tax-price">-Rs. {{coupon_amount}}</span>
                 </li>
                 {% elif cart_wallet %}
-                <li>
-                    <span class="item">Shine loyalty points</span>
-                    <span class="price">-Rs. {{redeemed_reward_point}}/-</span>
+                <li class="subtotal__item">
+                    <span class="subtotal__item--tax">Shine loyalty points</span>
+                    <span class="subtotal__item--tax-price">-Rs. {{redeemed_reward_point}}</span>
                 </li>
                 {% endif %}
                 {% if cart_coupon or cart_wallet %}
-                <li class="subtotal__item mb-15">
-                    <span class="subtotal__item--subtotal">Subtotal</span>
-                    <span class="subtotal__item--price">Rs. {{amount_after_discount}}</span>
+                <li class="subtotal__item">
+                    <span class="subtotal__item--tax">TOTAL</span>
+                    <span class="subtotal__item--tax-price">Rs. {{amount_after_discount}}</span>
                 </li>
-                {% else %}
-                <li class="subtotal__item mb-10">
-                        <span class="subtotal__item--tax fs-14">Subtotal</span>
-                        <span class="subtotal__item--tax-price fs-20 semi-bold" id="total-cart-amount-id">Rs.
-                            {{total_amount}}</span>
-                    </li>
-                {% endif %}
+                {%endif%}
                 <li class="subtotal__item">
                     <span class="subtotal__item--tax">SGST @ {{sgst}}%</span>
-                    <span class="subtotal__item--tax-price">+Rs. {{sgst_amount}}</span>
+                    <span class="subtotal__item--tax-price">+Rs. <span id="sgst-amount">{{sgst_amount}}</span></span>
                 </li>
 
                 <li class="subtotal__item">
                     <span class="subtotal__item--tax">CGST @ {{cgst}}%</span>
-                    <span class="subtotal__item--tax-price">+Rs. {{cgst_amount}}</span>
+                    <span class="subtotal__item--tax-price">+Rs. <span id="cgst-amount">{{cgst_amount}}</span></span>
                 </li>
             </ul>
         </div>
@@ -281,7 +290,7 @@
     $(function () {
         $("#btn-reedem").click(function () {
             $("#redeem-content").slideToggle();
-            
+
             return false;
         });
     });
@@ -293,4 +302,3 @@
 {% endblock js_section %}
 {% block zendesk %}
 {% endblock zendesk %}
-
