@@ -27,3 +27,4 @@ STATIC_SITE_ID_TO_SLUG_MAPPING = {
 STATIC_SITE_SLUG_TO_ID_MAPPING = {
     value: key for key, value in STATIC_SITE_ID_TO_SLUG_MAPPING.items()
 }
+
