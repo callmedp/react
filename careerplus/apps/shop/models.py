@@ -422,7 +422,7 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         return self.get_assessment_test_count()
 
     def get_assessment_test_count(self):
-        return self.test_set.count()
+        return self.testcategories.count()
 
     @property
     def get_free_test(self):

@@ -1,0 +1,63 @@
+{% extends "mobile/basic/base.html" %}
+{% load static compress %}
+{% load static thumbnail compress %}
+{% block title %}Shine learning{% endblock %}
+
+{% block css_section %}
+    {{ block.super }}
+    {% compress css %}
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/homepage/contact.scss' %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+
+{% block header %}
+<!-- header menu Icon Starts here -->
+<header class="w100fl he-auto">
+    <img aria-label="contact" src="{% static 'shinelearn/images/mobile/homepage/contact.jpg' %}">
+    <!-- header menu Icon Starts here -->
+    <div class="main-menu w100fl">
+        <div class="pull-left">
+            <a class=" pull-left" id="sidebar-main-trigger" href="#"></a> 
+                <a class="icon-back pull-left" role="button"  onclick="goBack()"></a> 
+        </div><!-- / Left side Icon ends here -->
+    </div><!-- header menu Icon ends here -->
+    <h1 class="heading-back w100fl pb-0" id="heading"></h1>
+</header><!-- header ends here -->
+{% endblock header %}
+
+{% block container %}
+<div class="body-wrapper">
+<section class="content-box">
+  <div id = "loader" style ="display:none; text-align: center;">
+    <img aria-label="loader" id="loadingimg" src="{% static 'shinelearn/images/loader.gif' %}" >
+  </div>
+  
+{#  <div class="mail-icon"><span class="mail-iconStrock"></span></div>#}
+</section>
+
+</div>
+
+{% endblock container %}
+
+{% block johukum %}
+{% endblock johukum %}
+
+{% block zendesk %}
+{% endblock zendesk %}
+{% block js_section %}
+  {{block.super}}
+<script>
+  $('#loader').show();
+  var page_type = {{page_type}};
+  $( document ).ready(function() {
+      $.get('/api/v1/static-site-page/',{"page_type": page_type},
+              (data)=>{
+                document.getElementById('heading').innerHTML = data.results[0].page_name;
+                $('#loader').hide();
+                document.getElementsByClassName('content-box')[0].innerHTML += data.results[0].content;
+              }).fail(function() {
+                      alert( "$.get failed!" );
+                    });
+});
+</script>
+{% endblock js_section %}

@@ -237,6 +237,16 @@ class Order(AbstractAutoDate):
         mobile = str(self.alt_mobile)
         return mobile[:2] + "".join(["*" for i in list(mobile[2:len(mobile)-2])]) + mobile[-2:]
 
+
+    @property
+    def full_name(self):
+        name = ""
+        if self.first_name:
+            name += self.first_name + " "
+        if self.last_name:
+            name += self.last_name
+        return name
+
     def get_currency_code(self):
         return CURRENCY_SYMBOL_CODE_MAPPING.get(self.currency)
 
@@ -579,7 +589,8 @@ class OrderItem(AbstractAutoDate):
             ("can_view_assigned_jobs_on_the_move", "Can view assigned jobs on the move"),
             ("can_assign_jobs_on_the_move", "Can assign jobs on the move"),
             ("can_send_jobs_on_the_move", "Can send assigned jobs on the move"),
-            ("can_approve_jobs_on_the_move", "Can Approve jobs on the move")
+            ("can_approve_jobs_on_the_move", "Can Approve jobs on the move"),
+            ("can_update_manual_links", "Can Update Manual Links")
         )
 
     def __str__(self):

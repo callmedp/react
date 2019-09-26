@@ -54,16 +54,19 @@
     </div><!-- end of box -->
 {% endfor %}
 {% if products.has_next %}
+    <div id='prod_load_more_mobile' class="loadmore">
+        <div id = "prod_loader_mobile" style ="display:none" class="loadmore__loader">
+        <img aria-label="loader"  src="{% static 'shinelearn/images/loader.gif' %}" class="img-responsive" >
+        </div>
     <p class="text-center pb-0">
-        <a role="button" id="product_load_more"
+        <a role="button" id="product_load_more_mobile"
         class="load-more loadmore">
         <strong>Load More</strong></a>
     </p>
     <div id="prod_load_more">
-        {% if products.has_next %}
             <input type="hidden" name="page"
-            value="{{products.next_page_number}}" id="page_id">
-            <input type="hidden" name="slug" value="{{category_obj.pk}}" id="slug_id">
-        {% endif %}
+            value="{{products.next_page_number}}" id="prod_page_id">
+            <input type="hidden" name="slug" value="{{category_obj.pk}}" id="ctg_id">
+    </div>
     </div>
 {% endif %}

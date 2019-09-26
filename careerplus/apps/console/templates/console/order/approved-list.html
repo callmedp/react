@@ -9,6 +9,7 @@
 {{block.super}}
 {% compress css %}
 <link type="text/css" href="{% static 'console/css/datepicker/daterangepicker.css' %}" rel="stylesheet">
+<link type="text/css" href="{% static 'console/css/custom.css' %}" rel="stylesheet">
 {% endcompress %}
 {% endblock css_block %}
 {% block pagecontent %}
@@ -64,13 +65,56 @@
 							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label class="radio-inline"><input type="radio" name="rad_search"value="product" {{product}}><b>product</b></label>
 						</div>
 					</div>
+					{% if request.GET.writer %}
+                        <input type="hidden" name="writer" value="{{request.GET.writer}}">
+                    {% endif %}
+                    {% if request.GET.modified %}
+                        <input type="hidden" name="modified" value="{{request.GET.modified}}">
+                    {% endif %}
+                    {% if request.GET.draft_level %}
+                        <input type="hidden" name="draft_level" value="{{request.GET.draft_level}">
+                    {% endif %}
+                    {% if request.GET.delivery_type %}
+                        <input type="hidden" name="delivery_type" value="{{request.GET.delivery_type}}">
+                    {% endif %}
+                    {% if request.GET.sort_type %}
+		                        <input type="hidden" name="sort_type" value="{{request.GET.sort_type}}">
+		            {% endif %}
 				</div>
 			</div>
 			</form>
 		</div>
 		<div class="row top_tiles">
-			<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-				<button type="button" class="btn btn-app" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-filter"></i>Filter By</button>
+			<div class="col-lg-12 col-md-3 col-sm-6 col-xs-12">
+				<button type="button" class="btn btn-app pull-left" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-filter"></i>Filter By</button>
+				<div class="dropdown pull-left" style="margin-left:20px;" id="sort_dropdown">
+				<strong>Sort By</strong>
+			<form id="sort_form" action="{% url "console:queue-approved" %}" method='GET'>
+				    <select class="form-control" name="sort_type" id="sort_type" onchange="sort();" >
+					    <option value="Date" {% if sort_type == 'Date'%} selected {% endif %}>Modified Date</option>
+						<option value="delivery_speed" {% if sort_type == 'delivery_speed'%} selected {% endif %}>Delivery Speed</option>
+						<option value="payment_date" {% if sort_type == 'payment_date'%} selected {% endif %}>Payment Date</option>
+				    </select>
+				    {% if request.GET.writer %}
+                        <input type="hidden" name="writer" value="{{request.GET.writer}}">
+                    {% endif %}
+                    {% if request.GET.modified %}
+                        <input type="hidden" name="modified" value="{{request.GET.modified}}">
+                    {% endif %}
+                    {% if request.GET.draft_level %}
+                        <input type="hidden" name="draft_level" value="{{request.GET.draft_level}">
+                    {% endif %}
+                    {% if request.GET.delivery_type %}
+                        <input type="hidden" name="delivery_type" value="{{request.GET.delivery_type}}">
+                    {% endif %}
+                    {% if query %}
+                           <input type="hidden" name="query" value="{{query}}">
+                       {% endif %}
+                       {% if request.GET.rad_search %}
+                            <input type="hidden" name="rad_search" value="{{request.GET.rad_search}}">
+                       {% endif %}
+		    	</form>
+			</div>
 			</div>
 			<div class="modal fade bs-example-modal-sm filter" tabindex="-1" role="dialog" aria-hidden="true">
 				<div class="modal-dialog modal-sm">
@@ -111,8 +155,14 @@
 								<br/>
 							</div>
 							{% if query %}
-							<input type="hidden" name="query" value="{{query}}">
-							{% endif %}
+                           <input type="hidden" name="query" value="{{query}}">
+                       {% endif %}
+                       {% if request.GET.rad_search %}
+                            <input type="hidden" name="rad_search" value="{{request.GET.rad_search}}">
+                       {% endif %}
+							{% if request.GET.sort_type %}
+	                        <input type="hidden" name="sort_type" value="{{request.GET.sort_type}}">
+		                    {% endif %}
 							</form>
 						</div>
 						<div class="modal-footer">
@@ -168,7 +218,7 @@
 							</thead>
 							<tbody>
 								{% for obj in page %}
-								<tr class="even pointer">
+								<tr class="even pointer {% if obj.delivery_service.name == 'super express' %}super_express{% elif obj.delivery_service.name == 'express' %}express{% endif %}">
 									<td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><b style="text-decoration: underline;">{{obj.order.number}}</b></a>
 										</br>
 										({{obj.pk}})
@@ -213,7 +263,11 @@
 					<td>{% if obj.delivery_service %}{{obj.delivery_service.name}}{% endif %}</td>
 					<td>{% if obj.assigned_to %}{{obj.assigned_to.name}} {% else %} Not Assigned{% endif %}</td>
 					<td>{{obj.approved_on}}</td>
-					<td>{{obj.modified|naturaltime}}</td>
+					<td>{{obj.modified|naturaltime}}
+					<b>Updated On: {{obj.modified}}</b>
+										<hr>
+										<b>Payment Made On: {{obj.order.payment_date}}</b>
+					</td>
 					</tr>
 					{% endfor %}
 					</tbody>

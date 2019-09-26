@@ -79,7 +79,7 @@
 
         <div class="popular_test_inside">
            <a id="{{test.id}}" onclick="testModal(event);" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}","courseName":"{{test.course.name}}","courseDuration":"{{test.course.get_duration_in_day}}","coursePrice":"{{test.course.inr_price}}","productName":"{{test.product.name}}","productDuration":"{{test.product.get_duration_day}}","productPrice":"{{test.product.inr_price}}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}","courseUrl":"{{test.course.get_absolute_url}}","productUrl":"{{test.product.get_absolute_url}}" }'>
-                <span class=" border border{{forloop.counter0}}"></span>
+                <span class="border border{{forloop.counter0}}"></span>
                 <span class="name">{{test.title}}</span>
                 <span class="btn btn-md btn-round-30 btn-blue" id="btn_check_result">Take free test</span>
             </a>
@@ -94,7 +94,7 @@
     </div>
 
       <!--start Test Modal-->
-    <div class="practice-test check-result-wrap pt-30" id="check_results">
+    <div class="practice-test check-result-wrap pt-30 w-100" id="check_results">
         <div class="practice-test-inside"></div>
         <div class="back" id="close"></div>
         <h1 class="mt-30">{{Category.heading}}</h1>

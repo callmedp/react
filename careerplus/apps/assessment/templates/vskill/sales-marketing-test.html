@@ -82,8 +82,9 @@
          <div class="col-sm-12 col-lg-12 col-md-12">
             <div class="popular_test row" id="funcDiv">
                {% for cat in category|slice:":8"  %}
+
                <div class="testinside testinside-inner">
-                  <span class="border-left"></span>
+                  <span class="border-left {% cycle 'default' 'purple' 'olive' 'green' %}"></span>
            <a class="test-box" href="{% url 'assessment:vskill-subcategory' slug=cat.slug %}" title="{{cat.name}}">
                      {{cat.name}}
                      <span class="test"> {{cat.get_assessment_test_count}}
@@ -122,7 +123,7 @@
                 element.innerHTML=
                 element.innerHTML +`
                 <div class="testinside testinside-inner">
-                <span class="border-left">
+                <span class="${'border-left ' +colorTile(fa)}">
                 </span>
                 <a class="test-box" title="${json.results[fa].name}" href="/practice-tests/${json.results[fa].slug}/sub">
                 ${json.results[fa].name}
@@ -143,6 +144,11 @@
                }
            });
    }
+   function colorTile(i){
+   let tile = ['default','purple','olive' ,'green']
+    return tile[i%4];
+   }
+
    </script>
 <script src="{% static 'shinelearn/js/assessment/assessment_search.js' %}"></script>
 
