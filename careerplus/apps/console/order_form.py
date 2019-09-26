@@ -539,7 +539,8 @@ class ProductUserProfileForm(forms.ModelForm):
         fields = (
             'contact_number', 'desired_industry', 'desired_location',
             'desired_position', 'desired_salary', 'current_salary',
-            'approved', 'experience', 'skills', 'onboard', 'day_of_week'
+            'approved', 'experience', 'skills', 'onboard', 'day_of_week',
+            'manual_links_count'
         )
     contact_number = forms.CharField(
         max_length=500,
@@ -595,6 +596,11 @@ class ProductUserProfileForm(forms.ModelForm):
             'class': 'form-control col-md-3 col-xs-12'}),
         required=True
     )
+    manual_links_count = forms.IntegerField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-3 col-xs-12'}),
+        required=False
+    )
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
@@ -612,6 +618,18 @@ class ProductUserProfileForm(forms.ModelForm):
         self.fields['desired_location'].widget.attrs['class'] = ' tagsinput tags form-control'
         self.fields['desired_position'].widget.attrs['class'] = ' tagsinput tags form-control'
 
+        if self.instance:
+            self.initial['manual_links_count'] = self.instance.order_item.get_manual_sent_link()
+
+    def clean_manual_links_count(self):
+        manual_links_count = self.cleaned_data['manual_links_count']
+        if manual_links_count:
+            if manual_links_count < 0:
+                raise forms.ValidationError('Please Provide positive values only')
+            manual_change = 1
+            already_sent_link = {'already_sent_link': manual_links_count}
+            self.cleaned_data['manual_change'] = manual_change
+            self.cleaned_data['manual_data'] = already_sent_link
 
     def save(self, commit=True):
         existing_obj = ProductUserProfile.objects.filter(id=self.instance.id).first()
@@ -620,5 +638,9 @@ class ProductUserProfileForm(forms.ModelForm):
             instance.save(user=self.user)
         if not existing_obj.onboard and instance.onboard:
             instance.order_item.set_due_date()
+        if self.cleaned_data.get('manual_change', None) and self.cleaned_data.get('manual_data', None):
+            instance.manual_change = self.cleaned_data['manual_change']
+            instance.manual_changes_data = str(self.cleaned_data['manual_data'])
+            instance.save()
         return instance
 
