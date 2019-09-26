@@ -103,3 +103,6 @@ class StaticSiteContent(models.Model):
     @property
     def page_name(self):
         return STATIC_PAGE_NAME_CHOICES[self.page_type-1][1]
+
+    def __str__(self):
+        return str(STATIC_PAGE_NAME_CHOICES[self.page_type-1][1])

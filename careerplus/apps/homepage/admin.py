@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import TopTrending, TrendingProduct, Testimonial
+from .models import TopTrending, TrendingProduct, Testimonial, StaticSiteContent
 
 
 class TrendingProductInline(admin.TabularInline):
@@ -32,3 +32,6 @@ class TestimonialAdmin(admin.ModelAdmin):
 # admin.site.register(TrendingProduct, TrendingProductAdmin)
 admin.site.register(TopTrending, TopTrendingAdmin)
 admin.site.register(Testimonial, TestimonialAdmin)
+admin.site.register(StaticSiteContent)
+
+
