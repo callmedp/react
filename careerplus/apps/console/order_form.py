@@ -608,9 +608,13 @@ class ProductUserProfileForm(forms.ModelForm):
         if self.instance:
             if self.instance.approved:
                 del self.fields['approved']
+
+            if self.instance.approved or not self.instance.onboard or self.instance.due_date:
+                del self.fields['day_of_week']
+
             if self.instance.onboard:
                 del self.fields['onboard']
-                del self.fields['day_of_week']
+
         if self.fields.get('day_of_week', None) and not self.instance:
             self.initial['day_of_week'] = timezone.now().weekday()
 
@@ -619,7 +623,11 @@ class ProductUserProfileForm(forms.ModelForm):
         self.fields['desired_position'].widget.attrs['class'] = ' tagsinput tags form-control'
 
         if self.instance:
-            self.initial['manual_links_count'] = self.instance.order_item.get_manual_sent_link()
+            order_item = getattr(self.instance, 'order_item', None)
+            if order_item:
+                self.initial['manual_links_count'] = self.instance.order_item.get_manual_sent_link()
+            else:
+                self.initial['manual_links_count'] = 0
 
     def clean_manual_links_count(self):
         manual_links_count = self.cleaned_data['manual_links_count']
@@ -636,7 +644,7 @@ class ProductUserProfileForm(forms.ModelForm):
         instance = super(ProductUserProfileForm, self).save()
         if commit:
             instance.save(user=self.user)
-        if not existing_obj.onboard and instance.onboard:
+        if not existing_obj.approved and instance.approved and not instance.order_item.has_due_date:
             instance.order_item.set_due_date()
         if self.cleaned_data.get('manual_change', None) and self.cleaned_data.get('manual_data', None):
             instance.manual_change = self.cleaned_data['manual_change']
