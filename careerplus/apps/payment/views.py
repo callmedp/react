@@ -22,6 +22,7 @@ from console.decorators import Decorate, stop_browser_cache
 from django.core.files.base import ContentFile
 from django.utils import timezone
 from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.views.decorators.csrf import csrf_exempt
 
 # local imports
 from core.api_mixin import ShineCandidateDetail
@@ -140,7 +141,8 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
                 return HttpResponseRedirect(return_parameter)
 
         return super(PaymentOptionView, self).get(request, *args, **kwargs)
-
+    
+    @csrf_exempt
     def post(self, request, *args, **kwargs):
         payment_type = request.POST.get('payment_type', '').strip()
         if payment_type == 'cash':
@@ -289,7 +291,8 @@ class ThankYouView(TemplateView):
         context.update({
             "pending_resume_items": pending_resume_items,
             "assesment_items": assesment_items,
-            'booster_item_exist':booster_item_exist
+            'booster_item_exist':booster_item_exist,
+            'candidate_id': self.request and self.request.session.get('candidate_id','')
         })
 
         if not self.request.session.get('resume_id', None):
@@ -298,11 +301,12 @@ class ThankYouView(TemplateView):
                 request=self.request)
         return context
 
+    @csrf_exempt
     def post(self, request, *args, **kwargs):
         action_type = request.POST.get('action_type', '').strip()
         order_pk = request.session.get('order_pk')
         resume_id = request.session.get('resume_id', None)
-        candidate_id = request.session.get('candidate_id', None)
+        candidate_id = request.session.get('candidate_id', None) or request.session.get('guest_candidate_id',None)
         order = Order.objects.filter(pk=order_pk).first()
         if not order:
             return
@@ -463,7 +467,8 @@ class EPayLaterResponseView(PaymentMixin, CartMixin, TemplateView):
         txn_obj.txn_info = failure_message
         logging.getLogger('error_log').error('EPAYLATER failed for {}'.format(txn_obj.txn))
         txn_obj.save()
-
+        
+    @csrf_exempt
     def post(self, request, *args, **kwargs):
         paylater_data = request.POST.copy()
         checksum = paylater_data.get('checksum')

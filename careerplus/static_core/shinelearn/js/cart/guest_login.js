@@ -287,6 +287,11 @@ $.validator.addMethod("indiaPin", function(value, element) {
         return true;
 });
 
+$.validator.addMethod("validateEmail", function(value, element) {
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(value);
+},'Please provide a valid email id.');
+
 
 $("#guest_form").validate({
     // errorClass: 'error-txt',
@@ -299,6 +304,7 @@ $("#guest_form").validate({
             email:{
                 required: true,
                 email: true,
+                validateEmail: true,
                 maxlength: 100,
             },
             mobile:{

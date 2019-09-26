@@ -34,6 +34,9 @@
 
 {% block container %}
 <div class="clearfix"></div>
+<div id = "loader" class="overlay-background"  text-align: center;">
+        <img aria-label="loader" id="loadingimg" class="loader-position-mobile" src="{% static 'shinelearn/images/mobile/loader1.png' %}" >
+  </div>
 <div class="payment">
     <div class="payment--bg"></div>
     <ul class="payment__steps">
@@ -80,9 +83,11 @@
                     {% endif %}
                     <div class="payment__summary__item--wrap">
                         <p class="payment__summary__item--course-title">{{item.name}}
-                            <strong class="mt-10">Rs.
+                            <strong>Rs.
                                 {% if variations|length and item.product_class == 'course' or item.type_flow == 17  %}
-                                {{variations.0.price}} {% else %} {{item.price}} {% endif %} </strong>
+                                {{variations.0.price}} {% else %} {{item.price}} {% endif %} 
+                            </strong>
+                            <span id="delivery-charge{{item.id}}">{%if delivery_service.inr_price %}Rs. {{delivery_service.inr_price}}/-{% endif %}</span>
                         </p>
                         {% if addons|length or variations|length %}
                         <div class="payment__summary__item__addons mt-20">
@@ -118,32 +123,32 @@
                         {% endif %}
 
                         {% if delivery_types %}
-                        <div class="payment__summary__item__addons mt-20">
-                            <div class="delivery-speed mb-15" id="btn-delivery"
+                        <div class="payment__summary__item__addons delivery-toggle-action mt-20">
+                            <div class="delivery-speed mb-15 delivery-toggle-action" id="btn-delivery"
                                 onclick="toggleDeliveryItems('{{item.id}}')">
-                                <span class="icon-delivery"></span>
-                                <p class="pb-0">
-                                    <strong class="block" id="active-delivery-title{{item.id}}">{%if delivery_service %}
+                                <span class="icon-delivery delivery-toggle-action"></span>
+                                <p class="pb-0 delivery-toggle-action">
+                                    <strong class="block delivery-toggle-action" id="active-delivery-title{{item.id}}">{%if delivery_service %}
                                         {{delivery_service.title}}- {% if delivery_service.inr_price|is_free %}No extra
                                         cost {% else %}Rs. {{delivery_service.inr_price}}/- {% endif %} {%else%}Normal -
                                         No extra cost{%endif%}</strong>
-                                    <span id="active-delivery-description{{item.id}}"> ({%if delivery_service %}
+                                    <span id="active-delivery-description{{item.id}}" class="delivery-toggle-action"> ({%if delivery_service %}
                                         {{delivery_service.meta_desc}} {%else%}get it in 5 working days{%endif%})</span>
                                 </p>
-                                <span class="icon-down-arrow"></span>
+                                <span class="icon-down-arrow delivery-toggle-action"></span>
                             </div><!-- /. select delivery options -->
 
-                            <ul class="delivery-list cls_delivery-content" id="delivery-item{{item.id}}"
+                            <ul class="delivery-list delivery-dropdown delivery-toggle-action cls_delivery-content" id="delivery-item{{item.id}}"
                                 style="display: none;">
                                 {% for delivery_obj in delivery_types %}
                                 <li>
-                                    <input type="radio" name="{{item.id}}" id="{{delivery_obj.slug}}{{item.id}}"
+                                    <input type="radio" class="delivery-toggle-action" name="{{item.id}}" id="{{delivery_obj.slug}}{{item.id}}"
                                         {% if forloop.counter0 == delivery_service|get_count %} checked {%endif %}
                                         name="delivery-list"
                                         onclick="selectDeliveryType('{{delivery_obj.id}}', '{% if variations|length  %} {{variations.0.id}} {% else %} {{item.id}} {% endif %}', '{{csrf_token}}', '{{item.id}}')"
                                         value="19">
-                                    <label for="{{delivery_obj.slug}}{{item.id}}"><strong
-                                            class="block">{{delivery_obj.title}}-
+                                    <label class="delivery-toggle-action" for="{{delivery_obj.slug}}{{item.id}}"><strong
+                                            class="block delivery-toggle-action">{{delivery_obj.title}}-
                                             {% if delivery_obj.inr_price|is_free %}No extra cost {% else %}Rs.
                                             {{delivery_obj.inr_price}}/- {% endif %}</strong>
                                         ({{delivery_obj.meta_desc}})</label>
@@ -172,7 +177,7 @@
                         <input id="loyalty_point" type="text" placeholder="{{cart_coupon.code}} points redeemed."
                             name="point"  disabled class="apply__wrap--input">
                         <button class="btn btn-lg btn-round btn-blue" id="loyalty-point-apply" type="button"
-                            onclick="JSRemoveDiscount();">Remove</button>
+                            onclick="JSRemoveDiscount(event);">Remove</button>
                     </div>
                     <p class="error-txt" id="point-alert">Required</p>
                 </div>
@@ -185,7 +190,7 @@
                     <input id="loyalty_point" type="text" placeholder="{{wallet_point}} points redeemed."
                         name="point" disabled class="apply__wrap--input">
                     <button class="btn btn-lg btn-round btn-blue" id="loyalty-point-apply" type="button"
-                        onclick="JSRemovePoint();">Remove</button>
+                        onclick="JSRemovePoint(event);">Remove</button>
                 </div>
                 <p class="error-txt" id="point-alert">Required</p>
             </div>
@@ -197,7 +202,7 @@
                 <input id="discount_code" type="text" placeholder="Enter coupon code" name="code" maxlength="15"
                     class="apply__wrap--input">
                 <button class="btn btn-lg btn-round btn-blue" id="discount-apply" type="button"
-                    onclick="JSApplyDiscount();">Apply</button>
+                    onclick="JSApplyDiscount(event);">Apply</button>
             </div>
             <p class="error-txt" id="discount-alert"> </p>
         </div>
@@ -209,7 +214,7 @@
                     <input id="loyalty_point" type="text" placeholder="{{wallet_total}} loyalty points." name="point"
                         min="0" max="{{wallet_total}}" class="apply__wrap--input">
                     <button class="btn btn-lg btn-round btn-blue" id="loyalty-point-apply" type="button"
-                        onclick="JSApplyPoint();">Reedem</button>
+                        onclick="JSApplyPoint(event);">Reedem</button>
                 </div>
                 <p class="error-txt" id="point-alert">Required</p>
             </div>

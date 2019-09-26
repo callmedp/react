@@ -76,6 +76,10 @@ Payment Login - Shine Learning
 
 {% block container %}
 <section class="container mt-53">
+    <div id = "loader" class="overlay-background"  text-align: center;">
+            <img aria-label="loader" id="loadingimg" class="loader-position" src="{% static 'shinelearn/images/loader1.png' %}" >
+    </div>
+
     <!-- page content body start -->
     <div class="row greybg2 pad-25">
 
@@ -208,7 +212,7 @@ Payment Login - Shine Learning
 
 
             <div class="col-sm-6 text-center" id="continue-as-guest-button">
-                <div class="login-guest">
+                <div class="login-guest guest-selection">
                     <span>
                         <a onclick="continueAsGuest()">
                             <figure class="guestlogin-payment-icon"></figure>

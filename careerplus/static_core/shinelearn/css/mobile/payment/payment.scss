@@ -201,7 +201,7 @@
             width: 130px;
 
             @media (max-width:320px) {
-              width: 110px;
+              width: 90px;
             }
           }
 
@@ -232,6 +232,7 @@
       font-size: $font-size-base;
       margin-right: auto;
       flex: 1;
+      padding-right: 10px;
 
       @media (max-width:320px) {
         font-size: $font-size-xs;
@@ -669,6 +670,26 @@
   } 
 }
 
+
+.overlay-background {
+  background: #000000;  
+  display: none;        
+  position: fixed;   
+  top: 0;                 
+  right: 0;             
+  bottom: 0;
+  left: 0;
+  opacity: 0.5;
+  z-index: 999;
+}
+
+.loader-position-mobile {
+  transform: translate(260%, 400%);
+}
+
+.body-noscroll {
+ overflow: hidden;
+}
 
 .payment-summary {
   width: 100%;
