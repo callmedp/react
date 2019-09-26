@@ -203,7 +203,7 @@ Payment Summary - Shine Learning
           <span class="col-sm-4 col-md-6 coupon">
             {% if cart_coupon %}
             <div id="showCoupon">
-              <div class="form-group">
+              <div class="coupon__wrap">
                 <input id="discount_code" type="text" value="Coupon {{cart_coupon.code}} is applied!" name="code"
                   maxlength="15" disabled>
                 <span class="error-txt" id="discount-alert"></span>
