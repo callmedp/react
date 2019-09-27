@@ -13,8 +13,9 @@ from core.library.haystack.query import SQS
 from core.api_mixin import ShineCandidateDetail
 from geolocation.models import Country
 from meta.views import MetadataMixin
-
 from .models import TopTrending, Testimonial
+
+from .config import STATIC_SITE_SLUG_TO_ID_MAPPING, STATIC_PAGE_NAME_CHOICES
 
 redis_conn = get_redis_connection("search_lookup")
 
@@ -176,23 +177,6 @@ class AboutUsView(TemplateView):
         context = super(AboutUsView, self).get_context_data(**kwargs)
         return context
 
-
-class PrivacyPolicyView(TemplateView):
-    template_name = 'homepage/privacy-policy.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(PrivacyPolicyView, self).get_context_data(**kwargs)
-        return context
-
-
-class TermsConditionsView(TemplateView):
-    template_name = 'homepage/tnc.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(TermsConditionsView, self).get_context_data(**kwargs)
-        return context
-
-
 class ContactUsView(TemplateView):
     template_name = 'homepage/contact-us.html'
 
@@ -205,10 +189,20 @@ class ContactUsView(TemplateView):
         })
         return context
 
-
-class DisclaimerView(TemplateView):
-    template_name = 'homepage/disclaimer.html'
-
+class StaticSiteContentView(TemplateView):
+    template_name = 'homepage/static-site-content.html'
+    
     def get_context_data(self, **kwargs):
-        context = super(DisclaimerView, self).get_context_data(**kwargs)
+        page_slug = kwargs['page_slug']
+        page_type = int(STATIC_SITE_SLUG_TO_ID_MAPPING[page_slug])
+        context = super(StaticSiteContentView, self).get_context_data(**kwargs)
+        context.update({
+            "page_type": page_type,
+            "page_name": STATIC_PAGE_NAME_CHOICES[page_type-1][1]
+            })
         return context
+
+    
+    
+
+

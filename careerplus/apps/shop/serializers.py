@@ -47,7 +47,8 @@ class CRMProductSerializer(ModelSerializer):
             'variation',
             'attributes',
             'active',
-            'delivery_type'
+            'delivery_type',
+            'short_description'
         ]
 
     def get_display_name(self,obj):
@@ -137,6 +138,7 @@ class CRMProductSerializer(ModelSerializer):
                             'usd_price': float(pv.usd_price),
                             'aed_price': float(pv.aed_price),
                             'gbp_price': float(pv.gbp_price),
+                            "short_description": pv.short_description
                         })
                     var_dict.update({
                         'var_list': var_list
@@ -158,6 +160,7 @@ class CRMProductSerializer(ModelSerializer):
                             'usd_price': float(pv.usd_price),
                             'aed_price': float(pv.aed_price),
                             'gbp_price': float(pv.gbp_price),
+                            "short_description": pv.short_description
                         })
                 var_dict.update({
                     'var_list': var_list

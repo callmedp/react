@@ -687,7 +687,8 @@ class OrderItem(AbstractAutoDate):
             ("can_view_assigned_jobs_on_the_move", "Can view assigned jobs on the move"),
             ("can_assign_jobs_on_the_move", "Can assign jobs on the move"),
             ("can_send_jobs_on_the_move", "Can send assigned jobs on the move"),
-            ("can_approve_jobs_on_the_move", "Can Approve jobs on the move")
+            ("can_approve_jobs_on_the_move", "Can Approve jobs on the move"),
+            ("can_update_manual_links", "Can Update Manual Links")
         )
 
     def __str__(self):
@@ -738,6 +739,14 @@ class OrderItem(AbstractAutoDate):
                 return profile.approved
 
     @property
+    def has_due_date(self):
+        if self.product.sub_type_flow == 502:
+            profile = getattr(self, 'whatsapp_profile_orderitem', None)
+            if profile:
+                return bool(profile.due_date)
+    
+
+    @property
     def is_onboard(self):
         if self.product.sub_type_flow == 502:
             profile = getattr(self, 'whatsapp_profile_orderitem', None)
@@ -785,7 +794,7 @@ class OrderItem(AbstractAutoDate):
 
     def get_weeks(self):
         weeks, weeks_till_now = None, None
-        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5, 23, 31]).order_by('id').first()
+        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[31]).order_by('id').first()
         if sevice_started_op:
             started = sevice_started_op.created
             day = self.product.get_duration_in_day()
@@ -799,7 +808,7 @@ class OrderItem(AbstractAutoDate):
     def get_links_needed_till_now(self):
         start, end = None, None
         links_count = 0
-        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5,23, 31]).order_by('id').first()
+        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[31]).order_by('id').first()
         links_per_week = getattr(self.product.attr, S_ATTR_DICT.get('LC'), 2)
         if sevice_started_op:
             links_count = 0
@@ -838,7 +847,7 @@ class OrderItem(AbstractAutoDate):
         return None
 
     def get_sent_link_count_for_current_week(self):
-        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[5,23, 31]).order_by('id').first()
+        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[31]).order_by('id').first()
         started = sevice_started_op.created
         day = self.product.get_duration_in_day()
         weeks = math.floor(day / 7)

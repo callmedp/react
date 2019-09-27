@@ -3473,6 +3473,7 @@ class WhatsAppScheduleView(UserPermissionMixin, DetailView, PaginationMixin):
                     "Job Link Scheduled Failed, Changes not Saved")
         else:
             profile = getattr(obj, 'whatsapp_profile_orderitem', None)
+            context = self.get_context_data()
             if profile:
                 profile_form = ProductUserProfileForm(
                     data=request.POST,
@@ -3484,16 +3485,17 @@ class WhatsAppScheduleView(UserPermissionMixin, DetailView, PaginationMixin):
                     messages.success(
                         self.request,
                         "Profile Changes Saved")
+                    return HttpResponseRedirect(reverse("console:queue-whatsapp-schedule", kwargs={'pk': obj.pk}))
                 else:
                     messages.error(
                         self.request,
                         "Profile Changes not Saved")
+                    context.update({'profile_form': profile_form})
             else:
                 messages.error(
                     self.request,
                     "Profile Changes not Saved")
                 obj.save()
-            context = self.get_context_data()
         return TemplateResponse(
             request, [
                 "console/order/whats_app_schedule.html"
