@@ -215,6 +215,7 @@
               <img src="{% static 'shinelearn/images/mobile/common/epaylater.jpg' %}" class="payment-type--item--img"/>
             </a>
           </div>
+            {% if total_amount > 5000 %}
 
                       <div class="accordion_example1 smk_accordion" id="zestMoneyAccordion" >
               <div class="accordion_in">
@@ -249,7 +250,7 @@
               </div><!-- /. cash accordion item -->
           </div><!-- /. accordion wrap -->
 
-
+                {% endif %}
         </div><!-- /. payment type -->
     </div><!-- /. payment white-box -->
 </div><!-- /. payment -->
