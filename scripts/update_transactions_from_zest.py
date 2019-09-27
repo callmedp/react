@@ -29,6 +29,7 @@ DAYS_DELTA = 7
 status_text_mapping = {
                      'applicationinprogress': 'Loan application is in progress',
                      'approved': 'Loan application has been approved',
+                     'active': 'Loan application has been approved',
                      'bankaccountdetailscomplete': 'Customer has completed his bank account details',
                      'cancelled': 'Loan application has been cancelled',
                      'customercancelled': 'Loan application has been cancelled by the customer',
@@ -64,17 +65,16 @@ if __name__ == "__main__":
         sdt = (edt - timedelta(days=delta+1)).replace(tzinfo=utc_tz)
         all_initiated_transactions = PaymentTxn.objects.filter(status__in=[0,2,3,4,5],\
                 payment_mode=14,created__gte=sdt,created__lte=edt,order__site=0)
-        logging.getLogger('info_log').info("number {}".format(len(all_initiated_transactions)))
 
         for transaction in all_initiated_transactions:
             order_status = zest_obj.fetch_order_status(transaction).lower()
             
-            if order_status in ["preaccepted","approved","active"]:
+            if order_status in ["approved","active"]:
                 transaction.status = 1
                 pay_day = datetime.now()
                 transaction.payment_date = pay_day
-                success_text = status_text_mapping.get (order_status, "")
-                success_text = json.dumps(success_text)
+                success_text = status_text_mapping.get(order_status, "")
+                success_text = json.dumps({'status': success_text})
                 transaction.txn_info = success_text
                 transaction.save()
                 order = transaction.order
@@ -86,19 +86,20 @@ if __name__ == "__main__":
             
             if order_status in approval_pending_status:
                 success_text = status_text_mapping.get(order_status, "")
-                success_text = json.dumps(success_text)
+                success_text = json.dumps({'status': success_text})
                 transaction.txn_info = success_text
                 transaction.status = 0
                 transaction.save()
                 continue
 
             failure_text = status_text_mapping.get(order_status,"")
-            failure_status = zest_status_payment_status_mapping.get(order_status,0)
-            logging.getLogger('info_log').info("Zest Order Update {},{}".\
-                    format(order_status,transaction.id))
+            failure_status = zest_status_payment_status_mapping.get(
+                order_status, 0)
+            logging.getLogger('info_log').info("Zest Order Update {},{}".format
+                                               (order_status,transaction.id))
 
-            transaction.txn_status = failure_status
-            transaction.failure_desc = failure_text
+            transaction.status = failure_status
+            transaction.extra_info = json.dumps({'failure text': failure_text})
             transaction.save()
 
     logging.getLogger('info_log').info(\
