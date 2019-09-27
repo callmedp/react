@@ -21,7 +21,7 @@ function Login(redirect_url) {
         }
     }, {scope: 'email'});
 }
-
+  
 // Load the SDK asynchronously
 (function (d, s, id) {
     let js, fjs = d.getElementsByTagName(s)[0];

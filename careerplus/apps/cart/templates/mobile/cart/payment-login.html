@@ -97,13 +97,13 @@
             <div class="line_wrap"><span>Login with</span><div class="line"></div></div>
 
             <div class="login__social text-center">
-                <a onclick="Login();">
+                <a onclick="Login('/payment/payment-options/');">
                     <sup class="icon-fb-2"></sup>
                 </a>
-                <a href="/user/linkedin/code/" class="link">
+                <a href="{% url 'users:linkedin-code' %}?next=/payment/payment-options/" class="link">
                     <sup class="icon-link-2"></sup>
                 </a>
-                <a onclick="glogin()">
+                <a onclick="glogin('/payment/payment-options/')">
                     <sup class="icon-gp-2"></sup>
                 </a>
             </div><!-- Login social -->
