@@ -646,6 +646,7 @@ class ZestMoneyResponseView(CartMixin,PaymentMixin,View):
         if order_status in self.approval_pending_status:
             txn_obj.status = 0
             self.update_txn_info(order_status, txn_obj)
+            self.closeCartObject(self.txn_obj.cart)
             return HttpResponseRedirect(reverse('payment:thank-you'))
 
         failure_text = self.status_text_mapping.get(order_status, "")
