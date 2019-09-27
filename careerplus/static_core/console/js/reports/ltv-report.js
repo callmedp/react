@@ -24,14 +24,15 @@ const getDefaultDate = ()=>{
 }
 
 const getLTVRecords = (year,month) =>{
-    // $('.loader').show()
-    // $('body').addClass('body-overflow')
     date = $('#report_date').val()
     year = date.split('-')[1]
     month = date.split('-')[0]
-
+    //loader
+    $('.loader').show()
+    $('body').addClass('body-overflow')
 
     $.get(`/order/api/v1/ltv-report/${year}/${month}`,(data)=>{
+        
         $('#messages').empty()
         if(data.count === 0){
             $('#messages').append(
@@ -43,10 +44,9 @@ const getLTVRecords = (year,month) =>{
             )
             $('.export-csv').hide()
             $('#ltv-records').empty()
-            return
         }
 
-        if(data.results){
+        if(data.results && data.count){
             $('.export-csv').show()
             $('#ltv-records').empty()
             for (result of data.results){
@@ -67,7 +67,23 @@ const getLTVRecords = (year,month) =>{
             }
             
         }
+
+        // end loader
+        $('.loader').hide()
+        $('body').removeClass('body-overflow')
         
+    }).fail(()=>{
+        $('#messages').empty()
+        $('#messages').append(
+            `
+                <div  class="alert alert-error alert-dismissable">
+                    Something went wrong
+                </div>
+            `
+        )
+        // stop loader
+        $('.loader').hide()
+        $('body').removeClass('body-overflow')
     })
 }
 
