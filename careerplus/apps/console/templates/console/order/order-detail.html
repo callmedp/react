@@ -2,663 +2,719 @@
 {% load static compress %}
 {% load humanize %}
 {% load thumbnail %}
-
 {% block title %}
-  <title>Order Detail- Shine Learning</title>
+<title>Order Detail- Shine Learning</title>
 {% endblock title %}
-
 {% block css_block %}
-    {{block.super}}
+{{block.super}}
 {% endblock css_block %}
-
-
 {% block pagecontent %}
-   <!-- page content -->
-    <div class="right_col" role="main">
-      <div class="">
-        <!-- new content -->
-        <!-- order detail top -->
-        <div class="row">
-          <div class="col-xs-12">
+<!-- page content -->
+<div class="right_col" role="main">
+   <div class="">
+      <!-- new content -->
+      <!-- order detail top -->
+      <div class="row">
+         <div class="col-xs-12">
             <div class="order_details">
-              <h1 class="order_details__heading mb-15">Order Detail</h1>
-              <div class="row flex">
-                <div class="col-md-3">
-                  <span class="order_details__id">
-                    <i class="icon-orderid mb-15"></i>
-                    Order ID
-                    <strong>CP200169</strong>
-                  </span>
-                </div>
-                <div class="col-md-3 bdr-rt order_details__by">
-                  <strong>Order By</strong>
-                  <h2 class="order_details__name">Chanchal Agrawal</h2>
-                  <p><i class="icon-callsm"></i> <span class="hidden">9871234567</span> <button class="round_btn">Click to view</button></p>
-                  <p><i class="icon-emailsm"></i> <span class="hidden">Chanchal12@gmail.com</span> <button class="round_btn">Click to view</button></p>
-                  <button class="blue_btn mt-10" data-toggle="modal" data-target="#alternatecontact_modal">Add Alternate contact</button>
-                </div>
-                <div class="col-md-3 order_details__status bdr-rt">
-                  <strong>Payment Status</strong>
-                  <p><b>Paid on:</b>  July 31, 2019</p>
-                  <strong class="mt-20">Welcome call </strong>
-                  <p>Order processed after final reminder Aug. 05, 2019, 10:35 am</p>
-                </div>
-                <div class="col-md-3 order_details__status">
-                  <strong>Added On</strong>
-                  <p>Aug 2, 2019, 2:31 p.m</p>
-                  <strong class="mt-20">Closed On</strong>
-                  <p>Not Closed Yet.</p>
-                </div>
-              </div>
+               <h1 class="order_details__heading mb-15">Order Detail</h1>
+               <input type="hidden" id="queueName" value="22">
+               <div class="row flex">
+                  <div class="col-md-3">
+                     <span class="order_details__id">
+                     <i class="icon-orderid mb-15"></i>
+                     Order ID
+                     <strong>{{order.number}}</strong>
+                     </span>
+                  </div>
+                  <div class="col-md-3 bdr-rt order_details__by">
+                     <strong>Order By</strong>
+                     <h2 class="order_details__name">{{order.first_name}} {{order.last_name}}</h2>
+                     <p>
+                       <i class="icon-callsm"></i><span id="mobile_field{{order.id}}_1"></span>
+                        <button class="round_btn" onclick="order_get_details('{{order.id}}','mobile,alt_mobile','mobile')";>C
+                        lick to view</button>
+                     </p>
+                     <p><i class="icon-emailsm"></i> <span id="email_field{{order.id}}_1"></span> <button class="round_btn" onclick="order_get_details('{{order.id}}','email,alt_email','email')";>Click to view</button></p>
+                     <button class="blue_btn mt-10" data-toggle="modal" data-target="#alternatecontact_modal">Add Alternate contact</button>
+                  </div>
+                  <div class="col-md-3 order_details__status bdr-rt">
+                     <strong>Payment Status</strong>
+                     <p>
+                       {% if txn_obj.payment_date %}
+                       <b>Paid on:</b>  {{txn_obj.payment_date}}
+                       {% else %}
+                       <b> Unpaid </b>
+                       {% endif %}
+                     </p>
+                     <strong class="mt-20">Welcome call </strong>
+                     <p> {{order_wc_status}} </p>
+                  </div>
+                  <div class="col-md-3 order_details__status">
+                     <strong>Added On</strong>
+                     <p>{{order.date_placed}}</p>
+                     <strong class="mt-20">Closed On</strong>
+                    {% if order.closed_on %}
+                    <p>{{order.closed_on}}</p>
+                      {% else %}
+                    <p>Not Closed Yet.</p>
+                      {% endif %}
+                  </div>
+               </div>
+                 <div>
+                    {% if order.replaced_order %}
+                   <p>Replacement of
+                   <a target="_blank" style="color:#1583c7;" href="{% url "console:order-detail"  order.replaced_order %}"><b style="text-decoration: underline;">CP{{ order.replaced_order }}</b></a>
+                   </p>
+                   {% endif %}
+                 </div>
             </div>
-          </div>
-        </div>
+         </div>
 
-        <!-- order details table head -->
-        <div class="row mt-50 mb-20">
-          <div class="col-xs-12">
+      </div>
+      <!-- order details table head -->
+      <div class="row mt-50 mb-20">
+         <div class="col-xs-12">
             <div class="order_details__head">
-              <div class="col-md-2">
-                Order item  ID
-              </div>
-              <div class="col-md-4">
-                Item Name
-              </div>
-              <div class="col-md-2">
-                Status/ Actions
-              </div>
-              <div class="col-md-4">
-                Messages / Communications
-              </div>
+               <div class="col-md-2">
+                  Order item  ID
+               </div>
+               <div class="col-md-4">
+                  Item Name
+               </div>
+               <div class="col-md-2">
+                  Status/ Actions
+               </div>
+               <div class="col-md-4">
+                  Messages / Communications
+               </div>
             </div>
-          </div>
-        </div>
+         </div>
+      </div>
+      <!-- order details table data -->
+                 {% for obj in orderitems %}
 
-        <!-- order details table data -->
-        <div class="row">
-          <div class="col-xs-12 mb-20">
+      <div class="row">
+         <div class="col-xs-12 mb-20">
             <div class="order_details_table">
-              <div class="col-md-2 order_details_table__id">
-                <h3>476514</h3>
-                <strong>Welcome Call Status:</strong>
-                <p>Order processed after final reminder</p>
-                <p class="mt-30"><i class="icon-wrong"></i> Can Process</p>
-                <p><i class="icon-correct"></i> Is Combo</p>
-              </div>
-              <div class="col-md-4 order_details_table__item">
-                <strong class="mb-30">Application Booster Package</strong>
-                <p><strong>Study mode:</strong> Online</p>
-                <p><strong>Course type:</strong> Basic + More Deliverable</p>
-                <p><strong>Duration:</strong> 9-12 months</p>
-                <p><strong>Partner:</strong> Vskills</p>
-              </div>
-              <div class="col-md-2 order_details_table__status">
-                <strong>Feature profile updated</strong>
-                <span>Aug 2, 2019, 2:31 p.m</span>
-                <button class="round_btn mt-30" data-toggle="modal" data-target="#allactions_modal">View all actions</button>
-              </div>
-              <div class="col-md-4 order_details_table__message">
-                <p>
-                  <span class="db">This course is best for your career.</span>
-                  <strong>Vishal Gupta,</strong> <span class="time">Aug 2, 2019, 2:31 p.m</span>
-                  <button class="round_btn mt-10 db" data-toggle="modal" data-target="#allmessages_modal">Read all</button>
-                </p>
-                <form>
-                  <textarea rows="2" placeholder="Type message here"></textarea>
-                  <label class="mt-10">
-                    <input type="checkbox"> For Internal Users Only
-                  </label>
-                  <button class="blue_btn pull-right mt-10">Submit</button>
-                </form>
-              </div>
+               <div class="col-md-2 order_details_table__id">
+                  <h3>{{obj.id}}</h3>
+                  <strong>Welcome Call Status:</strong>
+                  <p>  {{obj.get_wc_sub_cat}} </p>
+                  {% if obj.wc_sub_cat == 65  and obj.get_replacement_order_id%}
+                              <br>
+                              <br>
+                             Replaced With<p>
+                             <a target="_blank" style="color:#1583c7;" href="{% url "console:order-detail"  obj.get_replacement_order_id %}"><b style="text-decoration: underline;">CP{{ obj.get_replacement_order_id }}</b></a>
+                             {% endif %}
+                  </p>
+
+                  {% if obj.no_process %}
+                  <p class="mt-30"><i class="icon-wrong"></i> Can Process</p>
+                   {% endif %}
+                           {% if obj.is_combo %}
+                  <p class="mt-30"><i class="icon-correct"></i> Is Combo </p>
+                    {% endif %}
+                          {% if obj.is_variation %}
+                  <p class="mt-30"><i class="icon-correct"></i>Variation product</p>
+                   {% endif %}
+                  <p class="mt-30">
+                  {% if obj.is_addon %}
+                     <i class="icon-correct"></i> addon product
+                     {% endif %}
+               </p>
+               </div>
+
+                <!--ITEM NAME SECTION-->
+
+               <div class="col-md-4 order_details_table__item">
+                    {% if obj.parent and obj.is_variation %}
+                  <strong class="mb-30">
+  {{obj.parent.product.get_name}}{% if obj.parent.product.get_exp_db %} - Exp: {{obj.parent.product.get_exp_db}}{% endif %}
+                      <br/>
+                  </strong>
+                       {% endif %}
+                    {{obj.product.get_name}}<br/>
+                    {% if obj.product.get_studymode_db %}
+                  <p><strong>Study mode:</strong> {{obj.product.get_studymode_db}}</p>
+                    {% endif %}
+                   {% if obj.product.get_coursetype_db %}
+                  <p><strong>Course type:</strong> {{obj.product.get_coursetype_db}}</p>
+                       {% endif %}
+                     {% if obj.product.get_duration_db %}
+                  <p><strong>Duration:</strong>{obj.product.get_duration_db}}</p>
+                     {% endif %}
+                                              {% if obj.partner %}
+
+                  <p><strong>Partner:</strong> {{obj.partner}}</p>
+                   {% endif %}
+                         {% if obj.delivery_service %}
+                   <p><strong>Delivery Type:</strong> {{obj.delivery_service.name}}</p>
+                   {% endif %}
+               </div>
+              <!--END ITEM NAME SECTION-->
+
+               <div class="col-md-2 order_details_table__status">
+                         {% for op in obj.get_oi_operations.first %}
+                  <strong>{{op.get_oi_status}}</strong>
+                  <span>{{op.created}}</span>
+                       {% endfor %}
+                  <button class="round_btn mt-30" data-toggle="modal" data-target="#allactions_modal">View all actions</button>
+               </div>
+
+
+
+               <div class="col-md-4 order_details_table__message">
+                  <p>
+                     <span class="db">This course is best for your career.</span>
+                     <strong>Vishal Gupta,</strong> <span class="time">Aug 2, 2019, 2:31 p.m</span>
+                     <button class="round_btn mt-10 db" data-toggle="modal" data-target="#allmessages_modal">Read all</button>
+                  </p>
+                  <form>
+                     <textarea rows="2" placeholder="Type message here"></textarea>
+                     <label class="mt-10">
+                     <input type="checkbox"> For Internal Users Only
+                     </label>
+                     <button class="blue_btn pull-right mt-10">Submit</button>
+                  </form>
+               </div>
             </div>
-          </div>
-        </div>
+         </div>
+      </div>
+      {% endfor %}
+      <!-- order details table data -->
+      <!--<div class="row">-->
+         <!--<div class="col-xs-12 mb-20">-->
+            <!--<div class="order_details_table">-->
+               <!--<div class="col-md-2 order_details_table__id">-->
+                  <!--<h3>476515</h3>-->
+                  <!--<strong>Welcome Call Status:</strong>-->
+                  <!--<p>No Issue</p>-->
+               <!--</div>-->
+               <!--<div class="col-md-4 order_details_table__item">-->
+                  <!--<strong class="mb-30">Management Fundamentals</strong>-->
+                  <!--<p><strong>Exp:</strong> 15+ years</p>-->
+                  <!--<p><strong>Partner:</strong> Shine Learning</p>-->
+                  <!--<p><strong>Delivery Type:</strong> Super Express</p>-->
+               <!--</div>-->
+               <!--<div class="col-md-2 order_details_table__status">-->
+                  <!--<strong>Resume upload is pending</strong>-->
+                  <!--<span>Aug 2, 2019, 2:31 p.m</span>-->
+                  <!--<button class="round_btn mt-30">View all actions</button>-->
+               <!--</div>-->
+               <!--<div class="col-md-4 order_details_table__message">-->
+                  <!--<form>-->
+                     <!--<textarea rows="2" placeholder="Type message here"></textarea>-->
+                     <!--<label class="mt-10">-->
+                     <!--<input type="checkbox"> For Internal Users Only-->
+                     <!--</label>-->
+                     <!--<button class="blue_btn pull-right mt-10">Submit</button>-->
+                  <!--</form>-->
+               <!--</div>-->
+            <!--</div>-->
+         <!--</div>-->
+      <!--</div>-->
+      <!-- order details table data -->
+      <!--<div class="row">-->
+         <!--<div class="col-xs-12 mb-20">-->
+            <!--<div class="order_details_table">-->
+               <!--<div class="col-md-2 order_details_table__id">-->
+                  <!--<h3>476516</h3>-->
+                  <!--<strong>Welcome Call Status:</strong>-->
+                  <!--<p>Not reachable</p>-->
+               <!--</div>-->
+               <!--<div class="col-md-4 order_details_table__item">-->
+                  <!--<strong class="mb-30">International Resume for Senior Professionals</strong>-->
+                  <!--<p><strong>Exp:</strong> 15+ years</p>-->
+                  <!--<p><strong>Partner:</strong> Shine Learning</p>-->
+               <!--</div>-->
+               <!--<div class="col-md-2 order_details_table__status">-->
+                  <!--<strong>Candidate resume uploaded</strong>-->
+                  <!--<span>Aug 2, 2019, 2:31 p.m</span>-->
+                  <!--<button class="round_btn mt-30">View all actions</button>-->
+               <!--</div>-->
+               <!--<div class="col-md-4 order_details_table__message">-->
+                  <!--<form>-->
+                     <!--<textarea rows="2" placeholder="Type message here"></textarea>-->
+                     <!--<label class="mt-10">-->
+                     <!--<input type="checkbox"> For Internal Users Only-->
+                     <!--</label>-->
+                     <!--<button class="blue_btn pull-right mt-10">Submit</button>-->
+                  <!--</form>-->
+               <!--</div>-->
+            <!--</div>-->
+         <!--</div>-->
+      <!--</div>-->
+      <!-- order details table data -->
+      <!--<div class="row">-->
+         <!--<div class="col-xs-12 mb-20">-->
+            <!--<div class="order_details_table">-->
+               <!--<div class="col-md-2 order_details_table__id">-->
+                  <!--<h3>476514</h3>-->
+                  <!--<strong>Welcome Call Status:</strong>-->
+                  <!--<p>Order processed after final reminder</p>-->
+                  <!--<p class="mt-30"><i class="icon-wrong"></i> Can Process</p>-->
+                  <!--<p><i class="icon-correct"></i> Is Combo</p>-->
+               <!--</div>-->
+               <!--<div class="col-md-4 order_details_table__item">-->
+                  <!--<strong class="mb-30">Application Booster Package</strong>-->
+                  <!--<p><strong>Study mode:</strong> Online</p>-->
+                  <!--<p><strong>Course type:</strong> Basic + More Deliverable</p>-->
+                  <!--<p><strong>Duration:</strong> 9-12 months</p>-->
+                  <!--<p><strong>Partner:</strong> Vskills</p>-->
+               <!--</div>-->
+               <!--<div class="col-md-2 order_details_table__status">-->
+                  <!--<strong>Feature profile updated</strong>-->
+                  <!--<span>Aug 2, 2019, 2:31 p.m</span>-->
+                  <!--<button class="round_btn mt-30">View all actions</button>-->
+               <!--</div>-->
+               <!--<div class="col-md-4 order_details_table__message">-->
+                  <!--<p>-->
+                     <!--<span class="db">This course is best for your career.</span>-->
+                     <!--<strong>Vishal Gupta,</strong> <span class="time">Aug 2, 2019, 2:31 p.m</span>-->
+                     <!--<button class="round_btn mt-10 db">Read all</button>-->
+                  <!--</p>-->
+                  <!--<form>-->
+                     <!--<textarea rows="2" placeholder="Type message here"></textarea>-->
+                     <!--<label class="mt-10">-->
+                     <!--<input type="checkbox"> For Internal Users Only-->
+                     <!--</label>-->
+                     <!--<button class="blue_btn pull-right mt-10">Submit</button>-->
+                  <!--</form>-->
+               <!--</div>-->
+            <!--</div>-->
+         <!--</div>-->
+      <!--</div>-->
+      <!-- order details table data -->
+      <!--<div class="row">-->
+         <!--<div class="col-xs-12 mb-20">-->
+            <!--<div class="order_details_table">-->
+               <!--<div class="col-md-2 order_details_table__id">-->
+                  <!--<h3>476515</h3>-->
+                  <!--<strong>Welcome Call Status:</strong>-->
+                  <!--<p>No Issue</p>-->
+               <!--</div>-->
+               <!--<div class="col-md-4 order_details_table__item">-->
+                  <!--<strong class="mb-30">Management Fundamentals</strong>-->
+                  <!--<p><strong>Exp:</strong> 15+ years</p>-->
+                  <!--<p><strong>Partner:</strong> Shine Learning</p>-->
+                  <!--<p><strong>Delivery Type:</strong> Super Express</p>-->
+               <!--</div>-->
+               <!--<div class="col-md-2 order_details_table__status">-->
+                  <!--<strong>Resume upload is pending</strong>-->
+                  <!--<span>Aug 2, 2019, 2:31 p.m</span>-->
+                  <!--<button class="round_btn mt-30">View all actions</button>-->
+               <!--</div>-->
+               <!--<div class="col-md-4 order_details_table__message">-->
+                  <!--<form>-->
+                     <!--<textarea rows="2" placeholder="Type message here"></textarea>-->
+                     <!--<label class="mt-10">-->
+                     <!--<input type="checkbox"> For Internal Users Only-->
+                     <!--</label>-->
+                     <!--<button class="blue_btn pull-right mt-10">Submit</button>-->
+                  <!--</form>-->
+               <!--</div>-->
+            <!--</div>-->
+         <!--</div>-->
+      <!--</div>-->
+      <!-- order details table data -->
+      <!--<div class="row">-->
+         <!--<div class="col-xs-12 mb-20">-->
+            <!--<div class="order_details_table">-->
+               <!--<div class="col-md-2 order_details_table__id">-->
+                  <!--<h3>476516</h3>-->
+                  <!--<strong>Welcome Call Status:</strong>-->
+                  <!--<p>Not reachable</p>-->
+               <!--</div>-->
+               <!--<div class="col-md-4 order_details_table__item">-->
+                  <!--<strong class="mb-30">International Resume for Senior Professionals</strong>-->
+                  <!--<p><strong>Exp:</strong> 15+ years</p>-->
+                  <!--<p><strong>Partner:</strong> Shine Learning</p>-->
+               <!--</div>-->
+               <!--<div class="col-md-2 order_details_table__status">-->
+                  <!--<strong>Candidate resume uploaded</strong>-->
+                  <!--<span>Aug 2, 2019, 2:31 p.m</span>-->
+                  <!--<button class="round_btn mt-30">View all actions</button>-->
+               <!--</div>-->
+               <!--<div class="col-md-4 order_details_table__message">-->
+                  <!--<form>-->
+                     <!--<textarea rows="2" placeholder="Type message here"></textarea>-->
+                     <!--<label class="mt-10">-->
+                     <!--<input type="checkbox"> For Internal Users Only-->
+                     <!--</label>-->
+                     <!--<button class="blue_btn pull-right mt-10">Submit</button>-->
+                  <!--</form>-->
+               <!--</div>-->
+            <!--</div>-->
+         <!--</div>-->
+      <!--</div>-->
+      <!-- new content end -->
+      <!-- old content -->
+      <!--  <div class="row">
+         <div class="col-md-12 col-sm-12 col-xs-12">
+           {% if messages %}
+               {% for message in messages %}
 
-        <!-- order details table data -->
-        <div class="row">
-          <div class="col-xs-12 mb-20">
-            <div class="order_details_table">
-              <div class="col-md-2 order_details_table__id">
-                <h3>476515</h3>
-                <strong>Welcome Call Status:</strong>
-                <p>No Issue</p>
-              </div>
-              <div class="col-md-4 order_details_table__item">
-                <strong class="mb-30">Management Fundamentals</strong>
-                <p><strong>Exp:</strong> 15+ years</p>
-                <p><strong>Partner:</strong> Shine Learning</p>
-                <p><strong>Delivery Type:</strong> Super Express</p>
-              </div>
-              <div class="col-md-2 order_details_table__status">
-                <strong>Resume upload is pending</strong>
-                <span>Aug 2, 2019, 2:31 p.m</span>
-                <button class="round_btn mt-30">View all actions</button>
-              </div>
-              <div class="col-md-4 order_details_table__message">
-                <form>
-                  <textarea rows="2" placeholder="Type message here"></textarea>
-                  <label class="mt-10">
-                    <input type="checkbox"> For Internal Users Only
-                  </label>
-                  <button class="blue_btn pull-right mt-10">Submit</button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
+                 <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
+                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 
-        <!-- order details table data -->
-        <div class="row">
-          <div class="col-xs-12 mb-20">
-            <div class="order_details_table">
-              <div class="col-md-2 order_details_table__id">
-                <h3>476516</h3>
-                <strong>Welcome Call Status:</strong>
-                <p>Not reachable</p>
-              </div>
-              <div class="col-md-4 order_details_table__item">
-                <strong class="mb-30">International Resume for Senior Professionals</strong>
-                <p><strong>Exp:</strong> 15+ years</p>
-                <p><strong>Partner:</strong> Shine Learning</p>
-              </div>
-              <div class="col-md-2 order_details_table__status">
-                <strong>Candidate resume uploaded</strong>
-                <span>Aug 2, 2019, 2:31 p.m</span>
-                <button class="round_btn mt-30">View all actions</button>
-              </div>
-              <div class="col-md-4 order_details_table__message">
-                <form>
-                  <textarea rows="2" placeholder="Type message here"></textarea>
-                  <label class="mt-10">
-                    <input type="checkbox"> For Internal Users Only
-                  </label>
-                  <button class="blue_btn pull-right mt-10">Submit</button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
+                 {{ message }}
+                 </div>
+               {% endfor %}
+           {% endif %}
 
-        <!-- order details table data -->
-        <div class="row">
-          <div class="col-xs-12 mb-20">
-            <div class="order_details_table">
-              <div class="col-md-2 order_details_table__id">
-                <h3>476514</h3>
-                <strong>Welcome Call Status:</strong>
-                <p>Order processed after final reminder</p>
-                <p class="mt-30"><i class="icon-wrong"></i> Can Process</p>
-                <p><i class="icon-correct"></i> Is Combo</p>
-              </div>
-              <div class="col-md-4 order_details_table__item">
-                <strong class="mb-30">Application Booster Package</strong>
-                <p><strong>Study mode:</strong> Online</p>
-                <p><strong>Course type:</strong> Basic + More Deliverable</p>
-                <p><strong>Duration:</strong> 9-12 months</p>
-                <p><strong>Partner:</strong> Vskills</p>
-              </div>
-              <div class="col-md-2 order_details_table__status">
-                <strong>Feature profile updated</strong>
-                <span>Aug 2, 2019, 2:31 p.m</span>
-                <button class="round_btn mt-30">View all actions</button>
-              </div>
-              <div class="col-md-4 order_details_table__message">
-                <p>
-                  <span class="db">This course is best for your career.</span>
-                  <strong>Vishal Gupta,</strong> <span class="time">Aug 2, 2019, 2:31 p.m</span>
-                  <button class="round_btn mt-10 db">Read all</button>
-                </p>
-                <form>
-                  <textarea rows="2" placeholder="Type message here"></textarea>
-                  <label class="mt-10">
-                    <input type="checkbox"> For Internal Users Only
-                  </label>
-                  <button class="blue_btn pull-right mt-10">Submit</button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
+         </div>
+         <div class="row">
+           <div class="col-md-12 col-sm-6 col-xs-12">
+               <div class="x_panel">
+                 <div class="x_title">
+                   <h2><small>Order Details</small></h2>
+         <input type="hidden" id="queueName" value="22">
 
-        <!-- order details table data -->
-        <div class="row">
-          <div class="col-xs-12 mb-20">
-            <div class="order_details_table">
-              <div class="col-md-2 order_details_table__id">
-                <h3>476515</h3>
-                <strong>Welcome Call Status:</strong>
-                <p>No Issue</p>
-              </div>
-              <div class="col-md-4 order_details_table__item">
-                <strong class="mb-30">Management Fundamentals</strong>
-                <p><strong>Exp:</strong> 15+ years</p>
-                <p><strong>Partner:</strong> Shine Learning</p>
-                <p><strong>Delivery Type:</strong> Super Express</p>
-              </div>
-              <div class="col-md-2 order_details_table__status">
-                <strong>Resume upload is pending</strong>
-                <span>Aug 2, 2019, 2:31 p.m</span>
-                <button class="round_btn mt-30">View all actions</button>
-              </div>
-              <div class="col-md-4 order_details_table__message">
-                <form>
-                  <textarea rows="2" placeholder="Type message here"></textarea>
-                  <label class="mt-10">
-                    <input type="checkbox"> For Internal Users Only
-                  </label>
-                  <button class="blue_btn pull-right mt-10">Submit</button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
+                   <ul class="nav navbar-right panel_toolbox">
+                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                     </li>
+                   </ul>
+                   <div class="clearfix"></div>
+                 </div>
+                 <div class="x_content">
 
-        <!-- order details table data -->
-        <div class="row">
-          <div class="col-xs-12 mb-20">
-            <div class="order_details_table">
-              <div class="col-md-2 order_details_table__id">
-                <h3>476516</h3>
-                <strong>Welcome Call Status:</strong>
-                <p>Not reachable</p>
-              </div>
-              <div class="col-md-4 order_details_table__item">
-                <strong class="mb-30">International Resume for Senior Professionals</strong>
-                <p><strong>Exp:</strong> 15+ years</p>
-                <p><strong>Partner:</strong> Shine Learning</p>
-              </div>
-              <div class="col-md-2 order_details_table__status">
-                <strong>Candidate resume uploaded</strong>
-                <span>Aug 2, 2019, 2:31 p.m</span>
-                <button class="round_btn mt-30">View all actions</button>
-              </div>
-              <div class="col-md-4 order_details_table__message">
-                <form>
-                  <textarea rows="2" placeholder="Type message here"></textarea>
-                  <label class="mt-10">
-                    <input type="checkbox"> For Internal Users Only
-                  </label>
-                  <button class="blue_btn pull-right mt-10">Submit</button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
+                   <table class="table table-bordered">
+                     <thead>
+                       <tr>
+                         <th>OrderId</th>
+                         <th>Email</th>
+                         <th>Mobile</th>
+                         <th>Name</th>
+                         <th>Order Status</th>
+                         <th>Payment Date</th>
+                         <th>Welcome Call</th>
+                         <th>Added On</th>
+                         <th>Closed On</th>
+                       </tr>
+                     </thead>
+                     <tbody>
+                       <tr>
+                         <td>{{order.number}}</td>
+                       <td><div id="{{order.id}}"><div id="email_field{{order.id}}_1"></div>
 
-        <!-- new content end -->
-        <!-- old content -->
-       <!--  <div class="row">
-          <div class="col-md-12 col-sm-12 col-xs-12">
-            {% if messages %}
-                {% for message in messages %}
+                           </div>
 
-                  <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
-                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                         <button type="button" class="btn btn-default btn-xs" aria-hidden="true" onclick="alt_email_update('{{order.number}}')">
+                               <i class="fa fa-envelope"> Alternate Email</i>
+                             </button>
 
-                  {{ message }}
-                  </div>
-                {% endfor %}
-            {% endif %}
+                                 <div>
+                       <button type="button" class="btn btn-primary btn-xs" onclick="order_get_details('{{order.id}}','email,alt_email','email');"><i class="fa fa-search" aria-hidden="true"></i>ClickToView</button>
+                           </div>
+                           </td>
+                        <td> <div id="{{order.number}}">
+                            <div id="mobile_field{{order.id}}_1"></div>
+                           {% if exoitel_status%}
+                           <button id="{{order.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{order.id}});"></button>
+                           <span style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{order.id}}callingbtn-error"></span>
+                          {% endif %}
 
-        </div>
-        <div class="row">
-            <div class="col-md-12 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2><small>Order Details</small></h2>
-          <input type="hidden" id="queueName" value="22">
+                        </div>
+                         <button type="button" class="btn btn-default btn-xs" aria-hidden="true" onclick="alt_num_update('{{order.number}}')">
+                               <i class="fa fa-phone"> Alternate Number</i>
+                             </button>
 
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                      </li>
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
+                         <button type="button" onclick="order_get_details('{{order.id}}','mobile,alt_mobile','mobile')"; class="btn btn-primary btn-xs"><i class="fa fa-search" aria-hidden="true"></i>ClickToView</button>
 
-                    <table class="table table-bordered">
-                      <thead>
-                        <tr>
-                          <th>OrderId</th>
-                          <th>Email</th>
-                          <th>Mobile</th>
-                          <th>Name</th>
-                          <th>Order Status</th>
-                          <th>Payment Date</th>
-                          <th>Welcome Call</th>
-                          <th>Added On</th>
-                          <th>Closed On</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>{{order.number}}</td>
-                        <td><div id="{{order.id}}"><div id="email_field{{order.id}}_1"></div>
+                         </td>
+                         <td>{{order.first_name}} {{order.last_name}}</td>
+                         <td>{{order.get_status}}</td>
+                         <td>{{order.payment_date}}</td>
+                         <td>{{order_wc_status}}</td>
+                         <td>{{order.date_placed}}</td>
+                         <td>{% if order.closed_on %}{{order.closed_on}}{% else %}Not Closed Yet.{% endif %}</td>
+                       </tr>
+                     </tbody>
+                   </table>
 
-                            </div>
+                 </div>
+                 <div>
+                    {% if order.replaced_order %}
+                   <p>Replacement of
+                   <a target="_blank" style="color:#1583c7;" href="{% url "console:order-detail"  order.replaced_order %}"><b style="text-decoration: underline;">CP{{ order.replaced_order }}</b></a>
+                   </p>
+                   {% endif %}
+                 </div>
+               </div>
+           </div>
 
-                          <button type="button" class="btn btn-default btn-xs" aria-hidden="true" onclick="alt_email_update('{{order.number}}')">
-                                <i class="fa fa-envelope"> Alternate Email</i>
-                              </button>
+           <div class="col-md-12 col-sm-6 col-xs-12">
+               <div class="x_panel">
+                 <div class="x_title">
+                   <h2><small>Order Transactions</small></h2>
+                   <ul class="nav navbar-right panel_toolbox">
+                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                     </li>
+                   </ul>
+                   <div class="clearfix"></div>
+                 </div>
+                 <div class="x_content">
 
-                                  <div>
-                        <button type="button" class="btn btn-primary btn-xs" onclick="order_get_details('{{order.id}}','email,alt_email','email');"><i class="fa fa-search" aria-hidden="true"></i>ClickToView</button>
-                            </div>
-                            </td>
-                         <td> <div id="{{order.number}}">
-                             <div id="mobile_field{{order.id}}_1"></div>
-                            {% if exoitel_status%}
-                            <button id="{{order.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{order.id}});"></button>
-                            <span style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{order.id}}callingbtn-error"></span>
+                   <table class="table table-bordered">
+                     <thead>
+                       <tr>
+                         <th>TxnId</th>
+                         <th>Payment Mode</th>
+                         <th>Amount</th>
+                         <th>Payment Status</th>
+                         <th>Created On</th>
+                         <th>Paid On</th>
+                         <th>Instrument Number</th>
+                         <th>Instrument Issuer</th>
+                         <th>Instrument Issue Date</th>
+                       </tr>
+                     </thead>
+                     <tbody>
+                       {% for txn_obj in order.get_txns %}
+                       <tr>
+                         <td>{{txn_obj.txn}}</td>
+                         <td>{{txn_obj.get_payment_mode}}</td>
+                          <td>{{txn_obj.txn_amount}}</td>
+                         <td>{{txn_obj.get_payment_status}}</td>
+                         <td>{{txn_obj.created}}</td>
+                         <td>{{txn_obj.payment_date}}</td>
+                         <td>{{txn_obj.instrument_number}}</td>
+                         <td>{{txn_obj.instrument_issuer}}</td>
+                         <td>{{txn_obj.instrument_issue_date}}</td>
+                       </tr>
+                       {% endfor %}
+                     </tbody>
+                   </table>
+
+                 </div>
+               </div>
+           </div>
+
+
+           <div class="col-md-12 col-sm-6 col-xs-12">
+           <div class="x_panel">
+             <div class="x_title">
+               <h2><small>Following are order related items</small></h2>
+               <ul class="nav navbar-right panel_toolbox">
+                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                 </li>
+               </ul>
+               <div class="clearfix"></div>
+             </div>
+             <div class="x_content">
+
+               <table class="table table-bordered table-responsive">
+                 <thead>
+                   <tr>
+                       <th>Order Item Id</th>
+                       <th>Item Name</th>
+                       <th>Status</th>
+                       {% comment %}
+                       <th>
+                           <h2><small>Candidate resumes/drafts:</small></h2>
+                           <table class="table table-bordered table-responsive">
+                              <th>Label</th>
+                              <th>Draft</th>
+                           </table>
+                       </th>
+                       {% endcomment %}
+                       <th>
+                           <h2><small>Order items operations/actions:</small></h2>
+                           <table class="table table-bordered table-responsive">
+                              <th>Date & Time</th>
+                              <th>Action</th>
+                              <th>Added By / Assigned</th>
+                              <th>Download Document</th>
+                           </table>
+                       </th>
+
+                       <th>
+                           Messages / Communications
+                       </th>
+                       <th>Can Process</th>
+                       <th>Is Combo</th>
+                       <th>Is Variation</th>
+                       <th>Is Addon</th>
+                   <tr>
+
+                 </thead>
+                 <tbody>
+                     {% for obj in orderitems %}
+                     <tr>
+                         <td>{{obj.id}}<br/>
+                           <strong>
+                             Welcome Call Status:<br>
+                             {{obj.get_wc_sub_cat}}
+                             {% if obj.wc_sub_cat == 65  and obj.get_replacement_order_id%}
+                              <br>
+                              <br>
+                             Replaced With
+                             <a target="_blank" style="color:#1583c7;" href="{% url "console:order-detail"  obj.get_replacement_order_id %}"><b style="text-decoration: underline;">CP{{ obj.get_replacement_order_id }}</b></a>
+                             {% endif %}
+                           </strong>
+                         </td>
+                         <td>
+                           {% if obj.parent and obj.is_variation %}
+                             <strong>{{obj.parent.product.get_name}}{% if obj.parent.product.get_exp_db %} - Exp: {{obj.parent.product.get_exp_db}}{% endif %}:</strong><br/>
+                           {% endif %}
+                               {{obj.product.get_name}}<br/>
+                           {%if obj.product.get_exp_db %}
+                               <strong>Exp:</strong> {{obj.product.get_exp_db}}<br/>
+                           {% endif %}
+                           {% if obj.product.get_studymode_db %}
+                               <strong>Study mode:</strong> {{obj.product.get_studymode_db}}<br/>
+                           {% endif %}
+                           {% if obj.product.get_coursetype_db %}
+                               <strong>Course type:</strong> {{obj.product.get_coursetype_db}}<br/>
+                           {% endif %}
+                           {% if obj.product.get_duration_db %}
+                               <strong>Duration:</strong> {{obj.product.get_duration_db}}<br/>
+                           {% endif %}
+                           {% if obj.partner %}
+                             <strong>Partner:</strong> {{obj.partner}}
+                           {% endif %}<br/><br/>
+                           {% if obj.delivery_service %}
+                             <strong>Delivery Type:</strong> {{obj.delivery_service.name}}
                            {% endif %}
 
-                         </div>
-                          <button type="button" class="btn btn-default btn-xs" aria-hidden="true" onclick="alt_num_update('{{order.number}}')">
-                                <i class="fa fa-phone"> Alternate Number</i>
-                              </button>
+                         </td>
+                         <td>{{obj.get_oi_status}}</td>
 
-                          <button type="button" onclick="order_get_details('{{order.id}}','mobile,alt_mobile','mobile')"; class="btn btn-primary btn-xs"><i class="fa fa-search" aria-hidden="true"></i>ClickToView</button>
+                         <td>
+                             <table class="table table-bordered table-responsive">
+                                 {% for op in obj.get_oi_operations %}
+                                   <tr>
+                                     <td>{{op.created}}</td>
+                                     <td>{{op.get_oi_status}}</td>
+                                     <td>{{op.added_by.name}} / {{op.assigned_to.name}}</td>
+                                     <td>
+                                     {% if op.oi_resume %}
+                                             <strong>Candidate Resume:</strong></br>
+                                             <a href="{% url 'console:queue-resume-download' %}?path={{op.oi_resume.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
+                                     {% elif op.oi_status == 4 and op.oi_draft %}
+                                             <strong>Draft After Close OrderItem:</strong></br>
+                                             <a href="{% url 'console:queue-resume-download' %}?path={{op.oi_draft.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
+                                     {% elif op.oi_draft %}
+                                             <strong>Draft Level {% if op.draft_counter < max_limit_draft %} {{op.draft_counter}} {% else %}Final{% endif %}:</strong></br>
+                                             <a href="{% url 'console:queue-resume-download' %}?path={{op.oi_draft.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
+                                     {% elif op.linkedin and obj.oio_linkedin.pk %}
+                                         <strong>Candidate Draft</strong></br>
+                                         <a href="{% url 'linkedin-draf-download' obj.pk op.pk %}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Draft</button></a>
+                                         <strong>Draft Level {% if op.draft_counter < max_limit_draft %} {{op.draft_counter}} {% else %}Final{% endif %}:</strong></br>
+                                         <a href="{% url 'linkedin-draft' obj.pk op.pk %}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a>
+                                     {% endif %}
+                                     </td>
+                                   </tr>
+                                   {% if op.oi_status == 4 %}
+                                   {% if obj.oi_draft or op.linkedin %}
+                                   <tr>
+                                     <td colspan="4">
+                                       <form autocomplete="off" role="form" method="post"  data-parsley-validate enctype="multipart/form-data"
+                                       id="draft-upload-form{{obj.pk}}">{% csrf_token %}
+                                       {{draft_form.file}}
+                                       <div style="display:none">
+                                           <input type="hidden" name="oi_pk" value="{{obj.pk}}">
+                                           <input type="hidden" id="flow-id{{obj.pk}}" name="flow" value="detailpage"/>
+                                       </div>
+                                       <button type="button" onclick="clickSubmitDraft('{{obj.pk}}',)" class="btn btn-success btn-xs">Submit</button>
+                                       </form>
+                                       <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="draftmodal{{obj.pk}}">
+                                         <div class="modal-dialog modal-lg">
+                                           <div class="modal-content">
 
-                          </td>
-                          <td>{{order.first_name}} {{order.last_name}}</td>
-                          <td>{{order.get_status}}</td>
-                          <td>{{order.payment_date}}</td>
-                          <td>{{order_wc_status}}</td>
-                          <td>{{order.date_placed}}</td>
-                          <td>{% if order.closed_on %}{{order.closed_on}}{% else %}Not Closed Yet.{% endif %}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-
-                  </div>
-                  <div>
-                     {% if order.replaced_order %}
-                    <p>Replacement of
-                    <a target="_blank" style="color:#1583c7;" href="{% url "console:order-detail"  order.replaced_order %}"><b style="text-decoration: underline;">CP{{ order.replaced_order }}</b></a>
-                    </p>
-                    {% endif %}
-                  </div>
-                </div>
-            </div>
-
-            <div class="col-md-12 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2><small>Order Transactions</small></h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                      </li>
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-
-                    <table class="table table-bordered">
-                      <thead>
-                        <tr>
-                          <th>TxnId</th>
-                          <th>Payment Mode</th>
-                          <th>Amount</th>
-                          <th>Payment Status</th>
-                          <th>Created On</th>
-                          <th>Paid On</th>
-                          <th>Instrument Number</th>
-                          <th>Instrument Issuer</th>
-                          <th>Instrument Issue Date</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {% for txn_obj in order.get_txns %}
-                        <tr>
-                          <td>{{txn_obj.txn}}</td>
-                          <td>{{txn_obj.get_payment_mode}}</td>
-                           <td>{{txn_obj.txn_amount}}</td>
-                          <td>{{txn_obj.get_payment_status}}</td>
-                          <td>{{txn_obj.created}}</td>
-                          <td>{{txn_obj.payment_date}}</td>
-                          <td>{{txn_obj.instrument_number}}</td>
-                          <td>{{txn_obj.instrument_issuer}}</td>
-                          <td>{{txn_obj.instrument_issue_date}}</td>
-                        </tr>
-                        {% endfor %}
-                      </tbody>
-                    </table>
-
-                  </div>
-                </div>
-            </div>
-
-
-            <div class="col-md-12 col-sm-6 col-xs-12">
-            <div class="x_panel">
-              <div class="x_title">
-                <h2><small>Following are order related items</small></h2>
-                <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                </ul>
-                <div class="clearfix"></div>
-              </div>
-              <div class="x_content">
-
-                <table class="table table-bordered table-responsive">
-                  <thead>
-                    <tr>
-                        <th>Order Item Id</th>
-                        <th>Item Name</th>
-                        <th>Status</th>
-                        {% comment %}
-                        <th>
-                            <h2><small>Candidate resumes/drafts:</small></h2>
-                            <table class="table table-bordered table-responsive">
-                               <th>Label</th>
-                               <th>Draft</th>
-                            </table>
-                        </th>
-                        {% endcomment %}
-                        <th>
-                            <h2><small>Order items operations/actions:</small></h2>
-                            <table class="table table-bordered table-responsive">
-                               <th>Date & Time</th>
-                               <th>Action</th>
-                               <th>Added By / Assigned</th>
-                               <th>Download Document</th>
-                            </table>
-                        </th>
-
-                        <th>
-                            Messages / Communications
-                        </th>
-                        <th>Can Process</th>
-                        <th>Is Combo</th>
-                        <th>Is Variation</th>
-                        <th>Is Addon</th>
-                    <tr>
-
-                  </thead>
-                  <tbody>
-                      {% for obj in orderitems %}
-                      <tr>
-                          <td>{{obj.id}}<br/>
-                            <strong>
-                              Welcome Call Status:<br>
-                              {{obj.get_wc_sub_cat}}
-                              {% if obj.wc_sub_cat == 65  and obj.get_replacement_order_id%}
-                               <br>
-                               <br>
-                              Replaced With
-                              <a target="_blank" style="color:#1583c7;" href="{% url "console:order-detail"  obj.get_replacement_order_id %}"><b style="text-decoration: underline;">CP{{ obj.get_replacement_order_id }}</b></a>
-                              {% endif %}
-                            </strong>
-                          </td>
-                          <td>
-                            {% if obj.parent and obj.is_variation %}
-                              <strong>{{obj.parent.product.get_name}}{% if obj.parent.product.get_exp_db %} - Exp: {{obj.parent.product.get_exp_db}}{% endif %}:</strong><br/>
-                            {% endif %}
-                                {{obj.product.get_name}}<br/>
-                            {%if obj.product.get_exp_db %}
-                                <strong>Exp:</strong> {{obj.product.get_exp_db}}<br/>
-                            {% endif %}
-                            {% if obj.product.get_studymode_db %}
-                                <strong>Study mode:</strong> {{obj.product.get_studymode_db}}<br/>
-                            {% endif %}
-                            {% if obj.product.get_coursetype_db %}
-                                <strong>Course type:</strong> {{obj.product.get_coursetype_db}}<br/>
-                            {% endif %}
-                            {% if obj.product.get_duration_db %}
-                                <strong>Duration:</strong> {{obj.product.get_duration_db}}<br/>
-                            {% endif %}
-                            {% if obj.partner %}
-                              <strong>Partner:</strong> {{obj.partner}}
-                            {% endif %}<br/><br/>
-                            {% if obj.delivery_service %}
-                              <strong>Delivery Type:</strong> {{obj.delivery_service.name}}
-                            {% endif %}
-
-                          </td>
-                          <td>{{obj.get_oi_status}}</td>
-
-                          <td>
-                              <table class="table table-bordered table-responsive">
-                                  {% for op in obj.get_oi_operations %}
-                                    <tr>
-                                      <td>{{op.created}}</td>
-                                      <td>{{op.get_oi_status}}</td>
-                                      <td>{{op.added_by.name}} / {{op.assigned_to.name}}</td>
-                                      <td>
-                                      {% if op.oi_resume %}
-                                              <strong>Candidate Resume:</strong></br>
-                                              <a href="{% url 'console:queue-resume-download' %}?path={{op.oi_resume.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
-                                      {% elif op.oi_status == 4 and op.oi_draft %}
-                                              <strong>Draft After Close OrderItem:</strong></br>
-                                              <a href="{% url 'console:queue-resume-download' %}?path={{op.oi_draft.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
-                                      {% elif op.oi_draft %}
-                                              <strong>Draft Level {% if op.draft_counter < max_limit_draft %} {{op.draft_counter}} {% else %}Final{% endif %}:</strong></br>
-                                              <a href="{% url 'console:queue-resume-download' %}?path={{op.oi_draft.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
-                                      {% elif op.linkedin and obj.oio_linkedin.pk %}
-                                          <strong>Candidate Draft</strong></br>
-                                          <a href="{% url 'linkedin-draf-download' obj.pk op.pk %}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Draft</button></a>
-                                          <strong>Draft Level {% if op.draft_counter < max_limit_draft %} {{op.draft_counter}} {% else %}Final{% endif %}:</strong></br>
-                                          <a href="{% url 'linkedin-draft' obj.pk op.pk %}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a>
-                                      {% endif %}
-                                      </td>
-                                    </tr>
-                                    {% if op.oi_status == 4 %}
-                                    {% if obj.oi_draft or op.linkedin %}
-                                    <tr>
-                                      <td colspan="4">
-                                        <form autocomplete="off" role="form" method="post"  data-parsley-validate enctype="multipart/form-data"
-                                        id="draft-upload-form{{obj.pk}}">{% csrf_token %}
-                                        {{draft_form.file}}
-                                        <div style="display:none">
-                                            <input type="hidden" name="oi_pk" value="{{obj.pk}}">
-                                            <input type="hidden" id="flow-id{{obj.pk}}" name="flow" value="detailpage"/>
-                                        </div>
-                                        <button type="button" onclick="clickSubmitDraft('{{obj.pk}}',)" class="btn btn-success btn-xs">Submit</button>
-                                        </form>
-                                        <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="draftmodal{{obj.pk}}">
-                                          <div class="modal-dialog modal-lg">
-                                            <div class="modal-content">
-
-                                              <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                                                </button>
-                                                <h4 class="modal-title" id="myModalLabel">Draft Upload</h4>
-                                              </div>
-                                              <div class="modal-body" id="myModalbody{{obj.pk}}">
-                                                Are You Sure???
-                                              </div>
-                                              <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                <button type="button" id="uploadDraftAction{{obj.pk}}" data-dismiss="modal" class="btn btn-primary" onclick="detailPageUploadDraft('{{obj.pk}}',)">Yes</button>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </td>
-                                    </tr>
-                                    {% endif %}
-                                    {% endif %}
-                                  {% endfor %}
-                              </table>
-                          </td>
-                          <td>
-                              <div class="x_content col-md-6">
-                                  <ul class="list-unstyled msg_list">
-                                    {% for msg in obj.get_oi_communications %}
-                                        <li>
-                                          <a>
-                                            <span>
-                                              <span>{% if msg.added_by %}{{msg.added_by.name}}{% else %}{{order.first_name}}{% endif %}</span>
-                                              <span class="time" style="position:static; margin-left:10px; display:inline-block">{{msg.created.date}}</span>
-                                            </span>
-                                            <span class="message">
-                                              {{msg.message}}
-                                            </span>
-                                          </a>
-                                        </li>
-                                    {% endfor %}
+                                             <div class="modal-header">
+                                               <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                                               </button>
+                                               <h4 class="modal-title" id="myModalLabel">Draft Upload</h4>
+                                             </div>
+                                             <div class="modal-body" id="myModalbody{{obj.pk}}">
+                                               Are You Sure???
+                                             </div>
+                                             <div class="modal-footer">
+                                               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                               <button type="button" id="uploadDraftAction{{obj.pk}}" data-dismiss="modal" class="btn btn-primary" onclick="detailPageUploadDraft('{{obj.pk}}',)">Yes</button>
+                                             </div>
+                                           </div>
+                                         </div>
+                                       </div>
+                                     </td>
+                                   </tr>
+                                   {% endif %}
+                                   {% endif %}
+                                 {% endfor %}
+                             </table>
+                         </td>
+                         <td>
+                             <div class="x_content col-md-6">
+                                 <ul class="list-unstyled msg_list">
+                                   {% for msg in obj.get_oi_communications %}
+                                       <li>
+                                         <a>
+                                           <span>
+                                             <span>{% if msg.added_by %}{{msg.added_by.name}}{% else %}{{order.first_name}}{% endif %}</span>
+                                             <span class="time" style="position:static; margin-left:10px; display:inline-block">{{msg.created.date}}</span>
+                                           </span>
+                                           <span class="message">
+                                             {{msg.message}}
+                                           </span>
+                                         </a>
+                                       </li>
+                                   {% endfor %}
 
 
-                                  </ul>
-                                  <form autocomplete="off" id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
-                                    <fieldset>
+                                 </ul>
+                                 <form autocomplete="off" id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
+                                   <fieldset>
 
-                                        {% for field in message_form %}
-                                            <div class="form-group">
-                                                <div class="col-md-8">
-                                                    {{ field }}
-                                                    {% if field.help_text %}
-                                                        <p class="text-muted"><small>{{ field.help_text }}</small></p>
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                        {% endfor %}
-                                        <div style='display:none'>
-                                            <input type="hidden" name="pk" value="{{obj.pk}}">
-                                        </div>
-                                    </fieldset>
-                                      <div class="form-group">
-                                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                        <button type="button" onclick="submitMessage('{{obj.pk}}',)" class="btn btn-success btn-xs">Submit</button>
-                                        </div>
-                                    </div>
-                                </form>
-                                </div>
-                          </td>
-                          <td>{% if obj.no_process %}Can't be processed{% endif %}</td>
-                          <td>{% if obj.is_combo %}Combo product{% endif %}</td>
-                          <td>{% if obj.is_variation %}Variation product{% endif %}</td>
-                          <td>{% if obj.is_addon %}addon product{% endif %}</td>
-                      </tr>
-                      {% endfor %}
-                  </tbody>
-                </table>
+                                       {% for field in message_form %}
+                                           <div class="form-group">
+                                               <div class="col-md-8">
+                                                   {{ field }}
+                                                   {% if field.help_text %}
+                                                       <p class="text-muted"><small>{{ field.help_text }}</small></p>
+                                                   {% endif %}
+                                               </div>
+                                           </div>
+                                       {% endfor %}
+                                       <div style='display:none'>
+                                           <input type="hidden" name="pk" value="{{obj.pk}}">
+                                       </div>
+                                   </fieldset>
+                                     <div class="form-group">
+                                       <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                       <button type="button" onclick="submitMessage('{{obj.pk}}',)" class="btn btn-success btn-xs">Submit</button>
+                                       </div>
+                                   </div>
+                               </form>
+                               </div>
+                         </td>
+                         <td>{% if obj.no_process %}Can't be processed{% endif %}</td>
+                         <td>{% if obj.is_combo %}Combo product{% endif %}</td>
+                         <td>{% if obj.is_variation %}Variation product{% endif %}</td>
+                         <td>{% if obj.is_addon %}addon product{% endif %}</td>
+                     </tr>
+                     {% endfor %}
+                 </tbody>
+               </table>
 
-              </div>
-            </div>
-          </div> -->
-
-         {%include "console/order/partials/modals.html" %}
-
-        </div>
-      </div>
-    </div>
-    <!-- /page content -->
+             </div>
+           </div>
+         </div> -->
+   <!--</div>-->
+           {%include "console/order/partials/modals.html" %}
+</div>
+</div>
+<!-- /page content -->
 {% endblock pagecontent %}
-
 {% block js_block %}
-  {{ block.super }}
-  {% compress js %}
-  <!-- Parsley Validate Scripts -->
-  <script type="text/javascript" src="{% static 'console/js/order/exotelCall.js' %}"></script>
-  <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'console/js/order/draft-upload.js' %}"></script>
-  <script type="text/javascript" src="{% static 'console/js/order/alter.js' %}"></script>
-  <script type="text/javascript" src = "{% static 'console/js/order-info.js' %}"></script>
-
-
-  {% endcompress %}
-
+{{ block.super }}
+{% compress js %}
+<!-- Parsley Validate Scripts -->
+<script type="text/javascript" src="{% static 'console/js/order/exotelCall.js' %}"></script>
+<script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'console/js/order/draft-upload.js' %}"></script>
+<script type="text/javascript" src="{% static 'console/js/order/alter.js' %}"></script>
+<script type="text/javascript" src = "{% static 'console/js/order-info.js' %}"></script>
+{% endcompress %}
 {% endblock js_block %}
