@@ -93,11 +93,11 @@ $('#alternumber').submit(function(event){
 
 });
 
-//$('#alteremail').validate({
-//  rules: {
-//    alt_email: {
-//      required: true,
-//      email: true
-//    }
-//  }
-//});
+
+function allActionModal(id){
+$.get( "test.cgi", { 'id': id } )
+  .done(function( data ) {
+    alert( "Data Loaded: " + data );
+  });
+
+}

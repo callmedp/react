@@ -142,7 +142,7 @@
                   <p><strong>Course type:</strong> {{obj.product.get_coursetype_db}}</p>
                        {% endif %}
                      {% if obj.product.get_duration_db %}
-                  <p><strong>Duration:</strong>{obj.product.get_duration_db}}</p>
+                  <p><strong>Duration:</strong>{{obj.product.get_duration_db}}</p>
                      {% endif %}
                                               {% if obj.partner %}
 
@@ -155,15 +155,22 @@
               <!--END ITEM NAME SECTION-->
 
                <div class="col-md-2 order_details_table__status">
-                         {% for op in obj.get_oi_operations.first %}
-                  <strong>{{op.get_oi_status}}</strong>
-                  <span>{{op.created}}</span>
-                       {% endfor %}
-                  <button class="round_btn mt-30" data-toggle="modal" data-target="#allactions_modal">View all actions</button>
+                            <strong>{{obj.get_oi_status}}</strong>
+
+                  <span>{{obj.modified}}</span>
+
+               <!--API TO BE MADE FOR obj-->
+                   {% comment %}
+                      <!--{% for op in obj.get_oi_operations.first %}-->
+         <!---->
+                   <!--<strong>{{op.get_oi_status}}</strong>-->
+                   <!---->
+                   data-toggle="modal" data-target="#allactions_modal"
+                           {% endcomment %}
+                  <button class="round_btn mt-30" onclick="allActionModal({{obj.id}})";>View all actions</button>
+
+
                </div>
-
-
-
                <div class="col-md-4 order_details_table__message">
                   <p>
                      <span class="db">This course is best for your career.</span>
