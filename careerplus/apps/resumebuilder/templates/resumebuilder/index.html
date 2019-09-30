@@ -1,13 +1,22 @@
+{% extends "basic/base.html" %}
 {% load render_bundle from webpack_loader %}
-{% load static humanize compress %}
+{% load static thumbnail humanize compress %}
+
 
 {% block head %}
+    {{block.super}}
+    {% block title %}Resume Builder 2019 | Online Free Resume Maker [Unique Templates] @ Shine Learning{% endblock title %}
+     
+    {% block meta_html %}
+    {{block.super}}
     <meta
             name="viewport"
             content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    {% block css_section %}
+    <meta name="description" content="Online Resume Builder, Make your resume with our easy-to-use templates & pro resume tips from experts. Select, Personalize/Customize any built-in resume templates for free download.">
+    {% endblock meta_html %}
 
+    {% block css_section %}
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
               integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
               crossorigin="anonymous">
@@ -17,8 +26,6 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"/>
         {% render_bundle 'main' 'css' 'DEFAULT' %}
         <link type="text/css" href="{% static 'shinelearn/css/resume-builder/resume6.css' %}" rel="stylesheet">
-
-
     {% endblock css_section %}
     <script>
         window.config = {}
