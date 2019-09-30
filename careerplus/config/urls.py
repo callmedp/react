@@ -215,10 +215,6 @@ urlpatterns += [
 
      url(r'^about-us$',
          homepage_view.AboutUsView.as_view(), name='about-us'),
-
-     url(r'^(?P<page_slug>[\w-]+)/$',
-         homepage_view.StaticSiteContentView.as_view(),
-         name='static-site-content'),
      url(r'^contact-us$',
          homepage_view.ContactUsView.as_view(),
          name='contact-us'),
@@ -237,7 +233,11 @@ urlpatterns += [
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
 ) + static(
     settings.STATIC_URL, document_root=settings.STATIC_ROOT
-) + static(settings.DOWNLOAD_URL, document_root=settings.DOWNLOAD_ROOT)
+) + static(settings.DOWNLOAD_URL, document_root=settings.DOWNLOAD_ROOT) 
+  
+urlpatterns += [url(r'^(?P<page_slug>[\w-]+)/$',
+         homepage_view.StaticSiteContentView.as_view(),
+         name='static-site-content')]
 
 if settings.DEBUG:
     import debug_toolbar
