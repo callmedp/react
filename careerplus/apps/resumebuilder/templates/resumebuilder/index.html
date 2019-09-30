@@ -5,7 +5,10 @@
 
 {% block head %}
     {{block.super}}
-    {% block title %}Resume Builder 2019 | Online Free Resume Maker [Unique Templates] @ Shine Learning{% endblock title %}
+
+   <title> {% block title %} 
+         Resume Builder 2019 | Online Free Resume Maker [Unique Templates] @ Shine Learning
+    {% endblock title %} </title>
      
     {% block meta_html %}
     {{block.super}}
@@ -50,6 +53,10 @@
 
 {% endblock head %}
 
+{% block navigation %}
+
+{% endblock navigation %}
+
 
 {% block container %}
     <div id="react-app" oncontextmenu="return false;"></div>
@@ -69,3 +76,24 @@
     {% render_bundle 'main' 'js' 'DEFAULT' %}
    
 {% endblock js_section %}
+
+{% block banner_ads %}
+
+{% endblock banner_ads %}
+
+{% block banner_ads_bottom %}
+
+{% endblock banner_ads_bottom %}
+
+
+{% block footer %}
+
+{% endblock footer %}
+
+{% block marketingpopup %}
+
+{% endblock marketingpopup %}
+
+{% block zendesk %}
+
+{% endblock zendesk %}

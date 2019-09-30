@@ -1,9 +1,12 @@
+{% extends "mobile/basic/base.html" %}
 {% load render_bundle from webpack_loader %}
 {% load static thumbnail humanize compress %}
 
 {% block head %}
-    
-    {% block title %} Resume Builder 2019 | Online Free Resume Maker [Unique Templates] @ Shine Learning{% endblock title %}
+  {{block.super}}
+    <title>
+        {% block title %} Resume Builder 2019 | Online Free Resume Maker [Unique Templates] @ Shine Learning{% endblock title %}
+    </title>
 
     {% block meta_html %}
     {{block.super}}
@@ -40,6 +43,10 @@
     </script>
 {% endblock head %}
 
+{% block navigation %}
+
+{% endblock navigation %}
+
 
 {% block container %}
     <div id="react-app"  oncontextmenu="return false;"></div>
@@ -57,4 +64,17 @@
         ga('send', 'pageview');
     </script>
     {% render_bundle 'main' 'js' 'MOBILE' %}
+
 {% endblock js_section %}
+
+{% block footer %}
+
+{% endblock footer %}
+
+{% block marketingpopup %}
+
+{% endblock marketingpopup %}
+
+{% block  jquery_block %}
+
+{%endblock jquery_block %}
