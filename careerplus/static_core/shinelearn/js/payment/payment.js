@@ -48,6 +48,8 @@ $(document).ready(function () {
                 return ;
             }
             $('#check-sumit-button').prop('disabled',true);
+            $('.overlay-background').show()
+            $('body').addClass('body-noscroll')
             $('#check-pay-form').submit();
         }
     });
