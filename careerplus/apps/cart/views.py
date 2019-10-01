@@ -560,6 +560,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
         return super(self.__class__, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
+
         context = super(self.__class__, self).get_context_data(**kwargs)
         cart_obj, wal_obj = self.cart_obj, None
         cart_coupon, cart_wallet = None, None
@@ -633,7 +634,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
             'cart_coupon': cart_coupon, 'cart_wallet': cart_wallet,
             'wallet': wal_obj, 'type_flow': type_flow,
             'cart': cart_obj, 'wallet_total': wal_total, 'wallet_point': wal_point,
-            'email_id':  cart_obj.owner_email or  '',
+            'email_id':  cart_obj.owner_email or  self.request.session.get('email','') or '',
             'first_name' : cart_obj.first_name or self.request.session.get('first_name') or '',
             'candidate_in_session': self.request.session.get('candidate_id',''),
             'guest_in_session': self.request.session.get('guest_candidate_id')

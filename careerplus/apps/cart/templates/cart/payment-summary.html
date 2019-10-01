@@ -59,14 +59,14 @@ Payment Summary - Shine Learning
           class="green-circle" {% endif %}>2</span>
           {% if candidate_in_session or guest_in_session  %}
            Logged in<strong class="truncate-email">as
-              {%if guest_in_session %}
-                    Guest
-              {% else %}
-               {%if first_name%}
+            {% if candidate_in_session %}
+                {%if first_name%}
                   {{first_name}}
-               {% else %}
+                {% else %}
                   {{email_id}}
-              {% endif %}
+                {% endif %}         
+            {% else %}
+              Guest
             {% endif%}
               
           {% else %}
