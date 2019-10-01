@@ -62,130 +62,135 @@ $(document).ready(function () {
     };
 
     $('#country_code').on('select2:select', function (e) {
-        let data = e.params.data
-        if (data && data.id && data.id === "91") {
-            $("#guest-mobile").rules("add", {
-                required: true,
-                digits: true,
-                indiaMobile: true,
-                minlength: 10,
-                maxlength: 10,
-                notEqualTo: ['9999999999', '8888888888', '9876543210',
-                '7777777777', '9000000000', '8000000000',
-                '9898989898',
-                '6666666666'],
-                notStartWith: ['0', '1', '2', '3', '4', '5'],
-                messages: {
-                    required: 'Contact is required.',
-                    digits: 'only digit accepted.',
-                    indiaMobile: 'length must be 10 digits.',
-                    minlength: 'length must be 10 digits.',
-                    maxlength: 'length must be 10 digits.',
-                    notEqualTo: 'This number is not allowed.'
-                },
-                highlight: function (element) {
-                    debugger;
-                    /*if (window.CURRENT_FLAVOUR == 'mobile'){
-                        $(element).closest('.form-group').addClass('error');
-                    }
-                    else{
-                        $(element).closest('.col-sm-6').addClass('error');
-                    }*/
+        debugger;
+        if($('#country_code').val())
+        $('input[name=mobile-only]').valid()
+        // let data = e.params.data
+        // if (data && data.id && data.id === "91") {
+        //     $("#guest-mobile").rules("add", {
+        //         required: true,
+        //         digits: true,
+        //         indiaMobile: true,
+        //         minlength: 10,
+        //         maxlength: 10,
+        //         notEqualTo: ['9999999999', '8888888888', '9876543210',
+        //         '7777777777', '9000000000', '8000000000',
+        //         '9898989898',
+        //         '6666666666'],
+        //         notStartWith: ['0', '1', '2', '3', '4', '5'],
+        //         messages: {
+        //             required: 'Contact is required.',
+        //             digits: 'only digit accepted.',
+        //             indiaMobile: 'length must be 10 digits.',
+        //             minlength: 'length must be 10 digits.',
+        //             maxlength: 'length must be 10 digits.',
+        //             notEqualTo: 'This number is not allowed.'
+        //         },
+        //         highlight: function (element) {
+        //             debugger;
+        //             /*if (window.CURRENT_FLAVOUR == 'mobile'){
+        //                 $(element).closest('.form-group').addClass('error');
+        //             }
+        //             else{
+        //                 $(element).closest('.col-sm-6').addClass('error');
+        //             }*/
 
-                    let className = '.form-group', addClass = 'error1';
+        //             let className = '.form-group', addClass = 'error1';
 
-                    if (window.CURRENT_FLAVOUR == 'mobile') {
-                        className = 'li';
-                        addClass = 'error'
-                    }
-                    $(element).closest(className).addClass(addClass);
-                },
-                unhighlight: function (element) {
-                    if (window.CURRENT_FLAVOUR == 'mobile') {
-                        $(element).closest('li').removeClass('error');
-                        $(element).siblings('.error--mgs').html('');
+        //             if (window.CURRENT_FLAVOUR == 'mobile') {
+        //                 className = 'li';
+        //                 addClass = 'error'
+        //             }
+        //             $(element).closest(className).addClass(addClass);
+        //         },
+        //         unhighlight: function (element) {
+        //             if (window.CURRENT_FLAVOUR == 'mobile') {
+        //                 $(element).closest('li').removeClass('error');
+        //                 $(element).siblings('.error--mgs').html('');
 
-                    }
-                    else {
-                        $(element).closest('.form-group').removeClass('error1');
-                        $(element).siblings('.error-txt').html('');
-                        // if ($(element).attr('name') != "country_code"){
-                        // }
-                    }
-                },
-                invalidHandler: function (event, validator) {
-                },
-                errorPlacement: function (error, element) {
-                    debugger;
-                    let errorTextClass = '.error-txt';
-                    if (window.CURRENT_FLAVOUR == 'mobile') {
-                        errorTextClass = '.error--mgs';
-                    }
-                    $(element).siblings(errorTextClass).html(error.text());
-                }
-            });
-        }
-        else {
-            $("#guest-mobile").rules("add", {
-                required: true,
-                digits: true,
-                minlength: 6,
-                maxlength: 13,
-                notEqualTo: ['9999999999',  '8888888888', '9876543210',
-                '7777777777', '9000000000', '8000000000',
-                '9898989898',
-                '6666666666'],
-                messages: {
-                    required: 'Contact is required.',
-                    digits: 'only digit accepted.',
-                    minlength: 'length must be greater than 5 digits.',
-                    maxlength: 'length must be less than 14 digits.',
-                    notEqualTo: 'This number is not allowed.'
+        //             }
+        //             else {
+        //                 $(element).closest('.form-group').removeClass('error1');
+        //                 $(element).siblings('.error-txt').html('');
+        //                 // if ($(element).attr('name') != "country_code"){
+        //                 // }
+        //             }
+        //         },
+        //         invalidHandler: function (event, validator) {
+        //         },
+        //         errorPlacement: function (error, element) {
+        //             debugger;
+        //             let errorTextClass = '.error-txt';
+        //             if (window.CURRENT_FLAVOUR == 'mobile') {
+        //                 errorTextClass = '.error--mgs';
+        //             }
+        //             $(element).siblings(errorTextClass).html(error.text());
+        //         }
+        //     });
+        // }
+        // else {
+        //     $("#guest-mobile").rules("add", {
+        //         required: true,
+        //         digits: true,
+        //         minlength: 6,
+        //         maxlength: 13,
+        //         notEqualTo: ['9999999999',  '8888888888', '9876543210',
+        //         '7777777777', '9000000000', '8000000000',
+        //         '9898989898',
+        //         '6666666666'],
+        //         messages: {
+        //             required: 'Contact is required.',
+        //             digits: 'only digit accepted.',
+        //             minlength: 'length must be greater than 5 digits.',
+        //             maxlength: 'length must be less than 14 digits.',
+        //             notEqualTo: 'This number is not allowed.'
 
 
-                },
-                highlight: function (element) {
-                    debugger;
-                    /*if (window.CURRENT_FLAVOUR == 'mobile'){
-                        $(element).closest('.form-group').addClass('error');
-                    }
-                    else{
-                        $(element).closest('.col-sm-6').addClass('error');
-                    }*/
+        //         },
+        //         highlight: function (element) {
+        //             debugger;
+        //             /*if (window.CURRENT_FLAVOUR == 'mobile'){
+        //                 $(element).closest('.form-group').addClass('error');
+        //             }
+        //             else{
+        //                 $(element).closest('.col-sm-6').addClass('error');
+        //             }*/
 
-                    let className = '.form-group', addClass = 'error1';
+        //             let className = '.form-group', addClass = 'error1';
 
-                    if (window.CURRENT_FLAVOUR == 'mobile') {
-                        className = 'li';
-                        addClass = 'error'
-                    }
-                    $(element).closest(className).addClass(addClass);
-                },
-                unhighlight: function (element) {
-                    if (window.CURRENT_FLAVOUR == 'mobile') {
-                        $(element).closest('li').removeClass('error');
-                        $(element).siblings('.error--mgs').html('');
+        //             if (window.CURRENT_FLAVOUR == 'mobile') {
+        //                 className = 'li';
+        //                 addClass = 'error'
+        //             }
+        //             $(element).closest(className).addClass(addClass);
+        //         },
+        //         unhighlight: function (element) {
+        //             debugger;
+        //             if (window.CURRENT_FLAVOUR == 'mobile') {
+        //                 $(element).closest('li').removeClass('error');
+        //                 $(element).siblings('.error--mgs').html('');
 
-                    }
-                    else {
-                        $(element).closest('.form-group').removeClass('error1');
-                        $(element).siblings('.error-txt').html('');
-                        // if ($(element).attr('name') != "country_code"){
-                        // }
-                    }
-                },
-                invalidHandler: function (event, validator) {
-                },
-                errorPlacement: function (error, element) {
-                    debugger;
-                    let errorTextClass = '.error-txt';
-                    if (window.CURRENT_FLAVOUR == 'mobile') {
-                        errorTextClass = '.error--mgs';
-                    }
-                    $(element).siblings(errorTextClass).html(error.text());
-                }
-            });
-        }
+        //             }
+        //             else {
+        //                 $(element).closest('.form-group').removeClass('error1');
+        //                 $(element).siblings('.error-txt').html('');
+        //                 // if ($(element).attr('name') != "country_code"){
+        //                 // }
+        //             }
+        //         },
+        //         invalidHandler: function (event, validator) {
+        //             debugger;
+        //         },
+        //         errorPlacement: function (error, element) {
+        //             debugger;
+        //             let errorTextClass = '.error-txt';
+        //             if (window.CURRENT_FLAVOUR == 'mobile') {
+        //                 errorTextClass = '.error--mgs';
+        //             }
+        //             $(element).siblings(errorTextClass).html(error.text());
+        //         }
+        //     });
+        // }
     });
     /*
     * Fetch Country List
