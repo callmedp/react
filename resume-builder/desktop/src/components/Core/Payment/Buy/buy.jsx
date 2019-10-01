@@ -51,15 +51,18 @@ export class Buy extends Component {
 
     async redirectToCart() {
         
-        this.props.showLoader();
 
         this.props.eventClicked({
             'action': 'PayNow',
             'label': 'Click'
         })
-        if (!this.props.productIds[0])
-            return;
+
+        console.log('----', this.props.productIds);
+        
+        if (!this.props.productIds[0])   return;
         let product;
+        this.props.showLoader();
+
         if (this.state.checked === 'product1') {
             product = this.props.productIds[0]
         } else {
