@@ -42,7 +42,7 @@
         <div class="payment--bg"></div>
         <ul class="payment__steps">
             <li class="payment__steps__item">
-                <a href="{% url "cart:payment-summary" %}">
+                <a class='trig-loader' href="{% url "cart:payment-summary" %}">
                     <!-- <span class="dot">1</span> -->
                     <span class="tick"></span>
                     Summary
@@ -50,14 +50,14 @@
             </li>
 
             <li class="payment__steps__item">
-                <a href="{% url "cart:payment-login" %}" class="active">
+                <a class='trig-loader' href="{% url "cart:payment-login" %}" class="active">
                     <span class="dot">2</span>
                     <!-- <span class="tick"></span> -->
                     Login
                 </a>
             </li>            
             <li class="payment__steps__item">
-                <a href="{% url "payment:payment-option" %}">
+                <a class='trig-loader' href="{% url "payment:payment-option" %}"> 
                     <span class="dot">3</span>
                     <!-- <span class="tick"></span> -->
                     Payment

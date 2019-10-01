@@ -44,8 +44,8 @@ Payment Summary - Shine Learning
 
 {% block container %}
 <section class="container mt-53">
-    <div id = "loader" class="overlay-background"  text-align: center;">
-        <img aria-label="loader" id="loadingimg" class="loader-position" src="{% static 'shinelearn/images/loader1.png' %}" >
+  <div id="loader" class="overlay-background" text-align: center;">
+    <img aria-label="loader" id="loadingimg" class="loader-position" src="{% static 'shinelearn/images/loader1.png' %}">
   </div>
   <!-- page content body start -->
   <div class="row greybg2 pad-25">
@@ -53,8 +53,27 @@ Payment Summary - Shine Learning
     <!-- left content start -->
     <div class="col-sm-3 payment-summary-tab">
       <a href="{% url "cart:payment-summary" %}" class="active"><span>1</span> Summary</a>
-      <a href="{% url "cart:payment-login" %}"><span {% if candidate_in_session %} class="green-circle"
-          {% endif %}>2</span> Login</a>
+
+      <a href="{% url "cart:payment-login" %}"><span {% if candidate_in_session or guest_in_session  %}
+          class="green-circle" {% endif %}>2</span>
+          {% if candidate_in_session or guest_in_session  %}
+           Logged in<strong class="truncate-email">as
+              {%if guest_in_session %}
+                    Guest
+              {% else %}
+               {%if first_name%}
+                  {{first_name}}
+               {% else %}
+                  {{email_id}}
+              {% endif %}
+            {% endif%}
+              
+          {% else %}
+          Login
+          {% endif %}</strong></a>
+
+
+
       <a><span>3</span> Payment</a>
 
       <!-- secure payment -->
@@ -104,73 +123,80 @@ Payment Summary - Shine Learning
           <!-- delivery section -->
           {% if delivery_types %}
           <div class="row">
-              <div class="col-sm-9">
-                  <div class="delivery-speed mb-15 delivery-toggle-action" id="btn-delivery" onclick="toggleDeliveryItems('{{item.id}}')">
-                      <span class="delivery-icon delivery-toggle-action"></span>
-                      <p class="pb-0  delivery-toggle-action">
-                        <strong class="block delivery-toggle-action" id="active-delivery-title{{item.id}}">{%if delivery_service %}
-                          {{delivery_service.title}}- {% if delivery_service.inr_price|is_free %}No extra cost {% else %}Rs.
-                          {{delivery_service.inr_price}}/- {% endif %} {%else%}Normal - No extra cost{%endif%}</strong>
-                        <span id="active-delivery-description{{item.id}}" class='delivery-toggle-action'> ({%if delivery_service %}
-                          {{delivery_service.meta_desc}} {%else%}get it in 5 working days{%endif%})</span>
-                      </p>
-                      <span class="down-arrow-icon delivery-toggle-action delivery-dropdown-arrow mt-10"></span>
-                    </div><!-- /. select delivery options -->
-          
-                    <div class="pr delivery-toggle-action">
-                      <ul class="delivery-list cls_delivery-content delivery-toggle-action delivery-dropdown"id="delivery-item{{item.id}}" style="display: none;">
-                        {% for delivery_obj in delivery_types %}
-                        <li class='delivery-toggle-action'>
-                          <input type="radio" name="{{item.id}}"  class = "delivery-toggle-action" id="{{delivery_obj.slug}}{{item.id}}"
-                            {% if forloop.counter0 == delivery_service|get_count %} checked {%endif %} name="delivery-list"
-                            onclick="selectDeliveryType('{{delivery_obj.id}}', '{% if variations|length  %} {{variations.0.id}} {% else %} {{item.id}} {% endif %}', '{{csrf_token}}', '{{item.id}}')"
-                            value="19">
-                          <label class="delivery-toggle-action" for="{{delivery_obj.slug}}{{item.id}}"><strong class="block delivery-toggle-action">{{delivery_obj.title}}-
-                              {% if delivery_obj.inr_price|is_free %}No extra cost {% else %}Rs. {{delivery_obj.inr_price}}/-
-                              {% endif %}</strong> ({{delivery_obj.meta_desc}})</label>
-                        </li>
-                        {% endfor %}
-                      </ul>
-                    </div><!-- delivery dropdown -->
-              </div><!-- // COL 9 -->
-              <div class="col-sm-3">
+            <div class="col-sm-9">
+              <div class="delivery-speed mb-15 delivery-toggle-action" id="btn-delivery"
+                onclick="toggleDeliveryItems('{{item.id}}')">
+                <span class="delivery-icon delivery-toggle-action"></span>
+                <p class="pb-0  delivery-toggle-action">
+                  <strong class="block delivery-toggle-action"
+                    id="active-delivery-title{{item.id}}">{%if delivery_service %}
+                    {{delivery_service.title}}- {% if delivery_service.inr_price|is_free %}No extra cost {% else %}Rs.
+                    {{delivery_service.inr_price}}/- {% endif %} {%else%}Normal - No extra cost{%endif%}</strong>
+                  <span id="active-delivery-description{{item.id}}" class='delivery-toggle-action'>
+                    ({%if delivery_service %}
+                    {{delivery_service.meta_desc}} {%else%}get it in 5 working days{%endif%})</span>
+                </p>
+                <span class="down-arrow-icon delivery-toggle-action delivery-dropdown-arrow mt-10"></span>
+              </div><!-- /. select delivery options -->
+
+              <div class="pr delivery-toggle-action">
+                <ul class="delivery-list cls_delivery-content delivery-toggle-action delivery-dropdown"
+                  id="delivery-item{{item.id}}" style="display: none;">
+                  {% for delivery_obj in delivery_types %}
+                  <li class='delivery-toggle-action'>
+                    <input type="radio" name="{{item.id}}" class="delivery-toggle-action"
+                      id="{{delivery_obj.slug}}{{item.id}}" {% if forloop.counter0 == delivery_service|get_count %}
+                      checked {%endif %} name="delivery-list"
+                      onclick="selectDeliveryType('{{delivery_obj.id}}', '{% if variations|length  %} {{variations.0.id}} {% else %} {{item.id}} {% endif %}', '{{csrf_token}}', '{{item.id}}')"
+                      value="19">
+                    <label class="delivery-toggle-action" for="{{delivery_obj.slug}}{{item.id}}"><strong
+                        class="block delivery-toggle-action">{{delivery_obj.title}}-
+                        {% if delivery_obj.inr_price|is_free %}No extra cost {% else %}Rs. {{delivery_obj.inr_price}}/-
+                        {% endif %}</strong> ({{delivery_obj.meta_desc}})</label>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div><!-- delivery dropdown -->
+            </div><!-- // COL 9 -->
+            <div class="col-sm-3">
               <span id="delivery-charge{{item.id}}">{%if delivery_service.inr_price %}
                 Rs. {{delivery_service.inr_price}}/- {% endif %}</span>
-              </div><!-- // COL 3 -->
+            </div><!-- // COL 3 -->
           </div><!-- // ROW -->
-          {% endif %} <!-- // delivery section -->
+          {% endif %}
+          <!-- // delivery section -->
 
           <!-- Addons -->
           <div class="addons-wrap">
-              {% if addons|length or variations|length %}
-              <span class="addons">Addons</span>
-    
-              {% for var in variations %}
-              {% if var.is_available %}
-              <div class="addons-box">
-                <span class="col-sm-8 col-md-9 item-sub-heading pl-0"><b>{{var.name}}</b></span>
-                <span class="col-sm-4 col-md-3">Rs. {{var.price}}/-</span>
-                <span class="close-icon"
-                  onclick="removeVariationsOrAddons('{{csrf_token}}','{{var.reference}}','{{var.id}}')"></span>
-              </div>
-              {% else %}
-              <p class="pb-0 red-text text-right mt-sub-10">Not available</p>
-              {% endif %}
-              {% endfor %}
-              {% for addon in addons %}
-              {% if addon.is_available %}
-              <div class="addons-box row">
-                <span class="col-sm-8 col-md-9 item-sub-heading pl-0">
-                  <figure class="mr-10"></figure> <b>{{addon.name}}</b>
-                </span>
-                <span class="col-sm-4 col-md-3 pl-0">Rs. {{addon.price}}/-</span>
-                <span class="close-icon"
-                  onclick="removeVariationsOrAddons('{{csrf_token}}','{{var.reference}}','{{addon.id}}')"></span>
-              </div>
-              {% endif %}
-    
-              {% endfor %}
-              {% endif %}
+            {% if addons|length or variations|length %}
+            <span class="addons">Addons</span>
+
+            {% for var in variations %}
+            {% if var.is_available %}
+            <div class="addons-box">
+              <span class="col-sm-8 col-md-9 item-sub-heading pl-0"><b>{{var.name}}</b></span>
+              <span class="col-sm-4 col-md-3">Rs. {{var.price}}/-</span>
+              <span class="close-icon"
+                onclick="removeVariationsOrAddons('{{csrf_token}}','{{var.reference}}','{{var.id}}')"></span>
+            </div>
+            {% else %}
+            <p class="pb-0 red-text text-right mt-sub-10">Not available</p>
+            {% endif %}
+            {% endfor %}
+            {% for addon in addons %}
+            {% if addon.is_available %}
+            <div class="addons-box row">
+              <span class="col-sm-8 col-md-9 item-sub-heading pl-0">
+                <figure class="mr-10"></figure> <b>{{addon.name}}</b>
+              </span>
+              <span class="col-sm-4 col-md-3 pl-0">Rs. {{addon.price}}/-</span>
+              <span class="close-icon"
+                onclick="removeVariationsOrAddons('{{csrf_token}}','{{var.reference}}','{{addon.id}}')"></span>
+            </div>
+            {% endif %}
+
+            {% endfor %}
+            {% endif %}
           </div><!-- // Addons -->
           <!-- {% if variations.0.delivery_obj and variations.0.delivery_obj.get_price %}
           <div>
@@ -182,7 +208,7 @@ Payment Summary - Shine Learning
           {% endif %} -->
 
         </li>
-      
+
         {% endif %}
         {% endwith %}
         {% endfor %}
@@ -288,7 +314,7 @@ Payment Summary - Shine Learning
       <!-- Make payment -->
       <span class="col-sm-7 col-md-8"></span>
       <span class="col-sm-3 col-md-4 continue">
-        <a href="{% url "cart:payment-login" %}"><button type="button" id="payment-summary-continue-id">Proceed to
+        <a class='trig-loader' href="{% url "cart:payment-login" %}"><button type="button"  id="payment-summary-continue-id">Proceed to
             payment</button></a>
         <!-- <figure class="secure-payment-icon"></figure>
           <span>100% Secure Payment</span> -->

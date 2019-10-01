@@ -1,7 +1,10 @@
 function removeFromCartMobile(line_id) {
+    //  show loader
+    $('.overlay-background').show()
+    $('body').addClass('body-noscroll')
+
     if (line_id) {
         var formData = $('#cart_remove_form' + line_id).serialize();
-
         $.ajax({
             url: '/cart/mobile/remove-from-cart/',
             type: 'POST',
@@ -12,16 +15,37 @@ function removeFromCartMobile(line_id) {
                     window.location.reload();
                     //alert("product removed from cart successfully");
                 } else if (json.status == -1) {
+                    
+                     // remove loader
+                     $('.overlay-background').hide()
+                     $('body').removeClass('body-noscroll')
+
                     alert('Something went wrong, Please try again.');
                 }
             },
             failure: function (response) {
+                
+                 // remove loader
+                 $('.overlay-background').hide()
+                 $('body').removeClass('body-noscroll')
+
                 alert("Something went wrong, Please try again")
             },
             error: function (xhr, ajaxOptions, thrownError) {
+                
+                 // remove loader
+                 $('.overlay-background').hide()
+                 $('body').removeClass('body-noscroll')
+
                 alert("Something went wrong, Please try again")
             }
         });
+    }
+    else {
+    
+                 // remove loader
+                 $('.overlay-background').hide()
+                 $('body').removeClass('body-noscroll')
     }
 
 };

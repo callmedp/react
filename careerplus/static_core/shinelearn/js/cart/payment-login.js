@@ -125,8 +125,8 @@ const handleLoginCandidate = async () => {
         window.location.href = '/logout/';
         return;
     }
-    $('.overlay-background').hide()
-    $('body').removeClass('body-noscroll')
+    // $('.overlay-background').hide()
+    // $('body').removeClass('body-noscroll')
     
     window.location.href = `/payment/payment-options/`;
 
@@ -224,7 +224,12 @@ $(document).ready(function () {
     * validate login form
     * */
 
-    $("#login_form").validate({
+    $('.trig-loader').click(function(){
+        $('.overlay-background').show()
+        $('body').addClass('body-noscroll')
+    })
+
+    $("#login_form").validate({\
         rules: {
             email: {
                 required: true,

@@ -56,14 +56,17 @@
 
 {% block container %}
     <section class="container mt-53" id="containerBlock">
+        <div id="loader" class="overlay-background" text-align: center;">
+            <img aria-label="loader" id="loadingimg" class="loader-position" src="{% static 'shinelearn/images/loader1.png' %}">
+          </div>
         <!-- page content body start -->
         <div class="row greybg2 pad-25">
 
             <!-- left content start -->
             <div class="col-sm-3 payment-summary-tab">
-                <a href="{% url "cart:payment-summary" %}"><span class="green-circle">1</span> Summary</a>
-                <a href="{% url "cart:payment-login" %}"><span class="green-circle">2</span> Logged in <strong>as {%if guest_login%} Guest {%else%}{%if first_name%}{{first_name}}{% else %}{{email_id}}{% endif %}{%endif%}</strong></a>
-                <a href="{% url "payment:payment-option" %}" class="active"><span>3</span> Payment</a>
+                <a class='trig-loader' href="{% url "cart:payment-summary" %}"><span class="green-circle">1</span> Summary</a>
+                <a class='trig-loader' href="{% url "cart:payment-login" %}"><span class="green-circle">2</span> Logged in <strong class="truncate-email">as {%if guest_login%} Guest {%else%}{%if first_name%}{{first_name}}{% else %}{{email_id}}{% endif %}{%endif%}</strong></a>
+                <a class='trig-loader' href="{% url "payment:payment-option" %}" class="active"><span>3</span> Payment</a>
 
                 <!-- secure payment -->
                 <!-- <div class="secure-payment">
@@ -87,7 +90,7 @@
                     <div class="panel panel-default box-shadow1">
                     <div class="panel-heading">
                       <h4 class="panel-title">
-                        <a class="no-bg" href="{% url "payment:ccavenue_request" cart_id 'all' %}">
+                        <a  class="no-bg trig-loader" href="{% url "payment:ccavenue_request" cart_id 'all' %}">
                           Card & Netbanking
                         </a>
                       </h4>
@@ -137,7 +140,7 @@
                             </strong>
 
                             <div class="continue">
-                                <button type="submit" class="make-payment">Make Payment</button>
+                                <button type="butotn" id="cash-option-submit"  class="make-payment trig-loader">Make Payment</button>
                             </div>
                         </form>
                         <!-- cash payment method end -->
@@ -198,7 +201,7 @@
                         </strong>
 
                         <div class="continue">
-                            <button type="button" id="check-sumit-button" class="make-payment">Make Payment</button>
+                            <button type="button" id="check-sumit-button" class="make-payment trig-loader">Make Payment</button>
                         </div>
                         <!-- cheque payment method -->
                       </div>
@@ -208,7 +211,7 @@
                   <div class="panel panel-default box-shadow1">
                     <div class="panel-heading">
                       <h4 class="panel-title">
-                        <a class="no-bg" href="{% url "payment:epaylater-request" cart_id %}">
+                        <a class="no-bg trig-loader" href="{% url "payment:epaylater-request" cart_id %}">
                           Buy now, Pay Later <img src="{% static 'shinelearn/images/payments/epaylater-logo.svg' %}" width="89" alt="ePayLater" class="ml-5">
                         </a>
                       </h4>

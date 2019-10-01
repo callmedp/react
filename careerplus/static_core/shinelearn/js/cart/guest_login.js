@@ -60,6 +60,9 @@ $(document).ready(function () {
             //     $('#email-error').closest('.form-group').addClass('error1');
             //     return;
             // }
+            
+            $('.overlay-background').show()
+            $('body').addClass('body-noscroll')
             let input = document.createElement("input");
             input.setAttribute("type", "hidden");
             input.setAttribute("name", "login_with");

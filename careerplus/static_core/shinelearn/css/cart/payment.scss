@@ -590,6 +590,14 @@ input:-webkit-autofill:active {
 .body-noscroll {
  overflow: hidden;
 }
+
+.truncate-email{
+  width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .payment-option {
   border-radius: 5px;
   padding: 0;

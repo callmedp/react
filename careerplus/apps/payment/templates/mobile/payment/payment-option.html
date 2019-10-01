@@ -39,11 +39,14 @@
 
 {% block container %}
 <div class="clearfix"></div>
+<div id = "loader" class="overlay-background"  text-align: center;">
+    <img aria-label="loader" id="loadingimg" class="loader-position-mobile" src="{% static 'shinelearn/images/mobile/loader1.png' %}" >
+</div>
 <div class="payment">
     <div class="payment--bg"></div>
     <ul class="payment__steps">
         <li class="payment__steps__item">
-            <a  href="{% url "cart:payment-summary" %}">
+            <a class='trig-loader'  href="{% url "cart:payment-summary" %}">
                 <!-- <span class="dot">1</span> -->
                 <span class="tick"></span>
                 Summary
@@ -51,7 +54,7 @@
         </li>
 
         <li class="payment__steps__item">
-            <a href="{% url "cart:payment-login" %}">
+            <a class='trig-loader' href="{% url "cart:payment-login" %}">
                 <!-- <span class="dot">2</span> -->
                 <span class="tick"></span>
                 {%if guest_login%}Guest{%else%}Login{%endif%}
@@ -59,7 +62,7 @@
         </li>
 
         <li class="payment__steps__item">
-            <a href="{% url "payment:payment-option" %}" class="active">
+            <a class='trig-loader' href="{% url "payment:payment-option" %}" class="active">
                 <span class="dot">3</span>
                 <!-- <span class="tick"></span> -->
                 Payment
@@ -75,7 +78,7 @@
         <div class="payment-type">
           <div class="payment-type--item">
             <span></span>
-            <a href="{% url "payment:ccavenue_request" cart_id 'all' %}">Card & Netbanking</a>
+            <a class='trig-loader' href="{% url "payment:ccavenue_request" cart_id 'all' %}">Card & Netbanking</a>
           </div>
 
 
@@ -123,7 +126,7 @@
 
                     <p class="fs-18 mt-10 c3"><strong>Rs. {{total_amount}}</strong> (amount payable)</p>
                     <p class="mt-20">
-                        <button type="submit" class="btn btn-yellow btn-round w100">Make Payment</button>
+                        <button type="button" class="btn btn-yellow btn-round w100 trig-loader" id="cash-option-submit">Make Payment</button>
                     </p>
                 </form>
 
@@ -203,7 +206,7 @@
                     </ul>
 
                     <p class="fs-18 mt-20 c3"><strong>Rs. {{total_amount}}</strong> (amount payable)</p>
-                    <p class="mt-20"><a href="javascript:{}" id='check-sumit-button' class="btn btn-yellow btn-round w100">Make Payment</a></p>
+                    <p class="mt-20"><button type='button' id='check-sumit-button' class="btn btn-yellow btn-round w100 trig-loader">Make Payment</button></p>
                      </form>
                   </div><!-- /. accordion content -->
               </div><!-- /. Cheque accordion item -->
@@ -211,7 +214,7 @@
 
           <div class="payment-type--item">
             <span></span>
-            <a href="{% url "payment:epaylater-request" cart_id %}" >Buy now, Pay Later
+            <a class="trig-loader" href="{% url "payment:epaylater-request" cart_id %}" >Buy now, Pay Later
               <img src="{% static 'shinelearn/images/mobile/common/epaylater.jpg' %}" class="payment-type--item--img"/>
             </a>
           </div>
@@ -245,7 +248,7 @@
 
                   </div><!-- /. accordion content -->
                   <p class="mt-20">
-                        <button type="button" class="btn btn-yellow btn-round w100" id="zestMakePaymentBtn">Make Payment</button>
+                        <button type="button" class="btn btn-yellow btn-round w100 trig-loader" id="zestMakePaymentBtn">Make Payment</button>
                     </p>
               </div><!-- /. cash accordion item -->
           </div><!-- /. accordion wrap -->

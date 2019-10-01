@@ -1,5 +1,15 @@
 $(document).ready(function () {
 
+
+
+
+ // 
+ $('.trig-loader').click(function(){
+    $('.overlay-background').show()
+    $('body').addClass('body-noscroll')
+ })   
+
+
  $('#zest_emi_div').show();
  $("#emi-block-0" ).hide();
  $("#emi-block-1" ).hide();
@@ -32,9 +42,21 @@ $(document).ready(function () {
 
     $('#check-sumit-button').click(function () {
         if ($('#check-pay-form').valid()) {
+            var attr = $('#check-sumit-button').attr('disabled');
+            if(typeof attr !== typeof undefined && attr !== false){
+                e.preventDefault();
+                return ;
+            }
+            $('#check-sumit-button').prop('disabled',true);
             $('#check-pay-form').submit();
         }
     });
+
+    $('#cash-option-submit').click(function(){
+        $(this).val('Please wait...')
+        .attr('disabled','disabled');
+        $('#id-cash-form').submit();
+    })
 
     $.validator.addMethod("validState", function (value, element) {
         var state_id = $('#id_state').val();
@@ -171,3 +193,4 @@ $(document).ready(function () {
  })
 
 });
+

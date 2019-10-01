@@ -41,7 +41,7 @@
     <div class="payment--bg"></div>
     <ul class="payment__steps">
         <li class="payment__steps__item">
-            <a href="{% url "cart:payment-summary" %}" class="active">
+            <a class='trig-loader' href="{% url "cart:payment-summary" %}" class="active">
                 <span class="dot">1</span>
                 <!-- <span class="tick"></span> -->
                 Summary
@@ -49,7 +49,7 @@
         </li>
 
         <li class="payment__steps__item">
-            <a href="{% url "cart:payment-login" %}">
+            <a class='trig-loader' href="{% url "cart:payment-login" %}">
                 <span
                     class="{% if candidate_in_session %} tick {% else %} dot {% endif %}">{% if candidate_in_session %}
                     {% else %} 2 {% endif %}</span>
@@ -59,7 +59,7 @@
         </li>
 
         <li class="payment__steps__item">
-            <a href="{% url "payment:payment-option" %}">
+            <a>
                 <span class="dot">3</span>
                 <!-- <span class="tick"></span> -->
                 Payment
@@ -270,7 +270,7 @@
     </div>
 
     <div class="bottom-cta__btn">
-        <a href="{% url "cart:payment-login" %}">Proceed</a>
+        <a class='trig-loader' href="{% url "cart:payment-login" %}" ><button class='summary-proceed-button' id='payment-summary-continue-id'>Proceed</button></a>
     </div>
 </div><!-- Bottom CTA -->
 
