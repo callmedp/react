@@ -180,6 +180,8 @@ class PaymentLoginView(TemplateView, CartMixin):
         return super(self.__class__, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        import ipdb;
+        ipdb.set_trace();
         try:
             login_resp = {}
             login_dict = {}
@@ -471,6 +473,7 @@ class PaymentShippingView(UpdateView, CartMixin):
         return context
 
     def post(self, request, *args, **kwargs):
+       
         self.object = self.get_object()
         form = self.get_form()
 
@@ -490,6 +493,8 @@ class PaymentShippingView(UpdateView, CartMixin):
                     })
 
                     candidate_id, error = user_register(data=data)
+
+                
                     obj.owner_id = candidate_id
 
                     if request.session.get('email'):
