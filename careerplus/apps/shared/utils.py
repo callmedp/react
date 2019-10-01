@@ -28,7 +28,7 @@ from shop.choices import DURATION_DICT,EXP_DICT
 from order.models import Order,OrderItem,CouponOrder, RefundItem
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from users.mixins import WriterInvoiceMixin
-from order.utils import get_ltv
+from order.utils import get_ltv, LTVReportUtil
 
 #third party imports
 
@@ -305,8 +305,8 @@ class DiscountReportUtil:
                 writer_price = 0
                 writer_name = ''
                 if item.order.status in [1,3] and item.product.type_flow in [1, 8, 12, 13] and \
-                        item.oi_status == 4 and item.assigned_to and item.closed_on >= self.start_date\
-                            and item.closed_on <= self.end_date:
+                        item.oi_status == 4 and item.assigned_to and item.closed_on.replace(tzinfo=None) >= self.start_date\
+                            and item.closed_on.replace(tzinfo=None) <= self.end_date:
                     invoice_date = item.closed_on.replace(day=1).date()  
                     invoice_date = invoice_date - timedelta(days=1)
                     invoice_date =invoice_date + relativedelta.relativedelta(months=1)
@@ -318,14 +318,10 @@ class DiscountReportUtil:
                         writer_price = total_sum - total_combo_discount
                         writer_name = item.assigned_to if item.assigned_to else ''
 
-                sales_user_info = order.sales_user_info
                 lead_type = 'NA'
-                if sales_user_info:
-                    sales_user_info = json.loads(sales_user_info)
-                    if 'is_upsell' in sales_user_info:
-                        lead_type = 'Upsell' if sales_user_info['is_upsell'] else 'Fresh'
+                if 'is_upsell' in sales_user_info:
+                    lead_type = 'Upsell' if sales_user_info['is_upsell'] else 'Fresh'
 
-                
                 ltv_bracket = LTVReportUtil().get_ltv_bracket(candidate_id=order.candidate_id)
                 product = item.product
                 main_category = product.category_main
