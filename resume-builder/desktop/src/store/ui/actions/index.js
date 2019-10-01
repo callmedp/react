@@ -14,9 +14,16 @@ import {
     SHOW_GENERATE_RESUME_MODAL,
     HIDE_GENERATE_RESUME_MODAL,
     HIDE_HELP_MODAL,
-    SHOW_HELP_MODAL
+    SHOW_HELP_MODAL,
+    UPDATE_UI
 } from "./actionTypes";
 
+export const updateUi = (paylaod) => {
+    return {
+        type: UPDATE_UI,
+        data: paylaod
+    }
+}
 
 export const showModal = () => {
     return {
