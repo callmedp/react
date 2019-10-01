@@ -43,6 +43,7 @@ Payment Summary - Shine Learning
 
 
 {% block container %}
+{% if cart_contain_items %}
 <section class="container mt-53">
   <div id="loader" class="overlay-background" text-align: center;">
     <img aria-label="loader" id="loadingimg" class="loader-position" src="{% static 'shinelearn/images/loader1.png' %}">
@@ -327,6 +328,26 @@ Payment Summary - Shine Learning
   <!-- page content body end -->
 </section>
 <!-- main section end -->
+{% else %}
+        <!-- Blank Cart -->
+        <section class="container">
+
+            <!-- page content body start -->
+            <div class="row">
+                <!-- content start -->
+                <div class="col-sm-12 mt-53">
+                  <div class="empty-cart bdr">
+                    <figure class="empty-cart-pic"></figure>
+                    <article>You have no product in your cart. <br>Add your first product and earn <strong>Shine loyalty points</strong></article>
+                    <a href="{% url "homepage" %}" class="search-button">Search now</a>
+                  </div>
+                </div>
+                <!-- content end -->
+
+                  {% include "shop/partials/recommended_product.html" %}
+            </div>
+        </section>
+  {% endif %}
 {% endblock container %}
 
 

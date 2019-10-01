@@ -55,7 +55,7 @@ $(document).ready(function() {
 
         if (flag){
             console.log(action_type);
-            $('#upload-order-resume-form')[0].submit();
+            $('#upload-order-resume-form').submit();
         }
         
     });

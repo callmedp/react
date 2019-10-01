@@ -543,8 +543,6 @@ class PaymentSummaryView(TemplateView, CartMixin):
             cart_pk = self.request.session.get('cart_pk')
             try:
                 self.cart_obj = Cart.objects.get(pk=cart_pk)
-                if not self.cart_obj.lineitems.all().exists():
-                    return HttpResponseRedirect(reverse('homepage'))
 
             except Exception as e:
                 logging.getLogger('error_log').error("%s " % str(e))
@@ -583,7 +581,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
         payment_dict = self.getPayableAmount(cart_obj, cart_dict.get('total_amount'))
         context.update(payment_dict)
 
-        if cart_obj:
+        if cart_obj and len(cart_items):
             wal_txn = cart_obj.wallettxn.filter(txn_type=2).order_by('-created').select_related('wallet')
             cart_coupon = cart_obj.coupon
             if cart_coupon:
@@ -643,8 +641,12 @@ class PaymentSummaryView(TemplateView, CartMixin):
 
         context.update({
             "cart_items": cart_items,
+            "cart_contain_items" : True if len(cart_items)  else  False 
         })
+
         return context
+    
+        
 
 
 class UpdateDeliveryType(View, CartMixin):

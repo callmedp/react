@@ -33,6 +33,7 @@
 {% endblock header %}
 
 {% block container %}
+{% if cart_contain_items %}
 <div class="clearfix"></div>
 <div id = "loader" class="overlay-background"  text-align: center;">
         <img aria-label="loader" id="loadingimg" class="loader-position-mobile" src="{% static 'shinelearn/images/mobile/loader1.png' %}" >
@@ -273,6 +274,18 @@
         <a class='trig-loader' href="{% url "cart:payment-login" %}" ><button class='summary-proceed-button' id='payment-summary-continue-id'>Proceed</button></a>
     </div>
 </div><!-- Bottom CTA -->
+{% else %}
+    <div class="body-wrapper">
+        <div class="content-box">
+            <div class="text-center mt-50">
+                <span class="inline-block"><img aria-label="empty-image" src="{% static 'shinelearn/images/mobile/common/wallet_empty.jpg' %}" alt="empty-image"></span>
+                <p class="fs-18 c6 mt-10">You have no product in your cart. Add your first product and earn Shine loyalty points</p>
+
+            <a href="/" class="btn btn-blue btn-lg">Search now</a>
+            </div>
+        </div>
+    </div>
+{% endif %}
 
 {% endblock container %}
 {% block footer %}

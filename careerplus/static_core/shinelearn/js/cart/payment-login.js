@@ -177,14 +177,8 @@ $(document).ready(function () {
         timer: 3000
     })
 
-    
-
 });
-
-
-
    
-
     /*
     ** @handle basic request flow
     * */
@@ -192,7 +186,7 @@ $(document).ready(function () {
     const defaultHeaders = {
     "Content-Type": "application/json",
     };
-    
+
    async function handleResponse(response, isFetchingHTML) {
 
     // handle all the status and conditions here

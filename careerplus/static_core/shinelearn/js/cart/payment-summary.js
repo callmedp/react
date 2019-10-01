@@ -181,9 +181,11 @@ function JSApplyPoint(e) {
             } else {
                 alert_message = 'Something is not working, Please try later!';
             }
+
             // remove loader
             $('.overlay-background').hide()
             $('body').removeClass('body-noscroll')
+
             $('#loyalty_point').parent().addClass('error');
             $('#point-alert').empty();
             $('#point-alert').text(alert_message);
@@ -194,6 +196,9 @@ function JSApplyPoint(e) {
 
     } else {
         alert_message = 'Enter Loyalty Point First!';
+
+        $('.overlay-background').hide()
+        $('body').removeClass('body-noscroll')
         $('#loyalty_point').parent().addClass('error');
         $('#point-alert').empty();
         $('#point-alert').text(alert_message);
@@ -223,11 +228,14 @@ function JSRemoveDiscount(e) {
         },
         failure: function (response) {
 
-            // remove loader
-            $('.overlay-background').hide()
-            $('body').removeClass('body-noscroll')
+           
 
             alert_message = 'Something is not working, Please try later!';
+
+             // remove loader
+             $('.overlay-background').hide()
+             $('body').removeClass('body-noscroll')
+             
             $('#discount_code').parent().addClass('error');
             $('#discount-alert').empty();
             $('#discount-alert').text(alert_message);
@@ -238,11 +246,7 @@ function JSRemoveDiscount(e) {
         },
         error: function (result, status, err) {
 
-            // remove loader
-            $('.overlay-background').hide()
-            $('body').removeClass('body-noscroll')
-
-
+          
             if (result && result.status == 400) {
                 alert_message = result.responseJSON;
                 alert_message = alert_message.error;
@@ -250,6 +254,12 @@ function JSRemoveDiscount(e) {
                 alert_message = 'Something is not working, Please try later!';
 
             }
+
+              // remove loader
+              $('.overlay-background').hide()
+              $('body').removeClass('body-noscroll')
+  
+  
             $('#discount_code').parent().addClass('error');
             $('#discount-alert').empty();
             $('#discount-alert').text(alert_message);
