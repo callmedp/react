@@ -277,11 +277,10 @@ Payment Login - Shine Learning
     var cartData = "{{request|get_cart_info}}";
 </script>
 
-
 {% compress js %}
+<script src="{% static 'shinelearn/js/cart/payment-login.js' %}"></script>
 <script src="{% static 'shinelearn/js/cart/guest_login.js' %}"></script>
 <script src="{% static 'shinelearn/js/common/jquery.autocomplete.min.js' %}"></script>
-<script src="{% static 'shinelearn/js/cart/payment-login.js' %}"></script>
 <script src="{% static 'shinelearn/js/cart/payment-shipping.js' %}"></script>
 <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
 
