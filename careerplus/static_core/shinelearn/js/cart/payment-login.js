@@ -177,19 +177,22 @@ $(document).ready(function () {
         timer: 3000
     })
 
-    const defaultHeaders = {
-        "Content-Type": "application/json",
-    };
+    
 
 });
 
 
 
+   
+
     /*
     ** @handle basic request flow
     * */
 
-
+    const defaultHeaders = {
+    "Content-Type": "application/json",
+    };
+    
    async function handleResponse(response, isFetchingHTML) {
 
     // handle all the status and conditions here
