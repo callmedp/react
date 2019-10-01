@@ -180,6 +180,8 @@ class PaymentLoginView(TemplateView, CartMixin):
         return super(self.__class__, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        import ipdb;
+        ipdb.set_trace();
         try:
             login_resp = {}
             login_dict = {}
@@ -529,6 +531,8 @@ class PaymentSummaryView(TemplateView, CartMixin):
         self.cart_obj = None
 
     def redirect_if_necessary(self):
+        import ipdb;
+        ipdb.set_trace();
         if not self.request.session.get('cart_pk'):
             self.cart_obj = self.getCartObject()
         else:

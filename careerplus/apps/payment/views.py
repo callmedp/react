@@ -56,6 +56,8 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         self.cart_obj = None
 
     def redirect_if_necessary(self):
+        import ipdb;
+        ipdb.set_trace();
         if not self.request.session.get('cart_pk'):
             self.cart_obj = self.getCartObject()
         else:

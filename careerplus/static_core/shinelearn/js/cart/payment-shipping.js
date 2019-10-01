@@ -37,6 +37,10 @@ $().ready(function() {
                     indiaMobile: true,
                     minlength: 10,
                     maxlength: 10,
+                    notEqualTo: ['9999999999','8888888888', '9876543210',
+                    '7777777777', '9000000000', '8000000000',
+                    '9898989898',
+                    '6666666666'],
                 },
                 country_code:{
                     required: true,
@@ -70,10 +74,11 @@ $().ready(function() {
             
             mobile:{
                 required: 'Contact is required.',
-                digits: 'only digit accepted.',
-                indiaMobile: 'length must be 10 digits.',
-                minlength: 'length must be greater than 10 digits.',
-                maxlength: 'length must be less than 10 digits.',
+                digits: 'Only digit accepted.',
+                indiaMobile: 'Length must be 10 digits.',
+                minlength: 'Length must be 10 digits.',
+                maxlength: 'Length must be 10 digits.',
+                notEqualTo: 'This number is not allowed'
             },
             country_code:{
                 required: 'this value is required.',
@@ -93,6 +98,8 @@ $().ready(function() {
             // }
         },
         highlight: function(element) {
+            debugger;
+
             /*if (window.CURRENT_FLAVOUR == 'mobile'){
                 $(element).closest('.form-group').addClass('error');
             }
@@ -109,6 +116,7 @@ $().ready(function() {
             $(element).closest(className).addClass(addClass);
         },
         unhighlight: function(element) {
+            debugger;
             if (window.CURRENT_FLAVOUR == 'mobile'){
                 $(element).closest('li').removeClass('error');
                 $(element).siblings('.error--mgs').html('');
@@ -124,6 +132,8 @@ $().ready(function() {
         invalidHandler: function(event, validator) {
         },
         errorPlacement: function(error, element){
+            debugger;
+
             let  errorTextClass = '.error-txt';
              if (window.CURRENT_FLAVOUR == 'mobile'){
                errorTextClass = '.error--mgs';
