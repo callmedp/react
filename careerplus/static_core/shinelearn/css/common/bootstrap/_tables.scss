@@ -232,3 +232,25 @@ table {
     }
   }
 }
+
+.thead-light {
+  >tr {
+    > th {
+      background-color: #eeeaeb;
+      border: 0 none !important;
+      font-weight: normal;
+      color: $secondary-color;
+    }
+
+    > td {
+      border: 0 none !important;
+      font-weight: normal;
+      color: $primary-color;
+    }
+
+    > th,
+    > td {
+      padding: 10px 20px !important;
+    }
+  }
+}

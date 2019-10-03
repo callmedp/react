@@ -220,6 +220,7 @@
 
                     {% if total_amount > 5000 %}
 
+                  <!-- Zest Money Emi -->
                   <div class="panel panel-default box-shadow1">
                     <div class="panel-heading" role="tab" id="headingThree">
                       <h4 class="panel-title">
@@ -227,17 +228,43 @@
                           Zest Money Emi <img src="{% static 'shinelearn/images/payments/zest.png' %}" width="60" alt="zestMoney" class="ml-5">
                         </a>
                       </h4>
-                    </div>
+                    </div><!-- // Panel Heading -->
+
                     <div id="zestMoneyAccordion" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
                       <div class="panel-body other-payment" id="zestMoney">
 
-                             <div class="form-group col-md-12 bg-primary" id="zest_emi_div" style="text-align:center;display: none;">
-                            <div class="control-group">
-                                <div class="controls">
-                                    <label class="control-label" id="zest-emi-head">Loading EMI Options ..</label>
-                                </div>
-                            </div>
-                        </div>
+                        <p class="mt-0 font-weight-bold">EMI Options</p>
+
+                        <table class="table">
+                          <thead class="thead-light">
+                            <tr>
+                              <th scope="col">Month</th>
+                              <th scope="col">Monthly EMI</th>
+                              <th scope="col">Interset</th>
+                              <th scope="col">Down payment</th>
+                              <th scope="col">Loan Amount</th>
+                            </tr>
+                          </thead>
+                          <tbody class="thead-light">
+                            <tr>
+                              <td>6</td>
+                              <td>Rs.7,875</td>
+                              <td>1.53%</td>
+                              <td>Rs.11,875</td>
+                              <td>Rs.81,875</td>
+                            </tr>
+                            
+                            <tr>
+                              <td>9</td>
+                              <td>Rs.7,875</td>
+                              <td>1.53%</td>
+                              <td>Rs.11,875</td>
+                              <td>Rs.81,875</td>
+                            </tr>
+                          </tbody>
+                        </table>
+
+<!--                 
                         <div id="emi-block-0" class="col-md-6 zest_emi_div" style="display:block;">
                             <span id="emi-0-months"></span><br>
                             <span id="emi-0-monthly-amount"></span><br>
@@ -253,24 +280,21 @@
                             <span id="emi-1-interest-rate"></span><br>
                             <span id="emi-1-down-payment"></span><br>
                             <span id="emi-1-total-amount"></span><br>
-                        </div>
-                        <hr />
+                        </div> -->
+
                         <div class="buttons wrap-none mt-20" style="clear: both; margin-top: 40px; margin-left: 15px;overflow:hidden;">
 
-                        <strong>Rs. {{ total_amount }}
-                            <small>(amount payable)</small>
-                        </strong>
+                          <strong>Rs. {{ total_amount }} <span class="font-weight-normal">(amount payable)</span></strong>
 
-                        <div class="continue">
-                            <button type="button" class="make-payment" id="zestMakePaymentBtn">
-                               <a> Make Payment</a></button>
-                        </div>
+                          <div class="continue">
+                              <button type="button" class="make-payment" id="zestMakePaymentBtn">Make Payment</button>
+                          </div>
 
                         </div>
                         <!-- cheque payment method -->
                       </div>
                     </div>
-                  </div>
+                  </div><!-- //Zest Money Emi -->
 
                     {% endif %}
                 </div>
