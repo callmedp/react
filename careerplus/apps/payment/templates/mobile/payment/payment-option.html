@@ -220,38 +220,84 @@
           </div>
             {% if total_amount > 5000 %}
 
-                      <div class="accordion_example1 smk_accordion" id="zestMoneyAccordion" >
-              <div class="accordion_in">
-                <div class="acc_head payment-type--item">
-                  <span></span>
-                     Zest Money Emi
-                </div>
-                  <div class="acc_content d-flex">
-                      <div id="emi-block-0" class=" zest_emi_div mr-40">
-                            <span id="emi-0-months"></span><br>
-                            <span id="emi-0-monthly-amount"></span><br>
-                            <span id="emi-0-interest"></span><br>
-                            <span id="emi-0-interest-rate"></span><br>
-                            <span id="emi-0-down-payment"></span><br>
-                            <span id="emi-0-total-amount"></span><br>
+            <div class="accordion_example1 smk_accordion" id="zestMoneyAccordion" >
+                <div class="accordion_in">
+                  <div class="acc_head payment-type--item mb-0">
+                    <span></span>
+                      Zest Money Emi
+                  </div><!-- // tab ends here -->
+
+                    <div class="acc_content flex-direction-column d-flex p-0">
+                        <div class="emi-options">
+                            <h3>EMI Options</h3>
+
+                            <ul class="p-0">
+                              <li class="emi-options--item">
+                                <span>Months</span>
+                                <span>6</span>
+                                <span>9</span>
+                              </li>
+                              
+                              <li class="emi-options--item">
+                                <span>Monthly EMI</span>
+                                <span>Rs. 7,985</span>
+                                <span>Rs.5,239</span>
+                              </li>
+                              
+                              <li class="emi-options--item">
+                                <span>Interest</span>
+                                <span>1.76%</span>
+                                <span>1.76%</span>
+                              </li>
+                              
+                              <li class="emi-options--item">
+                                <span>Interest rate</span>
+                                <span>1.76%</span>
+                                <span>1.76%</span>
+                              </li>
+                              
+                              <li class="emi-options--item">
+                                <span>Down payment</span>
+                                <span>Rs. 11,985</span>
+                                <span>Rs.11,239</span>
+                              </li>
+                              
+                              <li class="emi-options--item">
+                                <span>Loan Amount</span>
+                                <span>Rs. 51,985</span>
+                                <span>Rs.51,239</span>
+                              </li>
+                            </ul>
+                        </div><!-- // ROW Content ends here -->
+                        <div class="mt-10 p-15 text-center">
+                          <p class="fs-16"><strong>Rs. 65,0986</strong> (amount payable)</p>
+                          <button type="button" class="btn btn-yellow btn-round w100 trig-loader" id="zestMakePaymentBtn">Make Payment</button>
                         </div>
-                        <div id="emi-block-1" class="zest_emi_div">
-                            <span id="emi-1-months"></span><br>
-                            <span id="emi-1-monthly-amount"></span><br>
-                            <span id="emi-1-interest"></span><br>
-                            <span id="emi-1-interest-rate"></span><br>
-                            <span id="emi-1-down-payment"></span><br>
-                            <span id="emi-1-total-amount"></span><br>
+                        
+                        
+                        
+                          <!-- <div id="emi-block-0" class=" zest_emi_div mr-40">
+                              <span id="emi-0-months"></span><br>
+                              <span id="emi-0-monthly-amount"></span><br>
+                              <span id="emi-0-interest"></span><br>
+                              <span id="emi-0-interest-rate"></span><br>
+                              <span id="emi-0-down-payment"></span><br>
+                              <span id="emi-0-total-amount"></span><br>
+                          </div>
+                          <div id="emi-block-1" class="zest_emi_div">
+                              <span id="emi-1-months"></span><br>
+                              <span id="emi-1-monthly-amount"></span><br>
+                              <span id="emi-1-interest"></span><br>
+                              <span id="emi-1-interest-rate"></span><br>
+                              <span id="emi-1-down-payment"></span><br>
+                              <span id="emi-1-total-amount"></span><br>
 
-                        </div>
+                          </div> -->
 
 
-                  </div><!-- /. accordion content -->
-                  <p class="mt-20">
-                        <button type="button" class="btn btn-yellow btn-round w100 trig-loader" id="zestMakePaymentBtn">Make Payment</button>
-                    </p>
-              </div><!-- /. cash accordion item -->
-          </div><!-- /. accordion wrap -->
+                    </div><!-- /. accordion content -->
+                </div><!-- /. cash accordion item -->
+            </div><!-- /. accordion wrap -->
 
                 {% endif %}
         </div><!-- /. payment type -->

@@ -965,3 +965,34 @@
   font-size: 1rem;
 
 }
+
+
+.emi-options {
+  width: 100%;
+  border-bottom: 1px solid $border-grey-d8;
+
+  h3 {
+    border-bottom: 1px solid $border-grey-d8;
+    padding: 0 15px 10px;
+  }
+  
+
+  &--item {
+    display: flex;
+    margin-bottom: 0 !important;
+
+    span {
+      padding: 10px 15px;
+      color: $txt-grey-333;
+      flex: 1;
+
+      &:first-child {
+        background-color: $grey-e5;
+        color: $txt-grey-666;
+        flex: 0 0 40%;
+      }
+    }
+  }
+
+
+}
