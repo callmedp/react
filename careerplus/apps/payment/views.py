@@ -224,7 +224,7 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         payment_dict = self.getPayableAmount(cart_obj=self.cart_obj)
         line_item = self.cart_obj.lineitems.filter(parent=None)[0]
         type_flow = int(line_item.product.type_flow)
-        email_id = self.cart_obj.owner_email,
+        email_id = self.cart_obj.owner_email or self.cart_obj.email or self.request.session.get('email',''),
         first_name = self.cart_obj.first_name or self.request.session.get('first_name')
         state_list = self.get_state_list()
         guest_login = True
