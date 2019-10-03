@@ -240,6 +240,7 @@ class LogoutApiView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         request.session.flush()
+        request.session.cycle_key()
         response = HttpResponseRedirect(reverse('homepage'))
         response.delete_cookie('_em_', domain='.shine.com')
         return response

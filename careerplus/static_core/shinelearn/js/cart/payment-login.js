@@ -1,4 +1,5 @@
 
+
 $(document).ready(function () {
     /*
     * validate login form
@@ -165,29 +166,30 @@ $(document).ready(function () {
         }
     });
 
+
+
     /*
 * *
 * * basic headers
 * */
-
-    const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000
-    })
-
 });
-   
-    /*
-    ** @handle basic request flow
-    * */
 
-    const defaultHeaders = {
+const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000
+})
+
+/*
+** @handle basic request flow
+* */
+
+const defaultHeaders = {
     "Content-Type": "application/json",
-    };
+};
 
-   async function handleResponse(response, isFetchingHTML) {
+async function handleResponse(response, isFetchingHTML) {
 
     // handle all the status and conditions here
     if (response['ok'] === false) {
@@ -213,13 +215,13 @@ $(document).ready(function () {
 }
 
 
-    /*
-    * *
-    * *  login Candidate using API
-    * *
-    * */
+/*
+* *
+* *  login Candidate using API
+* *
+* */
 
-   const handleLoginCandidate = async () => {
+const handleLoginCandidate = async () => {
 
     const formData = $('#login_form').serializeArray().reduce((obj, item) => {
         obj[item.name] = item.value
@@ -239,6 +241,7 @@ $(document).ready(function () {
     }
     $('.overlay-background').show()
     $('body').addClass('body-noscroll')
+
     loginResponse = await fetch(`${site_domain}/api/v1/candidate-login/`, {
         headers: defaultHeaders,
         method: 'POST',
@@ -248,6 +251,8 @@ $(document).ready(function () {
     let result;
 
     result = await handleResponse(loginResponse)
+
+    
 
     if (result['error']) {
         // Todo ***** error handling  *****
@@ -271,7 +276,11 @@ $(document).ready(function () {
         'mobile': mobile_no,
         'country_code': country_code
     }
-
+    
+    if (!cart_pk) {
+        window.location.href = '/logout/';
+    } 
+    
     const updateCartResponse = await fetch(`${site_domain}/api/v1/cart/${cart_pk}/`, {
         headers: defaultHeaders,
         method: 'PUT',
@@ -279,6 +288,7 @@ $(document).ready(function () {
     });
 
     const cartData = await handleResponse(updateCartResponse);
+
 
 
     if (cartData['error']) {
