@@ -1,0 +1,28 @@
+.error{
+    color: red;
+}
+#order-items{
+    font-size:14px;
+}
+.modal-item{
+    margin-left: 22px;
+}
+.loader-div{
+    background-color: rgba(0,0,0,0.5);
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 10;
+    display: none;
+}
+
+.body-overflow{
+    overflow: hidden;
+}
+
+.loader-image{
+    width: 100px;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+}

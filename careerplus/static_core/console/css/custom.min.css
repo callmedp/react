@@ -16,3 +16,8 @@
       color: red;
       padding-left: 0;
   }
+
+  li.selected {
+    color:blue;
+    border-left:4px solid blue;
+  }

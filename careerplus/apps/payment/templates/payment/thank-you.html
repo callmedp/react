@@ -13,6 +13,7 @@
         {% compress css %}
         <link type="text/scss" href="{% static 'shinelearn/css/cart/payment.scss' %}" rel="stylesheet">
         {% endcompress %}
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.min.css" rel="stylesheet" />
         <style type="text/css">
             .error{
                 color: red;
@@ -51,7 +52,11 @@
             {% if pending_resume_items %}
 
                 <p>To proceed further please upload your resume or fill the questionnaire.</p>
-                <form id="upload-order-resume-form" method="POST" action="{% url "payment:thank-you" %}" enctype='multipart/form-data'>{% csrf_token %}
+                {% if booster_item_exist %}
+                    <div>* Uploaded resume will be boosted</div>
+                {% endif %}
+                <form id="upload-order-resume-form" method="POST" action="{% url "payment:thank-you" %}" enctype='multipart/form-data'>
+                    {% csrf_token %}
                     <div class="latest-resume selected" id="upload-resume-box">
                         <figure></figure>
                         <a href="javascript:void();">Upload</a> new resume
@@ -66,6 +71,9 @@
                             Use latest shine resume
                         </div>
                     {% endif %}
+                    <div>
+                        <input type="checkbox" checked onclick="uploadResumeShine(this,{{order.id}})" /> <span>Upload new resume post service completion</span>
+                    </div>
                     <input type="hidden" id="action-type-id" name="action_type" value="upload_resume">
                     <a role="button" class="blue-button mt-20" id="resume-sumbmit-button">Proceed</a>
                 </form>
@@ -146,12 +154,11 @@
 
 {% block js_section %}
     {{ block.super }}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.all.min.js"></script>
     {% compress js %}
-    <script src="{% static 'shinelearn/js/payment/thank-you.js' %}"></script>
+        <script src="{% static 'shinelearn/js/payment/thank-you.js' %}"></script>
+        <script type="text/javascript" src="{% static "shinelearn/js/common/toast.js" %}"></script>
     {% endcompress %}
-    <script>
-
-    </script>
 {% endblock js_section %}
 
 {% block johukum %}

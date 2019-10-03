@@ -1,5 +1,5 @@
 # python imports
-import json,ast
+import json, ast
 
 # django imports
 from django.db import models
@@ -40,6 +40,7 @@ class CandidateProfile(AbstractAutoDate):
     selected_template = models.CharField('Selected Template', max_length=20, blank=True, null=True)
     extra_info = models.TextField('Extra Information', blank=True, null=True)
     entity_preference_data = models.TextField(blank=True, null=True)
+    upload_resume = models.BooleanField('Upload Resume', default=True)
 
     @property
     def owner_id(self):
@@ -54,10 +55,10 @@ class CandidateProfile(AbstractAutoDate):
 
         data = {}
         for item in entity_data:
-            data[item.get('entity_id')] = {"active":item.get('active'),"entity_text":item.get("entity_text")}
+            data[item.get('entity_id')] = {"active": item.get('active'), "entity_text": item.get("entity_text")}
 
         return data
-    
+
     @property
     def extracurricular_list(self):
         return [x for x in self.extracurricular.split(',')] if self.extracurricular != '' else []
@@ -76,24 +77,24 @@ class Candidate(PreviewImageCreationMixin, CandidateProfile):
 
         product_found = False
         order_data = {}
-        order_obj_list = Order.objects.filter(candidate_id=self.candidate_id,status__in=[1,3])
+        order_obj_list = Order.objects.filter(candidate_id=self.candidate_id, status__in=[1, 3])
 
         if not order_obj_list:
             return order_data
 
-        for order_obj in order_obj_list: 
+        for order_obj in order_obj_list:
             if product_found:
                 break
-                
+
             for item in order_obj.orderitems.all():
                 if item.product and item.product.type_flow == 17 and item.product.type_product == 2:
-                    order_data = {"id":order_obj.id,
-                    "combo":True if item.product.id != settings.RESUME_BUILDER_NON_COMBO_PID else False
-                    }
+                    order_data = {"id": order_obj.id,
+                                  "combo": True if item.product.id != settings.RESUME_BUILDER_NON_COMBO_PID else False
+                                  }
                     product_found = True
                     break
         return order_data
-            
+
     def create_template_customisations(self, candidate_id):
         for i in range(1, 6):
             obj = OrderCustomisation()
@@ -131,7 +132,7 @@ class OrderCustomisation(PreviewImageCreationMixin, models.Model):
     @property
     def entity_position_eval(self):
         try:
-            return json.loads(self.entity_position) 
+            return json.loads(self.entity_position)
         except:
             return []
 
@@ -148,16 +149,16 @@ class OrderCustomisation(PreviewImageCreationMixin, models.Model):
         languages = self.candidate.candidatelanguage_set.all().order_by('order')
 
         entity_id_count_mapping = {
-                2:bool(education.count()),
-                3:bool(experience.count()),
-                4:bool(projects.count()),
-                5:bool(skills.count()),
-                7:bool(achievements.count()),
-                8:bool(certifications.count()),
-                9:bool(languages.count()),
-                10:bool(references.count()),
-                11:bool(len(extracurricular)),
-            }
+            2: bool(education.count()),
+            3: bool(experience.count()),
+            4: bool(projects.count()),
+            5: bool(skills.count()),
+            7: bool(achievements.count()),
+            8: bool(certifications.count()),
+            9: bool(languages.count()),
+            10: bool(references.count()),
+            11: bool(len(extracurricular)),
+        }
 
         return entity_id_count_mapping
 
@@ -197,11 +198,11 @@ class CandidateExperience(PreviewImageCreationMixin, models.Model):
 
 class CandidateEducation(PreviewImageCreationMixin, models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
-    degree = models.CharField('Degree', max_length=200,blank=True, null=True)
+    degree = models.CharField('Degree', max_length=200, blank=True, null=True)
     specialization = models.CharField('Specialization', max_length=200)
     institution_name = models.CharField('Institution Name', max_length=250)
     course_type = models.CharField('Institution Name', choices=(('FT', 'Full Time'), ('PT', 'Part Time'),
-                                                                ('CR', 'Correspondence'),('NA','NA')), max_length=2)
+                                                                ('CR', 'Correspondence'), ('NA', 'NA')), max_length=2)
     percentage_cgpa = models.CharField('Percentage Or CGPA', max_length=250, null=True, blank=True)
     start_date = models.DateField('Start Date', blank=True, null=True)
     end_date = models.DateField('End Date', blank=True, null=True)
@@ -285,7 +286,7 @@ class CandidateSocialLink(PreviewImageCreationMixin, models.Model):
 class CandidateAchievement(PreviewImageCreationMixin, models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     title = models.CharField('Title', max_length=300)
-    date = models.IntegerField('Date',blank=True,null=True)
+    date = models.IntegerField('Date', blank=True, null=True)
     summary = models.TextField('Summary', null=True, blank=True)
     order = models.IntegerField('Order', default=0)
 
@@ -313,11 +314,7 @@ class CandidateLanguage(PreviewImageCreationMixin, models.Model):
 
 senders = [Candidate, Skill, CandidateExperience, CandidateEducation, \
            CandidateCertification, CandidateProject, CandidateReference, \
-           CandidateAchievement, CandidateLanguage,OrderCustomisation]
+           CandidateAchievement, CandidateLanguage, OrderCustomisation]
 
 for model_name in senders:
     post_save.connect(model_name.preview_image_task_call, sender=model_name)
-
-
-
-

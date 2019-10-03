@@ -78,8 +78,63 @@
         </div>
     </div><!-- /. searc -->
 
+    <!-- Testpreps -->
+         {% if test_prep %}
 
-    <div class="popular_test">
+       {% for testPrep in test_prep %}
+     <h2>{{testPrep.heading}}</h2>
+    <div class="popular_test mb-30">
+        <p class="text-center">
+Shine learning brings to you one of the largest collection of test preps for all  business and tech certifications. Say good bye to anxiety and crack the certification exams in the first attempt !        </p>
+          {% for fa in test_prep_children %}
+        <div class="popular_test_inside">
+            <a href="{% url 'assessment:vskill-subcategory' slug=fa.slug %}">
+                <span class="border border0"></span>
+                <div>
+                    <h2 class="name bold mb-0">{{fa.name}}</h2>
+                    <p class="fs-14 mb-0">{{fa.get_assessment_test_count}}  {% if fa.get_assessment_test_count < 2 %}Test {% else %}Tests{% endif %}</p>
+                </div>
+                <span>
+                    {% if fa.icon %}
+                    <img src="{{fa.icon.url}}" alt="{{fa.name}}">
+                    {% endif %}
+                </span>
+            </a>
+        </div><!-- // popular_test_inside -->
+                      {%endfor%}
+         {% if  testPrep.get_test_category_ids.count > 8  %}
+        <div class="text-center mt-30 mb-15">
+            <a href="{% url 'assessment:vskill-category' slug=testPrep.slug %}" class="btn btn-slg btn-round-30 btn-white">View all</a>
+        </div>
+                {% endif %}
+    </div><!-- /. Testpreps -->
+             {%endfor%}
+         {% endif %}
+    <!-- Tests by functional area -->
+    <div class="functional_area mt-15" id="funcDiv">
+        <h2>Tests by functional area</h2>
+        <p class="text-center">
+Shine learning brings to you one of the largest collection of functional tests. Test your skills on these free tests and know which is the course most suitable for you to grow in your career !
+        </p>
+        {% for fa in func_area|slice:":8" %}
+
+            <div class="functional_area_inside border-{{forloop.counter0}}">
+            <a title="{{fa.name}}" href="{% url 'assessment:vskill-category' slug=fa.slug %}">
+                  {% if fa.icon %}
+                     <span class="functional_area_inside--image"><img class="img-responsive" alt="{{fa.name}}" src= "{{fa.icon.url}}"></span>
+                     {% else %}
+                     <span class="functional_area_inside--image"><img  class="img-responsive" alt="{{fa.name}}" src="#"></span>
+                     {% endif %}
+                <span class="fa_name">{{fa.name}}</span></a> </div>
+              {%endfor%}
+
+    </div>
+                {% if  func_area.count > 8  %}
+            <div class="load_more_button" id="loadmorebtn" onclick="loadmore();">Load more</div>
+        {% endif %}
+</div>
+
+  <div class="popular_test">
         <h2>Most popular tests</h2>
          {% for test in test_list %}
 
@@ -91,29 +146,7 @@
             </a>
             </div>
             {% endfor %}
-    </div><!-- /. popular test -->
-      
-    <div class="functional_area mt-40" id="funcDiv">
-            <h2>Tests by functional area</h2>
-           {% for fa in func_area|slice:":8" %}
-
-            <div class="functional_area_inside border-{{forloop.counter0}}">
-            <a title="{{fa.name}}" href="{% url 'assessment:vskill-category' slug=fa.slug %}">
-                  {% if fa.icon %}
-                     <span class="functional_area_inside--image"><img class="img-responsive" alt="{{fa.name}}" src= "{{fa.icon.url}}"></span>
-                     {% else %}
-                     <span class="functional_area_inside--image"><img  class="img-responsive" alt="{{fa.name}}" src="#"></span>
-                     {% endif %}
-                <span class="fa_name">{{fa.name}}</span></a> </div>
-              {%endfor%}
-            
-            {% if  func_area.count > 8  %}
-
-            <div class="load_more_button" id="loadmorebtn" onclick="loadmore();">Load more</div>
-        {% endif %}
     </div>
-</div>
-
     <div class="practice-test check-result-wrap pt-30" id="check_results">
         <div class="practice-test-inside"></div>
         <div class="back" id="close"></div>
@@ -224,11 +257,18 @@
                  $('#loadmorebtn').hide();
                }
                for (fa in json.results){
-                element.innerHTML= element.innerHTML +
-                `<div class="functional_test_inside border-${color}">
-                <a href="/practice-tests/${json.results[fa].slug}">
-                <span class= "icon"><img alt="fa-icon" src = "${json.results[fa].icon}"
-                </span>${json.results[fa].name} </a></div>`;
+               color = counter(facolor);
+               element.innerHTML= element.innerHTML +
+                `<div class="functional_area_inside border-${color}">
+               <a title="${json.results[fa].name}" href="/practice-tests/${json.results[fa].slug}">
+                <span class="functional_area_inside--image">
+                <img class="image-responsive" alt="fa-icon" src="${json.results[fa].icon}"></span>
+                <span class="fa_name">
+                ${json.results[fa].name}
+                </span>
+                </a>
+                </div>`;
+                facolor +=1;
                }
                },
                error: function(xhr, ajaxOptions, thrownError) {
@@ -276,6 +316,7 @@
         $('#startTestLink').attr('href','/practice-tests/'+ modalobject.testSlug +'-test/');
         $('#testAddToCart').click( function()
          {
+            ga('send', 'event', 'Buy Flow', 'Enroll Now',modalobject.productId);
             updateToCart(modalobject.productId,'cart');
          }
       );

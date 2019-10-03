@@ -13,7 +13,7 @@ function order_get_details(o_id,key,element,counter='1'){
             },
             dataType: "json",
             success: function(data,textStatus, jqXHR) {
-                btn.style.visibility= "hidden";
+                btn.style.display= "none";
                 $('#'+element+'_field'+ o_id+'_'+counter).text("");
                 for (key in data){
                     $('#'+element+'_field' + o_id+'_'+counter).append(key+'- '+data[key] + '</br>');
@@ -23,7 +23,7 @@ function order_get_details(o_id,key,element,counter='1'){
                 if (xhr.status !=200){
                     $('#'+element+'_field'+ o_id+'_'+counter).text("N.A");
                     btn.removeAttr('disabled');
-                    btn.style.visibility= "block";
+                    btn.style.display= "block";
 
                 }
             }

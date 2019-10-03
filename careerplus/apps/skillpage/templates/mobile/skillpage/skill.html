@@ -31,7 +31,7 @@
             </div>
 
             <div class="pull-right" style="width:90%;">
-                <a class="icon-cart pull-right" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+                <a class="icon-cart pull-right" href="{% url 'cart:cart-product-list' %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
                 <form method='get' id="search-form">
                     <div class="searchbox">
                         <input id='id_q' type="text" placeholder="Search here" name="search" class="searchbox-input" autocomplete="off">
@@ -171,7 +171,21 @@
                         </ul>
                     </div>
                 </div><!-- end of Recommended for -->
+		{% if category_obj.assessment_test_count %}
+                <div class="container">
+                    <div class="freeTest-widget">
+                        <div class="freeTest-widget--image">
+                            <h2 class="fs-18">Confused about buying?</h2>
+                            <img src="{% static 'shinelearn/images/mobile/practice_test/free-test.png' %}" alt="banner" class="img-responsive">
+                        </div>
 
+                        <div class="freeTest-widget__content text-center mt-15">
+                            <p>Take our free practice test in <strong>{{category_obj.heading}}</strong>, to know where you stand</p>
+                            <a href="{% url 'assessment:vskill-subcategory' slug=category_obj.slug %}" class="btn btn-blue mt-15">Take free test</a>
+                        </div>
+                    </div>
+                </div>
+         {% endif %}
 
                  {% if widget_objs %}
                     <div class="w100fl">
@@ -321,7 +335,6 @@
 {% block js_section %}
     {{block.super}}
 <script>
-
 /***CENTER CROP IMAGE***/
 function CenterCropImage(x) {
 	x.each(function () {
@@ -374,8 +387,12 @@ CenterCropImage($('.cropcenterimg li a'));
 });
 
 </script>
+<script type="text/javascript">
+        var request_amp = "{{amp}}";
+</script>
 
-    {% compress js %}
+{% compress js %}
+
     <script src="{% static 'shinelearn/js/skill/skillpage.js' %}"></script>
     <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
     <script src="{% static 'shinelearn/js/mobile/common/base.js' %}"></script>

@@ -45,6 +45,7 @@ from order.tasks import (
 from shop.models import Skill, DeliveryService, ShineProfileData
 from blog.models import Blog
 from emailers.tasks import send_email_task
+from payment.models import PaymentTxn
 
 from .serializers import (
     OrderListHistorySerializer,
@@ -401,8 +402,8 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                     invoice_generation_order.delay(order_pk=order.pk)
 
                     # email for order
-                    process_mailer.apply_async((order.pk,), countdown=900)
-                    pending_item_email.apply_async((order.pk,), countdown=900)
+                    process_mailer.apply_async((order.pk,), countdown=settings.MAIL_COUNTDOWN)
+                    pending_item_email.apply_async((order.pk,), countdown=settings.MAIL_COUNTDOWN)
 
                     return Response(
                         {"status": 1, "msg": 'order created successfully.'},
@@ -898,9 +899,9 @@ class ShineCandidateLoginAPIView(APIView):
     def get_profile_info(self, profile):
         candidate_profile_keys = ['first_name', 'last_name', 'email', 'number', 'date_of_birth', 'location', 'gender',
                                   'candidate_id']
-        candidate_profile_values = [profile['first_name'], profile['last_name'], profile['email'],
-                                    profile['cell_phone'], profile['date_of_birth'],
-                                    profile['candidate_location'], profile['gender'], profile['id']]
+        candidate_profile_values = [profile.get('first_name',''), profile.get('last_name', ''), profile.get('email',''),
+                                    profile.get('cell_phone',''), profile.get('date_of_birth',''),
+                                    profile.get('candidate_location',''), profile.get('gender',''), profile.get('id','')]
         candidate_profile = dict(zip(candidate_profile_keys, candidate_profile_values))
 
         return candidate_profile
@@ -1170,14 +1171,21 @@ class UpdateCertificateAndAssesment(APIView):
                         (str(certificate.name), str(user_certificate.candidate_id))
                     )
         if getattr(parsed_data.user_certificate, 'order_item_id'):
-            if user_certificates:
-                flag = parser.update_order_and_badge_user(parsed_data, vendor=data['vendor'])
-            else:
+            if not user_certificates:
                 logging.getLogger('error_log').error(
                     "Order Item id present , Certificate not available, badging not done" % (data)
                 )
             orderitem_id = int(parsed_data.user_certificate.order_item_id)
             oi = OrderItem.objects.filter(id=orderitem_id).first()
+            if certificate_updated:
+                oi.orderitemoperation_set.create(
+                    oi_status=191,
+                    last_oi_status=oi.oi_status,
+                    assigned_to=oi.assigned_to
+                )
+                subject = "Congrats, {} on completing the certification on {}".format(
+                    oi.order.first_name, oi.product.name
+                )
             last_oi_status = oi.oi_status
             oi.oi_status = 4
             oi.closed_on = timezone.now()
@@ -1187,21 +1195,10 @@ class UpdateCertificateAndAssesment(APIView):
                 oi_status=6,
                 last_oi_status=last_oi_status,
                 assigned_to=oi.assigned_to)
-            if certificate_updated:
-                oi.orderitemoperation_set.create(
-                    oi_status=191,
-                    last_oi_status=last_oi_status,
-                    assigned_to=oi.assigned_to
-                )
-                if flag:
-                    oi.orderitemoperation_set.create(
-                        oi_status=192,
-                        last_oi_status=last_oi_status,
-                        assigned_to=oi.assigned_to
-                    )
-                    subject = "Congrats, {} on completing the certification on {}".format(
-                        oi.order.first_name, oi.product.name
-                    )
+            oi.orderitemoperation_set.create(
+                oi_status=oi.oi_status,
+                last_oi_status=oi.last_oi_status,
+                assigned_to=oi.assigned_to)
             to_emails = [oi.order.get_email()]
             mail_type = "CERTIFICATE_AND_ASSESMENT"
             data = {}
@@ -1218,10 +1215,6 @@ class UpdateCertificateAndAssesment(APIView):
             })
             create_assignment_lead.delay(obj_id=oi.id)
             send_email_task.delay(to_emails, mail_type, data, status=201, oi=oi.pk)
-            oi.orderitemoperation_set.create(
-                oi_status=oi.oi_status,
-                last_oi_status=oi.last_oi_status,
-                assigned_to=oi.assigned_to)
         else:
             logging.getLogger('error_log').error(
                 "Order Item id not present , so unable close item related to this data ( %s ) " % (data)
@@ -1532,6 +1525,53 @@ class ServerTimeAPIView(APIView):
         if self.request.GET.get('time_stamp'):
             return Response({'time': datetime.datetime.timestamp(datetime.datetime.now())})
         return Response({'time':datetime.datetime.now().strftime(self.time_format)})
+
+
+class ClaimOrderAPIView(APIView):
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    def post(self,request):
+        txn_id = self.request.POST.get('txn_id',None)
+        email = self.request.POST.get('email',None)
+        alt_email = self.request.POST.get('alt_email',None)
+        mobile = self.request.POST.get('mobile',"")[-10:]
+        alt_mobile = self.request.POST.get('alt_mobile',"")[-10:]
+        user_id = self.request.POST.get('user_id',None)
+        lead_id = self.request.POST.get('lead_id',None)
+        name = self.request.POST.get('name', None)
+
+        sales_user_info = self.request.POST.get('sales_user_info')
+        data = {'claim_order': False}
+        if not txn_id:
+            data.update({'msg': "Transaction id not found"})
+            return Response(data, status=400)
+        payment_object = PaymentTxn.objects.filter(txn=txn_id,status=1).first()
+        if not payment_object:
+            data.update({'msg': "Transaction object not found "})
+            return Response(data, status=400)
+        order = payment_object.order
+        if not order:
+            data.update({'msg': "Order object not found "})
+            return Response(data,  status=400)
+        if (email and getattr(order, 'email') == email) or\
+                (mobile and getattr(order, 'mobile') == mobile) or\
+                 (name and order.full_name == name):
+            if order.sales_user_info or order.crm_lead_id or order.crm_sales_id:
+                data.update({'msg': "Order is already claimed"})
+                return Response(data, status=400)
+            if not user_id or not lead_id or not sales_user_info:
+                return Response(data, status=400)
+            order.crm_lead_id = lead_id
+            order.crm_sales_id = user_id
+            order.sales_user_info = sales_user_info
+            order.save()
+            data.update({'claim_order': True,'msg': 'Order claimed '
+                         'successfully','order_amount':order.total_incl_tax})
+            return Response(data)
+        data.update({"msg": "Invalid details"})
+        return Response(data, status=400)
+
 
 
 

@@ -21,4 +21,9 @@ $(document).ready(function() {
     $('#id_filter').click(function(){
         $('#list-filter-form').submit();
     });
+
 });
+
+function sort(){
+      $('#sort_form').submit();
+    };

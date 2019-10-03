@@ -24,6 +24,7 @@
         $('#startTestLink').attr("href",'/practice-tests/'+ modalobject.testSlug +'-test/');
         $('#testAddToCart').click( function()
          {
+            ga('send', 'event', 'Buy Flow', 'Enroll Now',modalobject.productId);
             updateToCart(modalobject.productId,'cart');
          }
       );
@@ -104,3 +105,10 @@ function testSession(data){
                 }
             });
         }
+
+
+      function counter(facolor){
+
+    return facolor%9;
+
+   }

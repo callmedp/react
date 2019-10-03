@@ -1,3 +1,4 @@
+from django.conf import settings
 from rest_framework.generics import ListAPIView
 from shop.api.v1.serializers import CategorySerializer
 from shop.models import Category
@@ -39,26 +40,24 @@ class CategoryApiView(FieldFilterMixin,ListAPIView):
 
     def get_level3_test_category(self,val=False):
         queryset = Category.objects.all()
-        filter_dict = {}
-        if self.request.query_params.get('only_test_level3category') or val:
-            filter_dict.update({'category__categoryproducts__type_flow': 16,'category__active': True})
-
+        filter_dict = {'active': True}
+        level3_ids = set(Test.objects.exclude(category=None).values_list('category__id',flat=True))
+        categories = set(Test.objects.values_list('categories__id',flat=True).exclude(categories=None))
+        level3_ids = list(filter(None,level3_ids|categories))
         if self.request.query_params.get('test_category_id'):
-            filter_dict.update({'category__related_to':self.request.query_params.get('test_category_id')})
+            filter_dict.update({'related_to__id':self.request.query_params.get('test_category_id')})
 
-        level3_ids = list(set(Test.objects.filter(**filter_dict).\
-                             values_list('category__id',flat=True)))
-
-        return queryset.filter(id__in=level3_ids)
+        return queryset.filter(id__in=level3_ids).filter(
+            **filter_dict).order_by('created')
 
     def get_level2_test_category(self):
         filter_dict = {}
         queryset = self.get_level3_test_category(val=True)
-        filter_dict.update({'from_category__active': True,'from_category__is_main_parent': True})
+        filter_dict.update({'from_category__active': True})
 
         queryset = list(set(queryset.filter(**filter_dict).\
                             values_list('from_category__related_to__id', flat=True)))
-        return Category.objects.filter(id__in=queryset, active=True)
+        return Category.objects.filter(id__in=queryset, active=True).exclude(id__in=settings.TEST_PREP_ID)
 
     def get_queryset(self):
         queryset = None
@@ -72,9 +71,7 @@ class CategoryApiView(FieldFilterMixin,ListAPIView):
         if self.request.query_params.get('type_flow'):
             type_flow = self.request.query_params.get('type_flow').split(',')
             filter_dict.update({'type_flow__in': type_flow})
-        if self.request.query_params.get('only_test_level2category'):
-            pass
-        return queryset
+        return queryset.filter(**filter_dict)
 
 
 class TestApiView(FieldFilterMixin, ListAPIView):

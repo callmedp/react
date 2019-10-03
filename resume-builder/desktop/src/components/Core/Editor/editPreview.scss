@@ -1,0 +1,72 @@
+@import '../../../styles/variables/vars.scss';
+@import '../../../styles/variables/mixins.scss';
+
+.sticky-msg {
+	display: table;
+	box-shadow: 0 3px 25px 0 rgba(198,198,198,0.50);
+	border-radius: 4px;
+	padding: 20px;
+	width: 325px;
+	position: fixed;
+    right: 5%;
+    bottom: -1%;
+    background: $white;
+    animation: 1s ease-out 0s 1 slideInFromRight;
+
+	span {
+		display: table-cell;
+		vertical-align: top;
+
+		figure {
+			width: 90px;
+			height: 90px;
+			box-shadow: 0 3px 25px 0 rgba(198,198,198,0.50);
+			border-radius: 100%;
+			background: $white;
+			margin-right: 20px;
+			text-align: center;
+			vertical-align: middle;
+			font-size: 1.3rem;
+			font-weight: 600;
+			padding-top: 18px;
+
+			.icon-thumbsup {
+				display: block;
+				text-align: center;
+				margin: 0 auto 5px auto;
+				padding-top: 20px;
+			}
+		}
+
+		strong {
+			font-size: 1.6rem;
+			color: $black;
+			font-weight: 600;
+			display: block;
+		}
+
+		p {
+			color: $txt1;
+			font-size: 1.3rem;
+			line-height: 17px;
+			margin: 15px 0;
+		}
+
+		.orange-button {
+			color: $white;
+		}
+	}
+
+	.icon-close {
+		cursor: pointer;
+	}
+}
+
+@keyframes slideInFromRight {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}

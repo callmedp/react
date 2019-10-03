@@ -49,10 +49,10 @@ class Header extends Component {
                     {!!(page === 'home') &&
                     <ul className="home-links">
                         <li>
-                            <a href="#work" onClick={() => this.scrollTo('works',-63,'Howitworks_Header','Header')}>How it Works</a>
+                            <span  onClick={() => this.scrollTo('works',-63,'Howitworks_Header','Header')}>How it Works</span>
                         </li>
                         <li>
-                            <a href='#template'onClick={() => this.scrollTo('templates',-50,'Templates','Header')}>Templates</a>
+                            <span onClick={() => this.scrollTo('templates',-50,'Templates','Header')}>Templates</span>
                         </li>
                     </ul>
                     }

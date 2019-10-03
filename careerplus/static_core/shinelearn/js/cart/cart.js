@@ -583,6 +583,7 @@ $(document).ready(function(){
         $('#add-to-cart').attr('disabled', true);
 
         var prod_id = $('#add-to-cart').attr('prod-id');
+        ga('send', 'event', 'Buy Flow', 'Enroll Now',prod_id);
         // required options ie. for countries and product varification
 
         var req_options = [];
@@ -669,6 +670,7 @@ $(document).ready(function(){
     $(document).on( "click", "#enrol-now-button", function(e){
         e.preventDefault();
         var prod_id = $('#enrol-now-button').attr('prod-id');
+        ga('send', 'event', 'Buy Flow', 'Enroll Now',prod_id);
 
         var req_options = [];
         if ($('input[name="required_option"]').length){

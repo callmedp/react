@@ -18,6 +18,7 @@
                     {% endif %}
                 </a>
             </div>
+
             <div class="media-body">
                 <p class="pb-0"><a href="{{site}}{{product.pURL}}">
                     <strong>{{product.pNm}}</strong></a>
@@ -55,7 +56,27 @@
                 <p class="pb-0 fs-12">
                     Starting at <strong>Rs. {{ product.pPin |floatformat:'0' }}/-</strong>{% if product.pPfin|floatformat:0|add:"0" %}<strike>Rs. {{ product.pPfin|floatformat:"0" }}/-</strike> <span class="discount">{{ product.discount }}% OFF</span>{% endif %}
                 </p>
+                	{% if product.id|get_value:prod_tests %}
+                <a href="{% url 'assessment:vskill-exam' slug=product.id|get_value:prod_tests  %}"  class="btn btn-sm btn-blue mt-15">Take free test</a>
+                {% endif %}
             </div><!-- end of media body -->
         </div><!-- end of media -->
     </div><!-- end of box -->
 {% endfor %}
+{% if certifications.has_next %}
+    <div id='cert_load_more_mobile' class="loadmore">
+            <div id = "cert_loader_mobile" style ="display:none" class="loadmore__loader">
+                <img aria-label="loader"  src="{% static 'shinelearn/images/loader.gif' %}" class="img-responsive" >
+            </div>
+        <p class="text-center pb-0">
+            <a role="button" id="certification_load_more_mobile"
+            class="load-more loadmore">
+            <strong>Load More</strong></a>
+        </p>
+        <div id="cert_load_more">
+                <input type="hidden" name="page"
+                value="{{certifications.next_page_number}}" id="cert_page_id">
+                <input type="hidden" name="slug" value="{{category_obj.pk}}" id="ctg_id">
+        </div>
+    </div>
+{% endif %}

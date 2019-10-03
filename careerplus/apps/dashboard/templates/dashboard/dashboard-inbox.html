@@ -10,6 +10,7 @@
         {% compress css %}
         <link type="text/scss" href="{% static 'shinelearn/css/dashboard/dashboard.scss' %}" rel="stylesheet">
         {% endcompress %}
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.min.css" rel="stylesheet" />
             <style>
               .reject-msg .input-file .upload-file {
                 top: -14px !important;
@@ -20,6 +21,7 @@
             </style>
 
     {% endblock css_section %}
+    
     
     <!-- main section start -->
     {% block main_container %}
@@ -148,9 +150,12 @@
 
     {% block js_section %}
         {{block.super}}
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.all.min.js"></script>
         {% compress js %}
-        <script src="{% static 'shinelearn/js/dashboard/dashboard.js' %}"></script>
+          <script src="{% static 'shinelearn/js/dashboard/dashboard.js' %}"></script>
+          <script type="text/javascript" src="{% static "shinelearn/js/common/toast.js" %}"></script>
         {% endcompress %}
+        
         {% if ref_item_id and ref_rating %}
           <script type="text/javascript">
               giveFeedbackOrderitem('{{ref_item_id}}','rating{{ref_rating}}');

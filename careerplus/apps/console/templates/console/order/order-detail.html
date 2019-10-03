@@ -1,4 +1,5 @@
 {% extends "console/base_console.html" %}
+{% spaceless %}
 {% load static compress %}
 {% load humanize %}
 {% load thumbnail %}
@@ -32,8 +33,7 @@
                      <h2 class="order_details__name">{{order.first_name}} {{order.last_name}}</h2>
                      <p>
                        <i class="icon-callsm"></i><span id="mobile_field{{order.id}}_1"></span>
-                        <button class="round_btn" onclick="order_get_details('{{order.id}}','mobile,alt_mobile','mobile')";>C
-                        lick to view</button>
+                        <button class="round_btn" onclick="order_get_details('{{order.id}}','mobile,alt_mobile','mobile')";>Click to view</button>
                      </p>
                      <p><i class="icon-emailsm"></i> <span id="email_field{{order.id}}_1"></span> <button class="round_btn" onclick="order_get_details('{{order.id}}','email,alt_email','email')";>Click to view</button></p>
                      <button class="blue_btn mt-10" data-toggle="modal" data-target="#alternatecontact_modal">Add Alternate contact</button>
@@ -156,33 +156,40 @@
 
                <div class="col-md-2 order_details_table__status">
                             <strong>{{obj.get_oi_status}}</strong>
-
                   <span>{{obj.modified}}</span>
 
                <!--API TO BE MADE FOR obj-->
-                   {% comment %}
-                      <!--{% for op in obj.get_oi_operations.first %}-->
-         <!---->
-                   <!--<strong>{{op.get_oi_status}}</strong>-->
-                   <!---->
-                   data-toggle="modal" data-target="#allactions_modal"
-                           {% endcomment %}
-                  <button class="round_btn mt-30" onclick="allActionModal({{obj.id}})";>View all actions</button>
-
-
+                      {% for op in obj.get_oi_operations %}
+                   {% if forloop.counter == 1 %}
+                   <strong>{{op.get_oi_status}}</strong>
+                       <br/>
+                   {% endif %}
+                   {% if forloop.counter == 2 %}
+                   <button class="round_btn mt-30" id="viewAllActionBtn"  data-toggle="modal" data-target="#allactions_modal" onclick="allActionModal({{obj.id}})";>View all actions</button>
+                            {% endif %}
+                              {% endfor %}
                </div>
                <div class="col-md-4 order_details_table__message">
                   <p>
-                     <span class="db">This course is best for your career.</span>
-                     <strong>Vishal Gupta,</strong> <span class="time">Aug 2, 2019, 2:31 p.m</span>
-                     <button class="round_btn mt-10 db" data-toggle="modal" data-target="#allmessages_modal">Read all</button>
+                       {% for msg in obj.get_oi_communications %}
+                      {% if forloop.counter == 1 %}
+                     <span class="db"> {{msg.message}}</span>
+                     <strong>{% if msg.added_by %}{{msg.added_by.name}}{% else %}{{order.first_name}}{% endif %}</strong> <span class="time">{{msg.created.date}}</span>
+                                  {% endif %}
+                        {% if forloop.counter == 2 %}
+                     <button class="round_btn mt-10 db" data-toggle="modal" data-target="#allmessages_modal" onclick="allMessage({{obj.pk}})">Read all</button>
+                            {% endif %}
+                 {% endfor %}
                   </p>
-                  <form>
-                     <textarea rows="2" placeholder="Type message here"></textarea>
-                     <label class="mt-10">
-                     <input type="checkbox"> For Internal Users Only
+
+                  <form  autocomplete="off" id="message-add-form{{obj.pk}}" method="post"  data-parsley-validate class="form-horizontal form-label-left">
+                      {% csrf_token %}
+                      <textarea rows="2" name="message" id="id_message" required placeholder="Type message here"></textarea>
+                        <label class="mt-10">
+                        <input type="checkbox" name="is_internal" id="id_is_internal" checked data-parsley-multiple="is_internal" > For Internal Users Only
                      </label>
-                     <button class="blue_btn pull-right mt-10">Submit</button>
+                      <input type="hidden" name="pk" value="{{obj.pk}}">
+                     <button class="blue_btn pull-right mt-10" type="button" onclick="submitMessage('{{obj.pk}}',)">Submit</button>
                   </form>
                </div>
             </div>
@@ -617,6 +624,7 @@
                                    {% if obj.oi_draft or op.linkedin %}
                                    <tr>
                                      <td colspan="4">
+
                                        <form autocomplete="off" role="form" method="post"  data-parsley-validate enctype="multipart/form-data"
                                        id="draft-upload-form{{obj.pk}}">{% csrf_token %}
                                        {{draft_form.file}}
@@ -626,6 +634,7 @@
                                        </div>
                                        <button type="button" onclick="clickSubmitDraft('{{obj.pk}}',)" class="btn btn-success btn-xs">Submit</button>
                                        </form>
+
                                        <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="draftmodal{{obj.pk}}">
                                          <div class="modal-dialog modal-lg">
                                            <div class="modal-content">
@@ -635,16 +644,22 @@
                                                </button>
                                                <h4 class="modal-title" id="myModalLabel">Draft Upload</h4>
                                              </div>
+
                                              <div class="modal-body" id="myModalbody{{obj.pk}}">
                                                Are You Sure???
                                              </div>
+
                                              <div class="modal-footer">
                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                                <button type="button" id="uploadDraftAction{{obj.pk}}" data-dismiss="modal" class="btn btn-primary" onclick="detailPageUploadDraft('{{obj.pk}}',)">Yes</button>
                                              </div>
+
                                            </div>
+
                                          </div>
+
                                        </div>
+
                                      </td>
                                    </tr>
                                    {% endif %}
@@ -714,7 +729,12 @@
 </div>
 <!-- /page content -->
 {% endblock pagecontent %}
+
+{% endspaceless %}
 {% block js_block %}
+<script>
+    var maxDraft = {{max_limit_draft}}
+</script>
 {{ block.super }}
 {% compress js %}
 <!-- Parsley Validate Scripts -->

@@ -10,17 +10,14 @@
 {% compress css %}
 <link href="{% static 'packages/iCheck/skins/flat/green.css' %}" rel="stylesheet" type="text/css">
 <link type="text/css" href="{% static 'console/css/datepicker/daterangepicker.css' %}" rel="stylesheet">
-{% endcompress %}
-{% compress css inline %}
-<style type="text/css">
-	.error{
-	color: red;
-	}
-</style>
+<link type="text/css" href="{% static 'console/css/midout/midout.css' %}" rel="stylesheet">
 {% endcompress %}
 {% endblock css_block %}
 {% block pagecontent %}
 <!-- page content -->
+<div class="loader-div">
+  <img src="{% static 'console/images/loader.gif' %}" alt="Loading Icon" class="loader-image">
+</div>
 <div class="right_col" role="main">
 	<div class="">
 		<div class="page-title">
@@ -234,15 +231,7 @@
 										<b>Updated On: {{obj.modified}}</b>
 									</td>
 									<td>
-										<form autocomplete="off" data-parsley-validate method="POST" action="." enctype="multipart/form-data" id="resume-upload-form{{obj.pk}}">
-											{% csrf_token %}
-											{{form.oi_resume}}
-											<div style="display:none">
-												<input type="hidden" name="oi_pk" value="{{obj.pk}}">
-											</div>
-											</br>
-											<button type="button" id="uploadbutton{{obj.pk}}" onclick="upload_click({{obj.pk}});" class="btn btn-primary btn-xs"><i class="fa fa-upload"> Upload Document</i></button>
-										</form>
+										<button type="button" onclick="getOrderItems({{obj.pk}});" class="btn btn-primary btn-xs"><i class="fa fa-upload"> Upload Document</i></button>
 									</td>
 								</tr>
 								{% endfor %}
@@ -305,17 +294,42 @@
 	</div>
 </div>
 </div>
+<!-- modal for uploading document-->
+      <div class="modal fade" tabindex="-1" role="dialog" id="upload-doc-modal">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">Mid Out Upload Document</h4>
+            </div>
+            <div class="modal-body">
+              <div class="row modal-item">
+                <form autocomplete="off" data-parsley-validate method="POST" action="." enctype="multipart/form-data" id="resume-upload-form">
+					{% csrf_token %}
+					{{form.oi_resume}}
+					</br>
+					<div>
+                    	<input type="hidden" name="oi_ids" id="oi_ids" value="">
+                	</div>
+				</form>
+				<div id="order-items">
+				</div>
+				<br>
+				<ul class="parsley-errors-list filled" id="oi_item_error"><li class="parsley-required">Select Atleast 1 order item</li></ul>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" onclick="upload_click()"><i class="fa fa-upload">Upload Document</i></button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+<!-- end modal-->
 <!-- /page content -->
 {% endblock pagecontent %}
 {% block js_block %}
 {{ block.super }}
-<script>
-	function upload_click(pk){
-	   $("#uploadbutton"+pk).attr('disabled','true');
-	   $("#resume-upload-form"+ pk).submit();
-	}
-
-</script>
 {% compress js %}
 <!-- Parsley Validate Scripts -->
 <script type="text/javascript" src="{% static 'console/js/order/exotelCall.js' %}"></script>
