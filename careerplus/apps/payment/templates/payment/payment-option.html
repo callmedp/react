@@ -15,7 +15,6 @@
         <link href="{% static 'shinelearn/css/bootstrap-datepicker.min.css' %}" rel="stylesheet">
         <link type="text/scss" href="{% static 'shinelearn/css/cart/payment.scss' %}" rel="stylesheet">
     {% endcompress %}
-    {% compress css inline %}
         <style type="text/css">
             .danger-txt {
                 color: red;
@@ -24,11 +23,10 @@
             .error {
                 color: red;
             }
-            .center-align{
-            text-align:center;
+            .center-align {
+                text-align: center;
             }
         </style>
-    {% endcompress %}
 {% endblock css_section %}
 
 {% block navigation %}
