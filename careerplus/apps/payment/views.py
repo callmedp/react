@@ -225,7 +225,7 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         line_item = self.cart_obj.lineitems.filter(parent=None)[0]
         type_flow = int(line_item.product.type_flow)
         # Fallback for cart object not being properly updated. TODO FIND SOURCE OF ISSUE
-        email_id = self.cart_obj.owner_email or self.cart_obj.email or self.request.session.get('email',''),
+        email_id = self.cart_obj.owner_email or self.cart_obj.email or self.request.session.get('email','')
         first_name = self.cart_obj.first_name or self.request.session.get('first_name')
         state_list = self.get_state_list()
         guest_login = True
