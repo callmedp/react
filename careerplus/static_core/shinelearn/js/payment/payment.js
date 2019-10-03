@@ -22,12 +22,12 @@ $(document).ready(function () {
             if (data.length > 0) {;
                 $("#zest-emi-head").text("EMI Options");
                 $.each(data, function(index, plan) {
-                    $("#emi-" + index + "-months").text("No. Of Months : " + plan['number_of_months']);
-                    $("#emi-" + index + "-monthly-amount").text("Monthly Amount : " + (plan['total_monthly_amount'] - plan['interest_amount'] / plan['number_of_months']));
-                    $("#emi-" + index + "-interest").text("Interest : " + plan['interest_amount']);
-                    $("#emi-" + index + "-interest-rate").text("Interest rate : " + plan['interest_rate']);
-                    $("#emi-" + index + "-down-payment").text("Down Payment : " + plan['down_payment_amount']);
-                    $("#emi-" + index + "-total-amount").text("Loan Amount : " + (plan['loan_amount']));
+                    $("#emi-" + index + "-months").text( plan['number_of_months']);
+                    $("#emi-" + index + "-monthly-amount").text((plan['total_monthly_amount'] - plan['interest_amount'] / plan['number_of_months']));
+                    $("#emi-" + index + "-interest").text( plan['interest_amount']);
+                    $("#emi-" + index + "-interest-rate").text( plan['interest_rate'] + '%');
+                    $("#emi-" + index + "-down-payment").text(plan['down_payment_amount']);
+                    $("#emi-" + index + "-total-amount").text((plan['loan_amount'] + plan['interest_amount'] + plan['down_payment_amount']));
                     $("#emi-block-" + index ).show();
                 });
             }

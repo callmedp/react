@@ -24,6 +24,9 @@
             .error {
                 color: red;
             }
+            .center-align{
+            text-align:center;
+            }
         </style>
     {% endcompress %}
 {% endblock css_section %}
@@ -241,25 +244,28 @@
                               <th scope="col">Month</th>
                               <th scope="col">Monthly EMI</th>
                               <th scope="col">Interset</th>
+                              <th scope="col">Interset Rate</th>
                               <th scope="col">Down payment</th>
-                              <th scope="col">Loan Amount</th>
+                              <th scope="col">Total Amount</th>
                             </tr>
                           </thead>
                           <tbody class="thead-light">
                             <tr>
-                              <td>6</td>
-                              <td>Rs.7,875</td>
-                              <td>1.53%</td>
-                              <td>Rs.11,875</td>
-                              <td>Rs.81,875</td>
+                              <td class="center-align" id="emi-0-months"></td>
+                              <td class="center-align" id="emi-0-monthly-amount"></td>
+                              <td class="center-align" id="emi-0-interest" ></td>
+                              <td class="center-align" id="emi-0-interest-rate" ></td>
+                              <td class="center-align" id="emi-0-down-payment"></td>
+                              <td class="center-align" id="emi-0-total-amount"></td>
                             </tr>
                             
                             <tr>
-                              <td>9</td>
-                              <td>Rs.7,875</td>
-                              <td>1.53%</td>
-                              <td>Rs.11,875</td>
-                              <td>Rs.81,875</td>
+                              <td class="center-align" id="emi-1-months"></td>
+                              <td class="center-align" id="emi-1-monthly-amount"></td>
+                              <td class="center-align" id="emi-1-interest" ></td>
+                              <td class="center-align" id="emi-1-interest-rate" ></td>
+                              <td class="center-align" id="emi-1-down-payment"></td>
+                              <td class="center-align" id="emi-1-total-amount"></td>
                             </tr>
                           </tbody>
                         </table>
