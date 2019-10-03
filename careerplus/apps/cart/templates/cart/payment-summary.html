@@ -146,7 +146,7 @@ Payment Summary - Shine Learning
                   {% for delivery_obj in delivery_types %}
                   <li class='delivery-toggle-action'>
                     <input type="radio" name="{{item.id}}" class="delivery-toggle-action"
-                      id="{{delivery_obj.slug}}{{item.id}}" {% if forloop.counter0 == delivery_service|get_count %}
+                      id="{{delivery_obj.slug}}{{item.id}}" {% if delivery_obj.slug == delivery_service|get_slug %}
                       checked {%endif %} name="delivery-list"
                       onclick="selectDeliveryType('{{delivery_obj.id}}', '{% if variations|length  %} {{variations.0.id}} {% else %} {{item.id}} {% endif %}', '{{csrf_token}}', '{{item.id}}')"
                       value="19">

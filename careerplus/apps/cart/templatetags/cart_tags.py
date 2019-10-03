@@ -10,10 +10,10 @@ def is_free(price):
     return int(price) == 0
 
 @register.filter
-def get_count(delivery_service):
+def get_slug(delivery_service):
     if delivery_service:
-        return 3 - int(delivery_service.id)
-    return 0
+       return delivery_service.slug
+    return 'normal'
 
 @register.filter
 def get_cart_info(request):

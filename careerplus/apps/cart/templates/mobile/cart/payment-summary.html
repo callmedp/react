@@ -144,7 +144,7 @@
                                 {% for delivery_obj in delivery_types %}
                                 <li>
                                     <input type="radio" class="delivery-toggle-action" name="{{item.id}}" id="{{delivery_obj.slug}}{{item.id}}"
-                                        {% if forloop.counter0 == delivery_service|get_count %} checked {%endif %}
+                                        {% if delivery_obj.slug == delivery_service|get_slug %} checked {%endif %}
                                         name="delivery-list"
                                         onclick="selectDeliveryType('{{delivery_obj.id}}', '{% if variations|length  %} {{variations.0.id}} {% else %} {{item.id}} {% endif %}', '{{csrf_token}}', '{{item.id}}')"
                                         value="19">
