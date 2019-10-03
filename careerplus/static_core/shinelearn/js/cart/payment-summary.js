@@ -245,8 +245,9 @@ function JSRemoveDiscount(e) {
 
         },
         error: function (result, status, err) {
+     
+                    
 
-          
             if (result && result.status == 400) {
                 alert_message = result.responseJSON;
                 alert_message = alert_message.error;
