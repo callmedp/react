@@ -97,24 +97,30 @@ urlpatterns = [url(r'^services/%s/%s/$' % (cat_slug, cat_id),
 urlpatterns += [
     url(r'^robots.txt$', TemplateView.as_view(
         template_name='robots.txt', content_type='text/plain')),
-    url(r'^certification_course_sitemap\.xml$', cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
-        'sitemaps': course_sitemap,
-        'template_name': 'sitemap.xml'}, name='sitemap'),
-    url(r'^job_services_sitemap\.xml$', cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
-        'sitemaps': service_sitemap,
-        'template_name': 'sitemap.xml'}, name='sitemap'),
-    url(r'^article_sitemap\.xml$', cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
-        'sitemaps': article_sitemap,
-        'template_name': 'sitemap.xml'}, name='sitemap'),
-    url(r'^cms_sitemap\.xml$', cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
-        'sitemaps': cms_sitemap,
-        'template_name': 'sitemap.xml'}, name='sitemap'),
-    url(r'^te_sitemap\.xml$', cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
-        'sitemaps': talent_sitemap,
-        'template_name': 'sitemap.xml'}, name='sitemap'),
-    url(r'^practice-tests\.xml$', cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
-        'sitemaps': practicetest_sitemap,
-        'template_name': 'sitemap.xml'}, name='sitemap'),
+    url(r'^certification_course_sitemap\.xml$',
+        cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
+            'sitemaps': course_sitemap,
+            'template_name': 'sitemap.xml'}, name='sitemap'),
+    url(r'^job_services_sitemap\.xml$', 
+        cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
+            'sitemaps': service_sitemap,
+            'template_name': 'sitemap.xml'}, name='sitemap'),
+    url(r'^article_sitemap\.xml$', 
+        cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
+            'sitemaps': article_sitemap,
+            'template_name': 'sitemap.xml'}, name='sitemap'),
+    url(r'^cms_sitemap\.xml$', 
+        cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
+            'sitemaps': cms_sitemap,
+            'template_name': 'sitemap.xml'}, name='sitemap'),
+    url(r'^te_sitemap\.xml$', 
+        cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
+            'sitemaps': talent_sitemap,
+            'template_name': 'sitemap.xml'}, name='sitemap'),
+    url(r'^practice-tests\.xml$', 
+        cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
+            'sitemaps': practicetest_sitemap,
+            'template_name': 'sitemap.xml'}, name='sitemap'),
 
     url(r'^course/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='course-detail'),
@@ -132,13 +138,11 @@ urlpatterns += [
     url(r'^online-courses.html$',
         CourseCatalogueView.as_view(), name='course-catalogoue'),
 
-    url(r'^courses/(?P<sc_slug>[a-z\-]+)/$', LocationSkillPageView.as_view(), name='location-skillpage'),
+    url(r'^courses/(?P<sc_slug>[a-z\-]+)/$', 
+        LocationSkillPageView.as_view(), 
+        name='location-skillpage'),
 
     url(r'^', include('assessment.urls', namespace='assessment')),
-
-
-
-
 
     # url(r'^job-assistance/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
     #     ProductDetailView.as_view(), name='job-assist-detail'),
@@ -212,15 +216,7 @@ urlpatterns += [
 
                    url(r'^about-us$',
                        homepage_view.AboutUsView.as_view(), name='about-us'),
-                   url(r'^disclaimer$',
-                       homepage_view.DisclaimerView.as_view(), name='disclaimer'),
 
-                   url(r'^privacy-policy$',
-                       homepage_view.PrivacyPolicyView.as_view(),
-                       name='privacy-policy'),
-                   url(r'^tnc$',
-                       homepage_view.TermsConditionsView.as_view(),
-                       name='tnc'),
                    url(r'^contact-us$',
                        homepage_view.ContactUsView.as_view(),
                        name='contact-us'),
@@ -239,7 +235,11 @@ urlpatterns += [
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
 ) + static(
     settings.STATIC_URL, document_root=settings.STATIC_ROOT
-) + static(settings.DOWNLOAD_URL, document_root=settings.DOWNLOAD_ROOT)
+) + static(settings.DOWNLOAD_URL, document_root=settings.DOWNLOAD_ROOT) 
+  
+urlpatterns += [url(r'^(?P<page_slug>[\w-]+)/$',
+         homepage_view.StaticSiteContentView.as_view(),
+         name='static-site-content')]
 
 if settings.DEBUG:
     import debug_toolbar
