@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from geolocation import models
+from geolocation.models import (Currency, City, Country)
+
 
 class LimitedSerializerMixin(serializers.ModelSerializer):
     class Meta:
@@ -21,22 +22,36 @@ class LimitedSerializerMixin(serializers.ModelSerializer):
                 return d
         return data
 
+
 class CurrencySerializer(LimitedSerializerMixin):
     """
         Serializer for `Currency` model
     """
+
     class Meta:
-        model = models.Currency
+        model = Currency
         fields = ('id', 'name', 'value', 'exchange_rate', 'offset')
         read_only_fields = ('id', 'name', 'value', 'exchange_rate', 'offset')
         limited_case_field = 'exchange_rate'
+
 
 class CitySerializer(LimitedSerializerMixin):
     """
         Serializer for `City` model
     """
+
     class Meta:
-        model = models.City
+        model = City
         fields = ('id', 'code_city', 'timezone', 'name', 'country')
         read_only_fields = ('id', 'code_city', 'timezone', 'name', 'country')
         limited_case_field = 'name'
+
+
+class CountrySerializer(serializers.ModelSerializer):
+    """
+           Serializer for `City` model
+    """
+
+    class Meta:
+        model = Country
+        fields = ('id', 'name','phone', 'code2')

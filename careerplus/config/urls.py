@@ -169,75 +169,77 @@ def get_urls():
 admin.site.get_urls = get_urls
 
 urlpatterns += [
-     url(r'^admin/', include(admin.site.urls)),
-     url(r'^api-auth/',
-         include('rest_framework.urls', namespace='rest_framework')),
-     # cart rest apis
-     # url(r'^api/v1/cart/', include('cart.api.v1.urls', namespace="cart-api")),
-     url(r'api/v1/', include('shop.api.v1.urls', namespace='shop-api')),
-     url(r'api/', include('skillpage.api.v1.urls', namespace='skillpage-api')),
-     url(r'^$', homepage_view.HomePageView.as_view(), name='homepage'),
-     url(r'^console/', include('console.urls', namespace='console')),
-     url(r'^shine/', include('shine.urls', namespace='shine')),
-     url(r'^shop/', include('shop.urls', namespace='shop')),
-     url(r'^user/', include('users.urls', namespace='users')),
-     url(r'^cms/', include('cms.urls', namespace='cms')),
-     url(r'^article/', include('blog.urls', namespace='blog')),
-     url(r'^talenteconomy/', include('talenteconomy.urls', namespace='talent')),
-     url(r'^hr-insider/', include('hrinsider.urls', namespace='hrinsider')),
-     url(r'^cart/', include('cart.urls', namespace='cart')),
-     url(r'^order/', include('order.urls', namespace='order')),
-     url(r'^geolocation/', include('geolocation.urls', namespace='geolocation')),
-     url(r'^payment/', include('payment.urls', namespace='payment')),
-     url(r'^ajax/', include('ajax.urls', namespace='ajax')),
-     url(r'^design/', include('design.urls', namespace='design')),
-     url(r'^ckeditor/upload/', login_required(ckeditor_views.upload), name='ckeditor_upload'),
-     url(r'^ckeditor/bbrowse/', login_required(ckeditor_views.browse), name='ckeditor_browse'),
-     url(r'^search/', include('search.urls', namespace='search')),
-     url(r'^partner/', include('partner.urls')),
-     url(r'^partner/', include('microsite.urls')),
-     url(r'^linkedin/', include('linkedin.urls')),
-     url(r'^register/$', RegistrationApiView.as_view(), name='register'),
-     url(r'^login/$', LoginApiView.as_view(), name='login'),
-     url(r'^logout/$', LogoutApiView.as_view(), name='logout'),
-     url(r'^dashboard/', include('dashboard.urls', namespace='dashboard')),
-     url(r'^autologin/(?P<token>.+)/$', AutoLoginView.as_view(), name='autologin'),
-     url(r'^linkedin/login/$',
-         LinkedinCallbackView.as_view(), name='linkedin-login'),
-     url(r'^api/v1/resume/', include('resumebuilder.api.v1.urls', namespace='resume_builder')),
+                   url(r'^admin/', include(admin.site.urls)),
+                   url(r'^api-auth/',
+                       include('rest_framework.urls', namespace='rest_framework')),
+                   url(r'api/v1/', include('shop.api.v1.urls', namespace='shop-api')),
+                   url(r'api/', include('skillpage.api.v1.urls', namespace='skillpage-api')),
+                   url(r'^$', homepage_view.HomePageView.as_view(), name='homepage'),
+                   url(r'^console/', include('console.urls', namespace='console')),
+                   url(r'^shine/', include('shine.urls', namespace='shine')),
+                   url(r'^shop/', include('shop.urls', namespace='shop')),
+                   url(r'^user/', include('users.urls', namespace='users')),
+                   url(r'^cms/', include('cms.urls', namespace='cms')),
+                   url(r'^article/', include('blog.urls', namespace='blog')),
+                   url(r'^talenteconomy/', include('talenteconomy.urls', namespace='talent')),
+                   url(r'^hr-insider/', include('hrinsider.urls', namespace='hrinsider')),
+                   url(r'^cart/', include('cart.urls', namespace='cart')),
+                   url(r'^order/', include('order.urls', namespace='order')),
+                   url(r'^geolocation/', include('geolocation.urls', namespace='geolocation')),
+                   url(r'^payment/', include('payment.urls', namespace='payment')),
+                   url(r'^ajax/', include('ajax.urls', namespace='ajax')),
+                   url(r'^design/', include('design.urls', namespace='design')),
+                   url(r'^ckeditor/upload/', login_required(ckeditor_views.upload), name='ckeditor_upload'),
+                   url(r'^ckeditor/bbrowse/', login_required(ckeditor_views.browse), name='ckeditor_browse'),
+                   url(r'^search/', include('search.urls', namespace='search')),
+                   url(r'^partner/', include('partner.urls')),
+                   url(r'^partner/', include('microsite.urls')),
+                   url(r'^linkedin/', include('linkedin.urls')),
+                   url(r'^register/$', RegistrationApiView.as_view(), name='register'),
+                   url(r'^login/$', LoginApiView.as_view(), name='login'),
+                   url(r'^logout/$', LogoutApiView.as_view(), name='logout'),
+                   url(r'^dashboard/', include('dashboard.urls', namespace='dashboard')),
+                   url(r'^autologin/(?P<token>.+)/$', AutoLoginView.as_view(), name='autologin'),
+                   url(r'^linkedin/login/$',
+                       LinkedinCallbackView.as_view(), name='linkedin-login'),
+                   url(r'^api/v1/resume/', include('resumebuilder.api.v1.urls', namespace='resume_builder')),
 
-     url(r'^api/', include('api.urls', namespace='api')),
-     url(r'^api/', include('homepage.api.urls', namespace='homepage-api')),
+                   url(r'^api/v1/geolocation/', include('geolocation.api.v1.urls', namespace='geolocation')),
 
-     url(r'^lead/', include('crmapi.urls', namespace='crmapi')),
+                   url(r'^api/v1/cart/', include('cart.api.v1.urls', namespace='cart')),
 
-     url(r'^', include('marketing.urls', namespace='marketing')),
+                   url(r'^api/', include('api.urls', namespace='api')),
 
-     url(r'^about-us$',
-         homepage_view.AboutUsView.as_view(), name='about-us'),
+                   url(r'^lead/', include('crmapi.urls', namespace='crmapi')),
 
-     url(r'^(?P<page_slug>[\w-]+)/$',
-         homepage_view.StaticSiteContentView.as_view(),
-         name='static-site-content'),
-     url(r'^contact-us$',
-         homepage_view.ContactUsView.as_view(),
-         name='contact-us'),
+                   url(r'^', include('marketing.urls', namespace='marketing')),
 
-     url(r'^article-categories/(?P<slug>[-\w]+)/$',
-         blog_view.BlogCategoryListView.as_view(),
-         name='articles-by-category'),
+                   url(r'^about-us$',
+                       homepage_view.AboutUsView.as_view(), name='about-us'),
 
-     # django-oauth-toolkit
-     url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+                   url(r'^contact-us$',
+                       homepage_view.ContactUsView.as_view(),
+                       name='contact-us'),
 
-     # entry point for react template
-     url(r'^resume-builder/', WriteResumeView.as_view()),
+                   url(r'^article-categories/(?P<slug>[-\w]+)/$',
+                       blog_view.BlogCategoryListView.as_view(),
+                       name='articles-by-category'),
+
+                   # django-oauth-toolkit
+                   url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+
+                   # entry point for react template
+                   url(r'^resume-builder/', WriteResumeView.as_view()),
 
                ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
 ) + static(
     settings.STATIC_URL, document_root=settings.STATIC_ROOT
-) + static(settings.DOWNLOAD_URL, document_root=settings.DOWNLOAD_ROOT)
+) + static(settings.DOWNLOAD_URL, document_root=settings.DOWNLOAD_ROOT) 
+  
+urlpatterns += [url(r'^(?P<page_slug>[\w-]+)/$',
+         homepage_view.StaticSiteContentView.as_view(),
+         name='static-site-content')]
 
 if settings.DEBUG:
     import debug_toolbar
@@ -253,7 +255,7 @@ if settings.DEBUG:
 
     class SwaggerSchemaView(APIView):
         renderer_classes = [
-        #     renderers.OpenAPIRenderer,
+            #     renderers.OpenAPIRenderer,
             renderers.SwaggerUIRenderer
         ]
 

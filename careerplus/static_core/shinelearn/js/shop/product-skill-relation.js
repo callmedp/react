@@ -132,7 +132,6 @@ $(document).ready(function () {
     * Fetch Product List 
     * */
     const fetchProductList = () => {
-
         $('#select_products').select2({
             placeholder: 'Please Select Product',
             allowClear: true,
@@ -161,7 +160,6 @@ $(document).ready(function () {
                 }
             }
         });
-
     };
 
     fetchProductList();
@@ -210,7 +208,6 @@ $(document).ready(function () {
 
         $('#tags_1_tagsinput').append(`
                                     <span class="tag"><span data-product="${instance['product_id']}" data-skill="${instance['skill_id']}">${product}-${skill}&nbsp;&nbsp;</span><a class="remove-tags-input"  href="#" title="Remove tag">x</a></span>
-
 `);
         enableSubmitButton('submit_product_skills');
     });

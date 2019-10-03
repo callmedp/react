@@ -64,7 +64,8 @@ $(document).ready(function() {
         }
 
         if (flag){
-            $('#upload-order-resume-form')[0].submit();
+
+            $('#upload-order-resume-form').submit();
         }
         
     });

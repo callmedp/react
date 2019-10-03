@@ -141,9 +141,9 @@ class ShineCandidate:
     def is_authenticated(self):
         return True
 
-    def __init__(self,**kwargs):
-        for key,value in kwargs.items():
-            setattr(self,key,value)
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
 
     def __str__(self):
         return self.candidate_id

@@ -41,7 +41,7 @@ class Category(AbstractCommonModel, AbstractSEO, ModelMeta):
         choices=SITE_TYPE,
         default=1,
         help_text=_('sites where blog published.'))
-    image = models.FileField(
+    image = models.ImageField(
         "Image", max_length=200, upload_to="images/blog/category/",
         blank=True, null=True, help_text='use this category image')
     image_alt = models.CharField(
@@ -179,7 +179,7 @@ class Author(AbstractCommonModel, AbstractSEO, ModelMeta):
         choices=SITE_TYPE,
         default=1,
         help_text=_('sites where blog published.'))
-    image = models.FileField(
+    image = models.ImageField(
         "Profile Image", max_length=200, upload_to="images/blog/author/",
         blank=True, null=True, help_text='use this category image')
     image_alt = models.CharField(
@@ -238,7 +238,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
     slug = models.SlugField(
         ('Slug'), unique=True, max_length=255,
         blank=True, null=True, help_text=("Used to build the tag's URL."))
-    image = models.FileField(
+    image = models.ImageField(
         "Image", max_length=200, upload_to="images/blog/",
         blank=True, null=True, help_text='use this banner image')
     image_alt = models.CharField(
