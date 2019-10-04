@@ -87,18 +87,35 @@
     <div class="row">
 
     <!-- amcat certification start -->
+        {% if vendor_banner %}
     <div class="amcat-certification col-sm-12">
         <div class="box-panel text-center">
-            <div class="amcat-box mt-10">
-                <img src="{% static 'shinelearn/images/amcat-desktop.jpg' %}" alt="" class="img-responsive">
-            </div>
+        <img src="{{vendor_banner}}">
         </div>
-        
-        <div class="amcat-tags mt-30">
-            <a class="selected" href="#">All</a> <a href="#">Information Technology</a> <a href="#">Sales & Marketing</a> <a href="#">Banking & Finance</a> <a href="#">Marketing</a> <a href="#">Human Resources</a> <a href="#">Operations</a>
-        </div>
-        
-    </div> 
+        <div class="amcat-tags mt-30" id="bannerBtns">
+
+            {% if facets.pFA|length > 1 %}
+       {% for facet in facets.pFA %}
+            <a  name="filterBtn" value="{{facet.id}}" onclick="filterSearch(event)" class=
+                    {% if facet.label == 'Others' %}
+            {% if facet.id in areaf %}"check{{forloop.counter}} selected"{% endif %}
+
+            {% else %}
+            {% if facet.id|stringformat:"i" in areaf %}
+            "check{{forloop.counter}} selected"
+            {% else %}
+                    "check{{forloop.counter}}"
+            {% endif %}
+            {% endif %}>{{facet.label}}
+                </a>
+                {% endfor %}
+        {% endif %}
+
+
+
+
+    </div>
+        {% endif %}
 
     {% if products_found and page.object_list|length > 0 %}
         {% include "search/partials/search_filters.html" %}
@@ -161,6 +178,7 @@
             prefetchedFuncArea = '{{ recmnd_func_area }}',
             prefetchedSkills = '{{ recmnd_skills }}',
             categoryUrlSet = {{ category_url_set|safe }}
-            productUrlSet = {{ product_url_set|safe|safe }} 
+            productUrlSet = {{ product_url_set|safe|safe }}
+
     </script>
 {% endblock js_section %}

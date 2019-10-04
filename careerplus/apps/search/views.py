@@ -434,6 +434,13 @@ class SearchListView(SearchBaseView):
         context = super(SearchListView, self).get_extra_context()
         context['track_query_dict'] = self.track_query_dict.urlencode()
         context.update({"search_type": "simple"})
+        vendor_id = self.request.GET.getlist('fvid',[])
+        if len(vendor_id) == 1:
+            vendor = Vendor.objects.only('banner_image').filter(
+                id__in=vendor_id).first()
+            if not vendor or not vendor.banner_image:
+                return context
+            context.update({'vendor_banner':vendor.banner_image.url})
         return context
 
     def prepare_track(self, page):
