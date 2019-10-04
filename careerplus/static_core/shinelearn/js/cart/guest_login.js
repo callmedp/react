@@ -48,8 +48,7 @@ $(document).ready(function () {
                     text: `This number ${mobile} is not allowed with current country code ${countryCode}.`,
                     type: 'error',
                     showConfirmButton: false,
-                    timer: 2000
-
+                    timer: 3500
                 })
                 return ;
             }
