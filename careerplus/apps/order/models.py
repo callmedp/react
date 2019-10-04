@@ -367,7 +367,7 @@ class Order(AbstractAutoDate):
 
                 if order_discount > 0:
                     combo_discount_amount = (float(order_discount) /
-                                    float(order.total_excl_tax)) * \
+                                    float(item.order.total_excl_tax)) * \
                                     actual_price_of_item_after_virtual_decrease
                     actual_price_of_item_after_virtual_decrease -= combo_discount_amount
 
