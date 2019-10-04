@@ -246,12 +246,12 @@
                 {%endif%}
                 <li class="subtotal__item">
                     <span class="subtotal__item--tax">SGST @ {{sgst}}%</span>
-                    <span class="subtotal__item--tax-price">+Rs. {{sgst_amount}}</span>
+                    <span class="subtotal__item--tax-price">+Rs. <span id="sgst-amount">{{sgst_amount}}</span></span>
                 </li>
 
                 <li class="subtotal__item">
                     <span class="subtotal__item--tax">CGST @ {{cgst}}%</span>
-                    <span class="subtotal__item--tax-price">+Rs. {{cgst_amount}}</span>
+                    <span class="subtotal__item--tax-price">+Rs. <span id="cgst-amount">{{cgst_amount}}</span></span>
                 </li>
             </ul>
         </div>

@@ -39,6 +39,20 @@ function handleDeliveryUpdation(formData, lineId,itemId) {
         enctype: "multipart/form-data",
         success: function (data, textStatus, jqXHR) {
             if (data.total_cart_amount != -1 && data.delivery_charge != -1) {
+                
+                let {
+                    delivery_service_meta_desc: deliveryServiceDesc,
+                    delivery_service_title: deliveryServiceTitle,
+                    delivery_charge: deliveryCharge
+                } = data;
+                const str = `${deliveryServiceTitle}- ${Number(deliveryCharge) === 0 ? 'No extra cost' : 'Rs. ' + deliveryCharge.toFixed(2) + '/-'}`;
+                $(`#active-delivery-title${lineId.trim()}`).text(str);
+
+                $(`#active-delivery-description${lineId.trim()}`).text(`(${deliveryServiceDesc})`)
+
+                $(`#delivery-item${itemId}`).slideToggle();
+
+
                 if (data.delivery_charge) {
                     var text_str = '+ Rs. ' + data.delivery_charge.toString() + '/-';
                     $('#delivery-charge' + lineId).text(text_str);
@@ -57,18 +71,7 @@ function handleDeliveryUpdation(formData, lineId,itemId) {
                 // update cgst amountc
                 $('#cgst-amount').text(cgstAmount);
 
-                let {
-                    delivery_service_meta_desc: deliveryServiceDesc,
-                    delivery_service_title: deliveryServiceTitle,
-                    delivery_charge: deliveryCharge
-                } = data;
-                const str = `${deliveryServiceTitle}- ${Number(deliveryCharge) === 0 ? 'No extra cost' : 'Rs. ' + deliveryCharge.toFixed(2) + '/-'}`;
-                $(`#active-delivery-title${lineId.trim()}`).text(str);
-
-                $(`#active-delivery-description${lineId.trim()}`).text(`(${deliveryServiceDesc})`)
-
-                $(`#delivery-item${itemId}`).slideToggle();
-
+                
 
             }
 
