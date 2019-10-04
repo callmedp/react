@@ -69,7 +69,7 @@ class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
     image = models.ImageField(
         _('Image'), upload_to=get_upload_path_vendor,
         blank=True, null=True)
-    badge_image = models.ImageField(
+    banner_image = models.ImageField(
         _('Badge Image'), upload_to=get_upload_path_badge_file,
         blank=True, null=True)
     icon = models.ImageField(
