@@ -37,6 +37,8 @@ Search Result Page - Shine Learning
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/search/filter.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/common/mobile/typeaheadjs.css' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/search/amcat-widget.scss' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
 
@@ -90,6 +92,56 @@ Search Result Page - Shine Learning
     <div class="body-wrapper ">
 <div class="content-box pt-0">
   <div class="container pt-0 js_listing">
+
+    <!-- amcat certification start -->
+    <div class="amcat-certification">
+        <div class="amcat-box">
+            <img class="img-responsive" alt="" src="{% static 'shinelearn/images/mobile/common/amcat-mobile.jpg' %}">
+        </div>
+        <div class="amcat-tags mt-30">
+            <div class="slide-container">
+                <ul class="skill-provider amcat-tags">
+                    <li class="cuad" >
+                        <a href="#" class="selected">
+                            All
+                        </a>
+                    </li>
+                    <li class="cuad" >
+                        <a href="#" class="">
+                            Information Technology
+                        </a>
+                    </li>
+                    <li class="cuad" >
+                        <a href="#" class="">
+                            Sales & Marketing
+                        </a>
+                    </li>
+                    <li class="cuad" >
+                        <a href="#" class="">
+                            Banking & Finance
+                        </a>
+                    </li>
+                    <li class="cuad" >
+                        <a href="#" class="">
+                            Marketing
+                        </a>
+                    </li>
+                    <li class="cuad" >
+                        <a href="#" class="">
+                            Human Resources
+                        </a>
+                    </li>
+                    <li class="cuad" >
+                        <a href="#" class="">
+                            Operations
+                        </a>
+                    </li>
+               </ul>
+            </div> 
+        </div>
+        
+    </div> 
+    <!-- amcat certification end -->
 
     <div class="row enrol-now box pt-5 pb-5" id="hide-second">
 
