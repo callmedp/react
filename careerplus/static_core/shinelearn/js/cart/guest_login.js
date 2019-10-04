@@ -40,7 +40,6 @@ $(document).ready(function () {
         if ($('#guest_form').valid()) {
 
             // check mobile number valid 
-            debugger;
             let isNumberValid = await numberValidate(countryCode, mobile);
 
             if(!isNumberValid){
@@ -75,10 +74,9 @@ $(document).ready(function () {
 
     const numberValidate = async(countryCode, mobile) =>{
         // hit api to check whether the number with particular country is valid or not
-        const result = await fetch(`${site_domain}/api/v1/geolocation/validate/?country_code=${countryCode}&mobile=${mobile}`);
-        const {isValid} = await result.json();
-        return isValid
-
+        const resp = await fetch(`${site_domain}/api/v1/geolocation/validate/?country_code=${countryCode}&mobile=${mobile}`);
+        const {result} = await resp.json();
+        return result
 
     } 
 
@@ -91,136 +89,9 @@ $(document).ready(function () {
     };
 
     $('#country_code').on('select2:select', function (e) {
-        debugger;
         if($('#guest-mobile').val()){
             $('#guest-mobile').valid()
         }
-        // let data = e.params.data
-        // if (data && data.id && data.id === "91") {
-        //     $("#guest-mobile").rules("add", {
-        //         required: true,
-        //         digits: true,
-        //         indiaMobile: true,
-        //         minlength: 10,
-        //         maxlength: 10,
-        //         notEqualTo: ['9999999999', '8888888888', '9876543210',
-        //         '7777777777', '9000000000', '8000000000',
-        //         '9898989898',
-        //         '6666666666'],
-        //         notStartWith: ['0', '1', '2', '3', '4', '5'],
-        //         messages: {
-        //             required: 'Contact is required.',
-        //             digits: 'only digit accepted.',
-        //             indiaMobile: 'length must be 10 digits.',
-        //             minlength: 'length must be 10 digits.',
-        //             maxlength: 'length must be 10 digits.',
-        //             notEqualTo: 'This number is not allowed.'
-        //         },
-        //         highlight: function (element) {
-        //             debugger;
-        //             /*if (window.CURRENT_FLAVOUR == 'mobile'){
-        //                 $(element).closest('.form-group').addClass('error');
-        //             }
-        //             else{
-        //                 $(element).closest('.col-sm-6').addClass('error');
-        //             }*/
-
-        //             let className = '.form-group', addClass = 'error1';
-
-        //             if (window.CURRENT_FLAVOUR == 'mobile') {
-        //                 className = 'li';
-        //                 addClass = 'error'
-        //             }
-        //             $(element).closest(className).addClass(addClass);
-        //         },
-        //         unhighlight: function (element) {
-        //             if (window.CURRENT_FLAVOUR == 'mobile') {
-        //                 $(element).closest('li').removeClass('error');
-        //                 $(element).siblings('.error--mgs').html('');
-
-        //             }
-        //             else {
-        //                 $(element).closest('.form-group').removeClass('error1');
-        //                 $(element).siblings('.error-txt').html('');
-        //                 // if ($(element).attr('name') != "country_code"){
-        //                 // }
-        //             }
-        //         },
-        //         invalidHandler: function (event, validator) {
-        //         },
-        //         errorPlacement: function (error, element) {
-        //             debugger;
-        //             let errorTextClass = '.error-txt';
-        //             if (window.CURRENT_FLAVOUR == 'mobile') {
-        //                 errorTextClass = '.error--mgs';
-        //             }
-        //             $(element).siblings(errorTextClass).html(error.text());
-        //         }
-        //     });
-        // }
-        // else {
-        //     $("#guest-mobile").rules("add", {
-        //         required: true,
-        //         digits: true,
-        //         minlength: 6,
-        //         maxlength: 13,
-        //         notEqualTo: ['9999999999',  '8888888888', '9876543210',
-        //         '7777777777', '9000000000', '8000000000',
-        //         '9898989898',
-        //         '6666666666'],
-        //         messages: {
-        //             required: 'Contact is required.',
-        //             digits: 'only digit accepted.',
-        //             minlength: 'length must be greater than 5 digits.',
-        //             maxlength: 'length must be less than 14 digits.',
-        //             notEqualTo: 'This number is not allowed.'
-
-
-        //         },
-        //         highlight: function (element) {
-        //             debugger;
-        //             /*if (window.CURRENT_FLAVOUR == 'mobile'){
-        //                 $(element).closest('.form-group').addClass('error');
-        //             }
-        //             else{
-        //                 $(element).closest('.col-sm-6').addClass('error');
-        //             }*/
-
-        //             let className = '.form-group', addClass = 'error1';
-
-        //             if (window.CURRENT_FLAVOUR == 'mobile') {
-        //                 className = 'li';
-        //                 addClass = 'error'
-        //             }
-        //             $(element).closest(className).addClass(addClass);
-        //         },
-        //         unhighlight: function (element) {
-        //             debugger;
-        //             if (window.CURRENT_FLAVOUR == 'mobile') {
-        //                 $(element).closest('li').removeClass('error');
-        //                 $(element).siblings('.error--mgs').html('');
-
-        //             }
-        //             else {
-        //                 $(element).closest('.form-group').removeClass('error1');
-        //                 $(element).siblings('.error-txt').html('');
-        //                 // if ($(element).attr('name') != "country_code"){
-        //                 // }
-        //             }
-        //         },
-        //         invalidHandler: function (event, validator) {
-        //             debugger;
-        //         },
-        //         errorPlacement: function (error, element) {
-        //             debugger;
-        //             let errorTextClass = '.error-txt';
-        //             if (window.CURRENT_FLAVOUR == 'mobile') {
-        //                 errorTextClass = '.error--mgs';
-        //             }
-        //             $(element).siblings(errorTextClass).html(error.text());
-        //         }
-        //     });
-        // }
     });
     /*
     * Fetch Country List
@@ -299,11 +170,6 @@ $(document).ready(function () {
         document.forms['guest_form'].elements['mobile'].value = formObj['mobile'].trim() || ''
         if (formObj['mobile'].trim()) $("#guest_form input#guest-mobile").addClass('has-content');
 
-
-
-
-
-
     }
 
     //  auto fill guest details 
@@ -314,7 +180,6 @@ $(document).ready(function () {
 
     jQuery.validator.addMethod("notEqualTo",
         function (value, element, param) {
-            debugger;
             var notEqual = true;
             value = $.trim(value);
             for (i = 0; i < param.length; i++) {
@@ -328,7 +193,6 @@ $(document).ready(function () {
 
     jQuery.validator.addMethod("notStartWith",
         function (value, element, param) {
-            debugger;
             var notEqual = true;
             value = $.trim(value);
             for (i = 0; i < param.length; i++) {
@@ -338,21 +202,73 @@ $(document).ready(function () {
         },
         "This number is not allowed." 
     );
+
+    jQuery.validator.addMethod("minIndiaLengthValidator", 
+    function (value, element, param) {
+        if ($('#country_code').val() == '91'){
+            value = $.trim(value);
+            if(value.length <10)
+            {
+            return false;
+            }
+
+        }
+       return true;
+    },
+     jQuery.validator.format("The length must be greater than 9 digits.")
+);
+
+
+
     
 
-    jQuery.validator.addMethod("lengthValidator", 
+    jQuery.validator.addMethod("maxIndiaLengthValidator", 
         function (value, element, param) {
-            debugger;
-            var notEqual = true;
-            value = $.trim(value);
-            for (i = 0; i < param.length; i++) {
-                if (value[0] == $.trim(param[i])) { notEqual = false; }
+            if ($('#country_code').val() == '91'){
+                value = $.trim(value);
+                if(value.length > 10 )
+                {
+                    return false;
+                }
+
             }
-            return this.optional(element) || notEqual;
+           return true;
         },
-        "This number is not allowed."
+         jQuery.validator.format("The length must be less than 11 digits.")
     );
+
+
+
+    jQuery.validator.addMethod("maxOtherLengthValidator", 
+        function (value, element, param) {
+            if ($('#country_code').val() !== '91'){
+                value = $.trim(value);
+                if(value.length > 13 )
+                {
+                    return false;
+                }
+
+            }
+            return true;
+        },
+         jQuery.validator.format("The length must be less than 14 digits.")
+    );
+
     
+    jQuery.validator.addMethod("minOtherLengthValidator", 
+    function (value, element, param) {
+        if ($('#country_code').val() !== '91'){
+            value = $.trim(value);
+            if(value.length  < 6 )
+            {
+                return false;
+            }
+        }
+        return true;
+    },
+     jQuery.validator.format("The length must be greater than 5 digits.")
+);
+
 
 
 
@@ -390,7 +306,10 @@ $("#guest_form").validate({
                 required: true,
                 digits: true,
                 indiaMobile: true,
-                lengthValidator: true,
+                minIndiaLengthValidator: 10,
+                maxIndiaLengthValidator: 10,
+                minOtherLengthValidator: 6,
+                maxOtherLengthValidator: 13,
                 // minlength: 10,
                 // maxlength: 10,
                 notEqualTo: ['9999999999','8888888888', '9876543210',

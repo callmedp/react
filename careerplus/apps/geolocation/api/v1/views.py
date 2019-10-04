@@ -160,8 +160,6 @@ class CountryValidationView(APIView):
 
 
     def get(self, request, *args, **kwargs):
-        import ipdb;
-        ipdb.set_trace();
         country_code = request.GET.get('country_code','')
         mobile = request.GET.get('mobile','')
         data = {"cell_phone": mobile, "country_code": country_code}

@@ -180,8 +180,6 @@ class PaymentLoginView(TemplateView, CartMixin):
         return super(self.__class__, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        import ipdb;
-        ipdb.set_trace();
         try:
             login_resp = {}
             login_dict = {}

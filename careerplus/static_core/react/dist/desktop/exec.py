@@ -22,8 +22,6 @@ def extract_phone_number(phone_number):
 
 
 def validate_phone_number(self):
-        import ipdb;
-        ipdb.set_trace();
         def is_digit(character):
             return character.isdigit()
 
