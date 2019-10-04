@@ -94,53 +94,39 @@ Search Result Page - Shine Learning
   <div class="container pt-0 js_listing">
 
     <!-- amcat certification start -->
+              {% if vendor_banner %}
     <div class="amcat-certification">
         <div class="amcat-box">
-            <img class="img-responsive" alt="" src="{% static 'shinelearn/images/mobile/common/amcat-mobile.jpg' %}">
+            <img class="img-responsive" alt="" src="{{vendor_banner}}">
         </div>
         <div class="amcat-tags mt-30">
             <div class="slide-container">
                 <ul class="skill-provider amcat-tags">
-                    <li class="cuad" >
-                        <a href="#" class="selected">
-                            All
-                        </a>
-                    </li>
-                    <li class="cuad" >
-                        <a href="#" class="">
-                            Information Technology
-                        </a>
-                    </li>
-                    <li class="cuad" >
-                        <a href="#" class="">
-                            Sales & Marketing
-                        </a>
-                    </li>
-                    <li class="cuad" >
-                        <a href="#" class="">
-                            Banking & Finance
-                        </a>
-                    </li>
-                    <li class="cuad" >
-                        <a href="#" class="">
-                            Marketing
-                        </a>
-                    </li>
-                    <li class="cuad" >
-                        <a href="#" class="">
-                            Human Resources
-                        </a>
-                    </li>
-                    <li class="cuad" >
-                        <a href="#" class="">
-                            Operations
-                        </a>
-                    </li>
+                    <li class="cuad">
+                             {% if facets.pFA|length > 1 %}
+       {% for facet in facets.pFA %}
+                    <li class="cuad">
+            <a  name="filterBtn" value="{{facet.id}}" onclick="filterSearch(event)" class=
+                    {% if facet.label == 'Others' %}
+            {% if facet.id in areaf %}"check{{forloop.counter}} selected"{% endif %}
+
+            {% else %}
+            {% if facet.id|stringformat:"i" in areaf %}
+            "check{{forloop.counter}} selected"
+            {% else %}
+                    "check{{forloop.counter}}"
+            {% endif %}
+            {% endif %}>{{facet.label}}
+                </a>
+                        </li>
+                {% endfor %}
+        {% endif %}
                </ul>
             </div> 
         </div>
         
-    </div> 
+    </div>
+      {% endif %}
     <!-- amcat certification end -->
 
     <div class="row enrol-now box pt-5 pb-5" id="hide-second">

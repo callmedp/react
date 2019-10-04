@@ -92,7 +92,6 @@ if __name__ == "__main__":
             continue
         params_data = create_params(var1, command)
         try:
-            import ipdb;ipdb.set_trace()
             res = requests.post(settings.PAYU_INFO.get('web_api_url'),
                                 params_data)
         except Exception as e:
