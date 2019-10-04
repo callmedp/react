@@ -193,8 +193,10 @@ class DiscountReportUtil:
                 payment_date__gte=self.start_date,payment_date__lte=self.end_date)
             order_ids = list(transactions.values_list('order_id',flat=True))
             orders = Order.objects.filter(status__in=[1,3],id__in=order_ids).order_by('id')
+        
         elif int(self.filter_type) == 2: # get order item based on order created date filter
-            orders = Order.objects.filter(status__in=[1,3],created__gte=self.start_date,created__lte=self.end_date)
+            orders = Order.objects.filter(\
+              status__in=[1,3],payment_date__gte=self.start_date,payment_date__lte=self.end_date)
 
         logging.getLogger('info_log').info("\
             Discount Report :: Total orders found - {}".format(orders.count()))
