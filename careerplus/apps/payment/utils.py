@@ -173,7 +173,7 @@ class PayuPaymentUtil():
                                 id__in=oi_dict.keys())]))[:100]
             ,'udf1'       : "Orderid - {}".format(order.id),
             'amount'     : float(order.total_incl_tax),
-            "pg": 'CC',
+            "pg": 'CASH',
         }
         initial_dict.update \
             ({'txnid':txn.txn,

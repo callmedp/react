@@ -1,0 +1,34 @@
+<html>
+<head>
+    <title>Redirecting to PayU for Payment</title>
+
+    <script type="text/javascript">
+        function redirect_for_payment_at_payu() {
+            var payu_form = document.forms.payu_form;
+            payu_form.submit();
+        }
+    </script>
+</head>
+
+<body onload="redirect_for_payment_at_payu();">
+    <h3>Redirecting to Payment gateway. Please do not Refresh or close this window.</h3>
+    <form action="{{ action }}" method="post" name="payu_form" style="display: none">
+        <input type="text" name="txnid" value="{{txnid}}" />
+        <input type="text" name="firstname" value="{{firstname}}" />
+        <input type="text" name="lastname" value="{{lastname}}" />
+        <input type="text" name="email" value="{{email}}" />
+        <input type="text" name="phone" value="{{phone}}" />
+        <input type="text" name="productinfo" value="{{productinfo}}" />
+        <input type="text" name="udf1" value="{{udf1}}" />
+        <input type="text" name="amount" value="{{amount}}" />
+        <input type="text" name="surl" value="{{surl}}" />
+        <input type="text" name="furl" value="{{furl}}" />
+        <input type="text" name="curl" value="{{curl}}" />
+        <input type="text" name="hash" value="{{hash}}" />
+        <input type="text" name="key" value="{{key}}" />
+        <input type="text" name="PG" value="{{pg}}" />
+
+    </form>
+</body>
+
+</html>
