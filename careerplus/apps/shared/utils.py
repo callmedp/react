@@ -204,9 +204,15 @@ class DiscountReportUtil:
         for order in orders:
             order_items = OrderItem.objects.filter(order=order)
             try:
-                sales_user_info = ast.literal_eval(order.sales_user_info)
-            except:
-                sales_user_info = {}
+                sales_user_info = json.loads(order.sales_user_info)
+            except Exception as e:
+                try:
+                    sales_user_info = ast.literal_eval(order.sales_user_info)
+                except Exception as e:
+                    logging.getLogger('error_log').error("\
+                            Error - {}".format(e))
+                    sales_user_info = {}
+                
             txn_obj_list = order.get_txns().filter(status=1)
             txn_obj = txn_obj_list.first()
             last_txn_obj = txn_obj_list.order_by('-id').first()
@@ -319,13 +325,13 @@ class DiscountReportUtil:
                         total_sum,total_combo_discount,success_closure = writer_invoice.get_writer_details_per_oi(item,item.assigned_to) 
                         writer_price = total_sum - total_combo_discount
                         writer_name = item.assigned_to if item.assigned_to else ''
-                
-                sales_user_info = order.sales_user_info
+
+                logging.getLogger('error_log').error(\
+                        "sales_user_info_Data  {} | {}".format(sales_user_info.get('is_upsell'),sales_user_info.get('executive')))
+
                 lead_type = 'NA'
-                if sales_user_info:
-                    sales_user_info = json.loads(sales_user_info)
-                    if 'is_upsell' in sales_user_info:
-                        lead_type = 'Upsell' if sales_user_info['is_upsell'] else 'Fresh'
+                if 'is_upsell' in sales_user_info:
+                    lead_type = 'Upsell' if sales_user_info.get('is_upsell') else 'Fresh'
 
                 ltv_bracket = LTVReportUtil().get_ltv_bracket(candidate_id=order.candidate_id)
                 product = item.product
