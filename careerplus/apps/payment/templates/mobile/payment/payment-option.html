@@ -74,6 +74,7 @@
       <div class="p-15">
         <p class="fs-18">Choose your mode of payment</p>
       </div>
+         </div>
 
         <div class="payment-type">
           <div class="payment-type--item">
@@ -237,31 +238,31 @@
                                 <span id="emi-0-months"></span>
                                 <span id="emi-1-months"></span>
                               </li>
-                              
+
                               <li class="emi-options--item">
                                 <span>Monthly EMI</span>
                                 <span id="emi-0-monthly-amount"></span>
                                 <span id="emi-1-monthly-amount"></span>
                               </li>
-                              
+
                               <li class="emi-options--item">
                                 <span>Interest</span>
                                 <span id="emi-0-interest"></span>
                                 <span id="emi-1-interest"></span>
                               </li>
-                              
+
                               <li class="emi-options--item">
                                 <span>Interest rate</span>
                                 <span id="emi-0-interest-rate"></span>
                                 <span id="emi-1-interest-rate"></span>
                               </li>
-                              
+
                               <li class="emi-options--item">
                                 <span>Down payment</span>
                                 <span id="emi-0-down-payment"></span>
                                 <span id="emi-1-down-payment">/span>
                               </li>
-                              
+
                               <li class="emi-options--item">
                                 <span>Loan Amount</span>
                                 <span id="emi-0-total-amount" ></span>
@@ -272,9 +273,9 @@
                         <div class="mt-10 p-15 text-center">
                           <button type="button" class="btn btn-yellow btn-round w100 trig-loader" id="zestMakePaymentBtn">Make Payment</button>
                         </div>
-                        
-                        
-                        
+
+
+
                           <!-- <div id="emi-block-0" class=" zest_emi_div mr-40">
                               <span ></span><br>
                               <span id="emi-0-monthly-amount"></span><br>
@@ -300,6 +301,15 @@
 
                 {% endif %}
         </div><!-- /. payment type -->
+                   <div class="payment-type--item">
+            <span></span>
+            <a href="{% url "payment:payu-request" cart_id %}" >Amazon Pay
+              <img src="{% static 'shinelearn/images/payments/amazon-pay.png' %}" width="89" class="payment-type--item--img"/>
+            </a>
+          </div>
+        </div>
+
+       <!-- /. payment type -->
     </div><!-- /. payment white-box -->
 </div><!-- /. payment -->
 

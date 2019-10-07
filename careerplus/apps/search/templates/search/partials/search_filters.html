@@ -26,7 +26,7 @@
                     </h4>
                 </div>
                 <div class="panel-collapse">
-                    <div class="panel-body scroll js_filter_sxn">
+                    <div class="panel-body scroll js_filter_sxn" id="farea_filters">
                         {% if facets.pFA|length == 1 %}
                             <label title="{{facets.pFA.0.label}}">
                                 <input type="checkbox" {% if areaf %}name="farea" {% else %}name="ign_farea"{% endif %} value="{{facets.pFA.0.id}}" checked="checked" disabled="disabled" />
@@ -35,7 +35,7 @@
                         {% else %}
                             {% for facet in facets.pFA %}
                             <label title="{{facet.label}}">
-                                <input type="checkbox" name="farea" value="{{facet.id}}" {% if facet.label == 'Others' %}{% if facet.id in areaf %}checked="checked"{% endif %} {% else %}{% if facet.id|stringformat:"i" in areaf %}checked="checked" {% endif %} {% endif %} />
+                                <input class="check{{forloop.counter}}" type="checkbox" name="farea" value="{{facet.id}}" {% if facet.label == 'Others' %}{% if facet.id in areaf %}checked="checked"{% endif %} {% else %}{% if facet.id|stringformat:"i" in areaf %}checked="checked" {% endif %} {% endif %} />
                                 <span>{{facet.label}} <b>({{facet.count}})</b></span>
                             </label>
                             {% endfor %}

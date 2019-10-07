@@ -256,7 +256,7 @@
                               <td class="center-align" id="emi-0-down-payment"></td>
                               <td class="center-align" id="emi-0-total-amount"></td>
                             </tr>
-                            
+
                             <tr>
                               <td class="center-align" id="emi-1-months"></td>
                               <td class="center-align" id="emi-1-monthly-amount"></td>
@@ -268,7 +268,7 @@
                           </tbody>
                         </table>
 
-<!--                 
+<!--
                         <div id="emi-block-0" class="col-md-6 zest_emi_div" style="display:block;">
                             <span id="emi-0-months"></span><br>
                             <span id="emi-0-monthly-amount"></span><br>
@@ -301,6 +301,18 @@
                   </div><!-- //Zest Money Emi -->
 
                     {% endif %}
+
+                             <div class="panel panel-default box-shadow1">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a class="no-bg" href="{% url "payment:payu-request" cart_id %}">
+                         Amazon Pay <img src="{% static 'shinelearn/images/payments/amazon-pay.png' %}" width="89" style="margin-top:8px" alt="payu" class="ml-5">
+                        </a>
+                      </h4>
+                    </div>
+                  </div>
+
+
                 </div>
             </div>
             <!-- right content end -->

@@ -601,3 +601,7 @@ ZESTMONEY_INFO = {
                 "client_id":"e32b336c-74ab-4254-82a6-3d9ebd9242d0",
                 "client_secret":"Zaoz?KPq%}=7=CTYdbVs"
                 }
+PAYU_INFO = {'merchant_salt':'JN7rUoRe',
+            'merchant_key':'ng7s88',
+            'payment_url':'https://test.payu.in/_payment',
+            'web_api_url':'https://test.payu.in/merchant/postservice.php?form=2'}
