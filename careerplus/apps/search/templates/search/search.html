@@ -98,8 +98,8 @@
        {% for facet in facets.pFA %}
             <a  name="filterBtn" value="{{facet.id}}" onclick="filterSearch(event)" class=
                     {% if facet.label == 'Others' %}
-            {% if facet.id in areaf %}"check{{forloop.counter}} selected"{% endif %}
-
+            {% if facet.id in areaf %}" selected"{% endif %}
+            check{{forloop.counter}}
             {% else %}
             {% if facet.id|stringformat:"i" in areaf %}
             "check{{forloop.counter}} selected"
