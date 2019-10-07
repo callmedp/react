@@ -319,10 +319,13 @@ class DiscountReportUtil:
                         total_sum,total_combo_discount,success_closure = writer_invoice.get_writer_details_per_oi(item,item.assigned_to) 
                         writer_price = total_sum - total_combo_discount
                         writer_name = item.assigned_to if item.assigned_to else ''
-
+                
+                sales_user_info = order.sales_user_info
                 lead_type = 'NA'
-                if 'is_upsell' in sales_user_info:
-                    lead_type = 'Upsell' if sales_user_info['is_upsell'] else 'Fresh'
+                if sales_user_info:
+                    sales_user_info = json.loads(sales_user_info)
+                    if 'is_upsell' in sales_user_info:
+                        lead_type = 'Upsell' if sales_user_info['is_upsell'] else 'Fresh'
 
                 ltv_bracket = LTVReportUtil().get_ltv_bracket(candidate_id=order.candidate_id)
                 product = item.product
