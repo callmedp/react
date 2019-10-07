@@ -5,6 +5,7 @@
 /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py order_closer --settings=careerplus.config.settings_live
 /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py linkedin_tips_email --settings=careerplus.config.settings_live
 /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py feedback_call_entry --settings=careerplus.config.settings_live
+/var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py ltv_monthly_record --settings=careerplus.config.settings_live
 #/var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py cart_drop_out_mail --settings=careerplus.config.settings_live
 /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py closeorders --settings=careerplus.config.settings_live
 /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py update_product_buy_count --settings=careerplus.config.settings_live
