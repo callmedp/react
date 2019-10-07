@@ -1,0 +1,102 @@
+{% extends "console/base_console.html" %}
+{% load static compress %}
+{% load humanize %}
+{% load thumbnail %}
+{% block title %}
+<title>LTV Report - Shine Learning</title>
+{% endblock title %}
+{% block css_block %}
+{{block.super}}
+{% compress css %}
+<link href="{% static 'packages/iCheck/skins/flat/green.css' %}" rel="stylesheet" type="text/css">
+{% endcompress %}
+    <link type="text/css" href="{% static 'shinelearn/css/bootstrap-datepicker.min.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static "console/css/reports/ltv_report.css" %}" rel="stylesheet">
+{% endblock css_block %}
+{% block pagecontent %}
+<div class="loader">
+  <img src="{% static 'console/images/loader.gif' %}" alt="Loading Icon" class="loader-image">
+</div>
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>LTV Report</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12" id="messages">
+                {% for message in messages %}
+                <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable" {% endif %}>
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <form autocomplete="off" method="POST" role="form" id="ltv-report-form" action=".">
+                    {% csrf_token %}
+                    <button type="button" class="btn btn-primary export-csv"onclick="generateReport()"
+                        >Export to CSV</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+              <div class="col-sm-3">
+                <label>Select Month</label>
+                <div class='input-group'>
+                    <input class="form-control datepicker" name="report_date" id="report_date" placeholder="mm-yyyy" />
+                </div> 
+              </div>
+              <div class="col-sm-3">
+                <span class="input-group-btn" >
+                    <button type="button" class="btn btn-primary go-button" id="assign-user"  onclick="getLTVRecords()">Go</button>
+                </span>
+             </div>
+              <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+              </ul>
+              <div class="clearfix"></div>
+            </div>
+
+          <div class="x_content">
+            <div class="table-responsive">
+              <table class="table table-striped jambo_table bulk_action">
+                <thead>
+                  <tr class="headings">
+                    <th class="column-title">LTV Bracket</th>
+                    <th class="column-title">Total Users</th>
+                    <th class="column-title">Total Orders</th>
+                    <th class="column-title">Total Items</th>
+                    <th class="column-title">CRM orders</th>
+                    <th class="column-title">CRM items</th>
+                    <th class="column-title">Learning Orders</th>
+                    <th class="column-title">Learning Items</th>
+                  </tr>
+                </thead>
+
+                <tbody id="ltv-records" class="center-text">
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+
+{% endblock pagecontent %}
+{% block js_block %}
+{{ block.super }}
+<script type="text/javascript" src="{% static 'shinelearn/js/common/bootstrap-datepicker.min.js' %}"></script>
+<script type="text/javascript" src="{% static "console/js/reports/ltv-report.js" %}"></script>
+<script type="text/javascript">
+    var csrfTokenInput = `{% csrf_token %}`
+</script>
+{% endblock js_block %}

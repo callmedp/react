@@ -17,7 +17,7 @@ from seo.models import AbstractSEO, AbstractAutoDate
 from meta.models import ModelMeta
 from shop.functions import (
     get_upload_path_vendor,
-    get_upload_path_badge_file)
+    get_upload_path_badge_file,get_upload_path_mobile_banner_file)
 from geolocation.models import (
     Country,
     State,
@@ -69,9 +69,15 @@ class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
     image = models.ImageField(
         _('Image'), upload_to=get_upload_path_vendor,
         blank=True, null=True)
-    badge_image = models.ImageField(
-        _('Badge Image'), upload_to=get_upload_path_badge_file,
-        blank=True, null=True)
+    banner_image = models.ImageField(
+        _('Banner Image'), upload_to=get_upload_path_badge_file,
+        blank=True, null=True,default=None)
+    mobile_banner_image = models.ImageField(
+        _('Mobile Banner Image'), upload_to=get_upload_path_mobile_banner_file,
+        blank=True, null=True,default=None)
+
+    banner_visibility = models.BooleanField(_('Banner Visibility'),
+                                            default=True)
     icon = models.ImageField(
         _('Icon'), upload_to=get_upload_path_vendor,
         blank=True, null=True)

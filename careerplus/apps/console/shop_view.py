@@ -2518,6 +2518,7 @@ class DownloadDiscountReportView(TemplateView):
     def get_response_for_file_generation(self):
         start_date_str = self.request.POST.get('gen_start_date')
         end_date_str = self.request.POST.get('gen_end_date')
+        filter_type = self.request.POST.get('filter_type')
 
         if not start_date_str or not end_date_str:
             messages.add_message(self.request, messages.ERROR, "Please provide start and end date")
@@ -2528,7 +2529,7 @@ class DownloadDiscountReportView(TemplateView):
             end_date = datetime.strptime(end_date_str,'%Y_%m_%d')
         except Exception as e:
             logging.getLogger('error_log').error("Unable to parse date {}".format(e))
-            messages.add_message(self.request, messages.ERROR, "Please provide start and end date")
+            messages.add_message(self.request, messages.ERROR, "Please provide start and end date") 
             return render(self.request,template_name=self.template_name)
 
         if start_date > end_date:
@@ -2541,7 +2542,7 @@ class DownloadDiscountReportView(TemplateView):
         scheduler_obj.created_by = self.request.user
         scheduler_obj.save()
 
-        generate_discount_report.delay(scheduler_obj.id,start_date,end_date)
+        generate_discount_report.delay(scheduler_obj.id,start_date,end_date,filter_type)
         return HttpResponseRedirect("/console/tasks/tasklist/")
 
 

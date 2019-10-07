@@ -3,7 +3,7 @@ import logging
 from decimal import Decimal
 from datetime import datetime, timedelta
 from dateutil import relativedelta
-import ast,os,django,sys,csv
+import ast,os,django,sys,csv,json
 
 #Settings imports
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "careerplus.config.settings_live")
@@ -17,6 +17,7 @@ django.setup()
 from django.conf import settings
 from django.core.mail import EmailMessage
 from django.core.exceptions import ImproperlyConfigured
+from django.core.cache import cache
 
 #local imports
 
@@ -27,6 +28,7 @@ from shop.choices import DURATION_DICT,EXP_DICT
 from order.models import Order,OrderItem,CouponOrder, RefundItem
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from users.mixins import WriterInvoiceMixin
+from order.utils import get_ltv, LTVReportUtil
 
 #third party imports
 
@@ -155,6 +157,7 @@ class DiscountReportUtil:
         self.start_date = kwargs.get('start_date')
         self.end_date = kwargs.get('end_date')
         self.file_name = kwargs.get('file_name')
+        self.filter_type = kwargs.get('filter_type',1)
 
         if not self.start_date or not self.end_date or not self.file_name:
             raise ImproperlyConfigured("Please provide start_date and end_date")
@@ -174,7 +177,7 @@ class DiscountReportUtil:
         csv_writer = csv.writer(file_obj, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         csv_writer.writerow(["order_id","Candidate Id","Owner_name","Order_Date","Payment_Date","Payment Time",\
                     "Last Payment Date","Last Payment Time","Sales_executive","Sales_TL",\
-                    "Branch_Head","Transaction_ID","item_id","Product Id","Product_Name",\
+                    "Branch_Head","Transaction_ID","item_id","Product Id","Product_Name","Functional Area",\
                     "Item_Name","Experience","Course Duration","Status",\
                     "Price of item on site according to order (without tax including context)",\
                     "Discount (includes wallet and coupon)","Price of order with no discount/wallet",\
@@ -182,12 +185,19 @@ class DiscountReportUtil:
                     "Delivery Service","Delivery Price Incl Tax","Delivery Price Excl Tax",\
                     "Price of item on site","Transaction_Amount","coupon_id",\
                     "Payment_mode","Combo", "Combo Parent","Variation","Refunded","Refund Amount",\
-                    "No Process", "Replaced", "Replaced With", "Replacement Of","Writer price excluding Incentives","Writer's name"])
+                    "No Process", "Replaced", "Replaced With", "Replacement Of","Writer price excluding Incentives",\
+                    "Writer's name", "Lead Type",'LTV Bracket'])
 
-        transactions = PaymentTxn.objects.filter(status=1,\
-            payment_date__gte=self.start_date,payment_date__lte=self.end_date)
-        order_ids = list(transactions.values_list('order_id',flat=True))
-        orders = Order.objects.filter(status__in=[1,3],id__in=order_ids).order_by('id')
+        if int(self.filter_type) == 1:  # get order item based on payment_date filter
+            transactions = PaymentTxn.objects.filter(status=1,\
+                payment_date__gte=self.start_date,payment_date__lte=self.end_date)
+            order_ids = list(transactions.values_list('order_id',flat=True))
+            orders = Order.objects.filter(status__in=[1,3],id__in=order_ids).order_by('id')
+        
+        elif int(self.filter_type) == 2: # get order item based on order created date filter
+            orders = Order.objects.filter(\
+              status__in=[1,3],payment_date__gte=self.start_date,payment_date__lte=self.end_date)
+
         logging.getLogger('info_log').info("\
             Discount Report :: Total orders found - {}".format(orders.count()))
 
@@ -297,8 +307,8 @@ class DiscountReportUtil:
                 writer_price = 0
                 writer_name = ''
                 if item.order.status in [1,3] and item.product.type_flow in [1, 8, 12, 13] and \
-                        item.oi_status == 4 and item.assigned_to and item.closed_on >= self.start_date\
-                            and item.closed_on <= self.end_date:
+                        item.oi_status == 4 and item.assigned_to and item.closed_on.replace(tzinfo=None) >= self.start_date\
+                            and item.closed_on.replace(tzinfo=None) <= self.end_date:
                     invoice_date = item.closed_on.replace(day=1).date()  
                     invoice_date = invoice_date - timedelta(days=1)
                     invoice_date =invoice_date + relativedelta.relativedelta(months=1)
@@ -309,7 +319,21 @@ class DiscountReportUtil:
                         total_sum,total_combo_discount,success_closure = writer_invoice.get_writer_details_per_oi(item,item.assigned_to) 
                         writer_price = total_sum - total_combo_discount
                         writer_name = item.assigned_to if item.assigned_to else ''
+                
+                sales_user_info = order.sales_user_info
+                lead_type = 'NA'
+                if sales_user_info:
+                    sales_user_info = json.loads(sales_user_info)
+                    if 'is_upsell' in sales_user_info:
+                        lead_type = 'Upsell' if sales_user_info['is_upsell'] else 'Fresh'
 
+                ltv_bracket = LTVReportUtil().get_ltv_bracket(candidate_id=order.candidate_id)
+                product = item.product
+                main_category = product.category_main
+                lv2_parent = 'NA'   #default
+                if main_category:
+                    lv2_parent  = main_category.get_parent().first()
+                    lv2_parent = lv2_parent.name if lv2_parent else 'NA'
 
                 try:
                     row_data = [
@@ -318,7 +342,7 @@ class DiscountReportUtil:
                         last_txn_obj.payment_date.date(),last_txn_obj.payment_date.time(),\
                         sales_user_info.get('executive',''),\
                         sales_user_info.get('team_lead',''),sales_user_info.get('branch_head',''),\
-                        transaction_ids,item.id,item.product.id,item.product.name,item.product.heading,\
+                        transaction_ids,item.id,item.product.id,item.product.name,lv2_parent,item.product.heading,\
                         EXP_DICT.get(item.product.get_exp(),"N/A"), \
                         DURATION_DICT.get(item.product.get_duration(),"N/A"),order.get_status,\
                         item_cost_price,order_discount,price_without_wallet_discount,order.total_incl_tax,\
@@ -327,7 +351,7 @@ class DiscountReportUtil:
                         float(item.delivery_price_excl_tax),item_cost_price,order.total_incl_tax,\
                         coupon_code,txn_obj.get_payment_mode(),item.is_combo, combo_parent,item.is_variation,\
                         bool(item_refund_request_list),refund_amount,item.no_process, replaced, replacement_id,\
-                        order.replaced_order,writer_price,writer_name
+                        order.replaced_order,writer_price,writer_name,lead_type,ltv_bracket
                     ]
 
                     csv_writer.writerow(row_data)
@@ -337,6 +361,12 @@ class DiscountReportUtil:
                         "Discount Report | Order {} | {}".format(order.id,repr(e)))
                     continue
         file_obj.close()
+
+
+
+    
+
+    
 
 
 

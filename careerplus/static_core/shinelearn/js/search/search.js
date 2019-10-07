@@ -19,6 +19,19 @@ function filterquery(type) {
     $formFacets.submit();
 }
 
+
+function filterSearch(e)
+    {
+    clicked = $(e.target);
+    className = e.target.classList[0];
+    clicked.toggleClass('selected');
+
+    obj = $('#farea_filters .'+className)[0]
+    obj.toggleAttribute('checked')
+    filterquery();
+    }
+
+
 function paginate() {
     $('.cls_load_more').click(function(e){
         e.preventDefault();

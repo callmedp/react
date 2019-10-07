@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^wallet/history/$', wallet_view.WalletHistoryView.as_view(), name='wallethistory'),
     url(r'^api/', include('console.api.urls', namespace='api')),
     url(r'^compliance-report/$', order_view.ComplianceReport.as_view(), name='compliance-report'),
+    url(r'^ltv-report/$', order_view.LTVReportView.as_view(), name='ltv-report'),
 
 ]
 

@@ -37,6 +37,8 @@ Search Result Page - Shine Learning
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/search/filter.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/common/mobile/typeaheadjs.css' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/search/amcat-widget.scss' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
 
@@ -90,6 +92,42 @@ Search Result Page - Shine Learning
     <div class="body-wrapper ">
 <div class="content-box pt-0">
   <div class="container pt-0 js_listing">
+
+    <!-- amcat certification start -->
+              {% if vendor_banner %}
+    <div class="amcat-certification">
+        <div class="amcat-box">
+            <img class="img-responsive" alt="" src="{{vendor_banner}}">
+        </div>
+        <div class="amcat-tags mt-30">
+            <div class="slide-container">
+                <ul class="skill-provider amcat-tags">
+                    <li class="cuad">
+                             {% if facets.pFA|length > 1 %}
+       {% for facet in facets.pFA %}
+                    <li class="cuad">
+            <a  name="filterBtn" value="{{facet.id}}" onclick="filterSearch(event)" class=
+                    {% if facet.label == 'Others' %}
+            {% if facet.id in areaf %}"check{{forloop.counter}} selected"{% endif %}
+
+            {% else %}
+            {% if facet.id|stringformat:"i" in areaf %}
+            "check{{forloop.counter}} selected"
+            {% else %}
+                    "check{{forloop.counter}}"
+            {% endif %}
+            {% endif %}>{{facet.label}}
+                </a>
+                        </li>
+                {% endfor %}
+        {% endif %}
+               </ul>
+            </div> 
+        </div>
+        
+    </div>
+      {% endif %}
+    <!-- amcat certification end -->
 
     <div class="row enrol-now box pt-5 pb-5" id="hide-second">
 

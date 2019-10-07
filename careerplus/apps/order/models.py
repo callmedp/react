@@ -8,7 +8,7 @@ from dateutil import relativedelta
 #django imports
 from django.db import models
 from django.db.models import Q, Count, Case, When, IntegerField
-
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.utils import timezone
@@ -22,7 +22,7 @@ from .choices import STATUS_CHOICES, SITE_CHOICES,\
     PAYMENT_MODE, OI_OPS_STATUS, OI_LINKEDIN_FLOW_STATUS,\
     OI_USER_STATUS, OI_EMAIL_STATUS, REFUND_MODE, REFUND_OPS_STATUS,\
     TYPE_REFUND, OI_SMS_STATUS, WC_CATEGORY, WC_SUB_CATEGORY,\
-    WC_FLOW_STATUS, OI_OPS_TRANSFORMATION_DICT
+    WC_FLOW_STATUS, OI_OPS_TRANSFORMATION_DICT,LTV_BRACKET_LABELS
 
 from .functions import get_upload_path_order_invoice, process_application_highlighter
 from .tasks import generate_resume_for_order,bypass_resume_midout,upload_Resume_shine,board_user_on_neo
@@ -39,6 +39,7 @@ from coupon.models import Coupon
 #third party imports
 from payment.utils import manually_generate_autologin_url
 from shop.choices import S_ATTR_DICT, DAYS_CHOICES_DICT
+from coupon.models import Coupon
 
 
 #Global Constants
@@ -1381,4 +1382,23 @@ class OrderItemFeedbackOperation(models.Model):
     @property
     def oi_type_text(self):
         return dict(FEEDBACK_OPERATION_TYPE).get(self.oi_type)
+
+
+class LTVMonthlyRecord(models.Model):
+    ltv_bracket =  models.SmallIntegerField(choices=LTV_BRACKET_LABELS)
+    total_users = models.IntegerField()
+    total_order_count = models.IntegerField()
+    total_item_count = models.IntegerField()
+    crm_order_count = models.IntegerField()
+    crm_item_count = models.IntegerField()
+    learning_order_count = models.IntegerField()
+    learning_item_count = models.IntegerField()
+    year = models.IntegerField(validators=[MinValueValidator(2018)])  
+    month = models.IntegerField(validators=[MaxValueValidator(12), MinValueValidator(1)])
+    candidate_id_ltv_mapping = models.TextField()
+
+    @property
+    def ltv_bracket_text(self):
+        return dict(LTV_BRACKET_LABELS).get(self.ltv_bracket)
+
     
