@@ -437,6 +437,8 @@ class SearchListView(SearchBaseView):
         vendor_id = self.request.GET.getlist('fvid',[])
         if len(vendor_id) != 1:
             return context
+        if not vendor_id[0].isdigit():
+            return context
         if self.request.flavour.lower() == 'mobile':
             banner = 'mobile_banner_image'
         else:
