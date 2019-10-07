@@ -75,6 +75,9 @@ class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
     mobile_banner_image = models.ImageField(
         _('Mobile Banner Image'), upload_to=get_upload_path_mobile_banner_file,
         blank=True, null=True,default=None)
+
+    banner_visibility = models.BooleanField(_('Banner Visibility'),
+                                            default=True)
     icon = models.ImageField(
         _('Icon'), upload_to=get_upload_path_vendor,
         blank=True, null=True)
