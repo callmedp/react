@@ -1,0 +1,34 @@
+.export-csv{
+    border-radius:10px;
+    top:-7px;
+    float:right;
+    margin-bottom:15px;
+}
+
+.go-button{
+    margin-top:23px;
+}
+
+.loader{
+    background-color: rgba(0,0,0,0.5);
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 10;
+    display: none;
+}
+
+.body-overflow{
+    overflow: hidden;
+}
+
+.loader-image{
+    width: 100px;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+}
+
+.center-text{
+    text-align: center;
+}
