@@ -1,4 +1,4 @@
-#python imports
+# python imports
 import os
 import ast
 import json
@@ -8,8 +8,9 @@ import mimetypes
 from random import random
 from datetime import datetime
 
-#django imports
-from django.views.generic import TemplateView
+
+# django imports
+from django.views.generic import TemplateView,View
 from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.urls import reverse
 from django.conf import settings
@@ -21,18 +22,19 @@ from order.models import Order
 from console.decorators import Decorate, stop_browser_cache
 from django.core.files.base import ContentFile
 from django.utils import timezone
-from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect,\
+    HttpResponseForbidden,Http404
+from django.views.decorators.csrf import csrf_exempt
 
-
-#local imports
+# local imports
 from core.api_mixin import ShineCandidateDetail
 from .models import PaymentTxn
 from .mixin import PaymentMixin
 from .forms import StateForm, PayByCheckForm
-from .utils import EpayLaterEncryptDecryptUtil
+from .utils import EpayLaterEncryptDecryptUtil,ZestMoneyUtil
 from .tasks import put_epay_for_successful_payment
 
-#inter app imports
+# inter app imports
 from cart.models import Cart
 from order.models import Order
 from cart.mixins import CartMixin
@@ -41,10 +43,15 @@ from cart.tasks import create_lead_on_crm
 from core.api_mixin import ShineCandidateDetail
 from dashboard.dashboard_mixin import DashboardInfo
 from console.decorators import Decorate, stop_browser_cache
-from core.utils import get_client_ip,get_client_device_type
+from core.utils import get_client_ip, get_client_device_type
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
+from geolocation.models import Country
+
 
 # third party imports
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 
 
 @Decorate(stop_browser_cache())
@@ -63,19 +70,30 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
                 return HttpResponsePermanentRedirect(reverse('homepage'))
             try:
                 self.cart_obj = Cart.objects.get(pk=cart_pk)
-                if not self.cart_obj.shipping_done or not self.cart_obj.owner_id:
-                    return HttpResponsePermanentRedirect(reverse('cart:payment-shipping'))
+                if not self.cart_obj.owner_id:
+                    return HttpResponsePermanentRedirect(reverse('cart:payment-summary'))
             except Exception as e:
-                logging.getLogger('error_log').error('unable to get cart object%s'%str(e))
+                logging.getLogger('error_log').error('unable to get cart object%s' % str(e))
                 return HttpResponsePermanentRedirect(reverse('homepage'))
-        if self.cart_obj and not (self.cart_obj.shipping_done):
-            return HttpResponsePermanentRedirect(reverse('cart:payment-login'))
+        # if self.cart_obj and not (self.cart_obj.shipping_done):
+        #     return HttpResponsePermanentRedirect(reverse('cart:payment-login'))
 
-        elif not self.cart_obj:
+        if not self.cart_obj:
             return HttpResponsePermanentRedirect(reverse('homepage'))
         elif self.cart_obj and not self.cart_obj.lineitems.filter(no_process=False).exists():
             return HttpResponsePermanentRedirect(reverse('homepage'))
         return None
+
+    def get_state_list(self):
+        india_obj = Country.objects.filter(phone='91')
+        state_choices = []
+        if india_obj:
+            india_obj = india_obj[0]
+            states = india_obj.state_set.all().order_by('name')
+            for st in states:
+                state_choices.append((st.id, st.name))
+
+        return state_choices
 
     def get(self, request, *args, **kwargs):
         redirect = self.redirect_if_necessary()
@@ -121,108 +139,109 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
                     del request.session['checkout_type']
                     request.session.modified = True
                 except Exception as e:
-                    logging.getLogger('error_log').error('unable to delete request session objects%s'%str(e))
+                    logging.getLogger('error_log').error('unable to delete request session objects%s' % str(e))
                     pass
                 return HttpResponseRedirect(return_parameter)
 
         return super(PaymentOptionView, self).get(request, *args, **kwargs)
 
+    @csrf_exempt
     def post(self, request, *args, **kwargs):
         payment_type = request.POST.get('payment_type', '').strip()
         if payment_type == 'cash':
-            form = StateForm(request.POST)
-            if form.is_valid():
-                cart_pk = request.session.get('cart_pk')
-                if cart_pk:
-                    cart_obj = Cart.objects.get(pk=cart_pk)
-                    order = self.createOrder(cart_obj)
-                    self.closeCartObject(cart_obj)
-                    if order:
-                        txn = 'CP%d%s' % (order.pk, int(time.time()))
-                        pay_txn = PaymentTxn.objects.create(
-                            txn=txn,
-                            order=order,
-                            cart=cart_obj,
-                            status=0,
-                            payment_mode=1,
-                            currency=order.currency,
-                            txn_amount=order.total_incl_tax,
-                        )
-                        payment_type = "CASH"
-                        return_parameter = self.process_payment_method(
-                            payment_type, request, pay_txn)
-                        try:
-                            del request.session['cart_pk']
-                            del request.session['checkout_type']
-                            request.session.modified = True
-                        except Exception as e:
+            cart_pk = request.session.get('cart_pk')
+            if cart_pk:
+                cart_obj = Cart.objects.get(pk=cart_pk)
+                order = self.createOrder(cart_obj)
+                self.closeCartObject(cart_obj)
+                if order:
+                    txn = 'CP%d%s' % (order.pk, int(time.time()))
+                    pay_txn = PaymentTxn.objects.create(
+                        txn=txn,
+                        order=order,
+                        cart=cart_obj,
+                        status=0,
+                        payment_mode=1,
+                        currency=order.currency,
+                        txn_amount=order.total_incl_tax,
+                    )
+                    payment_type = "CASH"
+                    return_parameter = self.process_payment_method(
+                        payment_type, request, pay_txn)
+                    try:
+                        del request.session['cart_pk']
+                        del request.session['checkout_type']
+                        request.session.modified = True
+                    except Exception as e:
 
-                            logging.getLogger('error_log').error('unable to delete session request object%s'%str(e))
-                            pass
-                        return HttpResponseRedirect(return_parameter)
-                else:
-                    return HttpResponseRedirect(reverse('homepage'))
+                        logging.getLogger('error_log').error('unable to delete session request object%s' % str(e))
+                        pass
+                    return HttpResponseRedirect(return_parameter)
             else:
-                context = self.get_context_data()
-                context['state_form'] = form
-                return render(request, self.template_name, context)
+                return HttpResponseRedirect(reverse('homepage'))
         elif payment_type == 'cheque':
             form = PayByCheckForm(request.POST)
-            if form.is_valid():
-                cart_pk = request.session.get('cart_pk')
-                if cart_pk:
-                    cart_obj = Cart.objects.get(pk=cart_pk)
-                    order = self.createOrder(cart_obj)
-                    self.closeCartObject(cart_obj)
-                    if order:
-                        txn = 'CP%d%s%s' % (
-                            order.pk,
-                            int(time.time()),
-                            request.POST.get('cheque_no'))
-                        pay_txn = PaymentTxn.objects.create(
-                            txn=txn,
-                            order=order,
-                            cart=cart_obj,
-                            status=0,
-                            payment_mode=4,
-                            currency=order.currency,
-                            txn_amount=order.total_incl_tax,
-                            instrument_number=request.POST.get('cheque_no'),
-                            instrument_issuer=request.POST.get('drawn_bank'),
-                            instrument_issue_date=request.POST.get('deposit_date')
-                        )
-                        payment_type = "CHEQUE"
-                        return_parameter = self.process_payment_method(
-                            payment_type, request, pay_txn)
-                        try:
-                            del request.session['cart_pk']
-                            del request.session['checkout_type']
-                            request.session.modified = True
-                        except Exception as e:
-                            logging.getLogger('error_log').error('unable to delete request session object%s'%str(e))
-                            pass
-                        return HttpResponseRedirect(return_parameter)
-                else:
-                    return HttpResponseRedirect(reverse('homepage'))
+            cart_pk = request.session.get('cart_pk')
+            if cart_pk:
+                cart_obj = Cart.objects.get(pk=cart_pk)
+                order = self.createOrder(cart_obj)
+                self.closeCartObject(cart_obj)
+                if order:
+                    txn = 'CP%d%s%s' % (
+                        order.pk,
+                        int(time.time()),
+                        request.POST.get('cheque_no'))
+                    pay_txn = PaymentTxn.objects.create(
+                        txn=txn,
+                        order=order,
+                        cart=cart_obj,
+                        status=0,
+                        payment_mode=4,
+                        currency=order.currency,
+                        txn_amount=order.total_incl_tax,
+                        instrument_number=request.POST.get('cheque_no'),
+                        instrument_issuer=request.POST.get('drawn_bank'),
+                        instrument_issue_date=request.POST.get('deposit_date')
+                    )
+                    payment_type = "CHEQUE"
+                    return_parameter = self.process_payment_method(
+                        payment_type, request, pay_txn)
+                    try:
+                        del request.session['cart_pk']
+                        del request.session['checkout_type']
+                        request.session.modified = True
+                    except Exception as e:
+                        logging.getLogger('error_log').error('unable to delete request session object%s' % str(e))
+                        pass
+                    return HttpResponseRedirect(return_parameter)
             else:
-                context = self.get_context_data()
-                context['check_form'] = form
-                return render(request, self.template_name, context)
+                return HttpResponseRedirect(reverse('homepage'))
 
-        return HttpResponseRedirect(reverse('cart:cart-product-list'))
+        return HttpResponseRedirect(reverse('cart:payment-summary'))
 
     def get_context_data(self, **kwargs):
         context = super(PaymentOptionView, self).get_context_data(**kwargs)
         payment_dict = self.getPayableAmount(cart_obj=self.cart_obj)
         line_item = self.cart_obj.lineitems.filter(parent=None)[0]
         type_flow = int(line_item.product.type_flow)
-        print(type_flow)
+        # Fallback for cart object not being properly updated. TODO FIND SOURCE OF ISSUE
+        email_id = self.cart_obj.owner_email or self.cart_obj.email or self.request.session.get('email','')
+        first_name = self.cart_obj.first_name or self.request.session.get('first_name')
+        state_list = self.get_state_list()
+        guest_login = True
+        if self.request.session.get('candidate_id',''):
+            guest_login = False
+
         context.update({
             "state_form": StateForm(),
             "check_form": PayByCheckForm(),
             "total_amount": payment_dict.get('total_payable_amount'),
             "cart_id": self.request.session.get('cart_pk'),
-            "type_flow": type_flow
+            "type_flow": type_flow,
+            "email_id": ''.join(email_id),
+            "first_name": first_name,
+            "state_list": state_list,
+            "guest_login": guest_login
 
         })
         return context
@@ -279,7 +298,8 @@ class ThankYouView(TemplateView):
         context.update({
             "pending_resume_items": pending_resume_items,
             "assesment_items": assesment_items,
-            'booster_item_exist':booster_item_exist
+            'booster_item_exist':booster_item_exist,
+            'candidate_id': self.request and self.request.session.get('candidate_id','')
         })
 
         if not self.request.session.get('resume_id', None):
@@ -288,11 +308,12 @@ class ThankYouView(TemplateView):
                 request=self.request)
         return context
 
+    @csrf_exempt
     def post(self, request, *args, **kwargs):
         action_type = request.POST.get('action_type', '').strip()
         order_pk = request.session.get('order_pk')
         resume_id = request.session.get('resume_id', None)
-        candidate_id = request.session.get('candidate_id', None)
+        candidate_id = request.session.get('candidate_id', None) or request.session.get('guest_candidate_id',None)
         order = Order.objects.filter(pk=order_pk).first()
         if not order:
             return
@@ -347,27 +368,27 @@ class PaymentOopsView(TemplateView):
         return context
 
 
-class EPayLaterRequestView(OrderMixin,TemplateView):
+class EPayLaterRequestView(OrderMixin, TemplateView):
     template_name = "payment/epaylater_submission_form.html"
 
-    def _get_order_history_list(self,order):
+    def _get_order_history_list(self, order):
         order_history = []
 
         for past_order in order.get_past_orders_for_email_and_mobile():
             past_txn = past_order.ordertxns.filter(status=1).first()
             if not past_txn:
                 continue
-            order_data = {"orderId":past_txn.txn,"amount":float(past_order.total_incl_tax),
-                "currencyCode":past_order.get_currency_code(),
-                "date":past_order.payment_date.isoformat().split("+")[0].split(".")[0]+"Z",
-                "category": settings.EPAYLATER_INFO['category'],
-                "returned": "false","paymentMethod":past_txn.get_payment_mode()}
+            order_data = {"orderId": past_txn.txn, "amount": float(past_order.total_incl_tax),
+                          "currencyCode": past_order.get_currency_code(),
+                          "date": past_order.payment_date.isoformat().split("+")[0].split(".")[0] + "Z",
+                          "category": settings.EPAYLATER_INFO['category'],
+                          "returned": "false", "paymentMethod": past_txn.get_payment_mode()}
             order_history.append(order_data)
 
         return order_history
 
-    def get_context_data(self,**kwargs):
-        cart_id = kwargs.get('cart_id',0)
+    def get_context_data(self, **kwargs):
+        cart_id = kwargs.get('cart_id', 0)
         cart_obj = Cart.objects.filter(id=cart_id).first()
         if not cart_obj:
             return HttpResponseRedirect("/")
@@ -379,107 +400,108 @@ class EPayLaterRequestView(OrderMixin,TemplateView):
         order = self.createOrder(cart_obj)
         txn_id = 'CP%d%s' % (order.pk, int(time.time()))
         pay_txn = PaymentTxn.objects.create(
-            txn=txn_id,order=order,
-            cart=cart_obj,status=0,
-            payment_mode=11,currency=order.currency,
+            txn=txn_id, order=order,
+            cart=cart_obj, status=0,
+            payment_mode=11, currency=order.currency,
             txn_amount=order.total_incl_tax,
-            )
+        )
 
         current_utc_string = datetime.utcnow().isoformat().split(".")[0] + "Z"
         initial_dict = {
-            "redirectType": "WEBPAGE","marketplaceOrderId": txn_id,
+            "redirectType": "WEBPAGE", "marketplaceOrderId": txn_id,
             "mCode": settings.EPAYLATER_INFO.get('mCode'),
-            "callbackUrl": "{}://{}/payment/epaylater/response/{}/".format(\
-                settings.SITE_PROTOCOL,site_domain,cart_id),
-            "customerEmailVerified": False,"customerTelephoneNumberVerified": False,
-            "customerLoggedin": True,"amount": float(order.total_incl_tax*100),
+            "callbackUrl": "{}://{}/payment/epaylater/response/{}/".format( \
+                settings.SITE_PROTOCOL, site_domain, cart_id),
+            "customerEmailVerified": False, "customerTelephoneNumberVerified": False,
+            "customerLoggedin": True, "amount": float(order.total_incl_tax * 100),
             "currencyCode": order.get_currency_code(),
-            "date": current_utc_string,"category": settings.EPAYLATER_INFO['category']}
+            "date": current_utc_string, "category": settings.EPAYLATER_INFO['category']}
 
-        customer_data = {"firstName": order.first_name,"lastName": order.last_name,
-            "emailAddress":order.email,"telephoneNumber":order.mobile}
+        customer_data = {"firstName": order.first_name, "lastName": order.last_name,
+                         "emailAddress": order.email, "telephoneNumber": order.mobile}
 
         device_data = {"deviceType": get_client_device_type(self.request),
-            "deviceClient": self.request.META.get('HTTP_USER_AGENT',''),
-            "deviceNumber": get_client_ip(self.request)}
+                       "deviceClient": self.request.META.get('HTTP_USER_AGENT', ''),
+                       "deviceNumber": get_client_ip(self.request)}
 
-        market_data = {"marketplaceCustomerId":order.email,
-            "memberSince":order.get_first_touch_for_email().\
-                isoformat().split("+")[0].split(".")[0] + "Z"}
+        market_data = {"marketplaceCustomerId": order.email,
+                       "memberSince": order.get_first_touch_for_email(). \
+                                          isoformat().split("+")[0].split(".")[0] + "Z"}
 
-        initial_dict.update({"customer":customer_data,"device":device_data,
-            "orderHistory":self._get_order_history_list(order),
-            "marketplaceSpecificSection":market_data})
+        initial_dict.update({"customer": customer_data, "device": device_data,
+                             "orderHistory": self._get_order_history_list(order),
+                             "marketplaceSpecificSection": market_data})
 
         # generate checksum and encdata for form submission
-        epay_encdec_obj = EpayLaterEncryptDecryptUtil(settings.EPAYLATER_INFO['aeskey'],\
-            settings.EPAYLATER_INFO['iv'])
+        epay_encdec_obj = EpayLaterEncryptDecryptUtil(settings.EPAYLATER_INFO['aeskey'], \
+                                                      settings.EPAYLATER_INFO['iv'])
         checksum = epay_encdec_obj.checksum(json.dumps(initial_dict).encode('utf-8'))
         encdata = epay_encdec_obj.encrypt(json.dumps(initial_dict).encode('utf-8'))
 
-        template_context = {"action":settings.EPAYLATER_INFO['payment_url'],
-                    "mcode":settings.EPAYLATER_INFO['mCode'],
-                    "checksum":checksum,"encdata":encdata}
+        template_context = {"action": settings.EPAYLATER_INFO['payment_url'],
+                            "mcode": settings.EPAYLATER_INFO['mCode'],
+                            "checksum": checksum, "encdata": encdata}
         return template_context
 
 
-class EPayLaterResponseView(PaymentMixin,CartMixin,TemplateView):
+class EPayLaterResponseView(PaymentMixin, CartMixin, TemplateView):
 
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
         return HttpResponseNotAllowed()
 
-    def _extract_json_from_string(self,dec_data):
+    def _extract_json_from_string(self, dec_data):
         start_index = dec_data.find("{")
         end_index = dec_data.rfind("}")
-        decrypted_text = dec_data[start_index:end_index+1]
-        decrypted_text = decrypted_text.replace("null","\"\"")
+        decrypted_text = dec_data[start_index:end_index + 1]
+        decrypted_text = decrypted_text.replace("null", "\"\"")
         return ast.literal_eval(decrypted_text)
 
-    def _handle_successful_transaction(self,txn_obj,txn_id,order):
+    def _handle_successful_transaction(self, txn_obj, txn_id, order):
         self.closeCartObject(txn_obj.cart)
         return_url = self.process_payment_method(
             payment_type='EPAYLATER', request=self.request,
-            txn_obj=txn_obj,data={'order_id': order.pk, 'txn_id': txn_id})
+            txn_obj=txn_obj, data={'order_id': order.pk, 'txn_id': txn_id})
         try:
             del self.request.session['cart_pk']
             del self.request.session['checkout_type']
             self.request.session.modified = True
         except Exception as e:
-            logging.getLogger('error_log').error('unable to modify request session  %s'%str(e))
+            logging.getLogger('error_log').error('unable to modify request session  %s' % str(e))
         return return_url
 
-    def _handle_failed_transaction(self,txn_obj,failure_message):
+    def _handle_failed_transaction(self, txn_obj, failure_message):
         txn_obj.txn_status = 2
         txn_obj.txn_info = failure_message
         logging.getLogger('error_log').error('EPAYLATER failed for {}'.format(txn_obj.txn))
         txn_obj.save()
 
-    def post(self,request,*args,**kwargs):
+    @csrf_exempt
+    def post(self, request, *args, **kwargs):
         paylater_data = request.POST.copy()
         checksum = paylater_data.get('checksum')
         encdata = paylater_data.get('encdata')
-        epay_encdec_obj = EpayLaterEncryptDecryptUtil(settings.EPAYLATER_INFO['aeskey'],\
-            settings.EPAYLATER_INFO['iv'])
+        epay_encdec_obj = EpayLaterEncryptDecryptUtil(settings.EPAYLATER_INFO['aeskey'], \
+                                                      settings.EPAYLATER_INFO['iv'])
         decrypted_data = epay_encdec_obj.decrypt(encdata)
         inferred_checksum = epay_encdec_obj.checksum(decrypted_data.encode('utf-8'))
 
         if checksum != inferred_checksum:
             logging.getLogger('error_log').error("PayLater Checksum failure - {}".format(decrypted_data))
-            return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure&txn_id='+txn_id)
+            return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure&txn_id=' + txn_id)
 
         decrypted_data = self._extract_json_from_string(decrypted_data)
-        transaction_status = decrypted_data.get('status','').upper()
+        transaction_status = decrypted_data.get('status', '').upper()
         txn_id = decrypted_data.get('marketplaceOrderId')
         order_id = decrypted_data.get('eplOrderId')
 
         if not txn_id:
             logging.getLogger('error_log').error("PayLater No txn id - {}".format(decrypted_data))
-            return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure&txn_id='+txn_id)
+            return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure&txn_id=' + txn_id)
 
         txn_obj = PaymentTxn.objects.filter(txn=txn_id).first()
         if not txn_obj:
             logging.getLogger('error_log').error("PayLater No txn obj - {}".format(decrypted_data))
-            return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure&txn_id='+txn_id)
+            return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure&txn_id=' + txn_id)
 
         order = txn_obj.order
 
@@ -487,16 +509,159 @@ class EPayLaterResponseView(PaymentMixin,CartMixin,TemplateView):
 
             if txn_obj.status == 1:
                 logging.getLogger('info_log').info('EPAY - Updating successful transaction {}'.format(txn_id))
-                put_epay_for_successful_payment.delay(order_id,txn_id)
+                put_epay_for_successful_payment.delay(order_id, txn_id)
                 return HttpResponseRedirect(reverse('payment:thank-you'))
 
-            return_url = self._handle_successful_transaction(txn_obj,txn_id,order)
-            put_epay_for_successful_payment.delay(order_id,txn_id)
+            return_url = self._handle_successful_transaction(txn_obj, txn_id, order)
+            put_epay_for_successful_payment.delay(order_id, txn_id)
             return HttpResponseRedirect(return_url)
 
         else:
-            self._handle_failed_transaction(txn_obj,decrypted_data.get('statusDesc'))
-            return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure&txn_id='+txn_id)
+            self._handle_failed_transaction(txn_obj, decrypted_data.get('statusDesc'))
+            return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure&txn_id=' + txn_id)
+
+
+class ZestMoneyRequestApiView(OrderMixin, APIView):
+
+    '''
+    After the payment option page for zest money emi it will be redirected to this
+    view and following will be done
+    1) order is created
+    2) payment txn will be created
+    3) user will be redirected to the zestmoney site
+
+    '''
+
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self,request,*args,**kwargs):
+        data = {'url':''}
+        cart_pk = kwargs.get('cart_id')
+        if not cart_pk:
+            return Response(data,status=status.HTTP_400_BAD_REQUEST)
+        cart = Cart.objects.filter(id=cart_pk).first()
+        if not cart:
+            return Response(data,status=status.HTTP_400_BAD_REQUEST)
+        #creating order
+        order = self.createOrder(cart)
+        if not order:
+            logging.getLogger('error_log').error('order is not created for '
+                                                 'cart id- {}'.format(cart_pk))
+            return Response(data,status=status.HTTP_400_BAD_REQUEST)
+
+        txn = 'CP%d%s' % (order.pk, int(time.time()))
+       #creating txn object
+        pay_txn = PaymentTxn.objects.create(
+            txn=txn,
+            order=order,
+            cart=cart,
+            status=0,
+            payment_mode=14,
+            currency=order.currency,
+            txn_amount=order.total_incl_tax,
+        )
+        zest_object = ZestMoneyUtil()
+        redirect_url = zest_object.create_application_and_fetch_logon_url(
+            pay_txn)
+        if not redirect_url:
+            return Response(data, status=status.HTTP_400_BAD_REQUEST)
+        data.update({'url': redirect_url})
+        return Response(data, status=status.HTTP_200_OK)
+
+
+class ZestMoneyResponseView(CartMixin,PaymentMixin,View):
+
+    status_text_mapping = {
+        'applicationinprogress'     : 'Loan application is in progress',
+        'approved'                  : 'Loan application has been approved',
+        'bankaccountdetailscomplete': 'Customer has completed his bank '
+                                      'account details',
+        'cancelled'                 : 'Loan application has been cancelled',
+        'customercancelled'         : 'Loan application has been cancelled by '
+                                      'the customer',
+        'declined'                  : 'Loan application was declined',
+        'depositpaid'               : 'The customer has either made the '
+                                      'downpayment, or chose to pay on '
+                                      'delivery (if available)',
+        'documentscomplete'         : 'The customer has uploaded all the '
+                                      'required documents',
+        'loanagreementaccepted'     : 'The customer has signed the loan '
+                                      'agreement',
+        'merchantcancelled'         : 'Loan application was cancelled by the '
+                                      'merchant',
+        'outofstock'                : 'Some of the items in the order are out '
+                                      'of stock and the loan application was '
+                                      'cancelled',
+        'preaccepted'               : 'Loan application was pre-accepted by '
+                                      'automated risk process',
+        'riskpending'               : 'Risk decision pending',
+        'timeoutcancelled'          : 'Loan application was cancelled by a '
+                                      'timeout mechanism (customer did not '
+                                      'complete the application in time)'
+    }
+
+    zest_status_payment_status_mapping = {"cancelled"        : 5,
+                                          "customercancelled": 5,
+                                          "declined"         : 2,
+                                          "merchantcancelled": 5,
+                                          "outofstock"       : 5,
+                                          "timeoutcancelled" : 3,
+                                          }
+
+    approval_pending_status = ["bankaccountdetailscomplete",
+                               "applicationinprogress", "depositpaid", \
+                               "documentscomplete", "loanagreementaccepted",
+                               "riskpending"]
+
+
+    def update_txn_info(self,order_status,txn_obj):
+        success_text = self.status_text_mapping.get(order_status, "")
+        success_text = json.dumps(success_text)
+        txn_obj.txn_info = success_text
+        txn_obj.save()
+
+    def get(self, request, *args, **kwargs):
+        txn_id = kwargs.get('txn_id')
+        if not txn_id:
+            return HttpResponseForbidden()
+        txn_obj = PaymentTxn.objects.filter(id=txn_id).first()
+
+        if not txn_obj:
+            raise Http404()
+
+        zest_obj = ZestMoneyUtil()
+        order_status = zest_obj.fetch_order_status(txn_obj).lower()
+        logging.getLogger('info_log').info('order_status - {}'.format(
+            order_status))
+
+        if order_status in ["preaccepted", "approved", "active"]:
+            return_parameter = self.process_payment_method(
+                'ZESTMONEY', request, txn_obj)
+            logging.getLogger('info_log').info (
+                "Zest Order Successfully updated {},{}".\
+                format(order_status, txn_obj.id))
+            self.closeCartObject(txn_obj.cart)
+            return HttpResponseRedirect(return_parameter)
+
+        if order_status in self.approval_pending_status:
+            txn_obj.status = 0
+            self.update_txn_info(order_status, txn_obj)
+            self.closeCartObject(txn_obj.cart)
+            return HttpResponseRedirect(reverse('payment:thank-you'))
+
+        failure_text = self.status_text_mapping.get(order_status, "")
+        failure_status = self.zest_status_payment_status_mapping.get (
+            order_status, 0)
+        logging.getLogger('info_log').info("Zest Order Update {},{}". \
+                                             format (order_status,
+                                                     txn_obj.id))
+
+        txn_obj.status = failure_status
+        failure_text = json.dumps(failure_text)
+        txn_obj.txn_info = failure_text
+        txn_obj.save()
+        return HttpResponseRedirect(reverse('payment:thank-you'))
 
 
 

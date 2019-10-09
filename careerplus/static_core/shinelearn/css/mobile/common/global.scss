@@ -66,6 +66,14 @@
   align-items: flex-start;
 }
 
+.flex-1 {
+  flex: 1;
+}
+
+.flex-direction-column {
+  flex-direction: column;
+}
+
 .inline-block {
   display: inline-block;
 }
@@ -303,6 +311,10 @@
 
 .border-top {
   border-top: 1px solid $border-grey-f2;
+}
+
+.border-top-none {
+  border-top: none 0 !important;
 }
 
 .tagging {
@@ -751,4 +763,15 @@ address {
   margin-bottom: 20px;
   font-style: normal;
   line-height: 1.428571429;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+}
+
+mr-40 {
+    margin-right: 40px;
 }

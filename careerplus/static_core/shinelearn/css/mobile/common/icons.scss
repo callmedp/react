@@ -745,3 +745,16 @@
   background-position: -216px -460px;
 }
 
+
+
+.icon-whatsApp {
+  @include size(30px, 30px, block);
+  display: block;
+  box-shadow: 0 0 10px rgba($bg-black, .3);
+  background-position: -259px -465px;
+
+  position: fixed;
+  bottom: 30px;
+  left: 15px;
+  z-index: 99;
+}

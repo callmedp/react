@@ -99,6 +99,17 @@ class PaymentMixin(object):
 
             return_parameter = reverse('payment:thank-you')
 
+        elif payment_type == "ZESTMONEY":
+            payment_date = datetime.now()
+            txn_obj.status = 1
+            txn_obj.payment_date = payment_date
+            txn_obj.payment_mode = 14
+            txn_obj.save()
+
+            order.payment_date = payment_date
+            order.status = 1
+            order.save()
+
         if order:
             request.session['order_pk'] = order.pk
             if not order.candidate_id:
