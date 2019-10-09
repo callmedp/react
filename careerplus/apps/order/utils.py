@@ -107,6 +107,7 @@ class LTVReportUtil:
         year = int(year)
         month = int(month)
 
+        logging.getLogger('info_log').info('Monthly ltv cron started for year - {} month - {}'.format(year, month))
         start_date = date(year, month, 1)
         end_date = start_date + relativedelta.relativedelta(months=1)
 
@@ -118,9 +119,12 @@ class LTVReportUtil:
         unique_candidate_ids = list(set([x.candidate_id for x in orders]))
         candidate_id_ltv_mapping = {}
         ltv_bracket_record_mapping = {}
+        logging.getLogger('info_log').info('No of unique candidate ids are- {} '.format(len(unique_candidate_ids)))
 
         for candidate_id in unique_candidate_ids:
             ltv_bracket = self.get_ltv_bracket(candidate_id, till_month=month)
+            logging.getLogger('info_log').info('candidate id - {} in ltv bracket - {}'.format(candidate_id,ltv_bracket))
+
             if ltv_bracket in candidate_id_ltv_mapping:
                 candidate_id_ltv_mapping[ltv_bracket].append(candidate_id)
             else:
@@ -134,6 +138,8 @@ class LTVReportUtil:
             total_item_count = 0
             crm_order_count, crm_item_count = 0, 0
             learning_order_count, learning_item_count = 0, 0
+            crm_users = set()
+            learning_users = set()
 
             for order in total_orders:
                 oi_actual_price_mapping = order.get_oi_actual_price_mapping()
@@ -142,9 +148,14 @@ class LTVReportUtil:
                 if order.sales_user_info:
                     crm_item_count += count
                     crm_order_count += 1
+                    crm_users.add(candidate_id)
                 else:
                     learning_item_count += count
                     learning_order_count += 1
+                    learning_users.add(candidate_id)
+
+            crm_users = len(crm_users)
+            learning_users = len(learning_users)
 
             if previous_data:
                 total_users += previous_data.get('total_users', 0)
@@ -154,6 +165,8 @@ class LTVReportUtil:
                 crm_order_count += previous_data.get('crm_order_count', 0)
                 learning_item_count += previous_data.get('learning_item_count', 0)
                 learning_order_count += previous_data.get('learning_order_count', 0)
+                crm_users += previous_data.get('crm_users',0)
+                learning_users += previous_data.get('learning_users',0)
 
             ltv_bracket_record_mapping.update({
                 ltv_bracket: {
@@ -163,10 +176,13 @@ class LTVReportUtil:
                     'crm_item_count': crm_item_count,
                     'crm_order_count': crm_order_count,
                     'learning_item_count': learning_item_count,
-                    'learning_order_count': learning_order_count
+                    'learning_order_count': learning_order_count,
+                    'crm_users':crm_users,
+                    'learning_users':learning_users,
                 }
             })
 
+        logging.getLogger('info_log').info('Received records for different ltv brackets')
 
         default_record = {
             'total_users': 0,
@@ -175,7 +191,9 @@ class LTVReportUtil:
             'crm_item_count': 0,
             'crm_order_count': 0,
             'learning_item_count': 0,
-            'learning_order_count': 0
+            'learning_order_count': 0,
+            'crm_users':0,
+            'learning_users':0,
         }
 
         for index, bracket in enumerate(self.LTV_BRACKET_LABELS):
@@ -183,6 +201,8 @@ class LTVReportUtil:
 
             if not new_record:
                 new_record = default_record
+                logging.getLogger('info_log').info('No candidate in ltv bracket - {}'.format(bracket))
+
             candidate_ids = candidate_id_ltv_mapping.get(bracket, [])
             new_record.update({
                 'ltv_bracket': index,
@@ -193,10 +213,11 @@ class LTVReportUtil:
                 year=year, month=month, ltv_bracket=index,
                 defaults=new_record,
             )
-    # def get_yearly_record(self):
-    #     month_one_year_before = datetime.now().date() - relativedelta.relativedelta(months=11)
-    #     year = month_one_year_before.year
-    #     month = month_one_year_before.month
+
+            if created:
+                logging.getLogger('info_log').info('Created a record for ltv bracket - {}'.format(bracket))
+            else:
+                logging.getLogger('info_log').info('Updated a record for ltv bracket - {}'.format(bracket))
 
 
 
