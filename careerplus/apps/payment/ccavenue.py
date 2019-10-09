@@ -125,8 +125,9 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
         order_id = pay_txn.txn
 
         amount = amount = order_obj.total_incl_tax
-        surl = "http://" + settings.SITE_DOMAIN + reverse("payment:ccavenue_response", args=("success",))
-        curl = "http://" + settings.SITE_DOMAIN + reverse("payment:ccavenue_response", args=("cancel",))
+        domain = settings.MOBILE_PROTOCOL_DOMAIN if request.is_mobile else settings.MAIN_DOMAIN_PREFIX
+        surl = domain + reverse("payment:ccavenue_response", args=("success",))
+        curl = domain + reverse("payment:ccavenue_response", args=("cancel",))
 
         p_merchant_id = context_dict['merchant_id']
         p_currency = context_dict['currency']

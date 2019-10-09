@@ -310,8 +310,10 @@ ACCESSKEY = 'Af7fa4f7dacdc996393c18071b57d0a6f'
 
 ########## DOMAIN SETTINGS ######################
 SITE_DOMAIN = 'learning.shine.com'
+MOBILE_SITE_DOMAIN = 'mlearning.shine.com'
 SITE_PROTOCOL = 'https'
 MAIN_DOMAIN_PREFIX = '{}://{}'.format(SITE_PROTOCOL, SITE_DOMAIN)  # 'http://learning.shine.com'
+MOBILE_PROTOCOL_DOMAIN = '{}://{}'.format(SITE_PROTOCOL,MOBILE_SITE_DOMAIN)
 MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
 SITE_ID = 1
 CART_MAX_LIMIT = 5
