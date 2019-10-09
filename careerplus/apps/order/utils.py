@@ -107,6 +107,7 @@ class LTVReportUtil:
         year = int(year)
         month = int(month)
 
+        logging.getLogger('info_log').info('Monthly ltv cron started for year - {} month - {}'.format(year, month))
         start_date = date(year, month, 1)
         end_date = start_date + relativedelta.relativedelta(months=1)
 
@@ -118,9 +119,12 @@ class LTVReportUtil:
         unique_candidate_ids = list(set([x.candidate_id for x in orders]))
         candidate_id_ltv_mapping = {}
         ltv_bracket_record_mapping = {}
+        logging.getLogger('info_log').info('No of unique candidate ids are- {} '.format(len(unique_candidate_ids)))
 
         for candidate_id in unique_candidate_ids:
             ltv_bracket = self.get_ltv_bracket(candidate_id, till_month=month)
+            logging.getLogger('info_log').info('candidate id - {} in ltv bracket - {}'.format(candidate_id,ltv_bracket))
+
             if ltv_bracket in candidate_id_ltv_mapping:
                 candidate_id_ltv_mapping[ltv_bracket].append(candidate_id)
             else:
@@ -167,6 +171,7 @@ class LTVReportUtil:
                 }
             })
 
+        logging.getLogger('info_log').info('Received records for different ltv brackets')
 
         default_record = {
             'total_users': 0,
@@ -183,6 +188,8 @@ class LTVReportUtil:
 
             if not new_record:
                 new_record = default_record
+                logging.getLogger('info_log').info('No candidate in ltv bracket - {}'.format(bracket))
+
             candidate_ids = candidate_id_ltv_mapping.get(bracket, [])
             new_record.update({
                 'ltv_bracket': index,
@@ -193,10 +200,11 @@ class LTVReportUtil:
                 year=year, month=month, ltv_bracket=index,
                 defaults=new_record,
             )
-    # def get_yearly_record(self):
-    #     month_one_year_before = datetime.now().date() - relativedelta.relativedelta(months=11)
-    #     year = month_one_year_before.year
-    #     month = month_one_year_before.month
+
+            if created:
+                logging.getLogger('info_log').info('Created a record for ltv bracket - {}'.format(bracket))
+            else:
+                logging.getLogger('info_log').info('Updated a record for ltv bracket - {}'.format(bracket))
 
 
 
