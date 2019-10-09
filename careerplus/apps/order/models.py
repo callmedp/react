@@ -1387,6 +1387,8 @@ class OrderItemFeedbackOperation(models.Model):
 class LTVMonthlyRecord(models.Model):
     ltv_bracket =  models.SmallIntegerField(choices=LTV_BRACKET_LABELS)
     total_users = models.IntegerField()
+    crm_users = models.IntegerField(default=0)
+    learning_users = models.IntegerField(default=0)
     total_order_count = models.IntegerField()
     total_item_count = models.IntegerField()
     crm_order_count = models.IntegerField()

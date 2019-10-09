@@ -138,6 +138,8 @@ class LTVReportUtil:
             total_item_count = 0
             crm_order_count, crm_item_count = 0, 0
             learning_order_count, learning_item_count = 0, 0
+            crm_users = set()
+            learning_users = set()
 
             for order in total_orders:
                 oi_actual_price_mapping = order.get_oi_actual_price_mapping()
@@ -146,9 +148,14 @@ class LTVReportUtil:
                 if order.sales_user_info:
                     crm_item_count += count
                     crm_order_count += 1
+                    crm_users.add(candidate_id)
                 else:
                     learning_item_count += count
                     learning_order_count += 1
+                    learning_users.add(candidate_id)
+
+            crm_users = len(crm_users)
+            learning_users = len(learning_users)
 
             if previous_data:
                 total_users += previous_data.get('total_users', 0)
@@ -158,6 +165,8 @@ class LTVReportUtil:
                 crm_order_count += previous_data.get('crm_order_count', 0)
                 learning_item_count += previous_data.get('learning_item_count', 0)
                 learning_order_count += previous_data.get('learning_order_count', 0)
+                crm_users += previous_data.get('crm_users',0)
+                learning_users += previous_data.get('learning_users',0)
 
             ltv_bracket_record_mapping.update({
                 ltv_bracket: {
@@ -167,7 +176,9 @@ class LTVReportUtil:
                     'crm_item_count': crm_item_count,
                     'crm_order_count': crm_order_count,
                     'learning_item_count': learning_item_count,
-                    'learning_order_count': learning_order_count
+                    'learning_order_count': learning_order_count,
+                    'crm_users':crm_users,
+                    'learning_users':learning_users,
                 }
             })
 
@@ -180,7 +191,9 @@ class LTVReportUtil:
             'crm_item_count': 0,
             'crm_order_count': 0,
             'learning_item_count': 0,
-            'learning_order_count': 0
+            'learning_order_count': 0,
+            'crm_users':0,
+            'learning_users':0,
         }
 
         for index, bracket in enumerate(self.LTV_BRACKET_LABELS):
