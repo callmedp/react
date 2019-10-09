@@ -870,7 +870,7 @@ class ShineCandidateLoginAPIView(APIView):
 
         return order_data
 
-    def get_response_for_successful_login(self, candidate_id, login_response, with_info):
+    def get_response_for_successful_login(self, candidate_id, login_response, with_info=True):
         candidate_obj = ShineCandidate(**login_response)
         candidate_obj.id = candidate_id
         candidate_obj.candidate_id = candidate_id

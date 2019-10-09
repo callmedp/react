@@ -78,7 +78,7 @@ export class Buy extends Component {
 
         }
         await this.props.addToCart(data);
-        window.location.href = '/cart'
+        window.location.href = '/cart/payment-summary/'
     }
 
     async componentDidMount() {
