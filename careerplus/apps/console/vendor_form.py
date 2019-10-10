@@ -622,7 +622,6 @@ class ScreenProductAttributeForm(forms.ModelForm):
                 kwargs['initial']['attribute_%s' % attribute.name] = value
 
     def add_attribute_fields(self, product_class):
-        
         for attribute in product_class.attributes.filter(active=True):
             if self.instance.type_flow != 14 and attribute.name == 'Brochure':
                 continue

@@ -111,20 +111,20 @@ class CartMixin(object):
                     cart_obj.mobile = mobile
                     cart_obj.save()
 
-                # todo update it for resume builder only
-                if is_resume_template == 'true':
-                    cart_obj.lineitems.filter().delete()
-                else:
-                    cart_obj.lineitems.filter(Q(product=product) | Q(product__type_flow=17)).delete()
+                # # todo update it for resume builder only
+                # if is_resume_template == 'true':
+                #     cart_obj.lineitems.filter().delete()
+                # else:
+                #     cart_obj.lineitems.filter(Q(product=product) | Q(product__type_flow=17)).delete()
 
-                if product.is_course or product.type_flow == 17 and cv_id:
+                if (product.is_course or product.type_flow == 17) and cv_id:
                     # courses
                     try:
-                        # for resume builder type_flow todo create new type flow
-                        if product.type_flow == 17:
-                            cv_prod = Product.objects.get(id=cv_id)
-                        else:
-                            cv_prod = Product.objects.get(id=cv_id, active=True)
+                        # # for resume builder type_flow todo create new type flow
+                        # if product.type_flow == 17:
+                        #     cv_prod = Product.objects.get(id=cv_id)
+                        # else:
+                        cv_prod = Product.objects.get(id=cv_id, active=True)
                         parent = cart_obj.lineitems.create(product=product, no_process=True)
                         parent.reference = str(cart_obj.pk) + '_' + str(parent.pk)
                         parent.price_excl_tax = product.get_price()
@@ -565,13 +565,13 @@ class CartMixin(object):
                 if not total_amount:
 
                     # cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
-                    line_item = cart_obj.lineitems.filter(parent=None)[0]
-                    type_flow = int(line_item.product.type_flow)
-                    # resume builder flow handle
-                    if type_flow == 17:
-                        cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
-                    else:
-                        cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
+                    # line_item = cart_obj.lineitems.filter(parent=None)[0]
+                    # type_flow = int(line_item.product.type_flow)
+                    # # resume builder flow handle
+                    # if type_flow == 17:
+                    #     cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
+                    # else:
+                    cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
                     total_amount = cart_dict.get('total_amount', Decimal(0))
 
                 total_amount = InvoiceGenerate().get_quantize(total_amount)
