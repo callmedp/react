@@ -50,15 +50,15 @@ class CartView(TemplateView, CartMixin, UserMixin):
         context = super(self.__class__, self).get_context_data(**kwargs)
         cart_obj = self.getCartObject()
         line_items_list = cart_obj.lineitems.filter(parent=None)
-        type_flow = -1
-        if len(line_items_list):
-            line_item = line_items_list[0];
-            type_flow = int(line_item.product.type_flow)
-        #  resume builder flow handle
-        if type_flow == 17:
-            cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
-        else:
-            cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
+        # type_flow = -1
+        # if len(line_items_list):
+        #     line_item = line_items_list[0];
+        #     type_flow = int(line_item.product.type_flow)
+        # #  resume builder flow handle
+        # if type_flow == 17:
+        #     cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
+        # else:
+        cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
         cart_items = cart_dict.get('cart_items', [])
         total_amount = cart_dict.get('total_amount')
         context.update({
@@ -326,16 +326,16 @@ class PaymentLoginView(TemplateView, CartMixin):
         cart_obj = Cart.objects.get(pk=cart_pk)
         type_flow = -1
 
-        line_item_list = cart_obj.lineitems.filter(parent=None)
+        # line_item_list = cart_obj.lineitems.filter(parent=None)
 
-        if len(line_item_list):
-            line_item = line_item_list[0]
-            type_flow = int(line_item.product.type_flow)
+        # if len(line_item_list):
+        #     line_item = line_item_list[0]
+        #     type_flow = int(line_item.product.type_flow)
         # resume builder flow handle
-        if type_flow == 17:
-            cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
-        else:
-            cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
+        # if type_flow == 17:
+        #     cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
+        # else:
+        cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
         cart_items = cart_dict.get('cart_items', [])
         payment_dict = self.getPayableAmount(cart_obj, cart_dict.get('total_amount'))
         country_list = Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact='') | Q(active__exact=False))
@@ -567,19 +567,16 @@ class PaymentSummaryView(TemplateView, CartMixin):
         cart_obj, wal_obj = self.cart_obj, None
         cart_coupon, cart_wallet = None, None
         wal_txn, wal_total, wal_point = None, None, None
+        # line_item_list = cart_obj.lineitems.filter(parent=None)
 
-        type_flow = -1
-
-        line_item_list = cart_obj.lineitems.filter(parent=None)
-
-        if len(line_item_list):
-            line_item = line_item_list[0]
-            type_flow = int(line_item.product.type_flow)
-        # resume builder flow handle
-        if type_flow == 17:
-            cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
-        else:
-            cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
+        # if len(line_item_list):
+        #     line_item = line_item_list[0]
+        #     type_flow = int(line_item.product.type_flow)
+        # # resume builder flow handle
+        # if type_flow == 17:
+        #     cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
+        # else:
+        cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
         cart_items = cart_dict.get('cart_items', [])
         payment_dict = self.getPayableAmount(cart_obj, cart_dict.get('total_amount'))
         context.update(payment_dict)
@@ -667,19 +664,19 @@ class UpdateDeliveryType(View, CartMixin):
                 delivery_obj = delivery_servieces.get(pk=delivery_type)
                 line_obj.delivery_service = delivery_obj
                 line_obj.save()
-                type_flow = -1
+                # type_flow = -1
 
-                line_item_list = cart_obj.lineitems.filter(parent=None)
+                # line_item_list = cart_obj.lineitems.filter(parent=None)
 
-                if len(line_item_list):
-                    line_item = line_item_list[0]
-                    type_flow = int(line_item.product.type_flow)
+                # if len(line_item_list):
+                #     line_item = line_item_list[0]
+                #     type_flow = int(line_item.product.type_flow)
 
-                # resume builder flow handle
-                if type_flow == 17:
-                    cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
-                else:
-                    cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
+                # # resume builder flow handle
+                # if type_flow == 17:
+                #     cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
+                # else:
+                cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
                 total_cart_amount = cart_dict.get('total_amount')
                 delivery_charge = delivery_obj.get_price()
                 payment_dict = self.getPayableAmount(cart_obj, cart_dict.get('total_amount'))

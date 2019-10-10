@@ -178,15 +178,15 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                 "order_pk": order.pk,
             })
 
-            # cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
-            line_item = cart_obj.lineitems.filter(parent=None)[0]
-            type_flow = int(line_item.product.type_flow)
+            # # cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
+            # line_item = cart_obj.lineitems.filter(parent=None)[0]
+            # type_flow = int(line_item.product.type_flow)
 
-            # resume builder flow handle
-            if type_flow == 17:
-                cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
-            else:
-                cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
+            # # resume builder flow handle
+            # if type_flow == 17:
+            #     cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
+            # else:
+            cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
 
             cart_items = cart_dict.get('cart_items', [])
             for item in cart_items:

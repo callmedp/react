@@ -87,7 +87,7 @@ class Candidate(PreviewImageCreationMixin, CandidateProfile):
                 break
 
             for item in order_obj.orderitems.all():
-                if item.product and item.product.type_flow == 17 and item.product.type_product == 2:
+                if item.product and item.product.type_flow == 17 and item.product.type_product == 0:
                     order_data = {"id": order_obj.id,
                                   "combo": True if item.product.id != settings.RESUME_BUILDER_NON_COMBO_PID else False
                                   }
