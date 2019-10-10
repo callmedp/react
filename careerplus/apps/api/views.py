@@ -871,12 +871,19 @@ class ShineCandidateLoginAPIView(APIView):
         return order_data
 
     def get_response_for_successful_login(self, candidate_id, login_response, with_info=True):
+        import ipdb;
+        ipdb.set_trace();
         candidate_obj = ShineCandidate(**login_response)
         candidate_obj.id = candidate_id
         candidate_obj.candidate_id = candidate_id
         token = self.get_or_create_token(candidate_obj)
+        personal_info = login_response.get('personal_detail')[0]
+        personal_info['candidate_id']= personal_info.get('id')
 
         self.request.session.update(login_response)
+
+        self.request.session.update(personal_info)
+
         if with_info:
             data_to_send = {"token": token,
                             "candidate_id": candidate_id,
