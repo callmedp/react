@@ -66,7 +66,21 @@
             <!-- left content start -->
             <div class="col-sm-3 payment-summary-tab">
                 <a class='trig-loader' href="{% url "cart:payment-summary" %}"><span class="green-circle">1</span> Summary</a>
-                <a class='trig-loader' href="{% url "cart:payment-login" %}"><span class="green-circle">2</span> Logged in <strong class="truncate-email">as {%if guest_login%} Guest {%else%}{%if first_name%}{{first_name}}{% else %}{{email_id}}{% endif %}{%endif%}</strong></a>
+                <a class='trig-loader' href="{% url "cart:payment-login" %}"><span class="green-circle">2</span>
+                  {% if candidate_in_session or guest_login  %}
+           Logged in<strong class="truncate-email">as
+            {% if candidate_in_session %}
+                {%if first_name%}
+                  {{first_name}}
+                {% else %}
+                  {{email_id}}
+                {% endif %}         
+            {% else %}
+              Guest
+            {% endif%}
+          {% else %}
+          Login
+          {% endif %}</strong></a>
                 <a class='trig-loader' href="{% url "payment:payment-option" %}" class="active"><span>3</span> Payment</a>
 
                 <!-- secure payment -->
