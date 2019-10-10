@@ -13,6 +13,7 @@ import moment from "moment"
 import {fetchPersonalInfo, updatePersonalInfo} from '../../../../store/personalInfo/actions/index'
 import SelectTemplateModal from '../../../Modal/selectTemplateModal';
 import LoaderPage from '../../../Loader/loaderPage';
+import {siteDomain} from '../../../../Utils/domains'
 import {
     displaySelectedTemplate,
     fetchDefaultCustomization,
@@ -63,16 +64,11 @@ export class Buy extends Component {
             product = this.props.productIds[1]
         }
         const data = {
-            "prod_id": product.parent,
-            "addons": [],
+            "prod_id": product.id,
             "cart_type": 'cart',
-            "cv_id": product.id,
-            "req_options": [],
-            'add_resume': true
-
         }
         await this.props.addToCart(data);
-        window.location.href = '/cart'
+        window.location.href = `${siteDomain}/cart/payment-summary/`;
     }
 
     async componentDidMount() {

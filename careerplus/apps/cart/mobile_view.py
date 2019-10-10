@@ -9,8 +9,6 @@ from .models import Cart
 
 class RemoveFromCartMobileView(View, CartMixin):
     def post(self, request, *args, **kwargs):
-        import ipdb;
-        ipdb.set_trace();
         if request.is_ajax():
             data = {"status": -1}
             product_reference = request.POST.get('product_reference')

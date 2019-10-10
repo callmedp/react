@@ -43,13 +43,8 @@ class Buy extends Component {
             product = this.props.productIds[1]
         }
         const data = {
-            "prod_id": product.parent,
-            "addons": [],
-            "cart_type": 'cart',
-            "cv_id": product.id,
-            "req_options": [],
-            'add_resume': true
-
+            "prod_id": product.id,
+            "cart_type": 'cart'
         }
         this.props.addToCart(data);
         this.setState({pay_button_clicked: true})

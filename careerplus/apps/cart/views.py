@@ -78,8 +78,6 @@ class AddToCartView(View, CartMixin):
         return super(AddToCartView, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        import ipdb;
-        ipdb.set_trace();
 
         data = {"status": -1}
         cart_type = request.POST.get('cart_type')
@@ -564,10 +562,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
             return redirect
         return super(self.__class__, self).get(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        import ipdb;
-        ipdb.set_trace();
-        
+    def get_context_data(self, **kwargs):  
         context = super(self.__class__, self).get_context_data(**kwargs)
         cart_obj, wal_obj = self.cart_obj, None
         cart_coupon, cart_wallet = None, None
