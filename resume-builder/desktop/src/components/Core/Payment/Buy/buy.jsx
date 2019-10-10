@@ -5,7 +5,7 @@ import TopBar from '../../Editor/TopBar/topBar.jsx'
 import Header from '../../../Common/Header/header.jsx'
 import Footer from '../../../Common/Footer/footer.jsx'
 import * as action from '../../../../store/buy/actions'
-import {showModal, hideModal, showSelectTemplateModal, hideSelectTemplateModal} from "../../../../store/ui/actions"
+import {showModal, hideModal,updateUi, showSelectTemplateModal, hideSelectTemplateModal} from "../../../../store/ui/actions"
 import {connect} from "react-redux";
 import TemplateModal from '../../../Modal/tempateModal'
 import Slider from "react-slick";
@@ -51,13 +51,19 @@ export class Buy extends Component {
     }
 
     async redirectToCart() {
+        
+
         this.props.eventClicked({
             'action': 'PayNow',
             'label': 'Click'
         })
-        if (!this.props.productIds[0])
-            return;
+
+        console.log('----', this.props.productIds);
+        
+        if (!this.props.productIds[0])   return;
         let product;
+        this.props.showLoader();
+
         if (this.state.checked === 'product1') {
             product = this.props.productIds[0]
         } else {
@@ -325,6 +331,10 @@ const mapDispatchToProps = (dispatch) => {
                 dispatch(loginCandidate({payload: {alt: ''}, resolve, reject, isTokenAvail: false}))
             })
         },
+
+        "showLoader": () =>{
+            return dispatch(updateUi({loader:true}))
+        }
     }
 };
 

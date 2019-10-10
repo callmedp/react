@@ -12,6 +12,7 @@ import {eventClicked} from '../../../../store/googleAnalytics/actions/index'
 import {loginCandidate} from "../../../../store/landingPage/actions";
 
 
+
 class Buy extends Component {
 
     constructor(props) {
@@ -19,7 +20,6 @@ class Buy extends Component {
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
         this.state = {
             'checked': 'product1',
-            'pay_button_clicked': false,
             'modal_status': false,
             'template_id': ''
         }
@@ -30,6 +30,8 @@ class Buy extends Component {
 
 
     redirectToCart() {
+
+        
         this.props.eventClicked({
             'action': 'PayNow',
             'label': 'Click'
@@ -37,6 +39,8 @@ class Buy extends Component {
         if (!this.props.productIds[0])
             return;
         let product;
+
+
         if (this.state.checked === 'product1') {
             product = this.props.productIds[0]
         } else {
@@ -47,7 +51,6 @@ class Buy extends Component {
             "cart_type": 'cart'
         }
         this.props.addToCart(data);
-        this.setState({pay_button_clicked: true})
     }
 
     closeModalStatus() {
@@ -97,7 +100,7 @@ class Buy extends Component {
         };
         const {ui: {mainloader}, template: {thumbnailImages, templateImage}, productIds, history} = this.props
         const template = localStorage.getItem('selected_template') || 1;
-        const {checked, pay_button_clicked, modal_status} = this.state
+        const {checked, modal_status} = this.state
         const price1 = productIds[0] ? productIds[0].inr_price : 999
         const discount1 = Math.floor(((1499 - price1) / 1499) * 100)
         const price2 = productIds[1] ? productIds[1].inr_price : 1248
@@ -118,7 +121,7 @@ class Buy extends Component {
                             className="fs-26 color-333 semi-bold">Rs. {checked === 'product1' ? price1 : price2}/-</span>
                     </div>
 
-                    <button className="btn btn__round btn__primary fs-" disabled={pay_button_clicked}
+                    <button className="btn btn__round btn__primary fs-" 
                             onClick={this.redirectToCart.bind(this)}>Pay Now
                     </button>
                 </div>

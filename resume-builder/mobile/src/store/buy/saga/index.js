@@ -32,12 +32,12 @@ function* addToCart(action) {
         const result = yield call(Api.addToCart, data);
         if (result['error']) {
             apiError();
+            yield put({type:uiAction.UPDATE_MAIN_PAGE_LOADER,payload:{mainloader: false}})
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
         else{
             window.location.href = `${siteDomain}/cart/payment-summary/`
         }
-        yield put({type:uiAction.UPDATE_MAIN_PAGE_LOADER,payload:{mainloader: false}})
         return resolve('Product added to cart successfully.');
 
 

@@ -10,10 +10,6 @@ from django.core.management.base import BaseCommand
 from order.utils import LTVReportUtil
 
 
-
-
-
-
 class Command(BaseCommand):
     def handle(self, *args, **options): 
         year = options.get('year','')
@@ -21,8 +17,8 @@ class Command(BaseCommand):
         ltv_monthly_record(year,month)
 
     def add_arguments(self, parser):
-        parser.add_argument('year', type=str)
-        parser.add_argument('month', type=str)
+        parser.add_argument('year', type=str, nargs='?', default='')
+        parser.add_argument('month', type=str, nargs='?', default='')
 
 def ltv_monthly_record(year,month):
     if not (year and month):

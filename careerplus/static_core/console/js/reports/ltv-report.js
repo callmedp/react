@@ -57,9 +57,9 @@ const getLTVRecords = (year,month) =>{
                             <td>${result.total_users}</td>
                             <td>${result.total_order_count}</td>
                             <td>${result.total_item_count}</td>
-                            <td>${result.crm_order_count}</td>
+                            <td>${result.crm_users} (${result.crm_order_count})</td>
                             <td>${result.crm_item_count}</td>
-                            <td>${result.learning_order_count}</td>
+                            <td>${result.learning_users} (${result.learning_order_count})</td>
                             <td>${result.learning_item_count}</td>
                         </tr>
                     `
