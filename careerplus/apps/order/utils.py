@@ -4,7 +4,7 @@ import calendar
 from datetime import date, datetime,timedelta
 import logging
 from dateutil import relativedelta
-import json
+import json,copy
 
 # django imports
 from django.db.models import Sum
@@ -116,12 +116,22 @@ class LTVReportUtil:
             payment_date__lte=end_date,\
             status__in=[1, 3])
 
-        unique_candidate_ids = list(set([x.candidate_id for x in orders]))
+        candidate_id_order_mapping = {}
+
+        for order in orders:
+            if not order.candidate_id:
+                continue
+
+            previous_data = candidate_id_order_mapping.get(order.candidate_id,[])
+            previous_data.append(order)
+            candidate_id_order_mapping.update({order.candidate_id:previous_data})
+
+        print(candidate_id_order_mapping)
         candidate_id_ltv_mapping = {}
         ltv_bracket_record_mapping = {}
-        logging.getLogger('info_log').info('No of unique candidate ids are- {} '.format(len(unique_candidate_ids)))
+        logging.getLogger('info_log').info('No of unique candidate ids are- {} '.format(len(candidate_id_order_mapping.keys())))
 
-        for candidate_id in unique_candidate_ids:
+        for candidate_id in candidate_id_order_mapping.keys():
             ltv_bracket = self.get_ltv_bracket(candidate_id, till_month=month)
             logging.getLogger('info_log').info('candidate id - {} in ltv bracket - {}'.format(candidate_id,ltv_bracket))
 
@@ -129,84 +139,66 @@ class LTVReportUtil:
                 candidate_id_ltv_mapping[ltv_bracket].append(candidate_id)
             else:
                 candidate_id_ltv_mapping[ltv_bracket] = [candidate_id]
+
             previous_data = ltv_bracket_record_mapping.get(ltv_bracket)
             total_users = 1
-            total_orders = Order.objects.filter(
-                candidate_id=candidate_id, payment_date__gte=start_date,\
-                payment_date__lte=end_date, status__in=[1, 3])
-            total_order_count = total_orders.count()
-            total_item_count = 0
-            crm_order_count, crm_item_count = 0, 0
-            learning_order_count, learning_item_count = 0, 0
-            crm_users = set()
-            learning_users = set()
+            crm_order_ids,learning_order_ids = [],[]
+            crm_item_count,learning_item_count = 0 , 0
+            revenue = 0
 
-            for order in total_orders:
+            for order in candidate_id_order_mapping.get(candidate_id,[]):
                 oi_actual_price_mapping = order.get_oi_actual_price_mapping()
+                revenue += sum(oi_actual_price_mapping.values())
                 count = len(oi_actual_price_mapping.keys())
-                total_item_count += count
                 if order.sales_user_info:
                     crm_item_count += count
-                    crm_order_count += 1
-                    crm_users.add(candidate_id)
+                    crm_order_ids.append(order.id)
                 else:
                     learning_item_count += count
-                    learning_order_count += 1
-                    learning_users.add(candidate_id)
-
-            crm_users = len(crm_users)
-            learning_users = len(learning_users)
+                    learning_order_ids.append(order.id)
 
             if previous_data:
-                total_users += previous_data.get('total_users', 0)
-                total_item_count += previous_data.get('total_item_count', 0)
-                total_order_count += previous_data.get('total_order_count', 0)
-                crm_item_count += previous_data.get('crm_item_count', 0)
-                crm_order_count += previous_data.get('crm_order_count', 0)
+                crm_order_ids += (previous_data.get('crm_order_ids', []))
+                learning_order_ids += (previous_data.get('learning_order_ids', []))
                 learning_item_count += previous_data.get('learning_item_count', 0)
-                learning_order_count += previous_data.get('learning_order_count', 0)
-                crm_users += previous_data.get('crm_users',0)
-                learning_users += previous_data.get('learning_users',0)
+                crm_item_count += previous_data.get('crm_item_count', 0),
+                revenue += previous_data.get('revenue',0)
 
             ltv_bracket_record_mapping.update({
                 ltv_bracket: {
-                    'total_users': total_users,
-                    'total_item_count': total_item_count,
-                    'total_order_count': total_order_count,
-                    'crm_item_count': crm_item_count,
-                    'crm_order_count': crm_order_count,
+                    'crm_order_ids': crm_order_ids,
+                    'learning_order_ids': learning_order_ids,
                     'learning_item_count': learning_item_count,
-                    'learning_order_count': learning_order_count,
-                    'crm_users':crm_users,
-                    'learning_users':learning_users,
+                    'crm_item_count': crm_item_count,
+                    'revenue': revenue
                 }
             })
 
         logging.getLogger('info_log').info('Received records for different ltv brackets')
-
+        import ipdb; ipdb.set_trace()
         default_record = {
-            'total_users': 0,
-            'total_item_count': 0,
-            'total_order_count': 0,
-            'crm_item_count': 0,
-            'crm_order_count': 0,
+            'crm_order_ids': [],
+            'learning_order_ids': [],
             'learning_item_count': 0,
-            'learning_order_count': 0,
-            'crm_users':0,
-            'learning_users':0,
+            'crm_item_count': 0,
+            'revenue': revenue
         }
 
         for index, bracket in enumerate(self.LTV_BRACKET_LABELS):
             new_record = ltv_bracket_record_mapping.get(bracket,'')
 
             if not new_record:
-                new_record = default_record
+                new_record = copy.deepcopy(default_record)
                 logging.getLogger('info_log').info('No candidate in ltv bracket - {}'.format(bracket))
 
             candidate_ids = candidate_id_ltv_mapping.get(bracket, [])
+            crm_order_ids = json.dumps(new_record.get('crm_order_ids'))
+            learning_order_ids =  json.dumps(new_record.get('learning_order_ids'))
             new_record.update({
+                'crm_order_ids': crm_order_ids,
+                'learning_order_ids': learning_order_ids,
                 'ltv_bracket': index,
-                'candidate_id_ltv_mapping': json.dumps(candidate_ids)
+                'candidate_ids': json.dumps(candidate_ids)
             })
 
             obj, created = LTVMonthlyRecord.objects.update_or_create(

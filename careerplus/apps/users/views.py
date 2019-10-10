@@ -156,6 +156,7 @@ class LoginApiView(FormView):
         return context
 
     def form_valid(self, form):
+        import ipdb; ipdb.set_trace()
         context = self.get_context_data()
         login_dict = {}
         remember_me = self.request.POST.get('remember_me', None)
