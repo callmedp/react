@@ -57,7 +57,7 @@
             <a class='trig-loader' href="{% url "cart:payment-login" %}">
                 <!-- <span class="dot">2</span> -->
                 <span class="tick"></span>
-                {%if guest_login%}Guest{%else%}Login{%endif%}
+                {%if candidate_in_session%}Login{%else%}Guest{%endif%}
             </a>
         </li>
 
@@ -216,7 +216,7 @@
 
 
         {% endif %}
-        
+
           <div class="payment-type--item">
             <span></span>
             <a class="trig-loader" href="{% url "payment:epaylater-request" cart_id %}" >Buy now, Pay Later
