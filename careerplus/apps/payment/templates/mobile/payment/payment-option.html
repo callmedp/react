@@ -81,7 +81,8 @@
             <span></span>
             <a class='trig-loader' href="{% url "payment:ccavenue_request" cart_id 'all' %}">Card & Netbanking</a>
           </div>
-
+        
+          {% if type_flow != 17 %}
 
           <div class="accordion_example1 smk_accordion">
               <div class="accordion_in">
@@ -213,6 +214,9 @@
               </div><!-- /. Cheque accordion item -->
           </div><!-- /. accordion wrap -->
 
+
+        {% endif %}
+        
           <div class="payment-type--item">
             <span></span>
             <a class="trig-loader" href="{% url "payment:epaylater-request" cart_id %}" >Buy now, Pay Later
