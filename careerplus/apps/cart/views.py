@@ -565,13 +565,13 @@ class PaymentSummaryView(TemplateView, CartMixin):
     def get_context_data(self, **kwargs):  
         context = super(self.__class__, self).get_context_data(**kwargs)
         cart_obj, wal_obj = self.cart_obj, None
-        cart_coupon, cart_wallet = None, None
+        cart_coupon, cart_wallet, type_flow = None, None,None
         wal_txn, wal_total, wal_point = None, None, None
-        # line_item_list = cart_obj.lineitems.filter(parent=None)
+        line_item_list = cart_obj.lineitems.filter(parent=None)
 
-        # if len(line_item_list):
-        #     line_item = line_item_list[0]
-        #     type_flow = int(line_item.product.type_flow)
+        if len(line_item_list):
+            line_item = line_item_list[0]
+            type_flow = int(line_item.product.type_flow)
         # # resume builder flow handle
         # if type_flow == 17:
         #     cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
