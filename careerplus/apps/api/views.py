@@ -871,6 +871,7 @@ class ShineCandidateLoginAPIView(APIView):
         return order_data
 
     def get_response_for_successful_login(self, candidate_id, login_response, with_info=True):
+        
         candidate_obj = ShineCandidate(**login_response)
         candidate_obj.id = candidate_id
         candidate_obj.candidate_id = candidate_id
@@ -1096,10 +1097,9 @@ class ShineCandidateLoginAPIView(APIView):
             return Response({"data": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            if with_info:
-                login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
-            else:
-                login_response = ShineCandidateDetail().get_status_detail(shine_id=candidate_id)
+            login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
+            # else:
+            #     login_response = ShineCandidateDetail().get_status_detail(shine_id=candidate_id)
         except Exception as e:
             logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
             return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
