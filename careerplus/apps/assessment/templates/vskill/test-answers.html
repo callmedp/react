@@ -218,7 +218,7 @@
 
 
                <div class="form-group">
-                  <button class="blue_btn mr-20"  type="submit" id="leadCreationSubmit">Submit</button>
+                  <button class="blue_btn mr-20"  type="button" id="leadCreationSubmit">Submit</button>
                </div>
             </div>
          </form>
@@ -309,12 +309,18 @@ $('#leadCreationForm').validate({
 
 
 function getCoptions(){
+
         questionAttempt = JSON.parse(myStorage.getItem(tKey));
         if (questionAttempt != null) {
-            for (var id in Object.keys(questionAttempt)) {
-                if (Object.values(questionAttempt)[id] != "" && Object.keys(questionAttempt)[id] != "skippedQuestion") {
+            for ( preSelect of Object.keys(questionAttempt)) {
+                if (preSelect != "" && preSelect != "skippedQuestion" && typeof(questionAttempt[preSelect]) == 'string')
+                 {
+                if( questionAttempt[preSelect].length !=0){
 
-                    $('#' + Object.values(questionAttempt)[id]).attr('checked',true);
+                    for (id of questionAttempt[preSelect].split(',')){
+                    $('#'+id).attr('checked',true);
+                    }
+                    }
                 }
             }
          }
@@ -323,16 +329,37 @@ function getCoptions(){
          type  : 'get',
          success: function(response){
          for(i of response){
-            $('#check'+i.question_options[0]).addClass('ans-right');
-            if(questionAttempt && Object.values(questionAttempt) && Object.values(questionAttempt).includes(i.question_options[0])){
-                  right+= 1 ;
-                     }
-                            }
+      if (i.question_options.length > 1) {
+      debugger;
+	flag = true;
+	for (opt of i.question_options) {
+		$('#check' + opt).addClass('ans-right');
+		if (!Object.values(questionAttempt).toString().split(',').includes(opt)) {
+			flag = false;
+		}
+	}
+	if (flag) {
+		right += 1;
+	}
+} else {
+	$('#check' + i.question_options[0]).addClass('ans-right');
+	if (questionAttempt && Object.values(questionAttempt) && Object.values(questionAttempt).includes(i.question_options[0])) {
+		right += 1;
+	}
+}
+}
+
          if(questionAttempt){
-            for (i of Object.values(questionAttempt)){
+            selected_arrays = Object.values(questionAttempt);
+            for (val of selected_arrays ){
+               if(val && val.length != 0  && typeof(val) == 'string' ){
+                val = val.split(',')
+                for (i of val){
 
                 if(! $("#check"+i).hasClass('ans-right')){
                 $("#check"+i).addClass('ans-wrong');
+               }
+               }
                 }
 
 
@@ -410,7 +437,7 @@ if(flag){
 }
 
 
-$("#leadCreationForm").submit(function(e){
+$("#leadCreationForm").click(function(e){
 var flag=$('#leadCreationForm').valid();
 if(flag){
     getCoptions();

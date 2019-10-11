@@ -68,7 +68,11 @@
                             {% for ans in quest.options %}
                             <li>
                                 <label class="custom-radio">{{ans.option}}
-                                    <input type="radio" id="{{ans.option_id}}" name="radio">
+                                    {% if quest.question_type == 2  %}
+                                    <input type="checkbox" id="{{ans.option_id}}" name="radio">
+                                    {% else %}
+                                  <input type="radio" id="{{ans.option_id}}" name="radio">
+                                    {% endif %}
                                     <span class="checkmark"></span>
                                 </label>
                             </li>
@@ -334,16 +338,30 @@ function nextquestion(number) {
 }
 
 $('input[name="radio"]').on("click", function(e) {
-if (!timeout){
-    let quest_id = $(e.target).closest(".test-paper")[0].id;
-    $('#marked' + quest_id).removeClass();
-    $('#marked' + quest_id).addClass('dirt');
-    skippedQuest = skippedQuest.filter(item => item !== '#marked' + quest_id);
-    questionAttempt['skippedQuestion'] =skippedQuest;
+    if (!timeout) {
+        let quest_id = $(e.target).closest(".test-paper")[0].id;
+        $('#marked' + quest_id).removeClass();
+        $('#marked' + quest_id).addClass('dirt');
+        skippedQuest = skippedQuest.filter(item => item !== '#marked' + quest_id);
+        questionAttempt['skippedQuestion'] = skippedQuest;
         $('#marked' + quest_id).addClass('active');
-    questionAttempt[quest_id] = e.target.id;
 
-    myStorage.setItem(tKey, JSON.stringify(questionAttempt));
+        if ($(e.target.checked)[0] == true) {
+            attempt = questionAttempt[quest_id]
+            if (!attempt) {
+                attempt = e.target.id
+            } else {
+                attempt = attempt + ',' + e.target.id
+            }
+        } else {
+            attempt = questionAttempt[quest_id]
+            if (attempt) {
+                attempt = (attempt.split(',').filter(optId => optId != e.target.id)).toString()
+            }
+        }
+        questionAttempt[quest_id] = attempt;
+
+        myStorage.setItem(tKey, JSON.stringify(questionAttempt));
     }
 });
 
