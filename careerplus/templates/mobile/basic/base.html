@@ -199,6 +199,7 @@
     </body>
 </html>
 {% endspaceless %}
+{% block  jquery_block %}
 <script type="text/javascript">
     $("#id_q").on('keyup', function (e) {
     if (e.keyCode == 13) {
@@ -230,3 +231,4 @@
   });
 
 </script>
+{% endblock jquery_block %}

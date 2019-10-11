@@ -57,7 +57,7 @@
             <a class='trig-loader' href="{% url "cart:payment-login" %}">
                 <!-- <span class="dot">2</span> -->
                 <span class="tick"></span>
-                {%if guest_login%}Guest{%else%}Login{%endif%}
+                {%if candidate_in_session%}Login{%else%}Guest{%endif%}
             </a>
         </li>
 
@@ -81,7 +81,8 @@
             <span></span>
             <a class='trig-loader' href="{% url "payment:ccavenue_request" cart_id 'all' %}">Card & Netbanking</a>
           </div>
-
+        
+          {% if type_flow != 17 %}
 
           <div class="accordion_example1 smk_accordion">
               <div class="accordion_in">
@@ -212,6 +213,9 @@
                   </div><!-- /. accordion content -->
               </div><!-- /. Cheque accordion item -->
           </div><!-- /. accordion wrap -->
+
+
+        {% endif %}
 
           <div class="payment-type--item">
             <span></span>
