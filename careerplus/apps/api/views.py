@@ -896,7 +896,7 @@ class ShineCandidateLoginAPIView(APIView):
                 "token": token,
                 "candidate_id": candidate_id,
                 'cart_pk': self.request.session.get('cart_pk') or self.request._request.session.get('cart_pk'),
-                'profile': login_response
+                'profile': personal_info
             }
 
         return Response(data_to_send, status=status.HTTP_201_CREATED)
