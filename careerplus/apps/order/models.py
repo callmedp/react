@@ -1,6 +1,6 @@
 #python imports
 import math
-import datetime,logging
+import datetime,logging,json
 
 from decimal import Decimal
 from dateutil import relativedelta
@@ -1384,23 +1384,75 @@ class OrderItemFeedbackOperation(models.Model):
         return dict(FEEDBACK_OPERATION_TYPE).get(self.oi_type)
 
 
+# class LTVMonthlyRecord(models.Model):
+#     ltv_bracket =  models.SmallIntegerField(choices=LTV_BRACKET_LABELS)
+#     total_users = models.IntegerField()
+#     crm_users = models.IntegerField(default=0)
+#     learning_users = models.IntegerField(default=0)
+#     total_order_count = models.IntegerField()
+#     total_item_count = models.IntegerField()
+#     crm_order_count = models.IntegerField()
+#     crm_item_count = models.IntegerField()
+#     learning_order_count = models.IntegerField()
+#     learning_item_count = models.IntegerField()
+#     year = models.IntegerField(validators=[MinValueValidator(2018)])  
+#     month = models.IntegerField(validators=[MaxValueValidator(12), MinValueValidator(1)])
+#     candidate_id_ltv_mapping = models.TextField()
+
+#     @property
+#     def ltv_bracket_text(self):
+#         return dict(LTV_BRACKET_LABELS).get(self.ltv_bracket)
+
 class LTVMonthlyRecord(models.Model):
     ltv_bracket =  models.SmallIntegerField(choices=LTV_BRACKET_LABELS)
-    total_users = models.IntegerField()
-    crm_users = models.IntegerField(default=0)
-    learning_users = models.IntegerField(default=0)
-    total_order_count = models.IntegerField()
-    total_item_count = models.IntegerField()
-    crm_order_count = models.IntegerField()
-    crm_item_count = models.IntegerField()
-    learning_order_count = models.IntegerField()
-    learning_item_count = models.IntegerField()
+    crm_order_ids = models.TextField(default=True,null=True)
+    learning_order_ids = models.TextField(default=True)
+    crm_item_count = models.IntegerField()   # no process,free,combo parent,variation parent to be removed so query will take time
+    learning_item_count = models.IntegerField()  # no process,free,combo parent,variation parent to be removed so query will take time
     year = models.IntegerField(validators=[MinValueValidator(2018)])  
     month = models.IntegerField(validators=[MaxValueValidator(12), MinValueValidator(1)])
-    candidate_id_ltv_mapping = models.TextField()
+    candidate_ids = models.TextField()
 
     @property
     def ltv_bracket_text(self):
         return dict(LTV_BRACKET_LABELS).get(self.ltv_bracket)
+
+    @property 
+    def total_users(self):
+        return len(json.loads(self.candidate_ids))
+
+    @property
+    def crm_users(self):
+        candidates = Order.objects.filter(id__in=json.loads(self.crm_order_ids)).values_list('candidate_id',flat=True)
+        return len({candidate for candidate in candidates})
+
+    @property
+    def crm_order_count(self):
+        return len(json.loads(self.crm_order_ids))
+
+    @property
+    def learning_users(self):
+        candidates = Order.objects.filter(id__in=json.loads(self.learning_order_ids)).values_list('candidate_id',flat=True)
+        return len({candidate for candidate in candidates})
+
+    @property
+    def learning_order_count(self):
+        return len(json.loads(self.learning_order_ids))
+    
+    @property
+    def total_order_count(self):
+        return len(json.loads(self.crm_order_ids)) + len(json.loads(self.learning_order_ids))
+
+    @property
+    def total_item_count(self):
+        return self.crm_item_count + self.learning_item_count
+
+    @property
+    def revenue(self):
+        order_ids = json.loads(self.crm_order_ids) + json.loads(self.learning_order_ids)
+        order_amounts = Order.objects.filter(id__in=order_ids).values_list('total_excl_tax',flat=True)
+        return sum(order_amounts)
+        
+    
 
     

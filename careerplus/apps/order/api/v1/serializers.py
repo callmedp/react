@@ -24,7 +24,15 @@ class OrderSerializer(serializers.ModelSerializer):
 
 class LTVReportSerializer(serializers.ModelSerializer):
     ltv_bracket_text = serializers.CharField()
+    total_users = serializers.IntegerField()
+    crm_users = serializers.IntegerField()
+    crm_order_count = serializers.IntegerField()
+    learning_users = serializers.IntegerField()
+    learning_order_count = serializers.IntegerField()
+    total_order_count = serializers.IntegerField()
+    total_item_count = serializers.IntegerField()
+    revenue = serializers.IntegerField()
     
     class Meta:
         model = LTVMonthlyRecord
-        exclude = ('candidate_id_ltv_mapping','ltv_bracket',)
+        exclude = ('candidate_ids','ltv_bracket','crm_order_ids','learning_order_ids',)

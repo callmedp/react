@@ -209,6 +209,7 @@ urlpatterns += [
                    url(r'^api/v1/cart/', include('cart.api.v1.urls', namespace='cart')),
 
                    url(r'^api/', include('api.urls', namespace='api')),
+                   url(r'^api/', include('homepage.api.urls', namespace='api')),
 
                    url(r'^lead/', include('crmapi.urls', namespace='crmapi')),
 

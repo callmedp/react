@@ -61,6 +61,7 @@ const getLTVRecords = (year,month) =>{
                             <td>${result.crm_item_count}</td>
                             <td>${result.learning_users} (${result.learning_order_count})</td>
                             <td>${result.learning_item_count}</td>
+                            <td>${result.revenue}</td>
                         </tr>
                     `
                 )
