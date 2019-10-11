@@ -31,6 +31,7 @@ class LTVReportSerializer(serializers.ModelSerializer):
     learning_order_count = serializers.IntegerField()
     total_order_count = serializers.IntegerField()
     total_item_count = serializers.IntegerField()
+    revenue = serializers.IntegerField()
     
     class Meta:
         model = MonthlyLTVRecord
