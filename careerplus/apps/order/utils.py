@@ -96,14 +96,14 @@ class LTVReportUtil:
 
 
     def get_monthly_ltv_record(self,year,month):
-        from order.models import LTVMonthlyRecord
+        from order.models import MonthlyLTVRecord
 
-        return LTVMonthlyRecord.objects.filter(
+        return MonthlyLTVRecord.objects.filter(
             year=year, month=month
         )
 
     def create_monthly_ltv_record(self, year, month):
-        from order.models import LTVMonthlyRecord, Order
+        from order.models import MonthlyLTVRecord, Order
         year = int(year)
         month = int(month)
 
@@ -199,7 +199,7 @@ class LTVReportUtil:
                 'candidate_ids': json.dumps(candidate_ids)
             })
 
-            obj, created = LTVMonthlyRecord.objects.update_or_create(
+            obj, created = MonthlyLTVRecord.objects.update_or_create(
                 year=year, month=month, ltv_bracket=index,
                 defaults=new_record,
             )

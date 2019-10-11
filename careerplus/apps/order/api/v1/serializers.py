@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 #app imports
-from order.models import OrderItem,Order,LTVMonthlyRecord
+from order.models import OrderItem,Order,MonthlyLTVRecord
 
 
 class OrderItemListSerializer(serializers.ModelSerializer):
@@ -34,5 +34,5 @@ class LTVReportSerializer(serializers.ModelSerializer):
     revenue = serializers.IntegerField()
     
     class Meta:
-        model = LTVMonthlyRecord
+        model = MonthlyLTVRecord
         exclude = ('candidate_ids','ltv_bracket','crm_order_ids','learning_order_ids',)

@@ -12,14 +12,14 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='ltvmonthlyrecord',
-            name='crm_users',
-            field=models.IntegerField(default=0),
-        ),
-        migrations.AddField(
-            model_name='ltvmonthlyrecord',
-            name='learning_users',
-            field=models.IntegerField(default=0),
-        ),
+    #     migrations.AddField(
+    #         model_name='ltvmonthlyrecord',
+    #         name='crm_users',
+    #         field=models.IntegerField(default=0),
+    #     ),
+    #     migrations.AddField(
+    #         model_name='ltvmonthlyrecord',
+    #         name='learning_users',
+    #         field=models.IntegerField(default=0),
+    #     ),
     ]

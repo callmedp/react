@@ -1384,29 +1384,29 @@ class OrderItemFeedbackOperation(models.Model):
         return dict(FEEDBACK_OPERATION_TYPE).get(self.oi_type)
 
 
-# class LTVMonthlyRecord(models.Model):
-#     ltv_bracket =  models.SmallIntegerField(choices=LTV_BRACKET_LABELS)
-#     total_users = models.IntegerField()
-#     crm_users = models.IntegerField(default=0)
-#     learning_users = models.IntegerField(default=0)
-#     total_order_count = models.IntegerField()
-#     total_item_count = models.IntegerField()
-#     crm_order_count = models.IntegerField()
-#     crm_item_count = models.IntegerField()
-#     learning_order_count = models.IntegerField()
-#     learning_item_count = models.IntegerField()
-#     year = models.IntegerField(validators=[MinValueValidator(2018)])  
-#     month = models.IntegerField(validators=[MaxValueValidator(12), MinValueValidator(1)])
-#     candidate_id_ltv_mapping = models.TextField()
-
-#     @property
-#     def ltv_bracket_text(self):
-#         return dict(LTV_BRACKET_LABELS).get(self.ltv_bracket)
-
 class LTVMonthlyRecord(models.Model):
     ltv_bracket =  models.SmallIntegerField(choices=LTV_BRACKET_LABELS)
-    crm_order_ids = models.TextField(default=True,null=True)
-    learning_order_ids = models.TextField(default=True)
+    total_users = models.IntegerField()
+    crm_users = models.IntegerField(default=0)
+    learning_users = models.IntegerField(default=0)
+    total_order_count = models.IntegerField()
+    total_item_count = models.IntegerField()
+    crm_order_count = models.IntegerField()
+    crm_item_count = models.IntegerField()
+    learning_order_count = models.IntegerField()
+    learning_item_count = models.IntegerField()
+    year = models.IntegerField(validators=[MinValueValidator(2018)])  
+    month = models.IntegerField(validators=[MaxValueValidator(12), MinValueValidator(1)])
+    candidate_id_ltv_mapping = models.TextField()
+
+    @property
+    def ltv_bracket_text(self):
+        return dict(LTV_BRACKET_LABELS).get(self.ltv_bracket)
+
+class MonthlyLTVRecord(models.Model):
+    ltv_bracket =  models.SmallIntegerField(choices=LTV_BRACKET_LABELS)
+    crm_order_ids = models.TextField()
+    learning_order_ids = models.TextField()
     crm_item_count = models.IntegerField()   # no process,free,combo parent,variation parent to be removed so query will take time
     learning_item_count = models.IntegerField()  # no process,free,combo parent,variation parent to be removed so query will take time
     year = models.IntegerField(validators=[MinValueValidator(2018)])  
