@@ -143,11 +143,9 @@ class LTVReportUtil:
             total_users = 1
             crm_order_ids,learning_order_ids = [],[]
             crm_item_count,learning_item_count = 0 , 0
-            revenue = 0
 
             for order in candidate_id_order_mapping.get(candidate_id,[]):
                 oi_actual_price_mapping = order.get_oi_actual_price_mapping()
-                revenue += sum(oi_actual_price_mapping.values())
                 count = len(oi_actual_price_mapping.keys())
                 if order.sales_user_info:
                     crm_item_count += count
@@ -161,7 +159,6 @@ class LTVReportUtil:
                 learning_order_ids += (previous_data.get('learning_order_ids', []))
                 learning_item_count += previous_data.get('learning_item_count', 0)
                 crm_item_count += previous_data.get('crm_item_count', 0)
-                revenue += previous_data.get('revenue',0)
 
             ltv_bracket_record_mapping.update({
                 ltv_bracket: {
@@ -169,7 +166,6 @@ class LTVReportUtil:
                     'learning_order_ids': learning_order_ids,
                     'learning_item_count': learning_item_count,
                     'crm_item_count': crm_item_count,
-                    'revenue': revenue
                 }
             })
 
@@ -179,7 +175,6 @@ class LTVReportUtil:
             'learning_order_ids': [],
             'learning_item_count': 0,
             'crm_item_count': 0,
-            'revenue': revenue
         }
 
         for index, bracket in enumerate(self.LTV_BRACKET_LABELS):
