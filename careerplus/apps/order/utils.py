@@ -160,7 +160,7 @@ class LTVReportUtil:
                 crm_order_ids += (previous_data.get('crm_order_ids', []))
                 learning_order_ids += (previous_data.get('learning_order_ids', []))
                 learning_item_count += previous_data.get('learning_item_count', 0)
-                crm_item_count += previous_data.get('crm_item_count', 0),
+                crm_item_count += previous_data.get('crm_item_count', 0)
                 revenue += previous_data.get('revenue',0)
 
             ltv_bracket_record_mapping.update({

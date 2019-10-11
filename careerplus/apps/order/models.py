@@ -1383,7 +1383,6 @@ class OrderItemFeedbackOperation(models.Model):
     def oi_type_text(self):
         return dict(FEEDBACK_OPERATION_TYPE).get(self.oi_type)
 
-
 class LTVMonthlyRecord(models.Model):
     ltv_bracket =  models.SmallIntegerField(choices=LTV_BRACKET_LABELS)
     total_users = models.IntegerField()
@@ -1411,6 +1410,7 @@ class MonthlyLTVRecord(models.Model):
     learning_item_count = models.IntegerField()  # no process,free,combo parent,variation parent to be removed so query will take time
     year = models.IntegerField(validators=[MinValueValidator(2018)])  
     month = models.IntegerField(validators=[MaxValueValidator(12), MinValueValidator(1)])
+    revenue = models.IntegerField(default=0)
     candidate_ids = models.TextField()
 
     @property
@@ -1447,11 +1447,6 @@ class MonthlyLTVRecord(models.Model):
     def total_item_count(self):
         return self.crm_item_count + self.learning_item_count
 
-    @property
-    def revenue(self):
-        order_ids = json.loads(self.crm_order_ids) + json.loads(self.learning_order_ids)
-        order_amounts = Order.objects.filter(id__in=order_ids).values_list('total_excl_tax',flat=True)
-        return sum(order_amounts)
         
     
 
