@@ -6,6 +6,7 @@ import calendar
 from time import strptime
 from wsgiref.util import FileWrapper
 from dateutil.relativedelta import relativedelta
+from urllib.parse import urlencode
 
 from django.shortcuts import render
 from django.http import (
@@ -167,18 +168,15 @@ class LoginApiView(FormView):
         if 'next' in self.request.GET:
             self.success_url = self.request.GET.get('next')
         
-        url_parameters = dict(self.request.GET)
+        url_parameters ={}
 
-        if len(url_parameters.keys()):
-            self.success_url += '?'
+        for parameter in (self.request.GET).keys():
+            url_parameters.update({parameter:self.request.GET.get(parameter)})
 
-            for parameter_name in url_parameters.keys():
-                if parameter_name == 'next':
-                    continue
+        url_parameters.pop('next',None)
 
-                self.success_url += parameter_name + '=' + self.request.GET.get(parameter_name,'') + '&'
-
-            self.success_url = self.success_url[:-1]   #for removing last '&' character in url
+        if len(url_parameters.keys()): 
+            self.success_url += '?' + urlencode(url_parameters)
         
         try:
             user_exist = RegistrationLoginApi.check_email_exist(login_dict['email'])
