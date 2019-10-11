@@ -167,6 +167,20 @@ class LoginApiView(FormView):
         })
         if 'next' in self.request.GET:
             self.success_url = self.request.GET.get('next')
+        
+        url_parameters = dict(self.request.GET)
+
+        if len(url_parameters.keys()):
+            self.success_url += '?'
+
+            for parameter_name in url_parameters.keys():
+                if parameter_name == 'next':
+                    continue
+
+                self.success_url += parameter_name + '=' + self.request.GET.get(parameter_name,'') + '&'
+
+            self.success_url = self.success_url[:-1]   #for removing last '&' character in url
+        
         try:
             user_exist = RegistrationLoginApi.check_email_exist(login_dict['email'])
             if user_exist.get('exists', ''):

@@ -131,6 +131,7 @@ class LTVReportUtil:
         ltv_bracket_record_mapping = {}
         logging.getLogger('info_log').info('No of unique candidate ids are- {} '.format(len(candidate_id_order_mapping.keys())))
 
+        import ipdb; ipdb.set_trace()
         for candidate_id in candidate_id_order_mapping.keys():
             ltv_bracket = self.get_ltv_bracket(candidate_id, till_month=month)
             logging.getLogger('info_log').info('candidate id - {} in ltv bracket - {}'.format(candidate_id,ltv_bracket))
@@ -161,7 +162,7 @@ class LTVReportUtil:
                 crm_order_ids += (previous_data.get('crm_order_ids', []))
                 learning_order_ids += (previous_data.get('learning_order_ids', []))
                 learning_item_count += previous_data.get('learning_item_count', 0)
-                crm_item_count += previous_data.get('crm_item_count', 0),
+                crm_item_count += previous_data.get('crm_item_count', 0)
                 revenue += previous_data.get('revenue',0)
 
             ltv_bracket_record_mapping.update({
