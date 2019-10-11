@@ -1429,6 +1429,11 @@ class LTVMonthlyRecord(models.Model):
     def total_item_count(self):
         return self.crm_item_count + self.learning_item_count
 
+    @property
+    def revenue(self):
+        order_ids = json.loads(self.crm_order_ids) + json.loads(self.learning_order_ids)
+        order_amounts = Order.objects.filter(id__in=order_ids).values_list('total_excl_tax',flat=True)
+        return sum(order_amounts)        
         
     
 
