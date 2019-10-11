@@ -126,7 +126,6 @@ class LTVReportUtil:
             previous_data.append(order)
             candidate_id_order_mapping.update({order.candidate_id:previous_data})
 
-        print(candidate_id_order_mapping)
         candidate_id_ltv_mapping = {}
         ltv_bracket_record_mapping = {}
         logging.getLogger('info_log').info('No of unique candidate ids are- {} '.format(len(candidate_id_order_mapping.keys())))
@@ -175,7 +174,6 @@ class LTVReportUtil:
             })
 
         logging.getLogger('info_log').info('Received records for different ltv brackets')
-        import ipdb; ipdb.set_trace()
         default_record = {
             'crm_order_ids': [],
             'learning_order_ids': [],
