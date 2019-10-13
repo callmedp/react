@@ -38,6 +38,7 @@ from console.decorators import Decorate, stop_browser_cache
 from search.helpers import get_recommendations
 from .dashboard_mixin import DashboardInfo
 from linkedin.autologin import AutoLogin
+from shop.models import Product
 from core.library.gcloud.custom_cloud_storage import \
     GCPPrivateMediaStorage, GCPInvoiceStorage, GCPMediaStorage, GCPResumeBuilderStorage
 
@@ -798,7 +799,8 @@ class DashboardResumeTemplateDownload(View):
         candidate_id = request.session.get('candidate_id', None)
         email = request.session.get('email', None)
         product_id = request.POST.get('product_id', None)
-        is_combo = True if product_id != str(settings.RESUME_BUILDER_NON_COMBO_PID) else False
+        product = Product.objects.filter(id=product_id).first()
+        is_combo = True if product.attr.get_value_by_attribute(product.attr.get_attribute_by_name('template_type')).value == 'multiple' else False
         order_pk = request.POST.get('order_pk', None)
         candidate_obj = Candidate.objects.filter(candidate_id=candidate_id).first()
         selected_template = candidate_obj.selected_template if candidate_obj.selected_template else 1

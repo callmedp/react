@@ -605,6 +605,7 @@ def process_jobs_on_the_move(obj_id=None):
 def generate_resume_for_order(order_id):
     from resumebuilder.models import Candidate
     from order.models import Order
+    from shop.models import Product
     from resumebuilder.utils import ResumeGenerator
     order_obj = Order.objects.get(id=order_id)
     candidate_id = order_obj.candidate_id
@@ -613,8 +614,8 @@ def generate_resume_for_order(order_id):
         if item.product and item.product.type_flow == 17 and item.product.type_product == 0:
             product_id = item.product.id
             break
-
-    is_combo = True if product_id != settings.RESUME_BUILDER_NON_COMBO_PID else False
+    product = Product.objects.filter(id=product_id).first()
+    is_combo = True if product.attr.get_value_by_attribute(product.attr.get_attribute_by_name('template_type')).value == 'multiple'  else False
     selected_template = Candidate.objects.filter(candidate_id = candidate_id).first().selected_template
     builder_obj = ResumeGenerator()
     builder_obj.save_order_resume_pdf(order=order_obj,is_combo=is_combo,index=selected_template)
