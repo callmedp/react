@@ -21,6 +21,8 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.generics import (RetrieveUpdateAPIView)
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+
 
 
 class EmailStatusView(APIView):
@@ -36,8 +38,8 @@ class EmailStatusView(APIView):
 
 
 class CartRetrieveUpdateView(RetrieveUpdateAPIView):
-    authentication_classes = (SessionAuthentication,)
-    permission_classes = (IsOwner, )
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated, )
     serializer_class = CartSerializer
 
     def get_queryset(self):
