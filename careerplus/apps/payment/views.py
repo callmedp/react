@@ -665,9 +665,6 @@ class ZestMoneyResponseView(CartMixin,PaymentMixin,View):
 class PayuRequestView(OrderMixin,View):
 
     def get(self,request,*args,**kwargs):
-        import ipdb;
-        ipdb.set_trace();
-        
         return_dict = {}
         cart_id = self.kwargs.get('cart_id')
         if not cart_id:
@@ -706,9 +703,6 @@ class PayuRequestView(OrderMixin,View):
 class PayUResponseView(CartMixin,PaymentMixin,View):
 
     def post(self, request, *args, **kwargs):
-        import ipdb;
-        ipdb.set_trace();
-
         payu_data = request.POST.copy()
         transaction_status = payu_data.get('status', '').upper()
         txn_id = payu_data.get('txnid')
