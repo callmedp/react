@@ -29,9 +29,8 @@
     "redux-saga": "^1.1.1",
     "rewire": "^4.0.1",
     "slick-carousel": "^1.8.1",
-    "sweetalert2": "^8.18.3",
-    "webpack": "^4.41.0",
-    "webpack-bundle-tracker": "^0.4.2-beta"
+    "sweetalert2": "^8.18.2",
+    "webpack-bundle-tracker": "^0.4.3"
   },
   "scripts": {
     "start:dev": "REACT_APP_ENV=development npm run start",

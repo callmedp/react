@@ -894,7 +894,7 @@ class ShineCandidateLoginAPIView(APIView):
                 "token": token,
                 "candidate_id": candidate_id,
                 'cart_pk': self.request.session.get('cart_pk') or self.request._request.session.get('cart_pk'),
-                'profile': login_response
+                'profile': personal_info
             }
 
         return Response(data_to_send, status=status.HTTP_201_CREATED)
@@ -1095,10 +1095,9 @@ class ShineCandidateLoginAPIView(APIView):
             return Response({"data": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            if with_info:
-                login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
-            else:
-                login_response = ShineCandidateDetail().get_status_detail(shine_id=candidate_id)
+            login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
+            # else:
+            #     login_response = ShineCandidateDetail().get_status_detail(shine_id=candidate_id)
         except Exception as e:
             logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
             return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)

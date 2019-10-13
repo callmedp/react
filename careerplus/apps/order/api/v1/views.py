@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 
 #in app imports
 from order.api.core.mixins import OrderItemViewMixin
-from order.models import Order,LTVMonthlyRecord
+from order.models import Order,MonthlyLTVRecord
 from order.api.v1.serializers import OrderItemListSerializer
 from shared.rest_addons.authentication import ShineUserAuthentication
 from .serializers import OrderSerializer,LTVReportSerializer
@@ -51,7 +51,7 @@ class LTVReportView(ListAPIView):
     def get_queryset(self):
         year = self.kwargs.get('year')
         month = self.kwargs.get('month')
-        queryset = LTVMonthlyRecord.objects.filter(
+        queryset = MonthlyLTVRecord.objects.filter(
                         year=year,month=month)
         return queryset
     

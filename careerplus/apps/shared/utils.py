@@ -3,7 +3,7 @@ import logging
 from decimal import Decimal
 from datetime import datetime, timedelta
 from dateutil import relativedelta
-import ast,os,django,sys,csv,json
+import ast,os,django,sys,csv,json,pytz
 
 #Settings imports
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "careerplus.config.settings_live")
@@ -154,8 +154,8 @@ class ShineCandidate:
 class DiscountReportUtil:
 
     def __init__(self,**kwargs):
-        self.start_date = kwargs.get('start_date')
-        self.end_date = kwargs.get('end_date')
+        self.start_date = pytz.utc.localize(kwargs.get('start_date'))
+        self.end_date = pytz.utc.localize(kwargs.get('end_date'))
         self.file_name = kwargs.get('file_name')
         self.filter_type = kwargs.get('filter_type',1)
 
@@ -313,8 +313,8 @@ class DiscountReportUtil:
                 writer_price = 0
                 writer_name = ''
                 if item.order.status in [1,3] and item.product.type_flow in [1, 8, 12, 13] and \
-                        item.oi_status == 4 and item.assigned_to and item.closed_on.replace(tzinfo=None) >= self.start_date\
-                            and item.closed_on.replace(tzinfo=None) <= self.end_date:
+                        item.oi_status == 4 and item.assigned_to and item.closed_on >= self.start_date\
+                            and item.closed_on <= self.end_date:
                     invoice_date = item.closed_on.replace(day=1).date()  
                     invoice_date = invoice_date - timedelta(days=1)
                     invoice_date =invoice_date + relativedelta.relativedelta(months=1)

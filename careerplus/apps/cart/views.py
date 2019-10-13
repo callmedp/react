@@ -538,6 +538,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
         self.cart_obj = None
 
     def redirect_if_necessary(self):
+
         if not self.request.session.get('cart_pk'):
             self.cart_obj = self.getCartObject()
         else:
@@ -553,6 +554,20 @@ class PaymentSummaryView(TemplateView, CartMixin):
 
         if not self.cart_obj.owner_id: 
             self.cart_obj = self.getCartObject()
+        
+        if self.request.session.get('email') and not self.cart_obj.email: 
+            self.cart_obj.email = self.request.session.get('email')
+        if self.request.session.get('mobile_no') and not self.cart_obj.mobile:
+            self.cart_obj.mobile = self.request.session.get('mobile_no')
+        if self.request.session.get('country_code') and not self.cart_obj.country_code:
+            self.cart_obj.country_code = self.request.session.get('country_code')
+        if self.request.session.get('first_name') and not self.cart_obj.first_name:
+            self.cart_obj.first_name = self.request.session.get('first_name')
+        if self.request.session.get('last_name') and not self.cart_obj.last_name:
+            self.cart_obj.last_name = self.request.session.get('last_name')
+
+        self.cart_obj.save()
+    
 
         return None
 
