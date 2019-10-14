@@ -35,7 +35,7 @@ if __name__=="__main__":
     utc=pytz.UTC
     days_diff = int(sys.argv[1] if len(sys.argv) > 1 else 1)
     today = datetime.now()
-    edt = datetime(today.year,today.month,today.day,0,0,0).replace(tzinfo=utc)
+    edt = datetime(today.year,today.month,today.day,0,0,0)
     sdt = edt - timedelta(days=days_diff)
     file_name_suffix = "daily" if days_diff == 1 else "monthly"
     file_name = "reports/discount_report_" + datetime.strftime(datetime.now(),"%Y_%m_%d") + \
