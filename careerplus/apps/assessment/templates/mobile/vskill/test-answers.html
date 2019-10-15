@@ -185,7 +185,7 @@
                  <input type="hidden" class="form-control" id="leadScorePercent" name="msg" value="" />
 
             <li class="mt-40 mb-20">
-                <button class="btn btn-round-30 btn-blue w-100" type="submit" id="leadCreationSubmit">Submit</button>
+                <button class="btn btn-round-30 btn-blue w-100" type="button" id="leadCreationSubmit">Submit</button>
             </li>
         </ul>
     </form><!-- Check Result -->
@@ -199,7 +199,7 @@
 
 <script>
 var tKey = 'Test-' + '{{object.id}}',myStorage = window.localStorage,
-right=0,questionAttempt = null,total = {{questions_list.count}};
+right=0,questionAttempt = null,questionNumb =1,total = {{questions_list.count}};
 
 $(document).ready(function() {
     {% if not request.session.is_lead_created %}
@@ -260,9 +260,15 @@ $('#leadCreationForm').validate({
 function getCoptions(){
         questionAttempt = JSON.parse(myStorage.getItem(tKey));
         if (questionAttempt != null) {
-            for (var id in Object.keys(questionAttempt)) {
-      if (Object.values(questionAttempt)[id] != "" && Object.keys(questionAttempt)[id] != "skippedQuestion") {
-                    $('#' + Object.values(questionAttempt)[id]).attr('checked',true);
+            for ( preSelect of Object.keys(questionAttempt)) {
+                if (preSelect != "" && preSelect != "skippedQuestion" && typeof(questionAttempt[preSelect]) == 'string')
+                 {
+                if( questionAttempt[preSelect].length !=0){
+
+                    for (id of questionAttempt[preSelect].split(',')){
+                    $('#'+id).attr('checked',true);
+                    }
+                    }
                 }
             }
          }
@@ -270,21 +276,39 @@ function getCoptions(){
          url   : '/api/v1/question/?test_id={{object.id}}',
          type  : 'get',
          success: function(response){
-         for(i of response){
-            $('#check'+i.question_options[0]).addClass('pt-sprite icon-right');
-            if(questionAttempt && Object.values(questionAttempt) && Object.values(questionAttempt).includes(i.question_options[0])){
-                  right+= 1 ;
-                     }
-                            }
-                               if(questionAttempt){
-                              for (i of Object.values(questionAttempt)){
-                if(! $("#check"+i).hasClass('icon-right')){
+           for(i of response){
+if (i.question_options.length > 1) {
+	for (opt of i.question_options) {
+		$('#check' + opt).addClass('pt-sprite icon-right');
+	}
+	if (questionAttempt['question-' + questionNumb] && i.question_options.length == questionAttempt['question-' + questionNumb].split(',').length) {
+		if (questionAttempt['question-' + questionNumb].split(',').sort().toLocaleString() == i.question_options.sort().toLocaleString()) {
+			right += 1;
+		}
+	}
+} else {
+	$('#check' + i.question_options[0]).addClass('pt-sprite icon-right');
+	if (questionAttempt && Object.values(questionAttempt) && Object.values(questionAttempt).includes(i.question_options[0])) {
+		right += 1;
+	}
+}
+  questionNumb += 1;
+
+}
+
+
+         if(questionAttempt){
+            selected_arrays = Object.values(questionAttempt);
+            for (val of selected_arrays ){
+               if(val && val.length != 0  && typeof(val) == 'string' ){
+                val = val.split(',')
+                for (i of val){
+
+                if(! $("#check"+i).hasClass('pt-sprite icon-right')){
                 $("#check"+i).addClass('pt-sprite icon-cross');
-                }
-
-
-            }
-            }
+               }
+               }
+                } }}
 
               $('#correctMsg').text( right+ ' out of '+total+' correct answers ');
                    let scorePercent = (right/total)*100 ;
@@ -377,7 +401,7 @@ if(flag){
 }
 
 
-$("#leadCreationForm").submit(function(e){
+$("#leadCreationForm").click(function(e){
 var flag=$('#leadCreationForm').valid();
 if(flag){
     var form = $(this);
