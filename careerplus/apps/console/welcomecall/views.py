@@ -52,7 +52,8 @@ class WelcomeCallInfo(object):
             data_dict = {}
             oi = data.get('oi')
             # Do not consider assesment items in welcome call
-            if oi.product.type_flow == 16 or oi.product.vendor.slug == 'neo':
+            if (oi.product.type_flow == 16 or oi.product.vendor.slug == 'neo' \
+                or oi.product.type_flow ==17 or oi.product.sub_type_flow == 100):
                 continue
             addons = data.get('addons')
             variations = data.get('variations')

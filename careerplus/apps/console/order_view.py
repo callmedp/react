@@ -6,7 +6,6 @@ import logging
 import mimetypes
 import textwrap
 import os
-
 from io import StringIO
 from dateutil import relativedelta
 from wsgiref.util import FileWrapper
@@ -509,10 +508,21 @@ class InboxQueueVeiw(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(InboxQueueVeiw, self).get_queryset()
         queryset = queryset.filter(
-            order__status=1, no_process=False,
-            product__type_flow__in=[1, 3, 12, 13],
-            oi_status__in=[5, 3],
-            order__welcome_call_done=True).exclude(
+             Q(
+                order__status=1,
+                no_process=False,
+                product__type_flow__in=[1, 3, 12, 13],
+                oi_status__in=[5, 3],
+                order__welcome_call_done=True
+             )
+             |
+             Q(
+                order__status__in=[1, 3],
+                no_process=False,
+                oi_status__in=[5, 3],
+                product__sub_type_flow=101
+             )
+            ).exclude(
             wc_sub_cat__in=[64, 65])
 
         user = self.request.user
@@ -849,10 +859,21 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(ApprovalQueueVeiw, self).get_queryset()
         queryset = queryset.filter(
-            order__status=1, no_process=False,
-            oi_status=23,
-            product__type_flow__in=[1, 3, 12, 13],
-            order__welcome_call_done=True).exclude(
+             Q(
+                order__status=1,
+                no_process=False,
+                oi_status=23,
+                product__type_flow__in=[1, 3, 12, 13],
+                order__welcome_call_done=True
+             )
+             |
+             Q(
+                order__status=1,
+                no_process=False,
+                oi_status=23,
+                product__sub_type_flow=101
+             )
+            ).exclude(
             wc_sub_cat__in=[64, 65])
         user = self.request.user
        
@@ -983,9 +1004,21 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(ApprovedQueueVeiw, self).get_queryset()
         queryset = queryset.filter(
-            order__status=1, no_process=False,
-            oi_status=24, product__type_flow__in=[1, 3, 5, 12, 13],
-            order__welcome_call_done=True).exclude(
+             Q(
+                order__status=1,
+                no_process=False,
+                oi_status=24,
+                product__type_flow__in=[1, 3, 5, 12, 13],
+                order__welcome_call_done=True
+             )
+             |
+             Q(
+                order__status=1,
+                no_process=False,
+                oi_status=24,
+                product__sub_type_flow=101
+             )
+           ).exclude(
             wc_sub_cat__in=[64, 65])
         user = self.request.user
 
@@ -1122,9 +1155,19 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(RejectedByAdminQueue, self).get_queryset()
         queryset = queryset.filter(
+            Q(
             order__status=1, no_process=False,
             oi_status=25, product__type_flow__in=[1, 3, 12, 13],
-            order__welcome_call_done=True).exclude(
+            order__welcome_call_done=True
+            )
+            |
+             Q(
+            order__status=1, 
+            no_process=False,
+            oi_status=25, 
+            product__sub_type_flow=101
+            )
+            ).exclude(
             wc_sub_cat__in=[64, 65])
 
         user = self.request.user
@@ -1264,9 +1307,19 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(RejectedByCandidateQueue, self).get_queryset()
         queryset = queryset.filter(
+            Q(
             order__status=1, no_process=False,
             oi_status=26, product__type_flow__in=[1, 3, 12, 13],
-            order__welcome_call_done=True).exclude(
+            order__welcome_call_done=True
+            )
+            |
+            Q(
+            order__status=1,
+            no_process=False,
+            oi_status=26,
+            product__sub_type_flow=101,
+            )
+            ).exclude(
             wc_sub_cat__in=[64, 65])
 
         user = self.request.user
@@ -1404,10 +1457,20 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
         queryset = super(AllocatedQueueVeiw, self).get_queryset()
 
         queryset = queryset.filter(
-            order__status__in=[1, 3],
-            no_process=False,
-            product__type_flow__in=[1, 12, 13, 8, 3],
-            order__welcome_call_done=True).exclude(
+            
+            Q(
+                order__status__in=[1, 3],
+                no_process=False,
+                product__type_flow__in=[1, 12, 13, 8, 3],
+                order__welcome_call_done=True
+             )
+             |
+             Q(
+                order__status__in=[1, 3],
+                no_process=False,
+                product__sub_type_flow=101
+             )
+            ).exclude(
             wc_sub_cat__in=[64, 65]).exclude(
             oi_status=4)
         # user = self.request.user
@@ -1660,7 +1723,8 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
         q1 = queryset.filter(oi_status=61)
         exclude_list = []
         for oi in q1:
-            closed_ois = oi.order.orderitems.filter(product__type_flow=1, oi_status=4, no_process=False)
+            # Todo In future focused on expert assistance 
+            closed_ois = oi.order.orderitems.filter(product__type_flow=1, product__sub_type_flow__in =[101,100], oi_status=4, no_process=False)
             if closed_ois.exists():
                 last_oi_status = oi.oi_status
                 oi.oi_status = 5
@@ -1801,7 +1865,7 @@ class DomesticProfileInitiatedQueueView(ListView, PaginationMixin):
         q1 = queryset.filter(oi_status=61)
         exclude_list = []
         for oi in q1:
-            closed_ois = oi.order.orderitems.filter(product__type_flow=1, oi_status=4, no_process=False)
+            closed_ois = oi.order.orderitems.filter(product__type_flow=1,product__sub_type_flow__in=[101,100], oi_status=4, no_process=False)
             if closed_ois.exists():
                 last_oi_status = oi.oi_status
                 oi.oi_status = 5
@@ -2056,7 +2120,7 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
         q1 = queryset.filter(oi_status=61)
         exclude_list = []
         for obj in q1:
-            closed_ois = obj.order.orderitems.filter(oi_status=4, product__type_flow=1, no_process=False)
+            closed_ois = obj.order.orderitems.filter(oi_status=4, product__type_flow=1, product__sub_type_flow__in =[101,100], no_process=False)
             if closed_ois.exists():
                 last_oi_status = obj.oi_status
                 obj.oi_status = 5

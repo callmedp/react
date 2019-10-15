@@ -77,7 +77,10 @@ SUB_FLOWS = {
         (200, "Default"),
         (201, "Certificate Product"),
     ),
-
+    1: (
+        (100, "Expert Assistance"),
+        (101,"Default")
+    )
 }
 
 SUB_FLOW_CHOICES = ()
