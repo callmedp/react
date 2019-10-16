@@ -35,7 +35,7 @@ def booster():
 
     for oi in booster_ois:
         if oi.oi_status == 61:
-            closed_ois = oi.order.orderitems.filter(oi_status=4, product__type_flow=1,product__sub_type_flow__in =[101,100], no_process=False)
+            closed_ois = oi.order.orderitems.filter(oi_status=4, product__type_flow=1,product__sub_type_flow__inupdate_initiat_orderitem_sataus=[101,100], no_process=False)
             if closed_ois.exists():
                 last_oi_status = oi.oi_status
                 oi.oi_status = 5

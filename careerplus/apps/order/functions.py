@@ -67,7 +67,7 @@ def update_initiat_orderitem_sataus(order=None):
                         assigned_to=oi.assigned_to)
 
             elif oi.product.type_flow == 5:
-                if (oi.order.orderitems.filter(product__type_flow=1,product__sub_type_flow__in =[101,100], no_process=False).exists() and \
+                if (oi.order.orderitems.filter(product__type_flow=1,product__sub_type_flow__in=[101,100], no_process=False).exists() and \
                         oi.product.sub_type_flow == 501):
                     last_oi_status = oi.oi_status
                     oi.oi_status = 61
@@ -104,7 +104,7 @@ def update_initiat_orderitem_sataus(order=None):
 
             elif oi.product.type_flow in [7, 15]:
                 depending_ois = order.orderitems.filter(
-                    product__type_flow=1,product__sub_type_flow__in =[101,100], no_process=False)
+                    product__type_flow=1,product__sub_type_flow__in=[101,100], no_process=False)
 
                 if depending_ois.exists():
                     last_oi_status = oi.oi_status
@@ -150,7 +150,7 @@ def update_initiat_orderitem_sataus(order=None):
 
         # for assesment/neo if no orderitems other than assesment/ neo present
         # then make welcome call done and update welcome call statuses.
-        oi = order.orderitems.exclude(Q(product__type_flow=16) | Q(product__vendor__slug='neo')| Q(product__type_flow=17) | Q(product__sub_type_flow = 100))
+        oi = order.orderitems.exclude(Q(product__type_flow=16) | Q(product__vendor__slug='neo')| Q(product__type_flow=17) | Q(product__sub_type_flow = 101))
 
         # order.type_product == 3 
 

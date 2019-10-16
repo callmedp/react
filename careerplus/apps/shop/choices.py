@@ -78,8 +78,8 @@ SUB_FLOWS = {
         (201, "Certificate Product"),
     ),
     1: (
-        (100, "Expert Assistance"),
-        (101,"Default")
+        (100,"Default"),
+        (101, "Expert Assistance")
     )
 }
 
