@@ -359,6 +359,10 @@ $('input[name="radio"]').on("click", function(e) {
                 attempt = (attempt.split(',').filter(optId => optId != e.target.id)).toString()
             }
         }
+        if(!attempt){
+         $('#marked' + quest_id).removeClass();
+         $('#marked' + quest_id).addClass('active');
+        }
         questionAttempt[quest_id] = attempt;
 
         myStorage.setItem(tKey, JSON.stringify(questionAttempt));
@@ -372,7 +376,9 @@ function skipQuestion() {
     skippedQuest.push('#markedquestion-' + activeTab);
     }
     let quest_id = 'question-' + activeTab;
-    $('#' + questionAttempt[quest_id]).prop("checked", false);
+    for (att of questionAttempt[quest_id].split(',')){
+    $('#' +att).prop("checked", false);
+    }
     delete questionAttempt[quest_id];
     myStorage.setItem(tKey, JSON.stringify(questionAttempt));
     nextquestion(1);
