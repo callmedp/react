@@ -24,12 +24,13 @@ from haystack.query import SearchQuerySet
 from core.library.haystack.query import SQS
 from partner.utils import CertiticateParser
 from partner.models import ProductSkill
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from django_filters.rest_framework import DjangoFilterBackend
 
 from users.tasks import user_register
 from order.models import Order, OrderItem, RefundRequest
+from order.utils import get_ltv
 from shop.views import ProductInformationMixin
 from shop.models import Product, Category
 from coupon.models import Coupon, CouponUser
@@ -76,6 +77,7 @@ from assessment.models import Question
 from assessment.utils import TestCacheUtil
 
 
+
 class CreateOrderApiView(APIView, ProductInformationMixin):
     authentication_classes = [OAuth2Authentication]
     permission_classes = [IsAuthenticated, IsAdminUser]
@@ -87,177 +89,244 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
         country_code = request.data.get('country_code', '91').strip()
         mobile = request.data.get('mobile').strip()
         candidate_id = request.data.get('candidate_id', '').strip()
-        if item_list:
-            try:
-                order = None
-                flag = True
-                msg = ''
-                if not email and flag:
-                    msg = 'email is required.'
-                    flag = False
-                elif not mobile and flag:
-                    msg = 'mobile number is required.'
-                    flag = False
 
-                if email and not candidate_id:
-                    data = {
-                        "email": email,
-                        "country_code": country_code,
-                        "cell_phone": mobile,
-                        "name": name,
-                    }
-                    candidate_id, error = user_register(data)
+        if not item_list:
+            return Response(
+                {"status": 0, "msg": "there is no items in order"},
+                status=status.HTTP_400_BAD_REQUEST)
 
-                if not candidate_id and flag:
-                    msg = 'candidate_id is required.'
-                    flag = False
+        txns_list = request.data.get('txns_list', [])
+        order_already_created = False
 
-                first_name, last_name = '', ''
+        all_txn_ids = [x['txn_id'] for x in txns_list if x.get('txn_id')]
+        paid_transactions = PaymentTxn.objects.filter(txn__in=all_txn_ids,status=1)
+        
+        if paid_transactions:
+            logging.getLogger("error_log").error("Order for txns already created. {}".format(all_txn_ids))
+            return Response({"status": 0, "msg": "Order for txns already created."},
+                status=status.HTTP_400_BAD_REQUEST)
 
-                if candidate_id:
-                    status_response = ShineCandidateDetail().get_status_detail(
-                        email=None, shine_id=candidate_id)
+        try:
+            order = None
+            flag = True
+            msg = ''
+            if not email and flag:
+                msg = 'email is required.'
+                flag = False
+            elif not mobile and flag:
+                msg = 'mobile number is required.'
+                flag = False
 
-                    if status_response:
-                        first_name = status_response.get('first_name')
-                        last_name = status_response.get('last_name')
+            if email and not candidate_id:
+                data = {
+                    "email": email,
+                    "country_code": country_code,
+                    "cell_phone": mobile,
+                    "name": name,
+                }
+                candidate_id, error = user_register(data)
 
-                    if not first_name and not last_name:
-                        first_name = name
+            if not candidate_id and flag:
+                msg = 'candidate_id is required.'
+                flag = False
 
-                if country_code:
+            first_name, last_name = '', ''
+
+            if candidate_id:
+                status_response = ShineCandidateDetail().get_status_detail(
+                    email=None, shine_id=candidate_id)
+
+                if status_response:
+                    first_name = status_response.get('first_name')
+                    last_name = status_response.get('last_name')
+
+                if not first_name and not last_name:
+                    first_name = name
+
+            if country_code:
+                try:
+                    country_obj = Country.objects.get(phone=country_code)
+                except Exception as e:
+                    logging.getLogger('error_log').error("Unable to get country object %s" % str(e))
+
+                    country_obj = Country.objects.get(phone=91)
+
+            if flag:
+                percentage_discount = 0
+                tax_rate_per = int(request.data.get('tax_rate_per', 0))
+                order = Order.objects.create(
+                    candidate_id=candidate_id,
+                    email=email,
+                    country_code=country_code,
+                    mobile=mobile,
+                    date_placed=timezone.now(),
+                    payment_date=timezone.now())
+
+                order.number = 'CP' + str(order.id)
+                order.first_name = first_name
+                order.last_name = last_name
+                order.currency = int(request.data.get('currency', 0))
+                order.tax_config = str(request.data.get('tax_config', {}))
+                order.status = 1
+                order.site = 1
+                order.country = country_obj
+                order.total_excl_tax = request.data.get('total_excl_tax_excl_discount', 0)
+                order.total_incl_tax = request.data.get('total_payable_amount', 0)
+                crm_lead_id = request.data.get('crm_lead_id', '')
+                crm_sales_id = request.data.get('crm_sales_id', '')
+                sales_user_info = request.data.get('sales_user_info', {})
+                sales_user_info = str(sales_user_info)
+                order.crm_lead_id = crm_lead_id
+                order.crm_sales_id = crm_sales_id
+                order.sales_user_info = sales_user_info
+                order.save()
+                coupon_amount = request.data.get('coupon', 0)
+                coupon_code = request.data.get('coupon_code', '')
+                flag = False
+                if coupon_amount > 0 and coupon_code:
                     try:
-                        country_obj = Country.objects.get(phone=country_code)
-                    except Exception as e:
-                        logging.getLogger('error_log').error("Unable to get country object %s" % str(e))
-
-                        country_obj = Country.objects.get(phone=91)
-
-                if flag:
-                    percentage_discount = 0
-                    tax_rate_per = int(request.data.get('tax_rate_per', 0))
-                    order = Order.objects.create(
-                        candidate_id=candidate_id,
-                        email=email,
-                        country_code=country_code,
-                        mobile=mobile,
-                        date_placed=timezone.now(),
-                        payment_date=timezone.now())
-
-                    order.number = 'CP' + str(order.id)
-                    order.first_name = first_name
-                    order.last_name = last_name
-                    order.currency = int(request.data.get('currency', 0))
-                    order.tax_config = str(request.data.get('tax_config', {}))
-                    order.status = 1
-                    order.site = 1
-                    order.country = country_obj
-                    order.total_excl_tax = request.data.get('total_excl_tax_excl_discount', 0)
-                    order.total_incl_tax = request.data.get('total_payable_amount', 0)
-                    crm_lead_id = request.data.get('crm_lead_id', '')
-                    crm_sales_id = request.data.get('crm_sales_id', '')
-                    sales_user_info = request.data.get('sales_user_info', {})
-                    sales_user_info = str(sales_user_info)
-                    order.crm_lead_id = crm_lead_id
-                    order.crm_sales_id = crm_sales_id
-                    order.sales_user_info = sales_user_info
-                    order.save()
-                    coupon_amount = request.data.get('coupon', 0)
-                    coupon_code = request.data.get('coupon_code', '')
-                    flag = False
-                    if coupon_amount > 0 and coupon_code:
-                        try:
-                            coupon_obj = Coupon.objects.get(code=coupon_code)
-                            order.couponorder_set.create(
-                                coupon=coupon_obj,
-                                coupon_code=coupon_obj.code,
-                                value=coupon_amount
-                            )
-                            flag = True
-                        except Exception as e:
-                            logging.getLogger('error_log').error(str(e))
-
-                    if coupon_amount > 0 and not flag:
-                        coupon_obj = Coupon.objects.create_coupon(
-                            coupon_type='flat',
-                            value=coupon_amount,
-                            valid_until=None,
-                            prefix="crm",
-                            campaign=None,
-                            user_limit=1
-                        )
-
-                        coupon_obj.min_purchase = coupon_amount
-                        coupon_obj.max_deduction = coupon_amount
-                        coupon_obj.valid_from = timezone.now()
-                        coupon_obj.valid_until = timezone.now()
-                        coupon_obj.active = False
-                        coupon_obj.save()
-
-                        coupon_obj.users.create(
-                            user=email,
-                            redeemed_at=timezone.now()
-                        )
-
+                        coupon_obj = Coupon.objects.get(code=coupon_code)
                         order.couponorder_set.create(
                             coupon=coupon_obj,
                             coupon_code=coupon_obj.code,
                             value=coupon_amount
                         )
+                        flag = True
+                    except Exception as e:
+                        logging.getLogger('error_log').error(str(e))
 
-                    total_discount = coupon_amount
-                    total_amount_before_discount = order.total_excl_tax  # berfore discount and excl tax
-                    percentage_discount = (total_discount * 100) / total_amount_before_discount
-                    for data in item_list:
-                        delivery_service = None
-                        parent_id = data.get('id')
-                        addons = data.get('addons', [])
-                        variations = data.get('variations', [])
-                        combos = data.get('combos', [])
-                        product = Product.objects.get(id=parent_id)
-                        if data.get('delivery_service', None):
-                            delivery_service = data.get('delivery_service', None)
-                            delivery_service = DeliveryService.objects.get(name=delivery_service)
+                if coupon_amount > 0 and not flag:
+                    coupon_obj = Coupon.objects.create_coupon(
+                        coupon_type='flat',
+                        value=coupon_amount,
+                        valid_until=None,
+                        prefix="crm",
+                        campaign=None,
+                        user_limit=1
+                    )
 
-                        p_oi = order.orderitems.create(
-                            product=product,
-                            title=product.get_name,
-                            partner=product.vendor
+                    coupon_obj.min_purchase = coupon_amount
+                    coupon_obj.max_deduction = coupon_amount
+                    coupon_obj.valid_from = timezone.now()
+                    coupon_obj.valid_until = timezone.now()
+                    coupon_obj.active = False
+                    coupon_obj.save()
+
+                    coupon_obj.users.create(
+                        user=email,
+                        redeemed_at=timezone.now()
+                    )
+
+                    order.couponorder_set.create(
+                        coupon=coupon_obj,
+                        coupon_code=coupon_obj.code,
+                        value=coupon_amount
+                    )
+
+                total_discount = coupon_amount
+                total_amount_before_discount = order.total_excl_tax  # berfore discount and excl tax
+                percentage_discount = (total_discount * 100) / total_amount_before_discount
+                for data in item_list:
+                    delivery_service = None
+                    parent_id = data.get('id')
+                    addons = data.get('addons', [])
+                    variations = data.get('variations', [])
+                    combos = data.get('combos', [])
+                    product = Product.objects.get(id=parent_id)
+                    if data.get('delivery_service', None):
+                        delivery_service = data.get('delivery_service', None)
+                        delivery_service = DeliveryService.objects.get(name=delivery_service)
+
+                    p_oi = order.orderitems.create(
+                        product=product,
+                        title=product.get_name,
+                        partner=product.vendor
+                    )
+                    p_oi.upc = str(order.pk) + "_" + str(p_oi.pk)
+                    if product.type_flow == 8:
+                        p_oi.oi_status = 2
+                    if product.type_product == 3:
+                        p_oi.is_combo = True
+                        p_oi.no_process = True
+                        combos = self.get_combos(product).get('combos')
+                        for prd in combos:
+                            oi = order.orderitems.create(
+                                product=prd,
+                                title=prd.get_name,
+                                partner=prd.vendor,
+                                parent=p_oi,
+                                is_combo=True
+                            )
+                            if prd.type_flow == 8:  # Linkedin Orders Resume required status
+                                oi.oi_status = 2
+                            oi.upc = str(order.pk) + "_" + str(oi.pk)
+                            cost_price = oi.product.get_price()
+                            oi.cost_price = cost_price
+                            oi.selling_price = 0
+                            oi.tax_amount = 0
+                            oi.discount_amount = 0
+                            # setup delivery service
+                            if delivery_service:
+                                oi.delivery_service = delivery_service
+                            oi.save()
+
+                    elif variations:
+                        p_oi.is_variation = True
+                        p_oi.no_process = True
+
+                    cost_price = data.get('price')
+                    p_oi.cost_price = cost_price
+                    discount = (cost_price * percentage_discount) / 100
+                    cost_price_after_discount = cost_price - discount
+                    # As per product requirement , apply GST only for INR
+                    if order.currency == 0:
+                        tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                    else:
+                        tax_amount = 0
+                    selling_price = cost_price_after_discount + tax_amount
+                    p_oi.selling_price = selling_price
+                    p_oi.tax_amount = tax_amount
+                    p_oi.discount_amount = discount
+                    p_oi.save()
+
+                    if variations and p_oi.product.product_class.slug == 'course':
+                        p_oi.selling_price = 0
+                        p_oi.tax_amount = 0
+                        p_oi.discount_amount = 0
+                        p_oi.save()
+
+                    else:
+                        if delivery_service:
+                            # setup delivery service
+                            p_oi.delivery_service = delivery_service
+
+                            cost_price = float(p_oi.delivery_service.get_price())
+                            p_oi.delivery_price_excl_tax = cost_price
+                            discount = (cost_price * percentage_discount) / 100
+                            cost_price_after_discount = cost_price - discount
+                            # As per product requirement , apply GST only for INR
+                            if order.currency == 0:
+                                tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                            else:
+                                tax_amount = 0
+                            selling_price = cost_price_after_discount + tax_amount
+                            p_oi.delivery_price_incl_tax = selling_price
+                            p_oi.save()
+
+                    for var in variations:
+                        prd = Product.objects.get(id=var.get('id'))
+                        oi = order.orderitems.create(
+                            product=prd,
+                            title=prd.get_name,
+                            partner=prd.vendor,
+                            parent=p_oi,
+                            is_variation=True,
                         )
-                        p_oi.upc = str(order.pk) + "_" + str(p_oi.pk)
-                        if product.type_flow == 8:
-                            p_oi.oi_status = 2
-                        if product.type_product == 3:
-                            p_oi.is_combo = True
-                            p_oi.no_process = True
-                            combos = self.get_combos(product).get('combos')
-                            for prd in combos:
-                                oi = order.orderitems.create(
-                                    product=prd,
-                                    title=prd.get_name,
-                                    partner=prd.vendor,
-                                    parent=p_oi,
-                                    is_combo=True
-                                )
-                                if prd.type_flow == 8:  # Linkedin Orders Resume required status
-                                    oi.oi_status = 2
-                                oi.upc = str(order.pk) + "_" + str(oi.pk)
-                                cost_price = oi.product.get_price()
-                                oi.cost_price = cost_price
-                                oi.selling_price = 0
-                                oi.tax_amount = 0
-                                oi.discount_amount = 0
-                                # setup delivery service
-                                if delivery_service:
-                                    oi.delivery_service = delivery_service
-                                oi.save()
-
-                        elif variations:
-                            p_oi.is_variation = True
-                            p_oi.no_process = True
-
-                        cost_price = data.get('price')
-                        p_oi.cost_price = cost_price
+                        if prd.type_flow == 8:  # Linkedin Orders Resume required status
+                            oi.oi_status = 2
+                        oi.upc = str(order.pk) + "_" + str(oi.pk)
+                        cost_price = var.get('price')
+                        oi.cost_price = cost_price
                         discount = (cost_price * percentage_discount) / 100
                         cost_price_after_discount = cost_price - discount
                         # As per product requirement , apply GST only for INR
@@ -266,18 +335,12 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                         else:
                             tax_amount = 0
                         selling_price = cost_price_after_discount + tax_amount
-                        p_oi.selling_price = selling_price
-                        p_oi.tax_amount = tax_amount
-                        p_oi.discount_amount = discount
-                        p_oi.save()
+                        oi.selling_price = selling_price
+                        oi.tax_amount = tax_amount
+                        oi.discount_amount = discount
 
-                        if variations and p_oi.product.product_class.slug == 'course':
-                            p_oi.selling_price = 0
-                            p_oi.tax_amount = 0
-                            p_oi.discount_amount = 0
-                            p_oi.save()
-
-                        else:
+                        # setup delivery service
+                        if p_oi.product.product_class.slug == 'course':
                             if delivery_service:
                                 # setup delivery service
                                 p_oi.delivery_service = delivery_service
@@ -286,7 +349,6 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                                 p_oi.delivery_price_excl_tax = cost_price
                                 discount = (cost_price * percentage_discount) / 100
                                 cost_price_after_discount = cost_price - discount
-                                # As per product requirement , apply GST only for INR
                                 if order.currency == 0:
                                     tax_amount = (cost_price_after_discount * tax_rate_per) / 100
                                 else:
@@ -294,137 +356,89 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                                 selling_price = cost_price_after_discount + tax_amount
                                 p_oi.delivery_price_incl_tax = selling_price
                                 p_oi.save()
-
-                        for var in variations:
-                            prd = Product.objects.get(id=var.get('id'))
-                            oi = order.orderitems.create(
-                                product=prd,
-                                title=prd.get_name,
-                                partner=prd.vendor,
-                                parent=p_oi,
-                                is_variation=True,
-                            )
-                            if prd.type_flow == 8:  # Linkedin Orders Resume required status
-                                oi.oi_status = 2
-                            oi.upc = str(order.pk) + "_" + str(oi.pk)
-                            cost_price = var.get('price')
-                            oi.cost_price = cost_price
-                            discount = (cost_price * percentage_discount) / 100
-                            cost_price_after_discount = cost_price - discount
-                            # As per product requirement , apply GST only for INR
-                            if order.currency == 0:
-                                tax_amount = (cost_price_after_discount * tax_rate_per) / 100
-                            else:
-                                tax_amount = 0
-                            selling_price = cost_price_after_discount + tax_amount
-                            oi.selling_price = selling_price
-                            oi.tax_amount = tax_amount
-                            oi.discount_amount = discount
-
-                            # setup delivery service
-                            if p_oi.product.product_class.slug == 'course':
-                                if delivery_service:
-                                    # setup delivery service
-                                    p_oi.delivery_service = delivery_service
-
-                                    cost_price = float(p_oi.delivery_service.get_price())
-                                    p_oi.delivery_price_excl_tax = cost_price
-                                    discount = (cost_price * percentage_discount) / 100
-                                    cost_price_after_discount = cost_price - discount
-                                    if order.currency == 0:
-                                        tax_amount = (cost_price_after_discount * tax_rate_per) / 100
-                                    else:
-                                        tax_amount = 0
-                                    selling_price = cost_price_after_discount + tax_amount
-                                    p_oi.delivery_price_incl_tax = selling_price
-                                    p_oi.save()
-                            else:
-                                if delivery_service:
-                                    oi.delivery_service = delivery_service
-                            oi.save()
-
-                        for addon in addons:
-                            prd = Product.objects.get(id=addon.get('id'))
-                            oi = order.orderitems.create(
-                                product=prd,
-                                title=prd.get_name,
-                                partner=prd.vendor,
-                                parent=p_oi,
-                                is_addon=True,
-                            )
-                            if prd.type_flow == 8:  # Linkedin Orders Resume required status
-                                oi.oi_status = 2
-                            oi.upc = str(order.pk) + "_" + str(oi.pk)
-                            cost_price = addon.get('price')
-                            oi.cost_price = cost_price
-                            discount = (cost_price * percentage_discount) / 100
-                            cost_price_after_discount = cost_price - discount
-                            # As per product requirement , apply GST only for INR
-                            if order.currency == 0:
-                                tax_amount = (cost_price_after_discount * tax_rate_per) / 100
-                            else:
-                                tax_amount = 0
-                            selling_price = cost_price_after_discount + tax_amount
-                            oi.selling_price = selling_price
-                            oi.tax_amount = tax_amount
-                            oi.discount_amount = discount
-                            # setup delivery service
+                        else:
                             if delivery_service:
                                 oi.delivery_service = delivery_service
-                            oi.save()
+                        oi.save()
 
-                    update_initiat_orderitem_sataus(order=order)
-                    txns_list = request.data.get('txns_list', [])
-
-                    for txn_dict in txns_list:
-                        try:
-                            payment_date = txn_dict.get('payment_date')
-                            payment_date = datetime.datetime.strptime(payment_date, "%Y-%m-%d %H:%M:%S")
-                        except Exception as e:
-                            logging.getLogger('error_log').error("Unable to get payment date as per specified format "
-                                                                 "%s" %
-                                                                 str(e))
-                            payment_date = timezone.now()
-                        order.ordertxns.create(
-                            txn=txn_dict.get('txn_id', ''),
-                            status=int(txn_dict.get('status', 0)),
-                            payment_mode=int(txn_dict.get('payment_mode', 7)),
-                            payment_date=payment_date,
-                            currency=int(txn_dict.get('currency', 0)),
-                            txn_amount=txn_dict.get('amount', 0)
+                    for addon in addons:
+                        prd = Product.objects.get(id=addon.get('id'))
+                        oi = order.orderitems.create(
+                            product=prd,
+                            title=prd.get_name,
+                            partner=prd.vendor,
+                            parent=p_oi,
+                            is_addon=True,
                         )
+                        if prd.type_flow == 8:  # Linkedin Orders Resume required status
+                            oi.oi_status = 2
+                        oi.upc = str(order.pk) + "_" + str(oi.pk)
+                        cost_price = addon.get('price')
+                        oi.cost_price = cost_price
+                        discount = (cost_price * percentage_discount) / 100
+                        cost_price_after_discount = cost_price - discount
+                        # As per product requirement , apply GST only for INR
+                        if order.currency == 0:
+                            tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                        else:
+                            tax_amount = 0
+                        selling_price = cost_price_after_discount + tax_amount
+                        oi.selling_price = selling_price
+                        oi.tax_amount = tax_amount
+                        oi.discount_amount = discount
+                        # setup delivery service
+                        if delivery_service:
+                            oi.delivery_service = delivery_service
+                        oi.save()
 
-                    # wallet reward point
-                    # OrderMixin().addRewardPointInWallet(order=order)
-                    add_reward_point_in_wallet.delay(order_pk=order.pk)
+                update_initiat_orderitem_sataus(order=order)
 
-                    # invoice generation
-                    invoice_generation_order.delay(order_pk=order.pk)
+                for txn_dict in txns_list:
+                    try:
+                        payment_date = txn_dict.get('payment_date')
+                        payment_date = datetime.datetime.strptime(payment_date, "%Y-%m-%d %H:%M:%S")
+                    except Exception as e:
+                        logging.getLogger('error_log').error("Unable to get payment date as per specified format "
+                                                             "%s" %
+                                                             str(e))
+                        payment_date = timezone.now()
+                    order.ordertxns.create(
+                        txn=txn_dict.get('txn_id', ''),
+                        status=int(txn_dict.get('status', 0)),
+                        payment_mode=int(txn_dict.get('payment_mode', 7)),
+                        payment_date=payment_date,
+                        currency=int(txn_dict.get('currency', 0)),
+                        txn_amount=txn_dict.get('amount', 0)
+                    )
 
-                    # email for order
-                    process_mailer.apply_async((order.pk,), countdown=settings.MAIL_COUNTDOWN)
-                    pending_item_email.apply_async((order.pk,), countdown=settings.MAIL_COUNTDOWN)
+                # wallet reward point
+                # OrderMixin().addRewardPointInWallet(order=order)
+                add_reward_point_in_wallet.delay(order_pk=order.pk)
 
-                    return Response(
-                        {"status": 1, "msg": 'order created successfully.'},
-                        status=status.HTTP_200_OK)
+                # invoice generation
+                invoice_generation_order.delay(order_pk=order.pk)
 
-                else:
-                    return Response(
-                        {"msg": msg, "status": 0},
-                        status=status.HTTP_400_BAD_REQUEST)
-            except Exception as e:
-                if order:
-                    order.delete()
-                msg = str(e)
-                logging.getLogger('error_log').error(msg)
+                # email for order
+                process_mailer.apply_async((order.pk,), countdown=settings.MAIL_COUNTDOWN)
+                pending_item_email.apply_async((order.pk,), countdown=settings.MAIL_COUNTDOWN)
+
+                return Response(
+                    {"status": 1, "msg": 'order created successfully.'},
+                    status=status.HTTP_200_OK)
+
+            else:
                 return Response(
                     {"msg": msg, "status": 0},
                     status=status.HTTP_400_BAD_REQUEST)
-        else:
+        except Exception as e:
+            if order:
+                order.delete()
+            msg = str(e)
+            logging.getLogger('error_log').error(msg)
             return Response(
-                {"status": 0, "msg": "there is no items in order"},
+                {"msg": msg, "status": 0},
                 status=status.HTTP_400_BAD_REQUEST)
+        
 
 
 class EmailLTValueApiView(APIView):
@@ -442,7 +456,6 @@ class EmailLTValueApiView(APIView):
                 {"status": "FAIL", "msg": "Bad Parameters Provided"},
                 status=status.HTTP_400_BAD_REQUEST)
 
-        ltv = Decimal(0)
         if not candidate_id:
             candidate_id = ShineCandidateDetail().get_shine_id(email=email)
 
@@ -451,30 +464,7 @@ class EmailLTValueApiView(APIView):
                 {"status": "FAIL", "msg": "Email or User Doesn't Exists"},
                 status=status.HTTP_400_BAD_REQUEST)
 
-        date_one_year_ago = timezone.now() - timedelta(days=365)
-        #Consider only last 1 year's orders for LTV.
-        ltv_pks = list(Order.objects.filter(candidate_id=candidate_id,\
-            status__in=[1,2,3],payment_date__gte=date_one_year_ago).values_list('pk', flat=True))
-        
-        if ltv_pks:
-            ltv_order_sum = Order.objects.filter(
-                pk__in=ltv_pks).aggregate(ltv_price=Sum('total_incl_tax'))
-            last_order = OrderItem.objects.select_related('order').filter(order__in = ltv_pks)\
-                .exclude(oi_status=163).order_by('-order__payment_date').first()
-            if last_order:
-                last_order = last_order.order.payment_date.strftime('%Y-%m-%d %H:%M:%S')
-            else:
-                last_order = ""
-
-            ltv = ltv_order_sum.get('ltv_price') if ltv_order_sum.get('ltv_price') else Decimal(0)
-            rf_ois = list(OrderItem.objects.filter(
-                order__in=ltv_pks,
-                oi_status=163).values_list('order', flat=True))
-
-            rf_sum = RefundRequest.objects.filter(
-                order__in=rf_ois).aggregate(rf_price=Sum('refund_amount'))
-            if rf_sum.get('rf_price'):
-                ltv = ltv - rf_sum.get('rf_price')
+        ltv = get_ltv(candidate_id)
 
         return Response(
             {"status": "SUCCESS", "ltv_price": str(ltv), "name": name, "last_order": str(last_order)},
@@ -785,9 +775,9 @@ class ResumeBuilderProductView(ListAPIView):
 
     def get_queryset(self):
         type_flow = self.request.query_params.get('type_flow')
-        return Product.objects.filter(type_flow=type_flow, type_product=2,active=True).annotate(
-            parent=F('siblingproduct__main')).values(\
-            'id', 'parent', 'name','inr_price','usd_price','aed_price').order_by('inr_price')
+        return Product.objects.filter(type_flow=type_flow, type_product=2, active=True).annotate(
+            parent=F('siblingproduct__main')).values( \
+            'id', 'parent', 'name', 'inr_price', 'usd_price', 'aed_price').order_by('inr_price')
 
 
 class ShineDataFlowDataApiView(ListAPIView):
@@ -856,12 +846,12 @@ class ShineCandidateLoginAPIView(APIView):
 
         return data
 
-    def get_existing_order_data(self,candidate_id):
+    def get_existing_order_data(self, candidate_id):
         from order.models import Order
 
         product_found = False
         order_data = {}
-        order_obj_list = Order.objects.filter(candidate_id=candidate_id,status__in=[1,3])
+        order_obj_list = Order.objects.filter(candidate_id=candidate_id, status__in=[1, 3])
 
         if not order_obj_list:
             return order_data
@@ -872,28 +862,43 @@ class ShineCandidateLoginAPIView(APIView):
 
             for item in order_obj.orderitems.all():
                 if item.product and item.product.type_flow == 17 and item.product.type_product == 2:
-                    order_data = {"id":order_obj.id,
-                    "combo":True if item.product.id != settings.RESUME_BUILDER_NON_COMBO_PID else False
-                    }
+                    order_data = {"id": order_obj.id,
+                                  "combo": True if item.product.id != settings.RESUME_BUILDER_NON_COMBO_PID else False
+                                  }
                     product_found = True
                     break
 
         return order_data
 
-    def get_response_for_successful_login(self, candidate_id, login_response):
+    def get_response_for_successful_login(self, candidate_id, login_response, with_info=True):
+        
         candidate_obj = ShineCandidate(**login_response)
         candidate_obj.id = candidate_id
         candidate_obj.candidate_id = candidate_id
         token = self.get_or_create_token(candidate_obj)
+        personal_info = login_response.get('personal_detail')[0]
+        personal_info['candidate_id']= personal_info.get('id')
 
-        data_to_send = {"token": token,
-                        "candidate_id": candidate_id,
-                        "candidate_profile": self.customize_user_profile(login_response),
-                        "entity_status": self.get_entity_status_for_candidate(candidate_id),
-                        "order_data":self.get_existing_order_data(candidate_id)
-                        # TODO make param configurable
-                        }
         self.request.session.update(login_response)
+
+        self.request.session.update(personal_info)
+
+        if with_info:
+            data_to_send = {"token": token,
+                            "candidate_id": candidate_id,
+                            "candidate_profile": self.customize_user_profile(login_response),
+                            "entity_status": self.get_entity_status_for_candidate(candidate_id),
+                            "order_data": self.get_existing_order_data(candidate_id)
+                            # TODO make param configurable
+                            }
+        else:
+            data_to_send = {
+                "token": token,
+                "candidate_id": candidate_id,
+                'cart_pk': self.request.session.get('cart_pk') or self.request._request.session.get('cart_pk'),
+                'profile': login_response
+            }
+
         return Response(data_to_send, status=status.HTTP_201_CREATED)
 
     def get_profile_info(self, profile):
@@ -1057,7 +1062,7 @@ class ShineCandidateLoginAPIView(APIView):
 
         return candidate_info
 
-    def _dispatch_via_autologin(self, alt):
+    def _dispatch_via_autologin(self, alt, with_info):
         try:
             email, candidate_id, valid = AutoLogin().decode(alt)
         except Exception as e:
@@ -1073,9 +1078,9 @@ class ShineCandidateLoginAPIView(APIView):
             logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
             return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
 
-        return self.get_response_for_successful_login(candidate_id, login_response)
+        return self.get_response_for_successful_login(candidate_id, login_response, with_info)
 
-    def _dispatch_via_email_password(self, email, password):
+    def _dispatch_via_email_password(self, email, password, with_info):
         login_data = {"email": email.strip(), "password": password}
 
         try:
@@ -1093,11 +1098,13 @@ class ShineCandidateLoginAPIView(APIView):
 
         try:
             login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
+            # else:
+            #     login_response = ShineCandidateDetail().get_status_detail(shine_id=candidate_id)
         except Exception as e:
             logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
             return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
 
-        return self.get_response_for_successful_login(candidate_id, login_response)
+        return self.get_response_for_successful_login(candidate_id, login_response, with_info)
 
     def get(self, request, *args, **kwargs):
         user = request.user
@@ -1120,12 +1127,13 @@ class ShineCandidateLoginAPIView(APIView):
         email = request.data.get('email')
         password = request.data.get('password')
         alt = request.data.get('alt')
+        with_info = request.data.get('withInfo', True)
 
         if alt:
-            return self._dispatch_via_autologin(alt)
+            return self._dispatch_via_autologin(alt, with_info)
 
         if email and password:
-            return self._dispatch_via_email_password(email, password)
+            return self._dispatch_via_email_password(email, password, with_info)
 
         return Response({"data": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -1226,6 +1234,7 @@ class UpdateCertificateAndAssesment(APIView):
             status=status.HTTP_201_CREATED
         )
 
+
 class ShineDataFlowDataApiView(ListAPIView):
     permission_classes = []
     authentication_classes = []
@@ -1263,6 +1272,7 @@ class VendorCertificateMappingApiView(ListAPIView):
         response = self.list(request, *args, **kwargs)
 
         return response
+
 
 class ImportCertificateApiView(APIView, AmcatApiMixin):
     authentication_classes = [OAuth2Authentication]
@@ -1312,7 +1322,8 @@ class ImportCertificateApiView(APIView, AmcatApiMixin):
         else:
             return Response(data, status=data['code'])
 
-class TalentEconomyApiView(FieldFilterMixin,ListAPIView):
+
+class TalentEconomyApiView(FieldFilterMixin, ListAPIView):
     """
     Include params -
 
@@ -1334,6 +1345,17 @@ class TalentEconomyApiView(FieldFilterMixin,ListAPIView):
     To view particular Fields only:
         include fl= id,title, (include fields with ',' separated)
     To view all articles do not include status and visibility in parameter
+
+    To get the images for a particular size:
+        Note:
+            If you are using fl (include imagefield in it)
+            Dimensions should be like 100 x 100
+
+        For a particular size image
+               add &image_fieldname_size=100x100
+        For multiple size image
+            add &image_fieldname_size=100x100,200x200,300x300
+
 
     pagination params-
             nopage -  get all results(unpaginated)
@@ -1370,8 +1392,8 @@ class TalentEconomyApiView(FieldFilterMixin,ListAPIView):
         return Blog.objects.filter(**filter_dict)
 
 
-class OrderDetailApiView(FieldFilterMixin,RetrieveAPIView):
-    permission_classes = [IsAuthenticated,OrderAccessPermission]
+class OrderDetailApiView(FieldFilterMixin, RetrieveAPIView):
+    permission_classes = [IsAuthenticated, OrderAccessPermission]
     authentication_classes = [SessionAuthentication]
     serializer_class = OrderDetailSerializer
     queryset = Order.objects.all()
@@ -1385,8 +1407,14 @@ class OrderDetailApiView(FieldFilterMixin,RetrieveAPIView):
         for field in fields_to_log:
             if field not in fields_to_check:
                 continue
-            logging.getLogger('info_log').info('Order Data Accessed - {},{},{},{},{},{}'.format(current_time,\
-        user.id, user.get_full_name(), getattr(instance, 'number', 'None'), field, getattr(instance, field, 'None')))
+            logging.getLogger('info_log').info('Order Data Accessed - {},{},{},{},{},{}'.format(current_time, \
+                                                                                                user.id,
+                                                                                                user.get_full_name(),
+                                                                                                getattr(instance,
+                                                                                                        'number',
+                                                                                                        'None'), field,
+                                                                                                getattr(instance, field,
+                                                                                                        'None')))
         return self.retrieve(request, *args, **kwargs)
 
 
@@ -1430,7 +1458,7 @@ class CandidateInsight(APIView):
 
     def post(self, request, *args, **kwargs):
         data = request.data
-        logging.getLogger('info_log').info("Candidate Insight:- {}".format(str(data)) )
+        logging.getLogger('info_log').info("Candidate Insight:- {}".format(str(data)))
         return Response({
             "msg": "Data has been noted."},
             status=status.HTTP_201_CREATED

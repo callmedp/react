@@ -663,3 +663,83 @@
 	background: $white-color;
 	padding-top: 30px;
 }
+
+
+/*** amcat section css ***/
+.amcat-certification {
+	margin: -10px 0 0 0;
+
+	.box-panel {
+		padding: 10px 20px 20px 20px;
+	}
+}
+
+.amcat-box {
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+	font-size: $font-size+3;
+	
+	&__list {
+		list-style-type: none;
+		text-align: center;
+		width: 140px;
+
+		i {
+			width: 70px;
+			height: 70px;
+			border-radius: 50%;
+			display: block;
+			background-color: #f6faff;
+			margin: 0 auto 10px auto;
+			position: relative;
+
+			span {
+				position: absolute;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				top: 0;
+				margin: auto;
+			}
+		}
+	}
+}
+
+.amcat-tags {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+
+	a {
+		padding: 10px;
+		color: $primary-color;
+		font-size: $font-size+2;
+		background-color: #ececec;
+		border-radius: 20px;
+		padding: 7px 20px;
+		margin: 0 5px 15px 5px;
+
+		&.selected {
+			background-color: #dee9f9;
+		}
+	}
+}
+
+.amcat-heading1 {
+  width: 98px;
+  height: 23px;
+  background: $sprite 0 -537px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.amcat-heading2 {
+  width: 179px;
+  height: 40px;
+  background: $sprite 0 -560px;
+  display: inline-block;
+  vertical-align: sub;
+  margin-bottom: 2px;
+}

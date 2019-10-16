@@ -6,6 +6,7 @@ import calendar
 from time import strptime
 from wsgiref.util import FileWrapper
 from dateutil.relativedelta import relativedelta
+from urllib.parse import urlencode
 
 from django.shortcuts import render
 from django.http import (
@@ -130,7 +131,7 @@ class LoginApiView(FormView):
     template_name = "users/login.html"
     success_url = "/"
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs):    
         context = super(LoginApiView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
         form = self.get_form()
@@ -166,6 +167,17 @@ class LoginApiView(FormView):
         })
         if 'next' in self.request.GET:
             self.success_url = self.request.GET.get('next')
+        
+        url_parameters ={}
+
+        for parameter in (self.request.GET).keys():
+            url_parameters.update({parameter:self.request.GET.get(parameter)})
+
+        url_parameters.pop('next',None)
+
+        if len(url_parameters.keys()): 
+            self.success_url += '?' + urlencode(url_parameters)
+        
         try:
             user_exist = RegistrationLoginApi.check_email_exist(login_dict['email'])
             if user_exist.get('exists', ''):
@@ -240,6 +252,7 @@ class LogoutApiView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         request.session.flush()
+        request.session.cycle_key()
         response = HttpResponseRedirect(reverse('homepage'))
         response.delete_cookie('_em_', domain='.shine.com')
         return response
@@ -372,7 +385,6 @@ class ForgotHtmlView(TemplateView):
 class ForgotPasswordEmailView(View):
 
     def post(self, request, *args, **kwargs):
-
         if request.is_ajax():
             email = request.POST.get('email')
             user_exist = RegistrationLoginApi.check_email_exist(email)
@@ -410,6 +422,7 @@ class SocialLoginView(View):
                         email=None,
                         shine_id=candidateid)
                     request.session.update(resp_status)
+                    
                     return HttpResponseRedirect(self.success_url)
                 elif fb_user['prefill_details'].get('email'):
                     cart_pk = self.request.session.get('cart_pk')

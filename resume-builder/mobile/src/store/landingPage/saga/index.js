@@ -41,7 +41,7 @@ function* loginCandidate(action) {
         if (result && result['error']) {
             apiError('login')
             localStorage.clear();
-            window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
+            window.location.href = `${siteDomain}/login/${window.location.search ? window.location.search+'&' : '?'}next=/resume-builder/`;
             return;
             //redirect code here
         }

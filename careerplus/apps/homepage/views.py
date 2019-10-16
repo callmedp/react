@@ -2,6 +2,7 @@ import logging
 
 from django.views.generic import TemplateView
 from django.conf import settings
+from django.http.response import Http404
 
 from django_redis import get_redis_connection
 from haystack.query import SearchQuerySet
@@ -193,8 +194,15 @@ class StaticSiteContentView(TemplateView):
     template_name = 'homepage/static-site-content.html'
     
     def get_context_data(self, **kwargs):
-        page_slug = kwargs['page_slug']
-        page_type = int(STATIC_SITE_SLUG_TO_ID_MAPPING[page_slug])
+        page_slug = kwargs.get('page_slug','')
+        if not page_slug:
+            raise Http404
+        
+        page_type = str(STATIC_SITE_SLUG_TO_ID_MAPPING.get(page_slug,''))
+        if not page_type or not page_type.isdigit():
+            raise Http404
+
+        page_type = int(page_type)
         context = super(StaticSiteContentView, self).get_context_data(**kwargs)
         context.update({
             "page_type": page_type,

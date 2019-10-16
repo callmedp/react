@@ -93,6 +93,10 @@ class CartMixin(object):
                         cart_obj.email = email
                     cart_obj.save()
 
+                if self.request.session.get('first_name') and not cart_obj.first_name:
+                    cart_obj.first_name = self.request.session.get('first_name',None)
+                    cart_obj.save()
+
                 if country_code and not cart_obj.country_code:
                     try:
                         country_obj = Country.objects.get(phone=country_code, active=True)
@@ -543,7 +547,7 @@ class CartMixin(object):
             logging.getLogger('error_log').error(str(e))
         return round(total, 0)
 
-    def getPayableAmount(self, cart_obj, total_amount=Decimal(0)):
+    def getPayableAmount(self, cart_obj: object, total_amount: object = Decimal(0)) -> object:
         total_amount = total_amount
         total_payable_amount = Decimal(0)
         tax_amount = Decimal(0)
@@ -614,9 +618,9 @@ class CartMixin(object):
 
                 tax_amount = Decimal(0)
                 try:
-                    if cart_obj.country and cart_obj.country.phone == '91':
-                        tax_amount = (amount_after_discount * tax_rate_per) / 100
-                        tax_amount = InvoiceGenerate().get_quantize(tax_amount)
+                    # if cart_obj.country and cart_obj.country.phone == '91':
+                    tax_amount = (amount_after_discount * tax_rate_per) / 100
+                    tax_amount = InvoiceGenerate().get_quantize(tax_amount)
 
                 except Exception as e:
                     logging.getLogger('error_log').error("Cart object has no country attached:", str(e))

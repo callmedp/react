@@ -50,11 +50,11 @@
   $('#loader').show();
   var page_type = {{page_type}};
   $( document ).ready(function() {
-      $.get('/api/v1/static-site-page/',{"page_type": page_type},
+      $.get('/api/v1/static-site-page/'+page_type,
               (data)=>{
-                document.getElementById('heading').innerHTML = data.results[0].page_name;
+                document.getElementById('heading').innerHTML = data.page_name;
                 $('#loader').hide();
-                document.getElementsByClassName('content-box')[0].innerHTML += data.results[0].content;
+                document.getElementsByClassName('content-box')[0].innerHTML += data.content;
               }).fail(function() {
                       alert( "$.get failed!" );
                     });

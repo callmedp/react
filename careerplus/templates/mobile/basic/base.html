@@ -94,7 +94,7 @@
 
                    <div class="pull-right">
                         <!--a class="icon-search pull-left " href="search-listing.html">search</a-->
-                        <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+                        <a class="icon-cart" href="{% url "cart:payment-summary" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
                    </div><!-- / Right side Icon ends here -->
                 </div><!-- header menu Icon ends here -->
                 {% block header_title %}{% endblock header_title %}
@@ -199,6 +199,7 @@
     </body>
 </html>
 {% endspaceless %}
+{% block  jquery_block %}
 <script type="text/javascript">
     $("#id_q").on('keyup', function (e) {
     if (e.keyCode == 13) {
@@ -230,3 +231,4 @@
   });
 
 </script>
+{% endblock jquery_block %}

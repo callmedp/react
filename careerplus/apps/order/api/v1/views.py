@@ -1,11 +1,17 @@
+# rest imports
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import ListAPIView,UpdateAPIView
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import IsAuthenticated
+
+#in app imports
 from order.api.core.mixins import OrderItemViewMixin
-from order.models import Order,OrderItem
+from order.models import Order,MonthlyLTVRecord
 from order.api.v1.serializers import OrderItemListSerializer
 from shared.rest_addons.authentication import ShineUserAuthentication
-from rest_framework.permissions import IsAuthenticated
-from .serializers import OrderSerializer
+from .serializers import OrderSerializer,LTVReportSerializer
+
+# python imports
 import json
 from order.api.core.serializers import OrderItemOperationsSerializer,\
     MessageCommunincationSerializer
@@ -18,8 +24,6 @@ from shared.rest_addons.pagination import LearningCustomPagination
 
 
 class OrderItemViewSet(OrderItemViewMixin, ModelViewSet):
-    authentication_classes = [SessionAuthentication]
-    permission_classes = [OrderAccessPermission,]
     """
         CRUD Viewset for `OrderItem` model.
     """
@@ -53,8 +57,6 @@ class OrderItemOperationApiView(FieldFilterMixin,ListAPIView):
     &oi='OrderItemId'
 
     """
-
-
     authentication_classes = [SessionAuthentication]
     permission_classes = [OrderAccessPermission,]
     serializer_class = OrderItemOperationsSerializer
@@ -87,11 +89,26 @@ class MessageCommunicationListApiView(FieldFilterMixin,ListAPIView):
             filter_dict.update({'oi__id': oi_id})
         return Message.objects.filter(**filter_dict)
 
+    #
+    # def paginate_queryset(self, queryset):
+    #     if 'nopage' in self.request.query_params:
+    #         return None
+    #     else:
+    #         return super(MessageCommunicationListApiView,
+    #                      self).paginate_queryset(queryset)
 
-    def paginate_queryset(self, queryset):
-        if 'nopage' in self.request.query_params:
-            return None
-        else:
-            return super(MessageCommunicationListApiView,
-                         self).paginate_queryset(queryset)
+
+class LTVReportView(ListAPIView):
+	serializer_class = LTVReportSerializer
+	authentication_classes = (SessionAuthentication,)
+	permission_classes = (IsAuthenticated,)
+
+	def get_queryset(self):
+		year = self.kwargs.get('year')
+		month = self.kwargs.get('month')
+		queryset = MonthlyLTVRecord.objects.filter(
+			year=year, month=month)
+		return queryset
+
+
 

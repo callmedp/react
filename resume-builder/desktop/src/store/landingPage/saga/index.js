@@ -52,7 +52,7 @@ function* loginCandidate(action) {
         }
         if (result && result['error']) {
             localStorage.clear();
-            window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
+            window.location.href = `${siteDomain}/login/${window.location.search ? window.location.search+'&' : '?'}next=/resume-builder/`;
             yield put({type: UPDATE_UI, data: {loader: false}})
             return;
             //redirect code here

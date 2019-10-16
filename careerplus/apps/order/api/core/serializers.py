@@ -34,11 +34,6 @@ class OrderItemOperationsSerializer(SerializerFieldsMixin,
 	Serailzer for OrderItem operations
 
 	"""
-
-	oi_status_display = serializers.CharField()
-	order_oio_linkedin = serializers.CharField()
-
-
 	list_lookup_fields = ['oi_id']
 	fields_required_mapping = {'oi_id':['no_process','oi_draft_path']
 							   }

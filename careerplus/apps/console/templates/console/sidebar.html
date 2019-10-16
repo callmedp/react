@@ -290,6 +290,11 @@
                   <a href="{% url 'console:compliance-report' %}"><i class="fa fa-suitcase"></i>Compliance Report</a>
               </li>
             {% endif %}
+            {% if perms.order.can_download_ltv_report %}
+              <li>
+                  <a href="{% url 'console:ltv-report' %}"><i class="fa fa-suitcase"></i>LTV Report</a>
+              </li>
+            {% endif %}
           </ul>
         </li>
       </ul>

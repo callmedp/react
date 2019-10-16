@@ -6,6 +6,11 @@ from rest_framework import status
 from rest_framework.views import APIView
 from cart.models import Cart
 from cart.mixins import CartMixin
+from shared.rest_addons.authentication import ShineUserAuthentication
+from rest_framework.permissions import IsAuthenticated
+from django.views.decorators.csrf import csrf_exempt
+
+
 import logging
 from .models import (
     Wallet, RewardPoint, ECash,
@@ -20,12 +25,15 @@ class CsrfExemptSessionAuthentication(SessionAuthentication):
 
 
 class WalletRedeemView(APIView, CartMixin):
-    permission_classes = (AllowAny,)
-    authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
-
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (ShineUserAuthentication,)
+    
+    @csrf_exempt
     def post(self, request, format=None):
+        candidate_id = request.user.candidate_id
         point = request.data.get('point')
         if not point:
+            logging.getLogger('error_log').error('Redeem point is required for candidate_id {0}.'.format(candidate_id))
             return Response(
                 {'success': 0,
                  'error': 'Redeem point is required.'
@@ -38,11 +46,13 @@ class WalletRedeemView(APIView, CartMixin):
         try:
             cart_obj = Cart.objects.select_related('coupon').get(pk=cart_pk)
         except Cart.DoesNotExist:
+            logging.getLogger('error_log').error('Something went wrong, Please login to continue for candidate_id {0}.'.format(candidate_id))
             return Response(
                 {'success': 0,
                  'error': 'Something went wrong, Please login to continue.'
                  }, status=400, content_type='application/json')
         if cart_obj.coupon:
+            logging.getLogger('error_log').error('Coupon already applied, You cannot redeem point now for candidate_id {0}.'.format(candidate_id))
             return Response(
                 {'success': 0,
                  'error': 'Coupon already applied, You cannot redeem point now.'
@@ -50,6 +60,7 @@ class WalletRedeemView(APIView, CartMixin):
         wal_txn = cart_obj.wallettxn.filter(
             txn_type=2).order_by('-created').select_related('wallet')
         if wal_txn:
+            logging.getLogger('error_log').error('Points already applied! for candidate_id {0}.'.format(candidate_id))
             return Response(
                 {'success': 0,
                  'error': 'Points already applied!.'
@@ -57,6 +68,7 @@ class WalletRedeemView(APIView, CartMixin):
         owner = cart_obj.owner_id
         owner_email = cart_obj.email
         if not owner:
+            logging.getLogger('error_log').error('Session Expired, Please login to continue for candidate_id {0}.'.format(candidate_id))
             return Response(
                 {'success': 0,
                  'error': 'Session Expired, Please login to continue.'
@@ -64,6 +76,7 @@ class WalletRedeemView(APIView, CartMixin):
         try:
             wal_obj = Wallet.objects.get(owner=owner)
         except Wallet.DoesNotExist:
+            logging.getLogger('error_log').error('Something went wrong, Try after some time for candidate_id {0}.'.format(candidate_id))
             return Response(
                 {'success': 0,
                  'error': 'Something went wrong, Try after some time.'
@@ -71,6 +84,7 @@ class WalletRedeemView(APIView, CartMixin):
         try:
             point = Decimal(point)
             if point <= Decimal(0):
+                logging.getLogger('error_log').error('Redeem Point should be positive, Cannot Redeem! for candidate_id {0}.'.format(candidate_id))
                 return Response(
                     {'success': 0,
                      'error': 'Redeem Point should be positive, Cannot Redeem!.'
@@ -91,6 +105,7 @@ class WalletRedeemView(APIView, CartMixin):
                     total += pts.current
             wal_total = total
             if wal_total < point:
+                logging.getLogger('error_log').error('You have less points in wallet, Cannot Redeem! for candidate_id {0}.'.format(candidate_id))
                 return Response(
                     {'success': 0,
                      'error': 'You have less points in wallet, Cannot Redeem!.'
@@ -144,9 +159,10 @@ class WalletRedeemView(APIView, CartMixin):
 
 
 class WalletRemoveView(APIView, CartMixin):
-    permission_classes = (AllowAny,)
-    authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (ShineUserAuthentication,)
 
+    @csrf_exempt
     def post(self, request, format=None):
         try:
             if not request.session.get('cart_pk'):

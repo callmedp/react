@@ -18,4 +18,5 @@ urlpatterns = [
 		views.MessageCommunicationListApiView.as_view(),
 		name='message-communications'),
 
+    url(r'^ltv-report/(?P<year>\d+)/(?P<month>\d+)/$', views.LTVReportView.as_view()),
 ]
