@@ -118,6 +118,7 @@ class OrderListView(ListView, PaginationMixin):
         return super(OrderListView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
+
         context = super(OrderListView, self).get_context_data(**kwargs)
         paginator = Paginator(context['order_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
@@ -482,7 +483,9 @@ class InboxQueueVeiw(ListView, PaginationMixin):
             return HttpResponse(json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()
 
+
     def get_context_data(self, **kwargs):
+
         context = super(InboxQueueVeiw, self).get_context_data(**kwargs)
         paginator = Paginator(context['inbox_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))

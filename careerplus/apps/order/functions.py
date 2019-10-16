@@ -155,6 +155,7 @@ def update_initiat_orderitem_sataus(order=None):
         # order.type_product == 3 
 
         if not oi.exists():
+
             order.wc_cat = 21
             order.wc_sub_cat = 41
             order.wc_status = 41
@@ -163,7 +164,7 @@ def update_initiat_orderitem_sataus(order=None):
             order.welcomecalloperation_set.create(
                 wc_cat=order.wc_cat,
                 wc_sub_cat=order.wc_sub_cat,
-                message='Done automatically, Only Assesment items present',
+                message='Done automatically, skipped welcome call.',
                 wc_status=order.wc_status,
                 assigned_to=order.assigned_to
             )

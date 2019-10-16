@@ -1600,6 +1600,40 @@ class ClaimOrderAPIView(APIView):
 
 
 
+class GetAutoLoginToken(APIView):
+     authentication_classes = [SessionAuthentication]
+     permission_classes = [IsAuthenticated]
+
+     def get(self,request,*args,**kwargs):
+       
+         order_item_id = kwargs.get('order_item_id','')
+         order_item = OrderItem.objects.filter(id=order_item_id).first()
+         if not order_item: 
+             return Response({"token":'', "msg": 'Invalid Order Item Id'}, status=status.HTTP_400_BAD_REQUEST)
+         
+         email  = order_item.order.email; 
+         candidate_id = order_item.order.candidate_id;
+         token_gen = AutoLogin()
+         login_token = token_gen.encode(email, candidate_id, None)
+         return Response({"token": login_token, "msg": "Successfull"}, status=status.HTTP_200_OK)
+         
+
+
+         
+
+
+
+     
+     
+
+
+
+
+
+
+
+
+
 
 
 

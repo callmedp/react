@@ -259,6 +259,7 @@ class ApproveByAdminDraft(View):
                 json.dumps(data), content_type="application/json")
         data['status'] = 1
         product_flow = obj.product.type_flow
+        product_sub_type_flow = obj.product and obj.product.sub_type_flow
         if product_flow == 3:
             last_oi_status = obj.last_oi_status
             obj.oi_status = 4
@@ -309,6 +310,8 @@ class ApproveByAdminDraft(View):
                 added_by=request.user)
 
         elif product_flow in [1, 12, 13]:
+            if product_sub_type_flow == 101: 
+                obj.draft_counter = int(settings.DRAFT_MAX_LIMIT) - 1 
             last_oi_status = obj.last_oi_status
             if (obj.draft_counter + 1) >= settings.DRAFT_MAX_LIMIT:
                 obj.oi_status = 4
