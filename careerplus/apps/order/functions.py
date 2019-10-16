@@ -150,7 +150,7 @@ def update_initiat_orderitem_sataus(order=None):
 
         # for assesment/neo if no orderitems other than assesment/ neo present
         # then make welcome call done and update welcome call statuses.
-        oi = order.orderitems.exclude(Q(product__type_flow=16) | Q(product__vendor__slug='neo')| Q(product__type_flow=17) | Q(product__sub_type_flow=101))
+        oi = order.orderitems.exclude(Q(product__type_flow=16) | Q(product__vendor__slug='neo')| Q(product__type_flow=17) | Q(product__sub_type_flow=101) | Q(no_process=True))
 
         # order.type_product == 3 
 
