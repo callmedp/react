@@ -32,7 +32,7 @@ from linkedin.models import Draft
 from seo.models import AbstractAutoDate
 from geolocation.models import Country, CURRENCY_SYMBOL
 from users.models import User
-from console.feedbackCall.choices import FEEDBACK_RESOLUTION_CHOICES,FEEDBACK_CATEGORY_CHOICES,FEEDBACK_STATUS,FEEDBACK_OPERATION_TYPE
+from console.feedbackCall.choices import FEEDBACK_RESOLUTION_CHOICES,FEEDBACK_CATEGORY_CHOICES,FEEDBACK_STATUS,TOTAL_FEEDBACK_OPERATION_TYPE
 from order.utils import get_ltv
 from coupon.models import Coupon
 
@@ -1321,6 +1321,8 @@ class CustomerFeedback(models.Model):
     comment = models.TextField('Feedback Comment',blank=True, null=True)
     last_payment_date = models.DateTimeField('Last Payment Date',blank=True, null=True)
     ltv = models.DecimalField(max_digits=20, decimal_places=2,blank=True, null=True)
+    category =  models.SmallIntegerField(choices=FEEDBACK_CATEGORY_CHOICES,blank=True, null=True)
+    resolution =  models.SmallIntegerField(choices=FEEDBACK_RESOLUTION_CHOICES,blank=True, null=True)
 
     @property
     def status_text(self):
@@ -1329,6 +1331,14 @@ class CustomerFeedback(models.Model):
     @property
     def assigned_to_text(self):
         return self.assigned_to.name if self.assigned_to else ''
+
+    @property
+    def category_text(self):
+        return dict(FEEDBACK_CATEGORY_CHOICES).get(self.category)
+
+    @property
+    def resolution_text(self):
+        return dict(FEEDBACK_RESOLUTION_CHOICES).get(self.resolution)
 
     def save(self, *args, **kwargs):
         created = not bool(self.id)
@@ -1345,6 +1355,15 @@ class OrderItemFeedback(models.Model):
     comment = models.TextField('Feedback Comment',blank=True, null=True)
     order_item = models.ForeignKey(OrderItem)
     customer_feedback  = models.ForeignKey(CustomerFeedback)
+    
+
+    @property
+    def category_text(self):
+        return dict(FEEDBACK_CATEGORY_CHOICES).get(self.category)
+
+    @property
+    def resolution_text(self):
+        return dict(FEEDBACK_RESOLUTION_CHOICES).get(self.resolution)
 
     def save(self, *args, **kwargs):
         create = not bool(self.id)
@@ -1364,7 +1383,9 @@ class OrderItemFeedbackOperation(models.Model):
     comment = models.TextField('Feedback Comment',blank=True, null=True)
     order_item = models.ForeignKey(OrderItem,blank=True, null=True)
     customer_feedback  = models.ForeignKey(CustomerFeedback)
-    oi_type = models.SmallIntegerField(choices=FEEDBACK_OPERATION_TYPE,default=1)
+    oi_type = models.SmallIntegerField(choices=TOTAL_FEEDBACK_OPERATION_TYPE,default=-1)
+    feedback_category = models.SmallIntegerField(choices=FEEDBACK_CATEGORY_CHOICES,default=-1)
+    feedback_resolution =  models.SmallIntegerField(choices=FEEDBACK_RESOLUTION_CHOICES,default=-1)
 
 
     @property
@@ -1381,7 +1402,19 @@ class OrderItemFeedbackOperation(models.Model):
 
     @property
     def oi_type_text(self):
-        return dict(FEEDBACK_OPERATION_TYPE).get(self.oi_type)
+        return dict(TOTAL_FEEDBACK_OPERATION_TYPE).get(self.oi_type)
+
+    @property
+    def feedback_category_text(self):
+        return dict(FEEDBACK_CATEGORY_CHOICES).get(self.feedback_category)
+
+    @property
+    def feedback_resolution_text(self):
+        return dict(FEEDBACK_RESOLUTION_CHOICES).get(self.feedback_resolution)
+
+    def feedback_status_text(self):
+        return dict(FEEDBACK_STATUS).get(self.feedback_status)
+
 
 class LTVMonthlyRecord(models.Model):
     ltv_bracket =  models.SmallIntegerField(choices=LTV_BRACKET_LABELS)
@@ -1401,6 +1434,7 @@ class LTVMonthlyRecord(models.Model):
     @property
     def ltv_bracket_text(self):
         return dict(LTV_BRACKET_LABELS).get(self.ltv_bracket)
+
 
 class MonthlyLTVRecord(models.Model):
     ltv_bracket =  models.SmallIntegerField(choices=LTV_BRACKET_LABELS)
