@@ -520,7 +520,8 @@ class InboxQueueVeiw(ListView, PaginationMixin):
                 order__status=1,
                 no_process=False,
                 oi_status__in=[5, 3],
-                product__sub_type_flow=101
+                product__sub_type_flow=101,
+                order__welcome_call_done=False
              )
             ).exclude(
             wc_sub_cat__in=[64, 65])
@@ -871,7 +872,8 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
                 order__status=1,
                 no_process=False,
                 oi_status=23,
-                product__sub_type_flow=101
+                product__sub_type_flow=101,
+                order__welcome_call_done=False
              )
             ).exclude(
             wc_sub_cat__in=[64, 65])
@@ -1016,7 +1018,8 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
                 order__status=1,
                 no_process=False,
                 oi_status=24,
-                product__sub_type_flow=101
+                product__sub_type_flow=101,
+                order__welcome_call_done=False
              )
            ).exclude(
             wc_sub_cat__in=[64, 65])
@@ -1165,7 +1168,8 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
             order__status=1, 
             no_process=False,
             oi_status=25, 
-            product__sub_type_flow=101
+            product__sub_type_flow=101,
+            order__welcome_call_done=False
             )
             ).exclude(
             wc_sub_cat__in=[64, 65])
@@ -1318,6 +1322,7 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
             no_process=False,
             oi_status=26,
             product__sub_type_flow=101,
+            order__welcome_call_done=False
             )
             ).exclude(
             wc_sub_cat__in=[64, 65])
@@ -1468,7 +1473,8 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
              Q(
                 order__status__in=[1, 3],
                 no_process=False,
-                product__sub_type_flow=101
+                product__sub_type_flow=101,
+                order__welcome_call_done=False
              )
             ).exclude(
             wc_sub_cat__in=[64, 65]).exclude(
@@ -3348,13 +3354,14 @@ class CertficationProductQueueView(PaginationMixin, ListView):
                 product__type_flow=16, no_process=False,
                 oi_status__in=[5, 4],
                 product__sub_type_flow__in=[1601, 1602],
-                order__welcome_call_done=True)|
+                order__welcome_call_done=True)
+            |
             Q(
                 order__status__in=[1, 3],
                 product__type_flow=2, no_process=False,
                 oi_status__in=[5, 4],
                 product__vendor__slug='neo',
-                order__welcome_call_done=True
+                order__welcome_call_done=False
             )
         ).exclude(
                 wc_sub_cat__in=[64, 65]

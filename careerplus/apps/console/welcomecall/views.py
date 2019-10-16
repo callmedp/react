@@ -48,6 +48,9 @@ User = get_user_model()
 class WelcomeCallInfo(object):
     def get_welcome_list(self, order_items=[]):
         wc_items = []
+        import ipdb;
+        ipdb.set_trace();
+        
         for data in order_items:
             data_dict = {}
             oi = data.get('oi')
