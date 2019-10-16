@@ -1,0 +1,25 @@
+<html>
+
+<body>
+
+<h4>Dear {{ candidate_name }},</h4>
+
+ 
+<p>
+Shine values you and helps you meeting your professional goals by our services.{% if days == 0 %} {{ product }} is expiring today {% else %}{{ product }} would get expired on {{ expiration_date }} {% endif %}. Unless you renew the services, you are set to miss out on -
+</p>
+<ol>
+    <li>More recruiter views</li>
+    <li>More shortlisting chances</li>
+<ol/>
+
+<p>Don’t want to miss out?
+Good news is that there is still the time to renew. It’s simple
+</p>
+
+<ol>
+	<li>Click on this link <a href="{{ product_url }}">{{ product_url }}</a> and buy the service again</li>
+    <li>Email us at resume@shine.com</li>
+</ol>
+</body>
+</html>

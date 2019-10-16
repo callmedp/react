@@ -269,10 +269,25 @@ class SendMail():
         elif mail_type == "RESUME_BUILDER_INVITE":
             send_dict['subject'] = "Build Your Resume"
             send_dict['template'] = 'emailers/candidate/resume_builder_invite.html'
-            
+
         elif mail_type == "CERTIFICATE_AND_ASSESMENT":
             send_dict['subject'] = data['subject']
             send_dict['template'] = 'emailers/candidate/assesment_completed.html'
             headers_dict = {'Reply-To': settings.REPLY_TO}
             send_dict['header'] = headers_dict
             self.process(to, send_dict, data)
+
+        elif mail_type == 'SERVICE_EXPIRY_REMINDER':
+            send_dict['subject'] = data['subject']
+            send_dict['template'] = 'emailers/candidate/service_expiry_reminder.html'
+            headers_dict = {'Reply-To': settings.REPLY_TO}
+            send_dict['header'] = headers_dict
+            self.process(to, send_dict, data)
+
+        elif mail_type == 'SERVICE_EXPIRED_REMINDER':
+            send_dict['subject'] = data['subject']
+            send_dict['template'] = 'emailers/candidate/service_expired_reminder.html'
+            headers_dict = {'Reply-To': settings.REPLY_TO}
+            send_dict['header'] = headers_dict
+            self.process(to, send_dict, data)
+
