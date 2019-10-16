@@ -91,9 +91,9 @@
                     {% for ans in quest.options %}
                     <li>
                         {% if quest.question_type == 2  %}
-                        <input type="checkbox" value="test" id="{{ans.option_id}}" name="radio">
+                        <input type="checkbox"  value= "{{quest.question_type}}" id="{{ans.option_id}}" name="radio">
                         {% else %}
-                      <input type="radio" value="test" id="{{ans.option_id}}" name="radio">
+                      <input type="radio" value= "{{quest.question_type}}" id="{{ans.option_id}}" name="radio">
                         {% endif %}
                         <label for="{{ans.option_id}}">{{ans.option}}</label>
 
@@ -477,7 +477,7 @@ if (!timeout){
      $('#marked' + quest_id).addClass('active');
         if ($(e.target.checked)[0] == true) {
             attempt = questionAttempt[quest_id]
-            if (!attempt) {
+            if (!attempt || e.target.value == 1) {
                 attempt = e.target.id
             } else {
                 attempt = attempt + ',' + e.target.id

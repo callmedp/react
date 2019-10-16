@@ -36,7 +36,7 @@ ANSWER_MAPPING_DICT = {
 }
 
 if __name__ == "__main__":
-	for file in os.listdir("/Users/gaurav/Desktop/newtestprep/"):
+	for file in os.listdir("/Users/gaurav/Desktop/test_prep/"):
 		product_id = file.split('_')[0]
 		if not product_id.isnumeric():
 			continue
@@ -49,21 +49,23 @@ if __name__ == "__main__":
 											   format(prodscreen.id))
 		prod= prodscreen
 		category = prod.category_main
-		df = pandas.read_excel("/Users/gaurav/Desktop/newtestprep/"+file,
+		df = pandas.read_excel("/Users/gaurav/Desktop/test_prep/"+file,
 							   dtype=str)
 		logging.getLogger('info_log').info('Reading File  - {}'.format(file))
-		test_obj = Test.objects.create(product=prod,duration=600,title=prod.name,is_active=True)
+		title = prod.name+'-'+str(prod.id)
+		test_obj = Test.objects.create(product=prod,duration=600,title=title,is_active=True)
 		if category:
 			test_obj.category = category
 		if prod.vendor:
 			test_obj.vendor = prod.vendor
 		test_obj.save()
-
 		for question_array in df.get_values()[:df.values.size]:
 			question_object = Question.objects.create()
 			question_dict = {}
 			option_list = []
-			question_dict.update({'test':test_obj})
+			question_dict.update({'test': test_obj})
+			if len(question_array[-1]) > 1:
+				question_dict.update({'question_type': 2})
 			for index, value in enumerate(question_array[:-1]):
 				option_dict = {}
 				if index == 0:

@@ -69,9 +69,9 @@
                             <li>
                                 <label class="custom-radio">{{ans.option}}
                                     {% if quest.question_type == 2  %}
-                                    <input type="checkbox" id="{{ans.option_id}}" name="radio">
+                                    <input type="checkbox" value= "{{quest.question_type}}" id="{{ans.option_id}}" name="radio">
                                     {% else %}
-                                  <input type="radio" id="{{ans.option_id}}" name="radio">
+                                  <input type="radio" value= "{{quest.question_type}}" id="{{ans.option_id}}" name="radio">
                                     {% endif %}
                                     <span class="checkmark"></span>
                                 </label>
@@ -348,7 +348,7 @@ $('input[name="radio"]').on("click", function(e) {
 
         if ($(e.target.checked)[0] == true) {
             attempt = questionAttempt[quest_id]
-            if (!attempt) {
+            if (!attempt || e.target.value == 1) {
                 attempt = e.target.id
             } else {
                 attempt = attempt + ',' + e.target.id
@@ -416,8 +416,6 @@ function startTimer(duration,) {
 function submitTest(){
      $("#submitPermissionModal").modal('show');
 }
-
-
 
 function submitTestFinal(){
       if (timeout){
