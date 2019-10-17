@@ -340,7 +340,7 @@ class Preview extends Component {
                                                     <div className="font-filter__slide-bar">
                                                         <span className="font-filter__dot"></span>
                                                         <span className="font-filter--small mt-10 fs-12">S</span>
-                                                        <span className="font-filter--medium mt-10 fs-12">M</span>
+                                                    <span className="font-filter--medium mt-10 fs-12">M</span>
                                                         <span className="font-filter--large mt-10 fs-12">L</span>
                                                     </div> */}
                                                     <h3>Section Heading</h3>

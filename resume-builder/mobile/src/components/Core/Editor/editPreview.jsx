@@ -17,6 +17,12 @@ class EditPreview extends Component {
 
     constructor(props) {
         super(props);
+        if (parseInt(localStorage.getItem('experience') || 0) >= 4) {
+            document.getElementsByClassName('chat-bot')[0].style.display = 'none';
+        }
+        else {
+            document.getElementsByClassName('chat-bot')[0].style.display = 'block';
+        }
         this.changeLink = this.changeLink.bind(this)
         this.headingChange = this.headingChange.bind(this);
     }

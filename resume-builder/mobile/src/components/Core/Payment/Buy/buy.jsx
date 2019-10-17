@@ -17,6 +17,13 @@ class Buy extends Component {
 
     constructor(props) {
         super(props);
+        
+        if(parseInt(localStorage.getItem('experience')|| 0) >= 4){
+            document.getElementsByClassName('chat-bot')[0].style.display='none'; 
+        }
+        else{
+            document.getElementsByClassName('chat-bot')[0].style.display='block'; 
+        }
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
         this.state = {
             'checked': 'product1',

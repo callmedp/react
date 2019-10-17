@@ -869,6 +869,9 @@ class ShineCandidateLoginAPIView(APIView):
 
         return order_data
 
+    def get_candidate_experience(self,login_response):
+        return (login_response['workex'] and login_response['workex'][0] and login_response['workex'][0].get('experience_in_years',0)) or 0
+
     def get_response_for_successful_login(self, candidate_id, login_response, with_info=True):
         candidate_obj = ShineCandidate(**login_response)
         candidate_obj.id = candidate_id
@@ -880,13 +883,14 @@ class ShineCandidateLoginAPIView(APIView):
         self.request.session.update(login_response)
 
         self.request.session.update(personal_info)
-
+        
         if with_info:
             data_to_send = {"token": token,
                             "candidate_id": candidate_id,
                             "candidate_profile": self.customize_user_profile(login_response),
                             "entity_status": self.get_entity_status_for_candidate(candidate_id),
-                            "order_data": self.get_existing_order_data(candidate_id)
+                            "order_data": self.get_existing_order_data(candidate_id),
+                            "experience": self.get_candidate_experience(login_response),
                             # TODO make param configurable
                             }
         else:

@@ -34,12 +34,20 @@ class EditPreview extends Component {
         super(props);
         this.removeNote = this.removeNote.bind(this);
         this.allowUploadResume = this.allowUploadResume.bind(this);
+        if (parseInt(localStorage.getItem('experience') || 0) >= 4) {
+            document.getElementsByClassName('chat-bot')[0].style.display = 'none';
+        }
+        else {
+            document.getElementsByClassName('chat-bot')[0].style.display = 'block';
+        }        
         this.state = {
             visibleNote: true
         }
     }
 
     async componentDidMount() {
+       
+        
         const {analytics: {locationPath}, fetchEntityInfo, history: {location: {pathname}}, locationRouteChange, loginCandidate} = this.props
         if (!localStorage.getItem('candidateId')) {
             await loginCandidate()
@@ -105,6 +113,7 @@ class EditPreview extends Component {
                         </div>
                     }
                 </div>
+                
                 <Footer/>
 
             </div>
