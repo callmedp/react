@@ -87,11 +87,16 @@
                      <h3 ><span class="test-paper-count">{{forloop.counter}}</span> 
                      {{ quest.question_text|linebreaksbr }}</h3>
                   </div>
-                  <ul class="test-paper__question" id="testanswer">
+                  <ul class="test-paper__question" id="testanswer" >
                         {% for ans in quest.options %}
                      <li>
-                        <label class="custom-radio">{{ans.option}}
+
+                        <label  class="{% if quest.question_type == 2 %}custom-checkbox {%else%}custom-radio{% endif %}">{{ans.option}}
+                                               {% if quest.question_type == 2  %}
                            <input type="radio" id="{{ans.option_id}}" disabled  name="radio{{ans.option_id}}">
+                           {% else %}
+                            <input type="checkbox" id="{{ans.option_id}}" disabled  name="radio{{ans.option_id}}">
+                           {% endif %}
                            <span class="checkmark"></span>
                            <span id="check{{ans.option_id}}" class=""></span>
                         </label>

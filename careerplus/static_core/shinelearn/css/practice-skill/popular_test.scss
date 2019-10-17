@@ -1142,6 +1142,7 @@ h2 {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  margin-left: 12px;
 }
 
 /* Hide the browser's default radio button */
@@ -1202,6 +1203,78 @@ h2 {
     border-radius: 100%;
     background: $p-blue;
     border: 5px solid #d0dce5;
+}
+
+
+/* --------- custom checkbox styling start --------*/
+.custom-checkbox {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  margin-left: 12px;
+}
+
+/* Hide the browser's default checkbox button */
+.custom-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom checkbox button */
+.custom-checkbox .checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  margin: auto;
+  height: 14px;
+  width: 14px;
+  background-color: $white-bg;
+  border: 1px solid $p-blue;
+  border-radius: 2px;
+}
+
+/* On mouse-over, add a grey background color
+.custom-radio:hover input ~ .checkmark {
+  background-color: #ccc;
+}*/
+
+/* When the checkbox button is checked, add a blue background */
+.custom-checkbox input:checked ~ .checkmark {
+  background-color: $white-bg;
+  border: 1px solid $p-blue;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  background: url($path + 'images/free_skill/free_skill_sprite.png') no-repeat 1px -746px;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.custom-checkbox .checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.custom-checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.custom-checkbox .checkmark:after {
+    top: 0;
+    left: -6px;
+    right: 0;
+    bottom: 0;
 }
 
 .submittest {
@@ -1309,7 +1382,7 @@ input[type="button"] {
 
 #testanswer {
     li {
-        .custom-radio {
+        .custom-radio, .custom-checkbox {
             cursor: default;
             .checkmark {
               position: absolute;
@@ -1322,6 +1395,7 @@ input[type="button"] {
               background-color: #c9c9c9;
               border: 1px solid #c9c9c9;
               border-radius: 100%;
+              background-image: none;
             }
         }
     }

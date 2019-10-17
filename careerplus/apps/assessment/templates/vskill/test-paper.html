@@ -67,7 +67,7 @@
                         <ul class="test-paper__question">
                             {% for ans in quest.options %}
                             <li>
-                                <label class="custom-radio">{{ans.option}}
+                        <label class="{% if quest.question_type == 2 %}custom-checkbox {%else%}custom-radio{% endif %}">{{ans.option}}
                                     {% if quest.question_type == 2  %}
                                     <input type="checkbox" value= "{{quest.question_type}}" id="{{ans.option_id}}" name="radio">
                                     {% else %}
