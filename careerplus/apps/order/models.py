@@ -160,6 +160,9 @@ class Order(AbstractAutoDate):
     auto_upload = models.BooleanField(default=False)
     service_resume_upload_shine = models.BooleanField(default=True)
 
+    #utm parameters
+    utm_params = models.TextField(null=True, blank=True)
+
 
     class Meta:
         app_label = 'order'
