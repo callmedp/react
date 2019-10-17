@@ -78,7 +78,7 @@ def service_expiry_reminder(days):
     for val in SERVICES.values():
         if days >= 0:
             ois = OrderItem.objects.filter(**val)
-        else:
+        else: # this filter is for closed order in the past
             closed_date = timezone.now() + timedelta(days=days)
             closed_date = closed_date.replace(hour=0, minute=0, second=0)
             if 'oi_status' in val:
@@ -92,7 +92,7 @@ def service_expiry_reminder(days):
 
 
 def send_mail_for_service(oi, days):
-     if days >= 0:
+    if days >= 0:
         mail_type = "SERVICE_EXPIRY_REMINDER"
         subject = "Your service is expiring soon"
     else:
