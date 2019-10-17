@@ -171,7 +171,8 @@ class WelcomeQueueView(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(WelcomeQueueView, self).get_queryset()
         queryset = queryset.filter(
-            status=1, welcome_call_done=False)
+            status=1, welcome_call_done=False,
+            refundrequest=None).exclude(status=5)
         try:
             if self.query:
 
