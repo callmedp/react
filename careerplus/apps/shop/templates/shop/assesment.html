@@ -58,6 +58,14 @@
         <input id="skill" type="hidden" value=" {{skill}} ">
 
    </div>
+{% if whatsapp_icon %}
+{% for key,value in whatsapp_icon.items %}
+{% if key == "product-course-number" %}
+<a href="https://api.whatsapp.com/send?phone=91{{value}}"><div class="icon-whatsApp"></div></a>
+{% endif %}
+{% endfor %}
+{% endif %}
+
 {% endblock main_container %}
 
 

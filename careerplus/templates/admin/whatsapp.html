@@ -42,13 +42,36 @@ width:200px !important;
             <td valign="middle" style="vertical-align:middle;">
                  <b> Whatsapp Button </b>
             </td>
-            <td valign="middle">
-                <select class="js-example-basic-single" name="pclass">
-                    {% for class in productClass %}
-                    {{class.id}}
-                  <option value="{{class.id}}">{{class.name}}</option>
-                    {% endfor %}
-                </select>
+        </tr>
+        <tr>
+            <td>
+                Product Course</td><td> <input class="checkbox" type="checkbox" name="prodcourse" id="product-course" {% for  key,value in whatsappBtn.items %}
+        {% if key == 'product-course-visibility'  %} checked {% endif %} {% endfor %} ></td>
+               <td> &nbsp;&nbsp;<input type="number" minlength="10" maxlength="10" name="product-course" id="product-course-number"
+               value={% for key,value in whatsappBtn.items %}{% if key == 'product-course-number'%}"{{value}}"{% endif %}{% endfor %}>
+            </td>
+        </tr>
+             <tr>
+            <td>
+                Product Service</td><td> <input type="checkbox" class="checkbox" name="prodservice" id="product-service" {% for key,value in whatsappBtn.items %} {% if key == 'product-service-visibility' %} checked {% endif %} {% endfor %} ></td>
+
+               <td> &nbsp;&nbsp;<input class="checkbox" type="number" minlength="10" maxlength="10"  name="product-service" id="product-service-number" value={% for key,value in whatsappBtn.items %}
+        {% if key == 'product-service-number' %} "{{value}}" {% endif %} {% endfor %} >
+
+            </td>
+        </tr>
+             <tr>
+            <td>
+                Service Skill</td><td> <input class="checkbox" type="checkbox" name="serviceskill" id="service-skill" {% for key,value in whatsappBtn.items %} {% if key == 'service-skill-visibility' %} checked {% endif %} {% endfor %} ></td>
+               <td> &nbsp;&nbsp;<input type="number" minlength="10" maxlength="10"  name="service-skill" id="service-skill-number"  value={% for key,value in whatsappBtn.items %}
+        {% if key == 'service-skill-number' %} "{{value}}" {% endif %} {% endfor %}>
+            </td>
+        </tr>
+             <tr>
+            <td>
+                Course Skill</td><td> <input class="checkbox" type="checkbox" name="courseskill"  id="course-skill" {% for key,value in whatsappBtn.items %} {% if key == 'course-skill-visibility' %} checked {% endif %} {% endfor %} ></td>
+               <td> &nbsp;&nbsp;<input type="number" minlength="10" maxlength="10"  name="course-skill" id="course-skill-number"        value={% for key,value in whatsappBtn.items %}
+        {% if key == 'course-skill-number' %} "{{value}}" {% endif %} {% endfor %}>
             </td>
         </tr>
             <td colspan="2">
@@ -60,20 +83,34 @@ width:200px !important;
     </table>
 </form>
 </div>
-<script
-  src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
-<script type="text/javascript">
-$(document).ready(function() {
-    $('.js-example-basic-single').select2({
-      placeholder: 'Select an option',
-      multiple: true,
-      allowClear : true,
-    });
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function(){
+   for (field of $(":checkbox:not(:checked)")){
+    if (field.id == 'product-course'){
+        $('#'+field.id+'-number').prop('disabled', true);
+    }
+   else if(field.id == 'product-service'){
+        $('#'+field.id+'-number').prop('disabled', true);
+   }
+   else if(field.id == 'course-skill'){
+        $('#'+field.id+'-number').prop('disabled', true);
+   }
+   else if(field.id == 'service-skill'){
+        $('#'+field.id+'-number').prop('disabled', true);
+   }
+   }
+    $('.checkbox').click(function() {
+  if ($(this).is(':checked') ) {
+   $('#'+ this.id +'-number').prop('disabled', false);
+  }
+  else{
+       $('#'+ this.id +'-number').prop('disabled', true);
+  }
+})
 
-$('.js-example-basic-single').val({{whatsappBtn}}).trigger('change');
+    })
 
-});
 
 </script>
 

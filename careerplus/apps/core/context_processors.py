@@ -104,7 +104,7 @@ def common_context_processor(request):
         "IS_MAINTENANCE": settings.IS_MAINTENANCE,
         "MAINTENANCE_MESSAGE": settings.MAINTENANCE_MESSAGE,
         "exoitel_status": cache.get('exoitel_status', False),
-        "WHATSAPP_BTN": cache.get('whatsapp_btn', False)
+        "whatsapp_icon": cache.get('whatsapp_visibility_class', False),
      })
     return context
 
@@ -137,8 +137,6 @@ def get_console_sidebar_badges(request):
             "partner_badges_dict":cache.get("{}{}".format("partner_badges_dict_",request.user.id),{}),
             "ops_badges_dict":cache.get("{}{}".format("ops_badges_dict_",request.user.id),{}),
             }
-
-
 
 
 

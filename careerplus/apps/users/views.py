@@ -765,21 +765,35 @@ class CourseServiceWhatsappBtn(View):
     template_name = "admin/whatsapp.html"
 
     def get(self, request, *args, **kwargs):
-
         has_permission = request.user.is_superuser
-        whatsapp_btn = cache.get('whatsapp_visibility_class', [])
+        whatsapp_btn = cache.get('whatsapp_visibility_class', {})
         if not has_permission:
             raise PermissionDenied()
-        p_class = ProductClass.objects.all()
         return render(request, self.template_name, {'whatsappBtn':
-                                        whatsapp_btn,'productClass':p_class})
+                                        whatsapp_btn})
 
     def post(self,request,*args,**kwargs):
-        p_class =None
-        value = self.request.POST.getlist('pclass', [])
-        value = [int(i) for i in value if i]
-        cache.set(''
-                  'whatsapp_visibility_class', value,timeout=None)
-        p_class = ProductClass.objects.all()
-        return render(request, self.template_name, {'whatsappBtn':value,
-                                                    'productClass':p_class})
+        value_dict = {}
+        if self.request.POST.get('prodcourse') and self.request.POST.get('product-course'):
+            value_dict.update({'product-course-visibility':True ,
+                        'product-course-number':self.request.POST.get(
+                            'product-course')})
+        if self.request.POST.get('prodservice') and self.request.POST.get(
+                'product-service'):
+            value_dict.update({'product-service-visibility':True ,
+                        'product-service-number':self.request.POST.get(
+                            'product-service')})
+
+        if self.request.POST.get('courseskill') and self.request.POST.get(
+                'course-skill'):
+            value_dict.update({'course-skill-visibility':True,
+                        'course-skill-number'    :self.request.POST.get(
+                            'course-skill')})
+        if self.request.POST.get('serviceskill') and self.request.POST.get(
+                'service-skill'):
+            value_dict.update({'service-skill-visibility':True,
+                        'service-skill-number'    :self.request.POST.get(
+                            'service-skill')
+                        })
+        cache.set('whatsapp_visibility_class', value_dict,timeout=None)
+        return render(request, self.template_name, {'whatsappBtn':value_dict})

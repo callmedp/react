@@ -170,6 +170,14 @@
             </div><!-- end of skill box -->
         </section><!-- end of section here -->
     </div><!-- body wrapper ends here -->
+{% if whatsapp_icon %}
+{% for key,value in whatsapp_icon.items %}
+{% if value and key == "service-skill-number" %}
+<a href="https://api.whatsapp.com/send?phone=91{{value}}"><div class="icon-whatsApp"></div></a>
+{% endif %}
+{% endfor %}
+{% endif %}
+
     {% block call_us %}
     <div class="stick_bottom call-us">
     <div class="ui-grid-a block-3 text-center">
