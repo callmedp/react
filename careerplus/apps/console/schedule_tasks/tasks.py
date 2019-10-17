@@ -612,7 +612,7 @@ def write_row(sheet,data, row=0, start_col=0):
 @task(name="generate_feedback_report")
 def generate_feedback_report(sid,start_date,end_date):
     from order.models import OrderItemFeedbackOperation,OrderItemFeedback
-    from datetime import datetime
+    from datetime import datetime,timedelta
 
     logging.getLogger('info_log').info(\
         "Feedback Report Task Started for {},{},{}".format(sid,start_date,end_date))
@@ -627,7 +627,7 @@ def generate_feedback_report(sid,start_date,end_date):
                 'Feedaback Call Attempted Date Time', 'Satisfaction Status', 'Resolution', 'Payment Date Time']
     write_row(sheet,heading,)
 
-    oi_feedbacks = OrderItemFeedback.objects.filter(added_on__gte=start_date,added_on__lte=end_date)
+    oi_feedbacks = OrderItemFeedback.objects.filter(created__gte=start_date,created__lte=end_date+timedelta(days=1))
     logging.getLogger('info_log').info(\
         "Total Order Item Feedback Found {}".format(oi_feedbacks.count()))
     
@@ -693,7 +693,7 @@ def generate_feedback_report(sid,start_date,end_date):
         write_row(sheet,excel_row,row)
         row += 1
 
-    if merge_row_start_pos != row:
+    if merge_row_start_pos and merge_row_start_pos != row:
         for index,field in  enumerate(merged_row_data.get('merge_fields',[])):
             sheet.write_merge(merge_row_start_pos, row - 1, index, index, merged_row_data.get(field,''))
 

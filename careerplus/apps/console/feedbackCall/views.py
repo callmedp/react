@@ -28,7 +28,6 @@ class FeedbackReportView(UserGroupMixin, TemplateView):
     group_names = ['OPS_HEAD', ]
 
     def post(self,request,*args,**kwargs):
-        import ipdb; ipdb.set_trace()
         start_date_str = self.request.POST.get('start_date')
         end_date_str = self.request.POST.get('end_date')
 
@@ -54,7 +53,7 @@ class FeedbackReportView(UserGroupMixin, TemplateView):
         scheduler_obj.created_by = self.request.user
         scheduler_obj.save()
 
-        generate_feedback_report(scheduler_obj.id,start_date,end_date)
+        generate_feedback_report.delay(scheduler_obj.id,start_date,end_date)
         return HttpResponseRedirect("/console/tasks/tasklist/")
 
 

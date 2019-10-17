@@ -1355,6 +1355,7 @@ class OrderItemFeedback(models.Model):
     comment = models.TextField('Feedback Comment',blank=True, null=True)
     order_item = models.ForeignKey(OrderItem)
     customer_feedback  = models.ForeignKey(CustomerFeedback)
+    created = models.DateTimeField(null=True,default=datetime.datetime.now())
     
 
     @property
