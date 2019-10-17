@@ -76,7 +76,14 @@ def get_expiry_date(oi):
 
 def service_expiry_reminder(days):
     for val in SERVICES.values():
-        ois = OrderItem.objects.filter(**val)
+        if days >= 0:
+            ois = OrderItem.objects.filter(**val)
+        else:
+            closed_date = timezone.now() + timedelta(days=days)
+            closed_date = closed_date.replace(hour=0, minute=0, second=0)
+            if 'oi_status' in val:
+                val.update({'oi_status': 4}, )
+            ois = OrderItem.objects.filter(**val).filter(oi_status=4, closed_on__gt=closed_date)
         for oi in ois:
             expire_soon = check_if_going_to_expire(oi, days)
             if not expire_soon:
