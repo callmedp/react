@@ -32,6 +32,16 @@ class EditPreview extends Component {
             await loginCandidate()
         }
         this.props.fetchLoaderStatus()
+
+         // get userInfo from LocalStorage
+         if(localStorage.getItem('email')) window['email']= localStorage.getItem('email')
+         else window['email']=''
+         if(localStorage.getItem('mobile')) window['mobile'] = localStorage.getItem('mobile')
+         else window['mobile']=''
+         if(localStorage.getItem('name')) window['name'] = localStorage.getItem('name')
+         else window['name']= ''
+ 
+
         if (localStorage.getItem('personalInfo')) {
             localStorage.setItem('newUser', true)
         }

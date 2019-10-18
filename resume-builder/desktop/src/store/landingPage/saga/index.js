@@ -26,8 +26,6 @@ function* getCandidateId(action) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
 
         }
-
-
         localStorage.setItem('candidateId', JSON.parse((result.data && result.data['candidate_id'])) || '');
         resolve();
 
@@ -85,6 +83,12 @@ function* loginCandidate(action) {
                         }
                     };
                     localStorage.setItem(key, (JSON.stringify(candidate_profile[key])) || '');
+                    localStorage.setItem('email', candidate_profile[key]['email'] || '');
+                    const fName = (candidate_profile[key]['first_name'] ||'').trim()
+                    const lName = (candidate_profile[key]['last_name'] ||'').trim()
+                    let name = fName ? (lName ? fName + " " + lName : fName):lName ? lName : 'Dummy User'  
+                    localStorage.setItem('name', name || '');
+                    localStorage.setItem('mobile',candidate_profile[key]['cell_phone'])
                     localStorage.setItem('summary', '')
                 } else localStorage.setItem(key, (JSON.stringify(candidate_profile[key])) || '');
             }

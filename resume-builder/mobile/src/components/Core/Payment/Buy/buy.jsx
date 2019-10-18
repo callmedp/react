@@ -73,6 +73,14 @@ class Buy extends Component {
         if (!localStorage.getItem('candidateId')) {
             await loginCandidate()
         }
+         // get userInfo from LocalStorage
+         if(localStorage.getItem('email')) window['email']= localStorage.getItem('email')
+         else window['email']=''
+         if(localStorage.getItem('mobile')) window['mobile'] = localStorage.getItem('mobile')
+         else window['mobile']=''
+         if(localStorage.getItem('name')) window['name'] = localStorage.getItem('name')
+         else window['name']= ''
+ 
         this.props.getProductIds();
         this.props.fetchThumbNailImages();
     }
