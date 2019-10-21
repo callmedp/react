@@ -91,7 +91,7 @@
                         {% for ans in quest.options %}
                      <li>
 
-                        <label  class="{% if quest.question_type == 2 %}custom-checkbox {%else%}custom-radio{% endif %}">{{ans.option}}
+                        <label  class="{% if quest.question_type == 2 %}custom-radio {%else%}custom-radio{% endif %}">{{ans.option}}
                                                {% if quest.question_type == 2  %}
                            <input type="radio" id="{{ans.option_id}}" disabled  name="radio{{ans.option_id}}">
                            {% else %}

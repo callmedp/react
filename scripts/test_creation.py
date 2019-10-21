@@ -71,9 +71,8 @@ if __name__ == "__main__":
 				if index == 0:
 					question_dict.update({'question_text': value})
 					continue
-				if str(index) in question_array[-1].split(',') or \
-					question_array[-1] == str(index) or question_array[-1] \
-						== str(ANSWER_MAPPING_DICT.get(question_array[-1])):
+				if str(index) in list(map(lambda x : x.strip(),
+										  question_array[-1].split(','))):
 					option_dict.update({'is_correct': '1'})
 				else:
 					option_dict.update({'is_correct': '0'})
