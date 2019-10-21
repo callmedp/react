@@ -1,29 +1,29 @@
-import {Api} from './Api';
-import {takeLatest, call, put} from "redux-saga/effects";
-import {siteDomain} from "../../../Utils/domains";
+import { Api } from './Api';
+import { takeLatest, call, put } from "redux-saga/effects";
+import { siteDomain } from "../../../Utils/domains";
 import * as Actions from '../actions/actionTypes';
-import {UPDATE_UI} from '../../ui/actions/actionTypes'
-import {entityList} from "../../../Utils/formCategoryList";
-import {SAVE_USER_INFO} from "../../personalInfo/actions/actionTypes";
-import {Toast, LandingPageToast} from "../../../services/ErrorToast";
-import {SubmissionError} from 'redux-form'
+import { UPDATE_UI } from '../../ui/actions/actionTypes'
+import { entityList } from "../../../Utils/formCategoryList";
+import { SAVE_USER_INFO } from "../../personalInfo/actions/actionTypes";
+import { Toast, LandingPageToast } from "../../../services/ErrorToast";
+import { SubmissionError } from 'redux-form'
 
 
 function* getCandidateId(action) {
     try {
-        const {payload: {resolve, reject}} = action;
+        const { payload: { resolve, reject } } = action;
 
-        yield put({type: UPDATE_UI, data: {loader: true}});
+        yield put({ type: UPDATE_UI, data: { loader: true } });
         const result = yield call(Api.getCandidateId);
 
-        yield put({type: UPDATE_UI, data: {loader: false}});
+        yield put({ type: UPDATE_UI, data: { loader: false } });
 
         if (result['error']) {
             Toast.fire({
                 type: 'error',
                 title: result['errorMessage']
             });
-            return reject(new SubmissionError({_error: result['errorMessage']}));
+            return reject(new SubmissionError({ _error: result['errorMessage'] }));
 
         }
         localStorage.setItem('candidateId', JSON.parse((result.data && result.data['candidate_id'])) || '');
@@ -37,9 +37,9 @@ function* getCandidateId(action) {
 
 function* loginCandidate(action) {
     try {
-        let {data: {payload, resolve, reject, isTokenAvail}} = action;
+        let { data: { payload, resolve, reject, isTokenAvail } } = action;
 
-        yield put({type: UPDATE_UI, data: {loader: true}});
+        yield put({ type: UPDATE_UI, data: { loader: true } });
 
         let result;
         if (isTokenAvail) {
@@ -50,15 +50,15 @@ function* loginCandidate(action) {
         }
         if (result && result['error']) {
             localStorage.clear();
-            window.location.href = `${siteDomain}/login/${window.location.search ? window.location.search+'&' : '?'}next=/resume-builder/`;
-            yield put({type: UPDATE_UI, data: {loader: false}})
+            window.location.href = `${siteDomain}/login/${window.location.search ? window.location.search + '&' : '?'}next=/resume-builder/`;
+            yield put({ type: UPDATE_UI, data: { loader: false } })
             return;
             //redirect code here
         }
 
-        const {data: {candidate_id, candidate_profile, token, entity_status,experience}} = result;
+        const { data: { candidate_id, candidate_profile, token, entity_status, experience } } = result;
         localStorage.setItem('candidateId', (candidate_id) || '');
-        localStorage.setItem('experience',(experience || 0));
+        localStorage.setItem('experience', (experience || 0));
 
         for (const key in candidate_profile) {
             const entityObj = entity_status.find(el => el['display_value'] === key);
@@ -70,12 +70,17 @@ function* loginCandidate(action) {
                         "location": ''
                     }
                 }
-                yield put({type: SAVE_USER_INFO, data: candidate_profile[key]})
+                localStorage.setItem('email', candidate_profile[key]['email'] || '');
+                const fName = (candidate_profile[key]['first_name'] || '').trim();
+                const lName = (candidate_profile[key]['last_name'] || '').trim();
+                let name = fName ? (lName ? fName + " " + lName : fName) : lName ? lName : 'Dummy User';
+                localStorage.setItem('name', name || '');
+                localStorage.setItem('mobile', candidate_profile[key]['number'])
+                yield put({ type: SAVE_USER_INFO, data: candidate_profile[key] })
             }
 
             if (!entityObj.set) {
                 if (key === 'personalInfo') {
-
                     candidate_profile[key] = {
                         ...candidate_profile[key],
                         ...{
@@ -83,12 +88,6 @@ function* loginCandidate(action) {
                         }
                     };
                     localStorage.setItem(key, (JSON.stringify(candidate_profile[key])) || '');
-                    localStorage.setItem('email', candidate_profile[key]['email'] || '');
-                    const fName = (candidate_profile[key]['first_name'] ||'').trim()
-                    const lName = (candidate_profile[key]['last_name'] ||'').trim()
-                    let name = fName ? (lName ? fName + " " + lName : fName):lName ? lName : 'Dummy User'  
-                    localStorage.setItem('name', name || '');
-                    localStorage.setItem('mobile',candidate_profile[key]['cell_phone'])
                     localStorage.setItem('summary', '')
                 } else localStorage.setItem(key, (JSON.stringify(candidate_profile[key])) || '');
             }
@@ -96,7 +95,7 @@ function* loginCandidate(action) {
         localStorage.setItem('token', (token) || '');
 
         resolve('Login Successfully');
-        yield put({type: UPDATE_UI, data: {loader: false}})
+        yield put({ type: UPDATE_UI, data: { loader: false } })
 
 
     } catch (e) {
@@ -107,7 +106,7 @@ function* loginCandidate(action) {
 
 function* feedbackSubmit(action) {
     try {
-        let {payload} = action;
+        let { payload } = action;
         let result = yield call(Api.feedbackSubmit, payload);
         if (result["error"]) {
             console.log("error");
