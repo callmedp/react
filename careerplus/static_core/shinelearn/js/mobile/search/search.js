@@ -19,6 +19,18 @@ function filterquery(type) {
     $formFacets.submit();
 }
 
+function filterSearch(e)
+    {
+    clicked = $(e.target);
+    className = e.target.classList[0];
+    clicked.toggleClass('selected');
+
+    obj = $('#farea_filters .'+className)[0]
+    obj.toggleAttribute('checked')
+    filterquery();
+    }
+
+
 $(document).ready(function () {
     var win = $(window);
     var EOP = false,

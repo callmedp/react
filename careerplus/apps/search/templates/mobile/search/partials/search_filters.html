@@ -57,7 +57,7 @@
         <div class="tab-container js_filter_container">
             {% if facets.pFA|length %}
             <div id="tab-1" class="tab-content current">
-                <ul>
+                <ul id="farea_filters">
                     {% if facets.pFA|length == 1 %}
                         <li>
                             <input type="checkbox" id="test11" {% if areaf %}name="farea" {% else %}name="ign_farea"{% endif %}
@@ -67,7 +67,7 @@
                     {% else %}
                         {% for facet in facets.pFA|slice:"15" %}
                             <li>
-                                <input type="checkbox" id="test1{{ forloop.counter }}" name="farea"
+                                <input type="checkbox" class="check{{ forloop.counter }}" id="test1{{ forloop.counter }}" name="farea"
                                        value="{{facet.id}}" {% if facet.label == 'Others' %}{% if facet.id in areaf %}checked="checked"{% endif %} {% else %}{% if facet.id|stringformat:"i" in areaf %}checked="checked" {% endif %} {% endif %}>
                                 <label for="test1{{ forloop.counter }}">{{facet.label}} ({{facet.count}})</label>
                             </li>

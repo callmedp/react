@@ -25,7 +25,10 @@ class BadgingMixin(object):
         self.coll = database['CandidateStatic']
 
     def get_existing_badge_value(self, candidate_id):
-        candidate_id = bson.ObjectId(candidate_id)
+        # this is to determine that this candidate id mongo db bson id.
+        if bson.objectid.ObjectId.is_valid(candidate_id):
+            candidate_id = bson.ObjectId(candidate_id)
+
         candidate = self.coll.find_one({"_id": candidate_id}, {"scp": 1})
 
         if candidate:

@@ -30,6 +30,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from users.tasks import user_register
 from order.models import Order, OrderItem, RefundRequest
+from order.utils import get_ltv
 from shop.views import ProductInformationMixin
 from shop.models import Product, Category
 from coupon.models import Coupon, CouponUser
@@ -455,7 +456,6 @@ class EmailLTValueApiView(APIView):
                 {"status": "FAIL", "msg": "Bad Parameters Provided"},
                 status=status.HTTP_400_BAD_REQUEST)
 
-        ltv = Decimal(0)
         if not candidate_id:
             candidate_id = ShineCandidateDetail().get_shine_id(email=email)
 
@@ -464,30 +464,7 @@ class EmailLTValueApiView(APIView):
                 {"status": "FAIL", "msg": "Email or User Doesn't Exists"},
                 status=status.HTTP_400_BAD_REQUEST)
 
-        date_one_year_ago = timezone.now() - timedelta(days=365)
-        #Consider only last 1 year's orders for LTV.
-        ltv_pks = list(Order.objects.filter(candidate_id=candidate_id,\
-            status__in=[1,2,3],payment_date__gte=date_one_year_ago).values_list('pk', flat=True))
-        
-        if ltv_pks:
-            ltv_order_sum = Order.objects.filter(
-                pk__in=ltv_pks).aggregate(ltv_price=Sum('total_incl_tax'))
-            last_order = OrderItem.objects.select_related('order').filter(order__in = ltv_pks)\
-                .exclude(oi_status=163).order_by('-order__payment_date').first()
-            if last_order:
-                last_order = last_order.order.payment_date.strftime('%Y-%m-%d %H:%M:%S')
-            else:
-                last_order = ""
-
-            ltv = ltv_order_sum.get('ltv_price') if ltv_order_sum.get('ltv_price') else Decimal(0)
-            rf_ois = list(OrderItem.objects.filter(
-                order__in=ltv_pks,
-                oi_status=163).values_list('order', flat=True))
-
-            rf_sum = RefundRequest.objects.filter(
-                order__in=rf_ois).aggregate(rf_price=Sum('refund_amount'))
-            if rf_sum.get('rf_price'):
-                ltv = ltv - rf_sum.get('rf_price')
+        ltv = get_ltv(candidate_id)
 
         return Response(
             {"status": "SUCCESS", "ltv_price": str(ltv), "name": name, "last_order": str(last_order)},
@@ -894,12 +871,18 @@ class ShineCandidateLoginAPIView(APIView):
         return order_data
 
     def get_response_for_successful_login(self, candidate_id, login_response, with_info=True):
+        
         candidate_obj = ShineCandidate(**login_response)
         candidate_obj.id = candidate_id
         candidate_obj.candidate_id = candidate_id
         token = self.get_or_create_token(candidate_obj)
+        personal_info = login_response.get('personal_detail')[0]
+        personal_info['candidate_id']= personal_info.get('id')
 
         self.request.session.update(login_response)
+
+        self.request.session.update(personal_info)
+
         if with_info:
             data_to_send = {"token": token,
                             "candidate_id": candidate_id,
@@ -913,7 +896,7 @@ class ShineCandidateLoginAPIView(APIView):
                 "token": token,
                 "candidate_id": candidate_id,
                 'cart_pk': self.request.session.get('cart_pk') or self.request._request.session.get('cart_pk'),
-                'profile': login_response
+                'profile': personal_info
             }
 
         return Response(data_to_send, status=status.HTTP_201_CREATED)
@@ -1114,10 +1097,9 @@ class ShineCandidateLoginAPIView(APIView):
             return Response({"data": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            if with_info:
-                login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
-            else:
-                login_response = ShineCandidateDetail().get_status_detail(shine_id=candidate_id)
+            login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
+            # else:
+            #     login_response = ShineCandidateDetail().get_status_detail(shine_id=candidate_id)
         except Exception as e:
             logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
             return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)

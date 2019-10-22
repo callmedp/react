@@ -31,7 +31,7 @@ from core.api_mixin import ShineCandidateDetail
 from .models import PaymentTxn
 from .mixin import PaymentMixin
 from .forms import StateForm, PayByCheckForm
-from .utils import EpayLaterEncryptDecryptUtil,ZestMoneyUtil
+from .utils import EpayLaterEncryptDecryptUtil,ZestMoneyUtil,PayuPaymentUtil
 from .tasks import put_epay_for_successful_payment
 
 # inter app imports
@@ -52,7 +52,6 @@ from geolocation.models import Country
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-
 
 @Decorate(stop_browser_cache())
 class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
@@ -228,9 +227,8 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         email_id = self.cart_obj.owner_email or self.cart_obj.email or self.request.session.get('email','')
         first_name = self.cart_obj.first_name or self.request.session.get('first_name')
         state_list = self.get_state_list()
-        guest_login = True
-        if self.request.session.get('candidate_id',''):
-            guest_login = False
+        guest_login = self.request.session.get('guest_candidate_id','')
+        candidate_in_session = self.request.session.get('candidate_id','')
 
         context.update({
             "state_form": StateForm(),
@@ -241,8 +239,8 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
             "email_id": ''.join(email_id),
             "first_name": first_name,
             "state_list": state_list,
-            "guest_login": guest_login
-
+            "guest_login": guest_login,
+            "candidate_in_session": candidate_in_session
         })
         return context
 
@@ -662,6 +660,104 @@ class ZestMoneyResponseView(CartMixin,PaymentMixin,View):
         txn_obj.txn_info = failure_text
         txn_obj.save()
         return HttpResponseRedirect(reverse('payment:thank-you'))
+
+
+class PayuRequestView(OrderMixin,View):
+
+    def get(self,request,*args,**kwargs):
+        return_dict = {}
+        cart_id = self.kwargs.get('cart_id')
+        if not cart_id:
+            return_dict.update({'error': 'Cart id not found'})
+            return Response(return_dict,status=status.HTTP_400_BAD_REQUEST)
+        cart_obj = Cart.objects.filter(id=cart_id).first()
+        if not cart_obj:
+            return_dict.update({'error': 'Cart id not found'})
+            return Response(return_dict, status=status.HTTP_400_BAD_REQUEST)
+
+        order = self.createOrder(cart_obj)
+        if not order:
+            logging.getLogger('error_log').error('order is not created for '
+                                                 'cart id- {}'.format(cart_id))
+            return Response(return_dict, status=status.HTTP_400_BAD_REQUEST)
+
+        txn = 'CP%d%s' % (order.pk, int(time.time()))
+        # creating txn object
+        pay_txn = PaymentTxn.objects.create(
+            txn=txn,
+            order=order,
+            cart=cart_obj,
+            status=0,
+            payment_mode=13,
+            currency=order.currency,
+            txn_amount=order.total_incl_tax,
+        )
+
+        payu_object = PayuPaymentUtil()
+        payu_dict = payu_object.generate_payu_dict(pay_txn)
+        hash_val = payu_object.generate_payu_hash(payu_dict)
+        payu_dict.update({'hash': hash_val, "action": settings.PAYU_INFO[
+            'payment_url']})
+        return render(request, 'payment/payu_submission_form.html',payu_dict)
+
+class PayUResponseView(CartMixin,PaymentMixin,View):
+
+    def post(self, request, *args, **kwargs):
+        payu_data = request.POST.copy()
+        transaction_status = payu_data.get('status', '').upper()
+        txn_id = payu_data.get('txnid')
+        if not txn_id:
+            logging.getLogger('error_log').error(
+                "PayU No txn id - {}".format(payu_data))
+            return HttpResponseRedirect(reverse('payment:payment_oops'))
+
+        txn_obj = PaymentTxn.objects.filter(txn=txn_id,status=0).first()
+        if not txn_obj:
+            logging.getLogger('error_log').error(
+                "PayU No txn obj for txnid - {}".format(txn_id))
+            return HttpResponseRedirect(reverse('payment:payment_oops'))
+        extra_info_dict ={
+                    'bank_ref_no' : payu_data.get('bank_ref_num', ''),
+                    'bank_gateway_txn_id' : payu_data.get('mihpayid', ''),
+                    'bank_code' : payu_data.get('bankcode', ''),
+                    'txn_mode' : payu_data.get('mode', ''),
+                    'error': payu_data.get('error_Message',''),
+        }
+        extra_info_json = json.dumps(extra_info_dict)
+        txn_obj.txn_info = extra_info_json
+        txn_obj.save()
+
+        if transaction_status == "SUCCESS":
+            payment_type = "PAYU"
+            return_parameter = self.process_payment_method(
+                payment_type, request, txn_obj)
+            self.closeCartObject(txn_obj.cart)
+            try:
+                del request.session['cart_pk']
+                del request.session['checkout_type']
+                request.session.modified = True
+            except Exception as e:
+                logging.getLogger('error_log').error(
+                    'unable to delete request session objects%s' % str(e))
+                pass
+            return HttpResponseRedirect(return_parameter)
+
+        elif transaction_status == "FAILURE" or transaction_status == "PENDING":
+            txn_obj.status = 0
+            txn_obj.save()
+        return HttpResponseRedirect(
+            reverse('payment:payment_oops') + '?error=failure&txn_id=' + txn_id)
+
+
+
+
+
+
+
+
+
+
+
 
 
 

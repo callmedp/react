@@ -66,7 +66,21 @@
             <!-- left content start -->
             <div class="col-sm-3 payment-summary-tab">
                 <a class='trig-loader' href="{% url "cart:payment-summary" %}"><span class="green-circle">1</span> Summary</a>
-                <a class='trig-loader' href="{% url "cart:payment-login" %}"><span class="green-circle">2</span> Logged in <strong class="truncate-email">as {%if guest_login%} Guest {%else%}{%if first_name%}{{first_name}}{% else %}{{email_id}}{% endif %}{%endif%}</strong></a>
+                <a class='trig-loader' href="{% url "cart:payment-login" %}"><span class="green-circle">2</span>
+                  {% if candidate_in_session or guest_login  %}
+           Logged in<strong class="truncate-email">as
+            {% if candidate_in_session %}
+                {%if first_name%}
+                  {{first_name}}
+                {% else %}
+                  {{email_id}}
+                {% endif %}         
+            {% else %}
+              Guest
+            {% endif%}
+          {% else %}
+          Login
+          {% endif %}</strong></a>
                 <a class='trig-loader' href="{% url "payment:payment-option" %}" class="active"><span>3</span> Payment</a>
 
                 <!-- secure payment -->
@@ -256,7 +270,7 @@
                               <td class="center-align" id="emi-0-down-payment"></td>
                               <td class="center-align" id="emi-0-total-amount"></td>
                             </tr>
-                            
+
                             <tr>
                               <td class="center-align" id="emi-1-months"></td>
                               <td class="center-align" id="emi-1-monthly-amount"></td>
@@ -268,7 +282,7 @@
                           </tbody>
                         </table>
 
-<!--                 
+<!--
                         <div id="emi-block-0" class="col-md-6 zest_emi_div" style="display:block;">
                             <span id="emi-0-months"></span><br>
                             <span id="emi-0-monthly-amount"></span><br>
@@ -301,6 +315,18 @@
                   </div><!-- //Zest Money Emi -->
 
                     {% endif %}
+
+                             <div class="panel panel-default box-shadow1">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a class="no-bg" href="{% url "payment:payu-request" cart_id %}">
+                         Amazon Pay <img src="{% static 'shinelearn/images/payments/amazon-pay.png' %}" width="89" style="margin-top:8px" alt="payu" class="ml-5">
+                        </a>
+                      </h4>
+                    </div>
+                  </div>
+
+
                 </div>
             </div>
             <!-- right content end -->

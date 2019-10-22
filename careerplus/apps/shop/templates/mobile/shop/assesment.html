@@ -151,6 +151,12 @@
 
         <hr class="row">
         <article class="mt-20">
+               {% if prd_service == 'course' or product.type_flow == 16 %}
+            <span class="byvskills mb-30">
+              <strong><a onclick="gaEvent('Search','{{prd_vendor}}','ViewAllProductVendor');" href="/search/results/?fvid={{product.vendor.id}}">All courses/ certifications ({{prd_vendor_count}})</a></strong>
+              By {{prd_vendor}}
+            </span>
+            {% endif %}
         {% if prd_about %}
             <h2>{% if prd_service == 'assessment' %} Test {% elif prd_service == 'course' %}Course Overview {% else %}Service Overview{% endif %}</h2>
             {{prd_about|safe}}

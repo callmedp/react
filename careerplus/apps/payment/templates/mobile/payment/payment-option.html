@@ -57,7 +57,7 @@
             <a class='trig-loader' href="{% url "cart:payment-login" %}">
                 <!-- <span class="dot">2</span> -->
                 <span class="tick"></span>
-                {%if guest_login%}Guest{%else%}Login{%endif%}
+                {%if candidate_in_session%}Login{%else%}Guest{%endif%}
             </a>
         </li>
 
@@ -74,13 +74,15 @@
       <div class="p-15">
         <p class="fs-18">Choose your mode of payment</p>
       </div>
+         </div>
 
         <div class="payment-type">
           <div class="payment-type--item">
             <span></span>
             <a class='trig-loader' href="{% url "payment:ccavenue_request" cart_id 'all' %}">Card & Netbanking</a>
           </div>
-
+        
+          {% if type_flow != 17 %}
 
           <div class="accordion_example1 smk_accordion">
               <div class="accordion_in">
@@ -212,6 +214,9 @@
               </div><!-- /. Cheque accordion item -->
           </div><!-- /. accordion wrap -->
 
+
+        {% endif %}
+
           <div class="payment-type--item">
             <span></span>
             <a class="trig-loader" href="{% url "payment:epaylater-request" cart_id %}" >Buy now, Pay Later
@@ -222,7 +227,7 @@
 
             <div class="accordion_example1 smk_accordion" id="zestMoneyAccordion" >
                 <div class="accordion_in">
-                  <div class="acc_head payment-type--item mb-0">
+                  <div class="acc_head payment-type--item mb-10">
                     <span></span>
                       Zest Money EMI
                   </div><!-- // tab ends here -->
@@ -237,31 +242,31 @@
                                 <span id="emi-0-months"></span>
                                 <span id="emi-1-months"></span>
                               </li>
-                              
+
                               <li class="emi-options--item">
                                 <span>Monthly EMI</span>
                                 <span id="emi-0-monthly-amount"></span>
                                 <span id="emi-1-monthly-amount"></span>
                               </li>
-                              
+
                               <li class="emi-options--item">
                                 <span>Interest</span>
                                 <span id="emi-0-interest"></span>
                                 <span id="emi-1-interest"></span>
                               </li>
-                              
+
                               <li class="emi-options--item">
                                 <span>Interest rate</span>
                                 <span id="emi-0-interest-rate"></span>
                                 <span id="emi-1-interest-rate"></span>
                               </li>
-                              
+
                               <li class="emi-options--item">
                                 <span>Down payment</span>
                                 <span id="emi-0-down-payment"></span>
                                 <span id="emi-1-down-payment">/span>
                               </li>
-                              
+
                               <li class="emi-options--item">
                                 <span>Loan Amount</span>
                                 <span id="emi-0-total-amount" ></span>
@@ -272,34 +277,21 @@
                         <div class="mt-10 p-15 text-center">
                           <button type="button" class="btn btn-yellow btn-round w100 trig-loader" id="zestMakePaymentBtn">Make Payment</button>
                         </div>
-                        
-                        
-                        
-                          <!-- <div id="emi-block-0" class=" zest_emi_div mr-40">
-                              <span ></span><br>
-                              <span id="emi-0-monthly-amount"></span><br>
-                              <span id="emi-0-interest"></span><br>
-                              <span id="emi-0-interest-rate"></span><br>
-                              <span id="emi-0-down-payment"></span><br>
-                              <span id="emi-0-total-amount"></span><br>
-                          </div>
-                          <div id="emi-block-1" class="zest_emi_div">
-                              <span id="emi-1-months"></span><br>
-                              <span id="emi-1-monthly-amount"></span><br>
-                              <span id="emi-1-interest"></span><br>
-                              <span id="emi-1-interest-rate"></span><br>
-                              <span id="emi-1-down-payment"></span><br>
-                              <span id="emi-1-total-amount"></span><br>
-
-                          </div> -->
-
 
                     </div><!-- /. accordion content -->
                 </div><!-- /. cash accordion item -->
             </div><!-- /. accordion wrap -->
 
                 {% endif %}
-        </div><!-- /. payment type -->
+                   <div class="payment-type--item">
+            <span></span>
+            <a href="{% url "payment:payu-request" cart_id %}" >Amazon Pay
+              <img src="{% static 'shinelearn/images/payments/amazon-pay.png' %}" width="89" class="payment-type--item--img"/>
+            </a>
+          </div>
+        </div>
+
+       <!-- /. payment type -->
     </div><!-- /. payment white-box -->
 </div><!-- /. payment -->
 

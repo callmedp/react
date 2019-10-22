@@ -239,7 +239,7 @@ urlpatterns += [
     settings.STATIC_URL, document_root=settings.STATIC_ROOT
 ) + static(settings.DOWNLOAD_URL, document_root=settings.DOWNLOAD_ROOT) 
   
-urlpatterns += [url(r'^(?P<page_slug>[\w-]+)/$',
+urlpatterns += [url(r'^(?P<page_slug>tnc|disclaimer|privacy-policy)/$',
          homepage_view.StaticSiteContentView.as_view(),
          name='static-site-content')]
 

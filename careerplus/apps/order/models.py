@@ -1,6 +1,6 @@
 #python imports
 import math
-import datetime,logging
+import datetime,logging,json
 
 from decimal import Decimal
 from dateutil import relativedelta
@@ -8,7 +8,7 @@ from dateutil import relativedelta
 #django imports
 from django.db import models
 from django.db.models import Q, Count, Case, When, IntegerField
-
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.utils import timezone
@@ -22,7 +22,7 @@ from .choices import STATUS_CHOICES, SITE_CHOICES,\
     PAYMENT_MODE, OI_OPS_STATUS, OI_LINKEDIN_FLOW_STATUS,\
     OI_USER_STATUS, OI_EMAIL_STATUS, REFUND_MODE, REFUND_OPS_STATUS,\
     TYPE_REFUND, OI_SMS_STATUS, WC_CATEGORY, WC_SUB_CATEGORY,\
-    WC_FLOW_STATUS, OI_OPS_TRANSFORMATION_DICT
+    WC_FLOW_STATUS, OI_OPS_TRANSFORMATION_DICT,LTV_BRACKET_LABELS
 
 from .functions import get_upload_path_order_invoice, process_application_highlighter
 from .tasks import generate_resume_for_order,bypass_resume_midout,upload_Resume_shine,board_user_on_neo
@@ -39,6 +39,7 @@ from coupon.models import Coupon
 #third party imports
 from payment.utils import manually_generate_autologin_url
 from shop.choices import S_ATTR_DICT, DAYS_CHOICES_DICT
+from coupon.models import Coupon
 
 
 #Global Constants
@@ -1381,4 +1382,77 @@ class OrderItemFeedbackOperation(models.Model):
     @property
     def oi_type_text(self):
         return dict(FEEDBACK_OPERATION_TYPE).get(self.oi_type)
+
+class LTVMonthlyRecord(models.Model):
+    ltv_bracket =  models.SmallIntegerField(choices=LTV_BRACKET_LABELS)
+    total_users = models.IntegerField()
+    crm_users = models.IntegerField(default=0)
+    learning_users = models.IntegerField(default=0)
+    total_order_count = models.IntegerField()
+    total_item_count = models.IntegerField()
+    crm_order_count = models.IntegerField()
+    crm_item_count = models.IntegerField()
+    learning_order_count = models.IntegerField()
+    learning_item_count = models.IntegerField()
+    year = models.IntegerField(validators=[MinValueValidator(2018)])  
+    month = models.IntegerField(validators=[MaxValueValidator(12), MinValueValidator(1)])
+    candidate_id_ltv_mapping = models.TextField()
+
+    @property
+    def ltv_bracket_text(self):
+        return dict(LTV_BRACKET_LABELS).get(self.ltv_bracket)
+
+class MonthlyLTVRecord(models.Model):
+    ltv_bracket =  models.SmallIntegerField(choices=LTV_BRACKET_LABELS)
+    crm_order_ids = models.TextField()
+    learning_order_ids = models.TextField()
+    crm_item_count = models.IntegerField()   # no process,free,combo parent,variation parent to be removed so query will take time
+    learning_item_count = models.IntegerField()  # no process,free,combo parent,variation parent to be removed so query will take time
+    year = models.IntegerField(validators=[MinValueValidator(2018)])  
+    month = models.IntegerField(validators=[MaxValueValidator(12), MinValueValidator(1)])
+    revenue = models.IntegerField(default=0)
+    candidate_ids = models.TextField()
+
+    @property
+    def ltv_bracket_text(self):
+        return dict(LTV_BRACKET_LABELS).get(self.ltv_bracket)
+
+    @property 
+    def total_users(self):
+        return len(json.loads(self.candidate_ids))
+
+    @property
+    def crm_users(self):
+        candidates = Order.objects.filter(id__in=json.loads(self.crm_order_ids)).values_list('candidate_id',flat=True)
+        return len({candidate for candidate in candidates})
+
+    @property
+    def crm_order_count(self):
+        return len(json.loads(self.crm_order_ids))
+
+    @property
+    def learning_users(self):
+        candidates = Order.objects.filter(id__in=json.loads(self.learning_order_ids)).values_list('candidate_id',flat=True)
+        return len({candidate for candidate in candidates})
+
+    @property
+    def learning_order_count(self):
+        return len(json.loads(self.learning_order_ids))
+    
+    @property
+    def total_order_count(self):
+        return len(json.loads(self.crm_order_ids)) + len(json.loads(self.learning_order_ids))
+
+    @property
+    def total_item_count(self):
+        return self.crm_item_count + self.learning_item_count
+
+    @property
+    def revenue(self):
+        order_ids = json.loads(self.crm_order_ids) + json.loads(self.learning_order_ids)
+        order_amounts = Order.objects.filter(id__in=order_ids).values_list('total_excl_tax',flat=True)
+        return sum(order_amounts)        
+        
+    
+
     
