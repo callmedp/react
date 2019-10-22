@@ -315,9 +315,9 @@ if (i.question_options.length > 1) {
                 } }}
 
               $('#correctMsg').text( right+ ' out of '+total+' correct answers ');
-                   let scorePercent = (right/total)*100 ;
+                   let scorePercent = (Math.ceil(right/total))*100 ;
               let scoreMessage = "";
-              $('#scoringPercent').text((right/total)*100 );
+              $('#scoringPercent').text((Math.ceil(right/total))*100 );
               $('#leadScorePercent').val('score is '+ scorePercent +" %");
               ReCreateLead();
               if(scorePercent >80){

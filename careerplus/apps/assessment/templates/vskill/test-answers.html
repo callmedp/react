@@ -373,7 +373,7 @@ else {
             }
 
               $('#correctMsg').text( right+ ' out of '+total+' correct answers ');
-              let scorePercent = (right/total)*100 ;
+              let scorePercent = (Math.ceil(right/total))*100 ;
               let scoreMessage = "";
               $('#scoringPercent').text(scorePercent +"%");
               $('#leadScorePercent').val('score is '+ scorePercent +" %");
