@@ -376,12 +376,19 @@ function skipQuestion() {
     skippedQuest.push('#markedquestion-' + activeTab);
     }
     let quest_id = 'question-' + activeTab;
+    if (quest_id in questionAttempt){
     for (att of questionAttempt[quest_id].split(',')){
     $('#' +att).prop("checked", false);
     }
     delete questionAttempt[quest_id];
     myStorage.setItem(tKey, JSON.stringify(questionAttempt));
     nextquestion(1);
+    }
+    else{
+      nextquestion(1);
+          delete questionAttempt[quest_id];
+      myStorage.setItem(tKey, JSON.stringify(questionAttempt));
+    }
 }
 
 function startTimer(duration,) {
