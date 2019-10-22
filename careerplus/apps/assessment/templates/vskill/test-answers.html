@@ -87,11 +87,16 @@
                      <h3 ><span class="test-paper-count">{{forloop.counter}}</span> 
                      {{ quest.question_text|linebreaksbr }}</h3>
                   </div>
-                  <ul class="test-paper__question" id="testanswer">
+                  <ul class="test-paper__question" id="testanswer" >
                         {% for ans in quest.options %}
                      <li>
-                        <label class="custom-radio">{{ans.option}}
+
+                        <label  class="{% if quest.question_type == 2 %}custom-radio {%else%}custom-radio{% endif %}">{{ans.option}}
+                                               {% if quest.question_type == 2  %}
                            <input type="radio" id="{{ans.option_id}}" disabled  name="radio{{ans.option_id}}">
+                           {% else %}
+                            <input type="checkbox" id="{{ans.option_id}}" disabled  name="radio{{ans.option_id}}">
+                           {% endif %}
                            <span class="checkmark"></span>
                            <span id="check{{ans.option_id}}" class=""></span>
                         </label>
@@ -218,7 +223,7 @@
 
 
                <div class="form-group">
-                  <button class="blue_btn mr-20"  type="submit" id="leadCreationSubmit">Submit</button>
+                  <button class="blue_btn mr-20"  type="button" id="leadCreationSubmit">Submit</button>
                </div>
             </div>
          </form>
@@ -247,7 +252,7 @@
 
 <script>
 var tKey = 'Test-' + '{{object.id}}',myStorage = window.localStorage,
-right=0,questionAttempt = null,total = {{questions_list.count}};
+right=0,questionAttempt = null,questionNumb =1;total = {{questions_list.count}};
 
 $(document).ready(function() {
 
@@ -309,12 +314,18 @@ $('#leadCreationForm').validate({
 
 
 function getCoptions(){
+
         questionAttempt = JSON.parse(myStorage.getItem(tKey));
         if (questionAttempt != null) {
-            for (var id in Object.keys(questionAttempt)) {
-                if (Object.values(questionAttempt)[id] != "" && Object.keys(questionAttempt)[id] != "skippedQuestion") {
+            for ( preSelect of Object.keys(questionAttempt)) {
+                if (preSelect != "" && preSelect != "skippedQuestion" && typeof(questionAttempt[preSelect]) == 'string')
+                 {
+                if( questionAttempt[preSelect].length !=0){
 
-                    $('#' + Object.values(questionAttempt)[id]).attr('checked',true);
+                    for (id of questionAttempt[preSelect].split(',')){
+                    $('#'+id).attr('checked',true);
+                    }
+                    }
                 }
             }
          }
@@ -323,16 +334,38 @@ function getCoptions(){
          type  : 'get',
          success: function(response){
          for(i of response){
-            $('#check'+i.question_options[0]).addClass('ans-right');
-            if(questionAttempt && Object.values(questionAttempt) && Object.values(questionAttempt).includes(i.question_options[0])){
-                  right+= 1 ;
-                     }
-                            }
+if (i.question_options.length > 1) {
+
+	for (opt of i.question_options) {
+		$('#check' + opt).addClass('ans-right');
+	}
+	if (questionAttempt['question-' + questionNumb] && i.question_options.length == questionAttempt['question-' + questionNumb].split(',').length) {
+		if (questionAttempt['question-' + questionNumb].split(',').sort().toLocaleString() == i.question_options.sort().toLocaleString()) {
+			right += 1;
+		}
+	}
+}
+else {
+	$('#check' + i.question_options[0]).addClass('ans-right');
+	if (questionAttempt && Object.values(questionAttempt) && Object.values(questionAttempt).includes(i.question_options[0])) {
+		right += 1;
+	}
+}
+
+        questionNumb += 1;
+}
+
          if(questionAttempt){
-            for (i of Object.values(questionAttempt)){
+            selected_arrays = Object.values(questionAttempt);
+            for (val of selected_arrays ){
+               if(val && val.length != 0  && typeof(val) == 'string' ){
+                val = val.split(',')
+                for (i of val){
 
                 if(! $("#check"+i).hasClass('ans-right')){
                 $("#check"+i).addClass('ans-wrong');
+               }
+               }
                 }
 
 
@@ -410,7 +443,7 @@ if(flag){
 }
 
 
-$("#leadCreationForm").submit(function(e){
+$("#leadCreationForm").click(function(e){
 var flag=$('#leadCreationForm').valid();
 if(flag){
     getCoptions();

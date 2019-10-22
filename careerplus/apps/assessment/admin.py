@@ -1,3 +1,6 @@
+#python imports
+import json
+
 from django.contrib import admin
 from .models import *
 from shop.models import Category,Product
@@ -38,5 +41,39 @@ class test(admin.ModelAdmin):
     raw_id_fields = ('product','course','vendor')
     list_display = ['id','slug','title','category','product']
 
+
+class QuestionForm(forms.ModelForm):
+
+    def __init__(self,*args,**kwargs):
+        super(QuestionForm,self).__init__(*args,**kwargs)
+        self.fields['question_options'].help_text = " Question option should " \
+                                                    "be enter in this format " \
+        "only [{'option'   :'option_text.', 'option_image':'','option_id:''916a', 'is_correct':'0'}]"
+
+
+    def clean_question_options(self):
+        if not self.cleaned_data.get('question_options'):
+            raise forms.ValidationError('Options cannot be empty')
+        value = self.cleaned_data.get('question_options')
+        try:
+            value = json.loads(value)
+        except Exception as e:
+            value = []
+
+        if not isinstance(value,list):
+            raise forms.ValidationError("Enter the option in desired format"
+            " [{'option':'option_text.', 'option_image':'','option_id:''916a','is_correct':'0'}] ")
+
+        if not all(isinstance(option, dict) for option in value):
+            raise forms.ValidationError("Enter the option in desired format"
+                             " [{'option':'option_text.', 'option_image':'',"
+                             "'option_id:''916a','is_correct':'0'}] ")
+        return value
+
+    class Meta:
+        fields = '__all__'
+
+class QuestionAdmin(admin.ModelAdmin):
+    form = QuestionForm
 admin.site.register(Test,test)
-admin.site.register(Question)
+admin.site.register(Question,QuestionAdmin)
