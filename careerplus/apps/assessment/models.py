@@ -1,3 +1,6 @@
+#python imports
+import logging
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django_mysql.models import JSONField
@@ -115,9 +118,22 @@ class Question(AbstractAutoDate):
 
     @property
     def options(self):
-        if self.question_options:
-            return eval(self.question_options)
-        return []
+        if not self.question_options:
+            return []
+        try:
+            value = eval(self.question_options)
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to parse question '
+                                                 'option id={}'.format(self.id))
+            value =[]
+
+        if not isinstance(value, list):
+            return []
+
+        if not all(isinstance(option, dict) for option in value):
+            return []
+
+        return value
 
     def __str__(self):
         return '{}'.format(self.id)
