@@ -46,9 +46,8 @@ class QuestionForm(forms.ModelForm):
 
     def __init__(self,*args,**kwargs):
         super(QuestionForm,self).__init__(*args,**kwargs)
-        self.fields['question_options'].help_text = " Question option should " \
-                                                    "be enter in this format " \
-        "only [{'option'   :'option_text.', 'option_image':'','option_id:''916a', 'is_correct':'0'}]"
+        self.fields['question_options'].help_text = '[{"is_correct": "0", ' \
+'"option_id": "1157a", "option_image": "", "option": "horizontal pod autoscaler"}]'
 
 
     def clean_question_options(self):
@@ -58,16 +57,18 @@ class QuestionForm(forms.ModelForm):
         try:
             value = json.loads(value)
         except Exception as e:
-            value = []
+            value = None
 
         if not isinstance(value,list):
-            raise forms.ValidationError("Enter the option in desired format"
-            " [{'option':'option_text.', 'option_image':'','option_id:''916a','is_correct':'0'}] ")
-
+            raise forms.ValidationError('[{"is_correct": "0", "option_id": "1157a",'
+                                        ' "option_image": "", '
+                                        '"option": "horizontal pod '
+                                        'autoscaler"}]')
         if not all(isinstance(option, dict) for option in value):
-            raise forms.ValidationError("Enter the option in desired format"
-                             " [{'option':'option_text.', 'option_image':'',"
-                             "'option_id:''916a','is_correct':'0'}] ")
+            raise forms.ValidationError('[{"is_correct": "0", "option_id": "1157a",'
+                                        ' "option_image": "", '
+                                        '"option": "horizontal pod '
+                                        'autoscaler"}]')
         return value
 
     class Meta:
