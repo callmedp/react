@@ -87,6 +87,7 @@
     <div class="row">
 
     <!-- amcat certification start -->
+             {% if facets.pFA|length > 1 %}
         {% if vendor_banner %}
     <div class="amcat-certification col-sm-12">
         <div class="box-panel text-center">
@@ -94,7 +95,6 @@
         </div>
         <div class="amcat-tags mt-30" id="bannerBtns">
 
-            {% if facets.pFA|length > 1 %}
        {% for facet in facets.pFA %}
             <a  name="filterBtn" value="{{facet.id}}" onclick="filterSearch(event)" class=
                     {% if facet.label == 'Others' %}
@@ -109,13 +109,11 @@
             {% endif %}>{{facet.label}}
                 </a>
                 {% endfor %}
-        {% endif %}
-
-
 
 
     </div>
         {% endif %}
+                {% endif %}
 
     {% if products_found and page.object_list|length > 0 %}
         {% include "search/partials/search_filters.html" %}
