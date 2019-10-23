@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from order import models
+from users.models import User
 from shop.api.core.serializers import ProductSerializer
 from rest_framework import  serializers
 from shared.rest_addons.mixins import SerializerFieldsMixin, ListSerializerContextMixin, ListSerializerDataMixin
@@ -34,11 +35,17 @@ class OrderItemOperationsSerializer(SerializerFieldsMixin,
 	Serailzer for OrderItem operations
 
 	"""
-	list_lookup_fields = ['oi_id']
-	fields_required_mapping = {'oi_id':['no_process','oi_draft_path']
+	list_lookup_fields = ['oi_id','added_by_id','assigned_to_id']
+	fields_required_mapping = {'oi_id':['no_process','oi_draft_path',],
+							   'added_by_id':['name'],
+							   'assigned_to_id': ['name'],
 							   }
-	field_model_mapping = {'oi_id': models.OrderItem }
+	field_model_mapping = {'oi_id': models.OrderItem,
+						   'added_by_id': User,
+						   'assigned_to_id':User,
+						   }
 
+	oi_status_display = serializers.CharField(read_only=True)
 
 	class Meta:
 		model = models.OrderItemOperation

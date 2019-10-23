@@ -116,7 +116,8 @@ else if(element.oi_draft){
 let oi_draft = element.oi_draft.split('/').pop()
 return `<div class="allactions__box">
   <strong>Draft Level ${ element.draft_counter < maxDraft ? element.draft_counter:Final}:</strong></br>
-  <a href=<a href="/console/queue/resumedownload/?path=${oi_draft}&next=${window.location.pathname}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
+  <a href=<a href="/console/queue/resumedownload/?path=${oi_draft}&next=${window.location.pathname}">
+  <button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
 </div>`
 }
 else if( element.linkedin && element.order_oio_linkedin != ""){
@@ -176,26 +177,24 @@ function fileUploadForm(oiOperation){
 
 function allActionModal(id){
   $('#orderItemOperationModal').html('')
-$.get( "/order/api/v1/orderitemoperationsapi/", { 'oi': id ,'nopage':true,'include_oi_id':true} )
+$.get( "/order/api/v1/orderitemoperationsapi/", { 'oi': id ,'nopage':true,'include_oi_id':true,
+'include_added_by':true,'include_assigned_to':true} )
   .done(function( data ) {
     if(data ){
     let result = ""
     for (oiOperation of data){
-
       result += `<div class="allactions__box">
                 <p>${oiOperation.oi_status_display}</p>
-          <span>${new Date(oiOperation.created).toDateString()}</span>
+          <span> ${oiOperation. } &nbsp &nbsp  ${new Date(oiOperation.created).toDateString()}</span>
           </div>
-    ${createDraftResumeDownload(oiOperation)? createDraftResumeDownload(oiOperation):''}
-    ${ (oiOperation.oi_status == 4) ? (oiOperation.oi_id_data.oi_draft_path || oiOperation.linkedin) ?
-          fileUploadForm(oiOperation)
-        :'':'' }
 
-    } }
-    `
+    ${createDraftResumeDownload(oiOperation)? createDraftResumeDownload(oiOperation):''}
+    ${ (oiOperation.oi_status == 4) ? (oiOperation.oi_id_data.oi_draft_path || oiOperation.linkedin)?fileUploadForm(oiOperation):'':'' }`
+
     }
     $('#orderItemOperationModal').html(result);
-}
+
+    }
 $('#loader').hide();
   });
 

@@ -1067,6 +1067,7 @@ class OrderItemOperation(AbstractAutoDate):
     def __str__(self):
         return "#{}".format(self.pk)
 
+
     @property
     def oi_status_display(self):
          return self.get_oi_status
