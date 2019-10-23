@@ -734,6 +734,7 @@
 {% block js_block %}
 <script>
     var maxDraft = {{max_limit_draft}}
+    var oid = {{order.id}}
 </script>
 {{ block.super }}
 {% compress js %}

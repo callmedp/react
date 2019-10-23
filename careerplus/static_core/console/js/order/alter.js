@@ -204,7 +204,6 @@ function allMessage(id){
   $('#orderItemOperationModal').html('')
 $.get( "/order/api/v1/message-communications/", { 'oi': id ,'nopage':true} )
   .done(function( data ) {
-  debugger;
     if(data){
     let result = ""
     $('#MessageCounts').text('All Messages (' + data.length + ')');
@@ -222,3 +221,37 @@ $('#message-loader').hide();
   });
 
 }
+
+$('#orderEmailMobileUpdateBtn').click(function(){
+  let form = $('#orderEmailMobileUpdate');
+  let patchBody = {}
+   if (oid){
+    formData = form.serializeArray()
+    if (formData){
+    for (fieldData of formData){
+        if(fieldData.value){
+        patchBody[fieldData.name]= fieldData.value;
+        }
+    }
+
+    }
+  if (Object.keys(patchBody).length != 0){
+fetch(`/order/api/v1/${oid}/update/`, {
+  method: 'Patch',
+   credentials: "same-origin",
+    headers: {
+        "X-CSRFToken": getCookie("csrftoken"),
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+    },
+  body: JSON.stringify(patchBody),
+    }).then(response => form.reset(); )
+       .catch(function(error) {
+        console.log(error);
+    });
+}
+}
+
+})
+
+

@@ -43,7 +43,7 @@ class OrderItemsListView(ListAPIView):
 
 
 class OrderUpdateView(UpdateAPIView):
-    authentication_classes = (ShineUserAuthentication,)
+    authentication_classes = (SessionAuthentication,ShineUserAuthentication,)
     permission_classes = (IsAuthenticated,)
     serializer_class = OrderSerializer
     queryset = Order.objects.all()
@@ -76,8 +76,8 @@ class MessageCommunicationListApiView(FieldFilterMixin,ListAPIView):
     To get the messages for particular order items include &oi='OrderItemId'
     """
 
-    authentication_classes = []
-    permission_classes = ()
+    authentication_classes = [SessionAuthentication]
+    permission_classes = (OrderAccessPermission,)
     serializer_class = MessageCommunincationSerializer
     pagination_class = LearningCustomPagination
 
