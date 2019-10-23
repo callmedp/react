@@ -268,13 +268,6 @@
             </div><!-- end of skill box -->
         </section><!-- end of section here -->
     </div><!-- body wrapper ends here -->
-{% if whatsapp_icon %}
-{% for key,value in whatsapp_icon.items %}
-{% if key == "course-skill-number" %}
-<a href="https://api.whatsapp.com/send?phone=91{{value}}"><div class="icon-whatsApp"></div></a>
-{% endif %}
-{% endfor %}
-{% endif %}
 
 
     {% block call_us %}
@@ -289,6 +282,22 @@
         {% if not request.amp %}
         <div class="ui-block-c"><a href="JavaScript:void(0);"> <span></span>Chat </a></div>
         {% endif %}
+        <div>
+            {% if whatsapp_icon %}
+                    <div class="ui-block-c">
+
+{% for key,value in whatsapp_icon.items %}
+{% if key == "course-skill-number" %}
+            <div class="icon-whatsApp">
+                <a href="https://api.whatsapp.com/send?phone=91{{value}}"><span>
+                </span>Whatsapp</a>
+            </div>
+            {% endif %}
+{% endfor %}
+              </div>
+
+{% endif %}
+
     </div><!-- call us and chat widget ends here -->
 </div>
 
