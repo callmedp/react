@@ -211,7 +211,7 @@ class AssessmentResultPage(TemplateView):
         breadcrumbs = []
         breadcrumbs.append({"url": '/', "name": "Home"})
         breadcrumbs.append({"url": '/practice-tests/', "name": 'Practice Tests'})
-        if test.category.get_parent():
+        if test.category and test.category.get_parent():
             breadcrumbs.append({"url": '/practice-tests/'+test.category.get_parent()[0].slug, "name": test.category.get_parent()[0].name})
         if test.category:
             breadcrumbs.append({"url": '/practice-tests/'+test.category.slug + '/sub', "name": test.category.name})
