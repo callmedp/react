@@ -77,7 +77,6 @@ from assessment.models import Question
 from assessment.utils import TestCacheUtil
 
 
-
 class CreateOrderApiView(APIView, ProductInformationMixin):
     authentication_classes = [OAuth2Authentication]
     permission_classes = [IsAuthenticated, IsAdminUser]
@@ -100,7 +99,7 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
 
         all_txn_ids = [x['txn_id'] for x in txns_list if x.get('txn_id')]
         paid_transactions = PaymentTxn.objects.filter(txn__in=all_txn_ids,status=1)
-        
+
         if paid_transactions:
             logging.getLogger("error_log").error("Order for txns already created. {}".format(all_txn_ids))
             return Response({"status": 0, "msg": "Order for txns already created."},
@@ -438,7 +437,7 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
             return Response(
                 {"msg": msg, "status": 0},
                 status=status.HTTP_400_BAD_REQUEST)
-        
+
 
 
 class EmailLTValueApiView(APIView):
@@ -871,7 +870,7 @@ class ShineCandidateLoginAPIView(APIView):
         return order_data
 
     def get_response_for_successful_login(self, candidate_id, login_response, with_info=True):
-        
+
         candidate_obj = ShineCandidate(**login_response)
         candidate_obj.id = candidate_id
         candidate_obj.candidate_id = candidate_id
@@ -896,7 +895,7 @@ class ShineCandidateLoginAPIView(APIView):
                 "token": token,
                 "candidate_id": candidate_id,
                 'cart_pk': self.request.session.get('cart_pk') or self.request._request.session.get('cart_pk'),
-                'profile': login_response
+                'profile': personal_info
             }
 
         return Response(data_to_send, status=status.HTTP_201_CREATED)

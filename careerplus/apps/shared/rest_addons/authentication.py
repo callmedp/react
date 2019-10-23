@@ -22,7 +22,7 @@ from rest_framework.authentication import SessionAuthentication, get_authorizati
 conn = get_redis_connection('token')
 
 
-class ShineUserAuthentication(SessionAuthentication):
+class   ShineUserAuthentication(SessionAuthentication):
     """
     User authentication for APIs.
     Sets user in request else raises AuthenticationFailure

@@ -81,11 +81,14 @@ def manually_generate_autologin_url(assesment_items=[]):
             candidate_degree = status_response.get('highest_education', 'N.A')
             if candidate_degree != 'N.A':
                 candidate_degree = DEGREE_MAPPING.get(candidate_degree, 'N.A')
-
+            candidate_mobile = "{}{}".format(
+                status_response.get('country_code', '91'),
+                oi.order.mobile
+            )
             data = {
                 "candidate_email": oi.order.email,
                 "skill_id": str(skill_id),
-                "candidate_phone": oi.order.mobile,
+                "candidate_phone": candidate_mobile,
                 "candidate_name": oi.order.first_name,
                 "candidate_city": candidate_location,
                 "candidate_degree": candidate_degree,

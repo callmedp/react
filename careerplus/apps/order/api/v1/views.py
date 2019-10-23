@@ -99,16 +99,16 @@ class MessageCommunicationListApiView(FieldFilterMixin,ListAPIView):
 
 
 class LTVReportView(ListAPIView):
-	serializer_class = LTVReportSerializer
-	authentication_classes = (SessionAuthentication,)
-	permission_classes = (IsAuthenticated,)
+    serializer_class = LTVReportSerializer
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
-	def get_queryset(self):
-		year = self.kwargs.get('year')
-		month = self.kwargs.get('month')
-		queryset = MonthlyLTVRecord.objects.filter(
-			year=year, month=month)
-		return queryset
+    def get_queryset(self):
+        year = self.kwargs.get('year')
+        month = self.kwargs.get('month')
+        queryset = MonthlyLTVRecord.objects.filter(
+            year=year, month=month)
+        return queryset
 
 
 

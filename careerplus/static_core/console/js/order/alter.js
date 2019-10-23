@@ -245,7 +245,7 @@ fetch(`/order/api/v1/${oid}/update/`, {
         "Content-Type": "application/json"
     },
   body: JSON.stringify(patchBody),
-    }).then(response => form.reset(); )
+    }).then(response => form.reset() )
        .catch(function(error) {
         console.log(error);
     });
