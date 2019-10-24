@@ -1122,7 +1122,7 @@ class Message(AbstractAutoDate):
     def added_by_name(self):
         if self.added_by:
             return self.added_by.name
-            order = self.oi.order
+        order = self.oi.order
         return order.first_name
 
 

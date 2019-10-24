@@ -170,6 +170,44 @@
                    <strong>{{op.get_oi_status}}</strong>
                        <br/>
                    {% endif %}
+
+                     {% if op.oi_status == 4 %}
+                    {% if obj.oi_draft or op.linkedin %}
+                    <tr>
+                      <td colspan="4">
+                        <form autocomplete="off" role="form" method="post"  data-parsley-validate enctype="multipart/form-data"
+                        id="draft-upload-form{{obj.pk}}">{% csrf_token %}
+                        {{draft_form.file}}
+                        <div style="display:none">
+                            <input type="hidden" name="oi_pk" value="{{obj.pk}}">
+                            <input type="hidden" id="flow-id{{obj.pk}}" name="flow" value="detailpage"/>
+                        </div>
+                        <button type="button" onclick="clickSubmitDraft('{{obj.pk}}',)" class="btn btn-success btn-xs">Submit</button>
+                        </form>
+                        <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="draftmodal{{obj.pk}}">
+                          <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+
+                              <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                                </button>
+                                <h4 class="modal-title" id="myModalLabel">Draft Upload</h4>
+                              </div>
+                              <div class="modal-body" id="myModalbody{{obj.pk}}">
+                                Are You Sure???
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="button" id="uploadDraftAction{{obj.pk}}" data-dismiss="modal" class="btn btn-primary" onclick="detailPageUploadDraft('{{obj.pk}}',)">Yes</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    {% endif %}
+                    {% endif %}
+                   
                    {% if forloop.counter == 2 %}
                    <button class="round_btn mt-30" id="viewAllActionBtn"  data-toggle="modal" data-target="#allactions_modal" onclick="allActionModal({{obj.id}})";>View all actions</button>
                             {% endif %}
@@ -743,6 +781,7 @@
     var oid = {{order.id}}
 </script>
 {{ block.super }}
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 {% compress js %}
 <!-- Parsley Validate Scripts -->
 <script type="text/javascript" src="{% static 'console/js/order/exotelCall.js' %}"></script>

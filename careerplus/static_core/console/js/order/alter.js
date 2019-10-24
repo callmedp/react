@@ -115,7 +115,7 @@ return `<div class="allactions__box">
 else if(element.oi_draft){
 let oi_draft = element.oi_draft.split('/').pop()
 return `<div class="allactions__box">
-  <strong>Draft Level ${ element.draft_counter < maxDraft ? element.draft_counter:Final}:</strong></br>
+  <strong>Draft Level ${ element.draft_counter < maxDraft ? element.draft_counter:'Final'}:</strong></br>
   <a href=<a href="/console/queue/resumedownload/?path=${oi_draft}&next=${window.location.pathname}">
   <button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
 </div>`
@@ -125,7 +125,7 @@ return `<div class="allactions__box">
 <strong>Candidate Draft</strong></br>
 <a href="/linkedin/dashboard-draft-download/${element.oi}/${element.id}" target="_blank">
 <button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Draft</button></a>
-<strong>Draft Level ${ element.draft_counter < maxDraft ? element.draft_counter :Final}:</strong></br>
+<strong>Draft Level ${ element.draft_counter < maxDraft ? element.draft_counter :'Final'}:</strong></br>
 <a href="/linkedin/linkedin-draft/${element.oi}/${element.id}" target="_blank">
 <button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></div>`
 }
@@ -185,7 +185,7 @@ $.get( "/order/api/v1/orderitemoperationsapi/", { 'oi': id ,'nopage':true,'inclu
     for (oiOperation of data){
       result += `<div class="allactions__box">
                 <p>${oiOperation.oi_status_display}</p>
-          <span> ${oiOperation. } &nbsp &nbsp  ${new Date(oiOperation.created).toDateString()}</span>
+          <span> ${new Date(oiOperation.created).toDateString()}</span>
           </div>
 
     ${createDraftResumeDownload(oiOperation)? createDraftResumeDownload(oiOperation):''}
@@ -221,8 +221,46 @@ $('#message-loader').hide();
 
 }
 
+
+$('#orderEmailMobileUpdate').validate({
+  rules: {
+        alt_email: {
+            email: true,
+        },
+        alt_mobile: {
+            number: true,
+            minlength: 10,
+            maxlength: 10
+        },
+
+    },
+    messages: {
+
+        number: {
+            number: "Enter only number",
+            maxlength: "Please enter less than 11 digits",
+            minlength: "Please enter atleast 10 digits"
+        },
+
+    },
+//    errorPlacement: function(error, element) {
+//        /*$(element).siblings('.error').html(error.text());*/
+//        $(element).siblings('label').html(error.text())
+//
+//    },
+//     unhighlightError: function(error, element) {
+//        $(element).siblings('label').html('');
+//
+//    }, success: function(label) {
+//        label.html('') }
+
+})
+
+
 $('#orderEmailMobileUpdateBtn').click(function(){
+debugger;
   let form = $('#orderEmailMobileUpdate');
+  if(form.valid()){
   let patchBody = {}
    if (oid){
     formData = form.serializeArray()
@@ -244,13 +282,22 @@ fetch(`/order/api/v1/${oid}/update/`, {
         "Content-Type": "application/json"
     },
   body: JSON.stringify(patchBody),
-    }).then(response => form.reset() )
+    }).then(response => {
+    form.trigger('reset')
+
+    alert('Updated')
+     })
        .catch(function(error) {
+           form.trigger('reset')
+               alert('Something went wrong')
         console.log(error);
     });
 }
+else{
+alert('Enter email/mobile number to update')
 }
-
+}
+}
 })
 
 
