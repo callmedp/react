@@ -289,6 +289,13 @@
     background: url(../images/icon-sprite.png) no-repeat 0 -748px;
 }
 
+.icon-callsmw {
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+    background: url(../images/icon-sprite.png) no-repeat -18px -765px;
+}
+
 .icon-emailsm {
     width: 13px;
     height: 10px;
@@ -381,11 +388,46 @@
 
 .order_details__by p {
     margin-bottom: 5px;
+    display: flex;
+    margin-top: 5px;
 }
 
-.order_details__by p i {
-    margin-right: 5px;
+.order_details__by p .icon-callsm-box {
+    width: 23px;
+    height: 23px;
+    background-color: #4576BA;
+    display: inline-block;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-right: 7px;
+    flex: 0 0 23px;
 }
+
+.order_details__by p .icon-callsm-box .icon-callsmw{
+    margin: 5px 0 0 6px;
+}
+
+.order_details__by p .icon-emailsm-box {
+    width: 23px;
+    height: 23px;
+    background-color: #fff;
+    border: 1px solid #C0C0C0;
+    display: inline-block;
+    border-radius: 50%;
+    margin-right: 7px;
+    flex: 0 0 23px;
+}
+
+.order_details__by p .icon-emailsm-box .icon-emailsm {
+    margin: 5px 0 0 4px;
+}
+
+.order_details__by p .icon-txt {
+    font-size: 1.3rem;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
 
 .order_details__status {
     font-size: 1.4rem;
@@ -606,10 +648,10 @@
     opacity:0.5;
 }
 
-.alternatecontact form .error{
+.alternatecontact .form-group .error{
     position: relative;
 }
-.alternatecontact form .error input{
+.alternatecontact .form-group .error input{
     border: 1px solid #ff0000 !important;
 }
 .alternatecontact form .error .error-txt{

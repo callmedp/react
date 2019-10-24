@@ -243,22 +243,29 @@ $('#orderEmailMobileUpdate').validate({
         },
 
     },
-//    errorPlacement: function(error, element) {
-//        /*$(element).siblings('.error').html(error.text());*/
-//        $(element).siblings('label').html(error.text())
-//
-//    },
-//     unhighlightError: function(error, element) {
-//        $(element).siblings('label').html('');
-//
-//    }, success: function(label) {
-//        label.html('') }
+   errorPlacement: function(error, element) {
+       /*$(element).siblings('.error').html(error.text());*/
+       $(element).siblings('.error-txt').html(error.text())
+       // $(element).siblings('label').addClass('error-txt')
+
+
+   },
+    unhighlightError: function(error, element) {
+      // $(element).siblings('label').removeClass('error-txt')
+      //  $(element).closest('.form-group').removeClass('error');
+       $(element).siblings('.error-txt').html('');
+
+   }, success: function(label) {
+       label.html('') },
+  highlight: function(element) {
+    $(element).closest('.form-group').addClass('error');
+
+   }
 
 })
 
 
 $('#orderEmailMobileUpdateBtn').click(function(){
-debugger;
   let form = $('#orderEmailMobileUpdate');
   if(form.valid()){
   let patchBody = {}
