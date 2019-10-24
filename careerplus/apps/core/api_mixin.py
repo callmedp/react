@@ -476,15 +476,14 @@ class NeoApiMixin(object):
                 user_id = json_rep['data'][0]['id']
                 return user_id
 
-    def board_user_on_neo(self, email):
+    def board_user_on_neo(self, email, data_dict):
         user_id = self.get_user_neo_id(email)
         headers = self.get_headers()
         if user_id:
-            data = {
-                'user_id': user_id
-            }
+            data_dict['user_id'] = user_id
             url_to_hit = settings.NEO_URL['board_user']
-            resp = requests.post(url_to_hit, data=data, headers=headers)
+            print(data_dict)
+            resp = requests.post(url_to_hit, data=data_dict, headers=headers)
             if resp.status_code == 200:
                 return True
         else:
