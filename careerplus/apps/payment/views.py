@@ -228,6 +228,8 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         first_name = self.cart_obj.first_name or self.request.session.get('first_name')
         state_list = self.get_state_list()
         guest_login = bool(self.request.session.get('candidate_id', {}))
+        candidate_in_session = self.request.session.get('candidate_id','')
+
         context.update({
             "state_form": StateForm(),
             "check_form": PayByCheckForm(),
@@ -237,8 +239,8 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
             "email_id": ''.join(email_id),
             "first_name": first_name,
             "state_list": state_list,
-            "guest_login": guest_login
-
+            "guest_login": guest_login,
+            "candidate_in_session": candidate_in_session
         })
         return context
 
