@@ -5,6 +5,10 @@ import HomeContainer from '../components/Core/Home/home.jsx';
 import BuyContainer from '../components/Core/Payment/Buy/buy.jsx';
 import Preview from "../components/Core/Editor/Preview/preview.jsx";
 import Menu from "../components/Core/Editor/Menu/menu.jsx";
+import Middleware from '../middlewares/middleware'
+
+
+let middleware =new Middleware();
 
 export const RouteWithSubRoutes = route => (
     <Route
@@ -12,7 +16,7 @@ export const RouteWithSubRoutes = route => (
         exact={route.exact}
         render={props => (
             // pass the sub-routes down to keep nesting
-            <route.component {...props} routes={route.routes}/>
+            middleware.routeToDisplay(route.middlewares,<route.component {...props} routes={route.routes}/>)
         )}
     />
 );
@@ -30,25 +34,30 @@ const routes = [
     {
         path: '/resume-builder',
         component: HomeContainer,
-        exact: true
+        exact: true,
+        middlewares :['alreadyLoggedIn']
     },
 
     {
         path: '/resume-builder/edit/',
-        component: EditPreviewContainer
+        component: EditPreviewContainer,
+        middlewares:['privateRoute']
     },
     {
         path: '/resume-builder/preview/',
-        component: Preview
+        component: Preview,
+        middlewares:['privateRoute']
     },
     
     {
         path: '/resume-builder/buy',
-        component: BuyContainer
+        component: BuyContainer,
+        middlewares:['privateRoute']
     },
     {
         path: '/resume-builder/menu',
-        component: Menu
+        component: Menu,
+        middlewares:['privateRoute']
     }
 
 ]
