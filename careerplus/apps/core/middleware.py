@@ -8,7 +8,7 @@ import urllib.parse
 from datetime import datetime, timedelta
 
 # django imports
-from django_mobile.middleware import SetFlavourMiddleware
+from django_mobile.middleware import SetFlavourMiddleware,MobileDetectionMiddleware
 from django.utils.deprecation import MiddlewareMixin
 from django.conf import settings
 from django.conf import settings
@@ -23,7 +23,7 @@ from core.api_mixin import AdServerShine, ShineCandidateDetail
 from crmapi.tasks import add_server_lead_task
 
 
-class UpgradedSetFlavourMiddleware(MiddlewareMixin, SetFlavourMiddleware):
+class UpgradedSetFlavourMiddleware(MiddlewareMixin,SetFlavourMiddleware):
     """
     Makes middleware django 1.10 compatible
     """
@@ -31,24 +31,7 @@ class UpgradedSetFlavourMiddleware(MiddlewareMixin, SetFlavourMiddleware):
         super(UpgradedSetFlavourMiddleware, self).__init__(get_response)
 
 
-class MobileDetectionMiddleware(object):
-    http_accept_regex = re.compile(
-        "application/vnd\.wap\.xhtml\+xml", re.IGNORECASE)
-
-    def __init__(self):
-        pass
-
-    def process_request(self, request):
-        is_mobile = False
-        if request.META.get('HTTP_HOST') == settings.MOBILE_SITE_DOMAIN:
-            is_mobile = True
-        if is_mobile:
-            set_flavour(settings.DEFAULT_MOBILE_FLAVOUR, request)
-        else:
-            set_flavour(settings.FLAVOURS[0], request)
-
-
-class UpgradedMobileDetectionMiddleware(MiddlewareMixin, MobileDetectionMiddleware):
+class UpgradedMobileDetectionMiddleware(MiddlewareMixin,MobileDetectionMiddleware):
     """
     Makes middleware django 1.10 compatible
     """
