@@ -101,6 +101,10 @@ class ConsoleLogoutView(View):
 
     def get(self, request):
         logout(request)
+        
+        if request.GET.get('next'):
+            return HttpResponseRedirect(request.GET.get('next'));
+        
         return HttpResponseRedirect(reverse_lazy('console:login'))
 
 

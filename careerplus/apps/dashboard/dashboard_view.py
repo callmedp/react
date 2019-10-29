@@ -53,6 +53,7 @@ class DashboardView(TemplateView):
         return HttpResponseRedirect(reverse('homepage'))
 
     def get_context_data(self, **kwargs):
+
         context = super(DashboardView, self).get_context_data(**kwargs)
         if self.request.GET.get('oirate'):
             try:
