@@ -3782,10 +3782,10 @@ footer {
 .icon-whatsApp {
   width: 46px;
   height: 46px;
-  background: $sprite -642px -477px;
+  background: $sprite -642px -477px #fff;
   display: block;
   box-shadow: 0 0 10px rgba($black-color, .3);
-
+  z-index: 999;
   position: fixed;
   bottom: 60px;
   right: 0;
