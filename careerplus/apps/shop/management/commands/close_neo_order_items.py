@@ -12,7 +12,7 @@ from order.models import OrderItem
 from shop.models import PracticeTestInfo
 class Command(BaseCommand):
     """
-        Custom command to Update Crm Products.
+        Custom command to Close Neo Order Items.
     """
     help = 'Update Products CRM'
 
