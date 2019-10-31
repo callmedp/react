@@ -8,6 +8,7 @@ from django.conf import settings
 
 from order.models import OrderItem
 from emailers.email import SendMail
+from emailers.sms import SendSMS
 from shop.choices import S_ATTR_DICT
 
 SERVICES = {
@@ -79,7 +80,7 @@ def service_expiry_reminder(days):
         if days >= 0:
             ois = OrderItem.objects.filter(**val)
         else: # this filter is for closed order in the past
-            closed_date = timezone.now() + timedelta(days=days)
+            closed_date = timezone.now() + datetime.timedelta(days=days)
             closed_date = closed_date.replace(hour=0, minute=0, second=0)
             if 'oi_status' in val:
                 val.update({'oi_status': 4}, )
@@ -119,7 +120,8 @@ def send_mail_for_service(oi, days):
         'oi': oi,
         'product': oi.product.heading,
         'expiration_date': expiry_date,
-        'product_url': product_url
+        'product_url': product_url,
+        "mobile": oi.order.mobile,
     })
 
     try:
@@ -132,7 +134,7 @@ def send_mail_for_service(oi, days):
     # Send sms only if service is expiring today, as per product requirement
     if days == 0:
         try:
-            SendSMS().send(sms_type=mail_type, data=email_data)
+            SendSMS().send(sms_type=mail_type, data=email_dict)
         except Exception as e:
             logging.getLogger('error_log').error(
                 "%s - %s - %s" % (
