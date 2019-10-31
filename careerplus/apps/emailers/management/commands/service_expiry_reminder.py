@@ -47,7 +47,10 @@ def check_if_going_to_expire(oi, days=0):
     expiry_date = timezone.now() + datetime.timedelta(days=days)
     start_expiry_date = expiry_date.replace(hour=0, minute=0, second=0)
     end_expiry_date = expiry_date.replace(hour=23, minute=59, second=59)
-    expiration_date = get_expiry_date(oi)
+    if days >= 0:
+        expiration_date = get_expiry_date(oi)
+    else:
+        expiration_date = oi.closed_on
     if expiration_date > start_expiry_date and expiration_date < end_expiry_date:
         return True
 
