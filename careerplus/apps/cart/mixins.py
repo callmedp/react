@@ -66,7 +66,6 @@ class CartMixin(object):
             email = self.request.session.get('email')
             mobile = self.request.session.get('mobile_no')
             country_code = self.request.session.get('country_code')
-            utm_params = json.loads(self.request.session.get('utm',{}))
 
             if add_type == "cart":
                 self.getCartObject()
@@ -76,19 +75,17 @@ class CartMixin(object):
                 if cart_pk:
                     cart_obj = Cart.objects.get(pk=cart_pk)
                 elif candidate_id:
-                    cart_obj = Cart.objects.create(owner_id=candidate_id, session_id=session_id, status=2,\
-                                utm_params=utm_params)
+                    cart_obj = Cart.objects.create(owner_id=candidate_id, session_id=session_id, status=2)
                 elif session_id:
-                    cart_obj = Cart.objects.create(session_id=session_id, status=0,utm_params=utm_params)
+                    cart_obj = Cart.objects.create(session_id=session_id, status=0)
             elif add_type == "express":
                 if not self.request.session.session_key:
                     self.request.session.create()
                 session_id = self.request.session.session_key
                 if candidate_id:
-                    cart_obj = Cart.objects.create(owner_id=candidate_id, session_id=session_id, status=3\
-                                ,utm_params=utm_params)
+                    cart_obj = Cart.objects.create(owner_id=candidate_id, session_id=session_id, status=3)
                 elif session_id:
-                    cart_obj = Cart.objects.create(session_id=session_id, status=3,utm_params=utm_params)
+                    cart_obj = Cart.objects.create(session_id=session_id, status=3)
 
             if cart_obj:
                 if email and not cart_obj.owner_email:
@@ -227,8 +224,6 @@ class CartMixin(object):
             if cart_user and cart_session and (cart_user != cart_session):
                 self.mergeCart(cart_session, cart_user)
 
-            utm_params = json.loads(self.request.session.get('utm',{}))
-
             if cart_user:
                 cart_obj = cart_user
             elif cart_session and candidate_id:
@@ -239,10 +234,9 @@ class CartMixin(object):
             elif cart_session:
                 cart_obj = cart_session
             elif candidate_id:
-                cart_obj = Cart.objects.create(owner_id=candidate_id, session_id=sessionid, status=2,\
-                            utm_params=utm_params)
+                cart_obj = Cart.objects.create(owner_id=candidate_id, session_id=sessionid, status=2)
             elif sessionid:
-                cart_obj = Cart.objects.create(session_id=sessionid, status=0, utm_params=utm_params)
+                cart_obj = Cart.objects.create(session_id=sessionid, status=0)
 
             # update cart_obj in session
             if cart_obj:

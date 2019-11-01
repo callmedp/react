@@ -2,6 +2,9 @@
 
 {% for obj in orderitems %}
     <div class="box row mb-30">
+        {% if obj.product.get_duration_in_day %}
+               <div class="days-left">{{obj.product.get_duration_in_day}} days left</div>
+        {% endif %}
         <p class="fs-16 pb-5"><a href="{% url "dashboard:dashboard-itemdetail" %}?oi={{obj.pk}}">{{obj.product.get_name}}
             {% if obj.product.get_exp_db %}
              - {{obj.product.get_exp_db}}
