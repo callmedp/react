@@ -170,22 +170,48 @@
             </div><!-- end of skill box -->
         </section><!-- end of section here -->
     </div><!-- body wrapper ends here -->
+
     {% block call_us %}
-    <div class="stick_bottom call-us">
-    <div class="ui-grid-a block-3 text-center">
-        <div class="ui-block-a">
-            <a href="javascript:void(0)" id="enquire_btn"><span></span>Enquire</a>
-        </div>
-        <div class="ui-block-b">
-            <a href="tel:{{ggn_contact_full}}"><span></span>Call Us</a>
-        </div>
+    <div class="stick_bottom enquire-cta">
+    {% if not product.is_assesment %}
+    <a class="enquire-cta__enquire" href="javascript:void(0)" id="enquire_btn">
+        <i class="icon-enquire"></i>
+        <span>Enquire</span>
+    </a><!-- // Enquire -->
+    {% endif %}
+
+    <a class="enquire-cta__call" href="tel:{{ggn_contact_full}}" id="enquire_btn">
+        <i class="icon-call"></i>
+        <span>Call Us</span>
+    </a><!-- // Call -->
+
+    {% if not product.is_assesment %}
         {% if not request.amp %}
-        <div class="ui-block-c"><a href="JavaScript:void(0);"> <span></span>Chat </a></div>
+        <a class="enquire-cta__chat" href="javascript:void(0)" id="enquire_btn">
+            <i class="icon-chat-2"></i>
+            <span>Chat</span>
+        </a><!-- // Chat -->
         {% endif %}
-    </div><!-- call us and chat widget ends here -->
-</div>
+    {% endif %}
+
+    {% if whatsapp_icon %}
+{% for key,value in whatsapp_icon.items %}
+{% if value and key == "service-skill-number" %}
+        <a class="enquire-cta__whatsApp" href="https://api.whatsapp.com/send?phone=91{{value}}">
+        <i class="icon-whatsApp"></i>
+        <span>WhatsApp</span>
+    </a><!-- // Chat -->
+
+    {% endif %}
+{% endfor %}
+{% endif %}
 
 
+
+
+</div><!-- // enquire-cta -->
+
+{% if not product.is_assesment %}
 <div class="enquire" id="enquire">
     <header>
         <a class="icon-back pull-left" id="back_btn"></a>
@@ -218,11 +244,18 @@
                 <div class="form-group mb-30">
                     <textarea class="form-control" rows="2" name="msg" placeholder="Message"></textarea>
                 </div>
-              <input type="hidden" name="lsource" value="9">
-
-             <input type="hidden" name="product" value="{{category_obj.pk}}">
-        <input type="hidden" name="prd" value="{{category_obj.heading}}">
-      	<input type="hidden" name="path" value="{{request.build_absolute_uri}}">
+                 {% if  prd_service == 'course' %}
+              <input type="hidden" name="lsource" value="2">
+            {% else %}
+              <input type="hidden" name="lsource" value="8">
+            {% endif %}
+            {% if prd_vendor_slug == "neo" %}
+               <input type="hidden" name="campaign" value="neo">
+            {% endif %}
+            <input type="hidden" name="product" value="{{product.pk}}">
+            <input type="hidden" name="prd" value="{{product.heading}}">
+            <input type="hidden" name="path" value="{{product.get_absolute_url}}">
+            <input type="hidden" name="email" class="form-control" value="{{request.session.email}}">
             <div class="form-group">
                 <button type="submit" id="enquire_form" class="btn btn-blue w100 btn-round">Submit</button>
             </div>
@@ -231,6 +264,7 @@
         </div>
     </div>
 </div>
+{% endif %}
     {% endblock call_us %}
     
 {% endblock container %}
