@@ -627,7 +627,7 @@ def generate_feedback_report(sid,start_date,end_date):
                 'Feedaback Call Attempted Date Time', 'Satisfaction Status', 'Resolution', 'Payment Date Time']
     write_row(sheet,heading,)
 
-    oi_feedbacks = OrderItemFeedback.objects.filter(created__gte=start_date,created__lte=end_date+timedelta(days=1))
+    oi_feedbacks = OrderItemFeedback.objects.filter(created__gte=start_date,created__lte=end_date)
     logging.getLogger('info_log').info(\
         "Total Order Item Feedback Found {}".format(oi_feedbacks.count()))
     
@@ -685,9 +685,9 @@ def generate_feedback_report(sid,start_date,end_date):
         payment_date = oi_feedback.order_item.order.payment_date.strftime('%d/%m/%Y, %H:%M:%S') if oi_feedback.order_item\
                      and oi_feedback.order_item.order and oi_feedback.order_item.order.payment_date else ''
        
-        
+        product_name = oi_feedback.order_item.product.name if oi_feedback.orderitem and oi_feedback.order_item.product else ''
         excel_row = [
-                        None, None, None,None,None, None, oi_feedback.order_item.product.name, feedback_attempted_date_time\
+                        None, None, None,None,None, None, product_name, feedback_attempted_date_time\
                         , oi_feedback.category_text,oi_feedback.resolution_text, payment_date
                     ]
         write_row(sheet,excel_row,row)
