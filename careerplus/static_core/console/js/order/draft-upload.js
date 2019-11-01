@@ -276,6 +276,7 @@ const generateAutoLoginToken = async (oi_id) => {
     const { data: { token } } = result;
 
     window.open(`${site_domain}/console/logout/?next=/resume-builder/?token=${token}`, _blank='true')
+    window.location.reload();
 }
 
 function onClose(id){
