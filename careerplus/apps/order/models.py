@@ -698,6 +698,15 @@ class OrderItem(AbstractAutoDate):
         return "#{}".format(self.pk)
 
     @property
+    def product_service_days_left(self):
+        duration = self.product.get_duration_in_day if self.product and \
+                    self.product.get_duration_in_day else None
+        if not duration:
+            return 0
+        start_date = self.orderitemoperation_set.filter(oi_status__in=[31, 32, 5]).order_by('id').first()
+        return 
+
+    @property
     def order_payment_date(self):
         payment_date = self.order.payment_date.date()
         return payment_date
