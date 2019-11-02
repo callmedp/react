@@ -78,7 +78,9 @@ class OrderMixin(CartMixin, ProductInformationMixin):
             order.pincode = cart_obj.pincode
             order.state = cart_obj.state
             order.country = cart_obj.country
-            order.utm_params = json.dumps(self.request.session.get('utm',{}))
+            utm = self.request.session.get('utm',{})
+            
+            order.utm_params = json.dumps(utm) if utm and isinstance(utm,dict) else '{}'
 
             # set currency
             order.currency = 0

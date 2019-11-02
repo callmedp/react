@@ -595,11 +595,12 @@ def generate_pixel_report(task=None, url_slug=None, days=None):
     up_task.save()
 
 def get_file_obj(file_name):
-        if settings.IS_GCP:
-            generated_file_obj = GCPPrivateMediaStorage().open(file_name, 'wb')
-        else:
-            generated_file_obj = open(settings.MEDIA_ROOT + '/' + file_name, 'w')
-        return generated_file_obj
+    import ipdb; ipdb.set_trace()
+    if settings.IS_GCP:
+        generated_file_obj = GCPPrivateMediaStorage().open(file_name, 'wb')
+    else:
+        generated_file_obj = open(settings.MEDIA_ROOT + '/' + file_name, 'w')
+    return generated_file_obj
 
 def write_row(sheet,data, row=0, start_col=0):
     try:
@@ -611,6 +612,7 @@ def write_row(sheet,data, row=0, start_col=0):
 
 @task(name="generate_feedback_report")
 def generate_feedback_report(sid,start_date,end_date):
+    import ipdb; ipdb.set_trace()
     from order.models import OrderItemFeedbackOperation,OrderItemFeedback
     from datetime import datetime,timedelta
 
@@ -627,7 +629,7 @@ def generate_feedback_report(sid,start_date,end_date):
                 'Feedaback Call Attempted Date Time', 'Satisfaction Status', 'Resolution', 'Payment Date Time']
     write_row(sheet,heading,)
 
-    oi_feedbacks = OrderItemFeedback.objects.filter(created__gte=start_date,created__lte=end_date)
+    oi_feedbacks = OrderItemFeedback.objects.filter(created__gte=start_date,created__lte=end_date)[:2]
     logging.getLogger('info_log').info(\
         "Total Order Item Feedback Found {}".format(oi_feedbacks.count()))
     
@@ -685,7 +687,7 @@ def generate_feedback_report(sid,start_date,end_date):
         payment_date = oi_feedback.order_item.order.payment_date.strftime('%d/%m/%Y, %H:%M:%S') if oi_feedback.order_item\
                      and oi_feedback.order_item.order and oi_feedback.order_item.order.payment_date else ''
        
-        product_name = oi_feedback.order_item.product.name if oi_feedback.orderitem and oi_feedback.order_item.product else ''
+        product_name = oi_feedback.order_item.product.name if oi_feedback.order_item and oi_feedback.order_item.product else ''
         excel_row = [
                         None, None, None,None,None, None, product_name, feedback_attempted_date_time\
                         , oi_feedback.category_text,oi_feedback.resolution_text, payment_date
@@ -702,6 +704,7 @@ def generate_feedback_report(sid,start_date,end_date):
         logging.getLogger('info_log').info("Saved Data to GCP")
     else:
         workbook.save(file_obj.name)
+    file_obj.close()
     
     logging.getLogger('info_log').info(\
         "Feedback Report Task Complete for {},{},{}".format(sid,start_date,end_date))
