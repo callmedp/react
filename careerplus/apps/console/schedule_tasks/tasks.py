@@ -595,7 +595,6 @@ def generate_pixel_report(task=None, url_slug=None, days=None):
     up_task.save()
 
 def get_file_obj(file_name):
-    import ipdb; ipdb.set_trace()
     if settings.IS_GCP:
         generated_file_obj = GCPPrivateMediaStorage().open(file_name, 'wb')
     else:
@@ -612,9 +611,8 @@ def write_row(sheet,data, row=0, start_col=0):
 
 @task(name="generate_feedback_report")
 def generate_feedback_report(sid,start_date,end_date):
-    import ipdb; ipdb.set_trace()
     from order.models import OrderItemFeedbackOperation,OrderItemFeedback
-    from datetime import datetime,timedelta
+    from datetime import datetime
 
     logging.getLogger('info_log').info(\
         "Feedback Report Task Started for {},{},{}".format(sid,start_date,end_date))
@@ -628,8 +626,7 @@ def generate_feedback_report(sid,start_date,end_date):
     heading = ['Feedback Call Assigned Date Time','CustomerID','Status','Agent Name','LTV','Follow Up Date Time','Item Name',\
                 'Feedaback Call Attempted Date Time', 'Satisfaction Status', 'Resolution', 'Payment Date Time']
     write_row(sheet,heading,)
-
-    oi_feedbacks = OrderItemFeedback.objects.filter(created__gte=start_date,created__lte=end_date)[:2]
+    oi_feedbacks = OrderItemFeedback.objects.filter(created__gte=start_date,created__lte=end_date)
     logging.getLogger('info_log').info(\
         "Total Order Item Feedback Found {}".format(oi_feedbacks.count()))
     

@@ -14,7 +14,7 @@ from scheduler.models import Scheduler
 from console.schedule_tasks.tasks import generate_feedback_report
 
 #python imports
-from datetime import datetime
+from datetime import datetime,timedelta
 import logging
 
 
@@ -37,7 +37,7 @@ class FeedbackReportView(UserGroupMixin, TemplateView):
 
         try:
             start_date = datetime.strptime(start_date_str,'%Y/%m/%d')
-            end_date = datetime.strptime(end_date_str,'%Y/%m/%d')
+            end_date = datetime.strptime(end_date_str,'%Y/%m/%d') + timedelta(days=1)
         except Exception as e:
             logging.getLogger('error_log').error("Unable to parse date {}".format(e))
             messages.add_message(self.request, messages.ERROR, "Please provide start and end date") 
