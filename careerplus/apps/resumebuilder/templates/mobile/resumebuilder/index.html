@@ -15,12 +15,22 @@
     <meta name="theme-color" content="#000000"/>
     {% endblock meta_html %}
 
-    
+    {% block django_meta %}
+    {% endblock django_meta %}
+
     {% block css_section %}
     <link rel="stylesheet" type="text/css" charset="UTF-8" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" /> 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
         {% render_bundle 'main' 'css' 'MOBILE' %}
     {% endblock css_section %}
+
+    {% block banner_ads %}
+    {% endblock banner_ads %}
+    
+    {% block marketing_pixel %}
+    {% endblock marketing_pixel %}
+
+
     <script>
         window.config = {}
         config.staticUrl = "{{STATIC_URL}}"
@@ -43,15 +53,28 @@
     </script>
 {% endblock head %}
 
+
+{% block main_container %}
+{% block header %}
+{% block back_icon %}
+{% endblock back_icon %}
+{% block header_title %}{% endblock header_title %}
+{% endblock header %}
+{% block container %}
+    {% block call_us %}{% endblock call_us %}
+    <div id="react-app"  oncontextmenu="return false;"></div>
+    <!-- Webpack rendered JS -->
+{% endblock container %}
+
+{% block footer %}
+
+{% endblock footer %}
+
 {% block navigation %}
 
 {% endblock navigation %}
 
-
-{% block container %}
-    <div id="react-app"  oncontextmenu="return false;"></div>
-    <!-- Webpack rendered JS -->
-{% endblock container %}
+{% endblock main_container %}
 
 {% block js_section %}
     <script>
@@ -67,9 +90,10 @@
 
 {% endblock js_section %}
 
-{% block footer %}
 
-{% endblock footer %}
+{% block banner_ads_bottom %}
+
+{% endblock banner_ads_bottom %}
 
 {% block marketingpopup %}
 
@@ -78,3 +102,7 @@
 {% block  jquery_block %}
 
 {%endblock jquery_block %}
+
+{% block zendesk %}
+
+{% endblock zendesk %}
