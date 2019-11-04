@@ -611,7 +611,6 @@ def write_row(sheet,data, row=0, start_col=0):
 
 @task(name="generate_feedback_report")
 def generate_feedback_report(sid,start_date,end_date):
-    import ipdb; ipdb.set_trace()
     from order.models import OrderItemFeedbackOperation,OrderItemFeedback
     from datetime import datetime
 
