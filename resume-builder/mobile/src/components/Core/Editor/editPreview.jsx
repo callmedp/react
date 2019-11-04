@@ -18,10 +18,13 @@ class EditPreview extends Component {
     constructor(props) {
         super(props);
         if (parseInt(localStorage.getItem('experience') || 0) >= 4) {
-            document.getElementsByClassName('chat-bot')[0].style.display = 'none';
+            if(document.getElementsByClassName('chat-bot')){document.getElementsByClassName('chat-bot')[0].style.display = 'none';
+            }
         }
         else {
-            document.getElementsByClassName('chat-bot')[0].style.display = 'block';
+            if(document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]){
+                document.getElementsByClassName('chat-bot')[0].style.display = 'block';
+            }
         }
         this.changeLink = this.changeLink.bind(this)
         this.headingChange = this.headingChange.bind(this);

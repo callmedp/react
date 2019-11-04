@@ -19,10 +19,14 @@ class Buy extends Component {
         super(props);
         
         if(parseInt(localStorage.getItem('experience')|| 0) >= 4){
-            document.getElementsByClassName('chat-bot')[0].style.display='none'; 
+            if(document.getElementsByClassName('chat-bot')){
+                document.getElementsByClassName('chat-bot')[0].style.display='none'; 
+            }
         }
         else{
-            document.getElementsByClassName('chat-bot')[0].style.display='block'; 
+            if(document.getElementsByClassName('chat-bot')){
+                document.getElementsByClassName('chat-bot')[0].style.display='block';
+                } 
         }
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
         this.state = {
