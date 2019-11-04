@@ -611,6 +611,7 @@ def write_row(sheet,data, row=0, start_col=0):
 
 @task(name="generate_feedback_report")
 def generate_feedback_report(sid,start_date,end_date):
+    import ipdb; ipdb.set_trace()
     from order.models import OrderItemFeedbackOperation,OrderItemFeedback
     from datetime import datetime
 
@@ -633,14 +634,14 @@ def generate_feedback_report(sid,start_date,end_date):
     merged_row_data = {'merge_fields':['assigned_date','candidate_id','status','agent_name','ltv','follow_up']}
     row = 1
     merge_row_start_pos = None
-    current_feedback_id = None
+    previous_feedback_id = None
 
     for oi_feedback in oi_feedbacks:
 
         logging.getLogger('info_log').info(\
             "Adding a row for OI Feedback {}".format(oi_feedback.id))
 
-        if current_feedback_id != oi_feedback.customer_feedback.id:
+        if previous_feedback_id != oi_feedback.customer_feedback.id:
             if merge_row_start_pos:
                 logging.getLogger('info_log').info(\
                     "Merging rows of a column ")
@@ -648,7 +649,7 @@ def generate_feedback_report(sid,start_date,end_date):
                     sheet.write_merge(merge_row_start_pos, row - 1, index, index, merged_row_data.get(field,''))
 
             assigned_date = ''
-            assigned_date_list = OrderItemFeedbackOperation.objects.filter(customer_feedback=current_feedback_id,\
+            assigned_date_list = OrderItemFeedbackOperation.objects.filter(customer_feedback=oi_feedback.customer_feedback.id,\
                                 oi_type__in=[3,4]).values_list('added_on',flat=True)
             
             for date in assigned_date_list:
@@ -661,9 +662,9 @@ def generate_feedback_report(sid,start_date,end_date):
             ltv = oi_feedback.customer_feedback.ltv
 
             follow_up = ''
-            follow_up_list = OrderItemFeedbackOperation.objects.filter(customer_feedback=current_feedback_id,oi_type=5)\
+            follow_up_list = OrderItemFeedbackOperation.objects.filter(customer_feedback=oi_feedback.customer_feedback.id,oi_type=5)\
                         .values_list('follow_up_date',flat=True)
-                        
+
             for date in follow_up_list:
                 if not date:
                     continue
@@ -677,11 +678,11 @@ def generate_feedback_report(sid,start_date,end_date):
                 'ltv':ltv,
                 'follow_up':follow_up
             })
-            current_feedback_id =  oi_feedback.customer_feedback.id
+            previous_feedback_id =  oi_feedback.customer_feedback.id
 
             merge_row_start_pos = row
 
-        feedback_attempted_date_time = OrderItemFeedbackOperation.objects.filter(customer_feedback=current_feedback_id,\
+        feedback_attempted_date_time = OrderItemFeedbackOperation.objects.filter(customer_feedback=oi_feedback.customer_feedback.id,\
                                         order_item = oi_feedback.order_item, oi_type=1).first()
 
         feedback_attempted_date_time = feedback_attempted_date_time.added_on.strftime('%d/%m/%Y, %H:%M:%S') if \
