@@ -55,7 +55,7 @@ class WelcomeCallInfo(object):
             if oi.product.type_flow == 16 or oi.product.vendor.slug == 'neo':
                 continue
             # for variation parent/child refund request is done on child and welcome call on parent.
-            if oi.no_process and bool(list(oi.orderitem_set.values_list('refund_items'))):
+            if oi.no_process and bool(list(oi.orderitem_set.exclude(refund_items=None))):
                 continue
             
             if oi.refund_items.exists():
