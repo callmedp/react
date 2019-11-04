@@ -636,6 +636,7 @@ def generate_feedback_report(sid,start_date,end_date):
     current_feedback_id = None
 
     for oi_feedback in oi_feedbacks:
+
         logging.getLogger('info_log').info(\
             "Adding a row for OI Feedback {}".format(oi_feedback.id))
 
@@ -659,7 +660,7 @@ def generate_feedback_report(sid,start_date,end_date):
 
             follow_up = None
             follow_up_list = OrderItemFeedbackOperation.objects.filter(customer_feedback=current_feedback_id,oi_type=5)\
-                        .values_list('added_on',flat=True)
+                        .values_list('follow_up_date',flat=True)
             for date in follow_up_list:
                 follow_up += date.strftime('%d/%m/%Y, %H:%M:%S') + '|'
 
