@@ -10,7 +10,7 @@ import Header from "../../Common/Header/header.jsx";
 import LoaderPage from '../../Loader/loaderPage.jsx'
 import {scroller} from 'react-scroll';
 import queryString from "query-string";
-import {hideModal, showModal} from "../../../store/ui/actions";
+import {hideModal, showModal, showLoginModal, hideLoginModal} from "../../../store/ui/actions";
 import {displaySelectedTemplate} from '../../../store/template/actions';
 import {eventClicked} from '../../../store/googleAnalytics/actions/index';
 
@@ -65,12 +65,16 @@ class Home extends Component {
     }
 
     static getActions() {
-        return [loginCandidate, getComponentTitle]
+        return [getComponentTitle]
     }
 
     static async fetching({dispatch}, params) {
-        const actionList = Home.getActions();
+        let actionList = Home.getActions();
         const results = [];
+        // remove the api for loginCandidate if no alt token received
+        // if (!params['alt']) {
+        //     actionList = actionList.filter((el,index) => index !== 0 );
+        // }
         for (const [index, value] of actionList.entries()) {
               results[index] = await new Promise((resolve, reject) => dispatch(value({
                 info: params,
@@ -310,6 +314,12 @@ const mapDispatchToProps = (dispatch) => {
         },
         'hideModal': () => {
             return dispatch(hideModal())
+        },
+        'showLoginModal': () =>{
+            return dispatch(showLoginModal())
+        },
+        'hideLoginModal': () =>{
+            return dispatch(hideLoginModal())
         },
         'displaySelectedTemplate': (templateId) => {
             return dispatch(displaySelectedTemplate(templateId))

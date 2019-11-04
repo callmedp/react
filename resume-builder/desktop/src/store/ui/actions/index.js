@@ -14,7 +14,9 @@ import {
     SHOW_GENERATE_RESUME_MODAL,
     HIDE_GENERATE_RESUME_MODAL,
     HIDE_HELP_MODAL,
-    SHOW_HELP_MODAL
+    SHOW_HELP_MODAL,
+    SHOW_LOGIN_MODAL,
+    HIDE_LOGIN_MODAL
 } from "./actionTypes";
 
 
@@ -137,3 +139,21 @@ export const hideHelpModal = () => {
         data: {helpModal: false}
     }
 }
+
+
+export const showLoginModal = () => {
+    return {
+        type: SHOW_LOGIN_MODAL,
+        data: {loginModal: true}
+    }
+}
+
+export const hideLoginModal = () => {
+    return {
+        type: HIDE_LOGIN_MODAL,
+        data: {loginModal: false}
+    }
+}
+
+
+

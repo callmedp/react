@@ -4,13 +4,11 @@ import {matchRoutes} from 'react-router-config';
 
 var path = require('path');
 
-
 import render from './render';
 
 const fs = require('fs');
 
-
-const timestamp = fs.readFileSync(`${process.env.STATIC_FILE_PATH}`, "utf8");
+const timestamp = '1572350135076' //fs.readFileSync(`${process.env.STATIC_FILE_PATH}`, "utf8");
 
 let userAgents = '', store, routes, isMobile = false,paramObj = {
     alt:''
@@ -60,10 +58,12 @@ app.use(function (req, res, next) {
     next();
 });
 
-
 app.use('/resume-builder/dist', express.static('dist'));
+
 app.use('/media/static/react/assets/images', express.static('assets/images'));
+
 app.use('/media/static/resumebuilder/images', express.static('assets/resumebuilder/images'));
+
 app.get('*', async (req, res) => {
 
     const checkIsMobile = (userAgents) => {
@@ -89,7 +89,7 @@ app.get('*', async (req, res) => {
                     paramObj['alt'] = req.query.token 
                 }
                 result = await route.component.fetching(store, paramObj);
-                context['title'] = result[1];
+                context['title'] = result[0];
             } catch (e) {
                 console.log("Error in Api", e);
             }
