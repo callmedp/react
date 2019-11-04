@@ -316,7 +316,7 @@ const checkError = () => {
                 showError('#feedback-comment')
                 error = true;
             }
-            else if (key == 'category' || key == 'resolution' && !item ){
+            else if ((key == 'category' && !item) || (key == 'resolution' && !item) ){
                 showError(`#${key}-choices`,true);
                 error = true;
             }
