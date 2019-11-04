@@ -652,6 +652,8 @@ def generate_feedback_report(sid,start_date,end_date):
                                 oi_type__in=[3,4]).values_list('added_on',flat=True)
             
             for date in assigned_date_list:
+                if not date:
+                    continue
                 assigned_date += date.strftime('%d/%m/%Y, %H:%M:%S') + ' | '
 
             assigned_to = oi_feedback.customer_feedback.assigned_to.name if oi_feedback.customer_feedback and \
@@ -661,7 +663,10 @@ def generate_feedback_report(sid,start_date,end_date):
             follow_up = ''
             follow_up_list = OrderItemFeedbackOperation.objects.filter(customer_feedback=current_feedback_id,oi_type=5)\
                         .values_list('follow_up_date',flat=True)
+                        
             for date in follow_up_list:
+                if not date:
+                    continue
                 follow_up += date.strftime('%d/%m/%Y, %H:%M:%S') + ' | '
 
             merged_row_data.update({
