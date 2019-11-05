@@ -238,7 +238,7 @@ def generate_and_upload_resume_pdf(data):
             number=order.mobile,
             candidate_id=candidate_id,
             extracurricular="",
-            entity_preference= ENTITY_LIST,
+            entity_preference_data=str(ENTITY_LIST),
             selected_template=1
         )
         first_save = True
