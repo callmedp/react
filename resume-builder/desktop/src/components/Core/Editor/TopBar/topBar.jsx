@@ -29,8 +29,8 @@ export default class TopBar extends Component {
     }
 
     render() {
-        let {page, userInfo: {selected_template, order_data}, showAlertModal} = this.props;
-        if (localStorage.getItem('selected_template')) {
+        let {page, userInfo: {selected_template, order_data, resume_generated}, showAlertModal} = this.props;
+        if (localStorage.getItem('selected_template') && parseInt(selected_template || 0) !== -1) {
             selected_template = localStorage.getItem('selected_template')
         }
         const newUser = localStorage.getItem('newUser');
@@ -66,7 +66,7 @@ export default class TopBar extends Component {
                             </div> :
                             page === 'buy' ?
                                 '' :
-                                !!(!(order_data && order_data.id)) ?
+                                !!(!(order_data && order_data.id) || !(resume_generated)) ?
                                     <div className="top-banner--banner-right">
                                         <div>
                                             <button className="orange-button mr-10"

@@ -12,7 +12,10 @@ import {SubmissionError} from 'redux-form'
 
 
 function modifyPersonalInfo(data) {
-    let {date_of_birth, gender, extracurricular, image} = data;
+    let {date_of_birth, gender, extracurricular, image, first_name, selected_template} = data; 
+    if(!first_name){
+        localStorage.setItem('newUser',true);
+    }
     let newData = {
         ...data,
         ...{
@@ -65,7 +68,10 @@ function* updatePersonalDetails(action) {
         if (localStorage.getItem('newUser')) {
             localStorage.removeItem('newUser')
         }
-        if (localStorage.getItem('selected_template')) {
+        const {resume_generated, order_data} = personalDetails;
+        const isOrderedAndSingle = Object.keys(order_data).length  ?( order_data.combo ? false: true) : false; 
+
+        if (localStorage.getItem('selected_template') &&  !(resume_generated && isOrderedAndSingle )) {
             personalDetails = {
                 ...personalDetails,
                 ...{

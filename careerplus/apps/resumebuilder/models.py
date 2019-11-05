@@ -41,6 +41,7 @@ class CandidateProfile(AbstractAutoDate):
     extra_info = models.TextField('Extra Information', blank=True, null=True)
     entity_preference_data = models.TextField(blank=True, null=True)
     upload_resume = models.BooleanField('Upload Resume', default=True)
+    resume_generated = models.BooleanField('Resume Generated', default=True)
 
     @property
     def owner_id(self):

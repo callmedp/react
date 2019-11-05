@@ -120,7 +120,15 @@ class RightSection extends Component {
 
         // this.props.handleSwap([currentItem, nextItem])
     }
-
+    
+    // handleResumeGeneration(orderId){
+    //     showGenerateResumeModal()
+    //         reGeneratePDF(order_data.id)
+    //         setTimeout(function() {
+    //             window.location.href = `${siteDomain}/dashboard`
+    //             hideGenerateResumeModal()
+    //         }, 5000);
+    // }
     renderSwitch() {
         const {entityList, ui: {showMoreSection}, hideMoreSection} = this.props;
         let entity, nextEntity;

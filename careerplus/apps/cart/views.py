@@ -77,8 +77,7 @@ class AddToCartView(View, CartMixin):
     def dispatch(self, request, *args, **kwargs):
         return super(AddToCartView, self).dispatch(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
-
+    def post(self, request, *args, **kwargs): 
         data = {"status": -1}
         cart_type = request.POST.get('cart_type')
         prod_id = request.POST.get('prod_id', '')

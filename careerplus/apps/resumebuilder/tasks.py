@@ -239,6 +239,7 @@ def generate_and_upload_resume_pdf(data):
             candidate_id=candidate_id,
             extracurricular="",
             entity_preference_data=str(ENTITY_LIST),
+            resume_generated= False,
             selected_template=1
         )
         first_save = True

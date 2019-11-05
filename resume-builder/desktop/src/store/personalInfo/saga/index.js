@@ -26,7 +26,10 @@ const genderDict = {
 }
 
 function modifyPersonalInfo(data) {
-    const {date_of_birth, gender, extracurricular, entity_preference_data} = data;
+    const {date_of_birth, gender, extracurricular, entity_preference_data,first_name} = data;
+    if(!first_name){
+        localStorage.setItem('newUser',true);
+    }
     data = {
         ...data,
         ...{
@@ -106,7 +109,9 @@ function* updatePersonalDetails(action) {
         if (localStorage.getItem('newUser')) {
             localStorage.removeItem('newUser')
         }
-        if (localStorage.getItem('selected_template')) {
+        const {resume_generated, order_data} = personalDetails;
+        const isOrderedAndSingle = Object.keys(order_data).length  ?( order_data.combo ? false: true) : false; 
+        if (localStorage.getItem('selected_template') &&  !(resume_generated && isOrderedAndSingle )) {
             personalDetails = {
                 ...personalDetails,
                 ...{
