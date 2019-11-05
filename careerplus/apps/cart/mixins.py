@@ -201,6 +201,11 @@ class CartMixin(object):
                 request.session.create()
             sessionid = request.session.session_key
             cart_users = []
+            utm_params = request.session.get('utm')
+
+            if utm_params and isinstance(utm_params, dict):
+                utm_params = json.dumps(utm_params)
+
             if candidate_id:
                 cart_users = Cart.objects.filter(owner_id=candidate_id, status=2)
 
@@ -240,6 +245,12 @@ class CartMixin(object):
 
             # update cart_obj in session
             if cart_obj:
+                # before updating the cart in session updating the utm params in
+                # cart objects
+                if utm_params:
+                    cart_obj.utm_params = utm_params
+                    cart_obj.save()
+
                 request.session.update({
                     "cart_pk": cart_obj.pk,
                     "checkout_type": 'cart',
