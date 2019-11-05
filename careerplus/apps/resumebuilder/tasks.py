@@ -10,10 +10,10 @@ from django.template.loader import get_template
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 # local imports
+from .constants import ENTITY_LIST
 
 # inter app imports
 from core.library.gcloud.custom_cloud_storage import GCPResumeBuilderStorage
-
 # third party imports
 import zipfile
 import imgkit, pdfkit
@@ -231,14 +231,17 @@ def generate_and_upload_resume_pdf(data):
     candidate_id = order.candidate_id
     template_id = int(template_no)
     candidate = Candidate.objects.filter(candidate_id=candidate_id).first()
+    first_save = False 
     if not candidate:
         candidate = Candidate.objects.create(
             email=order.email,
             number=order.mobile,
             candidate_id=candidate_id,
             extracurricular="",
-            entity_preference="{}"
+            entity_preference= ENTITY_LIST,
+            selected_template=1
         )
+        first_save = True
         candidate.save()
         
         
@@ -317,7 +320,7 @@ def generate_and_upload_resume_pdf(data):
         send_resume_in_mail_resume_builder(['resume', pdf_file], data)
 
     # uploading resume on the shine 
-    if template_id == int(candidate.selected_template or 0) and candidate.upload_resume:
+    if template_id == int(candidate.selected_template or 0) and candidate.upload_resume and not first_save:
         info = {
             'candidate_id': candidate_id,
             'upload_medium': 'direct',
