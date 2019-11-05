@@ -145,14 +145,15 @@ export class PersonalInfo extends Component {
                             <div className="flex-container">
                                 <fieldset>
                                     <label>First Name</label>
-
+                                    {/*  Temporary disabled closed due to expert assitance */}
                                     <Field component={renderField} type={"text"} iconClass={'icon-name'}
-                                           name="first_name" maxLength={"20"} disabled={order_data && order_data.id ? true: false}/>
+                                           name="first_name" maxLength={"20"} disabled={order_data && order_data.id && false ? true: false}/>
                                 </fieldset>
                                 <fieldset>
                                     <label>Last Name</label>
+                                    {/*  Temporary disabled closed due to expert assitance */}
                                     <Field component={renderField}
-                                           iconClass={'icon-surname'} disabled={order_data && order_data.id ? true: false}
+                                           iconClass={'icon-surname'} disabled={order_data && order_data.id && false ? true: false}
                                            type={"text"} name="last_name" maxLength={"20"}/>
                                 </fieldset>
                             </div>
