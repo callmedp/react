@@ -600,7 +600,6 @@ def process_jobs_on_the_move(obj_id=None):
             )
             obj.update_pending_links_count()
 
-
 @task
 def generate_resume_for_order(order_id):
     from resumebuilder.models import Candidate
@@ -616,7 +615,13 @@ def generate_resume_for_order(order_id):
             break
     product = Product.objects.filter(id=product_id).first()
     is_combo = True if product.attr.get_value_by_attribute(product.attr.get_attribute_by_name('template_type')).value == 'multiple'  else False
-    selected_template = Candidate.objects.filter(candidate_id = candidate_id).first().selected_template
+    candidate_obj = Candidate.objects.filter(candidate_id = candidate_id).first()
+    # if not candidate_obj create it by yourself. 
+    if not candidate_obj:
+        selected_template = 1 
+    else: 
+        selected_template = candidate_obj.selected_template or 1 
+    # selected_template
     builder_obj = ResumeGenerator()
     builder_obj.save_order_resume_pdf(order=order_obj,is_combo=is_combo,index=selected_template)
 
