@@ -2271,13 +2271,19 @@ class ActionProductView(View, ProductValidation):
             allowed_action = []
 
             if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
-                allowed_action = ['active', 'inactive','index', 'unindex']
+                allowed_action = ['active', 'inactive','index', 'unindex',"show-on-crm","hide-on-crm"]
             else:
                 allowed_action = []
 
             if action and action in allowed_action:
                 try:
                     product = Product.objects.get(pk=pk_obj)
+                    
+                    if action == "show-on-crm" and not product.is_indexable:
+                        data = {'error': 'True'}
+                        messages.error(self.request,"Only indexable products can be visible on CRM.")
+                        return HttpResponse(json.dumps(data), content_type="application/json")
+
                     if action == "active":
                         if self.validate_before_active(request=self.request,product=product):    
                             product.active = True
@@ -2325,25 +2331,45 @@ class ActionProductView(View, ProductValidation):
                                     sibling.save()
                             messages.success(
                                 self.request,
-                                    "Product will be indexing!") 
+                                    "Product will now be indexed.") 
                             data = {'success': 'True',
                                 'next_url': reverse('console:product-change', kwargs={'pk': product.pk}) }
                         else:
                             data = {'error': 'True'}
                     elif action == "unindex":
-                            product.is_indexable = False
-                            product.save()
-                            if product.type_product == 1:
-                                childs = product.mainproduct.all()
-                                for child in childs:
-                                    sibling = child.sibling
-                                    sibling.is_indexable = False
-                                    sibling.save()
-                            messages.success(
-                                self.request,
-                                    "Product is removed from indexing!") 
-                            data = {'success': 'True',
-                                'next_url': reverse('console:product-change', kwargs={'pk': product.pk}) }
+                        product.is_indexable = False
+                        product.save()
+                        if product.type_product == 1:
+                            childs = product.mainproduct.all()
+                            for child in childs:
+                                sibling = child.sibling
+                                sibling.is_indexable = False
+                                sibling.save()
+                        messages.success(
+                            self.request,
+                                "Product is removed from indexing!") 
+                        data = {'success': 'True',
+                            'next_url': reverse('console:product-change', kwargs={'pk': product.pk}) }
+
+                    elif action in ["show-on-crm","hide-on-crm"]:
+                        action_bool_mapping = {"show-on-crm":True,
+                                            "hide-on-crm":False}
+
+                        setattr(product,"visible_on_crm",action_bool_mapping.get(action))
+                        product.save()
+                        
+                        if product.type_product == 1:
+                            childs = product.mainproduct.filter(active=True)
+                            for child in childs:
+                                sibling = child.sibling
+                                setattr(sibling,"visible_on_crm",action_bool_mapping.get(action))
+                                sibling.save()
+                        
+                        messages.success(self.request,"CRM visibility updated.") 
+                        data = {'success': 'True',
+                            'next_url': reverse('console:product-change', kwargs={'pk': product.pk}) }
+                        
+
                 except Exception as e:
                     logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
 

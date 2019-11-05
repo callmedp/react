@@ -226,6 +226,19 @@
             </div>
       
         {% endif %}
+        {% if not object.visible_on_crm %}
+    
+          <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >
+              <a class="btn btn-app click-modal" data-msg="show-on-crm">
+                <i class="fa fa-check-square-o"></i> Show on CRM</a>
+            </div>
+        {% else %}
+          <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >
+              <a class="btn btn-app click-modal" data-msg="hide-on-crm">
+                <i class="fa fa-minus-square"></i> Hide On CRM</a>
+            </div>
+      
+        {% endif %}
     </div>
     <form class="form-horizontal form-label-left" method="POST" novalidate id="approval-form">
       {% csrf_token %}

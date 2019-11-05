@@ -1032,6 +1032,9 @@ class Product(AbstractProduct, ModelMeta):
     reviews = GenericRelation(Review, related_query_name='reviews')
     is_indexable = models.BooleanField(default=False)
     is_indexed = models.BooleanField(default=False)
+    visible_on_crm = models.BooleanField(default=True)
+    
+    #associated model managers
     objects = ProductManager()
     selected = SelectedFieldProductManager()
     indexable = IndexableProductManager()

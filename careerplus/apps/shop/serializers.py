@@ -48,7 +48,8 @@ class CRMProductSerializer(ModelSerializer):
             'attributes',
             'active',
             'delivery_type',
-            'short_description'
+            'short_description',
+            'visible_on_crm'
         ]
 
     def get_display_name(self,obj):
