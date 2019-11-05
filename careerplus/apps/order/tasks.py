@@ -682,7 +682,7 @@ def bypass_resume_midout(order_id):
             break
     
     if not old_resume:
-        logging.getLogger('info_log').infoe("Old Resume Not Found")
+        logging.getLogger('info_log').info("Old Resume Not Found")
         return
     
     #order items to update old resume in new order ->(order items)
