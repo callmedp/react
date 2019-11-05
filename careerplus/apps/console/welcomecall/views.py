@@ -54,6 +54,13 @@ class WelcomeCallInfo(object):
             # Do not consider assesment items in welcome call
             if oi.product.type_flow == 16 or oi.product.vendor.slug == 'neo':
                 continue
+            # for variation parent/child refund request is done on child and welcome call on parent.
+            if oi.no_process and bool(list(oi.orderitem_set.exclude(refund_items=None))):
+                continue
+            
+            if oi.refund_items.exists():
+                continue
+
             addons = data.get('addons')
             variations = data.get('variations')
             combos = data.get('combos')
@@ -149,6 +156,18 @@ class WelcomeQueueView(ListView, PaginationMixin):
 
     def get_context_data(self, **kwargs):
         context = super(WelcomeQueueView, self).get_context_data(**kwargs)
+        k = context['object_list'].values('id','orderitems__oi_status','orderitems__no_process')
+        refund_order_dict = {}
+        for oi in k:
+            if oi['id'] not in refund_order_dict:
+                refund_order_dict[oi['id']] = {'total_count':0, 'refund_count':0}
+
+            if oi['orderitems__no_process'] == True:
+                continue
+            else:
+                if oi['orderitems__oi_status'] in [161]:
+                    refund_order_dict[oi['id']]['refund_count'] += 1
+                refund_order_dict[oi['id']]['total_count'] += 1
         paginator = Paginator(context['object_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
@@ -162,6 +181,7 @@ class WelcomeQueueView(ListView, PaginationMixin):
             "action_form": WelcomeCallAssignedForm(),
             "messages": alert,
             "filter_form": filter_form,
+            'refund_order_dict': refund_order_dict,
             "query": self.query,
             self.sel_opt: 'checked',
         })
@@ -171,7 +191,8 @@ class WelcomeQueueView(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(WelcomeQueueView, self).get_queryset()
         queryset = queryset.filter(
-            status=1, welcome_call_done=False)
+            status=1, welcome_call_done=False
+        ).exclude(status=5)
         try:
             if self.query:
 

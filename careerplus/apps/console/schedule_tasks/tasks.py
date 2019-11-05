@@ -595,11 +595,11 @@ def generate_pixel_report(task=None, url_slug=None, days=None):
     up_task.save()
 
 def get_file_obj(file_name):
-        if settings.IS_GCP:
-            generated_file_obj = GCPPrivateMediaStorage().open(file_name, 'wb')
-        else:
-            generated_file_obj = open(settings.MEDIA_ROOT + '/' + file_name, 'w')
-        return generated_file_obj
+    if settings.IS_GCP:
+        generated_file_obj = GCPPrivateMediaStorage().open(file_name, 'wb')
+    else:
+        generated_file_obj = open(settings.MEDIA_ROOT + '/' + file_name, 'w')
+    return generated_file_obj
 
 def write_row(sheet,data, row=0, start_col=0):
     try:
@@ -612,7 +612,7 @@ def write_row(sheet,data, row=0, start_col=0):
 @task(name="generate_feedback_report")
 def generate_feedback_report(sid,start_date,end_date):
     from order.models import OrderItemFeedbackOperation,OrderItemFeedback
-    from datetime import datetime,timedelta
+    from datetime import datetime
 
     logging.getLogger('info_log').info(\
         "Feedback Report Task Started for {},{},{}".format(sid,start_date,end_date))
@@ -626,43 +626,48 @@ def generate_feedback_report(sid,start_date,end_date):
     heading = ['Feedback Call Assigned Date Time','CustomerID','Status','Agent Name','LTV','Follow Up Date Time','Item Name',\
                 'Feedaback Call Attempted Date Time', 'Satisfaction Status', 'Resolution', 'Payment Date Time']
     write_row(sheet,heading,)
-
-    oi_feedbacks = OrderItemFeedback.objects.filter(created__gte=start_date,created__lte=end_date+timedelta(days=1))
+    oi_feedbacks = OrderItemFeedback.objects.filter(created__gte=start_date,created__lte=end_date)
     logging.getLogger('info_log').info(\
         "Total Order Item Feedback Found {}".format(oi_feedbacks.count()))
     
     merged_row_data = {'merge_fields':['assigned_date','candidate_id','status','agent_name','ltv','follow_up']}
     row = 1
     merge_row_start_pos = None
-    current_feedback_id = None
+    previous_feedback_id = None
 
     for oi_feedback in oi_feedbacks:
+
         logging.getLogger('info_log').info(\
             "Adding a row for OI Feedback {}".format(oi_feedback.id))
 
-        if current_feedback_id != oi_feedback.customer_feedback.id:
+        if previous_feedback_id != oi_feedback.customer_feedback.id:
             if merge_row_start_pos:
                 logging.getLogger('info_log').info(\
                     "Merging rows of a column ")
                 for index,field in  enumerate(merged_row_data.get('merge_fields',[])):
                     sheet.write_merge(merge_row_start_pos, row - 1, index, index, merged_row_data.get(field,''))
 
-            assigned_date = None
-            assigned_date_list = OrderItemFeedbackOperation.objects.filter(customer_feedback=current_feedback_id,\
+            assigned_date = ''
+            assigned_date_list = OrderItemFeedbackOperation.objects.filter(customer_feedback=oi_feedback.customer_feedback.id,\
                                 oi_type__in=[3,4]).values_list('added_on',flat=True)
             
             for date in assigned_date_list:
-                assigned_date += date.strftime('%d/%m/%Y, %H:%M:%S') + '|'
+                if not date:
+                    continue
+                assigned_date += date.strftime('%d/%m/%Y, %H:%M:%S') + ' | '
 
             assigned_to = oi_feedback.customer_feedback.assigned_to.name if oi_feedback.customer_feedback and \
                         oi_feedback.customer_feedback.assigned_to else ''
             ltv = oi_feedback.customer_feedback.ltv
 
-            follow_up = None
-            follow_up_list = OrderItemFeedbackOperation.objects.filter(customer_feedback=current_feedback_id,oi_type=5)\
-                        .values_list('added_on',flat=True)
+            follow_up = ''
+            follow_up_list = OrderItemFeedbackOperation.objects.filter(customer_feedback=oi_feedback.customer_feedback.id,oi_type=5)\
+                        .values_list('follow_up_date',flat=True)
+
             for date in follow_up_list:
-                follow_up += date.strftime('%d/%m/%Y, %H:%M:%S') + '|'
+                if not date:
+                    continue
+                follow_up += date.strftime('%d/%m/%Y, %H:%M:%S') + ' | '
 
             merged_row_data.update({
                 'assigned_date': assigned_date,
@@ -672,11 +677,11 @@ def generate_feedback_report(sid,start_date,end_date):
                 'ltv':ltv,
                 'follow_up':follow_up
             })
-            current_feedback_id =  oi_feedback.customer_feedback.id
+            previous_feedback_id =  oi_feedback.customer_feedback.id
 
             merge_row_start_pos = row
 
-        feedback_attempted_date_time = OrderItemFeedbackOperation.objects.filter(customer_feedback=current_feedback_id,\
+        feedback_attempted_date_time = OrderItemFeedbackOperation.objects.filter(customer_feedback=oi_feedback.customer_feedback.id,\
                                         order_item = oi_feedback.order_item, oi_type=1).first()
 
         feedback_attempted_date_time = feedback_attempted_date_time.added_on.strftime('%d/%m/%Y, %H:%M:%S') if \
@@ -685,9 +690,9 @@ def generate_feedback_report(sid,start_date,end_date):
         payment_date = oi_feedback.order_item.order.payment_date.strftime('%d/%m/%Y, %H:%M:%S') if oi_feedback.order_item\
                      and oi_feedback.order_item.order and oi_feedback.order_item.order.payment_date else ''
        
-        
+        product_name = oi_feedback.order_item.product.name if oi_feedback.order_item and oi_feedback.order_item.product else ''
         excel_row = [
-                        None, None, None,None,None, None, oi_feedback.order_item.product.name, feedback_attempted_date_time\
+                        None, None, None,None,None, None, product_name, feedback_attempted_date_time\
                         , oi_feedback.category_text,oi_feedback.resolution_text, payment_date
                     ]
         write_row(sheet,excel_row,row)
@@ -702,6 +707,7 @@ def generate_feedback_report(sid,start_date,end_date):
         logging.getLogger('info_log').info("Saved Data to GCP")
     else:
         workbook.save(file_obj.name)
+    file_obj.close()
     
     logging.getLogger('info_log').info(\
         "Feedback Report Task Complete for {},{},{}".format(sid,start_date,end_date))

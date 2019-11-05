@@ -29,6 +29,8 @@ ORDER_ITEM_OPERATION_TYPE = ((1, "Order Item Updated"),)
 CUSTOMER_FEEDBACK_OPERATION_TYPE = ( (2, "Feedback Message Updated"),
                             (3, "Assigned"),
                             (4, "Reassigned"),
-                            (5, "Follow Up")  )
+                            (5, "Follow Up"),
+                            (6, "Customer Category Updated"),
+                            (7, "Customer Resolution Updated")  )
 
 TOTAL_FEEDBACK_OPERATION_TYPE = ORDER_ITEM_OPERATION_TYPE + CUSTOMER_FEEDBACK_OPERATION_TYPE

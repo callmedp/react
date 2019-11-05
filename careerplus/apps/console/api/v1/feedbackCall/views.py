@@ -9,6 +9,7 @@ from django.views.generic import DetailView
 from django.http import HttpResponse
 from django.conf import settings
 from django.db.models import Q
+from django.contrib.auth import get_user_model
 
 #app imports
 from order.models import CustomerFeedback,OrderItemFeedback,OrderItemFeedbackOperation
@@ -19,9 +20,13 @@ from console.feedbackCall.choices import FEEDBACK_CATEGORY_CHOICES,FEEDBACK_RESO
                                             FEEDBACK_PARENT_CATEGORY_CHOICES
 from shared.permissions import IsActiveUser,InFeedbackGroup,InFeedbackGroup
 
+
 #python imports
 from datetime import datetime,timedelta
 import json,logging
+
+
+User = get_user_model()
 
 
 
@@ -97,7 +102,13 @@ class FeedbackCallsAssignUserView(CreateAPIView):
     def post(self,*args, **kwargs):
         feedback_ids = eval(self.request.POST.get('feedback_ids'))
         user_id =self.request.POST.get('user_id')
-        CustomerFeedback.objects.filter(id__in=feedback_ids).update(assigned_to=user_id,status=2)
+        user = User.objects.filter(id=user_id).first()
+
+        feedbacks = CustomerFeedback.objects.filter(id__in=feedback_ids)
+        for feedback in feedbacks:
+            feedback.assigned_to=user
+            feedback.status=2
+            feedback.save()
         return HttpResponse(json.dumps({'result':'updated'}), content_type="application/json")
 
 

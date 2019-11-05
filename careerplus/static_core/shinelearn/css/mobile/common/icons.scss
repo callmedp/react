@@ -755,6 +755,18 @@
   background-position: -18px 0;
 }
 
+
+/* .icon-whatsApp {
+  @include size(30px, 30px, block);
+  display: block;
+  box-shadow: 0 0 10px rgba($bg-black, .3);
+  background-position: -259px -465px;
+
+  position: fixed;
+  bottom: 30px;
+  left: 15px;
+  z-index: 99;
+}*/
 .amcats-icon3 {
   @include size(20px, 20px, inline-block);
   background-position: -44px 0;
@@ -780,4 +792,21 @@
   @include size(160px, 37px, inline-block);
   background-position: -116px 0;
   vertical-align: sub;
+}
+
+
+.icon-enquire {
+  background-position: 0 -376px;
+}
+
+.icon-call {
+  background-position: 0 -214px;
+}
+
+.icon-chat-2 {
+  background-position: -22px -215px;
+}
+
+.icon-whatsApp {
+  background-position: -46px -214px;
 }
