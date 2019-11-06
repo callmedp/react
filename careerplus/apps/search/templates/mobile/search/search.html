@@ -94,6 +94,7 @@ Search Result Page - Shine Learning
   <div class="container pt-0 js_listing">
 
     <!-- amcat certification start -->
+                                {% if facets.pFA|length >= 1 %}
               {% if vendor_banner %}
     <div class="amcat-certification">
         <div class="amcat-box">
@@ -103,7 +104,7 @@ Search Result Page - Shine Learning
             <div class="slide-container">
                 <ul class="skill-provider amcat-tags">
                     <li class="cuad">
-                             {% if facets.pFA|length > 1 %}
+
        {% for facet in facets.pFA %}
                     <li class="cuad">
             <a  name="filterBtn" value="{{facet.id}}" onclick="filterSearch(event)" class=
@@ -120,12 +121,13 @@ Search Result Page - Shine Learning
                 </a>
                         </li>
                 {% endfor %}
-        {% endif %}
+
                </ul>
             </div> 
         </div>
         
     </div>
+              {% endif %}
       {% endif %}
     <!-- amcat certification end -->
 

@@ -1874,3 +1874,9 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
 	color: #757575;
 	margin-bottom: 6px;
 }
+
+.days-left{
+	float: right;
+	position: relative;
+	top: 20px;
+}

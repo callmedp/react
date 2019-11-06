@@ -5,21 +5,28 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 #django imports
-from django.views.generic.detail import DetailView
+from django.views.generic import DetailView
 from django.http import HttpResponse
 from django.conf import settings
 from django.db.models import Q
+from django.contrib.auth import get_user_model
 
 #app imports
 from order.models import CustomerFeedback,OrderItemFeedback,OrderItemFeedbackOperation
-from console.api.v1.feedbackCall.serializers import FeedbackQueueSerializer,CustomerFeedbackSerializer,OrderItemFeedbackSerializer,OrderItemFeedbackOperationSerializer
+from console.api.v1.feedbackCall.serializers import FeedbackQueueSerializer,CustomerFeedbackSerializer,\
+            OrderItemFeedbackSerializer,OrderItemFeedbackOperationSerializer
 from shared.rest_addons.pagination import LearningCustomPagination 
-from console.feedbackCall.choices import FEEDBACK_CATEGORY_CHOICES,FEEDBACK_RESOLUTION_CHOICES,FEEDBACK_PARENT_CATEGORY_CHOICES
+from console.feedbackCall.choices import FEEDBACK_CATEGORY_CHOICES,FEEDBACK_RESOLUTION_CHOICES,\
+                                            FEEDBACK_PARENT_CATEGORY_CHOICES
 from shared.permissions import IsActiveUser,InFeedbackGroup,InFeedbackGroup
+
 
 #python imports
 from datetime import datetime,timedelta
 import json,logging
+
+
+User = get_user_model()
 
 
 
@@ -95,7 +102,13 @@ class FeedbackCallsAssignUserView(CreateAPIView):
     def post(self,*args, **kwargs):
         feedback_ids = eval(self.request.POST.get('feedback_ids'))
         user_id =self.request.POST.get('user_id')
-        CustomerFeedback.objects.filter(id__in=feedback_ids).update(assigned_to=user_id,status=2)
+        user = User.objects.filter(id=user_id).first()
+
+        feedbacks = CustomerFeedback.objects.filter(id__in=feedback_ids)
+        for feedback in feedbacks:
+            feedback.assigned_to=user
+            feedback.status=2
+            feedback.save()
         return HttpResponse(json.dumps({'result':'updated'}), content_type="application/json")
 
 
@@ -176,13 +189,16 @@ class SaveFeedbackIdData(CreateAPIView):
         for value in form_data.values():
             if type(value) is dict:
                 order_item_feedback = OrderItemFeedback.objects.filter(id=value.get('id')).first()
-                order_item_feedback.category =value.get('category')
-                order_item_feedback.resolution =value.get('resolution')
-                order_item_feedback.comment =value.get('comment')
+                order_item_feedback.category =value.get('category','')
+                order_item_feedback.resolution =value.get('resolution','')
+                order_item_feedback.comment =value.get('comment','')
                 order_item_feedback.save()
         
         customer_feedback = CustomerFeedback.objects.get(id=feedback_id)
-        customer_feedback.comment = form_data.get('comment')
+        customer_feedback.comment = form_data.get('comment','')
+        customer_feedback.category = form_data.get('category','')
+        customer_feedback.resolution = form_data.get('resolution','')
+
         if form_data['IsFollowUp']:
             customer_feedback.follow_up_date = form_data.get('follow-up')
         else:

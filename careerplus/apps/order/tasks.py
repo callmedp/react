@@ -115,7 +115,7 @@ def pending_item_email(pk=None):
             product_names.append(oi.product.name)
             sms_oi_status=61
 
-        elif (oi.product.type_flow == 5) and (71 not in email_sets) and (71 not in sms_sets):
+        elif (oi.product.type_flow == 5 and oi.product.sub_type_flow in [501]) and (71 not in email_sets) and (71 not in sms_sets):
             oi_status_mapping.update({oi.id:71})
             product_names.append(oi.product.name)
             sms_oi_status=71
@@ -461,6 +461,9 @@ def service_initiation(pk=None):
                 sms_sets = list(
                     oi.smsorderitemoperation_set.all().values_list(
                         'sms_oi_status', flat=True).distinct())
+
+                urlshortener = create_short_url(login_url=data)
+                data.update({'url':urlshortener.get('url')})
 
                 if oi.product.type_flow == 2 and 162 not in sms_sets:
                     try:

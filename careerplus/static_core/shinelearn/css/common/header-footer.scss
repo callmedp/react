@@ -3776,3 +3776,17 @@ footer {
     }
   }
 }
+
+
+
+.icon-whatsApp {
+  width: 46px;
+  height: 46px;
+  background: $sprite -642px -477px #fff;
+  display: block;
+
+  z-index: 999;
+  position: fixed;
+  bottom: 60px;
+  right: 0;
+}

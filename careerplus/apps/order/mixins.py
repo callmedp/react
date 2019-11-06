@@ -1,4 +1,4 @@
-import json
+import json,logging
 import datetime
 
 from decimal import Decimal
@@ -78,6 +78,13 @@ class OrderMixin(CartMixin, ProductInformationMixin):
             order.pincode = cart_obj.pincode
             order.state = cart_obj.state
             order.country = cart_obj.country
+            try:
+                utm = json.loads(cart_obj.utm_params) if cart_obj.utm_params else \
+                    self.request.session.get('utm',{})
+            except:
+                logging.getLogger('error_log').error('error in decrypting utm parameters')
+                utm = {}
+            order.utm_params = json.dumps(utm) if utm and isinstance(utm,dict) else '{}'
 
             # set currency
             order.currency = 0

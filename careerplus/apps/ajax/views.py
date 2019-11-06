@@ -906,14 +906,11 @@ class WelcomeServiceCallView(UserPermissionMixin,View):
 
 class ProductCopyAPIView(View):
 
-
-
     def create_relation_m2m(self,attr_obj,new_object):
         attr_copy = deepcopy(attr_obj)
         attr_copy.pk = None
         attr_copy.product = new_object
         attr_copy.save()
-
 
     def post(self,request,*args,**kwargs):
         pid = self.request.POST.get('id')

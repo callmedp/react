@@ -99,6 +99,19 @@ const feedbackCallDetails = () => {
         $('#feedback-comment').val(data.comment)
         form_data['comment'] = data.comment
         form_data['follow-up'] = data.follow_up_date
+        form_data['category'] = data.category
+        form_data['resolution'] = data.resolution
+
+        if (data.category){
+            $(`#category-choices`).val(data.category)
+            $(`#category-choices`).trigger('change.select2');
+        }
+
+        if (data.resolution){
+            $(`#resolution-choices`).val(data.resolution)
+            $(`#resolution-choices`).trigger('change.select2');
+        }
+        
     }).fail(()=>{
         Toast.fire({
             type: 'error',
@@ -125,13 +138,13 @@ const getOrderItemFeedback = () => {
                             <td class="padding-item"><a class="orderitem-id" href="/console/queue/order/${order_item.length ? order_item[0].order_id : ''}/details/">${item.order_item}</a></td>
                             <td class="padding-item">${order_item.length ? formatDate(order_item[0].order_payment_date) : ''}</td>
                             <td class="scalling">
-                                <select id="item-category-${index}" onclick="removeError('#item-category-${index}',${index},'category')" name="category" class="form-control">
+                                <select id="item-category-${index}" name="category" class="form-control">
                                     <option value="">Select Category</option>
                                 </select>
                                 <span class="help-block hide">Select a Category</span>
                             </td>
                             <td class="scalling"> 
-                                <select id="item-resolution-${index}" onclick="removeError('#item-resolution-${index}',${index},'resolution')" name="resolution" class="form-control">
+                                <select id="item-resolution-${index}" name="resolution" class="form-control">
                                     <option value="">Select Resolution</option>
                                 </select>
                                 <span class="help-block hide">Select a Resolution</span>
@@ -167,11 +180,11 @@ const getDropdownChoices = () => {
     $.get(`/console/api/v1/feedback-call/category-choices/`,(data)=>{
         if(data){
             category = data
-            createDropdown('#category-choices',category,null,null,null,true)
+            createDropdown('#category-choices',category,'category',null,null,true)
             $.get(`/console/api/v1/feedback-call/resolution-choices/`,(data)=>{
                 if(data){
                     resolution = data
-                    createDropdown('#resolution-choices',resolution,null,null,null,true)
+                    createDropdown('#resolution-choices',resolution,'resolution',null,null,true)
                     getOrderItemFeedback()
                 }
             }).fail(()=>{
@@ -191,14 +204,14 @@ const getDropdownChoices = () => {
 }
 
 
-const createDropdown  = (id,data,index,type,pre_value,isMainDropdown) => {
+const createDropdown  = (id,data,key,type,pre_value,isMainDropdown) => {
     properties = {
         data:data,
         minimumResultsForSearch: -1,
     }
     isMainDropdown ? ()=>{} : properties['width']='160px'  
     $(id).select2(properties);
-    $(id).on('select2:select', {id:id,key:index,type},removeError);
+    $(id).on('select2:select', {id:id,key,type},removeError);
     if (pre_value){
         $(id).val(pre_value)
         $(id).trigger('change.select2');
@@ -303,20 +316,24 @@ const checkError = () => {
                 showError('#feedback-comment')
                 error = true;
             }
+            else if ((key == 'category' && !item) || (key == 'resolution' && !item) ){
+                showError(`#${key}-choices`,true);
+                error = true;
+            }
         }
     }
     return error
 }
 
 
-const showError = (id) => {
-    first_error_id = first_error_id ? first_error_id : id
+const showError = (id,priority=false) => {
+    first_error_id = first_error_id && !priority ? first_error_id : id
     let parent = $(id).parent()
     parent.addClass('has-error')
     parent.children('.help-block').removeClass('hide')
 }
 
-const removeError = (event,data,isMainDropdown) => {
+const removeError = (event,data,) => {
     first_error_id = null
     let id,key,type;
     if(event){

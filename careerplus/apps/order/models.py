@@ -32,7 +32,7 @@ from linkedin.models import Draft
 from seo.models import AbstractAutoDate
 from geolocation.models import Country, CURRENCY_SYMBOL
 from users.models import User
-from console.feedbackCall.choices import FEEDBACK_RESOLUTION_CHOICES,FEEDBACK_CATEGORY_CHOICES,FEEDBACK_STATUS,FEEDBACK_OPERATION_TYPE
+from console.feedbackCall.choices import FEEDBACK_RESOLUTION_CHOICES,FEEDBACK_CATEGORY_CHOICES,FEEDBACK_STATUS,TOTAL_FEEDBACK_OPERATION_TYPE
 from order.utils import get_ltv
 from coupon.models import Coupon
 from resumebuilder.models import Candidate
@@ -160,6 +160,9 @@ class Order(AbstractAutoDate):
     #resume writing
     auto_upload = models.BooleanField(default=False)
     service_resume_upload_shine = models.BooleanField(default=True)
+
+    #utm parameters
+    utm_params = models.TextField(null=True, blank=True)
 
 
     class Meta:
@@ -707,6 +710,15 @@ class OrderItem(AbstractAutoDate):
         return "#{}".format(self.pk)
 
     @property
+    def product_service_days_left(self):
+        duration = self.product.get_duration_in_day if self.product and \
+                    self.product.get_duration_in_day else None
+        if not duration:
+            return 0
+        start_date = self.orderitemoperation_set.filter(oi_status__in=[31, 32, 5]).order_by('id').first()
+        return 
+
+    @property
     def order_payment_date(self):
         payment_date = self.order.payment_date.date()
         return payment_date
@@ -719,7 +731,7 @@ class OrderItem(AbstractAutoDate):
 
     @property
     def product_name(self):
-        return self.product.name
+        return self.product.name if self.product else ''
 
     @property
     def order_status_text(self):
@@ -1333,6 +1345,8 @@ class CustomerFeedback(models.Model):
     comment = models.TextField('Feedback Comment',blank=True, null=True)
     last_payment_date = models.DateTimeField('Last Payment Date',blank=True, null=True)
     ltv = models.DecimalField(max_digits=20, decimal_places=2,blank=True, null=True)
+    category =  models.SmallIntegerField(choices=FEEDBACK_CATEGORY_CHOICES,blank=True, null=True)
+    resolution =  models.SmallIntegerField(choices=FEEDBACK_RESOLUTION_CHOICES,blank=True, null=True)
 
     @property
     def status_text(self):
@@ -1342,12 +1356,44 @@ class CustomerFeedback(models.Model):
     def assigned_to_text(self):
         return self.assigned_to.name if self.assigned_to else ''
 
+    @property
+    def category_text(self):
+        return dict(FEEDBACK_CATEGORY_CHOICES).get(self.category)
+
+    @property
+    def resolution_text(self):
+        return dict(FEEDBACK_RESOLUTION_CHOICES).get(self.resolution)
+
+    def create_operation(self):
+        prev_feedback = CustomerFeedback.objects.get(id=self.id)
+        if prev_feedback.comment != self.comment :
+            OrderItemFeedbackOperation.objects.create(comment=self.comment,customer_feedback=self,\
+                assigned_to=self.assigned_to,oi_type=2)
+
+        if not prev_feedback.assigned_to and  self.assigned_to :
+            OrderItemFeedbackOperation.objects.create(customer_feedback=self,assigned_to=self.assigned_to\
+                ,oi_type=3)
+        elif prev_feedback.assigned_to != self.assigned_to :
+            OrderItemFeedbackOperation.objects.create(customer_feedback=self,assigned_to=self.assigned_to\
+                ,oi_type=4)
+            
+        if prev_feedback.follow_up_date != self.follow_up_date:
+            OrderItemFeedbackOperation.objects.create(customer_feedback=self,assigned_to=self.assigned_to\
+                ,oi_type=5,follow_up_date=self.follow_up_date)
+
+        if prev_feedback.category != self.category:
+            OrderItemFeedbackOperation.objects.create(customer_feedback=self,assigned_to=self.assigned_to\
+                ,oi_type=6,category=self.category)
+                
+        if prev_feedback.category != self.category:
+            OrderItemFeedbackOperation.objects.create(customer_feedback=self,assigned_to=self.assigned_to\
+                ,oi_type=7,resolution=self.resolution)
+
     def save(self, *args, **kwargs):
         created = not bool(self.id)
         if not created:
-            prev_comment = CustomerFeedback.objects.get(id=self.id).comment
-            if prev_comment != self.comment :
-                OrderItemFeedbackOperation.objects.create(comment=self.comment,customer_feedback=self,assigned_to=self.assigned_to,oi_type=2)
+            self.create_operation()
+            
         super(CustomerFeedback, self).save(*args, **kwargs)
 
 
@@ -1357,6 +1403,16 @@ class OrderItemFeedback(models.Model):
     comment = models.TextField('Feedback Comment',blank=True, null=True)
     order_item = models.ForeignKey(OrderItem)
     customer_feedback  = models.ForeignKey(CustomerFeedback)
+    created = models.DateTimeField(editable=False, auto_now_add=True,null=True)
+    
+
+    @property
+    def category_text(self):
+        return dict(FEEDBACK_CATEGORY_CHOICES).get(self.category)
+
+    @property
+    def resolution_text(self):
+        return dict(FEEDBACK_RESOLUTION_CHOICES).get(self.resolution)
 
     def save(self, *args, **kwargs):
         create = not bool(self.id)
@@ -1365,7 +1421,8 @@ class OrderItemFeedback(models.Model):
             prev_data = OrderItemFeedback.objects.get(id=self.id)
             compare_list = [self.category==prev_data.category,self.resolution==prev_data.resolution,self.comment==prev_data.comment]
             if not all(compare_list):
-                OrderItemFeedbackOperation.objects.create(category=self.category,resolution=self.resolution,comment=self.comment,order_item=self.order_item,customer_feedback=self.customer_feedback,assigned_to=assigned_to)
+                OrderItemFeedbackOperation.objects.create(category=self.category,resolution=self.resolution,comment=self.comment,\
+                    order_item=self.order_item,customer_feedback=self.customer_feedback,assigned_to=assigned_to,oi_type=1)
         super(OrderItemFeedback, self).save(*args, **kwargs) # Call the real save() method
 
 class OrderItemFeedbackOperation(models.Model):
@@ -1376,8 +1433,10 @@ class OrderItemFeedbackOperation(models.Model):
     comment = models.TextField('Feedback Comment',blank=True, null=True)
     order_item = models.ForeignKey(OrderItem,blank=True, null=True)
     customer_feedback  = models.ForeignKey(CustomerFeedback)
-    oi_type = models.SmallIntegerField(choices=FEEDBACK_OPERATION_TYPE,default=1)
-
+    oi_type = models.SmallIntegerField(choices=TOTAL_FEEDBACK_OPERATION_TYPE,default=-1)
+    feedback_category = models.SmallIntegerField(choices=FEEDBACK_CATEGORY_CHOICES,default=-1)
+    feedback_resolution =  models.SmallIntegerField(choices=FEEDBACK_RESOLUTION_CHOICES,default=-1)
+    follow_up_date = models.DateTimeField('Follow Up Date', blank=True, null=True)
 
     @property
     def category_text(self):
@@ -1393,7 +1452,19 @@ class OrderItemFeedbackOperation(models.Model):
 
     @property
     def oi_type_text(self):
-        return dict(FEEDBACK_OPERATION_TYPE).get(self.oi_type)
+        return dict(TOTAL_FEEDBACK_OPERATION_TYPE).get(self.oi_type)
+
+    @property
+    def feedback_category_text(self):
+        return dict(FEEDBACK_CATEGORY_CHOICES).get(self.feedback_category)
+
+    @property
+    def feedback_resolution_text(self):
+        return dict(FEEDBACK_RESOLUTION_CHOICES).get(self.feedback_resolution)
+
+    def feedback_status_text(self):
+        return dict(FEEDBACK_STATUS).get(self.feedback_status)
+
 
 class LTVMonthlyRecord(models.Model):
     ltv_bracket =  models.SmallIntegerField(choices=LTV_BRACKET_LABELS)
@@ -1413,6 +1484,7 @@ class LTVMonthlyRecord(models.Model):
     @property
     def ltv_bracket_text(self):
         return dict(LTV_BRACKET_LABELS).get(self.ltv_bracket)
+
 
 class MonthlyLTVRecord(models.Model):
     ltv_bracket =  models.SmallIntegerField(choices=LTV_BRACKET_LABELS)
