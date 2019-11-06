@@ -37,12 +37,17 @@ class EditPreview extends Component {
         this.removeNote = this.removeNote.bind(this);
         this.allowUploadResume = this.allowUploadResume.bind(this);
         this.generateResumeAlert = this.generateResumeAlert.bind(this);
+
         if (parseInt(localStorage.getItem('experience') || 0) >= 4) {
-            document.getElementsByClassName('chat-bot')[0].style.display = 'none';
+            if(document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]){
+                document.getElementsByClassName('chat-bot')[0].style.display = 'none';
+            }
         }
         else {
-            document.getElementsByClassName('chat-bot')[0].style.display = 'block';
-        }        
+            if(document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]){
+                document.getElementsByClassName('chat-bot')[0].style.display = 'block';
+            }
+        }    
         this.state = {
             visibleNote: true
         }

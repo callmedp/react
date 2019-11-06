@@ -31,12 +31,13 @@ export class Buy extends Component {
         this.state = {
             'checked': 'product1'
         }
-
-        if (parseInt(localStorage.getItem('experience') || 0) >= 4 && document.getElementsByClassName('chat-bot') ) {
-            document.getElementsByClassName('chat-bot')[0].style.display = 'none';
+        if (parseInt(localStorage.getItem('experience') || 0) >= 4) {
+            if (document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
+                document.getElementsByClassName('chat-bot')[0].style.display = 'none';
+            }
         }
         else {
-            if(document.getElementsByClassName('chat-bot')[0]){
+            if (document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
                 document.getElementsByClassName('chat-bot')[0].style.display = 'block';
             }
         }
@@ -91,14 +92,14 @@ export class Buy extends Component {
             await loginCandidate()
         }
 
-         // get userInfo from LocalStorage
-         if(localStorage.getItem('email')) window['email']= localStorage.getItem('email')
-         else window['email']=''
-         if(localStorage.getItem('mobile')) window['mobile'] = localStorage.getItem('mobile')
-         else window['mobile']=''
-         if(localStorage.getItem('name')) window['name'] = localStorage.getItem('name')
-         else window['name']= ''
- 
+        // get userInfo from LocalStorage
+        if (localStorage.getItem('email')) window['email'] = localStorage.getItem('email')
+        else window['email'] = ''
+        if (localStorage.getItem('mobile')) window['mobile'] = localStorage.getItem('mobile')
+        else window['mobile'] = ''
+        if (localStorage.getItem('name')) window['name'] = localStorage.getItem('name')
+        else window['name'] = ''
+
         this.props.fetchThumbNailImages();
         this.props.fetchSelectedTemplateImage(localStorage.getItem('selected_template') || 1);
         this.props.getProductIds();
