@@ -462,6 +462,9 @@ def service_initiation(pk=None):
                     oi.smsorderitemoperation_set.all().values_list(
                         'sms_oi_status', flat=True).distinct())
 
+                urlshortener = create_short_url(login_url=data)
+                data.update({'url':urlshortener.get('url')})
+
                 if oi.product.type_flow == 2 and 162 not in sms_sets:
                     try:
                         
