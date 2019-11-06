@@ -73,6 +73,9 @@
 {% block js_section %}
     {{block.super}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.all.min.js"></script>
+    <script>
+        var candidateId = '{{candidate_id}}'
+        </script>
     {% compress js %}
     <script src="{% static 'shinelearn/js/dashboard/dashboard.js' %}"></script>
     <script src="{% static 'shinelearn/js/mobile/dashboard/dashboard.js' %}"></script>

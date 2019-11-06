@@ -179,7 +179,7 @@ function downloadOrderInvoice(order_pk) {
 
 function downloadOrderTemplate(order_pk) {
     if(order_pk){
-        $('#download-resume-form' + order_pk)   .submit();
+        $('#download-resume-form' + order_pk).submit();
     }
 }
 
@@ -189,7 +189,12 @@ function openCancelModal(order_pk) {
 }
 
 
-
+function editTemplate(){
+    if(!localStorage.getItem('candidateId') && candidateId){
+        localStorage.setItem('candidateId',candidateId)
+    }
+    window.location.href = "/resume-builder/edit/?type=profile"
+}
 
 
 $(document).ready(function(){

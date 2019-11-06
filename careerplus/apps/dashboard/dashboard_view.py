@@ -72,6 +72,7 @@ class DashboardView(TemplateView):
             context.update({
                 'inbox_list': inbox_list,
                 'pending_resume_items': pending_resume_items,
+                'candidate_id': candidate_id
             })
         if self.request.flavour == 'mobile' and not empty_inbox:
             if not self.request.session.get('resume_id', None):

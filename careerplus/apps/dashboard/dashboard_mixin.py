@@ -65,6 +65,7 @@ class DashboardInfo(object):
             "csrf_token_value": get_token(request),
             "last_month_from": last_month_from,
             "select_type": select_type,
+            "candidate_id": candidate_id,
         }
 
         return render_to_string('partial/user-inboxlist.html',context)
