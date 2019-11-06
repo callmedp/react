@@ -10,7 +10,6 @@ import SuggestionModal from '../../../../../Modal/suggestionModal'
 import {hideSuggestionModal, showSuggestionModal, setSuggestionType} from "../../../../../../store/ui/actions";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons.jsx';
-import {siteDomain} from '../../../../../../Utils/domains'
 
 
 class Experience extends Component {
@@ -77,25 +76,17 @@ class Experience extends Component {
     }
 
     async handleSubmit(values, entityLink, currentFields) {
-         const {userInfo:{order_data},hideGenerateResumeModal,showGenerateResumeModal,history,reGeneratePDF} = this.props
+         const {generateResumeAlert,bulkUpdateOrCreate,history} = this.props
         const {list} = values;
         if (list.length) {
-            await this.props.bulkUpdateOrCreate(list);
+            await bulkUpdateOrCreate(list);
             this.setState({
                 submit: true
             })
-            if (entityLink) this.props.history.push(entityLink);
-            else if(order_data && order_data.id){
-            showGenerateResumeModal()
-            reGeneratePDF(order_data.id)
-            setTimeout(function() {
-                window.location.href = `${siteDomain}/dashboard`
-                hideGenerateResumeModal()
-            }, 5000);
-        }
-        else{
-            history.push(`/resume-builder/buy`) 
-        }
+            if (entityLink) history.push(entityLink);
+            else{
+                generateResumeAlert()
+            }
         }
 
     }

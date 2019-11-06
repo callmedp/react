@@ -16,7 +16,6 @@ import validate from '../../../../../FormHandler/validations/personalInfo/valida
 import moment from 'moment';
 import {renderAsyncCreatableSelect} from "../../../../../FormHandler/formFieldRenderer";
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
-import {siteDomain} from '../../../../../../Utils/domains'
 
 
 export class PersonalInfo extends Component {
@@ -60,21 +59,14 @@ export class PersonalInfo extends Component {
     }
 
     async handleSubmit(values, entityLink) {
-        const {userInfo: {order_data}, hideGenerateResumeModal, showGenerateResumeModal, history, reGeneratePDF, personalInfo} = this.props
-        await this.props.onSubmit(values, this.state.imageURL, this.state.flag, personalInfo);
+        const {personalInfo,history,onSubmit,generateResumeAlert} = this.props
+        await onSubmit(values, this.state.imageURL, this.state.flag, personalInfo);
         this.setState({
             submit: true
         })
-        if (entityLink) this.props.history.push(entityLink);
-        else if (order_data && order_data.id) {
-            showGenerateResumeModal()
-            reGeneratePDF(order_data.id)
-            setTimeout(function () {
-                window.location.href = `${siteDomain}/dashboard`
-                hideGenerateResumeModal()
-            }, 5000);
-        } else {
-            history.push(`/resume-builder/buy`)
+        if (entityLink) history.push(entityLink);
+        else{
+            generateResumeAlert()
         }
     }
 

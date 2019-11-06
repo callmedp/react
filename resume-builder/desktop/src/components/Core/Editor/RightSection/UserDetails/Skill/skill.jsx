@@ -13,7 +13,6 @@ styles
 * */
 import 'react-accessible-accordion/dist/fancy-example.css';
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
-import {siteDomain} from '../../../../../../Utils/domains'
 
 class Skill extends Component {
     constructor(props) {
@@ -41,25 +40,17 @@ class Skill extends Component {
     }
 
     async handleSubmit(values, entityLink) {
-         const {userInfo:{order_data},hideGenerateResumeModal,showGenerateResumeModal,history,reGeneratePDF} = this.props
+         const {generateResumeAlert,bulkUpdateOrCreate,history} = this.props
         const {list} = values;
         if (list.length) {
-            await this.props.bulkUpdateOrCreate(list);
+            await bulkUpdateOrCreate(list);
             this.setState({
                 submit: true
             })
-            if (entityLink) this.props.history.push(entityLink);
-            else if(order_data && order_data.id){
-            showGenerateResumeModal()
-            reGeneratePDF(order_data.id)
-            setTimeout(function() {
-                window.location.href = `${siteDomain}/dashboard`
-                hideGenerateResumeModal()
-            }, 5000);
-        }
-        else{
-            history.push(`/resume-builder/buy`) 
-        }
+            if (entityLink) history.push(entityLink);
+            else{
+                generateResumeAlert()
+            }
         }
     }
 

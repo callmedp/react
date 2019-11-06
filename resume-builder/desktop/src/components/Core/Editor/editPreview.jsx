@@ -27,13 +27,16 @@ import {
 } from '../../../store/ui/actions/index'
 import moment from 'moment'
 import {locationRouteChange, eventClicked} from '../../../store/googleAnalytics/actions/index'
-import queryString from "query-string";
+import Swal from 'sweetalert2'
+import { siteDomain } from '../../../Utils/domains'
+
 
 class EditPreview extends Component {
     constructor(props) {
         super(props);
         this.removeNote = this.removeNote.bind(this);
         this.allowUploadResume = this.allowUploadResume.bind(this);
+        this.generateResumeAlert = this.generateResumeAlert.bind(this);
         if (parseInt(localStorage.getItem('experience') || 0) >= 4) {
             document.getElementsByClassName('chat-bot')[0].style.display = 'none';
         }
@@ -85,6 +88,51 @@ class EditPreview extends Component {
         updateSelectedTemplate(userInfo)
     }
 
+    generateResumeAlert(){
+        const { userInfo: { order_data, resume_generated }, history, showGenerateResumeModal, reGeneratePDF, hideGenerateResumeModal} = this.props;
+        if (order_data && order_data.id) {
+            if (!resume_generated) {
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                })
+
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to change your template again.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, generate resume!',
+                    cancelButtonText: 'No, cancel!',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.value) {
+                        showGenerateResumeModal()
+                        reGeneratePDF(order_data.id)
+                        setTimeout(function () {
+                            window.location.href = `${siteDomain}/dashboard`
+                            hideGenerateResumeModal()
+                        }, 5000);
+                    }
+                })
+            }
+            else {
+                showGenerateResumeModal()
+                reGeneratePDF(order_data.id)
+                setTimeout(function () {
+                    window.location.href = `${siteDomain}/dashboard`
+                    hideGenerateResumeModal()
+                }, 5000);
+            }
+
+        } else {
+            history.push('/resume-builder/buy')
+        }
+    }
+
     render() {
         const {ui: {loader}, userInfo: {first_name, last_name, number, email, upload_resume: uploadResume}, history: {location: {pathname}}} = this.props;
         const showNote = localStorage.getItem('showNote') || '';
@@ -102,10 +150,10 @@ class EditPreview extends Component {
                     email={email}/>
                 <div className="page-container">
                     <SelectTemplateModal {...this.props} page={'edit'}/>
-                    <TopBar {...this.props}/>
+                    <TopBar {...this.props} />
                     <section className={'flex-container mt-30'}>
-                        <LeftSideBar {...this.props} onChange={this.allowUploadResume}/>
-                        <RightSection {...this.props}/>
+                        <LeftSideBar {...this.props} onChange={this.allowUploadResume} generateResumeAlert={this.generateResumeAlert}/>
+                        <RightSection {...this.props} generateResumeAlert={this.generateResumeAlert}/>
                     </section>
                     {
                         pathname === '/resume-builder/preview/' && !!(!uploadResume) && !!(!showNote.length) && !!(visibleNote) &&

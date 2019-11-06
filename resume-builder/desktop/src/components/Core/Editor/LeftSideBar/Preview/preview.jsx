@@ -7,10 +7,8 @@ import {
     AccordionItemHeading,
     AccordionItemPanel
 } from "react-accessible-accordion";
-import { siteDomain } from '../../../../../Utils/domains'
 import AlertModal from '../../../../Modal/alertModal';
 import { formCategoryList } from '../../../../../Utils/formCategoryList'
-import Swal from 'sweetalert2'
 
 export default class Preview extends Component {
     constructor(props) {
@@ -65,52 +63,13 @@ export default class Preview extends Component {
 
 
     goToBuyPage() {
-        const { userInfo: { order_data, resume_generated }, history, showGenerateResumeModal, reGeneratePDF, hideGenerateResumeModal, eventClicked } = this.props;
+        const {generateResumeAlert,eventClicked} = this.props;
+
         eventClicked({
             'action': 'GetYourResume',
             'label': 'Click'
         })
-        if (order_data && order_data.id) {
-            if (!resume_generated) {
-                const swalWithBootstrapButtons = Swal.mixin({
-                    customClass: {
-                        confirmButton: 'btn btn-success',
-                        cancelButton: 'btn btn-danger'
-                    },
-                    buttonsStyling: false
-                })
-
-                swalWithBootstrapButtons.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to change your template again.",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, generate resume!',
-                    cancelButtonText: 'No, cancel!',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.value) {
-                        showGenerateResumeModal()
-                        reGeneratePDF(order_data.id)
-                        setTimeout(function () {
-                            window.location.href = `${siteDomain}/dashboard`
-                            hideGenerateResumeModal()
-                        }, 5000);
-                    }
-                })
-            }
-            else {
-                showGenerateResumeModal()
-                reGeneratePDF(order_data.id)
-                setTimeout(function () {
-                    window.location.href = `${siteDomain}/dashboard`
-                    hideGenerateResumeModal()
-                }, 5000);
-            }
-
-        } else {
-            history.push('/resume-builder/buy')
-        }
+        generateResumeAlert()
     }
 
 
