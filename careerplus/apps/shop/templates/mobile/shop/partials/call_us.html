@@ -11,16 +11,7 @@
         <span>Call Us</span>
     </a><!-- // Call -->
 
-    {% if not product.is_assesment %}
-        {% if not request.amp %}
-        <a class="enquire-cta__chat" href="javascript:void(0)" id="enquire_btn">
-            <i class="icon-chat-2"></i>
-            <span>Chat</span>
-        </a><!-- // Chat -->
-        {% endif %}
-    {% endif %}
-
-    {% if whatsapp_icon %}
+        {% if whatsapp_icon %}
 {% for key,value in whatsapp_icon.items %}
 {% if product.is_course and key == "product-course-number" %}
     <a class="enquire-cta__whatsApp" href="https://api.whatsapp.com/send?phone=91{{value}}">
@@ -37,6 +28,18 @@
     {% endif %}
 {% endfor %}
 {% endif %}
+
+
+
+    {% if not product.is_assesment %}
+        {% if not request.amp %}
+        <a class="enquire-cta__chat" href="javascript:void(0)" id="enquire_btn">
+            <i class="icon-chat-2"></i>
+            <span>Chat</span>
+        </a><!-- // Chat -->
+        {% endif %}
+    {% endif %}
+
 
 
 

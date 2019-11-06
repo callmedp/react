@@ -165,14 +165,13 @@
     justify-content: center;
     align-items: center;
 
+    &:not(:last-child) {
+        border-right: 1px solid rgba($bg-white, .5);
+    }
+
     i {
       @include size (18px, 17px, block);
       margin-top: 4px;
-    }
-
-    &.enquire-cta__enquire,
-    &.enquire-cta__chat {
-      background-color: rgba($bg-white, .15);
     }
   }
 }
