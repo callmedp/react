@@ -237,7 +237,6 @@ class Preview extends Component {
     render() {
         const { customize, currentTab, selectedColor, headingFontSize, textFontSize, sectionEntityName, startingReorderUpDowmIndex, zoomIn } = this.state
         const { template: { html, zoomInHtml, entity_position, entity_id_count_mapping }, ui: { mainloader, alertModalStatus, generateResumeModal }, personalInfo: { selected_template, order_data, resume_generated, upload_resume: uploadResume }, history, eventClicked } = this.props
-        console.log('-----resume', resume_generated, order_data)
         return (
             <div className="preview">
                 <Header page={'preview'} {...this.props} order_data={order_data} eventClicked={eventClicked} />
