@@ -58,10 +58,6 @@ function* loginCandidate(action) {
                     }
                 }
                 localStorage.setItem('email', candidate_profile[key]['email'] || '');
-                const fName = (candidate_profile[key]['first_name'] ||'').trim()
-                const lName = (candidate_profile[key]['last_name'] ||'').trim()
-                let name = fName ? (lName ? fName + " " + lName : fName):lName ? lName :'Dummy User'   
-                localStorage.setItem('name', name || '');
                 localStorage.setItem('mobile',candidate_profile[key]['number'])
 
                 yield put({type: SAVE_USER_INFO, data: candidate_profile[key]})
