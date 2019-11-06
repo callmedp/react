@@ -6,7 +6,7 @@
   }
 
   .ui-block-a {
-    background-color: $bg-blue;
+    background-color: #3f8bff;
     font-size: 1em;
 
     span {
@@ -29,7 +29,7 @@
   }
 
   .ui-block-c {
-    background-color: $bg-blue;
+    background-color: #3f8bff;
 
     span {
       @include icon-inblock (20px, 15px, -22px -216px);
@@ -56,7 +56,6 @@
       width: 33.33%
     }
 }
-
 
 .enquire {
   position: fixed;
@@ -158,8 +157,9 @@
     color: $txt-white;
     text-align: center;
     font-size: $font-size-xs;
+    padding: 0 10px;
+    flex-grow: 1;
 
-    flex-basis: 25%;
     display: flex;
     flex-direction: column;
     justify-content: center;
