@@ -115,7 +115,7 @@ class CartMixin(object):
                 # if is_resume_template == 'true':
                 #     cart_obj.lineitems.filter().delete()
                 # else:
-                #     cart_obj.lineitems.filter(Q(product=product) | Q(product__type_flow=17)).delete()
+                cart_obj.lineitems.filter(Q(product=product)).delete()
 
                 if (product.is_course or product.type_flow == 17) and cv_id:
                     # courses
