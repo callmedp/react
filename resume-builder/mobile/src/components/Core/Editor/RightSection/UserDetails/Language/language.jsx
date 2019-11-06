@@ -6,7 +6,6 @@ import {connect} from "react-redux";
 import PreviewModal from "../../../Preview/changeTemplateModal";
 import renderLanguage from "./renderLanguage";
 import validate from "../../../../../FormHandler/validtaions/language/validate"
-import {siteDomain} from "../../../../../../Utils/domains";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 import BottomCTC from '../../../../../Common/BottomCTC/bottom-ctc';
 import Subscribe from '../../../RightSection/subscribe';
@@ -46,24 +45,15 @@ class Language extends Component {
 
     async handleSubmit(values) {
         values = this.state.fields ? this.state.fields : values.list
-        let {sidenav:{listOfLinks,currentLinkPos},bulkUpdateUserLanguage,personalInfo:{order_data},updateCurrentLinkPos,history,showGenerateResumeModal,hideGenerateResumeModal,reGeneratePDF} = this.props
+        let {sidenav:{listOfLinks,currentLinkPos},bulkUpdateUserLanguage,generateResumeAlert,updateCurrentLinkPos,
+                history} = this.props
         currentLinkPos++
         
         this.setState({submit:true})
         await bulkUpdateUserLanguage(values);
         if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
-            if(order_data && order_data.id){
-                showGenerateResumeModal()
-                reGeneratePDF(order_data.id)
-                setTimeout(function() {
-                    window.location.href = `${siteDomain}/dashboard`
-                    hideGenerateResumeModal()
-                }, 5000);
-            }
-            else{
-                history.push(`/resume-builder/buy`) 
-            }
+            generateResumeAlert()
         }
         else{
             updateCurrentLinkPos({currentLinkPos})

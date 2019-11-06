@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
-import {Field, reduxForm, FieldArray} from "redux-form";
+import {reduxForm, FieldArray} from "redux-form";
 import * as actions from "../../../../../../store/reference/actions";
 import {connect} from "react-redux";
 import renderReferences from "./renderReference"
 import validate from "../../../../../FormHandler/validtaions/reference/validate"
 import PreviewModal from "../../../Preview/changeTemplateModal";
-import {siteDomain} from "../../../../../../Utils/domains";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 import BottomCTC from '../../../../../Common/BottomCTC/bottom-ctc';
 import Subscribe from '../../../RightSection/subscribe';
@@ -26,23 +25,14 @@ class References extends Component {
 
     async handleSubmit(values) {
         values = this.state.fields ? this.state.fields : values.list
-        let {sidenav:{listOfLinks,currentLinkPos},bulkUpdateUserReference,personalInfo:{order_data},updateCurrentLinkPos,history,showGenerateResumeModal,hideGenerateResumeModal,reGeneratePDF} = this.props
+        let {sidenav:{listOfLinks,currentLinkPos},bulkUpdateUserReference,generateResumeAlert,updateCurrentLinkPos,
+                history} = this.props
         currentLinkPos++
         this.setState({submit:true})
         await bulkUpdateUserReference(values);
         if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
-            if(order_data && order_data.id){
-                showGenerateResumeModal()
-                reGeneratePDF(order_data.id)
-                setTimeout(function() {
-                    window.location.href = `${siteDomain}/dashboard`
-                    hideGenerateResumeModal()
-                }, 5000);
-            }
-            else{
-                history.push(`/resume-builder/buy`) 
-            }
+            generateResumeAlert()
         }
         else{
             updateCurrentLinkPos({currentLinkPos})

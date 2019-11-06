@@ -2,11 +2,9 @@ import React, {Component} from 'react';
 import {reduxForm, FieldArray} from "redux-form";
 import * as actions from "../../../../../../store/course/actions";
 import {connect} from "react-redux";
-import moment from "moment";
 import PreviewModal from "../../../Preview/changeTemplateModal";
 import renderCourse from "./renderCourse";
 import validate from "../../../../../FormHandler/validtaions/course/validate"
-import {siteDomain} from "../../../../../../Utils/domains";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 import BottomCTC from '../../../../../Common/BottomCTC/bottom-ctc';
 import Subscribe from '../../../RightSection/subscribe';
@@ -36,23 +34,14 @@ class Course extends Component {
 
     async handleSubmit(values) {
         values = this.state.fields ? this.state.fields : values.list
-        let {sidenav:{listOfLinks,currentLinkPos},bulkUpdateUserCourse,personalInfo:{order_data},updateCurrentLinkPos,history,showGenerateResumeModal,hideGenerateResumeModal,reGeneratePDF} = this.props
+        let {sidenav:{listOfLinks,currentLinkPos},bulkUpdateUserCourse,generateResumeAlert,updateCurrentLinkPos,
+                history} = this.props
         currentLinkPos++
         this.setState({submit:true})
         await bulkUpdateUserCourse(values);
          if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
-            if(order_data && order_data.id){
-                showGenerateResumeModal()
-                reGeneratePDF(order_data.id)
-                setTimeout(function() {
-                    window.location.href = `${siteDomain}/dashboard`
-                    hideGenerateResumeModal()
-                }, 5000);
-            }
-            else{
-                history.push(`/resume-builder/buy`) 
-            }
+            generateResumeAlert()
         }
         else{
             updateCurrentLinkPos({currentLinkPos})

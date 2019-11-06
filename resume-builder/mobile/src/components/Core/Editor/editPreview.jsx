@@ -12,6 +12,8 @@ import {loginCandidate} from '../../../store/landingPage/actions/index';
 import Loader from '../../Common/Loader/loader'
 import {eventClicked} from '../../../store/googleAnalytics/actions/index'
 import {formCategoryList} from '../../../Utils/formCategoryList'
+import Swal from 'sweetalert2'
+import { siteDomain } from '../../../Utils/domains';
 
 class EditPreview extends Component {
 
@@ -28,6 +30,7 @@ class EditPreview extends Component {
         }
         this.changeLink = this.changeLink.bind(this)
         this.headingChange = this.headingChange.bind(this);
+        this.generateResumeAlert = this.generateResumeAlert.bind(this);
     }
 
     async componentDidMount() {
@@ -64,14 +67,61 @@ class EditPreview extends Component {
         entityChange(entity, heading, pos);
     }
 
+    generateResumeAlert(){
+        const { personalInfo: { order_data, resume_generated }, history, reGeneratePDF, showGenerateResumeModal, 
+                hideGenerateResumeModal } = this.props;
+        if (order_data && order_data.id) {
+            if (!resume_generated) {
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                })
+
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to change your template again.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, generate resume!',
+                    cancelButtonText: 'No, cancel!',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.value) {
+                        showGenerateResumeModal()
+                        reGeneratePDF(order_data.id)
+                        setTimeout(function () {
+                            window.location.href = `${siteDomain}/dashboard`
+                            hideGenerateResumeModal()
+                        }, 5000);
+                    }
+                })
+            }
+            else {
+                showGenerateResumeModal()
+                reGeneratePDF(order_data.id)
+                setTimeout(function () {
+                    window.location.href = `${siteDomain}/dashboard`
+                    hideGenerateResumeModal()
+                }, 5000);
+            }
+        }
+        else {
+            history.push(`/resume-builder/buy`)
+        }
+    }
+
     render() {
         const {history, ui: {mainloader}} = this.props;
         return (
             <div className="edit-section">
                 {mainloader ? <Loader/> : ""}
                 <Header page={'edit'} history={history}/>
-                <LeftSideBar {...this.props}/>
-                <RightSection {...this.props} changeLink={this.changeLink} headingChange={this.headingChange}/>
+                <LeftSideBar {...this.props} generateResumeAlert={this.generateResumeAlert}/>
+                <RightSection {...this.props} changeLink={this.changeLink} headingChange={this.headingChange}
+                        generateResumeAlert={this.generateResumeAlert} />
             </div>
 
         )

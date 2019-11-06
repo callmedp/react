@@ -9,7 +9,6 @@ import {
     datepicker,
     renderSelect,
     renderTextArea,
-    renderMultiselect,
     renderAsyncCreatableSelect
 } from "../../../../../FormHandler/formFieldRenderer.jsx";
 
@@ -17,7 +16,6 @@ import moment from 'moment';
 import PreviewModal from "../../../Preview/changeTemplateModal";
 import Subscribe from "../../../RightSection/subscribe";
 import validate from "../../../../../FormHandler/validtaions/profile/validate"
-import {siteDomain} from "../../../../../../Utils/domains";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError";
 import {defaultInterests} from "../../../../../../Utils/defaultInterests";
 
@@ -48,23 +46,15 @@ class PersonalInfo extends Component {
     }
 
     async handleSubmit(values) {
-        let {sidenav: {listOfLinks, currentLinkPos}, personalInfo: {order_data}, history, updateCurrentLinkPos, onSubmit, showGenerateResumeModal, hideGenerateResumeModal, reGeneratePDF, personalInfo} = this.props
+        let {sidenav: {listOfLinks, currentLinkPos},generateResumeAlert, history, updateCurrentLinkPos, 
+                onSubmit, personalInfo} = this.props
         const {imageURL, flag} = this.state
         currentLinkPos++
         this.setState({submit: true})
         await onSubmit(values, imageURL, flag, personalInfo);
         if (currentLinkPos === listOfLinks.length) {
             currentLinkPos = 0
-            if (order_data && order_data.id) {
-                showGenerateResumeModal()
-                reGeneratePDF(order_data.id)
-                setTimeout(function () {
-                    window.location.href = `${siteDomain}/dashboard`
-                    hideGenerateResumeModal()
-                }, 5000);
-            } else {
-                history.push(`/resume-builder/buy`)
-            }
+            generateResumeAlert()
         } else {
             updateCurrentLinkPos({currentLinkPos})
             history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
