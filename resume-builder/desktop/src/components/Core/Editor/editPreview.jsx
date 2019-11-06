@@ -99,7 +99,7 @@ class EditPreview extends Component {
             if (!resume_generated) {
                 const swalWithBootstrapButtons = Swal.mixin({
                     customClass: {
-                        confirmButton: 'btn btn-success blue-button ',
+                        confirmButton: 'btn btn-success blue-button ml-10',
                         cancelButton: 'btn btn-danger blue-button ml-10'
                     },
                     buttonsStyling: false
