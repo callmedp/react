@@ -196,6 +196,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         "fetchEntityInfo": () => {
+            console.log('-----fetdd')
             return dispatch(profileActions.fetchPersonalInfo())
         },
         "showSelectTemplateModal": () => {

@@ -190,8 +190,11 @@ function openCancelModal(order_pk) {
 
 
 function editTemplate(){
+    if(localStorage.getItem('personalInfo')){
+        localStorage.removeItem('personalInfo')
+    }
     if(!localStorage.getItem('candidateId') && candidateId){
-        localStorage.setItem('candidateId',candidateId)
+        localStorage.setItem('candidateId',candidateId);
     }
     window.location.href = "/resume-builder/edit/?type=profile"
 }

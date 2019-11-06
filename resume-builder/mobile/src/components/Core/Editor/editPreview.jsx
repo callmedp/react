@@ -37,6 +37,7 @@ class EditPreview extends Component {
         if (!localStorage.getItem('candidateId') || !localStorage.getItem('token')) {
             await this.props.loginCandidate()
         }
+        this.props.fetchPersonalInfo();
         this.props.fetchLoaderStatus()
 
          // get userInfo from LocalStorage

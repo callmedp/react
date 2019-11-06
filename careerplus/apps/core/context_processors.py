@@ -38,7 +38,8 @@ def js_settings(request):
     if vars_text:
         vars_text = '<script type=\"text/javascript\">%s;</script>' % vars_text
     return {
-        'JS_SETTINGS': vars_text
+        'JS_SETTINGS': vars_text,
+        'CHATBOT_URL': cache.get('CHATBOT_URL','')
     }
 
 

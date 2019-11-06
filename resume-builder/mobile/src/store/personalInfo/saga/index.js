@@ -36,7 +36,6 @@ function* getPersonalDetails(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
         yield put({type: uiAction.UPDATE_MAIN_PAGE_LOADER, payload: {mainloader: true}})
         if (localStorage.getItem('personalInfo')) {
-
             yield put({
                 type: Actions.SAVE_USER_INFO,
                 data: modifyPersonalInfo(JSON.parse(localStorage.getItem('personalInfo')) || [])
