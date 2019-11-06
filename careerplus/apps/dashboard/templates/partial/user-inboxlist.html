@@ -1,6 +1,9 @@
 {% load static %}
 {% for obj in orderitems %}
         <li class="col-sm-12">
+            {% comment %} {% if obj.product.get_duration_in_day%}
+                <div class="days-left">{{obj.product.get_duration_in_day}} days left</div>
+            {% endif %} {% endcomment %}
             <h2>{{obj.product.get_name}}
                 {% if obj.product.get_exp_db %}
                  - {{obj.product.get_exp_db}}

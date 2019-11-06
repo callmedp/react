@@ -6,6 +6,7 @@ import codecs
 import time
 import sys,gzip
 import datetime
+import xlwt
 
 #django imports
 from django.contrib.auth import get_user_model
@@ -592,3 +593,127 @@ def generate_pixel_report(task=None, url_slug=None, days=None):
     csvfile.close()
     up_task.file_generated = upload_path
     up_task.save()
+
+def get_file_obj(file_name):
+    if settings.IS_GCP:
+        generated_file_obj = GCPPrivateMediaStorage().open(file_name, 'wb')
+    else:
+        generated_file_obj = open(settings.MEDIA_ROOT + '/' + file_name, 'w')
+    return generated_file_obj
+
+def write_row(sheet,data, row=0, start_col=0):
+    try:
+        for column, value in enumerate(data, start_col):
+            sheet.write(row, column, value,)
+    except Exception as e:
+        logging.getLogger('error_log').error("Failed to write row {}".format(e))
+    
+
+@task(name="generate_feedback_report")
+def generate_feedback_report(sid,start_date,end_date):
+    from order.models import OrderItemFeedbackOperation,OrderItemFeedback
+    from datetime import datetime
+
+    logging.getLogger('info_log').info(\
+        "Feedback Report Task Started for {},{},{}".format(sid,start_date,end_date))
+
+    scheduler_obj = Scheduler.objects.get(id=sid)
+    today_date_str = datetime.now().date().strftime("%Y_%m_%d")
+    file_name = "scheduler/{}/{}_discount_report.xls".format(today_date_str,sid)
+    file_obj = get_file_obj(file_name)
+    workbook = xlwt.Workbook()
+    sheet = workbook.add_sheet("Sheet 1",cell_overwrite_ok=True) 
+    heading = ['Feedback Call Assigned Date Time','CustomerID','Status','Agent Name','LTV','Follow Up Date Time','Item Name',\
+                'Feedaback Call Attempted Date Time', 'Satisfaction Status', 'Resolution', 'Payment Date Time']
+    write_row(sheet,heading,)
+    oi_feedbacks = OrderItemFeedback.objects.filter(created__gte=start_date,created__lte=end_date)
+    logging.getLogger('info_log').info(\
+        "Total Order Item Feedback Found {}".format(oi_feedbacks.count()))
+    
+    merged_row_data = {'merge_fields':['assigned_date','candidate_id','status','agent_name','ltv','follow_up']}
+    row = 1
+    merge_row_start_pos = None
+    previous_feedback_id = None
+
+    for oi_feedback in oi_feedbacks:
+
+        logging.getLogger('info_log').info(\
+            "Adding a row for OI Feedback {}".format(oi_feedback.id))
+
+        if previous_feedback_id != oi_feedback.customer_feedback.id:
+            if merge_row_start_pos:
+                logging.getLogger('info_log').info(\
+                    "Merging rows of a column ")
+                for index,field in  enumerate(merged_row_data.get('merge_fields',[])):
+                    sheet.write_merge(merge_row_start_pos, row - 1, index, index, merged_row_data.get(field,''))
+
+            assigned_date = ''
+            assigned_date_list = OrderItemFeedbackOperation.objects.filter(customer_feedback=oi_feedback.customer_feedback.id,\
+                                oi_type__in=[3,4]).values_list('added_on',flat=True)
+            
+            for date in assigned_date_list:
+                if not date:
+                    continue
+                assigned_date += date.strftime('%d/%m/%Y, %H:%M:%S') + ' | '
+
+            assigned_to = oi_feedback.customer_feedback.assigned_to.name if oi_feedback.customer_feedback and \
+                        oi_feedback.customer_feedback.assigned_to else ''
+            ltv = oi_feedback.customer_feedback.ltv
+
+            follow_up = ''
+            follow_up_list = OrderItemFeedbackOperation.objects.filter(customer_feedback=oi_feedback.customer_feedback.id,oi_type=5)\
+                        .values_list('follow_up_date',flat=True)
+
+            for date in follow_up_list:
+                if not date:
+                    continue
+                follow_up += date.strftime('%d/%m/%Y, %H:%M:%S') + ' | '
+
+            merged_row_data.update({
+                'assigned_date': assigned_date,
+                'candidate_id': oi_feedback.customer_feedback.candidate_id, 
+                'status': oi_feedback.customer_feedback.status_text,
+                'agent_name':assigned_to,
+                'ltv':ltv,
+                'follow_up':follow_up
+            })
+            previous_feedback_id =  oi_feedback.customer_feedback.id
+
+            merge_row_start_pos = row
+
+        feedback_attempted_date_time = OrderItemFeedbackOperation.objects.filter(customer_feedback=oi_feedback.customer_feedback.id,\
+                                        order_item = oi_feedback.order_item, oi_type=1).first()
+
+        feedback_attempted_date_time = feedback_attempted_date_time.added_on.strftime('%d/%m/%Y, %H:%M:%S') if \
+                                        feedback_attempted_date_time else ''
+ 
+        payment_date = oi_feedback.order_item.order.payment_date.strftime('%d/%m/%Y, %H:%M:%S') if oi_feedback.order_item\
+                     and oi_feedback.order_item.order and oi_feedback.order_item.order.payment_date else ''
+       
+        product_name = oi_feedback.order_item.product.name if oi_feedback.order_item and oi_feedback.order_item.product else ''
+        excel_row = [
+                        None, None, None,None,None, None, product_name, feedback_attempted_date_time\
+                        , oi_feedback.category_text,oi_feedback.resolution_text, payment_date
+                    ]
+        write_row(sheet,excel_row,row)
+        row += 1
+
+    if merge_row_start_pos and merge_row_start_pos != row:
+        for index,field in  enumerate(merged_row_data.get('merge_fields',[])):
+            sheet.write_merge(merge_row_start_pos, row - 1, index, index, merged_row_data.get(field,''))
+
+    if settings.IS_GCP:
+        workbook.save(file_obj)
+        logging.getLogger('info_log').info("Saved Data to GCP")
+    else:
+        workbook.save(file_obj.name)
+    file_obj.close()
+    
+    logging.getLogger('info_log').info(\
+        "Feedback Report Task Complete for {},{},{}".format(sid,start_date,end_date))
+
+    scheduler_obj.file_generated = file_name
+    scheduler_obj.percent_done = 100
+    scheduler_obj.status = 2
+    scheduler_obj.completed_on = datetime.now()
+    scheduler_obj.save()

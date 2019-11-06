@@ -1,0 +1,92 @@
+{% extends "console/base_console.html" %}
+{% load static compress %}
+{% load humanize %}
+{% load thumbnail %}
+{% block title %}
+<title>Feedback Report - Shine Learning</title>
+{% endblock title %}
+{% block css_block %}
+{{block.super}}
+{% compress css %}
+<link href="{% static 'packages/iCheck/skins/flat/green.css' %}" rel="stylesheet" type="text/css">
+{% endcompress %}
+<link type="text/css" href="{% static 'shinelearn/css/bootstrap-datepicker.min.css' %}" rel="stylesheet">
+{% endblock css_block %}
+{% block pagecontent %}
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Feedback Report</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                {% for message in messages %}
+                <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable" {% endif %}>
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row" style="margin-top:30px;">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <h2>Generate Report</h2>
+                <div class="x_panel">
+                    <div class="x_title">
+                        <form autocomplete="off" method="POST" role="form" id="feedback_report_gen_form" action=".">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="2">
+                            <div class="col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label>Start Date</label>
+                                    <div class='input-group' id='gen_start_date'>
+                                        <input class="form-control datepicker date-select" id="start-date" name="start_date" placeholder="Start Date" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label>End Date</label>
+                                    <div class='input-group' id='gen_end_date'>
+                                        <input class="form-control datepicker date-select" id="end-date" name="end_date" placeholder="End Date" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-4" style="margin-left:-15px">
+                                <div class="form-group">
+                                    <label> </label>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-primary" id="generate_button" style="border-radius:10px;">Generate</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock pagecontent %}
+{% block js_block %}
+{{ block.super }}
+<script type="text/javascript" src="{% static 'shinelearn/js/common/bootstrap-datepicker.min.js' %}"></script>
+<script type="text/javascript">
+    $('.date-select').datepicker({
+        'endDate':'today',
+        'format': 'yyyy/mm/dd',
+        'autoclose':true,
+    });
+    $("#generate_button").click(() => {
+        $("#feedback_report_gen_form").submit();
+    });
+    $("#start-date").change(()=>{   // to limit starting date of end date
+        $('#end-date').datepicker('setStartDate', new Date($('#start-date').val()));
+    })
+</script>
+{% endblock js_block %}
