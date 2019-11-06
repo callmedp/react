@@ -69,10 +69,15 @@ export default class TopBar extends Component {
                                 !!(!(order_data && order_data.id) || !(resume_generated)) ?
                                     <div className="top-banner--banner-right">
                                         <div>
+                                            {
+                                                !!(!(order_data && order_data.id)) 
+                                            ? 
                                             <button className="orange-button mr-10"
                                                     onClick={() => newUser ? showAlertModal() : this.redirectToBuyPage()}>Subscribe
                                                 now
                                             </button>
+                                            : ''
+                                            }
                                             <button className="white-button mr-20" onClick={() => {
                                                 newUser ? showAlertModal() : this.changeTemplate()
                                             }}>Change template
