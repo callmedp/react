@@ -35,6 +35,7 @@ from users.models import User
 from console.feedbackCall.choices import FEEDBACK_RESOLUTION_CHOICES,FEEDBACK_CATEGORY_CHOICES,FEEDBACK_STATUS,FEEDBACK_OPERATION_TYPE
 from order.utils import get_ltv
 from coupon.models import Coupon
+from resumebuilder.models import Candidate
 
 #third party imports
 from payment.utils import manually_generate_autologin_url
@@ -192,6 +193,9 @@ class Order(AbstractAutoDate):
         items = self.orderitems.all()
         return any([item.product.type_flow == 17 for item in items])
 
+    def order_contains_expert_assistance(self):
+        items = self.orderitems.all()
+        return any([item.product.sub_type_flow == 101 for item in items])
     def order_contains_neo_item(self):
         items = self.orderitems.all()
         return any([item.product.vendor.slug == 'neo' for item in items])
@@ -427,6 +431,14 @@ class Order(AbstractAutoDate):
             board_user_on_neo.delay(neo_ids=neo_items_id)
 
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_resume_builder():
+            if self.order_contains_expert_assistance():
+                cand_id = existing_obj and existing_obj.candidate_id
+                if cand_id:
+                    candidate_obj = Candidate.objects.filter(candidate_id=cand_id).first()
+                    if candidate_obj: 
+                        candidate_obj.resume_generated = False
+                        candidate_obj.save()
+
             generate_resume_for_order.delay(self.id)
 
             logging.getLogger('info_log').info("Generating resume for order {}".format(self.id))
