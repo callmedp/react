@@ -7,6 +7,8 @@ import { updatePersonalInfo, fetchPersonalInfo } from "../../../../store/persona
 import { updateAlertModalStatus, showGenerateResumeModal, hideGenerateResumeModal } from "../../../../store/ui/actions/index"
 import Loader from '../../../Common/Loader/loader.jsx';
 import ChangeTemplateModal from './changeTemplateModal.jsx';
+import {loginCandidate} from '../../../../store/landingPage/actions/index';
+
 import moment from 'moment'
 import {
     Accordion,
@@ -63,8 +65,11 @@ class Preview extends Component {
         }
     }
 
-    componentDidUpdate(prevProps) {
-        const { template: { entity_position, reorderFailToast }, personalInfo: { selected_template } } = this.props;
+    async componentDidUpdate(prevProps) {
+        const { template: { entity_position, reorderFailToast }, personalInfo: { selected_template } , loginCandidate} = this.props;
+        if (!localStorage.getItem('candidateId') || !localStorage.getItem('token')) {
+            await loginCandidate()
+        }
         const { selectedEntity } = this.state
         if (entity_position !== prevProps.template.entity_position) {
             (entity_position && eval(entity_position) || []).map((el) => {
@@ -554,7 +559,12 @@ const mapDispatchToProps = (dispatch) => {
         },
         'eventClicked': (data) => {
             return dispatch(eventClicked(data))
-        }
+        },
+        "loginCandidate": (token) => {
+            return new Promise((resolve, reject) => {
+                dispatch(loginCandidate({payload: {alt: token}, resolve, reject, isTokenAvail: false}))
+            })
+        },
     }
 };
 

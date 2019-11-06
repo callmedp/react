@@ -75,7 +75,7 @@ class Buy extends Component {
 
     async componentDidMount() {
         if (!localStorage.getItem('candidateId')) {
-            await loginCandidate()
+            await this.props.loginCandidate()
         }
          // get userInfo from LocalStorage
          if(localStorage.getItem('email')) window['email']= localStorage.getItem('email')

@@ -35,7 +35,7 @@ class EditPreview extends Component {
 
     async componentDidMount() {
         if (!localStorage.getItem('candidateId') || !localStorage.getItem('token')) {
-            await loginCandidate()
+            await this.props.loginCandidate()
         }
         this.props.fetchLoaderStatus()
 
