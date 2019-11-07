@@ -38,7 +38,7 @@ class EditPreview extends Component {
         this.allowUploadResume = this.allowUploadResume.bind(this);
         this.generateResumeAlert = this.generateResumeAlert.bind(this);
 
-        if (parseInt(localStorage.getItem('experience') || 0) >= 4) {
+        if (parseInt(localStorage.getItem('userExperience') || 0) >= 4) {
             if(document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]){
                 document.getElementsByClassName('chat-bot')[0].style.display = 'none';
             }

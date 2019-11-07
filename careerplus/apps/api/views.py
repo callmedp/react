@@ -896,7 +896,7 @@ class ShineCandidateLoginAPIView(APIView):
                             "candidate_profile": self.customize_user_profile(login_response),
                             "entity_status": self.get_entity_status_for_candidate(candidate_id),
                             "order_data": self.get_existing_order_data(candidate_id),
-                            "experience": self.get_candidate_experience(login_response),
+                            "userExperience": self.get_candidate_experience(login_response),
                             # TODO make param configurable
                             }
         else:
