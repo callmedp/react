@@ -31,7 +31,7 @@ export class Buy extends Component {
         this.state = {
             'checked': 'product1'
         }
-        if (parseInt(localStorage.getItem('experience') || 0) >= 4) {
+        if (parseInt(localStorage.getItem('userExperience') || 0) >= 4) {
             if (document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
                 document.getElementsByClassName('chat-bot')[0].style.display = 'none';
             }
