@@ -60,7 +60,7 @@ class Home extends Component {
 
     async componentDidMount() {
         if(this.state.token){
-            await this.props.loginCandidate(this.state.token);
+            await this.props.loginCandidate({alt:this.state.token}, true);
         }
     }
 
@@ -304,9 +304,9 @@ const mapDispatchToProps = (dispatch) => {
         "getCandidateId": () => {
             return dispatch(getCandidateId())
         },
-        "loginCandidate": (token) => {
+        "loginCandidate": (payload, isTokenAvail) => {
             return new Promise((resolve, reject) => {
-                return dispatch(loginCandidate({info: {alt: token}, resolve, reject, isTokenAvail: true}))
+                return dispatch(loginCandidate({info: payload, resolve, reject, isTokenAvail: isTokenAvail}))
             })
         },
         'showModal': () => {

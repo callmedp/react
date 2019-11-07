@@ -55,7 +55,7 @@ function* loginCandidate(action) {
             result = yield call(Api.getInformation)
         }
 
-        if (result && result['error']) {
+        if (result && result['error']) {    
             localStorage.clear();
             window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
             yield put({type: UPDATE_UI, data: {loader: false}})

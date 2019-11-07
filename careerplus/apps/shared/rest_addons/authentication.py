@@ -1,11 +1,14 @@
 # python imports
 import pickle
+import logging
 
 # django imports
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.signals import user_login_failed
 from django.contrib.auth import _get_backends, _clean_credentials
+
+
 
 # local imports
 
@@ -45,6 +48,7 @@ class ShineUserAuthentication(SessionAuthentication):
 
         auth = get_authorization_header(request).split()
         if not auth:
+            logging.getLogger('info_log').info('No authorisation header found.')
             return None
 
         return self.authenticate_credentials(auth[0])
@@ -52,7 +56,9 @@ class ShineUserAuthentication(SessionAuthentication):
     def authenticate_credentials(self, key):
         candidate_profile = conn.get(key)
         if not candidate_profile:
+            logging.getLogger('eror_log').error('Could not fetch candidate profile for  header {}'.format(key))
             return
+            
         shine_candidate_obj = pickle.loads(candidate_profile)
         return (shine_candidate_obj, None)
 
