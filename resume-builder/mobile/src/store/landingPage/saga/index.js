@@ -45,9 +45,9 @@ function* loginCandidate(action) {
             return;
             //redirect code here
         }
-        const {data: {candidate_id, candidate_profile, token, entity_status, experience}} = result;
+        const {data: {candidate_id, candidate_profile, token, entity_status, userExperience}} = result;
         localStorage.setItem('candidateId', (candidate_id) || '');
-        localStorage.setItem('experience',(experience || 0));
+        localStorage.setItem('userExperience',(userExperience || 0));
         for (const key in candidate_profile) {
             const entityObj = entity_status.find(el => el['display_value'] === key);
             if (key === 'personalInfo') {
