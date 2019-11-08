@@ -4,6 +4,10 @@
             {% comment %} {% if obj.product.get_duration_in_day%}
                 <div class="days-left">{{obj.product.get_duration_in_day}} days left</div>
             {% endif %} {% endcomment %}
+            <div class="days-remaining">
+                <P>DAYS REMAINING</P>
+                <span>0</span> <span>4</span> <span>5</span>
+             </div>
             <h2>{{obj.product.get_name}}
                 {% if obj.product.get_exp_db %}
                  - {{obj.product.get_exp_db}}
@@ -73,7 +77,8 @@
                 {% elif obj.order.auto_upload %}
                     <p><strong>Status:</strong> Service is under progress- <a role="button" class="upload-resume">Upload Resume</a></p>
                 {% else %}
-                    <p><strong>Status:</strong> Service is under progress</p>
+                    <p><strong>Status:</strong> Service is under progress</p> 
+                    <p class="pause-play-services"><a role="button" class="upload-resume"><i class="play"> </i> Pause Services</a></p>
                 {% endif %}
 
             {% elif obj.product.type_flow == 8 %}
