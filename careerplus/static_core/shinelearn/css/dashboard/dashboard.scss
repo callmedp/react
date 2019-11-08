@@ -1943,6 +1943,7 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
 	p {
 		background: $white-color !important;
 		font-size: $font-size+3;
+		padding: 0 0 10px 0 !important;
 	}
 	span {
 		width: 35px;
