@@ -208,6 +208,8 @@
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
                 {% else %}
                    <p><strong>Status:</strong> Service is under progress</p>
+                {% endif %}
+                {% if obj.oi_status == 28 or obj.oi_status == 34 or obj.oi_status == 35%}
                     {% if obj.days_left_oi_product > 0 and obj.oi_status|stringformat:'i' in '28,34,35' %}
                         {% if obj.service_pause_status %}
                             <p class="pause-play-services">
