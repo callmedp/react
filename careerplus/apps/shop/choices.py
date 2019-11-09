@@ -150,6 +150,7 @@ S_ATTR_DICT = {
     'FD': 'featured_duration',
     'SD': 'service_doc',
     'SI': 'service_im',
+    'CP': 'can_be_paused',
     'LC': 'links_count'
 }
 

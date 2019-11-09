@@ -9,8 +9,6 @@ from django.conf import settings
 #local imports
 
 #inter app imports
-from order.models import Order
-from users.mixins import RegistrationLoginApi
 from core.api_mixin import ShineCandidateDetail
 from emailers.email import SendMail
 
@@ -26,6 +24,8 @@ def randompassword():
 
 # @task(name="register user on shine" )
 def user_register(data={}, order=None):
+    from order.models import Order
+    from users.mixins import RegistrationLoginApi
     try:
         # data dict contains following data email, raw_password, country_code, cell_phone, vendor_id
         raw_password = randompassword()

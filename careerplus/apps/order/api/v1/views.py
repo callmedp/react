@@ -3,16 +3,22 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import ListAPIView,UpdateAPIView
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 
 #in app imports
 from order.api.core.mixins import OrderItemViewMixin
-from order.models import Order,MonthlyLTVRecord
-from order.api.v1.serializers import OrderItemListSerializer
+from order.models import Order,MonthlyLTVRecord,OrderItem
+from order.api.v1.serializers import OrderItemSerializer
 from shared.rest_addons.authentication import ShineUserAuthentication
 from .serializers import OrderSerializer,LTVReportSerializer
+from careerplus.apps.order.utils import FeatureProfileUtil
+from shared.permissions import IsObjectOwner, IsOwner
 
 # python imports
 import json
+
+#django imports
+from django.http import HttpResponse,HttpResponseBadRequest
 
 
 class OrderItemViewSet(OrderItemViewMixin, ModelViewSet):
@@ -22,7 +28,7 @@ class OrderItemViewSet(OrderItemViewMixin, ModelViewSet):
 
 
 class OrderItemsListView(ListAPIView):
-    serializer_class = OrderItemListSerializer
+    serializer_class = OrderItemSerializer
     authentication_classes = ()
     permission_classes = ()
 
@@ -54,6 +60,15 @@ class LTVReportView(ListAPIView):
         queryset = MonthlyLTVRecord.objects.filter(
                         year=year,month=month)
         return queryset
+
+class OrderItemUpdateView(UpdateAPIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = OrderItemSerializer
+    queryset = OrderItem.objects.all()
+    lookup_field = "id"
+    lookup_url_kwarg = "pk"
+    
     
         
 
