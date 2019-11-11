@@ -711,12 +711,12 @@ class OrderItem(AbstractAutoDate):
         can_be_paused = self.product.is_pause_service
         
         if not can_be_paused:
-            return 0
+            return timedelta(0)
 
         featured_op = self.orderitemoperation_set.filter(oi_status=28).first()
 
         if not featured_op:
-            return 0
+            return timedelta(0)
 
         sdt = featured_op.created
 

@@ -209,7 +209,7 @@
                 {% else %}
                    <p><strong>Status:</strong> Service is under progress</p>
                 {% endif %}
-                {% if obj.oi_status == 28 or obj.oi_status == 34 or obj.oi_status == 35 and obj.days_left_oi_product.days > 0%}
+                {% if obj.oi_status == 28 or obj.oi_status == 34 or obj.oi_status == 35 and obj.days_left_oi_product.days > 0 %}
                     {% if obj.service_pause_status %}
                         <p class="pause-play-services">
                             <a role="button" onclick="pause_resume_service(this,{{obj.id}},34)">
