@@ -2,7 +2,7 @@
 {% for obj in orderitems %}
         <li class="col-sm-12">
             {% if obj.product.type_flow == 5 %}
-                {% if obj.days_left_oi_product.days > 0 and obj.oi_status == 28 or obj.oi_status == 34 or obj.oi_status == 35 %}
+                {% if obj.oi_status == 28 or obj.oi_status == 34 or obj.oi_status == 35 and obj.days_left_oi_product.days > 0  %}
                     <div class="days-remaining">
                         <P>DAYS REMAINING</P>
                         <span>{{ obj.days_left_oi_product|get_data:0 }}</span> <span>{{ obj.days_left_oi_product|get_data:1 }}</span> <span>{{ obj.days_left_oi_product|get_data:2 }}</span>
