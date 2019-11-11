@@ -126,7 +126,7 @@ function* feedbackSubmit(action) {
 function* getComponentTitle(action) {
     try {
         let {payload: {resolve, reject}} = action;
-        resolve('Resume Builder | Shine Learning')
+        resolve('Resume Builder 2019 | Online Free Resume Maker [Unique Templates] @ Shine Learning')
     } catch (e) {
         console.log(e);
     }
