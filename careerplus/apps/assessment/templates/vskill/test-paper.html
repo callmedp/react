@@ -3,7 +3,7 @@
 {% block title %}{{object.title}} @ Shine Learning{% endblock title %}
 {% block canonical_url %}
 <link rel="canonical" href="https://{{ SITE_DOMAIN }}/practice-tests/{{object.slug}}-test/">
-<link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}/practice-tests/{{object.slug}}-test/">
+<link rel="alternate" href="//{{ SITE_DOMAIN }}/practice-tests/{{object.slug}}-test/">
 {% endblock canonical_url %}
 {% block django_meta %}
     <meta name="description" content="{{object.title }} practice test, answer these {{questions_list.count}} questions to obtain your score for free.">
