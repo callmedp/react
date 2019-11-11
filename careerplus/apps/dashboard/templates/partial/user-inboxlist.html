@@ -2,10 +2,10 @@
 {% for obj in orderitems %}
         <li class="col-sm-12">
             {% if obj.product.type_flow == 5 %}
-                {% if obj.days_left_oi_product > 0 %}
+                {% if obj.days_left_oi_product > 0 and obj.oi_status == 28 or obj.oi_status == 34 or obj.oi_status == 35 %}
                     <div class="days-remaining">
                         <P>DAYS REMAINING</P>
-                        <span>{{ obj.days_left_oi_product|modulo:2 }}</span> <span>{{ obj.days_left_oi_product|modulo:1 }}</span> <span>{{ obj.days_left_oi_product|modulo:0 }}</span>
+                        <span>{{ obj.days_left_oi_product|get_data:0 }}</span> <span>{{ obj.days_left_oi_product|get_data:1 }}</span> <span>{{ obj.days_left_oi_product|get_data:2 }}</span>
                     </div>
                     {% comment %} <div class="days-left">{{obj.days_left_oi_product}} days left</div> {% endcomment %}
                 {% endif %} 
@@ -209,21 +209,19 @@
                 {% else %}
                    <p><strong>Status:</strong> Service is under progress</p>
                 {% endif %}
-                {% if obj.oi_status == 28 or obj.oi_status == 34 or obj.oi_status == 35%}
-                    {% if obj.days_left_oi_product > 0 and obj.oi_status|stringformat:'i' in '28,34,35' %}
-                        {% if obj.service_pause_status %}
-                            <p class="pause-play-services">
-                                <a role="button" onclick="pause_resume_service(this,{{obj.id}},34)">
-                                    <i class="pause"> </i> Pause Service
-                                </a>
-                            </p>
-                        {% else %}
-                            <p class="pause-play-services">
-                                <a role="button" onclick="pause_resume_service(this,{{obj.id}},35)">
-                                    <i class="play"> </i> Resume Service
-                                </a>
-                            </p>
-                        {% endif %}
+                {% if obj.oi_status == 28 or obj.oi_status == 34 or obj.oi_status == 35 and obj.days_left_oi_product > 0%}
+                    {% if obj.service_pause_status %}
+                        <p class="pause-play-services">
+                            <a role="button" onclick="pause_resume_service(this,{{obj.id}},34)">
+                                <i class="pause"> </i> Pause Service
+                            </a>
+                        </p>
+                    {% else %}
+                        <p class="pause-play-services">
+                            <a role="button" onclick="pause_resume_service(this,{{obj.id}},35)">
+                                <i class="play"> </i> Resume Service
+                            </a>
+                        </p>
                     {% endif %}
                 {% endif %}
 
