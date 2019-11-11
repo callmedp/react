@@ -251,6 +251,7 @@ class FeatureProfileUtil:
 
 
     def pause_resume_feature(self,oi,isPause=True):
+        from  order.models import OrderItem
         candidate_id = self.get_candidate_id(oi)
         pause_resume_operations = oi.orderitemoperation_set.filter(oi_status__in=[34,35])
         if pause_resume_operations:
@@ -315,6 +316,7 @@ class FeatureProfileUtil:
     
 
     def close_all_feature(self):
+        from  order.models import OrderItem
         oi_status = [28,34,35]
         sub_type_flow = [501,503]
         featured_orderitems = self.get_featured_oi(oi_status,sub_type_flow)
