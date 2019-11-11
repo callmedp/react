@@ -4,9 +4,7 @@ import './helpModal.scss'
 
 
 if (typeof document !== 'undefined') {
-
     Modal.setAppElement(document.getElementById('react-app'));
-
 }
 
 
@@ -38,14 +36,19 @@ export default class LoginModal extends React.Component {
     }
 
     async handleLogin(event){
-        debugger;
         event.preventDefault();
+        const {history} = this.props;
         if(! this.state.email  ||  !this.state.password){
             return ; 
         }
         this.closeModal();
-        await this.props.loginCandidate({email:this.state.email, password: this.state.password},true)
-
+        try{
+        const result  =  await this.props.loginCandidate({email:this.state.email, password: this.state.password},true)
+        history.push('/resume-builder/edit/?type=profile')
+    }
+        catch(e){
+            console.log('The error is , ', e.message);
+        }
     }
     closeModal() {
         this.props.hideLoginModal();
