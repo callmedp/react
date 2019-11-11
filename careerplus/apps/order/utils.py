@@ -312,7 +312,7 @@ class FeatureProfileUtil:
 
         for oi in featured_orderitems:
             candidate_id = self.get_candidate_id(oi)
-            days_left = oi.days_left_oi_product
+            days_left = oi.days_left_oi_product.days
 
             if not candidate_id or  days_left > 0:
                 logging.getLogger('info_log').info(

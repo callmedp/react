@@ -951,8 +951,14 @@ const uploadResumeShine = (checkbox,order_id)=>{
     })
 }
 
+let pause_resume_api_hit_once = false
+
 const pause_resume_service = (el,oi_id,oi_status)=>{
-    $(el).parent().hide();	
+    if (pause_resume_api_hit_once)
+        return
+
+    pause_resume_api_hit_once = true
+    
     let request = fetch(`/order/api/v1/orderitem/${oi_id}/update/`,{
         headers: {
             "Content-Type": "application/json"
