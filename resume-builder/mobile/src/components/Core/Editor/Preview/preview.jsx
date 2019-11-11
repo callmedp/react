@@ -28,6 +28,16 @@ class Preview extends Component {
 
     constructor(props) {
         super(props)
+
+        if (parseInt(localStorage.getItem('userExperince') || 0) >= 4) {
+            if(document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]){document.getElementsByClassName('chat-bot')[0].style.display = 'none';
+            }
+        }
+        else {
+            if(document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]){
+                document.getElementsByClassName('chat-bot')[0].style.display = 'block';
+            }
+        }
         this.state = {
             'customize': false,
             currentTab: 1,
@@ -55,6 +65,7 @@ class Preview extends Component {
 
     componentWillUpdate(prevProps) {
         const { template } = this.props
+        
         if (template !== prevProps.template) {
 
             this.setState({
