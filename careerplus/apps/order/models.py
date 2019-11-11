@@ -736,7 +736,7 @@ class OrderItem(AbstractAutoDate):
 
         if (not pause_resume_operations.count() & 1) and pause_resume_operations.count()>0:  #if even no of operations -> the service is resumed
             days_between_pause_resume += timezone.now() - pause_resume_operations.last()
-        else:
+        elif pause_resume_operations.count() == 0:
             days_left -= (timezone.now() - sdt)
 
         days_left -= (days_between_pause_resume)
