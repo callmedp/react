@@ -260,6 +260,16 @@ class FeatureProfileUtil:
             #     return False
             if time_diff.seconds <120:   #this is just for testing
                 return False
+        if isPause:
+            other_item_exist = OrderItem.objects.filter(
+                    order__status__in=[1, 3], product__type_flow__in=[5],
+                    oi_status=28,
+                    product__sub_type_flow=oi.product.sub_type_flow,
+                    order__candidate_id=oi.order.candidate_id).exclude(id=oi.id).exists()
+
+            if other_item_exist:
+                return True
+                
         flag = self.update_badges(candidate_id,oi,False)
 
         if not flag:
@@ -319,10 +329,19 @@ class FeatureProfileUtil:
                     'Days remaining {} '.format(days_left)
                 )
                 continue
-            flag = self.update_badges(candidate_id,oi,False)
 
-            if not flag:
-                continue
+            other_item_exist = OrderItem.objects.filter(
+                    order__status__in=[1, 3], product__type_flow__in=[5],
+                    oi_status=28,
+                    product__sub_type_flow=oi.product.sub_type_flow,
+                    order__candidate_id=oi.order.candidate_id).exclude(id=oi.id).exists()
+
+            if not other_item_exist:
+                flag = self.update_badges(candidate_id,oi,False)
+                if not flag:
+                    logging.getLogger('info_log').info(
+                        'Badging Failed for order item id %s' % (str(oi.id)))
+                    continue
 
             unfeature_count += 1
             last_oi_status = oi.oi_status
