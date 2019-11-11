@@ -102,3 +102,40 @@ function openPopup(el) {
 function closePopup() {
     $('.modal').fadeOut(300);
 }
+
+let pause_resume_api_hit_once = false
+
+const pause_resume_service = (el,oi_id,oi_status)=>{
+    if (pause_resume_api_hit_once)
+        return
+
+    pause_resume_api_hit_once = true
+    
+    let request = fetch(`/order/api/v1/orderitem/${oi_id}/update/`,{
+        headers: {
+            "Content-Type": "application/json"
+        },
+        method: 'PATCH',  
+        body: JSON.stringify({
+                    oi_status
+                }),
+    });
+
+    request.then((resp) =>resp.json())
+    .then(response => {
+        error = response['oi_status'] !== oi_status ? true : false
+        title = error ? `Please wait 24 hours before ${oi_status==34 ? 'pausing' : 'resuming'} ` : 
+                            response['oi_status'] ===34 ? 'Service is Paused' : 'Service is Resumed'
+        Toast.fire({
+                    type: error ?'error' : 'success',
+                    title
+        })
+        location.reload()
+    })
+    .catch(e =>{
+        Toast.fire({
+            type: 'error',
+            title:'Something went wrong'
+        })
+    })
+}

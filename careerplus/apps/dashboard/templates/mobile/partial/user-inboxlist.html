@@ -248,20 +248,39 @@
                 {% endif %}
             {% endif %}
 
-            <div class="light-blue__pause">
-                <span class="light-blue__pause--button"></span>
-                <p class="pb-0">Pause Service</p>
-            </div><!-- // Pause Service -->
+            {% if obj.oi_status == 28 or obj.oi_status == 34 or obj.oi_status == 35 %}
+                {% if obj.days_left_oi_product.days > 0  %}
+                    {% if obj.service_pause_status %}
+                        <div class="light-blue__pause" onclick="pause_resume_service(this,{{obj.id}},34)">
+                            <span class="light-blue__pause--button"></span>
+                            <p class="pb-0">Pause Service</p>
+                        </div><!-- // Pause Service -->
+                    {% else %}
+                        <div class="light-blue__pause" onclick="pause_resume_service(this,{{obj.id}},35)">
+                            <span class="light-blue__pause--button"></span>
+                            <p class="pb-0">Resume Service</p>
+                        </div><!-- // Resume Service -->
+                    {% endif %}
+                {% endif %}
+            {% endif %}
         </div><!-- /.blue box -->
 
-        <div class="day-remains">
-            <span class="day-remains--head">Day Remaining</span>
-            <ul class="day-remains--counts">
-                <li>0</li>
-                <li>4</li>
-                <li>5</li>
-            </ul>
-        </div><!-- // Day Remaining-->
+        {% if obj.product.type_flow == 5 %}
+            {% if obj.oi_status == 28 or obj.oi_status == 34 or obj.oi_status == 35 %}
+                {% if obj.days_left_oi_product.days > 0  %}
+                 <div class="day-remains">
+                    <span class="day-remains--head">Day Remaining</span>
+                    <ul class="day-remains--counts">
+                        <li>{{ obj.days_left_oi_product|get_data:0 }}</li>
+                        <li>{{ obj.days_left_oi_product|get_data:1 }}</li>
+                        <li>{{ obj.days_left_oi_product|get_data:2 }}</li>
+                    </ul>
+                </div><!-- // Day Remaining-->
+                {{% endif %}
+            {% endif %} 
+            
+        {% endif %}
+       
 
 
         {% if obj.oi_status == 24 or obj.oi_status == 46 %}
