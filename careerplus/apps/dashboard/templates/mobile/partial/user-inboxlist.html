@@ -246,10 +246,24 @@
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
 
                 {% endif %}
-
-
             {% endif %}
+
+            <div class="light-blue__pause">
+                <span class="light-blue__pause--button"></span>
+                <p class="pb-0">Pause Service</p>
+            </div><!-- // Pause Service -->
         </div><!-- /.blue box -->
+
+        <div class="day-remains">
+            <span class="day-remains--head">Day Remaining</span>
+            <ul class="day-remains--counts">
+                <li>0</li>
+                <li>4</li>
+                <li>5</li>
+            </ul>
+        </div><!-- // Day Remaining-->
+
+
         {% if obj.oi_status == 24 or obj.oi_status == 46 %}
             <div class="button-wrap mt-15">
                 <span class="accept"><a role="button" onClick="openPopup('accept-modal{{obj.pk}}');"><sup class="icon-tick-green"></sup>Accept</a></span>
