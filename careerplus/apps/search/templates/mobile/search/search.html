@@ -8,7 +8,7 @@
     {%  endblock django_meta %}
     {% block canonical_url %}
       <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{canonical_url}}">
-      {% comment %} <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{canonical_url}}"> {% endcomment %}
+      {% comment %} <link rel="alternate" href="//{{ SITE_DOMAIN }}{{canonical_url}}"> {% endcomment %}
     {% endblock canonical_url %}
 {% endif %}
 
