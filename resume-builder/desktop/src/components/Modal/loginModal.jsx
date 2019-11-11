@@ -37,12 +37,14 @@ export default class LoginModal extends React.Component {
         })
     }
 
-    handleLogin(){
+    async handleLogin(event){
         debugger;
+        event.preventDefault();
         if(! this.state.email  ||  !this.state.password){
             return ; 
         }
-        this.props.loginCandidate({email:this.state.email, password: this.state.password},true)
+        this.closeModal();
+        await this.props.loginCandidate({email:this.state.email, password: this.state.password},true)
 
     }
     closeModal() {
