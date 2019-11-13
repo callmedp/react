@@ -40,6 +40,11 @@ class UpgradedMobileDetectionMiddleware(MiddlewareMixin,MobileDetectionMiddlewar
         super(UpgradedMobileDetectionMiddleware, self).__init__(get_response)
 
 
+    def process_response(self, request, response):
+        response['Vary'] = "User-Agent"
+        return response
+
+
 class LoginMiddleware(object):
 
     def __init__(self, get_response):
