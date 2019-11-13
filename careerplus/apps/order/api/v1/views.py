@@ -63,11 +63,12 @@ class LTVReportView(ListAPIView):
 
 class OrderItemUpdateView(UpdateAPIView):
     authentication_classes = (ShineUserAuthentication,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,IsObjectOwner,)
     serializer_class = OrderItemSerializer
     queryset = OrderItem.objects.all()
     lookup_field = "id"
     lookup_url_kwarg = "pk"
+    owner_fields = ['order.candidate_id']
     
     
         
