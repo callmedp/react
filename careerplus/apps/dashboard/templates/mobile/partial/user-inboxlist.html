@@ -1,4 +1,4 @@
-{% load static %}
+{% load static filter-tags %}
 
 {% for obj in orderitems %}
     <div class="box row mb-30">
@@ -276,7 +276,7 @@
                         <li>{{ obj.days_left_oi_product|get_data:2 }}</li>
                     </ul>
                 </div><!-- // Day Remaining-->
-                {{% endif %}
+                {% endif %}
             {% endif %} 
             
         {% endif %}
