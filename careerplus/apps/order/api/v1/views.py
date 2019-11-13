@@ -62,6 +62,7 @@ class OrderItemOperationApiView(FieldFilterMixin,ListAPIView):
     serializer_class = OrderItemOperationsSerializer
     pagination_class = LearningCustomPagination
 
+
     def get_queryset(self):
         filter_dict = {}
         query_params = self.request.query_params

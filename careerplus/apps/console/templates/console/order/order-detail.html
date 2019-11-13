@@ -33,13 +33,13 @@
                      <h2 class="order_details__name">{{order.first_name}} {{order.last_name}}</h2>
                      <p>
 
-
-                       <span class="icon-callsm-box"> <i class="icon-callsmw"></i></span> <span class="icon-txt" id="mobile_field{{order.id}}_1"></span>
-                        <button class="round_btn" onclick="order_get_details('{{order.id}}','mobile,alt_mobile','mobile')";>Click to view</button>
-                         &nbsp;&nbsp;   {% if exoitel_status%}
-                           <button id="{{order.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{order.id}});"></button>
-                           <span style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{order.id}}callingbtn-error"></span>
+                    {% if exoitel_status%}
+                       <span class="icon-callsm-box" id="{{order.id}}callingBtn1"> <i class="icon-callsmw" onclick="makeCallBtn({{order.id}});"></i></span> <span class="icon-txt" id="mobile_field{{order.id}}_1"></span>
+                           <span style="overflow-y: auto; overflow-x: hidden;" id="{{order.id}}callingbtn-error"></span>
                           {% endif %}
+
+                        <button class="round_btn" onclick="order_get_details('{{order.id}}','mobile,alt_mobile','mobile')";>Click to view</button>
+
                      </p>
                      <p><span class="icon-emailsm-box"><i class="icon-emailsm"></i></span> <span class="icon-txt" id="email_field{{order.id}}_1"></span> <button class="round_btn" onclick="order_get_details('{{order.id}}','email,alt_email','email')";>Click to view</button></p>
                      <button class="blue_btn mt-10" data-toggle="modal" data-target="#alternatecontact_modal">Add Alternate contact</button>
