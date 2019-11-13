@@ -103,13 +103,13 @@ function closePopup() {
     $('.modal').fadeOut(300);
 }
 
-let pause_resume_api_hit_once = false
+let pause_resume_api_hit_once_mobile = false
 
-const pause_resume_service = (el,oi_id,oi_status)=>{
-    if (pause_resume_api_hit_once)
+const pause_resume_service_mobile = (el,oi_id,oi_status)=>{
+    if (pause_resume_api_hit_once_mobile)
         return
 
-    pause_resume_api_hit_once = true
+    pause_resume_api_hit_once_mobile = true
     
     let request = fetch(`/order/api/v1/orderitem/${oi_id}/update/`,{
         headers: {

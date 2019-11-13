@@ -251,12 +251,12 @@
             {% if obj.oi_status == 28 or obj.oi_status == 34 or obj.oi_status == 35 %}
                 {% if obj.days_left_oi_product.days > 0  %}
                     {% if obj.service_pause_status %}
-                        <div class="light-blue__pause" onclick="pause_resume_service(this,{{obj.id}},34)">
+                        <div class="light-blue__pause" onclick="pause_resume_service_mobile(this,{{obj.id}},34)">
                             <span class="light-blue__pause--button"></span>
                             <p class="pb-0">Pause Service</p>
                         </div><!-- // Pause Service -->
                     {% else %}
-                        <div class="light-blue__pause" onclick="pause_resume_service(this,{{obj.id}},35)">
+                        <div class="light-blue__pause" onclick="pause_resume_service_mobile(this,{{obj.id}},35)">
                             <span class="light-blue__pause--button"></span>
                             <p class="pb-0">Resume Service</p>
                         </div><!-- // Resume Service -->
