@@ -188,14 +188,16 @@ function openCancelModal(order_pk) {
     $(modal_id).modal('show');
 }
 
-
-function editTemplate(){
+function editTemplate(key = 'mobile'){
     if(localStorage.getItem('personalInfo')){
         localStorage.removeItem('personalInfo')
     }
-    if(!localStorage.getItem('candidateId') && candidateId){
-        localStorage.setItem('candidateId',candidateId);
+    if(key =='mobile'){
+        if(!localStorage.getItem('candidateId') && candidateId){
+            localStorage.setItem('candidateId',candidateId);
+        }
     }
+  
     window.location.href = "/resume-builder/edit/?type=profile"
 }
 

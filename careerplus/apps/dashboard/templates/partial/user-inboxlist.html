@@ -33,7 +33,7 @@
                    <p class="inline-block">
                     <a role="button" onclick="downloadOrderTemplate('{{obj.order.pk}}');event.stopPropagation()" id="download-order-invoice{{obj.order.pk}}">Download</a>
                    </p>
-                   <p class="inline-block"><a role="button" href="/resume-builder/edit/?type=profile">Edit Template</a></p>
+                   <p class="inline-block"><a role="button" onclick="editTemplate('desktop');event.stopPropagation()">Edit Template</a></p>
                 </form>
 
             {% elif obj.product.type_flow == 1 or obj.product.type_flow == 12 or obj.product.type_flow == 13 %}
