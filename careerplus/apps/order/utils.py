@@ -271,7 +271,7 @@ class FeatureProfileUtil:
             if other_item_exist:
                 return True
                 
-        flag = self.update_badges(candidate_id,oi,False)
+        flag = self.update_badges(candidate_id,oi,isPause)
 
         if not flag:
             logging.getLogger('info_log').info(
