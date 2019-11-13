@@ -250,6 +250,7 @@
     <script>
         var site_domain = "{{ SITE_PROTOCOL }}://{{MOBILE_SITE_DOMAIN}}";
         var cartData = "{{request|get_cart_info}}"
+        var neoEmail = "{{neo_email}}"
     </script>
     {% compress js %}
         <script src="{% static 'shinelearn/js/cart/guest_login.js' %}"></script>

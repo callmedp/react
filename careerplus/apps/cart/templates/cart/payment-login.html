@@ -161,7 +161,7 @@ Payment Login - Shine Learning
                 </div>
                 <div class="form-group clearfix">
                     <div class="col-sm-12">
-                        <input type="email" name="email" class="form-control" placeholder=" "
+                        <input type="email" name="email" class="form-control" placeholder=" " id="guest-email"
                             value="{% if neo_email %} {{ neo_email }} {% elif request.session.email %}
                                         {{ request.session.email }}
                                         {% elif request.session.lead_email %}
@@ -278,6 +278,7 @@ Payment Login - Shine Learning
 <script>
     var site_domain = "{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN}}";
     var cartData = "{{request|get_cart_info}}";
+    var neoEmail = "{{neo_email}}";
 </script>
 
 {% compress js %}
