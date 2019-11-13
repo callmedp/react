@@ -65,7 +65,6 @@ app.use('/media/static/react/assets/images', express.static('assets/images'));
 app.use('/media/static/resumebuilder/images', express.static('assets/resumebuilder/images'));
 
 app.get('*', async (req, res) => {
-
     const checkIsMobile = (userAgents) => {
         return /Android|Phone|Mobile|Opera\sM(in|ob)i|iP[ao]d|BlackBerry|SymbianOS|Safari\.SearchHelper|SAMSUNG-(GT|C)|WAP|CFNetwork|Puffin|PlayBook|Nokia|LAVA|SonyEricsson|Karbonn|UCBrowser|ucweb|Micromax|Silk|LG(MW|-MMS)|PalmOS/i.test(userAgents)
     }
@@ -74,8 +73,8 @@ app.get('*', async (req, res) => {
         store = require('../mobile/src/store/index').default;
         routes = require('../mobile/src/routes/index').routes;
         isMobile = true;
-
-    } else {
+    } 
+    else {
         console.log('<><><>in desktop');
         store = require('../desktop/src/store/index').default;
         routes = require('../desktop/src/routes/index').routes;
