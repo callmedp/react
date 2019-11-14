@@ -281,7 +281,7 @@ $('#orderEmailMobileUpdateBtn').click(function(){
     }
   if (Object.keys(patchBody).length != 0){
 fetch(`/order/api/v1/${oid}/update/`, {
-  method: 'Patch',
+  method: 'PATCH',
    credentials: "same-origin",
     headers: {
         "X-CSRFToken": getCookie("csrftoken"),
