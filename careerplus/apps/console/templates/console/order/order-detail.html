@@ -30,7 +30,14 @@
                   </div>
                   <div class="col-md-3 bdr-rt order_details__by">
                      <strong>Order By</strong>
-                     <h2 class="order_details__name">{{order.first_name}} {{order.last_name}}</h2>
+                     <h2 class="order_details__name">
+                        {% if order.first_name %}
+                         {{order.first_name}}
+                         {% endif %}
+                           {% if order.last_name %}
+                         {{order.last_name}}
+                       {% endif %}
+                     </h2>
                      <p>
 
                     {% if exoitel_status%}
@@ -141,6 +148,13 @@
                   </strong>
                        {% endif %}
                     {{obj.product.get_name}}<br/>
+                   {% if obj.product.get_exp_db %}
+                      <strong class="mb-30">
+                   {{obj.product.get_exp_db}}
+                      <br/>
+                  </strong>
+                   {% endif %}
+
                     {% if obj.product.get_studymode_db %}
                   <p><strong>Study mode:</strong> {{obj.product.get_studymode_db}}</p>
                     {% endif %}
@@ -615,7 +629,7 @@
                              <strong>{{obj.parent.product.get_name}}{% if obj.parent.product.get_exp_db %} - Exp: {{obj.parent.product.get_exp_db}}{% endif %}:</strong><br/>
                            {% endif %}
                                {{obj.product.get_name}}<br/>
-                           {%if obj.product.get_exp_db %}
+                           {%if obj.product.  %}
                                <strong>Exp:</strong> {{obj.product.get_exp_db}}<br/>
                            {% endif %}
                            {% if obj.product.get_studymode_db %}

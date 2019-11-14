@@ -9,7 +9,7 @@ from order.api.core.mixins import OrderItemViewMixin
 from order.models import Order,MonthlyLTVRecord
 from order.api.v1.serializers import OrderItemListSerializer
 from shared.rest_addons.authentication import ShineUserAuthentication
-from .serializers import OrderSerializer,LTVReportSerializer
+from .serializers import OrderSerializer,LTVReportSerializer,OrderShineCandidateSerializer
 
 # python imports
 import json
@@ -18,7 +18,7 @@ from order.api.core.serializers import OrderItemOperationsSerializer,\
 from order.models import OrderItemOperation,Message
 from shared.rest_addons.mixins import FieldFilterMixin,\
     ListSerializerContextMixin,ListSerializerDataMixin
-from shared.rest_addons.permissions import OrderAccessPermission
+from shared.rest_addons.permissions import OrderAccessPermission,IsObjectOwnerOrConsoleUser
 from rest_framework.authentication import SessionAuthentication
 from shared.rest_addons.pagination import LearningCustomPagination
 
@@ -43,12 +43,16 @@ class OrderItemsListView(ListAPIView):
 
 
 class OrderUpdateView(UpdateAPIView):
-    authentication_classes = (SessionAuthentication,ShineUserAuthentication,)
-    permission_classes = (IsAuthenticated,)
-    serializer_class = OrderSerializer
+    authentication_classes = (SessionAuthentication, ShineUserAuthentication)
+    permission_classes = (IsAuthenticated, IsObjectOwnerOrConsoleUser)
     queryset = Order.objects.all()
     lookup_field = "id"
     lookup_url_kwarg = "pk"
+
+    def get_serializer_class(self):
+        if self.request._request.session.get('candidate_id'):
+            return OrderShineCandidateSerializer
+        return OrderSerializer
 
 
 class OrderItemOperationApiView(FieldFilterMixin,ListAPIView):
@@ -61,7 +65,6 @@ class OrderItemOperationApiView(FieldFilterMixin,ListAPIView):
     permission_classes = [OrderAccessPermission,]
     serializer_class = OrderItemOperationsSerializer
     pagination_class = LearningCustomPagination
-
 
     def get_queryset(self):
         filter_dict = {}
