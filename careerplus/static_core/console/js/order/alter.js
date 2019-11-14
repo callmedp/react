@@ -116,7 +116,7 @@ else if(element.oi_draft){
 let oi_draft = element.oi_draft.split('/').pop()
 return `<div class="allactions__box">
   <strong>Draft Level ${ element.draft_counter < maxDraft ? element.draft_counter:'Final'}:</strong></br>
-  <a href=<a href="/console/queue/resumedownload/?path=${oi_draft}&next=${window.location.pathname}">
+  <a href="/console/queue/resumedownload/?path=${oi_draft}&next=${window.location.pathname}">
   <button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
 </div>`
 }
