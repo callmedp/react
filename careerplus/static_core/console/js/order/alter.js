@@ -291,7 +291,7 @@ fetch(`/order/api/v1/${oid}/update/`, {
   body: JSON.stringify(patchBody),
     }).then(response => {
     form.trigger('reset')
-
+    $('#alternatecontact_modal').modal('hide')
     alert('Updated')
      })
        .catch(function(error) {

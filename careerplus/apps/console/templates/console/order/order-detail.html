@@ -47,10 +47,10 @@
                   <div class="col-md-3 order_details__status bdr-rt">
                      <strong>Payment Status</strong>
                      <p>
-                       {% if txn_obj.payment_date %}
-                       <b>Paid on:</b>  {{txn_obj.payment_date}}
+                       {% if order.payment_date %}
+                       <b>{{order.get_status}}</b>  {{order.payment_date}}
                        {% else %}
-                       <b> Unpaid </b>
+                       <b> {{order.get_status}} </b>
                        {% endif %}
                      </p>
                      <strong class="mt-20">Welcome call </strong>
@@ -166,10 +166,6 @@
 
                <!--API TO BE MADE FOR obj-->
                       {% for op in obj.get_oi_operations %}
-                   {% if forloop.counter == 1 %}
-                   <strong>{{op.get_oi_status}}</strong>
-                       <br/>
-                   {% endif %}
 
                      {% if op.oi_status == 4 %}
                     {% if obj.oi_draft or op.linkedin %}
@@ -182,11 +178,31 @@
                             <input type="hidden" name="oi_pk" value="{{obj.pk}}">
                             <input type="hidden" id="flow-id{{obj.pk}}" name="flow" value="detailpage"/>
                         </div>
-                        <button data-toggle="modal" data-target="#upload_modal" type="button" onclick="clickSubmitDraft('{{obj.pk}}',)" class="blue_btn mt-10">Submit</button>
+                        <button data-toggle="modal" type="button" onclick="clickSubmitDraft('{{obj.pk}}',)" class="blue_btn mt-10">Submit</button>
                         </form>
                         
                       </td>
                     </tr>
+
+                   {% block uploadmodal %}
+
+<div class="modal fade" id="draftmodal{{obj.pk}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content alternatecontact">
+      <div class="modal-header alternatecontact__header">
+        <button type="button" class="close alternatecontact__close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body text-center">
+        <h2 class="modal-title text-center alternatecontact__heading" id="myModalLabel">Draft Upload</h2>
+        <form class="mt-10 mb-20" id="orderDraftUpload">
+          <p class="mt-30 mb-30">Are you sure to upload document?</p>
+          <button type="button" id="uploadDraftAction{{obj.pk}}" onclick="detailPageUploadDraft('{{obj.pk}}',)" class="update_btn">Upload</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock  %}
                     {% endif %}
                     {% endif %}
                    
