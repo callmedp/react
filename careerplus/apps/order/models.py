@@ -747,7 +747,7 @@ class OrderItem(AbstractAutoDate):
 
     @property
     def oi_draft_path(self):
-        return str(self.oi_draft.path) if self.oi_draft else ""
+        return str(self.oi_draft.url) if self.oi_draft else ""
 
 
     @property

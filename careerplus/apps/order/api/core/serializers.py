@@ -46,19 +46,19 @@ class OrderItemOperationsSerializer(SerializerFieldsMixin,
 						   }
 
 	oi_status_display = serializers.CharField(read_only=True)
-	oi_resume_name = serializers.SerializerMethodField('get_oi_resume_name',read_only=True)
-	oi_draft_name = serializers.SerializerMethodField('get_oi_draft_name',read_only=True)
+	# oi_resume_name = serializers.SerializerMethodField('get_oi_resume_name',read_only=True)
+	# oi_draft_name = serializers.SerializerMethodField('get_oi_draft_name',read_only=True)
 
 
-	def oi_resume_name(self,obj):
-		if not obj:
-			return ''
-		return obj.oi_resume.name if obj.oi_resume else ''
-
-	def oi_draft_name(self,obj):
-		if not obj:
-			return ''
-		return obj.oi_draft.name if obj.oi_draft else ''
+	# def oi_resume_name(self,obj):
+	# 	if not obj:
+	# 		return ''
+	# 	return obj.oi_resume.name if obj.oi_resume else ''
+	#
+	# def oi_draft_name(self,obj):
+	# 	if not obj:
+	# 		return ''
+	# 	return obj.oi_draft.name if obj.oi_draft else ''
 
 
 	class Meta:
