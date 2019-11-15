@@ -1,4 +1,4 @@
-{% load static %}
+{% load static filter-tags %}
 
 {% for obj in orderitems %}
     <div class="box row mb-30">
@@ -246,10 +246,45 @@
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
 
                 {% endif %}
+            {% endif %}
 
-
+            {% if obj.oi_status == 28 or obj.oi_status == 34 or obj.oi_status == 35 %}
+                {% if obj.days_left_oi_product > 0  %}
+                    {% if obj.service_pause_status %}
+                        <div class="light-blue__pause" onclick="pause_resume_service_mobile(this,{{obj.id}},34)">
+                            <span class="light-blue__pause--button"></span>
+                            <p class="pb-0">Pause Service</p>
+                        </div><!-- // Pause Service -->
+                    {% else %}
+                        <div class="light-blue__pause" onclick="pause_resume_service_mobile(this,{{obj.id}},35)">
+                            <span class="light-blue__pause--playBtn">
+                                <span class="right-arrow"></span>
+                            </span>
+                            <p class="pb-0">Resume Service</p>
+                        </div><!-- // Resume Service -->
+                    {% endif %}
+                {% endif %}
             {% endif %}
         </div><!-- /.blue box -->
+
+        {% if obj.product.type_flow == 5 %}
+            {% if obj.oi_status == 28 or obj.oi_status == 34 or obj.oi_status == 35 %}
+                {% if obj.days_left_oi_product > 0  %}
+                 <div class="day-remains">
+                    <span class="day-remains--head">Day Remaining</span>
+                    <ul class="day-remains--counts">
+                        <li>{{ obj.days_left_oi_product|modulo:2 }}</li>
+                        <li>{{ obj.days_left_oi_product|modulo:1 }}</li>
+                        <li>{{ obj.days_left_oi_product|modulo:0 }}</li>
+                    </ul>
+                </div><!-- // Day Remaining-->
+                {% endif %}
+            {% endif %} 
+            
+        {% endif %}
+       
+
+
         {% if obj.oi_status == 24 or obj.oi_status == 46 %}
             <div class="button-wrap mt-15">
                 <span class="accept"><a role="button" onClick="openPopup('accept-modal{{obj.pk}}');"><sup class="icon-tick-green"></sup>Accept</a></span>

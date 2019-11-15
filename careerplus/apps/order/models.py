@@ -1,6 +1,7 @@
 #python imports
 import math
-import datetime,logging,json
+import  logging,json 
+from datetime import datetime,timedelta
 
 from decimal import Decimal
 from dateutil import relativedelta
@@ -36,6 +37,8 @@ from console.feedbackCall.choices import FEEDBACK_RESOLUTION_CHOICES,FEEDBACK_CA
 from order.utils import get_ltv
 from coupon.models import Coupon
 from resumebuilder.models import Candidate
+from order.utils import FeatureProfileUtil
+
 
 #third party imports
 from payment.utils import manually_generate_autologin_url
@@ -298,10 +301,10 @@ class Order(AbstractAutoDate):
         c_time = timezone.now()
         follow_up = self.wc_follow_up
         if follow_up:
-            before_time = follow_up - datetime.timedelta(
+            before_time = follow_up - timedelta(
                 minutes=30
             )
-            later_time = follow_up + datetime.timedelta(
+            later_time = follow_up + timedelta(
                 minutes=60
             )
             if c_time >= before_time and c_time <= later_time:
@@ -709,14 +712,76 @@ class OrderItem(AbstractAutoDate):
     def __str__(self):
         return "#{}".format(self.pk)
 
+    def service_pause_status(self):
+        pause_resume_ops_count = self.orderitemoperation_set.filter(oi_status__in=[34,35]).count()
+        if pause_resume_ops_count&1 and self.oi_status == 34:
+            return False
+        return True
+
     @property
-    def product_service_days_left(self):
-        duration = self.product.get_duration_in_day if self.product and \
-                    self.product.get_duration_in_day else None
-        if not duration:
+    def days_left_oi_product(self):
+        can_be_paused = self.product.is_pause_service
+        
+        if not can_be_paused:
             return 0
-        start_date = self.orderitemoperation_set.filter(oi_status__in=[31, 32, 5]).order_by('id').first()
-        return 
+
+        featured_op = self.orderitemoperation_set.filter(oi_status=28).first()
+
+        if not featured_op:
+            return 0
+
+        sdt = featured_op.created
+
+        duration_days = self.product.day_duration
+        edt = sdt + timedelta(days=duration_days*2)
+        pause_resume_operations = self.orderitemoperation_set.filter(oi_status__in=[34,35]).values_list('created',flat=True)
+        days_left = timedelta(days=duration_days)
+        days_between_pause_resume = timedelta(0)
+
+        for pos in range(0,pause_resume_operations.count(),2):
+            if pos==0:
+                days_between_pause_resume += pause_resume_operations[pos] -sdt
+                continue
+
+            days_between_pause_resume += pause_resume_operations[pos] - \
+                                        pause_resume_operations[pos-1]
+
+        if (not pause_resume_operations.count() & 1) and pause_resume_operations.count()>0:  #if even no of operations -> the service is resumed
+            days_between_pause_resume += timezone.now() - pause_resume_operations.last()
+        elif pause_resume_operations.count() == 0:
+            days_left -= (timezone.now() - sdt)
+
+        days_left -= (days_between_pause_resume)
+
+        if (edt - timezone.now()) < days_left:
+            days_left = (edt - timezone.now())
+
+        return days_left.days
+
+
+        # remove above code as it is just for testing
+        # days_left = duration_days
+        # days_between_pause_resume = timedelta(0)
+
+        # for pos in range(0,pause_resume_operations.count(),2):
+        #     if pos==0:
+        #         days_between_pause_resume += pause_resume_operations[pos] -sdt
+        #         continue
+
+        #     days_between_pause_resume += pause_resume_operations[pos] - \
+        #                                 pause_resume_operations[pos-1]
+
+        # if (not pause_resume_operations.count() & 1) and pause_resume_operations.count()>0:  #if even no of operations -> the service is resumed
+        #     days_between_pause_resume += timezone.now() - pause_resume_operations.last()
+        # else:
+        #     days_left -= (timezone.now() - sdt).days
+
+        # days_left -= (days_between_pause_resume).days
+
+        # if (edt - timezone.now()).days < days_left:
+        #     days_left = (edt - timezone.now()).days
+
+        # return days_left
 
     @property
     def order_payment_date(self):
@@ -977,13 +1042,30 @@ class OrderItem(AbstractAutoDate):
         if self.oi_status == 4 and self.oi_status !=existing_obj.oi_status  and self.order.service_resume_upload_shine:
             upload_Resume_shine.delay(self.id)
 
+    def update_pause_resume_service(self,existing_obj):
+        if not self.oi_status in [34,35]:
+            return
+        feature_util = FeatureProfileUtil()
+        
+        if not feature_util.pause_resume_feature(existing_obj,self.service_pause_status):  # if pause or resume fails then return oi_status to previous position
+            self.oi_status = existing_obj.oi_status
+            return
+
+        self.last_oi_status = existing_obj.oi_status
+        self.orderitemoperation_set.create(
+            oi_status=self.oi_status,
+            last_oi_status=existing_obj.oi_status,
+            assigned_to=self.assigned_to)
+
     def save(self, *args, **kwargs):
         created = not bool(getattr(self, "id"))
         orderitem = OrderItem.objects.filter(id=self.pk).first()
         self.oi_status = 4 if orderitem and orderitem.oi_status == 4 else self.oi_status
         # handling combo case getting parent and updating child
+        self.update_pause_resume_service(orderitem)
         obj = super().save(*args, **kwargs)  # Call the "real" save() method.       
         self.upload_service_resume_shine(orderitem)
+        
         return obj 
 
         # # for resume booster create orderitem

@@ -1,9 +1,17 @@
-{% load static %}
+{% load static filter-tags %}
 {% for obj in orderitems %}
         <li class="col-sm-12">
-            {% comment %} {% if obj.product.get_duration_in_day%}
-                <div class="days-left">{{obj.product.get_duration_in_day}} days left</div>
-            {% endif %} {% endcomment %}
+            {% if obj.product.type_flow == 5 %}
+                {% if obj.oi_status == 28 or obj.oi_status == 34 or obj.oi_status == 35 %}
+                    {% if obj.days_left_oi_product > 0  %}
+                        <div class="days-remaining">
+                            <P>DAYS REMAINING</P>
+                            <span>{{ obj.days_left_oi_product|modulo:2 }}</span> <span>{{ obj.days_left_oi_product|modulo:1 }}</span> <span>{{ obj.days_left_oi_product|modulo:0 }}</span>
+                        </div>
+                    {% endif %}
+                {% endif %} 
+                
+            {% endif %}
             <h2>{{obj.product.get_name}}
                 {% if obj.product.get_exp_db %}
                  - {{obj.product.get_exp_db}}
@@ -73,7 +81,7 @@
                 {% elif obj.order.auto_upload %}
                     <p><strong>Status:</strong> Service is under progress- <a role="button" class="upload-resume">Upload Resume</a></p>
                 {% else %}
-                    <p><strong>Status:</strong> Service is under progress</p>
+                    <p><strong>Status:</strong> Service is under progress</p> 
                 {% endif %}
 
             {% elif obj.product.type_flow == 8 %}
@@ -201,6 +209,23 @@
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
                 {% else %}
                    <p><strong>Status:</strong> Service is under progress</p>
+                {% endif %}
+                {% if obj.oi_status == 28 or obj.oi_status == 34 or obj.oi_status == 35 %}
+                    {% if obj.days_left_oi_product > 0  %}
+                        {% if obj.service_pause_status %}
+                            <p class="pause-play-services">
+                                <a role="button" onclick="pause_resume_service(this,{{obj.id}},34)">
+                                    <i class="pause"> </i> Pause Service
+                                </a>
+                            </p>
+                        {% else %}
+                            <p class="pause-play-services">
+                                <a role="button" onclick="pause_resume_service(this,{{obj.id}},35)">
+                                    <i class="play"> </i> Resume Service
+                                </a>
+                            </p>
+                        {% endif %}
+                    {% endif %}
                 {% endif %}
 
             {% elif obj.product.type_flow == 6 %}

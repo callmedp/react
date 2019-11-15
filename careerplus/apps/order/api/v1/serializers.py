@@ -4,12 +4,12 @@ from rest_framework import serializers
 from order.models import OrderItem,Order,MonthlyLTVRecord
 
 
-class OrderItemListSerializer(serializers.ModelSerializer):
+class OrderItemSerializer(serializers.ModelSerializer):
     product_name = serializers.CharField()
 
     class Meta:
         model = OrderItem
-        fields = ('id','product_name',)
+        fields = ('id','product_name','oi_status')
 
 
 class OrderSerializer(serializers.ModelSerializer):

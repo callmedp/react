@@ -57,6 +57,8 @@ OI_OPS_STATUS = (
     (31, 'Jobs Link Pending'),
     (32, 'Jobs Link Sent'),
     (33, 'Boarded on Neo'),
+    (34, 'Service paused'),
+    (35, 'Service Resumed'),
 
     # for linkedin flow8 41 - 60
     (42, 'Counselling Form Submitted'),
