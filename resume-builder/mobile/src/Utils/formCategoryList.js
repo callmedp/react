@@ -27,7 +27,7 @@ export const formCategoryList = {
         link: '/resume-builder/edit/?type=project',
         icon: 'icon-projects',
         itemType: 'project',
-        default: true
+        default: false
 
 
     },
@@ -108,7 +108,7 @@ export const entityList = [
     {
         "entity_id": 4,
         "entity_text": "Projects",
-        "active": true,
+        "active": false,
             "priority": 4
     },
     {
