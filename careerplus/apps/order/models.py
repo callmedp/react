@@ -711,12 +711,12 @@ class OrderItem(AbstractAutoDate):
         can_be_paused = self.product.is_pause_service
         
         if not can_be_paused:
-            return timedelta(0)
+            return 0
 
         featured_op = self.orderitemoperation_set.filter(oi_status=28).first()
 
         if not featured_op:
-            return timedelta(0)
+            return 0
 
         sdt = featured_op.created
 
@@ -744,7 +744,7 @@ class OrderItem(AbstractAutoDate):
         if (edt - timezone.now()) < days_left:
             days_left = (edt - timezone.now())
 
-        return days_left
+        return days_left.days
 
 
         # remove above code as it is just for testing

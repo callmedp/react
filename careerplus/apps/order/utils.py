@@ -254,13 +254,13 @@ class FeatureProfileUtil:
         from  order.models import OrderItem
         candidate_id = self.get_candidate_id(oi)
         pause_resume_operations = oi.orderitemoperation_set.filter(oi_status__in=[34,35])
+
         if pause_resume_operations:
             last_op_date = pause_resume_operations.last().created
             time_diff = timezone.now() - last_op_date
-            # if time_diff.days == 0:    
-            #     return False
-            if time_diff.seconds <120:   #this is just for testing
+            if time_diff.days == 0:    
                 return False
+
         if isPause:
             other_item_exist = OrderItem.objects.filter(
                     order__status__in=[1, 3], product__type_flow__in=[5],
@@ -324,7 +324,7 @@ class FeatureProfileUtil:
 
         for oi in featured_orderitems:
             candidate_id = self.get_candidate_id(oi)
-            days_left = oi.days_left_oi_product.days
+            days_left = oi.days_left_oi_product
 
             if not candidate_id or  days_left > 0:
                 logging.getLogger('info_log').info(
@@ -383,6 +383,7 @@ class FeatureProfileUtil:
             send_email_task.delay(
                 to_emails, mail_type, data,
                 status=72, oi=oi.pk)
+
         SendSMS().send(sms_type=mail_type, data=data)
                     
 
