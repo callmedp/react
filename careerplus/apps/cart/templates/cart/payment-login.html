@@ -110,10 +110,10 @@ Payment Login - Shine Learning
                 {% else %}
                 <div class="form-group clearfix">
                     <div class="col-sm-12">
-                        <input type="email" name="email" class="form-control" placeholder=" " value="{% if request.session.email %}
+                        <input type="email" name="email" class="form-control" placeholder=" " value="{% if neo_email %} {{ neo_email }} {% elif request.session.email %}
                                         {{ request.session.email }}
                                         {% elif request.session.lead_email %}
-                                        {{ request.session.lead_email }}{% endif %}" />
+                                        {{ request.session.lead_email }}{% endif %}" {% if neo_email %} readonly {% endif %} />
                         <label for="">Email id</label>
                         <span class="error-txt"></span>
                     </div>
@@ -162,9 +162,12 @@ Payment Login - Shine Learning
                 <div class="form-group clearfix">
                     <div class="col-sm-12">
                         <input type="email" name="email" class="form-control" placeholder=" "
-                            value="{% if neo_email %} {{ neo_email }} {% elif request.session.email%}{{request.session.email}}{% elif request.session.lead_email %}{{ request.session.lead_email }} {% endif %}"
-                            {% if request.session.email %} {% endif %}" {% if neo_email %} readonly {% endif %}>
-                        <label for="">Email id</label>
+                            value="{% if neo_email %} {{ neo_email }} {% elif request.session.email %}
+                                        {{ request.session.email }}
+                                        {% elif request.session.lead_email %}
+                                        {{ request.session.lead_email }}{% endif %}"
+                            >
+                        <label for="">Email</label>
                         <span class="error-txt" id="email-error"></span>
                     </div>
                 </div>
@@ -200,7 +203,7 @@ Payment Login - Shine Learning
                 <div class="form-group clearfix">
                     <div class="col-sm-12 ">
                         <!-- {{form.first_name}} -->
-                        <input type="text" class="form-control" id="" name="email" placeholder=" " />
+                        <input type="text" class="form-control" id="" name="email" placeholder=" "  value="{% if neo_email %} {{ neo_email }} {% endif %}" {% if neo_email %} readonly {% endif %}/>
                         <label for="">Your email</label>
                         <span class="error-txt"></span>
                     </div>

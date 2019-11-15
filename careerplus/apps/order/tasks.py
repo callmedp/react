@@ -642,13 +642,41 @@ def send_resume_in_mail_resume_builder(attachment,data):
 
 @task(name='board_user_on_neo')
 def board_user_on_neo(neo_ids):
+    '''
+    Take Neo Order Items
+    - Board User on Trial Basis Or Regular Basis.
+    - While Boarding User On Regular Basis Check.
+        - If on Trial, then update SSO Profile.
+        - else hit for Boarding assuming either 
+          already Regular user O New user.
+    '''
+    from datetime import datetime, timedelta
     from order.models import OrderItem
     neo_items = OrderItem.objects.filter(id__in=neo_ids)
     for item in neo_items:
         email = item.order.email
-        flag = NeoApiMixin().board_user_on_neo(email=email)
-        if flag:
-            cache.set('neo_mail_sent_{}'.format(str(item.id)), 1, 3600 * 24 * 2)
+        data_dict = {}
+        coursetype = item.product.get_coursetype()
+        duration = item.product.get_duration_in_day()
+        if coursetype == 'TR':
+            data_dict['account_type'] = 'trial'
+            if duration:
+                start_date = datetime.now().strftime('%Y-%m-%d')
+                end_date = (datetime.now() + timedelta(days=duration)).strftime('%Y-%m-%d')
+                data_dict.update({
+                    'start_date': start_date,
+                    'end_date': end_date,
+                })
+        account_type = NeoApiMixin().get_student_account_type(email)
+        if account_type and account_type == 'trial':
+                data = {
+                    'account_type': 'regular',
+                }
+                NeoApiMixin().update_student_sso_profile(data=data)
+        else:
+            flag = NeoApiMixin().board_user_on_neo(email=email, data_dict=data_dict)
+            if flag:
+                cache.set('neo_mail_sent_{}'.format(str(item.id)), 1, 3600 * 24 * 2)
 
 
 @task
