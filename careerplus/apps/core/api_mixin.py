@@ -506,7 +506,8 @@ class NeoApiMixin(object):
         resp = requests.post(url_to_hit, data=data, headers=headers)
         if resp.status_code == 200:
             json_rep = resp.json()
-            return json_rep
+            return True
+
 
     def get_pt_result(self, email):
         ''' Return placement test result for provided email'''

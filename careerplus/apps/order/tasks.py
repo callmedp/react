@@ -672,7 +672,12 @@ def board_user_on_neo(neo_ids):
                 data = {
                     'account_type': 'regular',
                 }
-                NeoApiMixin().update_student_sso_profile(data=data)
+                flag = NeoApiMixin().update_student_sso_profile(data=data, email=email)
+                if flag:
+                    logging.getLogger('error_log').error('Account update to Regular from Trial for email {}'.format(email))
+                else:
+                    logging.getLogger('error_log').error('Unable to Update SSO profile for email{}'.format(email))
+ 
         else:
             flag = NeoApiMixin().board_user_on_neo(email=email, data_dict=data_dict)
             if flag:
