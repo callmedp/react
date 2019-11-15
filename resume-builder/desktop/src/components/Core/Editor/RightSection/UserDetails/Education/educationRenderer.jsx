@@ -5,30 +5,31 @@ import {
     AccordionItemHeading,
     AccordionItemPanel
 } from "react-accessible-accordion";
-import {Field} from "redux-form";
-import {datepicker, renderField, renderSelect} from "../../../../../FormHandler/formFieldRenderer";
+import { Field } from "redux-form";
+import { datepicker, renderField, renderSelect } from "../../../../../FormHandler/formFieldRenderer";
 import React from "react";
 import styles from './education.scss'
 
 export const EducationRenderer = ({
-                                      fields,
-                                      loader,
-                                      meta: {touched, error, submitFailed},
-                                      deleteEducation,
-                                      handleAddition,
-                                      handleSubmit,
-                                      handleAccordionClick,
-                                      changeOrderingUp,
-                                      changeOrderingDown,
-                                      editHeading,
-                                      saveTitle,
-                                      isEditable,
-                                      entityName,
-                                      expanded,
-                                      till_today,
-                                      tillTodayDisable,
-                                      handleInputValue
-                                  }) => {
+    fields,
+    loader,
+    meta: { touched, error, submitFailed },
+    deleteEducation,
+    handleAddition,
+    handleSubmit,
+    handleAccordionClick,
+    changeOrderingUp,
+    changeOrderingDown,
+    editHeading,
+    saveTitle,
+    isEditable,
+    entityName,
+    expanded,
+    till_today,
+    tillTodayDisable,
+    handleInputValue,
+    showAlertMessage
+}) => {
     return (
         <div>
             {/*{<LoaderSection/>}*/}
@@ -39,16 +40,27 @@ export const EducationRenderer = ({
                     </h2> :
                     <React.Fragment>
                         <input autoFocus type="text" name="" defaultValue={entityName}
-                               onChange={(event) => handleInputValue(event.target.value || entityName)}/>
-                        <span onClick={(event) => saveTitle(event)} className="icon-tick"/>
+                            onChange={(event) => handleInputValue(event.target.value || entityName)} />
+                        <span onClick={(event) => saveTitle(event)} className="icon-tick" />
                     </React.Fragment>
                 }
                 <span onClick={() => editHeading()}
-                      className={!!(!isEditable) ? "icon-edit " + styles['icon-education__cursor'] : ''}/>
+                    className={!!(!isEditable) ? "icon-edit " + styles['icon-education__cursor'] : ''} />
 
                 <button
                     onClick={handleSubmit((values) => {
-                        handleAddition(fields, error)
+                        let skipAddition = false;
+                        (values && values.list || []).forEach(el => {
+                            if (!el.institution_name) {
+                                skipAddition = true;
+                            }
+                        })
+                        if (!skipAddition) {
+                            handleAddition(fields, error)
+                        }
+                        else {
+                            showAlertMessage()
+                        }
                     })}
                     type={'button'}
                     className={"add-button " + styles['add-button__right']}>Add new
@@ -72,7 +84,7 @@ export const EducationRenderer = ({
                                     <li key={index}>
                                         <section className="info-section">
                                             <AccordionItem uuid={index} name={`education${index}`}
-                                                           id={`education${index}`}>
+                                                id={`education${index}`}>
                                                 <AccordionItemHeading>
                                                     <AccordionItemButton>
                                                         <div className="flex-container">
@@ -82,17 +94,17 @@ export const EducationRenderer = ({
                                                             <div className="addon-buttons mr-10">
                                                                 <span
                                                                     onClick={(event) => deleteEducation(index, fields, event)}
-                                                                    className="icon-delete mr-15"/>
+                                                                    className="icon-delete mr-15" />
                                                                 {index !== 0 &&
-                                                                <span
-                                                                    onClick={(event) => changeOrderingUp(index, fields, event)}
-                                                                    className="icon-ascend mr-5"/>
+                                                                    <span
+                                                                        onClick={(event) => changeOrderingUp(index, fields, event)}
+                                                                        className="icon-ascend mr-5" />
                                                                 }
                                                                 {
                                                                     index !== fields.length - 1 &&
                                                                     < span
                                                                         onClick={(event) => changeOrderingDown(index, fields, event)}
-                                                                        className="icon-descend"/>
+                                                                        className="icon-descend" />
                                                                 }
                                                             </div>
                                                         </div>
@@ -107,11 +119,11 @@ export const EducationRenderer = ({
                                                                 iconClass={'icon-company'}
                                                                 maxLength={'50'}
                                                                 component={renderField} type={"text"}
-                                                                name={`${member}.institution_name`}/>
+                                                                name={`${member}.institution_name`} />
                                                         </fieldset>
                                                     </div>
                                                     <div className="flex-container">
-                                                        
+
                                                         <fieldset>
                                                             <label>Degree</label>
                                                             <Field
@@ -119,7 +131,7 @@ export const EducationRenderer = ({
                                                                 component={renderField}
                                                                 maxLength={'100'}
                                                                 type={"text"}
-                                                                name={`${member}.degree`}/>
+                                                                name={`${member}.degree`} />
                                                         </fieldset>
                                                         <fieldset>
                                                             <label>Specialization</label>
@@ -128,9 +140,9 @@ export const EducationRenderer = ({
                                                                 component={renderField}
                                                                 maxLength={'50'}
                                                                 type={"text"}
-                                                                name={`${member}.specialization`}/>
+                                                                name={`${member}.specialization`} />
                                                         </fieldset>
-                                                        
+
                                                     </div>
                                                     <div className="flex-container">
                                                         <fieldset className="custom">
@@ -140,12 +152,12 @@ export const EducationRenderer = ({
                                                                 component={renderSelect} type={"text"}
                                                                 name={`${member}.course_type`}
                                                                 options={[
-                                                                    {value: 'FT', label: 'FULL TIME'},
-                                                                    {value: 'PT', label: 'PART TIME'},
-                                                                    {value: 'NA', label: 'NA'}
+                                                                    { value: 'FT', label: 'FULL TIME' },
+                                                                    { value: 'PT', label: 'PART TIME' },
+                                                                    { value: 'NA', label: 'NA' }
                                                                 ]}
                                                                 closeMenuOnSelect={true}
-                                                                className="input-control"/>
+                                                                className="input-control" />
                                                         </fieldset>
                                                         <fieldset>
                                                             <label>Percentage</label>
@@ -155,47 +167,47 @@ export const EducationRenderer = ({
                                                                 component={renderField}
                                                                 type={"number"}
                                                                 name={`${member}.percentage_cgpa`}
-                                                                className="input-control width-half"/>
+                                                                className="input-control width-half" />
 
                                                         </fieldset>
-                                                        
+
                                                     </div>
                                                     <div className="flex-container">
                                                         <fieldset>
                                                             <label>Date from</label>
                                                             <Field maxDateAllowed={true}
-                                                                   component={datepicker}
-                                                                   type={"date"}
-                                                                   iconClass={'icon-date'}
-                                                                   yearDropDownItemNumber={40}
-                                                                   endDate={fields.get(index).end_date || null}
-                                                                   name={`${member}.start_date`}
-                                                                   className="input-control"/>
+                                                                component={datepicker}
+                                                                type={"date"}
+                                                                iconClass={'icon-date'}
+                                                                yearDropDownItemNumber={40}
+                                                                endDate={fields.get(index).end_date || null}
+                                                                name={`${member}.start_date`}
+                                                                className="input-control" />
                                                         </fieldset>
                                                         <fieldset>
                                                             <label>Date to</label>
                                                             <Field component={datepicker}
-                                                                   type={"date"}
-                                                                   iconClass={'icon-date'}
-                                                                   name={`${member}.end_date`}
-                                                                   maxDateAllowed={true}
-                                                                   educationEndDate={true}
-                                                                   startDate={fields.get(index).start_date || null}
-                                                                   disabled={till_today[index]}
-                                                                   yearDropDownItemNumber={40}
-                                                                   className="input-control"/>
+                                                                type={"date"}
+                                                                iconClass={'icon-date'}
+                                                                name={`${member}.end_date`}
+                                                                maxDateAllowed={true}
+                                                                educationEndDate={true}
+                                                                startDate={fields.get(index).start_date || null}
+                                                                disabled={till_today[index]}
+                                                                yearDropDownItemNumber={40}
+                                                                className="input-control" />
 
                                                             <span className={styles["till-today"]}>
                                                                 <Field type="checkbox" name={`${member}.is_pursuing`}
-                                                                       component={renderField}
-                                                                       tillTodayDisable={tillTodayDisable}
-                                                                       index={`${index}`}
-                                                                       text={'Till Today'}
-                                                                       checked={`${member}.end_date` === true}/>
+                                                                    component={renderField}
+                                                                    tillTodayDisable={tillTodayDisable}
+                                                                    index={`${index}`}
+                                                                    text={'Till Today'}
+                                                                    checked={`${member}.end_date` === true} />
                                                             </span>
                                                         </fieldset>
                                                     </div>
-                                                    
+
                                                 </AccordionItemPanel>
                                             </AccordionItem>
                                         </section>

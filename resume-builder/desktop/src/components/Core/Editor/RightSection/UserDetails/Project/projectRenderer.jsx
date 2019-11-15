@@ -28,7 +28,8 @@ export const ProjectRenderer = ({
                                     tillTodayDisable,
                                     till_today,
                                     formValues,
-                                    handleInputValue
+                                    handleInputValue,
+                                    showAlertMessage
                                 }) => {
 
     return (
@@ -52,7 +53,18 @@ export const ProjectRenderer = ({
 
                 <button
                     onClick={handleSubmit((values) => {
-                        handleAddition(fields, error)
+                        let skipAddition = false;
+                        (values && values.list  || []).forEach(el => {
+                            if (!el.project_name) {
+                                skipAddition = true;
+                            }
+                        })
+                        if (!skipAddition) {
+                            handleAddition(fields, error)
+                        }
+                        else {
+                            showAlertMessage()
+                        }
                     })}
                     type={'button'}
                     className={"add-button " + styles['add-button__right']}>Add new
