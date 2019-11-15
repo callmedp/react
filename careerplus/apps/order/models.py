@@ -721,8 +721,9 @@ class OrderItem(AbstractAutoDate):
     @property
     def days_left_oi_product(self):
         can_be_paused = self.product.is_pause_service
+        duration_days = self.product.day_duration
         
-        if not can_be_paused:
+        if not self.is_service:
             return 0
 
         featured_op = self.orderitemoperation_set.filter(oi_status=28).first()
@@ -731,8 +732,13 @@ class OrderItem(AbstractAutoDate):
             return 0
 
         sdt = featured_op.created
+        
+        if not can_be_paused:
+            edt = sdt + timedelta(days=duration_days)
+            days_left = edt - timezone.now()
+            return days_left.days if days_left.days > 0 else 0
 
-        duration_days = self.product.day_duration
+        sdt = featured_op.created
         edt = sdt + timedelta(days=duration_days*2)
         pause_resume_operations = self.orderitemoperation_set.filter(oi_status__in=[34,35]).values_list('created',flat=True)
         days_left = timedelta(days=duration_days)
@@ -756,7 +762,7 @@ class OrderItem(AbstractAutoDate):
         if (edt - timezone.now()) < days_left:
             days_left = (edt - timezone.now())
 
-        return days_left.days
+        return days_left.days if days_left.days > 0 else 0
 
 
         # remove above code as it is just for testing
