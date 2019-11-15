@@ -99,3 +99,8 @@ class SendSMS(object):
             template_name = data.get('template_name','welcome_call_back.html')
             send_dict['template'] = 'sms/' + template_name
             self.process(send_dict, data)
+
+        elif sms_type == "SERVICE_EXPIRY_REMINDER":
+            template_name = data.get('template_name','service_expiry_reminder.html')
+            send_dict['template'] = 'sms/' + template_name
+            self.process(send_dict, data)
