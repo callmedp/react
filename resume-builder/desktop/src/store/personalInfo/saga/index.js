@@ -57,8 +57,10 @@ function* getPersonalDetails(action) {
 
         yield put({type: UPDATE_UI, data: {loader: true}});
 
-
         const result = yield call(Api.fetchPersonalInfo, candidateId);
+
+        console.log('result ---is --', result);
+
         if (result['error']) {
             reject(new Error(result['errorMessage']));
             Toast.fire({
@@ -66,12 +68,14 @@ function* getPersonalDetails(action) {
                 title: result['errorMessage']
             });
         }
+
         yield put({type: UPDATE_UI, data: {loader: false}})
 
         let {data} = result;
         data = modifyPersonalInfo(data)
         yield put({type: Actions.SAVE_USER_INFO, data: data})
         resolve('Information successfully fetched.')
+        
     } catch (e) {
         console.log(e);
     }

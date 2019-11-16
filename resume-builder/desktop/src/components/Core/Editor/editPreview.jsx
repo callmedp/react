@@ -50,7 +50,6 @@ class EditPreview extends Component {
         }
     }
 
-
     static getActions() {
         return [fetchPersonalInfo, getComponentTitle]
     }
