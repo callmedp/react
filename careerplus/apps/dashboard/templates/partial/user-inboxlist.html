@@ -203,7 +203,7 @@
                 {% if obj.oi_status == 2 %}
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a role="button" class="upload-resume">Upload Resume</a></p>
 
-                {% elif obj.oi_status == 4 or obj.oi_status == 28 or obj.oi_status == 29 %}
+                {% elif obj.oi_status == 4 or obj.oi_status == 28 or obj.oi_status == 29 or obj.oi_status == 34 or obj.oi_status == 35 %}
                     <p><strong>Status:</strong> Service has been processed</p>
 
                 {% elif obj.oi_status == 61 %}
