@@ -16,6 +16,7 @@ const validate = values => {
         errors.list = listErrors;
         return errors;
     }
+    return errors;
 
 };
 

@@ -26,7 +26,7 @@ def get_emails(user_details):
     for row in user_details:
         name, email = row.values()
         token_gen = AutoLogin()
-        login_token = token_gen.encode('freeregister31@mailinator.com', '5dcd2e309cbeea1aeb7771c1', None)
+        login_token = token_gen.encode('freeregister32@mailinator.com', '5dd2355a9cbeea775ebf868e', None)
         upload_url = "http://localhost:3000/resume-builder/?token=%s" % (
 
             login_token)

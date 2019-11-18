@@ -124,7 +124,6 @@ class RightSection extends Component {
     }
 
     showAlertMessage(){
-
         Swal.fire(
             'You Can\'t add more!',
             'Please Fill current list first',
