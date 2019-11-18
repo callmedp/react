@@ -723,7 +723,7 @@ class OrderItem(AbstractAutoDate):
         can_be_paused = self.product.is_pause_service
         duration_days = self.product.day_duration
         
-        if not self.is_service:
+        if not self.product or not self.product.is_service:
             return 0
 
         featured_op = self.orderitemoperation_set.filter(oi_status=28).first()
