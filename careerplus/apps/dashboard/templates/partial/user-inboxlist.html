@@ -3,7 +3,7 @@
         <li class="col-sm-12">
             {% if obj.product.type_flow == 5 %}
                 {% if obj.oi_status == 28 or obj.oi_status == 34 or obj.oi_status == 35 %}
-                    {% if obj.days_left_oi_product > 0  %}
+                    {% if obj.days_left_oi_product >= 0  %}
                         <div class="days-remaining">
                             <P>DAYS REMAINING</P>
                             {% if obj.days_left_oi_product|modulo:2 > 0 %}

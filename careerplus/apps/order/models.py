@@ -736,7 +736,7 @@ class OrderItem(AbstractAutoDate):
         if not can_be_paused:
             edt = sdt + timedelta(days=duration_days)
             days_left = edt - timezone.now()
-            return days_left.days if days_left.days > 0 else 0
+            return days_left.days 
 
         sdt = featured_op.created
         edt = sdt + timedelta(days=duration_days*2)
@@ -762,7 +762,7 @@ class OrderItem(AbstractAutoDate):
         if (edt - timezone.now()) < days_left:
             days_left = (edt - timezone.now())
 
-        return days_left.days if days_left.days > 0 else 0
+        return days_left.days
 
     @property
     def order_payment_date(self):
