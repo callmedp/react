@@ -83,7 +83,7 @@ class Home extends Component {
                 isTokenAvail: true
             })))
         }
-        results.push(localStorage);
+        results.push(JSON.stringify(localStorage));
         return results;
     }
 

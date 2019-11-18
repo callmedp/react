@@ -52,8 +52,10 @@ function* getPersonalDetails(action) {
                 type: Actions.SAVE_USER_INFO,
                 data: modifyPersonalInfo(JSON.parse(localStorage.getItem('personalInfo')) || [])
             });
+            resolve('Information successfully fetched.')
             return;
         }
+
 
         yield put({type: UPDATE_UI, data: {loader: true}});
 

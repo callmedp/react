@@ -1,6 +1,6 @@
 import "regenerator-runtime/runtime";
 import express from 'express';
-import {matchRoutes} from 'react-router-config';
+import { matchRoutes } from 'react-router-config';
 
 var path = require('path');
 
@@ -10,9 +10,10 @@ const fs = require('fs');
 
 const timestamp = '1572350135076' //fs.readFileSync(`${process.env.STATIC_FILE_PATH}`, "utf8");
 
-let userAgents = '', store, routes, isMobile = false,paramObj = {
-    alt:''
+let userAgents = '', store, routes, isMobile = false, paramObj = {
+    alt: ''
 };
+
 
 if (typeof window == 'undefined') {
     global.window = {
@@ -31,21 +32,30 @@ if (typeof fetch == 'undefined') {
     global.fetch = require('node-fetch');
 }
 
+
 if (typeof localStorage == 'undefined') {
     console.log(' in here', global.localStorage);
     global.localStorage = {
         setItem: (param1, param2) => {
-            console.log('--set Item --', global.localStorage)
             return global.localStorage[param1] = param2;
         },
         getItem: (param1) => {
             return global.localStorage[param1];
         },
         clear: () => {
-            return null;
+           let dummyObj  = {
+               ...{},
+               ...global.localStorage
+           };
+           Object.keys(dummyObj).forEach(el => {
+               if( ['setItem','getItem', 'removeItem','clear'].findIndex(el) === -1){
+                  delete  global.localStorage[el];
+               }
+           })
         },
-        candidateId:"5dcfe4279cbeea7d2716480a",
-        token: "25629b30656a0815b595927646a1c0fec6519774"
+        removeItem: (param1) => {
+            delete global.localStorage[param1]
+        }
     }
 }
 const PORT = process.env.PORT || 8079;
@@ -75,7 +85,7 @@ app.get('*', async (req, res) => {
         store = require('../mobile/src/store/index').default;
         routes = require('../mobile/src/routes/index').routes;
         isMobile = true;
-    } 
+    }
     else {
         console.log('<><><>in desktop');
         store = require('../desktop/src/store/index').default;
@@ -83,15 +93,28 @@ app.get('*', async (req, res) => {
         isMobile = false;
     }
 
-    for (const [index, {route}] of (matchRoutes(routes, req.path) || []).entries()) {
+    for (const [index, { route }] of (matchRoutes(routes, req.path) || []).entries()) {
         if (route && route.component && route.component.fetching) {
             try {
-                if(req.query && req.query.token) {  
-                    paramObj['alt'] = req.query.token 
+                if (req.query && req.query.token) {
+                    paramObj['alt'] = req.query.token
                 }
+                console.log('---', route.component.fetching);
                 result = await route.component.fetching(store, paramObj);
-                console.log('-resumt -', result);
-                context['title'] = result[1];
+                const resultLength = result.length;
+                console.log('0result---<:>>><<>', result);
+                console.log(",>><><>><>><><><><><><><><><><><<><><>><");
+                if (resultLength) {
+                    let data = JSON.parse(result[resultLength - 1]);
+                    if (Object.keys(data).length) {
+                        global.localStorage = {
+                            ...global.localStorage,
+                            ...data
+                        }
+                    }
+                }
+                console.log('--local Storage--', global.localStorage);
+                context['title'] = result[resultLength - 2];
             } catch (e) {
                 console.log("Error in Api", e);
             }

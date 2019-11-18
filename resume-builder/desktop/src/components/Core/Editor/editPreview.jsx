@@ -60,6 +60,7 @@ class EditPreview extends Component {
         for (const [index, value] of actionList.entries()) {
             results[index] = await new Promise((resolve, reject) => dispatch(value({info: params, resolve, reject})))
         }
+        results.push(JSON.stringify(localStorage));
         return results;
     }
 
