@@ -32,8 +32,10 @@ if (typeof fetch == 'undefined') {
 }
 
 if (typeof localStorage == 'undefined') {
+    console.log(' in here', global.localStorage);
     global.localStorage = {
         setItem: (param1, param2) => {
+            console.log('--set Item --', global.localStorage)
             return global.localStorage[param1] = param2;
         },
         getItem: (param1) => {
@@ -42,8 +44,8 @@ if (typeof localStorage == 'undefined') {
         clear: () => {
             return null;
         },
-        candidateId: "53461c6e6cca0763532d4b09",
-        token: "da3b4f42ce9c2c5cd1d2d81750ca7db51c71e645"
+        candidateId:"5dcfe4279cbeea7d2716480a",
+        token: "25629b30656a0815b595927646a1c0fec6519774"
     }
 }
 const PORT = process.env.PORT || 8079;
@@ -84,11 +86,12 @@ app.get('*', async (req, res) => {
     for (const [index, {route}] of (matchRoutes(routes, req.path) || []).entries()) {
         if (route && route.component && route.component.fetching) {
             try {
-                if(req.query && req.query.token) {
+                if(req.query && req.query.token) {  
                     paramObj['alt'] = req.query.token 
                 }
                 result = await route.component.fetching(store, paramObj);
-                context['title'] = result[0];
+                console.log('-resumt -', result);
+                context['title'] = result[1];
             } catch (e) {
                 console.log("Error in Api", e);
             }

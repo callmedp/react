@@ -65,16 +65,16 @@ class Home extends Component {
     }
 
     static getActions() {
-        return [getComponentTitle]
+        return [loginCandidate,getComponentTitle]
     }
 
     static async fetching({dispatch}, params) {
         let actionList = Home.getActions();
         const results = [];
-        // remove the api for loginCandidate if no alt token received
-        // if (!params['alt']) {
-        //     actionList = actionList.filter((el,index) => index !== 0 );
-        // }
+       // remove the api for loginCandidate if no alt token received
+        if (!params['alt']) {
+            actionList = actionList.filter((el,index) => index !== 0 );
+        }
         for (const [index, value] of actionList.entries()) {
               results[index] = await new Promise((resolve, reject) => dispatch(value({
                 info: params,
@@ -83,6 +83,7 @@ class Home extends Component {
                 isTokenAvail: true
             })))
         }
+        results.push(localStorage);
         return results;
     }
 

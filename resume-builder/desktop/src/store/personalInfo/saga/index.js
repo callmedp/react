@@ -59,7 +59,7 @@ function* getPersonalDetails(action) {
 
         const result = yield call(Api.fetchPersonalInfo, candidateId);
 
-        console.log('result ---is --', result);
+        console.log('result ---is --', result,localStorage);
 
         if (result['error']) {
             reject(new Error(result['errorMessage']));
@@ -75,7 +75,7 @@ function* getPersonalDetails(action) {
         data = modifyPersonalInfo(data)
         yield put({type: Actions.SAVE_USER_INFO, data: data})
         resolve('Information successfully fetched.')
-        
+
     } catch (e) {
         console.log(e);
     }
