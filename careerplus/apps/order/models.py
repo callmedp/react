@@ -721,8 +721,9 @@ class OrderItem(AbstractAutoDate):
     @property
     def days_left_oi_product(self):
         can_be_paused = self.product.is_pause_service
+        duration_days = self.product.day_duration
         
-        if not can_be_paused:
+        if not self.product or not self.product.is_service:
             return 0
 
         featured_op = self.orderitemoperation_set.filter(oi_status=28).first()
@@ -731,8 +732,13 @@ class OrderItem(AbstractAutoDate):
             return 0
 
         sdt = featured_op.created
+        
+        if not can_be_paused:
+            edt = sdt + timedelta(days=duration_days)
+            days_left = edt - timezone.now()
+            return days_left.days if days_left.days > 0 else 0
 
-        duration_days = self.product.day_duration
+        sdt = featured_op.created
         edt = sdt + timedelta(days=duration_days*2)
         pause_resume_operations = self.orderitemoperation_set.filter(oi_status__in=[34,35]).values_list('created',flat=True)
         days_left = timedelta(days=duration_days)
@@ -756,32 +762,7 @@ class OrderItem(AbstractAutoDate):
         if (edt - timezone.now()) < days_left:
             days_left = (edt - timezone.now())
 
-        return days_left.days
-
-
-        # remove above code as it is just for testing
-        # days_left = duration_days
-        # days_between_pause_resume = timedelta(0)
-
-        # for pos in range(0,pause_resume_operations.count(),2):
-        #     if pos==0:
-        #         days_between_pause_resume += pause_resume_operations[pos] -sdt
-        #         continue
-
-        #     days_between_pause_resume += pause_resume_operations[pos] - \
-        #                                 pause_resume_operations[pos-1]
-
-        # if (not pause_resume_operations.count() & 1) and pause_resume_operations.count()>0:  #if even no of operations -> the service is resumed
-        #     days_between_pause_resume += timezone.now() - pause_resume_operations.last()
-        # else:
-        #     days_left -= (timezone.now() - sdt).days
-
-        # days_left -= (days_between_pause_resume).days
-
-        # if (edt - timezone.now()).days < days_left:
-        #     days_left = (edt - timezone.now()).days
-
-        # return days_left
+        return days_left.days if days_left.days > 0 else 0
 
     @property
     def order_payment_date(self):

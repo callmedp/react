@@ -1072,6 +1072,8 @@ class ShineCandidateLoginAPIView(APIView):
 
     def _dispatch_via_autologin(self, alt, with_info):
         try:
+            alt = alt.replace(" ","+")
+            alt = alt.replace("%20","+") 
             email, candidate_id, valid = AutoLogin().decode(alt)
         except Exception as e:
             logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
