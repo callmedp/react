@@ -1940,6 +1940,7 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
 
 .days-remaining {
 	float: right;
+	text-align: center;
 	p {
 		background: $white-color !important;
 		font-size: $font-size+3;

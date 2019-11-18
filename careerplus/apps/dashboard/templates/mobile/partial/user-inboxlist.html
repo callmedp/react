@@ -273,7 +273,9 @@
                  <div class="day-remains">
                     <span class="day-remains--head">Day Remaining</span>
                     <ul class="day-remains--counts">
+                        {% if obj.days_left_oi_product|modulo:2 > 0 %}
                         <li>{{ obj.days_left_oi_product|modulo:2 }}</li>
+                        {% endif %}
                         <li>{{ obj.days_left_oi_product|modulo:1 }}</li>
                         <li>{{ obj.days_left_oi_product|modulo:0 }}</li>
                     </ul>
