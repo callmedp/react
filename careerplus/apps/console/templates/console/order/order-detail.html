@@ -230,7 +230,7 @@
                        {% for msg in obj.get_oi_communications %}
                       {% if forloop.counter == 1 %}
                      <span class="db"> {{msg.message}}</span>
-                     <strong>{% if msg.added_by %}{{msg.added_by.name}}{% else %}{{order.first_name}}{% endif %}</strong> <span class="time">{{msg.created.date}}</span>
+                     <strong>{% if msg.added_by %}{{msg.added_by.name}}{% else %}{{order.first_name}}{% endif %}</strong> <span class="time">{{msg.created}}</span>
                                   {% endif %}
                         {% if forloop.counter == 2 %}
                      <button class="round_btn mt-10 db" data-toggle="modal" data-target="#allmessages_modal" onclick="allMessage({{obj.pk}})">Read all</button>

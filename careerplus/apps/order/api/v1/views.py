@@ -1,24 +1,30 @@
-# rest imports
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.generics import ListAPIView,UpdateAPIView
-from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import IsAuthenticated
+# python imports
+import json
+
+# django imports
+
+# local imports
+from .serializers import OrderSerializer,LTVReportSerializer,OrderShineCandidateSerializer
+
 
 #in app imports
+
+from order.models import OrderItemOperation,Message
 from order.api.core.mixins import OrderItemViewMixin
 from order.models import Order,MonthlyLTVRecord
 from order.api.v1.serializers import OrderItemListSerializer
 from shared.rest_addons.authentication import ShineUserAuthentication
-from .serializers import OrderSerializer,LTVReportSerializer,OrderShineCandidateSerializer
-
-# python imports
-import json
 from order.api.core.serializers import OrderItemOperationsSerializer,\
     MessageCommunincationSerializer
-from order.models import OrderItemOperation,Message
+
+# 3rd party imports
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.generics import ListAPIView,UpdateAPIView
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import IsAuthenticated
 from shared.rest_addons.mixins import FieldFilterMixin,\
     ListSerializerContextMixin,ListSerializerDataMixin
-from shared.rest_addons.permissions import OrderAccessPermission,IsObjectOwnerOrConsoleUser
+from shared.rest_addons.permissions import OrderItemAccessPermission,IsObjectOwnerOrConsoleUser
 from rest_framework.authentication import SessionAuthentication
 from shared.rest_addons.pagination import LearningCustomPagination
 
@@ -62,14 +68,15 @@ class OrderItemOperationApiView(FieldFilterMixin,ListAPIView):
 
     """
     authentication_classes = [SessionAuthentication]
-    permission_classes = [OrderAccessPermission,]
+    permission_classes = [OrderItemAccessPermission,]
     serializer_class = OrderItemOperationsSerializer
     pagination_class = LearningCustomPagination
 
     def get_queryset(self):
         filter_dict = {}
-        query_params = self.request.query_params
-        oi_id = query_params.get('oi')
+        # query_params = self.request.query_params
+        # oi_id = query_params.get('oi')
+        oi_id = self.kwargs.get('oi_id')
         if oi_id:
             filter_dict.update({'oi__id':oi_id})
         return OrderItemOperation.objects.filter(**filter_dict)
@@ -81,14 +88,14 @@ class MessageCommunicationListApiView(FieldFilterMixin,ListAPIView):
     """
 
     authentication_classes = [SessionAuthentication]
-    permission_classes = (OrderAccessPermission,)
+    permission_classes = (OrderItemAccessPermission,)
     serializer_class = MessageCommunincationSerializer
     pagination_class = LearningCustomPagination
 
     def get_queryset(self):
         filter_dict = {}
-        query_params = self.request.query_params
-        oi_id = query_params.get('oi')
+        # query_params = self.request.query_params
+        oi_id = self.kwargs.get('oi_id')
         if oi_id:
             filter_dict.update({'oi__id': oi_id})
         return Message.objects.filter(**filter_dict)

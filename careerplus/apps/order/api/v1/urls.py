@@ -1,22 +1,24 @@
 from rest_framework import routers
-from . import views
+from .views import (OrderItemViewSet,OrderItemsListView,OrderUpdateView,
+					OrderItemOperationApiView,MessageCommunicationListApiView,LTVReportView)
 from django.conf.urls import url, include
 
 router = routers.SimpleRouter()
 
-router.register(r'orderitem', views.OrderItemViewSet)
+router.register(r'orderitem', OrderItemViewSet)
 
 urlpatterns = router.urls
 
 urlpatterns = [
-    url(r'^orderitem/$', views.OrderItemViewSet),
-    url(r'^order/(?P<pk>\d+)/items/$', views.OrderItemsListView.as_view()),
-    url(r'^(?P<pk>\d+)/update/$', views.OrderUpdateView.as_view()),
-	url(r'^orderitemoperationsapi/$', views.OrderItemOperationApiView.as_view(),
+    url(r'^orderitem/$', OrderItemViewSet),
+    url(r'^order/(?P<pk>\d+)/items/$', OrderItemsListView.as_view()),
+    url(r'^order/(?P<pk>\d+)/update/$', OrderUpdateView.as_view()),
+	url(r'^order/order-item-operation/(?P<oi_id>\d+)/$',
+		OrderItemOperationApiView.as_view(),
 		name='orderitemoperations'),
-	url(r'^message-communications/$',
-		views.MessageCommunicationListApiView.as_view(),
+	url(r'^order/order-item/(?P<oi_id>\d+)/message/$',
+		MessageCommunicationListApiView.as_view(),
 		name='message-communications'),
 
-    url(r'^ltv-report/(?P<year>\d+)/(?P<month>\d+)/$', views.LTVReportView.as_view()),
+    url(r'^ltv-report/(?P<year>\d+)/(?P<month>\d+)/$', LTVReportView.as_view()),
 ]

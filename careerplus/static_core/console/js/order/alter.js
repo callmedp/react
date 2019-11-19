@@ -176,7 +176,7 @@ function fileUploadForm(oiOperation){
 
 function allActionModal(id){
   $('#orderItemOperationModal').html('')
-$.get( "/order/api/v1/orderitemoperationsapi/", { 'oi': id ,'nopage':true,'include_oi_id':true,
+$.get( `/api/v1/order/order-item-operation/${id}`, {'nopage':true,'include_oi_id':true,
 'include_added_by':true,'include_assigned_to':true} )
   .done(function( data ) {
     if(data ){
@@ -184,7 +184,7 @@ $.get( "/order/api/v1/orderitemoperationsapi/", { 'oi': id ,'nopage':true,'inclu
     for (oiOperation of data){
       result += `<div class="allactions__box">
                 <p>${oiOperation.oi_status_display}</p>
-          <span> ${new Date(oiOperation.created).toDateString()}</span>
+          <span> ${new Date(oiOperation.created).toLocaleString('en-US', {hour12: true })}</span>
           </div>
 
     ${createDraftResumeDownload(oiOperation)? createDraftResumeDownload(oiOperation):''}
@@ -200,7 +200,7 @@ $('#loader').hide();
 }
 function allMessage(id){
   $('#orderItemOperationModal').html('')
-$.get( "/order/api/v1/message-communications/", { 'oi': id ,'nopage':true} )
+$.get( `/api/v1/order/order-item/${id}/message/`, {'nopage':true} )
   .done(function( data ) {
     if(data){
     let result = ""
@@ -210,7 +210,7 @@ $.get( "/order/api/v1/message-communications/", { 'oi': id ,'nopage':true} )
           <p>${msg.message}</p>
           <span>
               <strong>${msg.added_by_name}</strong>
-             ${new Date(msg.created).toDateString()}</span>
+             ${new Date(msg.created).toLocaleString('en-US', {hour12: true })}</span>
         </div>`
     }
     $('#MessagesModal').html(result);
@@ -279,7 +279,7 @@ $('#orderEmailMobileUpdateBtn').click(function(){
 
     }
   if (Object.keys(patchBody).length != 0){
-fetch(`/order/api/v1/${oid}/update/`, {
+fetch(`/api/v1/order/${oid}/update/`, {
   method: 'PATCH',
    credentials: "same-origin",
     headers: {
@@ -289,11 +289,15 @@ fetch(`/order/api/v1/${oid}/update/`, {
     },
   body: JSON.stringify(patchBody),
     }).then(response => {
+    if (response.status == 200){
     form.trigger('reset')
     $('#alternatecontact_modal').modal('hide')
     alert('Updated')
-     })
-       .catch(function(error) {
+    }
+    else{
+    alert('Something went wrong')
+    }
+     }).catch(function(error) {
            form.trigger('reset')
                alert('Something went wrong')
         console.log(error);
