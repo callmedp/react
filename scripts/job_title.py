@@ -16,11 +16,14 @@ conn = get_redis_connection('search_lookup')
 with open('merged_experience.json') as fp:
     data = eval(fp.read())
 
+print(conn.hmget('suggestion_set_jt_experience'))
+
 conn.hmset('suggestion_set_jt_experience', data)
 
 
 with open('merged_summary.json') as fp:
     data = eval(fp.read())
 
+print(conn.hmget('suggestion_set_jt_summary'))
 conn.hmset('suggestion_set_jt_summary', data)
 
