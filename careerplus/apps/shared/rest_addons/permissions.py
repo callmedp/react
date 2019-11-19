@@ -165,17 +165,17 @@ class IsObjectOwnerOrConsoleUser(BasePermission):
                 'order.can_view_order_detail'):
             return False
 
-        oi = view.kwargs.get('oi_id')
+        oi = view.kwargs.get('pk')
 
         if not oi:
             return False
 
-        oi = OrderItem.objects.filter(id=oi).first()
+        order = Order.objects.filter(id=oi).first()
 
-        if not oi:
+        if not order:
             return False
 
-        order_items = oi.order.orderitems.all()
+        order_items = order.orderitems.all()
 
         vendor_ids = [x.vendee.id for x in VendorHierarchy.objects.filter(employee=user, active=True)]
         if vendor_ids:
@@ -202,7 +202,7 @@ class IsObjectOwnerOrConsoleUser(BasePermission):
                 'order.can_view_order_detail'):
             return False
 
-        order_items = obj.order.orderitems.all()
+        order_items = obj.orderitems.all()
         vendor_ids = [x.vendee.id for x in
                       VendorHierarchy.objects.filter(employee=user,
                                                      active=True)]
