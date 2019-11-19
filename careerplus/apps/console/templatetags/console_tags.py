@@ -95,3 +95,7 @@ def is_whole_refund(key, refund_dict):
         return not bool(refund_dict[key]['total_count'] - refund_dict[key]['refund_count'])
     return False
 
+@register.filter(name='get_dict_item')
+def get_dict_item(item_dict,id):
+    return item_dict.get(id,None)
+
