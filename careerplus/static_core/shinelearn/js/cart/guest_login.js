@@ -147,7 +147,6 @@ $(document).ready(function () {
 
 
     const autoFillGuestDetails = () => {
-
         let info = cartData.split(',');
     
         const formObj = {
