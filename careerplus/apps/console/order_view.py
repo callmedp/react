@@ -752,6 +752,9 @@ class OrderDetailView(DetailView):
 
     def _get_visible_order_items_for_order(self,order):
         order_items = order.orderitems.all().select_related('product', 'partner').order_by('id')
+
+        if self.request.user.is_superuser:
+            return order_items
         
         #Handle vendor users
         vendor_ids = [x.vendee.id for x in VendorHierarchy.objects.filter(\
@@ -783,7 +786,8 @@ class OrderDetailView(DetailView):
         if not last_status_object:
             last_status = "Not Done"
         else:
-            timestamp = '\n' + date_timezone_convert(last_status_object.created).strftime('%b. %d, %Y, %I:%M %P ')
+            timestamp = '\n' + date_timezone_convert(
+                last_status_object.created).strftime('%b. %d, %Y, %I:%M %p ')
             last_status = last_status_object.get_wc_status()
             last_status += timestamp
         

@@ -814,7 +814,11 @@ class OrderItem(AbstractAutoDate):
             profile = getattr(self, 'whatsapp_profile_orderitem', None)
             if profile:
                 return bool(profile.due_date)
-    
+
+    @property
+    def oi_draft_path(self):
+        return str(self.oi_draft.url) if self.oi_draft else ""
+
 
     @property
     def is_onboard(self):
@@ -1153,6 +1157,11 @@ class OrderItemOperation(AbstractAutoDate):
     def __str__(self):
         return "#{}".format(self.pk)
 
+
+    @property
+    def oi_status_display(self):
+         return self.get_oi_status
+
     @property
     def get_oi_status(self):
         if self.oi_status in [28, 29, 30]:
@@ -1161,22 +1170,23 @@ class OrderItemOperation(AbstractAutoDate):
         return dict_status.get(self.oi_status)
 
     @property
+    def order_oio_linkedin(self):
+        oi = self.oi
+        return oi.oio_linkedin.id if oi.oio_linkedin else ""
+
+    @property
     def get_user_oi_status(self):
         dict_status = dict(OI_USER_STATUS)
         return dict_status.get(self.oi_status)
 
     def oi_status_transform(self):
-        val = OI_OPS_TRANSFORMATION_DICT.get(
-            self.oi.product.sub_type_flow, {}
-        ).get(self.oi_status, None)
+        val = OI_OPS_TRANSFORMATION_DICT.get(self.oi.product.sub_type_flow, {})\
+            .get(self.oi_status, None)
         if val:
             return val
         else:
             dict_status = dict(OI_OPS_STATUS)
             return dict_status.get(self.oi_status)
-
-
-
 
 class Message(AbstractAutoDate):
     oi = models.ForeignKey(OrderItem, null=True)
@@ -1197,6 +1207,13 @@ class Message(AbstractAutoDate):
 
     def __str__(self):
         return "#{}".format(self.pk)
+
+    @property
+    def added_by_name(self):
+        if self.added_by:
+            return self.added_by.name
+        order = self.oi.order
+        return order.first_name
 
 
 class InternationalProfileCredential(AbstractAutoDate):
