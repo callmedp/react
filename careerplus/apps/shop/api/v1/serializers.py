@@ -165,7 +165,7 @@ class UpdateProductSkillSerializer(serializers.Serializer):
         return product
 
     def validate_product_id(self, value):
-        if not ProductScreen.objects.filter(id=value).exists():
+        if not Product.objects.filter(id=value).exists():
             raise serializers.ValidationError("Product with given id does not exits.")
         return value
 
