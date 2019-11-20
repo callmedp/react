@@ -51,7 +51,7 @@ class EditPreview extends Component {
     }
 
     static getActions() {
-        return [fetchPersonalInfo, getComponentTitle]
+        return [getComponentTitle]
     }
 
     static async fetching({dispatch}, params) {
@@ -60,7 +60,6 @@ class EditPreview extends Component {
         for (const [index, value] of actionList.entries()) {
             results[index] = await new Promise((resolve, reject) => dispatch(value({info: params, resolve, reject})))
         }
-        results.push(JSON.stringify(localStorage));
         return results;
     }
 

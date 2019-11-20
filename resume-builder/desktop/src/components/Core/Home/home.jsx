@@ -1,18 +1,18 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './home.scss'
-import {getCandidateId, loginCandidate, feedbackSubmit, getComponentTitle} from "../../../store/landingPage/actions";
-import {connect} from "react-redux";
+import { getCandidateId, loginCandidate, feedbackSubmit, getComponentTitle } from "../../../store/landingPage/actions";
+import { connect } from "react-redux";
 import Banner from "./Banner/banner.jsx";
 import ResumeSlider from "./ResumeSlider/resumeSlider.jsx";
 import Testimonial from "./Testimonial/testimonial.jsx";
 import Footer from "../../Common/Footer/footer.jsx";
 import Header from "../../Common/Header/header.jsx";
 import LoaderPage from '../../Loader/loaderPage.jsx'
-import {scroller} from 'react-scroll';
+import { scroller } from 'react-scroll';
 import queryString from "query-string";
-import {hideModal, showModal, showLoginModal, hideLoginModal} from "../../../store/ui/actions";
-import {displaySelectedTemplate} from '../../../store/template/actions';
-import {eventClicked} from '../../../store/googleAnalytics/actions/index';
+import { hideModal, showModal, showLoginModal, hideLoginModal } from "../../../store/ui/actions";
+import { displaySelectedTemplate } from '../../../store/template/actions';
+import { eventClicked } from '../../../store/googleAnalytics/actions/index';
 
 
 class Home extends Component {
@@ -59,45 +59,40 @@ class Home extends Component {
     }
 
     async componentDidMount() {
-        if(this.state.token){
-            await this.props.loginCandidate({alt:this.state.token}, true);
+        if (this.state.token) {
+            await this.props.loginCandidate({ alt: this.state.token }, true);
         }
     }
 
     static getActions() {
-        return [loginCandidate,getComponentTitle]
+        return [getComponentTitle]
     }
 
-    static async fetching({dispatch}, params) {
+    static async fetching({ dispatch }, params) {
         let actionList = Home.getActions();
-        const results = [];
-       // remove the api for loginCandidate if no alt token received
-        if (!params['alt']) {
-            actionList = actionList.filter((el,index) => index !== 0 );
-        }
+        const results = []
         for (const [index, value] of actionList.entries()) {
-              results[index] = await new Promise((resolve, reject) => dispatch(value({
+            results[index] = await new Promise((resolve, reject) => dispatch(value({
                 info: params,
                 resolve,
                 reject,
                 isTokenAvail: true
             })))
         }
-        results.push(JSON.stringify(localStorage));
         return results;
     }
 
     render() {
-        const {ui: {loader}, userInfo, userInfo: {first_name}, feedback, eventClicked} = this.props;
+        const { ui: { loader }, userInfo, userInfo: { first_name }, feedback, eventClicked } = this.props;
         return (
             <div className="nav-fixed">
                 {
                     !!(loader) &&
-                    <LoaderPage/>
+                    <LoaderPage />
                 }
                 <Header userName={first_name} page={'home'} userInfo={userInfo} eventClicked={eventClicked}
-                        feedback={feedback} getclass={this.state.scrolled ? 'color-change' : ''}/>
-                <Banner userName={first_name} eventClicked={eventClicked}/>
+                    feedback={feedback} getclass={this.state.scrolled ? 'color-change' : ''} />
+                <Banner userName={first_name} eventClicked={eventClicked} />
                 <section className="section-container">
                     <h2>Resume builder advantages</h2>
                     <strong className="section-container--sub-head">Resume builder advantages which will make your
@@ -187,7 +182,7 @@ class Home extends Component {
                     </ul>
                 </section>
 
-                <ResumeSlider {...this.props} page={'home'}/>
+                <ResumeSlider {...this.props} page={'home'} />
 
                 <section className="section-container">
                     <h2>Resume builder features</h2>
@@ -250,7 +245,7 @@ class Home extends Component {
                     </ul>
 
                     <button className="orange-button"
-                            onClick={() => this.scrollTo('templates', 'BuildResume', 'Features')}>Build your resume
+                        onClick={() => this.scrollTo('templates', 'BuildResume', 'Features')}>Build your resume
                     </button>
 
                 </section>
@@ -261,12 +256,12 @@ class Home extends Component {
 
                     <div>
                         <img className="img-responsive" alt={"Next generation ready resume"}
-                             src={`${this.staticUrl}react/assets/images/nextgen-resume.jpg`}/>
+                            src={`${this.staticUrl}react/assets/images/nextgen-resume.jpg`} />
                     </div>
 
                 </section>
 
-                <Testimonial/>
+                <Testimonial />
 
                 <section className="section-container flex-container text-center">
                     <div className="shinelearning">
@@ -283,7 +278,7 @@ class Home extends Component {
                     </div>
                 </section>
 
-                <Footer/>
+                <Footer />
             </div>
         )
     }
@@ -307,7 +302,7 @@ const mapDispatchToProps = (dispatch) => {
         },
         "loginCandidate": (payload, isTokenAvail) => {
             return new Promise((resolve, reject) => {
-                return dispatch(loginCandidate({info: payload, resolve, reject, isTokenAvail: isTokenAvail}))
+                return dispatch(loginCandidate({ info: payload, resolve, reject, isTokenAvail: isTokenAvail }))
             })
         },
         'showModal': () => {
@@ -316,10 +311,10 @@ const mapDispatchToProps = (dispatch) => {
         'hideModal': () => {
             return dispatch(hideModal())
         },
-        'showLoginModal': () =>{
+        'showLoginModal': () => {
             return dispatch(showLoginModal())
         },
-        'hideLoginModal': () =>{
+        'hideLoginModal': () => {
             return dispatch(hideLoginModal())
         },
         'displaySelectedTemplate': (templateId) => {

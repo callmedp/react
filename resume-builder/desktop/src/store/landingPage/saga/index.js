@@ -48,7 +48,6 @@ function* loginCandidate(action) {
         if (isTokenAvail) {
             result = yield call(Api.loginCandidate, info);
         }
-        console.log('with token login ---', result , localStorage);
 
         // if some error comes or token not available then
         // get new information using session.
@@ -57,7 +56,6 @@ function* loginCandidate(action) {
             result = yield call(Api.getInformation)
         }
 
-        console.log('after login ---', result , localStorage);
 
         if (result && result['error']) {    
             localStorage.clear();

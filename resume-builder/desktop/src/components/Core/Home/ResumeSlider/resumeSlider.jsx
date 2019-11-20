@@ -19,22 +19,28 @@ export default class ResumeSlider extends Component {
             'label':'HomePage'
         })
         const templateId = parseInt(document.getElementsByClassName('slick-current slick-center')[0].getAttribute('data-index')) + 1;
+        const {page, fetchSelectedTemplateImage, history} = this.props;
+
+        if(page == 'home'){
         this.props.showLoginModal()
-        // const {page, fetchSelectedTemplateImage, history} = this.props;
-        // localStorage.setItem('selected_template', (templateId))
-        // const select_template_modal = this.props.ui ? this.props.ui.select_template_modal : false
-        // if (select_template_modal) {
-        //     this.props.hideSelectTemplateModal();
-        //     if (page === 'edit') {
-        //         this.props.fetchDefaultCustomization(templateId);
-        //     }
-        //     this.props.updateSelectedTemplate(this.props.userInfo)
-        //     if (fetchSelectedTemplateImage && page === 'buy') {
-        //         this.props.fetchSelectedTemplateImage(templateId, false)
-        //     }
-        // } else {
-        //    history.push('/resume-builder/edit/?type=profile')
-        // }
+        }
+        else {
+        const {page, fetchSelectedTemplateImage, history} = this.props;
+        localStorage.setItem('selected_template', (templateId))
+        const select_template_modal = this.props.ui ? this.props.ui.select_template_modal : false
+        if (select_template_modal) {
+            this.props.hideSelectTemplateModal();
+            if (page === 'edit') {
+                this.props.fetchDefaultCustomization(templateId);
+            }
+            this.props.updateSelectedTemplate(this.props.userInfo)
+            if (fetchSelectedTemplateImage && page === 'buy') {
+                this.props.fetchSelectedTemplateImage(templateId, false)
+            }
+        } else {
+           history.push('/resume-builder/edit/?type=profile')
+        }
+        }
     }
 
 

@@ -99,22 +99,9 @@ app.get('*', async (req, res) => {
                 if (req.query && req.query.token) {
                     paramObj['alt'] = req.query.token
                 }
-                console.log('---', route.component.fetching);
                 result = await route.component.fetching(store, paramObj);
-                const resultLength = result.length;
-                console.log('0result---<:>>><<>', result);
-                console.log(",>><><>><>><><><><><><><><><><><<><><>><");
-                if (resultLength) {
-                    let data = JSON.parse(result[resultLength - 1]);
-                    if (Object.keys(data).length) {
-                        global.localStorage = {
-                            ...global.localStorage,
-                            ...data
-                        }
-                    }
-                }
-                console.log('--local Storage--', global.localStorage);
-                context['title'] = result[resultLength - 2];
+              
+                context['title'] = result[result.length -1];
             } catch (e) {
                 console.log("Error in Api", e);
             }
