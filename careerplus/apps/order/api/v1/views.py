@@ -95,7 +95,7 @@ class MessageCommunicationListApiView(FieldFilterMixin,ListAPIView):
         oi_id = self.kwargs.get('oi_id')
         if oi_id:
             filter_dict.update({'oi__id': oi_id})
-        return Message.objects.filter(**filter_dict)
+        return Message.objects.filter(**filter_dict).order_by('-created')
 
     #
     # def paginate_queryset(self, queryset):

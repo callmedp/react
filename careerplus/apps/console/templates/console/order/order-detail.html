@@ -228,7 +228,7 @@
                <div class="col-md-4 order_details_table__message">
                   <p>
                        {% for msg in obj.get_oi_communications %}
-                      {% if forloop.counter == 1 %}
+                      {% if forloop.last %}
                      <span class="db"> {{msg.message}}</span>
                      <strong>{% if msg.added_by %}{{msg.added_by.name}}{% else %}{{order.first_name}}{% endif %}</strong> <span class="time">{{msg.created}}</span>
                                   {% endif %}
