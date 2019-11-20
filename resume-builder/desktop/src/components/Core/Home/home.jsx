@@ -24,15 +24,15 @@ class Home extends Component {
         this.state = {
             'scrolled': false,
             'token': '',
-            'login': '',
+            'login': ''
         }
-        if(document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]){
-            document.getElementsByClassName('chat-bot')[0].style.display='none'; 
+        if (document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
+            document.getElementsByClassName('chat-bot')[0].style.display = 'none';
         }
-       
+
         const values = queryString.parse(this.props.location.search);
         const token = (values && values.token) || '', login = (values && values.login) || '';
-    
+
         this.state.token = token;
         this.state.login = login;
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
@@ -67,11 +67,12 @@ class Home extends Component {
 
     async componentDidMount() {
         if (this.state.token) {
-            await this.props.loginCandidate({ alt: this.state.token },this.props.history, true);
+            await this.props.loginCandidate({ alt: this.state.token }, this.props.history, true);
         }
-        if(this.state.login === 'false'){
+        if (this.state.login === 'false') {
             this.props.showLoginModal()
         }
+
     }
 
     static getActions() {
@@ -101,7 +102,7 @@ class Home extends Component {
                     <LoaderPage />
                 }
                 <Header userName={first_name} page={'home'} userInfo={userInfo} eventClicked={eventClicked}
-                    feedback={feedback} getclass={this.state.scrolled ? 'color-change' : ''} />
+                    feedback={feedback} getclass={this.state.scrolled ? 'color-change' : ''} location={this.props.location} />
                 <Banner userName={first_name} eventClicked={eventClicked} />
                 <section className="section-container">
                     <h2>Resume builder advantages</h2>
@@ -312,7 +313,7 @@ const mapDispatchToProps = (dispatch) => {
         },
         "loginCandidate": (payload, history, isTokenAvail) => {
             return new Promise((resolve, reject) => {
-                return dispatch(loginCandidate({ info: payload, resolve, reject,history, isTokenAvail: isTokenAvail }))
+                return dispatch(loginCandidate({ info: payload, resolve, reject, history, isTokenAvail: isTokenAvail }))
             })
         },
         'showModal': () => {

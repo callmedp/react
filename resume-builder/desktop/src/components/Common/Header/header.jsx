@@ -1,10 +1,12 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './header.scss'
-import {connect} from "react-redux";
-import {scroller} from 'react-scroll'
-import {Link} from "react-router-dom";
-import {showHelpModal, hideHelpModal} from '../../../store/ui/actions/index';
+import { connect } from "react-redux";
+import { scroller } from 'react-scroll'
+import { Link } from "react-router-dom";
+import { showHelpModal, hideHelpModal } from '../../../store/ui/actions/index';
 import HelpModal from '../../Modal/helpModal';
+import queryString from "query-string";
+
 
 
 class Header extends Component {
@@ -14,9 +16,16 @@ class Header extends Component {
         this.scrollTo = this.scrollTo.bind(this);
         this.reachUsButton = this.reachUsButton.bind(this);
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
+        this.state = {
+            'template': ''
+        }
+        const values = queryString.parse(this.props.location.search);
+        const template = (values && values.template) || '';
+        this.state.template = template;
+
     }
 
-    scrollTo(elem,offset,action,label) {
+    scrollTo(elem, offset, action, label) {
         scroller.scrollTo(elem, {
             duration: 800,
             delay: 0,
@@ -30,52 +39,58 @@ class Header extends Component {
         })
     }
 
-    reachUsButton(){
-        const {showHelpModal,eventClicked} =this.props;
+    reachUsButton() {
+        const { showHelpModal, eventClicked } = this.props;
         showHelpModal()
         eventClicked({
-            'action':'ReachUs',
-            'label':'Header'
+            'action': 'ReachUs',
+            'label': 'Header'
         })
     }
 
+    componentDidMount() {
+        if (this.state.template === "false") {
+            this.scrollTo('templates', -50, 'Templates', 'Header')
+        }
+
+    }
     render() {
-        const {page, userName, ui:{helpModal}, hideHelpModal,feedback,userInfo,eventClicked} = this.props;
+        const { page, userName, ui: { helpModal }, hideHelpModal, feedback, userInfo, eventClicked } = this.props;
         return (
             <header className={this.props.getclass + " home-nav-fixed"}>
-             <HelpModal modalStatus={helpModal} hideHelpModal={hideHelpModal} userInfo={userInfo} feedback={feedback} eventClicked={eventClicked}/>
+                <HelpModal modalStatus={helpModal} hideHelpModal={hideHelpModal} userInfo={userInfo} feedback={feedback} eventClicked={eventClicked} />
                 <div className="container">
-                    <Link to={'/resume-builder/'} className="container--logo"/>
+                    <Link to={'/resume-builder/'} className="container--logo" />
                     {!!(page === 'home') &&
-                    <ul className="home-links">
-                        <li>
-                            <span  onClick={() => this.scrollTo('works',-63,'Howitworks_Header','Header')}>How it Works</span>
-                        </li>
-                        <li>
-                            <span onClick={() => this.scrollTo('templates',-50,'Templates','Header')}>Templates</span>
-                        </li>
-                    </ul>
+                        <ul className="home-links">
+                            <li>
+                                <span onClick={() => this.scrollTo('works', -63, 'Howitworks_Header', 'Header')}>How it Works</span>
+                            </li>
+                            <li>
+                                <span onClick={() => this.scrollTo('templates', -50, 'Templates', 'Header')}>Templates</span>
+                            </li>
+                        </ul>
                     }
                     <div className="signin">
                         {!!(page === 'home') &&
-                        <React.Fragment>
-                            <button className="white-button mr-15" onClick={this.reachUsButton}>
-                                Reach us
+                            <React.Fragment>
+                                <button className="white-button mr-15" onClick={this.reachUsButton}>
+                                    Reach us
                             </button>
-                            <button className="white-button mr-30" onClick={()=>{this.scrollTo('templates',-60,'BuildResume','Header')}}>Build your
-                                resume
+                                <button className="white-button mr-30" onClick={() => { this.scrollTo('templates', -60, 'BuildResume', 'Header') }}>Build your
+                                    resume
                             </button>
-                        </React.Fragment>
+                            </React.Fragment>
                         }
                         {!!(page !== 'home') &&
-                        <React.Fragment>
-                        <span className="signin--user-pic">
-                        <img alt="user info" src={`${this.staticUrl}react/assets/images/user-pic.jpg`}/>
-                     </span>
-                        <span>
-                        Hello {userName || 'User'}
-                       </span>
-                       </React.Fragment>
+                            <React.Fragment>
+                                <span className="signin--user-pic">
+                                    <img alt="user info" src={`${this.staticUrl}react/assets/images/user-pic.jpg`} />
+                                </span>
+                                <span>
+                                    Hello {userName || 'User'}
+                                </span>
+                            </React.Fragment>
                         }
                     </div>
                 </div>
@@ -87,16 +102,16 @@ class Header extends Component {
 
 const mapStateToProps = (state) => {
     return {
-    ui: state.ui
+        ui: state.ui
     }
 }
 
-const mapDispatchToProps = (dispatch)=>{
+const mapDispatchToProps = (dispatch) => {
     return {
-        "showHelpModal": () =>{
+        "showHelpModal": () => {
             return dispatch(showHelpModal())
         },
-        "hideHelpModal": ()=>{
+        "hideHelpModal": () => {
             return dispatch(hideHelpModal())
         }
     }

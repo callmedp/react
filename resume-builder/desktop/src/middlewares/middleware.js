@@ -32,8 +32,14 @@ export default class Middleware {
       }
 
       privateRoute (component, pathname = '/') { 
-        return (localStorage.getItem('candidateId') && localStorage.getItem('token')
-                ? this._getRouteReturn(true, component)
+        return (localStorage.getItem('candidateId') && localStorage.getItem('token') 
+                ?  localStorage.getItem('selected_template') ? this._getRouteReturn(true, component):
+                this._getRouteReturn(false,
+                  <Redirect to={{
+                    pathname: `/resume-builder/`,
+                    search: "?template=false",
+                    state: { from: pathname }
+                  }} />)
                 : this._getRouteReturn(false,
                   <Redirect to={{
                     pathname: `/resume-builder/`,
