@@ -1618,7 +1618,8 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
                     'order':order,
                     'product':product,
                     'parent':parent,
-                    'parent_product':parent_product
+                    'parent_product':parent_product,
+                    'delivery_service':delivery_service,
                 }
             })
             
