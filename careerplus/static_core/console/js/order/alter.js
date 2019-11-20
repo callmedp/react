@@ -93,11 +93,221 @@ $('#alternumber').submit(function(event){
 
 });
 
-//$('#alteremail').validate({
-//  rules: {
-//    alt_email: {
-//      required: true,
-//      email: true
-//    }
-//  }
-//});
+function createDraftResumeDownload(element){
+if(element.oi_resume){
+let oi_resume = element.oi_resume.split('/').pop()
+return ` <div class="allactions__box"><strong>Candidate Resume:</strong></br>
+         <a href="/console/queue/resumedownload/?path=${oid}/${oi_resume}&next=${window.location.pathname}">
+         <button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
+         </div>`
+                     }
+
+else if(element.oi_status == 4 && element.oi_draft) {
+let oi_draft = element.oi_draft.split('/').pop()
+return `<div class="allactions__box">
+<strong>Draft After Close OrderItem:</strong></br>
+<a href="/console/queue/resumedownload/?path=${oid}/${oi_draft}&next=${window.location.pathname}">
+<button type="button" class="btn btn-success btn-xs">
+<i class="fa fa-eye"></i>Download Doc</button></a></div>`
+                                                      }
+
+else if(element.oi_draft){
+let oi_draft = element.oi_draft.split('/').pop()
+return `<div class="allactions__box">
+  <strong>Draft Level ${ element.draft_counter < maxDraft ? element.draft_counter:'Final'}:</strong></br>
+  <a href="/console/queue/resumedownload/?path=${oid}/${oi_draft}&next=${window.location.pathname}">
+  <button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
+</div>`
+}
+else if( element.linkedin && element.order_oio_linkedin != ""){
+return `<div class="allactions__box">
+<strong>Candidate Draft</strong></br>
+<a href="/linkedin/dashboard-draft-download/${element.oi}/${element.id}" target="_blank">
+<button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Draft</button></a>
+<strong>Draft Level ${ element.draft_counter < maxDraft ? element.draft_counter :'Final'}:</strong></br>
+<a href="/linkedin/linkedin-draft/${element.oi}/${element.id}" target="_blank">
+<button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></div>`
+}
+}
+
+
+function fileUploadForm(oiOperation){
+   return ` <form autocomplete="off" role="form" method="post"  data-parsley-validate enctype="multipart/form-data" id="draft-upload-form${oiOperation.oi}">
+         <input type="hidden" name="csrfmiddlewaretoken" value="${csrftoken}">
+           <input type="file" name="file" required="" id="id_file">
+           <div style="display:none">
+               <input type="hidden" name="oi_pk" value="${oiOperation.oi}">
+               <input type="hidden" id="flow-id{oiOperation.oi}" name="flow" value="detailpage"/>
+           </div>
+           <button type="button" onclick="clickSubmitDraft('{oiOperation.oi}',)" class="btn btn-success btn-xs">Submit</button>
+           </form>
+
+
+      <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="draftmodal${oiOperation.oi}">
+                         <div class="modal-dialog modal-lg">
+                           <div class="modal-content">
+
+                             <div class="modal-header">
+                               <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                               </button>
+                               <h4 class="modal-title" id="myModalLabel">Draft Upload</h4>
+                             </div>
+
+                             <div class="modal-body" id="myModalbody${oiOperation.oi}">
+                               Are You Sure???
+                             </div>
+
+                             <div class="modal-footer">
+                               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                               <button type="button" id="uploadDraftAction${oiOperation.oi} data-dismiss="modal" class="btn btn-primary" onclick="detailPageUploadDraft('${oiOperation.oi}',)">Yes</button>
+                             </div>
+
+                           </div>
+
+                         </div>
+
+                       </div>`
+
+
+}
+
+
+
+
+function allActionModal(id){
+  $('#orderItemOperationModal').html('')
+$.get( `/api/v1/order/order-item-operation/${id}`, {'nopage':true,'include_oi_id':true,
+'include_added_by':true,'include_assigned_to':true} )
+  .done(function( data ) {
+    if(data ){
+    let result = ""
+    for (oiOperation of data){
+      result += `<div class="allactions__box">
+                <p>${oiOperation.oi_status_display}</p>
+          <span> ${new Date(oiOperation.created).toLocaleString('en-US', {hour12: true })}</span>
+          </div>
+
+    ${createDraftResumeDownload(oiOperation)? createDraftResumeDownload(oiOperation):''}
+    ${ (oiOperation.oi_status == 4) ? (oiOperation.oi_id_data.oi_draft_path || oiOperation.linkedin)?fileUploadForm(oiOperation):'':'' }`
+
+    }
+    $('#orderItemOperationModal').html(result);
+
+    }
+$('#loader').hide();
+  });
+
+}
+function allMessage(id){
+  $('#orderItemOperationModal').html('')
+$.get( `/api/v1/order/order-item/${id}/message/`, {'nopage':true} )
+  .done(function( data ) {
+    if(data){
+    let result = ""
+    $('#MessageCounts').text('All Messages (' + data.length + ')');
+    for (msg of data){
+       result += `   <div class="allmessages__box">
+          <p>${msg.message}</p>
+          <span>
+              <strong>${msg.added_by_name}</strong>
+             ${new Date(msg.created).toLocaleString('en-US', {hour12: true })}</span>
+        </div>`
+    }
+    $('#MessagesModal').html(result);
+}
+$('#message-loader').hide();
+  });
+
+}
+
+
+$('#orderEmailMobileUpdate').validate({
+  rules: {
+        alt_email: {
+            email: true,
+        },
+        alt_mobile: {
+            number: true,
+            minlength: 10,
+            maxlength: 10
+        },
+
+    },
+    messages: {
+
+        number: {
+            number: "Enter only number",
+            maxlength: "Please enter less than 11 digits",
+            minlength: "Please enter atleast 10 digits"
+        },
+
+    },
+   errorPlacement: function(error, element) {
+       /*$(element).siblings('.error').html(error.text());*/
+       $(element).siblings('.error-txt').html(error.text())
+       // $(element).siblings('label').addClass('error-txt')
+
+
+   },
+    unhighlightError: function(error, element) {
+      // $(element).siblings('label').removeClass('error-txt')
+      //  $(element).closest('.form-group').removeClass('error');
+       $(element).siblings('.error-txt').html('');
+
+   }, success: function(label) {
+       label.html('') },
+  highlight: function(element) {
+    $(element).closest('.form-group').addClass('error');
+
+   }
+
+})
+
+
+$('#orderEmailMobileUpdateBtn').click(function(){
+  let form = $('#orderEmailMobileUpdate');
+  if(form.valid()){
+  let patchBody = {}
+   if (oid){
+    formData = form.serializeArray()
+    if (formData){
+    for (fieldData of formData){
+        if(fieldData.value){
+        patchBody[fieldData.name]= fieldData.value;
+        }
+    }
+
+    }
+  if (Object.keys(patchBody).length != 0){
+fetch(`/api/v1/order/${oid}/update/`, {
+  method: 'PATCH',
+   credentials: "same-origin",
+    headers: {
+        "X-CSRFToken": getCookie("csrftoken"),
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+    },
+  body: JSON.stringify(patchBody),
+    }).then(response => {
+    if (response.status == 200){
+    form.trigger('reset')
+    $('#alternatecontact_modal').modal('hide')
+    alert('Updated')
+    }
+    else{
+    alert('Something went wrong')
+    }
+     }).catch(function(error) {
+           form.trigger('reset')
+               alert('Something went wrong')
+        console.log(error);
+    });
+}
+else{
+alert('Enter email/mobile number to update')
+}
+}
+}
+})
+
+
