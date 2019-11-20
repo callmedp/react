@@ -6,7 +6,9 @@ from shop.models import (Product, ProductScreen, PracticeTestInfo)
 from .serializers import (
     ProductListSerializerForAuditHistory,
     ProductDetailSerializer,
-    PracticeTestInfoCreateSerializer
+    PracticeTestInfoCreateSerializer,
+    UpdateProductScreenSkillSerializer,
+    UpdateProductSkillSerializer
 )
 from rest_framework.authentication import SessionAuthentication
 from django_filters.rest_framework import DjangoFilterBackend
@@ -25,7 +27,9 @@ from rest_framework.permissions import IsAuthenticated
 from django.core.exceptions import PermissionDenied
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
-
+from shop.helpers import get_inferred_skills
+from rest_framework.response import Response
+from rest_framework import status
 
 class ProductListView(FieldFilterMixin, ListAPIView):
     serializer_class = ProductListSerializerForAuditHistory
@@ -191,4 +195,51 @@ class BoardNeoProductApiView(APIView):
                 return Response({'message': 'Mail sent for verification on neo'})
 
         raise PermissionDenied
+
+
+class ParseSkillFromTextApiView(APIView):
+    """
+    This APIView takes text as input and return
+    parsed skills from text.
+    """
+
+    authentication_classes = ()
+    permission_classes = ()
+
+
+    def post(self, request, *args, **kwargs):
+        text = request.data.get('text', '')
+        k = get_inferred_skills(text)
+        return Response(data=k, status=status.HTTP_200_OK)
+
+
+class UpdateScreenProductSkillView(CreateAPIView):
+    """
+    This API endpoint takes data in the format of
+    {
+        "user_type": [<skill_name1>,<skill_name2>],
+        "product_type": [<skill_name3>,<skill_name4>],
+        "product_id": <product_id>
+    }
+    and update skill for productscreen
+    """
+    serializer_class = UpdateProductScreenSkillSerializer
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (SessionAuthentication, )
+
+class UpdateProductSkillView(CreateAPIView):
+    """
+    This API endpoint takes data in the format of
+    {
+        "user_type": [<skill_name1>,<skill_name2>],
+        "product_type": [<skill_name3>,<skill_name4>],
+        "product_id": <product_id>
+    }
+    and update skill for product
+    """
+    serializer_class = UpdateProductSkillSerializer
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (SessionAuthentication, )
+
+
 
