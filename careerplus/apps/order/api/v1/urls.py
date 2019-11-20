@@ -5,7 +5,8 @@ from django.conf.urls import url, include
 
 # local imports
 from .views import (OrderItemViewSet,OrderItemsListView,OrderUpdateView,
-					OrderItemOperationApiView,MessageCommunicationListApiView,LTVReportView)
+							OrderItemUpdateView,OrderItemOperationApiView,
+							MessageCommunicationListApiView,LTVReportView)
 # inter app imports
 
 # 3rd party imports
@@ -22,6 +23,7 @@ urlpatterns = [
     url(r'^orderitem/$', OrderItemViewSet),
     url(r'^order/(?P<pk>\d+)/items/$', OrderItemsListView.as_view()),
     url(r'^order/(?P<pk>\d+)/update/$', OrderUpdateView.as_view()),
+	url(r'orderitem/(?P<pk>\d+)/update/$',OrderItemUpdateView.as_view()),
 	url(r'^order/order-item-operation/(?P<oi_id>\d+)/$',
 		OrderItemOperationApiView.as_view(),
 		name='orderitemoperations'),

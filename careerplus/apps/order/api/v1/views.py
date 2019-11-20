@@ -9,7 +9,6 @@ from .serializers import OrderSerializer,LTVReportSerializer,OrderShineCandidate
 from order.api.core.mixins import OrderItemViewMixin
 from order.models import Order,MonthlyLTVRecord,OrderItemOperation,Message,OrderItem
 from order.api.v1.serializers import OrderItemSerializer
-from shared.rest_addons.authentication import ShineUserAuthentication
 from order.api.core.serializers import OrderItemOperationsSerializer,\
     MessageCommunincationSerializer
 
@@ -23,6 +22,8 @@ from shared.rest_addons.permissions import OrderItemAccessPermission,IsObjectOwn
 from rest_framework.authentication import SessionAuthentication
 from shared.rest_addons.pagination import LearningCustomPagination
 from shared.permissions import IsObjectOwner
+from shared.rest_addons.authentication import ShineUserAuthentication
+
 
 
 
