@@ -4,9 +4,7 @@ import './helpModal.scss'
 
 
 if (typeof document !== 'undefined') {
-
     Modal.setAppElement(document.getElementById('react-app'));
-
 }
 
 
@@ -17,6 +15,8 @@ export default class LoginModal extends React.Component {
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/';
         this.closeModal = this.closeModal.bind(this);
         this.handleEmailInput = this.handleEmailInput.bind(this);
+        this.handlePasswordInput = this.handlePasswordInput.bind(this);
+        this.handleLogin = this.handleLogin.bind(this);
         this.state={
             email:"",
             password:""
@@ -35,6 +35,21 @@ export default class LoginModal extends React.Component {
         })
     }
 
+    async handleLogin(event){
+        event.preventDefault();
+        const {history} = this.props;
+        if(! this.state.email  ||  !this.state.password){
+            return ; 
+        }
+        this.closeModal();
+        try{
+        const result  =  await this.props.loginCandidate({email:this.state.email, password: this.state.password},true)
+        history.push('/resume-builder/edit/?type=profile')
+    }
+        catch(e){
+            console.log('The error is , ', e.message);
+        }
+    }
     closeModal() {
         this.props.hideLoginModal();
         this.setState({
@@ -60,12 +75,12 @@ export default class LoginModal extends React.Component {
                                className='icon-close icon-close--position1'/>
                             <h2>Login</h2>
                         
-                            <input  className="mb-20" placeholder="Email" onChange="this.handleEmailInput" />
+                            <input  className="mb-20" placeholder="Email" onChange={this.handleEmailInput} />
 
-                            <input placeholder="Password" onChange="this.handlePasswordInput"/>
+                            <input placeholder="Password" onChange={this.handlePasswordInput}/>
                             
                             <button className="orange-button"
-                                    type={'submit'} onClick={this.handleFeedback}>Login
+                                    type={'submit'} onClick={this.handleLogin}>Login
                             </button>
                         </React.Fragment>
                     </div>

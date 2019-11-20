@@ -101,7 +101,6 @@ export class PersonalInfo extends Component {
         })
     }
 
-
     render() {
         const {
             handleSubmit, userInfo: {order_data}, personalInfo, ui: {loader}, isEditable, fetchInterests,eventClicked,

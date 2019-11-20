@@ -16,7 +16,7 @@ import {
     reorderSection,
     reGeneratePDF
 } from "../../../store/template/actions"
-import * as profileActions from "../../../store/personalInfo/actions"
+import {fetchPersonalInfo, updatePersonalInfo, getComponentTitle} from "../../../store/personalInfo/actions"
 import SelectTemplateModal from '../../Modal/selectTemplateModal';
 import {
     showAlertModal,
@@ -78,9 +78,19 @@ class EditPreview extends Component {
         }
     }
 
-    getUserInfo(){
-
+    static getActions() {
+        return [getComponentTitle]
     }
+
+    static async fetching({dispatch}, params) {
+        const actionList = EditPreview.getActions()
+        const results = [];
+        for (const [index, value] of actionList.entries()) {
+            results[index] = await new Promise((resolve, reject) => dispatch(value({info: params, resolve, reject})))
+        }
+        return results;
+    }
+
 
     removeNote() {
         localStorage.setItem('showNote', 'false')
@@ -203,8 +213,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         "fetchEntityInfo": () => {
-            console.log('-----fetdd')
-            return dispatch(profileActions.fetchPersonalInfo())
+            return new Promise((resolve, reject) => {
+                return dispatch(fetchPersonalInfo({info: '', resolve, reject}))
+            })
+
         },
         "showSelectTemplateModal": () => {
             return dispatch(actions.showSelectTemplateModal())
@@ -233,7 +245,7 @@ const mapDispatchToProps = (dispatch) => {
                 }
             }
             return new Promise((resolve, reject) => {
-                dispatch(profileActions.updatePersonalInfo({personalDetails, resolve, reject}));
+                dispatch(updatePersonalInfo({personalDetails, resolve, reject}));
             })
         },
         "reorderSection": (payload) => {
@@ -265,7 +277,7 @@ const mapDispatchToProps = (dispatch) => {
         },
         "loginCandidate": (token = '') => {
             return new Promise((resolve, reject) => {
-                dispatch(loginCandidate({payload: {alt: ''}, resolve, reject, isTokenAvail: false}))
+                dispatch(loginCandidate({info: {alt: ''}, resolve, reject, isTokenAvail: false}))
             })
         },
     }

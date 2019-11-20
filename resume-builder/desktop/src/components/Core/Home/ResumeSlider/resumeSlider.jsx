@@ -2,6 +2,7 @@ import React, {Component, Fragment} from 'react';
 import './resumeSlider.scss'
 import Slider from "react-slick";
 import TemplateModal from "../../../Modal/tempateModal";
+import LoginModal from "../../../Modal/loginModal";
 
 
 export default class ResumeSlider extends Component {
@@ -19,6 +20,12 @@ export default class ResumeSlider extends Component {
         })
         const templateId = parseInt(document.getElementsByClassName('slick-current slick-center')[0].getAttribute('data-index')) + 1;
         const {page, fetchSelectedTemplateImage, history} = this.props;
+
+        if(page == 'home'){
+        this.props.showLoginModal()
+        }
+        else {
+        const {page, fetchSelectedTemplateImage, history} = this.props;
         localStorage.setItem('selected_template', (templateId))
         const select_template_modal = this.props.ui ? this.props.ui.select_template_modal : false
         if (select_template_modal) {
@@ -33,7 +40,7 @@ export default class ResumeSlider extends Component {
         } else {
            history.push('/resume-builder/edit/?type=profile')
         }
-
+        }
     }
 
 
@@ -61,6 +68,7 @@ export default class ResumeSlider extends Component {
         return (
             <Fragment>
                 <TemplateModal {...this.props} page={'home'}/>
+                <LoginModal {...this.props} />
                 < section
                     name="templates"
                     id="templates"

@@ -16,7 +16,10 @@ import {
     SHOW_GENERATE_RESUME_MODAL,
     HIDE_GENERATE_RESUME_MODAL,
     HIDE_HELP_MODAL,
-    SHOW_HELP_MODAL
+    SHOW_HELP_MODAL,
+    SHOW_LOGIN_MODAL,
+    HIDE_LOGIN_MODAL
+
 } from "../actions/actionTypes";
 
 const initialState = {
@@ -33,6 +36,7 @@ const initialState = {
     'suggestionType': 'experience',
     'previewClicked' : false,
     'helpModal': false,
+    'loginModal': false 
 };
 
 export const uiReducer = (state = initialState, action) => {
@@ -151,7 +155,19 @@ export const uiReducer = (state = initialState, action) => {
                 ...action.data
             }
         }
-
+        case SHOW_LOGIN_MODAL: {
+            return {
+                ...state,
+                ...action.data
+            }
+        }
+        case HIDE_LOGIN_MODAL: {
+            return {
+                ...state,
+                ...action.data
+            }
+        }
+        
         default: {
             return state;
         }

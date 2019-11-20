@@ -2,8 +2,10 @@ import React from 'react';
 import Modal from 'react-modal';
 import './suggestionModal.scss'
 
-Modal.setAppElement(document.getElementById('react-app'));
+if (typeof document !== 'undefined') {
 
+    Modal.setAppElement(document.getElementById('react-app'));
+}
 export default class SuggestionModal extends React.Component {
     constructor(props) {
         super(props);

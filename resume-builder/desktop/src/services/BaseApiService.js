@@ -2,14 +2,14 @@ import { siteDomain } from "../Utils/domains";
 
 const defaultHeaders = {
     "Content-Type": "application/json",
-    'Authorization': localStorage.getItem('token') || ''
+    'Authorization': (typeof localStorage !== 'undefined') ? localStorage.getItem('token') || '' : ''
 };
 
 // todo make seperate function for fetch request
 
 const get = (url, headers = {
     ...defaultHeaders,
-    'Authorization': localStorage.getItem('token') || ''
+    ...{ 'Authorization': (typeof localStorage !== 'undefined') ? localStorage.getItem('token') || '' : '' }
 }, isFetchingHTML = false) => {
     return fetch(url, {
         headers,
@@ -19,6 +19,7 @@ const get = (url, headers = {
         .then(async (response) => {
             return await handleResponse(response, isFetchingHTML)
         })
+        .catch(err => console.log(err))
 };
 
 const handleParams = (data) => Object.keys(data).map((key) => {
@@ -27,7 +28,7 @@ const handleParams = (data) => Object.keys(data).map((key) => {
 
 const post = (url, data, headers = {
     ...defaultHeaders,
-    'Authorization': localStorage.getItem('token') || ''
+    ...{ 'Authorization': (typeof localStorage !== 'undefined') ? localStorage.getItem('token') || '' : '' }
 }, isStringify = true, isUpload = false) => {
     return fetch(url, {
         headers,
@@ -35,11 +36,12 @@ const post = (url, data, headers = {
         body: isStringify ? JSON.stringify(data) : isUpload ? data : handleParams(data)
     })
         .then(handleResponse)
+        .catch(err => console.log(err))
 };
 
 const patch = (url, data, headers = {
     ...defaultHeaders,
-    'Authorization': localStorage.getItem('token') || ''
+    ...{ 'Authorization': (typeof localStorage !== 'undefined') ? localStorage.getItem('token') || '' : '' }
 }, isStringify = true, isUpload = false) => {
     return fetch(url, {
         headers,
@@ -47,22 +49,24 @@ const patch = (url, data, headers = {
         body: isStringify ? JSON.stringify(data) : isUpload ? data : handleParams(data)
     })
         .then(handleResponse)
+        .catch(err => console.log(err));
 };
 
 const deleteMethod = (url, headers = {
     ...defaultHeaders,
-    'Authorization': localStorage.getItem('token') || ''
+    ...{ 'Authorization': (typeof localStorage !== 'undefined') ? localStorage.getItem('token') || '' : '' }
 }, isStringify = true, isUpload = false) => {
     return fetch(url, {
         headers,
         method: 'DELETE',
     })
         .then(handleResponse)
+        .catch(err => console.log(err));
 };
 
 const put = (url, data, headers = {
     ...defaultHeaders,
-    'Authorization': localStorage.getItem('token') || ''
+    ...{ 'Authorization': (typeof localStorage !== 'undefined') ? localStorage.getItem('token') || '' : '' }
 }, isStringify = true) => {
     return fetch(url, {
         headers,
@@ -70,6 +74,7 @@ const put = (url, data, headers = {
         body: isStringify ? JSON.stringify(data) : data
     })
         .then(handleResponse)
+        .catch(err => console.log(err));
 };
 
 
@@ -78,18 +83,30 @@ async function handleResponse(response, isFetchingHTML) {
     // handle all the status and conditions here
     if (response['ok'] === false) {
         let message = '';
-        let data = await response.json();
-        for (const key in data) {
-            message += `${data[key]} `;
+        let data;
+        try {
+            data = await response.json();
+            for (const key in data) {
+                message += `${data[key]} `;
+            }
+            if (response['status'] === 401) {
+                window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
+            }
+            return {
+                error: true,
+                errorMessage: message,
+                status: response['status'],
+            }
+
+        } catch (e) {
+            console.log('--error--', e);
+            return {
+                error: true,
+                errorMessage: 'Something went wrong',
+                status: response['status'],
+            }
         }
-        if (response['status'] === 401) {
-            window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
-        }
-        return {
-            error: true,
-            errorMessage: message,
-            status: response['status'],
-        }
+
     } else if (response['status'] === 204) {
         return { data: {} };
     } else {

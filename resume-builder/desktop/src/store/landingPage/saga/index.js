@@ -37,21 +37,28 @@ function* getCandidateId(action) {
 
 function* loginCandidate(action) {
     try {
-        let { data: { payload, resolve, reject, isTokenAvail } } = action;
+        let {data: {info, resolve, reject, isTokenAvail}} = action;
 
         yield put({ type: UPDATE_UI, data: { loader: true } });
 
         let result;
+        // if token avail pass it in body and login the candidate
         if (isTokenAvail) {
-            result = yield call(Api.loginCandidate, payload);
+            result = yield call(Api.loginCandidate, info);
         }
+
+        // if some error comes or token not available then
+        // get new information using session.
+
         if (result && result['error'] || !isTokenAvail) {
             result = yield call(Api.getInformation)
         }
-        if (result && result['error']) {
+
+
+        if (result && result['error']) {    
             localStorage.clear();
-            window.location.href = `${siteDomain}/login/${window.location.search ? window.location.search + '&' : '?'}next=/resume-builder/`;
             yield put({ type: UPDATE_UI, data: { loader: false } })
+            window.location.href = `${siteDomain}/login/${window.location.search ? window.location.search + '&' : '?'}next=/resume-builder/`;
             return;
             //redirect code here
         }
@@ -90,8 +97,9 @@ function* loginCandidate(action) {
         }
         localStorage.setItem('token', (token) || '');
 
-        resolve('Login Successfully');
-        yield put({ type: UPDATE_UI, data: { loader: false } })
+        yield put({type: UPDATE_UI, data: {loader: false}})
+
+        resolve(JSON.stringify(result));
 
 
     } catch (e) {
@@ -117,9 +125,19 @@ function* feedbackSubmit(action) {
     }
 }
 
+function* getComponentTitle(action) {
+    try {
+        let {payload: {resolve, reject}} = action;
+        resolve('Resume Builder 2019 | Online Free Resume Maker [Unique Templates] @ Shine Learning')
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 export default function* watchLandingPage() {
     yield takeLatest(Actions.GET_CANDIDATE_ID, getCandidateId);
     yield takeLatest(Actions.LOGIN_CANDIDATE, loginCandidate);
     yield takeLatest(Actions.FEEDBACK_SUBMIT, feedbackSubmit);
+    yield takeLatest(Actions.GET_HOME_COMPONENT_TITLE, getComponentTitle);
 
 }

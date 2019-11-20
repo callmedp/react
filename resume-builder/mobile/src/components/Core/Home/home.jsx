@@ -3,7 +3,7 @@ import Header from '../../Common/Header/header.jsx';
 import Footer from '../../Common/Footer/footer.jsx';
 import {connect} from "react-redux";
 import './home.scss'
-import * as actions from "../../../store/landingPage/actions";
+import {getCandidateId, loginCandidate, feedbackSubmit, getComponentTitle} from "../../../store/landingPage/actions/index.js";
 import Banner from './Banner/banner.jsx';
 import ResumeSlider from './ResumeSlider/resumeSlider.jsx';
 import Testimonial from './Testimonial/testimonial.jsx';
@@ -11,7 +11,6 @@ import queryString from "query-string";
 import {scroller} from 'react-scroll';
 import Loader from '../../Common/Loader/loader.jsx';
 import {eventClicked} from '../../../store/googleAnalytics/actions/index'
-
 class Home extends Component {
 
     constructor(props) {
@@ -30,7 +29,10 @@ class Home extends Component {
     }
 
     async componentDidMount() {
+        if (this.state.token){
+            console.log('in herer ', this.state.token);
         await this.props.loginCandidate(this.state.token);
+        }
     }
 
     scrollTo(elem, action, label) {
@@ -39,12 +41,34 @@ class Home extends Component {
             delay: 0,
             smooth: 'easeInOutQuad',
             offset: -50
-        })
+        });
         this.props.eventClicked({
             action,
             label
         })
     }
+
+    static getActions() {
+        return [loginCandidate, getComponentTitle]
+    }
+
+     static async fetching({dispatch}, params) {
+        const actionList = Home.getActions()
+        const results = [];
+        for (const [index, value] of actionList.entries()) {
+            if(index == 0 && !(params && params.alt)) {
+                continue;
+            }
+            results[index] = await new Promise((resolve, reject) => dispatch(value({
+                info: params,
+                resolve,
+                reject,
+                isTokenAvail: true
+            })))
+        }
+        return results;
+    }
+
 
     render() {
         const {ui: {mainloader}, userInfo: {first_name}, eventClicked} = this.props;
@@ -52,7 +76,10 @@ class Home extends Component {
             <div className="home">
                 <Header eventClicked={eventClicked}/>
                 <Banner userName={first_name} eventClicked={eventClicked}/>
-                {mainloader ? <Loader/> : ""}
+                {
+                   !!( mainloader)
+                    &&<Loader/>
+                }
 
 
                 <section className="section professional">
@@ -214,11 +241,11 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         "getCandidateId": () => {
-            return dispatch(actions.getCandidateId())
+            return dispatch(getCandidateId())
         },
         "loginCandidate": (token) => {
             return new Promise((resolve, reject) => {
-                dispatch(actions.loginCandidate({payload: {alt: token}, resolve, reject, isTokenAvail: true}))
+                dispatch(loginCandidate({info: {alt: token}, resolve, reject, isTokenAvail: true}))
             })
         },
         'eventClicked': (data) => {

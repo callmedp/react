@@ -48,30 +48,39 @@ function* getPersonalDetails(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
 
+        const {payload: {resolve, reject}} = action;
 
         if (localStorage.getItem('personalInfo')) {
             yield put({
                 type: Actions.SAVE_USER_INFO,
                 data: modifyPersonalInfo(JSON.parse(localStorage.getItem('personalInfo')) || [])
             });
+            resolve('Information successfully fetched.')
             return;
         }
 
+
         yield put({type: UPDATE_UI, data: {loader: true}});
 
-
         const result = yield call(Api.fetchPersonalInfo, candidateId);
+
+        console.log('result ---is --', result,localStorage);
+
         if (result['error']) {
+            reject(new Error(result['errorMessage']));
             Toast.fire({
                 type: 'error',
                 title: result['errorMessage']
             });
         }
+
         yield put({type: UPDATE_UI, data: {loader: false}})
 
         let {data} = result;
         data = modifyPersonalInfo(data)
         yield put({type: Actions.SAVE_USER_INFO, data: data})
+        resolve('Information successfully fetched.')
+
     } catch (e) {
         console.log(e);
     }
@@ -209,10 +218,20 @@ function* updateEntityPreference(action) {
     }
 }
 
+function* getComponentTitle(action) {
+    try {
+        let {payload: {resolve, reject}} = action;
+        resolve('Edit-Preview Page | Shine Learning')
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 export default function* watchPersonalInfo() {
     yield takeLatest(Actions.FETCH_PERSONAL_INFO, getPersonalDetails);
     yield takeLatest(Actions.UPDATE_PERSONAL_INFO, updatePersonalDetails);
     yield takeLatest(Actions.FETCH_IMAGE_URL, fetchImageUrl);
     yield takeLatest(Actions.UPDATE_ENTITY_PREFERENCE, updateEntityPreference);
     yield takeLatest(Actions.FETCH_INTEREST_LIST, getInterestList);
+    yield takeLatest(Actions.GET_COMPONENT_TITLE, getComponentTitle);
 }

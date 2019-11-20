@@ -27,8 +27,7 @@ const AppRouter = () => (
     </Router>
 );
 
-
-const routes = [
+export const routes = [
     {
         path: '/resume-builder',
         component: HomeContainer,

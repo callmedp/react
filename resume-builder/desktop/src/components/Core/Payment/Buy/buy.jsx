@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 import TemplateModal from '../../../Modal/tempateModal'
 import Slider from "react-slick";
 import moment from "moment"
-import { fetchPersonalInfo, updatePersonalInfo } from '../../../../store/personalInfo/actions/index'
+import { fetchPersonalInfo, updatePersonalInfo, getComponentTitle } from '../../../../store/personalInfo/actions/index'
 import SelectTemplateModal from '../../../Modal/selectTemplateModal';
 import LoaderPage from '../../../Loader/loaderPage';
 import { siteDomain } from '../../../../Utils/domains'
@@ -62,6 +62,7 @@ export class Buy extends Component {
             'label': 'PaymentPage'
         })
     }
+
 
     async redirectToCart() {
 
@@ -119,6 +120,24 @@ export class Buy extends Component {
                 'checked': 'product2'
             })
         }
+    }
+
+    static getActions() {
+        return [getComponentTitle]
+    }
+
+    static async fetching({ dispatch }, params) {
+        let actionList = Buy.getActions();
+        const results = [];
+        for (const [index, value] of actionList.entries()) {
+            results[index] = await new Promise((resolve, reject) => dispatch(value({
+                info: params,
+                resolve,
+                reject,
+                isTokenAvail: true
+            })))
+        }
+        return results;
     }
 
 
@@ -350,7 +369,7 @@ const mapDispatchToProps = (dispatch) => {
 
         "loginCandidate": (token = '') => {
             return new Promise((resolve, reject) => {
-                dispatch(loginCandidate({ payload: { alt: '' }, resolve, reject, isTokenAvail: false }))
+                dispatch(loginCandidate({ info: { alt: '' }, resolve, reject, isTokenAvail: false }))
             })
         },
 
