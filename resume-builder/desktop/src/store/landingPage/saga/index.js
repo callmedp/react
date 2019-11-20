@@ -37,7 +37,7 @@ function* getCandidateId(action) {
 
 function* loginCandidate(action) {
     try {
-        let {data: {info, resolve, reject, isTokenAvail}} = action;
+        let { data: { info, resolve, reject, history, isTokenAvail } } = action;
 
         yield put({ type: UPDATE_UI, data: { loader: true } });
 
@@ -50,16 +50,16 @@ function* loginCandidate(action) {
         // if some error comes or token not available then
         // get new information using session.
 
-        if (result && result['error'] || !isTokenAvail) {
+        if ((result && result['error'] || !isTokenAvail) && Object.keys(info).indexOf('alt') !== -1) {
             result = yield call(Api.getInformation)
         }
 
 
-        if (result && result['error']) {    
+        if (result && result['error']) {
             localStorage.clear();
-            yield put({ type: UPDATE_UI, data: { loader: false } })
-            window.location.href = `${siteDomain}/login/${window.location.search ? window.location.search + '&' : '?'}next=/resume-builder/`;
-            return;
+            yield put({ type: UPDATE_UI, data: { loader: false } });
+            return reject( new Error(result['errorMessage']));
+            
             //redirect code here
         }
 
@@ -97,7 +97,7 @@ function* loginCandidate(action) {
         }
         localStorage.setItem('token', (token) || '');
 
-        yield put({type: UPDATE_UI, data: {loader: false}})
+        yield put({ type: UPDATE_UI, data: { loader: false } })
 
         resolve(JSON.stringify(result));
 
@@ -127,7 +127,7 @@ function* feedbackSubmit(action) {
 
 function* getComponentTitle(action) {
     try {
-        let {payload: {resolve, reject}} = action;
+        let { payload: { resolve, reject } } = action;
         resolve('Resume Builder 2019 | Online Free Resume Maker [Unique Templates] @ Shine Learning')
     } catch (e) {
         console.log(e);

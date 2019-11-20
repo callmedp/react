@@ -90,7 +90,7 @@ async function handleResponse(response, isFetchingHTML) {
                 message += `${data[key]} `;
             }
             if (response['status'] === 401) {
-                window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
+                window.location.href = `http://localhost:3000/resume-builder/?login=false`;
             }
             return {
                 error: true,

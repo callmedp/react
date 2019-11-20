@@ -17,76 +17,93 @@ export default class LoginModal extends React.Component {
         this.handleEmailInput = this.handleEmailInput.bind(this);
         this.handlePasswordInput = this.handlePasswordInput.bind(this);
         this.handleLogin = this.handleLogin.bind(this);
-        this.state={
-            email:"",
-            password:""
+        this.state = {
+            email: "",
+            password: "",
+            error: false,
+            errorMessage: ""
         }
     }
 
-    handleEmailInput(event){
+    handleEmailInput(event) {
         this.setState({
             "email": event.target.value
         })
     }
 
-    handlePasswordInput(event){
+    handlePasswordInput(event) {
         this.setState({
             "password": event.target.value
         })
     }
 
-    async handleLogin(event){
+    async handleLogin(event) {
         event.preventDefault();
-        const {history} = this.props;
-        if(! this.state.email  ||  !this.state.password){
-            return ; 
+        const { history } = this.props;
+        this.setState({
+            "error": false,
+            "errorMessage": ''
+        })
+        if (!this.state.email || !this.state.password) {
+            return;
         }
-        this.closeModal();
-        try{
-        const result  =  await this.props.loginCandidate({email:this.state.email, password: this.state.password},true)
-        history.push('/resume-builder/edit/?type=profile')
-    }
-        catch(e){
-            console.log('The error is , ', e.message);
+        try {
+            const result = await this.props.loginCandidate({ email: this.state.email, password: this.state.password }, history, true)
+            this.closeModal();
+           // history.push('/resume-builder/edit/?type=profile')
+        }
+        catch (e) {
+            this.setState({
+                error: true,
+                errorMessage: e.message
+            })
+
         }
     }
     closeModal() {
         this.props.hideLoginModal();
         this.setState({
-            "email":"",
-            "password":""
+            "email": "",
+            "password": "",
+            "error": false,
+            "errorMessage": ""
         })
     }
-    
-    render(){
-        const {ui:{loginModal}} = this.props
-        return(
-            <div className="pr">
-            <Modal
-                isOpen={loginModal}
-                onRequestClose={this.closeModal}
-                contentLabel="Help Modal"
-                className="help-modal1"
-            >
-                <form>
-                    <div className="pr help-modal">
-                        <React.Fragment>
-                            <i onClick={this.closeModal}
-                               className='icon-close icon-close--position1'/>
-                            <h2>Login</h2>
-                        
-                            <input  className="mb-20" placeholder="Email" onChange={this.handleEmailInput} />
 
-                            <input placeholder="Password" onChange={this.handlePasswordInput}/>
-                            
-                            <button className="orange-button"
+    render() {
+        const { ui: { loginModal } } = this.props
+        return (
+            <div className="pr">
+                <Modal
+                    isOpen={loginModal}
+                    onRequestClose={this.closeModal}
+                    contentLabel="Help Modal"
+                    className="help-modal1"
+                >
+                    <form>
+                        <div className="pr help-modal">
+                            <React.Fragment>
+                                <i onClick={this.closeModal}
+                                    className='icon-close icon-close--position1' />
+                                <h2>Login</h2>
+
+                                <input className="mb-20" placeholder="Email" onChange={this.handleEmailInput} />
+
+                                <input placeholder="Password" onChange={this.handlePasswordInput} />
+
+                                {
+                                    this.state.error &&
+                                    <span className='pr'>{this.state.errorMessage}</span>
+
+                                }
+                                <button className="orange-button"
                                     type={'submit'} onClick={this.handleLogin}>Login
                             </button>
-                        </React.Fragment>
-                    </div>
-                </form>
-            </Modal>
-        </div>
+                            </React.Fragment>
+                        </div>
+                    </form>
+                </Modal>
+            </div>
         );
     }
 

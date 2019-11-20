@@ -37,6 +37,7 @@ export default class Middleware {
                 : this._getRouteReturn(false,
                   <Redirect to={{
                     pathname: `/resume-builder/`,
+                    search: "?login=false",
                     state: { from: pathname }
                   }} />)
         )

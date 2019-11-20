@@ -24,14 +24,17 @@ class Home extends Component {
         this.state = {
             'scrolled': false,
             'token': '',
+            'login': '',
         }
         if(document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]){
             document.getElementsByClassName('chat-bot')[0].style.display='none'; 
         }
        
         const values = queryString.parse(this.props.location.search);
-        const token = (values && values.token) || '';
+        const token = (values && values.token) || '', login = (values && values.login) || '';
+    
         this.state.token = token;
+        this.state.login = login;
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
     }
 
@@ -64,7 +67,10 @@ class Home extends Component {
 
     async componentDidMount() {
         if (this.state.token) {
-            await this.props.loginCandidate({ alt: this.state.token }, true);
+            await this.props.loginCandidate({ alt: this.state.token },this.props.history, true);
+        }
+        if(this.state.login === 'false'){
+            this.props.showLoginModal()
         }
     }
 
@@ -304,9 +310,9 @@ const mapDispatchToProps = (dispatch) => {
         "getCandidateId": () => {
             return dispatch(getCandidateId())
         },
-        "loginCandidate": (payload, isTokenAvail) => {
+        "loginCandidate": (payload, history, isTokenAvail) => {
             return new Promise((resolve, reject) => {
-                return dispatch(loginCandidate({ info: payload, resolve, reject, isTokenAvail: isTokenAvail }))
+                return dispatch(loginCandidate({ info: payload, resolve, reject,history, isTokenAvail: isTokenAvail }))
             })
         },
         'showModal': () => {

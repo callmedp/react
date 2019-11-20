@@ -43,7 +43,6 @@ export default class ResumeSlider extends Component {
         }
     }
 
-
     showZoomedImage(templateId) {
         this.props.displaySelectedTemplate(templateId);
         this.props.showModal()
