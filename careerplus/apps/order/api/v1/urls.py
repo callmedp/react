@@ -20,13 +20,14 @@ router = routers.SimpleRouter()
 urlpatterns = router.urls
 
 urlpatterns = [
-    url(r'^order/(?P<pk>\d+)/items/$', OrderItemsListView.as_view()),
-    url(r'^order/(?P<pk>\d+)/update/$', OrderUpdateView.as_view()),
-	url(r'^order/orderitem/(?P<pk>\d+)/update/$',OrderItemUpdateView.as_view()),
-	url(r'^order/order-item-operation/(?P<oi_id>\d+)/$',
+    url(r'^orderitem/$', OrderItemViewSet),
+    url(r'^(?P<pk>\d+)/items/$', OrderItemsListView.as_view()),
+    url(r'^(?P<pk>\d+)/update/$', OrderUpdateView.as_view()),
+	url(r'^orderitem/(?P<pk>\d+)/update/$',OrderItemUpdateView.as_view()),
+	url(r'^order-item-operation/(?P<oi_id>\d+)/$',
 		OrderItemOperationApiView.as_view(),
 		name='orderitemoperations'),
-	url(r'^order/order-item/(?P<oi_id>\d+)/message/$',
+	url(r'^order-item/(?P<oi_id>\d+)/message/$',
 		MessageCommunicationListApiView.as_view(),
 		name='message-communications'),
     url(r'^ltv-report/(?P<year>\d+)/(?P<month>\d+)/$', LTVReportView.as_view()),

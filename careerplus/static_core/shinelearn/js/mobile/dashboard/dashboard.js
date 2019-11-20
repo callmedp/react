@@ -103,6 +103,41 @@ function closePopup() {
     $('.modal').fadeOut(300);
 }
 
+let  getCookie = (name)=> {
+    var value = "; " + document.cookie;
+    var parts = value.split("; " + name + "=");
+    if (parts.length == 2) return parts.pop().split(";").shift();
+}
+
+const uploadResumeShineMobile = (checkbox,order_id)=>{
+    let request = fetch(`/api/v1/order/${order_id}/update/`,{
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie('csrftoken')
+        },
+        method: 'PATCH',  
+        body: JSON.stringify({
+                    service_resume_upload_shine: $(checkbox).is(':checked')
+                }),
+    });
+
+    request.then((resp) =>resp.json())
+    .then(response => {
+        title = response['service_resume_upload_shine'] ? 'Resume will be updated' : 'Resume will not be updated'
+        Toast.fire({
+                    type: response['service_resume_upload_shine'] ?'success' : 'error',
+                    title
+        })
+    })
+    .catch(e =>{
+        Toast.fire({
+            type: 'error',
+            title:'Something went wrong'
+        })
+    })
+}
+
+
 let pause_resume_api_hit_once_mobile = false
 
 const pause_resume_service_mobile = (el,oi_id,oi_status)=>{
@@ -111,7 +146,7 @@ const pause_resume_service_mobile = (el,oi_id,oi_status)=>{
 
     pause_resume_api_hit_once_mobile = true
     
-    let request = fetch(`/order/api/v1/orderitem/${oi_id}/update/`,{
+    let request = fetch(`/api/v1/order/orderitem/${oi_id}/update/`,{
         headers: {
             "Content-Type": "application/json"
         },
