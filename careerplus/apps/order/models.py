@@ -785,6 +785,8 @@ class OrderItem(AbstractAutoDate):
 
     @property
     def get_oi_status(self):
+        if self.oi_status in [28, 29, 30]:
+            return self.oi_status_transform()
         dict_status = dict(OI_OPS_STATUS)
         return dict_status.get(self.oi_status)
 
@@ -1025,6 +1027,17 @@ class OrderItem(AbstractAutoDate):
         assigned_op = self.orderitemoperation_set.filter(oi_status=1).first()
         if assigned_op:
             return assigned_op.created
+
+
+    def oi_status_transform(self):
+        val = OI_OPS_TRANSFORMATION_DICT.get(self.product.sub_type_flow, {})\
+            .get(self.oi_status, None)
+        if val:
+            return val
+        else:
+            dict_status = dict(OI_OPS_STATUS)
+            return dict_status.get(self.oi_status)
+
 
     def upload_service_resume_shine(self,existing_obj):
         if self.oi_status == 4 and self.oi_status !=existing_obj.oi_status  and self.order.service_resume_upload_shine:
