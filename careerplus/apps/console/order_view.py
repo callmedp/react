@@ -3405,7 +3405,6 @@ class CertficationProductQueueView(PaginationMixin, ListView):
                 product__type_flow=2, no_process=False,
                 oi_status__in=[5, 4],
                 product__vendor__slug='neo',
-                order__welcome_call_done=False
             )
         ).exclude(
                 wc_sub_cat__in=[64, 65]

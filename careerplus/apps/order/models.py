@@ -849,6 +849,9 @@ class OrderItem(AbstractAutoDate):
         sent = cache.get('neo_mail_sent_{}'.format(self.id))
         return sent
 
+    @property
+    def updated_from_trial_to_regular(self):
+        return cache.get('updated_from_trial_to_regular_{}'.format(self.id))
 
     def get_due_date(self):
         profile = getattr(self, 'whatsapp_profile_orderitem', None)

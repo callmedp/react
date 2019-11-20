@@ -42,10 +42,9 @@ function boardNeoUser(oi_pk, ) {
             url: '/api/v1/neo_board_user/',
             type: "POST",
             data : {'oi_pk': oi_pk, },
-            dataType: 'html',
-            success: function(html) {
+            success: function(data) {
+                alert(data['msg'])
                 window.location.reload();
-                alert('Please check you mail to confirm boarding on Neo')
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 alert("Something went wrong");
