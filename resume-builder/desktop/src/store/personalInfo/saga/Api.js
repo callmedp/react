@@ -3,7 +3,6 @@ import BaseApiService from '../../../services/BaseApiService'
 import {siteDomain} from "../../../Utils/domains";
 
 const fetchPersonalInfo = (candidateId) => {
-
     const url = `candidates/${candidateId}/`;
     return BaseApiService.get(`${siteDomain}/api/v1/resume/${url}`);
 };

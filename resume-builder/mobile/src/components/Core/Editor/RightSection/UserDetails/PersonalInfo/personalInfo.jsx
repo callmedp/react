@@ -9,7 +9,6 @@ import {
     datepicker,
     renderSelect,
     renderTextArea,
-    renderMultiselect,
     renderAsyncCreatableSelect
 } from "../../../../../FormHandler/formFieldRenderer.jsx";
 
@@ -17,7 +16,6 @@ import moment from 'moment';
 import PreviewModal from "../../../Preview/changeTemplateModal";
 import Subscribe from "../../../RightSection/subscribe";
 import validate from "../../../../../FormHandler/validtaions/profile/validate"
-import {siteDomain} from "../../../../../../Utils/domains";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError";
 import {defaultInterests} from "../../../../../../Utils/defaultInterests";
 
@@ -48,23 +46,15 @@ class PersonalInfo extends Component {
     }
 
     async handleSubmit(values) {
-        let {sidenav: {listOfLinks, currentLinkPos}, personalInfo: {order_data}, history, updateCurrentLinkPos, onSubmit, showGenerateResumeModal, hideGenerateResumeModal, reGeneratePDF, personalInfo} = this.props
+        let {sidenav: {listOfLinks, currentLinkPos},generateResumeAlert, history, updateCurrentLinkPos, 
+                onSubmit, personalInfo} = this.props
         const {imageURL, flag} = this.state
         currentLinkPos++
         this.setState({submit: true})
         await onSubmit(values, imageURL, flag, personalInfo);
         if (currentLinkPos === listOfLinks.length) {
             currentLinkPos = 0
-            if (order_data && order_data.id) {
-                showGenerateResumeModal()
-                reGeneratePDF(order_data.id)
-                setTimeout(function () {
-                    window.location.href = `${siteDomain}/dashboard`
-                    hideGenerateResumeModal()
-                }, 5000);
-            } else {
-                history.push(`/resume-builder/buy`)
-            }
+            generateResumeAlert()
         } else {
             updateCurrentLinkPos({currentLinkPos})
             history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
@@ -178,17 +168,17 @@ class PersonalInfo extends Component {
                     <form onSubmit={handleSubmit(this.handleSubmit)}>
 
                         <ul className="form">
-
+                        {/*  Temporary disabled closed due to expert assitance */}
                             <li className="form__group">
                                 <Field component={renderField} label={"First Name"} type={"text"} name="first_name"
-                                       id="first_name" disabled={order_data && order_data.id ? true: false}
+                                       id="first_name" disabled={order_data && order_data.id && false ? true: false}
                                        iconClass={"sprite icon--firstName"} className="form__input" prepend={true}
                                        maxLength={"20"}/>
                             </li>
-
+                        {/*  Temporary disabled closed due to expert assitance */}
                             <li className="form__group">
                                 <Field component={renderField} label={"Last Name"} type={"text"} name="last_name"
-                                       id="last_name" disabled={order_data && order_data.id ? true: false}
+                                       id="last_name" disabled={order_data && order_data.id && false ? true: false}
                                        iconClass={"sprite icon--lastName"} className="form__input" prepend={true}
                                        maxLength={"20"}/>
                             </li>

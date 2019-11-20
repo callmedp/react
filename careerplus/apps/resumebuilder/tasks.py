@@ -10,10 +10,10 @@ from django.template.loader import get_template
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 # local imports
+from .constants import ENTITY_LIST
 
 # inter app imports
 from core.library.gcloud.custom_cloud_storage import GCPResumeBuilderStorage
-
 # third party imports
 import zipfile
 import imgkit, pdfkit
@@ -184,7 +184,6 @@ def zip_all_resume_pdfs(order_id, data):
     store_resume_file(file_dir, file_name, zip_stream.getvalue())
     send_resume_in_mail_resume_builder([file_name, zip_stream.getvalue()], data)
 
-
 @task
 def generate_and_upload_resume_pdf(data):
     from resumebuilder.models import Candidate
@@ -232,12 +231,24 @@ def generate_and_upload_resume_pdf(data):
     candidate_id = order.candidate_id
     template_id = int(template_no)
     candidate = Candidate.objects.filter(candidate_id=candidate_id).first()
+    first_save = False 
     if not candidate:
-        return {}
-
+        candidate = Candidate.objects.create(
+            email=order.email,
+            number=order.mobile,
+            candidate_id=candidate_id,
+            extracurricular="",
+            entity_preference_data=str(ENTITY_LIST),
+            resume_generated= False,
+            selected_template=1
+        )
+        first_save = True
+        candidate.save()
+        
+        
     file_dir = "{}/{}".format(candidate.id, content_type)
     file_name = "{}.{}".format(template_no, content_type)
-    entity_preference = eval(candidate.entity_preference_data)
+    entity_preference = eval(candidate.entity_preference_data or "{}")
     extracurricular = candidate.extracurricular_list
     education = candidate.candidateeducation_set.all().order_by('order')
     experience = candidate.candidateexperience_set.all().order_by('order')
@@ -298,7 +309,7 @@ def generate_and_upload_resume_pdf(data):
     data = {}
     data.update({
         'email': candidate.email,
-        'username': candidate.first_name,
+        'username': candidate.first_name or "User",
         'subject': 'Your resume is here',
         'siteDomain': settings.SITE_DOMAIN
     })
@@ -309,7 +320,8 @@ def generate_and_upload_resume_pdf(data):
     if send_mail:
         send_resume_in_mail_resume_builder(['resume', pdf_file], data)
 
-    if template_id == int(candidate.selected_template) and candidate.upload_resume:
+    # uploading resume on the shine 
+    if template_id == int(candidate.selected_template or 0) and candidate.upload_resume and not first_save:
         info = {
             'candidate_id': candidate_id,
             'upload_medium': 'direct',

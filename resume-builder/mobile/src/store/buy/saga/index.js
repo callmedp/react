@@ -36,7 +36,7 @@ function* addToCart(action) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
         else{
-            window.location.href = `/cart/payment-summary/`
+            window.location.href = `${siteDomain}/cart/payment-summary/`
         }
         return resolve('Product added to cart successfully.');
 

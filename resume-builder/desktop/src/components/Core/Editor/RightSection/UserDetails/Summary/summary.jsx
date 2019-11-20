@@ -13,7 +13,6 @@ import {
     renderTextArea
 } from "../../../../../FormHandler/formFieldRenderer.jsx";
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
-import {siteDomain} from '../../../../../../Utils/domains'
 
 
 class Summary extends Component {
@@ -53,22 +52,15 @@ class Summary extends Component {
     }
 
     async handleSubmit(values, entityLink) {
-        const {userInfo: {order_data}, hideGenerateResumeModal, showGenerateResumeModal, history, reGeneratePDF, personalInfo} = this.props;
-        await this.props.onSubmit(values, personalInfo);
+        const {generateResumeAlert,onSubmit, personalInfo,history} = this.props;
+        await onSubmit(values, personalInfo);
         this.setState({
             submit: true
         })
         if (entityLink) {
-            this.props.history.push(entityLink)
-        } else if (order_data && order_data.id) {
-            showGenerateResumeModal()
-            reGeneratePDF(order_data.id)
-            setTimeout(function () {
-                window.location.href = `${siteDomain}/dashboard`
-                hideGenerateResumeModal()
-            }, 5000);
-        } else {
-            history.push(`/resume-builder/buy`)
+            history.push(entityLink)
+        } else{
+            generateResumeAlert()
         }
     }
 

@@ -1,4 +1,4 @@
-import {siteDomain} from "../Utils/domains";
+import { siteDomain } from "../Utils/domains";
 
 const defaultHeaders = {
     "Content-Type": "application/json",
@@ -7,12 +7,15 @@ const defaultHeaders = {
 
 // todo make seperate function for fetch request
 
-const get = (url, headers = defaultHeaders, isFetchingHTML = false) => {
+const get = (url, headers = {
+    ...defaultHeaders,
+    'Authorization': localStorage.getItem('token') || ''
+}, isFetchingHTML = false) => {
     return fetch(url, {
         headers,
         method: 'GET'
     })
-    // .then(response => response.json())
+        // .then(response => response.json())
         .then(async (response) => {
             return await handleResponse(response, isFetchingHTML)
         })
@@ -22,7 +25,10 @@ const handleParams = (data) => Object.keys(data).map((key) => {
     return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
 }).join('&');
 
-const post = (url, data, headers = defaultHeaders, isStringify = true, isUpload = false) => {
+const post = (url, data, headers = {
+    ...defaultHeaders,
+    'Authorization': localStorage.getItem('token') || ''
+}, isStringify = true, isUpload = false) => {
     return fetch(url, {
         headers,
         method: 'POST',
@@ -31,7 +37,10 @@ const post = (url, data, headers = defaultHeaders, isStringify = true, isUpload 
         .then(handleResponse)
 };
 
-const patch = (url, data, headers = defaultHeaders, isStringify = true, isUpload = false) => {
+const patch = (url, data, headers = {
+    ...defaultHeaders,
+    'Authorization': localStorage.getItem('token') || ''
+}, isStringify = true, isUpload = false) => {
     return fetch(url, {
         headers,
         method: 'PATCH',
@@ -40,7 +49,10 @@ const patch = (url, data, headers = defaultHeaders, isStringify = true, isUpload
         .then(handleResponse)
 };
 
-const deleteMethod = (url, headers = defaultHeaders, isStringify = true, isUpload = false) => {
+const deleteMethod = (url, headers = {
+    ...defaultHeaders,
+    'Authorization': localStorage.getItem('token') || ''
+}, isStringify = true, isUpload = false) => {
     return fetch(url, {
         headers,
         method: 'DELETE',
@@ -48,7 +60,10 @@ const deleteMethod = (url, headers = defaultHeaders, isStringify = true, isUploa
         .then(handleResponse)
 };
 
-const put = (url, data, headers = defaultHeaders, isStringify = true) => {
+const put = (url, data, headers = {
+    ...defaultHeaders,
+    'Authorization': localStorage.getItem('token') || ''
+}, isStringify = true) => {
     return fetch(url, {
         headers,
         method: 'PUT',
@@ -67,7 +82,7 @@ async function handleResponse(response, isFetchingHTML) {
         for (const key in data) {
             message += `${data[key]} `;
         }
-        if(response['status'] === 401) {
+        if (response['status'] === 401) {
             window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
         }
         return {
@@ -76,10 +91,10 @@ async function handleResponse(response, isFetchingHTML) {
             status: response['status'],
         }
     } else if (response['status'] === 204) {
-        return {data: {}};
+        return { data: {} };
     } else {
         let result = isFetchingHTML ? await response.text() : await response.json();
-        return {data: result};
+        return { data: result };
     }
 }
 

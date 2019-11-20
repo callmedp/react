@@ -6,7 +6,6 @@ import logging
 import mimetypes
 import textwrap
 import os
-
 from io import StringIO
 from dateutil import relativedelta
 from wsgiref.util import FileWrapper
@@ -119,6 +118,7 @@ class OrderListView(ListView, PaginationMixin):
         return super(OrderListView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
+
         context = super(OrderListView, self).get_context_data(**kwargs)
         paginator = Paginator(context['order_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
@@ -483,7 +483,9 @@ class InboxQueueVeiw(ListView, PaginationMixin):
             return HttpResponse(json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()
 
+
     def get_context_data(self, **kwargs):
+
         context = super(InboxQueueVeiw, self).get_context_data(**kwargs)
         paginator = Paginator(context['inbox_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
@@ -509,10 +511,22 @@ class InboxQueueVeiw(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(InboxQueueVeiw, self).get_queryset()
         queryset = queryset.filter(
-            order__status=1, no_process=False,
-            product__type_flow__in=[1, 3, 12, 13],
-            oi_status__in=[5, 3],
-            order__welcome_call_done=True).exclude(
+             Q(
+                order__status=1,
+                no_process=False,
+                product__type_flow__in=[1, 3, 12, 13],
+                oi_status__in=[5, 3],
+                order__welcome_call_done=True
+             )
+             |
+             Q(
+                order__status=1,
+                no_process=False,
+                oi_status__in=[5, 3],
+                product__sub_type_flow=101,
+                order__welcome_call_done=False
+             )
+            ).exclude(
             wc_sub_cat__in=[64, 65])
 
         user = self.request.user
@@ -849,10 +863,22 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(ApprovalQueueVeiw, self).get_queryset()
         queryset = queryset.filter(
-            order__status=1, no_process=False,
-            oi_status=23,
-            product__type_flow__in=[1, 3, 12, 13],
-            order__welcome_call_done=True).exclude(
+             Q(
+                order__status=1,
+                no_process=False,
+                oi_status=23,
+                product__type_flow__in=[1, 3, 12, 13],
+                order__welcome_call_done=True
+             )
+             |
+             Q(
+                order__status=1,
+                no_process=False,
+                oi_status=23,
+                product__sub_type_flow=101,
+                order__welcome_call_done=False
+             )
+            ).exclude(
             wc_sub_cat__in=[64, 65])
         user = self.request.user
        
@@ -983,9 +1009,22 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(ApprovedQueueVeiw, self).get_queryset()
         queryset = queryset.filter(
-            order__status=1, no_process=False,
-            oi_status=24, product__type_flow__in=[1, 3, 5, 12, 13],
-            order__welcome_call_done=True).exclude(
+             Q(
+                order__status=1,
+                no_process=False,
+                oi_status=24,
+                product__type_flow__in=[1, 3, 5, 12, 13],
+                order__welcome_call_done=True
+             )
+             |
+             Q(
+                order__status=1,
+                no_process=False,
+                oi_status=24,
+                product__sub_type_flow=101,
+                order__welcome_call_done=False
+             )
+           ).exclude(
             wc_sub_cat__in=[64, 65])
         user = self.request.user
 
@@ -1122,9 +1161,20 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(RejectedByAdminQueue, self).get_queryset()
         queryset = queryset.filter(
+            Q(
             order__status=1, no_process=False,
             oi_status=25, product__type_flow__in=[1, 3, 12, 13],
-            order__welcome_call_done=True).exclude(
+            order__welcome_call_done=True
+            )
+            |
+             Q(
+            order__status=1, 
+            no_process=False,
+            oi_status=25, 
+            product__sub_type_flow=101,
+            order__welcome_call_done=False
+            )
+            ).exclude(
             wc_sub_cat__in=[64, 65])
 
         user = self.request.user
@@ -1264,9 +1314,20 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(RejectedByCandidateQueue, self).get_queryset()
         queryset = queryset.filter(
+            Q(
             order__status=1, no_process=False,
             oi_status=26, product__type_flow__in=[1, 3, 12, 13],
-            order__welcome_call_done=True).exclude(
+            order__welcome_call_done=True
+            )
+            |
+            Q(
+            order__status=1,
+            no_process=False,
+            oi_status=26,
+            product__sub_type_flow=101,
+            order__welcome_call_done=False
+            )
+            ).exclude(
             wc_sub_cat__in=[64, 65])
 
         user = self.request.user
@@ -1404,10 +1465,21 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
         queryset = super(AllocatedQueueVeiw, self).get_queryset()
 
         queryset = queryset.filter(
-            order__status__in=[1, 3],
-            no_process=False,
-            product__type_flow__in=[1, 12, 13, 8, 3],
-            order__welcome_call_done=True).exclude(
+            
+            Q(
+                order__status__in=[1, 3],
+                no_process=False,
+                product__type_flow__in=[1, 12, 13, 8, 3],
+                order__welcome_call_done=True
+             )
+             |
+             Q(
+                order__status__in=[1, 3],
+                no_process=False,
+                product__sub_type_flow=101,
+                order__welcome_call_done=False
+             )
+            ).exclude(
             wc_sub_cat__in=[64, 65]).exclude(
             oi_status=4)
         # user = self.request.user
@@ -1509,6 +1581,48 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
     def get_context_data(self, **kwargs):
         context = super(ClosedOrderItemQueueVeiw, self).get_context_data(**kwargs)
         paginator = Paginator(context['closed_oi_list'], self.paginated_by)
+        # this mapping is created to decrease no of hits
+        oi_data_mapping = {}
+        start_index = (int(self.page)-1)*50
+        end_index = start_index+50
+        oi_list = context.get('object_list',[])
+        oi_list = oi_list[start_index:end_index]
+
+        orders = Order.objects.filter(id__in=[oi.order_id for oi in oi_list])\
+                .only('id','number','first_name','last_name','payment_date')
+        order_id_mapping = {order.id:order for order in orders}
+
+        products = Product.objects.filter(id__in=[oi.product_id for oi in oi_list])\
+                .only('id')
+        product_id_mapping = {product.id:product for product in products}
+
+        oi_delivery_service_list = DeliveryService.objects.filter(id__in=[oi.delivery_service for oi in oi_list])\
+                                .only('name')
+        delivery_service_mapping = {x.id:x for x in oi_delivery_service_list}
+
+        parent_ois = OrderItem.objects.filter(id__in=[oi.parent_id for oi in oi_list if oi.parent_id])\
+                    .only('id')
+        parent_oi_id_mapping = {oi.id:oi for oi in parent_ois}
+
+        parent_oi_products = Product.objects.filter(id__in=[oi.product_id for oi in parent_ois]).only('id')
+        parent_oi_product_id_mapping = {product.id:product for product in parent_oi_products}
+
+        for oi in oi_list:
+            order = order_id_mapping.get(oi.order_id,None)
+            product = product_id_mapping.get(oi.product_id,None)
+            delivery_service = delivery_service_mapping.get(oi.delivery_service,None)
+            parent = parent_oi_id_mapping.get(oi.parent_id,None) if oi.parent_id else None
+            parent_product = parent_oi_product_id_mapping.get(parent.product_id,None) if parent else None
+            oi_data_mapping.update({
+                oi.id:{
+                    'order':order,
+                    'product':product,
+                    'parent':parent,
+                    'parent_product':parent_product,
+                    'delivery_service':delivery_service,
+                }
+            })
+            
         context.update(self.pagination(paginator, self.page))
         var =self.sel_opt
         alert = messages.get_messages(self.request)
@@ -1521,6 +1635,7 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
             "query": self.query,
             "filter_form": filter_form,
             var:'checked',
+            'oi_data_mapping':oi_data_mapping
         })
 
         return context
@@ -1593,9 +1708,7 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
 
-        return queryset.select_related(
-            'order', 'product', 'assigned_by',
-            'assigned_to', 'delivery_service').order_by('-modified')
+        return queryset.order_by('-modified')
 
 
 @Decorate(stop_browser_cache())
@@ -1660,7 +1773,8 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
         q1 = queryset.filter(oi_status=61)
         exclude_list = []
         for oi in q1:
-            closed_ois = oi.order.orderitems.filter(product__type_flow=1, oi_status=4, no_process=False)
+            # Todo In future focused on expert assistance 
+            closed_ois = oi.order.orderitems.filter(product__type_flow=1, product__sub_type_flow__in=[101,100], oi_status=4, no_process=False)
             if closed_ois.exists():
                 last_oi_status = oi.oi_status
                 oi.oi_status = 5
@@ -1801,7 +1915,7 @@ class DomesticProfileInitiatedQueueView(ListView, PaginationMixin):
         q1 = queryset.filter(oi_status=61)
         exclude_list = []
         for oi in q1:
-            closed_ois = oi.order.orderitems.filter(product__type_flow=1, oi_status=4, no_process=False)
+            closed_ois = oi.order.orderitems.filter(product__type_flow=1,product__sub_type_flow__in=[101,100], oi_status=4, no_process=False)
             if closed_ois.exists():
                 last_oi_status = oi.oi_status
                 oi.oi_status = 5
@@ -2056,7 +2170,7 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
         q1 = queryset.filter(oi_status=61)
         exclude_list = []
         for obj in q1:
-            closed_ois = obj.order.orderitems.filter(oi_status=4, product__type_flow=1, no_process=False)
+            closed_ois = obj.order.orderitems.filter(oi_status=4, product__type_flow=1, product__sub_type_flow__in=[101,100], no_process=False)
             if closed_ois.exists():
                 last_oi_status = obj.oi_status
                 obj.oi_status = 5
@@ -3284,13 +3398,14 @@ class CertficationProductQueueView(PaginationMixin, ListView):
                 product__type_flow=16, no_process=False,
                 oi_status__in=[5, 4],
                 product__sub_type_flow__in=[1601, 1602],
-                order__welcome_call_done=True)|
+                order__welcome_call_done=True)
+            |
             Q(
                 order__status__in=[1, 3],
                 product__type_flow=2, no_process=False,
                 oi_status__in=[5, 4],
                 product__vendor__slug='neo',
-                order__welcome_call_done=True
+                order__welcome_call_done=False
             )
         ).exclude(
                 wc_sub_cat__in=[64, 65]

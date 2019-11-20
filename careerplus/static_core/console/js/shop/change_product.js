@@ -22,6 +22,7 @@ $(document).ready(function() {
     });
   $('.click-modal').click(function(){
     let msg = $(this).data("msg");
+    console.log(msg);
     $("#alertModalOk").data("action", msg);
     if (msg == "active"){
       let message = 'Please make sure you have saved your changes. Do you wish to make this product active?';
@@ -37,6 +38,14 @@ $(document).ready(function() {
     }
     else if(msg == "unindex"){
       let message = 'Do you want to unindex this product?';
+      $("#alertModal").modal('show').find('#alertModalBody').html(message);
+    }
+    else if(msg == "show-on-crm"){
+      let message = 'Do you want to make this product visible on CRM?';
+      $("#alertModal").modal('show').find('#alertModalBody').html(message);
+    }
+    else if(msg == "hide-on-crm"){
+      let message = 'Do you want to hide this product on CRM?';
       $("#alertModal").modal('show').find('#alertModalBody').html(message);
     }
      

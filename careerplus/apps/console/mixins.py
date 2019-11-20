@@ -12,7 +12,7 @@ from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from emailers.email import SendMail
 from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
-from order.models import OrderItem
+from order.models import OrderItem, Order
 from linkedin.models import Draft, Organization, Education
 from quizs.models import QuizResponse
 
@@ -61,6 +61,11 @@ class ActionUserMixin(object):
                 obj.assigned_date = timezone.now()
                 obj.assigned_by = user
                 obj.save()
+
+                if obj.product.type_flow == 1: 
+                    order = obj.order 
+                    order.auto_upload = False
+                    order.save()
 
                 obj.orderitemoperation_set.create(
                     oi_status=1,

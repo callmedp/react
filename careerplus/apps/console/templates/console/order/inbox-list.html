@@ -342,6 +342,9 @@
 											</div>
 											<button type="button" onclick="saveWaitingForInput('{{obj.pk}}',)" class="btn btn-success btn-xs">Save</button>
 										</form>
+										{% if obj.product.sub_type_flow == 101 %} 
+										<button type="button"  class='btn btn-success' onclick="generateAutoLoginToken('{{obj.id}}')">Create Resume</button>
+										{% endif %}
 									</td>
 									<td>
 										<form autocomplete="off" id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">
@@ -434,6 +437,9 @@
 {% endblock pagecontent %}
 {% block js_block %}
 {{ block.super }}
+<script>
+	var site_domain = "{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN}}";
+</script>
 {% compress js %}
 <script type="text/javascript" src="{% static 'console/js/order/exotelCall.js' %}"></script>
 <script type="text/javascript" src="{% static 'console/js/moment/moment.min.js' %}"></script>

@@ -774,11 +774,16 @@ class ResumeBuilderProductView(ListAPIView):
     serializer_class = ResumeBuilderProductSerializer
 
     def get_queryset(self):
+        new_product_list =[]
         type_flow = self.request.query_params.get('type_flow')
-        return Product.objects.filter(type_flow=type_flow, type_product=2, active=True).annotate(
-            parent=F('siblingproduct__main')).values( \
-            'id', 'parent', 'name', 'inr_price', 'usd_price', 'aed_price').order_by('inr_price')
+        product_list = Product.objects.filter(type_flow=type_flow, type_product=0, active=True).values('id', 'name', 'inr_price', 'usd_price', 'aed_price').order_by('inr_price')
 
+        for item in  product_list:
+            product = Product.objects.filter(id=item['id']).first()
+            value = product.attr.get_value_by_attribute(product.attr.get_attribute_by_name('template_type')).value or '';
+            if( value == 'single' or value == 'multiple'):
+                new_product_list.append(item)     
+        return new_product_list
 
 class ShineDataFlowDataApiView(ListAPIView):
     permission_classes = []
@@ -846,7 +851,7 @@ class ShineCandidateLoginAPIView(APIView):
 
         return data
 
-    def get_existing_order_data(self, candidate_id):
+    def get_existing_order_data(self, candidate_id):        
         from order.models import Order
 
         product_found = False
@@ -861,17 +866,19 @@ class ShineCandidateLoginAPIView(APIView):
                 break
 
             for item in order_obj.orderitems.all():
-                if item.product and item.product.type_flow == 17 and item.product.type_product == 2:
+                if item.product and item.product.type_flow == 17 and item.product.type_product == 0:
                     order_data = {"id": order_obj.id,
-                                  "combo": True if item.product.id != settings.RESUME_BUILDER_NON_COMBO_PID else False
+                                  "combo": True if item.product.attr.get_value_by_attribute(item.product.attr.get_attribute_by_name('template_type')).value == 'multiple' else False
                                   }
                     product_found = True
                     break
 
         return order_data
 
+    def get_candidate_experience(self,login_response):
+        return (login_response['workex'] and login_response['workex'][0] and login_response['workex'][0].get('experience_in_years',0)) or 0
+
     def get_response_for_successful_login(self, candidate_id, login_response, with_info=True):
-        
         candidate_obj = ShineCandidate(**login_response)
         candidate_obj.id = candidate_id
         candidate_obj.candidate_id = candidate_id
@@ -882,13 +889,14 @@ class ShineCandidateLoginAPIView(APIView):
         self.request.session.update(login_response)
 
         self.request.session.update(personal_info)
-
+        
         if with_info:
             data_to_send = {"token": token,
                             "candidate_id": candidate_id,
                             "candidate_profile": self.customize_user_profile(login_response),
                             "entity_status": self.get_entity_status_for_candidate(candidate_id),
-                            "order_data": self.get_existing_order_data(candidate_id)
+                            "order_data": self.get_existing_order_data(candidate_id),
+                            "userExperience": self.get_candidate_experience(login_response),
                             # TODO make param configurable
                             }
         else:
@@ -1064,6 +1072,8 @@ class ShineCandidateLoginAPIView(APIView):
 
     def _dispatch_via_autologin(self, alt, with_info):
         try:
+            alt = alt.replace(" ","+")
+            alt = alt.replace("%20","+") 
             email, candidate_id, valid = AutoLogin().decode(alt)
         except Exception as e:
             logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
@@ -1599,6 +1609,40 @@ class ClaimOrderAPIView(APIView):
             return Response(data)
         data.update({"msg": "Invalid details"})
         return Response(data, status=400)
+
+
+
+class GetAutoLoginToken(APIView):
+     authentication_classes = [SessionAuthentication]
+     permission_classes = [IsAuthenticated]
+
+     def get(self,request,*args,**kwargs):
+       
+         order_item_id = kwargs.get('order_item_id','')
+         order_item = OrderItem.objects.filter(id=order_item_id).first()
+         if not order_item: 
+             return Response({"token":'', "msg": 'Invalid Order Item Id'}, status=status.HTTP_400_BAD_REQUEST)
+         
+         email  = order_item.order.email; 
+         candidate_id = order_item.order.candidate_id;
+         token_gen = AutoLogin()
+         login_token = token_gen.encode(email, candidate_id, None)
+         return Response({"token": login_token, "msg": "Successfull"}, status=status.HTTP_200_OK)
+         
+
+
+         
+
+
+
+     
+     
+
+
+
+
+
+
 
 
 

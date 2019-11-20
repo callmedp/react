@@ -45,8 +45,9 @@ function* loginCandidate(action) {
             return;
             //redirect code here
         }
-        const {data: {candidate_id, candidate_profile, token, entity_status}} = result;
+        const {data: {candidate_id, candidate_profile, token, entity_status, userExperience}} = result;
         localStorage.setItem('candidateId', (candidate_id) || '');
+        localStorage.setItem('userExperience',(userExperience || 0));
         for (const key in candidate_profile) {
             const entityObj = entity_status.find(el => el['display_value'] === key);
             if (key === 'personalInfo') {
@@ -56,6 +57,9 @@ function* loginCandidate(action) {
                         "location": ''
                     }
                 }
+                localStorage.setItem('email', candidate_profile[key]['email'] || '');
+                localStorage.setItem('mobile',candidate_profile[key]['number'])
+
                 yield put({type: SAVE_USER_INFO, data: candidate_profile[key]})
             }
             if (!entityObj.set) {
@@ -67,7 +71,7 @@ function* loginCandidate(action) {
                             "entity_preference_data": entityList
                         }
                     };
-                    localStorage.setItem(key, (JSON.stringify(candidate_profile[key])) || '')
+                    localStorage.setItem(key, (JSON.stringify(candidate_profile[key])) || '');
                     localStorage.setItem('summary', '')
                 } else localStorage.setItem(key, (JSON.stringify(candidate_profile[key])) || '');
             }

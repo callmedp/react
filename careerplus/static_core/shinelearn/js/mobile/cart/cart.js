@@ -11,6 +11,7 @@ function removeFromCartMobile(line_id) {
             data: formData,
             dataType: 'json',
             success: function (json) {
+                
                 if (json.status == 1) {
                     window.location.reload();
                     //alert("product removed from cart successfully");

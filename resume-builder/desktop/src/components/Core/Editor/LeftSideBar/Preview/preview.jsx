@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './preview.scss'
 import {
     Accordion,
@@ -7,9 +7,8 @@ import {
     AccordionItemHeading,
     AccordionItemPanel
 } from "react-accessible-accordion";
-import {siteDomain} from '../../../../../Utils/domains'
 import AlertModal from '../../../../Modal/alertModal';
-import {formCategoryList} from '../../../../../Utils/formCategoryList'
+import { formCategoryList } from '../../../../../Utils/formCategoryList'
 
 export default class Preview extends Component {
     constructor(props) {
@@ -48,7 +47,7 @@ export default class Preview extends Component {
         this.setState({
             selectedColor: color
         })
-        const {eventClicked, customizeTemplate} = this.props;
+        const { eventClicked, customizeTemplate } = this.props;
         eventClicked({
             'action': 'ChangeTheme',
             'label': data['color_name']
@@ -64,28 +63,19 @@ export default class Preview extends Component {
 
 
     goToBuyPage() {
-        const {userInfo: {order_data}, history, showGenerateResumeModal, reGeneratePDF, hideGenerateResumeModal, eventClicked} = this.props;
+        const {generateResumeAlert,eventClicked} = this.props;
+
         eventClicked({
             'action': 'GetYourResume',
             'label': 'Click'
         })
-        if (order_data && order_data.id) {
-            showGenerateResumeModal()
-            reGeneratePDF(order_data.id)
-            setTimeout(function () {
-                window.location.href = `${siteDomain}/dashboard`
-                hideGenerateResumeModal()
-            }, 5000);
-        } else {
-            history.push('/resume-builder/buy')
-        }
-
+        generateResumeAlert()
     }
 
 
     static getDerivedStateFromProps(nextProp, prevState) {
 
-        const {template: {color, heading_font_size, text_font_size}} = nextProp;
+        const { template: { color, heading_font_size, text_font_size } } = nextProp;
         let obj = prevState;
 
         if (color !== prevState['selectedColor']) {
@@ -148,7 +138,7 @@ export default class Preview extends Component {
             currentTab: 1
         })
 
-        let {heading_font_size: headingFontSize, text_font_size: textFontSize} = await this.props.fetchDefaultCustomization(localStorage.getItem('selected_template'));
+        let { heading_font_size: headingFontSize, text_font_size: textFontSize } = await this.props.fetchDefaultCustomization(localStorage.getItem('selected_template') || 1);
         let elem1 = this.refs.bar1, slider1 = this.refs.slider1, elem2 = this.refs.bar2, slider2 = this.refs.slider2;
 
         const self = this;
@@ -187,7 +177,7 @@ export default class Preview extends Component {
 
 
             function onMouseUp() {
-                const {userInfo: {selected_template}} = self.props;
+                const { userInfo: { selected_template } } = self.props;
 
                 let size = 1;
                 if (leftEdge > ((rEdge / 2) + 50)) {
@@ -223,7 +213,7 @@ export default class Preview extends Component {
 
         slider1.onmousedown = (event) => {
             event.preventDefault();
-            const {userInfo: {selected_template}, eventClicked} = self.props;
+            const { userInfo: { selected_template }, eventClicked } = self.props;
             const elementValue = event.screenX - slider1.getBoundingClientRect().left;
             const rightEdge = slider1.offsetWidth - elem1.offsetWidth;
             let size = 1;
@@ -252,7 +242,7 @@ export default class Preview extends Component {
         };
         slider2.onmousedown = (event) => {
             event.preventDefault();
-            const {userInfo: {selected_template}, eventClicked} = self.props;
+            const { userInfo: { selected_template }, eventClicked } = self.props;
             let size = 1;
 
             const elementValue = event.screenX - slider2.getBoundingClientRect().left;
@@ -321,37 +311,37 @@ export default class Preview extends Component {
     }
 
     moveUpSection(selectedEntity, selectedTemplate) {
-        const {eventClicked, reorderSection} = this.props;
+        const { eventClicked, reorderSection } = this.props;
         eventClicked({
             'action': 'ReorderSection',
             'label': formCategoryList[selectedEntity['entity_id']].name
         })
         reorderSection({
             templateId: selectedTemplate,
-            info: {entity_id: selectedEntity['entity_id'], step: -1, pos: selectedEntity['pos']}
+            info: { entity_id: selectedEntity['entity_id'], step: -1, pos: selectedEntity['pos'] }
         })
     }
 
     moveDownSection(selectedEntity, selectedTemplate) {
-        const {eventClicked, reorderSection} = this.props;
+        const { eventClicked, reorderSection } = this.props;
         eventClicked({
             'action': 'ReorderSection',
             'label': formCategoryList[selectedEntity['entity_id']].name
         })
         reorderSection({
             templateId: selectedTemplate,
-            info: {entity_id: selectedEntity['entity_id'], step: 1, pos: selectedEntity['pos']}
+            info: { entity_id: selectedEntity['entity_id'], step: 1, pos: selectedEntity['pos'] }
         })
     }
 
     getEntityName(entity_position, activeSection) {
         const entityElements = entity_position && eval(entity_position) || [];
         const entityElementSectionList = (entityElements || []).filter(els =>
-                (
-                    /*els['alignment'] === activeSection ||
-                    els['alignment'] === 'center') &&*/
-                    (els['entity_id'] !== 6 && els['entity_id'] !== 1) && els['active']
-                ))
+            (
+                /*els['alignment'] === activeSection ||
+                els['alignment'] === 'center') &&*/
+                (els['entity_id'] !== 6 && els['entity_id'] !== 1) && els['active']
+            ))
             || [];
         const currentEntity = entityElementSectionList && entityElementSectionList.length && entityElementSectionList[0]
         const entityName = currentEntity && currentEntity['entity_text'] || 'Personal Info'
@@ -360,11 +350,11 @@ export default class Preview extends Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        const {template: {entity_position}} = this.props;
-        const {selectedEntity} = this.state;
+        const { template: { entity_position } } = this.props;
+        const { selectedEntity } = this.state;
         if (this.state.activeSection !== prevState.activeSection) {
-            const {template: {entity_position}} = this.props;
-            const {activeSection} = this.state;
+            const { template: { entity_position } } = this.props;
+            const { activeSection } = this.state;
             const [currentEntity, entityName] = this.getEntityName(entity_position, activeSection)
             this.setState({
                 sectionEntityName: entityName,
@@ -377,7 +367,7 @@ export default class Preview extends Component {
         if (entity_position !== prevProps.template.entity_position) {
             (entity_position && eval(entity_position) || []).map((el) => {
                 if (selectedEntity && selectedEntity['entity_id'] === el.entity_id) {
-                    this.setState({selectedEntity: el})
+                    this.setState({ selectedEntity: el })
                 }
             })
         }
@@ -385,13 +375,13 @@ export default class Preview extends Component {
 
 
     render() {
-        const {userInfo: {selected_template, upload_resume}, template: {entity_position, entity_id_count_mapping}} = this.props;
-        const {currentTab, selectedColor, activeSection, sectionEntityName, selectedEntity} = this.state;
+        const { userInfo: { selected_template, upload_resume }, template: { entity_position, entity_id_count_mapping } } = this.props;
+        const { currentTab, selectedColor, activeSection, sectionEntityName, selectedEntity } = this.state;
         const [currentEntity] = this.getEntityName(entity_position, activeSection);
 
         return (
             <div className="preview-section">
-                <AlertModal {...this.props} isPreview={true}/>
+                <AlertModal {...this.props} isPreview={true} />
                 <strong>Complete your customisation</strong>
                 <Accordion
                     preExpanded={["1"]}>
@@ -420,7 +410,7 @@ export default class Preview extends Component {
                                                 readOnly
                                                 type="radio"
                                                 name="radio1" id="green" value="green"
-                                                checked={selectedColor === 1}/>
+                                                checked={selectedColor === 1} />
                                             <label htmlFor="green"><span className="theme-green"></span></label>
                                         </li>
                                         <li>
@@ -464,7 +454,7 @@ export default class Preview extends Component {
                                                 type="radio"
                                                 readOnly
                                                 name="radio1" id="black" value="black"
-                                                checked={selectedColor === 4}/>
+                                                checked={selectedColor === 4} />
                                             <label htmlFor="black"><span className="theme-black"></span></label>
                                         </li>
                                         <li>
@@ -492,7 +482,7 @@ export default class Preview extends Component {
                                                 type="radio"
                                                 readOnly
                                                 name="radio1" id="violet" value="violet"
-                                                checked={selectedColor === 6}/>
+                                                checked={selectedColor === 6} />
                                             <label htmlFor="violet"><span className="theme-violet"></span></label>
                                         </li>
                                     </ul>
@@ -504,7 +494,7 @@ export default class Preview extends Component {
                                 <AccordionItemHeading>
                                     <AccordionItemButton>
                                         <div onClick={() => this.selectCurrentTab(2)}
-                                             className={"change-theme--theme-heading " + (currentTab === 2 ? 'change-theme--active' : '')}>
+                                            className={"change-theme--theme-heading " + (currentTab === 2 ? 'change-theme--active' : '')}>
                                             <span className="icon-change-font mr-20"></span>
                                             Font size
                                         </div>
@@ -516,9 +506,9 @@ export default class Preview extends Component {
                                             <strong>Section Heading</strong>
                                             <div ref="slider1" className="change-font-content--font-box">
                                                 <div role="progressbar" aria-valuenow="40" aria-valuemin="0"
-                                                     aria-valuemax="100"
-                                                     className="change-font-content--font-bar">
-                                                    <span ref="bar1" className="change-font-content--font-bar__bar"/>
+                                                    aria-valuemax="100"
+                                                    className="change-font-content--font-bar">
+                                                    <span ref="bar1" className="change-font-content--font-bar__bar" />
                                                 </div>
                                             </div>
                                             <div className="change-font-content--text-align">
@@ -531,11 +521,11 @@ export default class Preview extends Component {
                                             <strong>Section Text</strong>
                                             <div ref="slider2" className="change-font-content--font-box">
                                                 <div role="progressbar" aria-valuenow="40" aria-valuemin="0"
-                                                     aria-valuemax="100"
+                                                    aria-valuemax="100"
 
-                                                     className="change-font-content--font-bar">
+                                                    className="change-font-content--font-bar">
                                                     <span ref="bar2"
-                                                          className="change-font-content--font-bar__bar"></span>
+                                                        className="change-font-content--font-bar__bar"></span>
                                                 </div>
                                                 <div className="change-font-content--text-align">
                                                     <span>S</span>
@@ -590,12 +580,12 @@ export default class Preview extends Component {
                                                                     {index !== 0 ?
                                                                         <span
                                                                             onClick={() => this.moveUpSection(selectedEntity || currentEntity, selected_template)}
-                                                                            className="icon-ascend1 mr-5 ml-0"/> : ''
+                                                                            className="icon-ascend1 mr-5 ml-0" /> : ''
                                                                     }
                                                                     {arr.length !== index + 1 ?
                                                                         <span
                                                                             onClick={() => this.moveDownSection(selectedEntity || currentEntity, selected_template)}
-                                                                            className="icon-descend1 ml-0"/>
+                                                                            className="icon-descend1 ml-0" />
                                                                         : ''
                                                                     }
                                                                 </span> : ''
@@ -614,8 +604,8 @@ export default class Preview extends Component {
                     </div>
                 </Accordion>
                 <div className={"upload-resume-section"}>
-                    <input type="checkbox" className={"upload-resume-checkbox"}  checked={upload_resume|| false}
-                           onChange={this.toggleUploadResume} />
+                    <input type="checkbox" className={"upload-resume-checkbox"} checked={upload_resume || false}
+                        onChange={this.toggleUploadResume} />
                     <span className="upload-resume">Upload resume on Shine</span>
                 </div>
                 < button

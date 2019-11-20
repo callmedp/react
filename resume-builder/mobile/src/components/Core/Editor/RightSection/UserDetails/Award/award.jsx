@@ -3,10 +3,8 @@ import {reduxForm, FieldArray} from "redux-form";
 import * as actions from "../../.../../../../../../store/award/actions";
 import {connect} from "react-redux";
 import validate from "../../../../../FormHandler/validtaions/award/validate"
-import moment from "moment";
 import PreviewModal from "../../../Preview/changeTemplateModal";
 import renderAwards from "./renderAwards"
-import {siteDomain} from "../../../../../../Utils/domains";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 import BottomCTC from '../../../../../Common/BottomCTC/bottom-ctc';
 import Subscribe from "../../../RightSection/subscribe";
@@ -65,24 +63,14 @@ class Award extends Component {
 
     async handleSubmit(values) {
         values = this.state.fields ? this.state.fields : values.list
-        let {sidenav:{listOfLinks,currentLinkPos},bulkUpdateUserAward,personalInfo:{order_data},
-            updateCurrentLinkPos,history,showGenerateResumeModal,hideGenerateResumeModal,reGeneratePDF} = this.props
+        let {sidenav:{listOfLinks,currentLinkPos},bulkUpdateUserAward,updateCurrentLinkPos,history,
+                    generateResumeAlert} = this.props
         currentLinkPos++
         this.setState({submit:true})
         await bulkUpdateUserAward(values);
         if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
-            if(order_data && order_data.id){
-                showGenerateResumeModal()
-                reGeneratePDF(order_data.id)
-                setTimeout(function() {
-                    window.location.href = `${siteDomain}/dashboard`
-                    hideGenerateResumeModal()
-                }, 5000);
-            }
-            else{
-                history.push(`/resume-builder/buy`) 
-            }
+            generateResumeAlert()
         }
         else{
             updateCurrentLinkPos({currentLinkPos})

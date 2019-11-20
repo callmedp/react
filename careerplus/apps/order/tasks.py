@@ -462,6 +462,9 @@ def service_initiation(pk=None):
                     oi.smsorderitemoperation_set.all().values_list(
                         'sms_oi_status', flat=True).distinct())
 
+                urlshortener = create_short_url(login_url=data)
+                data.update({'url':urlshortener.get('url')})
+
                 if oi.product.type_flow == 2 and 162 not in sms_sets:
                     try:
                         
@@ -600,22 +603,28 @@ def process_jobs_on_the_move(obj_id=None):
             )
             obj.update_pending_links_count()
 
-
 @task
 def generate_resume_for_order(order_id):
     from resumebuilder.models import Candidate
     from order.models import Order
+    from shop.models import Product
     from resumebuilder.utils import ResumeGenerator
     order_obj = Order.objects.get(id=order_id)
     candidate_id = order_obj.candidate_id
 
     for item in order_obj.orderitems.all():
-        if item.product and item.product.type_flow == 17 and item.product.type_product == 2:
+        if item.product and item.product.type_flow == 17 and item.product.type_product == 0:
             product_id = item.product.id
             break
-
-    is_combo = True if product_id != settings.RESUME_BUILDER_NON_COMBO_PID else False
-    selected_template = Candidate.objects.filter(candidate_id = candidate_id).first().selected_template
+    product = Product.objects.filter(id=product_id).first()
+    is_combo = True if product.attr.get_value_by_attribute(product.attr.get_attribute_by_name('template_type')).value == 'multiple'  else False
+    candidate_obj = Candidate.objects.filter(candidate_id = candidate_id).first()
+    # if not candidate_obj create it by yourself. 
+    if not candidate_obj:
+        selected_template = 1 
+    else: 
+        selected_template = candidate_obj.selected_template or 1 
+    # selected_template
     builder_obj = ResumeGenerator()
     builder_obj.save_order_resume_pdf(order=order_obj,is_combo=is_combo,index=selected_template)
 

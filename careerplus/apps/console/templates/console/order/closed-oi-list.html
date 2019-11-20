@@ -1,5 +1,5 @@
 {% extends "console/base_console.html" %}
-{% load static compress %}
+{% load static compress console_tags %}
 {% load humanize %}
 {% load thumbnail %}
 
@@ -169,58 +169,61 @@
 
                 <tbody id="body-table-inbox">
                   {% for obj in page %}
+                  {% with oi_data=oi_data_mapping|get_dict_item:obj.id %}
                     <tr class="even pointer">
-                     <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><b style="text-decoration: underline;">{{obj.order.number}}</b></a>
+                     <td><a target="_blank" href="{% url "console:order-detail" oi_data.order.pk %}"><b style="text-decoration: underline;">{{oi_data.order.number}}</b></a>
                                       </br>
                                           ({{obj.pk}})
                                       </td>
-                      <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
+                      <td>{{oi_data.order.first_name}} {{oi_data.order.last_name}}</td>
                                <td>
                          <div>
-                            <div id="email_field{{obj.order.id}}_{{forloop.counter}}"></div>
+                            <div id="email_field{{oi_data.order.id}}_{{forloop.counter}}"></div>
                         </div>
                         <div>
-                            <button type="button" class="btn btn-primary btn-xs" onclick="order_get_details('{{obj.order.id}}','email,alt_email','email','{{forloop.counter}}');"><i class="fa fa-search" aria-hidden="true"></i>ClickToView</button>
+                            <button type="button" class="btn btn-primary btn-xs" onclick="order_get_details('{{oi_data.order.id}}','email,alt_email','email','{{forloop.counter}}');"><i class="fa fa-search" aria-hidden="true"></i>ClickToView</button>
                         </div>
 
                       </td>
 
                         <td>
                     <div>
-                        <div id="mobile_field{{obj.order.id}}_{{forloop.counter}}"> </div>
+                        <div id="mobile_field{{oi_data.order.id}}_{{forloop.counter}}"> </div>
                         {% if exoitel_status%}
-                        <button id="{{obj.order.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{obj.order.id}});"></button>
-                        <span style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{obj.order.id}}callingbtn-error"></span>
+                        <button id="{{oi_data.order.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{oi_data.order.id}});"></button>
+                        <span style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{oi_data.order.id}}callingbtn-error"></span>
                         {% endif %}
-                        <button type="button" onclick="order_get_details('{{obj.order.id}}','mobile,alt_mobile','mobile','{{forloop.counter}}');" class="btn btn-primary btn-xs"><i class="fa fa-phone" aria-hidden="true"></i>ClickToView</button>
+                        <button type="button" onclick="order_get_details('{{oi_data.order.id}}','mobile,alt_mobile','mobile','{{forloop.counter}}');" class="btn btn-primary btn-xs"><i class="fa fa-phone" aria-hidden="true"></i>ClickToView</button>
 					</div>
 
 
                       </td>
                       <td>
-                            {% if obj.parent and obj.is_variation %}
-                              <strong>{{obj.parent.product.get_name}}{% if obj.parent.product.get_exp_db %} - Exp: {{obj.parent.product.get_exp_db}}{% endif %}:</strong><br/>
+                            {% if oi_data.parent and obj.is_variation %}
+                              <strong>{{oi_data.parent_product.get_name}}{% if oi_data.parent_product.get_exp_db %} - Exp: {{oi_data.parent_product.get_exp_db}}{% endif %}:</strong><br/>
                             {% endif %}
-                                {{obj.product.get_name}}<br/>
-                            {%if obj.product.get_exp_db %}
-                                <strong>Exp:</strong> {{obj.product.get_exp_db}}<br/>
+                                {{oi_data.product.get_name}}<br/>
+                            {% if oi_data.product.get_exp_db %}
+                                <strong>Exp:</strong> {{oi_data.product.get_exp_db}}<br/>
                             {% endif %}
-                            {% if obj.product.get_studymode_db %}
-                                <strong>Study mode:</strong> {{obj.product.get_studymode_db}}<br/>
+                            {% if oi_data.product.get_studymode_db %}
+                                <strong>Study mode:</strong> {{oi_data.product.get_studymode_db}}<br/>
                             {% endif %}
-                            {% if obj.product.get_coursetype_db %}
-                                <strong>Course type:</strong> {{obj.product.get_coursetype_db}}<br/>
+                            {% if oi_data.product.get_coursetype_db %}
+                                <strong>Course type:</strong> {{oi_data.product.get_coursetype_db}}<br/>
                             {% endif %}
-                            {% if obj.product.get_duration_db %}
-                                <strong>Duration:</strong> {{obj.product.get_duration_db}}
+                            {% if oi_data.product.get_duration_db %}
+                                <strong>Duration:</strong> {{oi_data.product.get_duration_db}}
                             {% endif %}
                       </td>
-                      <td>{% if obj.delivery_service %}{{obj.delivery_service.name}}{% endif %}</td>
+                      <td>{% if oi_data.delivery_service %}{{oi_data.delivery_service.name}}{% endif %}</td>
                       <td>{{obj.modified|naturaltime}}</td>
-                      <td>{{obj.order.payment_date}}</td>
+                      <td>{{oi_data.order.payment_date}}</td>
                       <td>{{obj.created}}</td>
                     </tr>
+                  {% endwith %}
                   {% endfor %}
+
                 </tbody>
               </table>
             </div>

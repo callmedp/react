@@ -89,12 +89,12 @@ class WalletRedeemView(APIView, CartMixin):
                     {'success': 0,
                      'error': 'Redeem Point should be positive, Cannot Redeem!.'
                      }, status=400, content_type='application/json')
-            line_item = cart_obj.lineitems.filter(parent=None)[0]
-            type_flow = int(line_item.product.type_flow)
-            if type_flow == 17:
-                cart_dict = CartMixin.get_local_cart_items(self,cart_obj=cart_obj)
-            else:
-                cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
+            # line_item = cart_obj.lineitems.filter(parent=None)[0]
+            # type_flow = int(line_item.product.type_flow)
+            # if type_flow == 17:
+            #     cart_dict = CartMixin.get_local_cart_items(self,cart_obj=cart_obj)
+            # else:
+            cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
             total_amount = cart_dict.get('total_amount')
             if point >= total_amount:
                 point = total_amount

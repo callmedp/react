@@ -385,6 +385,77 @@ EDUCATION_PARENT_CHILD_HEIRARCHY_LIST = [{'child': [{'cdesc': 'Arts and Humaniti
                                           'pdesc': 'Ph.D/Doctorate',
                                           'pid': 138}]
 
+
+ENTITY_LIST = [
+    {
+        "entity_id": 1,
+        "entity_text": "Personal Info",
+        "active": True,
+        "priority": 1
+    },
+    {
+        "entity_id": 2,
+        "entity_text": "Education",
+        "active": True,
+        "priority": 2
+    },
+    {
+        "entity_id": 3,
+        "entity_text": "Experience",
+        "active": True,
+        "priority": 3
+    },
+    {
+        "entity_id": 4,
+        "entity_text": "Projects",
+        "active": True,
+        "priority": 4
+    },
+    {
+        "entity_id": 5,
+        "entity_text": "Skills",
+        "active": True,
+        "priority": 5
+    },
+    {
+        "entity_id": 6,
+        "entity_text": "Summary",
+        "active": True,
+        "priority": 6
+    },
+
+    {
+        "entity_id": 7,
+        "entity_text": "Awards",
+        "active": False,
+        "priority": 7
+    },
+    {
+        "entity_id": 8,
+        "entity_text": "Certifications",
+        "active": False,
+        "priority": 8
+    },
+    {
+        "entity_id": 9,
+        "entity_text": "Languages",
+        "active": False,
+        "priority": 9
+    },
+    {
+        "entity_id": 10,
+        "entity_text": "References",
+        "active": False,
+        "priority": 10
+    },
+    {
+        "entity_id": 11,
+        "entity_text": "Interest",
+        "active": False,
+        "priority": 0
+    }
+]
+
 TEMPLATE_DEFAULT_ENTITY_POSITION = {
 
     1: [

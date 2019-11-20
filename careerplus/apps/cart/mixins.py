@@ -66,6 +66,7 @@ class CartMixin(object):
             email = self.request.session.get('email')
             mobile = self.request.session.get('mobile_no')
             country_code = self.request.session.get('country_code')
+
             if add_type == "cart":
                 self.getCartObject()
                 cart_pk = self.request.session.get('cart_pk')
@@ -111,20 +112,20 @@ class CartMixin(object):
                     cart_obj.mobile = mobile
                     cart_obj.save()
 
-                # todo update it for resume builder only
-                if is_resume_template == 'true':
-                    cart_obj.lineitems.filter().delete()
-                else:
-                    cart_obj.lineitems.filter(Q(product=product) | Q(product__type_flow=17)).delete()
+                # # todo update it for resume builder only
+                # if is_resume_template == 'true':
+                #     cart_obj.lineitems.filter().delete()
+                # else:
+                cart_obj.lineitems.filter(Q(product=product)).delete()
 
-                if product.is_course or product.type_flow == 17 and cv_id:
+                if (product.is_course or product.type_flow == 17) and cv_id:
                     # courses
                     try:
-                        # for resume builder type_flow todo create new type flow
-                        if product.type_flow == 17:
-                            cv_prod = Product.objects.get(id=cv_id)
-                        else:
-                            cv_prod = Product.objects.get(id=cv_id, active=True)
+                        # # for resume builder type_flow todo create new type flow
+                        # if product.type_flow == 17:
+                        #     cv_prod = Product.objects.get(id=cv_id)
+                        # else:
+                        cv_prod = Product.objects.get(id=cv_id, active=True)
                         parent = cart_obj.lineitems.create(product=product, no_process=True)
                         parent.reference = str(cart_obj.pk) + '_' + str(parent.pk)
                         parent.price_excl_tax = product.get_price()
@@ -200,6 +201,11 @@ class CartMixin(object):
                 request.session.create()
             sessionid = request.session.session_key
             cart_users = []
+            utm_params = request.session.get('utm')
+
+            if utm_params and isinstance(utm_params, dict):
+                utm_params = json.dumps(utm_params)
+
             if candidate_id:
                 cart_users = Cart.objects.filter(owner_id=candidate_id, status=2)
 
@@ -239,6 +245,12 @@ class CartMixin(object):
 
             # update cart_obj in session
             if cart_obj:
+                # before updating the cart in session updating the utm params in
+                # cart objects
+                if utm_params:
+                    cart_obj.utm_params = utm_params
+                    cart_obj.save()
+
                 request.session.update({
                     "cart_pk": cart_obj.pk,
                     "checkout_type": 'cart',
@@ -565,13 +577,13 @@ class CartMixin(object):
                 if not total_amount:
 
                     # cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
-                    line_item = cart_obj.lineitems.filter(parent=None)[0]
-                    type_flow = int(line_item.product.type_flow)
-                    # resume builder flow handle
-                    if type_flow == 17:
-                        cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
-                    else:
-                        cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
+                    # line_item = cart_obj.lineitems.filter(parent=None)[0]
+                    # type_flow = int(line_item.product.type_flow)
+                    # # resume builder flow handle
+                    # if type_flow == 17:
+                    #     cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
+                    # else:
+                    cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
                     total_amount = cart_dict.get('total_amount', Decimal(0))
 
                 total_amount = InvoiceGenerate().get_quantize(total_amount)

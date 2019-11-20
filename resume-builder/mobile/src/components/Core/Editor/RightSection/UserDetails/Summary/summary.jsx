@@ -11,7 +11,6 @@ import {
 import PreviewModal from "../../../Preview/changeTemplateModal";
 import moment from 'moment'
 import validate from "../../../../../FormHandler/validtaions/summary/validate"
-import {siteDomain} from "../../../../../../Utils/domains";
 import AddSuggesion from '../../../../../Common/AddSuggestion/addSuggesion';
 import BottomCTC from '../../../../../Common/BottomCTC/bottom-ctc';
 import Subscribe from '../../../RightSection/subscribe';
@@ -49,22 +48,14 @@ class Summary extends Component {
     }
 
     async handleSubmit(values) {
-        let {sidenav: {listOfLinks, currentLinkPos}, onSubmit, personalInfo: {order_data}, updateCurrentLinkPos, history, showGenerateResumeModal, hideGenerateResumeModal, reGeneratePDF, personalInfo} = this.props
+        let {sidenav: {listOfLinks, currentLinkPos}, onSubmit,generateResumeAlert, updateCurrentLinkPos, 
+                history, personalInfo} = this.props
         currentLinkPos++
         this.setState({submit: true})
         await onSubmit(values, personalInfo);
         if (currentLinkPos === listOfLinks.length) {
             currentLinkPos = 0
-            if (order_data && order_data.id) {
-                showGenerateResumeModal()
-                reGeneratePDF(order_data.id)
-                setTimeout(function () {
-                    window.location.href = `${siteDomain}/dashboard`
-                    hideGenerateResumeModal()
-                }, 5000);
-            } else {
-                history.push(`/resume-builder/buy`)
-            }
+            generateResumeAlert()
         } else {
             updateCurrentLinkPos({currentLinkPos})
             history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)

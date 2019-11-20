@@ -1,0 +1,118 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet" />
+
+<style>
+
+.select2-container{
+width:200px !important;
+}
+.select2-selection__choice {
+    background-color: green !important;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    cursor: default;
+    float: left;
+    margin-right: 5px;
+    margin-top: 5px;
+    padding: 0 5px;
+    color: #ffff;
+}
+</style>
+
+{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+<div>
+    <form method="post">
+        {% csrf_token %}
+    <table>
+        <th></th>
+
+        <tr>
+            <td valign="middle" style="vertical-align:middle;">
+                 <b> Whatsapp Button </b>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Product Course</td><td> <input class="checkbox" type="checkbox" name="prodcourse" id="product-course" {% for  key,value in whatsappBtn.items %}
+        {% if key == 'product-course-visibility'  %} checked {% endif %} {% endfor %} ></td>
+               <td> &nbsp;&nbsp;<input type="number" minlength="10" maxlength="10" name="product-course" id="product-course-number"
+               value={% for key,value in whatsappBtn.items %}{% if key == 'product-course-number'%}"{{value}}"{% endif %}{% endfor %}>
+            </td>
+        </tr>
+             <tr>
+            <td>
+                Product Service</td><td> <input type="checkbox" class="checkbox" name="prodservice" id="product-service" {% for key,value in whatsappBtn.items %} {% if key == 'product-service-visibility' %} checked {% endif %} {% endfor %} ></td>
+
+               <td> &nbsp;&nbsp;<input class="checkbox" type="number" minlength="10" maxlength="10"  name="product-service" id="product-service-number" value={% for key,value in whatsappBtn.items %}
+        {% if key == 'product-service-number' %} "{{value}}" {% endif %} {% endfor %} >
+
+            </td>
+        </tr>
+             <tr>
+            <td>
+                Service Skill</td><td> <input class="checkbox" type="checkbox" name="serviceskill" id="service-skill" {% for key,value in whatsappBtn.items %} {% if key == 'service-skill-visibility' %} checked {% endif %} {% endfor %} ></td>
+               <td> &nbsp;&nbsp;<input type="number" minlength="10" maxlength="10"  name="service-skill" id="service-skill-number"  value={% for key,value in whatsappBtn.items %}
+        {% if key == 'service-skill-number' %} "{{value}}" {% endif %} {% endfor %}>
+            </td>
+        </tr>
+             <tr>
+            <td>
+                Course Skill</td><td> <input class="checkbox" type="checkbox" name="courseskill"  id="course-skill" {% for key,value in whatsappBtn.items %} {% if key == 'course-skill-visibility' %} checked {% endif %} {% endfor %} ></td>
+               <td> &nbsp;&nbsp;<input type="number" minlength="10" maxlength="10"  name="course-skill" id="course-skill-number"        value={% for key,value in whatsappBtn.items %}
+        {% if key == 'course-skill-number' %} "{{value}}" {% endif %} {% endfor %}>
+            </td>
+        </tr>
+            <td colspan="2">
+                <input type="submit">
+            </td>
+        </tr>
+
+
+    </table>
+</form>
+</div>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function(){
+   for (field of $(":checkbox:not(:checked)")){
+    if (field.id == 'product-course'){
+        $('#'+field.id+'-number').prop('disabled', true);
+    }
+   else if(field.id == 'product-service'){
+        $('#'+field.id+'-number').prop('disabled', true);
+   }
+   else if(field.id == 'course-skill'){
+        $('#'+field.id+'-number').prop('disabled', true);
+   }
+   else if(field.id == 'service-skill'){
+        $('#'+field.id+'-number').prop('disabled', true);
+   }
+   }
+    $('.checkbox').click(function() {
+  if ($(this).is(':checked') ) {
+   $('#'+ this.id +'-number').prop('disabled', false);
+  }
+  else{
+       $('#'+ this.id +'-number').prop('disabled', true);
+  }
+})
+
+    })
+
+
+</script>
+
+{% endblock %}
+

@@ -77,7 +77,10 @@ SUB_FLOWS = {
         (200, "Default"),
         (201, "Certificate Product"),
     ),
-
+    1: (
+        (100,"Default"),
+        (101, "Expert Assistance")
+    )
 }
 
 SUB_FLOW_CHOICES = ()
@@ -150,6 +153,7 @@ S_ATTR_DICT = {
     'FD': 'featured_duration',
     'SD': 'service_doc',
     'SI': 'service_im',
+    'CP': 'can_be_paused',
     'LC': 'links_count'
 }
 

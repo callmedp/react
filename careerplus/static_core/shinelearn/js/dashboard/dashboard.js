@@ -179,7 +179,7 @@ function downloadOrderInvoice(order_pk) {
 
 function downloadOrderTemplate(order_pk) {
     if(order_pk){
-        $('#download-resume-form' + order_pk)   .submit();
+        $('#download-resume-form' + order_pk).submit();
     }
 }
 
@@ -188,8 +188,18 @@ function openCancelModal(order_pk) {
     $(modal_id).modal('show');
 }
 
-
-
+function editTemplate(key = 'mobile'){
+    if(localStorage.getItem('personalInfo')){
+        localStorage.removeItem('personalInfo')
+    }
+    if(key =='mobile'){
+        if(!localStorage.getItem('candidateId') && candidateId){
+            localStorage.setItem('candidateId',candidateId);
+        }
+    }
+  
+    window.location.href = "/resume-builder/edit/?type=profile"
+}
 
 
 $(document).ready(function(){
@@ -937,12 +947,48 @@ const uploadResumeShine = (checkbox,order_id)=>{
 
     request.then((resp) =>resp.json())
     .then(response => {
-        console.log('--response', response);
         title = response['service_resume_upload_shine'] ? 'Resume will be updated' : 'Resume will not be updated'
         Toast.fire({
                     type: response['service_resume_upload_shine'] ?'success' : 'error',
                     title
         })
+    })
+    .catch(e =>{
+        Toast.fire({
+            type: 'error',
+            title:'Something went wrong'
+        })
+    })
+}
+
+let pause_resume_api_hit_once = false
+
+const pause_resume_service = (el,oi_id,oi_status)=>{
+    if (pause_resume_api_hit_once)
+        return
+
+    pause_resume_api_hit_once = true
+    
+    let request = fetch(`/order/api/v1/orderitem/${oi_id}/update/`,{
+        headers: {
+            "Content-Type": "application/json"
+        },
+        method: 'PATCH',  
+        body: JSON.stringify({
+                    oi_status
+                }),
+    });
+
+    request.then((resp) =>resp.json())
+    .then(response => {
+        error = response['oi_status'] !== oi_status ? true : false
+        title = error ? `Please wait 24 hours before ${oi_status==34 ? 'pausing' : 'resuming'} ` : 
+                            response['oi_status'] ===34 ? 'Service is Paused' : 'Service is Resumed'
+        Toast.fire({
+                    type: error ?'error' : 'success',
+                    title
+        })
+        location.reload()
     })
     .catch(e =>{
         Toast.fire({

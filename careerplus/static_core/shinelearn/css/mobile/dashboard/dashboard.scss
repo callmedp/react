@@ -55,6 +55,61 @@
 .light-blue {
 	background-color: $light-blue;
 	padding: 15px;
+
+	&__pause {
+		display: flex;
+		color: #4554b1;
+		font-weight: 600;
+		margin-top: 10px;
+
+		&--button {
+			@include square(20px, block);
+			border-radius: 50%;
+			border:1px solid #7f94d5;
+			position: relative;
+			margin-right: 5px;
+			cursor: pointer;
+
+			&::after,
+			&::before  {
+				content: '';
+				width: 3px;
+				height: 9px;
+				background-color: #7f94d5;
+				position: absolute;
+				top: 4px;
+			}
+
+			&::after {
+				left: 5px;
+			}
+
+			&::before {
+				right: 5px;
+			}
+		}
+
+		&--playBtn {
+			@include square(20px, block);
+			border-radius: 50%;
+			border:1px solid #7f94d5;
+			position: relative;
+			margin-right: 5px;
+			cursor: pointer;
+
+			.right-arrow {
+				width: 0;
+				height: 0;
+				border-style: solid;
+				border-width: 5px 0 5px 5px;
+				border-color: transparent transparent transparent #7f94d5;
+				position: absolute;
+				left: 8px;
+				top: 4px;
+			}
+		}
+	}
+	
 }
 
 .button-wrap {
@@ -392,4 +447,44 @@
 .booster-msg{
 	color: #757575;
     font-size: 12px;
+}
+
+.days-left{
+	float: right;
+    position: relative;
+    color: #999;
+    font-size: 13px;
+    top: 24px;
+}
+
+.day-remains {
+	display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 15px 0 0;
+
+	&--head {
+		text-transform: uppercase;
+		color: $txt-grey-666;
+		font-weight: 600;
+		margin-right: 10px;
+	}
+
+	&--counts {
+		display: flex;
+
+		li {
+			height: 42px;
+			box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+			font-size: 34px;
+			width: auto;
+			color: #666;
+			border-radius: 3px;
+			margin-right: 10px;
+			padding: 0 7px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+	}
 }
