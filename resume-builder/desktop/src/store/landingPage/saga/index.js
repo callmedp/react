@@ -35,6 +35,65 @@ function* getCandidateId(action) {
 }
 
 
+function* getCandidateShineDetails(action) {
+    try {
+        const { payload: { resolve, reject } } = action;
+
+        yield put({ type: UPDATE_UI, data: { loader: true } });
+        const result = yield call(Api.getInformation);
+
+        if (result && result['error']) {
+            localStorage.clear();
+            yield put({ type: UPDATE_UI, data: { loader: false } });
+            return reject(new Error(result['errorMessage']));
+            //redirect code here
+        }
+
+        const { data: { candidate_id, candidate_profile, token, entity_status, userExperience } } = result;
+        localStorage.setItem('candidateId', (candidate_id) || '');
+        localStorage.setItem('userExperience', (userExperience || 0));
+
+        for (const key in candidate_profile) {
+            const entityObj = entity_status.find(el => el['display_value'] === key);
+
+            if (key === 'personalInfo') {
+                candidate_profile[key] = {
+                    ...candidate_profile[key],
+                    ...{
+                        "location": ''
+                    }
+                }
+                localStorage.setItem('email', candidate_profile[key]['email'] || '');
+                localStorage.setItem('mobile', candidate_profile[key]['number'])
+                yield put({ type: SAVE_USER_INFO, data: candidate_profile[key] })
+            }
+
+            if (!entityObj.set) {
+                if (key === 'personalInfo') {
+                    candidate_profile[key] = {
+                        ...candidate_profile[key],
+                        ...{
+                            "entity_preference_data": entityList
+                        }
+                    };
+                    localStorage.setItem(key, (JSON.stringify(candidate_profile[key])) || '');
+                    localStorage.setItem('summary', '')
+                } else localStorage.setItem(key, (JSON.stringify(candidate_profile[key])) || '');
+            }
+        }
+        localStorage.setItem('token', (token) || '');
+
+        yield put({ type: UPDATE_UI, data: { loader: false } })
+
+        resolve(JSON.stringify(result));
+
+
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+
 function* loginCandidate(action) {
     try {
         let { data: { info, resolve, reject, history, isTokenAvail } } = action;
@@ -58,8 +117,8 @@ function* loginCandidate(action) {
         if (result && result['error']) {
             localStorage.clear();
             yield put({ type: UPDATE_UI, data: { loader: false } });
-            return reject( new Error(result['errorMessage']));
-            
+            return reject(new Error(result['errorMessage']));
+
             //redirect code here
         }
 
@@ -139,5 +198,7 @@ export default function* watchLandingPage() {
     yield takeLatest(Actions.LOGIN_CANDIDATE, loginCandidate);
     yield takeLatest(Actions.FEEDBACK_SUBMIT, feedbackSubmit);
     yield takeLatest(Actions.GET_HOME_COMPONENT_TITLE, getComponentTitle);
+    yield takeLatest(Actions.GET_CANDIDATE_SHINE_DETAILS, getCandidateShineDetails);
+
 
 }

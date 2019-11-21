@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React, { Component, Fragment } from 'react';
 import './resumeSlider.scss'
 import Slider from "react-slick";
 import TemplateModal from "../../../Modal/tempateModal";
@@ -13,33 +13,40 @@ export default class ResumeSlider extends Component {
         this.showZoomedImage = this.showZoomedImage.bind(this);
     }
 
-    selectTemplate() {
+    async selectTemplate() {
         this.props.eventClicked({
-            'action':'SelectTemplate',
-            'label':'HomePage'
+            'action': 'SelectTemplate',
+            'label': 'HomePage'
         })
         const templateId = parseInt(document.getElementsByClassName('slick-current slick-center')[0].getAttribute('data-index')) + 1;
-        const {page, fetchSelectedTemplateImage, history} = this.props;
+        const { page, fetchSelectedTemplateImage, history } = this.props;
 
-        if(page == 'home'){
-        this.props.showLoginModal()
+        // get candidate details 
+        try {
+            await this.props.getCandidateShineDetails();
+        }
+        catch (e) {
+                console.log('error ', e);
+        }
+        if (page == 'home') {
+            //   this.props.showLoginModal()
         }
         else {
-        const {page, fetchSelectedTemplateImage, history} = this.props;
-        localStorage.setItem('selected_template', (templateId))
-        const select_template_modal = this.props.ui ? this.props.ui.select_template_modal : false
-        if (select_template_modal) {
-            this.props.hideSelectTemplateModal();
-            if (page === 'edit') {
-                this.props.fetchDefaultCustomization(templateId);
+            const { page, fetchSelectedTemplateImage, history } = this.props;
+            localStorage.setItem('selected_template', (templateId))
+            const select_template_modal = this.props.ui ? this.props.ui.select_template_modal : false
+            if (select_template_modal) {
+                this.props.hideSelectTemplateModal();
+                if (page === 'edit') {
+                    this.props.fetchDefaultCustomization(templateId);
+                }
+                this.props.updateSelectedTemplate(this.props.userInfo)
+                if (fetchSelectedTemplateImage && page === 'buy') {
+                    this.props.fetchSelectedTemplateImage(templateId, false)
+                }
+            } else {
+                history.push('/resume-builder/edit/?type=profile')
             }
-            this.props.updateSelectedTemplate(this.props.userInfo)
-            if (fetchSelectedTemplateImage && page === 'buy') {
-                this.props.fetchSelectedTemplateImage(templateId, false)
-            }
-        } else {
-           history.push('/resume-builder/edit/?type=profile')
-        }
         }
     }
 
@@ -63,10 +70,10 @@ export default class ResumeSlider extends Component {
         if (localStorage.getItem('selected_template')) {
             settings['initialSlide'] = (localStorage.getItem('selected_template') - 1)
         }
-        const {ui: {select_template_modal}, page} = this.props;
+        const { ui: { select_template_modal }, page } = this.props;
         return (
             <Fragment>
-                <TemplateModal {...this.props} page={'home'}/>
+                <TemplateModal {...this.props} page={'home'} />
                 <LoginModal {...this.props} />
                 < section
                     name="templates"
@@ -87,7 +94,7 @@ export default class ResumeSlider extends Component {
 
                     < Slider
                         {...
-                            settings
+                        settings
                         }
                     >
                         {
@@ -97,10 +104,10 @@ export default class ResumeSlider extends Component {
                                         <div className="proven-resume--slide">
                                             {
                                                 !!(page === 'home') &&
-                                                <div onClick={() => this.showZoomedImage(item)} className="zoom"/>
+                                                <div onClick={() => this.showZoomedImage(item)} className="zoom" />
                                             }
                                             <img
-                                                src={`${this.staticUrl}react/assets/images/resume${item}_preview.jpg`}/>
+                                                src={`${this.staticUrl}react/assets/images/resume${item}_preview.jpg`} />
                                         </div>
                                     </div>
                                 )

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './home.scss'
-import { getCandidateId, loginCandidate, feedbackSubmit, getComponentTitle } from "../../../store/landingPage/actions";
+import { getCandidateId, loginCandidate, feedbackSubmit, getComponentTitle, getCandidateShineDetails } from "../../../store/landingPage/actions";
 import { connect } from "react-redux";
 import Banner from "./Banner/banner.jsx";
 import ResumeSlider from "./ResumeSlider/resumeSlider.jsx";
@@ -314,6 +314,11 @@ const mapDispatchToProps = (dispatch) => {
         "loginCandidate": (payload, history, isTokenAvail) => {
             return new Promise((resolve, reject) => {
                 return dispatch(loginCandidate({ info: payload, resolve, reject, history, isTokenAvail: isTokenAvail }))
+            })
+        },
+        "getCandidateShineDetails":()=> {
+            return new Promise((resolve, reject)=> {
+                return dispatch(getCandidateShineDetails({resolve, reject}))
             })
         },
         'showModal': () => {
