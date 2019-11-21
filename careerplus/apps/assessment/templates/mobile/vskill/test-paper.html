@@ -91,9 +91,9 @@
                     {% for ans in quest.options %}
                     <li>
                         {% if quest.question_type == 2  %}
-                        <input type="checkbox"  value= "{{quest.question_type}}" id="{{ans.option_id}}" name="radio">
+                        <input class="radioSelect" type="checkbox"  value= "{{quest.question_type}}" id="{{ans.option_id}}" name="radio">
                         {% else %}
-                      <input type="radio" value= "{{quest.question_type}}" id="{{ans.option_id}}" name="radio">
+                      <input class="radioSelect" type="radio" value= "{{quest.question_type}}" id="{{ans.option_id}}" name="radio">
                         {% endif %}
                         <label for="{{ans.option_id}}">{{ans.option}}</label>
 
@@ -363,12 +363,18 @@ $(document).ready(function() {
             window.location.href = '/practice-tests/{{object.slug}}/result/';
         }
 
-            for (var id in Object.keys(questionAttempt)) {
-             if (Object.values(questionAttempt)[id] != "" && Object.keys(questionAttempt)[id] != "skippedQuestion") {
-                    $('#' + Object.values(questionAttempt)[id]).click();
-                    $('#marked' + Object.keys(questionAttempt)[id]).removeClass();
-                    $('#marked' + Object.keys(questionAttempt)[id]).addClass('dirt');
+                 for (var id in Object.keys(questionAttempt)) {
+
+                         if (Object.values(questionAttempt)[id] != "" && Object.keys(questionAttempt)[id] != "skippedQuestion") {
+
+                    (Object.values(questionAttempt)[id]).split(',').map(valId => {
+                       $('#' + valId).click();
+                       $('#marked' + Object.keys(questionAttempt)[id]).removeClass();
+                        $('#marked' + Object.keys(questionAttempt)[id]).addClass('dirt');
+                    })
+
                 }
+
                  else if(Object.keys(questionAttempt)[id] == "skippedQuestion"){
                   for(i of Object.values(questionAttempt)[id]){
                   $(i).addClass('skipped');
@@ -467,7 +473,7 @@ function nextquestion(number) {
     }
 }
 
-$('input[name="radio"]').on("click", function(e) {
+$('.radioSelect').on("click", function(e) {
 if (!timeout){
     let quest_id = $(e.target).closest(".test-paper")[0].id;
     $('#marked' + quest_id).removeClass('');
@@ -481,11 +487,12 @@ if (!timeout){
                 attempt = e.target.id
             } else {
                 attempt = attempt + ',' + e.target.id
+                attempt = [...new Set(attempt.split(','))].toString()
             }
         } else {
             attempt = questionAttempt[quest_id]
-            if (attempt) {
-                attempt = (attempt.split(',').filter(optId => optId != e.target.id)).toString()
+              if (attempt && e.target.value != "1") {
+                  attempt = (attempt.split(',').filter(optId => optId != e.target.id)).toString()
             }
         }
                if(!attempt){
