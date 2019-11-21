@@ -288,7 +288,7 @@
     {% if whatsapp_icon %}
 {% for key,value in whatsapp_icon.items %}
 {% if value and key == "course-skill-number" %}
-    <a class="enquire-cta__whatsApp" href="https://api.whatsapp.com/send?phone=91{{value}}&text=I need your help">
+    <a class="enquire-cta__whatsApp" href="https://api.whatsapp.com/send?phone=91{{value}}&text=I need your help for {{category_obj.name}}">
         <i class="icon-whatsApp"></i>
         <span>WhatsApp</span>
     </a><!-- // Chat -->
