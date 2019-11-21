@@ -1,150 +1,16 @@
-import requests
-import json
-import logging
+# python imports
 from datetime import datetime,timedelta
-
+# django imports
 from django.conf import settings
 from django.core.cache import cache
 from django.core.exceptions import ImproperlyConfigured
 from django_redis import get_redis_connection
 
-from .config import *
+# local imports
 
-from .models import Question
+# interapp imports
 
-class VskillTest(object):
-
-    def get_token(self):
-        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-        token, response = None, None
-        try:
-            response = requests.post(settings.VSKILLS_EXAM_DICT.get('login_url'), headers=headers \
-                                     , data=settings.VSKILLS_EXAM_DICT.get('credential'), allow_redirects=False)
-        except Exception as e:
-            logging.getLogger('error_log').error('error in getting vskill login response  {}'.format(str(e)))
-
-        if response.status_code == 200:
-            response_json = json.loads(response.text)
-            token = response_json.get('jwt')
-        else:
-            logging.getLogger('info_log').info('Unable to get status 200 in login ')
-        return token
-
-    def get_all_test(self):
-        token = self.get_token()
-        if not token:
-            logging.getLogger('info_log').info('unable to create token')
-            return
-        response = None
-        headers = {
-            'Content-Type': 'application/json'
-        }
-        try:
-            response = requests.get(settings.VSKILLS_EXAM_DICT.get('get_all_test_url').format(token), \
-                                    headers=headers, data=settings.VSKILLS_EXAM_DICT.get('credential'),
-                                    allow_redirects=False)
-        except Exception as e:
-            logging.getLogger('error_log').error('error in getting vskill all test response  {}'. \
-                                                 format(str(e)))
-
-        if response.status_code == 200:
-            response = json.loads(response.text)
-        else:
-            logging.getLogger('info_log').info('Unable to get status 200 in all test ')
-        return response
-
-    def get_all_test_id(self):
-        all_test = self.get_all_test()
-        if not all_test:
-            return []
-        return [prod.get('shine_id') for prod in all_test.get('data',[])]
-
-    def get_test_by_id(self, test_id):
-        token = self.get_token()
-        if not test_id or not token:
-            return
-        response = None
-        headers = {}
-        data = {}
-        try:
-            response = requests.get(settings.VSKILLS_EXAM_DICT.get('get_single_test_url') \
-                                    .format(token, test_id), headers=headers, data=data,
-                                    allow_redirects=False)
-        except Exception as e:
-            logging.getLogger('error_log').error('error in getting vskill single test id {} response  {}' \
-                                                 .format(test_id, str(e)))
-
-        if response.status_code == 200:
-            response = json.loads(response.text)
-        else:
-            logging.getLogger('info_log').info('Unable to get status 200 in single test id {}'. \
-                                               format(test_id))
-        return response
-
-
-class VskillParser:
-
-    def get_question_type(self,option_list):
-        return 2 if len([option.get('option_id') for option in option_list\
-                if option.get('is_correct') and bool(eval(option.get('is_correct'))\
-                if isinstance(option.get('is_correct'), str) else option.get(
-                'is_correct'))]) > 1 else 1
-
-
-    def prepare_questions(self,data_list,test):
-        if not data_list:
-            return
-        data_list = data_list.get('data')
-        prepared_test = 0
-        if not data_list or not isinstance(data_list, list):
-            return
-        for data in data_list:
-            create_dict = {'test_id': test}
-            question_type = None
-            question = Question.objects.create()
-
-            if not question:
-                logging.getLogger('error_log').error('unable to create '
-                                                     'question')
-                continue
-            prepared_test += 1
-
-            for key, values in PARSER_FIELDS.get('Vskills').items():
-                if key == "question_options":
-                    val,question_type = self.prepare_json_options(data.get(values),
-                                                    question.id)
-                    create_dict.update({key: val})
-                    continue
-                create_dict.update({key: data.get(values)})
-            if question_type == 2:
-                create_dict.update({'question_type': question_type})
-            for key, value in create_dict.items():
-                setattr(question, key, value)
-            question.save()
-        logging.getLogger('info_log').info('total {} question object '
-                                           'created'.format(prepared_test))
-
-    def prepare_json_options(self, data, question_id):
-        if not data or not isinstance(data, list) or not question_id:
-            return
-
-        option_list = []
-        for index, option in enumerate(data,start=1):
-            option_dict = {}
-            option_dict.update({'option_image': str(option.get(
-                'option_image'))})
-            option_dict.update({"option": option.get("option")})
-
-            # we are creating our own option_ids
-
-            option_dict.update({"option_id": str(question_id) +
-                                             str(ANSWER_MAPPING_DICT.get(
-                                                 index)),
-                                "is_correct": option.get("is_correct")})
-            option_list.append(option_dict)
-        quest_type = self.get_question_type(option_list)
-
-        return json.dumps(option_list), quest_type
+# 3rd party imports
 
 
 class TestCacheUtil:
