@@ -39,7 +39,7 @@ class TestForm(forms.ModelForm):
 class test(admin.ModelAdmin):
     form = TestForm
     raw_id_fields = ('product','course','vendor')
-    list_display = ['id','slug','title','category','product']
+    list_display = ['id','slug','title','category','product','is_active']
 
 
 class QuestionForm(forms.ModelForm):

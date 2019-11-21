@@ -122,10 +122,10 @@ return `<div class="allactions__box">
 else if( element.linkedin && element.order_oio_linkedin != ""){
 return `<div class="allactions__box">
 <strong>Candidate Draft</strong></br>
-<a href="/linkedin/dashboard-draft-download/${element.oi}/${element.id}" target="_blank">
+<a href="/linkedin/draft-download/linkedin/${element.oi}/${element.id}/" target="_blank">
 <button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Draft</button></a>
 <strong>Draft Level ${ element.draft_counter < maxDraft ? element.draft_counter :'Final'}:</strong></br>
-<a href="/linkedin/linkedin-draft/${element.oi}/${element.id}" target="_blank">
+<a href="/linkedin/linkedin-draft/${element.oi}/${element.id}/" target="_blank">
 <button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></div>`
 }
 }
