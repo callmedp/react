@@ -8,7 +8,7 @@ export default class Middleware {
 
    routeToDisplay(middlewares = [], routeToVisit, directedFrom = '', extra = {}) {
         const mware = {
-            privateRoute: (routeToVisit, directedFrom) => this.privateRoute(routeToVisit),
+            privateRoute: (routeToVisit, directedFrom) => this.privateRoute(routeToVisit, directedFrom),
             alreadyLoggedIn: (routeToVisit) => this.alreadyLoggedIn(routeToVisit)
         }
 

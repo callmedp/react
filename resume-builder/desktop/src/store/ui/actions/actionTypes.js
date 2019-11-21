@@ -19,6 +19,7 @@ export const SHOW_HELP_MODAL = 'SHOW_HELP_MODAL';
 export const HIDE_HELP_MODAL = 'HIDE_HELP_MODAL';
 export const SHOW_LOGIN_MODAL = 'SHOW_LOGIN_MODAL';
 export const HIDE_LOGIN_MODAL = 'HIDE_LOGIN_MODAL';
+export const SUCCESS_LOGIN ="SUCCESS_LOGIN";
 
 
 

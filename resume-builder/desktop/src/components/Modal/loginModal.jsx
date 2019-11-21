@@ -39,7 +39,7 @@ export default class LoginModal extends React.Component {
 
     async handleLogin(event) {
         event.preventDefault();
-        const { history } = this.props;
+        const { history } = this.props, templateId = localStorage.getItem('selected_template') || ''
         this.setState({
             "error": false,
             "errorMessage": ''
@@ -49,8 +49,11 @@ export default class LoginModal extends React.Component {
         }
         try {
             const result = await this.props.loginCandidate({ email: this.state.email, password: this.state.password }, history, true)
+            if (templateId) {
+                localStorage.setItem('selected_template', templateId);
+            }
             this.closeModal();
-           // history.push('/resume-builder/edit/?type=profile')
+            this.props.handleLoginSuccess()
         }
         catch (e) {
             this.setState({
@@ -71,7 +74,7 @@ export default class LoginModal extends React.Component {
     }
 
     render() {
-        const { ui: { loginModal } } = this.props
+        const { ui: { loginModal }, handleLoginSuccess } = this.props
         return (
             <div className="pr">
                 <Modal

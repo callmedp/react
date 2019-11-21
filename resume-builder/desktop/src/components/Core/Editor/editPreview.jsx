@@ -1,22 +1,22 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './editPreview.scss'
 import TopBar from './TopBar/topBar.jsx'
 import LeftSideBar from './LeftSideBar/leftSideBar.jsx'
 import Header from '../../Common/Header/header.jsx'
 import Footer from '../../Common/Footer/footer.jsx'
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import RightSection from './RightSection/rightSection.jsx'
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import LoaderPage from "../../Loader/loaderPage.jsx";
 import * as actions from "../../../store/ui/actions"
-import {loginCandidate} from "../../../store/landingPage/actions"
+import { loginCandidate } from "../../../store/landingPage/actions"
 import {
     customizeTemplate,
     fetchDefaultCustomization,
     reorderSection,
     reGeneratePDF
 } from "../../../store/template/actions"
-import {fetchPersonalInfo, updatePersonalInfo, getComponentTitle} from "../../../store/personalInfo/actions"
+import { fetchPersonalInfo, updatePersonalInfo, getComponentTitle } from "../../../store/personalInfo/actions"
 import SelectTemplateModal from '../../Modal/selectTemplateModal';
 import {
     showAlertModal,
@@ -26,7 +26,7 @@ import {
     hideGenerateResumeModal
 } from '../../../store/ui/actions/index'
 import moment from 'moment'
-import {locationRouteChange, eventClicked} from '../../../store/googleAnalytics/actions/index'
+import { locationRouteChange, eventClicked } from '../../../store/googleAnalytics/actions/index'
 import Swal from 'sweetalert2'
 import { siteDomain } from '../../../Utils/domains'
 
@@ -41,38 +41,38 @@ class EditPreview extends Component {
         // check if the userexperinece is greater or equal to 4 years. (7 is the pid for 4 years (mapping done here))
 
         if (parseInt(localStorage.getItem('userExperience') || 0) >= 7) {
-            if(document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]){
+            if (document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
                 document.getElementsByClassName('chat-bot')[0].style.display = 'none';
             }
         }
         else {
-            if(document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]){
+            if (document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
                 document.getElementsByClassName('chat-bot')[0].style.display = 'block';
             }
-        }    
+        }
         this.state = {
             visibleNote: true
         }
     }
 
     async componentDidMount() {
-       
-        
-        const {analytics: {locationPath}, fetchEntityInfo, history: {location: {pathname}}, locationRouteChange, loginCandidate} = this.props
+
+
+        const { analytics: { locationPath }, fetchEntityInfo, history: { location: { pathname } }, locationRouteChange, loginCandidate } = this.props
         if (!localStorage.getItem('candidateId')) {
             await loginCandidate()
         }
         fetchEntityInfo();
-        
-         // get userInfo from LocalStorage
-         if(localStorage.getItem('email')) window['email']= localStorage.getItem('email')
-         else window['email']=''
-         if(localStorage.getItem('mobile')) window['mobile'] = localStorage.getItem('mobile')
-         else window['mobile']=''
-         if(localStorage.getItem('name')) window['name'] = localStorage.getItem('name')
-         else window['name']= ''
- 
- 
+
+        // get userInfo from LocalStorage
+        if (localStorage.getItem('email')) window['email'] = localStorage.getItem('email')
+        else window['email'] = ''
+        if (localStorage.getItem('mobile')) window['mobile'] = localStorage.getItem('mobile')
+        else window['mobile'] = ''
+        if (localStorage.getItem('name')) window['name'] = localStorage.getItem('name')
+        else window['name'] = ''
+
+
         if (localStorage.getItem('personalInfo')) {
             localStorage.setItem('newUser', true)
         }
@@ -82,11 +82,11 @@ class EditPreview extends Component {
         return [getComponentTitle]
     }
 
-    static async fetching({dispatch}, params) {
+    static async fetching({ dispatch }, params) {
         const actionList = EditPreview.getActions()
         const results = [];
         for (const [index, value] of actionList.entries()) {
-            results[index] = await new Promise((resolve, reject) => dispatch(value({info: params, resolve, reject})))
+            results[index] = await new Promise((resolve, reject) => dispatch(value({ info: params, resolve, reject })))
         }
         return results;
     }
@@ -100,13 +100,13 @@ class EditPreview extends Component {
     }
 
     allowUploadResume() {
-        let {userInfo: {upload_resume: uploadResume}, userInfo, updateSelectedTemplate} = this.props;
+        let { userInfo: { upload_resume: uploadResume }, userInfo, updateSelectedTemplate } = this.props;
         userInfo['upload_resume'] = !uploadResume
         updateSelectedTemplate(userInfo)
     }
 
-    generateResumeAlert(){
-        const { userInfo: { order_data, resume_generated }, history, showGenerateResumeModal, reGeneratePDF, hideGenerateResumeModal} = this.props;
+    generateResumeAlert() {
+        const { userInfo: { order_data, resume_generated }, history, showGenerateResumeModal, reGeneratePDF, hideGenerateResumeModal } = this.props;
         if (order_data && order_data.id) {
             if (!resume_generated) {
                 const swalWithBootstrapButtons = Swal.mixin({
@@ -151,49 +151,51 @@ class EditPreview extends Component {
     }
 
     render() {
-        const {ui: {loader}, userInfo: {first_name, last_name, number, email, upload_resume: uploadResume}, history: {location: {pathname}}} = this.props;
+        const { ui: { loader }, userInfo: { first_name, last_name, number, email, upload_resume: uploadResume }, history: { location: { pathname } } } = this.props;
         const showNote = localStorage.getItem('showNote') || '';
-        const {visibleNote} = this.state;
+        const { visibleNote } = this.state;
         return (
             <div>
                 {
                     !!(loader) &&
-                    <LoaderPage/>
+                    <LoaderPage />
                 }
                 <Header
                     userName={first_name}
                     lastName={last_name}
                     number={number}
-                    email={email}/>
+                    email={email}
+                    location={this.props.location}
+                />
                 <div className="page-container">
-                    <SelectTemplateModal {...this.props} page={'edit'}/>
+                    <SelectTemplateModal {...this.props} page={'edit'} />
                     <TopBar {...this.props} />
                     <section className={'flex-container mt-30'}>
-                        <LeftSideBar {...this.props} onChange={this.allowUploadResume} generateResumeAlert={this.generateResumeAlert}/>
-                        <RightSection {...this.props} generateResumeAlert={this.generateResumeAlert}/>
+                        <LeftSideBar {...this.props} onChange={this.allowUploadResume} generateResumeAlert={this.generateResumeAlert} />
+                        <RightSection {...this.props} generateResumeAlert={this.generateResumeAlert} />
                     </section>
                     {
                         pathname === '/resume-builder/preview/' && !!(!uploadResume) && !!(!showNote.length) && !!(visibleNote) &&
                         < div className="sticky-msg">
-                        <span className="pt-20">
-                        <figure>
-                        <i className="icon-thumbsup"></i>
-                        Well Done!
+                            <span className="pt-20">
+                                <figure>
+                                    <i className="icon-thumbsup"></i>
+                                    Well Done!
                         </figure>
-                        </span>
-                        <span>
-                        <strong>Update Resume</strong>
-                        <p>Your resume is ready to help you
-                        search best jobs, update it on your
+                            </span>
+                            <span>
+                                <strong>Update Resume</strong>
+                                <p>Your resume is ready to help you
+                                search best jobs, update it on your
                         shine profile</p>
-                        <button className="orange-button" onClick={this.allowUploadResume}>Update</button>
-                        </span>
-                        <i className="icon-close" onClick={this.removeNote}></i>
+                                <button className="orange-button" onClick={this.allowUploadResume}>Update</button>
+                            </span>
+                            <i className="icon-close" onClick={this.removeNote}></i>
                         </div>
                     }
                 </div>
-                
-                <Footer/>
+
+                <Footer />
 
             </div>
         )
@@ -214,7 +216,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         "fetchEntityInfo": () => {
             return new Promise((resolve, reject) => {
-                return dispatch(fetchPersonalInfo({info: '', resolve, reject}))
+                return dispatch(fetchPersonalInfo({ info: '', resolve, reject }))
             })
 
         },
@@ -230,11 +232,11 @@ const mapDispatchToProps = (dispatch) => {
         },
         "fetchDefaultCustomization": (templateId) => {
             return new Promise((resolve, reject) => {
-                return dispatch(fetchDefaultCustomization({templateId, resolve, reject}))
+                return dispatch(fetchDefaultCustomization({ templateId, resolve, reject }))
             })
         },
         "updateSelectedTemplate": (personalDetails) => {
-            const {gender, date_of_birth, extracurricular} = personalDetails;
+            const { gender, date_of_birth, extracurricular } = personalDetails;
             personalDetails = {
                 ...personalDetails,
                 ...{
@@ -245,7 +247,7 @@ const mapDispatchToProps = (dispatch) => {
                 }
             }
             return new Promise((resolve, reject) => {
-                dispatch(updatePersonalInfo({personalDetails, resolve, reject}));
+                dispatch(updatePersonalInfo({ personalDetails, resolve, reject }));
             })
         },
         "reorderSection": (payload) => {
@@ -277,7 +279,7 @@ const mapDispatchToProps = (dispatch) => {
         },
         "loginCandidate": (token = '') => {
             return new Promise((resolve, reject) => {
-                dispatch(loginCandidate({info: {alt: ''}, resolve, reject, isTokenAvail: false}))
+                dispatch(loginCandidate({ info: { alt: '' }, resolve, reject, isTokenAvail: false }))
             })
         },
     }

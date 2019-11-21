@@ -18,7 +18,7 @@ from .views import (CandidateCreateView, CandidateRetrieveUpdateView, SkillRetri
                     CandidateLanguageRetrieveUpdateView,
                     CandidateResumePreview,ProfileEntityBulkUpdateView, InterestView,
                     OrderCustomisationListView,OrderCustomisationRUDView,ResumeImagePreviewView,
-                    SuggestionApiView, EntityReorderView,PDFRefreshAPIView)
+                    SuggestionApiView, EntityReorderView,PDFRefreshAPIView,SessionAvailabilityAPIView)
 
 #inter app imports
 
@@ -62,5 +62,6 @@ urlpatterns = [
     url(r'^candidate/(?P<candidate_id>[0-9a-z]+)/refresh-order/(?P<order_id>[0-9]+)/$', PDFRefreshAPIView.as_view()),
     url(r'^interest-list/$', InterestView.as_view()),
     url(r'^suggestion/$', SuggestionApiView.as_view()),
+    url(r'^session/$',SessionAvailabilityAPIView.as_view())
 
 ]

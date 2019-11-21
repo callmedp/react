@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './home.scss'
-import { getCandidateId, loginCandidate, feedbackSubmit, getComponentTitle, getCandidateShineDetails } from "../../../store/landingPage/actions";
+import { getCandidateId, loginCandidate, feedbackSubmit, getComponentTitle, getCandidateShineDetails, checkSessionAvaialability } from "../../../store/landingPage/actions";
 import { connect } from "react-redux";
 import Banner from "./Banner/banner.jsx";
 import ResumeSlider from "./ResumeSlider/resumeSlider.jsx";
@@ -10,10 +10,13 @@ import Header from "../../Common/Header/header.jsx";
 import LoaderPage from '../../Loader/loaderPage.jsx'
 import { scroller } from 'react-scroll';
 import queryString from "query-string";
+import LoginModal from "../../Modal/loginModal";
 import { hideModal, showModal, showLoginModal, hideLoginModal } from "../../../store/ui/actions";
 import { displaySelectedTemplate } from '../../../store/template/actions';
 import { eventClicked } from '../../../store/googleAnalytics/actions/index';
-
+import {
+    Redirect
+} from 'react-router-dom'
 
 class Home extends Component {
     constructor(props) {
@@ -36,6 +39,7 @@ class Home extends Component {
         this.state.token = token;
         this.state.login = login;
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
+        this.handleLoginSuccess = this.handleLoginSuccess.bind(this);
     }
 
 
@@ -65,12 +69,39 @@ class Home extends Component {
         }
     }
 
+
+    handleLoginSuccess() {
+        const { history, location } = this.props;
+        const pathFrom = location.state && location.state.from || '';
+
+        if (pathFrom) {
+            history.push(pathFrom);
+        }
+        else {
+            history.push('/resume-builder/edit/?type=profile')
+        }
+    }
     async componentDidMount() {
         if (this.state.token) {
             await this.props.loginCandidate({ alt: this.state.token }, this.props.history, true);
         }
         if (this.state.login === 'false') {
-            this.props.showLoginModal()
+            const isSessionAvailable = await this.props.checkSessionAvaialability();
+            if (isSessionAvailable) {
+                await this.props.getCandidateShineDetails()
+                // redirect back from where it comes
+                const { state } = this.props.location;
+                if (state && state.from) {
+                    this.props.history.push(state.from);
+                }
+            }
+            else {
+                await this.props.showLoginModal()
+                // const { state } = this.props.location;
+                // if (state && state.from) {
+                //     this.props.history.push(state.from);
+                // }
+            }
         }
 
     }
@@ -104,6 +135,7 @@ class Home extends Component {
                 <Header userName={first_name} page={'home'} userInfo={userInfo} eventClicked={eventClicked}
                     feedback={feedback} getclass={this.state.scrolled ? 'color-change' : ''} location={this.props.location} />
                 <Banner userName={first_name} eventClicked={eventClicked} />
+                <LoginModal {...this.props} handleLoginSuccess={this.handleLoginSuccess} />
                 <section className="section-container">
                     <h2>Resume builder advantages</h2>
                     <strong className="section-container--sub-head">Resume builder advantages which will make your
@@ -316,9 +348,9 @@ const mapDispatchToProps = (dispatch) => {
                 return dispatch(loginCandidate({ info: payload, resolve, reject, history, isTokenAvail: isTokenAvail }))
             })
         },
-        "getCandidateShineDetails":()=> {
-            return new Promise((resolve, reject)=> {
-                return dispatch(getCandidateShineDetails({resolve, reject}))
+        "getCandidateShineDetails": () => {
+            return new Promise((resolve, reject) => {
+                return dispatch(getCandidateShineDetails({ resolve, reject }))
             })
         },
         'showModal': () => {
@@ -341,6 +373,11 @@ const mapDispatchToProps = (dispatch) => {
         },
         'eventClicked': (data) => {
             return dispatch(eventClicked(data))
+        },
+        'checkSessionAvaialability': () => {
+            return new Promise((resolve, reject) => {
+                return dispatch(checkSessionAvaialability({ resolve, reject }))
+            })
         }
     }
 };

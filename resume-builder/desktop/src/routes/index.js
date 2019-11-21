@@ -7,16 +7,17 @@ import DownloadContainer from '../components/Core/Payment/DownloadResume/downloa
 import Middleware from '../middlewares/middleware'
 
 let middleware =new Middleware();
-export const RouteWithSubRoutes = route => (
+export const RouteWithSubRoutes = route => {
+    return(
     <Route
         path={route.path}
         exact={route.exact}
         render={props => 
             // pass the sub-routes down to keep nesting
-            middleware.routeToDisplay(route.middlewares,<route.component {...props} routes={route.routes}/>)
+            middleware.routeToDisplay(route.middlewares,<route.component {...props} routes={route.routes}/>,route.path)
         }
     />
-);
+)};
 
 
 const AppRouter = () => (

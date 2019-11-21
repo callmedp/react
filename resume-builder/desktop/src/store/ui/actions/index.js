@@ -17,7 +17,8 @@ import {
     SHOW_HELP_MODAL,
     UPDATE_UI,
     SHOW_LOGIN_MODAL,
-    HIDE_LOGIN_MODAL
+    HIDE_LOGIN_MODAL,
+    SUCCESS_LOGIN
 } from "./actionTypes";
 
 export const updateUi = (paylaod) => {
@@ -161,6 +162,15 @@ export const hideLoginModal = () => {
         data: {loginModal: false}
     }
 }
+
+export const successLogin = (payload) => {
+    return {
+        type: SUCCESS_LOGIN,
+        payload
+    }
+}
+
+
 
 
 

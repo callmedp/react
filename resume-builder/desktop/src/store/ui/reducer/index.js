@@ -18,7 +18,8 @@ import {
     HIDE_HELP_MODAL,
     SHOW_HELP_MODAL,
     SHOW_LOGIN_MODAL,
-    HIDE_LOGIN_MODAL
+    HIDE_LOGIN_MODAL,
+    SUCCESS_LOGIN
 
 } from "../actions/actionTypes";
 
@@ -36,7 +37,8 @@ const initialState = {
     'suggestionType': 'experience',
     'previewClicked' : false,
     'helpModal': false,
-    'loginModal': false 
+    'loginModal': false ,
+    'successLogin': true
 };
 
 export const uiReducer = (state = initialState, action) => {
@@ -162,6 +164,12 @@ export const uiReducer = (state = initialState, action) => {
             }
         }
         case HIDE_LOGIN_MODAL: {
+            return {
+                ...state,
+                ...action.data
+            }
+        }
+        case SUCCESS_LOGIN: {
             return {
                 ...state,
                 ...action.data

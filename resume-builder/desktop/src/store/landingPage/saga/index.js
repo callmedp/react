@@ -193,12 +193,28 @@ function* getComponentTitle(action) {
     }
 }
 
+
+function* checkSessionAvaialability(action) {
+    try {
+        let { payload: { resolve, reject } } = action;
+        let result = yield call(Api.checkSessionAvaialability)
+        if (result["error"]) {
+            resolve(false)
+        }
+        const { data } = result;
+        resolve(data['result']);
+    } catch (e) {
+        console.log(e);
+    }
+}
 export default function* watchLandingPage() {
     yield takeLatest(Actions.GET_CANDIDATE_ID, getCandidateId);
     yield takeLatest(Actions.LOGIN_CANDIDATE, loginCandidate);
     yield takeLatest(Actions.FEEDBACK_SUBMIT, feedbackSubmit);
     yield takeLatest(Actions.GET_HOME_COMPONENT_TITLE, getComponentTitle);
     yield takeLatest(Actions.GET_CANDIDATE_SHINE_DETAILS, getCandidateShineDetails);
+    yield takeLatest(Actions.CHECK_SESSION_AVAILABILITY, checkSessionAvaialability);
+
 
 
 }

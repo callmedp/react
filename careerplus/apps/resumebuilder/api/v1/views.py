@@ -859,6 +859,23 @@ class SuggestionApiView(APIView):
             status=status.HTTP_200_OK
         )
 
+class SessionAvailabilityAPIView(APIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = ()
+    serializer_class = None
+
+    def get(self, request, *args, **kwargs):
+        if (request.user and request.user.is_authenticated()):
+
+            return Response(
+                data={'result': True},
+                status=status.HTTP_200_OK
+            )
+        return Response(
+            data={'result': False},
+            status=status.HTTP_200_OK 
+        )
+
 
 class PDFRefreshAPIView(APIView):
     authentication_classes = (ShineUserAuthentication,)

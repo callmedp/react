@@ -16,13 +16,6 @@ class Header extends Component {
         this.scrollTo = this.scrollTo.bind(this);
         this.reachUsButton = this.reachUsButton.bind(this);
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
-        this.state = {
-            'template': ''
-        }
-        const values = queryString.parse(this.props.location.search);
-        const template = (values && values.template) || '';
-        this.state.template = template;
-
     }
 
     scrollTo(elem, offset, action, label) {
@@ -49,7 +42,10 @@ class Header extends Component {
     }
 
     componentDidMount() {
-        if (this.state.template === "false") {
+        const values = queryString.parse(this.props.location.search);
+        const template = (values && values.template) || '';
+
+        if (template === "false") {
             this.scrollTo('templates', -50, 'Templates', 'Header')
         }
 

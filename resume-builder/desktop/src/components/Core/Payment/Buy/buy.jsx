@@ -31,7 +31,7 @@ export class Buy extends Component {
         this.state = {
             'checked': 'product1'
         }
-        
+
         // check if the userexperinece is greater or equal to 4 years. (7 is the pid for 4 years (mapping done here))
 
         if (parseInt(localStorage.getItem('userExperience') || 0) >= 7) {
@@ -164,7 +164,9 @@ export class Buy extends Component {
                 <Header userName={first_name}
                     lastName={last_name}
                     number={number}
-                    email={email} />
+                    email={email}
+                    location={this.props.location}
+                />
                 <TemplateModal {...this.props} page={'buy'} />
                 <SelectTemplateModal {...this.props} page={"buy"} />
                 {
