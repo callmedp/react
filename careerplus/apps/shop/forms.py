@@ -11,7 +11,7 @@ from django.utils.html import format_html
 from shop.models import (
     Keyword, AttributeOptionGroup, AttributeOption,
     Attribute, Product, Category, ProductCategory,
-    FAQProduct, Chapter,
+    FAQProduct, Chapter, Skill, ProductSkill,
     ChildProduct, VariationProduct, RelatedProduct,
     UniversityCourseDetail)
 from partner.models import Vendor
@@ -1373,6 +1373,64 @@ class ChapterInlineFormSet(forms.BaseInlineFormSet):
         super(ChapterInlineFormSet, self).clean()
         if any(self.errors):
             return
+
+class SkillTypeForm(forms.Form):
+
+    product_skill = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-3 col-xs-12',
+            'placeholder':'Add skills'}),
+        required=False
+    )
+
+    required_skill = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-3 col-xs-12',
+            'placeholder':'Add skills'}),
+        required=False
+    )
+
+
+    def save(self, commit=True):
+        product = Product.objects.filter(id=self.data.get('product','')).first()
+
+        new_product_skills = self.cleaned_data.get('product_skill','')
+        new_required_skills = self.cleaned_data.get('required_skill','')
+
+        new_product_skills = new_product_skills.split(",") if new_product_skills!='' else []
+        new_required_skills = new_required_skills.split(",") if new_required_skills!='' else []
+
+        old_product_skills = []
+        old_required_skills = []
+
+        product_skill = ProductSkill.objects.filter(product=product, active=True)
+        for prd_sk in product_skill:
+            if prd_sk.relation_type == 1:
+                old_product_skills.append(prd_sk.skill.name.lower())
+            elif prd_sk.relation_type == 2:
+                old_required_skills.append(prd_sk.skill.name.lower())
+
+        added_skills = { 1: list(set(new_product_skills)-set(old_product_skills)),
+            2: list(set(new_required_skills)-set(old_required_skills))}
+
+        deleted_skills = {1: list(set(old_product_skills)-set(new_product_skills)),
+            2: list(set(old_required_skills)-set(new_required_skills))}
+
+        for relation_type, skill_list in deleted_skills.items():
+            for sk in skill_list:
+                ProductSkill.objects.filter(product=product,
+                    skill=Skill.objects.get(name=sk),
+                    relation_type=relation_type).update(active=False)  
+
+        for relation_type, skill_list in added_skills.items():
+            for sk in skill_list:
+                skill , created= Skill.objects.get_or_create(name=sk)
+                sps , created_skill = ProductSkill.objects.get_or_create(skill=skill, product=product, relation_type=relation_type)
+                sps.active = True
+                sps.save()
+
         
 # class AddProductBaseForm(forms.ModelForm):
 

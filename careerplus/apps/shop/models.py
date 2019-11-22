@@ -2642,7 +2642,7 @@ class ProductSkill(AbstractAutoDate):
         return name
 
     class Meta:
-        unique_together = ('product', 'skill')
+        unique_together = ('product', 'skill', 'relation_type')
         verbose_name = _('Product Skill')
         verbose_name_plural = _('Product Skills')
 
@@ -2670,7 +2670,7 @@ class ScreenProductSkill(AbstractAutoDate):
         return name
 
     class Meta:
-        unique_together = ('product', 'skill')
+        unique_together = ('product', 'skill', 'relation_type')
         verbose_name = _('Product Skill')
         verbose_name_plural = _('Product Skills')
 

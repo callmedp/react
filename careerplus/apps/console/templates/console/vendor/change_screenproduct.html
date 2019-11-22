@@ -125,6 +125,10 @@
       padding: 10px 10px;
       min-height: 122px;
     }
+
+    .tag:after{
+      display: none;
+    }
     
   </style>
   {% endcompress %}
@@ -503,6 +507,52 @@
                   </div>  
           </div>
         </div>
+
+        <div class="x_panel">
+          <div class="x_title">
+            <h2><i class="fa fa-thumb-tack"></i> Skill</h2>
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            <div class="accordion" id="accordion3" role="tablist" aria-multiselectable="true">
+                    <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" >
+                          {% csrf_token %}
+                          <!-- {{ prdchapter_form.management_form }} -->
+                      {% if prdskill_form.non_form_errors %}
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                          </button>
+                          {{ prdchapter_form.non_form_errors }}
+                        </div>
+                      {% endif %}
+                      <div class="form-group col-md-6">
+                        <label> Product Skills</label>
+                        {{ prdskill_form.product_skill }}
+                        <button type="button" class="copy-tag" data-copy-tag-id="id_product_skill">Copy</button>
+                      </div>
+                      <div class="form-group">
+                        <label> User Skills</label>
+                          {{ prdskill_form.required_skill }}
+                        <button type="button" class="copy-tag" data-copy-tag-id="id_required_skill">Copy</button>
+                      </div>
+                  
+                    <input type="hidden" name="product" value="{{object.pk}}">
+                      <input type="hidden" name="slug" value="skill">
+                      <div class="ln_solid"></div>
+                      <div class="form-group">
+                        <div class="col-md-9 col-sm-9 col-xs-9 col-md-offset-3">
+                          <button type="submit" class="btn btn-success save_scroll">Submit</button>
+                        </div>
+                      </div>
+                    
+                    </form>
+                  </div>  
+          </div>
+        </div>
         
         <div class="x_panel">
           <div class="x_title">
@@ -854,7 +904,7 @@
         </div>
 
 
-        <div class="x_panel">
+        <!-- <div class="x_panel">
           <div class="x_title">
             <h2><i class="fa fa-thumb-tack"></i> Skill</h2>
             <ul class="nav navbar-right panel_toolbox">
@@ -875,7 +925,7 @@
                       {{ prdskill_formset.non_form_errors }}
                     </div>
                   {% endif %}
-                <div class="inter-related-parent-div">    
+                <div class="inter-related-parent-div"> 
                 {% for inline_admin_form in prdskill_formset.forms %}
                 <div class="panel {% if forloop.last %} {% endif %}">
                   <a class="panel-heading {% if not inline_admin_form.errors %}collapsed{% endif %}" role="tab" id="heading2{{forloop.counter}}60" data-toggle="collapse" data-parent="#accordion60" href="#collapse2{{forloop.counter}}60" {% if inline_admin_form.errors %}aria-expanded="true"{% else %}aria-expanded="false"{% endif %} aria-controls="collapse2{{forloop.counter}}60">
@@ -954,7 +1004,7 @@
                 </form>
               </div>    
           </div>
-        </div>
+        </div> -->
         {% if prd_university_form %}
           <div class="x_panel">
             <div class="x_title">
@@ -1307,14 +1357,13 @@
   </script>
   <script type="text/javascript" src="{% static 'packages/jquery.tagsinput/src/jquery.tagsinput.js' %}"></script>
   <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
-  <script src="{% static 'console/js/myadmin/django-admin.multiselect.js' %}"></script>
-  <script src="{% static 'console/js/myadmin/django-admin-multiselect-media.js' %}"></script> 
   <!-- Switchery -->
   <script type="text/javascript" src="{% static 'packages/switchery/dist/switchery.min.js' %}"></script>
 
   <!-- Custom Theme Scripts -->
   <script type="text/javascript" src="{% static 'console/js/shop/console_shop.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/shop/change_screenproduct.js' %}"></script>
+  <script type="text/javascript" src="{% static 'packages/jquery.tagsinput/src/jquery.tagsinput.js' %}"></script>
     <script type="text/javascript">
  
   $("#application_process_priority").val(application_process_order.join(','))
@@ -1400,9 +1449,54 @@
     }
     $("#benefits_priority").val(benefits_order.join(','))
 });
+
+  $('#id_product_skill').tagsInput({
+        width: 'auto',
+        'delimiter': [','],   // Or a string with a single delimiter. Ex: ';'
+    });
+    paste_tage('id_product_skill')
+
+  $('#id_required_skill').tagsInput({
+        width: 'auto',
+        'delimiter': [','],   // Or a string with a single delimiter. Ex: ';'
+    });
+    paste_tage('id_required_skill')
+
+    function paste_tage(tag_id){
+      $("#"+tag_id+"_tag").on('paste',function(e){
+        var element=this;
+        setTimeout(function () {
+            var text = $(element).val();
+            var target=$("#"+tag_id);
+            var tags = (text).split(/[ ,]+/);
+            for (var i = 0, z = tags.length; i<z; i++) {
+                  var tag = $.trim(tags[i]);
+                  if (!target.tagExist(tag)) {
+                        target.addTag(tag);
+                  }
+                  else
+                  {
+                      $("#"+tag_id+"_tag").val('');
+                  }
+             }
+        }, 0);
+    });
+  }
+
+  $('.copy-tag').click(function(){
+      let elem_id = $(this).attr('data-copy-tag-id');
+      let k = $("#"+elem_id).siblings(".tagsinput").children('.tag')
+      let tags = [];
+      for (var i = k.length; i--;) {  
+          tags.push($(k[i]).text().substring(0, $(k[i]).text().length -  1).trim());  
+      }
+      element = $('<textarea>').appendTo('body').val(tags.join(',')).select()
+      document.execCommand('copy')
+      element.remove()
+    });
   </script>
   {% endcompress %}
 
-  {{prdskill_formset.media}}
+  <!-- {{prdskill_formset.media}} -->
 
 {% endblock js_block %}
