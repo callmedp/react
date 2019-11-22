@@ -241,6 +241,7 @@ DURATION_DICT = {
 ATTRIBUTE_OPTION = {
     'BD': 'Basic + More Deliverable',
     'BS': 'Basic',
+    'TR': 'Trial'
 }
 
 ##DO NOT CHANGE#

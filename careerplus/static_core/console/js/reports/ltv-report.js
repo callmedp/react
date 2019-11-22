@@ -31,7 +31,7 @@ const getLTVRecords = (year,month) =>{
     $('.loader').show()
     $('body').addClass('body-overflow')
 
-    $.get(`/order/api/v1/ltv-report/${year}/${month}`,(data)=>{
+    $.get(`/api/v1/order/ltv-report/${year}/${month}`,(data)=>{
         
         $('#messages').empty()
         if(data.count === 0){

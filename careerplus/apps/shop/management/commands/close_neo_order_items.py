@@ -12,7 +12,7 @@ from order.models import OrderItem
 from shop.models import PracticeTestInfo
 class Command(BaseCommand):
     """
-        Custom command to Update Crm Products.
+        Custom command to Close Neo Order Items.
     """
     help = 'Update Products CRM'
 
@@ -23,6 +23,7 @@ class Command(BaseCommand):
         order_item = OrderItem.objects.filter(
             product__vendor__slug='neo',
             order__status__in=[1, 3],
+            no_process=False,
             oi_status=5
         )
         neo_closing_count = 0
@@ -31,7 +32,7 @@ class Command(BaseCommand):
             test_info = oi.test_info.first()
             if test_info:
                 status = NeoApiMixin().get_student_status_on_neo(email=test_info.email)
-                if status == 'onboard':
+                if status == 'onboard' or status == 'trial':
                     test_info.is_boarded = True
                     if not test_info.test_data:
                         json_rep = NeoApiMixin().get_pt_result(email=email)

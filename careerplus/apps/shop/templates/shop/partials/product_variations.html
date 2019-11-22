@@ -24,6 +24,9 @@
               <td></td>
               <td>Study Mode</td>
               <td>Access Duration</td>
+              {% if prd_vendor_slug == 'neo' %}
+                  <td>Course Type</td>
+              {% endif %}
               <td>Certification</td>
               <td>Level</td>
               <td>Price</td>
@@ -39,6 +42,9 @@
               {%else%}
                 1 Day
               {% endif %}</td>
+              {% if prd_vendor_slug == 'neo' %}
+                <td>{{vars.type|get_choice_display:"ATTRIBUTE_OPTION"}}</td>
+              {% endif %}
               <td>{% if vars.certify %}
                 Yes {% else %}
                 No{% endif %}</td>

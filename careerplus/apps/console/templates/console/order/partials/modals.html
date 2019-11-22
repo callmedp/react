@@ -1,4 +1,71 @@
+{% load static %}
+{% block emailnumbermodals %}
 
+<div class="modal fade" id="alternatecontact_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content alternatecontact">
+      <div class="modal-header alternatecontact__header">
+        <button type="button" class="close alternatecontact__close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body text-center">
+        <i class="alternatecontact__bg"></i>
+        <h2 class="modal-title text-center alternatecontact__heading mt-20" id="myModalLabel">Add alternate contact</h2>
+        <form class="mt-30 mb-20" id="orderEmailMobileUpdate">
+          <div class="form-group">
+            <input type="text" class="form-control" id="alt_email" name="alt_email" value="" placeholder="Email">
+            <span class="error-txt"></span>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" id="alt_number" name="alt_mobile" value="" placeholder="Mobile">
+            <span class="error-txt"></span>
+          </div>
+          <button type="button" id="orderEmailMobileUpdateBtn" class="update_btn">Update</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock  %}
+
+{% block allmessagesmodals %}
+
+<div class="modal fade" id="allmessages_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content alternatecontact">
+      <div class="modal-header alternatecontact__header">
+        <button type="button" class="close alternatecontact__close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <h2 class="modal-title text-center alternatecontact__heading mb-30" id="MessageCounts">All messages</h2>
+        <img id="message-loader" style="left:85px;" src="{% static 'console/images/loader.gif' %}" class="modal-body" >
+        <div id="MessagesModal">
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock  %}
+
+{% block allactionsmodals %}
+
+<div class="modal fade" id="allactions_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content alternatecontact">
+      <div class="modal-header alternatecontact__header">
+        <button type="button" class="close alternatecontact__close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <h2 class="modal-title text-center alternatecontact__heading mb-30" id="myModalLabel">Order item status/ action</h2>
+        <img id="loader" style="left:85px;" src="{% static 'console/images/loader.gif' %}" class="modal-body" >
+        <div id="orderItemOperationModal">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock  %}
 
 {% block emailmodals %}
 
@@ -59,3 +126,4 @@
 </div>
 </div>
 {% endblock %}
+

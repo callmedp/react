@@ -220,6 +220,9 @@ class DashboardDetailView(TemplateView):
             if self.oi.product.type_flow in [1, 12, 13]:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 24, 26, 27, 161, 162, 163, 164, 181])
 
+            elif self.oi.product.vendor.slug == 'neo':
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 33, 4, 161, 162, 163, 164])
+
             elif self.oi.product.type_flow in [2, 14]:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 6, 161, 162, 163, 164])
 
@@ -240,6 +243,7 @@ class DashboardDetailView(TemplateView):
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 6, 101, 161, 162, 163, 164])
             elif self.oi.product.type_flow == 16:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 6, 4])
+
             context.update({
                 "oi": self.oi,
                 "max_draft_limit": settings.DRAFT_MAX_LIMIT,

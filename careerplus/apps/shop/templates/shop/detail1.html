@@ -65,9 +65,9 @@
 {% if whatsapp_icon %}
 {% for key,value in whatsapp_icon.items %}
 {% if product.is_course and key == "product-course-number" %}
-<a href="https://api.whatsapp.com/send?phone=91{{value}}"><div class="icon-whatsApp"></div></a>
+<a href="https://api.whatsapp.com/send?phone=91{{value}}&text=I need your help"><div class="icon-whatsApp"></div></a>
 {% elif product.is_writing and key == "product-service-number" or product.is_service and key == "product-service-number" %}
-<a href="https://api.whatsapp.com/send?phone=91{{value}}"><div class="icon-whatsApp"></div></a>
+<a href="https://api.whatsapp.com/send?phone=91{{value}}&text=I need your help"><div class="icon-whatsApp"></div></a>
 {% endif %}
 {% endfor %}
 {% endif %}
