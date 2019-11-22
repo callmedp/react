@@ -64,8 +64,6 @@ function* getPersonalDetails(action) {
 
         const result = yield call(Api.fetchPersonalInfo, candidateId);
 
-        console.log('result ---is --', result,localStorage);
-
         if (result['error']) {
             reject(new Error(result['errorMessage']));
             Toast.fire({
