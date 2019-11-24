@@ -752,6 +752,9 @@ class OrderDetailView(DetailView):
 
     def _get_visible_order_items_for_order(self,order):
         order_items = order.orderitems.all().select_related('product', 'partner').order_by('id')
+
+        if self.request.user.is_superuser:
+            return order_items
         
         #Handle vendor users
         vendor_ids = [x.vendee.id for x in VendorHierarchy.objects.filter(\
@@ -783,7 +786,8 @@ class OrderDetailView(DetailView):
         if not last_status_object:
             last_status = "Not Done"
         else:
-            timestamp = '\n' + date_timezone_convert(last_status_object.created).strftime('%b. %d, %Y, %I:%M %P ')
+            timestamp = '\n' + date_timezone_convert(
+                last_status_object.created).strftime('%b. %d, %Y, %I:%M %p ')
             last_status = last_status_object.get_wc_status()
             last_status += timestamp
         
@@ -1581,6 +1585,49 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
     def get_context_data(self, **kwargs):
         context = super(ClosedOrderItemQueueVeiw, self).get_context_data(**kwargs)
         paginator = Paginator(context['closed_oi_list'], self.paginated_by)
+        # this mapping is created to decrease no of hits
+        oi_data_mapping = {}
+        start_index = (int(self.page)-1)*50
+        end_index = start_index+50
+        oi_list = context.get('object_list',[])
+        oi_list = oi_list[start_index:end_index]
+
+        orders = Order.objects.filter(id__in=[oi.order_id for oi in oi_list if oi.order_id])\
+                .only('id','number','first_name','last_name','payment_date')
+        order_id_mapping = {order.id:order for order in orders}
+
+        products = Product.objects.filter(id__in=[oi.product_id for oi in oi_list if oi.product_id])\
+                .only('id')
+        product_id_mapping = {product.id:product for product in products}
+
+        oi_delivery_service_list = DeliveryService.objects.filter(id__in=[oi.delivery_service_id for oi in oi_list\
+                                    if oi.delivery_service_id]).only('name')
+        delivery_service_mapping = {x.id:x for x in oi_delivery_service_list}
+
+        parent_ois = OrderItem.objects.filter(id__in=[oi.parent_id for oi in oi_list if oi.parent_id])\
+                    .only('id')
+        parent_oi_id_mapping = {oi.id:oi for oi in parent_ois}
+
+        parent_oi_products = Product.objects.filter(id__in=[oi.product_id for oi in parent_ois if oi.product_id])\
+                            .only('id')
+        parent_oi_product_id_mapping = {product.id:product for product in parent_oi_products}
+
+        for oi in oi_list:
+            order = order_id_mapping.get(oi.order_id,None)
+            product = product_id_mapping.get(oi.product_id,None)
+            delivery_service = delivery_service_mapping.get(oi.delivery_service_id,None)
+            parent = parent_oi_id_mapping.get(oi.parent_id,None) if oi.parent_id else None
+            parent_product = parent_oi_product_id_mapping.get(parent.product_id,None) if parent else None
+            oi_data_mapping.update({
+                oi.id:{
+                    'order':order,
+                    'product':product,
+                    'parent':parent,
+                    'parent_product':parent_product,
+                    'delivery_service':delivery_service,
+                }
+            })
+            
         context.update(self.pagination(paginator, self.page))
         var =self.sel_opt
         alert = messages.get_messages(self.request)
@@ -1593,6 +1640,7 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
             "query": self.query,
             "filter_form": filter_form,
             var:'checked',
+            'oi_data_mapping':oi_data_mapping
         })
 
         return context
@@ -1665,9 +1713,7 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
 
-        return queryset.select_related(
-            'order', 'product', 'assigned_by',
-            'assigned_to', 'delivery_service').order_by('-modified')
+        return queryset.order_by('-modified')
 
 
 @Decorate(stop_browser_cache())
@@ -3364,7 +3410,6 @@ class CertficationProductQueueView(PaginationMixin, ListView):
                 product__type_flow=2, no_process=False,
                 oi_status__in=[5, 4],
                 product__vendor__slug='neo',
-                order__welcome_call_done=False
             )
         ).exclude(
                 wc_sub_cat__in=[64, 65]

@@ -416,7 +416,9 @@ NEO_URL = {
     'pt_result': 'https://etestapi.dyned.com/pt/result',
     'board_user': 'https://universaldashboard.id.dyned.com/api/v1/student/onboard',
     'user_detail': 'https://universaldashboard.id.dyned.com/api/v1/student/',
-    'jwt_token': 'https://myneo.space/api/v1/jwt/token-request'
+    'jwt_token': 'https://myneo.space/api/v1/jwt/token-request',
+    'get-sso-profile': 'https://myneo.space/api/v1/sso/user/{}/get/{}',
+    'update-sso-profile': 'https://myneo.space/api/v1/dsa/admin/update-profile-sso/{}'
 }
 NEO_USERNAME = 'shineadmin@shine.com'
 NEO_PASSWORD = 'MPgddK5vpM'

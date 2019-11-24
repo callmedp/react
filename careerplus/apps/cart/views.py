@@ -224,11 +224,11 @@ class PaymentLoginView(TemplateView, CartMixin):
                         "name": guest_name,
                     })
                     candidate_id, error = user_register(data=data)
-                    
+
                     # setting guest candidate id for thank you upload fix
                     self.request.session['guest_candidate_id'] = candidate_id
 
-                    
+
                     # if error:
                     # email_error = error
                     # context = self.get_context_data()
@@ -476,7 +476,7 @@ class PaymentShippingView(UpdateView, CartMixin):
         return context
 
     def post(self, request, *args, **kwargs):
-       
+
         self.object = self.get_object()
         form = self.get_form()
 
@@ -497,7 +497,7 @@ class PaymentShippingView(UpdateView, CartMixin):
 
                     candidate_id, error = user_register(data=data)
 
-                
+
                     obj.owner_id = candidate_id
 
                     if request.session.get('email'):
@@ -551,10 +551,10 @@ class PaymentSummaryView(TemplateView, CartMixin):
         if not self.cart_obj:
             return HttpResponseRedirect(reverse('homepage'))
 
-        if not self.cart_obj.owner_id: 
+        if not self.cart_obj.owner_id:
             self.cart_obj = self.getCartObject()
-        
-        if self.request.session.get('email') and not self.cart_obj.email: 
+
+        if self.request.session.get('email') and not self.cart_obj.email:
             self.cart_obj.email = self.request.session.get('email')
         if self.request.session.get('mobile_no') and not self.cart_obj.mobile:
             self.cart_obj.mobile = self.request.session.get('mobile_no')
@@ -566,7 +566,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
             self.cart_obj.last_name = self.request.session.get('last_name')
 
         self.cart_obj.save()
-    
+
 
         return None
 
@@ -655,12 +655,12 @@ class PaymentSummaryView(TemplateView, CartMixin):
 
         context.update({
             "cart_items": cart_items,
-            "cart_contain_items" : True if len(cart_items)  else  False 
+            "cart_contain_items" : True if len(cart_items)  else  False
         })
 
         return context
-    
-        
+
+
 
 
 class UpdateDeliveryType(View, CartMixin):

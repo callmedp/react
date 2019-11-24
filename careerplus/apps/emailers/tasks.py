@@ -5,7 +5,6 @@ from django.utils import timezone
 
 from emailers.email import SendMail
 from emailers.sms import SendSMS
-from order.models import Order
 from order.functions import close_resume_booster_ois
 
 @task(name="send_email_task")
@@ -44,6 +43,7 @@ def send_email_for_base_task(subject=None, body=None, to=[], headers=None, oi=No
 
 @task(name="send_sms_for_base_task")
 def send_sms_for_base_task(mob=None, message=None, oi=None, status=None):
+    from order.models import Order
     SendSMS().base_send_sms(mob, message)
     if oi:
         obj = Order.objects.get(pk=oi)

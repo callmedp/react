@@ -39,7 +39,7 @@ from shop.models import (
     Category, Keyword,
     Attribute, AttributeOptionGroup,
     Product, Chapter, Skill, ProductAuditHistory, UniversityCoursePayment,
-    SubHeaderCategory,SubCategory
+    SubHeaderCategory,SubCategory, ProductSkill
 )
 from homepage.models import Testimonial
 from .shop_form import (
@@ -72,7 +72,7 @@ from shop.forms import (
     VariationInlineFormSet, ProductChildForm,
     ChildInlineFormSet, ProductRelatedForm,
     RelatedInlineFormSet, ChangeProductVariantForm,
-    ChapterInlineFormSet, ProductChapterForm)
+    ChapterInlineFormSet, ProductChapterForm, SkillTypeForm)
 
 from shop.utils import CategoryValidation, ProductValidation
 from faq.forms import (
@@ -1345,6 +1345,21 @@ class ChangeProductView(DetailView):
                     'vendor': vendor},)
             context.update({'prdfaq_formset': prdfaq_formset})
 
+        if self.object:
+            product_skills = ",".join(prd_sk.skill.name.lower() for prd_sk in 
+                ProductSkill.objects.filter(product=self.get_object(), 
+                    active=True, relation_type=1))
+
+            required_skills = ",".join(rqd_sk.skill.name.lower() for rqd_sk in
+                ProductSkill.objects.filter(product=self.get_object(), 
+                    active=True, relation_type=2))             
+
+            prdskill_form = SkillTypeForm(initial=
+                {'product_skill':product_skills,
+                'required_skill':required_skills,}
+                )
+            context.update({'prdskill_form':prdskill_form})
+
         ProductChapterFormSet = inlineformset_factory(
             Product, Chapter, fk_name='product',
             form=ProductChapterForm,
@@ -1801,6 +1816,32 @@ class ChangeProductView(DetailView):
                                 request, [
                                     "console/shop/change_product.html"
                                 ], context)
+
+                    elif slug == 'skill':
+                        prdskill_form = SkillTypeForm(request.POST)
+                        from django.db import transaction
+                        if prdskill_form.is_valid():
+                            with transaction.atomic():
+                                prdskill_form.save()
+                            messages.success(
+                                self.request,
+                                "Product Skill Changed Successfully")
+                            return HttpResponseRedirect(
+                                reverse(
+                                    'console:product-change',
+                                    kwargs={'pk': obj.pk}))
+                        else:
+                            context = self.get_context_data()
+                            if prdskill_form:
+                                context.update({'prdskill_form':prdskill_form})
+                            messages.error(
+                                self.request,
+                                "Product Skill Change Failed, Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/shop/change_product.html"
+                                ], context)
+
 
                     elif slug == 'university':
                         form = UniversityCourseForm(request.POST, request.FILES, instance=obj.university_course_detail)

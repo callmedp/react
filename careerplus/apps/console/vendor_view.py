@@ -40,11 +40,12 @@ from .vendor_form import (
     ScreenProductFAQForm,
     ScreenFAQInlineFormSet,
     ScreenProductChapterForm,
+    ScreenSkillTypeForm,
     ScreenChapterInlineFormSet,
     ScreenProductVariationForm,
     ScreenVariationInlineFormSet,
-    ScreenProductSkillForm,
-    ScreenSkillInlineFormSet,
+    # ScreenProductSkillForm,
+    #ScreenSkillInlineFormSet,
     ScreenUniversityCourseForm,
     ScreenUniversityCoursePaymentForm,
     ScreenUniversityCoursesPaymentInlineFormset)
@@ -547,19 +548,34 @@ class ChangeScreenProductView(DetailView):
                     'vendor': vendor},)
             context.update({'prdfaq_formset': prdfaq_formset})
 
-        ScreenProductSkillFormSet = inlineformset_factory(
-            ProductScreen, ScreenProductSkill,
-            fk_name='product',
-            form=ScreenProductSkillForm,
-            can_delete=True,
-            formset=ScreenSkillInlineFormSet, extra=1,
-            max_num=15, validate_max=True)
-
         if self.object:
-            prdskill_formset = ScreenProductSkillFormSet(
-                instance=self.get_object(),
-                form_kwargs={'object': self.get_object()})
-            context.update({'prdskill_formset': prdskill_formset})
+            product_skills = ",".join(prd_sk.skill.name.lower() for prd_sk in 
+                ScreenProductSkill.objects.filter(product=self.get_object(), 
+                    active=True, relation_type=1))
+
+            required_skills = ",".join(rqd_sk.skill.name.lower() for rqd_sk in
+                ScreenProductSkill.objects.filter(product=self.get_object(), 
+                    active=True, relation_type=2))             
+
+            prdskill_form = ScreenSkillTypeForm(initial=
+                {'product_skill':product_skills,
+                'required_skill':required_skills,}
+                )
+            context.update({'prdskill_form':prdskill_form})
+
+        # ScreenProductSkillFormSet = inlineformset_factory(
+        #     ProductScreen, ScreenProductSkill,
+        #     fk_name='product',
+        #     form=ScreenProductSkillForm,
+        #     can_delete=True,
+        #     formset=ScreenSkillInlineFormSet, extra=1,
+        #     max_num=15, validate_max=True)
+
+        # if self.object:
+        #     prdskill_formset = ScreenProductSkillFormSet(
+        #         instance=self.get_object(),
+        #         form_kwargs={'object': self.get_object()})
+        #     context.update({'prdskill_formset': prdskill_formset})
 
         ScreenProductChapterFormSet = inlineformset_factory(
             ProductScreen, ScreenChapter, fk_name='product',
@@ -861,26 +877,11 @@ class ChangeScreenProductView(DetailView):
                                 ], context)
 
                     elif slug == 'skill':
-                        ScreenProductSkillFormSet = inlineformset_factory(
-                            ProductScreen, ScreenProductSkill, fk_name='product',
-                            form=ScreenProductSkillForm,
-                            can_delete=True,
-                            formset=ScreenSkillInlineFormSet, extra=0,
-                            max_num=15, validate_max=True)
-                        formset = ScreenProductSkillFormSet(
-                            request.POST, instance=obj,
-                            form_kwargs={'object': obj},)
+                        prdskill_form = ScreenSkillTypeForm(request.POST)
                         from django.db import transaction
-                        if formset.is_valid():
+                        if prdskill_form.is_valid():
                             with transaction.atomic():
-                                formset.save(commit=False)
-                                saved_formset = formset.save(commit=False)
-                                for ins in formset.deleted_objects:
-                                    ins.delete()
-
-                                for form in saved_formset:
-                                    form.save()
-                                formset.save_m2m()
+                                prdskill_form.save()
                             messages.success(
                                 self.request,
                                 "Product Skill Changed Successfully")
@@ -888,10 +889,40 @@ class ChangeScreenProductView(DetailView):
                                 reverse(
                                     'console:screenproduct-change',
                                     kwargs={'pk': obj.pk}))
+
+                        # ScreenProductSkillFormSet = inlineformset_factory(
+                        #     ProductScreen, ScreenProductSkill, fk_name='product',
+                        #     form=ScreenProductSkillForm,
+                        #     can_delete=True,
+                        #     formset=ScreenSkillInlineFormSet, extra=0,
+                        #     max_num=15, validate_max=True)
+                        # formset = ScreenProductSkillFormSet(
+                        #     request.POST, instance=obj,
+                        #     form_kwargs={'object': obj},)
+                        # from django.db import transaction
+                        # if formset.is_valid():
+                        #     with transaction.atomic():
+                        #         formset.save(commit=False)
+                        #         saved_formset = formset.save(commit=False)
+                        #         for ins in formset.deleted_objects:
+                        #             ins.delete()
+
+                        #         for form in saved_formset:
+                        #             form.save()
+                        #         formset.save_m2m()
+                        #     messages.success(
+                        #         self.request,
+                        #         "Product Skill Changed Successfully")
+                        #     return HttpResponseRedirect(
+                        #         reverse(
+                        #             'console:screenproduct-change',
+                        #             kwargs={'pk': obj.pk}))
                         else:
                             context = self.get_context_data()
-                            if formset:
-                                context.update({'prdskill_formset': formset})
+                            # if formset:
+                            #     context.update({'prdskill_formset': formset})
+                            if prdskill_form:
+                                context.update({'prdskill_form': prdskill_form})
                             messages.error(
                                 self.request,
                                 "Product Skill Change Failed, \
