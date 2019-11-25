@@ -81,7 +81,7 @@
          <!-- Most popular tests starts -->
          <div class="col-sm-12 col-lg-12 col-md-12">
             <div class="popular_test row" id="funcDiv">
-               {% for cat in category|slice:":8"  %}
+               {% for cat in category  %}
 
                <div class="testinside testinside-inner">
                   <span class="border-left {% cycle 'default' 'purple' 'olive' 'green' %}"></span>
@@ -94,9 +94,11 @@
                </div>
                {% endfor %}
             </div>
+             {% comment %}
             {%if category.count > 8 %}
             <button class="btn_white loadmore" id="loadmorebtn" onclick="loadmore();">Load more</button>
             {% endif %}
+             {% endcomment %}
          </div>
       </div>
       </div>

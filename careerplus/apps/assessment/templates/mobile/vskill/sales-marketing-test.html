@@ -74,7 +74,7 @@
     </div>
 
     <div class="popular_test" id="funcDiv">
-                       {% for cat in category|slice:":8"  %}
+                       {% for cat in category  %}
         <div class="popular_test_inside category">
             <a href="{% url 'assessment:vskill-subcategory' slug=cat.slug %}" title="{{cat.name}}">
                 <span class="border border{{forloop.counter0}}"></span>
@@ -86,9 +86,11 @@
         {% endfor %}
 
     </div>
+    {% comment %}
         {%if category.count > 8 %}
         <button class="load_more_button" id="loadmorebtn" onclick="loadmore();">Load more</button>
       {% endif %}
+    {% endcomment %}
 
     </div>
 {% endblock container %}
