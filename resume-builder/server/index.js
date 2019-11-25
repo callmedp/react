@@ -20,13 +20,17 @@ if (typeof window == 'undefined') {
         config: {
             staticUrl: process.env.STATIC_URL || '',
             siteDomain: process.env.SITE_DOMAIN || '',
-            msiteDomain: process.env.MSITE_DOMAIN || ''
+            siteProtocol: process.env.SITE_PROTOCOL || '',
         },
         location: {
             href: ''
         }
-    }
+    };
+
+    global.window.siteDomain = `${global.window.siteProtocol}://${global.window.siteDomain}`;
+
 }
+
 
 if (typeof fetch == 'undefined') {
     global.fetch = require('node-fetch');
@@ -43,21 +47,22 @@ if (typeof localStorage == 'undefined') {
             return global.localStorage[param1];
         },
         clear: () => {
-           let dummyObj  = {
-               ...{},
-               ...global.localStorage
-           };
-           Object.keys(dummyObj).forEach(el => {
-               if( ['setItem','getItem', 'removeItem','clear'].findIndex(el) === -1){
-                  delete  global.localStorage[el];
-               }
-           })
+            let dummyObj = {
+                ...{},
+                ...global.localStorage
+            };
+            Object.keys(dummyObj).forEach(el => {
+                if (['setItem', 'getItem', 'removeItem', 'clear'].findIndex(el) === -1) {
+                    delete global.localStorage[el];
+                }
+            })
         },
         removeItem: (param1) => {
             delete global.localStorage[param1]
         }
     }
 }
+
 const PORT = process.env.PORT || 8079;
 const app = express();
 let context = {
@@ -100,15 +105,15 @@ app.get('*', async (req, res) => {
                     paramObj['alt'] = req.query.token
                 }
                 result = await route.component.fetching(store, paramObj);
-              
-                context['title'] = result[result.length -1];
+
+                context['title'] = result[result.length - 1];
             } catch (e) {
                 console.log("Error in Api", e);
             }
         }
     }
 
-    const content = render(req.path, store, routes, context, timestamp, window.config.staticUrl, isMobile);
+    const content = render(req.path, store, routes, context, timestamp, window.config.staticUrl, isMobile, window.config.siteDomain);
     res.send(content);
 });
 

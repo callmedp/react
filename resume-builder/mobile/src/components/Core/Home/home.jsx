@@ -21,7 +21,7 @@ class Home extends Component {
             'token': '',
             'login': ''
         }
-        if (document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
+        if (typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
             document.getElementsByClassName('chat-bot')[0].style.display = 'none';
         }
         const values = queryString.parse(this.props.location.search);
@@ -89,16 +89,16 @@ class Home extends Component {
     }
 
     static getActions() {
-        return [loginCandidate, getComponentTitle]
+        return [getComponentTitle]
     }
 
     static async fetching({ dispatch }, params) {
         const actionList = Home.getActions()
         const results = [];
         for (const [index, value] of actionList.entries()) {
-            if (index == 0 && !(params && params.alt)) {
-                continue;
-            }
+            // if (index == 0 && !(params && params.alt)) {
+            //     continue;
+            // }
             results[index] = await new Promise((resolve, reject) => dispatch(value({
                 info: params,
                 resolve,

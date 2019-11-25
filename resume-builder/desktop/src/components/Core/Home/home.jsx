@@ -29,7 +29,8 @@ class Home extends Component {
             'token': '',
             'login': ''
         }
-        if (document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
+        console.log('-----', typeof document);
+        if ( typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
             document.getElementsByClassName('chat-bot')[0].style.display = 'none';
         }
 
@@ -88,7 +89,12 @@ class Home extends Component {
         if (this.state.login === 'false') {
             const isSessionAvailable = await this.props.checkSessionAvaialability();
             if (isSessionAvailable) {
-                await this.props.getCandidateShineDetails()
+                try {
+                    await this.props.getCandidateShineDetails()
+                }
+                catch (e) {
+                    console.log('error ---e', e);
+                }
                 // redirect back from where it comes
                 const { state } = this.props.location;
                 if (state && state.from) {
@@ -114,12 +120,17 @@ class Home extends Component {
         let actionList = Home.getActions();
         const results = []
         for (const [index, value] of actionList.entries()) {
-            results[index] = await new Promise((resolve, reject) => dispatch(value({
-                info: params,
-                resolve,
-                reject,
-                isTokenAvail: true
-            })))
+            try {
+                results[index] = await new Promise((resolve, reject) => dispatch(value({
+                    info: params,
+                    resolve,
+                    reject,
+                    isTokenAvail: true
+                })))
+            }
+            catch (e) {
+                console.log('New error - ', e);
+            }
         }
         return results;
     }

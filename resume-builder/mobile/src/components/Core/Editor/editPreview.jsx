@@ -23,11 +23,12 @@ class EditPreview extends Component {
         // check if the userexperinece is greater or equal to 4 years. (7 is the pid for 4 years (mapping done here))
  
         if (parseInt(localStorage.getItem('userExperience') || 0) >= 7) {
-            if(document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]){document.getElementsByClassName('chat-bot')[0].style.display = 'none';
+            console.log('---', typeof document);
+            if(typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]){document.getElementsByClassName('chat-bot')[0].style.display = 'none';
             }
         }
         else {
-            if(document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]){
+            if(typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]){
                 document.getElementsByClassName('chat-bot')[0].style.display = 'block';
             }
         }
