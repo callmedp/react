@@ -63,7 +63,7 @@
                     {% endif %} 
                 {% elif obj.oi_status == 161 or obj.oi_status == 162 or obj.oi_status == 163 %}
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
-                {% elif obj.order.auto_upload %}
+                {% elif obj.order.auto_upload and not obj.is_assigned %}
                     <p><strong>Status:</strong> Service is under progress</p>
                     <a href="javascript:void(0)" role="button" class="sidebar-secondary-trigger" id="upload_resume">Upload Resume</a>
                 {% else %}
@@ -101,7 +101,7 @@
                     {% endif %} 
                 {% elif obj.oi_status == 161 or obj.oi_status == 162 or obj.oi_status == 163 %}
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
-                {% elif obj.order.auto_upload %}
+                {% elif obj.order.auto_upload and not obj.is_assigned %}
                     <p><strong>Status:</strong> Service is under progress</p>
                     <a href="javascript:void(0)" role="button" class="sidebar-secondary-trigger" id="upload_resume">Upload Resume</a>
                 {% else %}
@@ -118,7 +118,7 @@
                     {% endif %} 
                 {% elif obj.oi_status == 161 or obj.oi_status == 162 or obj.oi_status == 163 %}
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
-                {% elif obj.order.auto_upload %}
+                {% elif obj.order.auto_upload and not obj.is_assigned %}
                     <p><strong>Status:</strong> Service is under progress</p>
                     <a href="javascript:void(0)" role="button" class="sidebar-secondary-trigger" id="upload_resume">Upload Resume</a>
                 {% else %}
@@ -162,7 +162,7 @@
 
                 {% elif obj.oi_status == 161 or obj.oi_status == 162 or obj.oi_status == 163 %}
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
-                {% elif obj.order.auto_upload %}
+                {% elif obj.order.auto_upload and not obj.is_assigned %}
                     <p><strong>Status:</strong> Service is under progress</p>
                     <a href="javascript:void(0)" role="button" class="sidebar-secondary-trigger" id="upload_resume">Upload Resume</a>
                 {% else %}

@@ -1058,11 +1058,10 @@ class OrderItem(AbstractAutoDate):
             last_oi_status=existing_obj.oi_status,
             assigned_to=self.assigned_to)
 
-    def remove_auto_upload_assign_user(self,existing_obj):
-        if self.oi_status == 2 and self.oi_status != existing_obj.oi_status and self.product.type_flow in [1,12,13,8,3,4]:
-            order = self.order
-            order.auto_upload = False
-            order.save()
+    def is_assigned(self):
+        if self.assigned_to:
+            return True
+        return False
 
     def save(self, *args, **kwargs):
         created = not bool(getattr(self, "id"))
@@ -1070,7 +1069,6 @@ class OrderItem(AbstractAutoDate):
         self.oi_status = 4 if orderitem and orderitem.oi_status == 4 else self.oi_status
         # handling combo case getting parent and updating child
         self.update_pause_resume_service(orderitem)
-        self.remove_auto_upload_assign_user(orderitem)
         obj = super().save(*args, **kwargs)  # Call the "real" save() method.       
         self.upload_service_resume_shine(orderitem)
         
