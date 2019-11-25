@@ -2,7 +2,6 @@ import bson
 import logging
 
 from shop.models import ShineProfileData
-from order.models import OrderItem
 from django.db.models import Q
 from pymongo import MongoClient
 from django.conf import settings

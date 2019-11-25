@@ -1,6 +1,7 @@
 {% extends "console/base_console.html" %}
 {% load static compress %}
 {% load humanize %}
+{% load console_tags %}
 {% load thumbnail %}
 
 
@@ -15,6 +16,12 @@
     <link href="{% static "packages/iCheck/skins/flat/green.css"  %}" rel="stylesheet" type="text/css">
     <link type="text/css" href="{% static "console/css/datepicker/daterangepicker.css" %}" rel="stylesheet">
     {% endcompress %}
+    <style>
+      .disable_row {
+        pointer-events: none;
+        background-color: #c0c2c3 !important;
+      }
+    </style>
 
 {% endblock css_block %}
 
@@ -215,11 +222,12 @@
 
                 <tbody id="body-table-list">
                   {% for obj in page %}
-                    <tr class="even pointer">
+
+                    <tr class="even pointer {% if obj.id|is_whole_refund:refund_order_dict %} disable_row {% endif %}">
                       <td class="a-center ">
                           <input autocomplete="off" type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
                       </td>
-                      <td>{{obj.number}}</td>
+                      <td>{{obj.number}}{% if obj.id|is_whole_refund:refund_order_dict %} <p> Refunded</p> {% endif %}</td>
                       <td>{{obj.first_name}} {{obj.last_name}}</td>
                         <td>
                     <div id="email{{obj.id}}">

@@ -1,15 +1,15 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Header from '../../../Common/Header/header.jsx';
 import './buy.scss';
 import * as action from '../../../../store/buy/actions';
-import {fetchThumbNailImages, fetchSelectedTemplateImage} from '../../../../store/template/actions/index'
-import {connect} from "react-redux";
-import {siteDomain} from "../../../../Utils/domains";
+import { fetchThumbNailImages, fetchSelectedTemplateImage } from '../../../../store/template/actions/index'
+import { connect } from "react-redux";
+import { siteDomain } from "../../../../Utils/domains";
 import Slider from "react-slick";
 import Loader from '../../../Common/Loader/loader.jsx';
 import BuyTemplateModal from '../../../Common/BuyTemplateModal/buyTemplateModal.jsx';
-import {eventClicked} from '../../../../store/googleAnalytics/actions/index'
-import {loginCandidate} from "../../../../store/landingPage/actions";
+import { eventClicked } from '../../../../store/googleAnalytics/actions/index'
+import { loginCandidate } from "../../../../store/landingPage/actions";
 
 
 
@@ -17,6 +17,18 @@ class Buy extends Component {
 
     constructor(props) {
         super(props);
+        // check if the userexperinece is greater or equal to 4 years. (7 is the pid for 4 years (mapping done here))
+       
+        if (parseInt(localStorage.getItem('userExperience') || 0) >= 7) {
+            if (document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
+                document.getElementsByClassName('chat-bot')[0].style.display = 'none';
+            }
+        }
+        else {
+            if (document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
+                document.getElementsByClassName('chat-bot')[0].style.display = 'block';
+            }
+        }
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
         this.state = {
             'checked': 'product1',
@@ -31,7 +43,7 @@ class Buy extends Component {
 
     redirectToCart() {
 
-        
+
         this.props.eventClicked({
             'action': 'PayNow',
             'label': 'Click'
@@ -47,30 +59,33 @@ class Buy extends Component {
             product = this.props.productIds[1]
         }
         const data = {
-            "prod_id": product.parent,
-            "addons": [],
-            "cart_type": 'cart',
-            "cv_id": product.id,
-            "req_options": [],
-            'add_resume': true
-
+            "prod_id": product.id,
+            "cart_type": 'cart'
         }
         this.props.addToCart(data);
     }
 
     closeModalStatus() {
-        this.setState({modal_status: false})
+        this.setState({ modal_status: false })
     }
 
     async openModal(index) {
         await this.props.fetchSelectedTemplateImage(index + 1)
-        this.setState({modal_status: true, template_id: index + 1})
+        this.setState({ modal_status: true, template_id: index + 1 })
     }
 
     async componentDidMount() {
         if (!localStorage.getItem('candidateId')) {
-            await loginCandidate()
+            await this.props.loginCandidate()
         }
+        // get userInfo from LocalStorage
+        if (localStorage.getItem('email')) window['email'] = localStorage.getItem('email')
+        else window['email'] = ''
+        if (localStorage.getItem('mobile')) window['mobile'] = localStorage.getItem('mobile')
+        else window['mobile'] = ''
+        if (localStorage.getItem('name')) window['name'] = localStorage.getItem('name')
+        else window['name'] = ''
+
         this.props.getProductIds();
         this.props.fetchThumbNailImages();
     }
@@ -88,7 +103,7 @@ class Buy extends Component {
     }
 
     editTemplate() {
-        const {eventClicked, history} = this.props;
+        const { eventClicked, history } = this.props;
         eventClicked({
             'action': 'EditTemplate',
             'label': 'Click'
@@ -103,9 +118,9 @@ class Buy extends Component {
             speed: 500,
             slidesToShow: 2,
         };
-        const {ui: {mainloader}, template: {thumbnailImages, templateImage}, productIds, history} = this.props
+        const { ui: { mainloader }, template: { thumbnailImages, templateImage }, productIds, history } = this.props
         const template = localStorage.getItem('selected_template') || 1;
-        const {checked, modal_status} = this.state
+        const { checked, modal_status } = this.state
         const price1 = productIds[0] ? productIds[0].inr_price : 999
         const discount1 = Math.floor(((1499 - price1) / 1499) * 100)
         const price2 = productIds[1] ? productIds[1].inr_price : 1248
@@ -113,11 +128,11 @@ class Buy extends Component {
         return (
 
             <div className="buy-container">
-                <Header page={"buy"} history={history}/>
-                {mainloader ? <Loader/> : ""}
+                <Header page={"buy"} history={history} />
+                {mainloader ? <Loader /> : ""}
                 {modal_status ? <BuyTemplateModal modal_status={modal_status}
-                                                  closeModalStatus={this.closeModalStatus}
-                                                  templateImage={templateImage}/> : ''}
+                    closeModalStatus={this.closeModalStatus}
+                    templateImage={templateImage} /> : ''}
 
                 <div className="pay-now">
                     <div className="pay-now__price">
@@ -126,8 +141,8 @@ class Buy extends Component {
                             className="fs-26 color-333 semi-bold">Rs. {checked === 'product1' ? price1 : price2}/-</span>
                     </div>
 
-                    <button className="btn btn__round btn__primary fs-" 
-                            onClick={this.redirectToCart.bind(this)}>Pay Now
+                    <button className="btn btn__round btn__primary fs-"
+                        onClick={this.redirectToCart.bind(this)}>Pay Now
                     </button>
                 </div>
 
@@ -139,12 +154,12 @@ class Buy extends Component {
                         <div className="buy__item">
                             <div className="buy__item--left">
                                 <input className="buy__item--input form__radio-input" type="radio" id="your-resume"
-                                       name="product-1"
-                                       checked={checked === 'product1' ? true : false}
-                                       onChange={this.handleOnChange.bind(this, 'product1')}></input>
+                                    name="product-1"
+                                    checked={checked === 'product1' ? true : false}
+                                    onChange={this.handleOnChange.bind(this, 'product1')}></input>
                                 <label className="buy__item--label form__radio-label" htmlFor="your-resume">
                                     <span className="form__radio-button"></span>
-                                    Buy your <br/>customised resume<br/>
+                                    Buy your <br />customised resume<br />
                                     <strong>Rs. {price1}/-</strong>
                                     <span className="fs-14 line-through">Rs. 1499 </span>
                                     <span className="fs-14 bold">Flat {discount1}% off</span>
@@ -154,10 +169,10 @@ class Buy extends Component {
                                 <span className="buy__item--image">
                                     {thumbnailImages.length === 5 ?
                                         <img src={`data:image/png;base64, ${thumbnailImages[template - 1]}`}
-                                             alt="Resume"/> :
+                                            alt="Resume" /> :
                                         <img
                                             src={`${this.staticUrl}react/assets/images/mobile/small-resume-${template}.jpg`}
-                                            alt="Custom resume"/>
+                                            alt="Custom resume" />
                                     }
                                 </span>
                                 <a className="fs-12 mt-5" onClick={this.editTemplate}>Edit</a>
@@ -168,9 +183,9 @@ class Buy extends Component {
                             <div className="buy__recommended--tag">Recommended</div>
                             <div className="buy__item--left form__radio-group">
                                 <input className="buy__item--input form__radio-input" type="radio" id="all-resumes"
-                                       name="product2"
-                                       checked={checked === 'product2' ? true : false}
-                                       onChange={this.handleOnChange.bind(this, 'product2')}></input>
+                                    name="product2"
+                                    checked={checked === 'product2' ? true : false}
+                                    onChange={this.handleOnChange.bind(this, 'product2')}></input>
                                 <label className="buy__item--label form__radio-label" htmlFor="all-resumes">
                                     <span className="form__radio-button"></span>
                                     Buy all 5 customised resumes
@@ -189,24 +204,24 @@ class Buy extends Component {
                                             thumbnailImages.map((el, index) => {
                                                 return (
                                                     <div className="buy__recommended__item" key={index}>
-                                                    <span className="buy__recommended__image">
-                                                        <span className="sprite icon--zoom"
-                                                              onClick={() => {
-                                                                  this.openModal(index)
-                                                              }}></span>
-                                                        <img src={`data:image/png;base64, ${el}`} alt="Custom resume"/>
-                                                    </span>
+                                                        <span className="buy__recommended__image">
+                                                            <span className="sprite icon--zoom"
+                                                                onClick={() => {
+                                                                    this.openModal(index)
+                                                                }}></span>
+                                                            <img src={`data:image/png;base64, ${el}`} alt="Custom resume" />
+                                                        </span>
                                                     </div>
                                                 )
                                             }) :
                                             [1, 2, 3, 4, 5].map((el, index) => {
                                                 return (
                                                     <div className="buy__recommended__item" key={index}>
-                                                    <span className="buy__recommended__image">
-                                                        <img
-                                                            src={`${this.staticUrl}react/assets/images/mobile/resumebig-${el}.jpg`}
-                                                            alt="Custom resume"/>
-                                                    </span>
+                                                        <span className="buy__recommended__image">
+                                                            <img
+                                                                src={`${this.staticUrl}react/assets/images/mobile/resumebig-${el}.jpg`}
+                                                                alt="Custom resume" />
+                                                        </span>
                                                     </div>
                                                 )
 
@@ -244,12 +259,12 @@ const mapDispatchToProps = (dispatch) => {
         },
         'fetchSelectedTemplateImage': (template_id) => {
             return new Promise((resolve, reject) => {
-                return dispatch(fetchSelectedTemplateImage({template_id, resolve, reject}))
+                return dispatch(fetchSelectedTemplateImage({ template_id, resolve, reject }))
             })
         },
         'addToCart': (data) => {
             return new Promise((resolve, reject) => {
-                dispatch(action.addToCart({data, resolve, reject}));
+                dispatch(action.addToCart({ data, resolve, reject }));
             })
         },
         'eventClicked': (data) => {
@@ -257,7 +272,7 @@ const mapDispatchToProps = (dispatch) => {
         },
         "loginCandidate": (token) => {
             return new Promise((resolve, reject) => {
-                dispatch(loginCandidate({payload: {alt: token}, resolve, reject, isTokenAvail: false}))
+                dispatch(loginCandidate({ payload: { alt: token }, resolve, reject, isTokenAvail: false }))
             })
         },
     }

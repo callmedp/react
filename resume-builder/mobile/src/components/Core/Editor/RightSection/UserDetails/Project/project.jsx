@@ -6,7 +6,6 @@ import moment from "moment";
 import PreviewModal from "../../../Preview/changeTemplateModal";
 import validate from "../../../../../FormHandler/validtaions/project/validate"
 import renderProjects from "./renderProject"
-import {siteDomain} from "../../../../../../Utils/domains";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 import BottomCTC from '../../../../../Common/BottomCTC/bottom-ctc';
 import Subscribe from '../../../RightSection/subscribe';
@@ -65,23 +64,14 @@ class Project extends Component {
 
     async handleSubmit(values) {
         values = this.state.fields ? this.state.fields : values.list
-        let {sidenav:{listOfLinks,currentLinkPos},bulkUpdateUserProject,personalInfo:{order_data},updateCurrentLinkPos,history,showGenerateResumeModal,hideGenerateResumeModal,reGeneratePDF} = this.props
+        let {sidenav:{listOfLinks,currentLinkPos},bulkUpdateUserProject,generateResumeAlert,updateCurrentLinkPos,
+                history} = this.props
         currentLinkPos++
         this.setState({submit:true})
         await bulkUpdateUserProject(values);
          if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
-            if(order_data && order_data.id){
-                showGenerateResumeModal()
-                reGeneratePDF(order_data.id)
-                setTimeout(function() {
-                    window.location.href = `${siteDomain}/dashboard`
-                    hideGenerateResumeModal()
-                }, 5000);
-            }
-            else{
-                history.push(`/resume-builder/buy`) 
-            }
+            generateResumeAlert()
         }
         else{
             updateCurrentLinkPos({currentLinkPos})

@@ -1,21 +1,50 @@
-<div class="stick_bottom call-us">
-    <div class="ui-grid-a block-3 text-center">
-        {% if not product.is_assesment %}
-        <div class="ui-block-a">
+<div class="stick_bottom enquire-cta">
+    {% if not product.is_assesment %}
+    <a class="enquire-cta__enquire" href="javascript:void(0)" id="enquire_btn">
+        <i class="icon-enquire"></i>
+        <span>Enquire</span>
+    </a><!-- // Enquire -->
+    {% endif %}
 
-            <a href="javascript:void(0)" id="enquire_btn"><span></span>Enquire</a>
-        </div>
-        {% endif %}
-        <div class="ui-block-b" {% if product.is_assesment %} style="width:100%;"{% endif %}>
-            <a href="tel:{{ggn_contact_full}}"><span></span>Call Us</a>
-        </div>
-        {% if not product.is_assesment %}
+    <a class="enquire-cta__call" href="tel:{{ggn_contact_full}}" id="enquire_btn">
+        <i class="icon-call"></i>
+        <span>Call Us</span>
+    </a><!-- // Call -->
+
+        {% if whatsapp_icon %}
+{% for key,value in whatsapp_icon.items %}
+{% if product.is_course and key == "product-course-number" %}
+    <a class="enquire-cta__whatsApp" href="https://api.whatsapp.com/send?phone=91{{value}}&text=I need your help for {{product.heading}}">
+        <i class="icon-whatsApp"></i>
+        <span>WhatsApp</span>
+    </a><!-- // Chat -->
+
+    {% elif product.is_writing and key == "product-service-number" or product.is_service and key == "product-service-number" %}
+        <a class="enquire-cta__whatsApp" href="https://api.whatsapp.com/send?phone=91{{value}}&text=I need your help for {{product.heading}}">
+        <i class="icon-whatsApp"></i>
+        <span>WhatsApp</span>
+    </a><!-- // Chat -->
+
+    {% endif %}
+{% endfor %}
+{% endif %}
+
+
+
+    {% if not product.is_assesment %}
         {% if not request.amp %}
-        <div class="ui-block-c"><a href="JavaScript:void(0);"> <span></span>Chat </a></div>
+        <a class="enquire-cta__chat cls_chat" href="javascript:void(0)" id="enquire_btn">
+            <i class="icon-chat-2"></i>
+            <span>Chat</span>
+        </a><!-- // Chat -->
         {% endif %}
-        {% endif %}
-    </div><!-- call us and chat widget ends here -->
-</div>
+    {% endif %}
+
+
+
+
+
+</div><!-- // enquire-cta -->
 
 {% if not product.is_assesment %}
 <div class="enquire" id="enquire">

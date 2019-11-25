@@ -1032,6 +1032,9 @@ class Product(AbstractProduct, ModelMeta):
     reviews = GenericRelation(Review, related_query_name='reviews')
     is_indexable = models.BooleanField(default=False)
     is_indexed = models.BooleanField(default=False)
+    visible_on_crm = models.BooleanField(default=True)
+    
+    #associated model managers
     objects = ProductManager()
     selected = SelectedFieldProductManager()
     indexable = IndexableProductManager()
@@ -1629,6 +1632,11 @@ class Product(AbstractProduct, ModelMeta):
     @property
     def day_duration(self):
         return self.get_duration_in_day()
+
+    @property
+    def is_pause_service(self):
+        return getattr(self.attr, S_ATTR_DICT.get('CP'),False)
+
 
     def get_duration_in_ddmmyy(self):
         if self.is_course:

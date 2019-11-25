@@ -147,19 +147,23 @@ $(document).ready(function () {
 
 
     const autoFillGuestDetails = () => {
-
         let info = cartData.split(',');
-
+    
         const formObj = {
             'name': info[0],
-            'email': info[1],
+            'email': neoEmail ? neoEmail: info[1],
             'country_code': info[2],
             'mobile': info[3]
         }
         document.forms['guest_form'].elements['name'].value = formObj['name'].trim() || ''
         if (formObj['name'].trim()) $("#guest_form input#guest-name").addClass('has-content');
+
         document.forms['guest_form'].elements['email'].value = formObj['email'].trim() || ''
         if (formObj['email'].trim()) $("#guest_form input#guest-email").addClass('has-content');
+
+        if (neoEmail){
+            $("#guest_form input#guest-email").attr('readonly',true)  
+        }
         const ccVal = formObj['country_code'] || '91';
         if ($('#country_code').find("option[value='" + ccVal + "']").length) {
             $('#country_code').val(ccVal).trigger('change');

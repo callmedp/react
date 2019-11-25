@@ -41,6 +41,7 @@ class CandidateProfile(AbstractAutoDate):
     extra_info = models.TextField('Extra Information', blank=True, null=True)
     entity_preference_data = models.TextField(blank=True, null=True)
     upload_resume = models.BooleanField('Upload Resume', default=True)
+    resume_generated = models.BooleanField('Resume Generated', default=True)
 
     @property
     def owner_id(self):
@@ -87,9 +88,9 @@ class Candidate(PreviewImageCreationMixin, CandidateProfile):
                 break
 
             for item in order_obj.orderitems.all():
-                if item.product and item.product.type_flow == 17 and item.product.type_product == 2:
+                if item.product and item.product.type_flow == 17 and item.product.type_product == 0:
                     order_data = {"id": order_obj.id,
-                                  "combo": True if item.product.id != settings.RESUME_BUILDER_NON_COMBO_PID else False
+                                  "combo": True if item.product.attr.get_value_by_attribute(item.product.attr.get_attribute_by_name('template_type')).value == 'multiple' else False
                                   }
                     product_found = True
                     break

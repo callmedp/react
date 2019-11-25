@@ -73,6 +73,9 @@ class Cart(AbstractAutoDate):
     lead_archive = models.BooleanField(default=False)
     lead_created = models.BooleanField(default=False)
 
+    #utm parameters
+    utm_params = models.TextField(null=True, blank=True)
+
     class Meta:
         app_label = 'cart'
         verbose_name = _('Cart')

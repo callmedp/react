@@ -6,6 +6,8 @@ import calendar
 from time import strptime
 from wsgiref.util import FileWrapper
 from dateutil.relativedelta import relativedelta
+from django.core.cache import  cache
+from django.core.exceptions import PermissionDenied
 from urllib.parse import urlencode
 
 from django.shortcuts import render
@@ -167,7 +169,7 @@ class LoginApiView(FormView):
         })
         if 'next' in self.request.GET:
             self.success_url = self.request.GET.get('next')
-        
+
         url_parameters ={}
 
         for parameter in (self.request.GET).keys():
@@ -175,9 +177,9 @@ class LoginApiView(FormView):
 
         url_parameters.pop('next',None)
 
-        if len(url_parameters.keys()): 
+        if len(url_parameters.keys()):
             self.success_url += '?' + urlencode(url_parameters)
-        
+
         try:
             user_exist = RegistrationLoginApi.check_email_exist(login_dict['email'])
             if user_exist.get('exists', ''):
@@ -769,3 +771,41 @@ class UserLoginTokenView(UserPassesTestMixin,TemplateView):
             request, self.template_name,
             {'has_permission': has_permission, 'login_url': self.login_url}
         )
+
+
+class CourseServiceWhatsappBtn(View):
+    template_name = "admin/whatsapp.html"
+
+    def get(self, request, *args, **kwargs):
+        has_permission = request.user.is_superuser
+        whatsapp_btn = cache.get('whatsapp_visibility_class', {})
+        if not has_permission:
+            raise PermissionDenied()
+        return render(request, self.template_name, {'whatsappBtn':
+                                        whatsapp_btn})
+
+    def post(self,request,*args,**kwargs):
+        value_dict = {}
+        if self.request.POST.get('prodcourse') and self.request.POST.get('product-course'):
+            value_dict.update({'product-course-visibility':True ,
+                        'product-course-number':self.request.POST.get(
+                            'product-course')})
+        if self.request.POST.get('prodservice') and self.request.POST.get(
+                'product-service'):
+            value_dict.update({'product-service-visibility':True ,
+                        'product-service-number':self.request.POST.get(
+                            'product-service')})
+
+        if self.request.POST.get('courseskill') and self.request.POST.get(
+                'course-skill'):
+            value_dict.update({'course-skill-visibility':True,
+                        'course-skill-number'    :self.request.POST.get(
+                            'course-skill')})
+        if self.request.POST.get('serviceskill') and self.request.POST.get(
+                'service-skill'):
+            value_dict.update({'service-skill-visibility':True,
+                        'service-skill-number'    :self.request.POST.get(
+                            'service-skill')
+                        })
+        cache.set('whatsapp_visibility_class', value_dict,timeout=None)
+        return render(request, self.template_name, {'whatsappBtn':value_dict})

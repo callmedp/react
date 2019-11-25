@@ -50,15 +50,15 @@ class CartView(TemplateView, CartMixin, UserMixin):
         context = super(self.__class__, self).get_context_data(**kwargs)
         cart_obj = self.getCartObject()
         line_items_list = cart_obj.lineitems.filter(parent=None)
-        type_flow = -1
-        if len(line_items_list):
-            line_item = line_items_list[0];
-            type_flow = int(line_item.product.type_flow)
-        #  resume builder flow handle
-        if type_flow == 17:
-            cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
-        else:
-            cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
+        # type_flow = -1
+        # if len(line_items_list):
+        #     line_item = line_items_list[0];
+        #     type_flow = int(line_item.product.type_flow)
+        # #  resume builder flow handle
+        # if type_flow == 17:
+        #     cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
+        # else:
+        cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
         cart_items = cart_dict.get('cart_items', [])
         total_amount = cart_dict.get('total_amount')
         context.update({
@@ -77,7 +77,7 @@ class AddToCartView(View, CartMixin):
     def dispatch(self, request, *args, **kwargs):
         return super(AddToCartView, self).dispatch(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs): 
         data = {"status": -1}
         cart_type = request.POST.get('cart_type')
         prod_id = request.POST.get('prod_id', '')
@@ -224,11 +224,11 @@ class PaymentLoginView(TemplateView, CartMixin):
                         "name": guest_name,
                     })
                     candidate_id, error = user_register(data=data)
-                    
+
                     # setting guest candidate id for thank you upload fix
                     self.request.session['guest_candidate_id'] = candidate_id
 
-                    
+
                     # if error:
                     # email_error = error
                     # context = self.get_context_data()
@@ -325,16 +325,16 @@ class PaymentLoginView(TemplateView, CartMixin):
         cart_obj = Cart.objects.get(pk=cart_pk)
         type_flow = -1
 
-        line_item_list = cart_obj.lineitems.filter(parent=None)
+        # line_item_list = cart_obj.lineitems.filter(parent=None)
 
-        if len(line_item_list):
-            line_item = line_item_list[0]
-            type_flow = int(line_item.product.type_flow)
+        # if len(line_item_list):
+        #     line_item = line_item_list[0]
+        #     type_flow = int(line_item.product.type_flow)
         # resume builder flow handle
-        if type_flow == 17:
-            cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
-        else:
-            cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
+        # if type_flow == 17:
+        #     cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
+        # else:
+        cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
         cart_items = cart_dict.get('cart_items', [])
         payment_dict = self.getPayableAmount(cart_obj, cart_dict.get('total_amount'))
         country_list = Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact='') | Q(active__exact=False))
@@ -476,7 +476,7 @@ class PaymentShippingView(UpdateView, CartMixin):
         return context
 
     def post(self, request, *args, **kwargs):
-       
+
         self.object = self.get_object()
         form = self.get_form()
 
@@ -497,7 +497,7 @@ class PaymentShippingView(UpdateView, CartMixin):
 
                     candidate_id, error = user_register(data=data)
 
-                
+
                     obj.owner_id = candidate_id
 
                     if request.session.get('email'):
@@ -551,10 +551,10 @@ class PaymentSummaryView(TemplateView, CartMixin):
         if not self.cart_obj:
             return HttpResponseRedirect(reverse('homepage'))
 
-        if not self.cart_obj.owner_id: 
+        if not self.cart_obj.owner_id:
             self.cart_obj = self.getCartObject()
-        
-        if self.request.session.get('email') and not self.cart_obj.email: 
+
+        if self.request.session.get('email') and not self.cart_obj.email:
             self.cart_obj.email = self.request.session.get('email')
         if self.request.session.get('mobile_no') and not self.cart_obj.mobile:
             self.cart_obj.mobile = self.request.session.get('mobile_no')
@@ -566,7 +566,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
             self.cart_obj.last_name = self.request.session.get('last_name')
 
         self.cart_obj.save()
-    
+
 
         return None
 
@@ -576,25 +576,21 @@ class PaymentSummaryView(TemplateView, CartMixin):
             return redirect
         return super(self.__class__, self).get(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-
+    def get_context_data(self, **kwargs):  
         context = super(self.__class__, self).get_context_data(**kwargs)
         cart_obj, wal_obj = self.cart_obj, None
-        cart_coupon, cart_wallet = None, None
+        cart_coupon, cart_wallet, type_flow = None, None,None
         wal_txn, wal_total, wal_point = None, None, None
-
-        type_flow = -1
-
         line_item_list = cart_obj.lineitems.filter(parent=None)
 
         if len(line_item_list):
             line_item = line_item_list[0]
             type_flow = int(line_item.product.type_flow)
-        # resume builder flow handle
-        if type_flow == 17:
-            cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
-        else:
-            cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
+        # # resume builder flow handle
+        # if type_flow == 17:
+        #     cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
+        # else:
+        cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
         cart_items = cart_dict.get('cart_items', [])
         payment_dict = self.getPayableAmount(cart_obj, cart_dict.get('total_amount'))
         context.update(payment_dict)
@@ -659,12 +655,12 @@ class PaymentSummaryView(TemplateView, CartMixin):
 
         context.update({
             "cart_items": cart_items,
-            "cart_contain_items" : True if len(cart_items)  else  False 
+            "cart_contain_items" : True if len(cart_items)  else  False
         })
 
         return context
-    
-        
+
+
 
 
 class UpdateDeliveryType(View, CartMixin):
@@ -682,19 +678,19 @@ class UpdateDeliveryType(View, CartMixin):
                 delivery_obj = delivery_servieces.get(pk=delivery_type)
                 line_obj.delivery_service = delivery_obj
                 line_obj.save()
-                type_flow = -1
+                # type_flow = -1
 
-                line_item_list = cart_obj.lineitems.filter(parent=None)
+                # line_item_list = cart_obj.lineitems.filter(parent=None)
 
-                if len(line_item_list):
-                    line_item = line_item_list[0]
-                    type_flow = int(line_item.product.type_flow)
+                # if len(line_item_list):
+                #     line_item = line_item_list[0]
+                #     type_flow = int(line_item.product.type_flow)
 
-                # resume builder flow handle
-                if type_flow == 17:
-                    cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
-                else:
-                    cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
+                # # resume builder flow handle
+                # if type_flow == 17:
+                #     cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
+                # else:
+                cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
                 total_cart_amount = cart_dict.get('total_amount')
                 delivery_charge = delivery_obj.get_price()
                 payment_dict = self.getPayableAmount(cart_obj, cart_dict.get('total_amount'))

@@ -1,6 +1,7 @@
 #python imports
 import math
-import datetime,logging,json
+import  logging,json 
+from datetime import datetime,timedelta
 
 from decimal import Decimal
 from dateutil import relativedelta
@@ -32,9 +33,12 @@ from linkedin.models import Draft
 from seo.models import AbstractAutoDate
 from geolocation.models import Country, CURRENCY_SYMBOL
 from users.models import User
-from console.feedbackCall.choices import FEEDBACK_RESOLUTION_CHOICES,FEEDBACK_CATEGORY_CHOICES,FEEDBACK_STATUS,FEEDBACK_OPERATION_TYPE
+from console.feedbackCall.choices import FEEDBACK_RESOLUTION_CHOICES,FEEDBACK_CATEGORY_CHOICES,FEEDBACK_STATUS,TOTAL_FEEDBACK_OPERATION_TYPE
 from order.utils import get_ltv
 from coupon.models import Coupon
+from resumebuilder.models import Candidate
+from order.utils import FeatureProfileUtil
+
 
 #third party imports
 from payment.utils import manually_generate_autologin_url
@@ -160,6 +164,9 @@ class Order(AbstractAutoDate):
     auto_upload = models.BooleanField(default=False)
     service_resume_upload_shine = models.BooleanField(default=True)
 
+    #utm parameters
+    utm_params = models.TextField(null=True, blank=True)
+
 
     class Meta:
         app_label = 'order'
@@ -192,6 +199,9 @@ class Order(AbstractAutoDate):
         items = self.orderitems.all()
         return any([item.product.type_flow == 17 for item in items])
 
+    def order_contains_expert_assistance(self):
+        items = self.orderitems.all()
+        return any([item.product.sub_type_flow == 101 for item in items])
     def order_contains_neo_item(self):
         items = self.orderitems.all()
         return any([item.product.vendor.slug == 'neo' for item in items])
@@ -291,10 +301,10 @@ class Order(AbstractAutoDate):
         c_time = timezone.now()
         follow_up = self.wc_follow_up
         if follow_up:
-            before_time = follow_up - datetime.timedelta(
+            before_time = follow_up - timedelta(
                 minutes=30
             )
-            later_time = follow_up + datetime.timedelta(
+            later_time = follow_up + timedelta(
                 minutes=60
             )
             if c_time >= before_time and c_time <= later_time:
@@ -427,6 +437,14 @@ class Order(AbstractAutoDate):
             board_user_on_neo.delay(neo_ids=neo_items_id)
 
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_resume_builder():
+            if self.order_contains_expert_assistance():
+                cand_id = existing_obj and existing_obj.candidate_id
+                if cand_id:
+                    candidate_obj = Candidate.objects.filter(candidate_id=cand_id).first()
+                    if candidate_obj: 
+                        candidate_obj.resume_generated = False
+                        candidate_obj.save()
+
             generate_resume_for_order.delay(self.id)
 
             logging.getLogger('info_log').info("Generating resume for order {}".format(self.id))
@@ -694,6 +712,58 @@ class OrderItem(AbstractAutoDate):
     def __str__(self):
         return "#{}".format(self.pk)
 
+    def service_pause_status(self):
+        pause_resume_ops_count = self.orderitemoperation_set.filter(oi_status__in=[34,35]).count()
+        if pause_resume_ops_count&1 and self.oi_status == 34:
+            return False
+        return True
+
+    @property
+    def days_left_oi_product(self):
+        can_be_paused = self.product.is_pause_service
+        duration_days = self.product.day_duration
+        
+        if not self.product or not self.product.is_service:
+            return 0
+
+        featured_op = self.orderitemoperation_set.filter(oi_status=28).first()
+
+        if not featured_op:
+            return 0
+
+        sdt = featured_op.created
+        
+        if not can_be_paused:
+            edt = sdt + timedelta(days=duration_days)
+            days_left = edt - timezone.now()
+            return days_left.days 
+
+        sdt = featured_op.created
+        edt = sdt + timedelta(days=duration_days*2)
+        pause_resume_operations = self.orderitemoperation_set.filter(oi_status__in=[34,35]).values_list('created',flat=True)
+        days_left = timedelta(days=duration_days)
+        days_between_pause_resume = timedelta(0)
+
+        for pos in range(0,pause_resume_operations.count(),2):
+            if pos==0:
+                days_between_pause_resume += pause_resume_operations[pos] -sdt
+                continue
+
+            days_between_pause_resume += pause_resume_operations[pos] - \
+                                        pause_resume_operations[pos-1]
+
+        if (not pause_resume_operations.count() & 1) and pause_resume_operations.count()>0:  #if even no of operations -> the service is resumed
+            days_between_pause_resume += timezone.now() - pause_resume_operations.last()
+        elif pause_resume_operations.count() == 0:
+            days_left -= (timezone.now() - sdt)
+
+        days_left -= (days_between_pause_resume)
+
+        if (edt - timezone.now()) < days_left:
+            days_left = (edt - timezone.now())
+
+        return days_left.days
+
     @property
     def order_payment_date(self):
         payment_date = self.order.payment_date.date()
@@ -707,7 +777,7 @@ class OrderItem(AbstractAutoDate):
 
     @property
     def product_name(self):
-        return self.product.name
+        return self.product.name if self.product else ''
 
     @property
     def order_status_text(self):
@@ -715,6 +785,8 @@ class OrderItem(AbstractAutoDate):
 
     @property
     def get_oi_status(self):
+        if self.oi_status in [28, 29, 30]:
+            return self.oi_status_transform()
         dict_status = dict(OI_OPS_STATUS)
         return dict_status.get(self.oi_status)
 
@@ -744,7 +816,11 @@ class OrderItem(AbstractAutoDate):
             profile = getattr(self, 'whatsapp_profile_orderitem', None)
             if profile:
                 return bool(profile.due_date)
-    
+
+    @property
+    def oi_draft_path(self):
+        return str(self.oi_draft.url) if self.oi_draft else ""
+
 
     @property
     def is_onboard(self):
@@ -779,6 +855,9 @@ class OrderItem(AbstractAutoDate):
         sent = cache.get('neo_mail_sent_{}'.format(self.id))
         return sent
 
+    @property
+    def updated_from_trial_to_regular(self):
+        return cache.get('updated_from_trial_to_regular_{}'.format(self.id))
 
     def get_due_date(self):
         profile = getattr(self, 'whatsapp_profile_orderitem', None)
@@ -949,17 +1028,45 @@ class OrderItem(AbstractAutoDate):
         if assigned_op:
             return assigned_op.created
 
+
+    def oi_status_transform(self):
+        val = OI_OPS_TRANSFORMATION_DICT.get(self.product.sub_type_flow, {})\
+            .get(self.oi_status, None)
+        if val:
+            return val
+        else:
+            dict_status = dict(OI_OPS_STATUS)
+            return dict_status.get(self.oi_status)
+
+
     def upload_service_resume_shine(self,existing_obj):
         if self.oi_status == 4 and self.oi_status !=existing_obj.oi_status  and self.order.service_resume_upload_shine:
             upload_Resume_shine.delay(self.id)
+
+    def update_pause_resume_service(self,existing_obj):
+        if not self.oi_status in [34,35]:
+            return
+        feature_util = FeatureProfileUtil()
+        
+        if not feature_util.pause_resume_feature(existing_obj,self.service_pause_status):  # if pause or resume fails then return oi_status to previous position
+            self.oi_status = existing_obj.oi_status
+            return
+
+        self.last_oi_status = existing_obj.oi_status
+        self.orderitemoperation_set.create(
+            oi_status=self.oi_status,
+            last_oi_status=existing_obj.oi_status,
+            assigned_to=self.assigned_to)
 
     def save(self, *args, **kwargs):
         created = not bool(getattr(self, "id"))
         orderitem = OrderItem.objects.filter(id=self.pk).first()
         self.oi_status = 4 if orderitem and orderitem.oi_status == 4 else self.oi_status
         # handling combo case getting parent and updating child
+        self.update_pause_resume_service(orderitem)
         obj = super().save(*args, **kwargs)  # Call the "real" save() method.       
         self.upload_service_resume_shine(orderitem)
+        
         return obj 
 
         # # for resume booster create orderitem
@@ -1063,6 +1170,11 @@ class OrderItemOperation(AbstractAutoDate):
     def __str__(self):
         return "#{}".format(self.pk)
 
+
+    @property
+    def oi_status_display(self):
+         return self.get_oi_status
+
     @property
     def get_oi_status(self):
         if self.oi_status in [28, 29, 30]:
@@ -1071,22 +1183,23 @@ class OrderItemOperation(AbstractAutoDate):
         return dict_status.get(self.oi_status)
 
     @property
+    def order_oio_linkedin(self):
+        oi = self.oi
+        return oi.oio_linkedin.id if oi.oio_linkedin else ""
+
+    @property
     def get_user_oi_status(self):
         dict_status = dict(OI_USER_STATUS)
         return dict_status.get(self.oi_status)
 
     def oi_status_transform(self):
-        val = OI_OPS_TRANSFORMATION_DICT.get(
-            self.oi.product.sub_type_flow, {}
-        ).get(self.oi_status, None)
+        val = OI_OPS_TRANSFORMATION_DICT.get(self.oi.product.sub_type_flow, {})\
+            .get(self.oi_status, None)
         if val:
             return val
         else:
             dict_status = dict(OI_OPS_STATUS)
             return dict_status.get(self.oi_status)
-
-
-
 
 class Message(AbstractAutoDate):
     oi = models.ForeignKey(OrderItem, null=True)
@@ -1107,6 +1220,13 @@ class Message(AbstractAutoDate):
 
     def __str__(self):
         return "#{}".format(self.pk)
+
+    @property
+    def added_by_name(self):
+        if self.added_by:
+            return self.added_by.name
+        order = self.oi.order
+        return order.first_name
 
 
 class InternationalProfileCredential(AbstractAutoDate):
@@ -1321,6 +1441,8 @@ class CustomerFeedback(models.Model):
     comment = models.TextField('Feedback Comment',blank=True, null=True)
     last_payment_date = models.DateTimeField('Last Payment Date',blank=True, null=True)
     ltv = models.DecimalField(max_digits=20, decimal_places=2,blank=True, null=True)
+    category =  models.SmallIntegerField(choices=FEEDBACK_CATEGORY_CHOICES,blank=True, null=True)
+    resolution =  models.SmallIntegerField(choices=FEEDBACK_RESOLUTION_CHOICES,blank=True, null=True)
 
     @property
     def status_text(self):
@@ -1330,12 +1452,44 @@ class CustomerFeedback(models.Model):
     def assigned_to_text(self):
         return self.assigned_to.name if self.assigned_to else ''
 
+    @property
+    def category_text(self):
+        return dict(FEEDBACK_CATEGORY_CHOICES).get(self.category)
+
+    @property
+    def resolution_text(self):
+        return dict(FEEDBACK_RESOLUTION_CHOICES).get(self.resolution)
+
+    def create_operation(self):
+        prev_feedback = CustomerFeedback.objects.get(id=self.id)
+        if prev_feedback.comment != self.comment :
+            OrderItemFeedbackOperation.objects.create(comment=self.comment,customer_feedback=self,\
+                assigned_to=self.assigned_to,oi_type=2)
+
+        if not prev_feedback.assigned_to and  self.assigned_to :
+            OrderItemFeedbackOperation.objects.create(customer_feedback=self,assigned_to=self.assigned_to\
+                ,oi_type=3)
+        elif prev_feedback.assigned_to != self.assigned_to :
+            OrderItemFeedbackOperation.objects.create(customer_feedback=self,assigned_to=self.assigned_to\
+                ,oi_type=4)
+            
+        if prev_feedback.follow_up_date != self.follow_up_date:
+            OrderItemFeedbackOperation.objects.create(customer_feedback=self,assigned_to=self.assigned_to\
+                ,oi_type=5,follow_up_date=self.follow_up_date)
+
+        if prev_feedback.category != self.category:
+            OrderItemFeedbackOperation.objects.create(customer_feedback=self,assigned_to=self.assigned_to\
+                ,oi_type=6,category=self.category)
+                
+        if prev_feedback.category != self.category:
+            OrderItemFeedbackOperation.objects.create(customer_feedback=self,assigned_to=self.assigned_to\
+                ,oi_type=7,resolution=self.resolution)
+
     def save(self, *args, **kwargs):
         created = not bool(self.id)
         if not created:
-            prev_comment = CustomerFeedback.objects.get(id=self.id).comment
-            if prev_comment != self.comment :
-                OrderItemFeedbackOperation.objects.create(comment=self.comment,customer_feedback=self,assigned_to=self.assigned_to,oi_type=2)
+            self.create_operation()
+            
         super(CustomerFeedback, self).save(*args, **kwargs)
 
 
@@ -1345,6 +1499,16 @@ class OrderItemFeedback(models.Model):
     comment = models.TextField('Feedback Comment',blank=True, null=True)
     order_item = models.ForeignKey(OrderItem)
     customer_feedback  = models.ForeignKey(CustomerFeedback)
+    created = models.DateTimeField(editable=False, auto_now_add=True,null=True)
+    
+
+    @property
+    def category_text(self):
+        return dict(FEEDBACK_CATEGORY_CHOICES).get(self.category)
+
+    @property
+    def resolution_text(self):
+        return dict(FEEDBACK_RESOLUTION_CHOICES).get(self.resolution)
 
     def save(self, *args, **kwargs):
         create = not bool(self.id)
@@ -1353,7 +1517,8 @@ class OrderItemFeedback(models.Model):
             prev_data = OrderItemFeedback.objects.get(id=self.id)
             compare_list = [self.category==prev_data.category,self.resolution==prev_data.resolution,self.comment==prev_data.comment]
             if not all(compare_list):
-                OrderItemFeedbackOperation.objects.create(category=self.category,resolution=self.resolution,comment=self.comment,order_item=self.order_item,customer_feedback=self.customer_feedback,assigned_to=assigned_to)
+                OrderItemFeedbackOperation.objects.create(category=self.category,resolution=self.resolution,comment=self.comment,\
+                    order_item=self.order_item,customer_feedback=self.customer_feedback,assigned_to=assigned_to,oi_type=1)
         super(OrderItemFeedback, self).save(*args, **kwargs) # Call the real save() method
 
 class OrderItemFeedbackOperation(models.Model):
@@ -1364,8 +1529,10 @@ class OrderItemFeedbackOperation(models.Model):
     comment = models.TextField('Feedback Comment',blank=True, null=True)
     order_item = models.ForeignKey(OrderItem,blank=True, null=True)
     customer_feedback  = models.ForeignKey(CustomerFeedback)
-    oi_type = models.SmallIntegerField(choices=FEEDBACK_OPERATION_TYPE,default=1)
-
+    oi_type = models.SmallIntegerField(choices=TOTAL_FEEDBACK_OPERATION_TYPE,default=-1)
+    feedback_category = models.SmallIntegerField(choices=FEEDBACK_CATEGORY_CHOICES,default=-1)
+    feedback_resolution =  models.SmallIntegerField(choices=FEEDBACK_RESOLUTION_CHOICES,default=-1)
+    follow_up_date = models.DateTimeField('Follow Up Date', blank=True, null=True)
 
     @property
     def category_text(self):
@@ -1381,7 +1548,19 @@ class OrderItemFeedbackOperation(models.Model):
 
     @property
     def oi_type_text(self):
-        return dict(FEEDBACK_OPERATION_TYPE).get(self.oi_type)
+        return dict(TOTAL_FEEDBACK_OPERATION_TYPE).get(self.oi_type)
+
+    @property
+    def feedback_category_text(self):
+        return dict(FEEDBACK_CATEGORY_CHOICES).get(self.feedback_category)
+
+    @property
+    def feedback_resolution_text(self):
+        return dict(FEEDBACK_RESOLUTION_CHOICES).get(self.feedback_resolution)
+
+    def feedback_status_text(self):
+        return dict(FEEDBACK_STATUS).get(self.feedback_status)
+
 
 class LTVMonthlyRecord(models.Model):
     ltv_bracket =  models.SmallIntegerField(choices=LTV_BRACKET_LABELS)
@@ -1401,6 +1580,7 @@ class LTVMonthlyRecord(models.Model):
     @property
     def ltv_bracket_text(self):
         return dict(LTV_BRACKET_LABELS).get(self.ltv_bracket)
+
 
 class MonthlyLTVRecord(models.Model):
     ltv_bracket =  models.SmallIntegerField(choices=LTV_BRACKET_LABELS)

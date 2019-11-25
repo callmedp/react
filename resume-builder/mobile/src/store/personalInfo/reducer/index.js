@@ -14,8 +14,6 @@ const initialState = {
     extra_info: '',
     interest_list:['loading...'],
     'hide_subscribe_button': false
-
-
 };
 
 

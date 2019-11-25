@@ -10,6 +10,7 @@ from django.utils import timezone
 from django.db.models import Q
 
 def update_initiat_orderitem_sataus(order=None):
+
     if order:
         orderitems = order.orderitems.filter(
             no_process=False).select_related('order', 'product', 'partner')
@@ -46,7 +47,7 @@ def update_initiat_orderitem_sataus(order=None):
                         test_info.save()
 
             elif oi.product.type_flow == 4:
-                if oi.order.orderitems.filter(product__type_flow=12, no_process=False).exists():
+                if oi.order.orderitems.filter(product__type_flow=12,  no_process=False).exists():
                     last_oi_status = oi.oi_status
                     oi.oi_status = 61
                     oi.last_oi_status = last_oi_status
@@ -66,7 +67,7 @@ def update_initiat_orderitem_sataus(order=None):
                         assigned_to=oi.assigned_to)
 
             elif oi.product.type_flow == 5:
-                if (oi.order.orderitems.filter(product__type_flow=1, no_process=False).exists() and \
+                if (oi.order.orderitems.filter(product__type_flow=1,product__sub_type_flow__in=[101,100], no_process=False).exists() and \
                         oi.product.sub_type_flow == 501):
                     last_oi_status = oi.oi_status
                     oi.oi_status = 61
@@ -103,7 +104,7 @@ def update_initiat_orderitem_sataus(order=None):
 
             elif oi.product.type_flow in [7, 15]:
                 depending_ois = order.orderitems.filter(
-                    product__type_flow=1, no_process=False)
+                    product__type_flow=1,product__sub_type_flow__in=[101,100], no_process=False)
 
                 if depending_ois.exists():
                     last_oi_status = oi.oi_status
@@ -149,9 +150,12 @@ def update_initiat_orderitem_sataus(order=None):
 
         # for assesment/neo if no orderitems other than assesment/ neo present
         # then make welcome call done and update welcome call statuses.
-        oi = order.orderitems.exclude(Q(product__type_flow=16) | Q(product__vendor__slug='neo'))
+        oi = order.orderitems.exclude(Q(product__type_flow=16) | Q(product__vendor__slug='neo')| Q(product__type_flow=17) | Q(product__sub_type_flow=101) | Q(no_process=True))
+
+        # order.type_product == 3 
 
         if not oi.exists():
+
             order.wc_cat = 21
             order.wc_sub_cat = 41
             order.wc_status = 41
@@ -160,7 +164,7 @@ def update_initiat_orderitem_sataus(order=None):
             order.welcomecalloperation_set.create(
                 wc_cat=order.wc_cat,
                 wc_sub_cat=order.wc_sub_cat,
-                message='Done automatically, Only Assesment items present',
+                message='Done automatically, skipped welcome call.',
                 wc_status=order.wc_status,
                 assigned_to=order.assigned_to
             )

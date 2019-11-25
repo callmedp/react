@@ -26,10 +26,11 @@ def get_emails(user_details):
     for row in user_details:
         name, email = row.values()
         token_gen = AutoLogin()
-        login_token = token_gen.encode('kharbpriya5@gmail.com', '53461c6e6cca0763532d4b09', None)
+        login_token = token_gen.encode('newuser33@mailinator.com', '5da87e2a9cbeea5f16680f9a', None)
         upload_url = "http://localhost:3000/resume-builder/?token=%s" % (
 
             login_token)
+        print(upload_url)
         context_data = {
             'first_name': name,
             'upload_url': upload_url

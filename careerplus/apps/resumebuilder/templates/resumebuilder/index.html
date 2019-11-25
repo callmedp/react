@@ -64,6 +64,8 @@
 {% endblock container %}
 
 {% block js_section %}
+   <script src="{{CHATBOT_URL}}">
+   </script>
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -93,6 +95,10 @@
 {% block marketingpopup %}
 
 {% endblock marketingpopup %}
+
+{% block  jquery_block %}
+
+{%endblock jquery_block %}
 
 {% block zendesk %}
 

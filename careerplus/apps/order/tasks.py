@@ -462,6 +462,9 @@ def service_initiation(pk=None):
                     oi.smsorderitemoperation_set.all().values_list(
                         'sms_oi_status', flat=True).distinct())
 
+                urlshortener = create_short_url(login_url=data)
+                data.update({'url':urlshortener.get('url')})
+
                 if oi.product.type_flow == 2 and 162 not in sms_sets:
                     try:
                         
@@ -600,22 +603,28 @@ def process_jobs_on_the_move(obj_id=None):
             )
             obj.update_pending_links_count()
 
-
 @task
 def generate_resume_for_order(order_id):
     from resumebuilder.models import Candidate
     from order.models import Order
+    from shop.models import Product
     from resumebuilder.utils import ResumeGenerator
     order_obj = Order.objects.get(id=order_id)
     candidate_id = order_obj.candidate_id
 
     for item in order_obj.orderitems.all():
-        if item.product and item.product.type_flow == 17 and item.product.type_product == 2:
+        if item.product and item.product.type_flow == 17 and item.product.type_product == 0:
             product_id = item.product.id
             break
-
-    is_combo = True if product_id != settings.RESUME_BUILDER_NON_COMBO_PID else False
-    selected_template = Candidate.objects.filter(candidate_id = candidate_id).first().selected_template
+    product = Product.objects.filter(id=product_id).first()
+    is_combo = True if product.attr.get_value_by_attribute(product.attr.get_attribute_by_name('template_type')).value == 'multiple'  else False
+    candidate_obj = Candidate.objects.filter(candidate_id = candidate_id).first()
+    # if not candidate_obj create it by yourself. 
+    if not candidate_obj:
+        selected_template = 1 
+    else: 
+        selected_template = candidate_obj.selected_template or 1 
+    # selected_template
     builder_obj = ResumeGenerator()
     builder_obj.save_order_resume_pdf(order=order_obj,is_combo=is_combo,index=selected_template)
 
@@ -633,14 +642,51 @@ def send_resume_in_mail_resume_builder(attachment,data):
 
 @task(name='board_user_on_neo')
 def board_user_on_neo(neo_ids):
+    '''
+    Take Neo Order Items
+    - Board User on Trial Basis Or Regular Basis.
+    - While Boarding User On Regular Basis Check.
+        - If on Trial, then update SSO Profile.
+        - else hit for Boarding assuming either 
+          already Regular user O New user.
+    '''
+    from datetime import datetime, timedelta
     from order.models import OrderItem
     neo_items = OrderItem.objects.filter(id__in=neo_ids)
+    boarding_type = 'regular'
     for item in neo_items:
         email = item.order.email
-        flag = NeoApiMixin().board_user_on_neo(email=email)
-        if flag:
-            cache.set('neo_mail_sent_{}'.format(str(item.id)), 1, 3600 * 24 * 2)
+        data_dict = {}
+        coursetype = item.product.get_coursetype()
+        duration = item.product.get_duration_in_day()
+        if coursetype == 'TR':
+            boarding_type = 'trail'
+            data_dict['account_type'] = 'trial'
+            if duration:
+                start_date = datetime.now().strftime('%Y-%m-%d')
+                end_date = (datetime.now() + timedelta(days=duration)).strftime('%Y-%m-%d')
+                data_dict.update({
+                    'start_date': start_date,
+                    'end_date': end_date,
+                })
+        account_type = NeoApiMixin().get_student_account_type(email)
+        if account_type and account_type == 'trial':
+                boarding_type = 'already_trial'
+                data = {
+                    'account_type': 'regular',
+                }
+                flag = NeoApiMixin().update_student_sso_profile(data=data, email=email)
+                if flag:
+                    cache.set('updated_from_trial_to_regular_{}'.format(str(item.id)), 1, 3600 * 24 * 2)
+                    logging.getLogger('error_log').error('Account update to Regular from Trial for email {}'.format(email))
+                else:
+                    logging.getLogger('error_log').error('Unable to Update SSO profile for email{}'.format(email))
 
+        else:
+            flag = NeoApiMixin().board_user_on_neo(email=email, data_dict=data_dict)
+            if flag:
+                cache.set('neo_mail_sent_{}'.format(str(item.id)), 1, 3600 * 24 * 2)
+        return boarding_type
 
 @task
 def bypass_resume_midout(order_id):

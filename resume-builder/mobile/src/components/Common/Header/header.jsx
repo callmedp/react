@@ -41,7 +41,7 @@ class Header extends Component {
     render() {
         const {
             page, history, backPage, order_data, ui: {helpModal},
-            personalInfo, feedback, hideHelpModal,eventClicked
+            personalInfo,personalInfo:{resume_generated}, feedback, hideHelpModal,eventClicked
         } = this.props;
 
         return (
@@ -75,8 +75,10 @@ class Header extends Component {
     
                             {<span>Resume Preview</span>}
                         </div>
-                        {order_data && order_data.id && !order_data.combo ? '':
-                            <a className="btn btn__round btn--outline" onClick={this.changeTemplate}>Change template</a>
+                        {
+                        (!(order_data && order_data.id) || !(resume_generated)) ?
+                        <a className="btn btn__round btn--outline" onClick={this.changeTemplate}>Change template</a>:
+                        (order_data && order_data.id && order_data.combo) ? <a className="btn btn__round btn--outline" onClick={this.changeTemplate}>Change template</a> : ''          
                         }
                     </React.Fragment>:
                     page === 'buy' ?

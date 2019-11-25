@@ -38,6 +38,7 @@ from console.decorators import Decorate, stop_browser_cache
 from search.helpers import get_recommendations
 from .dashboard_mixin import DashboardInfo
 from linkedin.autologin import AutoLogin
+from shop.models import Product
 from core.library.gcloud.custom_cloud_storage import \
     GCPPrivateMediaStorage, GCPInvoiceStorage, GCPMediaStorage, GCPResumeBuilderStorage
 
@@ -52,6 +53,7 @@ class DashboardView(TemplateView):
         return HttpResponseRedirect(reverse('homepage'))
 
     def get_context_data(self, **kwargs):
+
         context = super(DashboardView, self).get_context_data(**kwargs)
         if self.request.GET.get('oirate'):
             try:
@@ -70,6 +72,7 @@ class DashboardView(TemplateView):
             context.update({
                 'inbox_list': inbox_list,
                 'pending_resume_items': pending_resume_items,
+                'candidate_id': candidate_id
             })
         if self.request.flavour == 'mobile' and not empty_inbox:
             if not self.request.session.get('resume_id', None):
@@ -217,6 +220,9 @@ class DashboardDetailView(TemplateView):
             if self.oi.product.type_flow in [1, 12, 13]:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 24, 26, 27, 161, 162, 163, 164, 181])
 
+            elif self.oi.product.vendor.slug == 'neo':
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 33, 4, 161, 162, 163, 164])
+
             elif self.oi.product.type_flow in [2, 14]:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 6, 161, 162, 163, 164])
 
@@ -237,6 +243,7 @@ class DashboardDetailView(TemplateView):
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 6, 101, 161, 162, 163, 164])
             elif self.oi.product.type_flow == 16:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 6, 4])
+
             context.update({
                 "oi": self.oi,
                 "max_draft_limit": settings.DRAFT_MAX_LIMIT,
@@ -795,20 +802,22 @@ class DashboardResumeDownload(View):
 class DashboardResumeTemplateDownload(View):
 
     def post(self, request, *args, **kwargs):
+        
         candidate_id = request.session.get('candidate_id', None)
         email = request.session.get('email', None)
         product_id = request.POST.get('product_id', None)
-        is_combo = True if product_id != str(settings.RESUME_BUILDER_NON_COMBO_PID) else False
+        product = Product.objects.filter(id=product_id).first()
+        is_combo = True if product.attr.get_value_by_attribute(product.attr.get_attribute_by_name('template_type')).value == 'multiple' else False
         order_pk = request.POST.get('order_pk', None)
         candidate_obj = Candidate.objects.filter(candidate_id=candidate_id).first()
-        selected_template = candidate_obj.selected_template if candidate_obj.selected_template else 1
+        selected_template = candidate_obj.selected_template if candidate_obj and candidate_obj.selected_template else 1
         order = Order.objects.get(pk=order_pk)
 
         if not candidate_id or not order.status in [1, 3, 0] or not (order.email == email) \
                 or not (order.candidate_id == candidate_id):
             return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))
 
-        filename_prefix = "{}_{}".format(order.first_name, order.last_name)
+        filename_prefix = "{}_{}".format(order.first_name or "resume", order.last_name or order_pk)
         file_path = settings.RESUME_TEMPLATE_DIR + "/{}/pdf/{}.pdf".format(candidate_obj.id, selected_template)
         content_type = "application/pdf"
         filename_suffix = ".pdf"

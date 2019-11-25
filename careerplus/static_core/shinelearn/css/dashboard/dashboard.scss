@@ -608,8 +608,7 @@
 		p {
 			background-color: #ddf6ff;
 			padding: 10px;
-			display: table;
-			margin-bottom: 20px;
+			display: table-cell;
 
 			strong {
 				font-weight: $font-weight+300;			
@@ -622,6 +621,64 @@
 			&.order-completed {
 				background-color: #ebebeb;
 			}
+
+			&.pause-play-services {
+				border-left: 10px solid #fff;
+
+				.pause {
+					width: 20px;
+					height: 20px;
+					border-radius: 50%;
+					border: 1px solid #7f94d3;
+					display: inline-block;
+					vertical-align: sub;
+					margin-right: 5px;
+					position: relative;
+
+					&::before {
+						content: "";
+						width: 3px;
+						height: 9px;
+						background: #7f94d3;
+						position: absolute;
+						left: 5px;
+						top: 4px;
+					}
+
+					&::after {
+						content: "";
+						width: 3px;
+						height: 9px;
+						background: #7f94d3;
+						position: absolute;
+						right: 5px;
+						top: 4px;
+					}
+				}
+
+				.play {
+					width: 20px;
+					height: 20px;
+					border-radius: 50%;
+					border: 1px solid #7f94d3;
+					display: inline-block;
+					vertical-align: sub;
+					margin-right: 5px;
+					position: relative;
+
+					&::after {
+						content: "";
+						width: 0; 
+					    height: 0; 
+					    border-top: 5px solid transparent;
+					    border-bottom: 5px solid transparent; 
+					    border-left:5px solid #7f94d3;
+						position: absolute;
+						right: 5px;
+						top: 4px;
+					}
+				}
+			}
 		}
 
 		.view-comments-links {
@@ -629,7 +686,7 @@
 			font-weight: $font-weight+300;
 			color: $secondary-color;
 			padding-left: 0;
-			margin: 0;
+			margin: 20px 0 0 0;
 			list-style-type: none;
 
 			li {
@@ -1873,4 +1930,32 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
 	padding-left: 10px;
 	color: #757575;
 	margin-bottom: 6px;
+}
+
+.days-left{
+	float: right;
+	position: relative;
+	top: 20px;
+}
+
+.days-remaining {
+	float: right;
+	text-align: center;
+	p {
+		background: $white-color !important;
+		font-size: $font-size+3;
+		padding: 0 0 10px 0 !important;
+	}
+	span {
+		width: 35px;
+		height: 40px;
+		display: inline-block;
+		box-shadow: $box-shadow;
+		font-size: $font-size+9;
+		font-weight: $font-weight;
+		text-align: center;
+		border-radius: 5px;
+		margin-right: 5px;
+		padding-top: 5px;
+	}
 }

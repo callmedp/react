@@ -88,3 +88,14 @@ def profile_status(key, dict):
         return dict[key].profile_status
     else:
         return ''
+
+@register.filter(name='is_whole_refund')
+def is_whole_refund(key, refund_dict):
+    if key in refund_dict:
+        return not bool(refund_dict[key]['total_count'] - refund_dict[key]['refund_count'])
+    return False
+
+@register.filter(name='get_dict_item')
+def get_dict_item(item_dict,id):
+    return item_dict.get(id,None)
+

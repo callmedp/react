@@ -7,7 +7,6 @@ import moment from 'moment';
 import validate from "../../../../../FormHandler/validtaions/experience/validate"
 import PreviewModal from "../../../Preview/changeTemplateModal";
 import renderExperiences from "./renderExperience"
-import {siteDomain} from "../../../../../../Utils/domains";
 import AddSuggesion from '../../../../../Common/AddSuggestion/addSuggesion';
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 import BottomCTC from '../../../../../Common/BottomCTC/bottom-ctc';
@@ -58,23 +57,14 @@ class Experience extends Component {
     }
 
     async handleSubmit(values) {
-        let {sidenav:{listOfLinks,currentLinkPos},bulkUpdateUserExperience,personalInfo:{order_data},updateCurrentLinkPos,history,showGenerateResumeModal,hideGenerateResumeModal,reGeneratePDF} = this.props
+        let {sidenav:{listOfLinks,currentLinkPos},bulkUpdateUserExperience,generateResumeAlert,updateCurrentLinkPos,
+                history} = this.props
         this.setState({submit:true})
         currentLinkPos++
         await bulkUpdateUserExperience(values.list);
          if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
-            if(order_data && order_data.id){
-                showGenerateResumeModal()
-                reGeneratePDF(order_data.id)
-                setTimeout(function() {
-                    window.location.href = `${siteDomain}/dashboard`
-                    hideGenerateResumeModal()
-                }, 5000);
-            }
-            else{
-                history.push(`/resume-builder/buy`) 
-            }
+            generateResumeAlert()
         }
         else{
             updateCurrentLinkPos({currentLinkPos})

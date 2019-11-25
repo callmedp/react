@@ -19,6 +19,9 @@ class Home extends Component {
         this.state = {
             'token': ''
         }
+        if (document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]){
+        document.getElementsByClassName('chat-bot')[0].style.display='none'; 
+        }
         const values = queryString.parse(this.props.location.search);
         this.scrollTo = this.scrollTo.bind(this);
         const token = (values && values.token) || '';

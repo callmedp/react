@@ -32,7 +32,7 @@ class IsObjectOwner(BasePermission):
 
         return True
 
-    def has_object_permission(self, request, view, obj):
+    def has_object_permission(self, request, view, model_obj):
         owner_fields = getattr(view, 'owner_fields', ['owner_id', 'candidate_id'])
         permission_granted = False
 
@@ -42,10 +42,17 @@ class IsObjectOwner(BasePermission):
             return False
 
         for field in owner_fields:
-            object_data = getattr(obj, field, '')
-            if object_data == str(user.id):
-                permission_granted = True
-                break
+            nested_field = field.split('.')
+            obj = model_obj
+            for f in nested_field:
+                object_data = getattr(obj, f, '')
+
+                if object_data == str(user.id):
+                    permission_granted = True
+                    break
+
+                if object_data:
+                    obj = getattr(obj,f,'')
 
         return permission_granted
 
