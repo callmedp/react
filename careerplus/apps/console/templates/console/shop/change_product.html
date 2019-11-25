@@ -2313,7 +2313,10 @@
       element.remove()
     });
   </script>
-    <script>
+   
+
+    {% endcompress %}
+     <script>
     var product_id = {{ object.id }}
     $("#suggestion_skill_btn").click(function(){
         let url = '/api/v1/parse-skill/'
@@ -2393,8 +2396,6 @@
     }
 
   </script>
-
-    {% endcompress %}
 
     {{prdskill_formset.media}}
 
