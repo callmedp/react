@@ -1,0 +1,46 @@
+* {
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+
+html {
+  height: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  color: $body-color;
+  display: block;
+  font-family: $font-family-montserrat;
+  font-size: $font-base;
+  font-weight: $font-weight;
+  line-height: $line-height;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+a {
+    color: $txt-blue;
+    text-decoration: none;
+}
+
+figure {
+  margin: 0;
+}
+
+hr {
+  border: 0 none;
+  border-top: 1px solid #ddd;
+  margin: 10px 0 15px;
+}
+
+li {
+    @extend %remove-space;
+    list-style: none;
+  }
+  
+  ul, ol {
+    @extend %remove-space;
+    list-style: none;
+  }

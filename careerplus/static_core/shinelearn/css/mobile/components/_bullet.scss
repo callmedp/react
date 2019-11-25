@@ -1,5 +1,4 @@
 .bullet {
-
   li {
     list-style-type: circle;
     list-style-position: inside;
@@ -40,6 +39,29 @@
       @include border-radius(50%);
       content: '';
       background-color: $blue;
+      position: absolute;
+      left: 0;
+      top: 7px;
+    }
+  }
+}
+
+.bullet-tick {
+  padding: 0 !important;
+
+  li {
+    position: relative;
+    padding-left: 20px;
+    display:inline-block;
+    list-style-type: none !important;
+
+    &:not(:last-child) {
+      margin-bottom: 20px;
+    }
+
+    &:after{
+      @extend %tick-blue;
+      content: '';
       position: absolute;
       left: 0;
       top: 7px;

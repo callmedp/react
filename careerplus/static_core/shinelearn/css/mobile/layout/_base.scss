@@ -1,0 +1,73 @@
+.wrapper {
+    display: block;
+    min-height: 100%;
+    position: relative;
+    width: 100%;
+}
+
+.content-box {
+    padding: 15px;
+}
+
+.media-right {
+    @extend %tablecell-top;
+  }
+  
+  .media-body {
+    @extend .media-right;
+    width: 10000px;
+  }
+  
+  .media-left {
+    @extend .media-right;
+    padding-right: 15px;
+  }
+
+.white-box {
+    @include border-radius($border-radius-base);
+    background-color: $white;
+    box-shadow: $box-shadow;
+    padding: 15px;
+    position: relative;
+
+    h2 {
+        position: relative;
+        margin-bottom: 12px;
+
+        &::before {
+            content: '';
+            @include size(5px, 35px, block);
+            position: absolute;
+            left: -15px;
+            background-color: $primary-light;
+        }
+    }
+}
+
+.body-wrapper {
+    width: 100%;
+    padding: 0 0 120px;
+    clear: both;
+}
+
+.border-bottom-blue {
+    overflow: hidden;
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 7px;
+        left: 0;
+        background-color: $primary-light;;
+    }
+}
+
+.position-relative {
+    position: relative;
+}
+
+.row {
+    margin-left: -15px;
+    margin-right: -15px;
+}

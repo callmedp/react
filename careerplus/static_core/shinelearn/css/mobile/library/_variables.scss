@@ -82,6 +82,7 @@ $error: #f34a38;
 // images
 
 $fullpath:        $path + 'images/mobile/common/';
+$path-mobile:        $path + 'images/mobile/';
 $image-path:         $fullpath + 'sprites.svg';
 $dropdown-default:   $fullpath + 'dropdown.svg';
 $dropdown-white:   $fullpath + 'dropdown-white.svg';
@@ -168,7 +169,6 @@ $prac-blue         :#D7F9F9;
   background-image: none;
   border: 1px solid transparent;
   cursor: pointer;
-  display: inline-block;
   font-size: 1em;
   font-weight: normal;
   line-height: 1.6;
@@ -339,6 +339,7 @@ $prac-blue         :#D7F9F9;
   background-color: #e1e1e1;
   margin-bottom: 4px;
 }
+
 %white-box {
   background-color: $bg-white;
   border-radius: 5px;
@@ -346,3 +347,46 @@ $prac-blue         :#D7F9F9;
   margin-top: 30px;
   padding: 15px;
 }
+
+
+// ------- New Variables Starts here ----- // 
+
+$primary            : #2958A8;
+$primary-light      : #E0F3FF;
+$primary-lightest   : #F8F9FC;
+
+$secondary          : #FED27A;
+// $secondary-medium   : #ffa721;
+// $secondary-light    : #ffbd59;
+
+$gray-darker        : #333333;
+$gray-dark          : #666666;
+$gray-medium        : #999999;
+$white              : #ffffff;
+$black              : #000000;
+$body-color         : $gray-dark;
+$link-color         :   $primary;
+
+// Images path
+$sprite-new:         $fullpath + 'sprite-19.svg';
+
+
+// Font Family
+$font-family-montserrat: 'Montserrat', sans-serif;
+
+// border radius
+$border-radius-base   : 4px;
+$round-corner         : 30px;
+$border-radius-circle : 50%;
+
+// Font Size 
+$font-base  : 0.875rem;     // 14px
+$h1-heading : 1.5rem;       // 24px
+$h2-heading : 1.125rem;      // 18px
+
+// badge colors
+$badge-1: #E8D0B7;
+$badge-2: #F8C2C2;
+$badge-3: #B0F3FF;
+$badge-4: #CAE9BD;
+$badge-5: #D9CDED;

@@ -1,0 +1,4 @@
+%tick-blue {
+    @include icon-block(10px, 8px, 0 -31px);
+    background-image: url($sprite-new);
+}

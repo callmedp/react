@@ -210,6 +210,26 @@ $(document).ready(function() {
 		infinite: true
 	});
 
+	$(".main-banner__slider").slick({
+		autoplay:false,
+		arrows: false,
+		dots: false,
+		variableWidth: true,
+		slidesToShow: 2,
+		slidesToScroll: 1,
+		infinite: true
+	});
+
+	$(".popular-courses__slides").slick({
+		autoplay:false,
+		arrows: false,
+		dots: false,
+		variableWidth: true,
+		slidesToShow: 2,
+		slidesToScroll: 1,
+		infinite: true
+	});
+
 
 
 

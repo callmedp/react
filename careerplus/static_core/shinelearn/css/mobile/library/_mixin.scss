@@ -155,6 +155,12 @@
 
 %flexbox { @include flexbox; }
 
+@mixin flex-center($flex,$vCenter,$hCenter) {
+  display: $flex;
+  justify-content: $vCenter;
+  align-items: $hCenter;
+}
+
 @mixin flex($fg: 1, $fs: null, $fb: null) {
 
 	// Set a variable to be used by box-flex properties

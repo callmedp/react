@@ -1,0 +1,15 @@
+footer {
+    background-color: $bg-grey-eb;
+    bottom: 0;
+    font-size: 80%;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    color: $txt-grey-666;
+  
+    a {
+      color: $txt-grey-666;
+      padding: 0 5px;
+    }
+  }
