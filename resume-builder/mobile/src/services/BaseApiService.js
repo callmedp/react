@@ -5,7 +5,10 @@ const defaultHeaders = {
 
 // todo make seperate function for fetch request
 
-const get = (url, headers = { ...defaultHeaders, 'Authorization': localStorage.getItem('token') || '' }, isFetchingHTML = false) => {
+const get = (url, headers = {
+    ...defaultHeaders,
+    ...{ 'Authorization': (typeof localStorage !== 'undefined') ? localStorage.getItem('token') || '' : '' }
+}, isFetchingHTML = false) => {
     return fetch(url, {
         headers,
         method: 'GET'
@@ -20,7 +23,10 @@ const handleParams = (data) => Object.keys(data).map((key) => {
     return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
 }).join('&');
 
-const post = (url, data, headers = { ...defaultHeaders, 'Authorization': localStorage.getItem('token') || '' }, isStringify = true, isUpload = false) => {
+const post = (url, data, headers = {
+    ...defaultHeaders,
+    ...{ 'Authorization': (typeof localStorage !== 'undefined') ? localStorage.getItem('token') || '' : '' }
+}, isStringify = true, isUpload = false) => {
     return fetch(url, {
         headers,
         method: 'POST',
@@ -29,7 +35,10 @@ const post = (url, data, headers = { ...defaultHeaders, 'Authorization': localSt
         .then(handleResponse)
 };
 
-const deleteMethod = (url, headers = { ...defaultHeaders, 'Authorization': localStorage.getItem('token') || '' }, isStringify = true, isUpload = false) => {
+const deleteMethod = (url, headers = {
+    ...defaultHeaders,
+    ...{ 'Authorization': (typeof localStorage !== 'undefined') ? localStorage.getItem('token') || '' : '' }
+}, isStringify = true, isUpload = false) => {
     return fetch(url, {
         headers,
         method: 'DELETE',
@@ -70,7 +79,7 @@ async function handleResponse(response, isFetchingHTML) {
             status: response['status'],
         }
     } else if (response['status'] === 204) {
-        return { data: {} };
+        window.location.href = `http://localhost:3000/resume-builder/?login=false`;
     } else {
         let result = isFetchingHTML ? await response.text() : await response.json();
         return { data: result };

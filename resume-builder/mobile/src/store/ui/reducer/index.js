@@ -9,6 +9,8 @@ import {
     HIDE_GENERATE_RESUME_MODAL,
     SHOW_HELP_MODAL,
     HIDE_HELP_MODAL,
+    SHOW_LOGIN_MODAL,
+    HIDE_LOGIN_MODAL,
 } from "../actions/actionTypes";
 
 const initialState = {
@@ -20,6 +22,7 @@ const initialState = {
     'alertModalStatus': false,
     'generateResumeModal': false,
     'helpModal': false,
+    'loginModal': false
 };
 
 export const uiReducer = (state = initialState, action) => {
@@ -81,6 +84,18 @@ export const uiReducer = (state = initialState, action) => {
             }
         }
         case HIDE_HELP_MODAL: {
+            return {
+                ...state,
+                ...action.data
+            }
+        }
+        case SHOW_LOGIN_MODAL: {
+            return {
+                ...state,
+                ...action.data
+            }
+        }
+        case HIDE_LOGIN_MODAL: {
             return {
                 ...state,
                 ...action.data

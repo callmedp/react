@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
-import './helpModal.scss'
+import './loginModal.scss'
 
 
 if (typeof document !== 'undefined') {

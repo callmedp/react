@@ -9,7 +9,9 @@ import {
     SHOW_GENERATE_RESUME_MODAL,
     HIDE_GENERATE_RESUME_MODAL,
     SHOW_HELP_MODAL,
-    HIDE_HELP_MODAL
+    HIDE_HELP_MODAL,
+    HIDE_LOGIN_MODAL,
+    SHOW_LOGIN_MODAL
 } from './actionTypes'
 
 
@@ -43,17 +45,17 @@ export const changeFormName = (payload) => {
 export const setSuggestionType = (type) => {
     return {
         type: SET_SUGGESTION_TYPE,
-        data: {suggestionType: type}
+        data: { suggestionType: type }
     }
 }
 
-export const fetchAlertModalStatus = () =>{
+export const fetchAlertModalStatus = () => {
     return {
         type: FETCH_ALERT_MODAL_STATUS
     }
 }
 
-export const updateAlertModalStatus = (payload) =>{
+export const updateAlertModalStatus = (payload) => {
     return {
         type: UPDATE_ALERT_MODAL_STATUS,
         payload
@@ -62,27 +64,46 @@ export const updateAlertModalStatus = (payload) =>{
 export const showGenerateResumeModal = () => {
     return {
         type: SHOW_GENERATE_RESUME_MODAL,
-        data: {'generateResumeModal': true}
+        data: { 'generateResumeModal': true }
     }
 }
 
 export const hideGenerateResumeModal = () => {
     return {
         type: HIDE_GENERATE_RESUME_MODAL,
-        data: {'generateResumeModal': true}
+        data: { 'generateResumeModal': true }
     }
 }
 
 export const showHelpModal = () => {
     return {
         type: SHOW_HELP_MODAL,
-        data: {helpModal: true}
+        data: { helpModal: true }
     }
 }
 
 export const hideHelpModal = () => {
     return {
         type: HIDE_HELP_MODAL,
-        data: {helpModal: false}
+        data: { helpModal: false }
     }
 }
+
+
+
+export const showLoginModal = () => {
+    return {
+        type: SHOW_LOGIN_MODAL,
+        data: { loginModal: true }
+    }
+}
+
+export const hideLoginModal = () => {
+    return {
+        type: HIDE_LOGIN_MODAL,
+        data: { loginModal: false }
+    }
+}
+
+
+

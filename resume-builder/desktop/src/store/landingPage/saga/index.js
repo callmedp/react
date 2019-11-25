@@ -106,10 +106,16 @@ function* loginCandidate(action) {
             result = yield call(Api.loginCandidate, info);
         }
 
+        let checkSession = yield call(Api.checkSessionAvaialability)
+
+        const { data: isSessionAvailable } = checkSession;
+
         // if some error comes or token not available then
         // get new information using session.
 
-        if ((result && result['error'] || !isTokenAvail) && Object.keys(info).indexOf('alt') !== -1) {
+
+
+        if ((result && result['error'] || !isTokenAvail) && Object.keys(info).indexOf('alt') !== -1 && isSessionAvailable['result']) {
             result = yield call(Api.getInformation)
         }
 
@@ -118,7 +124,6 @@ function* loginCandidate(action) {
             localStorage.clear();
             yield put({ type: UPDATE_UI, data: { loader: false } });
             return reject(new Error(result['errorMessage']));
-
             //redirect code here
         }
 
@@ -186,7 +191,7 @@ function* feedbackSubmit(action) {
 
 function* getComponentTitle(action) {
     try {
-        let { payload: { resolve, reject } } = action;
+        let { payload: { resolve,reject}} = action;
         resolve('Resume Builder 2019 | Online Free Resume Maker [Unique Templates] @ Shine Learning')
     } catch (e) {
         console.log(e);
@@ -214,7 +219,5 @@ export default function* watchLandingPage() {
     yield takeLatest(Actions.GET_HOME_COMPONENT_TITLE, getComponentTitle);
     yield takeLatest(Actions.GET_CANDIDATE_SHINE_DETAILS, getCandidateShineDetails);
     yield takeLatest(Actions.CHECK_SESSION_AVAILABILITY, checkSessionAvaialability);
-
-
 
 }

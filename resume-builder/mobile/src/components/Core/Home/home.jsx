@@ -3,7 +3,7 @@ import Header from '../../Common/Header/header.jsx';
 import Footer from '../../Common/Footer/footer.jsx';
 import { connect } from "react-redux";
 import './home.scss'
-import { getCandidateId, loginCandidate, feedbackSubmit, getComponentTitle } from "../../../store/landingPage/actions/index.js";
+import { getCandidateId, loginCandidate, feedbackSubmit, getComponentTitle, getCandidateShineDetails, checkSessionAvaialability } from "../../../store/landingPage/actions/index.js";
 import Banner from './Banner/banner.jsx';
 import ResumeSlider from './ResumeSlider/resumeSlider.jsx';
 import Testimonial from './Testimonial/testimonial.jsx';
@@ -11,29 +11,70 @@ import queryString from "query-string";
 import { scroller } from 'react-scroll';
 import Loader from '../../Common/Loader/loader.jsx';
 import { eventClicked } from '../../../store/googleAnalytics/actions/index'
+import { showLoginModal, hideLoginModal } from '../../../store/ui/actions/index'
+import LoginModal from '../../Common/LoginModal/loginModal.jsx'
 class Home extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            'token': ''
+            'token': '',
+            'login': ''
         }
         if (document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
             document.getElementsByClassName('chat-bot')[0].style.display = 'none';
         }
         const values = queryString.parse(this.props.location.search);
         this.scrollTo = this.scrollTo.bind(this);
-        const token = (values && values.token) || '';
+        const token = (values && values.token) || '', login = (values && values.login) || '';
         this.state.token = token;
+        this.state.login = login;
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
+        this.handleLoginSuccess = this.handleLoginSuccess.bind(this);
     }
 
     async componentDidMount() {
         if (this.state.token) {
-            await this.props.loginCandidate(this.state.token);
+            await this.props.loginCandidate({ alt: this.state.token }, this.props.history, true);
         }
+        if (this.state.login === 'false') {
+            const isSessionAvailable = await this.props.checkSessionAvaialability();
+            if (isSessionAvailable) {
+                await this.props.getCandidateShineDetails()
+                // redirect back from where it comes
+                const { state } = this.props.location;
+                if (state && state.from) {
+                    this.props.history.push(state.from);
+                }
+            }
+            else {
+                await this.props.showLoginModal()
+                // const { state } = this.props.location;
+                // if (state && state.from) {
+                //     this.props.history.push(state.from);
+                // }
+            }
+        }
+        const values = queryString.parse(this.props.location.search);
+        const template = (values && values.template) || '';
+
+        if (template === "false") {
+            this.scrollTo('templates', -15, 'Templates', 'Header')
+        }
+
     }
 
+    handleLoginSuccess() {
+        const { history, location } = this.props;
+        const pathFrom = location.state && location.state.from || '';
+
+        if (pathFrom) {
+            history.push(pathFrom);
+        }
+        else {
+            history.push('/resume-builder/edit/?type=profile')
+        }
+    }
     scrollTo(elem, action, label) {
         scroller.scrollTo(elem, {
             duration: 800,
@@ -79,7 +120,7 @@ class Home extends Component {
                     !!(mainloader)
                     && <Loader />
                 }
-
+                <LoginModal  {...this.props} handleLoginSuccess={this.handleLoginSuccess} />
 
                 <section className="section professional">
                     <div className="text-center">
@@ -151,7 +192,7 @@ class Home extends Component {
                     </div>
                 </section>
 
-                <ResumeSlider showtext={true} eventClicked={eventClicked} />
+                <ResumeSlider showtext={true} eventClicked={eventClicked} {...this.props} />
 
                 <section className="section pt-30 pb-30">
                     <div className="text-center">
@@ -242,13 +283,29 @@ const mapDispatchToProps = (dispatch) => {
         "getCandidateId": () => {
             return dispatch(getCandidateId())
         },
-        "loginCandidate": (token) => {
+        "loginCandidate": (payload, history, isTokenAvail) => {
             return new Promise((resolve, reject) => {
-                dispatch(loginCandidate({ info: { alt: token }, resolve, reject, isTokenAvail: true }))
+                dispatch(loginCandidate({ info: payload, resolve, reject, history, isTokenAvail: isTokenAvail }))
+            })
+        },
+        "getCandidateShineDetails": () => {
+            return new Promise((resolve, reject) => {
+                return dispatch(getCandidateShineDetails({ resolve, reject }))
             })
         },
         'eventClicked': (data) => {
             return dispatch(eventClicked(data))
+        },
+        'showLoginModal': () => {
+            return dispatch(showLoginModal())
+        },
+        'hideLoginModal': () => {
+            return dispatch(hideLoginModal())
+        },
+        'checkSessionAvaialability': () => {
+            return new Promise((resolve, reject) => {
+                return dispatch(checkSessionAvaialability({ resolve, reject }))
+            })
         }
     }
 };

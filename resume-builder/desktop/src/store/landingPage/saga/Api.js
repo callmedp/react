@@ -38,5 +38,4 @@ export const Api = {
     getInformation,
     feedbackSubmit,
     checkSessionAvaialability
-
 }
