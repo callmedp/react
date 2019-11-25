@@ -27,7 +27,7 @@ function* getCandidateShineDetails(action) {
     try {
         const { payload: { resolve, reject } } = action;
 
-        yield put({ type: uiAction.UPDATE_MAIN_PAGE_LOADER, data: { mainloader: true } })
+        yield put({ type: uiAction.UPDATE_MAIN_PAGE_LOADER, payload: { mainloader: true } });
 
         const result = yield call(Api.getInformation);
 
@@ -87,7 +87,7 @@ function* loginCandidate(action) {
     try {
         let { data: { info, resolve, reject, isTokenAvail } } = action;
 
-        yield put({ type: uiAction.UPDATE_MAIN_PAGE_LOADER, data: { mainloader: true } })
+        yield put({ type: uiAction.UPDATE_MAIN_PAGE_LOADER, payload: { mainloader: true } })
 
         let result;
         if (isTokenAvail) {
@@ -127,7 +127,7 @@ function* loginCandidate(action) {
                 localStorage.setItem('mobile', candidate_profile[key]['number'])
                 yield put({ type: SAVE_USER_INFO, data: candidate_profile[key] })
             }
-            
+
             if (!entityObj.set) {
                 if (key == 'personalInfo') {
 
