@@ -602,7 +602,7 @@ class Attribute(AbstractAutoDate):
 
     @property
     def get_class(self):
-        if self.product_class:
+        if self.product_class_id:
             return self.product_class.name
         return ''
 
@@ -1070,7 +1070,7 @@ class Product(AbstractProduct, ModelMeta):
 
     def __init__(self, *args, **kwargs):
         super(Product, self).__init__(*args, **kwargs)
-        if self.product_class:
+        if self.product_class_id:
             self.attr = ProductAttributesContainer(product=self)
 
     def __str__(self):
@@ -1848,7 +1848,7 @@ class ProductScreen(AbstractProduct):
 
     def __init__(self, *args, **kwargs):
         super(ProductScreen, self).__init__(*args, **kwargs)
-        if self.product_class:
+        if self.product_class_id:
             self.attr = ProductAttributesContainer(product=self)
 
     def save(self, *args, **kwargs):
