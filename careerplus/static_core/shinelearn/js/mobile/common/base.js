@@ -230,6 +230,16 @@ $(document).ready(function() {
 		infinite: true
 	});
 
+	$(".learner-stories__slider").slick({
+		autoplay:false,
+		arrows: false,
+		dots: false,
+		variableWidth: true,
+		slidesToShow: 2,
+		slidesToScroll: 1,
+		infinite: true
+	});
+
 
 
 
@@ -323,4 +333,23 @@ $(document).ready(function(){
 	}
 
 
+$('.scrollTo').click(function(e){
+	var height = $('.sticky-header').height() + 10;
+	$('html, body').animate({
+		scrollTop: $( $(this).attr('href') ).offset().top - height
+	}, 500);
 
+	e.stopPropagation();
+	$(".active").removeClass("active");
+	$(this).addClass("active");
+	return false;
+});
+
+
+$(window).scroll(function(){
+    if ($(this).scrollTop() > 10) {
+       $('.sticky-header').addClass('fixed');
+    } else {
+       $('.sticky-header').removeClass('fixed');
+    }
+});

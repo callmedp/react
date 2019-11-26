@@ -1,3 +1,11 @@
+.m-auto {
+  margin: 0 auto;
+}
+
+.m-15 {
+  margin: 15px;
+}
+
 .mx-0 {
   margin-left: -imp(0);
   margin-right: -imp(0);
@@ -189,3 +197,5 @@
     margin-bottom: -imp(120px);
   }
 }
+
+

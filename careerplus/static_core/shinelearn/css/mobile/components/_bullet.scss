@@ -46,7 +46,8 @@
   }
 }
 
-.bullet-tick {
+
+.bullet-custom {
   padding: 0 !important;
 
   li {
@@ -67,4 +68,27 @@
       top: 7px;
     }
   }
+
+  &.tick {
+    li {
+      &:after{
+        @extend %tick-blue;
+      }
+    }
+  }
+  
+  &.arrow {
+    li {
+      display: block;
+
+      &:not(:last-child) {
+        margin-bottom: 10px;
+      }
+
+      &:after{
+        @extend %arrow-blue;
+      }
+    }
+  }
 }
+

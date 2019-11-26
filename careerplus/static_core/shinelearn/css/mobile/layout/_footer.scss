@@ -1,5 +1,5 @@
 footer {
-    background-color: $bg-grey-eb;
+    background-color: $gray-lightest;
     bottom: 0;
     font-size: 80%;
     left: 0;
@@ -13,3 +13,23 @@ footer {
       padding: 0 5px;
     }
   }
+
+
+.footer-new {
+  @extend footer;
+
+  &__smo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    
+    a {
+      @include size(25px, 25px, block);
+
+      &:not(:last-child) {
+        margin-right: 10px;
+      }
+    }
+  }
+}
+  

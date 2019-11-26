@@ -2,3 +2,8 @@
     @include icon-block(10px, 8px, 0 -31px);
     background-image: url($sprite-new);
 }
+
+%arrow-blue {
+    @include icon-block(5px, 9px, 0 -144px);
+    background-image: url($sprite-new);
+}
