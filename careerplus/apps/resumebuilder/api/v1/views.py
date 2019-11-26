@@ -874,7 +874,7 @@ class SessionAvailabilityAPIView(APIView):
         return Response(
             data={'result': False},
             status=status.HTTP_200_OK 
-        )
+            )
 
 
 class PDFRefreshAPIView(APIView):

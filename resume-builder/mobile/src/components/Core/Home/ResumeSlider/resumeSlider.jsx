@@ -97,23 +97,23 @@ export default class ResumeSlider extends Component {
                 <div className="proven-resume__slideWrap">
                     <Slider {...settings}>
                         <div className="proven-resume__imageWrap">
-                            <img src={`${this.staticUrl}react/assets/images/mobile/resume-1.jpg`} alt="" />
+                            <img src={`${this.staticUrl}react/assets/images/mobile/resume-1.jpg`} alt="Resume 1"/>
                         </div>
                         <div className="proven-resume__imageWrap">
-                            <img src={`${this.staticUrl}react/assets/images/mobile/resume-2.jpg`} alt="" />
+                            <img src={`${this.staticUrl}react/assets/images/mobile/resume-2.jpg`} alt="Resume 2"/>
                         </div>
                         <div className="proven-resume__imageWrap">
-                            <img src={`${this.staticUrl}react/assets/images/mobile/resume-3.jpg`} alt="" />
+                            <img src={`${this.staticUrl}react/assets/images/mobile/resume-3.jpg`} alt="Resume 3"/>
                         </div>
                         <div className="proven-resume__imageWrap">
-                            <img src={`${this.staticUrl}react/assets/images/mobile/resume-4.jpg`} alt="" />
+                            <img src={`${this.staticUrl}react/assets/images/mobile/resume-4.jpg`} alt="Resume 4"/>
                         </div>
                         <div className="proven-resume__imageWrap">
-                            <img src={`${this.staticUrl}react/assets/images/mobile/resume-5.jpg`} alt="" />
+                            <img src={`${this.staticUrl}react/assets/images/mobile/resume-5.jpg`} alt="Resume 5"/>
                         </div>
                     </Slider>
 
-                    <a className="btn btn__shadow btn__round btn__primary" onClick={this.customise}>Select Template</a>
+                    <a className="btn btn__shadow btn__round btn__primary" alt="Select Template" onClick={this.customise}>Select Template</a>
                 </div>
             </section>
         )

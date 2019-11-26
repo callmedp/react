@@ -229,7 +229,7 @@ class Home extends Component {
                     </div>
 
                     <div className="text-center mt-30">
-                        <a className="btn btn__shadow btn__round btn__primary"
+                        <a className="btn btn__shadow btn__round btn__primary" alt ="Build Your Resume"
                             onClick={() => this.scrollTo('templates', 'BuildResume', 'Features')}>Build your resume</a>
                     </div>
 
@@ -241,7 +241,7 @@ class Home extends Component {
                     </div>
 
                     <div className="mt-20 resume-builder">
-                        <img src={`${this.staticUrl}react/assets/images/mobile/nextgen-resume.jpg`} alt=""
+                        <img src={`${this.staticUrl}react/assets/images/mobile/nextgen-resume.jpg`} alt="Resume Template"
                             className="img-fluid" />
                     </div>
                 </section>

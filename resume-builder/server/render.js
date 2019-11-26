@@ -19,7 +19,7 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
       </div>
     </StaticRouter>
   </Provider>);
-  
+
 
   // const cssUrl = isMobile ? `${staticUrl}react/dist/mobile/main-${timeStamp}.css` : `${staticUrl}react/dist/desktop/main-${timeStamp}.css`
   // const jsBuildUrl = isMobile ? `${staticUrl}react/dist/mobile/main-${timeStamp}.js` : `${staticUrl}react/dist/desktop/main-${timeStamp}.js`
@@ -28,34 +28,8 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
     viewPort = isMobile ? `width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no`
       : "width=device-width, initial-scale=1, shrink-to-fit=no";
 
-
-
-    //   <script>
-    //   var url = "${siteDomain}/api/v1/chatbot/?key=CHATBOT_URL"
-    //   fetch(url, {headers : {"Content-Type": "application/json"}, method:'GET'})
-    //   .then(response => response.json())
-    //   .then(result=> {
-    //     console.log("---result--",result);
-    //   })
-    // </script>
-    
   // Meta descriptions 
 
-  // <meta name="description" content="Online Resume Builder, Make your resume with our easy-to-use templates & pro resume tips from experts. Select, Personalize/Customize any built-in resume templates for free download.">
-  // <meta name="keywords" content="Resume formats, format of Resume, Download Resume format, CV format">
-  // <meta property="og:title" content="${context.title}">
-  // <meta property="og:url" content="https://learning.shine.com/cms/resume-format/1/">
-  // <meta property="og:description" content="Online Resume Builder, Make your resume with our easy-to-use templates & pro resume tips from experts. Select, Personalize/Customize any built-in resume templates for free download.">
-  // <meta property="og:type" content="Website">
-  // <meta property="og:site_name" content="ShineLearning">
-  // <meta property="article:modified_time" content="2018-07-20 08:52:47.536574+00:00">
-  // <meta property="fb:profile_id" content="282244838633660">
-  // <meta property="og:image" content="https://static1.shine.com/l/s/shinelearn/images/cms/creative-1.jpg">
-  // <meta itemprop="name" content="${context.title}">
-  // <meta itemprop="dateModified" content="2018-08-07 08:52:47.536574+00:00">
-  // <meta itemprop="url" content="https://learning.shine.com/cms/resume-format/1/">
-  // <meta itemprop="description" content="Online Resume Builder, Make your resume with our easy-to-use templates & pro resume tips from experts. Select, Personalize/Customize any built-in resume templates for free download.">
-  // <link rel="canonical" href="${siteProtocol}://${siteDomain}/${'resume-builder'}/">
 
 
   return `
@@ -63,8 +37,22 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
       <html lang="en">
       <head>
         <base href="/resume-builder/" />
+         <title>${context.title}</title>
          <link type="text/css" href="${cssUrl}" rel="stylesheet" />
          <meta name="viewport" content="${viewPort}"/>
+         <meta name="description" content="Online Resume Builder, Make your resume with our easy-to-use templates & pro resume tips from experts. Select, Personalize/Customize any built-in resume templates for free download.">
+         <meta property="og:title" content="${context.title}">
+         <meta property="og:url" content="https://learning.shine.com/resume-builder/">
+         <meta property="og:description" content="Online Resume Builder, Make your resume with our easy-to-use templates & pro resume tips from experts. Select, Personalize/Customize any built-in resume templates for free download.">
+         <meta property="og:type" content="Website">
+         <meta property="og:site_name" content="ShineLearning">
+         <meta property="fb:profile_id" content="282244838633660">
+         <meta property="og:image" content="https://static1.shine.com/l/s/react/assets/images/home-banner-slider.png">
+         <meta itemprop="name" content="${context.title}">
+         <meta itemprop="description" content="Online Resume Builder, Make your resume with our easy-to-use templates & pro resume tips from experts. Select, Personalize/Customize any built-in resume templates for free download.">
+         <link rel="canonical" href="${siteDomain}${pathname}">
+         <meta charset="UTF-8">
+         <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
          <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
               integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
               crossorigin="anonymous">
@@ -73,9 +61,6 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
         <link rel="stylesheet" type="text/css"
           href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"/>
         <link type="text/css" href="${staticUrl}shinelearn/css/resume-builder/resume6.css" rel="stylesheet">
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>${context.title}</title>
       </head>
       <body>
       <div id="react-app">${content}</div>
@@ -96,7 +81,14 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
           }
       }
       </script>
-     
+      <script type="text/javascript">
+      var url = "${siteDomain}/api/v1/cache/?key=CHATBOT_URL";
+      fetch(url, {headers : {"Content-Type": "application/json"}, method:'GET'})
+      .then(response => response.json())
+      .then(result=> {
+        console.log("---result--",result);
+      })
+    </script>
       <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

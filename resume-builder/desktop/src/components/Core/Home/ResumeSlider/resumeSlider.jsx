@@ -145,7 +145,7 @@ export default class ResumeSlider extends Component {
                                     new job</strong>
                             </React.Fragment>
                     }
-                    <a onClick={this.selectTemplate} className="orange-button proven-resume--customise">Select
+                    <a onClick={this.selectTemplate} alt="Select Template" className="orange-button proven-resume--customise">Select
                         Template</a>
 
                     < Slider
@@ -163,6 +163,7 @@ export default class ResumeSlider extends Component {
                                                 <div onClick={() => this.showZoomedImage(item)} className="zoom" />
                                             }
                                             <img
+                                                alt = "Resume-Slider"
                                                 src={`${this.staticUrl}react/assets/images/resume${item}_preview.jpg`} />
                                         </div>
                                     </div>

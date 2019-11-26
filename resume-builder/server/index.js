@@ -27,7 +27,7 @@ if (typeof window == 'undefined') {
         }
     };
 
-    global.window.siteDomain = `${global.window.siteProtocol}://${global.window.siteDomain}`;
+    global.window.config.siteDomain = `${global.window.config.siteProtocol}://${global.window.config.siteDomain}`;
 
 }
 
