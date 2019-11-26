@@ -192,9 +192,10 @@ def generate_and_upload_resume_pdf(data):
     from order.tasks import send_resume_in_mail_resume_builder
     from core.api_mixin import UploadResumeToShine
     data = json.loads(data)
-    order = Order.objects.get(id=data.get('order_id'))
+    order = Order.objects.filter(id=data.get('order_id')).first()
     template_no = data.get('template_no')
     send_mail = data.get('send_mail')
+    is_free_trial = data.get('is_free_trial',False)
 
     # Render PDF for context
     def generate_file(context_dict={}, template_src=None, file_type='pdf'):
@@ -228,11 +229,17 @@ def generate_and_upload_resume_pdf(data):
 
     # Prepare Context for PDF generation
     content_type = "pdf"
-    candidate_id = order.candidate_id
+    candidate_id = order.candidate_id if not is_free_trial else data.get('candidate_id','')
+
+    if not candidate_id:
+        logging.getLogger('error_log').error("No candidate id.")
+        return
+    
     template_id = int(template_no)
     candidate = Candidate.objects.filter(candidate_id=candidate_id).first()
     first_save = False 
-    if not candidate:
+    
+    if not candidate and not is_free_trial:
         candidate = Candidate.objects.create(
             email=order.email,
             number=order.mobile,
@@ -244,12 +251,19 @@ def generate_and_upload_resume_pdf(data):
         )
         first_save = True
         candidate.save()
+    else:
+        logging.getLogger('error_log').error("No candidate for this trial resume download.")
+        return
         
-        
+   
     file_dir = "{}/{}".format(candidate.id, content_type)
-    file_name = "{}.{}".format(template_no, content_type)
+    if is_free_trial:
+        file_name = "free-trial-{}.{}".format(template_no, content_type)
+    else:
+        file_name = "{}.{}".format(template_no, content_type)
+
     entity_preference = eval(candidate.entity_preference_data or "{}")
-    extracurricular = candidate.extracurricular_list
+    extracurricular = candidate.extfile_nameracurricular_list
     education = candidate.candidateeducation_set.all().order_by('order')
     experience = candidate.candidateexperience_set.all().order_by('order')
     skills = candidate.skill_set.all().order_by('order')
@@ -305,6 +319,12 @@ def generate_and_upload_resume_pdf(data):
                     }
     pdf_file = generate_file(context_dict=context_dict, template_src=template_src, file_type='pdf')
     store_resume_file(file_dir, file_name, pdf_file)
+
+    if is_free_trial:
+        candidate.resume_download_count += 1
+        candidate.save()
+        logging.getLogger('info_log').info("Trial part finished and incremented download count")
+        return
 
     data = {}
     data.update({

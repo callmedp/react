@@ -1,0 +1,46 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}" />
+
+{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+<div>
+    <form method="post">
+        {% csrf_token %}
+    <table>
+        <tr>
+            <td valign="middle" style="vertical-align:middle;">
+                 <b> Free Resume Downloads </b>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Product Course
+            </td>
+            <td> 
+                <input type="number" name="free_downloads" value="{{free_resume_downloads}}" class="vIntegerField" min="0" required="" id="free_downloads">
+            </td>
+        </tr>
+        
+        </tr>
+            <td colspan="2">
+                <input type="submit">
+            </td>
+        </tr>
+
+
+    </table>
+    </form>
+</div>
+
+{% endblock %}
+

@@ -149,6 +149,19 @@ class Buy extends Component {
                 <div className="buy">
                     <p className="buy--create">Use resume builder for 12 months
                         to<strong> create/edit</strong> unlimited resume.</p>
+                        <div class="buy__wrap mt-15">
+                            <div class="buy__item buy__trial">
+                                <div class="buy__trial--tag">
+                                    <div className="buy__trial--tag__text">Trial offer</div>
+                                </div>
+                                <div>
+                                    <div className="buy__trial__download-text">Free one time download for 1st time users</div>
+                                    <div className="buy__trial__download-button">
+                                        <button class="btn btn__round btn--outline">Download</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     <div className="buy__wrap mt-15">
                         <div className="buy__item">
                             <div className="buy__item--left">

@@ -39,7 +39,7 @@ from skillpage.views import (
     ServiceDetailPage, UniversityPageView,
     UniversityFacultyView, LocationSkillPageView)
 
-from resumebuilder.views import (WriteResumeView)
+from resumebuilder.views import (WriteResumeView,FreeResumeDownload)
 
 from django.conf.urls import (
     handler400, handler403, handler404, handler500
@@ -163,6 +163,7 @@ def get_urls():
             admin.site.admin_view(UserLoginTokenView.as_view())),
         url(r'^shownumberfield/$', admin.site.admin_view(ShowNumberField.as_view())),
         url(r'^whatsappbtn/$', admin.site.admin_view(CourseServiceWhatsappBtn.as_view())),
+        url(r'^free-resume-downloads/$', admin.site.admin_view(FreeResumeDownload.as_view())),
     ]
     return urls
 

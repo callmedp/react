@@ -126,13 +126,14 @@ export class Buy extends Component {
             slidesToShow: 3,
             slidesToScroll: 1,
         };
-        const { userInfo: { first_name, last_name, number, email, selected_template, order_data }, ui: { loader }, template: { templateImage, thumbnailImages }, productIds, eventClicked } = this.props;
+        const { userInfo: { first_name, last_name, number, email, selected_template, order_data,resume_download_count,free_resume_downloads }, ui: { loader }, template: { templateImage, thumbnailImages }, productIds, eventClicked } = this.props;
         const { userInfo } = this.props;
         const { checked } = this.state;
         const price1 = productIds[0] ? productIds[0].inr_price : 999
         const discount1 = Math.floor(((1499 - price1) / 1499) * 100)
         const price2 = productIds[1] ? productIds[1].inr_price : 1248
         const discount2 = Math.floor(((1999 - price2) / 1999) * 100)
+        const free_download_count = free_download_count - resume_download_count
 
         return (
             /*
@@ -176,6 +177,27 @@ export class Buy extends Component {
                                 <h2 className="mt-10">Choose your plan</h2>
                                 <span
                                     class="choose-plan-txt">Use resume builder for 12 months to<strong> create/edit</strong> unlimited resume.</span>
+                                
+                                <ul>
+                                    <li className="bdr pos-rel free-trial">
+                                        <div>
+                                            <span className="free-trial--ribbon">
+                                                <span>TRIAL OFFER</span>
+                                            </span>
+                                            <span className="free-trial--text">
+                                                <p>
+                                                     {free_download_count? `Free download ${free_download_count} times for 1st time users.` :"You have exceeded the free download limit."} 
+                                                </p>
+                                            </span>
+                                            {free_download_count?
+                                                <span className="free-trial--download-button">
+                                                    <button>Download</button>
+                                                </span>:''
+                                            }
+                                        </div>
+                                    </li>
+                                </ul>
+
                                 <ul>
                                     <li>
                                         <div className="flex-container">
