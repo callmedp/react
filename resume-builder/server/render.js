@@ -30,7 +30,15 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
 
 
 
-
+    //   <script>
+    //   var url = "${siteDomain}/api/v1/chatbot/?key=CHATBOT_URL"
+    //   fetch(url, {headers : {"Content-Type": "application/json"}, method:'GET'})
+    //   .then(response => response.json())
+    //   .then(result=> {
+    //     console.log("---result--",result);
+    //   })
+    // </script>
+    
   // Meta descriptions 
 
   // <meta name="description" content="Online Resume Builder, Make your resume with our easy-to-use templates & pro resume tips from experts. Select, Personalize/Customize any built-in resume templates for free download.">
@@ -88,6 +96,7 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
           }
       }
       </script>
+     
       <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -98,7 +107,7 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
        </script>
       <script type="text/javascript" src="${jsBuildUrl}"></script>
       </body>
-      </html>
+    </html>
   `;
 
 };
