@@ -88,9 +88,10 @@ $(document).ready(function(){
 })
 
 const uploadResumeShine = (checkbox,order_id)=>{
-    let request = fetch(`/order/api/v1/${order_id}/update/`,{
+    let request = fetch(`/api/v1/order/${order_id}/update/`,{
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie('csrftoken')
         },
         method: 'PATCH',  
         body: JSON.stringify({

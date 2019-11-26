@@ -83,9 +83,13 @@ class AssessmentLandingPage(TemplateView):
     def get_func_area_ids(self):
         # category_ids = list(set(Test.objects.filter(category__categoryproducts__type_flow=16,category__active=True)\
         #     .values_list('category__id', flat=True)))
-        category_ids = set(Test.objects.exclude(category=None).values_list('category__id',flat=True))
+        category_ids = set(Test.objects.exclude(category=None,
+                       is_active=False,categories=None).values_list(
+            'category__id',
+                                                       flat=True))
         all_categories_ids = set(Test.objects.values_list('categories',flat=True)\
-            .exclude(categories=None).exclude(category=None))
+            .exclude(categories=None).exclude(category=None,is_active=False,
+                                              categories=None))
         category_ids = list(filter(None,category_ids|all_categories_ids))
         return category_ids
 
@@ -99,10 +103,12 @@ class AssessmentLandingPage(TemplateView):
         category_ids = self.get_func_area_ids()
         test_prep_children = []
         if category_ids:
-            category_ids = Category.objects.filter(id__in=category_ids, from_category__active=True).values_list\
+            category_ids = Category.objects.filter(id__in=category_ids,
+                            active=True,from_category__active=True).values_list\
                 ('from_category__related_to__id', flat=True)
         if category_ids:
-            category_ids = Category.objects.filter(id__in=category_ids).exclude(id__in=settings.TEST_PREP_ID)
+            category_ids = Category.objects.filter(id__in=category_ids,
+                            active=True).exclude(id__in=settings.TEST_PREP_ID)
         test_prep = Category.objects.filter(id__in=settings.TEST_PREP_ID)
         test_children_id = Test.objects.filter(
             categories__id__in=settings.TEST_PREP_CHILDREN_ID).values_list(

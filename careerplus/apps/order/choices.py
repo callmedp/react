@@ -129,6 +129,7 @@ OI_USER_STATUS = (
     (28, 'Feature profile initiated'),
     (29, 'Feature profile expired'),
     (30, 'Feature profile updated'),
+    (33, 'Boarded on Neo'),
 
     # for linkedin flow8 41 - 60
     (44, 'Linkedin Draft Created'),

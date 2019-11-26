@@ -42,10 +42,9 @@ function boardNeoUser(oi_pk, ) {
             url: '/api/v1/neo_board_user/',
             type: "POST",
             data : {'oi_pk': oi_pk, },
-            dataType: 'html',
-            success: function(html) {
+            success: function(data) {
+                alert(data['msg'])
                 window.location.reload();
-                alert('Please check you mail to confirm boarding on Neo')
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 alert("Something went wrong");
@@ -934,10 +933,17 @@ function roundone_edit(form, ajaxurl){
     });
 }
 
+const  getCookieMobile = (name)=> {
+    var value = "; " + document.cookie;
+    var parts = value.split("; " + name + "=");
+    if (parts.length == 2) return parts.pop().split(";").shift();
+  }
+
 const uploadResumeShine = (checkbox,order_id)=>{
-    let request = fetch(`/order/api/v1/${order_id}/update/`,{
+    let request = fetch(`/api/v1/order/${order_id}/update/`,{
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookieMobile('csrftoken')
         },
         method: 'PATCH',  
         body: JSON.stringify({
@@ -969,7 +975,7 @@ const pause_resume_service = (el,oi_id,oi_status)=>{
 
     pause_resume_api_hit_once = true
     
-    let request = fetch(`/order/api/v1/orderitem/${oi_id}/update/`,{
+    let request = fetch(`/api/v1/order/orderitem/${oi_id}/update/`,{
         headers: {
             "Content-Type": "application/json"
         },
