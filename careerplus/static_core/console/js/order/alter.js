@@ -95,37 +95,38 @@ $('#alternumber').submit(function(event){
 
 function createDraftResumeDownload(element){
 if(element.oi_resume){
-let oi_resume = element.oi_resume.split('/').pop()
+let oi_resume = element.oi_resume.split('/').slice(-2)
 return ` <div class="allactions__box"><strong>Candidate Resume:</strong></br>
-         <a href="/console/queue/resumedownload/?path=${oid}/${oi_resume}&next=${window.location.pathname}">
+         <a href="/console/queue/resumedownload/?path=${oi_resume[0]}/${oi_resume[1]}&next=${window.location.pathname}">
          <button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
          </div>`
                      }
 
 else if(element.oi_status == 4 && element.oi_draft) {
-let oi_draft = element.oi_draft.split('/').pop()
+let oi_draft = element.oi_draft.split('/').slice(-2)
+
 return `<div class="allactions__box">
 <strong>Draft After Close OrderItem:</strong></br>
-<a href="/console/queue/resumedownload/?path=${oid}/${oi_draft}&next=${window.location.pathname}">
+<a href="/console/queue/resumedownload/?path=${oi_draft[0]}/${oi_draft[1]}&next=${window.location.pathname}">
 <button type="button" class="btn btn-success btn-xs">
 <i class="fa fa-eye"></i>Download Doc</button></a></div>`
                                                       }
 
 else if(element.oi_draft){
-let oi_draft = element.oi_draft.split('/').pop()
+let oi_draft = element.oi_draft.split('/').slice(-2)
 return `<div class="allactions__box">
   <strong>Draft Level ${ element.draft_counter < maxDraft ? element.draft_counter:'Final'}:</strong></br>
-  <a href="/console/queue/resumedownload/?path=${oid}/${oi_draft}&next=${window.location.pathname}">
+  <a href="/console/queue/resumedownload/?path=${oi_draft[0]}/${oi_draft[1]}&next=${window.location.pathname}">
   <button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
 </div>`
 }
 else if( element.linkedin && element.order_oio_linkedin != ""){
 return `<div class="allactions__box">
 <strong>Candidate Draft</strong></br>
-<a href="/linkedin/dashboard-draft-download/${element.oi}/${element.id}" target="_blank">
+<a href="/linkedin/draft-download/linkedin/${element.oi}/${element.id}/" target="_blank">
 <button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Draft</button></a>
 <strong>Draft Level ${ element.draft_counter < maxDraft ? element.draft_counter :'Final'}:</strong></br>
-<a href="/linkedin/linkedin-draft/${element.oi}/${element.id}" target="_blank">
+<a href="/linkedin/linkedin-draft/${element.oi}/${element.id}/" target="_blank">
 <button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></div>`
 }
 }
