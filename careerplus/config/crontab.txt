@@ -33,3 +33,6 @@
 */30 * * * * export DJANGO_SETTINGS_MODULE=careerplus.config.settings_live && /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/scripts/update_transactions_from_zest.py
 
 */30 * * * * export DJANGO_SETTINGS_MODULE=careerplus.config.settings_live && /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/scripts/update_transactions_from_payu.py
+
+#Keep extra line for crontab syntax correction
+

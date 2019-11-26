@@ -4,7 +4,7 @@ var tests = new Bloodhound({
   },
   queryTokenizer: Bloodhound.tokenizers.whitespace,
   remote: {
-    url: "/api/get-test/?page_size=100&fl=id,category,title,slug&title=%QUERY",
+    url: "/api/get-test/?nopage=true&fl=id,category,title,slug&title=%QUERY&active=true",
     wildcard: '%QUERY',
     filter: function(response) {
       return response.results;

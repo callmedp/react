@@ -77,7 +77,6 @@ from assessment.models import Question
 from assessment.utils import TestCacheUtil
 
 
-
 class CreateOrderApiView(APIView, ProductInformationMixin):
     authentication_classes = [OAuth2Authentication]
     permission_classes = [IsAuthenticated, IsAdminUser]
@@ -100,7 +99,7 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
 
         all_txn_ids = [x['txn_id'] for x in txns_list if x.get('txn_id')]
         paid_transactions = PaymentTxn.objects.filter(txn__in=all_txn_ids,status=1)
-        
+
         if paid_transactions:
             logging.getLogger("error_log").error("Order for txns already created. {}".format(all_txn_ids))
             return Response({"status": 0, "msg": "Order for txns already created."},
@@ -438,7 +437,7 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
             return Response(
                 {"msg": msg, "status": 0},
                 status=status.HTTP_400_BAD_REQUEST)
-        
+
 
 
 class EmailLTValueApiView(APIView):
@@ -782,7 +781,7 @@ class ResumeBuilderProductView(ListAPIView):
             product = Product.objects.filter(id=item['id']).first()
             value = product.attr.get_value_by_attribute(product.attr.get_attribute_by_name('template_type')).value or '';
             if( value == 'single' or value == 'multiple'):
-                new_product_list.append(item)     
+                new_product_list.append(item)
         return new_product_list
 
 class ShineDataFlowDataApiView(ListAPIView):
@@ -851,7 +850,7 @@ class ShineCandidateLoginAPIView(APIView):
 
         return data
 
-    def get_existing_order_data(self, candidate_id):        
+    def get_existing_order_data(self, candidate_id):
         from order.models import Order
 
         product_found = False
@@ -889,7 +888,7 @@ class ShineCandidateLoginAPIView(APIView):
         self.request.session.update(login_response)
 
         self.request.session.update(personal_info)
-        
+
         if with_info:
             data_to_send = {"token": token,
                             "candidate_id": candidate_id,
@@ -1073,7 +1072,7 @@ class ShineCandidateLoginAPIView(APIView):
     def _dispatch_via_autologin(self, alt, with_info):
         try:
             alt = alt.replace(" ","+")
-            alt = alt.replace("%20","+") 
+            alt = alt.replace("%20","+")
             email, candidate_id, valid = AutoLogin().decode(alt)
         except Exception as e:
             logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
@@ -1617,18 +1616,17 @@ class GetAutoLoginToken(APIView):
      permission_classes = [IsAuthenticated]
 
      def get(self,request,*args,**kwargs):
-       
+
          order_item_id = kwargs.get('order_item_id','')
          order_item = OrderItem.objects.filter(id=order_item_id).first()
-         if not order_item: 
+         if not order_item:
              return Response({"token":'', "msg": 'Invalid Order Item Id'}, status=status.HTTP_400_BAD_REQUEST)
-         
-         email  = order_item.order.email; 
+
+         email  = order_item.order.email;
          candidate_id = order_item.order.candidate_id;
          token_gen = AutoLogin()
          login_token = token_gen.encode(email, candidate_id, None)
          return Response({"token": login_token, "msg": "Successfull"}, status=status.HTTP_200_OK)
-         
 
 class GetCacheValue(APIView):
     authentication_classes = ()
@@ -1649,12 +1647,13 @@ class GetCacheValue(APIView):
 
         
 
-         
 
 
 
-     
-     
+
+
+
+
 
 
 

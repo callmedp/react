@@ -79,9 +79,10 @@ $(document).ready(function(){
 })
 
 const uploadResumeShine = (checkbox,order_id)=>{
-    let request = fetch(`/order/api/v1/${order_id}/update/`,{
+    let request = fetch(`/api/v1/order/${order_id}/update/`,{
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie('csrftoken')
         },
         method: 'PATCH',  
         body: JSON.stringify({
@@ -91,7 +92,6 @@ const uploadResumeShine = (checkbox,order_id)=>{
 
     request.then((resp) =>resp.json())
     .then(response => {
-        console.log('--response', response);
         title = response['service_resume_upload_shine'] ? 'Resume will be updated' : 'Resume will not be updated'
         Toast.fire({
                     type: response['service_resume_upload_shine'] ?'success' : 'error',

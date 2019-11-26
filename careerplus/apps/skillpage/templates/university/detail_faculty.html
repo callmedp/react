@@ -6,8 +6,6 @@
 {% endblock title %}
 {% block canonical_url %}
   <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{canonical_url}}">
-  <link rel="alternate" media="only screen and (maxwidth:640px)" href="https://{{ MOBILE_SITE_DOMAIN }}{{request.path}}">
-  <link rel="alternate" media="handheld" href="https://{{ MOBILE_SITE_DOMAIN }}{{request.path}}">
 {% endblock canonical_url %}
 
         {% block django_meta %}

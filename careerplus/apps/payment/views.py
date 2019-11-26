@@ -392,8 +392,8 @@ class EPayLaterRequestView(OrderMixin, TemplateView):
             return HttpResponseRedirect("/")
 
         site_domain = settings.SITE_DOMAIN
-        if self.request.flavour == 'mobile':
-            site_domain = settings.MOBILE_SITE_DOMAIN
+        # if self.request.flavour == 'mobile':
+        #     site_domain = settings.MOBILE_SITE_DOMAIN
 
         order = self.createOrder(cart_obj)
         txn_id = 'CP%d%s' % (order.pk, int(time.time()))

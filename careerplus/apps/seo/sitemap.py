@@ -15,7 +15,7 @@ class CustomSitemap(Sitemap):
     def _urls(self, page, protocol, domain):
         urls = super(CustomSitemap, self)._urls(page, protocol, domain)
         for url in urls:
-            url['loc_mobile'] = "%s://%s%s" % (protocol, settings.MOBILE_SITE_DOMAIN, self.location(url['item']))
+            url['loc_mobile'] = "%s://%s%s" % (protocol, settings.SITE_DOMAIN, self.location(url['item']))
         return urls
 
 

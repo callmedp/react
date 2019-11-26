@@ -439,12 +439,5 @@ class PayuPaymentUtil():
                                                                    settings.SITE_DOMAIN),
               'curl':"{}://{}/payment/payu/response/cancel/".format(settings.SITE_PROTOCOL,
                                                                settings.SITE_DOMAIN),
-              'msurl':"{}://{}/payment/payu/response/success/".format(settings.SITE_PROTOCOL,
-                                                                   settings.MOBILE_SITE_DOMAIN),
-              'mfurl':"{}://{}/payment/payu/response/failure/".format(settings.SITE_PROTOCOL,
-                                                                   settings.MOBILE_SITE_DOMAIN),
-              'mcurl':"{}://{}/payment/payu/response/cancel/".format(settings.SITE_PROTOCOL,
-                                                               settings.MOBILE_SITE_DOMAIN),                                                  
-
               })
         return initial_dict

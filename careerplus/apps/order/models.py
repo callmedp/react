@@ -785,6 +785,8 @@ class OrderItem(AbstractAutoDate):
 
     @property
     def get_oi_status(self):
+        if self.oi_status in [28, 29, 30]:
+            return self.oi_status_transform()
         dict_status = dict(OI_OPS_STATUS)
         return dict_status.get(self.oi_status)
 
@@ -814,7 +816,11 @@ class OrderItem(AbstractAutoDate):
             profile = getattr(self, 'whatsapp_profile_orderitem', None)
             if profile:
                 return bool(profile.due_date)
-    
+
+    @property
+    def oi_draft_path(self):
+        return str(self.oi_draft.url) if self.oi_draft else ""
+
 
     @property
     def is_onboard(self):
@@ -849,6 +855,9 @@ class OrderItem(AbstractAutoDate):
         sent = cache.get('neo_mail_sent_{}'.format(self.id))
         return sent
 
+    @property
+    def updated_from_trial_to_regular(self):
+        return cache.get('updated_from_trial_to_regular_{}'.format(self.id))
 
     def get_due_date(self):
         profile = getattr(self, 'whatsapp_profile_orderitem', None)
@@ -1019,6 +1028,17 @@ class OrderItem(AbstractAutoDate):
         if assigned_op:
             return assigned_op.created
 
+
+    def oi_status_transform(self):
+        val = OI_OPS_TRANSFORMATION_DICT.get(self.product.sub_type_flow, {})\
+            .get(self.oi_status, None)
+        if val:
+            return val
+        else:
+            dict_status = dict(OI_OPS_STATUS)
+            return dict_status.get(self.oi_status)
+
+
     def upload_service_resume_shine(self,existing_obj):
         if self.oi_status == 4 and self.oi_status !=existing_obj.oi_status  and self.order.service_resume_upload_shine:
             upload_Resume_shine.delay(self.id)
@@ -1150,6 +1170,11 @@ class OrderItemOperation(AbstractAutoDate):
     def __str__(self):
         return "#{}".format(self.pk)
 
+
+    @property
+    def oi_status_display(self):
+         return self.get_oi_status
+
     @property
     def get_oi_status(self):
         if self.oi_status in [28, 29, 30]:
@@ -1158,22 +1183,23 @@ class OrderItemOperation(AbstractAutoDate):
         return dict_status.get(self.oi_status)
 
     @property
+    def order_oio_linkedin(self):
+        oi = self.oi
+        return oi.oio_linkedin.id if oi.oio_linkedin else ""
+
+    @property
     def get_user_oi_status(self):
         dict_status = dict(OI_USER_STATUS)
         return dict_status.get(self.oi_status)
 
     def oi_status_transform(self):
-        val = OI_OPS_TRANSFORMATION_DICT.get(
-            self.oi.product.sub_type_flow, {}
-        ).get(self.oi_status, None)
+        val = OI_OPS_TRANSFORMATION_DICT.get(self.oi.product.sub_type_flow, {})\
+            .get(self.oi_status, None)
         if val:
             return val
         else:
             dict_status = dict(OI_OPS_STATUS)
             return dict_status.get(self.oi_status)
-
-
-
 
 class Message(AbstractAutoDate):
     oi = models.ForeignKey(OrderItem, null=True)
@@ -1194,6 +1220,13 @@ class Message(AbstractAutoDate):
 
     def __str__(self):
         return "#{}".format(self.pk)
+
+    @property
+    def added_by_name(self):
+        if self.added_by:
+            return self.added_by.name
+        order = self.oi.order
+        return order.first_name
 
 
 class InternationalProfileCredential(AbstractAutoDate):

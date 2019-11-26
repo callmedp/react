@@ -4,6 +4,13 @@ import rest_framework
 
 from collections import OrderedDict
 
+#django imports
+
+from django.db.models import QuerySet
+from django.core.exceptions import ImproperlyConfigured
+
+
+
 #3rd party imports
 from sorl.thumbnail import get_thumbnail
 
