@@ -188,7 +188,6 @@ class DashboardInfo(object):
                 assigned_to=oi.assigned_to)
 
             order = oi.order
-            order.auto_upload = False
             order.save()
 
     def check_user_shine_resume(self, candidate_id=None, request=None):
