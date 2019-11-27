@@ -248,7 +248,7 @@
         <script src="{% static 'packages/sweetalert/dist/sweetalert2.all.min.js' %}"></script>
 
     <script>
-        var site_domain = "{{ SITE_PROTOCOL }}://{{MOBILE_SITE_DOMAIN}}";
+        var site_domain = "{{ SITE_PROTOCOL }}://{{SITE_DOMAIN}}";
         var cartData = "{{request|get_cart_info}}"
         var neoEmail = "{{neo_email}}"
     </script>

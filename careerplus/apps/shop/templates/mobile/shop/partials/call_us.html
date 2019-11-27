@@ -14,13 +14,13 @@
         {% if whatsapp_icon %}
 {% for key,value in whatsapp_icon.items %}
 {% if product.is_course and key == "product-course-number" %}
-    <a class="enquire-cta__whatsApp" href="https://api.whatsapp.com/send?phone=91{{value}}&text=I need your help">
+    <a class="enquire-cta__whatsApp" href="https://api.whatsapp.com/send?phone=91{{value}}&text=I need your help for {{product.heading}}">
         <i class="icon-whatsApp"></i>
         <span>WhatsApp</span>
     </a><!-- // Chat -->
 
     {% elif product.is_writing and key == "product-service-number" or product.is_service and key == "product-service-number" %}
-        <a class="enquire-cta__whatsApp" href="https://api.whatsapp.com/send?phone=91{{value}}&text=I need your help">
+        <a class="enquire-cta__whatsApp" href="https://api.whatsapp.com/send?phone=91{{value}}&text=I need your help for {{product.heading}}">
         <i class="icon-whatsApp"></i>
         <span>WhatsApp</span>
     </a><!-- // Chat -->
