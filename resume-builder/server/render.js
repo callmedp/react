@@ -66,6 +66,9 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
       <div id="react-app">${content}</div>
       <script>
         window.__PRELOADED_STATE__ = ${JSON.stringify(store.getState()).replace(/</g, '\\u003c')}
+        window.config = {}
+        config.staticUrl = ${staticUrl} 
+        config.siteDomain = ${siteDomain}
         document.onkeydown = function(e) {
           if(event.keyCode == 123) {
               return false;
@@ -88,6 +91,7 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
       .then(result=> {
         console.log("---result--",result);
       })
+
     </script>
       <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
