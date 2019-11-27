@@ -64,7 +64,6 @@ class ActionUserMixin(object):
 
                 if obj.product.type_flow == 1: 
                     order = obj.order 
-                    order.auto_upload = False
                     order.save()
 
                 obj.orderitemoperation_set.create(

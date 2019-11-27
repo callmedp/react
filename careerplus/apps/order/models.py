@@ -1058,6 +1058,11 @@ class OrderItem(AbstractAutoDate):
             last_oi_status=existing_obj.oi_status,
             assigned_to=self.assigned_to)
 
+    def is_assigned(self):
+        if self.assigned_to:
+            return True
+        return False
+
     def save(self, *args, **kwargs):
         created = not bool(getattr(self, "id"))
         orderitem = OrderItem.objects.filter(id=self.pk).first()

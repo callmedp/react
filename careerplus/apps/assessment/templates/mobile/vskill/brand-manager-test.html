@@ -75,7 +75,7 @@
 
 
     <div class="popular_test" id="funcDiv">
-                       {% for test in all_test|slice:":8" %}
+                       {% for test in all_test %}
 
         <div class="popular_test_inside">
            <a id="{{test.id}}" onclick="testModal(event);" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}","courseName":"{{test.course.name}}","courseDuration":"{{test.course.get_duration_in_day}}","coursePrice":"{{test.course.inr_price}}","productName":"{{test.product.name}}","productDuration":"{{test.product.get_duration_day}}","productPrice":"{{test.product.inr_price}}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}","courseUrl":"{{test.course.get_absolute_url}}","productUrl":"{{test.product.get_absolute_url}}" }'>
@@ -88,9 +88,11 @@
 
       
     </div>
+    {% comment %}
        {%if all_test.count > 8 %}
         <button class="load_more_button" id="loadmorebtn" onclick="loadmore();">Load more</button>
       {% endif %}
+    {% endcomment %}
     </div>
 
       <!--start Test Modal-->
