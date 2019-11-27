@@ -1,0 +1,1211 @@
+{% extends "basic/base-inner.html" %}
+{% load static compress %}
+{% load shop_tags %}
+
+{% block head %}
+    <head>
+    <title>{% block title %}Shine Learning{% endblock title%}</title>
+    {% block meta_html %}
+      
+    {% endblock meta_html %}
+
+    {% block django_meta %}
+    {% endblock django_meta %}
+    {% block canonical_url %}
+      <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
+      <link rel="alternate" media="only screen and (maxwidth:640px)" href="https://{{ MOBILE_SITE_DOMAIN }}{{request.path}}">
+      <link rel="alternate" media="handheld" href="https://{{ MOBILE_SITE_DOMAIN }}{{request.path}}">
+    {% endblock canonical_url %}
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+
+    {% block GA %}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3537905-41"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          {% if request.GET.itm_source or request.GET.itm_medium or request.GET.itm_campaign or request.GET.itm_content %}
+              gtag('config', 'UA-3537905-41' ,{'dimension1': '{{request.GET.itm_source}}','dimension2' : '{{request.GET.itm_medium}}','dimension3':  '{{request.GET.itm_campaign}}','dimension4':'{{request.GET.itm_content}}' });
+          {% else%}
+              gtag('config', 'UA-3537905-41');
+          {%endif%}
+          gtag('config', 'UA-3537905-1',{'group':'mainProfile'});
+        </script>
+    {% endblock GA %}
+
+
+{% block css_section %}
+      
+<!-- Bootstrap 4 -->
+ {% compress css %}
+        <link type="text/scss" href="{% static 'shinelearn/css/common/bootstrap4/bootstrap.scss' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/common/bootstrap4/skill.scss' %}" rel="stylesheet">
+ {% endcompress %}
+
+{% endblock css_section %}
+    {% block banner_ads %}
+        <script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>
+        <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+        </script>
+        <script>
+        googletag.cmd.push(function() {
+        googletag.defineSlot('/1198510/ShineLearning_1x1_desktop', [1, 1], 'div-gpt-ad-1509431221932-0').addService(googletag.pubads());
+        googletag.pubads().enableSingleRequest();
+        googletag.enableServices();
+        });
+        </script>
+    {% endblock banner_ads %}
+    {% block marketing_pixel %}
+        <!-- Google Tag Manager -->
+        <!--<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':-->
+        <!--new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],-->
+        <!--j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=-->
+        <!--'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);-->
+        <!--})(window,document,'script','dataLayer','GTM-M323HB');</script>-->
+        <!-- End Google Tag Manager -->
+    {% endblock marketing_pixel %}
+   {{ JS_SETTINGS|safe }}
+   </head>
+   
+{% endblock head %} 
+
+
+{% block container %}
+<!-- top first navigation -->
+<nav class="container-fluid padlr-0 shadow position-relative zindex">
+  <div class="container padlr-0">
+    <div class="navbar navbar-expand-lg navbar-light padlr-0">
+      <a class="navbar-brand" href="#"></a>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <form class="form-inline my-2 my-lg-0 mr-auto">
+            <input class="form-control" type="search" placeholder="Search course, assesssment…" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0 nav-pad" type="submit"><figure class="icon-search mb-0"></figure></button>
+        </form>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Job assistance</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Practice test</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="#">Free resources</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="#">Blog</a>
+          </li>
+          <li class="nav-item dropdown dropdown-call">
+              <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <figure class="icon-call"></figure>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#"><strong>Call us:</strong> 0124-4312500/01</a>
+              </div>
+            </li>
+            <li class="nav-item dropdown dropdown-user">
+                <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <figure class="icon-user"></figure>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="#">My Inbox</a>
+                  <a class="dropdown-item" href="#">My Orders</a>
+                  <a class="dropdown-item" href="#">My Wallet</a>
+                  <a class="dropdown-item" href="#">My Referrals
+                  <a class="dropdown-item" href="#">abc@hindustantimes.com</a>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#">Logout</a>
+                </div>
+              </li>
+              <li class="nav-item position-relative">
+                  <span class="counter">4</span>
+                  <a class="nav-link" href="#">
+                    <figure class="icon-cart"></figure>
+                  </a>
+              </li>
+        </ul>
+        
+      </div>
+    </div>
+  </div>
+</nav>
+<!-- top first navigation end -->
+<!-- top second navigation -->
+<nav class="navbar-bg-light navbar navbar-expand-lg navbar-light">
+  <div class="container">
+    <div class="row">
+      <ul class="navbar-nav" id=categories>
+        <li class="nav-item dropdown dropdown-categories">
+            <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span class="sm-txt">Explore</span></span>Categories
+              <figure class="icon-down"></figure>
+            </a>
+            <div class="dropdown-menu category-tab" aria-labelledby="navbarDropdown">
+              <div class="categories-tab">
+                  <ul class="nav nav-tabs" id="myTab" role="tablist">
+                      <li class="nav-item">
+                        <a class="nav-link active" id="category-tab" data-toggle="tab" href="#tab-links1" role="tab" aria-controls="category-tab" aria-selected="true">Sales & Marketing</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="category-tab" data-toggle="tab" href="#tab-links2" role="tab" aria-controls="category-tab" aria-selected="false">Operation Management</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="category-tab" data-toggle="tab" href="#tab-links3" role="tab" aria-controls="category-tab" aria-selected="false">Banking & Finance</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="category-tab" data-toggle="tab" href="#tab-links4" role="tab" aria-controls="category-tab" aria-selected="false">Information Technology</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="category-tab" data-toggle="tab" href="#tab-links5" role="tab" aria-controls="category-tab" aria-selected="false">Human Resources</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="category-tab" data-toggle="tab" href="#tab-links6" role="tab" aria-controls="category-tab" aria-selected="false">Management</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="category-tab" data-toggle="tab" href="#tab-links7" role="tab" aria-controls="category-tab" aria-selected="false">Mass Communication</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="category-tab" data-toggle="tab" href="#tab-links8" role="tab" aria-controls="category-tab" aria-selected="false">Personal Development</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="category-tab" data-toggle="tab" href="#tab-links9" role="tab" aria-controls="category-tab" aria-selected="false">Law</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="category-tab" data-toggle="tab" href="#tab-links10" role="tab" aria-controls="category-tab" aria-selected="false">Course Catalogue</a>
+                      </li>
+                  </ul>
+                  <div class="tab-content" id="myTabContent">
+                      <div class="tab-pane fade show active" id="tab-links1" role="tabpanel" aria-labelledby="category-tab">
+                          <a href="#">Advanced Accounting</a>
+                          <a href="#">Banking</a>
+                          <a href="#">Risk Management</a>
+                          <a href="#">Stock Market Training</a>
+                          <a href="#">Finanacial Reporting and Management</a>
+                          <a href="#">Commercial Operation</a>
+                          <a href="#">Investment Banking</a>
+                          <a href="#">GST</a>
+                          <a href="#">Advanced Accounting</a>
+                          <a href="#">Banking</a>
+                          <a href="#">Risk Management</a>
+                          <a href="#">Stock Market Training</a>
+                          <a href="#">View all</a>
+                      </div>
+                      <div class="tab-pane fade" id="tab-links2" role="tabpanel" aria-labelledby="category-tab">
+                          <a href="#">Advanced Accounting</a>
+                          <a href="#">Banking</a>
+                          <a href="#">Risk Management</a>
+                          <a href="#">Stock Market Training</a>
+                          <a href="#">Finanacial Reporting and Management</a>
+                          <a href="#">Commercial Operation</a>
+                          <a href="#">Investment Banking</a>
+                          <a href="#">GST</a>
+                          <a href="#">View all</a>
+                      </div>
+                      <div class="tab-pane fade" id="tab-links3" role="tabpanel" aria-labelledby="category-tab">
+                          <a href="#">Risk Management</a>
+                          <a href="#">Stock Market Training</a>
+                          <a href="#">Finanacial Reporting and Management</a>
+                          <a href="#">Commercial Operation</a>
+                          <a href="#">Investment Banking</a>
+                          <a href="#">GST</a>
+                          <a href="#">Advanced Accounting</a>
+                          <a href="#">Banking</a>
+                          <a href="#">Risk Management</a>
+                          <a href="#">Stock Market Training</a>
+                          <a href="#">View all</a>
+                      </div>
+                      <div class="tab-pane fade" id="tab-links4" role="tabpanel" aria-labelledby="category-tab">
+                          <a href="#">Stock Market Training</a>
+                          <a href="#">Finanacial Reporting and Management</a>
+                          <a href="#">Commercial Operation</a>
+                          <a href="#">Investment Banking</a>
+                          <a href="#">GST</a>
+                          <a href="#">Advanced Accounting</a>
+                          <a href="#">Banking</a>
+                          <a href="#">Risk Management</a>
+                          <a href="#">Stock Market Training</a>
+                          <a href="#">View all</a>
+                      </div>
+                      <div class="tab-pane fade" id="tab-links5" role="tabpanel" aria-labelledby="category-tab">
+                          <a href="#">Advanced Accounting</a>
+                          <a href="#">Banking</a>
+                          <a href="#">Risk Management</a>
+                          <a href="#">Stock Market Training</a>
+                          <a href="#">Finanacial Reporting and Management</a>
+                          <a href="#">Commercial Operation</a>
+                          <a href="#">Investment Banking</a>
+                          <a href="#">GST</a>
+                          <a href="#">Advanced Accounting</a>
+                          <a href="#">Banking</a>
+                          <a href="#">Risk Management</a>
+                          <a href="#">Stock Market Training</a>
+                          <a href="#">View all</a>
+                      </div>
+                      <div class="tab-pane fade" id="tab-links6" role="tabpanel" aria-labelledby="category-tab">
+                          <a href="#">Stock Market Training</a>
+                          <a href="#">Finanacial Reporting and Management</a>
+                          <a href="#">Commercial Operation</a>
+                          <a href="#">Investment Banking</a>
+                          <a href="#">GST</a>
+                          <a href="#">Advanced Accounting</a>
+                          <a href="#">Banking</a>
+                          <a href="#">Risk Management</a>
+                          <a href="#">Stock Market Training</a>
+                          <a href="#">View all</a>
+                      </div>
+                      <div class="tab-pane fade" id="tab-links7" role="tabpanel" aria-labelledby="category-tab">
+                          <a href="#">Investment Banking</a>
+                          <a href="#">GST</a>
+                          <a href="#">Advanced Accounting</a>
+                          <a href="#">Banking</a>
+                          <a href="#">Risk Management</a>
+                          <a href="#">Stock Market Training</a>
+                          <a href="#">View all</a>
+                      </div>
+                      <div class="tab-pane fade" id="tab-links8" role="tabpanel" aria-labelledby="category-tab">
+                          <a href="#">Banking</a>
+                          <a href="#">Risk Management</a>
+                          <a href="#">Stock Market Training</a>
+                          <a href="#">Finanacial Reporting and Management</a>
+                          <a href="#">Commercial Operation</a>
+                          <a href="#">Investment Banking</a>
+                          <a href="#">GST</a>
+                          <a href="#">Advanced Accounting</a>
+                          <a href="#">Banking</a>
+                          <a href="#">Risk Management</a>
+                          <a href="#">Stock Market Training</a>
+                          <a href="#">View all</a>
+                      </div>
+                      <div class="tab-pane fade" id="tab-links9" role="tabpanel" aria-labelledby="category-tab">
+                          <a href="#">Stock Market Training</a>
+                          <a href="#">Finanacial Reporting and Management</a>
+                          <a href="#">Commercial Operation</a>
+                          <a href="#">Investment Banking</a>
+                          <a href="#">GST</a>
+                          <a href="#">Advanced Accounting</a>
+                          <a href="#">Banking</a>
+                          <a href="#">Risk Management</a>
+                          <a href="#">Stock Market Training</a>
+                          <a href="#">View all</a>
+                      </div>
+                      <div class="tab-pane fade" id="tab-links10" role="tabpanel" aria-labelledby="category-tab">
+                          <a href="#">Advanced Accounting</a>
+                          <a href="#">Banking</a>
+                          <a href="#">Risk Management</a>
+                          <a href="#">Stock Market Training</a>
+                          <a href="#">Finanacial Reporting and Management</a>
+                          <a href="#">Commercial Operation</a>
+                          <a href="#">Investment Banking</a>
+                          <a href="#">GST</a>
+                          <a href="#">Advanced Accounting</a>
+                          <a href="#">Banking</a>
+                          <a href="#">Risk Management</a>
+                          <a href="#">Stock Market Training</a>
+                          <a href="#">View all</a>
+                      </div>
+                  </div>
+              </div>
+            </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Digital Marketing</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Six Sigma</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Project Management</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Big Data</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">IT Software</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">General Management</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<!-- top second navigation end -->
+
+<header class="skillpage-bg">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-9">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mt-40 mb-20">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Sales and Marketing</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Digital Marketing</li>
+          </ol>
+        </nav>
+
+        <h1 class="white head-ht">Digital Marketing Courses & <br/>Certifications</h1>
+
+        <div class="row mt-20 mb-20">
+          <div class="col">
+            <div class="media stats">
+              <figure class="icon-stats mr-20"></figure>
+              <div class="media-body">
+                  26% Annual Growth for cloud
+                  related opportunities In IT Sector
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="media stats">
+              <figure class="icon-stats mr-20"></figure>
+              <div class="media-body">
+                  Digital Marketing expected to create
+                  3.3 million jobs by 2022
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- sticky nav -->
+  <nav class="navbar navbar-expand-lg navbar-light shadow sticky-nav sticky-top sticky-none">
+    <div class="collapse navbar-collapse container" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="#about">ABOUT</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#objective">Objective</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#who-learn">Who should learn</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#skill-learn">SKills you learn</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#testimonial">Testimonial</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#impact">Our Impact</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#popular-courses">Courses</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#faq">FAQ</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <!-- sticky nav end -->
+  
+  <div class="container">
+    <div class="row">
+      <!-- left container -->
+      <div class="col-sm-9">
+        <div class="row">
+          <!-- about section -->
+          <section id="about" class="col-sm-12">
+            <div class="skill-about">
+              <h2>About Digital Marketing</h2>
+              <p id="expand-content" class="collapse" aria-expanded="false">
+                Digital Marketing is the marketing and advertising in the digital space fulfilling all the duties of traditional marketing and beyond it. And as the digital landscape gains reach and complexity, Digital Marketing follows. Thus, the demand for Certified Digital Marketing Professionals. Digital Marketing is the marketing and advertising in the digital space fulfilling all the duties of traditional marketing and beyond it. And as the digital landscape gains reach and complexity, Digital Marketing follows. Thus, the demand for Certified Digital Marketing Professionals. 
+              </p>
+              <a role="button" class="collapsed" data-toggle="collapse" href="#expand-content" aria-expanded="false" aria-controls="expand-content"></a>
+            </div>
+          </section>
+
+          <!-- popular course section -->
+          <section id="popular-courses" class="col-sm-12">
+            <div class="popular-course">
+              <div class="row">
+                <h2>Popular courses</h2>
+                <a class="btn btn-outline-primary ml-auto" href="#" role="button">View Courses</a>
+                <div class="d-flex mb-10">
+                  <div class="col">
+                    <div class="media">
+                      <figure class="mr-20 shadow-icon">
+                          <img aria-label="Digital Marketing Master Training Course" class="img-fluid" src="https://static1.shine.com/l/m/product_image/656/1518077922_6747.png" alt="Digital Marketing Master Training Course">
+                      </figure>
+                      <figcaption class="media-body">
+                          <a href="#">Certified Email Marketing Professionals</a>
+                      </figcaption>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="media">
+                      <figure class="mr-20 shadow-icon">
+                          <img aria-label="Email Marketing Master Training Course" class="img-fluid" src="https://static1.shine.com/l/m/product_image/801/1508869287_7378.png" alt="Email Marketing Master Training Course">
+                      </figure>
+                      <figcaption class="media-body">
+                          <a href="#">Email Marketing Master course</a>
+                      </figcaption>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="media">
+                      <figure class="mr-20 shadow-icon">
+                          <img aria-label="Certified Email Marketing Professional" class="img-fluid" src="https://static1.shine.com/l/m/product_image/3262/1532690201_3277.png" alt="Certified Email Marketing Professional">
+                      </figure>
+                      <figcaption class="media-body">
+                          <a href="#">Digital Marketing Professionals </a>
+                      </figcaption>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- objective section -->
+          <section id="objective" class="col-sm-12">
+            <div class="objective">
+              <h2>Objective</h2>
+                <ul class="objective__list collapse" id="expand-list" aria-expanded="false">
+                  <li>Understand the meaning of business  analytics and its importance in the industry.</li>
+                  <li>Learn how to analyze with complex datasets using pivot tables and slicers.</li>
+                  <li>Represent your findings using charts and dashboards.</li>
+                  <li>Understand the meaning of business  analytics and its importance in the industry.</li>
+                  <li>Learn how to analyze with complex datasets using pivot tables and slicers.</li>
+                  <li>Represent your findings using charts and dashboards.</li>
+                </ul>
+                <a role="button" class="collapsed ml-15" data-toggle="collapse" href="#expand-list" aria-expanded="false" aria-controls="expand-list"></a>
+            </div>
+          </section>
+
+          <!-- who should learn? section -->
+          <section id="who-learn" class="col-sm-12">
+            <div class="who-should-learn">
+              <h2>Who should learn?</h2>
+                <ul class="who-should-learn__list d-flex flex-wrap">
+                  <li>Any professional from Business Analytics/Business Intelligence background</li>
+                  <li>Engineering or Non-Engineering aspirants wanting to become a Data Scientist</li>
+                  <li>Managers from Analytical background and those who are leading a team of Analysts</li>
+                  <li>Any Data Analyst or Software Developer aspiring to be a Data Scientist</li>
+                </ul>
+            </div>
+          </section>
+
+          <!-- skills you will gain section -->
+          <section id="skill-learn" class="col-sm-12">
+            <div class="skill-gain">
+              <h2>Skills you will gain</h2>
+              <p class="mb-0 mt-30">
+                <span class="badge badge-pill badge-purple">Content Marketing</span>
+                <span class="badge badge-pill badge-purple">Email Marketing</span>
+                <span class="badge badge-pill badge-purple">Content Marketing</span>
+                <span class="badge badge-pill badge-purple">Email Marketing</span>
+                <span class="badge badge-pill badge-purple">Adwords</span>
+                <span class="badge badge-pill badge-purple">Social Media</span>
+                <span class="badge badge-pill badge-purple">SEO</span>
+                <span class="badge badge-pill badge-purple">Adwords</span>
+                <span class="badge badge-pill badge-purple">Social Media</span>
+                <span class="badge badge-pill badge-purple">SEO</span>
+                <span class="badge badge-pill badge-purple">Copywriting</span>
+                <span class="badge badge-pill badge-purple">Digital Marketing</span>
+                <span class="badge badge-pill badge-purple">Copywriting</span>
+                <span class="badge badge-pill badge-purple">Digital Marketing</span>
+              </p>
+            </div>
+          </section>
+
+          <!-- test your skills section -->
+          <section class="col-sm-12">
+            <div class="test-skill">
+              <img src="{% static 'shinelearn/images/test-skill.png' %}" class="img-fluid float-right" alt="Test your skills">
+              <h2>Test your skills</h2>
+              <p>Take our free practice test to test your skill level in <strong>Digital Marketing</strong></p>
+              <a class="btn btn-primary mt-10" href="#" role="button">Take free test</a>
+            </div>
+          </section>
+
+          <!-- our impact section -->
+          <section id="impact" class="col-sm-12">
+            <div class="our-impact">
+              <h2>Our Impact</h2>
+              <div class="row pt-10 mb-5">
+                <div class="col-sm-4">
+                  <div class="media align-items-center">
+                    <figure class="icon-impact1 mr-20"></figure>
+                    <figcaption class="media-body">
+                        <strong>50K+</strong>
+                        Registered learners 
+                    </figcaption>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="media align-items-center">
+                    <figure class="icon-impact1 mr-20"></figure>
+                    <figcaption class="media-body">
+                        <strong>250K+</strong>
+                        <a href="#"><strong>Courses</strong> available</a>
+                    </figcaption>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="media align-items-center">
+                    <figure class="icon-impact1 mr-20"></figure>
+                    <figcaption class="media-body">
+                        <strong>5K+</strong>
+                        <span class="">Digital markt.</span> <a href="#"><strong>jobs at shine</strong></a>
+                    </figcaption>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- courses assesments tab section -->
+          <section class="col-sm-12">
+            <div class="courses-assesment-tab">
+              <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" id="courses-tab" data-toggle="tab" href="#courses" role="tab" aria-controls="courses" aria-selected="true">
+                    <h2>Courses (18)</h2>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="assessments-tab" data-toggle="tab" href="#assessments" role="tab" aria-controls="assessments" aria-selected="false">
+                    <h2>Assessments (25)</h2>
+                  </a>
+                </li>
+              </ul>
+              <div class="tab-content listing" id="myTabContent">
+                <div class="tab-pane fade show active" id="courses" role="tabpanel" aria-labelledby="courses-tab">
+                    <ul class="list-unstyled">
+                      <li class="media listing__list">
+                        <figure class="listing__image">
+                            <img aria-label="Digital Marketing Master Training Course" class="img-fluid" src="https://static1.shine.com/l/m/product_image/656/1518077922_6747.png" alt="Digital Marketing Master Training Course">
+                        </figure>
+                        
+                        <div class="media-body">
+                          <h3><a href="#">Email Marketing Master Training Course</a></h5>
+                            <div class="rating">
+                              <i class="icon-star"></i>
+                              <i class="icon-star"></i> 
+                              <i class="icon-star"></i>
+                              <i class="icon-star"></i>
+                              <i class="icon-star-blank"></i>
+                              <span class="rating__output">4/5</span>
+                            </div>
+
+                            <div class="mode mr-30">
+                                Mode 
+                                <span class="mode__name">
+                                    Instructor
+                                </span>
+                            </div>
+                            <div class="provider">
+                                Provider 
+                                <span class="provider__name">
+                                    GetCertGo
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="mr-auto courses">
+                          <strong class="courses__price">Rs. 2899/-</strong>
+                        </div>
+
+                        <div class="course-tag">
+                          <span class="course-tag__best">Bestseller</span>
+                        </div>
+                      </li>
+
+                      <li class="media listing__list">
+                        <figure class="listing__image">
+                            <img aria-label="Digital Marketing Test" class="img-fluid" src="https://static1.shine.com/l/m/product_image/3954/1562948482_5538.png" alt="Digital Marketing Test">
+                        </figure>
+                        
+                        <div class="media-body">
+                          <h3><a href="#">Certified Email Marketing Professional</a></h5>
+                            <div class="rating">
+                              <i class="icon-star"></i>
+                              <i class="icon-star"></i> 
+                              <i class="icon-star"></i>
+                              <i class="icon-star"></i>
+                              <i class="icon-star-blank"></i>
+                              <span class="rating__output">4/5</span>
+                            </div>
+
+                            <div class="mode mr-30">
+                                Mode 
+                                <span class="mode__name">
+                                    Instructor
+                                </span>
+                            </div>
+                            <div class="provider">
+                                Provider 
+                                <span class="provider__name">
+                                    GetCertGo
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="mr-auto courses">
+                          <strong class="courses__price">Rs. 21420/-</strong>
+                        </div>
+
+                        <div class="course-tag">
+                          <span class="course-tag__new">Newly added</span>
+                        </div>
+                      </li>
+
+                      <li class="media listing__list">
+                        <figure class="listing__image">
+                            <img aria-label="Digital Marketing Master Training Course" class="img-fluid" src="https://static1.shine.com/l/m/product_image/656/1518077922_6747.png" alt="Digital Marketing Master Training Course">
+                        </figure>
+                        
+                        <div class="media-body">
+                          <h3><a href="#">Email Marketing Master Training Course</a></h5>
+                            <div class="rating">
+                              <i class="icon-star"></i>
+                              <i class="icon-star"></i> 
+                              <i class="icon-star"></i>
+                              <i class="icon-star"></i>
+                              <i class="icon-star-blank"></i>
+                              <span class="rating__output">4/5</span>
+                            </div>
+
+                            <div class="mode mr-30">
+                                Mode 
+                                <span class="mode__name">
+                                    Instructor
+                                </span>
+                            </div>
+                            <div class="provider">
+                                Provider 
+                                <span class="provider__name">
+                                    GetCertGo
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="mr-auto courses">
+                          <strong class="courses__price">Rs. 2899/-</strong>
+                        </div>
+
+                        <div class="course-tag">
+                          <span class="course-tag__best">Bestseller</span>
+                        </div>
+                      </li>
+                      
+                      <li class="media listing__list">
+                        <figure class="listing__image">
+                            <img aria-label="Digital Marketing Test" class="img-fluid" src="https://static1.shine.com/l/m/product_image/3954/1562948482_5538.png" alt="Digital Marketing Test">
+                        </figure>
+                        
+                        <div class="media-body">
+                          <h3><a href="#">Certified Email Marketing Professional</a></h5>
+                            <div class="rating">
+                              <i class="icon-star"></i>
+                              <i class="icon-star"></i> 
+                              <i class="icon-star"></i>
+                              <i class="icon-star"></i>
+                              <i class="icon-star-blank"></i>
+                              <span class="rating__output">4/5</span>
+                            </div>
+
+                            <div class="mode mr-30">
+                                Mode 
+                                <span class="mode__name">
+                                    Instructor
+                                </span>
+                            </div>
+                            <div class="provider">
+                                Provider 
+                                <span class="provider__name">
+                                    GetCertGo
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="mr-auto courses">
+                          <strong class="courses__price">Rs. 21420/-</strong>
+                        </div>
+
+                        <div class="course-tag">
+                          <span class="course-tag__new">Newly added</span>
+                        </div>
+                      </li>
+                    </ul>
+                    <div class="d-flex justify-content-center mt-40 mb-30">
+                      <a class="btn btn-outline-primary" href="#" role="button">Load more courses</a>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="assessments" role="tabpanel" aria-labelledby="assessments-tab">
+                    <ul class="list-unstyled">
+                      <li class="media listing__list">
+                        <figure class="listing__image">
+                            <img aria-label="Digital Marketing Master Training Course" class="img-fluid" src="https://static1.shine.com/l/m/product_image/656/1518077922_6747.png" alt="Digital Marketing Master Training Course">
+                        </figure>
+                        
+                        <div class="media-body">
+                          <h3><a href="#">Email Marketing Master Training Course</a></h5>
+                            <div class="rating">
+                              <i class="icon-star"></i>
+                              <i class="icon-star"></i> 
+                              <i class="icon-star"></i>
+                              <i class="icon-star"></i>
+                              <i class="icon-star-blank"></i>
+                              <span class="rating__output">4/5</span>
+                            </div>
+
+                            <div class="mode mr-30">
+                                Mode 
+                                <span class="mode__name">
+                                    Instructor
+                                </span>
+                            </div>
+                            <div class="provider">
+                                Provider 
+                                <span class="provider__name">
+                                    GetCertGo
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="mr-auto courses">
+                          <strong class="courses__price">Rs. 2899/-</strong>
+                        </div>
+                      </li>
+
+                      <li class="media listing__list">
+                        <figure class="listing__image">
+                            <img aria-label="Digital Marketing Test" class="img-fluid" src="https://static1.shine.com/l/m/product_image/3954/1562948482_5538.png" alt="Digital Marketing Test">
+                        </figure>
+                        
+                        <div class="media-body">
+                          <h3><a href="#">Certified Email Marketing Professional</a></h5>
+                            <div class="rating">
+                              <i class="icon-star"></i>
+                              <i class="icon-star"></i> 
+                              <i class="icon-star"></i>
+                              <i class="icon-star"></i>
+                              <i class="icon-star-blank"></i>
+                              <span class="rating__output">4/5</span>
+                            </div>
+
+                            <div class="mode mr-30">
+                                Mode 
+                                <span class="mode__name">
+                                    Instructor
+                                </span>
+                            </div>
+                            <div class="provider">
+                                Provider 
+                                <span class="provider__name">
+                                    GetCertGo
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="mr-auto courses">
+                          <strong class="courses__price">Rs. 21420/-</strong>
+                        </div>
+                      </li>
+
+                      <li class="media listing__list">
+                        <figure class="listing__image">
+                            <img aria-label="Digital Marketing Master Training Course" class="img-fluid" src="https://static1.shine.com/l/m/product_image/656/1518077922_6747.png" alt="Digital Marketing Master Training Course">
+                        </figure>
+                        
+                        <div class="media-body">
+                          <h3><a href="#">Email Marketing Master Training Course</a></h5>
+                            <div class="rating">
+                              <i class="icon-star"></i>
+                              <i class="icon-star"></i> 
+                              <i class="icon-star"></i>
+                              <i class="icon-star"></i>
+                              <i class="icon-star-blank"></i>
+                              <span class="rating__output">4/5</span>
+                            </div>
+
+                            <div class="mode mr-30">
+                                Mode 
+                                <span class="mode__name">
+                                    Instructor
+                                </span>
+                            </div>
+                            <div class="provider">
+                                Provider 
+                                <span class="provider__name">
+                                    GetCertGo
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="mr-auto courses">
+                          <strong class="courses__price">Rs. 2899/-</strong>
+                        </div>
+                      </li>
+                      
+                      <li class="media listing__list">
+                        <figure class="listing__image">
+                            <img aria-label="Digital Marketing Test" class="img-fluid" src="https://static1.shine.com/l/m/product_image/3954/1562948482_5538.png" alt="Digital Marketing Test">
+                        </figure>
+                        
+                        <div class="media-body">
+                          <h3><a href="#">Certified Email Marketing Professional</a></h5>
+                            <div class="rating">
+                              <i class="icon-star"></i>
+                              <i class="icon-star"></i> 
+                              <i class="icon-star"></i>
+                              <i class="icon-star"></i>
+                              <i class="icon-star-blank"></i>
+                              <span class="rating__output">4/5</span>
+                            </div>
+
+                            <div class="mode mr-30">
+                                Mode 
+                                <span class="mode__name">
+                                    Instructor
+                                </span>
+                            </div>
+                            <div class="provider">
+                                Provider 
+                                <span class="provider__name">
+                                    GetCertGo
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="mr-auto courses">
+                          <strong class="courses__price">Rs. 21420/-</strong>
+                        </div>
+                      </li>
+                    </ul>
+
+                    <div class="d-flex justify-content-center mt-40 mb-30">
+                      <a class="btn btn-outline-primary" href="#" role="button">Load more assesments</a>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- learners stories section -->
+          <section id="testimonial" class="col-sm-12">
+            <h2>Learners stories</h2>
+            <div id="carouselExampleCaptions" class="carousel slide learner-stories" data-ride="carousel">
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <div class="d-flex">
+                    <div class="col-sm-4">
+                      <div class="card text-center">
+                        <div class="card__heading">
+                          AS
+                        </div>
+                        <div class="card-body">
+                          <p class="card-text">
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.
+                          </p>
+                        </div>
+                        <p class="card__name">
+                          <strong>Abhishek sinha</strong>
+                          Sapient, Noida
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="card text-center">
+                        <div class="card__heading">
+                          AS
+                        </div>
+                        <div class="card-body">
+                          <p class="card-text">
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.
+                          </p>
+                        </div>
+                        <p class="card__name">
+                          <strong>Abhishek sinha</strong>
+                          Sapient, Noida
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="card text-center">
+                        <div class="card__heading">
+                          AS
+                        </div>
+                        <div class="card-body">
+                          <p class="card-text">
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.
+                          </p>
+                        </div>
+                        <p class="card__name">
+                          <strong>Abhishek sinha</strong>
+                          Sapient, Noida
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="carousel-item">
+                  <div class="d-flex">
+                    <div class="col-sm-4">
+                      <div class="card text-center">
+                        <div class="card__heading">
+                          AS
+                        </div>
+                        <div class="card-body">
+                          <p class="card-text">
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.
+                          </p>
+                        </div>
+                        <p class="card__name">
+                          <strong>Abhishek sinha</strong>
+                          Sapient, Noida
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="card text-center">
+                        <div class="card__heading">
+                          AS
+                        </div>
+                        <div class="card-body">
+                          <p class="card-text">
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.
+                          </p>
+                        </div>
+                        <p class="card__name">
+                          <strong>Abhishek sinha</strong>
+                          Sapient, Noida
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="card text-center">
+                        <div class="card__heading">
+                          AS
+                        </div>
+                        <div class="card-body">
+                          <p class="card-text">
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.
+                          </p>
+                        </div>
+                        <p class="card__name">
+                          <strong>Abhishek sinha</strong>
+                          Sapient, Noida
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+                <span class="carousel-control-icon" aria-hidden="true"><figure class="icon-prev"></figure></span>
+              </a>
+              <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
+                <span class="carousel-control-icon" aria-hidden="true"><figure class="icon-next"></figure></span>
+              </a>
+            </div>
+          </section>
+
+          <!-- faq section -->
+          <section id="faq" class="col-sm-12">
+            <div class="faq">
+              <h2>FAQ</h2>
+              <div class="accordion" id="accordionExample">
+                <div class="card">
+                  <div class="card__question" id="headingOne">
+                    <button class="btn" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      <p><strong>What is the cancellation policy?</strong></p>
+                    </button>
+                  </div>
+              
+                  <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div class="card-body card__answer">
+                      <p>Requests for refund of fees on account of  cancellation of enrolment  shall be considered  only if such requests are received prior to closure of registration or 21 days before date of course commencement whichever is earlier.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card__question" id="headingTwo">
+                    <button class="btn collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                      <p><strong>Can I join next batch after paying for this batch</strong></p>
+                    </button>
+                  </div>
+                  <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                    <div class="card-body card__answer">
+                      <p>Requests for refund of fees on account of  cancellation of enrolment  shall be considered  only if such requests are received prior to closure of registration or 21 days before date of course commencement whichever is earlier.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card__question" id="headingThree">
+                    <button class="btn collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                      <p><strong>Do we get placement opportunity with this course?</strong></p>
+                    </button>
+                  </div>
+                  <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                    <div class="card-body card__answer">
+                      <p>Requests for refund of fees on account of  cancellation of enrolment  shall be considered  only if such requests are received prior to closure of registration or 21 days before date of course commencement whichever is earlier.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex justify-content-center mt-30">
+                <a class="btn btn-outline-primary" href="#" role="button">More FAQs</a>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </div>
+      <!-- left container end -->
+
+      <!-- right container -->
+      <div class="col-sm-3 sticky-mt">
+      <div class="sticky-right">
+        <!-- need help section -->
+        <section class="col-sm-12 padlr-0 pt-0">
+          <div class="need-help form-bg">
+            <h2>Need help?</h2>
+            <form>
+              <div class="d-flex">
+                <div class="custom-select-box">
+                  <select name="select" class="custom-select">
+                    <option selected>+91</option>
+                    <option value="+91">+91</option>
+                    <option value="+92">+92</option>
+                    <option value="+93">+93</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control input_field" id="mobile" placeholder="Mobile">
+                  <label for="mobile" class="input_label">Mobile</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <input type="email" class="form-control input_field" id="email" placeholder="Email">
+                <label for="email" class="input_label">Email</label>              
+              </div>
+              <div class="form-group error">
+                <input type="text" class="form-control input_field" id="name" placeholder="Name">
+                <label for="name" class="input_label">Name</label>
+                <span class="error-msg">Required</span>
+              </div>
+              <button type="submit" class="btn btn-block btn-primary">Submit</button>
+            </form>
+          </div>
+        </section>
+        <!-- also check section -->
+        <section class="col-sm-12 padlr-0">
+          <div class="also-check">
+            <h2>Also check</h2>
+            <ul class="also-check__list">
+              <li><a href="#">Digital Marketing Jobs</a></li>
+              <li><a href="#">Online Marketing Jobs</a></li>
+              <li><a href="#">SEO Jobs</a></li>
+              <li><a href="#">Business Development Jobs</a></li>
+              <li><a href="#">Resume Format for Sales & Marketing Professionals</a></li>
+            </ul>
+          </div>
+        </section>
+      </div>
+      </div>
+      <!-- right container end -->
+
+    </div>
+  </div>
+</main>
+
+<footer class="mt-40">
+  <div class="container">
+    <nav class="navbar navbar-expand-lg">
+      <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Partners</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Privacy Policy</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Terms & Condition</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact us</a>
+          </li>
+        </ul>
+        <span class="navbar-text social-icon">
+          <a href="#" class="icon-facebook"></a>
+          <a href="#" class="icon-linkedin"></a>
+          <a href="#" class="icon-twitter"></a>
+        </span>
+      </div>
+    </nav>
+    <div class="d-flex justify-content-between align-items-center mt-20">
+      <div class="secure-payment">
+        <figure class="icon-secure mr-20"></figure>
+        <span>
+          <strong>100% Secure Payment</strong>
+          All major credit & debit cards accepted
+        </span>
+      </div>
+      <div class="payment-option">
+          Payment options
+          <figure class="icon-payment-option"></figure>
+      </div>
+      <div class="copyright">
+          Copyright © 2019 HT Media Limited.
+      </div>
+    </div>
+  </div>
+</footer>
+
+{% endblock container %}
+
+{% block navigation %}
+  <!-- navigation bar -->
+  {% include 'basic/navigation.html' %}
+
+{% endblock navigation %}
+
+
+
+{% block footer %}
+      <!-- footer -->
+  {% include 'basic/footer.html' %}      
+{% endblock footer %}
+{% block js_section %}
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="{% static 'shinelearn/js/common/bootstrap4.min.js' %}"> </script>
+    
+    <script>
+        $('.category-tab .nav-tabs > li ').hover(function() {
+          if ($(this).hasClass('hoverblock'))
+            return;
+          else
+            $(this).find('a').tab('show');
+        });
+
+        $(window).on('scroll', function (e) {
+          $('.sticky-nav')[$(window).scrollTop() >= 420 ? 'removeClass' : 'addClass']('sticky-none');
+        })
+
+        $('.sticky-nav .nav-link').click(function(){
+          $('.sticky-nav .nav-link').removeClass('active');
+          $(this).addClass('active');
+        })
+    </script>
+
+{% endblock js_section %}

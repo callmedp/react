@@ -69,16 +69,17 @@ class SkillPageView(DetailView, SkillPageMixin):
         return None
 
     def get(self, request, *args, **kwargs):
-        self.pk = self.kwargs.get('pk', None)
-        self.object = self.get_object()
-        redirect = self.redirect_if_necessary(request.path, self.object)
-        if redirect:
-            return redirect
+        # self.pk = self.kwargs.get('pk', None)
+        # self.object = self.get_object()
+        # redirect = self.redirect_if_necessary(request.path, self.object)
+        # if redirect:
+        #     return redirect
         context = super(SkillPageView, self).get(request, args, **kwargs)
         return context
 
     def get_context_data(self, **kwargs):
         context = super(SkillPageView, self).get_context_data(**kwargs)
+        return context;
         page = self.request.GET.get('page', 1)
         api_data = self.get_job_count_and_fuctionan_area(self.object.name)
         career_outcomes = self.object.split_career_outcomes()

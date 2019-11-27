@@ -8,3 +8,19 @@
 @mixin square($size) {
   @include size($size, $size);
 }
+
+@mixin icon-details($width, $height, $position) {
+  background-position: $position;
+  width: $width;
+  height: $height;
+}
+
+@mixin icon-block($width, $height, $position) {
+  @include icon-details($width, $height, $position);
+  display: block;
+}
+
+@mixin icon-inblock($width, $height, $position) {
+  @include icon-details($width, $height, $position);
+  display: inline-block;
+}
