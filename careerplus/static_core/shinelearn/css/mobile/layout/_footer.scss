@@ -1,15 +1,15 @@
 footer {
     background-color: $gray-lightest;
     bottom: 0;
-    font-size: 80%;
+    font-size: 86%;
     left: 0;
     position: absolute;
     width: 100%;
     text-align: center;
-    color: $txt-grey-666;
+    color: $gray-dark;
   
     a {
-      color: $txt-grey-666;
+      color: $gray-dark;
       padding: 0 5px;
     }
   }
@@ -21,7 +21,8 @@ footer {
   &__smo {
     display: flex;
     justify-content: center;
-    margin-bottom: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     
     a {
       @include size(25px, 25px, block);
