@@ -85,6 +85,15 @@
             font-size: $font-size-lg;
         }
     }
+
+    &--courseName {
+        width: 95px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        resize: horizontal;
+        display: inline-block;
+    }
 }
 
 .skill-tabs {
