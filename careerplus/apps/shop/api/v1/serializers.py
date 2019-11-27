@@ -111,18 +111,15 @@ class UpdateProductScreenSkillSerializer(serializers.Serializer):
         for skill in user_type_skills:
             skill, created = Skill.objects.get_or_create(name=skill)
             productskill, created = ScreenProductSkill.objects.get_or_create(
-                skill=skill, product=product
+                skill=skill, product=product, relation_type=2
             )
-            productskill.relation_type = 2
-            productskill.save()
 
         for skill in product_type_skills:
             skill, created = Skill.objects.get_or_create(name=skill)
             productskill, created = ScreenProductSkill.objects.get_or_create(
-                skill=skill, product=product
+                skill=skill, product=product, relation_type=1
             )
-            productskill.relation_type = 1
-            productskill.save()
+
         return product
 
     def validate_product_id(self, value):
@@ -149,19 +146,15 @@ class UpdateProductSkillSerializer(serializers.Serializer):
 
         for skill in user_type_skills:
             skill, created = Skill.objects.get_or_create(name=skill)
-            productskill, created = ProductSkill.objects.get_or_create(
-                skill=skill, product=product
+            ProductSkill.objects.get_or_create(
+                skill=skill, product=product, relation_type=2
             )
-            productskill.relation_type = 2
-            productskill.save()
 
         for skill in product_type_skills:
             skill, created = Skill.objects.get_or_create(name=skill)
-            productskill, created = ProductSkill.objects.get_or_create(
-                skill=skill, product=product
+            ProductSkill.objects.get_or_create(
+                skill=skill, product=product, relation_type=1
             )
-            productskill.relation_type = 1
-            productskill.save()
         return product
 
     def validate_product_id(self, value):
