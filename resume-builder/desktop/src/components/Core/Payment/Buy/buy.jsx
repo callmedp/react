@@ -5,7 +5,8 @@ import TopBar from '../../Editor/TopBar/topBar.jsx'
 import Header from '../../../Common/Header/header.jsx'
 import Footer from '../../../Common/Footer/footer.jsx'
 import * as action from '../../../../store/buy/actions'
-import { showModal, hideModal, updateUi, showSelectTemplateModal, hideSelectTemplateModal } from "../../../../store/ui/actions"
+import { showModal, hideModal, updateUi, showSelectTemplateModal, hideSelectTemplateModal,
+          hideGenerateResumeModal, showGenerateResumeModal } from "../../../../store/ui/actions"
 import { connect } from "react-redux";
 import TemplateModal from '../../../Modal/tempateModal'
 import Slider from "react-slick";
@@ -22,6 +23,7 @@ import {
 } from "../../../../store/template/actions";
 import { eventClicked } from '../../../../store/googleAnalytics/actions/index'
 import { loginCandidate } from "../../../../store/landingPage/actions";
+import AlertModal from '../../../Modal/alertModal';
 
 
 export class Buy extends Component {
@@ -44,6 +46,7 @@ export class Buy extends Component {
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
         this.showEnlargedTemplate = this.showEnlargedTemplate.bind(this);
         this.changeTemplate = this.changeTemplate.bind(this);
+        this.freeResumeTemplate = this.freeResumeTemplate.bind(this);
     }
 
     async showEnlargedTemplate(templateId) {
@@ -58,6 +61,23 @@ export class Buy extends Component {
             'action': 'ChangeTemplate',
             'label': 'PaymentPage'
         })
+    }
+
+    async freeResumeTemplate() {
+        const {requestFreeResume,pollingFreeResume,showGenerateResumeModal,downloadFreeResume} = this.props
+        const response = await requestFreeResume()
+        console.log(response)
+        showGenerateResumeModal()
+
+        var timer = setInterval(async function () {
+                let result = await pollingFreeResume();    
+                console.log(result)
+                if(result === true){
+                    clearInterval(timer)
+                    downloadFreeResume()
+                }
+        }, 2000);
+
     }
 
     async redirectToCart() {
@@ -126,14 +146,17 @@ export class Buy extends Component {
             slidesToShow: 3,
             slidesToScroll: 1,
         };
-        const { userInfo: { first_name, last_name, number, email, selected_template, order_data,resume_download_count,free_resume_downloads }, ui: { loader }, template: { templateImage, thumbnailImages }, productIds, eventClicked } = this.props;
+        const { userInfo: { first_name, last_name, number, email,selected_template,
+                             order_data,resume_download_count,free_resume_downloads },
+                 ui: { loader }, template: { templateImage, thumbnailImages },
+                productIds, eventClicked } = this.props;
         const { userInfo } = this.props;
         const { checked } = this.state;
         const price1 = productIds[0] ? productIds[0].inr_price : 999
         const discount1 = Math.floor(((1499 - price1) / 1499) * 100)
         const price2 = productIds[1] ? productIds[1].inr_price : 1248
         const discount2 = Math.floor(((1999 - price2) / 1999) * 100)
-        const free_download_count = free_download_count - resume_download_count
+        const free_download_count = free_resume_downloads - resume_download_count
 
         return (
             /*
@@ -145,6 +168,7 @@ export class Buy extends Component {
                     number={number}
                     email={email} />
                 <TemplateModal {...this.props} page={'buy'} />
+                <AlertModal {...this.props} />
                 <SelectTemplateModal {...this.props} page={"buy"} />
                 {
                     !!(loader) &&
@@ -176,7 +200,7 @@ export class Buy extends Component {
                             <div className="choose-plan">
                                 <h2 className="mt-10">Choose your plan</h2>
                                 <span
-                                    class="choose-plan-txt">Use resume builder for 12 months to<strong> create/edit</strong> unlimited resume.</span>
+                                    className="choose-plan-txt">Use resume builder for 12 months to<strong> create/edit</strong> unlimited resume.</span>
                                 
                                 <ul>
                                     <li className="bdr pos-rel free-trial">
@@ -186,12 +210,12 @@ export class Buy extends Component {
                                             </span>
                                             <span className="free-trial--text">
                                                 <p>
-                                                     {free_download_count? `Free download ${free_download_count} times for 1st time users.` :"You have exceeded the free download limit."} 
+                                                     {free_download_count > 0? ` ${free_download_count} Free download for 1st time users.` :"You have exceeded the free download limit."} 
                                                 </p>
                                             </span>
-                                            {free_download_count?
+                                            {free_download_count > 0?
                                                 <span className="free-trial--download-button">
-                                                    <button>Download</button>
+                                                    <button onClick={this.freeResumeTemplate}>Download</button>
                                                 </span>:''
                                             }
                                         </div>
@@ -325,6 +349,12 @@ const mapDispatchToProps = (dispatch) => {
         'hideModal': () => {
             return dispatch(hideModal())
         },
+        'showGenerateResumeModal': () => {
+            return dispatch(showGenerateResumeModal())
+        },
+        'hideGenerateResumeModal': () => {
+            return dispatch(hideGenerateResumeModal())
+        },
         'showSelectTemplateModal': () => {
             return dispatch(showSelectTemplateModal())
         },
@@ -370,6 +400,21 @@ const mapDispatchToProps = (dispatch) => {
         "loginCandidate": (token = '') => {
             return new Promise((resolve, reject) => {
                 dispatch(loginCandidate({ payload: { alt: '' }, resolve, reject, isTokenAvail: false }))
+            })
+        },
+        "requestFreeResume": () => {
+            return new Promise((resolve, reject) => {
+                dispatch(action.requestFreeResume({resolve,reject}))
+            })
+        },
+        "downloadFreeResume": () => {
+            return new Promise((resolve, reject) => {
+                dispatch(action.downloadFreeResume({resolve,reject}))
+            })
+        },
+        "pollingFreeResume": () => {
+            return new Promise((resolve, reject) => {
+                dispatch(action.pollingFreeResume({resolve,reject}))
             })
         },
 

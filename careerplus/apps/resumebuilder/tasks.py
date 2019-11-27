@@ -196,6 +196,7 @@ def generate_and_upload_resume_pdf(data):
     template_no = data.get('template_no')
     send_mail = data.get('send_mail')
     is_free_trial = data.get('is_free_trial',False)
+    is_combo = data.get('is_combo',False)
 
     # Render PDF for context
     def generate_file(context_dict={}, template_src=None, file_type='pdf'):
@@ -251,7 +252,7 @@ def generate_and_upload_resume_pdf(data):
         )
         first_save = True
         candidate.save()
-    else:
+    elif not candidate and is_free_trial:
         logging.getLogger('error_log').error("No candidate for this trial resume download.")
         return
         
@@ -263,7 +264,7 @@ def generate_and_upload_resume_pdf(data):
         file_name = "{}.{}".format(template_no, content_type)
 
     entity_preference = eval(candidate.entity_preference_data or "{}")
-    extracurricular = candidate.extfile_nameracurricular_list
+    extracurricular = candidate.extracurricular_list
     education = candidate.candidateeducation_set.all().order_by('order')
     experience = candidate.candidateexperience_set.all().order_by('order')
     skills = candidate.skill_set.all().order_by('order')
@@ -318,13 +319,18 @@ def generate_and_upload_resume_pdf(data):
                     'entity_position': updated_entity_position, "width": 93.7
                     }
     pdf_file = generate_file(context_dict=context_dict, template_src=template_src, file_type='pdf')
-    store_resume_file(file_dir, file_name, pdf_file)
+
+    for i in range(5):
+        try:
+            store_resume_file(file_dir, file_name, pdf_file)
+            break
+        except Exception as e:
+            logging.getLogger('error_log').error("File not uploaded to cloud")
 
     if is_free_trial:
         candidate.resume_download_count += 1
         candidate.save()
         logging.getLogger('info_log').info("Trial part finished and incremented download count")
-        return
 
     data = {}
     data.update({
@@ -334,7 +340,7 @@ def generate_and_upload_resume_pdf(data):
         'siteDomain': settings.SITE_DOMAIN
     })
 
-    if template_no == 5:
+    if template_no == 5 and is_combo:
         zip_all_resume_pdfs.apply_async((order.id, data), countdown=2)
 
     if send_mail:

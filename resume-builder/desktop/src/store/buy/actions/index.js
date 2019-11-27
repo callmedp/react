@@ -1,4 +1,4 @@
-import {ADD_TO_CART , GET_PRODUCT_IDS} from './actionTypes'
+import {ADD_TO_CART , GET_PRODUCT_IDS, REQUEST_FREE_RESUME, POLLING_FREE_RESUME, DOWNLOAD_FREE_RESUME} from './actionTypes'
 
 
 export const addToCart = (payload) => ({
@@ -8,5 +8,20 @@ export const addToCart = (payload) => ({
 
 export const getProductIds = (payload) => ({
     type: GET_PRODUCT_IDS,
+    payload
+});
+
+export const requestFreeResume = (payload) => ({
+    type: REQUEST_FREE_RESUME,
+    payload
+});
+
+export const downloadFreeResume = (payload) => ({
+    type: DOWNLOAD_FREE_RESUME,    
+    payload
+});
+
+export const pollingFreeResume = (payload) => ({
+    type: POLLING_FREE_RESUME,
     payload
 });

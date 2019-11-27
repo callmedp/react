@@ -904,6 +904,8 @@ class PDFRefreshAPIView(APIView):
         return Response({"detail": "Resume successfully Updated"}, status=status.HTTP_200_OK)
 
 class FreeTrialResumeDownload(APIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsObjectOwner,)
     '''
     use of the view is to download free trial resume of users with following functions
     1. post request to generate and send pdf file in response
@@ -915,13 +917,17 @@ class FreeTrialResumeDownload(APIView):
           'is_free_trial':True,
           'template_no': kwargs.get('template_no',1)
         }
-        generate_and_upload_resume_pdf.delay(data)
-        response = HttpResponse('Started creating file')
+        data = json.dumps(data)
+        response = HttpResponse(json.dumps({'results':'Free Resume template creation started.Please wait for a few seconds'}))
         return response
+        generate_and_upload_resume_pdf.delay(data)
+        
+        
 
     def get(self,request,*args,**kwargs):
         candidate_id = kwargs.get('candidate_id','')
         template_no = kwargs.get('template_no','')
+        content_type = "application/pdf"
         filename_prefix = "free-trial"
         file_path = settings.RESUME_TEMPLATE_DIR + "/{}/pdf/free-trial-{}.pdf".format(candidate_id, template_no)
         content_type = "application/pdf"
@@ -941,9 +947,11 @@ class FreeTrialResumeDownload(APIView):
 
         except Exception as e:
             logging.getLogger('error_log').error("%s" % str(e))
-            return redirect('/path/to/current/page/')
+            return HttpResponse(json.dumps({'error':True}))
 
 class FreeTrialResumePolling(APIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsObjectOwner,)
 
     def get(self,request, *args,**kwargs):
         candidate_id = kwargs.get('candidate_id','')
@@ -954,8 +962,8 @@ class FreeTrialResumePolling(APIView):
             return HttpResponse('No candidate')
         
         if candidate.resume_download_count > prev_resume_download_count:
-            return HttpResponse(True)
+            return HttpResponse(json.dumps({'poll_result':True}))
             
-        return HttpResponse(False)
+        return HttpResponse(json.dumps({'poll_result':True}))
 
 

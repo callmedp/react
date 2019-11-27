@@ -31,7 +31,7 @@ export default class Testimonial extends Component {
                         (testimonials || []).map((el, key) => {
                             return(
                                 <div className="testimonials--list" key={key}>
-                                    <span class="icon-quote"></span>
+                                    <span className="icon-quote"></span>
                                     <div className="testimonials--wrap">
 
                                         
