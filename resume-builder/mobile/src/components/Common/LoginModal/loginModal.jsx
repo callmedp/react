@@ -45,6 +45,20 @@ export default class LoginModal extends React.Component {
             "errorMessage": ''
         })
         if (!this.state.email || !this.state.password) {
+            let errorMessage ="";
+            if(! this.state.email && !this.state.password){
+                errorMessage = "Email and Password is required."
+            }
+            else if (!this.state.email){
+                errorMessage = "Email is required."
+            }
+            else {
+                errorMessage = "Password is required"
+            }
+            this.setState({
+                'error': true,
+                "errorMessage": errorMessage
+            })
             return;
         }
         try {
@@ -74,7 +88,7 @@ export default class LoginModal extends React.Component {
     }
 
     render() {
-        const { ui: { loginModal }, handleLoginSuccess } = this.props
+        const { ui: { loginModal, mainLoader }, handleLoginSuccess } = this.props
         return (
             <div>
                 <Modal
@@ -83,27 +97,37 @@ export default class LoginModal extends React.Component {
                     contentLabel="Help Modal"
                     className="alertModal"
                     overlayClassName="Overlay">
-                >
                     <form>
-                        <div className="modal-reachus">
-                            <React.Fragment>
-                                <div className="form__group mt-20"></div>
-                                <i onClick={this.closeModal}
-                                    className='icon-close icon-close--position1' />
-                                <h2>Login</h2>
+                        <div className="login-modal">
+                            <React.Fragment>                                
 
-                                <input className="form__group mt-20mb-20" placeholder="Email" onChange={this.handleEmailInput} />
+                                <span className="login-modal--close"  onClick={this.closeModal}></span>   
 
-                                <input className="form__group mt-20" placeholder="Password" onChange={this.handlePasswordInput} />
+                                <h2 className="mt-30">Login to build your resume</h2>
+                                <p className="error-message mt-30 text-center">
+                                    {
+                                        this.state.error &&
+                                        <span className='pr'>{this.state.errorMessage}</span>
 
-                                {
-                                    this.state.error &&
-                                    <span className='pr'>{this.state.errorMessage}</span>
+                                    }
+                                </p>
 
-                                }
-                                <button className="btn btn__round btn__primary mt-20"
+                                <ul className="login-modal__lists">
+                                    <li className="login-modal__lists--item">
+                                        <input className="login-modal__input" placeholder="Email" onChange={this.handleEmailInput} autoComplete="false" />
+                                    </li>
+                                    <li className="login-modal__lists--item">
+                                        <input className="login-modal__input" placeholder="Password" type="password" onChange={this.handlePasswordInput} autoComplete="false" />
+                                    </li>
+                                    {/* <li className="login-modal__lists--item text-right fs-12">
+                                        <a href="#">Forget Password</a>
+                                    </li> */}
+                                </ul>
+                                <button className="btn btn__medium btn__round btn__primary mt-20 w-100"
                                     type={'submit'} onClick={this.handleLogin}>Login
-                            </button>
+                                </button>
+
+                                <p className="fs-12 text-center mt-30">Don’t have an account yet? <a href="/register/">Register Now</a></p>
                             </React.Fragment>
                         </div>
                     </form>

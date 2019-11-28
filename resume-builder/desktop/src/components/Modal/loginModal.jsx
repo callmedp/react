@@ -45,6 +45,20 @@ export default class LoginModal extends React.Component {
             "errorMessage": ''
         })
         if (!this.state.email || !this.state.password) {
+            let errorMessage = "";
+            if (!this.state.email && !this.state.password) {
+                errorMessage = "Email and Password is required."
+            }
+            else if (!this.state.email) {
+                errorMessage = "Email is required."
+            }
+            else {
+                errorMessage = "Password is required"
+            }
+            this.setState({
+                'error': true,
+                "errorMessage": errorMessage
+            })
             return;
         }
         try {
@@ -81,27 +95,50 @@ export default class LoginModal extends React.Component {
                     isOpen={loginModal}
                     onRequestClose={this.closeModal}
                     contentLabel="Help Modal"
-                    className="help-modal1"
+                    className="login-modal"
                 >
                     <form>
-                        <div className="pr help-modal">
+                        <div className="mt-10">
                             <React.Fragment>
+
                                 <i onClick={this.closeModal}
-                                    className='icon-close icon-close--position1' />
-                                <h2>Login</h2>
+                                    className='login-modal--close'>
+                                </i>
 
-                                <input className="mb-20" placeholder="Email" onChange={this.handleEmailInput} />
+                                <h2 className="mt-30">Login to build your resume</h2>
 
-                                <input placeholder="Password" onChange={this.handlePasswordInput} />
+                                <p className="login-modal--error text-center">
+                                        {
+                                        this.state.error &&
+                                        <span className='pr'>{this.state.errorMessage}</span>
 
-                                {
-                                    this.state.error &&
-                                    <span className='pr'>{this.state.errorMessage}</span>
+                                    }
+                                </p>
+                                <ul className="login-modal__lists">
+                                    <li className="login-modal__lists--item">
+                                        <input className="login-modal__input" placeholder="Email" onChange={this.handleEmailInput} />
+                                    </li>
+                                    <li className="login-modal__lists--item">
+                                        <input className="login-modal__input" placeholder="Password" type='password' onChange={this.handlePasswordInput} />
+                                    </li>
 
-                                }
-                                <button className="orange-button"
-                                    type={'submit'} onClick={this.handleLogin}>Login
-                            </button>
+                                    {/* <li className="login-modal__lists--item text-right">
+                                        <a href="#">Forget Password</a>
+                                    </li> */}
+                                    
+
+                                    <li className="login-modal__lists--item">
+                                        <button className="orange-button w-100"
+                                            type={'submit'} onClick={this.handleLogin}>Login
+                                    </button>
+                                    </li>
+                                </ul>
+
+                                <p className="mt-30 mb-30 text-center">Don’t have an account yet? <a href="/register/">Register Now</a></p>
+
+
+
+
                             </React.Fragment>
                         </div>
                     </form>

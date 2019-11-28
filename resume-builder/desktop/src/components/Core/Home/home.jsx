@@ -91,15 +91,16 @@ class Home extends Component {
             if (isSessionAvailable) {
                 try {
                     await this.props.getCandidateShineDetails()
+                    const { state } = this.props.location;
+                    if (state && state.from) {
+                        this.props.history.push(state.from);
+                    }
                 }
                 catch (e) {
-                    console.log('error ---e', e);
+                    console.log(e.message);
                 }
                 // redirect back from where it comes
-                const { state } = this.props.location;
-                if (state && state.from) {
-                    this.props.history.push(state.from);
-                }
+               
             }
             else {
                 await this.props.showLoginModal()
