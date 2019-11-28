@@ -17,18 +17,7 @@ class Buy extends Component {
 
     constructor(props) {
         super(props);
-        // check if the userexperinece is greater or equal to 4 years. (7 is the pid for 4 years (mapping done here))
        
-        if (parseInt(localStorage.getItem('userExperience') || 0) >= 7) {
-            if (typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
-                document.getElementsByClassName('chat-bot')[0].style.display = 'none';
-            }
-        }
-        else {
-            if (typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
-                document.getElementsByClassName('chat-bot')[0].style.display = 'block';
-            }
-        }
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
         this.state = {
             'checked': 'product1',
@@ -75,6 +64,19 @@ class Buy extends Component {
     }
 
     async componentDidMount() {
+         // check if the userexperinece is greater or equal to 4 years. (7 is the pid for 4 years (mapping done here))
+       
+         if (parseInt(localStorage.getItem('userExperience') || 0) >= 7) {
+            if (typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
+                document.getElementsByClassName('chat-bot')[0].style.display = 'none';
+            }
+        }
+        else {
+            if (typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
+                document.getElementsByClassName('chat-bot')[0].style.display = 'block';
+            }
+        }
+
         if (!localStorage.getItem('candidateId')) {
             await this.props.loginCandidate()
         }

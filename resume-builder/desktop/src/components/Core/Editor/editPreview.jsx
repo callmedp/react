@@ -38,6 +38,14 @@ class EditPreview extends Component {
         this.allowUploadResume = this.allowUploadResume.bind(this);
         this.generateResumeAlert = this.generateResumeAlert.bind(this);
 
+        this.state = {
+            visibleNote: true
+        }
+    }
+
+    async componentDidMount() {
+
+
         // check if the userexperinece is greater or equal to 4 years. (7 is the pid for 4 years (mapping done here))
 
         if (parseInt(localStorage.getItem('userExperience') || 0) >= 7) {
@@ -50,12 +58,6 @@ class EditPreview extends Component {
                 document.getElementsByClassName('chat-bot')[0].style.display = 'block';
             }
         }
-        this.state = {
-            visibleNote: true
-        }
-    }
-
-    async componentDidMount() {
 
 
         const { analytics: { locationPath }, fetchEntityInfo, history: { location: { pathname } }, locationRouteChange, loginCandidate } = this.props

@@ -20,10 +20,17 @@ class EditPreview extends Component {
     constructor(props) {
         super(props);
 
-        // check if the userexperinece is greater or equal to 4 years. (7 is the pid for 4 years (mapping done here))
+       
+        this.changeLink = this.changeLink.bind(this)
+        this.headingChange = this.headingChange.bind(this);
+        this.generateResumeAlert = this.generateResumeAlert.bind(this);
+    }
+
+    async componentDidMount() {
+
+         // check if the userexperinece is greater or equal to 4 years. (7 is the pid for 4 years (mapping done here))
  
-        if (parseInt(localStorage.getItem('userExperience') || 0) >= 7) {
-            console.log('---', typeof document);
+         if (parseInt(localStorage.getItem('userExperience') || 0) >= 7) {
             if(typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]){document.getElementsByClassName('chat-bot')[0].style.display = 'none';
             }
         }
@@ -32,12 +39,7 @@ class EditPreview extends Component {
                 document.getElementsByClassName('chat-bot')[0].style.display = 'block';
             }
         }
-        this.changeLink = this.changeLink.bind(this)
-        this.headingChange = this.headingChange.bind(this);
-        this.generateResumeAlert = this.generateResumeAlert.bind(this);
-    }
 
-    async componentDidMount() {
         if (!localStorage.getItem('candidateId') || !localStorage.getItem('token')) {
             await this.props.loginCandidate()
         }

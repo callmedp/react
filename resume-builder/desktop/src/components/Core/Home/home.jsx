@@ -28,12 +28,7 @@ class Home extends Component {
             'scrolled': false,
             'token': '',
             'login': ''
-        }
-        console.log('-----', typeof document);
-        if ( typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
-            document.getElementsByClassName('chat-bot')[0].style.display = 'none';
-        }
-
+        }        
         const values = queryString.parse(this.props.location.search);
         const token = (values && values.token) || '', login = (values && values.login) || '';
 
@@ -83,6 +78,11 @@ class Home extends Component {
         }
     }
     async componentDidMount() {
+
+        if ( typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
+            document.getElementsByClassName('chat-bot')[0].style.display = 'none';
+        }
+
         if (this.state.token) {
             await this.props.loginCandidate({ alt: this.state.token }, this.props.history, true);
         }
