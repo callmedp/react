@@ -16,6 +16,5 @@
 /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py close_neo_order_items --settings=careerplus.config.settings_live
 /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py service_expiry_reminder --settings=careerplus.config.settings_live
 
->>>>>>> origin/development
 export DJANGO_SETTINGS_MODULE="careerplus.config.settings_live" && /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/scripts/welcome_recording.py
 export DJANGO_SETTINGS_MODULE="careerplus.config.settings_live" && /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/scripts/candidate_agent_interaction_recording.py

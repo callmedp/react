@@ -108,7 +108,7 @@ SITE_DOMAIN = 'learning1.shine.com'
 MOBILE_SITE_DOMAIN = 'mlearning1.shine.com'
 SITE_PROTOCOL = 'https'
 MAIN_DOMAIN_PREFIX = '{}://{}'.format(SITE_PROTOCOL, SITE_DOMAIN)  # 'http://learning.shine.com'
-MOBILE_PROTOCOL_DOMAIN = '{}://{}'.format(SITE_PROTOCOL,MOBILE_SITE_DOMAIN)
+MOBILE_PROTOCOL_DOMAIN = '{}://{}'.format(SITE_PROTOCOL,SITE_DOMAIN)
 MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
 META_SITE_PROTOCOL = SITE_DOMAIN
 META_SITE_DOMAIN = SITE_PROTOCOL
@@ -194,6 +194,14 @@ CACHES = {
     'search_lookup': {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "redis://127.0.0.1:6379/3",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            'CONNECTION_POOL_KWARGS': {'max_connections': 50},
+        }
+    },
+    'candidate_search_lookup': {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://172.22.67.223:6379/4",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             'CONNECTION_POOL_KWARGS': {'max_connections': 50},

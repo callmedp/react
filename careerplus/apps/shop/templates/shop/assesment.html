@@ -6,7 +6,6 @@
 {% endblock title %}
 {% block canonical_url %}
   <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
-  <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{request.path}}">
 {% endblock canonical_url %}
 
         {% block django_meta %}
@@ -61,7 +60,7 @@
 {% if whatsapp_icon %}
 {% for key,value in whatsapp_icon.items %}
 {% if key == "product-course-number" %}
-<a href="https://api.whatsapp.com/send?phone=91{{value}}&text=I need your help"><div class="icon-whatsApp"></div></a>
+<a href="https://api.whatsapp.com/send?phone=91{{value}}&text=I need your help for {{product.heading}}"><div class="icon-whatsApp"></div></a>
 {% endif %}
 {% endfor %}
 {% endif %}
