@@ -1,0 +1,80 @@
+@import '../../styles/variables/vars.scss';
+@import '../../styles/variables/mixins.scss';
+
+.ReactModal__Overlay--after-open {
+    z-index: 99 !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-modal {
+    width: 375px;
+    background-color: $white;
+    padding: 20px;
+    z-index: 99;
+    border-radius: 5px;
+    position: relative;
+  
+    h2 {
+      font-size: 2.0rem;
+      color: $black;
+      font-weight: 700;
+    }
+  
+    &__lists {
+      margin-top: 30px;
+  
+      &--item {
+        &:not(:last-child) {
+          margin-bottom: 15px;
+        }
+      }
+    }
+  
+    &__input {
+      @include size(100%, 45px, block);
+      @include border-radius(4px);
+      box-shadow: 0 0 4px rgba($black, .2);
+      border: 1px solid #E9E9E9;
+      padding: 12px;
+      font-size: 14px;
+      color: $txt1;
+    }
+  
+    input::-webkit-input-placeholder {
+      color: $txt2;
+    }
+  
+
+    &--close {
+      @include size(25px, 25px, block);
+      position: absolute;
+      right: 0;
+      top: 15px;
+      transform: rotate(45deg);
+      cursor: pointer;
+  
+      &::before,
+      &::after {
+        content: '';
+        @include border-radius(2px);
+        background-color: $txt2;
+        position: absolute;
+      }
+  
+      &::before {
+        @include size(20px, 2px, block);
+        top: 9px;
+        left: -9px;
+       
+      }
+      &::after {
+        @include size(2px, 20px, block);
+      }
+    }
+
+    a {
+        color: $link;
+    }
+  }
