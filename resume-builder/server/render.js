@@ -67,8 +67,8 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
       <script>
         window.__PRELOADED_STATE__ = ${JSON.stringify(store.getState()).replace(/</g, '\\u003c')}
         window.config = {}
-        config.staticUrl = ${staticUrl} 
-        config.siteDomain = ${siteDomain}
+        config.staticUrl = "${staticUrl}" 
+        config.siteDomain = "${siteDomain}"
         document.onkeydown = function(e) {
           if(event.keyCode == 123) {
               return false;
@@ -90,6 +90,13 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
       .then(response => response.json())
       .then(result=> {
         console.log("---result--",result);
+        var script = document.createElement('script');
+        var head=document.getElementsByTagName("head")[0];
+        script.src=result.value;
+        head.appendChild(script);
+      })
+      .catch(err =>{
+        console.log(err);
       })
 
     </script>
