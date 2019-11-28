@@ -1513,7 +1513,7 @@
         setTimeout(function () {
             var text = $(element).val();
             var target=$("#"+tag_id);
-            var tags = (text).split(/[ ,]+/);
+            var tags = (text).split(/[,]+/);
             for (var i = 0, z = tags.length; i<z; i++) {
                   var tag = $.trim(tags[i]);
                   if (!target.tagExist(tag)) {
@@ -1532,7 +1532,7 @@
       let elem_id = $(this).attr('data-copy-tag-id');
       let k = $("#"+elem_id).siblings(".tagsinput").children('.tag')
       let tags = [];
-      for (var i = k.length; i--;) {  
+      for (var i = 0;i<k.length; i++) {  
           tags.push($(k[i]).text().substring(0, $(k[i]).text().length -  1).trim());  
       }
       element = $('<textarea>').appendTo('body').val(tags.join(',')).select()
