@@ -81,27 +81,47 @@ export default class LoginModal extends React.Component {
                     isOpen={loginModal}
                     onRequestClose={this.closeModal}
                     contentLabel="Help Modal"
-                    className="help-modal1"
+                    className="login-modal"
                 >
                     <form>
-                        <div className="pr help-modal">
+                        <div className="mt-10">
                             <React.Fragment>
+                                
                                 <i onClick={this.closeModal}
-                                    className='icon-close icon-close--position1' />
-                                <h2>Login</h2>
+                                    className='login-modal--close'>
+                                </i>
+                                
+                                <h2 className="mt-30">Login to build your resume</h2>
 
-                                <input className="mb-20" placeholder="Email" onChange={this.handleEmailInput} />
 
-                                <input placeholder="Password" onChange={this.handlePasswordInput} />
+                                <ul className="login-modal__lists">
+                                    <li className="login-modal__lists--item">
+                                        <input className="login-modal__input" placeholder="Email" onChange={this.handleEmailInput} />
+                                    </li>
+                                    <li className="login-modal__lists--item">
+                                        <input className="login-modal__input" placeholder="Password" onChange={this.handlePasswordInput} />
+                                    </li>
 
+                                    <li className="login-modal__lists--item text-right">
+                                        <a href="#">Forget Password</a>
+                                    </li>
+
+                                    <li className="login-modal__lists--item">
+                                    <button className="orange-button w-100"
+                                        type={'submit'} onClick={this.handleLogin}>Login
+                                    </button>
+                                    </li>
+                                </ul>
+
+                                <p className="mt-30 mb-30 text-center">Don’t have an account yet? <a href="#">Register Now</a></p>
+
+                        
                                 {
                                     this.state.error &&
                                     <span className='pr'>{this.state.errorMessage}</span>
 
                                 }
-                                <button className="orange-button"
-                                    type={'submit'} onClick={this.handleLogin}>Login
-                            </button>
+                                
                             </React.Fragment>
                         </div>
                     </form>
