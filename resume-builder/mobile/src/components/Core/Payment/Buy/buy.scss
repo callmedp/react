@@ -218,61 +218,29 @@
     }
 
     &__trial {
-        flex-direction: column;
-        padding-top: 5.0rem !important;
+        padding-top: 5.0rem;
+        align-items: center;
 
-        &__download-text {
-            width: 60%;
-            float: left;
-        }
-
-        &__download-button{
-            width: 40%;
-            float: right;
-
-            button{
-                float: right;
-            }
-        }
-
-        &--tag {
-            position: absolute;
-            transform: rotate(180deg);
+        .buy__recommended--tag {
+            right: auto;
             left: -11px;
-            top: 18px;
-            background-color:$purple;
-            color: $white;
-            font-size: 1.2rem;
-            font-weight: 600;
-            height: 20px;
-            text-transform: uppercase;
-            box-shadow: -6px 6px 10px rgba(0, 0, 0, 0.3);
-            line-height: 19px;
-            padding-right: .5rem;
+            padding-left: .5rem;
 
-            &__text {
-                transform: rotate(180deg);
+            &::before{
+                left: auto;
+                right: -11px;
             }
 
-            &::before {
-                @include size(12px, 20px, block);
-                content: '';
-                background-position: -82px -287px;
-                background-image: url($sprite);
-                position: absolute;
-                left: -11px;
-            }
-            
             &::after {
-                content: '';
-                width: 0;
-                height: 0;
-                border-top: 10px solid $black;
-                border-right: 10px solid transparent;
-                position: absolute;
-                right: 0px;
-                top: 20px;
+                left: 0px;
+                right: auto;
+                transform: rotate(90deg);
             }
+        }
+
+        .buy_item--left {
+            padding-right: 30px;
+            font-size: 1.4rem;
         }
     }
 }
