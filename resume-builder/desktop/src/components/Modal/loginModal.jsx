@@ -45,6 +45,20 @@ export default class LoginModal extends React.Component {
             "errorMessage": ''
         })
         if (!this.state.email || !this.state.password) {
+            let errorMessage = "";
+            if (!this.state.email && !this.state.password) {
+                errorMessage = "Email and Password is required."
+            }
+            else if (!this.state.email) {
+                errorMessage = "Email is required."
+            }
+            else {
+                errorMessage = "Password is required"
+            }
+            this.setState({
+                'error': true,
+                "errorMessage": errorMessage
+            })
             return;
         }
         try {
@@ -86,42 +100,45 @@ export default class LoginModal extends React.Component {
                     <form>
                         <div className="mt-10">
                             <React.Fragment>
-                                
+
                                 <i onClick={this.closeModal}
                                     className='login-modal--close'>
                                 </i>
-                                
+
                                 <h2 className="mt-30">Login to build your resume</h2>
 
+                                <p className="login-modal--error text-center">
+                                        {
+                                        this.state.error &&
+                                        <span className='pr'>{this.state.errorMessage}</span>
 
+                                    }
+                                </p>
                                 <ul className="login-modal__lists">
                                     <li className="login-modal__lists--item">
                                         <input className="login-modal__input" placeholder="Email" onChange={this.handleEmailInput} />
                                     </li>
                                     <li className="login-modal__lists--item">
-                                        <input className="login-modal__input" placeholder="Password" onChange={this.handlePasswordInput} />
+                                        <input className="login-modal__input" placeholder="Password" type='password' onChange={this.handlePasswordInput} />
                                     </li>
 
-                                    <li className="login-modal__lists--item text-right">
+                                    {/* <li className="login-modal__lists--item text-right">
                                         <a href="#">Forget Password</a>
-                                    </li>
+                                    </li> */}
+                                    
 
                                     <li className="login-modal__lists--item">
-                                    <button className="orange-button w-100"
-                                        type={'submit'} onClick={this.handleLogin}>Login
+                                        <button className="orange-button w-100"
+                                            type={'submit'} onClick={this.handleLogin}>Login
                                     </button>
                                     </li>
                                 </ul>
 
-                                <p className="mt-30 mb-30 text-center">Don’t have an account yet? <a href="#">Register Now</a></p>
+                                <p className="mt-30 mb-30 text-center">Don’t have an account yet? <a href="/register/">Register Now</a></p>
 
-                        
-                                {
-                                    this.state.error &&
-                                    <span className='pr'>{this.state.errorMessage}</span>
 
-                                }
-                                
+
+
                             </React.Fragment>
                         </div>
                     </form>

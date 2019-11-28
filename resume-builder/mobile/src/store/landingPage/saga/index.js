@@ -106,7 +106,7 @@ function* loginCandidate(action) {
         }
 
         if (result && result['error']) {
-            yield put({ type: uiAction.UPDATE_MAIN_PAGE_LOADER, data: { mainloader: false } })
+            yield put({ type: uiAction.UPDATE_MAIN_PAGE_LOADER, payload: { mainloader: false } })
             localStorage.clear();
             return reject(new Error(result['errorMessage']));
             //redirect code here

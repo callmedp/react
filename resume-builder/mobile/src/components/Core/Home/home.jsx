@@ -40,12 +40,19 @@ class Home extends Component {
         if (this.state.login === 'false') {
             const isSessionAvailable = await this.props.checkSessionAvaialability();
             if (isSessionAvailable) {
-                await this.props.getCandidateShineDetails()
-                // redirect back from where it comes
-                const { state } = this.props.location;
-                if (state && state.from) {
-                    this.props.history.push(state.from);
+                try {
+
+                    await this.props.getCandidateShineDetails()
+                    // redirect back from where it comes
+                    const { state } = this.props.location;
+                    if (state && state.from) {
+                        this.props.history.push(state.from);
+                    }
                 }
+                catch (e) {
+                    console.log(e.message);
+                }
+
             }
             else {
                 await this.props.showLoginModal()
@@ -229,7 +236,7 @@ class Home extends Component {
                     </div>
 
                     <div className="text-center mt-30">
-                        <a className="btn btn__shadow btn__round btn__primary" alt ="Build Your Resume"
+                        <a className="btn btn__shadow btn__round btn__primary" alt="Build Your Resume"
                             onClick={() => this.scrollTo('templates', 'BuildResume', 'Features')}>Build your resume</a>
                     </div>
 
