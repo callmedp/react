@@ -123,7 +123,6 @@ const feedbackCallDetails = () => {
 const getOrderItemFeedback = () => {
     $.get(`/console/api/v1/feedback-call/feedback/${id}/order-items/`,{
         'include_order_item_id':true,
-        'nopage':true
     },(data)=>{
         total_order_item = data.count
         if(data.results){
