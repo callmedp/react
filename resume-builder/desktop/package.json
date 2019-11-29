@@ -28,6 +28,8 @@
     "rewire": "^4.0.1",
     "slick-carousel": "^1.8.1",
     "sweetalert2": "^8.18.2",
+    "webpack": "^4.28.3",
+    "node-sass": "^4.12.0",
     "webpack-bundle-tracker": "^0.4.3",
     "webpack-node-externals": "^1.7.2"
   },
@@ -50,7 +52,6 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "node-sass": "^4.12.0",
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
