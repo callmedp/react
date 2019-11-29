@@ -33,7 +33,6 @@
     "webpack": "^4.28.3",
     "webpack-bundle-tracker": "^0.4.3"
   },
-  "config": { "unsafe-perm": true },
   "scripts": {
     "start": "react-app-rewired start",
     "build": "sh -ac 'rm -rf ../../careerplus/static_core/react/dist/mobile/*; node ./scripts/build-config.js'",
@@ -52,7 +51,6 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "node-sass": "^4.12.0",
     "redux-devtools-extension": "^2.13.8",
     "react-app-rewired": "^2.1.3"
   }

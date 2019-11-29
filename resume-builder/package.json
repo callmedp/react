@@ -48,9 +48,7 @@
     "webpack": "^4.28.3",
     "webpack-node-externals": "^1.7.2"
   },
-  "config": { "unsafe-perm": true },
   "scripts": {
-    "node-sass": "^4.12.0",
     "start:dev": "REACT_APP_ENV=development npm run start",
     "start": "react-app-rewired start",
     "build": "webpack --config ./server/webpack.server.config.js",

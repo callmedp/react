@@ -32,7 +32,6 @@
     "webpack-bundle-tracker": "^0.4.3",
     "webpack-node-externals": "^1.7.2"
   },
-  "config": { "unsafe-perm": true },
   "scripts": {
     "start:dev": "REACT_APP_ENV=development npm run start",
     "start": "react-app-rewired start",
@@ -52,7 +51,6 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "node-sass": "^4.12.0",
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
