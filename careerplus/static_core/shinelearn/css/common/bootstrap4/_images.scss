@@ -43,115 +43,115 @@
 
 
 /*****icons css****/
-[class^="icon-"] {
+[class^="b4-icon-"] {
   text-indent: 200%;
   overflow: hidden;
   white-space: nowrap;
 }
 
-.icon-call {
+.b4-icon-call {
   background: $sprite-new;
   @include icon-inblock (21px, 22px, -324px 0);
 }
 
-.icon-user {
+.b4-icon-user {
   background: $sprite-new;
   @include icon-inblock (20px, 24px, -281px 0);
 }
 
-.icon-cart {
+.b4-icon-cart {
   background: $sprite-new;
   @include icon-inblock (22px, 20px, -364px 0);
 }
 
-.icon-search {
+.b4-icon-search {
   background: $sprite-new;
   @include icon-inblock (18px, 17px, -244px 0);
   vertical-align: sub;
 }
 
-.icon-down {
+.b4-icon-down {
   background: $sprite-new;
   @include icon-inblock (9px, 6px, -403px 0);
 }
 
-.icon-stats {
+.b4-icon-stats {
   background: $sprite-new;
   @include icon-inblock (28px, 28px, -430px 0);
 }
 
-.skillpage-bg {
+.b4-skillpage-bg {
   background: url($path + 'images/skillpage-bg.jpg') no-repeat;
   background-size: cover;
   min-height: 26.3rem;
 }
 
-.form-bg {
+.b4-form-bg {
   background: url($path + 'images/form-bg.png') no-repeat 0 0 $white;;
   background-size: contain;
 }
 
-.icon-tick {
+.b4-icon-tick {
   background: $sprite-new;
   @include icon-inblock (10px, 8px, -402px -10px);
 }
 
-.icon-impact1 {
+.b4-icon-impact1 {
   background: $sprite-new;
   @include icon-inblock (40px, 42px, -472px 0);
 }
 
-.icon-impact2 {
+.b4-icon-impact2 {
   background: $sprite-new;
   @include icon-inblock (35px, 35px, -522px 0);
 }
 
-.icon-impact3 {
+.b4-icon-impact3 {
   background: $sprite-new;
   @include icon-inblock (39px, 39px, -569px 0);
 }
 
-.icon-star {
+.b4-icon-star {
   background: $sprite-new;
   @include icon-inblock (13px, 12px, -386px -23px);
 }
 
-.icon-star-blank {
+.b4-icon-star-blank {
   background: $sprite-new;
   @include icon-inblock (13px, 12px, -401px -23px);
 }
 
-.icon-prev {
+.b4-icon-prev {
   background: $sprite-new;
   @include icon-inblock (7px, 12px, -351px -25px);
 }
 
-.icon-next {
+.b4-icon-next {
   background: $sprite-new;
   @include icon-inblock (7px, 12px, -366px -25px);
 }
 
-.icon-facebook {
+.b4-icon-facebook {
   background: $sprite-new;
   @include icon-inblock (13px, 24px, -621px 0);
 }
 
-.icon-linkedin {
+.b4-icon-linkedin {
   background: $sprite-new;
   @include icon-inblock (25px, 23px, -645px 0);
 }
 
-.icon-twitter {
+.b4-icon-twitter {
   background: $sprite-new;
   @include icon-inblock (24px, 20px, -680px 0);
 }
 
-.icon-secure {
+.b4-icon-secure {
   background: $sprite-new;
   @include icon-inblock (29px, 40px, -263px -36px);
 }
 
-.icon-payment-option {
+.b4-icon-payment-option {
   background: $sprite-new;
   @include icon-inblock (252px, 29px, 0 -48px);
 }
