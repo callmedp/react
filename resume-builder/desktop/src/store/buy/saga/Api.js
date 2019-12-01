@@ -28,14 +28,8 @@ const downloadFreeResume = () => {
     return BaseApiService.get(`${siteDomain}/api/v1/resume/${url}`)
 }
 
-const pollingFreeResume = () => {
-    const candidateId = localStorage.getItem('candidateId')
-    const url = `candidate/${candidateId}/free-resume/polling/`;
-    return BaseApiService.get(`${siteDomain}/api/v1/resume/${url}`)
-}
-
 
 
 export const Api = {
-    fetchProductIds, addToCart,requestFreeResume,downloadFreeResume,pollingFreeResume
+    fetchProductIds, addToCart,requestFreeResume,downloadFreeResume
 }

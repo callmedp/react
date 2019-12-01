@@ -31,7 +31,9 @@ export class Buy extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            'checked': 'product1'
+            'checked': 'product1',
+            'resumeDownloadCount':0,
+            'resumeDownloadCountUpdated':false
         }
         if (parseInt(localStorage.getItem('userExperience') || 0) >= 4) {
             if (document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
@@ -46,7 +48,7 @@ export class Buy extends Component {
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
         this.showEnlargedTemplate = this.showEnlargedTemplate.bind(this);
         this.changeTemplate = this.changeTemplate.bind(this);
-        this.freeResumeTemplate = this.freeResumeTemplate.bind(this);
+        this.freeResumeRequest = this.freeResumeRequest.bind(this);
     }
 
     async showEnlargedTemplate(templateId) {
@@ -63,20 +65,50 @@ export class Buy extends Component {
         })
     }
 
-    async freeResumeTemplate() {
-        const {requestFreeResume,pollingFreeResume,showGenerateResumeModal,downloadFreeResume} = this.props
-        const response = await requestFreeResume()
-        console.log(response)
-        showGenerateResumeModal()
+    componentDidUpdate(prevProps) {
+        if (this.props.userInfo !== prevProps.userInfo ) {
+            console.log("prev",this.props.userInfo,"new",prevProps.userInfo)
+            if(this.state.resumeDownloadCount && (this.state.resumeDownloadCount< this.props.userInfo.resume_download_count)){
+                console.log(this.props.userInfo.resume_download_count,"prev",prevProps.userInfo.resume_download_count)
+                this.setState({'resumeDownloadCountUpdated':true})
+            }
+        }
+    }
 
-        var timer = setInterval(async function () {
-                let result = await pollingFreeResume();    
-                console.log(result)
-                if(result === true){
-                    clearInterval(timer)
-                    downloadFreeResume()
-                }
-        }, 2000);
+    async freeResumeRequest() {
+        console.log(this)
+        const {  requestFreeResume,showGenerateResumeModal,downloadFreeResume,
+                fetchUserInfo ,userInfo: { resume_download_count}, } = this.props
+        console.log("downlod",resume_download_count)
+        this.setState({'resumeDownloadCount':resume_download_count},async ()=>{
+            const {resumeDownloadCount,resumeDownloadCountUpdated} = this.state
+            const response = await requestFreeResume()
+            console.log(response)
+            showGenerateResumeModal()
+            
+            var timer = setInterval(function () {
+                    fetchUserInfo(true);  
+                    console.log("count updated",resumeDownloadCountUpdated,'count',resumeDownloadCount)  
+                    if(resumeDownloadCountUpdated){
+                        clearInterval(timer)
+                    }
+
+                    // if(prev_resume_download_count < resume_download_count){
+                    //     
+                    //     const response = await  downloadFreeResume()
+                    //     const blob =  response.blob()
+                    //     const url = window.URL.createObjectURL(new Blob([blob]));
+                    //     const link = document.createElement('a');
+                    //     link.href = url;
+                    //     link.setAttribute('download', `free-trial`);
+                    //     document.body.appendChild(link);
+                    //     link.click();
+                    //     link.parentNode.removeChild(link);
+                    // }
+                    
+            }, 2000);
+        })
+        
 
     }
 
@@ -215,7 +247,7 @@ export class Buy extends Component {
                                             </span>
                                             {free_download_count > 0?
                                                 <span className="free-trial--download-button">
-                                                    <button onClick={this.freeResumeTemplate}>Download</button>
+                                                    <button onClick={this.freeResumeRequest}>Download</button>
                                                 </span>:''
                                             }
                                         </div>
@@ -332,8 +364,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        'fetchUserInfo': () => {
-            return dispatch(fetchPersonalInfo())
+        'fetchUserInfo': (noUiLoader) => {
+            return dispatch(fetchPersonalInfo({noUiLoader}))
         },
         'getProductIds': () => {
             return dispatch(action.getProductIds())
@@ -410,11 +442,6 @@ const mapDispatchToProps = (dispatch) => {
         "downloadFreeResume": () => {
             return new Promise((resolve, reject) => {
                 dispatch(action.downloadFreeResume({resolve,reject}))
-            })
-        },
-        "pollingFreeResume": () => {
-            return new Promise((resolve, reject) => {
-                dispatch(action.pollingFreeResume({resolve,reject}))
             })
         },
 

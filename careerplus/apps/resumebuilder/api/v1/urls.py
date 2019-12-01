@@ -18,7 +18,7 @@ from .views import (CandidateCreateView, CandidateRetrieveUpdateView, SkillRetri
                     CandidateLanguageRetrieveUpdateView,
                     CandidateResumePreview,ProfileEntityBulkUpdateView, InterestView,
                     OrderCustomisationListView,OrderCustomisationRUDView,ResumeImagePreviewView,
-                    SuggestionApiView, EntityReorderView,PDFRefreshAPIView,FreeTrialResumeDownload,FreeTrialResumePolling)
+                    SuggestionApiView, EntityReorderView,PDFRefreshAPIView,FreeTrialResumeDownload)
 
 #inter app imports
 
@@ -61,7 +61,6 @@ urlpatterns = [
     url(r'^candidate/(?P<candidate_id>[0-9a-z]+)/bulk-update/(?P<entity_slug>[a-z\-]+)/$', ProfileEntityBulkUpdateView.as_view()),
     url(r'^candidate/(?P<candidate_id>[0-9a-z]+)/refresh-order/(?P<order_id>[0-9]+)/$', PDFRefreshAPIView.as_view()),
     url(r'^candidate/(?P<candidate_id>[0-9a-z]+)/free-resume/template/(?P<template_no>[0-9]+)/$', FreeTrialResumeDownload.as_view()),
-    url(r'^candidate/(?P<candidate_id>[0-9a-z]+)/free-resume/polling/$', FreeTrialResumePolling.as_view()),
     url(r'^interest-list/$', InterestView.as_view()),
     url(r'^suggestion/$', SuggestionApiView.as_view()),
 

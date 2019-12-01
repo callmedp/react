@@ -21,7 +21,3 @@ export const downloadFreeResume = (payload) => ({
     payload
 });
 
-export const pollingFreeResume = (payload) => ({
-    type: POLLING_FREE_RESUME,
-    payload
-});

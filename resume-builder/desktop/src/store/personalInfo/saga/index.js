@@ -47,7 +47,9 @@ function modifyPersonalInfo(data) {
 function* getPersonalDetails(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
-
+        const {payload} = action;
+        const loader = payload && payload.noUiLoader ? false : true
+        console.log('loader',loader,'arrgument',payload )
 
         if (localStorage.getItem('personalInfo')) {
             yield put({
@@ -57,10 +59,11 @@ function* getPersonalDetails(action) {
             return;
         }
 
-        yield put({type: UPDATE_UI, data: {loader: true}});
+        yield put({type: UPDATE_UI, data: {loader}});
 
 
         const result = yield call(Api.fetchPersonalInfo, candidateId);
+        console.log("result from huit",result)
         if (result['error']) {
             Toast.fire({
                 type: 'error',
@@ -71,6 +74,7 @@ function* getPersonalDetails(action) {
 
         let {data} = result;
         data = modifyPersonalInfo(data)
+        console.log("data to update",data)
         yield put({type: Actions.SAVE_USER_INFO, data: data})
     } catch (e) {
         console.log(e);

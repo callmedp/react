@@ -918,18 +918,22 @@ class FreeTrialResumeDownload(APIView):
           'template_no': kwargs.get('template_no',1)
         }
         data = json.dumps(data)
-        response = HttpResponse(json.dumps({'results':'Free Resume template creation started.Please wait for a few seconds'}))
-        return response
         generate_and_upload_resume_pdf.delay(data)
-        
-        
+        response = HttpResponse(json.dumps({'results':'Free Resume template creation started.Please wait for a few seconds'}))
+        return response 
 
     def get(self,request,*args,**kwargs):
         candidate_id = kwargs.get('candidate_id','')
         template_no = kwargs.get('template_no','')
+        candidate = Candidate.objects.filter(candidate_id=candidate_id).first()
+
+        if not candidate:
+            logging.getLogger('error_log').error("No Candidate Found")
+            return HttpResponse(json.dumps({'error':True}))
+
         content_type = "application/pdf"
         filename_prefix = "free-trial"
-        file_path = settings.RESUME_TEMPLATE_DIR + "/{}/pdf/free-trial-{}.pdf".format(candidate_id, template_no)
+        file_path = settings.RESUME_TEMPLATE_DIR + "/{}/pdf/free-trial-{}.pdf".format(candidate.id, template_no)
         content_type = "application/pdf"
         filename_suffix = ".pdf"
 
@@ -949,21 +953,5 @@ class FreeTrialResumeDownload(APIView):
             logging.getLogger('error_log').error("%s" % str(e))
             return HttpResponse(json.dumps({'error':True}))
 
-class FreeTrialResumePolling(APIView):
-    authentication_classes = (ShineUserAuthentication,)
-    permission_classes = (IsObjectOwner,)
-
-    def get(self,request, *args,**kwargs):
-        candidate_id = kwargs.get('candidate_id','')
-        prev_resume_download_count = kwargs.get('count',0)
-        candidate = Candidate.objects.filter(candidate_id=candidate_id).first()
-
-        if not candidate:
-            return HttpResponse('No candidate')
-        
-        if candidate.resume_download_count > prev_resume_download_count:
-            return HttpResponse(json.dumps({'poll_result':True}))
-            
-        return HttpResponse(json.dumps({'poll_result':True}))
 
 

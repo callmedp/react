@@ -43,20 +43,6 @@ function* requestFreeResume(action) {
     }
 }
 
-function* pollingFreeResume(action) {
-    try {
-        const {payload: {resolve, reject}} = action
-        const result = yield call(Api.pollingFreeResume);
-        if (result['error']) {
-            return reject(new SubmissionError({_error: result['errorMessage']}));
-        }
-        const {data: {poll_result}} = result;
-        return resolve(poll_result)
-    } catch (e) {
-        console.log(e);
-    }
-}
-
 function* downloadFreeResume(action) {
     try {
         const {payload: {resolve, reject}} = action
@@ -90,7 +76,6 @@ export default function* watchProductId() {
     yield takeLatest(Actions.GET_PRODUCT_IDS, fetchProductIds)
     yield takeLatest(Actions.ADD_TO_CART, addToCart)
     yield takeLatest(Actions.REQUEST_FREE_RESUME, requestFreeResume)
-    yield takeLatest(Actions.POLLING_FREE_RESUME, pollingFreeResume)
     yield takeLatest(Actions.DOWNLOAD_FREE_RESUME, downloadFreeResume)
 
 }
