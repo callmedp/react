@@ -21,15 +21,9 @@ const requestFreeResume = () => {
     return BaseApiService.post(`${siteDomain}/api/v1/resume/${url}`,{})
 }
 
-const downloadFreeResume = () => {
-    const candidateId = localStorage.getItem('candidateId')
-    const selectedTemplate = localStorage.getItem('selected_template',1)
-    const url = `candidate/${candidateId}/free-resume/template/${selectedTemplate}/`;
-    return BaseApiService.get(`${siteDomain}/api/v1/resume/${url}`)
-}
 
 
 
 export const Api = {
-    fetchProductIds, addToCart,requestFreeResume,downloadFreeResume
+    fetchProductIds, addToCart,requestFreeResume
 }

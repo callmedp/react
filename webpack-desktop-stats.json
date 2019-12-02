@@ -1,19 +1,18 @@
-
 {
     "status": "done",
     "chunks": {
         "main": [
             {
-                "name": "main-1575039007166.css",
-                "path": "/home/hitesh/Documents/careerplus/careerplus/static_core/react/dist/desktop/main-1575039007166.css"
+                "name": "main-1575283518385.css",
+                "path": "/home/hitesh/Documents/careerplus/careerplus/static_core/react/dist/desktop/main-1575283518385.css"
             },
             {
-                "name": "main-1575039007166.js",
-                "path": "/home/hitesh/Documents/careerplus/careerplus/static_core/react/dist/desktop/main-1575039007166.js"
+                "name": "main-1575283518385.js",
+                "path": "/home/hitesh/Documents/careerplus/careerplus/static_core/react/dist/desktop/main-1575283518385.js"
             },
             {
-                "name": "main-1575039007166.js.map",
-                "path": "/home/hitesh/Documents/careerplus/careerplus/static_core/react/dist/desktop/main-1575039007166.js.map"
+                "name": "main-1575283518385.js.map",
+                "path": "/home/hitesh/Documents/careerplus/careerplus/static_core/react/dist/desktop/main-1575283518385.js.map"
             }
         ]
     }

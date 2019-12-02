@@ -33,7 +33,6 @@ export class Buy extends Component {
         this.state = {
             'checked': 'product1',
             'resumeDownloadCount':0,
-            'resumeDownloadCountUpdated':false
         }
         if (parseInt(localStorage.getItem('userExperience') || 0) >= 4) {
             if (document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
@@ -49,6 +48,8 @@ export class Buy extends Component {
         this.showEnlargedTemplate = this.showEnlargedTemplate.bind(this);
         this.changeTemplate = this.changeTemplate.bind(this);
         this.freeResumeRequest = this.freeResumeRequest.bind(this);
+        this.pollingUserInfo = this.pollingUserInfo.bind(this);
+        this.downloadRequestedResume = this.downloadRequestedResume.bind(this);
     }
 
     async showEnlargedTemplate(templateId) {
@@ -67,60 +68,50 @@ export class Buy extends Component {
 
     componentDidUpdate(prevProps) {
         if (this.props.userInfo !== prevProps.userInfo ) {
-            console.log("prev",this.props.userInfo,"new",prevProps.userInfo)
             if(this.state.resumeDownloadCount && (this.state.resumeDownloadCount< this.props.userInfo.resume_download_count)){
-                console.log(this.props.userInfo.resume_download_count,"prev",prevProps.userInfo.resume_download_count)
-                this.setState({'resumeDownloadCountUpdated':true})
+                clearInterval(this.state.timerId)
+                this.downloadRequestedResume();
             }
         }
     }
 
-    async freeResumeRequest() {
-        console.log(this)
-        const {  requestFreeResume,showGenerateResumeModal,downloadFreeResume,
-                fetchUserInfo ,userInfo: { resume_download_count}, } = this.props
-        console.log("downlod",resume_download_count)
-        this.setState({'resumeDownloadCount':resume_download_count},async ()=>{
-            const {resumeDownloadCount,resumeDownloadCountUpdated} = this.state
-            const response = await requestFreeResume()
-            console.log(response)
-            showGenerateResumeModal()
-            
-            var timer = setInterval(function () {
-                    fetchUserInfo(true);  
-                    console.log("count updated",resumeDownloadCountUpdated,'count',resumeDownloadCount)  
-                    if(resumeDownloadCountUpdated){
-                        clearInterval(timer)
-                    }
+    async downloadRequestedResume(){
+        const candidateId = localStorage.getItem('candidateId')
+        const selectedTemplate = localStorage.getItem('selected_template',1)
+        const url = `${siteDomain}/api/v1/resume/candidate/${candidateId}/free-resume/template/${selectedTemplate}/`
+        const link = document.createElement('a');
+        link.href = url;
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode.removeChild(link);
+    }
 
-                    // if(prev_resume_download_count < resume_download_count){
-                    //     
-                    //     const response = await  downloadFreeResume()
-                    //     const blob =  response.blob()
-                    //     const url = window.URL.createObjectURL(new Blob([blob]));
-                    //     const link = document.createElement('a');
-                    //     link.href = url;
-                    //     link.setAttribute('download', `free-trial`);
-                    //     document.body.appendChild(link);
-                    //     link.click();
-                    //     link.parentNode.removeChild(link);
-                    // }
-                    
-            }, 2000);
+    async freeResumeRequest() {
+        const {  requestFreeResume,showGenerateResumeModal,
+                 userInfo: { resume_download_count}, } = this.props
+        this.setState({'resumeDownloadCount':resume_download_count},async ()=>{
+            await requestFreeResume()
+            showGenerateResumeModal()
+            this.pollingUserInfo()
         })
         
 
     }
 
+    pollingUserInfo(){
+        const {fetchUserInfo} = this.props
+            
+        const timer = setInterval(function () {
+            fetchUserInfo(true);  
+        }, 10000);
+        this.setState({'timerId':timer})
+    } 
+
     async redirectToCart() {
-
-
         this.props.eventClicked({
             'action': 'PayNow',
             'label': 'Click'
         })
-
-        console.log('----', this.props.productIds);
 
         if (!this.props.productIds[0]) return;
         let product;
@@ -439,12 +430,6 @@ const mapDispatchToProps = (dispatch) => {
                 dispatch(action.requestFreeResume({resolve,reject}))
             })
         },
-        "downloadFreeResume": () => {
-            return new Promise((resolve, reject) => {
-                dispatch(action.downloadFreeResume({resolve,reject}))
-            })
-        },
-
         "showLoader": () => {
             return dispatch(updateUi({ loader: true }))
         }

@@ -16,8 +16,4 @@ export const requestFreeResume = (payload) => ({
     payload
 });
 
-export const downloadFreeResume = (payload) => ({
-    type: DOWNLOAD_FREE_RESUME,    
-    payload
-});
 

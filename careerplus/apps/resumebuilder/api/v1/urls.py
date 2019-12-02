@@ -18,7 +18,7 @@ from .views import (CandidateCreateView, CandidateRetrieveUpdateView, SkillRetri
                     CandidateLanguageRetrieveUpdateView,
                     CandidateResumePreview,ProfileEntityBulkUpdateView, InterestView,
                     OrderCustomisationListView,OrderCustomisationRUDView,ResumeImagePreviewView,
-                    SuggestionApiView, EntityReorderView,PDFRefreshAPIView,FreeTrialResumeDownload)
+                    SuggestionApiView, EntityReorderView,PDFRefreshAPIView,FreeTrialResumeDownload) 
 
 #inter app imports
 

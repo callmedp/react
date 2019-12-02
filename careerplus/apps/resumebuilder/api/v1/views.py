@@ -919,7 +919,7 @@ class FreeTrialResumeDownload(APIView):
         }
         data = json.dumps(data)
         generate_and_upload_resume_pdf.delay(data)
-        response = HttpResponse(json.dumps({'results':'Free Resume template creation started.Please wait for a few seconds'}))
+        response = HttpResponse(json.dumps({'result':'Free Resume template creation started.Please wait for a few seconds'}))
         return response 
 
     def get(self,request,*args,**kwargs):
@@ -945,7 +945,7 @@ class FreeTrialResumeDownload(APIView):
                 fsock = GCPResumeBuilderStorage().open(file_path)
 
             filename = filename_prefix + filename_suffix
-            response = HttpResponse(fsock, content_type=content_type)
+            response = HttpResponse(fsock.read(), content_type=content_type)
             response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
             return response
 

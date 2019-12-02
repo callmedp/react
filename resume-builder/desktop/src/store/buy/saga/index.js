@@ -27,31 +27,13 @@ function* fetchProductIds(action) {
 function* requestFreeResume(action) {
     try {
         const {payload: {resolve, reject}} = action
-        const result = yield call(Api.requestFreeResume);
-        console.log(result)
+        const response = yield call(Api.requestFreeResume);
 
-        if (result['error']) {
-            return reject(new SubmissionError({_error: result['errorMessage']}));
+        if (response['error']) {
+            return reject(new SubmissionError({_error: response['errorMessage']}));
         }
 
-        const {data: {results}} = result;
-        console.log(results)
-        
-        return resolve(results)
-    } catch (e) {
-        console.log(e);
-    }
-}
-
-function* downloadFreeResume(action) {
-    try {
-        const {payload: {resolve, reject}} = action
-        const result = yield call(Api.downloadFreeResume);
-        if (result['error']) {
-            return reject(new SubmissionError({_error: result['errorMessage']}));
-        }
-        console.log(result)
-        // const {data: {results}} = result;
+        const {data: {result}} = response;        
         return resolve(result)
     } catch (e) {
         console.log(e);
@@ -76,6 +58,5 @@ export default function* watchProductId() {
     yield takeLatest(Actions.GET_PRODUCT_IDS, fetchProductIds)
     yield takeLatest(Actions.ADD_TO_CART, addToCart)
     yield takeLatest(Actions.REQUEST_FREE_RESUME, requestFreeResume)
-    yield takeLatest(Actions.DOWNLOAD_FREE_RESUME, downloadFreeResume)
 
 }
