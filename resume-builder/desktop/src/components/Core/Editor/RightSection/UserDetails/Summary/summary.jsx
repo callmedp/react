@@ -145,23 +145,6 @@ class Summary extends Component {
                                 component={renderTextArea} type={"textarea"} name="extra_info" maxLength={"1000"}
                                 className="summary-box--summary-txt" rows="10" value={extra_info}/>
                         </div>
-                        <ul>
-                            {(suggestions || []).map((el, index) => {
-                                return (
-                                    <li key={index} onClick={(event) => {
-                                        suggestion_selected[index]
-                                            ? this.removeSuggestion(index, event) : this.addSuggestion(el, index, event)
-                                    }} htmlFor={`add${index}`}>
-                                <span className={suggestion_selected[index] ? 'selected' : ''}
-                                >
-                                    <input className="styled-checkbox" type="checkbox" readOnly
-                                            checked={suggestion_selected[index] ? true : false}
-                                            id={`add${index}`}/> <label htmlFor="styled-checkbox-1">Add</label>
-                                </span>
-                                        <p>{el}</p>
-                                    </li>)
-                            })}
-                        </ul>
                         <span className="add-suggested mt-15" onClick={() => {
                             this.openModal()
                         }}>Add suggested summary</span>

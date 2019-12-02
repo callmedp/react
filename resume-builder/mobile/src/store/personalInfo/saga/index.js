@@ -34,7 +34,9 @@ function modifyPersonalInfo(data) {
 function* getPersonalDetails(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
-        yield put({type: uiAction.UPDATE_MAIN_PAGE_LOADER, payload: {mainloader: true}})
+        const {payload} = action;
+        const loader = payload && payload.noUiLoader ? false : true
+        yield put({type: uiAction.UPDATE_MAIN_PAGE_LOADER, payload: {mainloader: loader}})
         if (localStorage.getItem('personalInfo')) {
             yield put({
                 type: Actions.SAVE_USER_INFO,

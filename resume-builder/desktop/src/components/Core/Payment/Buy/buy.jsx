@@ -24,6 +24,7 @@ import {
 import { eventClicked } from '../../../../store/googleAnalytics/actions/index'
 import { loginCandidate } from "../../../../store/landingPage/actions";
 import AlertModal from '../../../Modal/alertModal';
+import { Toast } from '../../../../services/ErrorToast';
 
 
 export class Buy extends Component {
@@ -33,6 +34,7 @@ export class Buy extends Component {
         this.state = {
             'checked': 'product1',
             'resumeDownloadCount':0,
+            'freeDownloadButtonDisable':false,
         }
         if (parseInt(localStorage.getItem('userExperience') || 0) >= 4) {
             if (document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
@@ -50,6 +52,7 @@ export class Buy extends Component {
         this.freeResumeRequest = this.freeResumeRequest.bind(this);
         this.pollingUserInfo = this.pollingUserInfo.bind(this);
         this.downloadRequestedResume = this.downloadRequestedResume.bind(this);
+        this.timerFunction = this.timerFunction.bind(this);
     }
 
     async showEnlargedTemplate(templateId) {
@@ -74,8 +77,10 @@ export class Buy extends Component {
             }
         }
     }
+    
 
     async downloadRequestedResume(){
+        const {hideGenerateResumeModal} = this.props
         const candidateId = localStorage.getItem('candidateId')
         const selectedTemplate = localStorage.getItem('selected_template',1)
         const url = `${siteDomain}/api/v1/resume/candidate/${candidateId}/free-resume/template/${selectedTemplate}/`
@@ -84,27 +89,38 @@ export class Buy extends Component {
         document.body.appendChild(link);
         link.click();
         link.parentNode.removeChild(link);
+        hideGenerateResumeModal()
     }
 
     async freeResumeRequest() {
         const {  requestFreeResume,showGenerateResumeModal,
                  userInfo: { resume_download_count}, } = this.props
-        this.setState({'resumeDownloadCount':resume_download_count},async ()=>{
+        this.setState({'resumeDownloadCount':resume_download_count,'freeDownloadButtonDisable':true},async ()=>{
             await requestFreeResume()
             showGenerateResumeModal()
             this.pollingUserInfo()
         })
-        
+    }
 
+    timerFunction(){
+        const {fetchUserInfo} = this.props
+        const { timerId,pollingStartTIme} = this.state
+        if(new Date().getTime() - pollingStartTIme > 60000) {  // max limit 10*6 seconds
+            clearInterval(timerId)
+            hideGenerateResumeModal()
+            this.setState({'freeDownloadButtonDisable':false})
+            Toast.fire({
+                type: 'error',
+                title: 'Something Went Wrong'
+            });
+        }
+        fetchUserInfo(true); 
     }
 
     pollingUserInfo(){
-        const {fetchUserInfo} = this.props
-            
-        const timer = setInterval(function () {
-            fetchUserInfo(true);  
-        }, 10000);
-        this.setState({'timerId':timer})
+        const timer = setInterval(this.timerFunction, 10000);
+        const startTime = new Date().getTime();
+        this.setState({'timerId':timer,'pollingStartTIme':startTime})
     } 
 
     async redirectToCart() {
@@ -174,7 +190,7 @@ export class Buy extends Component {
                  ui: { loader }, template: { templateImage, thumbnailImages },
                 productIds, eventClicked } = this.props;
         const { userInfo } = this.props;
-        const { checked } = this.state;
+        const { checked, freeDownloadButtonDisable} = this.state;
         const price1 = productIds[0] ? productIds[0].inr_price : 999
         const discount1 = Math.floor(((1499 - price1) / 1499) * 100)
         const price2 = productIds[1] ? productIds[1].inr_price : 1248
@@ -238,7 +254,7 @@ export class Buy extends Component {
                                             </span>
                                             {free_download_count > 0?
                                                 <span className="free-trial--download-button">
-                                                    <button onClick={this.freeResumeRequest}>Download</button>
+                                                    <button onClick={this.freeResumeRequest} disabled={freeDownloadButtonDisable}>Download</button>
                                                 </span>:''
                                             }
                                         </div>

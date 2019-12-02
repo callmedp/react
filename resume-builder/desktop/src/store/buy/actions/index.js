@@ -1,4 +1,4 @@
-import {ADD_TO_CART , GET_PRODUCT_IDS, REQUEST_FREE_RESUME, POLLING_FREE_RESUME, DOWNLOAD_FREE_RESUME} from './actionTypes'
+import {ADD_TO_CART , GET_PRODUCT_IDS, REQUEST_FREE_RESUME} from './actionTypes'
 
 
 export const addToCart = (payload) => ({
