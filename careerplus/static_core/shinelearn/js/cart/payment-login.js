@@ -222,7 +222,6 @@ async function handleResponse(response, isFetchingHTML) {
 * */
 
 const handleLoginCandidate = async () => {
-    debugger;
     const formData = $('#login_form').serializeArray().reduce((obj, item) => {
         obj[item.name] = item.value
         return obj;

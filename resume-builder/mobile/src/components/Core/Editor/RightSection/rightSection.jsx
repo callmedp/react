@@ -16,6 +16,8 @@ import {changeFormName} from "../../../../store/ui/actions/index";
 import {connect} from "react-redux";
 import { animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 import Loader from '../../../Common/Loader/loader.jsx';
+import Swal from 'sweetalert2';
+
 
 class RightSection extends Component {
 
@@ -160,6 +162,14 @@ const mapStateToProps = (state) => {
     }
 };
 
+const showAlertMessage = () =>{
+    Swal.fire(
+        'You Can\'t add more!',
+        'Please Fill current list first',
+        'error'
+      )
+}
+
 const mapDispatchToProps = (dispatch) => {
     return {
         "fetchListOfLink": () => {
@@ -183,6 +193,9 @@ const mapDispatchToProps = (dispatch) => {
         "changeOrderingDown":(index,fields,event)=>{
             return changeOrderingDown(index,fields,event)
         },
+        "showAlertMessage":()=>{
+            return showAlertMessage()
+        }
     }
 };
 

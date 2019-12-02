@@ -25,7 +25,8 @@ export const ReferenceRenderer = ({
                                       saveTitle,
                                       entityName,
                                       expanded,
-                                      handleInputValue
+                                      handleInputValue,
+                                      showAlertMessage
                                   }) => {
 
     return (
@@ -49,8 +50,20 @@ export const ReferenceRenderer = ({
 
                 <button
                     onClick={handleSubmit((values) => {
-                        handleAddition(fields, error)
-                    })} type={'button'}
+                        let skipAddition = false;
+                        (values && values.list  || []).forEach(el => {
+                            if (!el.reference_name) {
+                                skipAddition = true;
+                            }
+                        })
+                        if (!skipAddition) {
+                            handleAddition(fields, error)
+                        }
+                        else {
+                            showAlertMessage()
+                        }
+                    })}
+                     type={'button'}
                     className={"add-button " + styles['add-button__right']}>Add new
                 </button>
 

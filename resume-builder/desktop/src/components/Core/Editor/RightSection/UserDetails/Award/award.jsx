@@ -55,15 +55,29 @@ class Award extends Component {
          const {generateResumeAlert,bulkUpdateOrCreate,history} = this.props
         const {list} = values;
         if (list.length) {
-            await bulkUpdateOrCreate(list);
-            this.setState({
-                submit: true
+            // skip the api call if there is a certain field which is required but empty (We skipped validation intentionally)
+            let skipApiCall = false;
+            
+            list.map(el => {
+                if(! el.title){
+                    skipApiCall = true;
+                }
+                return; 
             })
-            if (entityLink) history.push(entityLink);
+
+            if(!skipApiCall){
+                await bulkUpdateOrCreate(list);
+            }
+        }
+
+        this.setState({
+            submit: true
+        })
+
+        if (entityLink) history.push(entityLink);
             else{
                 generateResumeAlert()
             }
-        }
     }
 
     handleAddition(fields, error) {
@@ -107,7 +121,7 @@ class Award extends Component {
     render() {
         const {
             handleSubmit,userInfo:{order_data}, ui: {loader}, saveTitle, editHeading,eventClicked,
-            isEditable, entityName, handleInputValue, nextEntity, showAlertModal,history, changeOrderingDown, changeOrderingUp
+            isEditable, entityName, handleInputValue, nextEntity, showAlertModal,history, changeOrderingDown, changeOrderingUp, showAlertMessage
         } = this.props;
 
         return (
@@ -127,6 +141,7 @@ class Award extends Component {
                             isEditable={isEditable}
                             handleInputValue={handleInputValue}
                             expanded={this.state.active}
+                            showAlertMessage={showAlertMessage}
                 />
                 <SavePreviewButtons 
                         showAlertModal={showAlertModal} context={this} history={history} order_data={order_data} form_name={'Awards'}

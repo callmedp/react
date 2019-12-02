@@ -28,7 +28,8 @@ const renderExperiences = ({
                                openModal,
                                tillTodayDisable,
                                fetchJobTitles,
-                               headingChange
+                               headingChange,
+                               showAlertMessage
                            }) => {
     return (
 
@@ -53,7 +54,22 @@ const renderExperiences = ({
                 </div>
                 {!editHeading ?
                     <button role="button"
-                            onClick={handleSubmit(handleAddition.bind(this, fields, experienceNewData(fields), 780, 'experience',eventClicked,'Experience'))}
+                            onClick=
+                            {
+                                handleSubmit((values) => {
+                                    let skipAddition = false;
+                                    (values && values.list || []).forEach(el => {
+                                        if (!el.job_profile) {
+                                            skipAddition = true;
+                                        }
+                                    })
+                                    if (!skipAddition) {
+                                        handleAddition(fields, experienceNewData(fields), 780, 'experience', eventClicked, 'Experience')
+                                    }
+                                    else {
+                                        showAlertMessage()
+                                    }
+                                })}
                             type={'button'} className="btn btn__round btn--outline">+ Add new</button> : ''
                 }
             </div>

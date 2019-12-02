@@ -39,8 +39,7 @@ export const ExperienceRenderer = ({
                                        tillTodayDisable,
                                        handleInputValue,
                                        openModal,
-
-
+                                       showAlertMessage
                                    }) => {
     return (
         <div>
@@ -60,7 +59,18 @@ export const ExperienceRenderer = ({
 
                 <button
                     onClick={handleSubmit((values) => {
-                        handleAddition(fields, error)
+                        let skipAddition = false;
+                        (values && values.list  || []).forEach(el => {
+                            if (!el.job_profile) {
+                                skipAddition = true;
+                            }
+                        })
+                        if (!skipAddition) {
+                            handleAddition(fields, error)
+                        }
+                        else {
+                            showAlertMessage()
+                        }
                     })}
                     type={'button'}
                     className={"add-button " + styles['add-button__right']}>Add new

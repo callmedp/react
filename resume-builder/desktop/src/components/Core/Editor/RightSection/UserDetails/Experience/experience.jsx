@@ -1,14 +1,14 @@
-import React, {Component} from 'react';
-import {reduxForm, FieldArray} from 'redux-form';
+import React, { Component } from 'react';
+import { reduxForm, FieldArray } from 'redux-form';
 import * as actions from '../../../../../../store/experience/actions/index';
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import moment from 'moment';
-import {ExperienceRenderer} from "./experienceRenderer";
+import { ExperienceRenderer } from "./experienceRenderer";
 import validate from '../../../../../FormHandler/validations/experience/validate'
-import {scroller} from "react-scroll/modules";
+import { scroller } from "react-scroll/modules";
 import SuggestionModal from '../../../../../Modal/suggestionModal'
-import {hideSuggestionModal, showSuggestionModal, setSuggestionType} from "../../../../../../store/ui/actions";
-import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
+import { hideSuggestionModal, showSuggestionModal, setSuggestionType } from "../../../../../../store/ui/actions";
+import { scrollOnErrors } from "../../../../../../Utils/srollOnError"
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons.jsx';
 
 
@@ -28,9 +28,9 @@ class Experience extends Component {
             submit: false,
             till_today: [],
             fieldArray: [],
-            length:0,
+            length: 0,
             currentIndex: null,
-            modal_status:false
+            modal_status: false
 
         };
         this.props.currentForm('experience');
@@ -43,14 +43,14 @@ class Experience extends Component {
         for (let i of this.props.initialValues.list) {
             till_today.push(i.is_working)
         }
-        this.setState({till_today})
+        this.setState({ till_today })
     }
 
     async componentDidUpdate(prevProps) {
-        const {ui:{previewClicked},previewButtonClicked,history,initialValues} = this.props;
-        if(previewClicked !== prevProps.ui.previewClicked && previewClicked){
+        const { ui: { previewClicked }, previewButtonClicked, history, initialValues } = this.props;
+        if (previewClicked !== prevProps.ui.previewClicked && previewClicked) {
             await this.updateInfoBeforeLoss()
-            this.setState({submit:true})
+            this.setState({ submit: true })
             previewButtonClicked(false)
             history.push('/resume-builder/preview/')
         }
@@ -59,7 +59,7 @@ class Experience extends Component {
             for (let i of initialValues.list) {
                 till_today.push(i.is_working)
             }
-            this.setState({till_today})
+            this.setState({ till_today })
         }
     }
 
@@ -71,55 +71,71 @@ class Experience extends Component {
 
     tillTodayDisable(index, checked, e) {
         e.stopPropagation();
-        let {till_today} = this.state;
+        let { till_today } = this.state;
         till_today[parseInt(index)] = checked
     }
 
     async handleSubmit(values, entityLink, currentFields) {
-         const {generateResumeAlert,bulkUpdateOrCreate,history} = this.props
-        const {list} = values;
+        const { generateResumeAlert, bulkUpdateOrCreate, history } = this.props
+        const { list } = values;
+
         if (list.length) {
-            await bulkUpdateOrCreate(list);
-            this.setState({
-                submit: true
+            // skip the api call if there is a certain field which is required but empty (We skipped validation intentionally)
+            let skipApiCall = false;
+
+            list.map(el => {
+                if (!el.job_profile) {
+                    skipApiCall = true;
+                }
+                return;
             })
-            if (entityLink) history.push(entityLink);
-            else{
+            if (!skipApiCall) {
+                await bulkUpdateOrCreate(list);
+            }
+           
+        }
+        
+        this.setState({
+            submit: true
+        })
+
+        if (entityLink) history.push(entityLink);
+        else {
                 generateResumeAlert()
             }
-        }
+
 
     }
 
-    async updateInfoBeforeLoss(){
-        let { initialValues, formData: {experience: {values, syncErrors}}} = this.props;
+    async updateInfoBeforeLoss() {
+        let { initialValues, formData: { experience: { values, syncErrors } } } = this.props;
         let error = false;
         (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el || {}).map(key => (!!el[key] ? error = true : false)))
-        if (!error && !this.state.submit && JSON.stringify(initialValues)!==JSON.stringify(values)) await this.props.bulkUpdateOrCreate(values && values['list'])
+        if (!error && !this.state.submit && JSON.stringify(initialValues) !== JSON.stringify(values)) await this.props.bulkUpdateOrCreate(values && values['list'])
     }
 
-    async openModal(fields,index){
+    async openModal(fields, index) {
 
-        const {job_profile:{label},work_description} = fields.get(index);
-        this.setState({length:work_description.length})
-        await this.props.fetchJobTitles(label || '','experience')
-        this.setState({modal_status:true,scrollpos:window.scrollY,fields,currentIndex:index})
+        const { job_profile: { label }, work_description } = fields.get(index);
+        this.setState({ length: work_description.length })
+        await this.props.fetchJobTitles(label || '', 'experience')
+        this.setState({ modal_status: true, scrollpos: window.scrollY, fields, currentIndex: index })
     }
 
-    closeModal(suggestions){
-        const {fields,currentIndex} = this.state
+    closeModal(suggestions) {
+        const { fields, currentIndex } = this.state
         const currentField = fields.get(currentIndex)
-        if(Object.keys(suggestions).length){
+        if (Object.keys(suggestions).length) {
             let suggestionsList = (currentField.work_description ? currentField.work_description + "\n" : '');
-            Object.keys(suggestions).map((el,index) => {
-                suggestionsList += suggestions[el] + (index+1 === Object.keys(suggestions).length ? "" : '\n')
+            Object.keys(suggestions).map((el, index) => {
+                suggestionsList += suggestions[el] + (index + 1 === Object.keys(suggestions).length ? "" : '\n')
             })
             console.log('-ddi------', suggestionsList);
             currentField['work_description'] = suggestionsList;
             fields.remove(currentIndex);
             fields.insert(currentIndex, currentField)
         }
-        this.setState({modal_status:false},()=>{ window.scrollTo(0, this.state.scrollpos)})
+        this.setState({ modal_status: false }, () => { window.scrollTo(0, this.state.scrollpos) })
     }
 
     handleAddition(fields, error) {
@@ -149,8 +165,8 @@ class Experience extends Component {
             containerId: 'experience'
         })
         this.props.eventClicked({
-            'action':'AddNew',
-            'label':'Experience'
+            'action': 'AddNew',
+            'label': 'Experience'
         })
     }
 
@@ -165,46 +181,47 @@ class Experience extends Component {
 
 
     handleAccordionClick(value, fields) {
-        this.setState({active: value})
+        this.setState({ active: value })
     }
 
     render() {
         const {
-            handleSubmit,userInfo:{order_data}, ui: {loader,suggestions}, isEditable,
-            editHeading, saveTitle, entityName, nextEntity, showAlertModal,history, eventClicked,
-            changeOrderingDown, changeOrderingUp, handleInputValue, currentFields, fetchJobTitles
+            handleSubmit, userInfo: { order_data }, ui: { loader, suggestions }, isEditable,
+            editHeading, saveTitle, entityName, nextEntity, showAlertModal, history, eventClicked,
+            changeOrderingDown, changeOrderingUp, handleInputValue, currentFields, fetchJobTitles,
+            showAlertMessage
         } = this.props;
-        const {till_today,modal_status,length} = this.state;
+        const { till_today, modal_status, length } = this.state;
 
         return (
             <React.Fragment>
-                <SuggestionModal label={'Job Description'} modal_status={modal_status} maxLength="1000" length={length} closeModal={this.closeModal} suggestions={suggestions}/>
+                <SuggestionModal label={'Job Description'} modal_status={modal_status} maxLength="1000" length={length} closeModal={this.closeModal} suggestions={suggestions} />
                 <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity, currentFields))}>
                     <FieldArray name={"list"}
-                                loader={loader}
-                                handleSubmit={handleSubmit}
-                                handleAccordionClick={this.handleAccordionClick}
-                                handleAddition={this.handleAddition}
-                                deleteExperience={this.deleteExperience}
-                                changeOrderingUp={changeOrderingUp}
-                                changeOrderingDown={changeOrderingDown}
-                                component={ExperienceRenderer}
-                                saveTitle={(event) => saveTitle(event, 3)}
-                                editHeading={() => editHeading(3)}
-                                isEditable={isEditable}
-                                entityName={entityName}
-                                expanded={this.state.active}
-                                fetchJobTitles={(inputValue) => fetchJobTitles(inputValue, '')}
-                                till_today={till_today}
-                                tillTodayDisable={this.tillTodayDisable}
-                                handleInputValue={handleInputValue}
-                                openModal={this.openModal}
-                                
+                        loader={loader}
+                        handleSubmit={handleSubmit}
+                        handleAccordionClick={this.handleAccordionClick}
+                        handleAddition={this.handleAddition}
+                        deleteExperience={this.deleteExperience}
+                        changeOrderingUp={changeOrderingUp}
+                        changeOrderingDown={changeOrderingDown}
+                        component={ExperienceRenderer}
+                        saveTitle={(event) => saveTitle(event, 3)}
+                        editHeading={() => editHeading(3)}
+                        isEditable={isEditable}
+                        entityName={entityName}
+                        expanded={this.state.active}
+                        fetchJobTitles={(inputValue) => fetchJobTitles(inputValue, '')}
+                        till_today={till_today}
+                        tillTodayDisable={this.tillTodayDisable}
+                        handleInputValue={handleInputValue}
+                        openModal={this.openModal}
+                        showAlertMessage={showAlertMessage}
 
 
                     />
 
-                    <SavePreviewButtons 
+                    <SavePreviewButtons
                         showAlertModal={showAlertModal} context={this} history={history} order_data={order_data} form_name={'Experience'}
                         nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss} eventClicked={eventClicked}
                     />
@@ -217,7 +234,7 @@ class Experience extends Component {
 export const ExperienceForm = reduxForm({
     form: 'experience',
     enableReinitialize: true,
-    onSubmitFail: (errors) => scrollOnErrors(errors,'experience',-100),
+    onSubmitFail: (errors) => scrollOnErrors(errors, 'experience', -100),
     validate
 })(Experience);
 
@@ -232,7 +249,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         "onSubmit": (userExperience) => {
-            const {start_date, end_date} = userExperience;
+            const { start_date, end_date } = userExperience;
             userExperience = {
                 ...userExperience,
                 ...{
@@ -241,7 +258,7 @@ const mapDispatchToProps = (dispatch) => {
                 }
             };
             return new Promise((resolve, reject) => {
-                return dispatch(actions.updateUserExperience({userExperience, resolve, reject}));
+                return dispatch(actions.updateUserExperience({ userExperience, resolve, reject }));
             })
         },
         "fetchUserExperience": () => {
@@ -253,7 +270,7 @@ const mapDispatchToProps = (dispatch) => {
 
         "bulkUpdateOrCreate": (listItems) => {
             listItems = (listItems || []).map((userExperience, index) => {
-                const {start_date, end_date, job_profile} = userExperience;
+                const { start_date, end_date, job_profile } = userExperience;
                 if (!userExperience['id']) delete userExperience['id'];
                 userExperience = {
                     ...userExperience,
@@ -267,14 +284,14 @@ const mapDispatchToProps = (dispatch) => {
                 return userExperience;
             });
             return new Promise((resolve, reject) => {
-                return dispatch(actions.bulkUpdateOrCreateUserExperience({list: listItems, resolve, reject}))
+                return dispatch(actions.bulkUpdateOrCreateUserExperience({ list: listItems, resolve, reject }))
             })
 
         },
         "fetchJobTitles": (inputValue, suggestionType) => {
             if (inputValue.length < 3) return new Promise(res => res([]));
             return new Promise((res, rej) => {
-                return dispatch(actions.fetchJobTitles({inputValue, suggestionType, res, rej}))
+                return dispatch(actions.fetchJobTitles({ inputValue, suggestionType, res, rej }))
             })
         },
         "hideSuggestionModal": () => {

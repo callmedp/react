@@ -1,12 +1,12 @@
-import React, {Component} from 'react';
-import {reduxForm, FieldArray} from "redux-form";
+import React, { Component } from 'react';
+import { reduxForm, FieldArray } from "redux-form";
 import * as actions from "../../../../../../store/education/actions";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import moment from "moment";
-import {EducationRenderer} from "./educationRenderer";
+import { EducationRenderer } from "./educationRenderer";
 import validate from '../../../../../FormHandler/validations/education/validate';
-import {scroller} from "react-scroll/modules";
-import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
+import { scroller } from "react-scroll/modules";
+import { scrollOnErrors } from "../../../../../../Utils/srollOnError"
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
 
 
@@ -29,18 +29,32 @@ class Education extends Component {
     }
 
     async handleSubmit(values, entityLink) {
-         const {generateResumeAlert,bulkUpdateOrCreate,history} = this.props
-        const {list} = values;
+        const { generateResumeAlert, bulkUpdateOrCreate, history } = this.props
+        const { list } = values;
         if (list.length) {
-            await bulkUpdateOrCreate(list);
-            this.setState({
+            // skip the api call if there is a certain field which is required but empty (We skipped validation intentionally)
+            let skipApiCall = false;
+            list.map(el => {
+                if (!el.institution_name) {
+                    skipApiCall = true;
+                }
+                return;
+            })
+            if (!skipApiCall) {
+                await bulkUpdateOrCreate(list);
+            }
+           
+        }
+
+         this.setState({
                 submit: true
             })
-            if (entityLink) history.push(entityLink);
-            else{
-                generateResumeAlert()
-            }
+
+        if (entityLink) history.push(entityLink);
+        else {
+            generateResumeAlert()
         }
+
     }
 
     componentWillUnmount() {
@@ -49,7 +63,7 @@ class Education extends Component {
 
     tillTodayDisable(index, checked, e) {
         e.stopPropagation();
-        let {till_today} = this.state
+        let { till_today } = this.state
         till_today[parseInt(index)] = checked
     }
 
@@ -59,15 +73,15 @@ class Education extends Component {
         for (let i of this.props.initialValues.list) {
             till_today.push(i.is_pursuing)
         }
-        this.setState({till_today})
+        this.setState({ till_today })
         this.props.fetchUserEducation()
     }
 
-    async componentDidUpdate(prevProps){
-        const {ui:{previewClicked},previewButtonClicked,history,initialValues} = this.props;
-        if(previewClicked !== prevProps.ui.previewClicked && previewClicked){
+    async componentDidUpdate(prevProps) {
+        const { ui: { previewClicked }, previewButtonClicked, history, initialValues } = this.props;
+        if (previewClicked !== prevProps.ui.previewClicked && previewClicked) {
             await this.updateInfoBeforeLoss()
-            this.setState({submit:true})
+            this.setState({ submit: true })
             previewButtonClicked(false)
             history.push('/resume-builder/preview/')
         }
@@ -76,15 +90,15 @@ class Education extends Component {
             for (let i of initialValues.list) {
                 till_today.push(i.is_pursuing)
             }
-            this.setState({till_today})
+            this.setState({ till_today })
         }
     }
 
-    async updateInfoBeforeLoss(){
-        let { initialValues, formData: {education: {values, syncErrors}}} = this.props;
+    async updateInfoBeforeLoss() {
+        let { initialValues, formData: { education: { values, syncErrors }}} = this.props;
         let error = false;
         (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el || {}).map(key => (!!el[key] ? error = true : false)))
-        if (!error && !this.state.submit && JSON.stringify(initialValues)!==JSON.stringify(values)) await this.props.bulkUpdateOrCreate(values && values['list'])
+        if (!error && !this.state.submit && JSON.stringify(initialValues) !== JSON.stringify(values)) await this.props.bulkUpdateOrCreate(values && values['list'])
     }
 
 
@@ -112,8 +126,8 @@ class Education extends Component {
             containerId: 'education'
         })
         this.props.eventClicked({
-            'action':'AddNew',
-            'label':'Education'
+            'action': 'AddNew',
+            'label': 'Education'
         })
 
     }
@@ -128,43 +142,43 @@ class Education extends Component {
     }
 
     handleAccordionClick(value, fields) {
-        this.setState({active: value})
+        this.setState({ active: value })
     }
 
     render() {
         const {
-            handleSubmit,userInfo:{order_data}, ui: {loader}, saveTitle, isEditable,eventClicked,
-            editHeading, entityName, nextEntity, handleInputValue, showAlertModal,history, changeOrderingUp
-            , changeOrderingDown
+            handleSubmit, userInfo: { order_data }, ui: { loader }, saveTitle, isEditable, eventClicked,
+            editHeading, entityName, nextEntity, handleInputValue, showAlertModal, history, changeOrderingUp
+            , changeOrderingDown, showAlertMessage
         } = this.props;
-        const {till_today} = this.state
+        const { till_today } = this.state
 
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                 <FieldArray name={'list'}
-                            loader={loader}
-                            handleSubmit={handleSubmit}
-                            handleAccordionClick={this.handleAccordionClick}
-                            handleAddition={this.handleAddition}
-                            deleteEducation={this.deleteEducation}
-                            changeOrderingUp={changeOrderingUp}
-                            changeOrderingDown={changeOrderingDown}
-                            component={EducationRenderer}
-                            saveTitle={(event) => saveTitle(event, 2)}
-                            editHeading={() => editHeading(2)}
-                            isEditable={isEditable}
-                            entityName={entityName}
-                            expanded={this.state.active}
-                            till_today={till_today}
-                            tillTodayDisable={this.tillTodayDisable}
-                            handleInputValue={handleInputValue}
-
+                    loader={loader}
+                    handleSubmit={handleSubmit}
+                    handleAccordionClick={this.handleAccordionClick}
+                    handleAddition={this.handleAddition}
+                    deleteEducation={this.deleteEducation}
+                    changeOrderingUp={changeOrderingUp}
+                    changeOrderingDown={changeOrderingDown}
+                    component={EducationRenderer}
+                    saveTitle={(event) => saveTitle(event, 2)}
+                    editHeading={() => editHeading(2)}
+                    isEditable={isEditable}
+                    entityName={entityName}
+                    expanded={this.state.active}
+                    till_today={till_today}
+                    tillTodayDisable={this.tillTodayDisable}
+                    handleInputValue={handleInputValue}
+                    showAlertMessage={showAlertMessage}
                 />
 
-                    <SavePreviewButtons 
-                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data} form_name={'Education'}
-                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss} eventClicked={eventClicked}
-                    />
+                <SavePreviewButtons
+                    showAlertModal={showAlertModal} context={this} history={history} order_data={order_data} form_name={'Education'}
+                    nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss} eventClicked={eventClicked}
+                />
 
             </form>
         )
@@ -175,7 +189,7 @@ class Education extends Component {
 export const EducationForm = reduxForm({
     form: 'education',
     enableReinitialize: true,
-    onSubmitFail: (errors) => scrollOnErrors(errors,'education',-100),
+    onSubmitFail: (errors) => scrollOnErrors(errors, 'education', -100),
     validate
 })(Education);
 
@@ -190,7 +204,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         "onSubmit": (userEducation) => {
-            const {start_date, end_date, course_type} = userEducation;
+            const { start_date, end_date, course_type } = userEducation;
 
             userEducation = {
                 ...userEducation,
@@ -201,7 +215,7 @@ const mapDispatchToProps = (dispatch) => {
                 }
             };
             return new Promise((resolve, reject) => {
-                return dispatch(actions.updateUserEducation({userEducation, resolve, reject}));
+                return dispatch(actions.updateUserEducation({ userEducation, resolve, reject }));
             })
         },
         "fetchUserEducation": () => {
@@ -213,22 +227,22 @@ const mapDispatchToProps = (dispatch) => {
 
         "bulkUpdateOrCreate": (listItems) => {
             listItems = (listItems || []).map((userEducation, index) => {
-                    const {start_date, end_date, course_type} = userEducation;
-                    if (!userEducation['id']) delete userEducation['id'];
-                    userEducation = {
-                        ...userEducation,
-                        ...{
-                            start_date: (start_date && moment(start_date).format('YYYY-MM-DD')) || '',
-                            end_date: (end_date && moment(end_date).format('YYYY-MM-DD')) || null,
-                            course_type: course_type && course_type.value,
-                            order: index
-                        }
-                    };
-                    return userEducation;
-                }
+                const { start_date, end_date, course_type } = userEducation;
+                if (!userEducation['id']) delete userEducation['id'];
+                userEducation = {
+                    ...userEducation,
+                    ...{
+                        start_date: (start_date && moment(start_date).format('YYYY-MM-DD')) || '',
+                        end_date: (end_date && moment(end_date).format('YYYY-MM-DD')) || null,
+                        course_type: course_type && course_type.value,
+                        order: index
+                    }
+                };
+                return userEducation;
+            }
             );
             return new Promise((resolve, reject) => {
-                return dispatch(actions.bulkUpdateOrCreateUserEducation({list: listItems, resolve, reject}))
+                return dispatch(actions.bulkUpdateOrCreateUserEducation({ list: listItems, resolve, reject }))
             })
 
         },

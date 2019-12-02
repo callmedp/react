@@ -1,25 +1,25 @@
-import React, {Component} from 'react';
-import {reduxForm, FieldArray} from "redux-form";
+import React, { Component } from 'react';
+import { reduxForm, FieldArray } from "redux-form";
 import * as actions from "../../.../../../../../../store/award/actions";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import validate from "../../../../../FormHandler/validtaions/award/validate"
 import PreviewModal from "../../../Preview/changeTemplateModal";
 import renderAwards from "./renderAwards"
-import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
+import { scrollOnErrors } from "../../../../../../Utils/srollOnError"
 import BottomCTC from '../../../../../Common/BottomCTC/bottom-ctc';
 import Subscribe from "../../../RightSection/subscribe";
 
 
 class Award extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.deleteAward = this.deleteAward.bind(this);
         this.state = {
             'editHeading': false,
-            'heading' : '',
-            'submit'  : false
+            'heading': '',
+            'submit': false
         }
         this.editHeadingClick = this.editHeadingClick.bind(this);
         this.updateInfoBeforeLoss = this.updateInfoBeforeLoss.bind(this)
@@ -28,53 +28,66 @@ class Award extends Component {
     componentDidMount() {
         this.props.fetchUserAward()
         if (this.props.personalInfo.entity_preference_data.length) {
-            this.setState({heading : this.props.personalInfo.entity_preference_data[6].entity_text})
+            this.setState({ heading: this.props.personalInfo.entity_preference_data[6].entity_text })
         }
     }
 
-    async updateInfoBeforeLoss(){
-        if(!this.state.submit){
-            const {initialValues} =this.props
+    async updateInfoBeforeLoss() {
+        if (!this.state.submit) {
+            const { initialValues } = this.props
             const form_data = this.props.info.form.award;
             let error = false
-            let error_values =form_data["syncErrors"]
-            if(error_values){
-                for(let i of  error_values['list']){
-                    for(let j of Object.keys(i)){
-                        if(i[j]){
-                            error =true
+            let error_values = form_data["syncErrors"]
+            if (error_values) {
+                for (let i of error_values['list']) {
+                    for (let j of Object.keys(i)) {
+                        if (i[j]) {
+                            error = true
                             break;
                         }
                     }
                 }
             }
-            if(!error && JSON.stringify(initialValues)!==JSON.stringify(form_data['values'])){
-                
+            if (!error && JSON.stringify(initialValues) !== JSON.stringify(form_data['values'])) {
+
                 const values = this.props.handleOrdering(form_data['values'])
                 await this.props.bulkUpdateUserAward(values.list)
             }
-        }  
+        }
     }
 
     componentWillUnmount() {
         this.updateInfoBeforeLoss()
     }
-    
+
 
     async handleSubmit(values) {
         values = this.state.fields ? this.state.fields : values.list
-        let {sidenav:{listOfLinks,currentLinkPos},bulkUpdateUserAward,updateCurrentLinkPos,history,
-                    generateResumeAlert} = this.props
-        currentLinkPos++
-        this.setState({submit:true})
-        await bulkUpdateUserAward(values);
-        if(currentLinkPos === listOfLinks.length){
+        let { sidenav: { listOfLinks, currentLinkPos }, bulkUpdateUserAward, updateCurrentLinkPos, history,
+            generateResumeAlert } = this.props;
+        currentLinkPos++;
+        if (values.length) {
+            // skip the api call if there is a certain field which is required but empty (We skipped validation intentionally)
+            let skipApiCall = false;
+
+            values.map(el => {
+                if (!el.title) {
+                    skipApiCall = true;
+                }
+                return;
+            })
+            if (!skipApiCall) {
+                await bulkUpdateUserAward(values);
+            }
+        }
+        this.setState({ submit: true });
+        if (currentLinkPos === listOfLinks.length) {
             currentLinkPos = 0
             generateResumeAlert()
         }
-        else{
-            updateCurrentLinkPos({currentLinkPos})
-            history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)    
+        else {
+            updateCurrentLinkPos({ currentLinkPos })
+            history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
         }
     }
 
@@ -88,46 +101,48 @@ class Award extends Component {
     }
 
 
-    editHeadingClick(){
-        this.setState({editHeading:true})
+    editHeadingClick() {
+        this.setState({ editHeading: true })
     }
 
     componentDidUpdate(prevProps) {
         if (this.props.personalInfo.entity_preference_data !== prevProps.personalInfo.entity_preference_data) {
-            this.setState({heading : this.props.personalInfo.entity_preference_data[6].entity_text})
+            this.setState({ heading: this.props.personalInfo.entity_preference_data[6].entity_text })
         }
     }
 
-    render () {
-        const {handleSubmit,submitting,history,personalInfo:{order_data,entity_preference_data},changeOrderingUp,changeOrderingDown,headingChange,updateAlertModalStatus,eventClicked} = this.props;
+    render() {
+        const { handleSubmit, submitting, history, personalInfo: { order_data, entity_preference_data }, changeOrderingUp, changeOrderingDown, headingChange, updateAlertModalStatus, eventClicked, showAlertMessage } = this.props;
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {editHeading,heading} =this.state;
-        
-        return(
+        const { editHeading, heading } = this.state;
+
+        return (
             <div className="buildResume">
-                <PreviewModal {...this.props}/>
-                <Subscribe {...this.props}/>
-                <form onSubmit={handleSubmit((values)=>this.handleSubmit(values))}>
-                    <FieldArray name="list" 
-                                handleSubmit={handleSubmit}
-                                handleAddition={this.props.handleAddition}
-                                deleteAward={this.deleteAward}
-                                changeOrderingUp={changeOrderingUp}
-                                changeOrderingDown={changeOrderingDown}
-                                eventClicked={eventClicked}
-                                component={renderAwards}
-                                headingChange={headingChange}
-                                editHeading={editHeading}
-                                editHeadingClick={this.editHeadingClick}
-                                entity_preference_data={entity_preference_data}
-                                context={this}
-                                heading ={heading}/>
+                <PreviewModal {...this.props} />
+                <Subscribe {...this.props} />
+                <form onSubmit={handleSubmit((values) => this.handleSubmit(values))}>
+                    <FieldArray name="list"
+                        handleSubmit={handleSubmit}
+                        handleAddition={this.props.handleAddition}
+                        deleteAward={this.deleteAward}
+                        changeOrderingUp={changeOrderingUp}
+                        changeOrderingDown={changeOrderingDown}
+                        eventClicked={eventClicked}
+                        component={renderAwards}
+                        headingChange={headingChange}
+                        editHeading={editHeading}
+                        editHeadingClick={this.editHeadingClick}
+                        entity_preference_data={entity_preference_data}
+                        context={this}
+                        heading={heading}
+                        showAlertMessage={showAlertMessage}
+                    />
                     <ul className="form">
                         <li className="form__group">
-                            <BottomCTC  disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
-                                length={length} pos={pos+1} updateInfoBeforeLoss={this.updateInfoBeforeLoss} 
-                                order_data={order_data} eventClicked={eventClicked} form_name={'Awards'}/>
+                            <BottomCTC disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
+                                length={length} pos={pos + 1} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                                order_data={order_data} eventClicked={eventClicked} form_name={'Awards'} />
                         </li>
                     </ul>
                 </form>
@@ -141,7 +156,7 @@ export const AwardForm = reduxForm({
     form: 'award',
     validate,
     enableReinitialize: true,
-    onSubmitFail: (errors) => scrollOnErrors(errors,'award',-100),
+    onSubmitFail: (errors) => scrollOnErrors(errors, 'award', -100),
 })(Award);
 
 
@@ -163,7 +178,7 @@ const mapDispatchToProps = (dispatch) => {
         },
         "bulkUpdateUserAward": (listItems) => {
             listItems = (listItems || []).map((userAward, index) => {
-                const {date} = userAward;
+                const { date } = userAward;
                 if (!userAward['id']) delete userAward['id'];
                 userAward = {
                     ...userAward,
@@ -174,7 +189,7 @@ const mapDispatchToProps = (dispatch) => {
                 return userAward;
             });
             return new Promise((resolve, reject) => {
-                return dispatch(actions.bulkUpdateUserAward({list: listItems,resolve,reject}))
+                return dispatch(actions.bulkUpdateUserAward({ list: listItems, resolve, reject }))
             })
         }
     }
