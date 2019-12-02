@@ -177,7 +177,7 @@ function fileUploadForm(oiOperation){
 
 function allActionModal(id){
   $('#orderItemOperationModal').html('')
-$.get( `/api/v1/order/order-item-operation/${id}`, {'nopage':true,'include_oi_id':true,
+$.get( `/api/v1/order/order-item-operation/${id}/?include_added_by_id&include_assigned_to_id`, {'nopage':true,'include_oi_id':true,
 'include_added_by':true,'include_assigned_to':true} )
   .done(function( data ) {
     if(data ){
@@ -185,9 +185,11 @@ $.get( `/api/v1/order/order-item-operation/${id}`, {'nopage':true,'include_oi_id
     for (oiOperation of data){
       result += `<div class="allactions__box">
                 <p>${oiOperation.oi_status_display}</p>
-          <span> ${new Date(oiOperation.created).toLocaleString('en-US', {hour12: true })}</span>
-          </div>
-
+          <span> ${new Date(oiOperation.created).toLocaleString('en-US', {hour12: true })}</span>`
+          
+      if(oiOperation.assigned_to){ result +=`<span> assigned to: ${oiOperation.assigned_to_id_data[0].name}</span>`}
+      if(oiOperation.assigned_to){ result += `<span> assigned by: ${oiOperation.added_by_id_data[0].name}</span>`}
+      result +=`</div>
     ${createDraftResumeDownload(oiOperation)? createDraftResumeDownload(oiOperation):''}
     ${ (oiOperation.oi_status == 4) ? (oiOperation.oi_id_data.oi_draft_path || oiOperation.linkedin)?fileUploadForm(oiOperation):'':'' }`
 
