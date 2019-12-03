@@ -240,26 +240,28 @@ export class Buy extends Component {
                                 <h2 className="mt-10">Choose your plan</h2>
                                 <span
                                     className="choose-plan-txt">Use resume builder for 12 months to<strong> create/edit</strong> unlimited resume.</span>
-                                
-                                <ul>
-                                    <li className="bdr pos-rel free-trial">
-                                        <div>
-                                            <span className="free-trial--ribbon">
-                                                <span>TRIAL OFFER</span>
-                                            </span>
-                                            <span className="free-trial--text">
-                                                <p>
-                                                     {free_download_count > 0? ` ${free_download_count} Free download for 1st time users.` :"You have exceeded the free download limit."} 
-                                                </p>
-                                            </span>
-                                            {free_download_count > 0?
-                                                <span className="free-trial--download-button">
-                                                    <button onClick={this.freeResumeRequest} disabled={freeDownloadButtonDisable}>Download</button>
-                                                </span>:''
-                                            }
-                                        </div>
-                                    </li>
-                                </ul>
+                                { free_resume_downloads ?
+                                    <ul>
+                                        <li className="bdr pos-rel free-trial">
+                                            <div>
+                                                <span className="free-trial--ribbon">
+                                                    <span>TRIAL OFFER</span>
+                                                </span>
+                                                <span className="free-trial--text">
+                                                    <p>
+                                                        {free_download_count > 0? ` ${free_download_count} free download for 1st time users.` 
+                                                        :"Sorry, you have exhausted the limit. Please buy resume builder with unlimited downloads to keep using resume builder for an year"} 
+                                                    </p>
+                                                </span>
+                                                {free_download_count > 0?
+                                                    <span className="free-trial--download-button">
+                                                        <button onClick={this.freeResumeRequest} disabled={freeDownloadButtonDisable}>Download</button>
+                                                    </span>:''
+                                                }
+                                            </div>
+                                        </li>
+                                    </ul>:''
+                                }
 
                                 <ul>
                                     <li>

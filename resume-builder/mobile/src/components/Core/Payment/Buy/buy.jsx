@@ -213,22 +213,23 @@ class Buy extends Component {
 
                 <div className="buy">
                     <p className="buy--create">Use resume builder for 12 months to<strong> create/edit</strong> unlimited resume.</p>
-
-                    <div class="buy__wrap mt-15">
-                        <div className="buy__item buy__trial">
-                            <div className="buy__recommended--tag">Trial offer</div>
-                            <div className="buy_item--left">
-                                {free_download_count > 0? ` ${free_download_count} Free download for 1st time users.` :
-                                    "You have exceeded the free download limit."}
+                    { free_resume_downloads ?
+                        <div class="buy__wrap mt-15">
+                            <div className="buy__item buy__trial">
+                                <div className="buy__recommended--tag">Trial offer</div>
+                                <div className="buy_item--left">
+                                    {free_download_count > 0? ` ${free_download_count} free download for 1st time users.` :
+                                        "Sorry, you have exhausted the limit. Please buy resume builder with unlimited downloads to keep using resume builder for an year."}
+                                </div>
+                                {free_download_count > 0?
+                                    <div className="buy_item--right">
+                                            <button class="btn btn__round btn--outline" onClick={this.freeResumeRequest}
+                                            disabled={freeDownloadButtonDisable} >Download</button>
+                                    </div>:''
+                                }
                             </div>
-                            {free_download_count > 0?
-                                <div className="buy_item--right">
-                                        <button class="btn btn__round btn--outline" onClick={this.freeResumeRequest}
-                                        disabled={freeDownloadButtonDisable} >Download</button>
-                                </div>:''
-                            }
-                        </div>
-                    </div>
+                        </div>:''
+                    }
 
                     <div className="buy__wrap mt-15">
                         <div className="buy__item">

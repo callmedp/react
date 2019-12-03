@@ -229,6 +229,7 @@
             &::before{
                 left: auto;
                 right: -11px;
+                transform: rotate(180deg);
             }
 
             &::after {
