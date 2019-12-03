@@ -62,7 +62,7 @@ class CandidateSerializer(serializers.ModelSerializer):
         model = Candidate
         fields = (
             'id', 'candidate_id', 'first_name', 'last_name', 'email', 'free_resume_downloads',\
-            'date_of_birth', 'number', 'gender', 'location', 'order_data','resume_download_count',\
+            'date_of_birth', 'number', 'gender', 'location', 'order_data','resume_creation_count',\
             'extra_info', 'extracurricular', 'image', 'resume_generated', 'entity_preference_data',\
              'selected_template', 'upload_resume')
 

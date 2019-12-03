@@ -35,7 +35,6 @@ from users.models import User
 from console.feedbackCall.choices import FEEDBACK_RESOLUTION_CHOICES,FEEDBACK_CATEGORY_CHOICES,FEEDBACK_STATUS,TOTAL_FEEDBACK_OPERATION_TYPE
 from order.utils import get_ltv
 from coupon.models import Coupon
-from resumebuilder.models import Candidate
 
 #third party imports
 from payment.utils import manually_generate_autologin_url
@@ -434,6 +433,7 @@ class Order(AbstractAutoDate):
             board_user_on_neo.delay(neo_ids=neo_items_id)
 
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_resume_builder():
+            from resumebuilder.models import Candidate   # imported here to not cause cyclic import for resumebuilder models
             if self.order_contains_expert_assistance():
                 cand_id = existing_obj and existing_obj.candidate_id
                 if cand_id:

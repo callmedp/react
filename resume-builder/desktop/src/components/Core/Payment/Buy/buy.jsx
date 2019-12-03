@@ -71,7 +71,7 @@ export class Buy extends Component {
 
     componentDidUpdate(prevProps) {
         if (this.props.userInfo !== prevProps.userInfo ) {
-            if(this.state.resumeDownloadCount && (this.state.resumeDownloadCount< this.props.userInfo.resume_download_count)){
+            if(this.state.resumeDownloadCount && (this.state.resumeDownloadCount< this.props.userInfo.resume_creation_count)){
                 clearInterval(this.state.timerId)
                 this.downloadRequestedResume();
             }
@@ -94,8 +94,8 @@ export class Buy extends Component {
 
     async freeResumeRequest() {
         const {  requestFreeResume,showGenerateResumeModal,
-                 userInfo: { resume_download_count}, } = this.props
-        this.setState({'resumeDownloadCount':resume_download_count,'freeDownloadButtonDisable':true},async ()=>{
+                 userInfo: { resume_creation_count}, } = this.props
+        this.setState({'resumeDownloadCount':resume_creation_count,'freeDownloadButtonDisable':true},async ()=>{
             await requestFreeResume()
             showGenerateResumeModal()
             this.pollingUserInfo()
@@ -186,7 +186,7 @@ export class Buy extends Component {
             slidesToScroll: 1,
         };
         const { userInfo: { first_name, last_name, number, email,selected_template,
-                             order_data,resume_download_count,free_resume_downloads },
+                             order_data,resume_creation_count,free_resume_downloads },
                  ui: { loader }, template: { templateImage, thumbnailImages },
                 productIds, eventClicked } = this.props;
         const { userInfo } = this.props;
@@ -195,7 +195,7 @@ export class Buy extends Component {
         const discount1 = Math.floor(((1499 - price1) / 1499) * 100)
         const price2 = productIds[1] ? productIds[1].inr_price : 1248
         const discount2 = Math.floor(((1999 - price2) / 1999) * 100)
-        const free_download_count = free_resume_downloads - resume_download_count
+        const free_download_count = free_resume_downloads - resume_creation_count
 
         return (
             /*

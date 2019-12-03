@@ -18,6 +18,7 @@ from .constants import TEMPLATE_DEFAULT_ENTITY_POSITION, TEMPLATE_ALLOW_LEFT_RIG
 
 # inter app imports
 from seo.models import AbstractAutoDate
+from order.models import Order 
 
 # third party imports
 
@@ -44,7 +45,7 @@ class CandidateProfile(AbstractAutoDate):
     entity_preference_data = models.TextField(blank=True, null=True)
     upload_resume = models.BooleanField('Upload Resume', default=True)
     resume_generated = models.BooleanField('Resume Generated', default=True)
-    resume_download_count = models.IntegerField(default=0)
+    resume_creation_count = models.IntegerField(default=0)
 
     @property
     def owner_id(self):
@@ -318,6 +319,14 @@ class CandidateLanguage(PreviewImageCreationMixin, models.Model):
 
     def __str__(self):
         return self.name
+
+
+class CandidateResumeOperations(models.Model):
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
+    order = models.ForeignKey(Order,null=True)
+    op_status = models.SmallIntegerField(default=-1,choices=CANDIDATE_OPERATION_STATUS)
+    created = models.DateTimeField(editable=False, auto_now_add=True,)
+
 
 
 senders = [Candidate, Skill, CandidateExperience, CandidateEducation, \

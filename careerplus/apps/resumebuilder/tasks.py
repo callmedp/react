@@ -186,7 +186,7 @@ def zip_all_resume_pdfs(order_id, data):
 
 @task
 def generate_and_upload_resume_pdf(data):
-    from resumebuilder.models import Candidate
+    from resumebuilder.models import Candidate,CandidateResumeOperations
     from order.models import Order
     from resumebuilder.utils import store_resume_file
     from order.tasks import send_resume_in_mail_resume_builder
@@ -328,9 +328,12 @@ def generate_and_upload_resume_pdf(data):
             logging.getLogger('error_log').error("File not uploaded to cloud")
 
     if is_free_trial:
-        candidate.resume_download_count += 1
+        op_status = 1  # for free resume creation operation status
+        candidate.resume_creation_count += 1
         candidate.save()
         logging.getLogger('info_log').info("Trial part finished and incremented download count")
+    else :
+        op_status = 2  # paid resume creation operation status
 
     data = {}
     data.update({
@@ -364,3 +367,6 @@ def generate_and_upload_resume_pdf(data):
             logging.getLogger('info_log').info("RESUME BUILDER: Upload to shine successful.")
             return
         logging.getLogger('info_log').info("RESUME BUILDER: Upload to shine failed.")
+
+    CandidateResumeOperations.objects.create(candidate=candidate,order=order,op_status=op_status)
+    logging.getLogger('info_log').info("RESUME BUILDER: File creation operation created for with op_status {}.".format(op_status))
