@@ -212,6 +212,12 @@
     pointer-events: none;
 }
 
+.dropdown-jobs {
+  .dropdown-menu {
+    left: 0;
+  }
+}
+
 .dropdown-call {
   .dropdown-menu {
     left: -7.5rem;
@@ -220,7 +226,7 @@
 
 .dropdown-user {
   .dropdown-menu {
-    left: -15rem;
+    left: -11rem;
   }
 }
 
@@ -290,6 +296,91 @@
 
     .tab-pane {
       height: 51rem;
+
+      a {
+        display: block;
+        padding: .5rem 2rem;
+        color: $gray-300;
+
+        &:hover, &:focus {
+          text-decoration: none;
+        }
+
+        &:first-child {
+          padding-top: 1.5rem;
+        }
+      }
+    }
+  }
+}
+
+.dropdown-resources {
+  .dropdown-menu {
+    min-width: 50rem;
+    border-radius: 0;
+    left: -16.5rem;
+  }
+
+  .sm-txt {
+    font-size: 1.2rem;
+    font-weight: 400;
+    display: block;
+    color: $gray-600;
+    line-height: 1.4rem;
+  }
+
+  .icon-down {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+}
+
+.resources-tab {
+  display: flex;
+  flex-direction: row;
+  height: 30rem;
+  overflow: hidden;
+  
+  .nav-tabs {
+    min-width: 23rem;
+    display: flex;
+    flex-direction: column;
+    border-bottom: none;
+    height: 30rem;
+
+    .nav-item {
+      padding-top: 0;
+      padding-bottom: 0;
+      
+      .nav-link {
+        border: none;
+        padding: 1.5rem 2rem;
+        border-radius: 0;
+
+        &:hover, &:focus {
+          background: $blue;
+          color: $white;
+          border-radius: 0;
+        }
+      }
+      a {
+        &.active {
+          background: $blue;
+          color: $white;
+        }
+      }
+    }
+  }
+
+  .tab-content {
+    flex: 1;
+    min-width: auto;
+    position: relative;
+    height: 30rem;
+    background: #F3F3F3;
+
+    .tab-pane {
+      height: 30rem;
 
       a {
         display: block;
