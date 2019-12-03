@@ -222,7 +222,6 @@ async function handleResponse(response, isFetchingHTML) {
 * */
 
 const handleLoginCandidate = async () => {
-
     const formData = $('#login_form').serializeArray().reduce((obj, item) => {
         obj[item.name] = item.value
         return obj;
@@ -262,7 +261,7 @@ const handleLoginCandidate = async () => {
 
         return;
     }
-    const { data: { candidate_id, cart_pk, token, profile: { email, first_name, last_name, mobile_no, country_code } } } = result;
+    const { data: { candidate_id, cart_pk, token, profile: { email, first_name, last_name, cell_phone, country_code } } } = result;
 
     /*
     *  update the cart
@@ -273,7 +272,7 @@ const handleLoginCandidate = async () => {
         'owner_email': email,
         'first_name': first_name,
         'last_name': last_name,
-        'mobile': mobile_no,
+        'mobile': cell_phone,
         'country_code': country_code
     }
     

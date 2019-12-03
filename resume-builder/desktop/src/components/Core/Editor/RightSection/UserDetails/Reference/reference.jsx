@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
-import {reduxForm, FieldArray} from "redux-form";
+import React, { Component } from 'react';
+import { reduxForm, FieldArray } from "redux-form";
 import * as actions from "../../../../../../store/reference/actions";
-import {connect} from "react-redux";
-import {ReferenceRenderer} from "./referenceRenderer";
+import { connect } from "react-redux";
+import { ReferenceRenderer } from "./referenceRenderer";
 import validate from '../../../../../FormHandler/validations/reference/validate'
-import {scroller} from "react-scroll/modules";
-import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
+import { scroller } from "react-scroll/modules";
+import { scrollOnErrors } from "../../../../../../Utils/srollOnError"
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
 
 
@@ -26,18 +26,32 @@ class Reference extends Component {
     }
 
     async handleSubmit(values, entityLink) {
-         const {generateResumeAlert,bulkUpdateOrCreate,history} = this.props
+        const { generateResumeAlert, bulkUpdateOrCreate, history } = this.props
 
-        const {list} = values;
+        const { list } = values;
         if (list.length) {
-            await bulkUpdateOrCreate(list);
-            this.setState({
-                submit: true
+            // skip the api call if there is a certain field which is required but empty (We skipped validation intentionally)
+            let skipApiCall = false;
+
+            list.map(el => {
+                if (!el.reference_name) {
+                    skipApiCall = true;
+                }
+                return;
             })
-            if (entityLink) history.push(entityLink);
-            else{
-                generateResumeAlert()
+            if (!skipApiCall) {
+                await bulkUpdateOrCreate(list);
             }
+            
+        }
+
+        this.setState({
+            submit: true
+        })
+        
+        if (entityLink) history.push(entityLink);
+        else {
+            generateResumeAlert()
         }
     }
 
@@ -46,21 +60,21 @@ class Reference extends Component {
         this.updateInfoBeforeLoss()
     }
 
-    async componentDidUpdate(prevProps){
-        const {ui:{previewClicked},previewButtonClicked,history} = this.props;
-        if(previewClicked !== prevProps.ui.previewClicked && previewClicked){
+    async componentDidUpdate(prevProps) {
+        const { ui: { previewClicked }, previewButtonClicked, history } = this.props;
+        if (previewClicked !== prevProps.ui.previewClicked && previewClicked) {
             await this.updateInfoBeforeLoss()
-            this.setState({submit:true})
+            this.setState({ submit: true })
             previewButtonClicked(false)
             history.push('/resume-builder/preview/')
         }
     }
 
-    async updateInfoBeforeLoss(){
-        let { initialValues, formData: {reference: {values, syncErrors}}} = this.props;
+    async updateInfoBeforeLoss() {
+        let { initialValues, formData: { reference: { values, syncErrors } } } = this.props;
         let error = false;
         (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el || {}).map(key => (!!el[key] ? error = true : false)))
-        if (!error && !this.state.submit && JSON.stringify(initialValues)!==JSON.stringify(values)) await this.props.bulkUpdateOrCreate(values && values['list'])
+        if (!error && !this.state.submit && JSON.stringify(initialValues) !== JSON.stringify(values)) await this.props.bulkUpdateOrCreate(values && values['list'])
     }
 
     componentDidMount() {
@@ -87,8 +101,8 @@ class Reference extends Component {
             containerId: 'reference'
         })
         this.props.eventClicked({
-            'action':'AddNew',
-            'label':'References'
+            'action': 'AddNew',
+            'label': 'References'
         })
     }
 
@@ -104,15 +118,16 @@ class Reference extends Component {
     }
 
 
-    handleAccordionClick(value,) {
-        this.setState({active: value})
+    handleAccordionClick(value, ) {
+        this.setState({ active: value })
     }
 
 
     render() {
         const {
-            handleSubmit,userInfo:{order_data}, ui: {loader}, isEditable, changeOrderingDown,eventClicked,
-            editHeading, saveTitle, entityName, nextEntity, showAlertModal,history, handleInputValue,changeOrderingUp
+            handleSubmit, userInfo: { order_data }, ui: { loader }, isEditable, changeOrderingDown, eventClicked,
+            editHeading, saveTitle, entityName, nextEntity, showAlertModal, history, handleInputValue, changeOrderingUp,
+            showAlertMessage
         } = this.props;
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
@@ -132,14 +147,13 @@ class Reference extends Component {
                     entityName={entityName}
                     expanded={this.state.active}
                     handleInputValue={handleInputValue}
-
-
+                    showAlertMessage={showAlertMessage}
                 />
 
-                <SavePreviewButtons 
-                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data} form_name={'References'}
-                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss} eventClicked={eventClicked}
-                    />
+                <SavePreviewButtons
+                    showAlertModal={showAlertModal} context={this} history={history} order_data={order_data} form_name={'References'}
+                    nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss} eventClicked={eventClicked}
+                />
             </form>
         )
     }
@@ -149,7 +163,7 @@ class Reference extends Component {
 export const ReferenceForm = reduxForm({
     form: 'reference',
     enableReinitialize: true,
-    onSubmitFail: (errors) => scrollOnErrors(errors,'reference',-100),
+    onSubmitFail: (errors) => scrollOnErrors(errors, 'reference', -100),
     validate
 })(Reference);
 
@@ -165,7 +179,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         "onSubmit": (userReference) => {
             return new Promise((resolve, reject) => {
-                return dispatch(actions.updateUserReference({userReference, resolve, reject}));
+                return dispatch(actions.updateUserReference({ userReference, resolve, reject }));
             })
         },
         "fetchUserReference": () => {
@@ -187,7 +201,7 @@ const mapDispatchToProps = (dispatch) => {
                 return userReference;
             });
             return new Promise((resolve, reject) => {
-                return dispatch(actions.bulkUpdateOrCreateUserReference({list: listItems, resolve, reject}))
+                return dispatch(actions.bulkUpdateOrCreateUserReference({ list: listItems, resolve, reject }))
             })
 
         },

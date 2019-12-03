@@ -27,7 +27,8 @@ export const AwardRenderer = ({
                                   editHeading,
                                   saveTitle,
                                   entityName,
-                                  expanded
+                                  expanded,
+                                  showAlertMessage
                               }) => {
     return (
         <div>
@@ -48,7 +49,18 @@ export const AwardRenderer = ({
                 <span onClick={() => editHeading()}
                       className={!!(!isEditable) ? "icon-edit " + styles['icon-edit__cursor'] : ''}/>
                 <button onClick={handleSubmit((values) => {
-                    handleAddition(fields, error)
+                    let skipAddition = false;
+                    (values && values.list  || []).forEach(el => {
+                        if (!el.title) {
+                            skipAddition = true;
+                        }
+                    })
+                    if (!skipAddition) {
+                        handleAddition(fields, error)
+                    }
+                    else {
+                        showAlertMessage()
+                    }
                 })}
                         type={'button'}
                         className={'add-button ' + styles['add-button__right']}>Add new

@@ -26,7 +26,8 @@ export const SkillRenderer = ({
                                   saveTitle,
                                   entityName,
                                   expanded,
-                                  handleInputValue
+                                  handleInputValue,
+                                  showAlertMessage
                               }) => {
 
     let elem = null;
@@ -51,7 +52,18 @@ export const SkillRenderer = ({
                 />
                 <button
                     onClick={handleSubmit((values) => {
-                        handleAddition(fields, error)
+                        let skipAddition = false;
+                        (values && values.list  || []).forEach(el => {
+                            if (!el.name) {
+                                skipAddition = true;
+                            }
+                        })
+                        if (!skipAddition) {
+                            handleAddition(fields, error)
+                        }
+                        else {
+                            showAlertMessage()
+                        }
                     })}
                     type={'button'}
                     className={"add-button " + styles['add-button__right']}>Add new

@@ -14,7 +14,7 @@ function modifyEducation(data) {
             list: data['list'].map(el => {
                 return {
                     ...el,
-                    course_type: courseTypeList[el['course_type']]
+                    course_type: courseTypeList[el['course_type']] || ''
                 }
             })
         }

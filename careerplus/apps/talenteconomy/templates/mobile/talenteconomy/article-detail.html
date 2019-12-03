@@ -8,7 +8,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@shinelearning">
 
-<meta name="twitter:domain" content="mlearning.shine.com">
+<meta name="twitter:domain" content="{{SITE_DOMAIN}}">
 <meta name="twitter:title" content="{{main_article.title}}">
 <meta name="twitter:description" content="{{ main_article.get_description }}" />
 <meta name="twitter:image:src" content="{{main_article.image.url}}">
@@ -16,7 +16,6 @@
 {%  endblock django_meta %}
 {% block canonical_url %}
   <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ object.get_absolute_url }}">
-  <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{ object.get_absolute_url}}?type=amp">
 {% endblock canonical_url %}
 
 {% block title %}

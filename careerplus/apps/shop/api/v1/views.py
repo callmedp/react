@@ -187,8 +187,11 @@ class BoardNeoProductApiView(APIView):
                 and self.oi.order.status in [1, 3]
             ):
                 if not self.oi.neo_mail_sent:
-                    board_user_on_neo([self.oi.id])
-                return Response({'message': 'Mail sent for verification on neo'})
+                    boarding_type = board_user_on_neo([self.oi.id])
+                    msg = 'Please check you mail to confirm boarding on Neo'
+                    if boarding_type == 'already_trial':
+                        msg = 'You Account has been Updated from Trial To Regular'
+                    return Response({'msg': msg})
 
         raise PermissionDenied
 

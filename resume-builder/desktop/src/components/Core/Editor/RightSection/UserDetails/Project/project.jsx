@@ -1,12 +1,12 @@
-import React, {Component} from 'react';
-import {FieldArray, reduxForm} from "redux-form";
+import React, { Component } from 'react';
+import { FieldArray, reduxForm } from "redux-form";
 import * as actions from "../../../../../../store/project/actions";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import moment from "moment";
 import validate from "../../../../../FormHandler/validations/project/validate"
-import {ProjectRenderer} from "./projectRenderer";
-import {scroller} from "react-scroll/modules";
-import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
+import { ProjectRenderer } from "./projectRenderer";
+import { scroller } from "react-scroll/modules";
+import { scrollOnErrors } from "../../../../../../Utils/srollOnError"
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
 
 class Project extends Component {
@@ -36,15 +36,15 @@ class Project extends Component {
         for (let i of this.props.initialValues.list) {
             till_today.push(i.currently_working)
         }
-        this.setState({till_today})
+        this.setState({ till_today })
 
     }
 
-    async componentDidUpdate(prevProps){
-        const {ui:{previewClicked},previewButtonClicked,history,initialValues} = this.props;
-        if(previewClicked !== prevProps.ui.previewClicked && previewClicked){
+    async componentDidUpdate(prevProps) {
+        const { ui: { previewClicked }, previewButtonClicked, history, initialValues } = this.props;
+        if (previewClicked !== prevProps.ui.previewClicked && previewClicked) {
             await this.updateInfoBeforeLoss()
-            this.setState({submit:true})
+            this.setState({ submit: true })
             previewButtonClicked(false)
             history.push('/resume-builder/preview/')
         }
@@ -53,7 +53,7 @@ class Project extends Component {
             for (let i of initialValues.list) {
                 till_today.push(i.currently_working)
             }
-            this.setState({till_today})
+            this.setState({ till_today })
         }
     }
 
@@ -63,28 +63,43 @@ class Project extends Component {
     }
 
     async handleSubmit(values, entityLink) {
-         const {generateResumeAlert,bulkUpdateOrCreate,history} = this.props
-        const {list} = values;
+        const { generateResumeAlert, bulkUpdateOrCreate, history } = this.props
+        const { list } = values;
+
         if (list.length) {
-            await bulkUpdateOrCreate(list);
-            this.setState({
-                submit: true
+            // skip the api call if there is a certain field which is required but empty (We skipped validation intentionally)
+            let skipApiCall = false;
+
+            list.map(el => {
+                if (!el.project_name) {
+                    skipApiCall = true;
+                }
+                return;
             })
-            if (entityLink) history.push(entityLink);
-            else{
-                generateResumeAlert()
+            if (!skipApiCall) {
+                await bulkUpdateOrCreate(list);
             }
+            
+        }
+
+        this.setState({
+            submit: true
+        })
+        
+        if (entityLink) history.push(entityLink);
+        else {
+            generateResumeAlert()
         }
 
     }
 
-    
 
-    async updateInfoBeforeLoss(){
-        let { initialValues, formData: {project: {values, syncErrors}}} = this.props;
+
+    async updateInfoBeforeLoss() {
+        let { initialValues, formData: { project: { values, syncErrors } } } = this.props;
         let error = false;
-        (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el || {}     ).map(key => (!!el[key] ? error = true : false)))
-        if (!error && !this.state.submit && JSON.stringify(initialValues)!==JSON.stringify(values)) await this.props.bulkUpdateOrCreate(values && values['list'])
+        (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el || {}).map(key => (!!el[key] ? error = true : false)))
+        if (!error && !this.state.submit && JSON.stringify(initialValues) !== JSON.stringify(values)) await this.props.bulkUpdateOrCreate(values && values['list'])
     }
 
     handleAddition(fields, error) {
@@ -109,14 +124,14 @@ class Project extends Component {
             containerId: 'project'
         })
         this.props.eventClicked({
-            'action':'AddNew',
-            'label':'Projects'
+            'action': 'AddNew',
+            'label': 'Projects'
         })
     }
 
     tillTodayDisable(index, checked, e) {
         e.stopPropagation();
-        let {till_today} = this.state
+        let { till_today } = this.state
         till_today[parseInt(index)] = checked
     }
 
@@ -130,17 +145,18 @@ class Project extends Component {
     }
 
     handleAccordionClick(value, fields) {
-        this.setState({active: value})
+        this.setState({ active: value })
     }
 
 
     render() {
         const {
-            handleSubmit,userInfo:{order_data}, ui: {loader}, saveTitle,
-            editHeading, isEditable, entityName, nextEntity,eventClicked,
-            showAlertModal,history, changeOrderingDown, changeOrderingUp, handleInputValue, formData: {project}
+            handleSubmit, userInfo: { order_data }, ui: { loader }, saveTitle,
+            editHeading, isEditable, entityName, nextEntity, eventClicked,
+            showAlertModal, history, changeOrderingDown, changeOrderingUp, handleInputValue, formData: { project },
+            showAlertMessage
         } = this.props;
-        const {till_today} = this.state
+        const { till_today } = this.state
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                 <FieldArray
@@ -162,13 +178,14 @@ class Project extends Component {
                     tillTodayDisable={this.tillTodayDisable}
                     formValues={project && project.values}
                     handleInputValue={handleInputValue}
+                    showAlertMessage={showAlertMessage}
 
                 />
 
-                <SavePreviewButtons 
-                        showAlertModal={showAlertModal} context={this} history={history} order_data={order_data} form_name={'Projects'}
-                        nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss} eventClicked={eventClicked}
-                    />
+                <SavePreviewButtons
+                    showAlertModal={showAlertModal} context={this} history={history} order_data={order_data} form_name={'Projects'}
+                    nextEntity={nextEntity} updateInfoBeforeLoss={this.updateInfoBeforeLoss} eventClicked={eventClicked}
+                />
             </form>
 
         )
@@ -179,7 +196,7 @@ class Project extends Component {
 export const ProjectForm = reduxForm({
     form: 'project',
     enableReinitialize: true,
-    onSubmitFail: (errors) => scrollOnErrors(errors,'project',-100),
+    onSubmitFail: (errors) => scrollOnErrors(errors, 'project', -100),
     validate
 })(Project);
 
@@ -194,7 +211,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         "onSubmit": (userProject) => {
-            const {start_date, end_date} = userProject;
+            const { start_date, end_date } = userProject;
 
             userProject = {
                 ...userProject,
@@ -204,7 +221,7 @@ const mapDispatchToProps = (dispatch) => {
                 }
             };
             return new Promise((resolve, reject) => {
-                return dispatch(actions.updateUserProject({userProject, resolve, reject}));
+                return dispatch(actions.updateUserProject({ userProject, resolve, reject }));
             })
         },
         "fetchUserProject": () => {
@@ -217,7 +234,7 @@ const mapDispatchToProps = (dispatch) => {
 
         "bulkUpdateOrCreate": (listItems) => {
             listItems = (listItems || []).map((userProject, index) => {
-                const {start_date, end_date} = userProject;
+                const { start_date, end_date } = userProject;
                 if (!userProject['id']) delete userProject['id'];
                 userProject = {
                     ...userProject,
@@ -230,7 +247,7 @@ const mapDispatchToProps = (dispatch) => {
                 return userProject;
             });
             return new Promise((resolve, reject) => {
-                return dispatch(actions.bulkUpdateOrCreateUserProject({list: listItems, resolve, reject}))
+                return dispatch(actions.bulkUpdateOrCreateUserProject({ list: listItems, resolve, reject }))
             })
 
         },

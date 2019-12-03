@@ -1,31 +1,32 @@
 import React from 'react';
-import {Field} from "redux-form";
+import { Field } from "redux-form";
 import {
     datepicker,
     renderField,
     renderTextArea,
     renderCheckboxField
 } from "../../../../../FormHandler/formFieldRenderer.jsx";
-import {projectNewData} from "../../../../../../Utils/addnewData"
+import { projectNewData } from "../../../../../../Utils/addnewData"
 
 const renderProjects = ({
-                            fields,
-                            meta: {touched, error, submitFailed},
-                            handleSubmit,
-                            handleAddition,
-                                eventClicked,
-                            deleteProject,
-                            changeOrderingUp,
-                            changeOrderingDown,
-                            editHeading,
-                            heading,
-                            headingChange,
-                            editHeadingClick,
-                            context,
-                            till_today,
-                            tillTodayDisable,
-                            entity_preference_data
-                        }) => {
+    fields,
+    meta: { touched, error, submitFailed },
+    handleSubmit,
+    handleAddition,
+    eventClicked,
+    deleteProject,
+    changeOrderingUp,
+    changeOrderingDown,
+    editHeading,
+    heading,
+    headingChange,
+    editHeadingClick,
+    context,
+    till_today,
+    tillTodayDisable,
+    entity_preference_data,
+    showAlertMessage
+}) => {
     return (
 
         <div className="buildResume__wrap">
@@ -38,19 +39,33 @@ const renderProjects = ({
                         </React.Fragment> :
                         <React.Fragment>
                             <input type="text" autoFocus defaultValue={heading} maxLength={'20'}
-                                   onChange={(event) => context.setState({heading: event.target.value})}/>
+                                onChange={(event) => context.setState({ heading: event.target.value })} />
                             <i className="sprite icon--editTick"
-                               onClick={() => {
-                                   headingChange(entity_preference_data, heading, 3);
-                                   context.setState({editHeading: false})
-                               }}></i>
+                                onClick={() => {
+                                    headingChange(entity_preference_data, heading, 3);
+                                    context.setState({ editHeading: false })
+                                }}></i>
                         </React.Fragment>
                     }
                 </div>
                 {!editHeading ?
                     <button role="button" className="btn btn__round btn--outline"
-                            onClick={handleSubmit(handleAddition.bind(this, fields, projectNewData(fields), 200, 'project',eventClicked,'Projects'))}
-                            type={'button'}>+ Add new</button> : ''
+                        onClick={
+                            handleSubmit((values) => {
+                                let skipAddition = false;
+                                (values && values.list || []).forEach(el => {
+                                    if (!el.project_name) {
+                                        skipAddition = true;
+                                    }
+                                })
+                                if (!skipAddition) {
+                                    handleAddition(fields, projectNewData(fields), 200, 'project', eventClicked, 'Projects')
+                                }
+                                else {
+                                    showAlertMessage()
+                                }
+                            })}
+                        type={'button'}>+ Add new</button> : ''
                 }
             </div>
             {fields.map((member, index) => {
@@ -69,7 +84,7 @@ const renderProjects = ({
                                     <li className="subHeading__btn"
                                         onClick={(event) => {
                                             fields = changeOrderingUp(index, fields, event);
-                                            context.setState({fields})
+                                            context.setState({ fields })
                                         }}>
                                         <i className="sprite icon--upArrow"></i>
                                     </li>
@@ -78,7 +93,7 @@ const renderProjects = ({
                                     <li className="subHeading__btn"
                                         onClick={(event) => {
                                             fields = changeOrderingDown(index, fields, event);
-                                            context.setState({fields})
+                                            context.setState({ fields })
                                         }}>
                                         <i className="sprite icon--downArrow"></i>
                                     </li>
@@ -90,34 +105,34 @@ const renderProjects = ({
 
                             <li className="form__group">
                                 <Field component={renderField} label={"Project name"} type={"text"}
-                                       name={`${member}.project_name`} prepend={true}
-                                       id={`${member}.project_name`} iconClass={"sprite icon--project-gray"}
-                                       className="form__input" maxLength={'50'}/>
+                                    name={`${member}.project_name`} prepend={true}
+                                    id={`${member}.project_name`} iconClass={"sprite icon--project-gray"}
+                                    className="form__input" maxLength={'50'} />
                             </li>
 
                             <li className="form__group dob">
                                 <Field component={datepicker} label={"Date from"}
-                                       maxDateAllowed={true}
-                                       endDate={fields.get(index).end_date || null}
-                                       type={"date"} yearDropDownItemNumber={15}
-                                       name={`${member}.start_date`} id={`${member}.start_date`}/>
+                                    maxDateAllowed={true}
+                                    endDate={fields.get(index).end_date || null}
+                                    type={"date"} yearDropDownItemNumber={15}
+                                    name={`${member}.start_date`} id={`${member}.start_date`} />
                             </li>
 
                             <li className="form__group dob">
                                 <Field component={datepicker} label={"Date to"} type={"date"}
-                                       minDate={fields.get(index).start_date}
-                                       startDate={fields.get(index).start_date || null}
-                                       maxDateAllowed={true}
-                                       yearDropDownItemNumber={15} name={`${member}.end_date`} id={`${member}.end_date`}
-                                       disabled={till_today[index]}/>
+                                    minDate={fields.get(index).start_date}
+                                    startDate={fields.get(index).start_date || null}
+                                    maxDateAllowed={true}
+                                    yearDropDownItemNumber={15} name={`${member}.end_date`} id={`${member}.end_date`}
+                                    disabled={till_today[index]} />
                             </li>
 
                             <li className="form__radio-group d-flex justify-content-end fs-14">
                                 <Field type="checkbox" name={`${member}.currently_working`}
-                                       component={renderCheckboxField}
-                                       className="form__radio-input" id={`${member}.currently_working`}
-                                       tillTodayDisable={tillTodayDisable}
-                                       index={`${index}`}/>
+                                    component={renderCheckboxField}
+                                    className="form__radio-input" id={`${member}.currently_working`}
+                                    tillTodayDisable={tillTodayDisable}
+                                    index={`${index}`} />
                                 <label className="form__radio-label" htmlFor={`${member}.currently_working`}>
                                     <span className="form__radio-button"></span>
                                     Till today
@@ -127,9 +142,9 @@ const renderProjects = ({
 
                             <li className="form__group">
                                 <Field component={renderTextArea} rows={"3"} type={"textarea"}
-                                       className="form__input" name={`${member}.description`}
-                                       prepend={true} iconClass={"sprite icon--description"} label={'Description'}
-                                       value={`${member}.description`} maxLength={'1000'}/>
+                                    className="form__input" name={`${member}.description`}
+                                    prepend={true} iconClass={"sprite icon--description"} label={'Description'}
+                                    value={`${member}.description`} maxLength={'1000'} />
                             </li>
                         </ul>
                     </div>

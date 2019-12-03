@@ -151,7 +151,7 @@ const getOrderItems = (order_id)=>{
     $('body').addClass('body-overflow')
     selected_order_items =[]
     current_oi = order_id
-    $.get(`/order/api/v1/order/${current_oi}/items`,(data)=>{
+    $.get(`/api/v1/order/${current_oi}/items`,(data)=>{
         $('#order-items').empty()
         if(data['count']){
             for(let oi of data['results']){

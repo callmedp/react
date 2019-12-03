@@ -3,6 +3,7 @@ import {SAVE_USER_EDUCATION, REMOVE_EDUCATION} from "../actions/actionTypes";
 export const initialState = {
     list: [{
         "candidate_id": '',
+        "course_type": '',
         "id": '',
         "specialization": '',
         "institution_name": '',

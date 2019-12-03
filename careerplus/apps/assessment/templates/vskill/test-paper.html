@@ -3,7 +3,7 @@
 {% block title %}{{object.title}} @ Shine Learning{% endblock title %}
 {% block canonical_url %}
 <link rel="canonical" href="https://{{ SITE_DOMAIN }}/practice-tests/{{object.slug}}-test/">
-<link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}/practice-tests/{{object.slug}}-test/">
+<link rel="alternate" href="//{{ SITE_DOMAIN }}/practice-tests/{{object.slug}}-test/">
 {% endblock canonical_url %}
 {% block django_meta %}
     <meta name="description" content="{{object.title }} practice test, answer these {{questions_list.count}} questions to obtain your score for free.">
@@ -69,9 +69,9 @@
                             <li>
                         <label class="{% if quest.question_type == 2 %}custom-checkbox {%else%}custom-radio{% endif %}">{{ans.option}}
                                     {% if quest.question_type == 2  %}
-                                    <input type="checkbox" value= "{{quest.question_type}}" id="{{ans.option_id}}" name="radio">
+                                    <input class="radioSelect" type="checkbox" value= "{{quest.question_type}}" id="{{ans.option_id}}" name="radio{{quest.id}}">
                                     {% else %}
-                                  <input type="radio" value= "{{quest.question_type}}" id="{{ans.option_id}}" name="radio">
+                                  <input class="radioSelect" type="radio" value= "{{quest.question_type}}" id="{{ans.option_id}}" name="radio{{quest.id}}">
                                     {% endif %}
                                     <span class="checkmark"></span>
                                 </label>
@@ -260,10 +260,15 @@ $(document).ready(function() {
         }
 
             for (var id in Object.keys(questionAttempt)) {
-                if (Object.values(questionAttempt)[id] != "" && Object.keys(questionAttempt)[id] != "skippedQuestion") {
-                    $('#' + Object.values(questionAttempt)[id]).click();
-                    $('#marked' + Object.keys(questionAttempt)[id]).removeClass();
-                    $('#marked' + Object.keys(questionAttempt)[id]).addClass('dirt');
+
+                         if (Object.values(questionAttempt)[id] != "" && Object.keys(questionAttempt)[id] != "skippedQuestion") {
+
+                    (Object.values(questionAttempt)[id]).split(',').map(valId => {
+                       $('#' + valId).click();
+                       $('#marked' + Object.keys(questionAttempt)[id]).removeClass();
+                        $('#marked' + Object.keys(questionAttempt)[id]).addClass('dirt');
+                    })
+
                 }
                 else if(Object.keys(questionAttempt)[id] == "skippedQuestion"){
                   for(i of Object.values(questionAttempt)[id]){
@@ -337,7 +342,7 @@ function nextquestion(number) {
     }
 }
 
-$('input[name="radio"]').on("click", function(e) {
+$('.radioSelect').on("click", function(e) {
     if (!timeout) {
         let quest_id = $(e.target).closest(".test-paper")[0].id;
         $('#marked' + quest_id).removeClass();
@@ -345,18 +350,18 @@ $('input[name="radio"]').on("click", function(e) {
         skippedQuest = skippedQuest.filter(item => item !== '#marked' + quest_id);
         questionAttempt['skippedQuestion'] = skippedQuest;
         $('#marked' + quest_id).addClass('active');
-
         if ($(e.target.checked)[0] == true) {
             attempt = questionAttempt[quest_id]
             if (!attempt || e.target.value == 1) {
                 attempt = e.target.id
             } else {
                 attempt = attempt + ',' + e.target.id
+                attempt = [...new Set(attempt.split(','))].toString()
             }
         } else {
             attempt = questionAttempt[quest_id]
-            if (attempt) {
-                attempt = (attempt.split(',').filter(optId => optId != e.target.id)).toString()
+            if (attempt && e.target.value != "1") {
+                  attempt = (attempt.split(',').filter(optId => optId != e.target.id)).toString()
             }
         }
         if(!attempt){
