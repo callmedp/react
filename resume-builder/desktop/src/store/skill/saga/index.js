@@ -17,7 +17,7 @@ function modifySkill(data) {
             list: data['list'].map(el => {
                 return {
                     ...el,
-                    proficiency: proficiencyList[el['proficiency'] && el['proficiency'].toString() || '5']
+                    proficiency: typeof el['proficiency']  === "object" ? el["proficiency"]: proficiencyList[el['proficiency'] && el['proficiency'].toString() || '5']
                 }
             })
         }

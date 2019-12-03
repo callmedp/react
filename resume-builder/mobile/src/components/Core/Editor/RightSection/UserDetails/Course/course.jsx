@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
-import {reduxForm, FieldArray} from "redux-form";
+import React, { Component } from 'react';
+import { reduxForm, FieldArray } from "redux-form";
 import * as actions from "../../../../../../store/course/actions";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import PreviewModal from "../../../Preview/changeTemplateModal";
 import renderCourse from "./renderCourse";
 import validate from "../../../../../FormHandler/validtaions/course/validate"
-import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
+import { scrollOnErrors } from "../../../../../../Utils/srollOnError"
 import BottomCTC from '../../../../../Common/BottomCTC/bottom-ctc';
 import Subscribe from '../../../RightSection/subscribe';
 
@@ -18,36 +18,48 @@ class Course extends Component {
         this.deleteCourse = this.deleteCourse.bind(this);
         this.state = {
             'editHeading': false,
-            'heading' : '',
-            'submit' : false
+            'heading': '',
+            'submit': false
         }
         this.editHeadingClick = this.editHeadingClick.bind(this);
         this.updateInfoBeforeLoss = this.updateInfoBeforeLoss.bind(this)
     }
-    
+
     componentDidMount() {
         this.props.fetchUserCourse()
         if (this.props.personalInfo.entity_preference_data.length) {
-            this.setState({heading : this.props.personalInfo.entity_preference_data[7].entity_text})
+            this.setState({ heading: this.props.personalInfo.entity_preference_data[7].entity_text })
         }
     }
 
     async handleSubmit(values) {
         values = this.state.fields ? this.state.fields : values.list
-        let {sidenav:{listOfLinks,currentLinkPos},bulkUpdateUserCourse,generateResumeAlert,updateCurrentLinkPos,
-                history} = this.props
+        let { sidenav: { listOfLinks, currentLinkPos }, bulkUpdateUserCourse, generateResumeAlert, updateCurrentLinkPos,
+            history } = this.props
         currentLinkPos++
-        this.setState({submit:true})
-        await bulkUpdateUserCourse(values);
-         if(currentLinkPos === listOfLinks.length){
+        if (values.length) {
+            // skip the api call if there is a certain field which is required but empty (We skipped validation intentionally)
+            let skipApiCall = false;
+
+            values.map(el => {
+                if (!el.name_of_certification) {
+                    skipApiCall = true;
+                }
+                return;
+            })
+            if (!skipApiCall) {
+                await bulkUpdateUserCourse(values);
+            }
+        }
+        this.setState({ submit: true })
+        if (currentLinkPos === listOfLinks.length) {
             currentLinkPos = 0
             generateResumeAlert()
         }
-        else{
-            updateCurrentLinkPos({currentLinkPos})
-            history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)    
+        else {
+            updateCurrentLinkPos({ currentLinkPos })
+            history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
         }
-        
     }
 
     deleteCourse(index, fields, event) {
@@ -61,73 +73,75 @@ class Course extends Component {
 
     componentDidUpdate(prevProps) {
         if (this.props.personalInfo.entity_preference_data !== prevProps.personalInfo.entity_preference_data) {
-            this.setState({heading : this.props.personalInfo.entity_preference_data[7].entity_text})
+            this.setState({ heading: this.props.personalInfo.entity_preference_data[7].entity_text })
         }
     }
 
-    async updateInfoBeforeLoss(){
+    async updateInfoBeforeLoss() {
 
-        if(!this.state.submit){
-            const {initialValues} =this.props
+        if (!this.state.submit) {
+            const { initialValues } = this.props
             const form_data = this.props.info.form.course;
             let error = false
-            let error_values =form_data["syncErrors"]
-            if(error_values){
-                for(let i of  error_values['list']){
-                    for(let j of Object.keys(i)){
-                        if(i[j]){
-                            error =true
+            let error_values = form_data["syncErrors"]
+            if (error_values) {
+                for (let i of error_values['list']) {
+                    for (let j of Object.keys(i)) {
+                        if (i[j]) {
+                            error = true
                             break;
                         }
                     }
                 }
             }
-            if(!error && JSON.stringify(initialValues)!==JSON.stringify(form_data['values'])){
-                
+            if (!error && JSON.stringify(initialValues) !== JSON.stringify(form_data['values'])) {
+
                 const values = this.props.handleOrdering(form_data['values'])
                 await this.props.bulkUpdateUserCourse(values.list)
             }
-        } 
+        }
     }
 
     componentWillUnmount() {
         this.updateInfoBeforeLoss()
     }
 
-    editHeadingClick(){
-        this.setState({editHeading:true})
+    editHeadingClick() {
+        this.setState({ editHeading: true })
     }
 
-    render () {
+    render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {updateAlertModalStatus,handleSubmit, history,submitting,personalInfo:{order_data,entity_preference_data},headingChange,changeOrderingUp,changeOrderingDown,eventClicked} = this.props;
-        const {editHeading,heading} =this.state;
-        return(
+        const { updateAlertModalStatus, handleSubmit, history, submitting, personalInfo: { order_data, entity_preference_data }, headingChange, changeOrderingUp, changeOrderingDown, eventClicked, showAlertMessage } = this.props;
+        const { editHeading, heading } = this.state;
+        return (
 
             <div className="buildResume">
-                <PreviewModal {...this.props}/>
-                <Subscribe {...this.props}/>
+                <PreviewModal {...this.props} />
+                <Subscribe {...this.props} />
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
-                    <FieldArray name="list" 
-                                handleSubmit={handleSubmit}
-                                handleAddition={this.props.handleAddition}
-                                deleteCourse={this.deleteCourse}
-                                changeOrderingUp={changeOrderingUp}
-                                changeOrderingDown={changeOrderingDown}
-                                eventClicked={eventClicked}
-                                component={renderCourse}
-                                headingChange={headingChange}
-                                entity_preference_data={entity_preference_data}
-                                editHeading={editHeading}
-                                editHeadingClick={this.editHeadingClick}
-                                context={this}
-                                heading ={heading}/>
+                    <FieldArray name="list"
+                        handleSubmit={handleSubmit}
+                        handleAddition={this.props.handleAddition}
+                        deleteCourse={this.deleteCourse}
+                        changeOrderingUp={changeOrderingUp}
+                        changeOrderingDown={changeOrderingDown}
+                        eventClicked={eventClicked}
+                        component={renderCourse}
+                        headingChange={headingChange}
+                        entity_preference_data={entity_preference_data}
+                        editHeading={editHeading}
+                        editHeadingClick={this.editHeadingClick}
+                        context={this}
+                        heading={heading}
+                        showAlertMessage={showAlertMessage}
+                    />
                     <ul className="form">
                         <li className="form__group">
-                            <BottomCTC  disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
-                                length={length} pos={pos+1} updateInfoBeforeLoss={this.updateInfoBeforeLoss} 
-                                order_data={order_data} eventClicked={eventClicked} form_name={'Courses'}/>
+                            <BottomCTC disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
+                                length={length} pos={pos + 1} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                                order_data={order_data} eventClicked={eventClicked} form_name={'Courses'} />
                         </li>
                     </ul>
                 </form>
@@ -139,7 +153,7 @@ class Course extends Component {
 export const CourseForm = reduxForm({
     form: 'course',
     enableReinitialize: true,
-    onSubmitFail: (errors) => scrollOnErrors(errors,'course',-100),
+    onSubmitFail: (errors) => scrollOnErrors(errors, 'course', -100),
     validate
 })(Course);
 
@@ -154,15 +168,15 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         "onSubmit": (userCourse) => {
-            const {year_of_certification} = userCourse;
+            const { year_of_certification } = userCourse;
             userCourse = {
                 ...userCourse,
                 ...{
-                    year_of_certification:parseInt(year_of_certification)
+                    year_of_certification: parseInt(year_of_certification)
                 }
             };
             return new Promise((resolve, reject) => {
-                return dispatch(actions.updateUserCourse({userCourse, resolve, reject}));
+                return dispatch(actions.updateUserCourse({ userCourse, resolve, reject }));
             })
         },
         "fetchUserCourse": () => {
@@ -174,7 +188,7 @@ const mapDispatchToProps = (dispatch) => {
 
         "bulkUpdateUserCourse": (listItems) => {
             listItems = (listItems || []).map(userCourse => {
-                const {year_of_certification} = userCourse;
+                const { year_of_certification } = userCourse;
                 if (!userCourse['id']) delete userCourse['id'];
                 userCourse = {
                     ...userCourse,
@@ -185,7 +199,7 @@ const mapDispatchToProps = (dispatch) => {
                 return userCourse;
             })
             return new Promise((resolve, reject) => {
-                return dispatch(actions.bulkUpdateUserCourse({list: listItems,resolve,reject}))
+                return dispatch(actions.bulkUpdateUserCourse({ list: listItems, resolve, reject }))
             })
         }
     }
