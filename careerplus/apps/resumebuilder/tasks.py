@@ -349,6 +349,9 @@ def generate_and_upload_resume_pdf(data):
     if send_mail:
         send_resume_in_mail_resume_builder(['resume', pdf_file], data)
 
+    CandidateResumeOperations.objects.create(candidate=candidate,order=order,op_status=op_status)
+    logging.getLogger('info_log').info("RESUME BUILDER: File creation operation created for with op_status {}.".format(op_status))
+
     # uploading resume on the shine 
     if template_id == int(candidate.selected_template or 0) and candidate.upload_resume and not first_save:
         info = {
@@ -367,6 +370,3 @@ def generate_and_upload_resume_pdf(data):
             logging.getLogger('info_log').info("RESUME BUILDER: Upload to shine successful.")
             return
         logging.getLogger('info_log').info("RESUME BUILDER: Upload to shine failed.")
-
-    CandidateResumeOperations.objects.create(candidate=candidate,order=order,op_status=op_status)
-    logging.getLogger('info_log').info("RESUME BUILDER: File creation operation created for with op_status {}.".format(op_status))
