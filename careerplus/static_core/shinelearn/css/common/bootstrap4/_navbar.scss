@@ -348,8 +348,14 @@
 }
 
 .navbar-right {
-  .nav-item {
+  // margin: .4rem 0 -.4rem 0;
+  > .nav-item {
     // padding-top: 0;
     // padding-bottom: 0;
+
+    > .link-ht {
+      height: 2.4rem;
+      text-indent: -9999;
+    }
   }
 }
