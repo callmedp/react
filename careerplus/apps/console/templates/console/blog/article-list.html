@@ -136,7 +136,7 @@
                     <th class="column-title">Name</th>
                     <th class="column-title">Slug</th>
                     <th class="column-title">Status</th>
-                    <th class="column-title">Publish Date</th>
+                    <th class="column-title" onclick="sortByDate()">Publish Date <i id="sortAngle" class="fa {% if sortdate == 1 %} fa-angle-down {% else %} fa-angle-up {% endif %} "></i></th>
                     <th class="column-title">View on Site</th>
                   </tr>
                 </thead>
@@ -251,6 +251,9 @@
         
 {% block js_block %}
   {{ block.super }}
+<script>
+   var sorting = '{{sortdate}}';
+   </script>
   <!-- Parsley Validate Scripts -->
   {% compress js %}
   <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
