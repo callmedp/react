@@ -1,33 +1,33 @@
+# python imports
 
-from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView
-from rest_framework.views import APIView
-from rest_framework import status
-from shop.models import (Product, ProductScreen, PracticeTestInfo)
+# django imports
+from django.core.cache import cache
+from django.core.exceptions import PermissionDenied
+from django.views.decorators.csrf import csrf_protect
+from django.utils.decorators import method_decorator
+
+# local imports
 from .serializers import (
     ProductListSerializerForAuditHistory,
     ProductDetailSerializer,
     PracticeTestInfoCreateSerializer,
     UpdateProductScreenSkillSerializer,
-    UpdateProductSkillSerializer
-)
-from rest_framework.authentication import SessionAuthentication
-from django_filters.rest_framework import DjangoFilterBackend
-from shared.rest_addons.mixins import FieldFilterMixin
-from rest_framework.response import Response
+    UpdateProductSkillSerializer)
 from .tasks import delete_from_solr, update_practice_test_info
+
+# interapp imports
+from shop.models import (Product, ProductScreen, PracticeTestInfo)
 from shared.permissions import HasGroupOrHasPermissions
 from shop.api.core.permissions import IsVendorAssociated
-
-import subprocess, os
-from rest_framework.generics import RetrieveAPIView
-from django.core.cache import cache
-from django.conf import settings
-from shared.rest_addons.authentication import ShineUserAuthentication
-from rest_framework.permissions import IsAuthenticated
-from django.core.exceptions import PermissionDenied
-from django.views.decorators.csrf import csrf_protect
-from django.utils.decorators import method_decorator
+from shared.rest_addons.mixins import FieldFilterMixin
 from shop.helpers import get_inferred_skills
+from shared.rest_addons.authentication import ShineUserAuthentication
+
+# 3rd party imports
+from rest_framework.generics import ListAPIView, CreateAPIView
+from rest_framework.views import APIView
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 
