@@ -819,10 +819,49 @@ class SuggestionApiView(APIView):
             status=status.HTTP_200_OK
         )
 
+
+    def set_suggestion_list(self,key, connection):
+        # imports 
+        from django_redis import get_redis_connection
+        import os, sys
+        ROOT_FOLDER = os.path.realpath(os.path.dirname(__file__))
+        ROOT_FOLDER = ROOT_FOLDER[:ROOT_FOLDER.rindex('/')]
+        ROOT_FOLDER = ROOT_FOLDER[:ROOT_FOLDER.rindex('/')]
+
+        if ROOT_FOLDER not in sys.path:
+            sys.path.insert(1, ROOT_FOLDER + '/')
+        if not connection: 
+            conn = get_redis_connection('search_lookup')
+        else: 
+            conn = connection 
+
+
+        if key == 'summary': 
+
+            file_name = os.path.join(ROOT_FOLDER, 'merged_summary.json')
+            # set summary in the redis
+            with open(file_name) as fp:
+                data = eval(fp.read())
+
+            conn.hmset('suggestion_set_jt_summary', data)
+
+        else : 
+            file_name = os.path.join(ROOT_FOLDER, 'merged_experience.json')
+            # set experience in the redis
+            with open(file_name) as fp:
+                data = eval(fp.read())
+
+            conn.hmset('suggestion_set_jt_experience', data)
+
+
+
     def job_title_to_experience(self, request, *args, **kwargs):
+
         job_title = request.GET.get('query', None)
         cache = get_redis_connection('search_lookup')
         suggestion = []
+        if cache.hlen('suggestion_set_jt_experience') == 0:
+            self.set_suggestion_list('experience',cache)
         if job_title:
             job_title = job_title.title()
             suggest = cache.hget('suggestion_set_jt_experience', job_title.title())
@@ -848,6 +887,9 @@ class SuggestionApiView(APIView):
         job_title = request.GET.get('query', None)
         cache = get_redis_connection('search_lookup')
         suggestion = []
+        if cache.hlen('suggestion_set_jt_summary') == 0:
+            self.set_suggestion_list('summary', cache)
+
         if job_title:
             job_title = job_title.title()
             suggest = cache.hget('suggestion_set_jt_summary', job_title.title())

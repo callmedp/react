@@ -34,14 +34,26 @@ class Course extends Component {
          const {generateResumeAlert,bulkUpdateOrCreate,history} = this.props
         const {list} = values;
         if (list.length) {
-            await bulkUpdateOrCreate(list);
-            this.setState({
+            // skip the api call if there is a certain field which is required but empty (We skipped validation intentionally)
+            let skipApiCall = false;
+            
+            list.map(el => {
+                if(! el.name_of_certification){
+                    skipApiCall = true;
+                }
+                return; 
+            })
+            if(!skipApiCall){
+                await bulkUpdateOrCreate(list);
+            } 
+        }
+         this.setState({
                 submit: true
             })
-            if (entityLink) history.push(entityLink);
-            else{
-                generateResumeAlert()
-            }
+        
+        if (entityLink) history.push(entityLink);
+        else{
+            generateResumeAlert()
         }
 
     }
@@ -70,7 +82,6 @@ class Course extends Component {
 
     handleAddition(fields, error) {
         const listLength = fields.length;
-
         fields.push({
             "candidate_id": '',
             "id": '',
@@ -108,7 +119,7 @@ class Course extends Component {
     render() {
         const {
             handleSubmit,userInfo:{order_data}, ui: {loader}, editHeading, saveTitle, isEditable,eventClicked,
-            entityName, nextEntity, showAlertModal,history, handleInputValue, changeOrderingUp, changeOrderingDown
+            entityName, nextEntity, showAlertModal,history, handleInputValue, changeOrderingUp, changeOrderingDown,showAlertMessage
         } = this.props;
 
         return (
@@ -128,6 +139,7 @@ class Course extends Component {
                             entityName={entityName}
                             expanded={this.state.active}
                             handleInputValue={handleInputValue}
+                            showAlertMessage={showAlertMessage}
                 />
                 <SavePreviewButtons 
                         showAlertModal={showAlertModal} context={this} history={history} order_data={order_data} form_name={'Courses'}

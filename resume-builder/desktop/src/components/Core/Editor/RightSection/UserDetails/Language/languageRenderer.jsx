@@ -26,7 +26,8 @@ export const LanguageRenderer = ({
                                      saveTitle,
                                      entityName,
                                      expanded,
-                                     handleInputValue
+                                     handleInputValue,
+                                     showAlertMessage
                                  }) => {
 
     return (
@@ -49,7 +50,18 @@ export const LanguageRenderer = ({
                       className={!!(!isEditable) ? "icon-edit " + styles['icon-language__cursor'] : ""}/>
 
                 <button onClick={handleSubmit((values) => {
-                    handleAddition(fields, error)
+                    let skipAddition = false;
+                    (values && values.list  || []).forEach(el => {
+                        if (!el.name) {
+                            skipAddition = true;
+                        }
+                    })
+                    if (!skipAddition) {
+                        handleAddition(fields, error)
+                    }
+                    else {
+                        showAlertMessage()
+                    }
                 })}
                         type={'button'}
                         className={"add-button " + styles['add-button__right']}>Add new

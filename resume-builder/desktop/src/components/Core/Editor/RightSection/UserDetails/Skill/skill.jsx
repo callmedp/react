@@ -43,15 +43,29 @@ class Skill extends Component {
          const {generateResumeAlert,bulkUpdateOrCreate,history} = this.props
         const {list} = values;
         if (list.length) {
-            await bulkUpdateOrCreate(list);
-            this.setState({
-                submit: true
-            })
-            if (entityLink) history.push(entityLink);
-            else{
-                generateResumeAlert()
-            }
-        }
+             // skip the api call if there is a certain field which is required but empty (We skipped validation intentionally)
+             let skipApiCall = false;
+            
+             list.map(el => {
+                 if(! el.name){
+                     skipApiCall = true;
+                 }
+                 return; 
+             })
+             if(!skipApiCall){
+                 await bulkUpdateOrCreate(list);
+             }
+             
+         }
+
+         this.setState({
+            submit: true
+        })
+        
+         if (entityLink) history.push(entityLink);
+         else{
+             generateResumeAlert()
+         }
     }
 
     async componentDidUpdate(prevProps){
@@ -117,7 +131,7 @@ class Skill extends Component {
         const {
             handleSubmit,userInfo:{order_data}, history, showAlertModal,eventClicked,
             ui: {loader}, isEditable, editHeading, saveTitle, entityName, nextEntity,
-            changeOrderingUp, changeOrderingDown, handleInputValue
+            changeOrderingUp, changeOrderingDown, handleInputValue,showAlertMessage
         } = this.props;
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
@@ -137,8 +151,7 @@ class Skill extends Component {
                     entityName={entityName}
                     expanded={this.state.active}
                     handleInputValue={handleInputValue}
-
-
+                    showAlertMessage={showAlertMessage}
                 />
 
                 <SavePreviewButtons 

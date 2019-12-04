@@ -75,7 +75,7 @@
          <div class="col-sm-12 col-lg-12 col-md-12">
             <div class="popular_test row mt-0" id="funcDiv">
 
-               {% for test in all_test|slice:":8" %}
+               {% for test in all_test %}
                <div class="testinside">
                   <span class="border-left border{{forloop.counter}}"></span>
   <a id="{{test.id}}" class="testModal" data-toggle="modal" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}","courseName":"{{test.course.name}}","courseDuration":"{{test.course.get_duration_in_day}}","coursePrice":"{{test.course.inr_price}}","productName":"{{test.product.name}}","productDuration":"{{test.product.get_duration_day}}","productPrice":"{{test.product.inr_price}}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}","courseUrl":"{{test.course.get_absolute_url}}","productUrl":"{{test.product.absolute_url}}"  }' data-target="#testModal">
@@ -87,9 +87,11 @@
              {% endfor %}
 
             </div>
+             {% comment %}
              {% if all_test.count > 8 %}
             <button class="btn_white loadmore" id="loadmorebtn" onclick="loadmore();">Load more</button>
              {% endif %}
+             {% endcomment %}
          </div>
       </div>
       </div>

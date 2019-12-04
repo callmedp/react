@@ -294,7 +294,7 @@ Shine learning brings to you one of the largest collection of functional tests. 
             page_number = page_number+1;
              element = document.getElementById('funcDiv');
            $.ajax({
-               url: '/api/get-category-level-products',
+               url: '/api/get-category-level-products/',
                type: "GET",
                data : {'tl': 2, 'page_size' : 4, 'page':page_number,'only_test_level2category':true },
                dataType: 'json',
@@ -322,6 +322,7 @@ Shine learning brings to you one of the largest collection of functional tests. 
                    }
                }
            });
+           return false;
    }
 
 

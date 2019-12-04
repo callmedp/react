@@ -16,6 +16,7 @@ import queryString from 'query-string';
 import * as actions from '../../../../store/personalInfo/actions';
 import {currentForm, hideMoreSection} from '../../../../store/ui/actions';
 import {formCategoryList} from "../../../../Utils/formCategoryList";
+import Swal from 'sweetalert2';
 
 
 class RightSection extends Component {
@@ -29,6 +30,7 @@ class RightSection extends Component {
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.changeOrderingDown = this.changeOrderingDown.bind(this);
         this.handleInputValue = this.handleInputValue.bind(this);
+        this.showAlertMessage = this.showAlertMessage.bind(this);
 
 
         this.state = {
@@ -120,6 +122,14 @@ class RightSection extends Component {
 
         // this.props.handleSwap([currentItem, nextItem])
     }
+
+    showAlertMessage(){
+        Swal.fire(
+            'You Can\'t add more!',
+            'Please Fill current list first',
+            'error'
+          )
+    }
     
     // handleResumeGeneration(orderId){
     //     showGenerateResumeModal()
@@ -177,6 +187,7 @@ class RightSection extends Component {
                                  saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
                                  currentFields={this.state.currentFields}
                                  handleInputValue={this.handleInputValue}
+                                 showAlertMessage = {this.showAlertMessage}
 
                     />
             }
@@ -201,6 +212,8 @@ class RightSection extends Component {
                                   editHeading={(elem) => this.editHeading(elem)}
                                   currentFields={this.state.currentFields}
                                   handleInputValue={this.handleInputValue}
+                                  showAlertMessage = {this.showAlertMessage}
+
 
                     />
             }
@@ -225,6 +238,8 @@ class RightSection extends Component {
                                editHeading={(elem) => this.editHeading(elem)}
                                currentFields={this.state.currentFields}
                                handleInputValue={this.handleInputValue}
+                               showAlertMessage = {this.showAlertMessage}
+
 
                     />
             }
@@ -249,6 +264,8 @@ class RightSection extends Component {
                              editHeading={(elem) => this.editHeading(elem)}
                              currentFields={this.state.currentFields}
                              handleInputValue={this.handleInputValue}
+                             showAlertMessage = {this.showAlertMessage}
+
 
                     />
             }
@@ -294,6 +311,8 @@ class RightSection extends Component {
                              editHeading={(elem) => this.editHeading(elem)}
                              currentFields={this.state.currentFields}
                              handleInputValue={this.handleInputValue}
+                             showAlertMessage = {this.showAlertMessage}
+
                     />
             }
             case 'course': {
@@ -317,6 +336,7 @@ class RightSection extends Component {
                               editHeading={(elem) => this.editHeading(elem)}
                               currentFields={this.state.currentFields}
                               handleInputValue={this.handleInputValue}
+                              showAlertMessage = {this.showAlertMessage}
 
                     />
             }
@@ -341,6 +361,8 @@ class RightSection extends Component {
                                 editHeading={(elem) => this.editHeading(elem)}
                                 currentFields={this.state.currentFields}
                                 handleInputValue={this.handleInputValue}
+                                showAlertMessage = {this.showAlertMessage}
+
                     />
             }
             case 'reference': {
@@ -363,6 +385,8 @@ class RightSection extends Component {
                                  editHeading={(elem) => this.editHeading(elem)}
                                  currentFields={this.state.currentFields}
                                  handleInputValue={this.handleInputValue}
+                                 showAlertMessage = {this.showAlertMessage}
+
                     />
             }
             default: {

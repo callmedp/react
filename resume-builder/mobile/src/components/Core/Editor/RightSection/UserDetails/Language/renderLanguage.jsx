@@ -1,46 +1,61 @@
 import React from 'react';
-import {Field} from "redux-form";
-import {renderField, renderSelect} from "../../../../../FormHandler/formFieldRenderer.jsx";
-import {languageNewData} from "../../../../../../Utils/addnewData"
+import { Field } from "redux-form";
+import { renderField, renderSelect } from "../../../../../FormHandler/formFieldRenderer.jsx";
+import { languageNewData } from "../../../../../../Utils/addnewData"
 
 const renderLanguage = ({
-                            fields, 
-                            meta: {touched, error, submitFailed},
-                            handleSubmit,
-                            handleAddition,
-                                eventClicked,
-                            deleteLanguage,
-                            changeOrderingUp,
-                            changeOrderingDown,
-                            editHeading,
-                            heading,
-                            headingChange,
-                            editHeadingClick,
-                            context,
-                            entity_preference_data
-                        }) => {
+    fields,
+    meta: { touched, error, submitFailed },
+    handleSubmit,
+    handleAddition,
+    eventClicked,
+    deleteLanguage,
+    changeOrderingUp,
+    changeOrderingDown,
+    editHeading,
+    heading,
+    headingChange,
+    editHeadingClick,
+    context,
+    entity_preference_data,
+    showAlertMessage
+}) => {
     return (
-        
+
         <div className="buildResume__wrap pb-0">
             <div className="buildResume__heading heading">
                 <div className="heading__info">
-                {!editHeading ?
+                    {!editHeading ?
                         <React.Fragment>
                             <h1 className="heading-style">{heading}</h1>
                             <i className="sprite icon--edit" onClick={editHeadingClick.bind(true)}></i>
-                        </React.Fragment>:
+                        </React.Fragment> :
                         <React.Fragment>
                             <input type="text" autoFocus defaultValue={heading} maxLength={'20'}
-                                    onChange={(event) => context.setState({heading:event.target.value})} />
-                            <i className="sprite icon--editTick" 
-                                onClick={()=>{headingChange(entity_preference_data,heading,8);context.setState({editHeading:false})}}></i>
+                                onChange={(event) => context.setState({ heading: event.target.value })} />
+                            <i className="sprite icon--editTick"
+                                onClick={() => { headingChange(entity_preference_data, heading, 8); context.setState({ editHeading: false }) }}></i>
                         </React.Fragment>
                     }
                 </div>
                 {!editHeading ?
                     <button role="button" className="btn btn__round btn--outline"
-                        onClick={handleSubmit(handleAddition.bind(this,fields,languageNewData(fields),0,'language',eventClicked,'Languages'))}
-                        type={'button'} >+ Add new</button>:''
+                        onClick={
+                            handleSubmit((values) => {
+                                let skipAddition = false;
+                                (values && values.list || []).forEach(el => {
+                                    if (!el.name) {
+                                        skipAddition = true;
+                                    }
+                                })
+                                if (!skipAddition) {
+                                    handleAddition(fields, languageNewData(fields), 0, 'language', eventClicked, 'Languages')
+                                }
+                                else {
+                                    showAlertMessage()
+                                }
+                            })}
+                        type={'button'} >+ Add new</button> : ''
                 }
             </div>
             {fields.map((member, index) => {
@@ -50,19 +65,19 @@ const renderLanguage = ({
                             <h2>{fields.get(index).name || 'Language'}</h2>
                             <ul className="subHeading__control">
                                 <li className="subHeading__delete">
-                                    <span  className={"sprite icon--delete " +(fields.length === 1 && !fields.get(index).id ? "hide":"")}
-                                     onClick={(event) => deleteLanguage(index, fields, event)}
-                                     role="button"></span>
+                                    <span className={"sprite icon--delete " + (fields.length === 1 && !fields.get(index).id ? "hide" : "")}
+                                        onClick={(event) => deleteLanguage(index, fields, event)}
+                                        role="button"></span>
                                 </li>
-                                {index === 0 ? '':
+                                {index === 0 ? '' :
                                     <li className="subHeading__btn"
-                                        onClick={(event) =>{fields=changeOrderingUp(index, fields, event);context.setState({fields})}}>
+                                        onClick={(event) => { fields = changeOrderingUp(index, fields, event); context.setState({ fields }) }}>
                                         <i className="sprite icon--upArrow"></i>
                                     </li>
                                 }
-                                {index === fields.length-1 ? '':
+                                {index === fields.length - 1 ? '' :
                                     <li className="subHeading__btn"
-                                        onClick={(event) =>{fields=changeOrderingDown(index, fields, event);context.setState({fields})}}>
+                                        onClick={(event) => { fields = changeOrderingDown(index, fields, event); context.setState({ fields }) }}>
                                         <i className="sprite icon--downArrow"></i>
                                     </li>
                                 }
@@ -71,12 +86,12 @@ const renderLanguage = ({
 
                         <ul className="form pb-0">
                             <li className="form__group">
-                                <Field component={renderField} label={"Language name"}  type={"text"} name={`${member}.name`}
-                                    id={`${member}.name`} prepend={false} className="form__input" maxLength={'50'}/>
+                                <Field component={renderField} label={"Language name"} type={"text"} name={`${member}.name`}
+                                    id={`${member}.name`} prepend={false} className="form__input" maxLength={'50'} />
                             </li>
-                            
+
                             <li className="form__group">
-                                <Field component={renderSelect} label={"Skill rating (out of 10)"} name={`${member}.proficiency`} 
+                                <Field component={renderSelect} label={"Skill rating (out of 10)"} name={`${member}.proficiency`}
                                     id={`${member}.proficiency`} className="form__input" prepend={false}>
                                     <option value="">Choose</option>
                                     <option value="1" >1</option>
@@ -94,9 +109,10 @@ const renderLanguage = ({
                         </ul>
 
                     </div>
-            )})}
+                )
+            })}
         </div>
-    
+
     )
 }
 

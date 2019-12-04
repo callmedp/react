@@ -58,14 +58,27 @@ class Language extends Component {
         const {generateResumeAlert,bulkUpdateOrCreate,history} = this.props
         const {list} = values;
         if (list.length) {
-            await bulkUpdateOrCreate(list);
-            this.setState({
-                submit: true
+            // skip the api call if there is a certain field which is required but empty (We skipped validation intentionally)
+            let skipApiCall = false;
+            
+            list.map(el => {
+                if(! el.name){
+                    skipApiCall = true;
+                }
+                return; 
             })
-            if (entityLink) history.push(entityLink);
-            else{
-                generateResumeAlert()
+            if(!skipApiCall){
+                await bulkUpdateOrCreate(list);
             }
+            
+        }
+        this.setState({
+            submit: true
+        })
+        
+        if (entityLink) history.push(entityLink);
+        else{
+            generateResumeAlert()
         }
     }
 
@@ -113,7 +126,8 @@ class Language extends Component {
         const {
             handleSubmit,userInfo:{order_data}, ui: {loader}, isEditable,
             editHeading, saveTitle, entityName, nextEntity,eventClicked,
-            showAlertModal,history, changeOrderingUp, changeOrderingDown, handleInputValue
+            showAlertModal,history, changeOrderingUp, changeOrderingDown, handleInputValue,
+            showAlertMessage
         } = this.props;
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
@@ -133,7 +147,7 @@ class Language extends Component {
                     entityName={entityName}
                     expanded={this.state.active}
                     handleInputValue={handleInputValue}
-
+                    showAlertMessage={showAlertMessage}
                 />
 
                 <SavePreviewButtons 

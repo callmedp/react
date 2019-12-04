@@ -1,12 +1,12 @@
-import React, {Component} from 'react';
-import {reduxForm, FieldArray} from "redux-form";
+import React, { Component } from 'react';
+import { reduxForm, FieldArray } from "redux-form";
 import validate from "../../../../../FormHandler/validtaions/education/validate";
 import * as actions from "../../../../../../store/education/actions";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import moment from "moment";
 import PreviewModal from "../../../Preview/changeTemplateModal";
 import renderEducation from "./renderEducation"
-import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
+import { scrollOnErrors } from "../../../../../../Utils/srollOnError"
 import BottomCTC from '../../../../../Common/BottomCTC/bottom-ctc';
 import Subscribe from '../../../RightSection/subscribe';
 
@@ -18,8 +18,8 @@ class Education extends Component {
         this.deleteEducation = this.deleteEducation.bind(this);
         this.state = {
             'editHeading': false,
-            'heading' : '',
-            'submit' : false,
+            'heading': '',
+            'submit': false,
             'till_today': [],
         }
         this.editHeadingClick = this.editHeadingClick.bind(this);
@@ -29,48 +29,61 @@ class Education extends Component {
 
     async handleSubmit(values) {
         values = this.state.fields ? this.state.fields : values.list
-        let {sidenav:{listOfLinks,currentLinkPos},bulkUpdateUserEducation,updateCurrentLinkPos,history,
-                generateResumeAlert} = this.props
+        let { sidenav: { listOfLinks, currentLinkPos }, bulkUpdateUserEducation, updateCurrentLinkPos, history,
+            generateResumeAlert } = this.props
         currentLinkPos++
-        this.setState({submit:true})
-        await bulkUpdateUserEducation(values);
-         if(currentLinkPos === listOfLinks.length){
+        if (values.length) {
+            // skip the api call if there is a certain field which is required but empty (We skipped validation intentionally)
+            let skipApiCall = false;
+
+            values.map(el => {
+                if (!el.institution_name) {
+                    skipApiCall = true;
+                }
+                return;
+            })
+            if (!skipApiCall) {
+                await bulkUpdateUserEducation(values);
+            }
+        }
+        this.setState({ submit: true })
+        if (currentLinkPos === listOfLinks.length) {
             currentLinkPos = 0
             generateResumeAlert()
         }
-        else{
-            updateCurrentLinkPos({currentLinkPos})
-            history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)    
+        else {
+            updateCurrentLinkPos({ currentLinkPos })
+            history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
         }
-        
+
     }
 
     tillTodayDisable(index, checked, e) {
         e.stopPropagation();
-        let {till_today} = this.state
+        let { till_today } = this.state
         till_today[parseInt(index)] = checked
     }
 
-    async updateInfoBeforeLoss(){
+    async updateInfoBeforeLoss() {
 
-        if(!this.state.submit){
-            const {initialValues} =this.props
-            
+        if (!this.state.submit) {
+            const { initialValues } = this.props
+
             const form_data = this.props.info.form.education;
             let error = false
-            let error_values =form_data["syncErrors"]
-            if(error_values){
-                for(let i of  error_values['list']){
-                    for(let j of Object.keys(i)){
-                        if(i[j]){
-                            error =true
+            let error_values = form_data["syncErrors"]
+            if (error_values) {
+                for (let i of error_values['list']) {
+                    for (let j of Object.keys(i)) {
+                        if (i[j]) {
+                            error = true
                             break;
                         }
                     }
                 }
             }
-            if(!error && JSON.stringify(initialValues)!==JSON.stringify(form_data['values'])){
-                
+            if (!error && JSON.stringify(initialValues) !== JSON.stringify(form_data['values'])) {
+
                 const values = this.props.handleOrdering(form_data['values'])
                 await this.props.bulkUpdateUserEducation(values.list)
             }
@@ -81,8 +94,8 @@ class Education extends Component {
         this.updateInfoBeforeLoss()
     }
 
-    editHeadingClick(){
-        this.setState({editHeading:true})
+    editHeadingClick() {
+        this.setState({ editHeading: true })
     }
 
 
@@ -92,22 +105,22 @@ class Education extends Component {
         for (let i of this.props.initialValues.list) {
             till_today.push(i.is_pursuing)
         }
-        this.setState({till_today})
+        this.setState({ till_today })
         if (this.props.personalInfo.entity_preference_data.length) {
-            this.setState({heading : this.props.personalInfo.entity_preference_data[1].entity_text})
+            this.setState({ heading: this.props.personalInfo.entity_preference_data[1].entity_text })
         }
     }
 
     componentDidUpdate(prevProps) {
         if (this.props.personalInfo.entity_preference_data !== prevProps.personalInfo.entity_preference_data) {
-            this.setState({heading : this.props.personalInfo.entity_preference_data[1].entity_text})
+            this.setState({ heading: this.props.personalInfo.entity_preference_data[1].entity_text })
         }
         if (this.props.initialValues.list !== prevProps.initialValues.list) {
             let till_today = []
             for (let i of this.props.initialValues.list) {
                 till_today.push(i.is_pursuing)
             }
-            this.setState({till_today})
+            this.setState({ till_today })
         }
     }
 
@@ -116,7 +129,7 @@ class Education extends Component {
         const education = fields.get(index);
         fields.remove(index);
         if (education && education.id) {
-            
+
             this.props.removeEducation(education.id)
         }
     }
@@ -124,34 +137,38 @@ class Education extends Component {
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {updateAlertModalStatus,handleSubmit,submitting,personalInfo:{order_data,entity_preference_data},headingChange,history,changeOrderingUp,changeOrderingDown,eventClicked} = this.props;
-        const {editHeading,heading,till_today} =this.state;
-        return(
+        const { updateAlertModalStatus, handleSubmit, submitting, personalInfo: { order_data, entity_preference_data }, 
+        headingChange, history, changeOrderingUp, changeOrderingDown, eventClicked , showAlertMessage
+    } = this.props;
+        const { editHeading, heading, till_today } = this.state;
+        return (
             <div className="buildResume">
-                <form onSubmit={handleSubmit(this.handleSubmit)}> 
-                    <PreviewModal {...this.props}/>
-                    <Subscribe {...this.props}/>
+                <form onSubmit={handleSubmit(this.handleSubmit)}>
+                    <PreviewModal {...this.props} />
+                    <Subscribe {...this.props} />
                     <FieldArray name={'list'}
-                                handleSubmit={handleSubmit}
-                                handleAddition={this.props.handleAddition}
-                                deleteEducation={this.deleteEducation}
-                                changeOrderingUp={changeOrderingUp}
-                                changeOrderingDown={changeOrderingDown}
-                                eventClicked={eventClicked}
-                                component={renderEducation}
-                                headingChange={headingChange}
-                                entity_preference_data={entity_preference_data}
-                                editHeading={editHeading}
-                                editHeadingClick={this.editHeadingClick}
-                                heading ={heading}
-                                context={this}
-                                till_today={till_today}
-                                tillTodayDisable={this.tillTodayDisable}/> 
+                        handleSubmit={handleSubmit}
+                        handleAddition={this.props.handleAddition}
+                        deleteEducation={this.deleteEducation}
+                        changeOrderingUp={changeOrderingUp}
+                        changeOrderingDown={changeOrderingDown}
+                        eventClicked={eventClicked}
+                        component={renderEducation}
+                        headingChange={headingChange}
+                        entity_preference_data={entity_preference_data}
+                        editHeading={editHeading}
+                        editHeadingClick={this.editHeadingClick}
+                        heading={heading}
+                        context={this}
+                        till_today={till_today}
+                        tillTodayDisable={this.tillTodayDisable}
+                        showAlertMessage={showAlertMessage}
+                         />
                     <ul className="form">
                         <li className="form__group">
-                         <BottomCTC  disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
-                                length={length} pos={pos+1} updateInfoBeforeLoss={this.updateInfoBeforeLoss} 
-                                order_data={order_data} eventClicked={eventClicked} form_name={'Education'}/>
+                            <BottomCTC disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
+                                length={length} pos={pos + 1} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                                order_data={order_data} eventClicked={eventClicked} form_name={'Education'} />
                         </li>
                     </ul>
                 </form>
@@ -163,7 +180,7 @@ class Education extends Component {
 export const EducationForm = reduxForm({
     form: 'education',
     enableReinitialize: true,
-    onSubmitFail: (errors) => scrollOnErrors(errors,'education',-100),
+    onSubmitFail: (errors) => scrollOnErrors(errors, 'education', -100),
     validate
 })(Education);
 
@@ -186,20 +203,20 @@ const mapDispatchToProps = (dispatch) => {
 
         "bulkUpdateUserEducation": (listItems) => {
             listItems = (listItems || []).map(userEducation => {
-                    const {start_date, end_date, course_type} = userEducation;
-                    if (!userEducation['id']) delete userEducation['id'];
-                    userEducation = {
-                        ...userEducation,
-                        ...{
-                            start_date: (start_date && moment(start_date).format('YYYY-MM-DD')) || '',
-                            end_date: (end_date && moment(end_date).format('YYYY-MM-DD')) || null,
-                        }
-                    };
-                    return userEducation;
-                }
+                const { start_date, end_date, course_type } = userEducation;
+                if (!userEducation['id']) delete userEducation['id'];
+                userEducation = {
+                    ...userEducation,
+                    ...{
+                        start_date: (start_date && moment(start_date).format('YYYY-MM-DD')) || '',
+                        end_date: (end_date && moment(end_date).format('YYYY-MM-DD')) || null,
+                    }
+                };
+                return userEducation;
+            }
             );
             return new Promise((resolve, reject) => {
-                return dispatch(actions.bulkUpdateUserEducation({list: listItems,resolve,reject}))
+                return dispatch(actions.bulkUpdateUserEducation({ list: listItems, resolve, reject }))
             })
         }
     }
