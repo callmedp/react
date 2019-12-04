@@ -186,9 +186,9 @@ $.get( `/api/v1/order/order-item-operation/${id}/?include_added_by_id&include_as
       result += `<div class="allactions__box">
                 <p>${oiOperation.oi_status_display}</p>
           <span> ${new Date(oiOperation.created).toLocaleString('en-US', {hour12: true })}</span>`;
-          
-      if(oiOperation.assigned_to){ result +=`<span> assigned to: ${oiOperation.assigned_to_id_data[0].name}</span>`}
-      if(oiOperation.added_by){ result += `<span> assigned by: ${oiOperation.added_by_id_data[0].name}</span>`}
+      if(oiOperation.oi_status == 1){   
+        if(oiOperation.assigned_to){ result +=`<span> assigned to: ${oiOperation.assigned_to_id_data[0].name}</span>`}
+        if(oiOperation.added_by){ result += `<span> assigned by: ${oiOperation.added_by_id_data[0].name}</span>`}}
       result +=`</div>
         ${createDraftResumeDownload(oiOperation)? createDraftResumeDownload(oiOperation):''}
         ${ (oiOperation.oi_status == 4) ? (oiOperation.oi_id_data.oi_draft_path || oiOperation.linkedin)?fileUploadForm(oiOperation):'':'' }`;
