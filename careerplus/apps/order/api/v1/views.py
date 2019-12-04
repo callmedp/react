@@ -76,7 +76,7 @@ class OrderItemOperationApiView(FieldFilterMixin,ListAPIView):
         oi_id = self.kwargs.get('oi_id')
         if oi_id:
             filter_dict.update({'oi__id':oi_id})
-        return OrderItemOperation.objects.filter(**filter_dict)
+        return OrderItemOperation.objects.filter(**filter_dict).order_by('-modified')
 
 
 class MessageCommunicationListApiView(FieldFilterMixin,ListAPIView):

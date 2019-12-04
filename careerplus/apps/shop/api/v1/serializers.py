@@ -1,6 +1,7 @@
 from rest_framework.serializers import ModelSerializer, ValidationError
 from rest_framework import serializers
-from shop.models import Product, Category, PracticeTestInfo
+from shop.models import Product, Category, PracticeTestInfo, Skill, \
+    ProductSkill, ProductScreen, ScreenProductSkill
 from shop.choices import C_ATTR_DICT, S_ATTR_DICT
 
 from shared.rest_addons.mixins import SerializerFieldsMixin
@@ -94,3 +95,74 @@ class PracticeTestInfoCreateSerializer(ModelSerializer):
             result = data.get('result', {})
             level = result.get('pt_level', 'N.A')
         return level
+
+class UpdateProductScreenSkillSerializer(serializers.Serializer):
+    user_type = serializers.ListField()
+    product_type = serializers.ListField()
+    product_id = serializers.IntegerField()
+
+
+    def create(self, validated_data):
+        user_type_skills = validated_data.get('user_type', [])
+        product_type_skills = validated_data.get('product_type', [])
+
+        product = ProductScreen.objects.filter(id=validated_data.get('product_id')).first()
+
+        for skill in user_type_skills:
+            skill, created = Skill.objects.get_or_create(name=skill)
+            productskill, created = ScreenProductSkill.objects.get_or_create(
+                skill=skill, product=product, relation_type=2
+            )
+
+        for skill in product_type_skills:
+            skill, created = Skill.objects.get_or_create(name=skill)
+            productskill, created = ScreenProductSkill.objects.get_or_create(
+                skill=skill, product=product, relation_type=1
+            )
+
+        return product
+
+    def validate_product_id(self, value):
+        if not ProductScreen.objects.filter(id=value).exists():
+            raise serializers.ValidationError("Product with given id does not exits.")
+        return value
+
+    def to_representation(self, instance):
+        return {
+            'skills': ','.join(instance.screenskills.values_list('skill__name', flat=True)),
+        }
+
+class UpdateProductSkillSerializer(serializers.Serializer):
+    user_type = serializers.ListField()
+    product_type = serializers.ListField()
+    product_id = serializers.IntegerField()
+
+
+    def create(self, validated_data):
+        user_type_skills = validated_data.get('user_type', [])
+        product_type_skills = validated_data.get('product_type', [])
+
+        product = Product.objects.filter(id=validated_data.get('product_id')).first()
+
+        for skill in user_type_skills:
+            skill, created = Skill.objects.get_or_create(name=skill)
+            ProductSkill.objects.get_or_create(
+                skill=skill, product=product, relation_type=2
+            )
+
+        for skill in product_type_skills:
+            skill, created = Skill.objects.get_or_create(name=skill)
+            ProductSkill.objects.get_or_create(
+                skill=skill, product=product, relation_type=1
+            )
+        return product
+
+    def validate_product_id(self, value):
+        if not Product.objects.filter(id=value).exists():
+            raise serializers.ValidationError("Product with given id does not exits.")
+        return value
+
+    def to_representation(self, instance):
+        return {
+            'skills': ','.join(instance.productskills.values_list('skill__name', flat=True)),
+        }

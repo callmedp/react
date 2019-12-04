@@ -305,7 +305,7 @@ const mapDispatchToProps = (dispatch) => {
                     'date_of_birth': (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
                     'image': imageURL || (flag ? image : ''),
                     'extracurricular': interest,
-                    'gender': parseInt(gender) === 0 ? '' : gender,
+                    'gender': parseInt(gender || 0) === 0 ? '': gender,
                     'entity_preference_data': (entity_preference_data || []).map(el => el)
                 }
             };
