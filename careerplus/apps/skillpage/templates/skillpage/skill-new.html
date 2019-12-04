@@ -84,15 +84,100 @@
             <input class="form-control" type="search" placeholder="Search course, assesssment…" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0 nav-pad" type="submit"><figure class="b4-icon-search mb-0"></figure></button>
         </form>
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="#">Job assistance</a>
+        <ul class="navbar-nav navbar-right">
+          <li class="nav-item dropdown dropdown-jobs">
+            <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Job assistance</a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="#">Resume Writing</a>
+              <a class="dropdown-item" href="#">International Resume</a>
+              <a class="dropdown-item" href="#">Visual Resume</a>
+              <a class="dropdown-item" href="#">Jobs On The Move</a>
+              <a class="dropdown-item" href="#">Linkedin Profile</a>
+              <a class="dropdown-item" href="#">Featured Profile</a>
+              <a class="dropdown-item" href="#">Background Verification Services</a>
+              <a class="dropdown-item" href="#">Interview Preparation</a>
+              <a class="dropdown-item" href="#">Application Highlighter</a>
+            </div>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Practice test</a>
           </li>
-          <li class="nav-item">
-              <a class="nav-link" href="#">Free resources</a>
+          <li class="nav-item dropdown dropdown-resources">
+              <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Free resources</a>
+              <div class="dropdown-menu category-tab" aria-labelledby="navbarDropdown">
+              <div class="resources-tab">
+                  <ul class="nav nav-tabs" id="myTab" role="tablist">
+                      <li class="nav-item">
+                        <a class="nav-link active" id="resources-tab" data-toggle="tab" href="#tab-links1" role="tab" aria-controls="resources-tab" aria-selected="true">Resume Formats</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="resources-tab" data-toggle="tab" href="#resources-links2" role="tab" aria-controls="resources-tab" aria-selected="false">Resignation Letter Formats</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="resources-tab" data-toggle="tab" href="#resources-links3" role="tab" aria-controls="resources-tab" aria-selected="false">Cover Letter Formats</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="resources-tab" data-toggle="tab" href="#resources-links4" role="tab" aria-controls="resources-tab" aria-selected="false">Resume Templates</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="resources-tab" data-toggle="tab" href="#resources-links5" role="tab" aria-controls="resources-tab" aria-selected="false">Linkedin Summary Example</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="resources-tab" data-toggle="tab" href="#resources-links6" role="tab" aria-controls="resources-tab" aria-selected="false">Career Guidance</a>
+                      </li>
+                  </ul>
+                  <div class="tab-content" id="myTabContent">
+                      <div class="tab-pane fade show active" id="resources-links1" role="tabpanel" aria-labelledby="resources-tab">
+                          <a href="#">Advanced Accounting</a>
+                          <a href="#">Banking</a>
+                          <a href="#">Risk Management</a>
+                          <a href="#">Stock Market Training</a>
+                          <a href="#">Finanacial Reporting and Management</a>
+                          <a href="#">View all</a>
+                      </div>
+                      <div class="tab-pane fade" id="resources-links2" role="tabpanel" aria-labelledby="resources-tab">
+                          <a href="#">Stock Market Training</a>
+                          <a href="#">Finanacial Reporting and Management</a>
+                          <a href="#">Commercial Operation</a>
+                          <a href="#">Investment Banking</a>
+                          <a href="#">GST</a>
+                          <a href="#">View all</a>
+                      </div>
+                      <div class="tab-pane fade" id="resources-links3" role="tabpanel" aria-labelledby="resources-tab">
+                          <a href="#">GST</a>
+                          <a href="#">Advanced Accounting</a>
+                          <a href="#">Banking</a>
+                          <a href="#">Risk Management</a>
+                          <a href="#">Stock Market Training</a>
+                          <a href="#">View all</a>
+                      </div>
+                      <div class="tab-pane fade" id="resources-links4" role="tabpanel" aria-labelledby="resources-tab">
+                          <a href="#">Stock Market Training</a>
+                          <a href="#">Finanacial Reporting and Management</a>
+                          <a href="#">Commercial Operation</a>
+                          <a href="#">Investment Banking</a>
+                          <a href="#">Stock Market Training</a>
+                          <a href="#">View all</a>
+                      </div>
+                      <div class="tab-pane fade" id="resources-links5" role="tabpanel" aria-labelledby="resources-tab">
+                          <a href="#">GST</a>
+                          <a href="#">Advanced Accounting</a>
+                          <a href="#">Banking</a>
+                          <a href="#">Risk Management</a>
+                          <a href="#">Stock Market Training</a>
+                          <a href="#">View all</a>
+                      </div>
+                      <div class="tab-pane fade" id="resources-links6" role="tabpanel" aria-labelledby="resources-tab">
+                          <a href="#">Stock Market Training</a>
+                          <a href="#">Finanacial Reporting and Management</a>
+                          <a href="#">Commercial Operation</a>
+                          <a href="#">Investment Banking</a>
+                          <a href="#">GST</a>
+                          <a href="#">View all</a>
+                      </div>
+                  </div>
+              </div>
+            </div>
           </li>
           <li class="nav-item">
               <a class="nav-link" href="#">Blog</a>
@@ -113,9 +198,8 @@
                   <a class="dropdown-item" href="#">My Inbox</a>
                   <a class="dropdown-item" href="#">My Orders</a>
                   <a class="dropdown-item" href="#">My Wallet</a>
-                  <a class="dropdown-item" href="#">My Referrals
+                  <a class="dropdown-item" href="#">My Referrals</a>
                   <a class="dropdown-item" href="#">abc@hindustantimes.com</a>
-                  </a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="#">Logout</a>
                 </div>
