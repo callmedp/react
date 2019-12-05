@@ -121,6 +121,7 @@ class Buy extends Component {
         link.click();
         link.parentNode.removeChild(link);
         hideGenerateResumeModal()
+        this.setState({'freeDownloadButtonDisable':false})
     }
 
     async freeResumeRequest() {
