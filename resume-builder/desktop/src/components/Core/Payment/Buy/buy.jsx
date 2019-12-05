@@ -33,7 +33,7 @@ export class Buy extends Component {
         super(props);
         this.state = {
             'checked': 'product1',
-            'resumeDownloadCount':0,
+            'resumeDownloadCount':-1,
             'freeDownloadButtonDisable':false,
         }
         if (parseInt(localStorage.getItem('userExperience') || 0) >= 4) {
@@ -71,7 +71,7 @@ export class Buy extends Component {
 
     componentDidUpdate(prevProps) {
         if (this.props.userInfo !== prevProps.userInfo ) {
-            if(this.state.resumeDownloadCount && (this.state.resumeDownloadCount< this.props.userInfo.resume_creation_count)){
+            if(this.state.resumeDownloadCount >= 0 && (this.state.resumeDownloadCount< this.props.userInfo.resume_creation_count)){
                 clearInterval(this.state.timerId)
                 this.downloadRequestedResume();
             }

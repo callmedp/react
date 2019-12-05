@@ -37,7 +37,7 @@ class Buy extends Component {
             'checked': 'product1',
             'modal_status': false,
             'template_id': '',
-            'resumeDownloadCount':0,
+            'resumeDownloadCount':-1,
             'freeDownloadButtonDisable':false,
         }
         this.closeModalStatus = this.closeModalStatus.bind(this);
@@ -103,7 +103,7 @@ class Buy extends Component {
 
     componentDidUpdate(prevProps) {
         if (this.props.userInfo !== prevProps.userInfo ) {
-            if(this.state.resumeDownloadCount && (this.state.resumeDownloadCount< this.props.userInfo.resume_creation_count)){
+            if(this.state.resumeDownloadCount >= 0 && (this.state.resumeDownloadCount< this.props.userInfo.resume_creation_count)){
                 clearInterval(this.state.timerId)
                 this.downloadRequestedResume();
             }

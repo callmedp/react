@@ -32,7 +32,7 @@ class CandidateEntityPreferenceSerializer(serializers.Serializer):
 class CandidateSerializer(serializers.ModelSerializer):
     entity_preference_data = serializers.JSONField(required=False, allow_null=True)
     order_data = serializers.DictField(read_only=True)
-    free_resume_downloads = serializers.IntegerField()
+    free_resume_downloads = serializers.IntegerField(read_only=True)
 
     def validate_entity_preference_data(self, entity_preference_data):
         if not isinstance(entity_preference_data, list):
