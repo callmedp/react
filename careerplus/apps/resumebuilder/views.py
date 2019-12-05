@@ -27,4 +27,6 @@ class FreeResumeDownload(View):
 
     def post(self,request,*args,**kwargs):
         cache.set('free_resume_downloads',request.POST.get('free_downloads',1))
-        return HttpResponseRedirect('/admin/')
+        free_resume_downloads = cache.get('free_resume_downloads', 1)
+        return render(request, self.template_name, {'free_resume_downloads':
+                                        free_resume_downloads,'success':True})

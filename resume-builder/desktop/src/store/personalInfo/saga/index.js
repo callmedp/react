@@ -1,6 +1,6 @@
 import {Api} from './Api';
 
-import {takeLatest, put, call} from "redux-saga/effects";
+import {takeLatest,takeEvery, put, call} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
 
@@ -211,7 +211,7 @@ function* updateEntityPreference(action) {
 }
 
 export default function* watchPersonalInfo() {
-    yield takeLatest(Actions.FETCH_PERSONAL_INFO, getPersonalDetails);
+    yield takeEvery(Actions.FETCH_PERSONAL_INFO, getPersonalDetails);
     yield takeLatest(Actions.UPDATE_PERSONAL_INFO, updatePersonalDetails);
     yield takeLatest(Actions.FETCH_IMAGE_URL, fetchImageUrl);
     yield takeLatest(Actions.UPDATE_ENTITY_PREFERENCE, updateEntityPreference);

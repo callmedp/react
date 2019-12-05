@@ -31,10 +31,16 @@
             </td>
         </tr>
         
-        </tr>
-            <td colspan="2">
+        <tr>
+            <td>
                 <input type="submit">
             </td>
+            {% if success %}
+                <td id="success-message">
+                    <span style="color: green;font-size: 0.8rem;display: block;margin-top: 12px;">Successfully updated</span>
+                </td>
+            {% endif %}
+            
         </tr>
 
 
@@ -43,4 +49,6 @@
 </div>
 
 {% endblock %}
+
+
 

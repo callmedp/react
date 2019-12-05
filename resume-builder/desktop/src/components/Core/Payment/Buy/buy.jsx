@@ -118,7 +118,7 @@ export class Buy extends Component {
     }
 
     pollingUserInfo(){
-        const timer = setInterval(this.timerFunction, 10000);
+        const timer = setInterval(this.timerFunction, 2000);
         const startTime = new Date().getTime();
         this.setState({'timerId':timer,'pollingStartTIme':startTime})
     } 
