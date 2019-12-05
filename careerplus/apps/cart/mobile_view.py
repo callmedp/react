@@ -7,7 +7,7 @@ from decimal import Decimal
 
 from .mixins import CartMixin
 from .models import Cart
-from wallet.models import Wallet, WalletTransaction
+from wallet.models import Wallet, WalletTransaction, PointTransaction
 
 
 class RemoveFromCartMobileView(View, CartMixin):
@@ -52,6 +52,7 @@ class RemoveFromCartMobileView(View, CartMixin):
                         else:
                             line_obj.delete()
                     data['status'] = 1
+    
                     cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
                     total_amount = cart_dict.get('total_amount', Decimal(0))  
                     # payment_dict = self.getPayableAmount(cart_obj, cart_dict.get('total_amount'))
@@ -62,10 +63,6 @@ class RemoveFromCartMobileView(View, CartMixin):
                         wal_txn = wal_txn[0]
                         intial_redeemed_points = wal_txn.point_value
                     if intial_redeemed_points > total_amount:
-                        # wal_txn = cart_obj.wallettxn.filter(
-                        #     txn_type=2).order_by('-created').select_related('wallet')
-                        # if wal_txn:
-                        #     wal_txn = wal_txn[0]
                         points_used = wal_txn.usedpoint.all().order_by('point__pk')
                         for pts in points_used:
                             r_point = pts.point
@@ -84,18 +81,8 @@ class RemoveFromCartMobileView(View, CartMixin):
                         wal_txn.current_value = wal_txn.wallet.get_current_amount()
                         wal_txn.save()
 
-                        # payment_dict = self.getPayableAmount(cart_obj, cart_dict.get('total_amount'))
-                        # point = payment_dict["redeemed_reward_point"]
-                        # cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
-                        # total_amount = cart_dict.get('total_amount', Decimal(0))
-                        # if point >= total_amount:
                         point = total_amount
                         points = wal_obj.point.filter(status=1).order_by('created')
-                        # total = Decimal(0)
-                        # for pts in points:
-                        #     if pts.expiry >= timezone.now():
-                        #         total += pts.current
-                        # wal_total = total
                         wallettxn = WalletTransaction.objects.create(
                             wallet=wal_obj, cart=cart_obj, txn_type=2, point_value=point)
                         for pts in points:
