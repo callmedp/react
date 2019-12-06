@@ -1,4 +1,5 @@
-from django import template                                                                      
+from django import template      
+from django.utils.html import strip_tags                                                                
 import math
 register = template.Library()
 
@@ -40,3 +41,31 @@ def get_value_from_dict(value, key):
         value = value[0]
         value = eval(value)
         return value.get(key,'')
+
+
+''' this fucntion is to convert the string data in the format
+    eg. '<p><strong>.....</strong></p><p>m...</p> <p><strong>.....</strong></p><p>m...</p> <p><strong>.....</strong></p><p>m...</p>'
+    to a list with heading and content like this
+    [{heading:`<p><strong>.....</strong></p>`, content:`<p>m...</p>}`,....]
+
+'''
+@register.filter(name='get_faq_list')
+def get_faq_list(string):
+    list_data = [i for i in string.split('\n') if not i.find('<p>')==-1]
+    return [{'heading':list_data[i],'content':list_data[i+1]} if len(list_data) >i+1 \
+                else {'heading':list_data[i]} for i in range(0,len(list_data),2)]
+
+'''
+this function is to convert the description into a list 
+'''
+@register.filter(name='format_description')
+def format_description(string):
+    return  [strip_tags(i) + '</br></br>' for i in string.split('\n') if not i.find('<p>')==-1]
+
+
+
+
+
+
+
+

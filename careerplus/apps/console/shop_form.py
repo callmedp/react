@@ -211,6 +211,9 @@ class SubHeaderCategoryForm(forms.ModelForm):
         self.fields['heading'].widget.attrs['data-parsley-length'] = "[1, 100]"
         self.fields['heading'].widget.attrs['data-parsley-length-message'] = 'Length should be between 1-30 characters.'
 
+        self.fields['heading_choices'].widget.attrs['class'] = form_class
+        # self.fields['heading_choices'].widget.attrs['data-parsley-notdefault'] = ''
+
         self.fields['description'].widget.attrs['class'] = form_class
         self.fields['description'].widget.attrs['maxlength'] = 100
         self.fields['description'].widget.attrs['data-parsley-trigger'] = 'change'
@@ -225,7 +228,7 @@ class SubHeaderCategoryForm(forms.ModelForm):
     class Meta:
         model = SubHeaderCategory
         fields = (
-            'heading', 'description', 'active', 'display_order')
+            'heading', 'description', 'active', 'display_order','heading_choices')
 
     def clean_heading(self):
         heading = self.cleaned_data.get('heading', '').strip()

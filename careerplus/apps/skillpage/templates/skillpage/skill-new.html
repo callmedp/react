@@ -424,13 +424,17 @@
       <div class="col-sm-9">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb mt-40 mb-20">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="#">Sales and Marketing</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Digital Marketing</li>
+          {% for bread in breadcrumbs %}
+            {% if bread.url %}
+              <li class="breadcrumb-item"><a href="{{bread.url}}">{{bread.name}}</a></li>
+            {% else %}
+              <li class="breadcrumb-item active" aria-current="page">{{bread.name}}</li>
+            {% endif %}
+          {% endfor %}
           </ol>
         </nav>
 
-        <h1 class="white head-ht">Digital Marketing Courses & <br/>Certifications</h1>
+        <h1 class="white head-ht">{{category.name|title}} Courses & <br/>Certifications</h1>
 
         <div class="row mt-20 mb-20">
           <div class="col">
@@ -502,7 +506,10 @@
             <div class="skill-about">
               <h2>About Digital Marketing</h2>
               <p id="expand-content" class="collapse" aria-expanded="false">
-                Digital Marketing is the marketing and advertising in the digital space fulfilling all the duties of traditional marketing and beyond it. And as the digital landscape gains reach and complexity, Digital Marketing follows. Thus, the demand for Certified Digital Marketing Professionals. Digital Marketing is the marketing and advertising in the digital space fulfilling all the duties of traditional marketing and beyond it. And as the digital landscape gains reach and complexity, Digital Marketing follows. Thus, the demand for Certified Digital Marketing Professionals. 
+                {% comment %} Digital Marketing is the marketing and advertising in the digital space fulfilling all the duties of traditional marketing and beyond it. And as the digital landscape gains reach and complexity, Digital Marketing follows. Thus, the demand for Certified Digital Marketing Professionals. Digital Marketing is the marketing and advertising in the digital space fulfilling all the duties of traditional marketing and beyond it. And as the digital landscape gains reach and complexity, Digital Marketing follows. Thus, the demand for Certified Digital Marketing Professionals.  {% endcomment %}
+                {% for description in  category.description|format_description%}
+                  {{description|safe}}
+                {% endfor %} 
               </p>
               <a role="button" class="collapsed" data-toggle="collapse" href="#expand-content" aria-expanded="false" aria-controls="expand-content"></a>
             </div>
@@ -515,17 +522,20 @@
                 <h2>Popular courses</h2>
                 <a class="btn btn-outline-primary ml-auto" href="#" role="button">View Courses</a>
                 <div class="d-flex mb-10">
-                  <div class="col">
-                    <div class="media">
-                      <figure class="mr-20 shadow-icon">
-                          <img aria-label="Digital Marketing Master Training Course" class="img-fluid" src="https://static1.shine.com/l/m/product_image/656/1518077922_6747.png" alt="Digital Marketing Master Training Course">
-                      </figure>
-                      <figcaption class="media-body">
-                          <a href="#">Certified Email Marketing Professionals</a>
-                      </figcaption>
+                  {% for product in top_3_products %}
+                    <div class="col">
+                      <div class="media">
+                        <figure class="mr-20 shadow-icon">
+                          <img aria-label="{{product.pNm}}" class="img-fluid" src="{{product.pImg}}" alt="{{product.pNm}}">
+                        </figure>
+                        <figcaption class="media-body">
+                            <a href="{{product.pURL}}">{{product.pNm}}</a>
+                        </figcaption>
+                      </div>
                     </div>
-                  </div>
-                  <div class="col">
+                  {% endfor %}
+                  
+                  {% comment %} <div class="col">
                     <div class="media">
                       <figure class="mr-20 shadow-icon">
                           <img aria-label="Email Marketing Master Training Course" class="img-fluid" src="https://static1.shine.com/l/m/product_image/801/1508869287_7378.png" alt="Email Marketing Master Training Course">
@@ -544,73 +554,64 @@
                           <a href="#">Digital Marketing Professionals </a>
                       </figcaption>
                     </div>
-                  </div>
+                  </div> {% endcomment %}
                 </div>
               </div>
             </div>
           </section>
 
           <!-- objective section -->
-          <section id="objective" class="col-sm-12">
-            <div class="objective">
-              <h2>Objective</h2>
-                <ul class="objective__list collapse" id="expand-list" aria-expanded="false">
-                  <li>Understand the meaning of business  analytics and its importance in the industry.</li>
-                  <li>Learn how to analyze with complex datasets using pivot tables and slicers.</li>
-                  <li>Represent your findings using charts and dashboards.</li>
-                  <li>Understand the meaning of business  analytics and its importance in the industry.</li>
-                  <li>Learn how to analyze with complex datasets using pivot tables and slicers.</li>
-                  <li>Represent your findings using charts and dashboards.</li>
-                </ul>
-                <a role="button" class="collapsed ml-15" data-toggle="collapse" href="#expand-list" aria-expanded="false" aria-controls="expand-list"></a>
-            </div>
-          </section>
+          {% if 'objective'|get_value:subheading %}
+            {% with objective='objective'|get_value:subheading %}
+              <section id="objective" class="col-sm-12">
+                <div class="objective">
+                  <h2>{{objective.heading}}</h2>
+                  {{objective.get_sub_heading_description_with_attr_ul|safe}}
+                    <a role="button" class="collapsed ml-15" data-toggle="collapse" href="#expand-list" aria-expanded="false" aria-controls="expand-list"></a>
+                </div>
+              </section>
+            {% endwith %}
+          {% endif %}
+          
 
           <!-- who should learn? section -->
-          <section id="who-learn" class="col-sm-12">
-            <div class="who-should-learn">
-              <h2>Who should learn?</h2>
-                <ul class="who-should-learn__list d-flex flex-wrap">
-                  <li>Any professional from Business Analytics/Business Intelligence background</li>
-                  <li>Engineering or Non-Engineering aspirants wanting to become a Data Scientist</li>
-                  <li>Managers from Analytical background and those who are leading a team of Analysts</li>
-                  <li>Any Data Analyst or Software Developer aspiring to be a Data Scientist</li>
-                </ul>
-            </div>
-          </section>
+          {% if 'who-should-learn'|get_value:subheading %}
+            {% with who_should_learn='who-should-learn'|get_value:subheading %}
+            <section id="who-learn" class="col-sm-12">
+              <div class="who-should-learn">
+                <h2>{{who_should_learn.heading}}</h2>
+                {{who_should_learn.get_sub_heading_description_with_attr_ul|safe}}
+              </div>
+            </section>
+            {% endwith %}
+          {% endif %}
 
           <!-- skills you will gain section -->
-          <section id="skill-learn" class="col-sm-12">
-            <div class="skill-gain">
-              <h2>Skills you will gain</h2>
-              <p class="mb-0 mt-30">
-                <span class="badge badge-pill badge-purple">Content Marketing</span>
-                <span class="badge badge-pill badge-purple">Email Marketing</span>
-                <span class="badge badge-pill badge-purple">Content Marketing</span>
-                <span class="badge badge-pill badge-purple">Email Marketing</span>
-                <span class="badge badge-pill badge-purple">Adwords</span>
-                <span class="badge badge-pill badge-purple">Social Media</span>
-                <span class="badge badge-pill badge-purple">SEO</span>
-                <span class="badge badge-pill badge-purple">Adwords</span>
-                <span class="badge badge-pill badge-purple">Social Media</span>
-                <span class="badge badge-pill badge-purple">SEO</span>
-                <span class="badge badge-pill badge-purple">Copywriting</span>
-                <span class="badge badge-pill badge-purple">Digital Marketing</span>
-                <span class="badge badge-pill badge-purple">Copywriting</span>
-                <span class="badge badge-pill badge-purple">Digital Marketing</span>
-              </p>
-            </div>
-          </section>
+          {% if career_outcomes %}
+            <section id="skill-learn" class="col-sm-12">
+              <div class="skill-gain">
+                <h2>Skills you will gain</h2>
+                <p class="mb-0 mt-30">
+                {% for outcome in career_outcomes %}
+                  <span class="badge badge-pill badge-purple">{{outcome}}</span>
+                {% endfor %}
+                </p>
+              </div>
+            </section>
+          {% endif %}
+          
 
           <!-- test your skills section -->
-          <section class="col-sm-12">
-            <div class="test-skill">
-              <img src="{% static 'shinelearn/images/test-skill.png' %}" class="img-fluid float-right" alt="Test your skills">
-              <h2>Test your skills</h2>
-              <p>Take our free practice test to test your skill level in <strong>Digital Marketing</strong></p>
-              <a class="btn btn-primary mt-10" href="#" role="button">Take free test</a>
-            </div>
-          </section>
+          {% if category.assessment_test_count %}
+            <section class="col-sm-12">
+              <div class="test-skill">
+                <img src="{% static 'shinelearn/images/test-skill.png' %}" class="img-fluid float-right" alt="Test your skills">
+                <h2>Test your skills</h2>
+                <p>Take our free practice test to test your skill level in <strong>{{category.heading}}</strong></p>
+                <a class="btn btn-primary mt-10" href="{% url 'assessment:vskill-subcategory' slug=category.slug  %}" role="button">Take free test</a>
+              </div>
+            </section>
+          {% endif %}
 
           <!-- our impact section -->
           <section id="impact" class="col-sm-12">
@@ -652,175 +653,69 @@
           <section class="col-sm-12">
             <div class="courses-assesment-tab">
               <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item">
-                  <a class="nav-link active" id="courses-tab" data-toggle="tab" href="#courses" role="tab" aria-controls="courses" aria-selected="true">
-                    <h2>Courses (18)</h2>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="assessments-tab" data-toggle="tab" href="#assessments" role="tab" aria-controls="assessments" aria-selected="false">
-                    <h2>Assessments (25)</h2>
-                  </a>
-                </li>
+                {% if product_count %}
+                  <li class="nav-item">
+                    <a class="nav-link active" id="courses-tab" data-toggle="tab" href="#courses" role="tab" aria-controls="courses" aria-selected="true">
+                      <h2>Courses ({{product_count}})</h2>
+                    </a>
+                  </li>
+                {% endif %}
+                {% if assesment_count %}
+                  <li class="nav-item">
+                    <a class="nav-link  {% if not product_count %}active{% endif %}" id="assessments-tab" data-toggle="tab" href="#assessments" role="tab" aria-controls="assessments" aria-selected="false">
+                      <h2>Assessments ({{assesment_count}})</h2>
+                    </a>
+                  </li>
+                {% endif %}
+                
               </ul>
               <div class="tab-content listing" id="myTabContent">
                 <div class="tab-pane fade show active" id="courses" role="tabpanel" aria-labelledby="courses-tab">
                     <ul class="list-unstyled">
-                      <li class="media listing__list">
-                        <figure class="listing__image">
-                            <img aria-label="Digital Marketing Master Training Course" class="img-fluid" src="https://static1.shine.com/l/m/product_image/656/1518077922_6747.png" alt="Digital Marketing Master Training Course">
-                        </figure>
-                        
-                        <div class="media-body">
-                          <h3><a href="#">Email Marketing Master Training Course</a></h5>
-                            <div class="rating">
-                              <i class="b4-icon-star"></i>
-                              <i class="b4-icon-star"></i> 
-                              <i class="b4-icon-star"></i>
-                              <i class="b4-icon-star"></i>
-                              <i class="b4-icon-star-blank"></i>
-                              <span class="rating__output">4/5</span>
-                            </div>
+                      {% for product in products %}
+                        <li class="media listing__list">
+                          <figure class="listing__image">
+                              <img aria-label="{{product.pNm}}" class="img-fluid" src="{{product.pImg}}" alt="{{product.pNm}}">
+                          </figure>
+                          
+                          <div class="media-body">
+                            <h3><a href="{{product.pURL}}">{{product.pNm}}</a></h3>
+                              <div class="rating">
+                                {% for rating in product.pStar %}
+                                  {% if rating == "*" %}
+                                    <i class="b4-icon-star"></i>
+                                  {% elif rating == "+" %}
+                                    {% comment %} <i class="b4-icon-star"></i> {% endcomment %}
+                                  {% elif rating == "*" %}
+                                    <i class="b4-icon-star-blank"></i>
+                                  {% endif %}
+                                {% endfor %}
+                                <span class="rating__output">{{product.pARx|floatformat:1}}/5</span>
+                              </div>
 
-                            <div class="mode mr-30">
-                                Mode 
-                                <span class="mode__name">
-                                    Instructor
-                                </span>
-                            </div>
-                            <div class="provider">
-                                Provider 
-                                <span class="provider__name">
-                                    GetCertGo
-                                </span>
-                            </div>
-                        </div>
+                              <div class="mode mr-30">
+                                  Mode 
+                                  <span class="mode__name">
+                                      Instructor
+                                  </span>
+                              </div>
+                              <div class="provider">
+                                  Provider 
+                                  <span class="provider__name">
+                                      {{product.pPvn}}
+                                  </span>
+                              </div>
+                          </div>
 
-                        <div class="mr-auto courses">
-                          <strong class="courses__price">Rs. 2899/-</strong>
-                        </div>
+                          <div class="mr-auto courses">
+                            <strong class="courses__price">Rs. {{ product.pPin |floatformat:'0' }}/-</strong>
+                          </div>
 
-                        <div class="course-tag">
-                          <span class="course-tag__best">Bestseller</span>
-                        </div>
-                      </li>
-
-                      <li class="media listing__list">
-                        <figure class="listing__image">
-                            <img aria-label="Digital Marketing Test" class="img-fluid" src="https://static1.shine.com/l/m/product_image/3954/1562948482_5538.png" alt="Digital Marketing Test">
-                        </figure>
-                        
-                        <div class="media-body">
-                          <h3><a href="#">Certified Email Marketing Professional</a></h5>
-                            <div class="rating">
-                              <i class="b4-icon-star"></i>
-                              <i class="b4-icon-star"></i> 
-                              <i class="b4-icon-star"></i>
-                              <i class="b4-icon-star"></i>
-                              <i class="b4-icon-star-blank"></i>
-                              <span class="rating__output">4/5</span>
-                            </div>
-
-                            <div class="mode mr-30">
-                                Mode 
-                                <span class="mode__name">
-                                    Instructor
-                                </span>
-                            </div>
-                            <div class="provider">
-                                Provider 
-                                <span class="provider__name">
-                                    GetCertGo
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="mr-auto courses">
-                          <strong class="courses__price">Rs. 21420/-</strong>
-                        </div>
-
-                        <div class="course-tag">
-                          <span class="course-tag__new">Newly added</span>
-                        </div>
-                      </li>
-
-                      <li class="media listing__list">
-                        <figure class="listing__image">
-                            <img aria-label="Digital Marketing Master Training Course" class="img-fluid" src="https://static1.shine.com/l/m/product_image/656/1518077922_6747.png" alt="Digital Marketing Master Training Course">
-                        </figure>
-                        
-                        <div class="media-body">
-                          <h3><a href="#">Email Marketing Master Training Course</a></h5>
-                            <div class="rating">
-                              <i class="b4-icon-star"></i>
-                              <i class="b4-icon-star"></i> 
-                              <i class="b4-icon-star"></i>
-                              <i class="b4-icon-star"></i>
-                              <i class="b4-icon-star-blank"></i>
-                              <span class="rating__output">4/5</span>
-                            </div>
-
-                            <div class="mode mr-30">
-                                Mode 
-                                <span class="mode__name">
-                                    Instructor
-                                </span>
-                            </div>
-                            <div class="provider">
-                                Provider 
-                                <span class="provider__name">
-                                    GetCertGo
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="mr-auto courses">
-                          <strong class="courses__price">Rs. 2899/-</strong>
-                        </div>
-
-                        <div class="course-tag">
-                          <span class="course-tag__best">Bestseller</span>
-                        </div>
-                      </li>
-                      
-                      <li class="media listing__list">
-                        <figure class="listing__image">
-                            <img aria-label="Digital Marketing Test" class="img-fluid" src="https://static1.shine.com/l/m/product_image/3954/1562948482_5538.png" alt="Digital Marketing Test">
-                        </figure>
-                        
-                        <div class="media-body">
-                          <h3><a href="#">Certified Email Marketing Professional</a></h5>
-                            <div class="rating">
-                              <i class="b4-icon-star"></i>
-                              <i class="b4-icon-star"></i> 
-                              <i class="b4-icon-star"></i>
-                              <i class="b4-icon-star"></i>
-                              <i class="b4-icon-star-blank"></i>
-                              <span class="rating__output">4/5</span>
-                            </div>
-
-                            <div class="mode mr-30">
-                                Mode 
-                                <span class="mode__name">
-                                    Instructor
-                                </span>
-                            </div>
-                            <div class="provider">
-                                Provider 
-                                <span class="provider__name">
-                                    GetCertGo
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="mr-auto courses">
-                          <strong class="courses__price">Rs. 21420/-</strong>
-                        </div>
-
-                        <div class="course-tag">
-                          <span class="course-tag__new">Newly added</span>
-                        </div>
-                      </li>
+                          <div class="course-tag">
+                            <span class="course-tag__best">Bestseller</span>
+                          </div>
+                        </li>
+                      {% endfor %}
                     </ul>
                     <div class="d-flex justify-content-center mt-40 mb-30">
                       <a class="btn btn-outline-primary" href="#" role="button">Load more courses</a>
@@ -828,145 +723,46 @@
                 </div>
                 <div class="tab-pane fade" id="assessments" role="tabpanel" aria-labelledby="assessments-tab">
                     <ul class="list-unstyled">
-                      <li class="media listing__list">
-                        <figure class="listing__image">
-                            <img aria-label="Digital Marketing Master Training Course" class="img-fluid" src="https://static1.shine.com/l/m/product_image/656/1518077922_6747.png" alt="Digital Marketing Master Training Course">
-                        </figure>
-                        
-                        <div class="media-body">
-                          <h3><a href="#">Email Marketing Master Training Course</a></h5>
-                            <div class="rating">
-                              <i class="b4-icon-star"></i>
-                              <i class="b4-icon-star"></i> 
-                              <i class="b4-icon-star"></i>
-                              <i class="b4-icon-star"></i>
-                              <i class="b4-icon-star-blank"></i>
-                              <span class="rating__output">4/5</span>
-                            </div>
+                      {% for assesment in assesments %}
+                        <li class="media listing__list">
+                          <figure class="listing__image">
+                              <img aria-label="{{product.pNm}}" class="img-fluid" src="{{product.pImg}}" alt="{{product.pNm}}">
+                          </figure>
+                          
+                          <div class="media-body">
+                            <h3><a href="{{product.pURL}}">{{product.pNm}}</a></h3>
+                              <div class="rating">
+                                {% for rating in product.pStar %}
+                                  {% if rating == "*" %}
+                                    <i class="b4-icon-star"></i>
+                                  {% elif rating == "+" %}
+                                    {% comment %} <i class="b4-icon-star"></i> {% endcomment %}
+                                  {% elif rating == "*" %}
+                                    <i class="b4-icon-star-blank"></i>
+                                  {% endif %}
+                                {% endfor %}
+                                <span class="rating__output">{{product.pARx|floatformat:1}}/5</span>
+                              </div>
 
-                            <div class="mode mr-30">
-                                Mode 
-                                <span class="mode__name">
-                                    Instructor
-                                </span>
-                            </div>
-                            <div class="provider">
-                                Provider 
-                                <span class="provider__name">
-                                    GetCertGo
-                                </span>
-                            </div>
-                        </div>
+                              <div class="mode mr-30">
+                                  Mode 
+                                  <span class="mode__name">
+                                      Instructor
+                                  </span>
+                              </div>
+                              <div class="provider">
+                                  Provider 
+                                  <span class="provider__name">
+                                      {{product.pPvn}}
+                                  </span>
+                              </div>
+                          </div>
 
-                        <div class="mr-auto courses">
-                          <strong class="courses__price">Rs. 2899/-</strong>
-                        </div>
-                      </li>
-
-                      <li class="media listing__list">
-                        <figure class="listing__image">
-                            <img aria-label="Digital Marketing Test" class="img-fluid" src="https://static1.shine.com/l/m/product_image/3954/1562948482_5538.png" alt="Digital Marketing Test">
-                        </figure>
-                        
-                        <div class="media-body">
-                          <h3><a href="#">Certified Email Marketing Professional</a></h5>
-                            <div class="rating">
-                              <i class="b4-icon-star"></i>
-                              <i class="b4-icon-star"></i> 
-                              <i class="b4-icon-star"></i>
-                              <i class="b4-icon-star"></i>
-                              <i class="b4-icon-star-blank"></i>
-                              <span class="rating__output">4/5</span>
-                            </div>
-
-                            <div class="mode mr-30">
-                                Mode 
-                                <span class="mode__name">
-                                    Instructor
-                                </span>
-                            </div>
-                            <div class="provider">
-                                Provider 
-                                <span class="provider__name">
-                                    GetCertGo
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="mr-auto courses">
-                          <strong class="courses__price">Rs. 21420/-</strong>
-                        </div>
-                      </li>
-
-                      <li class="media listing__list">
-                        <figure class="listing__image">
-                            <img aria-label="Digital Marketing Master Training Course" class="img-fluid" src="https://static1.shine.com/l/m/product_image/656/1518077922_6747.png" alt="Digital Marketing Master Training Course">
-                        </figure>
-                        
-                        <div class="media-body">
-                          <h3><a href="#">Email Marketing Master Training Course</a></h5>
-                            <div class="rating">
-                              <i class="b4-icon-star"></i>
-                              <i class="b4-icon-star"></i> 
-                              <i class="b4-icon-star"></i>
-                              <i class="b4-icon-star"></i>
-                              <i class="b4-icon-star-blank"></i>
-                              <span class="rating__output">4/5</span>
-                            </div>
-
-                            <div class="mode mr-30">
-                                Mode 
-                                <span class="mode__name">
-                                    Instructor
-                                </span>
-                            </div>
-                            <div class="provider">
-                                Provider 
-                                <span class="provider__name">
-                                    GetCertGo
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="mr-auto courses">
-                          <strong class="courses__price">Rs. 2899/-</strong>
-                        </div>
-                      </li>
-                      
-                      <li class="media listing__list">
-                        <figure class="listing__image">
-                            <img aria-label="Digital Marketing Test" class="img-fluid" src="https://static1.shine.com/l/m/product_image/3954/1562948482_5538.png" alt="Digital Marketing Test">
-                        </figure>
-                        
-                        <div class="media-body">
-                          <h3><a href="#">Certified Email Marketing Professional</a></h5>
-                            <div class="rating">
-                              <i class="b4-icon-star"></i>
-                              <i class="b4-icon-star"></i> 
-                              <i class="b4-icon-star"></i>
-                              <i class="b4-icon-star"></i>
-                              <i class="b4-icon-star-blank"></i>
-                              <span class="rating__output">4/5</span>
-                            </div>
-
-                            <div class="mode mr-30">
-                                Mode 
-                                <span class="mode__name">
-                                    Instructor
-                                </span>
-                            </div>
-                            <div class="provider">
-                                Provider 
-                                <span class="provider__name">
-                                    GetCertGo
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="mr-auto courses">
-                          <strong class="courses__price">Rs. 21420/-</strong>
-                        </div>
-                      </li>
+                          <div class="mr-auto courses">
+                            <strong class="courses__price">Rs. {{ product.pPin |floatformat:'0' }}/-</strong>
+                          </div>
+                        </li>
+                      {% endfor %}
                     </ul>
 
                     <div class="d-flex justify-content-center mt-40 mb-30">
@@ -1099,53 +895,36 @@
           </section>
 
           <!-- faq section -->
-          <section id="faq" class="col-sm-12">
-            <div class="faq">
-              <h2>FAQ</h2>
-              <div class="accordion" id="accordionExample">
-                <div class="card">
-                  <div class="card__question" id="headingOne">
-                    <button class="btn" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                      <p><strong>What is the cancellation policy?</strong></p>
-                    </button>
-                  </div>
-              
-                  <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-                    <div class="card-body card__answer">
-                      <p>Requests for refund of fees on account of  cancellation of enrolment  shall be considered  only if such requests are received prior to closure of registration or 21 days before date of course commencement whichever is earlier.</p>
+          {% if 'faq'|get_value:subheading %}
+            {% with faq='faq'|get_value:subheading %}
+              <section id="faq" class="col-sm-12">
+                <div class="faq">
+                  <h2>{{faq.heading}}</h2>
+                  <div class="accordion" id="accordionExample">
+                    {% for item in  faq.description|get_faq_list%}
+                      <div class="card">
+                      <div class="card__question" id="heading{{ forloop.counter }}">
+                        <button class="btn {% if forloop.counter > 1%}collapsed{% endif %}" type="button" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="{% if forloop.counter > 1%}false{% else %}true{% endif %}" aria-controls="collapse{{ forloop.counter }}">
+                          {{item.heading|safe}}
+                        </button>
+                      </div>
+                  
+                      <div id="collapse{{ forloop.counter }}" class="collapse {% if forloop.counter == 1%}show{% endif %}" aria-labelledby="heading{{ forloop.counter }}" data-parent="#accordionExample">
+                        <div class="card-body card__answer">
+                          {{item.content|safe}}
+                        </div>
+                      </div>
                     </div>
+                    {% endfor %}
+                  </div>
+                  <div class="d-flex justify-content-center mt-30">
+                    <a class="btn btn-outline-primary" href="#" role="button">More FAQs</a>
                   </div>
                 </div>
-                <div class="card">
-                  <div class="card__question" id="headingTwo">
-                    <button class="btn collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                      <p><strong>Can I join next batch after paying for this batch</strong></p>
-                    </button>
-                  </div>
-                  <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                    <div class="card-body card__answer">
-                      <p>Requests for refund of fees on account of  cancellation of enrolment  shall be considered  only if such requests are received prior to closure of registration or 21 days before date of course commencement whichever is earlier.</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="card">
-                  <div class="card__question" id="headingThree">
-                    <button class="btn collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                      <p><strong>Do we get placement opportunity with this course?</strong></p>
-                    </button>
-                  </div>
-                  <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-                    <div class="card-body card__answer">
-                      <p>Requests for refund of fees on account of  cancellation of enrolment  shall be considered  only if such requests are received prior to closure of registration or 21 days before date of course commencement whichever is earlier.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="d-flex justify-content-center mt-30">
-                <a class="btn btn-outline-primary" href="#" role="button">More FAQs</a>
-              </div>
-            </div>
-          </section>
+              </section>
+              {% endwith %}
+          {% endif %}
+          
 
         </div>
       </div>
@@ -1187,18 +966,23 @@
           </div>
         </section>
         <!-- also check section -->
-        <section class="col-sm-12 padlr-0">
-          <div class="also-check">
-            <h2>Also check</h2>
-            <ul class="also-check__list">
-              <li><a href="#">Digital Marketing Jobs</a></li>
-              <li><a href="#">Online Marketing Jobs</a></li>
-              <li><a href="#">SEO Jobs</a></li>
-              <li><a href="#">Business Development Jobs</a></li>
-              <li><a href="#">Resume Format for Sales & Marketing Professionals</a></li>
-            </ul>
-          </div>
-        </section>
+        {% if widget_obj_data %}
+          <section class="col-sm-12 padlr-0">
+            <div class="also-check">
+              <h2>{{widget_name}}</h2>
+              <ul class="also-check__list">
+                {% for obj in widget_obj_data %}
+                  <li><a href="{{obj.url}}">{{obj.name}}</a></li>
+                {% endfor %}
+                {% comment %} <li><a href="#">Online Marketing Jobs</a></li>
+                <li><a href="#">SEO Jobs</a></li>
+                <li><a href="#">Business Development Jobs</a></li>
+                <li><a href="#">Resume Format for Sales & Marketing Professionals</a></li> {% endcomment %}
+              </ul>
+            </div>
+          </section>
+        {% endif %}
+        
       </div>
       </div>
       <!-- right container end -->

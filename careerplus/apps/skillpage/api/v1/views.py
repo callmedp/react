@@ -22,10 +22,10 @@ class LoadMoreApiView(FieldFilterMixin, ListAPIView):
         pTF = self.request.query_params.get('pTF', 16)
         pTF_include = self.request.query_params.get('pTF_include')
 
-        if pCtg is not None:
-            if pTF_include == 'true':
-                certifications = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=pCtg, pTF=pTF)    
-            else :
-                certifications = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=pCtg).exclude(pTF=pTF)
+        if pCtg is None:
+            return []
 
-        return certifications
+        if pTF_include == 'true':
+            return SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=pCtg, pTF=pTF)    
+
+        return SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=pCtg).exclude(pTF=pTF)

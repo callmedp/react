@@ -66,6 +66,8 @@ from .choices import (
     LINK_STATUS_CHOICES,
     MANUAL_CHANGES_CHOICES,
     DAYS_CHOICES,
+    SUB_HEADING_CHOICES,
+    SUB_HEADING_CHOICE_ATTR_MAPPING,
     convert_inr,
     convert_usd,
     convert_aed,
@@ -457,12 +459,29 @@ class SubHeaderCategory(AbstractAutoDate):
         default=1)
     category = models.ForeignKey(
         'shop.Category',
-        verbose_name=_('University'),
         related_name='subheaders')
+    heading_choices = models.SmallIntegerField(default=-1,choices=SUB_HEADING_CHOICES)
 
     def __str__(self):
-        return '{} - for University - {}'.format(
-            self.heading, self.category.heading)
+        return '{}'.format(self.heading)
+
+    @property
+    def heading_choice_text(self):
+        subheading_choices = dict(SUB_HEADING_CHOICES)
+        return subheading_choices.get(self.heading_choices)
+
+    # this is required to add class and other attributes to ul in template from choices.py
+    @property
+    def get_sub_heading_description_with_attr_ul(self):
+        description = self.description
+        ul_pos = description.find('<ul')
+        attr = dict(SUB_HEADING_CHOICE_ATTR_MAPPING).get(self.heading_choices) 
+        
+        if ul_pos == -1 or ul_pos+4 > len(description):
+            return description
+
+        return description[:ul_pos+3] + ' {} '.format(attr) + description[ul_pos+3:]
+
 
 
 class CategoryRelationship(AbstractAutoDate):

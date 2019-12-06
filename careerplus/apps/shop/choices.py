@@ -325,3 +325,15 @@ DAYS_CHOICES_DICT = dict(DAYS_CHOICES)
 MANUAL_CHANGES_CHOICES = (
     (1, 'Update Pending Links Count'),
 )
+
+SUB_HEADING_CHOICES = (
+    (0, 'None'),
+    (1, 'objective'),
+    (2, 'who-should-learn'),
+    (3, 'faq')
+)
+
+SUB_HEADING_CHOICE_ATTR_MAPPING = (
+    (1,'class="objective__list collapse" id="expand-list" aria-expanded="false"'),
+    (2,'class="who-should-learn__list d-flex flex-wrap"'),
+)
