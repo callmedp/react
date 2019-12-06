@@ -11,7 +11,7 @@
     padding-left: 15px;
 
     li {
-      @extend %half-width;
+      // @extend %half-width;
       float: left;
       padding-right: 5px;
       // padding: 10px 5px;
@@ -86,7 +86,7 @@
       }
 
       &:after{
-        @extend %arrow-blue;
+        // @extend %arrow-blue;
       }
     }
   }
