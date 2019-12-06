@@ -61,7 +61,7 @@
     }
 
     &:after{
-      @extend %tick-blue;
+      // @extend %tick-blue;
       content: '';
       position: absolute;
       left: 0;
@@ -72,7 +72,7 @@
   &.tick {
     li {
       &:after{
-        @extend %tick-blue;
+        // @extend %tick-blue;
       }
     }
   }
