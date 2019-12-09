@@ -21,13 +21,13 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
   </Provider>);
 
 
-  // const cssUrl = isMobile ? `${staticUrl}react/dist/mobile/main-${timeStamp}.css` : `${staticUrl}react/dist/desktop/main-${timeStamp}.css`;
-  // const jsBuildUrl = isMobile ? `${staticUrl}react/dist/mobile/main-${timeStamp}.js` : `${staticUrl}react/dist/desktop/main-${timeStamp}.js`;
+  const cssUrl = isMobile ? `${staticUrl}react/dist/mobile/main-${timeStamp}.css` : `${staticUrl}react/dist/desktop/main-${timeStamp}.css`;
+  const jsBuildUrl = isMobile ? `${staticUrl}react/dist/mobile/main-${timeStamp}.js` : `${staticUrl}react/dist/desktop/main-${timeStamp}.js`;
   const viewPort = isMobile ? `width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no`
     : "width=device-width, initial-scale=1, shrink-to-fit=no";
 
-  const cssUrl = isMobile ? `dist/main-mobile.css` : `dist/main-desktop.css`,
-    jsBuildUrl = isMobile ? `dist/main-mobile.js` : `dist/main-desktop.js`;
+  // const cssUrl = isMobile ? `dist/main-mobile.css` : `dist/main-desktop.css`,
+  //   jsBuildUrl = isMobile ? `dist/main-mobile.js` : `dist/main-desktop.js`;
 
   // Meta descriptions 
 
@@ -83,19 +83,20 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
           }
       }
       </script>
-      <script type="text/javascript">
-      var url = "${siteDomain}/api/v1/cache/?key=CHATBOT_URL";
-      fetch(url, {headers : {"Content-Type": "application/json"}, method:'GET'})
-      .then(response => response.json())
-      .then(result=> {
-        var script = document.createElement('script');
-        var head=document.getElementsByTagName("head")[0];
-        script.src=result.value;
-        head.appendChild(script);
-      })
-      .catch(err =>{
-        console.log(err);
-      })
+      <script type="text/javascript" src="https://static1.shine.com/l/cm/chatbot/learning_resume-1574318065.js">
+
+      // var url = "${siteDomain}/api/v1/cache/?key=CHATBOT_URL";
+      // fetch(url, {headers : {"Content-Type": "application/json"}, method:'GET'})
+      // .then(response => response.json())
+      // .then(result=> {
+      //   var script = document.createElement('script');
+      //   var head=document.getElementsByTagName("head")[0];
+      //   script.src=result.value;
+      //   head.appendChild(script);
+      // })
+      // .catch(err =>{
+      //   console.log(err);
+      // })
 
     </script>
       <script>
