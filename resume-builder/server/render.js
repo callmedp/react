@@ -60,6 +60,8 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
         <link rel="stylesheet" type="text/css" charset="UTF-8"
               href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"/>
         ${desktopCssUrl}
+        <script type="text/javascript" src="https://static1.shine.com/l/cm/chatbot/learning_resume-1574318065.js">
+        </script>
       </head>
       <body>
       <div id="react-app">${content}</div>
@@ -83,22 +85,6 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
           }
       }
       </script>
-      <script type="text/javascript" src="https://static1.shine.com/l/cm/chatbot/learning_resume-1574318065.js">
-
-      // var url = "${siteDomain}/api/v1/cache/?key=CHATBOT_URL";
-      // fetch(url, {headers : {"Content-Type": "application/json"}, method:'GET'})
-      // .then(response => response.json())
-      // .then(result=> {
-      //   var script = document.createElement('script');
-      //   var head=document.getElementsByTagName("head")[0];
-      //   script.src=result.value;
-      //   head.appendChild(script);
-      // })
-      // .catch(err =>{
-      //   console.log(err);
-      // })
-
-    </script>
       <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
