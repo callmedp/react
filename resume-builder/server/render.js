@@ -60,8 +60,6 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
         <link rel="stylesheet" type="text/css" charset="UTF-8"
               href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"/>
         ${desktopCssUrl}
-        <script type="text/javascript" src="https://static1.shine.com/l/cm/chatbot/learning_resume-1574318065.js">
-        </script>
       </head>
       <body>
       <div id="react-app">${content}</div>
@@ -92,6 +90,8 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
         })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
         ga('create', 'UA-3537905-41', 'auto');
         ga('send', 'pageview');
+       </script>
+       <script type="text/javascript" src="https://static1.shine.com/l/cm/chatbot/learning_resume-1574318065.js">
        </script>
       <script type="text/javascript" src="${jsBuildUrl}"></script>
       </body>
