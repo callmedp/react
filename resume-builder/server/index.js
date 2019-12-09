@@ -8,7 +8,7 @@ import render from './render';
 
 const fs = require('fs');
 
-const timestamp = fs.readFileSync(`${process.env.STATIC_FILE_PATH}`, "utf8");
+const timestamp = 3434343434343 //fs.readFileSync(`${process.env.STATIC_FILE_PATH}`, "utf8");
 
 let userAgents = '', store, routes, isMobile = false, paramObj = {
     alt: ''
