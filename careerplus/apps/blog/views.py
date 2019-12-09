@@ -131,9 +131,9 @@ class BlogDetailView(DetailView, BlogMixin):
             queryset = self.get_queryset()
 
         if pk is not None:
-            queryset = queryset.filter(pk=pk, status=1, visibility=1)
+            queryset = queryset.filter(pk=pk, status=1)
         elif slug is not None:
-            queryset = queryset.filter(slug=slug, status=1, visibility=1)
+            queryset = queryset.filter(slug=slug, status=1)
         try:
             obj = queryset.get()
 
@@ -257,6 +257,12 @@ class BlogCategoryListView(TemplateView, PaginationMixin):
         self.paginated_by = 10
         self.cat_obj = None
 
+    def redirect_if_necessary(self, current_path, category):
+        expected_path = category.get_absolute_url()
+        if expected_path != urlquote(current_path):
+            return HttpResponsePermanentRedirect(expected_path)
+        return None
+
     def get(self, request, *args, **kwargs):
         slug = kwargs.get('slug', None)
         self.page = request.GET.get('page', 1)
@@ -270,13 +276,18 @@ class BlogCategoryListView(TemplateView, PaginationMixin):
             self.active_tab = 0
 
         try:
-            self.cat_obj = Category.objects.get(slug=slug, is_active=True, visibility=1)
+            self.cat_obj = Category.objects.get(slug=slug, is_active=True)
         except Exception as e:
             logging.getLogger('error_log').error("Unable to get category object %s"% str(e))
             raise Http404
+
+        redirect = self.redirect_if_necessary(request.path, self.cat_obj)
+
+        if redirect:
+            return redirect
         context = super(BlogCategoryListView, self).get(request, args, **kwargs)
         return context
-        
+
     def get_context_data(self, **kwargs):
         context = super(BlogCategoryListView, self).get_context_data(**kwargs)
         cat_obj = self.cat_obj
@@ -341,6 +352,12 @@ class BlogTagListView(TemplateView, PaginationMixin):
         self.paginated_by = 10
         self.tag_obj = None
 
+    def redirect_if_necessary(self, current_path, tag):
+        expected_path = tag.get_absolute_url()
+        if expected_path != urlquote(current_path):
+            return HttpResponsePermanentRedirect(expected_path)
+        return None
+
     def get(self, request, *args, **kwargs):
         slug = kwargs.get('slug', None)
         self.page = request.GET.get('page', 1)
@@ -353,6 +370,11 @@ class BlogTagListView(TemplateView, PaginationMixin):
             self.tag_obj = Tag.objects.get(slug=slug, is_active=True)
         except Exception:
             raise Http404
+
+        redirect = self.redirect_if_necessary(request.path, self.tag_obj)
+
+        if redirect:
+            return redirect
         context = super(BlogTagListView, self).get(request, args, **kwargs)
         return context
 
