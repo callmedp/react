@@ -4,12 +4,12 @@ from rest_framework import serializers
 from order.models import OrderItem,Order,MonthlyLTVRecord
 
 
-class OrderItemListSerializer(serializers.ModelSerializer):
+class OrderItemSerializer(serializers.ModelSerializer):
     product_name = serializers.CharField()
 
     class Meta:
         model = OrderItem
-        fields = ('id','product_name',)
+        fields = ('id','product_name','oi_status')
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -21,6 +21,17 @@ class OrderSerializer(serializers.ModelSerializer):
         exclude = ('co_id','archive_json','site','status','assigned_to','wc_cat','wc_sub_cat'\
             ,'wc_status','wc_follow_up','welcome_call_done','welcome_call_records','midout_sent_on',\
             'paid_by','invoice','crm_sales_id','crm_lead_id','sales_user_info','auto_upload','id')
+
+class OrderShineCandidateSerializer(serializers.ModelSerializer):
+    """
+     Serializer for candidate Order
+    """
+
+    class Meta:
+        model = Order
+        fields = ('alt_mobile','alt_email','first_name','last_name','service_resume_upload_shine')
+
+
 
 class LTVReportSerializer(serializers.ModelSerializer):
     ltv_bracket_text = serializers.CharField()

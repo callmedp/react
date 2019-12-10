@@ -5,51 +5,63 @@ import {
     AccordionItemHeading,
     AccordionItemPanel
 } from "react-accessible-accordion";
-import {Field} from "redux-form";
+import { Field } from "redux-form";
 import styles from './course.scss'
-import {yearList} from '../../../../../../Utils/yearList'
-import {renderField, renderSelect} from "../../../../../FormHandler/formFieldRenderer";
+import { yearList } from '../../../../../../Utils/yearList'
+import { renderField, renderSelect } from "../../../../../FormHandler/formFieldRenderer";
 import React from "react";
 
 export const CourseRenderer = ({
-                                   fields,
-                                   loader,
-                                   meta: {touched, error, submitFailed},
-                                   handleSubmit,
-                                   deleteCourse,
-                                   handleAddition,
-                                   handleAccordionClick,
-                                   changeOrderingUp,
-                                   changeOrderingDown,
-                                   isEditable,
-                                   editHeading,
-                                   saveTitle,
-                                   entityName,
-                                   expanded,
-                                   handleInputValue
-                               }) => {
+    fields,
+    loader,
+    meta: { touched, error, submitFailed },
+    handleSubmit,
+    deleteCourse,
+    handleAddition,
+    handleAccordionClick,
+    changeOrderingUp,
+    changeOrderingDown,
+    isEditable,
+    editHeading,
+    saveTitle,
+    entityName,
+    expanded,
+    handleInputValue,
+    showAlertMessage
+}) => {
     return (
         <div>
             {/*{!!loader &&*/}
             {/*<Loader/>*/}
             {/*}*/}
             <section className="head-section">
-                <span className="icon-box"><i className="icon-courses1"/></span>
+                <span className="icon-box"><i className="icon-courses1" /></span>
                 {!!(!isEditable) ?
                     <h2>{entityName}
                     </h2> :
                     <React.Fragment>
                         <input autoFocus type="text" name="" defaultValue={entityName}
-                               onChange={(event) => handleInputValue(event.target.value || entityName)} maxLength="20"/>
-                        <span onClick={(event) => saveTitle(event)} className="icon-tick"/>
+                            onChange={(event) => handleInputValue(event.target.value || entityName)} maxLength="20" />
+                        <span onClick={(event) => saveTitle(event)} className="icon-tick" />
                     </React.Fragment>
                 }
                 <span onClick={() => editHeading()}
-                      className={!!(!isEditable) ? "icon-edit " + styles['icon-edit__cursor'] : ""}/>
+                    className={!!(!isEditable) ? "icon-edit " + styles['icon-edit__cursor'] : ""} />
 
                 <button
                     onClick={handleSubmit((values) => {
-                        handleAddition(fields, error)
+                        let skipAddition = false;
+                        (values && values.list  || []).forEach(el => {
+                            if (!el.name_of_certification) {
+                                skipAddition = true;
+                            }
+                        })
+                        if (!skipAddition) {
+                            handleAddition(fields, error)
+                        }
+                        else {
+                            showAlertMessage()
+                        }
                     })}
 
                     type={'button'}
@@ -81,17 +93,17 @@ export const CourseRenderer = ({
                                                             <div className="addon-buttons mr-10">
                                                                 <span
                                                                     onClick={(event) => deleteCourse(index, fields, event)}
-                                                                    className="icon-delete mr-15"/>
+                                                                    className="icon-delete mr-15" />
                                                                 {index !== 0 &&
-                                                                <span
-                                                                    onClick={(event) => changeOrderingUp(index, fields, event)}
-                                                                    className="icon-ascend mr-5"/>
+                                                                    <span
+                                                                        onClick={(event) => changeOrderingUp(index, fields, event)}
+                                                                        className="icon-ascend mr-5" />
                                                                 }
                                                                 {
                                                                     index !== fields.length - 1 &&
                                                                     < span
                                                                         onClick={(event) => changeOrderingDown(index, fields, event)}
-                                                                        className="icon-descend"/>
+                                                                        className="icon-descend" />
                                                                 }
                                                             </div>
                                                         </div>
@@ -108,7 +120,7 @@ export const CourseRenderer = ({
                                                                 maxLength={'50'}
                                                                 type={"text"}
                                                                 name={`${member}.name_of_certification`}
-                                                                className={"input-control"}/>
+                                                                className={"input-control"} />
                                                         </fieldset>
                                                         <fieldset>
                                                             <label>Completion Year</label>
@@ -118,7 +130,7 @@ export const CourseRenderer = ({
                                                                 options={yearList}
                                                                 isMulti={false}
                                                                 name={`${member}.year_of_certification`}
-                                                                className="input-control"/>
+                                                                className="input-control" />
 
 
                                                         </fieldset>

@@ -76,8 +76,9 @@ Payment Login - Shine Learning
 
 {% block container %}
 <section class="container mt-53">
-    <div id = "loader" class="overlay-background"  text-align: center;">
-            <img aria-label="loader" id="loadingimg" class="loader-position" src="{% static 'shinelearn/images/loader1.png' %}" >
+    <div id="loader" class="overlay-background" text-align: center;">
+        <img aria-label="loader" id="loadingimg" class="loader-position"
+            src="{% static 'shinelearn/images/loader1.png' %}">
     </div>
 
     <!-- page content body start -->
@@ -85,7 +86,8 @@ Payment Login - Shine Learning
 
         <!-- left content start -->
         <div class="col-sm-3 payment-summary-tab">
-            <a  class='trig-loader' href="{% url "cart:payment-summary" %}"><span class="green-circle">1</span> Summary</a>
+            <a class='trig-loader' href="{% url "cart:payment-summary" %}"><span class="green-circle">1</span>
+                Summary</a>
             <a class='trig-loader' href="{% url "cart:payment-login" %}" class="active"><span>2</span> Login</a>
             <a class='trig-loader' href="{% url "payment:payment-option" %}"><span>3</span>Payment</a>
         </div>
@@ -99,18 +101,10 @@ Payment Login - Shine Learning
                 {% csrf_token %}
                 <strong class="personal-details-heading ml-15">Login</strong>
                 <span class="invalid-cred-err" style="display: none" id="invalid-cred">Invalid email or password</span>
-                {% if email_exist %}
                 <div class="form-group clearfix">
                     <div class="col-sm-12">
-                        <input type="email" class="form-control" name="email" placeholder=" " value="{{ email }}" />
-                        <label for="">Email id</label>
-                        <span class="error-txt"></span>
-                    </div>
-                </div>
-                {% else %}
-                <div class="form-group clearfix">
-                    <div class="col-sm-12">
-                        <input type="email" name="email" class="form-control" placeholder=" " value="{% if request.session.email %}
+                        <input {% if request.session.email or neo_email %} readonly {% endif %} type="email"
+                            name="email" class="form-control" placeholder=" " value="{% if neo_email %} {{ neo_email }} {% elif request.session.email %}
                                         {{ request.session.email }}
                                         {% elif request.session.lead_email %}
                                         {{ request.session.lead_email }}{% endif %}" />
@@ -118,7 +112,6 @@ Payment Login - Shine Learning
                         <span class="error-txt"></span>
                     </div>
                 </div>
-                {% endif %}
                 <div class="form-group clearfix">
                     <div class="col-sm-12">
                         <input type="password" class="form-control" required id="" name="password" placeholder=" " />
@@ -161,10 +154,11 @@ Payment Login - Shine Learning
                 </div>
                 <div class="form-group clearfix">
                     <div class="col-sm-12">
-                        <input type="email" name="email" class="form-control" placeholder=" "
-                            value="{% if neo_email %} {{ neo_email }} {% elif request.session.email%}{{request.session.email}}{% elif request.session.lead_email %}{{ request.session.lead_email }} {% endif %}"
-                            {% if request.session.email %} {% endif %}" {% if neo_email %} readonly {% endif %}>
-                        <label for="">Email id</label>
+                        <input type="email" name="email" class="form-control" placeholder=" " id="guest-email" value="{% if neo_email %} {{ neo_email }} {% elif request.session.email %}
+                                        {{ request.session.email }}
+                                        {% elif request.session.lead_email %}
+                                        {{ request.session.lead_email }}{% endif %}">
+                        <label for="">Email</label>
                         <span class="error-txt" id="email-error"></span>
                     </div>
                 </div>
@@ -200,7 +194,9 @@ Payment Login - Shine Learning
                 <div class="form-group clearfix">
                     <div class="col-sm-12 ">
                         <!-- {{form.first_name}} -->
-                        <input type="text" class="form-control" id="" name="email" placeholder=" " />
+                        <input type="text" class="form-control" id="" name="email" placeholder=" "
+                            value="{% if neo_email %} {{ neo_email }} {% endif %}" {% if neo_email %} readonly
+                            {% endif %} />
                         <label for="">Your email</label>
                         <span class="error-txt"></span>
                     </div>
@@ -247,10 +243,10 @@ Payment Login - Shine Learning
 <script>
 
     (function (i, s, o, g, r, a, m) {
-    i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-        (i[r].q = i[r].q || []).push(arguments)
-    }, i[r].l = 1 * new Date(); a = s.createElement(o),
-        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
     })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
     ga('create', 'UA-3537905-41', 'auto', { 'name': 'a' });
     ga('a.send', 'pageview');
@@ -275,6 +271,7 @@ Payment Login - Shine Learning
 <script>
     var site_domain = "{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN}}";
     var cartData = "{{request|get_cart_info}}";
+    var neoEmail = "{{neo_email}}";
 </script>
 
 {% compress js %}

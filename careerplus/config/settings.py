@@ -301,6 +301,14 @@ CACHES = {
         }
 
     },
+    'candidate_search_lookup': {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://172.22.67.223:6379/4",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            'CONNECTION_POOL_KWARGS': {'max_connections': 50},
+        }
+    },
 
     'search_lookup': {
         "BACKEND": "django_redis.cache.RedisCache",
@@ -408,7 +416,9 @@ NEO_URL = {
     'pt_result': 'https://etestapi.dyned.com/pt/result',
     'board_user': 'https://universaldashboard.id.dyned.com/api/v1/student/onboard',
     'user_detail': 'https://universaldashboard.id.dyned.com/api/v1/student/',
-    'jwt_token': 'https://myneo.space/api/v1/jwt/token-request'
+    'jwt_token': 'https://myneo.space/api/v1/jwt/token-request',
+    'get-sso-profile': 'https://myneo.space/api/v1/sso/user/{}/get/{}',
+    'update-sso-profile': 'https://myneo.space/api/v1/dsa/admin/update-profile-sso/{}'
 }
 NEO_USERNAME = 'shineadmin@shine.com'
 NEO_PASSWORD = 'MPgddK5vpM'

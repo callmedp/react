@@ -139,7 +139,8 @@ class CRMProductSerializer(ModelSerializer):
                             'usd_price': float(pv.usd_price),
                             'aed_price': float(pv.aed_price),
                             'gbp_price': float(pv.gbp_price),
-                            "short_description": pv.short_description
+                            'short_description': pv.short_description,
+                            'visible_on_crm': pv.visible_on_crm
                         })
                     var_dict.update({
                         'var_list': var_list
@@ -161,7 +162,8 @@ class CRMProductSerializer(ModelSerializer):
                             'usd_price': float(pv.usd_price),
                             'aed_price': float(pv.aed_price),
                             'gbp_price': float(pv.gbp_price),
-                            "short_description": pv.short_description
+                            'short_description': pv.short_description,
+                            'visible_on_crm': pv.visible_on_crm
                         })
                 var_dict.update({
                     'var_list': var_list

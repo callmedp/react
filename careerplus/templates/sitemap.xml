@@ -6,7 +6,6 @@
   {% if request.path == '/article_sitemap.xml' %}
       	<url>
           <loc>https://learning.shine.com/article/</loc>
-          <xhtml:link rel="alternate" media="only screen and (max-width: 640px)" href="https://mlearning.shine.com/article/" />
           {% if url.lastmod %}<lastmod>{{ url.lastmod|date:"Y-m-d" }}</lastmod>{% endif %}
           <changefreq>daily</changefreq>
           <priority>0.8</priority>
@@ -14,14 +13,12 @@
   {% elif request.path == '/te_sitemap.xml' %}
         <url>
           <loc>https://learning.shine.com/talenteconomy/</loc>
-          <xhtml:link rel="alternate" media="only screen and (max-width: 640px)" href="https://mlearning.shine.com/talenteconomy/" />
           {% if url.lastmod %}<lastmod>{{ url.lastmod|date:"Y-m-d" }}</lastmod>{% endif %}
           <changefreq>daily</changefreq>
           <priority>0.8</priority>
          </url>
         <url>
           <loc>https://learning.shine.com/authors/</loc>
-          <xhtml:link rel="alternate" media="only screen and (max-width: 640px)" href="https://mlearning.shine.com/authors/" />
           {% if url.lastmod %}<lastmod>{{ url.lastmod|date:"Y-m-d" }}</lastmod>{% endif %}
           <changefreq>daily</changefreq>
           <priority>0.7</priority>
@@ -30,7 +27,6 @@
    {% elif request.path == '/practice-tests.xml' %}
       	<url>
           <loc>https://learning.shine.com/practice-tests/</loc>
-          <xhtml:link rel="alternate" media="only screen and (max-width: 640px)" href="https://mlearning.shine.com/practice-tests/" />
           {% if url.lastmod %}<lastmod>{{ url.lastmod|date:"Y-m-d" }}</lastmod>{% endif %}
           <changefreq>daily</changefreq>
           <priority>0.8</priority>
@@ -40,7 +36,6 @@
   {% for url in urlset %}
     <url>
       <loc>{{ url.location }}</loc>
-      <xhtml:link rel="alternate" media="only screen and (max-width: 640px)" href="{{url.loc_mobile}}" />
       {% if url.lastmod %}<lastmod>{{ url.lastmod|date:"Y-m-d" }}</lastmod>{% endif %}
       {% if url.changefreq %}<changefreq>{{ url.changefreq }}</changefreq>{% endif %}
       {% if url.priority %}<priority>{{ url.priority }}</priority>{% endif %}

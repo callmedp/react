@@ -739,7 +739,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                         'label': pv.name,
                         'mode': pv.get_studymode(),
                         'duration': pv.get_duration(),
-                        'dur_days': obj.get_duration_in_day(),
+                        'dur_days': pv.get_duration_in_day(),
                         'type': pv.get_coursetype(),
                         'level': pv.get_courselevel(),
                         'certify': pv.get_cert(),
@@ -836,7 +836,9 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                         'fake_aed_price': float(pv.fake_aed_price),
                         'gbp_price': float(pv.gbp_price),
                         'fake_gbp_price': float(pv.fake_gbp_price),
-                        "short_description":pv.short_description})
+                        "short_description": pv.short_description,
+                        'visible_on_crm': pv.visible_on_crm
+                        })
                 elif pv.is_writing or pv.is_service:
                     fbt_list.append({
                         'id': pv.id,
@@ -852,7 +854,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                         'fake_aed_price': float(pv.fake_aed_price),
                         'gbp_price': float(pv.gbp_price),
                         'fake_gbp_price': float(pv.fake_gbp_price),
-                        "short_description":pv.short_description})
+                        "short_description": pv.short_description,
+                        'visible_on_crm': pv.visible_on_crm})
                 fbt_dict.update({
                     'fbt_list': fbt_list
                 })

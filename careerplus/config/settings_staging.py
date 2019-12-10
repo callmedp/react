@@ -108,7 +108,7 @@ SITE_DOMAIN = 'learning1.shine.com'
 MOBILE_SITE_DOMAIN = 'mlearning1.shine.com'
 SITE_PROTOCOL = 'https'
 MAIN_DOMAIN_PREFIX = '{}://{}'.format(SITE_PROTOCOL, SITE_DOMAIN)  # 'http://learning.shine.com'
-MOBILE_PROTOCOL_DOMAIN = '{}://{}'.format(SITE_PROTOCOL,MOBILE_SITE_DOMAIN)
+MOBILE_PROTOCOL_DOMAIN = '{}://{}'.format(SITE_PROTOCOL,SITE_DOMAIN)
 MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
 META_SITE_PROTOCOL = SITE_DOMAIN
 META_SITE_DOMAIN = SITE_PROTOCOL
@@ -194,6 +194,14 @@ CACHES = {
     'search_lookup': {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "redis://127.0.0.1:6379/3",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            'CONNECTION_POOL_KWARGS': {'max_connections': 50},
+        }
+    },
+    'candidate_search_lookup': {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://172.22.67.223:6379/4",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             'CONNECTION_POOL_KWARGS': {'max_connections': 50},
@@ -409,7 +417,9 @@ NEO_URL = {
     'pt_result': 'https://etestapi.dyned.com/pt/result',
     'board_user': 'https://universaldashboard.id.dyned.com/api/v1/student/onboard',
     'user_detail': 'https://universaldashboard.id.dyned.com/api/v1/student/',
-    'jwt_token': 'https://myneo.space/api/v1/jwt/token-request'
+    'jwt_token': 'https://myneo.space/api/v1/jwt/token-request',
+    'get-sso-profile': 'https://myneo.space/api/v1/sso/user/{}/get/{}',
+    'update-sso-profile': 'https://myneo.space/api/v1/dsa/admin/update-profile-sso/{}'
 }
 NEO_USERNAME = 'shineadmin@shine.com'
 NEO_PASSWORD = 'MPgddK5vpM'

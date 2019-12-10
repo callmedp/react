@@ -1,5 +1,5 @@
 # python imports
-import os, json
+import os, json, sys
 from io import BytesIO
 from datetime import date
 import logging
@@ -19,6 +19,7 @@ import zipfile
 import imgkit, pdfkit
 from PIL import Image
 from celery.decorators import task
+
 
 
 @task

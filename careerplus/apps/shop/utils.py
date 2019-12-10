@@ -425,7 +425,8 @@ class ProductModeration(object):
                 for screenskill in screen_skills:
                     skillprd, created = ProductSkill.objects.get_or_create(
                     product=product,
-                    skill=screenskill.skill)
+                    skill=screenskill.skill,
+                    relation_type = screenskill.relation_type)
 
                     skillprd.active = screenskill.active
                     skillprd.priority = screenskill.priority

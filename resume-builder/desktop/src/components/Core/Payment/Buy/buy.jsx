@@ -36,7 +36,10 @@ export class Buy extends Component {
             'resumeDownloadCount':-1,
             'freeDownloadButtonDisable':false,
         }
-        if (parseInt(localStorage.getItem('userExperience') || 0) >= 4) {
+        
+        // check if the userexperinece is greater or equal to 4 years. (7 is the pid for 4 years (mapping done here))
+
+        if (parseInt(localStorage.getItem('userExperience') || 0) >= 7) {
             if (document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
                 document.getElementsByClassName('chat-bot')[0].style.display = 'none';
             }

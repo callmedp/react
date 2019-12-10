@@ -20,6 +20,7 @@ export const renderAwards = ({
                                 context,
                                 headingChange,
                                 entity_preference_data,
+                                showAlertMessage
                             }) => {
     return (
         
@@ -40,7 +41,20 @@ export const renderAwards = ({
                     }
                 </div>
                 {!editHeading ?
-                    <button role="button" onClick={handleSubmit(handleAddition.bind(this,fields,awardNewData(fields),100,'award',eventClicked,'Awards'))}
+                    <button role="button" onClick={handleSubmit((values) =>{
+                        let skipAddition = false;
+                        (values && values.list  || []).forEach(el => {
+                            if (!el.title) {
+                                skipAddition = true;
+                            }
+                        })
+                        if (!skipAddition) {
+                            handleAddition(fields,awardNewData(fields),100,'award',eventClicked,'Awards')
+                        }
+                        else {
+                            showAlertMessage()
+                        }
+                    })}
                         type={'button'} className="btn btn__round btn--outline">+ Add new</button>:''
                 }
             </div>

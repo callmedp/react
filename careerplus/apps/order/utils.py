@@ -9,8 +9,16 @@ import json,copy
 # django imports
 from django.db.models import Sum
 from django.core.cache import cache
+from django.utils import timezone
 
-#in app import
+#inter app import
+from emailers.tasks import send_email_task
+from emailers.sms import SendSMS
+from emailers.utils import BadgingMixin
+from users.tasks import user_register
+from shop.choices import S_ATTR_DICT, A_ATTR_DICT
+
+
 
 
 def get_ltv(candidate_id, till_month=None):
@@ -203,6 +211,181 @@ class LTVReportUtil:
                 logging.getLogger('info_log').info('Created a record for ltv bracket - {}'.format(bracket))
             else:
                 logging.getLogger('info_log').info('Updated a record for ltv bracket - {}'.format(bracket))
+
+class FeatureProfileUtil:
+
+    def get_featured_oi(self,oi_status,sub_type_flow):
+        from  order.models import OrderItem
+        return OrderItem.objects.filter(
+                order__status__in=[1, 3], product__type_flow__in=[5], oi_status__in=oi_status,
+                product__sub_type_flow__in=sub_type_flow).select_related('order')
+
+    def get_candidate_id(self,oi):
+        from order.models import Order
+        candidate_id = oi.order.candidate_id 
+
+        if not candidate_id:
+            user_register(data={}, order=oi.order.pk)
+            order = Order.objects.get(pk=oi.order.pk)
+            candidate_id = oi.order.candidate_id
+        
+        return candidate_id
+
+    def update_badges(self,candidate_id,oi,feature):
+        badge_data = BadgingMixin().get_badging_data(
+                        candidate_id=candidate_id, curr_order_item=oi, feature=feature
+                    )
+        flag = BadgingMixin().update_badging_data(candidate_id=candidate_id, data=badge_data)
+        if flag:
+            logging.getLogger('info_log').info(
+                        'Feature:- Data sent to shine for order item %s is %s' % (str(oi.id), str(badge_data))
+                    )
+        return flag
+    
+    def create_oi_operation(self,oi,oi_status,last_oi_status):
+        oi.orderitemoperation_set.create(
+                oi_status=oi_status,
+                last_oi_status=last_oi_status,
+                assigned_to=oi.assigned_to)
+        return
+
+
+    def pause_resume_feature(self,oi,isPause=True):
+        from  order.models import OrderItem
+        candidate_id = self.get_candidate_id(oi)
+        pause_resume_operations = oi.orderitemoperation_set.filter(oi_status__in=[34,35])
+
+        if pause_resume_operations:
+            last_op_date = pause_resume_operations.last().created
+            time_diff = timezone.now() - last_op_date
+            if time_diff.days == 0:    
+                return False
+
+        if isPause:
+            other_item_exist = OrderItem.objects.filter(
+                    order__status__in=[1, 3], product__type_flow__in=[5],
+                    oi_status=28,
+                    product__sub_type_flow=oi.product.sub_type_flow,
+                    order__candidate_id=oi.order.candidate_id).exclude(id=oi.id).exists()
+
+            if other_item_exist:
+                return True
+                
+        flag = self.update_badges(candidate_id,oi,isPause)
+
+        if not flag:
+            logging.getLogger('info_log').info(
+                'Badging Failed {} '.format(str(oi.id))
+            )
+            return False
+        return True
+    def start_all_feature(self):
+        oi_status =[30]
+        sub_type_flow = [501,503]
+        featured_orderitems = self.get_featured_oi(oi_status,sub_type_flow)
+        featured_count = 0
+
+        for oi in featured_orderitems:
+            candidate_id = self.get_candidate_id(oi)
+            flag = self.update_badges(candidate_id,oi,True)
+            if not flag:
+                logging.getLogger('info_log').info(
+                    'Badging Failed {} '.format(str(oi.id))
+                )
+                continue
+            
+            featured_count += 1
+            last_oi_status = oi.oi_status
+            oi.oi_status = 28
+            oi.closed_on = timezone.now()
+            oi.last_oi_status = 6
+            oi.save()
+            self.create_oi_operation(oi,6,last_oi_status)
+            self.create_oi_operation(oi,oi.oi_status,oi.last_oi_status)
+
+            # Send mail and sms with subject line as Your Profile updated
+            self.send_feature_mail(oi)
+            
+        out_str = '%s profile featured out of %s' % (
+            featured_count, featured_orderitems.count())
+
+        logging.getLogger('info_log').info("{}".format(out_str))
+
+        return
+
+    
+
+    def close_all_feature(self):
+        from  order.models import OrderItem
+        oi_status = [28,34,35]
+        sub_type_flow = [501,503]
+        featured_orderitems = self.get_featured_oi(oi_status,sub_type_flow)
+        unfeature_count = 0
+
+        for oi in featured_orderitems:
+            candidate_id = self.get_candidate_id(oi)
+            days_left = oi.days_left_oi_product
+
+            if not candidate_id or  days_left >= 0:
+                logging.getLogger('info_log').info(
+                    'Days remaining {} '.format(days_left)
+                )
+                continue
+
+            other_item_exist = OrderItem.objects.filter(
+                    order__status__in=[1, 3], product__type_flow__in=[5],
+                    oi_status=28,
+                    product__sub_type_flow=oi.product.sub_type_flow,
+                    order__candidate_id=oi.order.candidate_id).exclude(id=oi.id).exists()
+
+            if not other_item_exist:
+                flag = self.update_badges(candidate_id,oi,False)
+                if not flag:
+                    logging.getLogger('info_log').info(
+                        'Badging Failed for order item id %s' % (str(oi.id)))
+                    continue
+
+            unfeature_count += 1
+            last_oi_status = oi.oi_status
+            oi.oi_status = 4
+            oi.closed_on = timezone.now()
+            oi.last_oi_status = 29
+            oi.save()
+            self.create_oi_operation(oi,29,last_oi_status)
+            self.create_oi_operation(oi,oi.oi_status,oi.last_oi_status)
+
+        out_str = '%s profile expired out of %s featured items' % (
+            unfeature_count, featured_orderitems.count())
+
+        logging.getLogger('info_log').info("{}".format(out_str))
+        return
+
+   
+
+    def send_feature_mail(self,oi):
+        if oi.product.sub_type_flow == 501:
+            mail_type = "FEATURED_PROFILE_UPDATED"
+        elif oi.product.sub_type_flow == 503:
+            mail_type = "PRIORITY_APPLICANT_MAIL"
+
+        email_sets = list(
+            oi.emailorderitemoperation_set.all().values_list(
+                'email_oi_status', flat=True).distinct())
+        to_emails = [oi.order.get_email()]
+        data = {}
+        data.update({
+            "subject": 'Your Featured Profile Is Updated',
+            "username": oi.order.first_name,
+            "product_timeline": oi.product.get_duration_in_day(),
+        })
+
+        if 72 not in email_sets:
+            send_email_task.delay(
+                to_emails, mail_type, data,
+                status=72, oi=oi.pk)
+
+        SendSMS().send(sms_type=mail_type, data=data)
+                    
 
 
 
