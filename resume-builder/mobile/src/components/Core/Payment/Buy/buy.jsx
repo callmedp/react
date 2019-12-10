@@ -221,7 +221,7 @@ class Buy extends Component {
                                 <div className="buy__recommended--tag">Trial offer</div>
                                 <div className="buy_item--left">
                                     {free_download_count > 0? ` ${free_download_count} free download for 1st time users.` :
-                                        "Sorry, you have exhausted the limit. Please buy resume builder with unlimited downloads to keep using resume builder for an year."}
+                                        "You have exhausted the limit. Please buy resume builder with unlimited downloads to keep using resume builder for an year."}
                                 </div>
                                 {free_download_count > 0?
                                     <div className="buy_item--right">

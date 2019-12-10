@@ -254,7 +254,7 @@ export class Buy extends Component {
                                                 <span className="free-trial--text">
                                                     <p>
                                                         {free_download_count > 0? ` ${free_download_count} free download for 1st time users.` 
-                                                        :"Sorry, you have exhausted the limit. Please buy resume builder with unlimited downloads to keep using resume builder for an year"} 
+                                                        :"You have exhausted the limit. Please buy resume builder with unlimited downloads to keep using resume builder for an year"} 
                                                     </p>
                                                 </span>
                                                 {free_download_count > 0?
