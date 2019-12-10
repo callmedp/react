@@ -106,7 +106,7 @@ export class Buy extends Component {
     timerFunction(){
         const {fetchUserInfo,hideGenerateResumeModal} = this.props
         const { timerId,pollingStartTIme} = this.state
-        if(new Date().getTime() - pollingStartTIme > 60000) {  // max limit 10*6 seconds
+        if(new Date().getTime() - pollingStartTIme > 30000) {  // max limit 10*3 seconds
             clearInterval(timerId)
             hideGenerateResumeModal()
             this.setState({'freeDownloadButtonDisable':false})
