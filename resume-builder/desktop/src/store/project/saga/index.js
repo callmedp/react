@@ -3,9 +3,8 @@ import {Api} from './Api';
 import {takeLatest, put, call, select} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
-
-import {Toast} from "../../../services/ErrorToast";
 import {SubmissionError} from 'redux-form'
+import {Toast} from "../../../services/ErrorToast";
 import {UPDATE_UI} from "../../ui/actions/actionTypes";
 import {initialState} from '../reducer';
 

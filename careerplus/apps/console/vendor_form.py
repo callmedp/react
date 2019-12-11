@@ -1043,7 +1043,6 @@ class ScreenSkillTypeForm(forms.Form):
 
 
     def save(self, commit=True):
-
         product = ProductScreen.objects.filter(id=self.data.get('product','')).first()
 
         new_product_skills = self.cleaned_data.get('product_skill','')

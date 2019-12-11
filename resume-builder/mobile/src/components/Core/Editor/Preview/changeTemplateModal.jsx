@@ -3,7 +3,9 @@ import Modal from 'react-modal';
 import './preview.scss'
 import ResumeSlider from '../../Home/ResumeSlider/resumeSlider';
 
-Modal.setAppElement(document.getElementById('react-app'));
+if(typeof document !== 'undefined') {
+    Modal.setAppElement(document.getElementById('react-app'));
+}
 
 export default class ChangeTemplateModal extends Component{
 

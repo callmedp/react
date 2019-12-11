@@ -115,6 +115,10 @@
     text-align: center;
 }
 
+.text-right {
+    text-align: right;
+}
+
 .relative {
     position: relative;
 }
@@ -140,8 +144,13 @@
 .m-auto {
     margin: 0 auto;
 }
+
 .w-150 {
     width: 15rem;
+}
+
+.w-100 {
+    width: 100%;
 }
 
 

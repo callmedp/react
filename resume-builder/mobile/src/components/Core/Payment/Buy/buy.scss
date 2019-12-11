@@ -216,6 +216,34 @@
             position: relative;
         }
     }
+
+    &__trial {
+        padding-top: 5.0rem;
+        align-items: center;
+
+        .buy__recommended--tag {
+            right: auto;
+            left: -11px;
+            padding-left: .5rem;
+
+            &::before{
+                left: auto;
+                right: -11px;
+                transform: rotate(180deg);
+            }
+
+            &::after {
+                left: 0px;
+                right: auto;
+                transform: rotate(90deg);
+            }
+        }
+
+        .buy_item--left {
+            padding-right: 30px;
+            font-size: 1.4rem;
+        }
+    }
 }
 
 .pay-now {

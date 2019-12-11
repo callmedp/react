@@ -185,12 +185,12 @@ class ResumeGenerator(object):
 
 
         if not is_combo:
-            data_to_send.update({"send_mail": True})
+            data_to_send.update({"send_mail": True,'is_combo':False})
             generate_and_upload_resume_pdf.delay(json.dumps(data_to_send))
             return
 
         for i in range(1, 6):
-            data_to_send.update({"template_no": i})
+            data_to_send.update({"template_no": i,'is_combo':True})
             generate_and_upload_resume_pdf.delay(json.dumps(data_to_send))
 
 

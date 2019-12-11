@@ -77,8 +77,8 @@ class Header extends Component {
                         </div>
                         {
                         (!(order_data && order_data.id) || !(resume_generated)) ?
-                        <a className="btn btn__round btn--outline" onClick={this.changeTemplate}>Change template</a>:
-                        (order_data && order_data.id && order_data.combo) ? <a className="btn btn__round btn--outline" onClick={this.changeTemplate}>Change template</a> : ''          
+                        <a className="btn btn__round btn--outline" alt="Change Template" onClick={this.changeTemplate}>Change template</a>:
+                        (order_data && order_data.id && order_data.combo) ? <a className="btn btn__round btn--outline" alt="Change Template" onClick={this.changeTemplate}>Change template</a> : ''          
                         }
                     </React.Fragment>:
                     page === 'buy' ?
@@ -95,7 +95,7 @@ class Header extends Component {
 
                         <div className="header__right">
                         <span className="header--off">
-                            <img src={`${this.staticUrl}react/assets/images/mobile/launch-offer.png`} alt=""/>
+                            <img src={`${this.staticUrl}react/assets/images/mobile/launch-offer.png`} alt="Launch Offer"/>
                         </span>
                         </div>
 
@@ -116,10 +116,10 @@ class Header extends Component {
 
                     <React.Fragment>
                         <div className="header--logo">
-                            <img src={`${this.staticUrl}react/assets/images/mobile/logo.png`} alt=""/>
+                            <img src={`${this.staticUrl}react/assets/images/mobile/logo.png`} alt="Logo"/>
                         </div>
                         <div className="header--logo"></div>
-                        <a className="btn btn__transparent btn__round" onClick={this.reachUsButton}>Reach us</a>
+                        <a className="btn btn__transparent btn__round" alt="Reach Us" onClick={this.reachUsButton}>Reach us</a>
                     </React.Fragment>}
             </header>
         )

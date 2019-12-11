@@ -28,10 +28,10 @@ export default class Testimonial extends Component {
                     builder</strong>
                 <Slider {...settings}>
                     {
-                        (testimonials || []).map((el, key) => {
+                        (testimonials || [])    .map((el, key) => {
                             return(
                                 <div className="testimonials--list" key={key}>
-                                    <span class="icon-quote"></span>
+                                    <span className="icon-quote"></span>
                                     <div className="testimonials--wrap">
 
                                         

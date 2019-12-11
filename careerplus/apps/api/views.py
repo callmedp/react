@@ -1628,6 +1628,24 @@ class GetAutoLoginToken(APIView):
          login_token = token_gen.encode(email, candidate_id, None)
          return Response({"token": login_token, "msg": "Successfull"}, status=status.HTTP_200_OK)
 
+class GetCacheValue(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+
+    def get(self, request, *args, **kwargs):
+        key = request.GET.get('key','')
+        if not key: 
+            return Response({
+                'value':''
+            }, status=status.HTTP_400_BAD_REQUEST)
+        value = cache.get(key,'')
+        return Response({
+            'value': value
+        }, status=status.HTTP_200_OK)
+
+
+
+        
 
 
 
