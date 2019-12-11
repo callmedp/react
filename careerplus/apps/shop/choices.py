@@ -330,7 +330,8 @@ SUB_HEADING_CHOICES = (
     (0, 'None'),
     (1, 'objective'),
     (2, 'who-should-learn'),
-    (3, 'faq')
+    (3, 'faq'),
+    (4, 'features')
 )
 
 SUB_HEADING_CHOICE_ATTR_MAPPING = (

@@ -62,6 +62,15 @@ this function is to convert the description into a list
 def format_description(string):
     return  [strip_tags(i) + '</br></br>' for i in string.split('\n') if not i.find('<p>')==-1]
 
+'''
+this function is to convert the Features into a list with only 2 items cause of space limit
+'''
+@register.filter(name='format_features')
+def format_features(string):
+    return  [strip_tags(i) for i in string.split('\n') if not i.find('<li>')==-1][:2]
+
+
+
 
 
 

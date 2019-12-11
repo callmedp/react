@@ -95,26 +95,22 @@
 
         <h1 class="white head-ht">{{category.name|title}} Courses & <br/>Certifications</h1>
 
-        <div class="row mt-20 mb-20">
-          <div class="col">
-            <div class="media stats">
-              <figure class="b4-icon-stats mr-20"></figure>
-              <div class="media-body">
-                  26% Annual Growth for cloud
-                  related opportunities In IT Sector
-              </div>
+        {% if 'features'|get_value:subheading %}
+          {% with features='features'|get_value:subheading %}
+            <div class="row mt-20 mb-20">
+              {% for item in  features.description|format_features%}
+                  <div class="col">
+                    <div class="media stats">
+                      <figure class="b4-icon-stats mr-20"></figure>
+                      <div class="media-body">
+                          {{item}}
+                      </div>
+                    </div>
+                  </div>
+              {% endfor %}
             </div>
-          </div>
-          <div class="col">
-            <div class="media stats">
-              <figure class="b4-icon-stats mr-20"></figure>
-              <div class="media-body">
-                  Digital Marketing expected to create
-                  3.3 million jobs by 2022
-              </div>
-            </div>
-          </div>
-        </div>
+          {% endwith %}
+        {% endif %}
 
       </div>
     </div>

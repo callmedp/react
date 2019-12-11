@@ -498,7 +498,6 @@ class ChangeCategoryView(DetailView):
                             return HttpResponseRedirect(
                                 reverse('console:category-change', kwargs={'pk': cat}))
                     elif slug == 'subheading':
-                        import ipdb; ipdb.set_trace()
                         SubHeaderFormSet = inlineformset_factory(
                             Category, SubHeaderCategory,
                             fk_name='category',

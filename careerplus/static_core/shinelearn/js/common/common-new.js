@@ -2,7 +2,28 @@ $(document).ready(()=>{
     //typeahead for search box new skill page
     //Note: Add class search-box in search box 
     attachTypeaheadElementDom('.search-box')
+    navigationDropdownHelper()
+    
 })
+
+const navigationDropdownHelper = () =>{
+    //hover method for better navigation
+    $('.category-tab .nav-tabs > li ').hover(function() {
+        if ($(this).hasClass('hoverblock')){
+            return;
+        }
+        else{
+            if(previous_tab){
+                $(`${previous_tab.attr('data-target')}`).removeClass('active')
+                $(`${previous_tab.attr('data-target')}`).removeClass('show')
+            }
+            $(this).find('a').tab('show');
+            previous_tab = $(this).find('a')
+        }
+    },function(){}).click(function(){
+        window.location.replace($(this).find('a').attr('href'))
+    });
+}
 
 const typeAheadSource = (dataSet) =>{
     return new Bloodhound({
@@ -41,6 +62,14 @@ const attachTypeaheadElementDom = (el) =>{
             window.location.href = `${productUrlSet[suggestion]}`;
     });
 }
+
+// Toast function
+const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000
+});
 
 
   

@@ -228,7 +228,6 @@ class SubHeaderCategoryForm(forms.ModelForm):
             'heading', 'description', 'active', 'display_order','heading_choices')
 
     def clean_heading(self):
-        import ipdb; ipdb.set_trace()
         heading = self.cleaned_data.get('heading', '').strip()
         if not heading:
             raise forms.ValidationError(

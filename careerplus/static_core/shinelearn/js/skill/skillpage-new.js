@@ -10,6 +10,7 @@ let needHelpFormValues = { //default values required for lead management
     'name':'',
 } 
 let needHelpFormError = false
+let previous_tab = null
 
 
 $(document).ready(()=>{
@@ -18,15 +19,8 @@ $(document).ready(()=>{
     let categoryHeading = $('#course-list').attr('categoryHeading');
     needHelpFormValues['prd'] = categoryHeading
     needHelpFormValues['product'] = categoryId
-
-    //hover method for better navigation
-    $('.category-tab .nav-tabs > li ').hover(function() {
-        if ($(this).hasClass('hoverblock'))
-          return;
-        else
-          $(this).find('a').tab('show');
-    });
-
+    
+    // methods for sticky navigation
     $(window).on('scroll', function (e) {
         $('.sticky-nav')[$(window).scrollTop() >= 420 ? 'removeClass' : 'addClass']('sticky-none');
     })
@@ -213,19 +207,9 @@ const gaEventFunc = (typeOfProduct,status) =>{
     gaEvent(event_cat,status,type);
 }
 
-// Toast finction
-const Toast = Swal.mixin({
-    toast: true,
-    position: 'top-end',
-    showConfirmButton: false,
-    timer: 3000
-});
-
 
 //Open More FAQ
-const openMoreFAQ = () =>{
-    console.log('HERE')
-    
+const openMoreFAQ = () =>{    
     $('#faq-accordion').children('.card').each(function(){
         $(this).removeClass('d-none')
     })
