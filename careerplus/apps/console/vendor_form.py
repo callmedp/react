@@ -1023,69 +1023,130 @@ class ScreenChapterInlineFormSet(forms.BaseInlineFormSet):
             return
 
 
-class ScreenProductSkillForm(forms.ModelForm):
+class ScreenSkillTypeForm(forms.Form):
 
-    def __init__(self, *args, **kwargs):
-        obj = kwargs.pop('object', None)
-        super(ScreenProductSkillForm, self).__init__(*args, **kwargs)
-        form_class = 'form-control col-md-7 col-xs-12'
-        queryset = Skill.objects.filter(active=True)
-        # if self.instance.pk:
-        #     self.fields['skill'].queryset = queryset
-        # else:
-        #     skills = obj.screenskills.all().values_list(
-        #         'skill_id', flat=True)
-        #     queryset = queryset.exclude(pk__in=skills)
-        self.fields['skill'].queryset = queryset
-        self.fields['skill'].widget.attrs['class'] = form_class
-        self.fields['skill'].required = True
+    product_skill = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-3 col-xs-12',
+            'placeholder':'Add skills'}),
+        required=False
+    )
 
-        self.fields['active'].widget.attrs['class'] = 'js-switch'
-        self.fields['active'].widget.attrs['data-switchery'] = 'true'
-        self.fields['priority'].widget.attrs['class'] = form_class
-
-    class Meta:
-        model = ScreenProductSkill
-        fields = (
-            'skill', 'active', 'priority')
-        widgets = {
-            'skill': autocomplete.ModelSelect2(
-                url='console:skill-autocomplete')
-        }
-
-    def clean(self):
-        super(ScreenProductSkillForm, self).clean()
-
-    def clean_skill(self):
-        skill = self.cleaned_data.get('skill', None)
-        if skill:
-            pass
-        else:
-            raise forms.ValidationError(
-                "This field is required.")
-        return skill
+    required_skill = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-3 col-xs-12',
+            'placeholder':'Add skills'}),
+        required=False
+    )
 
 
-class ScreenSkillInlineFormSet(forms.BaseInlineFormSet):
-    def clean(self):
-        super(ScreenSkillInlineFormSet, self).clean()
-        # if any(self.errors):
-        #     return
-        skills = []
-        duplicates = False
-        for form in self.forms:
-            if form.cleaned_data:
-                skill = form.cleaned_data['skill']
-                if skill in skills:
-                    duplicates = True
-                skills.append(skill)
+    def save(self, commit=True):
 
-                if duplicates:
-                    raise forms.ValidationError(
-                        'Skill must be unique.',
-                        code='duplicate_skill'
-                    )
-        return
+        product = ProductScreen.objects.filter(id=self.data.get('product','')).first()
+
+        new_product_skills = self.cleaned_data.get('product_skill','')
+        new_required_skills = self.cleaned_data.get('required_skill','')
+
+        new_product_skills = new_product_skills.split(",") if new_product_skills !='' else []
+        new_required_skills = new_required_skills.split(",") if new_required_skills!='' else []
+
+        old_product_skills = []
+        old_required_skills = []
+
+        product_skill = ScreenProductSkill.objects.filter(product=product, active=True)
+        for prd_sk in product_skill:
+            if prd_sk.relation_type == 1:
+                old_product_skills.append(prd_sk.skill.name.lower())
+            elif prd_sk.relation_type == 2:
+                old_required_skills.append(prd_sk.skill.name.lower())
+
+        added_skills = { 1: list(set(new_product_skills)-set(old_product_skills)),
+            2: list(set(new_required_skills)-set(old_required_skills))}
+
+        deleted_skills = {1: list(set(old_product_skills)-set(new_product_skills)),
+            2: list(set(old_required_skills)-set(new_required_skills))}
+
+        for relation_type, skill_list in deleted_skills.items():
+            for sk in skill_list:
+                ScreenProductSkill.objects.filter(product=product,
+                    skill=Skill.objects.get(name=sk),
+                    relation_type=relation_type).update(active=False)
+
+        for relation_type, skill_list in added_skills.items():
+            for sk in skill_list:
+                skill , created= Skill.objects.get_or_create(name=sk)
+                sps , created_skill = ScreenProductSkill.objects.get_or_create(skill=skill, 
+                    product=product, relation_type=relation_type)
+                sps.active = True
+                sps.save()
+
+
+
+# class ScreenProductSkillForm(forms.ModelForm):
+
+#     def __init__(self, *args, **kwargs):
+#         obj = kwargs.pop('object', None)
+#         super(ScreenProductSkillForm, self).__init__(*args, **kwargs)
+#         form_class = 'form-control col-md-7 col-xs-12'
+#         queryset = Skill.objects.filter(active=True)
+#         # if self.instance.pk:
+#         #     self.fields['skill'].queryset = queryset
+#         # else:
+#         #     skills = obj.screenskills.all().values_list(
+#         #         'skill_id', flat=True)
+#         #     queryset = queryset.exclude(pk__in=skills)
+#         self.fields['skill'].queryset = queryset
+#         self.fields['skill'].widget.attrs['class'] = form_class
+#         self.fields['skill'].required = True
+
+#         self.fields['active'].widget.attrs['class'] = 'js-switch'
+#         self.fields['active'].widget.attrs['data-switchery'] = 'true'
+#         self.fields['priority'].widget.attrs['class'] = form_class
+
+#     class Meta:
+#         model = ScreenProductSkill
+#         fields = (
+#             'skill', 'active', 'priority')
+#         widgets = {
+#             'skill': autocomplete.ModelSelect2(
+#                 url='console:skill-autocomplete')
+#         }
+
+#     def clean(self):
+#         super(ScreenProductSkillForm, self).clean()
+
+#     def clean_skill(self):
+#         skill = self.cleaned_data.get('skill', None)
+#         if skill:
+#             pass
+#         else:
+#             raise forms.ValidationError(
+#                 "This field is required.")
+#         return skill
+
+
+# class ScreenSkillInlineFormSet(forms.BaseInlineFormSet):
+#     def clean(self):
+#         super(ScreenSkillInlineFormSet, self).clean()
+#         # if any(self.errors):
+#         #     return
+#         skills = []
+#         duplicates = False
+#         for form in self.forms:
+#             if form.cleaned_data:
+#                 skill = form.cleaned_data['skill']
+#                 if skill in skills:
+#                     duplicates = True
+#                 skills.append(skill)
+
+#                 if duplicates:
+#                     raise forms.ValidationError(
+#                         'Skill must be unique.',
+#                         code='duplicate_skill'
+#                     )
+#         return
 
 
 class ScreenUniversityCoursesPaymentInlineFormset(forms.BaseInlineFormSet):

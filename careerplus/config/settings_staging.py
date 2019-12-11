@@ -199,6 +199,14 @@ CACHES = {
             'CONNECTION_POOL_KWARGS': {'max_connections': 50},
         }
     },
+    'candidate_search_lookup': {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://172.22.67.223:6379/4",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            'CONNECTION_POOL_KWARGS': {'max_connections': 50},
+        }
+    },
     'job_title_lookup': {
         "BACKEND": "django_red.cache.RedisCache",
         "LOCATION": "redis://172.22.67.223:6379/13",

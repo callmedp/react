@@ -71,6 +71,7 @@ from .choices import (
     convert_aed,
     convert_gbp)
 from search.choices import EXP_DICT
+from .config import RELATION_TYPE_CHOICES
 
 
 class ProductClass(AbstractAutoDate, AbstractSEO,):
@@ -2636,6 +2637,8 @@ class ProductSkill(AbstractAutoDate):
         on_delete=models.CASCADE)
     priority = models.PositiveIntegerField(default=1)
     active = models.BooleanField(default=True)
+    relation_type = models.PositiveIntegerField(
+        default=1, choices=RELATION_TYPE_CHOICES, help_text=("Describes the type of relation between product and skill"))
 
     def __str__(self):
         name = '{} - ({}) to {} - ({})'.format(
@@ -2644,7 +2647,7 @@ class ProductSkill(AbstractAutoDate):
         return name
 
     class Meta:
-        unique_together = ('product', 'skill')
+        unique_together = ('product', 'skill', 'relation_type')
         verbose_name = _('Product Skill')
         verbose_name_plural = _('Product Skills')
 
@@ -2662,6 +2665,8 @@ class ScreenProductSkill(AbstractAutoDate):
         on_delete=models.CASCADE)
     priority = models.PositiveIntegerField(default=1)
     active = models.BooleanField(default=True)
+    relation_type = models.PositiveIntegerField(
+        default=1, choices=RELATION_TYPE_CHOICES, help_text=("Describes the type of relation between product and skill"))
 
     def __str__(self):
         name = '{} - ({}) to {} - ({})'.format(
@@ -2670,7 +2675,7 @@ class ScreenProductSkill(AbstractAutoDate):
         return name
 
     class Meta:
-        unique_together = ('product', 'skill')
+        unique_together = ('product', 'skill', 'relation_type')
         verbose_name = _('Product Skill')
         verbose_name_plural = _('Product Skills')
 

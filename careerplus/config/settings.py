@@ -301,6 +301,14 @@ CACHES = {
         }
 
     },
+    'candidate_search_lookup': {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://172.22.67.223:6379/4",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            'CONNECTION_POOL_KWARGS': {'max_connections': 50},
+        }
+    },
 
     'search_lookup': {
         "BACKEND": "django_redis.cache.RedisCache",
