@@ -14,7 +14,16 @@ const addToCart = (data) => {
 
 }
 
+const requestFreeResume = () => {
+    const candidateId = localStorage.getItem('candidateId')
+    const selectedTemplate = localStorage.getItem('selected_template',1)
+    const url = `candidate/${candidateId}/free-resume/template/${selectedTemplate}/`;
+    return BaseApiService.post(`${siteDomain}/api/v1/resume/${url}`,{})
+}
+
+
+
 
 export const Api = {
-    fetchProductIds, addToCart
+    fetchProductIds, addToCart,requestFreeResume
 }

@@ -8,6 +8,8 @@ from django.conf import settings
 from django.template.loader import get_template
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django_redis import get_redis_connection
+from django.http import HttpResponse
+
 
 # local imports
 from resumebuilder.models import (Candidate, Skill, CandidateExperience, CandidateEducation, CandidateCertification,
@@ -22,6 +24,7 @@ from resumebuilder.choices import (INTEREST_LIST)
 from resumebuilder.mixins import (SessionManagerMixin)
 from resumebuilder.constants import EDUCATION_PARENT_CHILD_HEIRARCHY_LIST, JOB_TITLES
 from resumebuilder.utils import ResumeEntityReorderUtility
+from core.library.gcloud.custom_cloud_storage import GCPResumeBuilderStorage
 
 # inter app imports
 from shine.core import ShineCandidateDetail
@@ -37,6 +40,7 @@ from rest_framework.parsers import (FormParser, MultiPartParser)
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from wsgiref.util import FileWrapper
 import imgkit
 
 
@@ -940,3 +944,56 @@ class PDFRefreshAPIView(APIView):
         candidate_obj.save();
         generate_resume_for_order.delay(order_obj.id)
         return Response({"detail": "Resume successfully Updated"}, status=status.HTTP_200_OK)
+
+class FreeTrialResumeDownload(APIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsObjectOwner,)
+    '''
+    use of the view is to download free trial resume of users with following functions
+    1. post request to generate and send pdf file in response
+    '''
+    def post(self, request, *args, **kwargs):
+        from resumebuilder.tasks import generate_and_upload_resume_pdf
+        data = {
+          'candidate_id': kwargs.get('candidate_id',''),
+          'is_free_trial':True,
+          'template_no': kwargs.get('template_no',1)
+        }
+        data = json.dumps(data)
+        generate_and_upload_resume_pdf.delay(data)
+        response = HttpResponse(json.dumps({'result':'Free Resume template creation started.Please wait for a few seconds'}))
+        return response 
+
+    def get(self,request,*args,**kwargs):
+        candidate_id = kwargs.get('candidate_id','')
+        template_no = kwargs.get('template_no','')
+        candidate = Candidate.objects.filter(candidate_id=candidate_id).first()
+
+        if not candidate:
+            logging.getLogger('error_log').error("No Candidate Found")
+            return HttpResponse(json.dumps({'error':True}))
+
+        content_type = "application/pdf"
+        filename_prefix = "free-trial"
+        file_path = settings.RESUME_TEMPLATE_DIR + "/{}/pdf/free-trial-{}.pdf".format(candidate.id, template_no)
+        content_type = "application/pdf"
+        filename_suffix = ".pdf"
+
+        try:
+            if not settings.IS_GCP:
+                file_path = "{}/{}".format(settings.MEDIA_ROOT, file_path)
+                fsock = FileWrapper(open(file_path, 'rb'))
+            else:
+                fsock = GCPResumeBuilderStorage().open(file_path)
+
+            filename = filename_prefix + filename_suffix
+            response = HttpResponse(fsock.read(), content_type=content_type)
+            response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
+            return response
+
+        except Exception as e:
+            logging.getLogger('error_log').error("%s" % str(e))
+            return HttpResponse(json.dumps({'error':True}))
+
+
+

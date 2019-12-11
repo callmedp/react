@@ -9,8 +9,9 @@ import {
 } from './actionTypes';
 
 
-export const fetchPersonalInfo = () => ({
-    type: FETCH_PERSONAL_INFO
+export const fetchPersonalInfo = (payload) => ({
+    type: FETCH_PERSONAL_INFO,
+    payload
 });
 
 

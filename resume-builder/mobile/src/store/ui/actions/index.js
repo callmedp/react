@@ -69,7 +69,7 @@ export const showGenerateResumeModal = () => {
 export const hideGenerateResumeModal = () => {
     return {
         type: HIDE_GENERATE_RESUME_MODAL,
-        data: {'generateResumeModal': true}
+        data: {'generateResumeModal': false}
     }
 }
 
