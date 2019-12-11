@@ -9,10 +9,12 @@ from django.views.generic import (
     View)
 
 from django.http import HttpResponseForbidden, Http404,\
-    HttpResponse, HttpResponseRedirect
+    HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.db.models import Count
 from django.core.paginator import Paginator
 from django.urls import reverse
+from django.utils.http import urlquote
+
 from django.template.loader import render_to_string
 from django.db.models import Q
 
@@ -345,13 +347,17 @@ class TEBlogCategoryListView(TemplateView, BlogMixin):
 
         self.page = request.GET.get('page', 1)
         try:
-            self.cat_obj = Category.objects.get(slug=slug, is_active=True, visibility=2)
+            self.cat_obj = Category.objects.get(slug=slug, is_active=True)
             if not self.cat_obj.article_exists():
                 return HttpResponseRedirect(reverse('talent:talent-landing'))
         except Exception as e:
             logging.getLogger('error_log').error('unable to get category object %s' % str(e))
             raise Http404
 
+        redirect = self.redirect_if_necessary(request.path, self.cat_obj)
+
+        if redirect:
+            return redirect
         context = super(TEBlogCategoryListView, self).get(request, args, **kwargs)
         return context
 
@@ -362,6 +368,11 @@ class TEBlogCategoryListView(TemplateView, BlogMixin):
         return country_choices,initial_country
 
 
+    def redirect_if_necessary(self, current_path, category):
+        expected_path = category.get_absolute_url()
+        if expected_path != urlquote(current_path):
+            return HttpResponsePermanentRedirect(expected_path)
+        return None
 
     def get_context_data(self, **kwargs):
         context = super(
@@ -501,7 +512,7 @@ class TEBlogDetailView(DetailView, BlogMixin):
         self.page = 1
 
     def get_queryset(self):
-        qs = Blog.objects.filter(status=1, visibility=2)
+        qs = Blog.objects.filter(status=1)
         return qs
 
     def get_object(self, queryset=None):
@@ -511,14 +522,13 @@ class TEBlogDetailView(DetailView, BlogMixin):
             queryset = self.get_queryset()
 
         if slug is not None:
-            queryset = queryset.filter(slug=slug, status=1, visibility=2)
+            queryset = queryset.filter(slug=slug, status=1)
         try:
             obj = queryset.get()
         except Exception as e:
             logging.getLogger('error_log').error('unable to get queryset %s' % str(e))
             raise Http404
         return obj
-
 
     def get_countries(self):
         country_choices = [(m.phone, m.name) for m in
@@ -540,11 +550,11 @@ class TEBlogDetailView(DetailView, BlogMixin):
             agent.disable_browser_autorum()
         return ["talenteconomy/article-detail-amp.html"]
 
-#    def redirect_if_necessary(self, current_path, article):
-#        expected_path = article.get_absolute_url()
-#        if expected_path != urlquote(current_path):
-#            return HttpResponsePermanentRedirect(expected_path)
-#        return None
+    def redirect_if_necessary(self, current_path, article):
+       expected_path = article.get_absolute_url()
+       if expected_path != urlquote(current_path):
+           return HttpResponsePermanentRedirect(expected_path)
+       return None
 
     def get(self, request, *args, **kwargs):
         self.slug = kwargs.get('slug', None)
@@ -553,9 +563,9 @@ class TEBlogDetailView(DetailView, BlogMixin):
         self.object.no_views += 1
         self.object.update_score()
         self.object.save()
-        #redirect = self.redirect_if_necessary(request.path, self.object)
-        #if redirect:
-        #    return redirect
+        redirect = self.redirect_if_necessary(request.path, self.object)
+        if redirect:
+           return redirect
 
         context = super(self.__class__, self).get(request, args, **kwargs)
         return context
