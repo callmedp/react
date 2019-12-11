@@ -88,10 +88,12 @@ class SkillPageView(DetailView, SkillPageMixin):
         career_outcomes = self.object.split_career_outcomes()
         subheading_id_data_mapping = {}
 
-        products = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=self.object.pk).exclude(pTF=16)
-        product_count = products.count()
+        courses = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=self.object.pk).exclude(pTF=16)
+        course_count = courses.count()
         assesments = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=self.object.pk, pTF=16)
         assesment_count = assesments.count()
+        country_choices = [(m.phone, m.name) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+        country_choices = sorted(country_choices, key=lambda x: x[0])
 
         widget_obj = DetailPageWidget.objects.filter(content_type__model='Category', listid__contains=self.object.pk)
         widget_obj_data = widget_obj.widget.iw.indexcolumn_set.filter(column=1) if widget_obj else []
@@ -105,14 +107,15 @@ class SkillPageView(DetailView, SkillPageMixin):
             'subheading':subheading_id_data_mapping,
             'category':self.object,
             'career_outcomes':career_outcomes,
-            'products':products[:self.no_of_products],
-            'product_count':product_count,
-            'top_3_products':products[:3],
+            'courses':courses[:self.no_of_products],
+            'course_count':course_count,
+            'top_3_courses':courses[:3],
             'assesments':assesments[:self.no_of_products],
             'assesment_count':assesment_count,
             'widget_name':widget_obj.name if widget_obj else '',
             'widget_obj_data':widget_obj_data,
-            'breadcrumbs':self.get_breadcrumb_data()
+            'breadcrumbs':self.get_breadcrumb_data(),
+            'country_choices':country_choices,
         })
         return context
 

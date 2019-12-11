@@ -36,10 +36,12 @@
 
 
 {% block css_section %}
-      
+  {{ block.super }}
+
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.min.css" rel="stylesheet" />
+
 <!-- Bootstrap 4 -->
  {% compress css %}
-        <link type="text/scss" href="{% static 'shinelearn/css/common/bootstrap4/bootstrap.scss' %}" rel="stylesheet">
         <link type="text/scss" href="{% static 'shinelearn/css/common/bootstrap4/skill.scss' %}" rel="stylesheet">
  {% endcompress %}
 
@@ -74,349 +76,6 @@
 
 
 {% block container %}
-<!-- top first navigation -->
-<nav class="container-fluid padlr-0 shadow position-relative zindex">
-  <div class="container padlr-0">
-    <div class="navbar navbar-expand-lg navbar-light padlr-0">
-      <a class="navbar-brand" href="#"></a>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <form class="form-inline my-2 my-lg-0 mr-auto">
-            <input class="form-control" type="search" placeholder="Search course, assesssment…" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0 nav-pad" type="submit"><figure class="b4-icon-search mb-0"></figure></button>
-        </form>
-        <ul class="navbar-nav navbar-right">
-          <li class="nav-item dropdown dropdown-jobs">
-            <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Job assistance</a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Resume Writing</a>
-              <a class="dropdown-item" href="#">International Resume</a>
-              <a class="dropdown-item" href="#">Visual Resume</a>
-              <a class="dropdown-item" href="#">Jobs On The Move</a>
-              <a class="dropdown-item" href="#">Linkedin Profile</a>
-              <a class="dropdown-item" href="#">Featured Profile</a>
-              <a class="dropdown-item" href="#">Background Verification Services</a>
-              <a class="dropdown-item" href="#">Interview Preparation</a>
-              <a class="dropdown-item" href="#">Application Highlighter</a>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Practice test</a>
-          </li>
-          <li class="nav-item dropdown dropdown-resources">
-              <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Free resources</a>
-              <div class="dropdown-menu category-tab" aria-labelledby="navbarDropdown">
-              <div class="resources-tab">
-                  <ul class="nav nav-tabs" id="myTab" role="tablist">
-                      <li class="nav-item">
-                        <a class="nav-link active" id="resources-tab" data-toggle="tab" href="#tab-links1" role="tab" aria-controls="resources-tab" aria-selected="true">Resume Formats</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" id="resources-tab" data-toggle="tab" href="#resources-links2" role="tab" aria-controls="resources-tab" aria-selected="false">Resignation Letter Formats</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" id="resources-tab" data-toggle="tab" href="#resources-links3" role="tab" aria-controls="resources-tab" aria-selected="false">Cover Letter Formats</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" id="resources-tab" data-toggle="tab" href="#resources-links4" role="tab" aria-controls="resources-tab" aria-selected="false">Resume Templates</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" id="resources-tab" data-toggle="tab" href="#resources-links5" role="tab" aria-controls="resources-tab" aria-selected="false">Linkedin Summary Example</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" id="resources-tab" data-toggle="tab" href="#resources-links6" role="tab" aria-controls="resources-tab" aria-selected="false">Career Guidance</a>
-                      </li>
-                  </ul>
-                  <div class="tab-content" id="myTabContent">
-                      <div class="tab-pane fade show active" id="resources-links1" role="tabpanel" aria-labelledby="resources-tab">
-                          <a href="#">Advanced Accounting</a>
-                          <a href="#">Banking</a>
-                          <a href="#">Risk Management</a>
-                          <a href="#">Stock Market Training</a>
-                          <a href="#">Finanacial Reporting and Management</a>
-                          <a href="#">View all</a>
-                      </div>
-                      <div class="tab-pane fade" id="resources-links2" role="tabpanel" aria-labelledby="resources-tab">
-                          <a href="#">Stock Market Training</a>
-                          <a href="#">Finanacial Reporting and Management</a>
-                          <a href="#">Commercial Operation</a>
-                          <a href="#">Investment Banking</a>
-                          <a href="#">GST</a>
-                          <a href="#">View all</a>
-                      </div>
-                      <div class="tab-pane fade" id="resources-links3" role="tabpanel" aria-labelledby="resources-tab">
-                          <a href="#">GST</a>
-                          <a href="#">Advanced Accounting</a>
-                          <a href="#">Banking</a>
-                          <a href="#">Risk Management</a>
-                          <a href="#">Stock Market Training</a>
-                          <a href="#">View all</a>
-                      </div>
-                      <div class="tab-pane fade" id="resources-links4" role="tabpanel" aria-labelledby="resources-tab">
-                          <a href="#">Stock Market Training</a>
-                          <a href="#">Finanacial Reporting and Management</a>
-                          <a href="#">Commercial Operation</a>
-                          <a href="#">Investment Banking</a>
-                          <a href="#">Stock Market Training</a>
-                          <a href="#">View all</a>
-                      </div>
-                      <div class="tab-pane fade" id="resources-links5" role="tabpanel" aria-labelledby="resources-tab">
-                          <a href="#">GST</a>
-                          <a href="#">Advanced Accounting</a>
-                          <a href="#">Banking</a>
-                          <a href="#">Risk Management</a>
-                          <a href="#">Stock Market Training</a>
-                          <a href="#">View all</a>
-                      </div>
-                      <div class="tab-pane fade" id="resources-links6" role="tabpanel" aria-labelledby="resources-tab">
-                          <a href="#">Stock Market Training</a>
-                          <a href="#">Finanacial Reporting and Management</a>
-                          <a href="#">Commercial Operation</a>
-                          <a href="#">Investment Banking</a>
-                          <a href="#">GST</a>
-                          <a href="#">View all</a>
-                      </div>
-                  </div>
-              </div>
-            </div>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" href="#">Blog</a>
-          </li>
-          <li class="nav-item dropdown dropdown-call">
-              <a class="nav-link link-ht" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <figure class="b4-icon-call"></figure>
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#"><strong>Call us:</strong> 0124-4312500/01</a>
-              </div>
-            </li>
-            <li class="nav-item dropdown dropdown-user">
-                <a class="nav-link link-ht" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <figure class="b4-icon-user"></figure>
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="#">My Inbox</a>
-                  <a class="dropdown-item" href="#">My Orders</a>
-                  <a class="dropdown-item" href="#">My Wallet</a>
-                  <a class="dropdown-item" href="#">My Referrals</a>
-                  <a class="dropdown-item" href="#">abc@hindustantimes.com</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">Logout</a>
-                </div>
-              </li>
-              <li class="nav-item position-relative">
-                  <span class="counter">4</span>
-                  <a class="nav-link link-ht" href="#">
-                    <figure class="b4-icon-cart"></figure>
-                  </a>
-              </li>
-        </ul>
-        
-      </div>
-    </div>
-  </div>
-</nav>
-<!-- top first navigation end -->
-<!-- top second navigation -->
-<nav class="navbar-bg-light navbar navbar-expand-lg navbar-light">
-  <div class="container">
-    <div class="row">
-      <ul class="navbar-nav" id=categories>
-        <li class="nav-item dropdown dropdown-categories">
-            <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <span class="sm-txt">Explore</span></span>Categories
-              <figure class="b4-icon-down"></figure>
-            </a>
-            <div class="dropdown-menu category-tab" aria-labelledby="navbarDropdown">
-              <div class="categories-tab">
-                  <ul class="nav nav-tabs" id="myTab" role="tablist">
-                      <li class="nav-item">
-                        <a class="nav-link active" id="category-tab" data-toggle="tab" href="#tab-links1" role="tab" aria-controls="category-tab" aria-selected="true">Sales & Marketing</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" id="category-tab" data-toggle="tab" href="#tab-links2" role="tab" aria-controls="category-tab" aria-selected="false">Operation Management</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" id="category-tab" data-toggle="tab" href="#tab-links3" role="tab" aria-controls="category-tab" aria-selected="false">Banking & Finance</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" id="category-tab" data-toggle="tab" href="#tab-links4" role="tab" aria-controls="category-tab" aria-selected="false">Information Technology</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" id="category-tab" data-toggle="tab" href="#tab-links5" role="tab" aria-controls="category-tab" aria-selected="false">Human Resources</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" id="category-tab" data-toggle="tab" href="#tab-links6" role="tab" aria-controls="category-tab" aria-selected="false">Management</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" id="category-tab" data-toggle="tab" href="#tab-links7" role="tab" aria-controls="category-tab" aria-selected="false">Mass Communication</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" id="category-tab" data-toggle="tab" href="#tab-links8" role="tab" aria-controls="category-tab" aria-selected="false">Personal Development</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" id="category-tab" data-toggle="tab" href="#tab-links9" role="tab" aria-controls="category-tab" aria-selected="false">Law</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" id="category-tab" data-toggle="tab" href="#tab-links10" role="tab" aria-controls="category-tab" aria-selected="false">Course Catalogue</a>
-                      </li>
-                  </ul>
-                  <div class="tab-content" id="myTabContent">
-                      <div class="tab-pane fade show active" id="tab-links1" role="tabpanel" aria-labelledby="category-tab">
-                          <a href="#">Advanced Accounting</a>
-                          <a href="#">Banking</a>
-                          <a href="#">Risk Management</a>
-                          <a href="#">Stock Market Training</a>
-                          <a href="#">Finanacial Reporting and Management</a>
-                          <a href="#">Commercial Operation</a>
-                          <a href="#">Investment Banking</a>
-                          <a href="#">GST</a>
-                          <a href="#">Advanced Accounting</a>
-                          <a href="#">Banking</a>
-                          <a href="#">Risk Management</a>
-                          <a href="#">Stock Market Training</a>
-                          <a href="#">View all</a>
-                      </div>
-                      <div class="tab-pane fade" id="tab-links2" role="tabpanel" aria-labelledby="category-tab">
-                          <a href="#">Advanced Accounting</a>
-                          <a href="#">Banking</a>
-                          <a href="#">Risk Management</a>
-                          <a href="#">Stock Market Training</a>
-                          <a href="#">Finanacial Reporting and Management</a>
-                          <a href="#">Commercial Operation</a>
-                          <a href="#">Investment Banking</a>
-                          <a href="#">GST</a>
-                          <a href="#">View all</a>
-                      </div>
-                      <div class="tab-pane fade" id="tab-links3" role="tabpanel" aria-labelledby="category-tab">
-                          <a href="#">Risk Management</a>
-                          <a href="#">Stock Market Training</a>
-                          <a href="#">Finanacial Reporting and Management</a>
-                          <a href="#">Commercial Operation</a>
-                          <a href="#">Investment Banking</a>
-                          <a href="#">GST</a>
-                          <a href="#">Advanced Accounting</a>
-                          <a href="#">Banking</a>
-                          <a href="#">Risk Management</a>
-                          <a href="#">Stock Market Training</a>
-                          <a href="#">View all</a>
-                      </div>
-                      <div class="tab-pane fade" id="tab-links4" role="tabpanel" aria-labelledby="category-tab">
-                          <a href="#">Stock Market Training</a>
-                          <a href="#">Finanacial Reporting and Management</a>
-                          <a href="#">Commercial Operation</a>
-                          <a href="#">Investment Banking</a>
-                          <a href="#">GST</a>
-                          <a href="#">Advanced Accounting</a>
-                          <a href="#">Banking</a>
-                          <a href="#">Risk Management</a>
-                          <a href="#">Stock Market Training</a>
-                          <a href="#">View all</a>
-                      </div>
-                      <div class="tab-pane fade" id="tab-links5" role="tabpanel" aria-labelledby="category-tab">
-                          <a href="#">Advanced Accounting</a>
-                          <a href="#">Banking</a>
-                          <a href="#">Risk Management</a>
-                          <a href="#">Stock Market Training</a>
-                          <a href="#">Finanacial Reporting and Management</a>
-                          <a href="#">Commercial Operation</a>
-                          <a href="#">Investment Banking</a>
-                          <a href="#">GST</a>
-                          <a href="#">Advanced Accounting</a>
-                          <a href="#">Banking</a>
-                          <a href="#">Risk Management</a>
-                          <a href="#">Stock Market Training</a>
-                          <a href="#">View all</a>
-                      </div>
-                      <div class="tab-pane fade" id="tab-links6" role="tabpanel" aria-labelledby="category-tab">
-                          <a href="#">Stock Market Training</a>
-                          <a href="#">Finanacial Reporting and Management</a>
-                          <a href="#">Commercial Operation</a>
-                          <a href="#">Investment Banking</a>
-                          <a href="#">GST</a>
-                          <a href="#">Advanced Accounting</a>
-                          <a href="#">Banking</a>
-                          <a href="#">Risk Management</a>
-                          <a href="#">Stock Market Training</a>
-                          <a href="#">View all</a>
-                      </div>
-                      <div class="tab-pane fade" id="tab-links7" role="tabpanel" aria-labelledby="category-tab">
-                          <a href="#">Investment Banking</a>
-                          <a href="#">GST</a>
-                          <a href="#">Advanced Accounting</a>
-                          <a href="#">Banking</a>
-                          <a href="#">Risk Management</a>
-                          <a href="#">Stock Market Training</a>
-                          <a href="#">View all</a>
-                      </div>
-                      <div class="tab-pane fade" id="tab-links8" role="tabpanel" aria-labelledby="category-tab">
-                          <a href="#">Banking</a>
-                          <a href="#">Risk Management</a>
-                          <a href="#">Stock Market Training</a>
-                          <a href="#">Finanacial Reporting and Management</a>
-                          <a href="#">Commercial Operation</a>
-                          <a href="#">Investment Banking</a>
-                          <a href="#">GST</a>
-                          <a href="#">Advanced Accounting</a>
-                          <a href="#">Banking</a>
-                          <a href="#">Risk Management</a>
-                          <a href="#">Stock Market Training</a>
-                          <a href="#">View all</a>
-                      </div>
-                      <div class="tab-pane fade" id="tab-links9" role="tabpanel" aria-labelledby="category-tab">
-                          <a href="#">Stock Market Training</a>
-                          <a href="#">Finanacial Reporting and Management</a>
-                          <a href="#">Commercial Operation</a>
-                          <a href="#">Investment Banking</a>
-                          <a href="#">GST</a>
-                          <a href="#">Advanced Accounting</a>
-                          <a href="#">Banking</a>
-                          <a href="#">Risk Management</a>
-                          <a href="#">Stock Market Training</a>
-                          <a href="#">View all</a>
-                      </div>
-                      <div class="tab-pane fade" id="tab-links10" role="tabpanel" aria-labelledby="category-tab">
-                          <a href="#">Advanced Accounting</a>
-                          <a href="#">Banking</a>
-                          <a href="#">Risk Management</a>
-                          <a href="#">Stock Market Training</a>
-                          <a href="#">Finanacial Reporting and Management</a>
-                          <a href="#">Commercial Operation</a>
-                          <a href="#">Investment Banking</a>
-                          <a href="#">GST</a>
-                          <a href="#">Advanced Accounting</a>
-                          <a href="#">Banking</a>
-                          <a href="#">Risk Management</a>
-                          <a href="#">Stock Market Training</a>
-                          <a href="#">View all</a>
-                      </div>
-                  </div>
-              </div>
-            </div>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Digital Marketing</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Six Sigma</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Project Management</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Big Data</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">IT Software</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">General Management</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
-<!-- top second navigation end -->
 
 <header class="b4-skillpage-bg">
   <div class="container">
@@ -522,14 +181,14 @@
                 <h2>Popular courses</h2>
                 <a class="btn btn-outline-primary ml-auto" href="#" role="button">View Courses</a>
                 <div class="d-flex mb-10">
-                  {% for product in top_3_products %}
+                  {% for course in top_3_courses %}
                     <div class="col">
                       <div class="media">
                         <figure class="mr-20 shadow-icon">
-                          <img aria-label="{{product.pNm}}" class="img-fluid" src="{{product.pImg}}" alt="{{product.pNm}}">
+                          <img aria-label="{{course.pNm}}" class="img-fluid" src="{{course.pImg}}" alt="{{course.pNm}}">
                         </figure>
                         <figcaption class="media-body">
-                            <a href="{{product.pURL}}">{{product.pNm}}</a>
+                            <a href="{{course.pURL}}">{{course.pNm}}</a>
                         </figcaption>
                       </div>
                     </div>
@@ -653,16 +312,16 @@
           <section class="col-sm-12">
             <div class="courses-assesment-tab">
               <ul class="nav nav-tabs" id="myTab" role="tablist">
-                {% if product_count %}
+                {% if course_count %}
                   <li class="nav-item">
                     <a class="nav-link active" id="courses-tab" data-toggle="tab" href="#courses" role="tab" aria-controls="courses" aria-selected="true">
-                      <h2>Courses ({{product_count}})</h2>
+                      <h2>Courses ({{course_count}})</h2>
                     </a>
                   </li>
                 {% endif %}
                 {% if assesment_count %}
                   <li class="nav-item">
-                    <a class="nav-link  {% if not product_count %}active{% endif %}" id="assessments-tab" data-toggle="tab" href="#assessments" role="tab" aria-controls="assessments" aria-selected="false">
+                    <a class="nav-link  {% if not course_count %}active{% endif %}" id="assessments-tab" data-toggle="tab" href="#assessments" role="tab" aria-controls="assessments" aria-selected="false">
                       <h2>Assessments ({{assesment_count}})</h2>
                     </a>
                   </li>
@@ -671,26 +330,27 @@
               </ul>
               <div class="tab-content listing" id="myTabContent">
                 <div class="tab-pane fade show active" id="courses" role="tabpanel" aria-labelledby="courses-tab">
-                    <ul class="list-unstyled">
-                      {% for product in products %}
+                    {% comment %}Note: Catergory id and heading is used in lead management and for receiving products for used as an attribute here {% endcomment %}
+                    <ul class="list-unstyled" id="course-list" categoryId="{{category.pk}}" categoryHeading={{category.heading}}>  
+                      {% for course in courses %}
                         <li class="media listing__list">
                           <figure class="listing__image">
-                              <img aria-label="{{product.pNm}}" class="img-fluid" src="{{product.pImg}}" alt="{{product.pNm}}">
+                              <img aria-label="{{course.pNm}}" class="img-fluid" src="{{course.pImg}}" alt="{{course.pNm}}">
                           </figure>
                           
                           <div class="media-body">
-                            <h3><a href="{{product.pURL}}">{{product.pNm}}</a></h3>
+                            <h3><a href="{{course.pURL}}">{{course.pNm}}</a></h3>
                               <div class="rating">
-                                {% for rating in product.pStar %}
+                                {% for rating in course.pStar %}
                                   {% if rating == "*" %}
                                     <i class="b4-icon-star"></i>
                                   {% elif rating == "+" %}
-                                    {% comment %} <i class="b4-icon-star"></i> {% endcomment %}
-                                  {% elif rating == "*" %}
+                                    <i class="b4-icon-star"></i>
+                                  {% elif rating == "-" %}
                                     <i class="b4-icon-star-blank"></i>
                                   {% endif %}
                                 {% endfor %}
-                                <span class="rating__output">{{product.pARx|floatformat:1}}/5</span>
+                                <span class="rating__output">{{course.pARx|floatformat:1}}/5</span>
                               </div>
 
                               <div class="mode mr-30">
@@ -702,13 +362,13 @@
                               <div class="provider">
                                   Provider 
                                   <span class="provider__name">
-                                      {{product.pPvn}}
+                                      {{course.pPvn}}
                                   </span>
                               </div>
                           </div>
 
                           <div class="mr-auto courses">
-                            <strong class="courses__price">Rs. {{ product.pPin |floatformat:'0' }}/-</strong>
+                            <strong class="courses__price">Rs. {{ course.pPin |floatformat:'0' }}/-</strong>
                           </div>
 
                           <div class="course-tag">
@@ -717,22 +377,26 @@
                         </li>
                       {% endfor %}
                     </ul>
-                    <div class="d-flex justify-content-center mt-40 mb-30">
-                      <a class="btn btn-outline-primary" href="#" role="button">Load more courses</a>
-                    </div>
+                    {% comment %} Show load more only if course count>5{% endcomment %}
+                    {% if course_count > 5 %} 
+                      <div class="d-flex justify-content-center mt-40 mb-30">
+                        <a class="btn btn-outline-primary" onclick="loadProduct('course')" role="button">Load more courses</a>
+                      </div>
+                    {% endif %}
+                    
                 </div>
                 <div class="tab-pane fade" id="assessments" role="tabpanel" aria-labelledby="assessments-tab">
-                    <ul class="list-unstyled">
+                    <ul class="list-unstyled" id="assessment-list">
                       {% for assesment in assesments %}
                         <li class="media listing__list">
                           <figure class="listing__image">
-                              <img aria-label="{{product.pNm}}" class="img-fluid" src="{{product.pImg}}" alt="{{product.pNm}}">
+                              <img aria-label="{{assesment.pNm}}" class="img-fluid" src="{{assesment.pImg}}" alt="{{assesment.pNm}}">
                           </figure>
                           
                           <div class="media-body">
-                            <h3><a href="{{product.pURL}}">{{product.pNm}}</a></h3>
+                            <h3><a href="{{assesment.pURL}}">{{assesment.pNm}}</a></h3>
                               <div class="rating">
-                                {% for rating in product.pStar %}
+                                {% for rating in assesment.pStar %}
                                   {% if rating == "*" %}
                                     <i class="b4-icon-star"></i>
                                   {% elif rating == "+" %}
@@ -741,7 +405,7 @@
                                     <i class="b4-icon-star-blank"></i>
                                   {% endif %}
                                 {% endfor %}
-                                <span class="rating__output">{{product.pARx|floatformat:1}}/5</span>
+                                <span class="rating__output">{{assesment.pARx|floatformat:1}}/5</span>
                               </div>
 
                               <div class="mode mr-30">
@@ -753,21 +417,23 @@
                               <div class="provider">
                                   Provider 
                                   <span class="provider__name">
-                                      {{product.pPvn}}
+                                      {{assesment.pPvn}}
                                   </span>
                               </div>
                           </div>
 
                           <div class="mr-auto courses">
-                            <strong class="courses__price">Rs. {{ product.pPin |floatformat:'0' }}/-</strong>
+                            <strong class="courses__price">Rs. {{ assesment.pPin |floatformat:'0' }}/-</strong>
                           </div>
                         </li>
                       {% endfor %}
                     </ul>
-
-                    <div class="d-flex justify-content-center mt-40 mb-30">
-                      <a class="btn btn-outline-primary" href="#" role="button">Load more assesments</a>
-                    </div>
+                    {% comment %} Show load more only if assessment count>5{% endcomment %}
+                    {% if assesment_count > 5 %} 
+                      <div class="d-flex justify-content-center mt-40 mb-30">
+                        <a class="btn btn-outline-primary" onclick="loadProduct('assesment')" role="button">Load more assesments</a>
+                      </div>
+                    {% endif %}
                 </div>
               </div>
             </div>
@@ -900,25 +566,25 @@
               <section id="faq" class="col-sm-12">
                 <div class="faq">
                   <h2>{{faq.heading}}</h2>
-                  <div class="accordion" id="accordionExample">
+                  <div class="accordion" id="faq-accordion">
                     {% for item in  faq.description|get_faq_list%}
-                      <div class="card">
-                      <div class="card__question" id="heading{{ forloop.counter }}">
-                        <button class="btn {% if forloop.counter > 1%}collapsed{% endif %}" type="button" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="{% if forloop.counter > 1%}false{% else %}true{% endif %}" aria-controls="collapse{{ forloop.counter }}">
-                          {{item.heading|safe}}
-                        </button>
-                      </div>
-                  
-                      <div id="collapse{{ forloop.counter }}" class="collapse {% if forloop.counter == 1%}show{% endif %}" aria-labelledby="heading{{ forloop.counter }}" data-parent="#accordionExample">
-                        <div class="card-body card__answer">
-                          {{item.content|safe}}
+                      <div class="card {% if forloop.counter > 2%}d-none{% endif %}">
+                        <div class="card__question" id="heading{{ forloop.counter }}">
+                          <button class="btn {% if forloop.counter > 1%}collapsed{% endif %}" type="button" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="{% if forloop.counter > 1%}false{% else %}true{% endif %}" aria-controls="collapse{{ forloop.counter }}">
+                            {{item.heading|safe}}
+                          </button>
+                        </div>
+                    
+                        <div id="collapse{{ forloop.counter }}" class="collapse {% if forloop.counter == 1%}show{% endif %}" aria-labelledby="heading{{ forloop.counter }}" data-parent="#accordionExample">
+                          <div class="card-body card__answer">
+                            {{item.content|safe}}
+                          </div>
                         </div>
                       </div>
-                    </div>
                     {% endfor %}
                   </div>
                   <div class="d-flex justify-content-center mt-30">
-                    <a class="btn btn-outline-primary" href="#" role="button">More FAQs</a>
+                    <a class="btn btn-outline-primary" onclick="openMoreFAQ()" id="more-faq" role="button">More FAQs</a>
                   </div>
                 </div>
               </section>
@@ -940,28 +606,38 @@
             <form>
               <div class="d-flex">
                 <div class="custom-select-box">
-                  <select name="select" class="custom-select">
-                    <option selected>+91</option>
-                    <option value="+91">+91</option>
-                    <option value="+92">+92</option>
-                    <option value="+93">+93</option>
+                  <select name="select" class="custom-select" id="country-code">
+                    {% for country in country_choices %}
+                      <option value="{{country.0}}" {% if country.0 == '91' %} selected {% endif %}>
+                        +{{country.0}}&nbsp;&nbsp;&nbsp;&nbsp; -- &nbsp;&nbsp;&nbsp;&nbsp;{{country.1}}
+                      </option>
+                    {% endfor %}
+                      {% comment %} <option selected>+91</option>
+                      <option value="+91">+91</option>
+                      <option value="+92">+92</option>
+                      <option value="+93">+93</option> {% endcomment %}
                   </select>
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control input_field" id="mobile" placeholder="Mobile">
+                  <input type="number" class="form-control input_field" id="number" 
+                      onchange="updateValueFormInput(this,'number')" placeholder="Mobile">
                   <label for="mobile" class="input_label">Mobile</label>
+                  <span class="error-msg d-none">Required</span>
                 </div>
               </div>
               <div class="form-group">
-                <input type="email" class="form-control input_field" id="email" placeholder="Email">
-                <label for="email" class="input_label">Email</label>              
+                <input type="email" class="form-control input_field" id="email" 
+                     onchange="updateValueFormInput(this,'email')" placeholder="Email">
+                <label for="email" class="input_label">Email</label>   
+                <span class="error-msg d-none">Required</span>           
               </div>
-              <div class="form-group error">
-                <input type="text" class="form-control input_field" id="name" placeholder="Name">
+              <div class="form-group">
+                <input type="text" class="form-control input_field" id="name" 
+                    onchange="updateValueFormInput(this,'name')" placeholder="Name">
                 <label for="name" class="input_label">Name</label>
-                <span class="error-msg">Required</span>
+                <span class="error-msg d-none">Required</span>   
               </div>
-              <button type="submit" class="btn btn-block btn-primary">Submit</button>
+              <button type="button" class="btn btn-block btn-primary" onclick="needHelpFormSubmit()">Submit</button>
             </form>
           </div>
         </section>
@@ -991,89 +667,13 @@
   </div>
 </main>
 
-<footer class="mt-40">
-  <div class="container">
-    <nav class="navbar navbar-expand-lg">
-      <div class="collapse navbar-collapse" id="navbarText">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="#">About Us</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Partners</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Privacy Policy</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Terms & Condition</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Contact us</a>
-          </li>
-        </ul>
-        <span class="navbar-text social-icon">
-          <a href="#" class="b4-icon-facebook"></a>
-          <a href="#" class="b4-icon-linkedin"></a>
-          <a href="#" class="b4-icon-twitter"></a>
-        </span>
-      </div>
-    </nav>
-    <div class="d-flex justify-content-between align-items-center mt-20">
-      <div class="secure-payment">
-        <figure class="b4-icon-secure mr-20"></figure>
-        <span>
-          <strong>100% Secure Payment</strong>
-          All major credit & debit cards accepted
-        </span>
-      </div>
-      <div class="payment-option">
-          Payment options
-          <figure class="b4-icon-payment-option"></figure>
-      </div>
-      <div class="copyright">
-          Copyright © 2019 HT Media Limited.
-      </div>
-    </div>
-  </div>
-</footer>
-
 {% endblock container %}
 
-{% block navigation %}
-  <!-- navigation bar -->
-  {% include 'basic/navigation.html' %}
 
-{% endblock navigation %}
-
-
-
-{% block footer %}
-      <!-- footer -->
-  {% include 'basic/footer.html' %}      
-{% endblock footer %}
 {% block js_section %}
+    {{ block.super }}
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="{% static 'shinelearn/js/common/bootstrap4.min.js' %}"> </script>
-    
-    <script>
-        $('.category-tab .nav-tabs > li ').hover(function() {
-          if ($(this).hasClass('hoverblock'))
-            return;
-          else
-            $(this).find('a').tab('show');
-        });
+    <script src="{% static 'shinelearn/js/skill/skillpage-new.js' %}"></script>
 
-        $(window).on('scroll', function (e) {
-          $('.sticky-nav')[$(window).scrollTop() >= 420 ? 'removeClass' : 'addClass']('sticky-none');
-        })
-
-        $('.sticky-nav .nav-link').click(function(){
-          $('.sticky-nav .nav-link').removeClass('active');
-          $(this).addClass('active');
-        })
-    </script>
 
 {% endblock js_section %}

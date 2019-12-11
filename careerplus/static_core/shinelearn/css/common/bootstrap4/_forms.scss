@@ -347,12 +347,16 @@ textarea.form-control {
 
     input {
       background: #f7f7f7;
-      width: 85%;
+      width: 100%;
     }
 
     button {
       background: $blue;
       color: $white;
+    }
+
+    .twitter-typeahead {
+      width: 85%;
     }
   }
 }
@@ -396,4 +400,8 @@ textarea.form-control {
     }
     
   }
+}
+
+.search {
+
 }

@@ -215,10 +215,7 @@ class SubHeaderCategoryForm(forms.ModelForm):
         # self.fields['heading_choices'].widget.attrs['data-parsley-notdefault'] = ''
 
         self.fields['description'].widget.attrs['class'] = form_class
-        self.fields['description'].widget.attrs['maxlength'] = 100
         self.fields['description'].widget.attrs['data-parsley-trigger'] = 'change'
-        self.fields['description'].widget.attrs['data-parsley-length'] = "[1, 100]"
-        self.fields['description'].widget.attrs['data-parsley-length-message'] = 'Length should be between 1-100 characters.'
 
         self.fields['active'].widget.attrs['class'] = 'js-switch'
         self.fields['active'].widget.attrs['data-switchery'] = 'true'
@@ -231,13 +228,14 @@ class SubHeaderCategoryForm(forms.ModelForm):
             'heading', 'description', 'active', 'display_order','heading_choices')
 
     def clean_heading(self):
+        import ipdb; ipdb.set_trace()
         heading = self.cleaned_data.get('heading', '').strip()
         if not heading:
             raise forms.ValidationError(
                 "This field is required.")
-        if len(heading) < 1 or len(heading) > 100:
+        if len(heading) > 100:
             raise forms.ValidationError(
-                "Description should be between 1-100 characters.")
+                "Description should be at most 100 characters.")
         return heading
 
     # def clean_description(self):

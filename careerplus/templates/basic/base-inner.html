@@ -24,9 +24,11 @@
 
 
     {% block css_section %}
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700&display=swap" rel="stylesheet">
         <!-- Bootstrap 4 -->
         {% compress css %}
-        <link type="text/scss" href="{% static 'shinelearn/css/common/bootstrap4/bootstrap.scss' %}" rel="stylesheet">
+          <link type="text/scss" href="{% static 'shinelearn/css/common/bootstrap4/bootstrap.scss' %}" rel="stylesheet">
+          <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
         {% endcompress %}
 
 
@@ -49,15 +51,15 @@
     {% block banner_ads %}
         <script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>
         <script>
-        var googletag = googletag || {};
-        googletag.cmd = googletag.cmd || [];
-        </script>
-        <script>
-        googletag.cmd.push(function() {
-        googletag.defineSlot('/1198510/ShineLearning_1x1_desktop', [1, 1], 'div-gpt-ad-1509431221932-0').addService(googletag.pubads());
-        googletag.pubads().enableSingleRequest();
-        googletag.enableServices();
-        });
+            var googletag = googletag || {};
+            googletag.cmd = googletag.cmd || [];
+            </script>
+            <script>
+            googletag.cmd.push(function() {
+            googletag.defineSlot('/1198510/ShineLearning_1x1_desktop', [1, 1], 'div-gpt-ad-1509431221932-0').addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+            });
         </script>
     {% endblock banner_ads %}
     {% block marketing_pixel %}
@@ -73,8 +75,12 @@
    </head>
    
 {% endblock head %} 
-<body {%if IS_MAINTENANCE %}style="padding-top:91px;" {% endif %}>
+<body>
+{% block navigation %}
+  <!-- navigation bar -->
+  {% include 'basic/navigation-new.html' %}
 
+{% endblock navigation %}
 
 {% block blogtrending %}
 
@@ -94,6 +100,11 @@
 
 {% endblock container %}
 
+{% block footer %}
+      <!-- footer -->
+  {% include 'basic/footer-new.html' %}      
+{% endblock footer %}
+
 {% block marketingpopup%}
   {% if marketing_popup_html %}
       {% include marketing_popup_html %}
@@ -101,60 +112,26 @@
 {% endblock %}
 
 
-<link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700&display=swap" rel="stylesheet">
-
-
 {% block js_section %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
+    <script>
+      var categoryUrlSet = {{ category_url_set|safe }}
+      var productUrlSet = {{ product_url_set|safe }}
+    </script>
+    <script  src="http://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.all.min.js"></script>
+    
     
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     {% compress js %}
-    <!-- <script src="{% static 'shinelearn/js/common/bootstrap4.min.js' %}"></script> -->
-    <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"> </script>
-    <script src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
-    <script src="{% static 'shinelearn/js/common/common.js' %}"> </script>
-    <script src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
-
+      <script src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
+      <script src="{% static 'shinelearn/js/common/common-new.js' %}"> </script>
+      <script src="{% static 'shinelearn/js/common/bootstrap4.min.js' %}"> </script>
     {% endcompress %}
-
-    
-    
-    <script>
-        $('.nav-tabs > li > a').hover(function() {
-            $(this).tab('show');
-          });
-        $('.dropdown').hover(function(){
-            $('.dropdown-toggle', this).trigger('click');
-          });
-
-      {% if marketing_popup_html %}
-        
-        setTimeout(function() {
-          $('.marketing-popup').modal();
-        }, 1000);
-      {% endif %}
-    </script>
 
 {% endblock js_section %}
 
-<!-- {% block johukum %}
-    <script type='text/javascript' id='spd-busns-spt' async=''
-        src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'
-        data-client='324ed0abb0694b0c66a6daecb178352d'>
-    </script>
-{% endblock johukum %} -->
-
-{%block jsbottom%}
-{%comment%}
-<script>
-  $('.login-dropdown').hover(function(){
-    $('.tt-menu').hide();
-  });
-
-</script>{%endcomment%}
-{%endblock%}
 
 {% block zendesk %}
       <!--Start of Zendesk Chat Script-->
@@ -194,15 +171,11 @@
     <!-- /1198510/ShineLearning_1x1_desktop -->
     <div id='div-gpt-ad-1509431221932-0'>
     <script>
-    googletag.cmd.push(function() { googletag.display('div-gpt-ad-1509431221932-0'); });
+      googletag.cmd.push(function() { googletag.display('div-gpt-ad-1509431221932-0'); });
     </script>
     </div>
 {% endblock banner_ads_bottom %}
 </body>
-<script>
-  var categoryUrlSet = {{ category_url_set|safe }}
-  var productUrlSet = {{ product_url_set|safe }}
-</script>
 </html>
 {% endspaceless %}
 
