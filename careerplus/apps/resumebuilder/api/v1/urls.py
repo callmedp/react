@@ -18,7 +18,7 @@ from .views import (CandidateCreateView, CandidateRetrieveUpdateView, SkillRetri
                     CandidateLanguageRetrieveUpdateView,
                     CandidateResumePreview,ProfileEntityBulkUpdateView, InterestView,
                     OrderCustomisationListView,OrderCustomisationRUDView,ResumeImagePreviewView,
-                    SuggestionApiView, EntityReorderView,PDFRefreshAPIView,FreeTrialResumeDownload) 
+                    SuggestionApiView, EntityReorderView,PDFRefreshAPIView,SessionAvailabilityAPIView, FreeTrialResumeDownload)
 
 #inter app imports
 
@@ -63,5 +63,6 @@ urlpatterns = [
     url(r'^candidate/(?P<candidate_id>[0-9a-z]+)/free-resume/template/(?P<template_no>[0-9]+)/$', FreeTrialResumeDownload.as_view()),
     url(r'^interest-list/$', InterestView.as_view()),
     url(r'^suggestion/$', SuggestionApiView.as_view()),
+    url(r'^session/$',SessionAvailabilityAPIView.as_view())
 
 ]

@@ -59,20 +59,21 @@ function* getPersonalDetails(action) {
         }
 
         yield put({type: UPDATE_UI, data: {loader}});
-
-
         const result = yield call(Api.fetchPersonalInfo, candidateId);
+
         if (result['error']) {
             Toast.fire({
                 type: 'error',
                 title: result['errorMessage']
             });
         }
+
         yield put({type: UPDATE_UI, data: {loader: false}})
 
         let {data} = result;
         data = modifyPersonalInfo(data)
         yield put({type: Actions.SAVE_USER_INFO, data: data})
+
     } catch (e) {
         console.log(e);
     }
@@ -210,10 +211,20 @@ function* updateEntityPreference(action) {
     }
 }
 
+function* getComponentTitle(action) {
+    try {
+        let {payload: {resolve, reject}} = action;
+        resolve('Edit-Preview Page | Shine Learning')
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 export default function* watchPersonalInfo() {
     yield takeEvery(Actions.FETCH_PERSONAL_INFO, getPersonalDetails);
     yield takeLatest(Actions.UPDATE_PERSONAL_INFO, updatePersonalDetails);
     yield takeLatest(Actions.FETCH_IMAGE_URL, fetchImageUrl);
     yield takeLatest(Actions.UPDATE_ENTITY_PREFERENCE, updateEntityPreference);
     yield takeLatest(Actions.FETCH_INTEREST_LIST, getInterestList);
+    yield takeLatest(Actions.GET_COMPONENT_TITLE, getComponentTitle);
 }

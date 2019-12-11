@@ -20,23 +20,26 @@ class EditPreview extends Component {
     constructor(props) {
         super(props);
 
-        // check if the userexperinece is greater or equal to 4 years. (7 is the pid for 4 years (mapping done here))
- 
-        if (parseInt(localStorage.getItem('userExperience') || 0) >= 7) {
-            if(document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]){document.getElementsByClassName('chat-bot')[0].style.display = 'none';
-            }
-        }
-        else {
-            if(document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]){
-                document.getElementsByClassName('chat-bot')[0].style.display = 'block';
-            }
-        }
+       
         this.changeLink = this.changeLink.bind(this)
         this.headingChange = this.headingChange.bind(this);
         this.generateResumeAlert = this.generateResumeAlert.bind(this);
     }
 
     async componentDidMount() {
+
+         // check if the userexperinece is greater or equal to 4 years. (7 is the pid for 4 years (mapping done here))
+ 
+         if (parseInt(localStorage.getItem('userExperience') || 0) >= 7) {
+            if(typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]){document.getElementsByClassName('chat-bot')[0].style.display = 'none';
+            }
+        }
+        else {
+            if(typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]){
+                document.getElementsByClassName('chat-bot')[0].style.display = 'block';
+            }
+        }
+
         if (!localStorage.getItem('candidateId') || !localStorage.getItem('token')) {
             await this.props.loginCandidate()
         }
@@ -185,7 +188,7 @@ const mapDispatchToProps = (dispatch) => {
         },
         "loginCandidate": (token) => {
             return new Promise((resolve, reject) => {
-                dispatch(loginCandidate({payload: {alt: token}, resolve, reject, isTokenAvail: false}))
+                dispatch(loginCandidate({info: {alt: token}, resolve, reject, isTokenAvail: false}))
             })
         },
     }

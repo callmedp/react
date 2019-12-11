@@ -32,13 +32,13 @@ export default class Banner extends Component {
         return (
             <section className="banner">
                 <h1 className="mt-15">Resume Builder <br/> <strong>by Experts</strong></h1>
-                <p><strong>{userName || 'Hello'}</strong>, secure the job you want with our
+                <p><strong>Hello</strong>, secure the job you want with our
                     resume builder</p>
 
-                <img src={`${this.staticUrl}react/assets/images/mobile/resume-bundel.png`} alt=""
+                <img src={`${this.staticUrl}react/assets/images/mobile/resume-bundel.png`} alt="Resume Templates"
                      className="img-fluid"/>
                 <p className="text-center mt-5">
-                    <a className="btn pt-10 pb-10 btn__round btn__primary btn__shadow"
+                    <a className="btn pt-10 pb-10 btn__round btn__primary btn__shadow" alt="Build Your Resume"
                        onClick={() => this.scrollTo('templates', 'BuildResume', 'TopButton')}>Build your resume</a>
                 </p>
                 <ul className="resume-pointer">

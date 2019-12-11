@@ -1,11 +1,11 @@
 const rewire = require('rewire');
 const defaults = rewire('react-scripts/scripts/build.js');
+
 let config = defaults.__get__('config');
 var sass = require("node-sass");
 var sassUtils = require("node-sass-utils")(sass);
 var path = require('path');
 var BundleTracker = require('webpack-bundle-tracker');
-
 
 config.optimization.splitChunks = {
     cacheGroups: {
@@ -15,8 +15,9 @@ config.optimization.splitChunks = {
 // Move runtime into bundle instead of separate file
 config.optimization.runtimeChunk = false;
 
-const currentTimeStamp = +new Date();
+const currentTimeStamp = process.argv && process.argv[2] || +new Date();
 
+console.log('login in here', config);
 // JS
 config.output.filename = `../../../careerplus/static_core/react/dist/desktop/main-${currentTimeStamp}.js`;
 // CSS. "5" is MiniCssPlugin

@@ -4,17 +4,20 @@ import EditPreviewContainer from '../components/Core/Editor/editPreview.jsx';
 import HomeContainer from '../components/Core/Home/home.jsx';
 import BuyContainer from '../components/Core/Payment/Buy/buy.jsx';
 import DownloadContainer from '../components/Core/Payment/DownloadResume/downloadResume.jsx';
+import Middleware from '../middlewares/middleware'
 
-export const RouteWithSubRoutes = route => (
+let middleware =new Middleware();
+export const RouteWithSubRoutes = route => {
+    return(
     <Route
         path={route.path}
         exact={route.exact}
-        render={props => (
+        render={props => 
             // pass the sub-routes down to keep nesting
-            <route.component {...props} routes={route.routes}/>
-        )}
+            middleware.routeToDisplay(route.middlewares,<route.component {...props} routes={route.routes}/>,route.path)
+        }
     />
-);
+)};
 
 
 const AppRouter = () => (
@@ -25,27 +28,32 @@ const AppRouter = () => (
     </Router>
 );
 
-const routes = [
+export const routes = [
     {
         path: '/resume-builder',
         component: HomeContainer,
-        exact: true
+        exact: true,
+        middlewares :['alreadyLoggedIn']
     },
     {
         path: '/resume-builder/edit/',
-        component: EditPreviewContainer
+        component: EditPreviewContainer,
+        middlewares:['privateRoute']
     },
     {
         path: '/resume-builder/preview',
-        component: EditPreviewContainer
+        component: EditPreviewContainer,
+        middlewares:['privateRoute']
     },
     {
         path: '/resume-builder/buy',
-        component: BuyContainer
+        component: BuyContainer,
+        middlewares:['privateRoute']
     },
     {
         path: '/resume-builder/download',
-        component: DownloadContainer
+        component: DownloadContainer,
+        middlewares:['privateRoute']
     }
 
 
