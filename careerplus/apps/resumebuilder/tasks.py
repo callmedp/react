@@ -187,15 +187,17 @@ def zip_all_resume_pdfs(order_id, data):
 
 @task
 def generate_and_upload_resume_pdf(data):
-    from resumebuilder.models import Candidate
+    from resumebuilder.models import Candidate,CandidateResumeOperations
     from order.models import Order
     from resumebuilder.utils import store_resume_file
     from order.tasks import send_resume_in_mail_resume_builder
     from core.api_mixin import UploadResumeToShine
     data = json.loads(data)
-    order = Order.objects.get(id=data.get('order_id'))
+    order = Order.objects.filter(id=data.get('order_id')).first()
     template_no = data.get('template_no')
     send_mail = data.get('send_mail')
+    is_free_trial = data.get('is_free_trial',False)
+    is_combo = data.get('is_combo',False)
 
     # Render PDF for context
     def generate_file(context_dict={}, template_src=None, file_type='pdf'):
@@ -229,11 +231,17 @@ def generate_and_upload_resume_pdf(data):
 
     # Prepare Context for PDF generation
     content_type = "pdf"
-    candidate_id = order.candidate_id
+    candidate_id = order.candidate_id if not is_free_trial else data.get('candidate_id','')
+
+    if not candidate_id:
+        logging.getLogger('error_log').error("No candidate id.")
+        return
+    
     template_id = int(template_no)
     candidate = Candidate.objects.filter(candidate_id=candidate_id).first()
     first_save = False 
-    if not candidate:
+    
+    if not candidate and not is_free_trial:
         candidate = Candidate.objects.create(
             email=order.email,
             number=order.mobile,
@@ -245,10 +253,17 @@ def generate_and_upload_resume_pdf(data):
         )
         first_save = True
         candidate.save()
+    elif not candidate and is_free_trial:
+        logging.getLogger('error_log').error("No candidate for this trial resume download.")
+        return
         
-        
+   
     file_dir = "{}/{}".format(candidate.id, content_type)
-    file_name = "{}.{}".format(template_no, content_type)
+    if is_free_trial:
+        file_name = "free-trial-{}.{}".format(template_no, content_type)
+    else:
+        file_name = "{}.{}".format(template_no, content_type)
+
     entity_preference = eval(candidate.entity_preference_data or "{}")
     extracurricular = candidate.extracurricular_list
     education = candidate.candidateeducation_set.all().order_by('order')
@@ -305,7 +320,21 @@ def generate_and_upload_resume_pdf(data):
                     'entity_position': updated_entity_position, "width": 93.7
                     }
     pdf_file = generate_file(context_dict=context_dict, template_src=template_src, file_type='pdf')
-    store_resume_file(file_dir, file_name, pdf_file)
+
+    for i in range(5):
+        try:
+            store_resume_file(file_dir, file_name, pdf_file)
+            break
+        except Exception as e:
+            logging.getLogger('error_log').error("File not uploaded to cloud")
+
+    if is_free_trial:
+        op_status = 1  # for free resume creation operation status
+        candidate.resume_creation_count += 1
+        candidate.save()
+        logging.getLogger('info_log').info("Trial part finished and incremented download count")
+    else :
+        op_status = 2  # paid resume creation operation status
 
     data = {}
     data.update({
@@ -315,11 +344,14 @@ def generate_and_upload_resume_pdf(data):
         'siteDomain': settings.SITE_DOMAIN
     })
 
-    if template_no == 5:
+    if template_no == 5 and is_combo:
         zip_all_resume_pdfs.apply_async((order.id, data), countdown=2)
 
     if send_mail:
         send_resume_in_mail_resume_builder(['resume', pdf_file], data)
+
+    CandidateResumeOperations.objects.create(candidate=candidate,order=order,op_status=op_status)
+    logging.getLogger('info_log').info("RESUME BUILDER: File creation operation created for with op_status {}.".format(op_status))
 
     # uploading resume on the shine 
     if template_id == int(candidate.selected_template or 0) and candidate.upload_resume and not first_save:

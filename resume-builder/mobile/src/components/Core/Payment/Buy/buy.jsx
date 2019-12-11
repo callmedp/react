@@ -3,6 +3,8 @@ import Header from '../../../Common/Header/header.jsx';
 import './buy.scss';
 import * as action from '../../../../store/buy/actions';
 import { fetchThumbNailImages, fetchSelectedTemplateImage } from '../../../../store/template/actions/index'
+import {fetchPersonalInfo} from '../../../../store/personalInfo/actions/index'
+import {showGenerateResumeModal,hideGenerateResumeModal} from '../../../../store/ui/actions/index'
 import { connect } from "react-redux";
 import { siteDomain } from "../../../../Utils/domains";
 import Slider from "react-slick";
@@ -10,6 +12,8 @@ import Loader from '../../../Common/Loader/loader.jsx';
 import BuyTemplateModal from '../../../Common/BuyTemplateModal/buyTemplateModal.jsx';
 import { eventClicked } from '../../../../store/googleAnalytics/actions/index'
 import { loginCandidate } from "../../../../store/landingPage/actions";
+import { apiError } from '../../../../Utils/apiError.js';
+import AlertModal from '../../../Common/AlertModal/alertModal';
 
 
 
@@ -22,11 +26,17 @@ class Buy extends Component {
         this.state = {
             'checked': 'product1',
             'modal_status': false,
-            'template_id': ''
+            'template_id': '',
+            'resumeDownloadCount':-1,
+            'freeDownloadButtonDisable':false,
         }
         this.closeModalStatus = this.closeModalStatus.bind(this);
         this.openModal = this.openModal.bind(this);
         this.editTemplate = this.editTemplate.bind(this);
+        this.freeResumeRequest = this.freeResumeRequest.bind(this);
+        this.pollingUserInfo = this.pollingUserInfo.bind(this);
+        this.downloadRequestedResume = this.downloadRequestedResume.bind(this);
+        this.timerFunction = this.timerFunction.bind(this);
     }
 
 
@@ -77,6 +87,7 @@ class Buy extends Component {
             }
         }
 
+        const {getProductIds,fetchThumbNailImages,fetchUserInfo} = this.props
         if (!localStorage.getItem('candidateId')) {
             await this.props.loginCandidate()
         }
@@ -88,8 +99,61 @@ class Buy extends Component {
         if (localStorage.getItem('name')) window['name'] = localStorage.getItem('name')
         else window['name'] = ''
 
-        this.props.getProductIds();
-        this.props.fetchThumbNailImages();
+        getProductIds();
+        fetchThumbNailImages();
+        fetchUserInfo();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.userInfo !== prevProps.userInfo ) {
+            if(this.state.resumeDownloadCount >= 0 && (this.state.resumeDownloadCount< this.props.userInfo.resume_creation_count)){
+                clearInterval(this.state.timerId)
+                this.downloadRequestedResume();
+            }
+        }
+    }
+
+    async downloadRequestedResume(){
+        const {hideGenerateResumeModal} = this.props
+        const candidateId = localStorage.getItem('candidateId')
+        const selectedTemplate = localStorage.getItem('selected_template',1)
+        const url = `${siteDomain}/api/v1/resume/candidate/${candidateId}/free-resume/template/${selectedTemplate}/`
+        const link = document.createElement('a');
+        link.href = url;
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode.removeChild(link);
+        hideGenerateResumeModal()
+        this.setState({'freeDownloadButtonDisable':false})
+    }
+
+    async freeResumeRequest() {
+        const {  requestFreeResume,showGenerateResumeModal,
+                 userInfo: { resume_creation_count}, } = this.props
+        
+        this.setState({'resumeDownloadCount':resume_creation_count,'freeDownloadButtonDisable':true},async ()=>{
+            await requestFreeResume()
+            showGenerateResumeModal()
+            this.pollingUserInfo()
+        })
+    }
+
+    pollingUserInfo(){
+        const timer = setInterval(this.timerFunction, 2000);
+        const startTime = new Date().getTime();
+        this.setState({'timerId':timer,'pollingStartTIme':startTime})
+    } 
+
+    timerFunction(){
+        const {fetchUserInfo} = this.props
+        const { timerId,pollingStartTIme} = this.state
+        if(new Date().getTime() - pollingStartTIme > 30000) {  // max limit 10*3 seconds
+            clearInterval(timerId)
+            this.setState({'freeDownloadButtonDisable':false})
+            hideGenerateResumeModal()
+            apiError()
+        }
+        fetchUserInfo(true); 
     }
 
     handleOnChange(checkedProduct) {
@@ -120,13 +184,15 @@ class Buy extends Component {
             speed: 500,
             slidesToShow: 2,
         };
-        const { ui: { mainloader }, template: { thumbnailImages, templateImage }, productIds, history } = this.props
+        const { ui: { mainloader,generateResumeModal }, template: { thumbnailImages, templateImage }, productIds, history,
+                userInfo:{free_resume_downloads,resume_creation_count} } = this.props
         const template = localStorage.getItem('selected_template') || 1;
-        const { checked, modal_status } = this.state
+        const { checked, modal_status,freeDownloadButtonDisable } = this.state
         const price1 = productIds[0] ? productIds[0].inr_price : 999
         const discount1 = Math.floor(((1499 - price1) / 1499) * 100)
         const price2 = productIds[1] ? productIds[1].inr_price : 1248
         const discount2 = Math.floor(((1999 - price2) / 1999) * 100)
+        const free_download_count = free_resume_downloads - resume_creation_count
         return (
 
             <div className="buy-container">
@@ -135,7 +201,7 @@ class Buy extends Component {
                 {modal_status ? <BuyTemplateModal modal_status={modal_status}
                     closeModalStatus={this.closeModalStatus}
                     templateImage={templateImage} /> : ''}
-
+                <AlertModal modal_status={generateResumeModal} generateResumeModal={generateResumeModal} />
                 <div className="pay-now">
                     <div className="pay-now__price">
                         <span className="fs-12 pay-now__price--pay">You pay</span>
@@ -150,8 +216,25 @@ class Buy extends Component {
 
 
                 <div className="buy">
-                    <p className="buy--create">Use resume builder for 12 months
-                        to<strong> create/edit</strong> unlimited resume.</p>
+                    <p className="buy--create">Use resume builder for 12 months to<strong> create/edit</strong> unlimited resume.</p>
+                    { free_resume_downloads ?
+                        <div class="buy__wrap mt-15">
+                            <div className="buy__item buy__trial">
+                                <div className="buy__recommended--tag">Trial offer</div>
+                                <div className="buy_item--left">
+                                    {free_download_count > 0? ` ${free_download_count} free download for 1st time users.` :
+                                        "You have exhausted the limit. Please buy resume builder with unlimited downloads to keep using resume builder for an year."}
+                                </div>
+                                {free_download_count > 0?
+                                    <div className="buy_item--right">
+                                            <button class="btn btn__round btn--outline" onClick={this.freeResumeRequest}
+                                            disabled={freeDownloadButtonDisable} >Download</button>
+                                    </div>:''
+                                }
+                            </div>
+                        </div>:''
+                    }
+
                     <div className="buy__wrap mt-15">
                         <div className="buy__item">
                             <div className="buy__item--left">
@@ -235,8 +318,6 @@ class Buy extends Component {
                         </div>
                     </div>
                 </div>
-
-
             </div>
 
         )
@@ -247,12 +328,16 @@ const mapStateToProps = (state) => {
     return {
         productIds: state.productIds,
         ui: state.ui,
-        template: state.template
+        template: state.template,
+        userInfo: state.personalInfo,
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        'fetchUserInfo': (noUiLoader) => {
+            return dispatch(fetchPersonalInfo({noUiLoader}))
+        },
         'getProductIds': () => {
             return dispatch(action.getProductIds())
         },
@@ -276,6 +361,17 @@ const mapDispatchToProps = (dispatch) => {
             return new Promise((resolve, reject) => {
                 dispatch(loginCandidate({info: {alt: token}, resolve, reject, isTokenAvail: false}))
             })
+        },
+        "requestFreeResume": () => {
+            return new Promise((resolve, reject) => {
+                dispatch(action.requestFreeResume({resolve,reject}))
+            })
+        },
+        'showGenerateResumeModal': () => {
+            return dispatch(showGenerateResumeModal())
+        },
+        'hideGenerateResumeModal': () => {
+            return dispatch(hideGenerateResumeModal())
         },
     }
 };

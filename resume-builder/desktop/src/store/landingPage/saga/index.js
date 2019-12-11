@@ -24,7 +24,6 @@ function* getCandidateId(action) {
                 title: result['errorMessage']
             });
             return reject(new SubmissionError({ _error: result['errorMessage'] }));
-
         }
         localStorage.setItem('candidateId', JSON.parse((result.data && result.data['candidate_id'])) || '');
         resolve();

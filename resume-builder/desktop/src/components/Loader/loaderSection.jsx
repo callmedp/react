@@ -10,7 +10,7 @@ export default class LoaderSection extends Component {
     render() {
         return (
             <div className="loader-section">
-                <img class="" src={`${this.staticUrl}react/assets/images/loader.gif`}/>
+                <img className="" src={`${this.staticUrl}react/assets/images/loader.gif`}/>
                 
             </div>
         )

@@ -1,7 +1,7 @@
 import {Api} from './Api';
 import {apiError} from '../../../Utils/apiError';
 
-import {takeLatest, put, call, select} from "redux-saga/effects";
+import {takeLatest,takeEvery, put, call, select} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
 import * as uiAction from '../../ui/actions/actionTypes';
@@ -34,7 +34,9 @@ function modifyPersonalInfo(data) {
 function* getPersonalDetails(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
-        yield put({type: uiAction.UPDATE_MAIN_PAGE_LOADER, payload: {mainloader: true}})
+        const {payload} = action;
+        const loader = payload && payload.noUiLoader ? false : true
+        yield put({type: uiAction.UPDATE_MAIN_PAGE_LOADER, payload: {mainloader: loader}})
         if (localStorage.getItem('personalInfo')) {
             yield put({
                 type: Actions.SAVE_USER_INFO,
@@ -181,7 +183,7 @@ function* updateEntityPreference(action) {
 }
 
 export default function* watchPersonalInfo() {
-    yield takeLatest(Actions.FETCH_PERSONAL_INFO, getPersonalDetails)
+    yield takeEvery(Actions.FETCH_PERSONAL_INFO, getPersonalDetails)
     yield takeLatest(Actions.UPDATE_PERSONAL_INFO, updatePersonalDetails)
     yield takeLatest(Actions.FETCH_IMAGE_URL, fetchImageUrl)
     yield takeLatest(Actions.FETCH_INTEREST_LIST, getInterestList);

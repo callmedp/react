@@ -218,7 +218,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         "fetchEntityInfo": () => {
             return new Promise((resolve, reject) => {
-                return dispatch(fetchPersonalInfo({ info: '', resolve, reject }))
+                return dispatch(fetchPersonalInfo())
             })
 
         },

@@ -1,6 +1,6 @@
 import {Api} from './Api';
 
-import {takeLatest, put, call} from "redux-saga/effects";
+import {takeLatest,takeEvery, put, call} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
 
@@ -47,25 +47,21 @@ function modifyPersonalInfo(data) {
 function* getPersonalDetails(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
-
-        const {payload: {resolve, reject}} = action;
+        const {payload} = action;
+        const loader = payload && payload.noUiLoader ? false : true
 
         if (localStorage.getItem('personalInfo')) {
             yield put({
                 type: Actions.SAVE_USER_INFO,
                 data: modifyPersonalInfo(JSON.parse(localStorage.getItem('personalInfo')) || [])
             });
-            resolve('Information successfully fetched.')
             return;
         }
 
-
-        yield put({type: UPDATE_UI, data: {loader: true}});
-
+        yield put({type: UPDATE_UI, data: {loader}});
         const result = yield call(Api.fetchPersonalInfo, candidateId);
 
         if (result['error']) {
-            reject(new Error(result['errorMessage']));
             Toast.fire({
                 type: 'error',
                 title: result['errorMessage']
@@ -77,7 +73,6 @@ function* getPersonalDetails(action) {
         let {data} = result;
         data = modifyPersonalInfo(data)
         yield put({type: Actions.SAVE_USER_INFO, data: data})
-        resolve('Information successfully fetched.')
 
     } catch (e) {
         console.log(e);
@@ -226,7 +221,7 @@ function* getComponentTitle(action) {
 }
 
 export default function* watchPersonalInfo() {
-    yield takeLatest(Actions.FETCH_PERSONAL_INFO, getPersonalDetails);
+    yield takeEvery(Actions.FETCH_PERSONAL_INFO, getPersonalDetails);
     yield takeLatest(Actions.UPDATE_PERSONAL_INFO, updatePersonalDetails);
     yield takeLatest(Actions.FETCH_IMAGE_URL, fetchImageUrl);
     yield takeLatest(Actions.UPDATE_ENTITY_PREFERENCE, updateEntityPreference);

@@ -70,3 +70,8 @@ INTEREST_LIST = ((0, '3D printing'), (1, 'Acrobatics'), (2, 'Acting'), (3, 'Amat
                  (93, 'Whittling'), (94, 'Wood carving'), (95, 'Woodworking'), (96, 'Worldbuilding'), (97, 'Writing'),
                  (98, 'Yo-yoing'), (99, 'Yoga'))
 
+CANDIDATE_OPERATION_STATUS = (
+    (1, 'Free Resume Created'),
+    (2, 'Service Resume Created')
+)
+
