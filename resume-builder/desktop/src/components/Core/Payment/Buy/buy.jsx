@@ -317,12 +317,16 @@ export class Buy extends Component {
                                                     onChange={this.handleOnChange.bind(this, 'product2')} />
                                             </span>
                                             <span className="choose-plan--price">
-                                                <p>Buy all resume templates</p>
-                                                Rs. <strong>{price2}
+                                                <p><strong className="yearly-pack">Yearly Pack</strong></p>
+                                                <span className="rs">Rs.</span> <strong className="yp-price">  {price2}
                                                     /-</strong>
                                                 <strike className="ml-10">Rs. 1999</strike>
-                                                <span className="choose-plan--off ml-10">Flat {discount2}% off</span>
+                                                <span className="choose-plan--off mt-2 save-up-to">Save up to {discount2}% off</span>
                                             </span>
+                                            <button
+                                        className="choose-plan--orange-button-change orange-button items-right pull-right mt-10"
+                                        onClick={this.redirectToCart.bind(this)}>Pay now
+                                    </button>
                                         </div>
 
                                         <Slider {...settings}>

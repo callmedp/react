@@ -64,6 +64,13 @@
         display: inline-block;
       }
 
+      .save-up-to {
+        display: block;
+      }
+
+      .mt-2{
+        margin-top: 2rem
+      }
 
       strike {
         font-size: 1.6rem;
@@ -90,6 +97,27 @@
       font-size: 1.6rem;
       color: $txt1;
       margin-bottom: 10px;
+    }
+
+    .yearly-pack{
+      font-size: 1.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: $black;
+    }
+
+    .yp-price{
+      font-size: 2.2rem;
+      color: $black;
+      font-weight: 600;
+    }
+
+    .rs{
+      font-size: 2.2rem;
+      color: $black;
+      font-weight: 300;
+      display: inline-block;
+      color: $txt1;
     }
   }
 
@@ -375,3 +403,7 @@
   }
 
 }
+
+
+
+
