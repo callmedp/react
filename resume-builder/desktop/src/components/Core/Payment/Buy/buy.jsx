@@ -293,6 +293,21 @@ export class Buy extends Component {
                                 }
 
                                 <ul>
+                                    <li class="bdr pos-rel free-trial">
+                                        <div>
+                                            <span class="free-trial--ribbon">
+                                            <span>TRIAL OFFER</span></span>
+                                            <span class="free-trial--text">
+                                                <p> Free one time download for 1st time users</p>
+                                            </span>
+                                            <span class="free-trial--download-button">
+                                                <button>Download</button>
+                                            </span>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <ul>
                                     <li>
                                         <div className="flex-container">
                                             <span className="choose-plann--child">
@@ -304,8 +319,12 @@ export class Buy extends Component {
                                                 <p>Buy 1 resume template</p>
                                                 Rs. <strong>{price1}/-</strong>
                                                 <strike className="ml-10">Rs. 1499</strike>
-                                                <span className="choose-plan--off ml-10">Flat {discount1}% off</span>
+                                                <span className="choose-plan--off mt-10 db">Flat {discount1}% off</span>
                                             </span>
+                                            <button
+                                                className="choose-plan--btn-rt orange-button ml-auto"
+                                                onClick={this.redirectToCart.bind(this)}>Pay now
+                                            </button>
                                         </div>
                                     </li>
                                     <li className="bdr pos-rel">
@@ -317,18 +336,28 @@ export class Buy extends Component {
                                                     onChange={this.handleOnChange.bind(this, 'product2')} />
                                             </span>
                                             <span className="choose-plan--price">
-                                                <p><strong className="yearly-pack">Yearly Pack</strong></p>
-                                                <span className="rs">Rs.</span> <strong className="yp-price">  {price2}
+                                                <p>Yearly Pack</p>
+                                                <span>Rs.</span> <strong>  {price2}
                                                     /-</strong>
                                                 <strike className="ml-10">Rs. 1999</strike>
-                                                <span className="choose-plan--off mt-2 save-up-to">Save up to {discount2}% off</span>
+                                                <span className="choose-plan--off mt-10 db">Save up to {discount2}% off</span>
                                             </span>
                                             <button
-                                        className="choose-plan--orange-button-change orange-button items-right pull-right mt-10"
-                                        onClick={this.redirectToCart.bind(this)}>Pay now
-                                    </button>
+                                                className="choose-plan--btn-rt orange-button ml-auto mt-20"
+                                                onClick={this.redirectToCart.bind(this)}>Pay now
+                                            </button>
                                         </div>
+                                    </li>
+                                    <li className="bdr">
+                                        <ul className="choose-plan--planlist">
+                                            <li>Unlimited Downloads</li>
+                                            <li>100% access to all features</li>
+                                            <li>All Resume Templates</li>
+                                            <li>Auto-upgrade of new features</li>
+                                        </ul>
+                                    </li>
 
+                                    <li className="bdr pos-rel">
                                         <Slider {...settings}>
 
                                             {
