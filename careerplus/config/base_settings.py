@@ -607,3 +607,12 @@ PAYU_INFO = {'merchant_salt':'JN7rUoRe',
             'merchant_key':'ng7s88',
             'payment_url':'https://test.payu.in/_payment',
             'web_api_url':'https://test.payu.in/merchant/postservice.php?form=2'}
+
+# Redirect obsolete article to category page.
+REDIRECT_ARTICLE = {
+    1: '/talenteconomy/career-help/',
+    15: '/talenteconomy/career-help/'
+}
+REDIRECT_ARTICLE_CATEGORY = [
+    'job-search-guidance'
+]
