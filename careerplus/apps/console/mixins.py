@@ -56,7 +56,7 @@ class ActionUserMixin(object):
         orderitem_objs = OrderItem.objects.filter(
             id__in=orderitem_list).select_related('order')
         for obj in orderitem_objs:
-            if not obj.assigned_to:
+            if assigned_to and obj.assigned_to.id != assigned_to.id:
                 obj.assigned_to = assigned_to
                 obj.assigned_date = timezone.now()
                 obj.assigned_by = user

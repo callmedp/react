@@ -2845,6 +2845,7 @@ class ActionOrderItemView(View):
 
 class AssignmentOrderItemView(View):
     def post(self, request, *args, **kwargs):
+        import ipdb;ipdb.set_trace()
         try:
             user_pk = int(request.POST.get('assign_to', '0'))
         except:
