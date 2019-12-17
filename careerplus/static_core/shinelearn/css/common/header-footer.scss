@@ -404,14 +404,14 @@ datalist {
 .format-dropdown {
 
   .format-tabs {
-    padding: 0 !important;
+    padding: 0 !important;    
   }
 
   .dropdown-menu {
-    min-width: 500px;
+    min-width: auto;
 
     @media (max-width: 1023px) {
-      min-width: 300px;
+      min-width: auto;
     }
   }
 
@@ -474,13 +474,20 @@ datalist {
   .tab-content {
     display: table-cell;
     background-color: #ebebeb;
-    padding-right: 10px;
-    padding-left: 15px;
-    min-width: 300px;
+    min-width: auto;
     position: relative;
 
     @media (max-width: 1023px) {
       min-width: 250px;
+    }
+
+    .tab-pane {
+      width: 250px;
+
+      ul {
+        padding-left: 15px;
+        padding-right: 10px;
+      }
     }
 
     ul {
@@ -516,6 +523,11 @@ datalist {
             font-weight: $font-weight+100;
           }
         }
+      }
+    }
+    div {
+      &:last-child {
+        width: 0;
       }
     }
   }
