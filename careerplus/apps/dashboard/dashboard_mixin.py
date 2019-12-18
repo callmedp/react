@@ -126,12 +126,12 @@ class DashboardInfo(object):
         if candidate_id:
             resume_pending_items = OrderItem.objects.\
                 filter(order__candidate_id=candidate_id, order__status__in=[1, 3],no_process=False).\
-                filter(Q(oi_status=2) | Q(order__auto_upload=True)).exclude(oi_status__in=[4,24])
+                filter(Q(oi_status=2) | Q(order__auto_upload=True, assigned_to=None)).exclude(oi_status__in=[4,24])
 
         elif email:
             resume_pending_items = OrderItem.objects.\
                 filter(order__email=email, order__status__in=[1, 3],no_process=False).\
-                filter(Q(oi_status=2) | Q(order__auto_upload=True)).exclude(oi_status__in=[4,24])
+                filter(Q(oi_status=2) | Q(order__auto_upload=True, assigned_to=None)).exclude(oi_status__in=[4,24])
 
         return resume_pending_items.select_related('order', 'partner', 'product')
 

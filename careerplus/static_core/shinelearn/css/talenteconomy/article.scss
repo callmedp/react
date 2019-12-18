@@ -1334,7 +1334,10 @@ header {
     color: $error-color;
 }
 
-.article-detail-content ol li, .article-detail-content ul li .parsley-errors-list {
+.article-detail-content ol li, .article-detail-content ul li{
+	font-size: $font-size+6 !important;
+} 
+.parsley-errors-list {
 	font-size: $font-size+1 !important;
 } 
 
