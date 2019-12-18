@@ -1,5 +1,5 @@
 import json
-import logging
+import logging,numpy
 from itertools import zip_longest
 
 from django.http import (
@@ -26,7 +26,7 @@ from shop.choices import (
 from homepage.config import UNIVERSITY_PAGE
 from cms.mixins import UploadInFile
 from partner.models import Vendor
-from homepage.models import Testimonial
+from homepage.models import Testimonial,TestimonialCategoryRelationship
 from review.models import Review
 from crmapi.models import UNIVERSITY_LEAD_SOURCE
 from .mixins import SkillPageMixin
@@ -97,7 +97,9 @@ class SkillPageView(DetailView, SkillPageMixin):
 
         widget_obj = DetailPageWidget.objects.filter(content_type__model='Category', listid__contains=self.object.pk)
         widget_obj_data = widget_obj.widget.iw.indexcolumn_set.filter(column=1) if widget_obj else []
-
+        testimonialcategory = list(TestimonialCategoryRelationship.objects.filter(category=self.object.id,\
+                    testimonial__is_active=True).select_related('testimonial'))
+        
         for heading in subheading:
             subheading_id_data_mapping.update({
                 heading.heading_choice_text : heading
@@ -116,6 +118,7 @@ class SkillPageView(DetailView, SkillPageMixin):
             'widget_obj_data':widget_obj_data,
             'breadcrumbs':self.get_breadcrumb_data(),
             'country_choices':country_choices,
+            'testimonialcategory':testimonialcategory,
         })
         return context
 

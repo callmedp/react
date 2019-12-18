@@ -70,14 +70,15 @@ class TestimonialModelForm(forms.ModelForm):
         self.fields['is_active'].widget.attrs['class'] = 'js-switch'
         self.fields['is_active'].widget.attrs['data-switchery'] = 'true'
         self.fields['is_active'].label = 'Active'
-        self.fields['priority'].widget.attrs['class'] = form_class
+
+        self.fields['page'].widget.attrs['class'] = form_class
 
     class Meta:
         model = Testimonial
         fields = (
             'user_name', 'image',
             'designation', 'company', 'title', 'review',
-            'priority', 'is_active')
+            'is_active','page')
 
 
     def clean_user_name(self):
@@ -133,6 +134,17 @@ class TestimonialModelForm(forms.ModelForm):
             raise forms.ValidationError(
                 "Review should be between 1-500 characters.")
         return review
+
+    def clean_page(self):
+        level = self.cleaned_data.get('page', '')
+        if level:
+            if int(level) == 0:
+                raise forms.ValidationError(
+                    "This should not be default.")
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return level
 
 
 
@@ -250,6 +262,12 @@ class SubHeaderCategoryForm(forms.ModelForm):
 
 
 class SubHeaderInlineFormSet(forms.BaseInlineFormSet):
+
+    def __init__(self, *args, **kwargs):
+        super(SubHeaderInlineFormSet, self).__init__(*args, **kwargs)
+        for form in self.forms:
+            form.empty_permitted = True
+
     def clean(self):
         super(SubHeaderInlineFormSet, self).clean()
 

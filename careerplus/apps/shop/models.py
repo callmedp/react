@@ -67,7 +67,8 @@ from .choices import (
     MANUAL_CHANGES_CHOICES,
     DAYS_CHOICES,
     SUB_HEADING_CHOICES,
-    SUB_HEADING_CHOICE_ATTR_MAPPING,
+    SUB_HEADING_CHOICE_ATTR_MAPPING_DESKTOP,
+    SUB_HEADING_CHOICE_ATTR_MAPPING_MOBILE,
     convert_inr,
     convert_usd,
     convert_aed,
@@ -470,12 +471,24 @@ class SubHeaderCategory(AbstractAutoDate):
         subheading_choices = dict(SUB_HEADING_CHOICES)
         return subheading_choices.get(self.heading_choices)
 
-    # this is required to add class and other attributes to ul in template from choices.py
+    # this is required to add class and other attributes to ul in template from choices.py for desktop
     @property
-    def get_sub_heading_description_with_attr_ul(self):
+    def get_sub_heading_description_with_attr_ul_desktop(self):
         description = self.description
         ul_pos = description.find('<ul')
-        attr = dict(SUB_HEADING_CHOICE_ATTR_MAPPING).get(self.heading_choices) 
+        attr = dict(SUB_HEADING_CHOICE_ATTR_MAPPING_DESKTOP).get(self.heading_choices) 
+        
+        if ul_pos == -1 or ul_pos+4 > len(description):
+            return description
+
+        return description[:ul_pos+3] + ' {} '.format(attr) + description[ul_pos+3:]
+
+     # this is required to add class and other attributes to ul in template from choices.py for mobile
+    @property
+    def get_sub_heading_description_with_attr_ul_mobile(self):
+        description = self.description
+        ul_pos = description.find('<ul')
+        attr = dict(SUB_HEADING_CHOICE_ATTR_MAPPING_MOBILE).get(self.heading_choices) 
         
         if ul_pos == -1 or ul_pos+4 > len(description):
             return description

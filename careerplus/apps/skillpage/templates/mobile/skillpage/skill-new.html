@@ -1,5 +1,7 @@
 {% extends "mobile/basic/base-inner.html" %}
 {% load static compress %}
+{% load shop_tags %}
+
 {% block django_meta %}
     {% include 'meta/meta.html' %}
 
@@ -25,46 +27,36 @@
 {% block container %}
 <div class="body-wrapper">
     <div class="main-banner">
-        <h1>Digital Marketing Courses & Certifications</h1>
-        <ul class="main-banner__slider">
-            <li class="">
-                <div class="main-banner__slider--items border-bottom-blue">
-                    <i class="sprite circle-arrow"></i>
-                    <p class="pb-0"><strong>26% Annual Growth</strong> for cloud related opportunities In IT Sector</p>
-                </div>
-            </li><!-- // li -->
-            <li>
-                <div class="main-banner__slider--items border-bottom-blue">
-                    <i class="sprite circle-arrow"></i>
-                    <p class="pb-0"><strong>26% Annual Growth</strong> for cloud related opportunities In IT Sector</p>
-                </div>
-            </li><!-- // li -->
-            <li>
-                <div class="main-banner__slider--items border-bottom-blue">
-                    <i class="sprite circle-arrow"></i>
-                    <p class="pb-0"><strong>26% Annual Growth</strong> for cloud related opportunities In IT Sector</p>
-                </div>
-            </li><!-- // li -->
-            <li>
-                <div class="main-banner__slider--items border-bottom-blue">
-                    <i class="sprite circle-arrow"></i>
-                    <p class="pb-0"><strong>26% Annual Growth</strong> for cloud related opportunities In IT Sector</p>
-                </div>
-            </li><!-- // li -->
-            <li>
-                <div class="main-banner__slider--items border-bottom-blue">
-                    <i class="sprite circle-arrow"></i>
-                    <p class="pb-0"><strong>26% Annual Growth</strong> for cloud related opportunities In IT Sector</p>
-                </div>
-            </li><!-- // li -->
-        </ul>
+        <h1>{{category.name|title}} Courses & Certifications</h1>
+
+         <!-- Features of Skill Page    ISSUE : SLick not working cause of 2 items-->
+        {% if 'features'|get_value:subheading %}   
+            {% with features='features'|get_value:subheading %}
+                <ul class="main-banner__slider">
+                    {% for item in  features.description|format_features%}
+                        <li>
+                            <div class="main-banner__slider--items border-bottom-blue">
+                                <i class="sprite circle-arrow"></i>
+                                <p class="pb-0">{{item}}</p>
+                            </div>
+                        </li><!-- // li -->
+                    {% endfor %}
+                </ul>
+            {% endwith %}
+        {% endif %}
+        
     </div><!-- // main Baners -->
 
     <div class="content-box">
         <div class="white-box mb-15" id="about">
-            <h2>About Digital Marketing</h2>
-            <p class="pb-0">Digital Marketing is the marketing and advertising in the digital space fulfilling all the duties of traditional marketing and beyond it. And as the digital landscape…<a href="#">Read more</a></p>
-        </div><!-- // About Digital Marketing -->
+            <h2>About {{category.name|title}}</h2>
+            <p class="pb-0 collapse" id="expand-content" aria-expanded="false">
+                {% for description in  category.description|format_description%}
+                    {{description|safe}}
+                {% endfor %}
+            </p>
+            <a role="button" class="collapsed" data-toggle="collapse" href="#expand-content" aria-expanded="false" aria-controls="expand-content"></a>
+        </div><!-- // About Skill Page -->
 
         <div class="popular-courses mb-20 mt-20" id="popular-courses">
             <div class="d-flex align-items-center mb-15">
@@ -73,105 +65,69 @@
             </div><!-- // Heading -->
 
             <ul class="popular-courses__slides">
-                <li class="postion-relative">
-                    <span class="popular-courses__slides--circle">
-                        <img src="{% static 'shinelearn/images/course-logo1.png' %}" alt="">
-                    </span>
-                    <div class="popular-courses__slides--items border-bottom-blue mt-0">
-                        <a href="#">
-                            <p>Certified Email Marketing Profess…</p>
-                        </a>
-                    </div>
-                </li><!-- // li -->
-                
-                <li class="postion-relative">
-                    <span class="popular-courses__slides--circle">
-                        <img src="{% static 'shinelearn/images/course-logo2.png' %}" alt="">
-                    </span>
-                    <div class="popular-courses__slides--items border-bottom-blue mt-0">
-                        <a href="#">
-                            <p>Certified Email Marketing Profess…</p>
-                        </a>
-                    </div>
-                </li><!-- // li -->
-                
-                <li class="postion-relative">
-                    <span class="popular-courses__slides--circle">
-                        <img src="{% static 'shinelearn/images/course-logo3.png' %}" alt="">
-                    </span>
-                    <div class="popular-courses__slides--items border-bottom-blue mt-0">
-                        <a href="#">
-                            <p>Certified Email Marketing Profess…</p>
-                        </a>
-                    </div>
-                </li><!-- // li -->
-                
-                <li class="postion-relative">
-                    <span class="popular-courses__slides--circle">
-                        <img src="{% static 'shinelearn/images/course-logo4.png' %}" alt="">
-                    </span>
-                    <div class="popular-courses__slides--items border-bottom-blue mt-0">
-                        <a href="#">
-                            <p>Certified Email Marketing Profess…</p>
-                        </a>
-                    </div>
-                </li><!-- // li -->
-                
-                <li class="postion-relative">
-                    <span class="popular-courses__slides--circle">
-                        <img src="{% static 'shinelearn/images/course-logo5.png' %}" alt="">
-                    </span>
-                    <div class="popular-courses__slides--items border-bottom-blue mt-0">
-                        <a href="#">
-                            <p>Certified Email Marketing Profess…</p>
-                        </a>
-                    </div>
-                </li><!-- // li -->
+                {% for course in top_3_courses %}
+                    <li class="postion-relative">
+                        <span class="popular-courses__slides--circle">
+                            <img aria-label="{{course.pNm}}" src="{{course.pImg}}" alt="{{course.pNm}}">
+                        </span>
+                        <div class="popular-courses__slides--items border-bottom-blue mt-0">
+                            <a href="{{course.pURL}}">
+                                <p>{{course.pNm}}</p>
+                            </a>
+                        </div>
+                    </li><!-- // li -->
+                {% endfor %}
             </ul><!-- // Ul -->
         </div><!-- // Popular courses -->
 
-        <div class="white-box mb-20 pb-30" id="objective">
-            <h2>Objective</h2>
-            <ul class="bullet-blue">
-                <li>Understand the meaning of business analytics and its importance in the industry.</li>
-                <li>Learn how to analyze with complex datasets using pivot tables and slicers.</li>
-            </ul>
-            <a href="#" class="d-block mt-15 ml-20">Read more</a>
-        </div><!-- // Objective -->
-        
-        <div class="white-box mb-20 pb-30" id="should-learn">
-            <h2>Who should learn?</h2>
-            <ul class="bullet-custom tick">
-                <li>Any professional from Business Analytics / Business Intelligence background</li>
-                <li>Managers from Analytical background and those who are leading a team of Analysts</li>
-                <li>Engineering or Non-Engineering aspirants wanting to become a Data Scientist</li>
-                <li>Any Data Analyst or Software Developer aspiring to be a Data Scientist</li>
-            </ul>
-        </div><!-- // Who should learn? -->
-        
-        <div class="white-box mb-30 pb-30" id="skill">
-            <h2>Skills you will gain</h2>
-            <div class="tags">
-                <span class="tags--items">Content Marketing</span>
-                <span class="tags--items">Email Marketing</span>
-                <span class="tags--items">Adwords</span>
-                <span class="tags--items">Social Media</span>
-                <span class="tags--items">SEO</span>
-                <span class="tags--items">Copywriting</span>
-                <span class="tags--items">Digital Marketing</span>
-            </div>
-        </div><!-- // Skills you will gain -->
+        <!-- objective section -->
+          {% if 'objective'|get_value:subheading %}
+            {% with objective='objective'|get_value:subheading %}
+                <div class="white-box mb-20 pb-30 " id="objective">
+                    <h2>{{objective.heading}}</h2>
+                    {{objective.get_sub_heading_description_with_attr_ul_desktop|safe}}
+                    {% comment %} <ul class="bullet-blue">
+                        <li>Understand the meaning of business analytics and its importance in the industry.</li>
+                        <li>Learn how to analyze with complex datasets using pivot tables and slicers.</li>
+                    </ul> {% endcomment %}
+                    <a role="button" class="collapsed d-block mt-15 ml-20" data-toggle="collapse" href="#expand-list" aria-expanded="false" aria-controls="expand-list"></a>
 
-        <div class="test-skills row" id="test-skill">
-            <h2>Test your skills</h2>
-            <div class="d-flex mt-10">
-                <div class="test-skills__wrap--content">
-                    <p class="mb-30">Take our free practice test to test your skill level in <strong>Digital Marketing</strong></p>
-                    <a href="#" class="btn btn-blue btn-round">Take free test</a>
+                </div><!-- // Objective -->
+            {% endwith %}
+          {% endif %}
+        
+        {% if 'who-should-learn'|get_value:subheading %}
+            {% with who_should_learn='who-should-learn'|get_value:subheading %}
+                <div class="white-box mb-20 pb-30" id="should-learn">
+                    <h2>{{who_should_learn.heading}}?</h2>
+                    {{who_should_learn.get_sub_heading_description_with_attr_ul_mobile|safe}}
+                </div><!-- // Who should learn? -->
+            {% endwith %}
+        {% endif %}
+        
+        {% if career_outcomes %}
+            <div class="white-box mb-30 pb-30" id="skill">
+                <h2>Skills you will gain</h2>
+                <div class="tags">
+                    {% for outcome in career_outcomes %}
+                        <span class="tags--items">{{outcome}}</span>
+                    {% endfor %}
                 </div>
-                <img src="{% static 'shinelearn/images/mobile/skill/test-your-skill.png'%}" alt="">
-            </div>
-        </div><!-- // Test your skills -->
+            </div><!-- // Skills you will gain -->
+        {% endif %}
+
+        {% if category.assessment_test_count %}
+            <div class="test-skills row" id="test-skill">
+                <h2>Test your skills</h2>
+                <div class="d-flex mt-10">
+                    <div class="test-skills__wrap--content">
+                        <p class="mb-30">Take our free practice test to test your skill level in <strong>{{category.heading}}</strong></p>
+                        <a href="{% url 'assessment:vskill-subcategory' slug=category.slug  %}" class="btn btn-blue btn-round">Take free test</a>
+                    </div>
+                    <img src="{% static 'shinelearn/images/mobile/skill/test-your-skill.png'%}" alt="">
+                </div>
+            </div><!-- // Test your skills -->
+        {% endif %}
 
         <div class="white-box mb-15 mt-20" id="impact">
             <h2>Our impact</h2>
@@ -198,182 +154,71 @@
             <div class="skill-tabs row">
                 <div class="tab-wrap">
                     <ul class="tabs d-flex">
-                        <li class="tab-link current mb-0" data-tab="tab-1">Courses (18)</li>
-                        <li class="tab-link mb-0" data-tab="tab-2">Assessments (16)</li>
+                        {% if course_count %}
+                            <li class="tab-link current mb-0" id="tab-1-text" data-tab="tab-1" onclick="changeTab('tab-1','tab-2')">Courses ({{course_count}})</li>
+                        {% endif %}
+                        {% if assesment_count %}
+                            <li class="tab-link mb-0" id="tab-2-text" data-tab="tab-2" onclick="changeTab('tab-2','tab-1')">Assessments ({{assesment_count}})</li>
+                        {% endif %}
                     </ul>
     
-                    <div id="tab-1" class="tab-content current">
+                    <div id="tab-1" class="tab-content current" categoryId="{{category.pk}}" categoryHeading={{category.heading}}>
                         <ul>
-                            <li class="d-flex row">
-                                <span class="skill-tabs--image">
-                                    <img src="{% static 'shinelearn/images/course-logo2.png' %}" alt="">
-                                </span><!-- // Image -->
-        
-                                <div class="skill-tabs__content">
-                                    <div class="skill-tabs__content--tag skill-tabs__content--bestseller">Bestseller</div>
-                                    <a class="d-block pt-5" href="#"><strong>Certified Email Marketing Professional</strong></a>
-                                    <div class="ratingView mt-10">
-                                        <span class="rating" data-rating="4"></span> 4/5
+                            {% for course in courses %}
+                                <li class="d-flex row">
+                                    <span class="skill-tabs--image">
+                                        <img aria-label="{{course.pNm}}" src="{{course.pImg}}" alt="{{course.pNm}}">
+                                    </span><!-- // Image -->
+            
+                                    <div class="skill-tabs__content">
+                                        <div class="skill-tabs__content--tag skill-tabs__content--bestseller">Bestseller</div>
+                                        <a class="d-block pt-5" href="{{course.pURL}}"><strong>{{course.pNm}}</strong></a>
+                                        <div class="ratingView mt-10">
+                                            <span class="rating" data-rating="{{assesment.pARx|floatformat:1}}"></span> {{course.pARx|floatformat:1}}/5
+                                        </div>
+                                        <div class="skill-tabs__content--mode">
+                                            Mode
+                                            <span>Instructor</span>
+                                            <span>Online</span>
+                                        </div><!-- // mode -->
+                                        <p class="skill-tabs__content--provider fs-11"><small class="mr-5">Provider</small>{{course.pPvn}}</p>
+                                        <p class="skill-tabs__content--price"><strong>Rs. {{ course.pPin |floatformat:'0' }}/- </strong></p>
                                     </div>
-                                    <div class="skill-tabs__content--mode">
-                                        Mode
-                                        <span>Instructor</span>
-                                        <span>Online</span>
-                                    </div><!-- // mode -->
-                                    <p class="skill-tabs__content--provider fs-11"><small class="mr-5">Provider</small>GetCertGo</p>
-                                    <p class="skill-tabs__content--price"><strong>Rs. 48420/- </strong></p>
-                                </div>
-                            </li>
-
-                            <li class="d-flex row">
-                                <span class="skill-tabs--image">
-                                    <img src="{% static 'shinelearn/images/course-logo1.png' %}" alt="">
-                                </span><!-- // Image -->
-        
-                                <div class="skill-tabs__content">
-                                    <div class="skill-tabs__content--tag skill-tabs__content--new">New</div>
-                                    <a class="d-block pt-5" href="#"><strong>Digital Marketing Professional Course</strong></a>
-                                    <div class="ratingView mt-10">
-                                        <span class="rating" data-rating="3"></span> 3/5
-                                    </div>
-                                    <div class="skill-tabs__content--mode">
-                                        Mode
-                                        <span>Instructor</span>
-                                    </div><!-- // mode -->
-                                    <p class="skill-tabs__content--provider fs-11"><small class="mr-5">Provider</small>GetCertGo</p>
-                                    <p class="skill-tabs__content--price"><strong>Rs. 48420/- </strong></p>
-                                </div>
-                            </li>
-
-                            <li class="d-flex row">
-                                <span class="skill-tabs--image">
-                                    <img src="{% static 'shinelearn/images/course-logo3.png' %}" alt="">
-                                </span><!-- // Image -->
-        
-                                <div class="skill-tabs__content">
-                                    <a class="d-block pt-5" href="#"><strong>Certified Email Marketing Professional</strong></a>
-                                    <div class="ratingView mt-10">
-                                        <span class="rating" data-rating="4"></span> 4/5
-                                    </div>
-                                    <div class="skill-tabs__content--mode">
-                                        Mode
-                                        <span>Instructor</span>
-                                        <span>Online</span>
-                                    </div><!-- // mode -->
-                                    <p class="skill-tabs__content--provider fs-11"><small class="mr-5">Provider</small>GetCertGo</p>
-                                    <p class="skill-tabs__content--price"><strong>Rs. 48420/- </strong></p>
-                                </div>
-                            </li>
-
-                            <li class="d-flex row">
-                                <span class="skill-tabs--image">
-                                    <img src="{% static 'shinelearn/images/course-logo4.png' %}" alt="">
-                                </span><!-- // Image -->
-        
-                                <div class="skill-tabs__content">
-                                    <a class="d-block pt-5" href="#"><strong>Certified Email Marketing Professional</strong></a>
-                                    <div class="ratingView mt-10">
-                                        <span class="rating" data-rating="4"></span> 4/5
-                                    </div>
-                                    <div class="skill-tabs__content--mode">
-                                        Mode
-                                        <span>Instructor</span>
-                                        <span>Online</span>
-                                    </div><!-- // mode -->
-                                    <p class="skill-tabs__content--provider fs-11"><small class="mr-5">Provider</small>GetCertGo</p>
-                                    <p class="skill-tabs__content--price"><strong>Rs. 48420/- </strong></p>
-                                </div>
-                            </li>
+                                </li>
+                            {% endfor %}
                         </ul>
                         <div class="d-block text-center py-15">
-                            <a href="#" class="btn btn-round btn-outline d-inline-block">More course</a>
+                            <a onclick="loadProduct('course')" class="btn btn-round btn-outline d-inline-block">More course</a>
                         </div>
                     </div><!-- // Courses content -->
     
                     <div id="tab-2" class="tab-content">
                         <ul>
-                            <li class="d-flex row">
-                                <span class="skill-tabs--image">
-                                    <img src="{% static 'shinelearn/images/course-logo2.png' %}" alt="">
-                                </span><!-- // Image -->
-        
-                                <div class="skill-tabs__content">
-                                    <a class="d-block pt-5" href="#"><strong>Certified Email Marketing Professional</strong></a>
-                                    <div class="ratingView mt-10">
-                                        <span class="rating" data-rating="4"></span> 4/5
+                            {% for assesment in assesments %}
+                                <li class="d-flex row">
+                                    <span class="skill-tabs--image">
+                                        <img aria-label="{{assesment.pNm}}" src="{{assesment.pImg}}" alt="{{assesment.pNm}}">
+                                    </span><!-- // Image -->
+            
+                                    <div class="skill-tabs__content">
+                                        <a class="d-block pt-5" href="{{assesment.pURL}}"><strong>{{assesment.pNm}}</strong></a>
+                                        <div class="ratingView mt-10">
+                                            <span class="rating" data-rating="{{assesment.pARx|floatformat:1}}"></span> {{assesment.pARx|floatformat:1}}/5
+                                        </div>
+                                        <div class="skill-tabs__content--mode">
+                                            Mode
+                                            <span>Instructor</span>
+                                            <span>Online</span>
+                                        </div><!-- // mode -->
+                                        <p class="skill-tabs__content--provider fs-11"><small class="mr-5">Provider</small>{{course.pPvn}}</p>
+                                        <p class="skill-tabs__content--price"><strong>Rs. {{ course.pPin |floatformat:'0' }}/- </strong></p>
                                     </div>
-                                    <div class="skill-tabs__content--mode">
-                                        Mode
-                                        <span>Instructor</span>
-                                        <span>Online</span>
-                                    </div><!-- // mode -->
-                                    <p class="skill-tabs__content--provider fs-11"><small class="mr-5">Provider</small>GetCertGo</p>
-                                    <p class="skill-tabs__content--price"><strong>Rs. 48420/- </strong></p>
-                                </div>
-                            </li>
-
-                            <li class="d-flex row">
-                                <span class="skill-tabs--image">
-                                    <img src="{% static 'shinelearn/images/course-logo1.png' %}" alt="">
-                                </span><!-- // Image -->
-        
-                                <div class="skill-tabs__content">
-                                    <a class="d-block pt-5" href="#"><strong>Digital Marketing Professional Course</strong></a>
-                                    <div class="ratingView mt-10">
-                                        <span class="rating" data-rating="3"></span> 3/5
-                                    </div>
-                                    <div class="skill-tabs__content--mode">
-                                        Mode
-                                        <span>Instructor</span>
-                                    </div><!-- // mode -->
-                                    <p class="skill-tabs__content--provider fs-11"><small class="mr-5">Provider</small>GetCertGo</p>
-                                    <p class="skill-tabs__content--price"><strong>Rs. 48420/- </strong></p>
-                                </div>
-                            </li>
-
-                            <li class="d-flex row">
-                                <span class="skill-tabs--image">
-                                    <img src="{% static 'shinelearn/images/course-logo3.png' %}" alt="">
-                                </span><!-- // Image -->
-        
-                                <div class="skill-tabs__content">
-                                    <a class="d-block pt-5" href="#"><strong>Certified Email Marketing Professional</strong></a>
-                                    <div class="ratingView mt-10">
-                                        <span class="rating" data-rating="4"></span> 4/5
-                                    </div>
-                                    <div class="skill-tabs__content--mode">
-                                        Mode
-                                        <span>Instructor</span>
-                                        <span>Online</span>
-                                    </div><!-- // mode -->
-                                    <p class="skill-tabs__content--provider fs-11"><small class="mr-5">Provider</small>GetCertGo</p>
-                                    <p class="skill-tabs__content--price"><strong>Rs. 48420/- </strong></p>
-                                </div>
-                            </li>
-
-                            <li class="d-flex row">
-                                <span class="skill-tabs--image">
-                                    <img src="{% static 'shinelearn/images/course-logo4.png' %}" alt="">
-                                </span><!-- // Image -->
-        
-                                <div class="skill-tabs__content">
-                                    <a class="d-block pt-5" href="#"><strong>Certified Email Marketing Professional</strong></a>
-                                    <div class="ratingView mt-10">
-                                        <span class="rating" data-rating="4"></span> 4/5
-                                    </div>
-                                    <div class="skill-tabs__content--mode">
-                                        Mode
-                                        <span>Instructor</span>
-                                        <span>Online</span>
-                                    </div><!-- // mode -->
-                                    <p class="skill-tabs__content--provider fs-11"><small class="mr-5">Provider</small>GetCertGo</p>
-                                    <p class="skill-tabs__content--price"><strong>Rs. 48420/- </strong></p>
-                                </div>
-                            </li>
+                                </li>
+                            {% endfor %}
                         </ul>
 
                         <div class="d-block text-center py-15">
-                            <a href="#" class="btn btn-round btn-outline d-inline-block">More course</a>
+                            <a onclick="loadProduct('assesment')" class="btn btn-round btn-outline d-inline-block">More course</a>
                         </div>
                     </div><!-- // Courses content -->
 
@@ -412,52 +257,40 @@
             </ul>
         </div><!-- // Learner’s stories -->
 
-        <div class="white-box faq mt-20" id="faqs">
-            <h2>FAQ</h2>
-             <!-- Accordion begin -->
-             <div class="css-accordion">
-                <div class="css-accordion--tab">
-                    <input class="faq-input" type="radio" id="rd1" name="rd" checked>
-                    <label class="css-accordion--heading" for="rd1">What is the cancellation policy?</label>
-                    <div class="css-accordion--content">
-                        <p>i. Requests for refund of fees on account</p>
-                        <p>of  cancellation of enrolment  shall be considered  only if such requests are received prior to closure of registration</p>
-                        <p>or 21 days before date of course commencement whichever is earlier.</p>
-                    </div><!-- // css-accordion content -->
-                </div><!-- // css-accordion -->
+        {% if 'faq'|get_value:subheading %}
+            {% with faq='faq'|get_value:subheading %}
+                <div class="white-box faq mt-20" id="faqs">
+                    <h2>{{faq.heading}}</h2>
+                    <!-- Accordion begin -->
+                    <div class="css-accordion">
+                        {% for item in  faq.description|get_faq_list%}
+                            <div class="css-accordion--tab {% if forloop.counter > 2%}hide{% endif %}">
+                                <input class="faq-input" type="radio" id="rd{{ forloop.counter }}" name="rd" {% if forloop.counter == 1%}checked{% endif %}>
+                                <label class="css-accordion--heading" for="rd{{ forloop.counter }}">{{item.heading|safe}}</label>
+                                <div class="css-accordion--content">
+                                    {{item.content|safe}}
+                                </div><!-- // css-accordion content -->
+                            </div><!-- // css-accordion -->
+                        {% endfor %}
 
-                <div class="css-accordion--tab">
-                    <input class="faq-input" type="radio" id="rd2" name="rd">
-                    <label class="css-accordion--heading" for="rd2">Can I join next batch after paying for this batch</label>
-                    <div class="css-accordion--content">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                    </div><!-- // css-accordion--content -->
-                </div><!-- // css-accordion -->
-
-                <div class="css-accordion--tab">
-                    <input class="faq-input" type="radio" id="rd3" name="rd">
-                    <label class="css-accordion--heading" for="rd3">Do we get placement opportunity with this course?</label>
-                    <div class="css-accordion--content">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                    </div><!-- // css-accordion--content -->
-                </div><!-- // css-accordion -->
-
-            </div> <!-- css-accordion end -->
-            <div class="d-block text-center py-15 mt-15">
-                <a href="#" class="btn btn-round btn-outline d-inline-block">More FAQs</a>
-            </div>
-        </div><!-- // FAQs -->
-
-        <div class="white-box mt-20">
-            <h2>Also check</h2>
-            <ul class="bullet-custom arrow">
-                <li><a href="#">Digital Marketing Jobs</a></li>
-                <li><a href="#">Online Marketing Jobs</a></li>
-                <li><a href="#">SEO Jobs</a></li>
-                <li><a href="#">Business Development Jobs</a></li>
-                <li><a href="#">Resume Format for Sales & Marketing Professionals</a></li>
-            </ul>
-        </div><!-- // Also check -->
+                    </div> <!-- css-accordion end -->
+                    <div class="d-block text-center py-15 mt-15">
+                        <a onclick="openMoreFAQ()" id="more-faq" class="btn btn-round btn-outline d-inline-block">More FAQs</a>
+                    </div>
+                </div><!-- // FAQs -->
+            {% endwith %}
+        {% endif %}
+        
+        {% if widget_obj_data %}
+            <div class="white-box mt-20">
+                <h2>{{widget_name}}</h2>
+                <ul class="bullet-custom arrow">
+                    {% for obj in widget_obj_data %}
+                        <li><a href="{{obj.url}}">{{obj.name}}</a></li>
+                    {% endfor %}
+                </ul>
+            </div><!-- // Also check -->
+        {% endif %}
     </div><!-- // content-box -->
 </div><!-- // body-wrapper -->
 
@@ -488,9 +321,10 @@
 {% block js_section %}
     {{block.super}}
 
-{% compress js %}
-    <script src="{% static 'shinelearn/js/skill/skillpage.js' %}"></script>
-    <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
+    {% compress js %}
+        <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
+        <script src="{% static 'shinelearn/js/mobile/skill/skill-page-new.js' %}"></script>
+
     {% endcompress %}
 {% endblock js_section %}
 

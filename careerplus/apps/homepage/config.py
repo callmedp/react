@@ -8,6 +8,7 @@ PAGECHOICES = (
 	(1, 'Homepage'),
 	(2, 'Roundone'),
 	(3, 'Course Catalogue'),
+    (6, 'Skill Page'),
 	(UNIVERSITY_PAGE, 'University Page'),
 	(UNIVERSITY_COURSE, 'University Course')
 )

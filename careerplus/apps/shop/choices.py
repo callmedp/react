@@ -334,7 +334,12 @@ SUB_HEADING_CHOICES = (
     (4, 'features')
 )
 
-SUB_HEADING_CHOICE_ATTR_MAPPING = (
+SUB_HEADING_CHOICE_ATTR_MAPPING_DESKTOP = (
     (1,'class="objective__list collapse" id="expand-list" aria-expanded="false"'),
     (2,'class="who-should-learn__list d-flex flex-wrap"'),
+)
+
+SUB_HEADING_CHOICE_ATTR_MAPPING_MOBILE = (
+    (1,'class="objective__list collapse" id="expand-list" aria-expanded="false"'),
+    (2,'class="bullet-custom tick"'),
 )

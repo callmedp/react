@@ -266,3 +266,68 @@
         background-color: $badge-5;
     }
 }
+
+#about {
+    #expand-content {
+        &.collapse:not(.show) {
+            display: block;
+            height: 7rem;
+            overflow: hidden;
+        }
+
+        &.collapsing {
+            height: 6rem;
+            
+        }
+    }
+
+    a {
+       margin-bottom: .7rem;
+       display: inline-block; 
+       
+        &.collapsed {
+            &::after {
+                content: 'Read more';
+            }
+        }
+
+        &:not(.collapsed) {
+            &::after {
+                content: 'Read less';
+            }
+        }
+    }
+}
+
+#objective {
+
+    .objective__list{
+        @extend .bullet-blue;
+        &.collapse:not(.show) {
+            display: block;
+            height: 8.5rem;
+            overflow: hidden;
+        }
+
+        &.collapsing {
+            height: 9.5rem;
+        }
+    }
+
+    a {
+       margin-bottom: .7rem;
+       display: inline-block; 
+       
+        &.collapsed {
+            &::after {
+                content: 'Read more';
+            }
+        }
+
+        &:not(.collapsed) {
+            &::after {
+                content: 'Read less';
+            }
+        }
+    }
+}

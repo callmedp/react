@@ -195,3 +195,5 @@ class BoardNeoProductApiView(APIView):
 
         raise PermissionDenied
 
+
+

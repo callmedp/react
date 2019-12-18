@@ -95,6 +95,7 @@
 
         <h1 class="white head-ht">{{category.name|title}} Courses & <br/>Certifications</h1>
 
+        <!-- Features of Skill Page -->
         {% if 'features'|get_value:subheading %}
           {% with features='features'|get_value:subheading %}
             <div class="row mt-20 mb-20">
@@ -159,9 +160,8 @@
           <!-- about section -->
           <section id="about" class="col-sm-12">
             <div class="skill-about">
-              <h2>About Digital Marketing</h2>
+              <h2>About {{category.name|title}}</h2>
               <p id="expand-content" class="collapse" aria-expanded="false">
-                {% comment %} Digital Marketing is the marketing and advertising in the digital space fulfilling all the duties of traditional marketing and beyond it. And as the digital landscape gains reach and complexity, Digital Marketing follows. Thus, the demand for Certified Digital Marketing Professionals. Digital Marketing is the marketing and advertising in the digital space fulfilling all the duties of traditional marketing and beyond it. And as the digital landscape gains reach and complexity, Digital Marketing follows. Thus, the demand for Certified Digital Marketing Professionals.  {% endcomment %}
                 {% for description in  category.description|format_description%}
                   {{description|safe}}
                 {% endfor %} 
@@ -189,27 +189,6 @@
                       </div>
                     </div>
                   {% endfor %}
-                  
-                  {% comment %} <div class="col">
-                    <div class="media">
-                      <figure class="mr-20 shadow-icon">
-                          <img aria-label="Email Marketing Master Training Course" class="img-fluid" src="https://static1.shine.com/l/m/product_image/801/1508869287_7378.png" alt="Email Marketing Master Training Course">
-                      </figure>
-                      <figcaption class="media-body">
-                          <a href="#">Email Marketing Master course</a>
-                      </figcaption>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="media">
-                      <figure class="mr-20 shadow-icon">
-                          <img aria-label="Certified Email Marketing Professional" class="img-fluid" src="https://static1.shine.com/l/m/product_image/3262/1532690201_3277.png" alt="Certified Email Marketing Professional">
-                      </figure>
-                      <figcaption class="media-body">
-                          <a href="#">Digital Marketing Professionals </a>
-                      </figcaption>
-                    </div>
-                  </div> {% endcomment %}
                 </div>
               </div>
             </div>
@@ -221,7 +200,7 @@
               <section id="objective" class="col-sm-12">
                 <div class="objective">
                   <h2>{{objective.heading}}</h2>
-                  {{objective.get_sub_heading_description_with_attr_ul|safe}}
+                  {{objective.get_sub_heading_description_with_attr_ul_desktop|safe}}
                     <a role="button" class="collapsed ml-15" data-toggle="collapse" href="#expand-list" aria-expanded="false" aria-controls="expand-list"></a>
                 </div>
               </section>
@@ -235,7 +214,7 @@
             <section id="who-learn" class="col-sm-12">
               <div class="who-should-learn">
                 <h2>{{who_should_learn.heading}}</h2>
-                {{who_should_learn.get_sub_heading_description_with_attr_ul|safe}}
+                {{who_should_learn.get_sub_heading_description_with_attr_ul_desktop|safe}}
               </div>
             </section>
             {% endwith %}
@@ -435,126 +414,48 @@
             </div>
           </section>
 
-          <!-- learners stories section -->
-          <section id="testimonial" class="col-sm-12">
-            <h2>Learners stories</h2>
-            <div id="carouselExampleCaptions" class="carousel slide learner-stories" data-ride="carousel">
-              <div class="carousel-inner">
-                <div class="carousel-item active">
-                  <div class="d-flex">
-                    <div class="col-sm-4">
-                      <div class="card text-center">
-                        <div class="card__heading">
-                          AS
-                        </div>
-                        <div class="card-body">
-                          <p class="card-text">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.
-                          </p>
-                        </div>
-                        <p class="card__name">
-                          <strong>Abhishek sinha</strong>
-                          Sapient, Noida
-                        </p>
+          {% if testimonialcategory|length %}
+            <!-- learners stories section -->
+            <section id="testimonial" class="col-sm-12">
+              <h2>Learners stories</h2>
+              <div id="carouselExampleCaptions" class="carousel slide learner-stories" data-ride="carousel">
+                <div class="carousel-inner">
+                  {% for testimonialsubgroup in  testimonialcategory|divide_testimonial_category_group_list_of_lists%}
+                    <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
+                      <div class="d-flex">
+                        {% for obj in testimonialsubgroup %}
+                          {% if obj %}
+                            <div class="col-sm-4">
+                              <div class="card text-center">
+                                <div class="card__heading">
+                                  {{obj.testimonial.user_name|get_initials}}
+                                </div>
+                                <div class="card-body">
+                                  <p class="card-text">
+                                    {{obj.testimonial.review}}
+                                  </p>
+                                </div>
+                                <p class="card__name">
+                                  <strong>{{obj.testimonial.user_name}}</strong>
+                                  {{obj.testimonial.designation}},{{obj.testimonial.company}}
+                                </p>
+                              </div>
+                            </div>
+                          {% endif %}
+                        {% endfor %}
                       </div>
                     </div>
-                    <div class="col-sm-4">
-                      <div class="card text-center">
-                        <div class="card__heading">
-                          AS
-                        </div>
-                        <div class="card-body">
-                          <p class="card-text">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.
-                          </p>
-                        </div>
-                        <p class="card__name">
-                          <strong>Abhishek sinha</strong>
-                          Sapient, Noida
-                        </p>
-                      </div>
-                    </div>
-                    <div class="col-sm-4">
-                      <div class="card text-center">
-                        <div class="card__heading">
-                          AS
-                        </div>
-                        <div class="card-body">
-                          <p class="card-text">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.
-                          </p>
-                        </div>
-                        <p class="card__name">
-                          <strong>Abhishek sinha</strong>
-                          Sapient, Noida
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                  {% endfor %}
                 </div>
-
-                <div class="carousel-item">
-                  <div class="d-flex">
-                    <div class="col-sm-4">
-                      <div class="card text-center">
-                        <div class="card__heading">
-                          AS
-                        </div>
-                        <div class="card-body">
-                          <p class="card-text">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.
-                          </p>
-                        </div>
-                        <p class="card__name">
-                          <strong>Abhishek sinha</strong>
-                          Sapient, Noida
-                        </p>
-                      </div>
-                    </div>
-                    <div class="col-sm-4">
-                      <div class="card text-center">
-                        <div class="card__heading">
-                          AS
-                        </div>
-                        <div class="card-body">
-                          <p class="card-text">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.
-                          </p>
-                        </div>
-                        <p class="card__name">
-                          <strong>Abhishek sinha</strong>
-                          Sapient, Noida
-                        </p>
-                      </div>
-                    </div>
-                    <div class="col-sm-4">
-                      <div class="card text-center">
-                        <div class="card__heading">
-                          AS
-                        </div>
-                        <div class="card-body">
-                          <p class="card-text">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.
-                          </p>
-                        </div>
-                        <p class="card__name">
-                          <strong>Abhishek sinha</strong>
-                          Sapient, Noida
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
+                <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+                  <span class="carousel-control-icon" aria-hidden="true"><figure class="b4-icon-prev"></figure></span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
+                  <span class="carousel-control-icon" aria-hidden="true"><figure class="b4-icon-next"></figure></span>
+                </a>
               </div>
-              <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
-                <span class="carousel-control-icon" aria-hidden="true"><figure class="b4-icon-prev"></figure></span>
-              </a>
-              <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
-                <span class="carousel-control-icon" aria-hidden="true"><figure class="b4-icon-next"></figure></span>
-              </a>
-            </div>
-          </section>
+            </section>
+          {% endif %} 
 
           <!-- faq section -->
           {% if 'faq'|get_value:subheading %}
@@ -566,12 +467,15 @@
                     {% for item in  faq.description|get_faq_list%}
                       <div class="card {% if forloop.counter > 2%}d-none{% endif %}">
                         <div class="card__question" id="heading{{ forloop.counter }}">
-                          <button class="btn {% if forloop.counter > 1%}collapsed{% endif %}" type="button" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="{% if forloop.counter > 1%}false{% else %}true{% endif %}" aria-controls="collapse{{ forloop.counter }}">
+                          <button class="btn {% if forloop.counter > 1%}collapsed{% endif %}" type="button" data-toggle="collapse"
+                            data-target="#collapse{{ forloop.counter }}" aria-expanded="{% if forloop.counter > 1%}false{% else %}true{% endif %}"
+                            aria-controls="collapse{{ forloop.counter }}">
                             {{item.heading|safe}}
                           </button>
                         </div>
                     
-                        <div id="collapse{{ forloop.counter }}" class="collapse {% if forloop.counter == 1%}show{% endif %}" aria-labelledby="heading{{ forloop.counter }}" data-parent="#accordionExample">
+                        <div id="collapse{{ forloop.counter }}" class="collapse {% if forloop.counter == 1%}show{% endif %}" 
+                          aria-labelledby="heading{{ forloop.counter }}" data-parent="#faq-accordion">
                           <div class="card-body card__answer">
                             {{item.content|safe}}
                           </div>
@@ -584,7 +488,7 @@
                   </div>
                 </div>
               </section>
-              {% endwith %}
+            {% endwith %}
           {% endif %}
           
 

@@ -1,6 +1,6 @@
 from django import template      
 from django.utils.html import strip_tags                                                                
-import math
+import math,numpy
 register = template.Library()
 
 
@@ -69,6 +69,22 @@ this function is to convert the Features into a list with only 2 items cause of 
 def format_features(string):
     return  [strip_tags(i) for i in string.split('\n') if not i.find('<li>')==-1][:2]
 
+@register.filter(name='divide_testimonial_category_group_list_of_lists')
+def divide_testimonial_category_group_list_of_lists(testimonialcategory):
+    if  len(testimonialcategory)%3 == 1:
+        items_to_add = 2
+    elif len(testimonialcategory)%3 == 2:
+        items_to_add = 1
+    else:
+        items_to_add = 0
+    testimonialcategory.extend([None]*items_to_add)
+    testimonialcategory = numpy.array(testimonialcategory)
+    testimonialcategory = numpy.reshape(testimonialcategory,(-1,3)).tolist()  #convert testimonial into (x,3) x=len/3
+    return testimonialcategory
+
+@register.filter(name='get_initials')
+def get_initials(user_name):
+    return user_name
 
 
 
