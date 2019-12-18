@@ -269,6 +269,11 @@ class BlogCategoryListView(TemplateView, PaginationMixin):
         if category.slug in settings.REDIRECT_ARTICLE_CATEGORY:
             redirect_url = reverse('talent:talent-landing')
             return HttpResponsePermanentRedirect(redirect_url)
+        elif category.slug in settings.REDIRECT_ARTICLE_CATEGORY_TE_CATEGORY:
+            redirect_url = settings.REDIRECT_ARTICLE_CATEGORY_TE_CATEGORY.get(
+                category.slug, reverse('talent:talent-landing')
+            )
+            return HttpResponsePermanentRedirect(redirect_url)
         return None
 
     def get(self, request, *args, **kwargs):

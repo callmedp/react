@@ -614,5 +614,9 @@ REDIRECT_ARTICLE = {
     15: '/talenteconomy/career-help/'
 }
 REDIRECT_ARTICLE_CATEGORY = [
-    'job-search-guidance'
+    'job-search-guidance',
+    'competitive-exams'
 ]
+REDIRECT_ARTICLE_CATEGORY_TE_CATEGORY = {
+    'competitive-exams': '/talenteconomy/career-help/'
+}
