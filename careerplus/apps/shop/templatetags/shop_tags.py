@@ -84,7 +84,13 @@ def divide_testimonial_category_group_list_of_lists(testimonialcategory):
 
 @register.filter(name='get_initials')
 def get_initials(user_name):
-    return user_name
+    if not user_name:
+        return 'US'
+    splitted_user_name = user_name.split(' ')[:2]
+    initials = ''
+    for name in user_name.split(' ')[:2]:
+        initials+=name[0]
+    return initials.upper()
 
 
 
