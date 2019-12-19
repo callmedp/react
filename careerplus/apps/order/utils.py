@@ -280,7 +280,6 @@ class FeatureProfileUtil:
             return False
         return True
     def start_all_feature(self):
-        import ipdb; ipdb.set_trace();
         oi_status =[30]
         sub_type_flow = [501,503]
         featured_orderitems = self.get_featured_oi(oi_status,sub_type_flow)
@@ -319,7 +318,6 @@ class FeatureProfileUtil:
     
 
     def close_all_feature(self):
-        import ipdb; ipdb.set_trace()
         from order.models import OrderItem
         oi_status = [28,34,35]
         sub_type_flow = [501,503]

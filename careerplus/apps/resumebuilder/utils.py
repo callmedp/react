@@ -230,8 +230,6 @@ class SubscriptionUtil:
             product__sub_type_flow__in=sub_type_flow).select_related('order')
 
     def close_subscription(self):
-        import ipdb;
-        ipdb.set_trace();
         sub_type_flow = [1701]
         orderitems = self.get_oi(sub_type_flow)
 
