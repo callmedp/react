@@ -617,7 +617,11 @@ def generate_resume_for_order(order_id):
             product_id = item.product.id
             break
     product = Product.objects.filter(id=product_id).first()
-    is_combo = True if product.attr.get_value_by_attribute(product.attr.get_attribute_by_name('template_type')).value == 'multiple'  else False
+    if product.sub_type_flow == "1701":
+        is_combo = True
+    else:
+        is_combo = True if product.attr.get_value_by_attribute(product.attr.get_attribute_by_name('template_type')).value == 'multiple' else False
+    
     candidate_obj = Candidate.objects.filter(candidate_id = candidate_id).first()
     # if not candidate_obj create it by yourself. 
     if not candidate_obj:

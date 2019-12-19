@@ -80,7 +80,11 @@ SUB_FLOWS = {
     1: (
         (100,"Default"),
         (101, "Expert Assistance")
-    )
+    ),
+    17: {
+        (1700, "Default"),
+        (1701,"Subscription")
+    }
 }
 
 SUB_FLOW_CHOICES = ()
@@ -154,7 +158,8 @@ S_ATTR_DICT = {
     'SD': 'service_doc',
     'SI': 'service_im',
     'CP': 'can_be_paused',
-    'LC': 'links_count'
+    'LC': 'links_count',
+    'SUB':'subscription_days'
 }
 
 A_ATTR_DICT = {

@@ -46,6 +46,7 @@ class CandidateProfile(AbstractAutoDate):
     upload_resume = models.BooleanField('Upload Resume', default=True)
     resume_generated = models.BooleanField('Resume Generated', default=True)
     resume_creation_count = models.IntegerField(default=0)
+    active_subscription = models.BooleanField('Active Subscription', default=False)
 
     @property
     def owner_id(self):

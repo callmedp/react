@@ -775,13 +775,13 @@ class ResumeBuilderProductView(ListAPIView):
     def get_queryset(self):
         new_product_list =[]
         type_flow = self.request.query_params.get('type_flow')
-        product_list = Product.objects.filter(type_flow=type_flow, type_product=0, active=True).values('id', 'name', 'inr_price', 'usd_price', 'aed_price').order_by('inr_price')
+        product_list = Product.objects.filter(type_flow=type_flow, type_product=0, active=True, sub_type_flow='1701').values('id', 'name', 'inr_price', 'usd_price', 'aed_price').order_by('inr_price')
 
-        for item in  product_list:
-            product = Product.objects.filter(id=item['id']).first()
-            value = product.attr.get_value_by_attribute(product.attr.get_attribute_by_name('template_type')).value or '';
-            if( value == 'single' or value == 'multiple'):
-                new_product_list.append(item)
+        # for item in  product_list:
+        #     product = Product.objects.filter(id=item['id']).first()
+        #     value = product.attr.get_value_by_attribute(product.attr.get_attribute_by_name('template_type')).value or '';
+        #     if( value == 'single' or value == 'multiple'):
+        #         new_product_list.append(item)
         return new_product_list
 
 class ShineDataFlowDataApiView(ListAPIView):
