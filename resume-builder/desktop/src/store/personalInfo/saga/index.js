@@ -1,14 +1,14 @@
-import {Api} from './Api';
+import { Api } from './Api';
 
-import {takeLatest,takeEvery, put, call} from "redux-saga/effects";
+import { takeLatest, takeEvery, put, call } from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
 
 import moment from 'moment'
 
-import {SubmissionError} from 'redux-form'
-import {Toast} from "../../../services/ErrorToast";
-import {UPDATE_UI} from "../../ui/actions/actionTypes";
+import { SubmissionError } from 'redux-form'
+import { Toast } from "../../../services/ErrorToast";
+import { UPDATE_UI } from "../../ui/actions/actionTypes";
 
 const genderDict = {
     '1': {
@@ -26,9 +26,9 @@ const genderDict = {
 }
 
 function modifyPersonalInfo(data) {
-    const {date_of_birth, gender, extracurricular, entity_preference_data,first_name} = data;
-    if(!first_name){
-        localStorage.setItem('newUser',true);
+    const { date_of_birth, gender, extracurricular, entity_preference_data, first_name } = data;
+    if (!first_name) {
+        localStorage.setItem('newUser', true);
     }
     data = {
         ...data,
@@ -47,7 +47,7 @@ function modifyPersonalInfo(data) {
 function* getPersonalDetails(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
-        const {payload} = action;
+        const { payload } = action;
         const loader = payload && payload.noUiLoader ? false : true
 
         if (localStorage.getItem('personalInfo')) {
@@ -58,7 +58,7 @@ function* getPersonalDetails(action) {
             return;
         }
 
-        yield put({type: UPDATE_UI, data: {loader}});
+        yield put({ type: UPDATE_UI, data: { loader } });
         const result = yield call(Api.fetchPersonalInfo, candidateId);
 
         if (result['error']) {
@@ -68,11 +68,17 @@ function* getPersonalDetails(action) {
             });
         }
 
-        yield put({type: UPDATE_UI, data: {loader: false}})
 
-        let {data} = result;
+        yield put({ type: UPDATE_UI, data: { loader: false } })
+
+        let { data } = result;
         data = modifyPersonalInfo(data)
-        yield put({type: Actions.SAVE_USER_INFO, data: data})
+
+        const { subscription_active: subscriptionActive } = data;
+        if (subscriptionActive) {
+            localStorage.setItem('subscriptionActive', true);
+        }
+        yield put({ type: Actions.SAVE_USER_INFO, data: data })
 
     } catch (e) {
         console.log(e);
@@ -81,17 +87,17 @@ function* getPersonalDetails(action) {
 
 function* getInterestList(action) {
     try {
-        const {payload: {value, res, rej}} = action;
+        const { payload: { value, res, rej } } = action;
 
 
         const result = yield call(Api.fetchInterestList, value);
         if (result['error']) {
-            return rej(new SubmissionError({_error: result['errorMessage']}));
+            return rej(new SubmissionError({ _error: result['errorMessage'] }));
         }
-        let {data: {data}} = result;
+        let { data: { data } } = result;
 
         const newResult = Object.keys(data).map((el, key) => {
-            return {'value': data[el], 'label': data[el]}
+            return { 'value': data[el], 'label': data[el] }
         })
 
         return res(newResult)
@@ -104,16 +110,16 @@ function* getInterestList(action) {
 
 function* updatePersonalDetails(action) {
     try {
-        let {payload: {personalDetails, resolve, reject}} = action;
+        let { payload: { personalDetails, resolve, reject } } = action;
 
         const candidateId = localStorage.getItem('candidateId') || '';
         delete personalDetails['subscription_status']
         if (localStorage.getItem('newUser')) {
             localStorage.removeItem('newUser')
         }
-        const {resume_generated, order_data} = personalDetails;
-        const isOrderedAndSingle = Object.keys(order_data|| {}).length  ?( order_data.combo ? false: true) : false; 
-        if (localStorage.getItem('selected_template') &&  !(resume_generated && isOrderedAndSingle )) {
+        const { resume_generated, order_data } = personalDetails;
+        const isOrderedAndSingle = Object.keys(order_data || {}).length ? (order_data.combo ? false : true) : false;
+        if (localStorage.getItem('selected_template') && !(resume_generated && isOrderedAndSingle)) {
             personalDetails = {
                 ...personalDetails,
                 ...{
@@ -123,26 +129,26 @@ function* updatePersonalDetails(action) {
             // localStorage.removeItem('selected_template')
         }
 
-        yield put({type: UPDATE_UI, data: {loader: true}});
+        yield put({ type: UPDATE_UI, data: { loader: true } });
 
         let result = null;
         if (localStorage.getItem('personalInfo')) result = yield call(Api.createPersonalInfo, personalDetails);
         else result = yield call(Api.updatePersonalData, personalDetails, candidateId);
 
         if (result['error']) {
-            return reject(new SubmissionError({_error: result['errorMessage']}));
+            return reject(new SubmissionError({ _error: result['errorMessage'] }));
         }
 
         localStorage.removeItem('personalInfo');
 
-        yield put({type: UPDATE_UI, data: {loader: false}})
+        yield put({ type: UPDATE_UI, data: { loader: false } })
 
 
-        let {data} = result;
+        let { data } = result;
 
         data = modifyPersonalInfo(data)
 
-        yield put({type: Actions.SAVE_USER_INFO, data: data});
+        yield put({ type: Actions.SAVE_USER_INFO, data: data });
 
         return resolve('User Personal  Info saved successfully.');
 
@@ -154,7 +160,7 @@ function* updatePersonalDetails(action) {
 
 function* fetchImageUrl(action) {
     try {
-        const {payload: {imageFile, resolve}} = action;
+        const { payload: { imageFile, resolve } } = action;
 
         var data = new FormData();
 
@@ -167,14 +173,14 @@ function* fetchImageUrl(action) {
         for (const key in imageInfo) {
             data.append(key, imageInfo[key]);
         }
-        yield put({type: UPDATE_UI, data: {loader: true}});
+        yield put({ type: UPDATE_UI, data: { loader: true } });
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
 
         const result = yield call(Api.fetchImageUrl, data, candidateId);
 
-        yield put({type: UPDATE_UI, data: {loader: false}})
+        yield put({ type: UPDATE_UI, data: { loader: false } })
 
         return resolve(result['data']['path'])
 
@@ -187,23 +193,23 @@ function* fetchImageUrl(action) {
 
 function* updateEntityPreference(action) {
     try {
-        const {payload: {entity_preference_data, resolve, reject, showLoader}} = action;
+        const { payload: { entity_preference_data, resolve, reject, showLoader } } = action;
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        if (showLoader) yield put({type: UPDATE_UI, data: {loader: true}});
+        if (showLoader) yield put({ type: UPDATE_UI, data: { loader: true } });
 
-        const result = yield call(Api.updateEntityPreference, {entity_preference_data}, candidateId);
+        const result = yield call(Api.updateEntityPreference, { entity_preference_data }, candidateId);
 
-        yield put({type: UPDATE_UI, data: {loader: false}})
+        yield put({ type: UPDATE_UI, data: { loader: false } })
 
         if (result['error']) {
-            return reject(new SubmissionError({_error: result['errorMessage']}));
+            return reject(new SubmissionError({ _error: result['errorMessage'] }));
         }
 
 
         const data = modifyPersonalInfo(result['data']);
 
-        yield put({type: Actions.SAVE_USER_INFO, data: data});
+        yield put({ type: Actions.SAVE_USER_INFO, data: data });
         return resolve("Entity Updated")
 
     } catch (e) {
@@ -213,7 +219,7 @@ function* updateEntityPreference(action) {
 
 function* getComponentTitle(action) {
     try {
-        let {payload: {resolve, reject}} = action;
+        let { payload: { resolve, reject } } = action;
         resolve('Edit-Preview Page | Shine Learning')
     } catch (e) {
         console.log(e);

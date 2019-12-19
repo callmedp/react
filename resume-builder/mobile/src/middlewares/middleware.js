@@ -35,7 +35,7 @@ export default class Middleware {
 
     let buyPath = false;
     const componentPathname = component && component.props && component.props.location && component.props.location.pathname || ''
-    if (componentPathname === '/resume-builder/buy') {
+    if (componentPathname === '/resume-builder/buy' || componentPathname === '/resume-builder/buy/') {
       buyPath = true;
     }
     return (localStorage.getItem('candidateId') && localStorage.getItem('token')
