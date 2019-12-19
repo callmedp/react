@@ -137,7 +137,6 @@ function* loginCandidate(action) {
         if(orderData && orderData.id){
             localStorage.setItem('orderAvailable',true);
         }
-        if()
 
         for (const key in candidate_profile) {
             const entityObj = entity_status.find(el => el['display_value'] === key);
