@@ -278,7 +278,8 @@ export class Buy extends Component {
                                                 </span>
                                                 <span className="free-trial--text">
                                                     <p>
-                                                        {free_download_count > 0 ? ` ${free_download_count} free download for 1st time users.`
+                                                        {free_download_count > 0 
+                                                        ? ` ${free_download_count} free download for 1st time users.`
                                                             : "You have exhausted the limit. Please buy resume builder with unlimited downloads to keep using resume builder for an year"}
                                                     </p>
                                                 </span>
@@ -291,22 +292,6 @@ export class Buy extends Component {
                                         </li>
                                     </ul> : ''
                                 }
-
-                                <ul>
-                                    <li class="bdr pos-rel free-trial">
-                                        <div>
-                                            <span class="free-trial--ribbon">
-                                            <span>TRIAL OFFER</span></span>
-                                            <span class="free-trial--text">
-                                                <p> Free one time download for 1st time users</p>
-                                            </span>
-                                            <span class="free-trial--download-button">
-                                                <button>Download</button>
-                                            </span>
-                                        </div>
-                                    </li>
-                                </ul>
-
                                 <ul>
                                     <li>
                                         <div className="flex-container">
@@ -316,10 +301,10 @@ export class Buy extends Component {
                                                     onChange={this.handleOnChange.bind(this, 'product1')} />
                                             </span>
                                             <span className="choose-plan--price">
-                                                <p>Buy 1 resume template</p>
+                                                <p>14-DAYS PLAN</p>
                                                 Rs. <strong>{price1}/-</strong>
                                                 <strike className="ml-10">Rs. 1499</strike>
-                                                <span className="choose-plan--off mt-10 db">Flat {discount1}% off</span>
+                                                <span className="choose-plan--off mt-10 db">Save up to {discount1}% off</span>
                                             </span>
                                             <button
                                                 className="choose-plan--btn-rt orange-button ml-auto"
@@ -386,7 +371,7 @@ export class Buy extends Component {
                                         </Slider>
                                     </li>
                                 </ul>
-                                <div className="">
+                                {/* <div className="">
                                     <div className="choose-plan--pay-price">
                                         You pay
                                         <span>Rs. <strong>{checked === 'product1' ? price1 : price2}/-</strong></span>
@@ -395,7 +380,7 @@ export class Buy extends Component {
                                         className="choose-plan--orange-button-change orange-button items-right pull-right mt-10"
                                         onClick={this.redirectToCart.bind(this)}>Pay now
                                     </button>
-                                </div>
+                                </div> */}
                             </div>
                         </section>
 
