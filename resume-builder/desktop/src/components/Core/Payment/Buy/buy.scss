@@ -64,13 +64,13 @@
         display: inline-block;
       }
 
-      .save-up-to {
-        display: block;
-      }
+      // .save-up-to {
+      //   display: block;
+      // }
 
-      .mt-2{
-        margin-top: 2rem
-      }
+      // .mt-2{
+      //   margin-top: 2rem
+      // }
 
       strike {
         font-size: 1.6rem;
@@ -85,7 +85,7 @@
   }
 
   &--price {
-    font-size: 3rem;
+    font-size: 2.4rem;
     color: $black;
     margin-left: 10px;
 
@@ -94,31 +94,32 @@
     }
 
     p {
-      font-size: 1.6rem;
-      color: $txt1;
-      margin-bottom: 10px;
-    }
-
-    .yearly-pack{
       font-size: 1.8rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      color: $black;
-    }
-
-    .yp-price{
-      font-size: 2.2rem;
-      color: $black;
-      font-weight: 600;
-    }
-
-    .rs{
-      font-size: 2.2rem;
-      color: $black;
-      font-weight: 300;
-      display: inline-block;
       color: $txt1;
+      margin-bottom: 20px;
+      font-weight: 600;
     }
+
+    // .yearly-pack{
+    //   font-size: 1.8rem;
+    //   font-weight: 600;
+    //   text-transform: uppercase;
+    //   color: $black;
+    // }
+
+    // .yp-price{
+    //   font-size: 2.2rem;
+    //   color: $black;
+    //   font-weight: 600;
+    // }
+
+    // .rs{
+    //   font-size: 2.2rem;
+    //   color: $black;
+    //   font-weight: 300;
+    //   display: inline-block;
+    //   color: $txt1;
+    // }
   }
 
   &--ribbon {
@@ -139,7 +140,8 @@
 
   &--off {
     font-size: 1.6rem;
-    font-weight: 700;
+    font-weight: 600;
+    color: $txt2;
   }
 
   &--pay-price {
@@ -163,6 +165,26 @@
 
   &--orange-button-change {
     padding: 12px 10% !important;
+  }
+
+  &--btn-rt {
+    height: 3.5rem;
+  }
+
+  &--planlist {
+    list-style-type: none;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+
+      li {
+        font-size: 1.4rem !important;
+        color: $txt2;
+        display: inline-block !important;
+        padding: 10px 20px !important;
+        width: 49.5%;
+        vertical-align: top;
+    }
   }
 
   .slick-list {
@@ -355,7 +377,7 @@
   &--ribbon{
     position: absolute;
     float: left;
-    left: -11px;
+    left: -8px;
     top: 11px;
     background: $sprite -240px -178px;
     width: 142px;
@@ -404,6 +426,13 @@
 
 }
 
+.db {
+  display: block !important;
+}
+
+.ml-auto {
+  margin-left: auto;
+}
 
 
 

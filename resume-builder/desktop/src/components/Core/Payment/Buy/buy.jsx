@@ -278,7 +278,8 @@ export class Buy extends Component {
                                                 </span>
                                                 <span className="free-trial--text">
                                                     <p>
-                                                        {free_download_count > 0 ? ` ${free_download_count} free download for 1st time users.`
+                                                        {free_download_count > 0 
+                                                        ? ` ${free_download_count} free download for 1st time users.`
                                                             : "You have exhausted the limit. Please buy resume builder with unlimited downloads to keep using resume builder for an year"}
                                                     </p>
                                                 </span>
@@ -291,7 +292,6 @@ export class Buy extends Component {
                                         </li>
                                     </ul> : ''
                                 }
-
                                 <ul>
                                     <li>
                                         <div className="flex-container">
@@ -301,11 +301,15 @@ export class Buy extends Component {
                                                     onChange={this.handleOnChange.bind(this, 'product1')} />
                                             </span>
                                             <span className="choose-plan--price">
-                                                <p>Buy 1 resume template</p>
+                                                <p>14-DAYS PLAN</p>
                                                 Rs. <strong>{price1}/-</strong>
                                                 <strike className="ml-10">Rs. 1499</strike>
-                                                <span className="choose-plan--off ml-10">Flat {discount1}% off</span>
+                                                <span className="choose-plan--off mt-10 db">Save up to {discount1}% off</span>
                                             </span>
+                                            <button
+                                                className="choose-plan--btn-rt orange-button ml-auto"
+                                                onClick={this.redirectToCart.bind(this)}>Pay now
+                                            </button>
                                         </div>
                                     </li>
                                     <li className="bdr pos-rel">
@@ -317,18 +321,28 @@ export class Buy extends Component {
                                                     onChange={this.handleOnChange.bind(this, 'product2')} />
                                             </span>
                                             <span className="choose-plan--price">
-                                                <p><strong className="yearly-pack">Yearly Pack</strong></p>
-                                                <span className="rs">Rs.</span> <strong className="yp-price">  {price2}
+                                                <p>Yearly Pack</p>
+                                                <span>Rs.</span> <strong>  {price2}
                                                     /-</strong>
                                                 <strike className="ml-10">Rs. 1999</strike>
-                                                <span className="choose-plan--off mt-2 save-up-to">Save up to {discount2}% off</span>
+                                                <span className="choose-plan--off mt-10 db">Save up to {discount2}% off</span>
                                             </span>
                                             <button
-                                        className="choose-plan--orange-button-change orange-button items-right pull-right mt-10"
-                                        onClick={this.redirectToCart.bind(this)}>Pay now
-                                    </button>
+                                                className="choose-plan--btn-rt orange-button ml-auto mt-20"
+                                                onClick={this.redirectToCart.bind(this)}>Pay now
+                                            </button>
                                         </div>
+                                    </li>
+                                    <li className="bdr">
+                                        <ul className="choose-plan--planlist">
+                                            <li>Unlimited Downloads</li>
+                                            <li>100% access to all features</li>
+                                            <li>All Resume Templates</li>
+                                            <li>Auto-upgrade of new features</li>
+                                        </ul>
+                                    </li>
 
+                                    <li className="bdr pos-rel">
                                         <Slider {...settings}>
 
                                             {
@@ -357,7 +371,7 @@ export class Buy extends Component {
                                         </Slider>
                                     </li>
                                 </ul>
-                                <div className="">
+                                {/* <div className="">
                                     <div className="choose-plan--pay-price">
                                         You pay
                                         <span>Rs. <strong>{checked === 'product1' ? price1 : price2}/-</strong></span>
@@ -366,7 +380,7 @@ export class Buy extends Component {
                                         className="choose-plan--orange-button-change orange-button items-right pull-right mt-10"
                                         onClick={this.redirectToCart.bind(this)}>Pay now
                                     </button>
-                                </div>
+                                </div> */}
                             </div>
                         </section>
 
