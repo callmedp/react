@@ -223,14 +223,12 @@ class Buy extends Component {
                                 <div className="buy__recommended--tag">Trial offer</div>
                                 <div className="buy_item--left">
                                     {free_download_count > 0? ` ${free_download_count} free download for 1st time users.` :
-                                        "You have exhausted the limit. Please buy resume builder with unlimited downloads to keep using resume builder for an year."}
+                                        "Free one time download for all 1st time users"}
                                 </div>
-                                {free_download_count > 0?
-                                    <div className="buy_item--right">
-                                            <button class="btn btn__round btn--outline" onClick={this.freeResumeRequest}
-                                            disabled={freeDownloadButtonDisable} >Download</button>
-                                    </div>:''
-                                }
+                                <div className="buy_item--right">
+                                        <button class="btn btn__round btn--outline" onClick={this.freeResumeRequest}
+                                        disabled={freeDownloadButtonDisable} >Download</button>
+                                </div>
                             </div>
                         </div>:''
                     }
@@ -281,40 +279,16 @@ class Buy extends Component {
                                     </div>
                                 </label>
                             </div>
-
-                            <div className="buy__item--right">
-                                <div className="buy__item--right__sliderWrap">
-                                    <Slider {...settings}>
-                                        {thumbnailImages.length === 5 ?
-                                            thumbnailImages.map((el, index) => {
-                                                return (
-                                                    <div className="buy__recommended__item" key={index}>
-                                                        <span className="buy__recommended__image">
-                                                            <span className="sprite icon--zoom"
-                                                                onClick={() => {
-                                                                    this.openModal(index)
-                                                                }}></span>
-                                                            <img src={`data:image/png;base64, ${el}`} alt="Custom resume" />
-                                                        </span>
-                                                    </div>
-                                                )
-                                            }) :
-                                            [1, 2, 3, 4, 5].map((el, index) => {
-                                                return (
-                                                    <div className="buy__recommended__item" key={index}>
-                                                        <span className="buy__recommended__image">
-                                                            <img
-                                                                src={`${this.staticUrl}react/assets/images/mobile/resumebig-${el}.jpg`}
-                                                                alt="Custom resume" />
-                                                        </span>
-                                                    </div>
-                                                )
-
-                                            })
-                                        }
-                                    </Slider>
-                                </div>
-                            </div>
+                        </div>
+                        
+                        <div className="buy__item buy__recommended buy__youGet pt-15">
+                            <p className="buy__youGet--head">You will get</p>
+                            <ul className="buy__youGet__list mt-10">
+                                <li><span></span>Unlimited Downloads</li>
+                                <li><span></span>All Resume Templates</li>
+                                <li><span></span>100% access to all features</li>
+                                <li><span></span>Auto-upgrade of new features</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
