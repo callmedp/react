@@ -244,7 +244,7 @@ class Buy extends Component {
                                     onChange={this.handleOnChange.bind(this, 'product1')}></input>
                                 <label className="buy__item--label form__radio-label" htmlFor="your-resume">
                                     <span className="form__radio-button"></span>
-                                    Buy your <br />customised resume<br />
+                                    14 - DAYS PLAN
                                     <strong>Rs. {price1}/-</strong>
                                     <span className="fs-14 line-through">Rs. 1499 </span>
                                     <span className="fs-14 bold">Flat {discount1}% off</span>

@@ -234,7 +234,7 @@ class FeatureProfileUtil:
     def update_badges(self,candidate_id,oi,feature):
         badge_data = BadgingMixin().get_badging_data(
                         candidate_id=candidate_id, curr_order_item=oi, feature=feature
-                    )
+                    )        
         flag = BadgingMixin().update_badging_data(candidate_id=candidate_id, data=badge_data)
         if flag:
             logging.getLogger('info_log').info(
