@@ -117,18 +117,20 @@
       var categoryUrlSet = {{ category_url_set|safe }}
       var productUrlSet = {{ product_url_set|safe }}
     </script>
-    <script  src="http://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.all.min.js"></script>
-    
+
     
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     {% compress js %}
+      <script src="{% static 'packages/jquery3.4.1/jquery.min.js' %}"></script>
       <script src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
       <script src="{% static 'shinelearn/js/common/common-new.js' %}"> </script>
       <script src="{% static 'shinelearn/js/common/bootstrap4.min.js' %}"> </script>
     {% endcompress %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" 
+          integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.js"></script>
 
 {% endblock js_section %}
 
