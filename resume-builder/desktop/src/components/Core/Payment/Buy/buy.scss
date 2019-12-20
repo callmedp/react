@@ -184,6 +184,13 @@
         padding: 10px 20px !important;
         width: 49.5%;
         vertical-align: top;
+
+        &::before {
+          content: '\2713';
+          display:i nline-block;
+          color: $txt2;
+          margin-right: 3px;
+        }
     }
   }
 
