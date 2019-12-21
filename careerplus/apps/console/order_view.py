@@ -3064,6 +3064,7 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
         self.query = request.GET.get('query', '').strip()
         self.oi_status = request.GET.getlist('oi_status', [])
         self.day_choice = request.GET.get('day_choice', '-1').strip()
+        self.week_day_choice = request.GET.get('week_day_choice', '-1').strip()
         self.sel_opt = request.GET.get('rad_search', 'number')
         self.payment_date = self.request.GET.get('payment_date', '')
         self.due_date = self.request.GET.get('due_date', '')
@@ -3076,7 +3077,7 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
         context.update(self.pagination(paginator, self.page))
         var = self.sel_opt
         alert = messages.get_messages(self.request)
-        initial = {"day_choice": self.day_choice}
+        initial = {"day_choice": self.day_choice, "week_day_choice": self.week_day_choice}
 
         filter_form = OIFilterForm(initial, queue_name='queue-whatsappjoblist')
         context.update({"assignment_form": AssignmentActionForm(), "messages": alert, "query": self.query,
@@ -3209,6 +3210,12 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
                     pending_links_count__gt=0
                 ).exclude(oi_status=4)
             queryset = queryset.filter(q_objects)
+
+        if int(self.week_day_choice) != -1:
+            queryset = queryset.filter(
+                whatsapp_profile_orderitem__day_of_week=int(self.week_day_choice)
+            )
+
         if self.sort_value:
             if int(self.sort_value) == 1:
                 queryset = queryset.select_related(
