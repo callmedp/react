@@ -51,7 +51,7 @@ def get_value_from_dict(value, key):
 '''
 @register.filter(name='get_faq_list')
 def get_faq_list(string):
-    list_data = [i for i in string.split('\n') if not i.find('<p>')==-1]
+    list_data = [i for i in string.split('\n') if not i.find('<p>')==-1 and len(i)>15]  #the len>15 to remove extra spaces created by user
     return [{'heading':list_data[i],'content':list_data[i+1]} if len(list_data) >i+1 \
                 else {'heading':list_data[i]} for i in range(0,len(list_data),2)]
 

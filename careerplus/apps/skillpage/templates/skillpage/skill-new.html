@@ -175,7 +175,7 @@
             <div class="popular-course">
               <div class="row">
                 <h2>Popular courses</h2>
-                <a class="btn btn-outline-primary ml-auto" href="#myTab" role="button">View Courses</a>
+                <a class="btn btn-outline-primary ml-auto" onclick="smoothScrolling('courseTab')" role="button">View Courses</a>
                 <div class="d-flex mb-10">
                   {% for course in top_3_courses %}
                     <div class="col">
@@ -286,7 +286,7 @@
           <!-- courses assesments tab section -->
           <section class="col-sm-12">
             <div class="courses-assesment-tab">
-              <ul class="nav nav-tabs" id="myTab" role="tablist">
+              <ul class="nav nav-tabs" id="courseTab" role="tablist">
                 {% if course_count %}
                   <li class="nav-item">
                     <a class="nav-link active" id="courses-tab" data-toggle="tab" href="#courses" role="tab" aria-controls="courses" aria-selected="true">
@@ -370,7 +370,7 @@
                     {% comment %} Show load more only if course count>5{% endcomment %}
                     {% if course_count > 5 %} 
                       <div class="d-flex justify-content-center mt-40 mb-30">
-                        <a class="btn btn-outline-primary" onclick="loadProduct('course')" role="button">Load more courses</a>
+                        <a class="btn btn-outline-primary" onclick="loadProduct(this,'course')" role="button">Load more courses</a>
                       </div>
                     {% endif %}
                     
@@ -440,7 +440,7 @@
                     {% comment %} Show load more only if assessment count>5{% endcomment %}
                     {% if assesment_count > 5 %} 
                       <div class="d-flex justify-content-center mt-40 mb-30">
-                        <a class="btn btn-outline-primary" onclick="loadProduct('assesment')" role="button">Load more assesments</a>
+                        <a class="btn btn-outline-primary" onclick="loadProduct(this,'assesment')" role="button">Load more assesments</a>
                       </div>
                     {% endif %}
                 </div>

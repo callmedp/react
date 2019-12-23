@@ -71,5 +71,11 @@ const Toast = Swal.mixin({
     timer: 3000
 });
 
+const smoothScrolling = (id) => {
+    $('html, body').animate({
+        scrollTop: $(`#${id}`).offset().top
+    }, 700);
+}
+
 
   

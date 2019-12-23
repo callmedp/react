@@ -1,3 +1,4 @@
+
 let coursePageNo = 2,assessmentPageNo=2  //the page no starts form 2 cause 1st page is already loaded
 let pageSize = 5
 let categoryId = null
@@ -30,11 +31,13 @@ $(document).ready(()=>{
         $(this).addClass('active');
     })
 
-
-
 })
 
-const loadProduct = (type) => {
+//load courses or assessment 
+//arg1 : el => used to remove the button when more products cannot be loaded
+//arg2 : type => deciding whether course or product to be loaded
+//This function sends a get request to get products and append them to dom
+const loadProduct = (el,type) => {
     const pTFInclude = type==='course'?false:true
     const pageNo = type==='course'?coursePageNo:assessmentPageNo
     const productTypeId = type==='course'?'#course-list':'#assessment-list'
@@ -49,6 +52,11 @@ const loadProduct = (type) => {
         let products = data.results
         if (products)
             type==='course'?coursePageNo+=1:assessmentPageNo+=1
+
+        if(!data.next){
+            $(el).hide()
+            $(el).parent().hide()
+        }
         
         for (key in products){
             $(productTypeId).append(`
