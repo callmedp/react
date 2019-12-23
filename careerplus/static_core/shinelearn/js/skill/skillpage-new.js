@@ -43,7 +43,7 @@ const loadProduct = (type) => {
     {
         "page": pageNo, "page_size": pageSize, "pCtg" : categoryId, 
         "pTF" : 16 ,"pTF_include" : pTFInclude,  
-        "fl" : "name,pCert,pURL,pImg,pNm,pNJ,pHd,pStar,pARx,pPin,pPfin,pPvn,discount,pAsft"
+        "fl" : "name,pCert,pURL,pImg,pNm,pNJ,pHd,pStar,pARx,pPin,pPfin,pPvn,discount,pAsft,pStM,pTg"
     }
     ,(data)=>{
         let products = data.results
@@ -69,27 +69,40 @@ const loadProduct = (type) => {
                         <span class="rating__output">${ Math.round((products[key].pARx)*100)/100 }/5</span>
                         </div>
 
-                        <div class="mode mr-30">
-                            Mode 
-                            <span class="mode__name">
-                                Instructor
-                            </span>
-                        </div>
-                        <div class="provider">
-                            Provider 
-                            <span class="provider__name">
-                                ${products[key].pPvn}
-                            </span>
-                        </div>
+                        ${products[key].pStM ? 
+                                    `<div class="mode mr-30">
+                                        Mode 
+                                        ${products[key].pStM.map((item)=>(
+                                            `<span class="mode__name">
+                                                ${modeChoices[item]}
+                                            </span>`
+                                        )).join(' ')}
+                                    </div>`:''
+                        }
+                              
+                        ${products[key].pPvn ?
+                                `<div class="provider">
+                                  Provider 
+                                  <span class="provider__name">
+                                    ${products[key].pPvn}
+                                  </span>
+                                </div>`:''
+                        }
                     </div>
 
                     <div class="mr-auto courses">
                         <strong class="courses__price">Rs. ${ Math.round((products[key].pPin)*100)/100 }/-</strong>
                     </div>
-
-                    <div class="course-tag">
-                        <span class="course-tag__best">Bestseller</span>
-                    </div>
+                    
+                    ${products[key]===1 ?
+                        `<div class="course-tag">
+                            <span class="course-tag__best">Bestseller</span>
+                        </div>`:
+                    products[key]===2?
+                        `<div class="course-tag">
+                            <span class="course-tag__best">Bestseller</span>
+                        </div> `:''
+                    }
                 </li>
             `)
         }

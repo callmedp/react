@@ -471,6 +471,15 @@
                   </div>
                   <div class="alert">{{form.num_jobs.errors}}</div>
                 </div>
+
+                <div class="item form-group {% if form.product_tag.errors %}bad{% endif %}">
+                  <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.product_tag.id_for_label }}">Product Tag<span class="required"></span>
+                  </label>
+                  <div class="col-md-7 col-sm-7 col-xs-12">
+                    {{form.product_tag}}
+                  </div>
+                  <div class="alert">{{form.product_tag.errors}}</div>
+                </div>
                 
 
                 <input type="hidden" name="product" value="{{object.pk}}">

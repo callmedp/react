@@ -69,6 +69,7 @@ from .choices import (
     SUB_HEADING_CHOICES,
     SUB_HEADING_CHOICE_ATTR_MAPPING_DESKTOP,
     SUB_HEADING_CHOICE_ATTR_MAPPING_MOBILE,
+    PRODUCT_TAG_CHOICES,
     convert_inr,
     convert_usd,
     convert_aed,
@@ -1065,6 +1066,7 @@ class Product(AbstractProduct, ModelMeta):
     is_indexable = models.BooleanField(default=False)
     is_indexed = models.BooleanField(default=False)
     visible_on_crm = models.BooleanField(default=True)
+    product_tag = models.SmallIntegerField(default=0,choices=PRODUCT_TAG_CHOICES)
     
     #associated model managers
     objects = ProductManager()
@@ -1772,7 +1774,9 @@ class Product(AbstractProduct, ModelMeta):
         cache.set(unique_key, apply_date, 86400)
         return apply_date
 
-
+    @property
+    def product_tag_text(self):
+        return dict(PRODUCT_TAG_CHOICES).get(self.product_tag)
 
     @classmethod
     def post_save_product(cls, sender, instance, **kwargs):

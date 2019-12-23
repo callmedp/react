@@ -171,11 +171,11 @@
           </section>
 
           <!-- popular course section -->
-          <section id="popular-courses" class="col-sm-12">
+          <section id="popular-courses" classbutton="col-sm-12">
             <div class="popular-course">
               <div class="row">
                 <h2>Popular courses</h2>
-                <a class="btn btn-outline-primary ml-auto" href="#" role="button">View Courses</a>
+                <a class="btn btn-outline-primary ml-auto" href="#myTab" role="button">View Courses</a>
                 <div class="d-flex mb-10">
                   {% for course in top_3_courses %}
                     <div class="col">
@@ -328,27 +328,42 @@
                                 <span class="rating__output">{{course.pARx|floatformat:1}}/5</span>
                               </div>
 
-                              <div class="mode mr-30">
+                              {% if course.pStM %}
+                                <div class="mode mr-30">
                                   Mode 
-                                  <span class="mode__name">
-                                      Instructor
-                                  </span>
-                              </div>
-                              <div class="provider">
+                                  {% for mode in course.pStM %}
+                                    <span class="mode__name">
+                                      {{mode|get_value:product_mode_choices}} 
+                                    </span>
+                                  {% endfor %}  
+                                </div>
+                              {% endif %}
+                              
+                              {% if course.pPvn %}
+                                <div class="provider">
                                   Provider 
                                   <span class="provider__name">
                                       {{course.pPvn}}
                                   </span>
-                              </div>
+                                </div>
+                              
+                              {% endif %}
                           </div>
 
                           <div class="mr-auto courses">
                             <strong class="courses__price">Rs. {{ course.pPin |floatformat:'0' }}/-</strong>
                           </div>
 
-                          <div class="course-tag">
-                            <span class="course-tag__best">Bestseller</span>
-                          </div>
+                          {% if course.pTg == 1 %}
+                            <div class="course-tag">
+                              <span class="course-tag__best">Bestseller</span>
+                            </div>
+                          {% elif course.pTg == 2  %}
+                            <div class="course-tag">
+                              <span class="course-tag__new">Newly Added</span>
+                            </div>
+                          {% endif %}
+                          
                         </li>
                       {% endfor %}
                     </ul>
@@ -383,23 +398,42 @@
                                 <span class="rating__output">{{assesment.pARx|floatformat:1}}/5</span>
                               </div>
 
-                              <div class="mode mr-30">
+                              {% if assesment.pStM %}
+                                <div class="mode mr-30">
                                   Mode 
-                                  <span class="mode__name">
-                                      Instructor
-                                  </span>
-                              </div>
-                              <div class="provider">
+                                  {% for mode in assesment.pStM %}
+                                    <span class="mode__name">
+                                      {{mode|get_value:product_mode_choices}}
+                                    </span>
+                                  {% endfor %}  
+                                </div>
+                              {% endif %}
+                              
+                              {% if assesment.pPvn %}
+                                <div class="provider">
                                   Provider 
                                   <span class="provider__name">
                                       {{assesment.pPvn}}
                                   </span>
-                              </div>
+                                </div>
+                              
+                              {% endif %}
+                              
                           </div>
 
                           <div class="mr-auto courses">
                             <strong class="courses__price">Rs. {{ assesment.pPin |floatformat:'0' }}/-</strong>
                           </div>
+
+                          {% if course.pTg == 1 %}
+                            <div class="course-tag">
+                              <span class="course-tag__best">Bestseller</span>
+                            </div>
+                          {% elif course.pTg == 2  %}
+                            <div class="course-tag">
+                              <span class="course-tag__new">Newly Added</span>
+                            </div>
+                          {% endif %}
                         </li>
                       {% endfor %}
                     </ul>
@@ -572,6 +606,9 @@
 
 {% block js_section %}
     {{ block.super }}
+    <script> 
+      const modeChoices = {{product_mode_choices|safe}};
+    </script>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="{% static 'shinelearn/js/skill/skillpage-new.js' %}"></script>
 

@@ -33,6 +33,7 @@ from .mixins import SkillPageMixin
 from review.models import DetailPageWidget
 from assessment.models import Test
 from shop.models import SubHeaderCategory
+from shop.choices import STUDY_MODE
 
 # Create your views here.
 
@@ -92,11 +93,12 @@ class SkillPageView(DetailView, SkillPageMixin):
         course_count = courses.count()
         assesments = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=self.object.pk, pTF=16)
         assesment_count = assesments.count()
+        product_mode_choices = dict(STUDY_MODE)
         country_choices = [(m.phone, m.name) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
         country_choices = sorted(country_choices, key=lambda x: x[0])
 
-        widget_obj = DetailPageWidget.objects.filter(content_type__model='Category', listid__contains=self.object.pk)
-        widget_obj_data = widget_obj.widget.iw.indexcolumn_set.filter(column=1) if widget_obj else []
+        widget_obj = DetailPageWidget.objects.filter(content_type__model='Category', listid__contains=self.object.pk).first()
+        widget_obj_data = widget_obj.widget.iw.indexcolumn_set.filter(column=1) if widget_obj and widget_obj.widget else []
         testimonialcategory = list(TestimonialCategoryRelationship.objects.filter(category=self.object.id,\
                     testimonial__is_active=True).select_related('testimonial'))
         
@@ -119,6 +121,7 @@ class SkillPageView(DetailView, SkillPageMixin):
             'breadcrumbs':self.get_breadcrumb_data(),
             'country_choices':country_choices,
             'testimonialcategory':testimonialcategory,
+            'product_mode_choices':product_mode_choices,
         })
         return context
 
