@@ -2,7 +2,6 @@ function removeFromCartMobile(line_id) {
     //  show loader
     $('.overlay-background').show()
     $('body').addClass('body-noscroll')
-    debugger;
     if (line_id) {
         var formData = $('#cart_remove_form' + line_id).serialize();
         $.ajax({
