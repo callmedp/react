@@ -897,6 +897,7 @@ class OrderItem(AbstractAutoDate):
             today = timezone.now()
             for i in range(0, weeks):
                 start = started + relativedelta.relativedelta(days=i * 7)
+                start = start + timedelta(hours=12)
                 if start > today:
                     break
                 links_count += links_per_week
