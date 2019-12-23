@@ -214,7 +214,7 @@
             border-radius: .3rem;
             box-shadow: 0 0 10px rgba($black, .2);
             position: relative;
-        }
+        } 
     }
 
     &__trial {
@@ -242,6 +242,49 @@
         .buy_item--left {
             padding-right: 30px;
             font-size: 1.4rem;
+        }
+    }
+
+    &__youGet {
+        &--head {
+            color: $grey-333;
+            font-size: 1.6rem;
+        }
+
+        &__list {
+            padding: 0;
+
+            li {
+                font-size: 1.3rem;
+                color: $grey-666;
+
+                &:not(:last-child) {
+                    margin-bottom: 10px;
+                }
+
+
+                span{
+                    display:inline-block;
+                    margin-right: 8px;
+                    
+                    &:after{
+                      /*Add another block-level blank space*/
+                      content: '';
+                      display: block;
+                   
+                      /*Make it a small rectangle so the border will create an L-shape*/
+                      width: 5px;
+                      height: 8px;
+    
+                      /*Add a white border on the bottom and left, creating that 'L' */
+                      border: solid $grey-a7;
+                      border-width: 0 2px 2px 0;
+                   
+                      /*Rotate the L 45 degrees to turn it into a checkmark*/
+                      transform: rotate(45deg);
+                    }
+                  }
+            }
         }
     }
 }

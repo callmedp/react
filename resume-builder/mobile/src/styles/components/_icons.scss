@@ -256,6 +256,16 @@
     background-position: -53px -315px;
   }
 
+  &--zoom2 {
+    @include square(24px);
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -12px 0 0 -12px;
+    background-position: -167px -50px;
+  }
+
   &--expertise {
     position: relative;
 
