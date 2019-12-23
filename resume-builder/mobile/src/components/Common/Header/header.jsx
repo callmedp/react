@@ -93,11 +93,7 @@ class Header extends Component {
                             <span>Choose your plan</span>
                         </div>
 
-                        <div className="header__right">
-                        <span className="header--off">
-                            <img src={`${this.staticUrl}react/assets/images/mobile/launch-offer.png`} alt="Launch Offer"/>
-                        </span>
-                        </div>
+                        {/* <div className="header__right"></div> */}
 
                     </React.Fragment>:
                     

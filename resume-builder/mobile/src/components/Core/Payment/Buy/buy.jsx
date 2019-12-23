@@ -216,7 +216,27 @@ class Buy extends Component {
 
 
                 <div className="buy">
-                    <p className="buy--create">Use resume builder for 12 months to<strong> create/edit</strong> unlimited resume.</p>
+                    <div className="d-flex mb-30">
+                        <div className="mr-auto">
+                            <p className="fs-20 color-333"> Your customised <br></br>resume is ready </p>
+                            <button class="btn btn--sm btn__round btn--outline mt-10">Edit template</button>
+                        </div>
+
+
+                        <div className="position-relative">
+                            <span className="buy__item--image">
+                                {thumbnailImages.length === 5 ?
+                                    <img src={`data:image/png;base64, ${thumbnailImages[template - 1]}`}
+                                        alt="Resume" /> :
+                                    <img
+                                        src={`${this.staticUrl}react/assets/images/mobile/small-resume-${template}.jpg`}
+                                        alt="Custom resume" />
+                                }
+                            </span>
+                            <a href="javascript:Void(0)"className="sprite icon--zoom2" onClick={this.editTemplate}></a>
+                        </div>
+                    </div>
+
                     { free_resume_downloads ?
                         <div class="buy__wrap mt-15">
                             <div className="buy__item buy__trial">
@@ -235,48 +255,40 @@ class Buy extends Component {
 
                     <div className="buy__wrap mt-15">
                         <div className="buy__item">
-                            <div className="buy__item--left">
+                            <div className="buy__item--left w-100">
                                 <input className="buy__item--input form__radio-input" type="radio" id="your-resume"
                                     name="product-1"
                                     checked={checked === 'product1' ? true : false}
                                     onChange={this.handleOnChange.bind(this, 'product1')}></input>
                                 <label className="buy__item--label form__radio-label" htmlFor="your-resume">
                                     <span className="form__radio-button"></span>
-                                    Buy your <br />customised resume<br />
-                                    <strong>Rs. {price1}/-</strong>
-                                    <span className="fs-14 line-through">Rs. 1499 </span>
-                                    <span className="fs-14 bold">Flat {discount1}% off</span>
+                                    <span className="text-uppercase d-block color-333 bold">14- Days Plan</span>
+                                    <span className="d-flex align-items-center">
+                                        <strong className="mr-10">Rs. {price1}/-</strong>
+                                        <span className="line-through fs-16 color-999 font-weight-light">Rs. 499</span>
+                                    </span>
+                                    <span className="fs-14">Save upto 30%</span>
                                 </label>
                             </div>
-                            <div className="buy__item--right">
-                                <span className="buy__item--image">
-                                    {thumbnailImages.length === 5 ?
-                                        <img src={`data:image/png;base64, ${thumbnailImages[template - 1]}`}
-                                            alt="Resume" /> :
-                                        <img
-                                            src={`${this.staticUrl}react/assets/images/mobile/small-resume-${template}.jpg`}
-                                            alt="Custom resume" />
-                                    }
-                                </span>
-                                <a className="fs-12 mt-5" onClick={this.editTemplate}>Edit</a>
-                            </div>
                         </div>
-
+                        
                         <div className="buy__item buy__recommended">
                             <div className="buy__recommended--tag">Recommended</div>
-                            <div className="buy__item--left form__radio-group">
+                            <div className="buy__item--left w-100">
                                 <input className="buy__item--input form__radio-input" type="radio" id="all-resumes"
                                     name="product2"
                                     checked={checked === 'product2' ? true : false}
-                                    onChange={this.handleOnChange.bind(this, 'product2')}></input>
+                                    onChange={this.handleOnChange.bind(this, 'product2')}>
+                                </input>
+
                                 <label className="buy__item--label form__radio-label" htmlFor="all-resumes">
                                     <span className="form__radio-button"></span>
-                                    Buy all 5 customised resumes
-                                    <div className="buy__item--price">
-                                        <span className="fs-22 color-333 semi-bold">Rs. {price2}/-</span>
-                                        <span className="fs-14 line-through">Rs. 1999</span>
-                                        <span className="fs-14 bold">Flat {discount2}% off</span>
-                                    </div>
+                                    <span className="text-uppercase d-block color-333 bold">Yearly Pack</span>
+                                    <span className="d-flex align-items-center">
+                                        <strong className="mr-10">Rs. {price2}/-</strong>
+                                        <span className="line-through fs-16 color-999 font-weight-light">Rs. 1999</span>
+                                    </span>
+                                    <span className="fs-14">Save upto 30%</span>
                                 </label>
                             </div>
                         </div>
