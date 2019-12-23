@@ -3,8 +3,8 @@ import Header from '../../../Common/Header/header.jsx';
 import './buy.scss';
 import * as action from '../../../../store/buy/actions';
 import { fetchThumbNailImages, fetchSelectedTemplateImage } from '../../../../store/template/actions/index'
-import {fetchPersonalInfo} from '../../../../store/personalInfo/actions/index'
-import {showGenerateResumeModal,hideGenerateResumeModal} from '../../../../store/ui/actions/index'
+import { fetchPersonalInfo } from '../../../../store/personalInfo/actions/index'
+import { showGenerateResumeModal, hideGenerateResumeModal } from '../../../../store/ui/actions/index'
 import { connect } from "react-redux";
 import { siteDomain } from "../../../../Utils/domains";
 import Slider from "react-slick";
@@ -21,14 +21,14 @@ class Buy extends Component {
 
     constructor(props) {
         super(props);
-       
+
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
         this.state = {
             'checked': 'product1',
             'modal_status': false,
             'template_id': '',
-            'resumeDownloadCount':-1,
-            'freeDownloadButtonDisable':false,
+            'resumeDownloadCount': -1,
+            'freeDownloadButtonDisable': false,
         }
         this.closeModalStatus = this.closeModalStatus.bind(this);
         this.openModal = this.openModal.bind(this);
@@ -74,9 +74,9 @@ class Buy extends Component {
     }
 
     async componentDidMount() {
-         // check if the userexperinece is greater or equal to 4 years. (7 is the pid for 4 years (mapping done here))
-       
-         if (parseInt(localStorage.getItem('userExperience') || 0) >= 7) {
+        // check if the userexperinece is greater or equal to 4 years. (7 is the pid for 4 years (mapping done here))
+
+        if (parseInt(localStorage.getItem('userExperience') || 0) >= 7) {
             if (typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
                 document.getElementsByClassName('chat-bot')[0].style.display = 'none';
             }
@@ -87,7 +87,7 @@ class Buy extends Component {
             }
         }
 
-        const {getProductIds,fetchThumbNailImages,fetchUserInfo} = this.props
+        const { getProductIds, fetchThumbNailImages, fetchUserInfo } = this.props
         if (!localStorage.getItem('candidateId')) {
             await this.props.loginCandidate()
         }
@@ -105,18 +105,18 @@ class Buy extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.userInfo !== prevProps.userInfo ) {
-            if(this.state.resumeDownloadCount >= 0 && (this.state.resumeDownloadCount< this.props.userInfo.resume_creation_count)){
+        if (this.props.userInfo !== prevProps.userInfo) {
+            if (this.state.resumeDownloadCount >= 0 && (this.state.resumeDownloadCount < this.props.userInfo.resume_creation_count)) {
                 clearInterval(this.state.timerId)
                 this.downloadRequestedResume();
             }
         }
     }
 
-    async downloadRequestedResume(){
-        const {hideGenerateResumeModal} = this.props
+    async downloadRequestedResume() {
+        const { hideGenerateResumeModal } = this.props
         const candidateId = localStorage.getItem('candidateId')
-        const selectedTemplate = localStorage.getItem('selected_template',1)
+        const selectedTemplate = localStorage.getItem('selected_template', 1)
         const url = `${siteDomain}/api/v1/resume/candidate/${candidateId}/free-resume/template/${selectedTemplate}/`
         const link = document.createElement('a');
         link.href = url;
@@ -124,36 +124,36 @@ class Buy extends Component {
         link.click();
         link.parentNode.removeChild(link);
         hideGenerateResumeModal()
-        this.setState({'freeDownloadButtonDisable':false})
+        this.setState({ 'freeDownloadButtonDisable': false })
     }
 
     async freeResumeRequest() {
-        const {  requestFreeResume,showGenerateResumeModal,
-                 userInfo: { resume_creation_count}, } = this.props
-        
-        this.setState({'resumeDownloadCount':resume_creation_count,'freeDownloadButtonDisable':true},async ()=>{
+        const { requestFreeResume, showGenerateResumeModal,
+            userInfo: { resume_creation_count }, } = this.props
+
+        this.setState({ 'resumeDownloadCount': resume_creation_count, 'freeDownloadButtonDisable': true }, async () => {
             await requestFreeResume()
             showGenerateResumeModal()
             this.pollingUserInfo()
         })
     }
 
-    pollingUserInfo(){
+    pollingUserInfo() {
         const timer = setInterval(this.timerFunction, 2000);
         const startTime = new Date().getTime();
-        this.setState({'timerId':timer,'pollingStartTIme':startTime})
-    } 
+        this.setState({ 'timerId': timer, 'pollingStartTIme': startTime })
+    }
 
-    timerFunction(){
-        const {fetchUserInfo} = this.props
-        const { timerId,pollingStartTIme} = this.state
-        if(new Date().getTime() - pollingStartTIme > 30000) {  // max limit 10*3 seconds
+    timerFunction() {
+        const { fetchUserInfo } = this.props
+        const { timerId, pollingStartTIme } = this.state
+        if (new Date().getTime() - pollingStartTIme > 30000) {  // max limit 10*3 seconds
             clearInterval(timerId)
-            this.setState({'freeDownloadButtonDisable':false})
+            this.setState({ 'freeDownloadButtonDisable': false })
             hideGenerateResumeModal()
             apiError()
         }
-        fetchUserInfo(true); 
+        fetchUserInfo(true);
     }
 
     handleOnChange(checkedProduct) {
@@ -184,10 +184,10 @@ class Buy extends Component {
             speed: 500,
             slidesToShow: 2,
         };
-        const { ui: { mainloader,generateResumeModal }, template: { thumbnailImages, templateImage }, productIds, history,
-                userInfo:{free_resume_downloads,resume_creation_count} } = this.props
+        const { ui: { mainloader, generateResumeModal }, template: { thumbnailImages, templateImage }, productIds, history,
+            userInfo: { free_resume_downloads, resume_creation_count } } = this.props
         const template = localStorage.getItem('selected_template') || 1;
-        const { checked, modal_status,freeDownloadButtonDisable } = this.state
+        const { checked, modal_status, freeDownloadButtonDisable } = this.state
         const price1 = productIds[0] ? productIds[0].inr_price : 999
         const discount1 = Math.floor(((1499 - price1) / 1499) * 100)
         const price2 = productIds[1] ? productIds[1].inr_price : 1248
@@ -233,25 +233,11 @@ class Buy extends Component {
                                         alt="Custom resume" />
                                 }
                             </span>
-                            <a href="javascript:Void(0)"className="sprite icon--zoom2" onClick={this.editTemplate}></a>
+                            <a className="sprite icon--zoom2" onClick={() => {
+                                this.openModal(parseInt(template-1))
+                            }}></a>
                         </div>
                     </div>
-
-                    { free_resume_downloads ?
-                        <div class="buy__wrap mt-15">
-                            <div className="buy__item buy__trial">
-                                <div className="buy__recommended--tag">Trial offer</div>
-                                <div className="buy_item--left">
-                                    {free_download_count > 0? ` ${free_download_count} free download for 1st time users.` :
-                                        "Free one time download for all 1st time users"}
-                                </div>
-                                <div className="buy_item--right">
-                                        <button class="btn btn__round btn--outline" onClick={this.freeResumeRequest}
-                                        disabled={freeDownloadButtonDisable} >Download</button>
-                                </div>
-                            </div>
-                        </div>:''
-                    }
 
                     <div className="buy__wrap mt-15">
                         <div className="buy__item">
@@ -267,11 +253,11 @@ class Buy extends Component {
                                         <strong className="mr-10">Rs. {price1}/-</strong>
                                         <span className="line-through fs-16 color-999 font-weight-light">Rs. 499</span>
                                     </span>
-                                    <span className="fs-14">Save upto 30%</span>
+                                    <span className="fs-14">Save upto {discount1}%</span>
                                 </label>
                             </div>
                         </div>
-                        
+
                         <div className="buy__item buy__recommended">
                             <div className="buy__recommended--tag">Recommended</div>
                             <div className="buy__item--left w-100">
@@ -288,11 +274,11 @@ class Buy extends Component {
                                         <strong className="mr-10">Rs. {price2}/-</strong>
                                         <span className="line-through fs-16 color-999 font-weight-light">Rs. 1999</span>
                                     </span>
-                                    <span className="fs-14">Save upto 30%</span>
+                                    <span className="fs-14">Save upto {discount2}%</span>
                                 </label>
                             </div>
                         </div>
-                        
+
                         <div className="buy__item buy__recommended buy__youGet pt-15">
                             <p className="buy__youGet--head">You will get</p>
                             <ul className="buy__youGet__list mt-10">
@@ -303,6 +289,22 @@ class Buy extends Component {
                             </ul>
                         </div>
                     </div>
+
+                    {free_resume_downloads ?
+                        <div class="buy__wrap mt-15">
+                            <div className="buy__item buy__trial">
+                                <div className="buy__recommended--tag">Trial offer</div>
+                                <div className="buy_item--left">
+                                    {free_download_count > 0 ? ` ${free_download_count} free download for 1st time users.` :
+                                        "Free one time download for all 1st time users"}
+                                </div>
+                                <div className="buy_item--right">
+                                    <button class="btn btn__round btn--outline" onClick={this.freeResumeRequest}
+                                        disabled={freeDownloadButtonDisable} >Download</button>
+                                </div>
+                            </div>
+                        </div> : ''
+                    }
                 </div>
             </div>
 
@@ -322,7 +324,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         'fetchUserInfo': (noUiLoader) => {
-            return dispatch(fetchPersonalInfo({noUiLoader}))
+            return dispatch(fetchPersonalInfo({ noUiLoader }))
         },
         'getProductIds': () => {
             return dispatch(action.getProductIds())
@@ -345,12 +347,12 @@ const mapDispatchToProps = (dispatch) => {
         },
         "loginCandidate": (token) => {
             return new Promise((resolve, reject) => {
-                dispatch(loginCandidate({info: {alt: token}, resolve, reject, isTokenAvail: false}))
+                dispatch(loginCandidate({ info: { alt: token }, resolve, reject, isTokenAvail: false }))
             })
         },
         "requestFreeResume": () => {
             return new Promise((resolve, reject) => {
-                dispatch(action.requestFreeResume({resolve,reject}))
+                dispatch(action.requestFreeResume({ resolve, reject }))
             })
         },
         'showGenerateResumeModal': () => {

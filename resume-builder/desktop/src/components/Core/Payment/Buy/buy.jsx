@@ -304,7 +304,7 @@ export class Buy extends Component {
                                                 <p>14-DAYS PLAN</p>
                                                 Rs. <strong>{price1}/-</strong>
                                                 <strike className="ml-10">Rs. 1499</strike>
-                                                <span className="choose-plan--off mt-10 db">Save up to {discount1}% off</span>
+                                                <span className="choose-plan--off mt-10 db">Save up to {discount1}%</span>
                                             </span>
                                             <button
                                                 className="choose-plan--btn-rt orange-button ml-auto"
@@ -325,7 +325,7 @@ export class Buy extends Component {
                                                 <span>Rs.</span> <strong>  {price2}
                                                     /-</strong>
                                                 <strike className="ml-10">Rs. 1999</strike>
-                                                <span className="choose-plan--off mt-10 db">Save up to {discount2}% off</span>
+                                                <span className="choose-plan--off mt-10 db">Save up to {discount2}%</span>
                                             </span>
                                             <button
                                                 className="choose-plan--btn-rt orange-button ml-auto mt-20"
@@ -342,7 +342,7 @@ export class Buy extends Component {
                                         </ul>
                                     </li>
 
-                                    <li className="bdr pos-rel">
+                                    {/* <li className="bdr pos-rel">
                                         <Slider {...settings}>
 
                                             {
@@ -369,9 +369,9 @@ export class Buy extends Component {
                                                 ))
                                             }
                                         </Slider>
-                                    </li>
+                                    </li> */}
                                 </ul>
-                                {/* <div className="">
+                                <div className="">
                                     <div className="choose-plan--pay-price">
                                         You pay
                                         <span>Rs. <strong>{checked === 'product1' ? price1 : price2}/-</strong></span>
@@ -380,7 +380,7 @@ export class Buy extends Component {
                                         className="choose-plan--orange-button-change orange-button items-right pull-right mt-10"
                                         onClick={this.redirectToCart.bind(this)}>Pay now
                                     </button>
-                                </div> */}
+                                </div>
                             </div>
                         </section>
 
