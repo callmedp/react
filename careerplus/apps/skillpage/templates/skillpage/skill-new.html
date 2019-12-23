@@ -126,27 +126,39 @@
         <li class="nav-item active">
           <a class="nav-link" href="#about">ABOUT</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#objective">Objective</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#who-learn">Who should learn</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#skill-learn">SKills you learn</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#testimonial">Testimonial</a>
-        </li>
+        {% if 'objective'|get_value:subheading %}
+          <li class="nav-item">
+            <a class="nav-link" href="#objective">Objective</a>
+          </li>
+        {% endif %}
+        {% if 'who-should-learn'|get_value:subheading %}
+          <li class="nav-item">
+            <a class="nav-link" href="#who-learn">Who should learn</a>
+          </li>
+        {% endif %}
+        {% if career_outcomes %}
+          <li class="nav-item">
+            <a class="nav-link" href="#skill-learn">SKills you learn</a>
+          </li>
+        {% endif %}
+        {% if testimonialcategory|length %}
+          <li class="nav-item">
+            <a class="nav-link" href="#testimonial">Testimonial</a>
+          </li>
+        {% endif %}
         <li class="nav-item">
           <a class="nav-link" href="#impact">Our Impact</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#popular-courses">Courses</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#faq">FAQ</a>
-        </li>
+        {% if top_3_courses %}
+          <li class="nav-item">
+            <a class="nav-link" href="#popular-courses">Courses</a>
+          </li>
+        {% endif %}
+        {% if 'faq'|get_value:subheading %}
+          <li class="nav-item">
+            <a class="nav-link" href="#faq">FAQ</a>
+          </li>
+        {% endif %}
       </ul>
     </div>
   </nav>
@@ -171,28 +183,31 @@
           </section>
 
           <!-- popular course section -->
-          <section id="popular-courses" classbutton="col-sm-12">
-            <div class="popular-course">
-              <div class="row">
-                <h2>Popular courses</h2>
-                <a class="btn btn-outline-primary ml-auto" onclick="smoothScrolling('courseTab')" role="button">View Courses</a>
-                <div class="d-flex mb-10">
-                  {% for course in top_3_courses %}
-                    <div class="col">
-                      <div class="media">
-                        <figure class="mr-20 shadow-icon">
-                          <img aria-label="{{course.pNm}}" class="img-fluid" src="{{course.pImg}}" alt="{{course.pNm}}">
-                        </figure>
-                        <figcaption class="media-body">
-                            <a href="{{course.pURL}}">{{course.pNm}}</a>
-                        </figcaption>
+          {% if top_3_courses %}
+            <section id="popular-courses" classbutton="col-sm-12">
+              <div class="popular-course">
+                <div class="row">
+                  <h2>Popular courses</h2>
+                  <a class="btn btn-outline-primary ml-auto" onclick="smoothScrolling('courseTab')" role="button">View Courses</a>
+                  <div class="d-flex mb-10">
+                    {% for course in top_3_courses %}
+                      <div class="col">
+                        <div class="media">
+                          <figure class="mr-20 shadow-icon">
+                            <img aria-label="{{course.pNm}}" class="img-fluid" src="{{course.pImg}}" alt="{{course.pNm}}">
+                          </figure>
+                          <figcaption class="media-body">
+                              <a href="{{course.pURL}}">{{course.pNm}}</a>
+                          </figcaption>
+                        </div>
                       </div>
-                    </div>
-                  {% endfor %}
+                    {% endfor %}
+                  </div>
                 </div>
               </div>
-            </div>
-          </section>
+            </section>
+          {% endif %}
+          
 
           <!-- objective section -->
           {% if 'objective'|get_value:subheading %}

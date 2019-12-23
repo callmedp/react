@@ -102,13 +102,13 @@ const loadProduct = (el,type) => {
                         <strong class="courses__price">Rs. ${ Math.round((products[key].pPin)*100)/100 }/-</strong>
                     </div>
                     
-                    ${products[key]===1 ?
+                    ${products[key].pTg ==1 ?
                         `<div class="course-tag">
                             <span class="course-tag__best">Bestseller</span>
                         </div>`:
-                    products[key]===2?
+                    products[key].pTg ==  2?
                         `<div class="course-tag">
-                            <span class="course-tag__best">Bestseller</span>
+                            <span class="course-tag__new">Newly Added</span>
                         </div> `:''
                     }
                 </li>
@@ -167,6 +167,7 @@ const checkError = () => {
     }
 }
 
+//show error in DOM
 const showError = (id,errorName) =>{
     needHelpFormError = true
     let parent = $(`#${id}`).parent()
