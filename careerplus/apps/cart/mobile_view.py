@@ -12,6 +12,7 @@ from wallet.models import Wallet, WalletTransaction, PointTransaction
 
 class RemoveFromCartMobileView(View, CartMixin):
     def post(self, request, *args, **kwargs):
+        import ipdb; ipdb.set_trace();
         if request.is_ajax():
             data = {"status": -1}
             product_reference = request.POST.get('product_reference')
@@ -23,8 +24,6 @@ class RemoveFromCartMobileView(View, CartMixin):
                 cart_pk = self.request.session.get('cart_pk')
                 if cart_pk:
                     cart_obj = Cart.objects.get(pk=cart_pk)
-                    owner = cart_obj.owner_id
-                    wal_obj = Wallet.objects.get(owner=owner)
                     if child_list:
                         for child_ref in child_list:
                             line_obj = cart_obj.lineitems.get(reference=child_ref)
@@ -54,16 +53,19 @@ class RemoveFromCartMobileView(View, CartMixin):
                     data['status'] = 1
     
                     cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
-                    total_amount = cart_dict.get('total_amount', Decimal(0))  
+                    total_amount = Decimal(cart_dict.get('total_amount', Decimal(0)))
+                    initial_redeemed_points = Decimal(0)
                     # payment_dict = self.getPayableAmount(cart_obj, cart_dict.get('total_amount'))
                     # point = payment_dict["redeemed_reward_point"]
                     wal_txn = cart_obj.wallettxn.filter(
                             txn_type=2).order_by('-created').select_related('wallet')
                     if wal_txn:
                         wal_txn = wal_txn[0]
-                        intial_redeemed_points = wal_txn.point_value
-                    if intial_redeemed_points > total_amount:
+                        initial_redeemed_points = wal_txn.point_value
+                    if initial_redeemed_points > total_amount:
                         points_used = wal_txn.usedpoint.all().order_by('point__pk')
+                        owner = cart_obj.owner_id
+                        wal_obj = Wallet.objects.get(owner=owner)
                         for pts in points_used:
                             r_point = pts.point
                             r_point.current += pts.point_value
