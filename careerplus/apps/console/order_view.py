@@ -3147,7 +3147,8 @@ class UpdateTestimonialView(UpdateView):
             'messages': alert,
             'categories':categories,
             'categories_mapped':categories_mapped,
-            'update_page':True
+            'update_page':True,
+            'testimonial':self.object,
             # 'categories_mapped':categories_mapped,
         })
         return context

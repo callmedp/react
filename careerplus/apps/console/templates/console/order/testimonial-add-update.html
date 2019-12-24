@@ -109,7 +109,7 @@
       </div>
     </div>
 
-    {% if update_page %}
+    {% if update_page and testimonial.page == 6 %}
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
@@ -173,7 +173,7 @@
         $('.loader-div').removeClass('hide')
         $.post(`/api/v1/testimonial-category-map/`,{
             categories:JSON.stringify($('.category-select').val()),
-            testimonial:{{object.id}}
+            testimonial:{{testimonial.id|safe}}
         },(data)=>{
             console.log(data)
             window.location.reload();
