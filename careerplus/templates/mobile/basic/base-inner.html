@@ -16,6 +16,7 @@
       <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
    {% endblock canonical_url %}
     {% block css_section %}
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.min.css" rel="stylesheet" />
         <!--<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">-->
         {% compress css %}
         <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/global-new.scss' %}" rel="stylesheet">
@@ -103,8 +104,7 @@
 
     {% block js_section %}
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.min.js"></script>
+        
         <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
         <script>
          WebFont.load({
@@ -113,27 +113,23 @@
             }
           });
         </script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.all.min.js"></script>
+
 
         {% compress js %}
+            <script src="{% static 'packages/jquery3.4.1/jquery.min.js' %}"></script>
             <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/jquery-ui.min.js' %}"> </script>
             <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/slick.js' %}"></script>
             <script type="text/javascript" src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
-            <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/new-base.js' %}"> </script>
+            <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/common-new.js' %}"> </script>
             <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/jquery.bxslider.js' %}"> </script>
             <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/jquery.simpler-sidebar.js' %}"> </script>
             <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/multilevelnav.js' %}"></script>
-            {% comment %} <script type="text/javascript" src="{% static 'shinelearn/js/common/common.js' %}"></script> {% endcomment %}
-
-
-
-
-
-            {% comment %} <script type="text/javascript" src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"> </script>
-            <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/multilevelnav.js' %}"></script>
-            <script type="text/javascript" src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script> {% endcomment %}
+            <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"> </script>
             <script src="{% static 'shinelearn/js/common/bootstrap4.min.js' %}"> </script>
 
         {% endcompress %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.min.js"></script>
 
         <!-- {% block johukum %}
         <script type='text/javascript' id='spd-busns-spt' async=''

@@ -1,12 +1,11 @@
 
 let coursePageNo = 2,assessmentPageNo=2  //the page no starts form 2 cause 1st page is already loaded
 let pageSize = 5
-let needHelpFormError = false
-let previous_tab = null
+let categoryId = null
 
 
 $(document).ready(()=>{
-    let categoryHeading = $('#course-list').attr('categoryHeading');
+    categoryId = $('#course-list').attr('categoryId');
     
     // methods for sticky navigation
     $(window).on('scroll', function (e) {

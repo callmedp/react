@@ -7,6 +7,8 @@ $(document).ready(()=>{
     //categoryid and heading form couse list attributes
     categoryId = $('#tab-bar').attr('categoryId');
     stickyNavbarActiveScroll()
+    indiaMobileValidator()
+    callUsFormDataValidation()
 })
 
 const changeTab = (setTabId,removeTabId) => {
@@ -134,4 +136,123 @@ const stickyNavbarActiveScroll = () => {
         }
         
     })
+}
+
+const needHelpFormSubmit = (formData,lsource) => {
+    $.post(`/lead/lead-management/`,formData,(data)=>{
+        lsource[0] ? gaEventFunc(lsource[0].value,'success'):''
+        Toast.fire({
+            type: 'success',
+            title: 'A callback requested'
+        })
+        $("#callUsForm").find("input[type=text]").val("");
+	    
+    }).fail(()=>{
+        lsource[0] ? gaEventFunc(lsource[0].value,'failure'):''
+        Toast.fire({
+            type: 'error',
+            title: 'Something went wrong'
+        })
+    })
+
+}
+
+const callUsFormDataValidation = () => {
+
+    var callUsForm = $("#callUsForm");
+    callUsForm.validate({
+        errorClass:'error-msg',
+        rules: {
+            name: {
+                required: true,
+                maxlength: 100
+            },
+            email: {
+                required: true,
+                email:true,
+                maxlength: 100
+            },
+            number: {
+                required: true,
+                digits: true,
+                indiaMobile: true,
+                minlength: 4,
+                maxlength: 15,
+            },
+
+        },
+        messages: {
+            name: {
+                required: "Required",
+                maxlength: "Max length 100"
+            },
+            email: {
+                required: "Required",
+                email:'Not Email',
+                maxlength: "Max length 100"
+            },
+            number: {
+                required: "Required",
+                digits: "Only Digits",
+                indiaMobile: "10 digits only",
+                minlength: "Add atleast 4 digits",
+                maxlength: "Add less than 16 digits",
+
+            },
+        },
+        highlight: function(element, errorClass) {
+            $(element).parent().addClass('error') 
+        },
+        unhighlight: function(element, errorClass) {
+            $(element).parent().removeClass('error') 
+        },
+        // errorPlacement: errorPlacement,
+        submitHandler: function(form){
+            lsource =$(form).serializeArray().filter((el)=>{
+                if(el.name === 'lsource')
+                    return el;
+            })
+            var formData = $(form).serialize();
+            needHelpFormSubmit(formData,lsource)
+        }
+    });
+}
+
+const indiaMobileValidator = () => {
+    $.validator.addMethod("indiaMobile", function(value) {
+        var country_code = $('#country-code').val();
+        if(country_code == '91'){
+            return value.length == 10;
+        }
+        return true;
+    });
+}
+
+
+
+//ga functions
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-3537905-41', 'auto', {'name': 'a'});
+    ga('a.send', 'pageview');
+    ga('create', 'UA-3537905-41', 'auto');
+    ga('send', 'pageview');
+
+const gaEvent = (event_cat,event_lab,event_action) =>{
+    ga('send', 'event', event_cat, event_action, event_lab);
+}
+
+const gaEventFunc = (typeOfProduct,status) =>{
+    var event_cat='Form Interactions';
+
+    var type = "" ;
+    if(typeOfProduct == "1"){
+        type= 'Skill Course Enquiry';
+    }
+    else{
+        type= 'Skill Service Enquiry';
+    }
+    gaEvent(event_cat,status,type);
 }

@@ -43,12 +43,12 @@
         <h2 class="enquire__wrap--head">Enquire now</h2>
         <p class="enquire__wrap--subhead">Share your query, our experts will help you take your career forward!</p>
         <div class="content-box login-form">
-            <form>
+            <form id="callUsForm">
                 <div class="form-group enquire__flex">
                     <div class="code">
                         <select name="country_code" class="form-control" id="country-code">
                           {% for country in country_choices %}
-                            <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.0}}</option>
+                            <option value="{{country.0}}" {% if country.0 == '91' %} selected {% endif %} >{{country.0}}</option>
                           {% endfor %}
                         </select>
                     </div>
@@ -67,7 +67,7 @@
                 <input type="hidden" name="prd" value="{{category.heading}}">
                 <input type="hidden" name="path" value="{{category.get_absolute_url}}">
                 <div class="form-group">
-                    <button onclick="" class="btn btn-blue w100 btn-round">Submit</button>
+                    <button type="submit" class="btn btn-blue w100 btn-round">Submit</button>
                 </div>
 
             </form>
