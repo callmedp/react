@@ -14,7 +14,7 @@
   {% compress css %}
     <!-- Switchery -->
     <link href="{% static 'packages/switchery/dist/switchery.min.css' %}" rel="stylesheet" type="text/css">
-    <link type="text/css" href="{% static "console/css/testimonial/testimonial.css" %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'console/css/testimonial/testimonial.css' %}" rel="stylesheet">
 
   {% endcompress %}
                 
@@ -36,7 +36,7 @@
         {% if messages %}
             {% for message in messages %}
 
-              <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
+              <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
               <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 
               {{ message }}
@@ -157,11 +157,6 @@
 {% block js_block %}
   {{ block.super }}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
-  {% compress js %}
-  <!-- Parsley Validate Scripts -->
-  <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
-  <!-- Switchery -->
-  <script type="text/javascript" src="{% static 'packages/switchery/dist/switchery.min.js' %}"></script>
   <script>
     $(document).ready(function() {
         $('.category-select').select2();
@@ -184,6 +179,4 @@
         })
     }
   </script>
-  {% endcompress %}
-
 {% endblock js_block %}
