@@ -274,21 +274,25 @@
                 <div class="white-box faq mt-20" id="faqs">
                     <h2>{{faq.heading}}</h2>
                     <!-- Accordion begin -->
-                    <div class="css-accordion">
-                        {% for item in  faq.description|get_faq_list%}
-                            <div class="css-accordion--tab {% if forloop.counter > 2%}hide{% endif %}">
-                                <input class="faq-input" type="radio" id="rd{{ forloop.counter }}" name="rd" {% if forloop.counter == 1%}checked{% endif %}>
-                                <label class="css-accordion--heading" for="rd{{ forloop.counter }}">{{item.heading|safe}}</label>
-                                <div class="css-accordion--content">
-                                    {{item.content|safe}}
-                                </div><!-- // css-accordion content -->
-                            </div><!-- // css-accordion -->
-                        {% endfor %}
+                    {% with faq_list=faq.description|get_faq_list %}
+                        <div class="css-accordion">
+                            {% for item in  faq_list%}
+                                <div class="css-accordion--tab {% if forloop.counter > 2%}hide{% endif %}">
+                                    <input class="faq-input" type="radio" id="rd{{ forloop.counter }}" name="rd" {% if forloop.counter == 1%}checked{% endif %}>
+                                    <label class="css-accordion--heading" for="rd{{ forloop.counter }}">{{item.heading|safe}}</label>
+                                    <div class="css-accordion--content">
+                                        {{item.content|safe}}
+                                    </div><!-- // css-accordion content -->
+                                </div><!-- // css-accordion -->
+                            {% endfor %}
 
-                    </div> <!-- css-accordion end -->
-                    <div class="d-block text-center py-15 mt-15">
-                        <a onclick="openMoreFAQ()" id="more-faq" class="btn btn-round btn-outline d-inline-block">More FAQs</a>
-                    </div>
+                        </div> <!-- css-accordion end -->
+                        {% if faq_list|length > 2 %}
+                            <div class="d-block text-center py-15 mt-15">
+                                <a onclick="openMoreFAQ()" id="more-faq" class="btn btn-round btn-outline d-inline-block">More FAQs</a>
+                            </div>
+                        {% endif %}
+                    {% endwith %}
                 </div><!-- // FAQs -->
             {% endwith %}
         {% endif %}

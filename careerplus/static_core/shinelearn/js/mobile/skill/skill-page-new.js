@@ -10,7 +10,6 @@ $(document).ready(()=>{
 })
 
 const changeTab = (setTabId,removeTabId) => {
-    console.log('Here')
     $(`#${setTabId}`).addClass('current')
     $(`#${removeTabId}`).removeClass('current')
     $(`#${setTabId}-text`).addClass('current')
@@ -22,7 +21,6 @@ const changeTab = (setTabId,removeTabId) => {
 //arg2 : type => deciding whether course or product to be loaded
 //This function sends a get request to get products and append them to dom
 const loadProduct = (el,type) => {
-    console.log(categoryId)
     const pTFInclude = type==='course'?false:true
     const pageNo = type==='course'?coursePageNo:assessmentPageNo
     const productTypeId = type==='course'?'#tab-1':'#tab-2'
@@ -91,8 +89,8 @@ const openMoreFAQ = () =>{
 }
 
 
+//Funtion used to set activate of sticky nav while scrolling
 const stickyNavbarActiveScroll = () => {
-    debugger
     var topMenu = $("#sticky-header"),
     topMenuHeight = topMenu.outerHeight()+15,
     // All list items
@@ -104,21 +102,36 @@ const stickyNavbarActiveScroll = () => {
     });
 
     // Bind to scroll
-    // $(window).scroll(function(){
-    // // Get container scroll position
-    // var fromTop = $(this).scrollTop()+topMenuHeight;
+    $(window).scroll(function(){
+    // Get container scroll position
+        let fromTop = $(this).scrollTop()+topMenuHeight;
 
-    // // Get id of current scroll item
-    // var cur = scrollItems.map(function(){
-    //     if ($(this).offset().top < fromTop)
-    //     return this;
-    // });
-    // // Get the id of the current element
-    // cur = cur[cur.length-1];
-    // var id = cur && cur.length ? cur[0].id : "";
-    // // Set/remove active class
-    // menuItems
-    //     .parent().removeClass("active")
-    //     .end().filter("[href='#"+id+"']").parent().addClass("active");
-    // });​
+        // Get id of current scroll item
+        let cur = scrollItems.map(function(){
+            if ($(this).offset().top < fromTop)
+            return this;
+        });
+        if (cur.length > 0){
+            // Get the id of the current element
+            cur = cur[cur.length-1];
+            let id = cur && cur.length ? cur[0].id : "";
+             // Set/remove active class
+            menuItems.removeClass("active");
+            let activeItem = menuItems.filter(`[href="#${id}"]`)
+            activeItem.addClass("active");
+
+
+            var activeWidth = activeItem.width() / 2; // get active width center
+
+            var pos = activeItem.position().left + activeWidth; //get left position of active li + center position
+            var elpos = $('.scrolling-wrapper-flexbox').scrollLeft(); // get current scroll position
+            var elW = $('.scrolling-wrapper-flexbox').width(); //get div width
+            pos = pos + elpos - elW / 2; // for center position if you want adjust then change this
+
+            $('.scrolling-wrapper-flexbox').animate({
+                scrollLeft: pos
+            }, 0);
+        }
+        
+    })
 }

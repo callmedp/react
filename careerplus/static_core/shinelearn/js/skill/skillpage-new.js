@@ -31,6 +31,10 @@ $(document).ready(()=>{
         $(this).addClass('active');
     })
 
+    stickyNavbarActiveScroll()
+    objectiveDivCollasedHeightSet()
+    
+
 })
 
 //load courses or assessment 
@@ -237,3 +241,56 @@ const openMoreFAQ = () =>{
     })
     $('#more-faq').addClass('d-none')
 }
+
+//Funtion used to set activate of sticky nav while scrolling
+const stickyNavbarActiveScroll = () => {
+    var topMenu = $("#navbarNav"),
+    topMenuHeight = topMenu.outerHeight()+15,
+    // All list items
+    menuItems = topMenu.find("a"),
+    // Anchors corresponding to menu items
+    scrollItems = menuItems.map(function(){
+      var item = $($(this).attr("href"));
+      if (item.length) { return item; }
+    });
+
+    // Bind to scroll
+    $(window).scroll(function(){
+    // Get container scroll position
+        let fromTop = $(this).scrollTop()+topMenuHeight;
+
+        // Get id of current scroll item
+        let cur = scrollItems.map(function(){
+            if ($(this).offset().top < fromTop)
+            return this;
+        });
+        if (cur.length > 0){
+            // Get the id of the current element
+            cur = cur[cur.length-1];
+            let id = cur && cur.length ? cur[0].id : "";
+             // Set/remove active class
+            menuItems.removeClass("active");
+            let activeItem = menuItems.filter(`[href="#${id}"]`)
+            activeItem.addClass("active");
+        }
+        
+    })
+}
+
+
+//fucntion to dynamically set height for objective to show only 3 items
+const objectiveDivCollasedHeightSet = () => {
+    let objectiveLiELements = $('.objective__list').find('li').slice(0,3);
+    let totalWidth = 0
+    for(el of objectiveLiELements){
+        console.log(el)
+        console.log($(el).outerHeight(true))
+        totalWidth+=$(el).outerHeight(true)
+    }
+    $('.objective__list').css({'height':totalWidth})
+    $('.objective__list').on('hidden.bs.collapse', function () {
+        $(this).css({'height':totalWidth})
+    })
+    console.log(totalWidth)
+}
+
