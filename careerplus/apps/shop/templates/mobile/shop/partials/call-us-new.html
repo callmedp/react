@@ -1,0 +1,77 @@
+{% block call_us_block %}
+
+<div class="stick_bottom enquire-cta">
+    <a class="enquire-cta__enquire" href="javascript:void(0)" id="enquire_btn">
+        <i class="icon-enquire"></i>
+        <span>Enquire</span>
+    </a><!-- // Enquire -->
+
+    <a class="enquire-cta__call" href="tel:{{ggn_contact_full}}" id="enquire_btn">
+        <i class="icon-call"></i>
+        <span>Call Us</span>
+    </a><!-- // Call -->
+
+    {% if whatsapp_icon %}
+        {% for key,value in whatsapp_icon.items %}
+            {% if value and key == "course-skill-number" %}
+                <a class="enquire-cta__whatsApp" href="https://api.whatsapp.com/send?phone=91{{value}}&text=I need your help for {{category.name}}">
+                    <i class="icon-whatsApp"></i>
+                    <span>WhatsApp</span>
+                </a><!-- // Chat -->
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+
+
+    {% if not request.amp %}
+        <a class="enquire-cta__chat cls_chat" href="javascript:void(0)" id="enquire_btn">
+            <i class="icon-chat-2"></i>
+            <span>Chat</span>
+        </a><!-- // Chat -->
+    {% endif %}
+
+</div><!-- // enquire-cta -->
+
+
+<div class="enquire" id="enquire">
+    <header>
+        <a class="icon-back pull-left" id="back_btn"></a>
+    </header>
+    <div id="snackbar"></div>
+    <div class="enquire__wrap">
+        <h2 class="enquire__wrap--head">Enquire now</h2>
+        <p class="enquire__wrap--subhead">Share your query, our experts will help you take your career forward!</p>
+        <div class="content-box login-form">
+            <form>
+                <div class="form-group enquire__flex">
+                    <div class="code">
+                        <select name="country_code" class="form-control" id="country-code">
+                          {% for country in country_choices %}
+                            <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.0}}</option>
+                          {% endfor %}
+                        </select>
+                    </div>
+                    <span class="mobile_input">
+                        <input type="number" name="number" class="form-control number" id="number" placeholder="Mobile" value="{{request.session.mobile_no|safe}}">
+                    </span>
+
+                </div>
+                <div class="form-group">
+                    <input type="text" name="name" placeholder="Name" class="form-control" value="{{request.session.full_name}}" id="name">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="email" placeholder="Email" class="form-control" value="{{request.session.email}}" id="email">
+                </div>
+                <input type="hidden" name="product" value="{{category.pk}}">
+                <input type="hidden" name="prd" value="{{category.heading}}">
+                <input type="hidden" name="path" value="{{category.get_absolute_url}}">
+                <div class="form-group">
+                    <button onclick="" class="btn btn-blue w100 btn-round">Submit</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock call_us_block %}

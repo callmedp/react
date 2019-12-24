@@ -61,7 +61,7 @@
         <div class="popular-courses mb-20 mt-20" id="popular-courses">
             <div class="d-flex align-items-center mb-15">
                 <h2 class="mr-auto">Popular courses</h2>
-                <a href="#" class="btn btn-md btn-outline btn-round">View courses</a>
+                <a href="#tab-bar" class="btn btn-md btn-outline btn-round">View courses</a>
             </div><!-- // Heading -->
 
             <ul class="popular-courses__slides">
@@ -150,7 +150,7 @@
             </div>
         </div><!-- // Our impact -->
 
-        <div class="white-box py-0 mt-20" id="course">
+        <div class="white-box py-0 mt-20" id="tab-bar" categoryId="{{category.pk}}">
             <div class="skill-tabs row">
                 <div class="tab-wrap">
                     <ul class="tabs d-flex">
@@ -162,7 +162,7 @@
                         {% endif %}
                     </ul>
     
-                    <div id="tab-1" class="tab-content current" categoryId="{{category.pk}}" categoryHeading={{category.heading}}>
+                    <div id="tab-1" class="tab-content current">
                         <ul>
                             {% for course in courses %}
                                 <li class="d-flex row">
@@ -171,25 +171,36 @@
                                     </span><!-- // Image -->
             
                                     <div class="skill-tabs__content">
-                                        <div class="skill-tabs__content--tag skill-tabs__content--bestseller">Bestseller</div>
+                                        {% if course.pTg == 1 %}
+                                            <div class="skill-tabs__content--tag skill-tabs__content--bestseller">Bestseller</div>
+                                        {% elif course.pTg == 2  %}
+                                            <div class="skill-tabs__content--tag skill-tabs__content--new">Newly Added</div>
+                                        {% endif %}
                                         <a class="d-block pt-5" href="{{course.pURL}}"><strong>{{course.pNm}}</strong></a>
                                         <div class="ratingView mt-10">
-                                            <span class="rating" data-rating="{{assesment.pARx|floatformat:1}}"></span> {{course.pARx|floatformat:1}}/5
+                                            <span class="rating" data-rating="{{course.pARx|floatformat:1}}"></span> {{course.pARx|floatformat:1}}/5
                                         </div>
-                                        <div class="skill-tabs__content--mode">
-                                            Mode
-                                            <span>Instructor</span>
-                                            <span>Online</span>
-                                        </div><!-- // mode -->
-                                        <p class="skill-tabs__content--provider fs-11"><small class="mr-5">Provider</small>{{course.pPvn}}</p>
+                                        {% if course.pStM %}
+                                            <div class="skill-tabs__content--mode">
+                                                Mode 
+                                                {% for mode in course.pStM %}
+                                                    <span>{{mode|get_value:product_mode_choices}}</span>
+                                                {% endfor %}  
+                                            </div><!-- // mode -->
+                                        {% endif %}
+                                        {% if course.pPvn %}
+                                            <p class="skill-tabs__content--provider fs-11"><small class="mr-5">Provider</small>{{course.pPvn}}</p>                                        
+                                        {% endif %}
                                         <p class="skill-tabs__content--price"><strong>Rs. {{ course.pPin |floatformat:'0' }}/- </strong></p>
                                     </div>
                                 </li>
                             {% endfor %}
                         </ul>
-                        <div class="d-block text-center py-15">
-                            <a onclick="loadProduct('course')" class="btn btn-round btn-outline d-inline-block">More course</a>
-                        </div>
+                        {% if course_count > 5 %}
+                            <div class="d-block text-center py-15">
+                                <a onclick="loadProduct(this,'course')" class="btn btn-round btn-outline d-inline-block">More course</a>
+                            </div>
+                        {% endif %}
                     </div><!-- // Courses content -->
     
                     <div id="tab-2" class="tab-content">
@@ -201,61 +212,62 @@
                                     </span><!-- // Image -->
             
                                     <div class="skill-tabs__content">
+                                        {% if assesment.pTg == 1 %}
+                                            <div class="skill-tabs__content--tag skill-tabs__content--bestseller">Bestseller</div>
+                                        {% elif assesment.pTg == 2  %}
+                                            <div class="skill-tabs__content--tag skill-tabs__content--new">Newly Added</div>
+                                        {% endif %}
                                         <a class="d-block pt-5" href="{{assesment.pURL}}"><strong>{{assesment.pNm}}</strong></a>
                                         <div class="ratingView mt-10">
                                             <span class="rating" data-rating="{{assesment.pARx|floatformat:1}}"></span> {{assesment.pARx|floatformat:1}}/5
                                         </div>
-                                        <div class="skill-tabs__content--mode">
-                                            Mode
-                                            <span>Instructor</span>
-                                            <span>Online</span>
-                                        </div><!-- // mode -->
-                                        <p class="skill-tabs__content--provider fs-11"><small class="mr-5">Provider</small>{{course.pPvn}}</p>
-                                        <p class="skill-tabs__content--price"><strong>Rs. {{ course.pPin |floatformat:'0' }}/- </strong></p>
+                                        {% if assesment.pStM %}
+                                            <div class="skill-tabs__content--mode">
+                                                Mode 
+                                                {% for mode in assesment.pStM %}
+                                                    <span>{{mode|get_value:product_mode_choices}}</span>
+                                                {% endfor %}  
+                                            </div><!-- // mode -->
+                                        {% endif %}
+                                        {% if assesment.pPvn %}
+                                            <p class="skill-tabs__content--provider fs-11"><small class="mr-5">Provider</small>{{assesment.pPvn}}</p>                                        
+                                        {% endif %}
+                                        <p class="skill-tabs__content--price"><strong>Rs. {{ assesment.pPin |floatformat:'0' }}/- </strong></p>
                                     </div>
                                 </li>
                             {% endfor %}
                         </ul>
 
-                        <div class="d-block text-center py-15">
-                            <a onclick="loadProduct('assesment')" class="btn btn-round btn-outline d-inline-block">More course</a>
-                        </div>
+                        {% if assesment_count > 5%}
+                            <div class="d-block text-center py-15">
+                                <a onclick="loadProduct(this,'assesment')" class="btn btn-round btn-outline d-inline-block">More Assessments</a>
+                            </div>
+                        {% endif %}
                     </div><!-- // Courses content -->
 
                 </div><!-- // Tab Wrap -->
             </div><!-- // Skill Tabs -->
         </div><!-- // Course and Assessments -->
 
-        <div class="learner-stories row mt-20">
-            <h2 class="pl-15">Learner’s stories</h2>
+        {% if testimonialcategory|length %}
+            <div class="learner-stories row mt-20" id="testimonial">
+                <h2 class="pl-15">Learner’s stories</h2>
 
-            <ul class="learner-stories__slider">
-                <li>
-                    <div class="white-box border-bottom-blue text-center">
-                        <span class="learner-stories--tag badge-1 m-auto my-15">AS</span>
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-                        <strong class="d-block learner-stories--name">Abhishek sinha</strong>
-                        <p class="learner-stories--compaines">Sapient, Noida</p>
-                    </div>
-                </li>
-                <li>
-                    <div class="white-box border-bottom-blue text-center">
-                        <span class="learner-stories--tag badge-1 m-auto my-15">AS</span>
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-                        <strong class="d-block learner-stories--name">Abhishek sinha</strong>
-                        <p class="learner-stories--compaines">Sapient, Noida</p>
-                    </div>
-                </li>
-                <li>
-                    <div class="white-box border-bottom-blue text-center">
-                        <span class="learner-stories--tag badge-1 m-auto my-15">AS</span>
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-                        <strong class="d-block learner-stories--name">Abhishek sinha</strong>
-                        <p class="learner-stories--compaines">Sapient, Noida</p>
-                    </div>
-                </li>
-            </ul>
-        </div><!-- // Learner’s stories -->
+                <ul class="learner-stories__slider">
+                    {% for obj in testimonialcategory %}
+                        <li>
+                            <div class="white-box border-bottom-blue text-center">
+                                <span class="learner-stories--tag badge-1 m-auto my-15">{{obj.testimonial.user_name|get_initials}}</span>
+                                <p>{{obj.testimonial.review}}</p>
+                                <strong class="d-block learner-stories--name">{{obj.testimonial.user_name}}</strong>
+                                <p class="learner-stories--compaines">{{obj.testimonial.designation}}, {{obj.testimonial.company}}</p>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div><!-- // Learner’s stories -->
+        {% endif %} 
+
 
         {% if 'faq'|get_value:subheading %}
             {% with faq='faq'|get_value:subheading %}
@@ -294,24 +306,35 @@
     </div><!-- // content-box -->
 </div><!-- // body-wrapper -->
 
-<div class="stick_bottom enquire-cta gradient_base">
-    <a class="enquire-cta__enquire" href="javascript:void(0)" id="enquire_btn"><i class="icon-enquire"></i><span>Enquire</span></a><!-- // Enquire -->
-    <a class="enquire-cta__call" href="tel:0124-4312500/01" id="enquire_btn"><i class="icon-call"></i><span>Call Us</span></a><!-- // Call -->
-    <a class="enquire-cta__whatsApp" href="javascript:void(0)"><i class="icon-whatsApp"></i><span>WhatsApp</span></a><!-- // Chat -->
-    <a class="enquire-cta__chat cls_chat" href="javascript:void(0)" id="enquire_btn"><i class="icon-chat-2"></i><span>Chat</span></a><!-- // Chat -->
-</div><!-- // stick_bottom  -->
 
-<div class="sticky-header">
+{% block call_us_block %}
+    {% include "shop/partials/call-us-new.html" %}
+{% endblock call_us_block %}
+
+<div class="sticky-header" id="sticky-header">
     <ul class="scrolling-wrapper-flexbox">
         <li class="card"><a href="#about" class="scrollTo">About</a></li>
         <li class="card"><a href="#popular-courses" class="scrollTo">Popular Courses</a></li>
-        <li class="card"><a href="#objective" class="scrollTo">Objective</a></li>
-        <li class="card"><a href="#should-learn" class="scrollTo">Who should learn?</a></li>
-        <li class="card"><a href="#skill" class="scrollTo">Skills</a></li>
+        {% if 'objective'|get_value:subheading %}
+            <li class="card"><a href="#objective" class="scrollTo">Objective</a></li>
+        {% endif %}
+
+        {% if 'who-should-learn'|get_value:subheading %}
+            <li class="card"><a href="#should-learn" class="scrollTo">Who should learn?</a></li>
+        {% endif %}
+        {% if career_outcomes %}
+            <li class="card"><a href="#skill" class="scrollTo">Skills</a></li>
+        {% endif %}
         <li class="card"><a href="#test-skill" class="scrollTo">Test your skills</a></li>
         <li class="card"><a href="#impact" class="scrollTo">Our Impact</a></li>
-        <li class="card"><a href="#course" class="scrollTo">Courses</a></li>
-        <li class="card"><a href="#faqs" class="scrollTo">FAQs</a></li>
+
+        <li class="card"><a href="#tab-bar" class="scrollTo">Courses</a></li>
+        {% if testimonialcategory|length %}
+            <li class="card"><a href="#testimonial" class="scrollTo">Learner’s stories</a></li>
+        {% endif %}
+        {% if 'faq'|get_value:subheading %}
+            <li class="card"><a href="#faqs" class="scrollTo">FAQs</a></li>
+        {% endif %}
     </ul>
 </div><!-- // sticky-header -->
 
