@@ -170,7 +170,6 @@
             categories:JSON.stringify($('.category-select').val()),
             testimonial:{{testimonial.id|safe}}
         },(data)=>{
-            console.log(data)
             window.location.reload();
             $('.loader-div').addClass('hide')
         }).fail(()=>{

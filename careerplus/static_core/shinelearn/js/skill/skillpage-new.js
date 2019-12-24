@@ -1,25 +1,12 @@
 
 let coursePageNo = 2,assessmentPageNo=2  //the page no starts form 2 cause 1st page is already loaded
 let pageSize = 5
-let categoryId = null
-let needHelpFormValues = { //default values required for lead management
-    'country':'91', //by default country code=91 for india
-    'path':window.location.href,  //absolute path of the current url
-    'lsource':1, //default value for skill page
-    'number':'',
-    'email':'',
-    'name':'',
-} 
 let needHelpFormError = false
 let previous_tab = null
 
 
 $(document).ready(()=>{
-    //for form values recieving categoryid and heading form couse list attributes
-    categoryId = $('#course-list').attr('categoryId');
     let categoryHeading = $('#course-list').attr('categoryHeading');
-    needHelpFormValues['prd'] = categoryHeading
-    needHelpFormValues['product'] = categoryId
     
     // methods for sticky navigation
     $(window).on('scroll', function (e) {
@@ -33,6 +20,8 @@ $(document).ready(()=>{
 
     stickyNavbarActiveScroll()
     objectiveDivCollasedHeightSet()
+    callUsFormDataValidation()
+    indiaMobileValidator()
     
 
 })
@@ -122,86 +111,23 @@ const loadProduct = (el,type) => {
     })
 }
 
-const needHelpFormSubmit = () => {
-    checkError()
-    if (needHelpFormError)
-        return
-    needHelpFormValues.country = $('#country-code').val()
-    
-    $.post(`/lead/lead-management/`,needHelpFormValues,(data)=>{
-        gaEventFunc(needHelpFormValues.lsource,'success');
+const needHelpFormSubmit = (formData,lsource) => {
+    $.post(`/lead/lead-management/`,formData,(data)=>{
+        lsource[0] ? gaEventFunc(lsource[0].value,'success'):''
         Toast.fire({
             type: 'success',
             title: 'A callback will be arranged from executive'
         })
+        $("#callUsForm").find("input[type=text]").val("");
 	    
     }).fail(()=>{
-        gaEventFunc(needHelpFormValues.lsource,'failure');
+        lsource[0] ? gaEventFunc(lsource[0].value,'failure'):''
         Toast.fire({
             type: 'error',
             title: 'Something went wrong'
         })
     })
 
-}
-
-const checkError = () => {
-    for(key in needHelpFormValues){
-        value = needHelpFormValues[key]
-        switch(key){
-
-            case 'number':{
-                errorName = !value ? 'Required':value.length<4?'Min length is 4':value.length>16?'Max length is 15':''
-                errorName ? showError(key,errorName):()=>{} 
-                break
-            }
-            case 'email':{
-                errorName = !value ? 'Required':!isEmailValidation(value)?'Invalid Email':''
-                errorName ? showError(key,errorName):()=>{} 
-                break
-            }
-            case 'name':{
-                errorName = !value ? 'Required':value.length<2?'Min length is 2':value.length>51?'Max length is 50':''
-                errorName ? showError(key,errorName):()=>{} 
-                break
-            }
-            default:
-                break
-        }
-    }
-}
-
-//show error in DOM
-const showError = (id,errorName) =>{
-    needHelpFormError = true
-    let parent = $(`#${id}`).parent()
-    parent.children('.error-msg').text(errorName)
-    parent.children('.error-msg').removeClass('d-none')
-    parent.addClass('error') 
-}
-
-const removeError = (id) => {
-    needHelpFormError = false
-    let parent = $(`#${id}`).parent()
-    parent.children('.error-msg').addClass('d-none')
-    parent.removeClass('error') 
-}
-
-const updateValueFormInput = (el,id) => {
-    needHelpFormValues[`${id}`] =  $(el).val()
-    removeError(id)
-}
-
-//Validation functions
-const lengthValidation = (val,min,max)=>{
-    if(val.length>=min && val.length<=max)
-        return true
-    return false
-}
-
-const isEmailValidation = (email) => {
-    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
 }
 
 
@@ -283,14 +209,83 @@ const objectiveDivCollasedHeightSet = () => {
     let objectiveLiELements = $('.objective__list').find('li').slice(0,3);
     let totalWidth = 0
     for(el of objectiveLiELements){
-        console.log(el)
-        console.log($(el).outerHeight(true))
         totalWidth+=$(el).outerHeight(true)
     }
     $('.objective__list').css({'height':totalWidth})
     $('.objective__list').on('hidden.bs.collapse', function () {
         $(this).css({'height':totalWidth})
     })
-    console.log(totalWidth)
 }
 
+
+
+const callUsFormDataValidation = () => {
+
+    var callUsForm = $("#callUsForm");
+    callUsForm.validate({
+        errorClass:'error-msg',
+        rules: {
+            name: {
+                required: true,
+                maxlength: 100
+            },
+            email: {
+                required: true,
+                email:true,
+                maxlength: 100
+            },
+            number: {
+                required: true,
+                digits: true,
+                indiaMobile: true,
+                minlength: 4,
+                maxlength: 15,
+            },
+
+        },
+        messages: {
+            name: {
+                required: "Required",
+                maxlength: "Max length 100"
+            },
+            email: {
+                required: "Required",
+                email:'Not Email',
+                maxlength: "Max length 100"
+            },
+            number: {
+                required: "Required",
+                digits: "Only Digits",
+                indiaMobile: "10 digits only",
+                minlength: "Add atleast 4 digits",
+                maxlength: "Add less than 16 digits",
+
+            },
+        },
+        highlight: function(element, errorClass) {
+            $(element).parent().addClass('error') 
+        },
+        unhighlight: function(element, errorClass) {
+            $(element).parent().removeClass('error') 
+        },
+        // errorPlacement: errorPlacement,
+        submitHandler: function(form){
+            lsource =$(form).serializeArray().filter((el)=>{
+                if(el.name === 'lsource')
+                    return el;
+            })
+            var formData = $(form).serialize();
+            needHelpFormSubmit(formData,lsource)
+        }
+    });
+}
+
+const indiaMobileValidator = () => {
+    $.validator.addMethod("indiaMobile", function(value) {
+        var country_code = $('#country-code').val();
+        if(country_code == '91'){
+            return value.length == 10;
+        }
+        return true;
+    });
+}

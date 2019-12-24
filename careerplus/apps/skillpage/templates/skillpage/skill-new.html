@@ -558,64 +558,68 @@
 
       <!-- right container -->
       <div class="col-sm-3 sticky-mt">
-      <div class="sticky-right">
-        <!-- need help section -->
-        <section class="col-sm-12 padlr-0 pt-0">
-          <div class="need-help b4-form-bg">
-            <h2>Need help?</h2>
-            <form>
-              <div class="d-flex">
-                <div class="custom-select-box">
-                  <select name="select" class="custom-select" id="country-code">
-                    {% for country in country_choices %}
-                      <option value="{{country.0}}" {% if country.0 == '91' %} selected {% endif %}>
-                        +{{country.0}}&nbsp;&nbsp;&nbsp;&nbsp; -- &nbsp;&nbsp;&nbsp;&nbsp;{{country.1}}
-                      </option>
-                    {% endfor %}
-                  </select>
+        <div class="sticky-right" id="sticky-right">
+          <!-- need help section -->
+          <section class="col-sm-12 padlr-0 pt-0">
+            <div class="need-help b4-form-bg">
+              <h2>Need help?</h2>
+              <form id="callUsForm">
+                <div class="d-flex">
+                  <div class="custom-select-box">
+                    <select name="country" class="custom-select" id="country-code">
+                      {% for country in country_choices %}
+                        <option value="{{country.0}}" {% if country.0 == '91' %} selected {% endif %}>
+                          +{{country.0}}&nbsp;&nbsp;&nbsp;&nbsp; -- &nbsp;&nbsp;&nbsp;&nbsp;{{country.1}}
+                        </option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <input type="text" class="form-control input_field" id="number" name="number" 
+                        value="{{request.session.mobile_no|safe}}" placeholder="Mobile">
+                    <label for="mobile" class="input_label">Mobile</label>
+                  </div>
                 </div>
                 <div class="form-group">
-                  <input type="number" class="form-control input_field" id="number" 
-                      onchange="updateValueFormInput(this,'number')" placeholder="Mobile">
-                  <label for="mobile" class="input_label">Mobile</label>
-                  <span class="error-msg d-none">Required</span>
+                  <input type="text" class="form-control input_field" id="email" name="email"
+                      value="{{request.session.email}}" placeholder="Email">
+                  <label for="email" class="input_label">Email</label>   
                 </div>
-              </div>
-              <div class="form-group">
-                <input type="email" class="form-control input_field" id="email" 
-                     onchange="updateValueFormInput(this,'email')" placeholder="Email">
-                <label for="email" class="input_label">Email</label>   
-                <span class="error-msg d-none">Required</span>           
-              </div>
-              <div class="form-group">
-                <input type="text" class="form-control input_field" id="name" 
-                    onchange="updateValueFormInput(this,'name')" placeholder="Name">
-                <label for="name" class="input_label">Name</label>
-                <span class="error-msg d-none">Required</span>   
-              </div>
-              <button type="button" class="btn btn-block btn-primary" onclick="needHelpFormSubmit()">Submit</button>
-            </form>
-          </div>
-        </section>
-        <!-- also check section -->
-        {% if widget_obj_data %}
-          <section class="col-sm-12 padlr-0">
-            <div class="also-check">
-              <h2>{{widget_name}}</h2>
-              <ul class="also-check__list">
-                {% for obj in widget_obj_data %}
-                  <li><a href="{{obj.url}}">{{obj.name}}</a></li>
-                {% endfor %}
-                {% comment %} <li><a href="#">Online Marketing Jobs</a></li>
-                <li><a href="#">SEO Jobs</a></li>
-                <li><a href="#">Business Development Jobs</a></li>
-                <li><a href="#">Resume Format for Sales & Marketing Professionals</a></li> {% endcomment %}
-              </ul>
+                <div class="form-group">
+                  <input type="text" class="form-control input_field" id="name" name="name"
+                      value="{{request.session.full_name}}" placeholder="Name">
+                  <label for="name" class="input_label">Name</label>
+                </div>
+                <input type="hidden" name="lsource" value="1">
+                <input type="hidden" name="product" value="{{category.pk}}">
+                <input type="hidden" name="prd" value="{{category.heading}}">
+                <input type="hidden" name="path" value="{{category.get_absolute_url}}">
+                
+                <button type="submit" class="btn btn-block btn-primary">Submit</button>
+              </form>
             </div>
           </section>
-        {% endif %}
-        
-      </div>
+
+
+          <!-- also check section -->
+          {% if widget_obj_data %}
+            <section class="col-sm-12 padlr-0">
+              <div class="also-check">
+                <h2>{{widget_name}}</h2>
+                <ul class="also-check__list">
+                  {% for obj in widget_obj_data %}
+                    <li><a href="{{obj.url}}">{{obj.name}}</a></li>
+                  {% endfor %}
+                  {% comment %} <li><a href="#">Online Marketing Jobs</a></li>
+                  <li><a href="#">SEO Jobs</a></li>
+                  <li><a href="#">Business Development Jobs</a></li>
+                  <li><a href="#">Resume Format for Sales & Marketing Professionals</a></li> {% endcomment %}
+                </ul>
+              </div>
+            </section>
+          {% endif %}
+          
+        </div>
       </div>
       <!-- right container end -->
 

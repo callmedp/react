@@ -505,3 +505,9 @@ section {
     top: 6rem;
     z-index: 999;
 }
+
+.swal2-container{
+	z-index: 10000 !important;
+    background-color: #eeeeee !important;
+
+}
