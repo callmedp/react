@@ -82,7 +82,9 @@ class TestimonialModelForm(forms.ModelForm):
 
 
     def clean_user_name(self):
-        user_name = self.cleaned_data.get('user_name', '').strip()
+        user_name = self.cleaned_data.get('user_name', '')
+        user_name = user_name.strip() if user_name else ''  #remove extra spaces
+
         if not user_name:
             raise forms.ValidationError(
                 "This field is required.")
@@ -105,28 +107,34 @@ class TestimonialModelForm(forms.ModelForm):
         return file
 
     def clean_designation(self):
-        designation = self.cleaned_data.get('designation', '').strip()
+        designation = self.cleaned_data.get('designation', '')
+        designation = designation.strip() if designation else '' #remove extra spaces
         if designation and (len(designation) < 1 or len(designation) > 30):
             raise forms.ValidationError(
                 "Designation should be between 1-30 characters.")
         return designation
 
     def clean_company(self):
-        company = self.cleaned_data.get('company', '').strip()
+        company = self.cleaned_data.get('company', '')
+        company = company.strip() if company else ''
         if company and (len(company) < 1 or len(company) > 30):
             raise forms.ValidationError(
                 "Company should be between 1-30 characters.")
         return company
 
     def clean_title(self):
-        title = self.cleaned_data.get('title', '').strip()
+        title = self.cleaned_data.get('title', '')
+        title = title.strip() if title else ''
+
         if len(title) > 50:
             raise forms.ValidationError(
                 "Title should be between 1-50 characters.")
         return title
 
     def clean_review(self):
-        review = self.cleaned_data.get('review', '').strip()
+        review = self.cleaned_data.get('review', '')
+        review = review.strip() if review else ''
+
         if not review:
             raise forms.ValidationError(
                 "This field is required.")

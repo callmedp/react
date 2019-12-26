@@ -2,10 +2,12 @@
 let coursePageNo = 2,assessmentPageNo=2  //the page no starts form 2 cause 1st page is already loaded
 let pageSize = 5
 let categoryId = null
+let timeoutID = null
 
 
 $(document).ready(()=>{
     categoryId = $('#course-list').attr('categoryId');
+    let scrolltimer ;
     
     // methods for sticky navigation
     $(window).on('scroll', function (e) {
@@ -13,15 +15,20 @@ $(document).ready(()=>{
     })
 
     $('.sticky-nav .nav-link').click(function(){
+        timeoutID ? clearTimeout(timeoutID):''
+        stickyNavbarActiveScroll(false) //true argument is to start active scroll
         $('.sticky-nav .nav-link').removeClass('active');
         $(this).addClass('active');
+        timeoutID = setTimeout(() => {
+            stickyNavbarActiveScroll(true) //true argument is to start active scroll
+        }, 1000);
+
     })
 
-    stickyNavbarActiveScroll()
+    stickyNavbarActiveScroll(true) //true argument is to start active scroll
     objectiveDivCollasedHeightSet()
     callUsFormDataValidation()
     indiaMobileValidator()
-    
 
 })
 
@@ -168,7 +175,7 @@ const openMoreFAQ = () =>{
 }
 
 //Funtion used to set activate of sticky nav while scrolling
-const stickyNavbarActiveScroll = () => {
+const stickyNavbarActiveScroll = (startStickyActiveScroll) => {
     var topMenu = $("#navbarNav"),
     topMenuHeight = topMenu.outerHeight()+15,
     // All list items
@@ -178,10 +185,9 @@ const stickyNavbarActiveScroll = () => {
       var item = $($(this).attr("href"));
       if (item.length) { return item; }
     });
-
-    // Bind to scroll
-    $(window).scroll(function(){
-    // Get container scroll position
+    
+    var scrollHandler = () => {
+        // Get container scroll position
         let fromTop = $(this).scrollTop()+topMenuHeight;
 
         // Get id of current scroll item
@@ -198,8 +204,11 @@ const stickyNavbarActiveScroll = () => {
             let activeItem = menuItems.filter(`[href="#${id}"]`)
             activeItem.addClass("active");
         }
-        
-    })
+    }
+    // Bind to scroll
+    startStickyActiveScroll ? $(window).on('scroll',scrollHandler) : $(window).off('scroll')
+
+   
 }
 
 

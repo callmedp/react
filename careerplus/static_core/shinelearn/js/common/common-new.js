@@ -1,3 +1,5 @@
+let previous_tab = null
+
 $(document).ready(()=>{
     //typeahead for search box new skill page
     //Note: Add class search-box in search box 
