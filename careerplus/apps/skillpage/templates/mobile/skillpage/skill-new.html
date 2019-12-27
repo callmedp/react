@@ -352,6 +352,23 @@
         <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
         <script src="{% static 'shinelearn/js/mobile/skill/skill-page-new.js' %}"></script>
 
+        <script>
+            // JavaScript for label effects only
+                $(window).load(function(){
+                console.log("start")
+
+                    $(".input-effect input").focusout(function(){
+                        console.log("here")
+                    if($(this).val() != ""){
+                        $(this).addClass("has-content");
+                    }else{
+                        $(this).removeClass("has-content");
+                    }
+                })
+                });
+                
+        </script>
+
     {% endcompress %}
 {% endblock js_section %}
 

@@ -1,3 +1,4 @@
+{% load static compress %}
 {% block call_us_block %}
 
 <div class="stick_bottom enquire-cta">
@@ -74,4 +75,51 @@
         </div>
     </div>
 </div>
+
+<div class="new-enquire">
+    <div class="new-enquire__wrap">
+
+            <span>
+                <a href="#" class="close"></a>
+                <img src="{% static 'shinelearn/images/mobile/skill/enquire-now.jpg' %}">
+            </span>
+            <h2 class="new-enquire__wrap--head">Enquire now</h2>
+            <p class="new-enquire__wrap--subhead">Share your query, our experts will help you
+                take your career forward!</p>
+                <div class="new-login-form">
+                    <form>
+                        <ul>
+                            <li class="form-group input-effect">
+                                <input type="text" class="form--control animation-input" id="name" name="name" value="" placeholder="">
+                                <label for="name">Name</label>
+                                <span class="error--mgs"></span>
+                            </li>
+                            <li class="form-group d-flex">
+                                    <div class="input-effect code">
+                                        <input type="text" class="form--control animation-input" id="number" name="number" value="" placeholder="">
+                                        <label for="code-id">+91</label>
+                                        <span class="error--mgs"></span>
+                                    </div>
+                                    <div class="input-effect ml-auto number-w67 pr"> 
+                                        <input type="text" class="form--control animation-input" id="number" name="number" value="" placeholder="">
+                                        <label for="mobile-id">Mobile</label>
+                                        <span class="error--mgs"></span>
+                                    </div>
+                            </li>
+
+                            <li class="form-group input-effect">
+                                <input type="email" class="form--control animation-input" name="email" id="email-id" aria-describedby="email-id" placeholder="" value=" {% if neo_email %} {{ neo_email }} {% elif request.session.email%}{{request.session.email}}{% endif %}" {% if request.session.email or neo_email%} readonly {% endif %}>
+                                <label for="email-id">Email id</label>
+                                <span class="error--mgs"></span>
+                            </li>
+                            <li>
+                                <button class="btn btn-round btn-blue w100" type="submit">Submit</button>
+                            </li>
+
+                        </ul>
+                    </form>
+                </div>
+    </div>
+</div>
 {% endblock call_us_block %}
+
