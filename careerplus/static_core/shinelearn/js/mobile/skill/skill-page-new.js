@@ -1,14 +1,35 @@
 let coursePageNo = 2,assessmentPageNo=2  //the page no starts form 2 cause 1st page is already loaded
 let pageSize = 5
 let categoryId = null
+let timeoutID = null
+
 
 
 $(document).ready(()=>{
     //categoryid and heading form couse list attributes
     categoryId = $('#tab-bar').attr('categoryId');
-    stickyNavbarActiveScroll()
+
+    $('.scrollTo').click(function(e){
+        timeoutID ? clearTimeout(timeoutID):''
+        stickyNavbarActiveScroll(false) //false argument is to stop active scroll
+        var height = $('.sticky-header').height() + 10;
+        $('html, body').animate({
+            scrollTop: $( $(this).attr('href') ).offset().top - height
+        }, 500);
+    
+        e.stopPropagation();
+        $(".active").removeClass("active");
+        $(this).addClass("active");
+        timeoutID = setTimeout(() => {
+            stickyNavbarActiveScroll(true) //true argument is to start active scroll
+        }, 1500);   
+        return false;
+    });
+
+    stickyNavbarActiveScroll(true)
     indiaMobileValidator()
     callUsFormDataValidation()
+    
 })
 
 const changeTab = (setTabId,removeTabId) => {
@@ -92,7 +113,7 @@ const openMoreFAQ = () =>{
 
 
 //Funtion used to set activate of sticky nav while scrolling
-const stickyNavbarActiveScroll = () => {
+const stickyNavbarActiveScroll = (startStickyActiveScroll) => {
     var topMenu = $("#sticky-header"),
     topMenuHeight = topMenu.outerHeight()+15,
     // All list items
@@ -103,9 +124,11 @@ const stickyNavbarActiveScroll = () => {
       if (item.length) { return item; }
     });
 
-    // Bind to scroll
-    $(window).scroll(function(){
-    // Get container scroll position
+    var showStickyNavbarHandler = () =>{
+        $(this).scrollTop() > 10 ?  $('.sticky-header').addClass('fixed'): $('.sticky-header').removeClass('fixed');
+    }
+
+    var scrollHandler = () => {
         let fromTop = $(this).scrollTop()+topMenuHeight;
 
         // Get id of current scroll item
@@ -134,8 +157,12 @@ const stickyNavbarActiveScroll = () => {
                 scrollLeft: pos
             }, 0);
         }
-        
-    })
+
+    }
+
+     // Bind to scroll
+     startStickyActiveScroll ? $(window).on('scroll',scrollHandler) : $(window).off('scroll')
+     $(window).on('scroll',showStickyNavbarHandler)
 }
 
 const needHelpFormSubmit = (formData,lsource) => {

@@ -7,21 +7,15 @@ let timeoutID = null
 
 $(document).ready(()=>{
     categoryId = $('#course-list').attr('categoryId');
-    let scrolltimer ;
-    
-    // methods for sticky navigation
-    $(window).on('scroll', function (e) {
-        $('.sticky-nav')[$(window).scrollTop() >= 420 ? 'removeClass' : 'addClass']('sticky-none');
-    })
 
     $('.sticky-nav .nav-link').click(function(){
         timeoutID ? clearTimeout(timeoutID):''
-        stickyNavbarActiveScroll(false) //true argument is to start active scroll
+        stickyNavbarActiveScroll(false) //false argument is to stop active scroll
         $('.sticky-nav .nav-link').removeClass('active');
         $(this).addClass('active');
         timeoutID = setTimeout(() => {
             stickyNavbarActiveScroll(true) //true argument is to start active scroll
-        }, 1000);
+        }, 1500);
 
     })
 
@@ -185,6 +179,10 @@ const stickyNavbarActiveScroll = (startStickyActiveScroll) => {
       var item = $($(this).attr("href"));
       if (item.length) { return item; }
     });
+
+    var showStickyNavbarHandler = () =>{
+        $('.sticky-nav')[$(window).scrollTop() >= 420 ? 'removeClass' : 'addClass']('sticky-none');
+    }
     
     var scrollHandler = () => {
         // Get container scroll position
@@ -207,7 +205,7 @@ const stickyNavbarActiveScroll = (startStickyActiveScroll) => {
     }
     // Bind to scroll
     startStickyActiveScroll ? $(window).on('scroll',scrollHandler) : $(window).off('scroll')
-
+    $(window).on('scroll',showStickyNavbarHandler)
    
 }
 
