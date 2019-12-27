@@ -1,3 +1,20 @@
+/*
+Common function used in this file:
+1. navigationDropdownHelper => for the new header design to show proper dropdown on hover.
+2. Typeahaed :
+    a) typeAheadSource => create a bloodhound objeect with dataset for typeahead
+    b) attachTypeaheadElementDom => Attach typeahead feature to an element in dom.
+3. Toast => Sweetalert2 toast
+4. smoothScrolling => Smooth scrolling for an element to a particular div
+5. GA functions
+    a) get analytics script
+    b) ga event raise
+
+*/
+
+
+
+
 let previous_tab = null
 
 $(document).ready(()=>{
@@ -8,6 +25,9 @@ $(document).ready(()=>{
     
 })
 
+/*
+Navigation helper for new design
+*/
 const navigationDropdownHelper = () =>{
     //hover method for better navigation
     $('.category-tab .nav-tabs > li ').hover(function() {
@@ -27,6 +47,10 @@ const navigationDropdownHelper = () =>{
     });
 }
 
+
+/*
+Typeahead functions
+*/
 const typeAheadSource = (dataSet) =>{
     return new Bloodhound({
         datumTokenizer: Bloodhound.tokenizers.whitespace,
@@ -73,12 +97,32 @@ const Toast = Swal.mixin({
     timer: 3000
 });
 
+//smooth scrolling function
 const smoothScrolling = (id,extraOffset) => {
     extraOffset = extraOffset ? extraOffset : 0
     $('html, body').animate({
         scrollTop: $(`#${id}`).offset().top + extraOffset
     }, 'slow');
 }
+
+/*
+GA functions
+1. get analytics script
+2. ga event raise
+*/
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-3537905-41', 'auto', {'name': 'a'});
+    ga('a.send', 'pageview');
+    ga('create', 'UA-3537905-41', 'auto');
+    ga('send', 'pageview');
+
+const gaEvent = (event_cat,event_lab,event_action) =>{
+    ga('send', 'event', event_cat, event_action, event_lab);
+}
+
 
 
   

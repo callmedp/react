@@ -1,23 +1,23 @@
-{% extends "basic/base-inner.html" %}
+{% extends "basic/base-new.html" %}
 {% load static compress %}
 {% load shop_tags %}
 
 {% block head %}
-    <head>
+  <head>
     <title>{% block title %}Shine Learning{% endblock title%}</title>
+
     {% block meta_html %}
-      
     {% endblock meta_html %}
 
     {% block django_meta %}
     {% endblock django_meta %}
+
     {% block canonical_url %}
       <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
       <link rel="alternate" media="only screen and (maxwidth:640px)" href="https://{{ MOBILE_SITE_DOMAIN }}{{request.path}}">
       <link rel="alternate" media="handheld" href="https://{{ MOBILE_SITE_DOMAIN }}{{request.path}}">
     {% endblock canonical_url %}
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-
 
     {% block GA %}
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3537905-41"></script>
@@ -26,7 +26,8 @@
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
           {% if request.GET.itm_source or request.GET.itm_medium or request.GET.itm_campaign or request.GET.itm_content %}
-              gtag('config', 'UA-3537905-41' ,{'dimension1': '{{request.GET.itm_source}}','dimension2' : '{{request.GET.itm_medium}}','dimension3':  '{{request.GET.itm_campaign}}','dimension4':'{{request.GET.itm_content}}' });
+              gtag('config', 'UA-3537905-41' ,{'dimension1': '{{request.GET.itm_source}}','dimension2' : '{{request.GET.itm_medium}}'
+                ,'dimension3':  '{{request.GET.itm_campaign}}','dimension4':'{{request.GET.itm_content}}' });
           {% else%}
               gtag('config', 'UA-3537905-41');
           {%endif%}
@@ -35,594 +36,602 @@
     {% endblock GA %}
 
 
-{% block css_section %}
-  {{ block.super }}
-<!-- Bootstrap 4 -->
- {% compress css %}
-        <link type="text/scss" href="{% static 'shinelearn/css/common/bootstrap4/skill.scss' %}" rel="stylesheet">
- {% endcompress %}
+    {% block css_section %}
+      {{ block.super }}
+      <!-- Bootstrap 4 -->
+      {% compress css %}
+              <link type="text/scss" href="{% static 'shinelearn/css/common/bootstrap4/skill.scss' %}" rel="stylesheet">
+      {% endcompress %}
 
-{% endblock css_section %}
+    {% endblock css_section %}
+
     {% block banner_ads %}
         <script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>
         <script>
-        var googletag = googletag || {};
-        googletag.cmd = googletag.cmd || [];
-        </script>
-        <script>
-        googletag.cmd.push(function() {
-        googletag.defineSlot('/1198510/ShineLearning_1x1_desktop', [1, 1], 'div-gpt-ad-1509431221932-0').addService(googletag.pubads());
-        googletag.pubads().enableSingleRequest();
-        googletag.enableServices();
-        });
+          var googletag = googletag || {};
+          googletag.cmd = googletag.cmd || [];
+          </script>
+          <script>
+          googletag.cmd.push(function() {
+          googletag.defineSlot('/1198510/ShineLearning_1x1_desktop', [1, 1], 'div-gpt-ad-1509431221932-0').addService(googletag.pubads());
+          googletag.pubads().enableSingleRequest();
+          googletag.enableServices();
+          });
         </script>
     {% endblock banner_ads %}
-    {% block marketing_pixel %}
-        <!-- Google Tag Manager -->
-        <!--<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':-->
-        <!--new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],-->
-        <!--j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=-->
-        <!--'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);-->
-        <!--})(window,document,'script','dataLayer','GTM-M323HB');</script>-->
-        <!-- End Google Tag Manager -->
-    {% endblock marketing_pixel %}
-   {{ JS_SETTINGS|safe }}
-   </head>
+
+    {{ JS_SETTINGS|safe }}
+
+  </head>
    
 {% endblock head %} 
 
 
 {% block container %}
 
-<header class="b4-skillpage-bg">
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-9">
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb mt-40 mb-20">
-          {% for bread in breadcrumbs %}
-            {% if bread.url %}
-              <li class="breadcrumb-item"><a href="{{bread.url}}">{{bread.name}}</a></li>
-            {% else %}
-              <li class="breadcrumb-item active" aria-current="page">{{bread.name}}</li>
-            {% endif %}
-          {% endfor %}
-          </ol>
-        </nav>
+  <!-- Breadcrumbs and features -->
+  <header class="b4-skillpage-bg">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-9">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mt-40 mb-20">
+            {% for bread in breadcrumbs %}
+              {% if bread.url %}
+                <li class="breadcrumb-item"><a href="{{bread.url}}">{{bread.name}}</a></li>
+              {% else %}
+                <li class="breadcrumb-item active" aria-current="page">{{bread.name}}</li>
+              {% endif %}
+            {% endfor %}
+            </ol>
+          </nav>
 
-        <h1 class="white head-ht">{{category.name|title}} Courses & <br/>Certifications</h1>
+          <h1 class="white head-ht">{{category.name|title}} Courses & <br/>Certifications</h1>
 
-        <!-- Features of Skill Page -->
-        {% if 'features'|get_value:subheading %}
-          {% with features='features'|get_value:subheading %}
-            <div class="row mt-20 mb-20">
-              {% for item in  features.description|format_features%}
-                  <div class="col">
-                    <div class="media stats">
-                      <figure class="b4-icon-stats mr-20"></figure>
-                      <div class="media-body">
-                          {{item}}
+          <!-- Features of Skill Page -->
+          {% if 'features'|get_value:subheading %}
+            {% with features='features'|get_value:subheading %}
+              <div class="row mt-20 mb-20">
+                {% for item in  features.description|format_features%}
+                    <div class="col">
+                      <div class="media stats">
+                        <figure class="b4-icon-stats mr-20"></figure>
+                        <div class="media-body">
+                            {{item}}
+                        </div>
                       </div>
                     </div>
-                  </div>
-              {% endfor %}
-            </div>
-          {% endwith %}
-        {% endif %}
+                {% endfor %}
+              </div>
+            {% endwith %}
+          {% endif %}
 
+        </div>
       </div>
     </div>
-  </div>
-</header>
+  </header>
 
-<main>
-  <!-- sticky nav -->
-  <nav class="navbar navbar-expand-lg navbar-light shadow sticky-nav sticky-top sticky-none">
-    <div class="collapse navbar-collapse container" id="navbarNav">
-      <ul class="navbar-nav" >
-        <li class="nav-item active">
-          <a class="nav-link" href="#about">ABOUT</a>
-        </li>
-        {% if top_3_courses %}
-          <li class="nav-item">
-            <a class="nav-link" href="#popular-courses">Popular Courses</a>
+  <main>
+    <!-- sticky nav -->
+    <nav class="navbar navbar-expand-lg navbar-light shadow sticky-nav sticky-top sticky-none">
+      <div class="collapse navbar-collapse container" id="navbarNav">
+        <ul class="navbar-nav" >
+          <li class="nav-item active">
+            <a class="nav-link" href="#about">ABOUT</a>
           </li>
-        {% endif %}
-        {% if 'objective'|get_value:subheading %}
-          <li class="nav-item">
-            <a class="nav-link" href="#objective">Objective</a>
-          </li>
-        {% endif %}
-        {% if 'who-should-learn'|get_value:subheading %}
-          <li class="nav-item">
-            <a class="nav-link" href="#who-learn">Who should learn</a>
-          </li>
-        {% endif %}
-        {% if career_outcomes %}
-          <li class="nav-item">
-            <a class="nav-link" href="#skill-learn">SKills you learn</a>
-          </li>
-        {% endif %}
-        
-        <li class="nav-item">
-          <a class="nav-link" href="#impact">Our Impact</a>
-        </li>
-        {% if course_count or assesment_count %}
-          <li class="nav-item">
-            <a class="nav-link" href="#courseTab">Courses</a>
-          </li>
-        {% endif %}
-        
-        {% if testimonialcategory|length %}
-          <li class="nav-item">
-            <a class="nav-link" href="#testimonial">Testimonial</a>
-          </li>
-        {% endif %}
-        {% if 'faq'|get_value:subheading %}
-          <li class="nav-item">
-            <a class="nav-link" href="#faq">FAQ</a>
-          </li>
-        {% endif %}
-      </ul>
-    </div>
-  </nav>
-  <!-- sticky nav end -->
-  
-  <div class="container">
-    <div class="row">
-      <!-- left container -->
-      <div class="col-sm-9">
-        <div class="row">
-          <!-- about section -->
-          <section id="about" class="col-sm-12">
-            <div class="skill-about">
-              <h2>About {{category.name|title}}</h2>
-              <p id="expand-content" class="collapse" aria-expanded="false">
-                {% for description in  category.description|format_description%}
-                  {{description|safe}}
-                {% endfor %} 
-              </p>
-              <a role="button" class="collapsed" data-toggle="collapse" href="#expand-content" aria-expanded="false" aria-controls="expand-content"></a>
-            </div>
-          </section>
-
-          <!-- popular course section -->
           {% if top_3_courses %}
-            <section id="popular-courses" class="col-sm-12">
-              <div class="popular-course">
-                <div class="row">
-                  <h2>Popular courses</h2>
-                  <a class="btn btn-outline-primary ml-auto" onclick="smoothScrolling('courseTab',100)" role="button">View Courses</a>
-                  <div class="d-flex mb-10">
-                    {% for course in top_3_courses %}
-                      <div class="col">
-                        <div class="media">
-                          <figure class="mr-20 shadow-icon">
-                            <img aria-label="{{course.pNm}}" class="img-fluid" src="{{course.pImg}}" alt="{{course.pNm}}">
-                          </figure>
-                          <figcaption class="media-body">
-                              <a href="{{course.pURL}}">{{course.pNm}}</a>
-                          </figcaption>
+            <li class="nav-item">
+              <a class="nav-link" href="#popular-courses">Popular Courses</a>
+            </li>
+          {% endif %}
+          {% if 'objective'|get_value:subheading %}
+            <li class="nav-item">
+              <a class="nav-link" href="#objective">Objective</a>
+            </li>
+          {% endif %}
+          {% if 'who-should-learn'|get_value:subheading %}
+            <li class="nav-item">
+              <a class="nav-link" href="#who-learn">Who should learn</a>
+            </li>
+          {% endif %}
+          {% if career_outcomes %}
+            <li class="nav-item">
+              <a class="nav-link" href="#skill-learn">SKills you learn</a>
+            </li>
+          {% endif %}
+          
+          <li class="nav-item">
+            <a class="nav-link" href="#impact">Our Impact</a>
+          </li>
+          {% if course_count or assesment_count %}
+            <li class="nav-item">
+              <a class="nav-link" href="#courseTab">Courses</a>
+            </li>
+          {% endif %}
+          
+          {% if testimonialcategory|length %}
+            <li class="nav-item">
+              <a class="nav-link" href="#testimonial">Testimonial</a>
+            </li>
+          {% endif %}
+          {% if 'faq'|get_value:subheading %}
+            <li class="nav-item">
+              <a class="nav-link" href="#faq">FAQ</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+    <!-- sticky nav end -->
+    
+    <div class="container">
+      <div class="row">
+        <!-- left container -->
+        <div class="col-sm-9">
+          <div class="row">
+            <!-- about section -->
+            <section id="about" class="col-sm-12">
+              <div class="skill-about">
+                <h2>About {{category.name|title}}</h2>
+                <p id="expand-content" class="collapse" aria-expanded="false">
+                  {% for description in  category.description|format_description%}
+                    {{description|safe}}
+                  {% endfor %} 
+                </p>
+                <a role="button" class="collapsed" data-toggle="collapse" href="#expand-content" aria-expanded="false" 
+                    aria-controls="expand-content"></a>
+              </div>
+            </section>
+
+            <!-- popular course section -->
+            {% if top_3_courses %}
+              <section id="popular-courses" class="col-sm-12">
+                <div class="popular-course">
+                  <div class="row">
+                    <h2>Popular courses</h2>
+                    <a class="btn btn-outline-primary ml-auto" onclick="smoothScrolling('courseTab',100)" role="button">
+                      View Courses
+                    </a>
+                    <div class="d-flex mb-10">
+                      {% for course in top_3_courses %}
+                        <div class="col">
+                          <div class="media">
+                            <figure class="mr-20 shadow-icon">
+                              <img aria-label="{{course.pNm}}" class="img-fluid" src="{{course.pImg}}" alt="{{course.pNm}}">
+                            </figure>
+                            <figcaption class="media-body">
+                                <a href="{{course.pURL}}">{{course.pNm}}</a>
+                            </figcaption>
+                          </div>
+                        </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </section>
+            {% endif %}
+            
+
+            <!-- objective section -->
+            {% if 'objective'|get_value:subheading %}
+              {% with objective='objective'|get_value:subheading %}
+                <section id="objective" class="col-sm-12">
+                  <div class="objective">
+                    <h2>{{objective.heading}}</h2>
+                    {{objective.get_sub_heading_description_with_attr_ul_desktop|safe}}
+                      <a role="button" class="collapsed ml-15" data-toggle="collapse" href="#expand-list" aria-expanded="false"
+                         aria-controls="expand-list"></a>
+                  </div>
+                </section>
+              {% endwith %}
+            {% endif %}
+            
+
+            <!-- who should learn? section -->
+            {% if 'who-should-learn'|get_value:subheading %}
+              {% with who_should_learn='who-should-learn'|get_value:subheading %}
+              <section id="who-learn" class="col-sm-12">
+                <div class="who-should-learn">
+                  <h2>{{who_should_learn.heading}}</h2>
+                  {{who_should_learn.get_sub_heading_description_with_attr_ul_desktop|safe}}
+                </div>
+              </section>
+              {% endwith %}
+            {% endif %}
+
+            <!-- skills you will gain section -->
+            {% if career_outcomes %}
+              <section id="skill-learn" class="col-sm-12">
+                <div class="skill-gain">
+                  <h2>Skills you will gain</h2>
+                  <p class="mb-0 mt-30">
+                  {% for outcome in career_outcomes %}
+                    <span class="badge badge-pill badge-purple">{{outcome}}</span>
+                  {% endfor %}
+                  </p>
+                </div>
+              </section>
+            {% endif %}
+            
+
+            <!-- test your skills section -->
+            {% if category.assessment_test_count %}
+              <section class="col-sm-12">
+                <div class="test-skill">
+                  <img src="{% static 'shinelearn/images/test-skill.png' %}" class="img-fluid float-right" 
+                      alt="Test your skills">
+                  <h2>Test your skills</h2>
+                  <p>Take our free practice test to test your skill level in <strong>{{category.heading}}</strong></p>
+                  <a class="btn btn-primary mt-10" href="{% url 'assessment:vskill-subcategory' slug=category.slug  %}" 
+                      role="button">Take free test</a>
+                </div>
+              </section>
+            {% endif %}
+
+            <!-- our impact section -->
+            <section id="impact" class="col-sm-12">
+              <div class="our-impact">
+                <h2>Our Impact</h2>
+                <div class="row pt-10 mb-5">
+                  <div class="col-sm-4">
+                    <div class="media align-items-center">
+                      <figure class="b4-icon-impact1 mr-20"></figure>
+                      <figcaption class="media-body">
+                          <strong>50K+</strong>
+                          Registered learners 
+                      </figcaption>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="media align-items-center">
+                      <figure class="b4-icon-impact1 mr-20"></figure>
+                      <figcaption class="media-body">
+                          <strong>250K+</strong>
+                          <a href="#"><strong>Courses</strong> available</a>
+                      </figcaption>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="media align-items-center">
+                      <figure class="b4-icon-impact1 mr-20"></figure>
+                      <figcaption class="media-body">
+                          <strong>5K+</strong>
+                          <span class="">Digital markt.</span> 
+                          <a href="#"><strong>jobs at shine</strong></a>
+                      </figcaption>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- courses assesments tab section -->
+            <section class="col-sm-12" id="courseTab">
+              <div class="courses-assesment-tab">
+                <ul class="nav nav-tabs"  role="tablist">
+                  {% if course_count %}
+                    <li class="nav-item">
+                      <a class="nav-link active" id="courses-tab" data-toggle="tab" href="#courses" role="tab" 
+                          aria-controls="courses" aria-selected="true">
+                        <h2>Courses ({{course_count}})</h2>
+                      </a>
+                    </li>
+                  {% endif %}
+                  {% if assesment_count %}
+                    <li class="nav-item">
+                      <a class="nav-link  {% if not course_count %}active{% endif %}" id="assessments-tab" 
+                          data-toggle="tab" href="#assessments" role="tab" aria-controls="assessments" aria-selected="false">
+                        <h2>Assessments ({{assesment_count}})</h2>
+                      </a>
+                    </li>
+                  {% endif %}
+                  
+                </ul>
+                <div class="tab-content listing" id="myTabContent">
+                  <div class="tab-pane fade show active" id="courses" role="tabpanel" aria-labelledby="courses-tab">
+                      {% comment %}Note: Catergory id and heading is used in lead management and 
+                          for receiving products for used as an attribute here {% endcomment %}
+                      <ul class="list-unstyled" id="course-list" categoryId="{{category.pk}}" categoryHeading={{category.heading}}>  
+                        {% for course in courses %}
+                          <li class="media listing__list">
+                            <figure class="listing__image">
+                                <img aria-label="{{course.pNm}}" class="img-fluid" src="{{course.pImg}}" alt="{{course.pNm}}">
+                            </figure>
+                            
+                            <div class="media-body">
+                              <h3><a href="{{course.pURL}}">{{course.pNm}}</a></h3>
+                                <div class="rating">
+                                  {% for rating in course.pStar %}
+                                    {% if rating == "*" %}
+                                      <i class="b4-icon-star"></i>
+                                    {% elif rating == "+" %}
+                                      <i class="b4-icon-star"></i>
+                                    {% elif rating == "-" %}
+                                      <i class="b4-icon-star-blank"></i>
+                                    {% endif %}
+                                  {% endfor %}
+                                  <span class="rating__output">{{course.pARx|floatformat:1}}/5</span>
+                                </div>
+
+                                {% if course.pStM %}
+                                  <div class="mode mr-30">
+                                    Mode 
+                                    {% for mode in course.pStM %}
+                                      <span class="mode__name">
+                                        {{mode|get_value:product_mode_choices}} 
+                                      </span>
+                                    {% endfor %}  
+                                  </div>
+                                {% endif %}
+                                
+                                {% if course.pPvn %}
+                                  <div class="provider">
+                                    Provider 
+                                    <span class="provider__name">
+                                        {{course.pPvn}}
+                                    </span>
+                                  </div>
+                                
+                                {% endif %}
+                            </div>
+
+                            <div class="mr-auto courses">
+                              <strong class="courses__price">Rs. {{ course.pPin |floatformat:'0' }}/-</strong>
+                            </div>
+
+                            {% if course.pTg == 1 %}
+                              <div class="course-tag">
+                                <span class="course-tag__best">Bestseller</span>
+                              </div>
+                            {% elif course.pTg == 2  %}
+                              <div class="course-tag">
+                                <span class="course-tag__new">Newly Added</span>
+                              </div>
+                            {% endif %}
+                            
+                          </li>
+                        {% endfor %}
+                      </ul>
+                      {% comment %} Show load more only if course count>5{% endcomment %}
+                      {% if course_count > 5 %} 
+                        <div class="d-flex justify-content-center mt-40 mb-30">
+                          <a class="btn btn-outline-primary" onclick="loadProduct(this,'course')" role="button">
+                            Load more courses
+                          </a>
+                        </div>
+                      {% endif %}
+                      
+                  </div>
+                  <div class="tab-pane fade" id="assessments" role="tabpanel" aria-labelledby="assessments-tab">
+                      <ul class="list-unstyled" id="assessment-list">
+                        {% for assesment in assesments %}
+                          <li class="media listing__list">
+                            <figure class="listing__image">
+                                <img aria-label="{{assesment.pNm}}" class="img-fluid" src="{{assesment.pImg}}" 
+                                    alt="{{assesment.pNm}}">
+                            </figure>
+                            
+                            <div class="media-body">
+                              <h3><a href="{{assesment.pURL}}">{{assesment.pNm}}</a></h3>
+                                <div class="rating">
+                                  {% for rating in assesment.pStar %}
+                                    {% if rating == "*" %}
+                                      <i class="b4-icon-star"></i>
+                                    {% elif rating == "+" %}
+                                      {% comment %} <i class="b4-icon-star"></i> {% endcomment %}
+                                    {% elif rating == "*" %}
+                                      <i class="b4-icon-star-blank"></i>
+                                    {% endif %}
+                                  {% endfor %}
+                                  <span class="rating__output">{{assesment.pARx|floatformat:1}}/5</span>
+                                </div>
+
+                                {% if assesment.pStM %}
+                                  <div class="mode mr-30">
+                                    Mode 
+                                    {% for mode in assesment.pStM %}
+                                      <span class="mode__name">
+                                        {{mode|get_value:product_mode_choices}}
+                                      </span>
+                                    {% endfor %}  
+                                  </div>
+                                {% endif %}
+                                
+                                {% if assesment.pPvn %}
+                                  <div class="provider">
+                                    Provider 
+                                    <span class="provider__name">
+                                        {{assesment.pPvn}}
+                                    </span>
+                                  </div>
+                                
+                                {% endif %}
+                                
+                            </div>
+
+                            <div class="mr-auto courses">
+                              <strong class="courses__price">Rs. {{ assesment.pPin |floatformat:'0' }}/-</strong>
+                            </div>
+
+                            {% if course.pTg == 1 %}
+                              <div class="course-tag">
+                                <span class="course-tag__best">Bestseller</span>
+                              </div>
+                            {% elif course.pTg == 2  %}
+                              <div class="course-tag">
+                                <span class="course-tag__new">Newly Added</span>
+                              </div>
+                            {% endif %}
+                          </li>
+                        {% endfor %}
+                      </ul>
+                      {% comment %} Show load more only if assessment count>5{% endcomment %}
+                      {% if assesment_count > 5 %} 
+                        <div class="d-flex justify-content-center mt-40 mb-30">
+                          <a class="btn btn-outline-primary" onclick="loadProduct(this,'assesment')" role="button">
+                            Load more assesments
+                          </a>
+                        </div>
+                      {% endif %}
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {% if testimonialcategory|length %}
+              <!-- learners stories section -->
+              <section id="testimonial" class="col-sm-12">
+                <h2>Learners stories</h2>
+                <div id="carouselExampleCaptions" class="carousel slide learner-stories" data-ride="carousel">
+                  <div class="carousel-inner">
+                    {% for testimonialsubgroup in  testimonialcategory|divide_testimonial_category_group_list_of_lists%}
+                      <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
+                        <div class="d-flex">
+                          {% for obj in testimonialsubgroup %}
+                            {% if obj %}
+                              <div class="col-sm-4">
+                                <div class="card text-center">
+                                  <div class="card__heading">
+                                    {{obj.testimonial.user_name|get_initials}}
+                                  </div>
+                                  <div class="card-body">
+                                    <p class="card-text">
+                                      {{obj.testimonial.review}}
+                                    </p>
+                                  </div>
+                                  <p class="card__name">
+                                    <strong>{{obj.testimonial.user_name}}</strong>
+                                    {{obj.testimonial.designation}},{{obj.testimonial.company}}
+                                  </p>
+                                </div>
+                              </div>
+                            {% endif %}
+                          {% endfor %}
                         </div>
                       </div>
                     {% endfor %}
                   </div>
-                </div>
-              </div>
-            </section>
-          {% endif %}
-          
-
-          <!-- objective section -->
-          {% if 'objective'|get_value:subheading %}
-            {% with objective='objective'|get_value:subheading %}
-              <section id="objective" class="col-sm-12">
-                <div class="objective">
-                  <h2>{{objective.heading}}</h2>
-                  {{objective.get_sub_heading_description_with_attr_ul_desktop|safe}}
-                    <a role="button" class="collapsed ml-15" data-toggle="collapse" href="#expand-list" aria-expanded="false" aria-controls="expand-list"></a>
+                  <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+                    <span class="carousel-control-icon" aria-hidden="true"><figure class="b4-icon-prev"></figure></span>
+                  </a>
+                  <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
+                    <span class="carousel-control-icon" aria-hidden="true"><figure class="b4-icon-next"></figure></span>
+                  </a>
                 </div>
               </section>
-            {% endwith %}
-          {% endif %}
-          
+            {% endif %} 
 
-          <!-- who should learn? section -->
-          {% if 'who-should-learn'|get_value:subheading %}
-            {% with who_should_learn='who-should-learn'|get_value:subheading %}
-            <section id="who-learn" class="col-sm-12">
-              <div class="who-should-learn">
-                <h2>{{who_should_learn.heading}}</h2>
-                {{who_should_learn.get_sub_heading_description_with_attr_ul_desktop|safe}}
-              </div>
-            </section>
-            {% endwith %}
-          {% endif %}
+            <!-- faq section -->
+            {% if 'faq'|get_value:subheading %}
+              {% with faq='faq'|get_value:subheading %}
+                <section id="faq" class="col-sm-12">
+                  <div class="faq">
+                    <h2>{{faq.heading}}</h2>
+                    {% with faq_list=faq.description|get_faq_list %}
+                      <div class="accordion" id="faq-accordion">
+                        {% for item in faq_list %}
+                          <div class="card {% if forloop.counter > 2%}d-none{% endif %}">
+                            <div class="card__question" id="heading{{ forloop.counter }}">
+                              <button class="btn {% if forloop.counter > 1 %}collapsed{% endif %}" type="button" 
+                                  data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" 
+                                  aria-expanded="{% if forloop.counter > 1%}false{% else %}true{% endif %}"
+                                  aria-controls="collapse{{ forloop.counter }}">
 
-          <!-- skills you will gain section -->
-          {% if career_outcomes %}
-            <section id="skill-learn" class="col-sm-12">
-              <div class="skill-gain">
-                <h2>Skills you will gain</h2>
-                <p class="mb-0 mt-30">
-                {% for outcome in career_outcomes %}
-                  <span class="badge badge-pill badge-purple">{{outcome}}</span>
-                {% endfor %}
-                </p>
-              </div>
-            </section>
-          {% endif %}
-          
-
-          <!-- test your skills section -->
-          {% if category.assessment_test_count %}
-            <section class="col-sm-12">
-              <div class="test-skill">
-                <img src="{% static 'shinelearn/images/test-skill.png' %}" class="img-fluid float-right" alt="Test your skills">
-                <h2>Test your skills</h2>
-                <p>Take our free practice test to test your skill level in <strong>{{category.heading}}</strong></p>
-                <a class="btn btn-primary mt-10" href="{% url 'assessment:vskill-subcategory' slug=category.slug  %}" role="button">Take free test</a>
-              </div>
-            </section>
-          {% endif %}
-
-          <!-- our impact section -->
-          <section id="impact" class="col-sm-12">
-            <div class="our-impact">
-              <h2>Our Impact</h2>
-              <div class="row pt-10 mb-5">
-                <div class="col-sm-4">
-                  <div class="media align-items-center">
-                    <figure class="b4-icon-impact1 mr-20"></figure>
-                    <figcaption class="media-body">
-                        <strong>50K+</strong>
-                        Registered learners 
-                    </figcaption>
-                  </div>
-                </div>
-                <div class="col-sm-4">
-                  <div class="media align-items-center">
-                    <figure class="b4-icon-impact1 mr-20"></figure>
-                    <figcaption class="media-body">
-                        <strong>250K+</strong>
-                        <a href="#"><strong>Courses</strong> available</a>
-                    </figcaption>
-                  </div>
-                </div>
-                <div class="col-sm-4">
-                  <div class="media align-items-center">
-                    <figure class="b4-icon-impact1 mr-20"></figure>
-                    <figcaption class="media-body">
-                        <strong>5K+</strong>
-                        <span class="">Digital markt.</span> <a href="#"><strong>jobs at shine</strong></a>
-                    </figcaption>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- courses assesments tab section -->
-          <section class="col-sm-12" id="courseTab">
-            <div class="courses-assesment-tab">
-              <ul class="nav nav-tabs"  role="tablist">
-                {% if course_count %}
-                  <li class="nav-item">
-                    <a class="nav-link active" id="courses-tab" data-toggle="tab" href="#courses" role="tab" aria-controls="courses" aria-selected="true">
-                      <h2>Courses ({{course_count}})</h2>
-                    </a>
-                  </li>
-                {% endif %}
-                {% if assesment_count %}
-                  <li class="nav-item">
-                    <a class="nav-link  {% if not course_count %}active{% endif %}" id="assessments-tab" data-toggle="tab" href="#assessments" role="tab" aria-controls="assessments" aria-selected="false">
-                      <h2>Assessments ({{assesment_count}})</h2>
-                    </a>
-                  </li>
-                {% endif %}
-                
-              </ul>
-              <div class="tab-content listing" id="myTabContent">
-                <div class="tab-pane fade show active" id="courses" role="tabpanel" aria-labelledby="courses-tab">
-                    {% comment %}Note: Catergory id and heading is used in lead management and for receiving products for used as an attribute here {% endcomment %}
-                    <ul class="list-unstyled" id="course-list" categoryId="{{category.pk}}" categoryHeading={{category.heading}}>  
-                      {% for course in courses %}
-                        <li class="media listing__list">
-                          <figure class="listing__image">
-                              <img aria-label="{{course.pNm}}" class="img-fluid" src="{{course.pImg}}" alt="{{course.pNm}}">
-                          </figure>
-                          
-                          <div class="media-body">
-                            <h3><a href="{{course.pURL}}">{{course.pNm}}</a></h3>
-                              <div class="rating">
-                                {% for rating in course.pStar %}
-                                  {% if rating == "*" %}
-                                    <i class="b4-icon-star"></i>
-                                  {% elif rating == "+" %}
-                                    <i class="b4-icon-star"></i>
-                                  {% elif rating == "-" %}
-                                    <i class="b4-icon-star-blank"></i>
-                                  {% endif %}
-                                {% endfor %}
-                                <span class="rating__output">{{course.pARx|floatformat:1}}/5</span>
-                              </div>
-
-                              {% if course.pStM %}
-                                <div class="mode mr-30">
-                                  Mode 
-                                  {% for mode in course.pStM %}
-                                    <span class="mode__name">
-                                      {{mode|get_value:product_mode_choices}} 
-                                    </span>
-                                  {% endfor %}  
-                                </div>
-                              {% endif %}
-                              
-                              {% if course.pPvn %}
-                                <div class="provider">
-                                  Provider 
-                                  <span class="provider__name">
-                                      {{course.pPvn}}
-                                  </span>
-                                </div>
-                              
-                              {% endif %}
-                          </div>
-
-                          <div class="mr-auto courses">
-                            <strong class="courses__price">Rs. {{ course.pPin |floatformat:'0' }}/-</strong>
-                          </div>
-
-                          {% if course.pTg == 1 %}
-                            <div class="course-tag">
-                              <span class="course-tag__best">Bestseller</span>
+                                {{item.heading|safe}}
+                              </button>
                             </div>
-                          {% elif course.pTg == 2  %}
-                            <div class="course-tag">
-                              <span class="course-tag__new">Newly Added</span>
-                            </div>
-                          {% endif %}
-                          
-                        </li>
-                      {% endfor %}
-                    </ul>
-                    {% comment %} Show load more only if course count>5{% endcomment %}
-                    {% if course_count > 5 %} 
-                      <div class="d-flex justify-content-center mt-40 mb-30">
-                        <a class="btn btn-outline-primary" onclick="loadProduct(this,'course')" role="button">Load more courses</a>
-                      </div>
-                    {% endif %}
-                    
-                </div>
-                <div class="tab-pane fade" id="assessments" role="tabpanel" aria-labelledby="assessments-tab">
-                    <ul class="list-unstyled" id="assessment-list">
-                      {% for assesment in assesments %}
-                        <li class="media listing__list">
-                          <figure class="listing__image">
-                              <img aria-label="{{assesment.pNm}}" class="img-fluid" src="{{assesment.pImg}}" alt="{{assesment.pNm}}">
-                          </figure>
-                          
-                          <div class="media-body">
-                            <h3><a href="{{assesment.pURL}}">{{assesment.pNm}}</a></h3>
-                              <div class="rating">
-                                {% for rating in assesment.pStar %}
-                                  {% if rating == "*" %}
-                                    <i class="b4-icon-star"></i>
-                                  {% elif rating == "+" %}
-                                    {% comment %} <i class="b4-icon-star"></i> {% endcomment %}
-                                  {% elif rating == "*" %}
-                                    <i class="b4-icon-star-blank"></i>
-                                  {% endif %}
-                                {% endfor %}
-                                <span class="rating__output">{{assesment.pARx|floatformat:1}}/5</span>
-                              </div>
-
-                              {% if assesment.pStM %}
-                                <div class="mode mr-30">
-                                  Mode 
-                                  {% for mode in assesment.pStM %}
-                                    <span class="mode__name">
-                                      {{mode|get_value:product_mode_choices}}
-                                    </span>
-                                  {% endfor %}  
-                                </div>
-                              {% endif %}
-                              
-                              {% if assesment.pPvn %}
-                                <div class="provider">
-                                  Provider 
-                                  <span class="provider__name">
-                                      {{assesment.pPvn}}
-                                  </span>
-                                </div>
-                              
-                              {% endif %}
-                              
-                          </div>
-
-                          <div class="mr-auto courses">
-                            <strong class="courses__price">Rs. {{ assesment.pPin |floatformat:'0' }}/-</strong>
-                          </div>
-
-                          {% if course.pTg == 1 %}
-                            <div class="course-tag">
-                              <span class="course-tag__best">Bestseller</span>
-                            </div>
-                          {% elif course.pTg == 2  %}
-                            <div class="course-tag">
-                              <span class="course-tag__new">Newly Added</span>
-                            </div>
-                          {% endif %}
-                        </li>
-                      {% endfor %}
-                    </ul>
-                    {% comment %} Show load more only if assessment count>5{% endcomment %}
-                    {% if assesment_count > 5 %} 
-                      <div class="d-flex justify-content-center mt-40 mb-30">
-                        <a class="btn btn-outline-primary" onclick="loadProduct(this,'assesment')" role="button">Load more assesments</a>
-                      </div>
-                    {% endif %}
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {% if testimonialcategory|length %}
-            <!-- learners stories section -->
-            <section id="testimonial" class="col-sm-12">
-              <h2>Learners stories</h2>
-              <div id="carouselExampleCaptions" class="carousel slide learner-stories" data-ride="carousel">
-                <div class="carousel-inner">
-                  {% for testimonialsubgroup in  testimonialcategory|divide_testimonial_category_group_list_of_lists%}
-                    <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
-                      <div class="d-flex">
-                        {% for obj in testimonialsubgroup %}
-                          {% if obj %}
-                            <div class="col-sm-4">
-                              <div class="card text-center">
-                                <div class="card__heading">
-                                  {{obj.testimonial.user_name|get_initials}}
-                                </div>
-                                <div class="card-body">
-                                  <p class="card-text">
-                                    {{obj.testimonial.review}}
-                                  </p>
-                                </div>
-                                <p class="card__name">
-                                  <strong>{{obj.testimonial.user_name}}</strong>
-                                  {{obj.testimonial.designation}},{{obj.testimonial.company}}
-                                </p>
+                        
+                            <div id="collapse{{ forloop.counter }}" class="collapse {% if forloop.counter == 1%}show{% endif %}" 
+                              aria-labelledby="heading{{ forloop.counter }}" data-parent="#faq-accordion">
+                              <div class="card-body card__answer">
+                                {{item.content|safe}}
                               </div>
                             </div>
-                          {% endif %}
+                          </div>
                         {% endfor %}
                       </div>
-                    </div>
-                  {% endfor %}
-                </div>
-                <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
-                  <span class="carousel-control-icon" aria-hidden="true"><figure class="b4-icon-prev"></figure></span>
-                </a>
-                <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
-                  <span class="carousel-control-icon" aria-hidden="true"><figure class="b4-icon-next"></figure></span>
-                </a>
-              </div>
-            </section>
-          {% endif %} 
+                      {% if faq_list|length > 2 %}
+                        <div class="d-flex justify-content-center mt-30">
+                        <a class="btn btn-outline-primary" onclick="openMoreFAQ()" id="more-faq" role="button">More FAQs</a>
+                      </div>
+                      {% endif %} 
+                    {% endwith %}
+                  </div>
+                </section>
+              {% endwith %}
+            {% endif %}
+            
 
-          <!-- faq section -->
-          {% if 'faq'|get_value:subheading %}
-            {% with faq='faq'|get_value:subheading %}
-              <section id="faq" class="col-sm-12">
-                <div class="faq">
-                  <h2>{{faq.heading}}</h2>
-                  {% with faq_list=faq.description|get_faq_list %}
-                    <div class="accordion" id="faq-accordion">
-                      {% for item in faq_list %}
-                        <div class="card {% if forloop.counter > 2%}d-none{% endif %}">
-                          <div class="card__question" id="heading{{ forloop.counter }}">
-                            <button class="btn {% if forloop.counter > 1 %}collapsed{% endif %}" type="button" data-toggle="collapse"
-                              data-target="#collapse{{ forloop.counter }}" aria-expanded="{% if forloop.counter > 1%}false{% else %}true{% endif %}"
-                              aria-controls="collapse{{ forloop.counter }}">
-                              {{item.heading|safe}}
-                            </button>
-                          </div>
-                      
-                          <div id="collapse{{ forloop.counter }}" class="collapse {% if forloop.counter == 1%}show{% endif %}" 
-                            aria-labelledby="heading{{ forloop.counter }}" data-parent="#faq-accordion">
-                            <div class="card-body card__answer">
-                              {{item.content|safe}}
-                            </div>
-                          </div>
-                        </div>
-                      {% endfor %}
-                    </div>
-                    {% if faq_list|length > 2 %}
-                      <div class="d-flex justify-content-center mt-30">
-                      <a class="btn btn-outline-primary" onclick="openMoreFAQ()" id="more-faq" role="button">More FAQs</a>
-                    </div>
-                    {% endif %} 
-                  {% endwith %}
-                </div>
-              </section>
-            {% endwith %}
-          {% endif %}
-          
-
+          </div>
         </div>
-      </div>
-      <!-- left container end -->
+        <!-- left container end -->
 
-      <!-- right container -->
-      <div class="col-sm-3 sticky-mt">
-        <div class="sticky-right" id="sticky-right">
-          <!-- need help section -->
-          <section class="col-sm-12 padlr-0 pt-0">
-            <div class="need-help b4-form-bg">
-              <h2>Need help?</h2>
-              <form id="callUsForm">
-                <div class="d-flex">
-                  <div class="custom-select-box">
-                    <select name="country" class="custom-select" id="country-code">
-                      {% for country in country_choices %}
-                        <option value="{{country.0}}" {% if country.0 == '91' %} selected {% endif %}>
-                          +{{country.0}}&nbsp;&nbsp;&nbsp;&nbsp; -- &nbsp;&nbsp;&nbsp;&nbsp;{{country.1}}
-                        </option>
-                      {% endfor %}
-                    </select>
+        <!-- right container -->
+        <div class="col-sm-3 sticky-mt">
+          <div class="sticky-right" id="sticky-right">
+            <!-- need help section -->
+            <section class="col-sm-12 padlr-0 pt-0">
+              <div class="need-help b4-form-bg">
+                <h2>Need help?</h2>
+                <form id="callUsForm">
+                  <div class="d-flex">
+                    <div class="custom-select-box">
+                      <select name="country" class="custom-select" id="country-code">
+                        {% for country in country_choices %}
+                          <option value="{{country.0}}" {% if country.0 == '91' %} selected {% endif %}>
+                            +{{country.0}}&nbsp;&nbsp;&nbsp;&nbsp; -- &nbsp;&nbsp;&nbsp;&nbsp;{{country.1}}
+                          </option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <input type="text" class="form-control input_field" id="number" name="number" 
+                          value="{{request.session.mobile_no|safe}}" placeholder="Mobile">
+                      <label for="mobile" class="input_label">Mobile</label>
+                    </div>
                   </div>
                   <div class="form-group">
-                    <input type="text" class="form-control input_field" id="number" name="number" 
-                        value="{{request.session.mobile_no|safe}}" placeholder="Mobile">
-                    <label for="mobile" class="input_label">Mobile</label>
+                    <input type="text" class="form-control input_field" id="email" name="email"
+                        value="{{request.session.email}}" placeholder="Email">
+                    <label for="email" class="input_label">Email</label>   
                   </div>
-                </div>
-                <div class="form-group">
-                  <input type="text" class="form-control input_field" id="email" name="email"
-                      value="{{request.session.email}}" placeholder="Email">
-                  <label for="email" class="input_label">Email</label>   
-                </div>
-                <div class="form-group">
-                  <input type="text" class="form-control input_field" id="name" name="name"
-                      value="{{request.session.full_name}}" placeholder="Name">
-                  <label for="name" class="input_label">Name</label>
-                </div>
-                <input type="hidden" name="lsource" value="1">
-                <input type="hidden" name="product" value="{{category.pk}}">
-                <input type="hidden" name="prd" value="{{category.heading}}">
-                <input type="hidden" name="path" value="{{category.get_absolute_url}}">
-                
-                <button type="submit" class="btn btn-block btn-primary">Submit</button>
-              </form>
-            </div>
-          </section>
-
-
-          <!-- also check section -->
-          {% if widget_obj_data %}
-            <section class="col-sm-12 padlr-0">
-              <div class="also-check">
-                <h2>{{widget_name}}</h2>
-                <ul class="also-check__list">
-                  {% for obj in widget_obj_data %}
-                    <li><a href="{{obj.url}}">{{obj.name}}</a></li>
-                  {% endfor %}
-                  {% comment %} <li><a href="#">Online Marketing Jobs</a></li>
-                  <li><a href="#">SEO Jobs</a></li>
-                  <li><a href="#">Business Development Jobs</a></li>
-                  <li><a href="#">Resume Format for Sales & Marketing Professionals</a></li> {% endcomment %}
-                </ul>
+                  <div class="form-group">
+                    <input type="text" class="form-control input_field" id="name" name="name"
+                        value="{{request.session.full_name}}" placeholder="Name">
+                    <label for="name" class="input_label">Name</label>
+                  </div>
+                  <input type="hidden" name="lsource" value="1">
+                  <input type="hidden" name="product" value="{{category.pk}}">
+                  <input type="hidden" name="prd" value="{{category.heading}}">
+                  <input type="hidden" name="path" value="{{category.get_absolute_url}}">
+                  
+                  <button type="submit" class="btn btn-block btn-primary">Submit</button>
+                </form>
               </div>
             </section>
-          {% endif %}
-          
-        </div>
-      </div>
-      <!-- right container end -->
 
+
+            <!-- also check section -->
+            {% if widget_obj_data %}
+              <section class="col-sm-12 padlr-0">
+                <div class="also-check">
+                  <h2>{{widget_name}}</h2>
+                  <ul class="also-check__list">
+                    {% for obj in widget_obj_data %}
+                      <li><a href="{{obj.url}}">{{obj.name}}</a></li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </section>
+            {% endif %}
+            
+          </div>
+        </div>
+        <!-- right container end -->
+
+      </div>
     </div>
-  </div>
-</main>
+  </main>
 
 {% endblock container %}
 

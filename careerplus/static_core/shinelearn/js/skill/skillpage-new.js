@@ -1,8 +1,22 @@
+/*
+Following Funtions are used in skill page desktop
+    1. loadProduct => load courses or assesment in skill page
+    2. needHelpFormSubmit => helper function to submit need help form response
+    3. openMoreFAQ => to show faq is cound is more than 2
+    4. stickyNavbarActiveScroll => used to make sticky navbar active in its elements while scrolling
+    5. objectiveDivCollasedHeightSet => set dynmically height of objective div to show just 3 items.
+    6. needHelpFormValidation => validate the need help form using jquery validate
+    7. indiaMobileValidator =>  To add a new validation rules of indian mobile no in jquery validate
+    8. gaEventFunc => gaEvent function for enquiry form
 
+*/
+
+
+//global variable used in this js file
 let coursePageNo = 2,assessmentPageNo=2  //the page no starts form 2 cause 1st page is already loaded
-let pageSize = 5
-let categoryId = null
-let timeoutID = null
+let pageSize = 5  //get only 5 products in every api resonse to load product
+let categoryId = null  // for load product fucntion
+let timeoutID = null  // store the setimeout id
 
 
 $(document).ready(()=>{
@@ -21,7 +35,7 @@ $(document).ready(()=>{
 
     stickyNavbarActiveScroll(true) //true argument is to start active scroll
     objectiveDivCollasedHeightSet()
-    callUsFormDataValidation()
+    needHelpFormValidation()
     indiaMobileValidator()
 
 })
@@ -111,6 +125,7 @@ const loadProduct = (el,type) => {
     })
 }
 
+// submit need help form
 const needHelpFormSubmit = (formData,lsource) => {
     $.post(`/lead/lead-management/`,formData,(data)=>{
         lsource[0] ? gaEventFunc(lsource[0].value,'success'):''
@@ -128,35 +143,6 @@ const needHelpFormSubmit = (formData,lsource) => {
         })
     })
 
-}
-
-
-
-//ga functions
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-    ga('create', 'UA-3537905-41', 'auto', {'name': 'a'});
-    ga('a.send', 'pageview');
-    ga('create', 'UA-3537905-41', 'auto');
-    ga('send', 'pageview');
-
-const gaEvent = (event_cat,event_lab,event_action) =>{
-    ga('send', 'event', event_cat, event_action, event_lab);
-}
-
-const gaEventFunc = (typeOfProduct,status) =>{
-    var event_cat='Form Interactions';
-
-    var type = "" ;
-    if(typeOfProduct == "1"){
-        type= 'Skill Course Enquiry';
-    }
-    else{
-        type= 'Skill Service Enquiry';
-    }
-    gaEvent(event_cat,status,type);
 }
 
 
@@ -224,8 +210,8 @@ const objectiveDivCollasedHeightSet = () => {
 }
 
 
-
-const callUsFormDataValidation = () => {
+// funtion to set rukes and validate need help form
+const needHelpFormValidation = () => {
 
     var callUsForm = $("#callUsForm");
     callUsForm.validate({
@@ -286,6 +272,7 @@ const callUsFormDataValidation = () => {
     });
 }
 
+// fucntion to add a new validation rules of indian mobile no in jquery validate
 const indiaMobileValidator = () => {
     $.validator.addMethod("indiaMobile", function(value) {
         var country_code = $('#country-code').val();
@@ -294,4 +281,19 @@ const indiaMobileValidator = () => {
         }
         return true;
     });
+}
+
+
+//gaEventFucnt for enquiry form
+const gaEventFunc = (typeOfProduct,status) =>{
+    var event_cat='Form Interactions';
+
+    var type = "" ;
+    if(typeOfProduct == "1"){
+        type= 'Skill Course Enquiry';
+    }
+    else{
+        type= 'Skill Service Enquiry';
+    }
+    gaEvent(event_cat,status,type);
 }

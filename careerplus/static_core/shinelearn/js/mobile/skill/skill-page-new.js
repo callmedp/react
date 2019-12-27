@@ -1,7 +1,22 @@
+/*
+Following Funtions are used in skill page desktop
+    1. loadProduct => load courses or assesment in skill page
+    2. needHelpFormSubmit => helper function to submit need help form response
+    3. openMoreFAQ => to show faq is cound is more than 2
+    4. stickyNavbarActiveScroll => used to make sticky navbar active in its elements while scrolling
+    5. changeTab => Change tab between courses and assessments.
+    6. needHelpFormValidation => validate the need help form using jquery validate
+    7. indiaMobileValidator =>  To add a new validation rules of indian mobile no in jquery validate
+    8. gaEventFunc => gaEvent function for enquiry form
+
+*/
+
+
+//global variable used in this js file
 let coursePageNo = 2,assessmentPageNo=2  //the page no starts form 2 cause 1st page is already loaded
-let pageSize = 5
-let categoryId = null
-let timeoutID = null
+let pageSize = 5  //get only 5 products in every api resonse to load product
+let categoryId = null  // for load product fucntion
+let timeoutID = null  // store the setimeout id
 
 
 
@@ -28,16 +43,39 @@ $(document).ready(()=>{
 
     stickyNavbarActiveScroll(true)
     indiaMobileValidator()
-    callUsFormDataValidation()
+    needHelpFormValidation()
+
+    $(".main-banner__slider").slick({
+		autoplay:false,
+		arrows: false,
+		dots: false,
+		variableWidth: true,
+		slidesToShow: 1,
+		slidesToScroll: 1,
+		infinite: true
+	});
+
+	$(".popular-courses__slides").slick({
+		autoplay:false,
+		arrows: false,
+		dots: false,
+		variableWidth: true,
+		slidesToShow: 2,
+		slidesToScroll: 1,
+		infinite: true
+	});
+
+	$(".learner-stories__slider").slick({
+		autoplay:false,
+		arrows: false,
+		dots: false,
+		variableWidth: true,
+		slidesToShow: 2,
+		slidesToScroll: 1,
+		infinite: true
+    });  
     
 })
-
-const changeTab = (setTabId,removeTabId) => {
-    $(`#${setTabId}`).addClass('current')
-    $(`#${removeTabId}`).removeClass('current')
-    $(`#${setTabId}-text`).addClass('current')
-    $(`#${removeTabId}-text`).removeClass('current')
-}
 
 //load courses or assessment 
 //arg1 : el => used to remove the button when more products cannot be loaded
@@ -100,6 +138,25 @@ const loadProduct = (el,type) => {
         }
 
     })
+}
+// submit need help form
+const needHelpFormSubmit = (formData,lsource) => {
+    $.post(`/lead/lead-management/`,formData,(data)=>{
+        lsource[0] ? gaEventFunc(lsource[0].value,'success'):''
+        Toast.fire({
+            type: 'success',
+            title: 'A callback requested'
+        })
+        $("#callUsForm").find("input[type=text]").val("");
+	    
+    }).fail(()=>{
+        lsource[0] ? gaEventFunc(lsource[0].value,'failure'):''
+        Toast.fire({
+            type: 'error',
+            title: 'Something went wrong'
+        })
+    })
+
 }
 
 
@@ -165,26 +222,16 @@ const stickyNavbarActiveScroll = (startStickyActiveScroll) => {
      $(window).on('scroll',showStickyNavbarHandler)
 }
 
-const needHelpFormSubmit = (formData,lsource) => {
-    $.post(`/lead/lead-management/`,formData,(data)=>{
-        lsource[0] ? gaEventFunc(lsource[0].value,'success'):''
-        Toast.fire({
-            type: 'success',
-            title: 'A callback requested'
-        })
-        $("#callUsForm").find("input[type=text]").val("");
-	    
-    }).fail(()=>{
-        lsource[0] ? gaEventFunc(lsource[0].value,'failure'):''
-        Toast.fire({
-            type: 'error',
-            title: 'Something went wrong'
-        })
-    })
-
+//change tab between courses and assessment in skill page mobile
+const changeTab = (setTabId,removeTabId) => {
+    $(`#${setTabId}`).addClass('current')
+    $(`#${removeTabId}`).removeClass('current')
+    $(`#${setTabId}-text`).addClass('current')
+    $(`#${removeTabId}-text`).removeClass('current')
 }
 
-const callUsFormDataValidation = () => {
+// funtion to set rukes and validate need help form
+const needHelpFormValidation = () => {
 
     var callUsForm = $("#callUsForm");
     callUsForm.validate({
@@ -245,6 +292,7 @@ const callUsFormDataValidation = () => {
     });
 }
 
+// fucntion to add a new validation rules of indian mobile no in jquery validate
 const indiaMobileValidator = () => {
     $.validator.addMethod("indiaMobile", function(value) {
         var country_code = $('#country-code').val();
@@ -256,21 +304,7 @@ const indiaMobileValidator = () => {
 }
 
 
-
-//ga functions
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-    ga('create', 'UA-3537905-41', 'auto', {'name': 'a'});
-    ga('a.send', 'pageview');
-    ga('create', 'UA-3537905-41', 'auto');
-    ga('send', 'pageview');
-
-const gaEvent = (event_cat,event_lab,event_action) =>{
-    ga('send', 'event', event_cat, event_action, event_lab);
-}
-
+//gaEventFucnt for enquiry form
 const gaEventFunc = (typeOfProduct,status) =>{
     var event_cat='Form Interactions';
 
@@ -283,3 +317,4 @@ const gaEventFunc = (typeOfProduct,status) =>{
     }
     gaEvent(event_cat,status,type);
 }
+
