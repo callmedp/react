@@ -180,18 +180,19 @@
 
 .new-enquire{
   position: fixed;
-  top: 0;
+  top:  0px;
   width: 100%;
   background-color: $bg-white;
   z-index: 999;
   height: 100vh;
-  display: block;
+  display: none;
+
 
   &__wrap {
     padding: 15px;
     height: 100%;
 
-    span{
+    &--image {
       display: block;
       margin: 50px 0 10px 0;
       text-align: center;
@@ -209,6 +210,15 @@
       font-weight: 100;
       padding-top: 10px;
       padding-bottom: 30px;
+    }
+
+    .form-group {
+      margin-bottom: 30px;
+    }
+
+    select {
+      height: 48px;
+      border-radius: 4px;
     }
 
   }

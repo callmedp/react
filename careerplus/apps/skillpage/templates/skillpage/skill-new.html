@@ -570,45 +570,9 @@
         <div class="col-sm-3 sticky-mt">
           <div class="sticky-right" id="sticky-right">
             <!-- need help section -->
-            <section class="col-sm-12 padlr-0 pt-0">
-              <div class="need-help b4-form-bg">
-                <h2>Need help?</h2>
-                <form id="callUsForm">
-                  <div class="d-flex">
-                    <div class="custom-select-box">
-                      <select name="country" class="custom-select" id="country-code">
-                        {% for country in country_choices %}
-                          <option value="{{country.0}}" {% if country.0 == '91' %} selected {% endif %}>
-                            +{{country.0}}&nbsp;&nbsp;&nbsp;&nbsp; -- &nbsp;&nbsp;&nbsp;&nbsp;{{country.1}}
-                          </option>
-                        {% endfor %}
-                      </select>
-                    </div>
-                    <div class="form-group">
-                      <input type="text" class="form-control input_field" id="number" name="number" 
-                          value="{{request.session.mobile_no|safe}}" placeholder="Mobile">
-                      <label for="mobile" class="input_label">Mobile</label>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <input type="text" class="form-control input_field" id="email" name="email"
-                        value="{{request.session.email}}" placeholder="Email">
-                    <label for="email" class="input_label">Email</label>   
-                  </div>
-                  <div class="form-group">
-                    <input type="text" class="form-control input_field" id="name" name="name"
-                        value="{{request.session.full_name}}" placeholder="Name">
-                    <label for="name" class="input_label">Name</label>
-                  </div>
-                  <input type="hidden" name="lsource" value="1">
-                  <input type="hidden" name="product" value="{{category.pk}}">
-                  <input type="hidden" name="prd" value="{{category.heading}}">
-                  <input type="hidden" name="path" value="{{category.get_absolute_url}}">
-                  
-                  <button type="submit" class="btn btn-block btn-primary">Submit</button>
-                </form>
-              </div>
-            </section>
+            {% block call_us_block %}
+              {% include "shop/partials/call-us-new.html" %}
+            {% endblock call_us_block %}
 
 
             <!-- also check section -->

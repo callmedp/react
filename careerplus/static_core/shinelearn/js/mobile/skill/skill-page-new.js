@@ -8,6 +8,7 @@ Following Funtions are used in skill page desktop
     6. needHelpFormValidation => validate the need help form using jquery validate
     7. indiaMobileValidator =>  To add a new validation rules of indian mobile no in jquery validate
     8. gaEventFunc => gaEvent function for enquiry form
+    9. needHelpFormDOMEffect =>  need help form button ANimated effect
 
 */
 
@@ -44,6 +45,7 @@ $(document).ready(()=>{
     stickyNavbarActiveScroll(true)
     indiaMobileValidator()
     needHelpFormValidation()
+    needHelpFormDOMEffect()
 
     $(".main-banner__slider").slick({
 		autoplay:false,
@@ -145,10 +147,10 @@ const needHelpFormSubmit = (formData,lsource) => {
         lsource[0] ? gaEventFunc(lsource[0].value,'success'):''
         Toast.fire({
             type: 'success',
-            title: 'A callback requested'
+            title: 'Query Form submitted'
         })
         $("#callUsForm").find("input[type=text]").val("");
-	    
+	    showHideElement(false,'enquire')
     }).fail(()=>{
         lsource[0] ? gaEventFunc(lsource[0].value,'failure'):''
         Toast.fire({
@@ -232,10 +234,10 @@ const changeTab = (setTabId,removeTabId) => {
 
 // funtion to set rukes and validate need help form
 const needHelpFormValidation = () => {
-
     var callUsForm = $("#callUsForm");
     callUsForm.validate({
-        errorClass:'error-msg',
+        errorClass:'error--mgs',
+        errorElement:'span',
         rules: {
             name: {
                 required: true,
@@ -317,4 +319,13 @@ const gaEventFunc = (typeOfProduct,status) =>{
     }
     gaEvent(event_cat,status,type);
 }
+
+// need help form button ANimated effect
+const needHelpFormDOMEffect = () => {
+    $(".input-effect input").blur(function(){
+        $(this).val() !== "" ? $(this).addClass("has-content"):$(this).removeClass("has-content");
+    })
+}
+        
+
 

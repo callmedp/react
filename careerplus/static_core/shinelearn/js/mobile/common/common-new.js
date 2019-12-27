@@ -8,6 +8,7 @@ Common function used in this file:
 4. GA functions
     a) get analytics script
     b) ga event raise
+5. showHideElement => //show or remove a element with fadeIn and fadeOut animation from DOM
 
 */
 
@@ -83,6 +84,11 @@ const smoothScrolling = (id,extraOffset) => {
 
 const gaEvent = (event_cat,event_lab,event_action) =>{
     ga('send', 'event', event_cat, event_action, event_lab);
+}
+
+//show or remove a element with fadeIn and fadeOut animation from DOM
+const showHideElement = (showElement,id) => {
+	showElement ? $(`#${id}`).delay(100).fadeIn() : $(`#${id}`).delay(100).fadeOut()
 }
 
 
