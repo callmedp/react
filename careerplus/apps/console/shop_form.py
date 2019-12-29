@@ -138,9 +138,9 @@ class TestimonialModelForm(forms.ModelForm):
         if not review:
             raise forms.ValidationError(
                 "This field is required.")
-        if len(review) < 1 or len(review) > 500:
+        if len(review) < 1 or len(review) > 400:
             raise forms.ValidationError(
-                "Review should be between 1-500 characters.")
+                "Review should be between 1-400 characters.")
         return review
 
     def clean_page(self):
