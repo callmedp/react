@@ -299,6 +299,7 @@
 
     .tab-pane {
       height: 51rem;
+      position: relative;
 
       a {
         display: block;
@@ -400,4 +401,11 @@
       }
     }
   }
+}
+
+
+.view-all-detail {
+  bottom: 25px;
+  position: absolute;
+  width: 100%;
 }

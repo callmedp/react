@@ -16,7 +16,7 @@
 				var scrollPos = $(document).scrollTop();
 				var height = $(container).height();
 				var navBarHeight = $('#id_nav').outerHeight() || 0;
-        		var stickyBarHeight = $(".cls_sticky_scroller").outerHeight() || 0;
+				var stickyBarHeight = $(".cls_sticky_scroller").outerHeight() || 0;
 			    child.each(function () {
 			        var currLink = $(this);
 			        var refElement = $(currLink.attr("href"));
