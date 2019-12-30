@@ -93,6 +93,13 @@ class CouponRedeemView(APIView, CartMixin):
                  'error': 'This code is suspended.'
                  }, status=400, content_type='application/json')
 
+        if coupon.active == False:
+            logging.getLogger('error_log').error('This code is Inactive for candidate id {0}'.format(candidate_id))
+            return Response(
+                {'success': 0,
+                 'error': 'This code is Inactive.'
+                 }, status=400, content_type='application/json')            
+
         if coupon.site not in [0, 1]:
             logging.getLogger('error_log').error('This code is not valid for candidate id {0}'.format(candidate_id))
             return Response(
