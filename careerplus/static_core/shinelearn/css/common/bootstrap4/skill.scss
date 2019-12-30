@@ -17,6 +17,11 @@
     display: flex;
     align-items: center;
     border-bottom: .3rem solid #{$purple};
+
+    .media-body {
+        overflow: hidden;
+        height: 4rem;
+    }
 }
 
 .skill-about {
@@ -80,6 +85,10 @@
         img {
             margin-top: 1.5rem;
         }
+    }
+
+    .course-wd {
+        flex: 1000px;
     }
 }
 

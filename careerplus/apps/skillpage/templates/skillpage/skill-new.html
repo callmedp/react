@@ -189,10 +189,10 @@
                 <div class="popular-course">
                   <div class="row">
                     <h2>Popular courses</h2>
-                    <a class="btn btn-outline-primary ml-auto" onclick="smoothScrolling('courseTab',100)" role="button">
+                    <button class="btn btn-outline-primary ml-auto" onclick="smoothScrolling('courseTab',100)" role="button">
                       View Courses
-                    </a>
-                    <div class="d-flex mb-10">
+                    </button>
+                    <div class="d-flex mb-10 course-wd">
                       {% for course in top_3_courses %}
                         <div class="col">
                           <div class="media">
@@ -394,9 +394,9 @@
                       {% comment %} Show load more only if course count>5{% endcomment %}
                       {% if course_count > 5 %} 
                         <div class="d-flex justify-content-center mt-40 mb-30">
-                          <a class="btn btn-outline-primary" onclick="loadProduct(this,'course')" role="button">
+                          <button class="btn btn-outline-primary" onclick="loadProduct(this,'course')" role="button">
                             Load more courses
-                          </a>
+                          </button>
                           <div class="d-none">
                             <img aria-label="Loader image" class="img-fluid" src="{% static 'shinelearn/images/new-loader.gif' %}" alt="Loader image">
                           </div>
@@ -470,9 +470,9 @@
                       {% comment %} Show load more only if assessment count>5{% endcomment %}
                       {% if assesment_count > 5 %} 
                         <div class="d-flex justify-content-center mt-40 mb-30">
-                          <a class="btn btn-outline-primary" onclick="loadProduct(this,'assesment')" role="button">
+                          <button class="btn btn-outline-primary" onclick="loadProduct(this,'assesment')" role="button">
                             Load more assesments
-                          </a>
+                          </button>
                           <div class="d-none">
                             <img aria-label="Loader image" class="img-fluid" src="{% static 'shinelearn/images/new-loader.gif' %}" alt="Loader image">
                           </div>
@@ -557,7 +557,7 @@
                       </div>
                       {% if faq_list|length > 2 %}
                         <div class="d-flex justify-content-center mt-30">
-                          <a class="btn btn-outline-primary" onclick="openMoreFAQ()" id="more-faq" role="button">More FAQs</a>
+                          <button class="btn btn-outline-primary" onclick="openMoreFAQ()" id="more-faq" role="button">More FAQs</button>
                         </div>
                       {% endif %} 
                     {% endwith %}
