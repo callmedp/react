@@ -769,10 +769,11 @@ class MediaUploadView(CreateAPIView):
 
 
 class ResumeBuilderProductView(ListAPIView):
+    import ipdb
+    ipdb.set_trace()
     authentication_classes = ()
     permission_classes = ()
     serializer_class = ResumeBuilderProductSerializer
-
     def get_queryset(self):
         type_flow = self.request.query_params.get('type_flow')
         product_list = Product.objects.filter(type_flow=type_flow, type_product=0, active=True, sub_type_flow='1701').values('id', 'name', 'inr_price', 'usd_price', 'aed_price').order_by('inr_price')

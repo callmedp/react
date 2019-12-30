@@ -219,7 +219,7 @@ class Buy extends Component {
                     <div className="d-flex mb-30">
                         <div className="mr-auto">
                             <p className="fs-20 color-333"> Your customised <br></br>resume is ready </p>
-                            <button class="btn btn--sm btn__round btn--outline mt-10">Edit template</button>
+                            <button class="btn btn--sm btn__round btn--outline mt-10" onClick={this.editTemplate}>Edit template</button>
                         </div>
 
 
@@ -234,7 +234,7 @@ class Buy extends Component {
                                 }
                             </span>
                             <a className="sprite icon--zoom2" onClick={() => {
-                                this.openModal(parseInt(template-1))
+                                this.openModal(parseInt(template - 1))
                             }}></a>
                         </div>
                     </div>
