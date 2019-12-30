@@ -249,6 +249,14 @@
         font-size: $font-size-lg + .2;
     }
 
+    &--review-text{
+        height:19rem;
+    }
+
+    &--compaines{
+        height: 3rem;
+    }
+
     .badge-1 {
         background-color: $badge-1;
     }

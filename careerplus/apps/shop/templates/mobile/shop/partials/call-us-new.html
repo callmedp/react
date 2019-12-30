@@ -52,8 +52,9 @@
                         <form id="callUsForm">
                             <ul>
                                 <li class="form-group input-effect">
-                                    <input type="text" class="form--control animation-input" id="name" 
-                                        name="name" value="{{request.session.full_name}}" placeholder="">
+                                    <input type="text" id="name" name="name" value="{{request.session.full_name}}" 
+                                        class="form--control animation-input {% if request.session.full_name %}has-content{% endif %}" 
+                                        placeholder="">
                                     <label for="name">Name</label>
                                     <span class="error--mgs">Name</span>
                                 </li>
@@ -66,17 +67,18 @@
                                             </select>
                                         </div>
                                         <div class="input-effect ml-auto number-w67 pr"> 
-                                            <input type="text" class="form--control animation-input" id="number" 
-                                                name="number" value="" placeholder="">
+                                            <input type="text"  name="number" value="{{request.session.mobile_no }}" id="number" 
+                                                class="form--control animation-input {% if request.session.mobile_no %}has-content{% endif %}" 
+                                                placeholder="">
                                             <label for="mobile-id">Mobile</label>
                                             <span class="error--mgs"></span>
                                         </div>
                                 </li>
 
                                 <li class="form-group input-effect">
-                                    <input type="email" class="form--control animation-input" name="email" id="email-id" 
-                                        aria-describedby="email-id" placeholder="" 
-                                        value="{{request.session.email}}">
+                                    <input type="email" name="email" id="email-id" value="{{request.session.email}}"   
+                                        class="form--control animation-input {% if request.session.email %}has-content{% endif %}"
+                                        aria-describedby="email-id" placeholder="" >
                                     <label for="email-id">Email id</label>
                                     <span class="error--mgs"></span>
                                 </li>
