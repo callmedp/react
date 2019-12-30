@@ -67,7 +67,7 @@
                        <li><a href="/cms/resume-format/engineers-2/20/">Engineers   </a></li>
                        <li><a href="/cms/resume-format/it/53/">IT </a></li>
 
-                       <li><a href="/cms/resume-format/1/ ">View all </a></li>
+                       <li><a href="/cms/resume-format/1/ " class="view-all-detail">View all </a></li>
                     </ul>
                  </div>
                  <div role="tabpanel" class="tab-pane" id="format2">
@@ -77,27 +77,27 @@
                        <li><a href="/cms/resignation-letter-formats-and-samples/higher-studies-or-going-abroad/49/ ">Higher Studies </a></li>
                        <li><a href="/cms/resignation-letter-formats-and-samples/without-notice-period/17/ ">Without Notice Period   </a></li>
                        <li><a href="/cms/resignation-letter-formats-and-samples/family-illness/18/">Family Illness </a></li>
-                       <li><a href="/cms/resignation-letter-formats-and-samples/3/"> View all </a></li>
-                    </ul>
+                       <li><a href="/cms/resignation-letter-formats-and-samples/3/" class="view-all-detail"> View all </a></li>
+                    </ul>/cms/cover-letter-format/7/
                  </div>
                  <div role="tabpanel" class="tab-pane" id="format3">
                     <ul>
                        <li><a href="/cms/cover-letter-format/freshers/8/">Freshers </a></li>
                        <li><a href="/cms/cover-letter-format/engineers/9/">Engineers </a></li>
-                       <li><a href="/cms/cover-letter-format/7/"> View all </a></li>
+                       <li><a href="/cms/cover-letter-format/7/" class="view-all-detail"> View all </a></li>
                     </ul>
                  </div>
                  <div role="tabpanel" class="tab-pane" id="format4">
                     <ul>
                        <li><a href="/cms/resume-samples-and-templates/pharma/34/">Pharma </a></li>
                        <li><a href="/cms/resume-samples-and-templates/freshers-3/55/">Freshers </a></li>
-                       <li><a href="/cms/resume-samples-and-templates/50/"> View all </a></li>
+                       <li><a href="/cms/resume-samples-and-templates/50/" class="view-all-detail"> View all </a></li>
                     </ul>
                  </div>
                  <div role="tabpanel" class="tab-pane" id="format5">
                     <ul>
                        <li><a href="/cms/linkedin-summary-examples/hr-professional/36/"> HR Professionals </a></li>
-                       <li><a href="/cms/linkedin-summary-examples/43/"> View all </a></li>
+                       <li><a href="/cms/linkedin-summary-examples/43/" class="view-all-detail"> View all </a></li>
                     </ul>
                  </div>
                  <div role="tabpanel" class="tab-pane" id="format6">
@@ -107,7 +107,7 @@
                        <li><a href="/cms/relieving-letter-format/58/ "> Relieving Letter  </a></li>
                        <li><a href="/article-categories/job-search-guidance/ ">Job Search Guidance  </a></li>
                        <li><a href="/article-categories/general/ ">General  </a></li>
-                       <li><a href="/article/">View all</a></li>
+                       <li><a href="/article/" class="view-all-detail">View all</a></li>
                     </ul>
                  </div>
               </div>
@@ -129,13 +129,13 @@
 
           <!--a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="login-btn">{{request.session.email}}</span></a-->
           <ul class="dropdown-menu">
-            <li><a href="{% url "dashboard:dashboard" %}">My Inbox</a></li>
-            <li><a href="{% url "dashboard:dashboard-myorder" %}">My Orders</a></li>
-            <li><a href="{% url "dashboard:dashboard-mywallet" %}">My Wallet</a></li>
+            <li><a href="{% url 'dashboard:dashboard' %}">My Inbox</a></li>
+            <li><a href="{% url 'dashboard:dashboard-myorder' %}">My Orders</a></li>
+            <li><a href="{% url 'dashboard:dashboard-mywallet' %}">My Wallet</a></li>
             {% if roundone_user %}
-            <li><a href="{% url "dashboard:roundone-dashboard" %}">Referrals</a></li>
+              <li><a href="{% url 'dashboard:roundone-dashboard' %}">Referrals</a></li>
             {% endif %}
-            <li><a>{{request.session.email}}</a></li>
+            <li><a class="email-overflow">{{request.session.email}}</a></li>
             <li><a onclick= "return clearLocalStorage();" href="{% url 'logout' %}">Logout</a></li>
           </ul>
         </li>
@@ -189,7 +189,7 @@
                   <li><a href="/courses/sales-and-marketing/retail/35/ ">  Retail </a></li>
                   <li><a href="/courses/sales-and-marketing/product-marketing/24/">Product Marketing</a></li>
                   <li><a href="/courses/sales-and-marketing/service-marketing/30/">Service Marketing</a></li>
-                  <li><a href="/courses/sales-and-marketing/17/">View all products</a></li>
+                  <li><a href="/courses/sales-and-marketing/17/" class="view-all-detail">View all products</a></li>
                 </ul>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="courses2">
@@ -200,7 +200,7 @@
                   <li><a href="/courses/operation-management/service-quality/316/">Service Quality</a></li>
                   <li><a href="/courses/operation-management/production/39/">Production </a></li>
                   <li><a href="/courses/operation-management/customer-care/37/">Customer Care</a></li>
-                  <li><a href="/courses/operation-management/19/">View all products</a></li>
+                  <li><a href="/courses/operation-management/19/" class="view-all-detail">View all products</a></li>
                 </ul>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="courses3">
@@ -213,7 +213,7 @@
                   <li><a href="/courses/banking-finance/commercial-operation/112/">Commercial Operation </a></li>
                   <li><a href="/courses/banking-finance/investment-banking/100/">Investment Banking </a></li>
                   <li><a href="/courses/banking-finance/gst-2/507/">GST</a></li>
-                  <li><a href="/courses/banking-and-finance/20/">View all products</a></li>
+                  <li><a href="/courses/banking-and-finance/20/" class="view-all-detail">View all products</a></li>
                 </ul>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="courses4">
@@ -227,7 +227,7 @@
                   <li><a href="/courses/it-information-technology/it-language/80/">IT Language</a></li>
                   <li><a href="/courses/it-information-technology/blockchain/496/">Blockchain</a></li>
                   <li><a href="/courses/it-information-technology/data-science/497/">Data Science</a></li>
-                  <li><a href="/courses/it-information-technology/22/">View all products</a></li>
+                  <li><a href="/courses/it-information-technology/22/" class="view-all-detail">View all products</a></li>
                 </ul>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="courses5">
@@ -236,7 +236,7 @@
                   <li><a href="/courses/hr-human-resource/organizational-structure/97/">Organizational Structure </a></li>
                   <li><a href="/courses/hr-human-resource/training-and-development/91/">Training & Development </a></li>
                   <li><a href="/courses/hr-human-resource/compensation-2/110/">Compensation </a></li>
-                  <li><a href="/courses/hr-human-resource/25/">View all products</a></li>
+                  <li><a href="/courses/hr-human-resource/25/" class="view-all-detail">View all products</a></li>
                 </ul>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="courses6">
@@ -244,7 +244,7 @@
                   <li><a href="/courses/management/general-management/102/">General Management </a></li>
                   <li><a href="/courses/management/business-analyst/58/">Business Analyst </a></li>
                   <li><a href="/courses/management/corporate-governance/59/">Corporate Governance </a></li>
-                  <li><a href="/courses/management/27/">View all products</a></li>
+                  <li><a href="/courses/management/27/" class="view-all-detail">View all products</a></li>
                 </ul>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="courses7">
@@ -253,7 +253,7 @@
                   <li><a href="/courses/mass-communication/public-relations/96/">Public Relations </a></li>
                   <li><a href="/courses/mass-communication/editor/106/">Editor </a></li>
                   <li><a href="/courses/mass-communication/journalism/99/">Journalism </a></li>
-                  <li><a tabindex="-1" href="/courses/mass-communication/29/">View all products</a></li>
+                  <li><a tabindex="-1" href="/courses/mass-communication/29/" class="view-all-detail">View all products</a></li>
                 </ul>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="courses8">
@@ -263,7 +263,7 @@
                   <li><a href="/courses/personal-development/personality-development/42/">Personality Development</a></li>
                   <li><a href="/courses/personal-development/interview-preparation/38/">Interview Preparation</a></li>
                   <li><a href="/courses/personal-development/communication-development/36/">Communication Development</a></li>
-                  <li><a tabindex="-1" href="/courses/personal-development/21/">View all products</a></li>
+                  <li><a tabindex="-1" href="/courses/personal-development/21/" class="view-all-detail">View all products</a></li>
                 </ul>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="courses9">
@@ -271,7 +271,7 @@
                   <li><a href="/courses/law/cyber-law/107/">Cyber Law</a></li>
                   <li><a href="/courses/law/criminal-law/108/">Criminal Law </a></li>
                   <li><a href="/courses/law/company-law/111/">Company Law</a></li>
-                  <li><a tabindex="-1" href="/courses/law/23/">View all products</a></li>
+                  <li><a tabindex="-1" href="/courses/law/23/" class="view-all-detail">View all products</a></li>
                 </ul>
                 </div>
   
@@ -283,22 +283,22 @@
             </div>
           </li>
           <li class="ms-link">
-            <a class="" href="#">Digital Marketing</a>
+            <a class="" href="/courses/sales-and-marketing/digital-marketing/32/">Digital Marketing</a>
           </li>
           <li class="ms-link">
-            <a class="" href="#">Six Sigma</a>
+            <a class="" href="/courses/operation-management/six-sigma/193/">Six Sigma</a>
           </li>
           <li class="ms-link">
-            <a class="" href="#">Project Management</a>
+            <a class="" href="/courses/operation-management/project-management/123/">Project Management</a>
           </li>
           <li class="ms-link">
-            <a class="" href="#">Big Data</a>
+            <a class="" href="/courses/it-information-technology/big-data/84/">Big Data</a>
           </li>
           <li class="ms-link">
-            <a class="" href="#">IT Software</a>
+            <a class="" href="/courses/it-information-technology/it-software/53/">IT Software</a>
           </li>
           <li class="ms-link">
-            <a class="" href="#">General Management</a>
+            <a class="" href="/courses/management/general-management/102/">General Management</a>
           </li>
         </ul>
       </div><!-- /.navbar-collapse -->

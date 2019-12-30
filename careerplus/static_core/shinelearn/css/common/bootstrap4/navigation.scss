@@ -1,0 +1,10 @@
+.dropdown-overflow{
+    white-space: nowrap;
+    width: 22rem;
+
+    a{
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+}
