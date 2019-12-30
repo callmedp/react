@@ -398,6 +398,9 @@
                           <a class="btn btn-outline-primary" onclick="loadProduct(this,'course')" role="button">
                             Load more courses
                           </a>
+                          <div class="d-none">
+                            <img aria-label="Loader image" class="img-fluid" src="{% static 'shinelearn/images/new-loader.gif' %}" alt="Loader image">
+                          </div>
                         </div>
                       {% endif %}
                       
@@ -471,6 +474,9 @@
                           <a class="btn btn-outline-primary" onclick="loadProduct(this,'assesment')" role="button">
                             Load more assesments
                           </a>
+                          <div class="d-none">
+                            <img aria-label="Loader image" class="img-fluid" src="{% static 'shinelearn/images/new-loader.gif' %}" alt="Loader image">
+                          </div>
                         </div>
                       {% endif %}
                   </div>
@@ -552,8 +558,8 @@
                       </div>
                       {% if faq_list|length > 2 %}
                         <div class="d-flex justify-content-center mt-30">
-                        <a class="btn btn-outline-primary" onclick="openMoreFAQ()" id="more-faq" role="button">More FAQs</a>
-                      </div>
+                          <a class="btn btn-outline-primary" onclick="openMoreFAQ()" id="more-faq" role="button">More FAQs</a>
+                        </div>
                       {% endif %} 
                     {% endwith %}
                   </div>

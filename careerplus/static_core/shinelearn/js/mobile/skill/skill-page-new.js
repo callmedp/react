@@ -87,6 +87,9 @@ const loadProduct = (el,type) => {
     const pTFInclude = type==='course'?false:true
     const pageNo = type==='course'?coursePageNo:assessmentPageNo
     const productTypeId = type==='course'?'#tab-1':'#tab-2'
+    const loaderDiv = $(el).parent().find('div')
+    $(el).hide()
+    loaderDiv.removeClass('hide')
 
     $.get(`api/v1/load-more/`,
     {
@@ -98,10 +101,6 @@ const loadProduct = (el,type) => {
         let products = data.results
         if (products)
             type==='course'?coursePageNo+=1:assessmentPageNo+=1
-        
-        if(!data.next){
-            $(el).parent().hide()
-        }
         
         for (key in products){
             $(productTypeId).find('ul').append(`
@@ -138,6 +137,9 @@ const loadProduct = (el,type) => {
                 </li>
             `)
         }
+
+        loaderDiv.addClass('hide');
+        !data.next ? $(el).parent().hide():$(el).show();
 
     })
 }
