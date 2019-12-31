@@ -107,7 +107,7 @@ const loadProduct = (el,type) => {
                 <li class="d-flex row">
                     <span class="skill-tabs--image">
                         <img aria-label="${products[key].pNm}" src="${products[key].pImg}" alt="${products[key].pNm}">
-                    </span><!-- // Image -->
+                    </span>
 
                     <div class="skill-tabs__content">
                         ${products[key].pTg ==1 ?
