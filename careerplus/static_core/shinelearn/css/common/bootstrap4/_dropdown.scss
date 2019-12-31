@@ -198,7 +198,7 @@
 
 ////// Navbar Dropdown on hover custom CSS by Sachin ///////
 .navbar-nav>.dropdown>.dropdown-menu {
-  // top: 250%;
+  top: 100%;
   transition: 0.3s all ease-in-out;
   border: 1px solid transparent;
 }
@@ -230,6 +230,13 @@
   .dropdown-menu {
     left: -11rem;
     border-radius: 0;
+    width: 22rem;
+    white-space: nowrap;
+
+    .dropdown-item {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 }
 
@@ -312,6 +319,12 @@
 
         &:first-child {
           padding-top: 1.5rem;
+        }
+
+        &:last-child {
+          position: absolute;
+          bottom: 2.5rem;
+          width: 100%;
         }
       }
     }
@@ -401,11 +414,4 @@
       }
     }
   }
-}
-
-
-.view-all-detail {
-  bottom: 25px;
-  position: absolute;
-  width: 100%;
 }

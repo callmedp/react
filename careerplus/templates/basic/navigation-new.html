@@ -109,7 +109,7 @@
                 <a class="nav-link link-ht" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <figure class="b4-icon-user"></figure>
                 </a>
-                <div class="dropdown-menu dropdown-overflow" aria-labelledby="navbarDropdown">
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                   {% if request.session.candidate_id %}
                     <a class="dropdown-item" href="{% url "dashboard:dashboard" %}">My Inbox</a>
                     <a class="dropdown-item" href="{% url "dashboard:dashboard-myorder" %}">My Orders</a>
