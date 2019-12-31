@@ -242,7 +242,6 @@
 
 .dropdown-categories {
   .dropdown-menu {
-    min-width: 60rem;
     border-radius: 0;
   }
 
@@ -307,6 +306,7 @@
     .tab-pane {
       height: 51rem;
       position: relative;
+      min-width: 30rem;
 
       a {
         display: block;
@@ -326,6 +326,10 @@
           bottom: 2.5rem;
           width: 100%;
         }
+      }
+
+      &:last-child {
+        display: none;
       }
     }
   }
@@ -398,6 +402,7 @@
 
     .tab-pane {
       height: 30rem;
+      position: relative;
 
       a {
         display: block;
@@ -410,6 +415,12 @@
 
         &:first-child {
           padding-top: 1.5rem;
+        }
+
+        &:last-child {
+          position: absolute;
+          bottom: .8rem;
+          width: 100%;
         }
       }
     }
