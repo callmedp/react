@@ -1,0 +1,37 @@
+footer {
+    background-color: $gray-lightest;
+    bottom: 0px;
+    font-size: 86%;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    color: $gray-dark;
+  
+    a {
+      color: $gray-dark;
+      padding: 0 5px;
+    }
+  }
+
+
+.footer-new {
+  @extend footer;
+  bottom:40px;
+
+  &__smo {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    
+    a {
+      @include size(25px, 25px, block);
+
+      &:not(:last-child) {
+        margin-right: 10px;
+      }
+    }
+  }
+}
+  

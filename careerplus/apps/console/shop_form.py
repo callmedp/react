@@ -70,18 +70,21 @@ class TestimonialModelForm(forms.ModelForm):
         self.fields['is_active'].widget.attrs['class'] = 'js-switch'
         self.fields['is_active'].widget.attrs['data-switchery'] = 'true'
         self.fields['is_active'].label = 'Active'
-        self.fields['priority'].widget.attrs['class'] = form_class
+
+        self.fields['page'].widget.attrs['class'] = form_class
 
     class Meta:
         model = Testimonial
         fields = (
             'user_name', 'image',
             'designation', 'company', 'title', 'review',
-            'priority', 'is_active')
+            'is_active','page')
 
 
     def clean_user_name(self):
-        user_name = self.cleaned_data.get('user_name', '').strip()
+        user_name = self.cleaned_data.get('user_name', '')
+        user_name = user_name.strip() if user_name else ''  #remove extra spaces
+
         if not user_name:
             raise forms.ValidationError(
                 "This field is required.")
@@ -104,35 +107,52 @@ class TestimonialModelForm(forms.ModelForm):
         return file
 
     def clean_designation(self):
-        designation = self.cleaned_data.get('designation', '').strip()
+        designation = self.cleaned_data.get('designation', '')
+        designation = designation.strip() if designation else '' #remove extra spaces
         if designation and (len(designation) < 1 or len(designation) > 30):
             raise forms.ValidationError(
                 "Designation should be between 1-30 characters.")
         return designation
 
     def clean_company(self):
-        company = self.cleaned_data.get('company', '').strip()
+        company = self.cleaned_data.get('company', '')
+        company = company.strip() if company else ''
         if company and (len(company) < 1 or len(company) > 30):
             raise forms.ValidationError(
                 "Company should be between 1-30 characters.")
         return company
 
     def clean_title(self):
-        title = self.cleaned_data.get('title', '').strip()
+        title = self.cleaned_data.get('title', '')
+        title = title.strip() if title else ''
+
         if len(title) > 50:
             raise forms.ValidationError(
                 "Title should be between 1-50 characters.")
         return title
 
     def clean_review(self):
-        review = self.cleaned_data.get('review', '').strip()
+        review = self.cleaned_data.get('review', '')
+        review = review.strip() if review else ''
+
         if not review:
             raise forms.ValidationError(
                 "This field is required.")
-        if len(review) < 1 or len(review) > 500:
+        if len(review) < 1 or len(review) > 400:
             raise forms.ValidationError(
-                "Review should be between 1-500 characters.")
+                "Review should be between 1-400 characters.")
         return review
+
+    def clean_page(self):
+        level = self.cleaned_data.get('page', '')
+        if level:
+            if int(level) == 0:
+                raise forms.ValidationError(
+                    "This should not be default.")
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return level
 
 
 
@@ -211,11 +231,11 @@ class SubHeaderCategoryForm(forms.ModelForm):
         self.fields['heading'].widget.attrs['data-parsley-length'] = "[1, 100]"
         self.fields['heading'].widget.attrs['data-parsley-length-message'] = 'Length should be between 1-30 characters.'
 
+        self.fields['heading_choices'].widget.attrs['class'] = form_class
+        # self.fields['heading_choices'].widget.attrs['data-parsley-notdefault'] = ''
+
         self.fields['description'].widget.attrs['class'] = form_class
-        self.fields['description'].widget.attrs['maxlength'] = 100
         self.fields['description'].widget.attrs['data-parsley-trigger'] = 'change'
-        self.fields['description'].widget.attrs['data-parsley-length'] = "[1, 100]"
-        self.fields['description'].widget.attrs['data-parsley-length-message'] = 'Length should be between 1-100 characters.'
 
         self.fields['active'].widget.attrs['class'] = 'js-switch'
         self.fields['active'].widget.attrs['data-switchery'] = 'true'
@@ -225,16 +245,16 @@ class SubHeaderCategoryForm(forms.ModelForm):
     class Meta:
         model = SubHeaderCategory
         fields = (
-            'heading', 'description', 'active', 'display_order')
+            'heading', 'description', 'active', 'display_order','heading_choices')
 
     def clean_heading(self):
         heading = self.cleaned_data.get('heading', '').strip()
         if not heading:
             raise forms.ValidationError(
                 "This field is required.")
-        if len(heading) < 1 or len(heading) > 100:
+        if len(heading) > 100:
             raise forms.ValidationError(
-                "Description should be between 1-100 characters.")
+                "Description should be at most 100 characters.")
         return heading
 
     # def clean_description(self):
@@ -250,6 +270,12 @@ class SubHeaderCategoryForm(forms.ModelForm):
 
 
 class SubHeaderInlineFormSet(forms.BaseInlineFormSet):
+
+    def __init__(self, *args, **kwargs):
+        super(SubHeaderInlineFormSet, self).__init__(*args, **kwargs)
+        for form in self.forms:
+            form.empty_permitted = True
+
     def clean(self):
         super(SubHeaderInlineFormSet, self).clean()
 

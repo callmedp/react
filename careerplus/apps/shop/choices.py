@@ -325,3 +325,29 @@ DAYS_CHOICES_DICT = dict(DAYS_CHOICES)
 MANUAL_CHANGES_CHOICES = (
     (1, 'Update Pending Links Count'),
 )
+
+SUB_HEADING_CHOICES = (
+    (0, 'None'),
+    (1, 'objective'),
+    (2, 'who-should-learn'),
+    (3, 'faq'),
+    (4, 'features')
+)
+
+SUB_HEADING_CHOICE_ATTR_MAPPING_DESKTOP = (
+    (1,'class="objective__list collapse" id="expand-list" aria-expanded="false"'),
+    (2,'class="who-should-learn__list d-flex flex-wrap"'),
+)
+
+SUB_HEADING_CHOICE_ATTR_MAPPING_MOBILE = (
+    (1,'class="objective__list collapse" id="expand-list" aria-expanded="false"'),
+    (2,'class="bullet-custom tick"'),
+)
+
+#also added in choices.py of search to be used in filter tag
+PRODUCT_TAG_CHOICES = (
+    (0,'None'),
+    (1,'Bestseller'),
+    (2,'Newly Added')
+
+)

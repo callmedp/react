@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700&display=swap');
+
+// remove space ny margin and padding
+h2 {
+  @extend %remove-space;
+}
+
+h3 {
+  @extend %remove-space;
+}
+
+h4 {
+  @extend %remove-space;
+}
+
+h6 {
+  @extend %remove-space;
+}
+
+p {
+  @extend %remove-space;
+  padding-bottom: 10px;
+  line-height: 1.4rem;
+}
+
+h1 {
+  color: $white;
+  font-size: $h1-heading;
+  font-weight: $font-weight-bold;
+  line-height: 2rem;
+}
+
+h2 {
+  font-size: $h2-heading;
+  font-weight: $font-weight-bold;
+  line-height: 25px;
+  color: $gray-darker;
+  line-height: 34px;
+}
+
+h3 {
+  font-size: 115%;
+  font-weight: 600;
+}
+
+h4 {
+  color: $txt-white;
+  font-weight: 400;
+  margin-top: 20px;
+}
+
+h5 {
+  @extend h4;
+  font-size: .875em;
+}

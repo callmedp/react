@@ -1,0 +1,21 @@
+// Sizing shortcuts
+
+@mixin size($width, $height: $width) {
+  width: $width;
+  height: $height;
+  @include deprecate("`size()`", "v4.3.0", "v5");
+}
+
+@mixin icon-block($width, $height, $position) {
+  background-position: $position;
+  display: block;
+  height: $height;
+  width: $width;
+}
+
+@mixin icon-inblock($width, $height, $position) {
+  background-position: $position;
+  display: inline-block;
+  height: $height;
+  width: $width;
+}

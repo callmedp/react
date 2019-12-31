@@ -210,6 +210,8 @@ $(document).ready(function() {
 		infinite: true
 	});
 
+	
+
 
 
 
@@ -301,6 +303,5 @@ $(document).ready(function(){
 			$('.searchbox-icon').css('display','block');
 		}
 	}
-
 
 

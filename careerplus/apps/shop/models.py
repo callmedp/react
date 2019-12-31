@@ -66,6 +66,10 @@ from .choices import (
     LINK_STATUS_CHOICES,
     MANUAL_CHANGES_CHOICES,
     DAYS_CHOICES,
+    SUB_HEADING_CHOICES,
+    SUB_HEADING_CHOICE_ATTR_MAPPING_DESKTOP,
+    SUB_HEADING_CHOICE_ATTR_MAPPING_MOBILE,
+    PRODUCT_TAG_CHOICES,
     convert_inr,
     convert_usd,
     convert_aed,
@@ -458,12 +462,41 @@ class SubHeaderCategory(AbstractAutoDate):
         default=1)
     category = models.ForeignKey(
         'shop.Category',
-        verbose_name=_('University'),
         related_name='subheaders')
+    heading_choices = models.SmallIntegerField(default=-1,choices=SUB_HEADING_CHOICES)
 
     def __str__(self):
-        return '{} - for University - {}'.format(
-            self.heading, self.category.heading)
+        return '{}'.format(self.heading)
+
+    @property
+    def heading_choice_text(self):
+        subheading_choices = dict(SUB_HEADING_CHOICES)
+        return subheading_choices.get(self.heading_choices)
+
+    # this is required to add class and other attributes to ul in template from choices.py for desktop
+    @property
+    def get_sub_heading_description_with_attr_ul_desktop(self):
+        description = self.description
+        ul_pos = description.find('<ul')
+        attr = dict(SUB_HEADING_CHOICE_ATTR_MAPPING_DESKTOP).get(self.heading_choices) 
+        
+        if ul_pos == -1 or ul_pos+4 > len(description):
+            return description
+
+        return description[:ul_pos+3] + ' {} '.format(attr) + description[ul_pos+3:]
+
+     # this is required to add class and other attributes to ul in template from choices.py for mobile
+    @property
+    def get_sub_heading_description_with_attr_ul_mobile(self):
+        description = self.description
+        ul_pos = description.find('<ul')
+        attr = dict(SUB_HEADING_CHOICE_ATTR_MAPPING_MOBILE).get(self.heading_choices) 
+        
+        if ul_pos == -1 or ul_pos+4 > len(description):
+            return description
+
+        return description[:ul_pos+3] + ' {} '.format(attr) + description[ul_pos+3:]
+
 
 
 class CategoryRelationship(AbstractAutoDate):
@@ -1034,6 +1067,7 @@ class Product(AbstractProduct, ModelMeta):
     is_indexable = models.BooleanField(default=False)
     is_indexed = models.BooleanField(default=False)
     visible_on_crm = models.BooleanField(default=True)
+    product_tag = models.SmallIntegerField(default=0,choices=PRODUCT_TAG_CHOICES)
     
     #associated model managers
     objects = ProductManager()
@@ -1741,7 +1775,9 @@ class Product(AbstractProduct, ModelMeta):
         cache.set(unique_key, apply_date, 86400)
         return apply_date
 
-
+    @property
+    def product_tag_text(self):
+        return dict(PRODUCT_TAG_CHOICES).get(self.product_tag)
 
     @classmethod
     def post_save_product(cls, sender, instance, **kwargs):

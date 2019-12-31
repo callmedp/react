@@ -342,6 +342,18 @@ urlpatterns += [
         order_view.AssignmentOrderItemView.as_view(),
         name='assignment-orderitem-view'),
 
+    url(r'^queue/testimonial/testimonial-list/$',
+        order_view.TestimonialListView.as_view(),
+        name='testimonial-list'),
+
+    url(r'^queue/testimonial/testimonial-add-new/$',
+        order_view.CreateTestimonialView.as_view(),
+        name='testimonial-add-new'),
+
+    url(r'^queue/testimonial/testimonial/(?P<pk>\d+)/update/$',
+        order_view.UpdateTestimonialView.as_view(),
+        name='testimonial-update'),
+
     url(r'^queue/review/review-to-moderate/$',
         order_view.ReviewModerateListView.as_view(),
         name='review-to-moderate'),

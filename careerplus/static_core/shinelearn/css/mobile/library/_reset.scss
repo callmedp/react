@@ -75,7 +75,10 @@ h1 {
 }
 
 h2 {
-  @extend .main-heading;
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 25px;
+  margin-bottom: 10px;
 }
 
 h3 {

@@ -1,0 +1,110 @@
+header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 50px;
+    width: 100%;
+    padding: 10px 15px;
+
+    .bar-menu {
+        @include size(40px, 40px, flex);
+        flex-direction: column;
+        justify-content: center;
+
+        &--bar {
+            @include border-radius($border-radius-base);
+            height: 2px;
+            background-color: $white;
+            display: block;
+
+            &:not(:last-child) {
+                margin-bottom: 5px;
+            }
+        }
+
+        &--bar1 {
+          width: 16px;  
+        }
+        &--bar2 {
+            width: 26px;
+        }
+    }
+}
+
+.main-banner {
+    background-image: url(#{$path-mobile}skill/header.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    padding-top: 50px;
+    padding-right: 15px;
+    padding-left: 15px;
+
+    &__slider {
+        padding-bottom: 33px;
+        display: flex;
+        margin: 0 -15px;
+        overflow: hidden;
+        padding-left: 15px;
+
+        .slick-slide {
+            width: 280px;
+            margin-right: 15px;
+        }
+        
+
+        &--items {
+            @include border-radius($border-radius-base);
+            background-color: $white;
+            padding: 20px 15px;
+            box-shadow: 0 0 10px rgba($black, .15);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            color: $gray-darker;
+            font-size: $font-size-xs;
+
+            p {
+                line-height: 1.2rem;
+            }
+        }
+
+    }
+}
+
+.sticky-header {
+    background-color: $white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    box-shadow: $box-shadow-10;
+    padding: 0 15px;
+    font-weight: $font-weight-medium;
+    margin-bottom: 10px;
+    top: -70px;
+    opacity: 0;
+    transition: all .3s;
+
+    &.fixed {
+        top: 0;
+        opacity: 1;
+    }
+
+    ul {
+        li {
+            a {
+                border-bottom: 3px solid transparent;
+                padding: 15px;
+                display: block;
+
+                &.active {
+                    border-bottom-color: $primary;
+                }
+            }
+
+           
+        }
+    }
+
+}
