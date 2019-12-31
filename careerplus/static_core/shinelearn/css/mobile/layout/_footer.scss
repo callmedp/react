@@ -1,6 +1,6 @@
 footer {
     background-color: $gray-lightest;
-    bottom: 40px;
+    bottom: 0px;
     font-size: 86%;
     left: 0;
     position: absolute;
@@ -17,6 +17,7 @@ footer {
 
 .footer-new {
   @extend footer;
+  bottom:40px;
 
   &__smo {
     display: flex;
