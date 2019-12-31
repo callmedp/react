@@ -535,6 +535,12 @@ class ValidateCouponApiView(APIView):
                     "msg": 'This code is suspended.'},
                     status=status.HTTP_400_BAD_REQUEST)
 
+            if not coupon.active:
+                return Response({
+                    "status": "FAIL",
+                    "msg": 'This code is Inactive.'},
+                    status=status.HTTP_400_BAD_REQUEST)
+
             if coupon.site not in [0, 2]:
                 return Response({
                     "status": "FAIL",
