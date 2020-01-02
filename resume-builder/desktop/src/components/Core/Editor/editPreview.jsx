@@ -109,7 +109,7 @@ class EditPreview extends Component {
 
     generateResumeAlert() {
         const { userInfo: { order_data, resume_generated }, history, showGenerateResumeModal, reGeneratePDF, hideGenerateResumeModal } = this.props;
-        if (order_data && order_data.id) {
+        if (order_data && order_data.id && (localStorage.getItem('subscriptionActive') && localStorage.getItem('subscriptionActive') === 'true' ? true : false)) {
             if (!resume_generated) {
                 const swalWithBootstrapButtons = Swal.mixin({
                     customClass: {
@@ -140,7 +140,7 @@ class EditPreview extends Component {
             }
             else {
                 showGenerateResumeModal()
-                reGeneratePDF(order_data.id)    
+                reGeneratePDF(order_data.id)
                 setTimeout(function () {
                     window.location.href = `${siteDomain}/dashboard`
                     hideGenerateResumeModal()

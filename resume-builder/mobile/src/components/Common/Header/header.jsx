@@ -77,8 +77,8 @@ class Header extends Component {
                             </div>
                             {
                                 (order_data && order_data.id && order_data.combo) ? <a className="btn btn__round btn--outline" alt="Change Template" onClick={this.changeTemplate}>Change template</a>
-                                    : (order_data && order_data.id && order_data.expiry &&  localStorage.getItem('subscriptionActive')) ? <a className="btn btn__round btn--outline" alt="Change Template" onClick={this.changeTemplate}>Change template</a> :
-                                        (!(order_data && order_data.id) || !(resume_generated)) ?
+                                    : (order_data && order_data.id && order_data.expiry && (localStorage.getItem('subscriptionActive') && localStorage.getItem('subscriptionActive') === 'true' ? true : false)) ? <a className="btn btn__round btn--outline" alt="Change Template" onClick={this.changeTemplate}>Change template</a> :
+                                        (!(order_data && order_data.id) || !(resume_generated) || (localStorage.getItem('subscriptionActive') && localStorage.getItem('subscriptionActive') === 'false' ? true : false)) ?
                                             <a className="btn btn__round btn--outline" alt="Change Template" onClick={this.changeTemplate}>Change template</a> : ''
                             }
                         </React.Fragment> :

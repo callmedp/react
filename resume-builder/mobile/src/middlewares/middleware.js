@@ -41,7 +41,7 @@ export default class Middleware {
     return (localStorage.getItem('candidateId') && localStorage.getItem('token')
       ? localStorage.getItem('selected_template') ?
         (buyPath ?
-          (localStorage.getItem('subscriptionActive') ?
+          ((localStorage.getItem('subscriptionActive') && localStorage.getItem('subscriptionActive') === 'true' ? true : false) || false ?
             this._getRouteReturn(false, <Redirect to={{
               pathname: '/resume-builder',
             }} />) :

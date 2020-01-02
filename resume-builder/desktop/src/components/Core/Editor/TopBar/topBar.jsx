@@ -66,17 +66,15 @@ export default class TopBar extends Component {
                             </div> :
                             page === 'buy' ?
                                 '' :
-                                !!(!(order_data && order_data.id) || !(resume_generated)) ?
+                                !!(!(order_data && order_data.id) || !(resume_generated) || (localStorage.getItem('subscriptionActive') && localStorage.getItem('subscriptionActive') === 'false' ? true : false)) ?
                                     <div className="top-banner--banner-right">
                                         <div>
                                             {
-                                                !!(!(localStorage.getItem('subscriptionActive')))
-                                                    ?
-                                                    <button className="orange-button mr-10"
-                                                        onClick={() => newUser ? showAlertModal() : this.redirectToBuyPage()}>Subscribe
-                                                    now
+                                                < button className="orange-button mr-10"
+                                                    onClick={() => newUser ? showAlertModal() : this.redirectToBuyPage()}>Subscribe
+                                    now
                                             </button>
-                                                    : ''
+
                                             }
                                             <button className="white-button mr-20" onClick={() => {
                                                 newUser ? showAlertModal() : this.changeTemplate()
@@ -102,19 +100,20 @@ export default class TopBar extends Component {
                                                     src={`${this.staticUrl}react/assets/images/resume-thumb-${selected_template}.jpg`}
                                                     alt="" />
                                             </span>
-                                        </div> : (order_data && order_data.id && order_data.expiry && localStorage.getItem('subscriptionActive')) ? <div className="top-banner--banner-right">
-                                            <div>
-                                                <button className="white-button mr-20" onClick={() => {
-                                                    newUser ? showAlertModal() : this.changeTemplate()
-                                                }}>Change template
+                                        </div> : (order_data && order_data.id && order_data.expiry && (localStorage.getItem('subscriptionActive') && localStorage.getItem('subscriptionActive') === 'true' ? true : false)) ?
+                                            <div className="top-banner--banner-right">
+                                                <div>
+                                                    <button className="white-button mr-20" onClick={() => {
+                                                        newUser ? showAlertModal() : this.changeTemplate()
+                                                    }}>Change template
                                                 </button>
-                                            </div>
-                                            <span className="top-banner--banner-right--banner-thumb">
-                                                <img
-                                                    src={`${this.staticUrl}react/assets/images/resume-thumb-${selected_template}.jpg`}
-                                                    alt="" />
-                                            </span>
-                                        </div> : ''
+                                                </div>
+                                                <span className="top-banner--banner-right--banner-thumb">
+                                                    <img
+                                                        src={`${this.staticUrl}react/assets/images/resume-thumb-${selected_template}.jpg`}
+                                                        alt="" />
+                                                </span>
+                                            </div> : ''
                     }
                 </div>
             </section>

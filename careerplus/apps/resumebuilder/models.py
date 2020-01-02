@@ -1,5 +1,6 @@
 # python imports
-import json, ast
+import json
+import ast
 
 # django imports
 from django.db import models
@@ -7,7 +8,7 @@ from django.conf import settings
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django_mysql.models.fields import JSONField
-from django.core.cache import  cache
+from django.core.cache import cache
 
 
 # local imports
@@ -18,35 +19,45 @@ from .constants import TEMPLATE_DEFAULT_ENTITY_POSITION, TEMPLATE_ALLOW_LEFT_RIG
 
 # inter app imports
 from seo.models import AbstractAutoDate
-from order.models import Order 
+from order.models import Order
 
 # third party imports
 
-SOCIAL_LINKS = ((1, 'LinkedIn'), (2, 'Github'), (3, 'Behance'), (4, 'Dribble'), (5, 'Keggle')
-                , (6, 'NPM'), (7, 'Upwork'), (8, 'PyPI'), (9, 'Stack Overflow'))
+SOCIAL_LINKS = ((1, 'LinkedIn'), (2, 'Github'), (3, 'Behance'), (4, 'Dribble'),
+                (5, 'Keggle'), (6, 'NPM'), (7, 'Upwork'), (8, 'PyPI'), (9, 'Stack Overflow'))
 
 interest_dict = dict(INTEREST_LIST)
 
 
 class CandidateProfile(AbstractAutoDate):
-    candidate_id = models.CharField('Candidate Id', max_length=100, blank=True, null=True)
-    first_name = models.CharField('Candidate First Name', max_length=100, blank=True, null=True)
-    last_name = models.CharField('Candidate Last Name', max_length=100, blank=True, null=True)
-    email = models.CharField('Candidate Email', max_length=100, unique=True, blank=True, null=True)
-    number = models.CharField('Candidate Contact Number', max_length=15, blank=True, null=True)
+    candidate_id = models.CharField(
+        'Candidate Id', max_length=100, blank=True, null=True)
+    first_name = models.CharField(
+        'Candidate First Name', max_length=100, blank=True, null=True)
+    last_name = models.CharField(
+        'Candidate Last Name', max_length=100, blank=True, null=True)
+    email = models.CharField(
+        'Candidate Email', max_length=100, unique=True, blank=True, null=True)
+    number = models.CharField(
+        'Candidate Contact Number', max_length=15, blank=True, null=True)
     date_of_birth = models.DateField('DOB', blank=True, null=True)
-    location = models.CharField('Candidate Location', max_length=300, blank=True, null=True)
-    image = models.CharField('Candidate Image Url', max_length=200, blank=True, null=True)
+    location = models.CharField(
+        'Candidate Location', max_length=300, blank=True, null=True)
+    image = models.CharField('Candidate Image Url',
+                             max_length=200, blank=True, null=True)
     gender = models.CharField('Gender', choices=(('1', 'Male'), ('2', 'Female'), ('3', 'Others')), max_length=1,
                               blank=True, null=True)
-    extracurricular = models.TextField('Extra Curricular', blank=True, null=True)
-    selected_template = models.CharField('Selected Template', max_length=20, blank=True, null=True)
+    extracurricular = models.TextField(
+        'Extra Curricular', blank=True, null=True)
+    selected_template = models.CharField(
+        'Selected Template', max_length=20, blank=True, null=True)
     extra_info = models.TextField('Extra Information', blank=True, null=True)
     entity_preference_data = models.TextField(blank=True, null=True)
     upload_resume = models.BooleanField('Upload Resume', default=True)
     resume_generated = models.BooleanField('Resume Generated', default=True)
     resume_creation_count = models.IntegerField(default=0)
-    active_subscription = models.BooleanField('Active Subscription', default=False)
+    active_subscription = models.BooleanField(
+        'Active Subscription', default=False)
 
     @property
     def owner_id(self):
@@ -65,7 +76,8 @@ class CandidateProfile(AbstractAutoDate):
 
         data = {}
         for item in entity_data:
-            data[item.get('entity_id')] = {"active": item.get('active'), "entity_text": item.get("entity_text")}
+            data[item.get('entity_id')] = {"active": item.get(
+                'active'), "entity_text": item.get("entity_text")}
 
         return data
 
@@ -87,7 +99,8 @@ class Candidate(PreviewImageCreationMixin, CandidateProfile):
 
         product_found = False
         order_data = {}
-        order_obj_list = Order.objects.filter(candidate_id=self.candidate_id, status__in=[1, 3])
+        order_obj_list = Order.objects.filter(
+            candidate_id=self.candidate_id, status__in=[1, 3])
 
         if not order_obj_list:
             return order_data
@@ -111,7 +124,8 @@ class Candidate(PreviewImageCreationMixin, CandidateProfile):
             obj = OrderCustomisation()
             obj.candidate_id = candidate_id
             obj.template_no = i
-            obj.entity_position = json.dumps(TEMPLATE_DEFAULT_ENTITY_POSITION[i])
+            obj.entity_position = json.dumps(
+                TEMPLATE_DEFAULT_ENTITY_POSITION[i])
             obj.save()
 
     def save(self, **kwargs):
@@ -131,11 +145,14 @@ class Candidate(PreviewImageCreationMixin, CandidateProfile):
 
 
 class OrderCustomisation(PreviewImageCreationMixin, models.Model):
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
+    candidate = models.ForeignKey(
+        Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     template_no = models.SmallIntegerField(default=1)
     color = models.SmallIntegerField(choices=RESUME_COLOR_CHOICES, default=1)
-    heading_font_size = models.SmallIntegerField(choices=RESUME_FONT_SIZE_CHOICES, default=1)
-    text_font_size = models.SmallIntegerField(choices=RESUME_FONT_SIZE_CHOICES, default=1)
+    heading_font_size = models.SmallIntegerField(
+        choices=RESUME_FONT_SIZE_CHOICES, default=1)
+    text_font_size = models.SmallIntegerField(
+        choices=RESUME_FONT_SIZE_CHOICES, default=1)
     entity_position = JSONField(blank=True, null=True)
 
     initiate_image_upload_task = True
@@ -177,7 +194,8 @@ class OrderCustomisation(PreviewImageCreationMixin, models.Model):
 class Skill(PreviewImageCreationMixin, AbstractAutoDate):
     name = models.CharField('Skill Name', max_length=100)
     proficiency = models.IntegerField('Proficiency', default=5)
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
+    candidate = models.ForeignKey(
+        Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     order = models.IntegerField('Order', default=0)
 
     @property
@@ -189,14 +207,17 @@ class Skill(PreviewImageCreationMixin, AbstractAutoDate):
 
 
 class CandidateExperience(PreviewImageCreationMixin, models.Model):
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
+    candidate = models.ForeignKey(
+        Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     job_profile = models.CharField('Job Profile', max_length=100)
     company_name = models.CharField('Company Name', max_length=200)
     start_date = models.DateField('Start Date', blank=True, null=True)
     end_date = models.DateField('End Date', blank=True, null=True)
     is_working = models.BooleanField('Present', default=False)
-    job_location = models.CharField('Job Location', max_length=300, blank=True, null=True)
-    work_description = models.TextField('Job Description', blank=True, null=True)
+    job_location = models.CharField(
+        'Job Location', max_length=300, blank=True, null=True)
+    work_description = models.TextField(
+        'Job Description', blank=True, null=True)
     order = models.IntegerField('Order', default=0)
 
     @property
@@ -208,13 +229,15 @@ class CandidateExperience(PreviewImageCreationMixin, models.Model):
 
 
 class CandidateEducation(PreviewImageCreationMixin, models.Model):
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
+    candidate = models.ForeignKey(
+        Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     degree = models.CharField('Degree', max_length=200, blank=True, null=True)
     specialization = models.CharField('Specialization', max_length=200)
     institution_name = models.CharField('Institution Name', max_length=250)
     course_type = models.CharField('Institution Name', choices=(('FT', 'Full Time'), ('PT', 'Part Time'),
                                                                 ('CR', 'Correspondence'), ('NA', 'NA')), max_length=2)
-    percentage_cgpa = models.CharField('Percentage Or CGPA', max_length=250, null=True, blank=True)
+    percentage_cgpa = models.CharField(
+        'Percentage Or CGPA', max_length=250, null=True, blank=True)
     start_date = models.DateField('Start Date', blank=True, null=True)
     end_date = models.DateField('End Date', blank=True, null=True)
     is_pursuing = models.BooleanField('Still Pursuing', default=False)
@@ -229,8 +252,10 @@ class CandidateEducation(PreviewImageCreationMixin, models.Model):
 
 
 class CandidateCertification(PreviewImageCreationMixin, models.Model):
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
-    name_of_certification = models.CharField('Certification Name', max_length=250)
+    candidate = models.ForeignKey(
+        Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
+    name_of_certification = models.CharField(
+        'Certification Name', max_length=250)
     year_of_certification = models.IntegerField('Year of Certification')
     order = models.IntegerField('Order', default=0)
 
@@ -243,13 +268,16 @@ class CandidateCertification(PreviewImageCreationMixin, models.Model):
 
 
 class CandidateProject(PreviewImageCreationMixin, models.Model):
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
+    candidate = models.ForeignKey(
+        Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     project_name = models.CharField('Project Name', max_length=150)
     start_date = models.DateField('Start Date', blank=False, null=True)
     end_date = models.DateField('End Date', blank=True, null=True)
-    skills = models.ManyToManyField(Skill, verbose_name='List of Skills', null=True, blank=True)
+    skills = models.ManyToManyField(
+        Skill, verbose_name='List of Skills', null=True, blank=True)
     currently_working = models.BooleanField('Currently Working', default=False)
-    description = models.TextField('Project Description', blank=True, null=True)
+    description = models.TextField(
+        'Project Description', blank=True, null=True)
     order = models.IntegerField('Order', default=0)
 
     @property
@@ -261,10 +289,13 @@ class CandidateProject(PreviewImageCreationMixin, models.Model):
 
 
 class CandidateReference(PreviewImageCreationMixin, models.Model):
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
+    candidate = models.ForeignKey(
+        Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     reference_name = models.CharField('Reference Name', max_length=150)
-    reference_designation = models.CharField('Reference Designation', max_length=150)
-    about_candidate = models.TextField('About Candidate', null=True, blank=True)
+    reference_designation = models.CharField(
+        'Reference Designation', max_length=150)
+    about_candidate = models.TextField(
+        'About Candidate', null=True, blank=True)
     order = models.IntegerField('Order', default=0)
 
     @property
@@ -276,7 +307,8 @@ class CandidateReference(PreviewImageCreationMixin, models.Model):
 
 
 class CandidateSocialLink(PreviewImageCreationMixin, models.Model):
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
+    candidate = models.ForeignKey(
+        Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     link_name = models.CharField('Link Name', max_length=10,
                                  choices=SOCIAL_LINKS)
     link = models.CharField('Link', max_length=200)
@@ -295,7 +327,8 @@ class CandidateSocialLink(PreviewImageCreationMixin, models.Model):
 
 
 class CandidateAchievement(PreviewImageCreationMixin, models.Model):
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
+    candidate = models.ForeignKey(
+        Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     title = models.CharField('Title', max_length=300)
     date = models.IntegerField('Date', blank=True, null=True)
     summary = models.TextField('Summary', null=True, blank=True)
@@ -310,7 +343,8 @@ class CandidateAchievement(PreviewImageCreationMixin, models.Model):
 
 
 class CandidateLanguage(PreviewImageCreationMixin, models.Model):
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
+    candidate = models.ForeignKey(
+        Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     name = models.CharField('Language Name', max_length=100)
     proficiency = models.IntegerField('Proficiency', default=3)
     order = models.IntegerField('Order', default=0)
@@ -324,15 +358,16 @@ class CandidateLanguage(PreviewImageCreationMixin, models.Model):
 
 
 class CandidateResumeOperations(models.Model):
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
-    order = models.ForeignKey(Order,null=True)
-    op_status = models.SmallIntegerField(default=-1,choices=CANDIDATE_OPERATION_STATUS)
+    candidate = models.ForeignKey(
+        Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
+    order = models.ForeignKey(Order, null=True)
+    op_status = models.SmallIntegerField(
+        default=-1, choices=CANDIDATE_OPERATION_STATUS)
     created = models.DateTimeField(editable=False, auto_now_add=True,)
 
 
-
-senders = [Candidate, Skill, CandidateExperience, CandidateEducation, \
-           CandidateCertification, CandidateProject, CandidateReference, \
+senders = [Candidate, Skill, CandidateExperience, CandidateEducation,
+           CandidateCertification, CandidateProject, CandidateReference,
            CandidateAchievement, CandidateLanguage, OrderCustomisation]
 
 for model_name in senders:

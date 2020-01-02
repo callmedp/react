@@ -201,7 +201,7 @@ class Preview extends Component {
             'action': 'GetYourResume',
             'label': 'Click'
         })
-        if (order_data && order_data.id) {
+        if (order_data && order_data.id && (localStorage.getItem('subscriptionActive') && localStorage.getItem('subscriptionActive') === 'true' ? true : false)) {
             if (!resume_generated) {
                 const swalWithBootstrapButtons = Swal.mixin({
                     customClass: {

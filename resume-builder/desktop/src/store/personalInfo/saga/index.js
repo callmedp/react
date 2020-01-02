@@ -79,7 +79,7 @@ function* getPersonalDetails(action) {
             localStorage.setItem('subscriptionActive', true);
         }
         else {
-            localStorage.removeItem('subscriptionActive')
+            localStorage.setItem('subscriptionActive', false);
         }
         yield put({ type: Actions.SAVE_USER_INFO, data: data })
 
@@ -121,7 +121,8 @@ function* updatePersonalDetails(action) {
             localStorage.removeItem('newUser')
         }
         const { resume_generated, order_data } = personalDetails;
-        const isOrderedAndSingle = Object.keys(order_data || {}).length ? (order_data.combo ? false : order_data.expiry && localStorage.getItem('subscriptionActive') ? false: true) : false;
+
+        const isOrderedAndSingle = Object.keys(order_data || {}).length ? (order_data.combo ? false : order_data.expiry ? false : true) : false;
         if (localStorage.getItem('selected_template') && !(resume_generated && isOrderedAndSingle)) {
             personalDetails = {
                 ...personalDetails,
