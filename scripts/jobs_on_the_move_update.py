@@ -30,7 +30,7 @@ def get_jobs_move_items(oi_status, sub_type_flow):
         product__sub_type_flow__in=sub_type_flow).select_related('order')
 
 def update_jobs_on_the_move():
-    oi_status = [31, 32]
+    oi_status = [31, 32, 23]
     sub_type_flow = [502]
     jobs_move_items = get_jobs_move_items(oi_status, sub_type_flow)
     import ipdb; ipdb.set_trace()

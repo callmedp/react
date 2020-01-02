@@ -140,7 +140,7 @@ class EditPreview extends Component {
             }
             else {
                 showGenerateResumeModal()
-                reGeneratePDF(order_data.id)
+                reGeneratePDF(order_data.id)    
                 setTimeout(function () {
                     window.location.href = `${siteDomain}/dashboard`
                     hideGenerateResumeModal()

@@ -769,8 +769,6 @@ class MediaUploadView(CreateAPIView):
 
 
 class ResumeBuilderProductView(ListAPIView):
-    import ipdb
-    ipdb.set_trace()
     authentication_classes = ()
     permission_classes = ()
     serializer_class = ResumeBuilderProductSerializer
