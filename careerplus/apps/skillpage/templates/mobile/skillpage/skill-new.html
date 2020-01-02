@@ -29,7 +29,7 @@
 <!-- Main body Starts here -->
 {% block container %}
     <div class="body-wrapper">
-        <div class="main-banner">
+        <div class="main-banner {% if not 'features'|get_value:subheading %}pb-30{% endif %} ">
             <h1>{{category.name|title}} Courses & Certifications</h1>
 
             <!-- Features of Skill Page    ISSUE : SLick not working cause of 2 items-->
