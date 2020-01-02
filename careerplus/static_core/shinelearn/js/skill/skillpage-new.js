@@ -18,6 +18,11 @@ let pageSize = 5  //get only 5 products in every api resonse to load product
 let categoryId = null  // for load product fucntion
 let timeoutID = null  // store the setimeout id
 
+/*  About section height from top (USE CASE => show sticky nav in skill page when this height reaches 
+    This is set in document in ready before calling stickyNavbarActiveScroll function
+*/
+let aboutSectionPosTop = null 
+
 
 $(document).ready(()=>{
     categoryId = $('#course-list').attr('categoryId');
@@ -33,6 +38,7 @@ $(document).ready(()=>{
 
     })
 
+    aboutSectionPosTop = $('#about').offset().top
     stickyNavbarActiveScroll(true) //true argument is to start active scroll
     objectiveDivCollasedHeightSet()
     needHelpFormValidation()
@@ -167,7 +173,7 @@ const stickyNavbarActiveScroll = (startStickyActiveScroll) => {
     });
 
     var showStickyNavbarHandler = () =>{
-        $('.sticky-nav')[$(window).scrollTop() >= 420 ? 'removeClass' : 'addClass']('sticky-none');
+        $('.sticky-nav')[$(window).scrollTop() >= aboutSectionPosTop ? 'removeClass' : 'addClass']('sticky-none');
     }
     
     var scrollHandler = () => {
