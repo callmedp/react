@@ -29,36 +29,6 @@
 .skill-about {
     @extend %box-shadow;
     @extend %left-bdr;
-
-    #expand-content {
-        &.collapse:not(.show) {
-            display: block;
-            height: 6rem;
-            overflow: hidden;
-            transition: all .2s;
-        }
-
-        &.collapsing {
-            height: 6rem;
-        }
-    }
-
-    a {
-       margin-bottom: .7rem;
-       display: inline-block; 
-       
-        &.collapsed {
-            &::after {
-                content: 'Read more';
-            }
-        }
-
-        &:not(.collapsed) {
-            &::after {
-                content: 'Read less';
-            }
-        }
-    }
 }
 
 .popular-course {
@@ -115,36 +85,6 @@
                 top: .5rem;
                 left: -1.5rem;
                 border-radius: 100%;
-            }
-        }
-    }
-
-    #expand-list {
-        &.collapse:not(.show) {
-            display: block;
-            // height: 8.5rem;
-            overflow: hidden;
-            transition: all .2s;
-        }
-
-        &.collapsing {
-            height: 8.5rem;
-        }
-    }
-
-    a {
-       margin-bottom: .7rem;
-       display: inline-block; 
-       
-        &.collapsed {
-            &::after {
-                content: 'Read more';
-            }
-        }
-
-        &:not(.collapsed) {
-            &::after {
-                content: 'Read less';
             }
         }
     }

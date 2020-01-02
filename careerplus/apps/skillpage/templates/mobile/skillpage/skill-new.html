@@ -64,7 +64,7 @@
 
             <div class="popular-courses mb-20 mt-20" id="popular-courses">
                 <div class="d-flex align-items-center mb-15">
-                    <h2 class="mr-auto">Popular courses</h2>
+                    <h2 class="mr-auto">Popular Courses</h2>
                     <a onclick="smoothScrolling('tab-bar',-50)" class="btn btn-md btn-outline btn-round">View courses</a>
                 </div><!-- // Heading -->
 
@@ -89,7 +89,7 @@
                 {% with objective='objective'|get_value:subheading %}
                     <div class="white-box mb-20 pb-30 " id="objective">
                         <h2>{{objective.heading}}</h2>
-                        {{objective.get_sub_heading_description_with_attr_ul_desktop|safe}}
+                        {{objective.get_sub_heading_description_with_attr_ul_mobile|safe}}
                         <a role="button" class="collapsed d-block mt-15 ml-20" data-toggle="collapse" href="#expand-list" 
                             aria-expanded="false" aria-controls="expand-list"></a>
 
@@ -108,7 +108,7 @@
             
             {% if career_outcomes %}
                 <div class="white-box mb-30 pb-30" id="skill">
-                    <h2>Skills you will gain</h2>
+                    <h2>Skills You Will Gain</h2>
                     <div class="tags">
                         {% for outcome in career_outcomes %}
                             <span class="tags--items">{{outcome}}</span>
@@ -119,7 +119,7 @@
 
             {% if category.assessment_test_count %}
                 <div class="test-skills row" id="test-skill">
-                    <h2>Test your skills</h2>
+                    <h2>Test Your Skills</h2>
                     <div class="d-flex mt-10">
                         <div class="test-skills__wrap--content">
                             <p class="mb-30">Take our free practice test to test your skill level in <strong>
@@ -136,23 +136,23 @@
             {% endif %}
 
             <div class="white-box mb-15 mt-20" id="impact">
-                <h2>Our impact</h2>
+                <h2>Why Us?</h2>
                 <div class="impact d-flex">
                     <div class="impact--item">
                         <i class="sprite register-learners"></i>
-                        <h3>50K+</h3>
-                        <p>Registered <br />learners</p>
+                        <h3>10K+</h3>
+                        <p>Registered <br />Learners</p>
                     </div><!-- // impact__item -->
                     <div class="impact--item">
                         <i class="sprite courses-available"></i>
-                        <h3>250K+</h3>
-                        <p><a><strong>Courses</strong></a> <br />available</p>
+                        <h3>500+</h3>
+                        <p><a><strong>Courses</strong></a> <br />Available</p>
                     </div><!-- // impact__item -->
                     <div class="impact--item">
                         <i class="sprite courses-shine-job"></i>
-                        <h3>5K+</h3>
+                        <h3>3x times</h3>
                         <p>
-                            <a><strong>jobs at shine</strong></a>
+                            <a>Increased Chances <br/>of Getting Hired</a>
                         </p>
                     </div><!-- // impact__item -->
                 </div>
@@ -367,17 +367,17 @@
             {% endif %}
 
             {% if 'who-should-learn'|get_value:subheading %}
-                <li class="card"><a href="#should-learn" class="scrollTo">Who should learn?</a></li>
+                <li class="card"><a href="#should-learn" class="scrollTo">Who Should Learn?</a></li>
             {% endif %}
             {% if career_outcomes %}
                 <li class="card"><a href="#skill" class="scrollTo">Skills</a></li>
             {% endif %}
             <li class="card"><a href="#test-skill" class="scrollTo">Test your skills</a></li>
-            <li class="card"><a href="#impact" class="scrollTo">Our Impact</a></li>
+            <li class="card"><a href="#impact" class="scrollTo">Why Us?</a></li>
 
             <li class="card"><a href="#tab-bar" class="scrollTo">Courses</a></li>
             {% if testimonialcategory|length %}
-                <li class="card"><a href="#testimonial" class="scrollTo">Learner’s stories</a></li>
+                <li class="card"><a href="#testimonial" class="scrollTo">Learner’s Stories</a></li>
             {% endif %}
             {% if 'faq'|get_value:subheading %}
                 <li class="card"><a href="#faqs" class="scrollTo">FAQs</a></li>
