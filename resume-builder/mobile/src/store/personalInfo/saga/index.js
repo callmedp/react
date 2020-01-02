@@ -168,7 +168,7 @@ function* fetchImageUrl(action) {
     }
 }
 
-function* updateEntityPreference(action) {
+function* updateEntityPreference(action) {  
     try {
         const { payload: { entity_preference_data, resolve, reject } } = action;
         const candidateId = localStorage.getItem('candidateId') || '';
