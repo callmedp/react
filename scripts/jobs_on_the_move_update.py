@@ -33,7 +33,6 @@ def update_jobs_on_the_move():
     oi_status = [31, 32, 23]
     sub_type_flow = [502]
     jobs_move_items = get_jobs_move_items(oi_status, sub_type_flow)
-    import ipdb; ipdb.set_trace()
     for oi in jobs_move_items:
         oi_op = OrderItemOperation.objects.filter(
             oi=oi.id, oi_status__in=[31, 32]).first()

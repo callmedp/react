@@ -866,7 +866,8 @@ class ShineCandidateLoginAPIView(APIView):
             for item in order_obj.orderitems.all():
                 if item.product and item.product.type_flow == 17 and item.product.type_product == 0:
                     order_data = {"id": order_obj.id,
-                                  "combo": True if item.product.attr.get_value_by_attribute(item.product.attr.get_attribute_by_name('template_type')).value == 'multiple' else False
+                                  "combo": True if item.product.attr.get_value_by_attribute(item.product.attr.get_attribute_by_name('template_type')).value == 'multiple' else False,
+                                  "expiry": item.end_date,
                                   }
                     product_found = True
                     break

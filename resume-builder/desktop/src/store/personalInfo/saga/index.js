@@ -74,9 +74,12 @@ function* getPersonalDetails(action) {
         let { data } = result;
         data = modifyPersonalInfo(data)
 
-        const { subscription_active: subscriptionActive } = data;
+        const { active_subscription: subscriptionActive } = data;
         if (subscriptionActive) {
             localStorage.setItem('subscriptionActive', true);
+        }
+        else {
+            localStorage.removeItem('subscriptionActive')
         }
         yield put({ type: Actions.SAVE_USER_INFO, data: data })
 
@@ -118,7 +121,7 @@ function* updatePersonalDetails(action) {
             localStorage.removeItem('newUser')
         }
         const { resume_generated, order_data } = personalDetails;
-        const isOrderedAndSingle = Object.keys(order_data || {}).length ? (order_data.combo ? false : true) : false;
+        const isOrderedAndSingle = Object.keys(order_data || {}).length ? (order_data.combo ? false : order_data.expiry && localStorage.getItem('subscriptionActive') ? false: true) : false;
         if (localStorage.getItem('selected_template') && !(resume_generated && isOrderedAndSingle)) {
             personalDetails = {
                 ...personalDetails,

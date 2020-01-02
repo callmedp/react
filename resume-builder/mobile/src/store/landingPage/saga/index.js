@@ -120,11 +120,15 @@ function* loginCandidate(action) {
             return reject(new Error(result['errorMessage']));
             //redirect code here
         }
-        const { data: { candidate_id, candidate_profile, token, entity_status, userExperience, order_data: orderData } } = result;
+        const { data: { candidate_id, candidate_profile, token, entity_status, userExperience, order_data: orderData, subscription_active: subscriptionActive } } = result;
         localStorage.setItem('candidateId', (candidate_id) || '');
         localStorage.setItem('userExperience', (userExperience || 0));
+       
         if (orderData && orderData.id) {
             localStorage.setItem('orderAvailable', true);
+        }
+        if (subscriptionActive) {
+            localStorage.setItem('subscriptionActive', true);
         }
 
         for (const key in candidate_profile) {

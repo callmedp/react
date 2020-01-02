@@ -33,8 +33,6 @@ def get_resume_builder_items():
 
 def update_candidate_profile():
     order_items = get_resume_builder_items()
-    import ipdb
-    ipdb.set_trace()
     for oi in order_items:
         candidate_id = oi.order.candidate_id
         candidate = Candidate.objects.filter(candidate_id=candidate_id).first()
@@ -44,9 +42,7 @@ def update_candidate_profile():
                 candidate.save()
             except Exception as e:
                 print(e)
-
     return
-
 
 if __name__ == '__main__':
     update_candidate_profile()

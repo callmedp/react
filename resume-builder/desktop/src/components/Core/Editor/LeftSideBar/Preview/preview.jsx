@@ -274,28 +274,33 @@ export default class Preview extends Component {
             }
         }
 
+        if (elem1) {
+            elem1.onmousedown = function (event) {
+                event.preventDefault(); // prevent selection start (browser action)
 
-        elem1.onmousedown = function (event) {
-            event.preventDefault(); // prevent selection start (browser action)
+                handleElemEvent(event, elem1, slider1, 'heading');
+            };
+        }
 
-            handleElemEvent(event, elem1, slider1, 'heading');
-        };
+        if (elem2) {
+            elem2.onmousedown = function (event) {
+                event.preventDefault(); // prevent selection start (browser action)
 
-        elem2.onmousedown = function (event) {
-            event.preventDefault(); // prevent selection start (browser action)
+                handleElemEvent(event, elem2, slider2, 'text');
+            };
+        }
 
-            handleElemEvent(event, elem2, slider2, 'text');
-        };
+        if (elem1) {
+            elem1.ondragstart = function () {
+                return false;
+            };
+        }
 
-
-        elem1.ondragstart = function () {
-            return false;
-        };
-
-
-        elem2.ondragstart = function () {
-            return false;
-        };
+        if (elem2) {
+            elem2.ondragstart = function () {
+                return false;
+            };
+        }
 
     }
 

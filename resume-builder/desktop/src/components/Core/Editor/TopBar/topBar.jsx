@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import './topBar.scss'
 
 export default class TopBar extends Component {
@@ -10,7 +10,7 @@ export default class TopBar extends Component {
     }
 
     redirectToBuyPage() {
-        const {history, eventClicked} = this.props;
+        const { history, eventClicked } = this.props;
         eventClicked({
             'action': 'SubscribeNow',
             'label': 'Click'
@@ -19,7 +19,7 @@ export default class TopBar extends Component {
     }
 
     changeTemplate() {
-        const {showSelectTemplateModal, eventClicked} = this.props;
+        const { showSelectTemplateModal, eventClicked } = this.props;
         showSelectTemplateModal();
         let eventData = {
             'action': 'ChangeTemplate',
@@ -29,7 +29,7 @@ export default class TopBar extends Component {
     }
 
     render() {
-        let {page, userInfo: {selected_template, order_data, resume_generated}, showAlertModal} = this.props;
+        let { page, userInfo: { selected_template, order_data, resume_generated }, showAlertModal } = this.props;
         if (localStorage.getItem('selected_template') && parseInt(selected_template || 0) !== -1) {
             selected_template = localStorage.getItem('selected_template')
         }
@@ -53,16 +53,16 @@ export default class TopBar extends Component {
                                     <h1>You are closer to your perfect resume.</h1>
                                     <p>Fill the details to create your
                                         resume {!!(!(order_data && order_data.id)) ?
-                                            <span>( You can also subscribe <br/>now and create resume later)</span> : ""}</p>
+                                            <span>( You can also subscribe <br />now and create resume later)</span> : ""}</p>
                                 </div>
                     }
                     {
                         page === 'download' ?
                             <div className="top-banner--banner-right">
-                                
+
                                 <span className="top-banner--banner-right--payment-done ml-0">
-                			    
-                		        </span>
+
+                                </span>
                             </div> :
                             page === 'buy' ?
                                 '' :
@@ -70,13 +70,13 @@ export default class TopBar extends Component {
                                     <div className="top-banner--banner-right">
                                         <div>
                                             {
-                                                !!(!(order_data && order_data.id)) 
-                                            ? 
-                                            <button className="orange-button mr-10"
-                                                    onClick={() => newUser ? showAlertModal() : this.redirectToBuyPage()}>Subscribe
-                                                now
+                                                !!(!(localStorage.getItem('subscriptionActive')))
+                                                    ?
+                                                    <button className="orange-button mr-10"
+                                                        onClick={() => newUser ? showAlertModal() : this.redirectToBuyPage()}>Subscribe
+                                                    now
                                             </button>
-                                            : ''
+                                                    : ''
                                             }
                                             <button className="white-button mr-20" onClick={() => {
                                                 newUser ? showAlertModal() : this.changeTemplate()
@@ -86,8 +86,8 @@ export default class TopBar extends Component {
                                         <span className="top-banner--banner-right--banner-thumb">
                                             <img
                                                 src={`${this.staticUrl}react/assets/images/resume-thumb-${selected_template}.jpg`}
-                                                alt=""/>
-                		                </span>
+                                                alt="" />
+                                        </span>
                                     </div> :
                                     (order_data && order_data.id && order_data.combo) ?
                                         <div className="top-banner--banner-right">
@@ -98,11 +98,23 @@ export default class TopBar extends Component {
                                                 </button>
                                             </div>
                                             <span className="top-banner--banner-right--banner-thumb">
-                                    <img
-                                        src={`${this.staticUrl}react/assets/images/resume-thumb-${selected_template}.jpg`}
-                                        alt=""/>
-                		            </span>
-                                        </div> : ""
+                                                <img
+                                                    src={`${this.staticUrl}react/assets/images/resume-thumb-${selected_template}.jpg`}
+                                                    alt="" />
+                                            </span>
+                                        </div> : (order_data && order_data.id && order_data.expiry && localStorage.getItem('subscriptionActive')) ? <div className="top-banner--banner-right">
+                                            <div>
+                                                <button className="white-button mr-20" onClick={() => {
+                                                    newUser ? showAlertModal() : this.changeTemplate()
+                                                }}>Change template
+                                                </button>
+                                            </div>
+                                            <span className="top-banner--banner-right--banner-thumb">
+                                                <img
+                                                    src={`${this.staticUrl}react/assets/images/resume-thumb-${selected_template}.jpg`}
+                                                    alt="" />
+                                            </span>
+                                        </div> : ''
                     }
                 </div>
             </section>

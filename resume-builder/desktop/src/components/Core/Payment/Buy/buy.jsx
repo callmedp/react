@@ -387,7 +387,8 @@ export class Buy extends Component {
                     </section>
 
                     <div className="bottom-links">
-                        {order_data && order_data.id && !order_data.combo ? '' :
+                        {
+                            order_data && order_data.id && !order_data.combo ? '' : 
                             <React.Fragment>
                                 <a onClick={this.changeTemplate}>Change template</a> |
                             </React.Fragment>
