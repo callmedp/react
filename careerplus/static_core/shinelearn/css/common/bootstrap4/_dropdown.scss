@@ -338,7 +338,7 @@
 
 .dropdown-resources {
   .dropdown-menu {
-    min-width: 50rem;
+    // min-width: 50rem;
     border-radius: 0;
     left: -16.5rem;
   }
@@ -364,7 +364,7 @@
   overflow: hidden;
   
   .nav-tabs {
-    min-width: 23rem;
+    min-width: 24rem;
     display: flex;
     flex-direction: column;
     border-bottom: none;
@@ -404,6 +404,7 @@
     .tab-pane {
       height: 30rem;
       position: relative;
+      min-width: 25rem;
 
       a {
         display: block;
@@ -424,6 +425,9 @@
           width: 100%;
           font-weight: 600;
         }
+      }
+      &:last-child {
+        display: none;
       }
     }
   }

@@ -431,7 +431,8 @@ datalist {
 
   .format-tabs {
     padding: 0 !important;
-    left: -150px !important;
+    left: -145px !important;
+    right: 39px;
   }
 
   .dropdown-menu {
@@ -505,9 +506,7 @@ datalist {
   .tab-content {
     display: table-cell;
     background-color: #F3F3F3;
-    padding-right: 10px;
-    padding-left: 15px;
-    min-width: 300px;
+    min-width: auto;
     position: relative;
 
     @media (max-width: 1023px) {
@@ -515,47 +514,48 @@ datalist {
     }
 
     .tab-pane {
-      width: 250px;
+      min-width: 235px;
+      padding-right: 10px;
+      padding-left: 15px;
 
       ul {
-        padding-left: 15px;
-        padding-right: 10px;
-      }
-    }
-
-    ul {
-      list-style-type: none;
-      margin: 10px 0 0 0;
-      padding: 0;
-
-      li {
-        display: block;
-        padding: 8px 10px 8px 10px;
-
-        // &:last-child {
-        //   border-top: 1px solid #ddd;
-        //   position: absolute;
-        //   left: 25px;
-        //   bottom: 10px;
-        //   width: 88%;
-        //   padding-left: 0;
-
-        //   a {
-        //     color: $anchor-color;
-        //     padding: 10px 10px 10px 0;
-        //   }
-
-        // }
-
-        a {
-          color: $primary-color;
-          font-size: $font-size+3;
-          line-height: 20px;
-
-          &:hover {
-            font-weight: $font-weight+100;
+        list-style-type: none;
+        margin: 10px 0 0 0;
+        padding: 0;
+  
+        li {
+          display: block;
+          padding: 8px 10px 8px 10px;
+  
+          // &:last-child {
+          //   border-top: 1px solid #ddd;
+          //   position: absolute;
+          //   left: 25px;
+          //   bottom: 10px;
+          //   width: 88%;
+          //   padding-left: 0;
+  
+          //   a {
+          //     color: $anchor-color;
+          //     padding: 10px 10px 10px 0;
+          //   }
+  
+          // }
+  
+          a {
+            color: $primary-color;
+            font-size: $font-size+3;
+            line-height: 20px;
+  
+            &:hover {
+              font-weight: $font-weight+100;
+            }
           }
         }
+      }
+      &:last-child {
+        width: 0;
+        display: none;
       }
     }
     div {
@@ -3924,6 +3924,10 @@ footer {
   position: absolute;
   width: 100%;
   font-weight: 600;
+
+  &:hover {
+    font-weight: 600 !important;
+  }
 }
 
 .email-overflow{
