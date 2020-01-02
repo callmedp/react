@@ -86,6 +86,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pRC = indexes.IntegerField(model_attr='no_review', default=0, indexed=False) 
     pBC = indexes.IntegerField(model_attr='buy_count', default=0, indexed=True)
     pNJ = indexes.IntegerField(model_attr='num_jobs', default=0, indexed=False) 
+    pTg = indexes.IntegerField(model_attr='product_tag', default=0, indexed=False) 
 
     #Vendor Fields
     pVi = indexes.CharField(null=True, indexed=False)

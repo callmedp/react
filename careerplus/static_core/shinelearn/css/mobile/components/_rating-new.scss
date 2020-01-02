@@ -1,0 +1,105 @@
+.ratingView {
+    .rating {
+      @include size(70px, 14px, inline-block);
+      position: relative;
+      margin: 0 2px -2px 0;
+    }
+  
+    // a {
+    //   display: inline-block;
+    //   color: $link-color;
+    //   font-size: $font-size-sm;
+    // }
+  
+    .rating {
+      &::after {
+        content: "";
+        position: absolute;
+        height: 100%;
+        left: 0;
+        top: 0;
+        background: url(#{$fullpath}star-fill.png) repeat-x left center;
+        background-size: 14px 12px;
+      }
+  
+      &::before {
+        @include square(100%, block);
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        background: url(#{$fullpath}star-unfill.png) repeat-x left center;
+        background-size: 14px 12px;
+      }
+    }
+  }
+
+
+  
+.rating {
+    &[data-rating=".5"]:after {
+      width: 10%;
+    }
+  
+    &[data-rating="1"]:after {
+      width: 20%;
+    }
+  
+    &[data-rating="1.5"]:after {
+      width: 30%;
+    }
+  
+    &[data-rating="2"]:after {
+      width: 40%;
+    }
+  
+    &[data-rating="2.5"]:after {
+      width: 50%;
+    }
+  
+    &[data-rating="3"]:after {
+      width: 60%;
+    }
+  
+    &[data-rating="3.5"]:after {
+      width: 70%;
+    }
+  
+    &[data-rating="4"]:after {
+      width: 80%;
+    }
+  
+    &[data-rating="4.5"]:after {
+      width: 90%;
+    }
+  
+    &[data-rating="5"]:after {
+      width: 100%;
+    }
+  }
+
+  .ratting {
+      display: flex;
+      margin: 0 0 6px 0;
+
+      &__box {
+        @include border-radius(4px);
+        @include size(42px, 18px, flex);
+        background-color: $secondary;
+        color: $white;
+        margin-left: 5px;
+        padding: 0 5px;
+        font-size: $font-size-xs;
+
+        justify-content: space-evenly;
+        align-items: center;
+
+        img {
+          position: relative;
+          top: -1px;
+        }
+      }
+  }
+

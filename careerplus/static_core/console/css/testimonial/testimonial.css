@@ -1,0 +1,25 @@
+.loader-div{
+    background-color: rgba(0,0,0,0.5);
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 10;
+    left:0;
+    right:0;
+    top:0;
+}
+
+.body-overflow{
+    overflow: hidden;
+}
+
+.loader-image{
+    width: 100px;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+}
+
+.hide{
+    display: none;
+}

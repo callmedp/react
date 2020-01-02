@@ -17,7 +17,7 @@ var Scroller = function(itm,className) {
         var navBarHeight = $('#id_nav').outerHeight() || 0;
         if(windowTop >= parentDivTop && windowTop < (that.item.closest('.cls_scroller_parent').height() + parentDivTop)) {
             that.item.css({
-                'top': (windowTop - parentDivTop) + stickyBarHeight + navBarHeight
+                'top': (windowTop - parentDivTop) + stickyBarHeight 
             })
             that.item.find('.cls_scroller_hiddenDiv').removeClass('hidden');
         }else {
@@ -62,7 +62,7 @@ stickyHeaderDetail.prototype = {
         windowTop = $(window).scrollTop();
         if(windowTop >= parentDivTop){
             that.item.css({
-                'top': (windowTop - parentDivTop) + $('#id_nav').outerHeight() - 30
+                'top': (windowTop - parentDivTop) + - 30
             });
             //$('#id_nav').hide();
             that.item.find('.cls_scroller_hiddenDiv').removeClass('hidden');

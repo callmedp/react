@@ -1,0 +1,51 @@
+@import '../../path';
+@import '../library/variables';
+@import '../library/mixin';
+@import '../library/reset-new';
+@import '../library/typography';
+
+
+// Layout
+@import '../layout/base';
+@import '../layout/extend';
+@import '../layout/header';
+@import '../layout/footer';
+
+// From utilities
+@import '../utilities/font';
+@import '../utilities/padding';
+@import '../utilities/margin';
+@import '../utilities/flex';
+@import '../utilities/text';
+
+// From Components
+@import '../components/accordion';
+@import '../components/buttons';
+@import '../components/bullet';
+@import '../components/rating-new';
+@import '../components/tabs';
+@import '../components/call-us';
+@import '../components/hr-scroll';
+@import '../components/animatio-input';
+@import '../components/error-form';
+@import '../components/form-controls';
+@import '../components/form-items';
+
+
+
+// from page 
+@import '../pages/skills.scss';
+
+
+.w100 {
+    width: 100% !important;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.pr {
+    position: relative;
+}
+  

@@ -127,6 +127,7 @@ class LoadMoreSerializerSolr(SerializerFieldsMixin,Serializer):
     pAsft = serializers.JSONField()
     name = serializers.CharField(source="pNm")
     discount = SerializerMethodField()
+    pTg = serializers.IntegerField()
 
     def get_discount(self, obj):
         if obj.pPfin != 0:

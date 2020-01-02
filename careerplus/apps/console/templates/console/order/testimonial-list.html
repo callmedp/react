@@ -1,0 +1,194 @@
+{% extends "console/base_console.html" %}
+{% load static compress %}
+{% load humanize %}
+{% load thumbnail %}
+
+{% block title %} Review-List {% endblock title %}
+
+{% block css_block %}
+    {{block.super}}
+    {% compress css %}
+      <link href="{% static 'packages/iCheck/skins/flat/green.css' %}" rel="stylesheet" type="text/css">
+    {% endcompress %}
+{% endblock css_block %}
+
+
+{% block pagecontent %}
+
+<!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>Testimonial List</h3>
+      </div>
+      <form class="form-group" method="GET" action="{% url "console:testimonial-list" %}" id="filter-tables">
+          <div class="title_right">
+            <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
+              <div class="input-group">
+                <input type="text" name="query" class="form-control" {% if query %} value="{{query}}" {% endif %} placeholder="Search for users...">
+                <span class="input-group-btn">
+                  <button type="submit" class="btn btn-default" id="search_button" type="button">Go!</button>
+                </span>
+              </div>
+            </div>
+          </div>
+      </form>
+    </div>
+    {% if messages %}
+        {% for message in messages %}
+        <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissible fade in col-lg-12" {% endif %} role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            {{message}}
+        </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="clearfix"></div>
+    
+    <div class="row">
+
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <div class="col-sm-4">
+                <a href="{% url 'console:testimonial-add-new'  %}" class="btn btn-info btn"><i class="fa fa-pencil"></i>Add New</a>
+            </div>
+            
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+
+          <div class="x_content">
+
+            <div class="table-responsive">
+              <form id="review_table_form" method="post" action=".">{% csrf_token %}
+              <input type="hidden" name="action_type" id="action_type_id" class="flat">
+              <table class="table table-striped jambo_table bulk_action" id="commant-table">
+                <thead>
+                  <tr class="headings">
+                    <th class="column-title">Page Source</th>
+                    <th class="column-title">Created Date</th>
+                    <th class="column-title">User Name</th>
+                    <th class="column-title">Title</th>
+                    <th class="column-title">Rating</th>
+                    <th class="column-title">Active </th>
+                    <th class="column-title">Edit </th>
+                  </tr>
+                </thead>
+
+                <tbody id="body-table-review">
+                  {% for obj in page %}
+                  <tr class="even pointer">
+                    <td class=" ">{{obj.page_choice_text}}</td>
+                    <td class=" ">{{obj.created}}</td>
+                    <td class=" ">{{obj.user_name}}</td>
+                    <td class=" ">{{obj.title}}</td>
+                    <td class=" ">{{obj.rating}}</td>
+                    <td class=" ">
+                        <small>
+                            {% if obj.is_active %}
+                                <button  class="btn btn-success btn-xs"> Active </button>
+                            {% else %}
+                                <button  class="btn btn-danger btn-xs"> In Active </button>
+                            {% endif %}
+                        </small>
+                    </td>
+                    <td class=" ">
+                        <small><a href="{% url 'console:testimonial-update' obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a></small></td>
+
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              </form>
+            </div>
+                   
+            {% block main_pagination %}
+                <div class="main_pagination">
+                  {% if page %}
+                  <div class="col-sm-4">
+                       <div class="pull-left" style="display: inline-block;adding-left: 0;margin: 20px 0;">
+                        {% with current_page=page.number total_page=page.paginator.num_pages %}Page {{ current_page }} of {{ total_page }}
+                        {% endwith %}
+                      </div>
+                  </div>
+                  
+
+                <div class="col-sm-8">
+                    <div class="pull-right">
+                        <ul class="pagination">
+                        {% if page.has_previous %}
+                            <li class="paginate_button previous">
+                                <a href="?page={{ page.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >&laquo;</a>
+                            </li>
+                        {% endif %}
+
+                        {% for page_number in begin %}
+                            <li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %} ">
+                                <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
+                            </li>
+                        {% endfor %}
+
+                        {% if middle %}
+                            <li class="paginate_button disable"><a href="javascript:void(0);">&hellip;</a></li>
+                            {% for page_number in middle %}
+                                <li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %}">
+                                    <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
+                                    
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if page_end %}
+                            <li class="paginate_button disable"><a href="javascript:void(0);">&hellip;</a></li>
+                            {% for page_number in page_end %}
+                                <li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %}">
+                                    <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if page.has_next %}
+                            <li class="paginate_button next">
+                                <a href="?page={{ page.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >&raquo;</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                  </div>
+                </div>
+                {% endif %}
+
+
+      </div><!-- main_pagination end here -->
+      {% endblock main_pagination %}
+     
+                
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /page content -->
+
+{% endblock pagecontent %}
+
+
+{% block js_block %}
+    {{block.super}}
+
+    {% compress js %}
+    <script type="text/javascript" src="{% static "packages/iCheck/icheck.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "console/js/datepicker/daterangepicker.js" %}"></script>
+    {% comment %} <script type="text/javascript" src="{% static "console/js/order/review_action.js" %}"> {% endcomment %}
+    </script>
+    {% endcompress %}
+    
+{% endblock js_block %}
+
