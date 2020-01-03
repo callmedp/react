@@ -3,7 +3,7 @@ import os
 import json
 import logging
 from io import BytesIO
-from datetime import datetime,timedelta
+from datetime import datetime, timedelta
 from django.utils import timezone
 
 
@@ -226,7 +226,7 @@ class SubscriptionUtil:
     def get_oi(self, sub_type_flow):
         from order.models import OrderItem
         return OrderItem.objects.filter(
-            order__status__in=[1, 3], product__type_flow__in=[17],
+            order__status__in=[1, 3], product__type_flow__in=[17], oi_status__in=[0],
             product__sub_type_flow__in=sub_type_flow).select_related('order')
 
     def close_subscription(self):
@@ -236,6 +236,12 @@ class SubscriptionUtil:
         for oi in orderitems:
             if oi.end_date and (oi.end_date < timezone.now()):
                 # get shine candidate_id
+                oi.oi_status = 4
+                oi.save()
+                oi.orderitemoperation_set.create(
+                    oi_status=4,
+                    last_oi_status=0
+                )
                 candidate_id = oi.order.candidate_id
                 candidate = Candidate.objects.filter(
                     candidate_id=candidate_id).first()
