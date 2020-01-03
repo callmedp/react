@@ -38,9 +38,9 @@ PRODUCT_VENDOR_CHOICES = (
 
 
 PRODUCT_CHOICES = PRODUCT_VENDOR_CHOICES + ((2, 'Variation-Child'),
-    (3, 'Combo'),
-    (4, 'No-Direct-Sell/Virtual'),
-    (5, 'Downloadable'),)
+                                            (3, 'Combo'),
+                                            (4, 'No-Direct-Sell/Virtual'),
+                                            (5, 'Downloadable'),)
 
 FLOW_CHOICES = (
     (0, 'Default'),
@@ -78,13 +78,13 @@ SUB_FLOWS = {
         (201, "Certificate Product"),
     ),
     1: (
-        (100,"Default"),
+        (100, "Default"),
         (101, "Expert Assistance")
     ),
-    17: {
+    17: (
         (1700, "Default"),
-        (1701,"Subscription")
-    }
+        (1701, "Subscription")
+    )
 }
 
 SUB_FLOW_CHOICES = ()
@@ -94,13 +94,13 @@ for key, value in list(SUB_FLOWS.items()):
     SUB_FLOW_CHOICES += tuple(k)
 
 BG_COLOR = {0: "#c8b98d", 1: "#cfbabd", 2: "#75dac2", 3: "#d2db86",
-    4: "#a69cba", 5: "#8cb3f6", 6: "#9ac7e5", 7: "#ad9c7f",
-    8: "#80d7ff", 9: "#a48e96", 10: "#b4e4fc", 11: "#d7ccc8",
-    12: "#a3e77d", 13: "#ebdcc9", 14: "#9fdbd6", 15: "#a19f9c",
-    16: "#deae9e", 17: "#73a4d4", 18: "#cba5bf", 19: "#9099c6",
-    20: "#d9bee7", 21: "#cddb3a", 22: "#81c783", 23: "#afbec6",
-    24: "#cdac98", 25: "#c5cbe9", 26: "#d5d5d5", 27: "#e39b71"
-}
+            4: "#a69cba", 5: "#8cb3f6", 6: "#9ac7e5", 7: "#ad9c7f",
+            8: "#80d7ff", 9: "#a48e96", 10: "#b4e4fc", 11: "#d7ccc8",
+            12: "#a3e77d", 13: "#ebdcc9", 14: "#9fdbd6", 15: "#a19f9c",
+            16: "#deae9e", 17: "#73a4d4", 18: "#cba5bf", 19: "#9099c6",
+            20: "#d9bee7", 21: "#cddb3a", 22: "#81c783", 23: "#afbec6",
+            24: "#cdac98", 25: "#c5cbe9", 26: "#d5d5d5", 27: "#e39b71"
+            }
 BG_CHOICES = tuple(BG_COLOR.items())
 
 
@@ -116,6 +116,8 @@ DURATION_DICT = {
 }
 
 #
+
+
 def convert_to_month(days=0):
     if days:
         months = int(days)//30
@@ -138,6 +140,7 @@ def convert_to_month(days=0):
     return "D0"
 #
 
+
 C_ATTR_DICT = {
     'SM': 'study_mode',
     'DD': 'duration_day',
@@ -159,7 +162,7 @@ S_ATTR_DICT = {
     'SI': 'service_im',
     'CP': 'can_be_paused',
     'LC': 'links_count',
-    'SUB':'subscription_days'
+    'SUB': 'subscription_days'
 }
 
 A_ATTR_DICT = {
@@ -248,13 +251,14 @@ def convert_gbp(price=Decimal(0)):
             return '5'
     return '0'
 
+
 BENEFITS = {
     '1': ['Free featured profile', 'exe-icon-feat-profile', 'FREE featured profile worth Rs. 1440 for 1 month on Shine.com'],
     '2': ['Shine credits', 'exe-icon-shine-credit', '10% Shine credits redeemable on next purchase*'],
     '3': ['Global Education Providers', 'exe-icon-education-provider', 'Choose from a list of global providers as per your requirement.'],
     '4': ['Appear for exam – Get Certified', 'exe-icon-get-certified'],
     '5': ['Fill Online Application Form', 'exe-icon-online-application'],
-    '6': ['Get Access to online learning management system', 'exe-icon-access-online'], 
+    '6': ['Get Access to online learning management system', 'exe-icon-access-online'],
     # '7': ['Check eligibility before filling online application','exe-icon-check-eligible'],
     # '8': ['Complete online application form', 'exe-icon-complete-application'],
     # '9': ['Make Course Fee Payment', 'exe-icon-fee-payment'],
@@ -275,9 +279,11 @@ APPLICATION_PROCESS = {
 
 }
 
-APPLICATION_PROCESS_CHOICES = [(int(key), val[1], val[0])for key, val in list(APPLICATION_PROCESS.items())]
+APPLICATION_PROCESS_CHOICES = [(int(key), val[1], val[0])
+                               for key, val in list(APPLICATION_PROCESS.items())]
 
-BENEFITS_CHOICES = [(int(key), val[1], val[0])for key, val in list(BENEFITS.items())]
+BENEFITS_CHOICES = [(int(key), val[1], val[0])
+                    for key, val in list(BENEFITS.items())]
 
 CITY_CHOICES = (
     (0, 'Delhi'),
