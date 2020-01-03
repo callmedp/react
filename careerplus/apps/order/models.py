@@ -782,9 +782,12 @@ class OrderItem(AbstractAutoDate):
         else:
             sdt = self.start_date
         
+        time_val  = timezone.now() + timedelta(days=31)
+
         if not can_be_paused:
             edt = sdt + timedelta(days=duration_days)
-            days_left = edt - timezone.now()
+            print(timezone.now() + timedelta(days=31))
+            days_left = edt - time_val
             return days_left.days
 
 
@@ -808,8 +811,8 @@ class OrderItem(AbstractAutoDate):
 
         days_left -= (days_between_pause_resume)
 
-        if (edt - timezone.now()) < days_left:
-            days_left = (edt - timezone.now())
+        if (edt - time_val) < days_left:
+            days_left = (edt - time_val)
 
         return days_left.days
 
