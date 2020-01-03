@@ -7,8 +7,9 @@ Following Funtions are used in skill page desktop
     5. changeTab => Change tab between courses and assessments.
     6. needHelpFormValidation => validate the need help form using jquery validate
     7. indiaMobileValidator =>  To add a new validation rules of indian mobile no in jquery validate
-    8. gaEventFunc => gaEvent function for enquiry form
-    9. needHelpFormDOMEffect =>  need help form button ANimated effect
+    8. lettersOnlyValidator =>  To add a new validation rules of letters only in jquery validate
+    9. gaEventFunc => gaEvent function for enquiry form
+    10. needHelpFormDOMEffect =>  need help form button ANimated effect
 
 */
 
@@ -44,6 +45,7 @@ $(document).ready(()=>{
 
     stickyNavbarActiveScroll(true)
     indiaMobileValidator()
+    lettersOnlyValidator()
     needHelpFormValidation()
     needHelpFormDOMEffect()
 
@@ -243,6 +245,7 @@ const needHelpFormValidation = () => {
         rules: {
             name: {
                 required: true,
+                lettersonly: true,
                 maxlength: 100
             },
             email: {
@@ -262,6 +265,7 @@ const needHelpFormValidation = () => {
         messages: {
             name: {
                 required: "Required",
+                lettersonly: 'Letters Only',
                 maxlength: "Max length 100"
             },
             email: {
@@ -305,6 +309,13 @@ const indiaMobileValidator = () => {
         }
         return true;
     });
+}
+
+// fucntion to add a new validation rules of letters only in jquery validate
+const lettersOnlyValidator = () => {
+    $.validator.addMethod("lettersonly", function(value, element) {
+        return this.optional(element) || /^[a-z," "]+$/i.test(value);
+    }); 
 }
 
 

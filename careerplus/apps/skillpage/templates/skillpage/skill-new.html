@@ -131,17 +131,17 @@
           {% endif %}
           {% if 'who-should-learn'|get_value:subheading %}
             <li class="nav-item">
-              <a class="nav-link" href="#who-learn">Who should learn</a>
+              <a class="nav-link" href="#who-learn">Who Should Learn</a>
             </li>
           {% endif %}
           {% if career_outcomes %}
             <li class="nav-item">
-              <a class="nav-link" href="#skill-learn">SKills you learn</a>
+              <a class="nav-link" href="#skill-learn">Skills You Learn</a>
             </li>
           {% endif %}
           
           <li class="nav-item">
-            <a class="nav-link" href="#impact">Our Impact</a>
+            <a class="nav-link" href="#impact">Why Us?</a>
           </li>
           {% if course_count or assesment_count %}
             <li class="nav-item">
@@ -173,13 +173,11 @@
             <section id="about" class="col-sm-12">
               <div class="skill-about">
                 <h2>About {{category.name|title}}</h2>
-                <p id="expand-content" class="collapse" aria-expanded="false">
+                <p id="expand-content">
                   {% for description in  category.description|format_description%}
                     {{description|safe}}
                   {% endfor %} 
                 </p>
-                <a role="button" class="collapsed" data-toggle="collapse" href="#expand-content" aria-expanded="false" 
-                    aria-controls="expand-content"></a>
               </div>
             </section>
 
@@ -188,7 +186,7 @@
               <section id="popular-courses" class="col-sm-12">
                 <div class="popular-course">
                   <div class="row">
-                    <h2>Popular courses</h2>
+                    <h2>Popular Courses</h2>
                     <button class="btn btn-outline-primary ml-auto" onclick="smoothScrolling('courseTab',100)" role="button">
                       View Courses
                     </button>
@@ -219,8 +217,6 @@
                   <div class="objective">
                     <h2>{{objective.heading}}</h2>
                     {{objective.get_sub_heading_description_with_attr_ul_desktop|safe}}
-                      <a role="button" class="collapsed ml-15" data-toggle="collapse" href="#expand-list" aria-expanded="false"
-                         aria-controls="expand-list"></a>
                   </div>
                 </section>
               {% endwith %}
@@ -243,7 +239,7 @@
             {% if career_outcomes %}
               <section id="skill-learn" class="col-sm-12">
                 <div class="skill-gain">
-                  <h2>Skills you will gain</h2>
+                  <h2>Skills You Will Gain</h2>
                   <p class="mb-0 mt-30">
                   {% for outcome in career_outcomes %}
                     <span class="badge badge-pill badge-purple">{{outcome}}</span>
@@ -260,7 +256,7 @@
                 <div class="test-skill">
                   <img src="{% static 'shinelearn/images/test-skill.png' %}" class="img-fluid float-right" 
                       alt="Test your skills">
-                  <h2>Test your skills</h2>
+                  <h2>Test Your Skills</h2>
                   <p>Take our free practice test to test your skill level in <strong>{{category.heading}}</strong></p>
                   <a class="btn btn-primary mt-10" href="{% url 'assessment:vskill-subcategory' slug=category.slug  %}" 
                       role="button">Take free test</a>
@@ -271,14 +267,14 @@
             <!-- our impact section -->
             <section id="impact" class="col-sm-12">
               <div class="our-impact">
-                <h2>Our Impact</h2>
+                <h2>Why Us?</h2>
                 <div class="row pt-10 mb-5">
                   <div class="col-sm-4">
                     <div class="media align-items-center">
                       <figure class="b4-icon-impact1 mr-20"></figure>
                       <figcaption class="media-body">
-                          <strong>50K+</strong>
-                          Registered learners 
+                          <strong>10k+</strong>
+                           Registered Learners
                       </figcaption>
                     </div>
                   </div>
@@ -286,8 +282,8 @@
                     <div class="media align-items-center">
                       <figure class="b4-icon-impact1 mr-20"></figure>
                       <figcaption class="media-body">
-                          <strong>250K+</strong>
-                          <a><strong>Courses</strong> available</a>
+                          <strong>500+</strong>
+                          <a><strong>Courses</strong> Available</a>
                       </figcaption>
                     </div>
                   </div>
@@ -295,8 +291,8 @@
                     <div class="media align-items-center">
                       <figure class="b4-icon-impact1 mr-20"></figure>
                       <figcaption class="media-body">
-                          <strong>5K+</strong>
-                          <a><strong>jobs at shine</strong></a>
+                          <strong>3x times</strong>
+                          <a>Increased Chances of Getting Hired</a>  
                       </figcaption>
                     </div>
                   </div>
