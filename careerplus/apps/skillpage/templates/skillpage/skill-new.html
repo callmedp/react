@@ -607,7 +607,9 @@
       const modeChoices = {{product_mode_choices|safe}};
     </script>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="{% static 'shinelearn/js/skill/skillpage-new.js' %}"></script>
+    {% compress js %}
+      <script src="{% static 'shinelearn/js/skill/skillpage-new.js' %}"></script>
+    {% endcompress %}
 
 
 {% endblock js_section %}
