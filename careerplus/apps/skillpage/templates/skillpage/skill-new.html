@@ -2,69 +2,66 @@
 {% load static compress %}
 {% load shop_tags %}
 
-{% block head %}
-  <head>
-    <title>{% block title %}Shine Learning{% endblock title%}</title>
-
-    {% block meta_html %}
-    {% endblock meta_html %}
-
-    {% block django_meta %}
-    {% endblock django_meta %}
-
-    {% block canonical_url %}
-      <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
-      <link rel="alternate" media="only screen and (maxwidth:640px)" href="https://{{ MOBILE_SITE_DOMAIN }}{{request.path}}">
-      <link rel="alternate" media="handheld" href="https://{{ MOBILE_SITE_DOMAIN }}{{request.path}}">
-    {% endblock canonical_url %}
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-
-    {% block GA %}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3537905-41"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          {% if request.GET.itm_source or request.GET.itm_medium or request.GET.itm_campaign or request.GET.itm_content %}
-              gtag('config', 'UA-3537905-41' ,{'dimension1': '{{request.GET.itm_source}}','dimension2' : '{{request.GET.itm_medium}}'
-                ,'dimension3':  '{{request.GET.itm_campaign}}','dimension4':'{{request.GET.itm_content}}' });
-          {% else%}
-              gtag('config', 'UA-3537905-41');
-          {%endif%}
-          gtag('config', 'UA-3537905-1',{'group':'mainProfile'});
-        </script>
-    {% endblock GA %}
+{% block title %}	
+	{{meta.title}}
+{% endblock title %}
 
 
-    {% block css_section %}
-      {{ block.super }}
-      <!-- Bootstrap 4 -->
-      {% compress css %}
-              <link type="text/scss" href="{% static 'shinelearn/css/common/bootstrap4/skill.scss' %}" rel="stylesheet">
-      {% endcompress %}
+{% comment %} {% block meta_html %}
+{% endblock meta_html %} {% endcomment %}
 
-    {% endblock css_section %}
+{% block django_meta %}
+    {% include 'meta/meta.html' %}
+{%  endblock django_meta %}
 
-    {% block banner_ads %}
-        <script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>
-        <script>
-          var googletag = googletag || {};
-          googletag.cmd = googletag.cmd || [];
-          </script>
-          <script>
-          googletag.cmd.push(function() {
-          googletag.defineSlot('/1198510/ShineLearning_1x1_desktop', [1, 1], 'div-gpt-ad-1509431221932-0').addService(googletag.pubads());
-          googletag.pubads().enableSingleRequest();
-          googletag.enableServices();
-          });
-        </script>
-    {% endblock banner_ads %}
+{% block canonical_url %}
+  <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
+  <link rel="alternate" media="only screen and (maxwidth:640px)" href="https://{{ MOBILE_SITE_DOMAIN }}{{request.path}}">
+  <link rel="alternate" media="handheld" href="https://{{ MOBILE_SITE_DOMAIN }}{{request.path}}">
+{% endblock canonical_url %}
 
-    {{ JS_SETTINGS|safe }}
+{% block GA %}
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3537905-41"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      {% if request.GET.itm_source or request.GET.itm_medium or request.GET.itm_campaign or request.GET.itm_content %}
+          gtag('config', 'UA-3537905-41' ,{'dimension1': '{{request.GET.itm_source}}','dimension2' : '{{request.GET.itm_medium}}'
+            ,'dimension3':  '{{request.GET.itm_campaign}}','dimension4':'{{request.GET.itm_content}}' });
+      {% else%}
+          gtag('config', 'UA-3537905-41');
+      {%endif%}
+      gtag('config', 'UA-3537905-1',{'group':'mainProfile'});
+    </script>
+{% endblock GA %}
 
-  </head>
-   
-{% endblock head %} 
+
+{% block css_section %}
+  {{ block.super }}
+  <!-- Bootstrap 4 -->
+  {% compress css %}
+          <link type="text/scss" href="{% static 'shinelearn/css/common/bootstrap4/skill.scss' %}" rel="stylesheet">
+  {% endcompress %}
+
+{% endblock css_section %}
+
+{% block banner_ads %}
+    <script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>
+    <script>
+      var googletag = googletag || {};
+      googletag.cmd = googletag.cmd || [];
+      </script>
+      <script>
+      googletag.cmd.push(function() {
+      googletag.defineSlot('/1198510/ShineLearning_1x1_desktop', [1, 1], 'div-gpt-ad-1509431221932-0').addService(googletag.pubads());
+      googletag.pubads().enableSingleRequest();
+      googletag.enableServices();
+      });
+    </script>
+{% endblock banner_ads %}
+
+{{ JS_SETTINGS|safe }}
 
 
 {% block container %}
@@ -75,13 +72,21 @@
       <div class="row">
         <div class="col-sm-9">
           <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mt-40 mb-20">
+            <ol class="breadcrumb mt-40 mb-20" itemscope itemtype="http://schema.org/BreadcrumbList">
             {% for bread in breadcrumbs %}
               {% if bread.url %}
-                <li class="breadcrumb-item"><a href="{{bread.url}}">{{bread.name}}</a></li>
+                <li class="breadcrumb-item" itemprop="itemListElement" itemscope
+					      itemtype="http://schema.org/ListItem">
+                  <a href="{{bread.url}}" itemprop="item">{{bread.name}}</a>
+                  <meta itemprop="name" content="{{bread.name}}" />
+                  <meta itemprop="position" content="{{forloop.counter}}" />
+                </li>
               {% else %}
-                <li class="breadcrumb-item active" aria-current="page">{{bread.name}}</li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  <span itemprop="item">{{bread.name}}</span>
+                </li>
               {% endif %}
+              
             {% endfor %}
             </ol>
           </nav>
@@ -301,20 +306,20 @@
             </section>
 
             <!-- courses assesments tab section -->
-            <section class="col-sm-12" id="courseTab">
+            <section class="col-sm-12" id="courseTab" itemscope itemtype="http://schema.org/ItemList">
               <div class="courses-assesment-tab">
                 <ul class="nav nav-tabs"  role="tablist">
                   {% if course_count %}
                     <li class="nav-item">
                       <a class="nav-link active" id="courses-tab" data-toggle="tab" href="#courses" role="tab" 
-                          aria-controls="courses" aria-selected="true">
+                          aria-controls="courses" aria-selected="true" itemprop="name">
                         <h2>Courses ({{course_count}})</h2>
                       </a>
                     </li>
                   {% endif %}
                   {% if assesment_count %}
                     <li class="nav-item">
-                      <a class="nav-link  {% if not course_count %}active{% endif %}" id="assessments-tab" 
+                      <a class="nav-link  {% if not course_count %}active{% endif %}" id="assessments-tab" itemprop="name" 
                           data-toggle="tab" href="#assessments" role="tab" aria-controls="assessments" aria-selected="false">
                         <h2>Assessments ({{assesment_count}})</h2>
                       </a>
@@ -328,13 +333,15 @@
                           for receiving products for used as an attribute here {% endcomment %}
                       <ul class="list-unstyled" id="course-list" categoryId="{{category.pk}}" categoryHeading={{category.heading}}>  
                         {% for course in courses %}
-                          <li class="media listing__list">
+                          <li class="media listing__list" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                            <meta itemprop="position" content="{{forloop.counter}}" />
                             <figure class="listing__image">
                                 <img aria-label="{{course.pNm}}" class="img-fluid" src="{{course.pImg}}" alt="{{course.pNm}}">
                             </figure>
                             
-                            <div class="media-body">
-                              <h3><a href="{{course.pURL}}">{{course.pNm}}</a></h3>
+                            <div class="media-body" >
+                              <h3><a itemprop="url" href="{{course.pURL}}">{{course.pNm}}</a>
+                              </h3>
                                 <div class="rating">
                                   {% for rating in course.pStar %}
                                     {% if rating == "*" %}
@@ -403,14 +410,18 @@
                   <div class="tab-pane fade" id="assessments" role="tabpanel" aria-labelledby="assessments-tab">
                       <ul class="list-unstyled" id="assessment-list">
                         {% for assesment in assesments %}
-                          <li class="media listing__list">
+                          <li class="media listing__list" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                            <meta itemprop="position" content="{{forloop.counter}}" />
+
                             <figure class="listing__image">
                                 <img aria-label="{{assesment.pNm}}" class="img-fluid" src="{{assesment.pImg}}" 
                                     alt="{{assesment.pNm}}">
                             </figure>
                             
                             <div class="media-body">
-                              <h3><a href="{{assesment.pURL}}">{{assesment.pNm}}</a></h3>
+                              <h3>
+                                <a itemprop="url" href="{{assesment.pURL}}">{{assesment.pNm}}</a>
+                              </h3>
                                 <div class="rating">
                                   {% for rating in assesment.pStar %}
                                     {% if rating == "*" %}
@@ -481,27 +492,27 @@
 
             {% if testimonialcategory|length %}
               <!-- learners stories section -->
-              <section id="testimonial" class="col-sm-12">
+              <section id="testimonial" class="col-sm-12" >
                 <h2>Learners stories</h2>
                 <div id="carouselExampleCaptions" class="carousel slide learner-stories" data-ride="carousel">
                   <div class="carousel-inner">
                     {% for testimonialsubgroup in  testimonialcategory|divide_testimonial_category_group_list_of_lists%}
                       <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
-                        <div class="d-flex">
+                        <div class="d-flex" itemscope itemtype="http://schema.org/Review">
                           {% for obj in testimonialsubgroup %}
                             {% if obj %}
-                              <div class="col-sm-4">
+                              <div class="col-sm-4" itemprop="itemReviewed" >
                                 <div class="card text-center">
-                                  <div class="card__heading">
+                                  <div class="card__heading" itemprop="name">
                                     {{obj.testimonial.user_name|get_initials}}
                                   </div>
                                   <div class="card-body">
-                                    <p class="card-text">
+                                    <p class="card-text" itemprop="description">
                                       {{obj.testimonial.review}}
                                     </p>
                                   </div>
                                   <p class="card__name">
-                                    <strong>{{obj.testimonial.user_name}}</strong>
+                                    <strong itemprop="author">{{obj.testimonial.user_name}}</strong>
                                     {{obj.testimonial.designation}},{{obj.testimonial.company}}
                                   </p>
                                 </div>
@@ -525,26 +536,28 @@
             <!-- faq section -->
             {% if 'faq'|get_value:subheading %}
               {% with faq='faq'|get_value:subheading %}
-                <section id="faq" class="col-sm-12">
+                <section id="faq" class="col-sm-12" itemscope itemtype="https://schema.org/FAQPage">
                   <div class="faq">
-                    <h2>{{faq.heading}}</h2>
+                    <h2 itemprop="name">{{faq.heading}}</h2>
                     {% with faq_list=faq.description|get_faq_list %}
                       <div class="accordion" id="faq-accordion">
                         {% for item in faq_list %}
                           <div class="card {% if forloop.counter > 2%}d-none{% endif %}">
-                            <div class="card__question" id="heading{{ forloop.counter }}">
+                            <div class="card__question" id="heading{{ forloop.counter }}" itemscope itemprop="mainEntity" 
+                              itemtype="https://schema.org/Question">
                               <button class="btn {% if forloop.counter > 1 %}collapsed{% endif %}" type="button" 
                                   data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" 
                                   aria-expanded="{% if forloop.counter > 1%}false{% else %}true{% endif %}"
-                                  aria-controls="collapse{{ forloop.counter }}">
+                                  aria-controls="collapse{{ forloop.counter }}" itemprop="name">
 
                                 {{item.heading|safe}}
                               </button>
                             </div>
                         
                             <div id="collapse{{ forloop.counter }}" class="collapse {% if forloop.counter == 1%}show{% endif %}" 
-                              aria-labelledby="heading{{ forloop.counter }}" data-parent="#faq-accordion">
-                              <div class="card-body card__answer">
+                              aria-labelledby="heading{{ forloop.counter }}" data-parent="#faq-accordion" itemscope 
+                              itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                              <div class="card-body card__answer" itemprop="text">
                                 {{item.content|safe}}
                               </div>
                             </div>

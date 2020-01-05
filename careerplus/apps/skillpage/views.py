@@ -66,6 +66,11 @@ class SkillPageView(DetailView, SkillPageMixin):
             subheading_id_data_mapping.update({
                 heading.heading_choice_text : heading
             })
+
+        meta = self.object.as_meta()
+        setattr(meta,'_keywords',None)
+        setattr(meta,'_url',self.object.get_canonical_url())
+
         
         context.update({
             'subheading':subheading_id_data_mapping,
@@ -82,6 +87,9 @@ class SkillPageView(DetailView, SkillPageMixin):
             'country_choices':country_choices,
             'testimonialcategory':testimonialcategory,
             'product_mode_choices':product_mode_choices,
+            'meta':meta,
+            'canonical_url':self.object.get_canonical_url(),
+            'show_chat':True,
         })
         return context
 

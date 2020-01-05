@@ -1,9 +1,11 @@
 {% load static %}
 <!-- top first navigation -->
-<nav class="container-fluid padlr-0 shadow position-relative zindex">
+<nav class="container-fluid padlr-0 shadow position-relative zindex" >
   <div class="container padlr-0">
-    <div class="navbar navbar-expand-lg navbar-light padlr-0">
+    <div class="navbar navbar-expand-lg navbar-light padlr-0" itemscope itemtype="http://schema.org/Organization">
       <a class="navbar-brand" aria-label="shinelearning.com" href="{% url 'homepage' %}"></a>
+      <meta itemprop="name" content="Shine">
+      <meta itemprop="url" content="https://learning.shine.com"/>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <form action="/search/results/" class="form-inline my-2 my-lg-0 mr-auto">
             <input class="form-control search-box" type="search" placeholder="Search course, assesssment…" name="q" aria-label="Search" autocomplete="off">
