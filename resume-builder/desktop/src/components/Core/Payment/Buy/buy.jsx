@@ -118,7 +118,7 @@ export class Buy extends Component {
         this.setState({ 'timerId': timer, 'pollingStartTIme': startTime })
     }
 
-    async redirectToCart() {
+    async redirectToCart(checkedProduct) {
         this.props.eventClicked({
             'action': 'PayNow',
             'label': 'Click'
@@ -128,7 +128,7 @@ export class Buy extends Component {
         let product;
         this.props.showLoader();
 
-        if (this.state.checked === 'product1') {
+        if (checkedProduct === 'product1') {
             product = this.props.productIds[0]
         } else {
             product = this.props.productIds[1]
@@ -295,11 +295,11 @@ export class Buy extends Component {
                                 <ul>
                                     <li>
                                         <div className="flex-container">
-                                            <span className="choose-plann--child">
+                                            {/* <span className="choose-plann--child">
                                                 <input type="radio" name="product1"
                                                     checked={this.state.checked === 'product1' ? true : false}
                                                     onChange={this.handleOnChange.bind(this, 'product1')} />
-                                            </span>
+                                            </span> */}
                                             <span className="choose-plan--price">
                                                 <p>14-DAYS PLAN</p>
                                                 Rs. <strong>{price1}/-</strong>
@@ -308,18 +308,18 @@ export class Buy extends Component {
                                             </span>
                                             <button
                                                 className="choose-plan--btn-rt orange-button ml-auto"
-                                                onClick={this.redirectToCart.bind(this)}>Pay now
+                                                onClick={this.redirectToCart.bind(this, 'product1')}>Pay now
                                             </button>
                                         </div>
                                     </li>
                                     <li className="bdr pos-rel">
                                         <div className="flex-container">
                                             <span className="choose-plan--ribbon">Recommended</span>
-                                            <span className="choose-plann--child">
+                                            {/* <span className="choose-plann--child">
                                                 <input type="radio" name="product2"
                                                     checked={this.state.checked === 'product2' ? true : false}
                                                     onChange={this.handleOnChange.bind(this, 'product2')} />
-                                            </span>
+                                            </span> */}
                                             <span className="choose-plan--price">
                                                 <p>Yearly Pack</p>
                                                 <span>Rs.</span> <strong>  {price2}
@@ -329,7 +329,7 @@ export class Buy extends Component {
                                             </span>
                                             <button
                                                 className="choose-plan--btn-rt orange-button ml-auto mt-20"
-                                                onClick={this.redirectToCart.bind(this)}>Pay now
+                                                onClick={this.redirectToCart.bind(this, 'product2')}>Pay now
                                             </button>
                                         </div>
                                     </li>
