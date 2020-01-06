@@ -291,7 +291,7 @@
 
                     <ul class="learner-stories__slider" itemscope itemtype="http://schema.org/Review">
                         {% for obj in testimonialcategory %}
-                            <li  itemprop="itemReviewed">
+                            <li>
                                 <div class="white-box border-bottom-blue text-center">
                                     <span class="learner-stories--tag badge-1 m-auto my-15" itemprop="name">
                                         {{obj.testimonial.user_name|get_initials}}
@@ -319,18 +319,18 @@
                         {% with faq_list=faq.description|get_faq_list %}
                             <div class="css-accordion">
                                 {% for item in  faq_list%}
-                                    <div class="css-accordion--tab {% if forloop.counter > 2%}hide{% endif %}">
+                                    <div class="css-accordion--tab {% if forloop.counter > 2%}hide{% endif %}" itemscope 
+                                        itemprop="mainEntity" itemtype="https://schema.org/Question">
                                         <input class="faq-input" type="radio" id="rd{{ forloop.counter }}" 
                                             name="rd" {% if forloop.counter == 1%}checked{% endif %}>
-                                        <label class="css-accordion--heading" for="rd{{ forloop.counter }}" 
-                                            itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                                        <label class="css-accordion--heading" for="rd{{ forloop.counter }}" >
                                             {{item.heading|safe}}
                                             <meta itemprop="name" content="{{item.heading|safe}}">
                                         </label>
                                         <div class="css-accordion--content" itemscope itemprop="acceptedAnswer" 
                                             itemtype="https://schema.org/Answer">
                                             {{item.content|safe}}
-                                             <meta itemprop="description" content="{{item.content|safe}}">
+                                             <meta itemprop="text" content="{{item.content|safe}}">
                                         </div><!-- // css-accordion content -->
                                     </div><!-- // css-accordion -->
                                 {% endfor %}
