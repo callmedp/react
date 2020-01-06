@@ -590,10 +590,11 @@ def process_jobs_on_the_move(obj_id=None):
                     salary_in_lakh = resp_status['workex'][0]['salary_in_lakh']
                     salary_in_thousand = resp_status['workex'][0]['salary_in_thousand']
                     current_salary = str(salary_in_lakh) + 'Lakh ' + str(salary_in_thousand) + 'Thousand'
-
+            #  TODO handle this empty contact number issue in order
+            contact_number =  obj.order.mobile or "NA"; 
             ProductUserProfile.objects.create(
                 order_item=obj,
-                contact_number=obj.order.mobile,
+                contact_number=contact_number,
                 desired_industry=desired_industry,
                 desired_location=desired_location,
                 desired_salary=desired_salary,

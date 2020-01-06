@@ -458,7 +458,7 @@ class Order(AbstractAutoDate):
 
             for jobs_oi in jobs_on_the_move_items:
                 jobs_oi.start_date = timezone.now()
-                jobs_oi.end_date = timezone.now() + timedelta(jobs_oi.product.day_duration)
+                jobs_oi.end_date = timezone.now() + timedelta(days = jobs_oi.product.day_duration)
                 jobs_oi.save()
 
 

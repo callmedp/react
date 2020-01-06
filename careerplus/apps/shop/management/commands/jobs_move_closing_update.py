@@ -65,8 +65,9 @@ class Command(BaseCommand):
 
             delta_time = activation_date + \
                 datetime.timedelta(days=duration_days)
-            obj.getattr(
-                obj.product.attr, S_ATTR_DICT.get('FD'), 180)()
+        
+            obj.update_pending_links_count()
+
             # Close the order if condition satisfies else
             if candidate_id:
                 if (delta_time < timezone.now()) and obj.pending_links_count == 0:
