@@ -558,6 +558,11 @@ datalist {
         display: none;
       }
     }
+    div {
+      &:last-child {
+        width: 0;
+      }
+    }
   }
 }
 

@@ -1,19 +1,22 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './home.scss'
-import * as actions from "../../../store/landingPage/actions";
-import {connect} from "react-redux";
+import { getCandidateId, loginCandidate, feedbackSubmit, getComponentTitle, getCandidateShineDetails, checkSessionAvaialability } from "../../../store/landingPage/actions";
+import { connect } from "react-redux";
 import Banner from "./Banner/banner.jsx";
 import ResumeSlider from "./ResumeSlider/resumeSlider.jsx";
 import Testimonial from "./Testimonial/testimonial.jsx";
 import Footer from "../../Common/Footer/footer.jsx";
 import Header from "../../Common/Header/header.jsx";
 import LoaderPage from '../../Loader/loaderPage.jsx'
-import {scroller} from 'react-scroll';
+import { scroller } from 'react-scroll';
 import queryString from "query-string";
-import {hideModal, showModal} from "../../../store/ui/actions";
-import {displaySelectedTemplate} from '../../../store/template/actions'
-import {eventClicked} from '../../../store/googleAnalytics/actions/index'
-
+import LoginModal from "../../Modal/loginModal";
+import { hideModal, showModal, showLoginModal, hideLoginModal } from "../../../store/ui/actions";
+import { displaySelectedTemplate } from '../../../store/template/actions';
+import { eventClicked } from '../../../store/googleAnalytics/actions/index';
+import {
+    Redirect
+} from 'react-router-dom'
 
 class Home extends Component {
     constructor(props) {
@@ -24,16 +27,17 @@ class Home extends Component {
         this.state = {
             'scrolled': false,
             'token': '',
-        }
-        if(document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]){
-            document.getElementsByClassName('chat-bot')[0].style.display='none'; 
-        }
-       
+            'login': ''
+        }        
         const values = queryString.parse(this.props.location.search);
-        const token = (values && values.token) || '';
+        const token = (values && values.token) || '', login = (values && values.login) || '';
+
         this.state.token = token;
+        this.state.login = login;
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
+        this.handleLoginSuccess = this.handleLoginSuccess.bind(this);
     }
+
 
     scrollTo(elem, action, label) {
         scroller.scrollTo(elem, {
@@ -41,7 +45,7 @@ class Home extends Component {
             delay: 0,
             smooth: 'easeInOutQuad',
             offset: -10
-        })
+        });
         this.props.eventClicked({
             action,
             label
@@ -61,23 +65,89 @@ class Home extends Component {
         }
     }
 
+
+    handleLoginSuccess() {
+        const { history, location } = this.props;
+        const pathFrom = location.state && location.state.from || '';
+
+        if (pathFrom) {
+            history.push(pathFrom);
+        }
+        else {
+            history.push('/resume-builder/edit/?type=profile')
+        }
+    }
     async componentDidMount() {
-        await this.props.loginCandidate(this.state.token);
+
+        if ( typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
+            document.getElementsByClassName('chat-bot')[0].style.display = 'none';
+        }
+
+        if (this.state.token) {
+            await this.props.loginCandidate({ alt: this.state.token }, this.props.history, true);
+        }
+        if (this.state.login === 'false') {
+            const isSessionAvailable = await this.props.checkSessionAvaialability();
+            if (isSessionAvailable) {
+                try {
+                    await this.props.getCandidateShineDetails()
+                    const { state } = this.props.location;
+                    if (state && state.from) {
+                        this.props.history.push(state.from);
+                    }
+                }
+                catch (e) {
+                    console.log(e.message);
+                }
+                // redirect back from where it comes
+               
+            }
+            else {
+                await this.props.showLoginModal()
+                // const { state } = this.props.location;
+                // if (state && state.from) {
+                //     this.props.history.push(state.from);
+                // }
+            }
+        }
 
     }
 
+    static getActions() {
+        return [getComponentTitle]
+    }
+
+    static async fetching({ dispatch }, params) {
+        let actionList = Home.getActions();
+        const results = []
+        for (const [index, value] of actionList.entries()) {
+            try {
+                results[index] = await new Promise((resolve, reject) => dispatch(value({
+                    info: params,
+                    resolve,
+                    reject,
+                    isTokenAvail: true
+                })))
+            }
+            catch (e) {
+                console.log('New error - ', e);
+            }
+        }
+        return results;
+    }
 
     render() {
-        const {ui: {loader}, userInfo, userInfo: {first_name}, feedback, eventClicked} = this.props;
+        const { ui: { loader }, userInfo, userInfo: { first_name }, feedback, eventClicked } = this.props;
         return (
             <div className="nav-fixed">
                 {
                     !!(loader) &&
-                    <LoaderPage/>
+                    <LoaderPage />
                 }
                 <Header userName={first_name} page={'home'} userInfo={userInfo} eventClicked={eventClicked}
-                        feedback={feedback} getclass={this.state.scrolled ? 'color-change' : ''}/>
-                <Banner userName={first_name} eventClicked={eventClicked}/>
+                    feedback={feedback} getclass={this.state.scrolled ? 'color-change' : ''} location={this.props.location} />
+                <Banner userName={first_name} eventClicked={eventClicked} />
+                <LoginModal {...this.props} handleLoginSuccess={this.handleLoginSuccess} />
                 <section className="section-container">
                     <h2>Resume builder advantages</h2>
                     <strong className="section-container--sub-head">Resume builder advantages which will make your
@@ -88,7 +158,7 @@ class Home extends Component {
                                 <span className="icon-advantage1"></span>
                             </div>
                             <div className="advantages--content">
-                                <h3>Visually Striking Resume</h3>
+                                <strong>Visually Striking Resume</strong>
                                 <p>Our resume layout optimizer makes sure all your
                                     content is aligned and organized so your resume looks
                                     like a work of art.</p>
@@ -99,7 +169,7 @@ class Home extends Component {
                                 <span className="icon-advantage2"></span>
                             </div>
                             <div className="advantages--content">
-                                <h3>Unlimited Downloads</h3>
+                                <strong>Unlimited Downloads</strong>
                                 <p>Our Resume Builder subscription gives you the
                                     flexibility to edit and download your resume unlimited time</p>
                             </div>
@@ -109,7 +179,7 @@ class Home extends Component {
                                 <span className="icon-advantage3"></span>
                             </div>
                             <div className="advantages--content">
-                                <h3>Higher Recruiter Views</h3>
+                                <strong>Higher Recruiter Views</strong>
                                 <p>Each job has on average of 500 applicants with 95% of resume never read. Our resume
                                     builder increases the chances of your resume getting read.</p>
                             </div>
@@ -119,7 +189,7 @@ class Home extends Component {
                                 <span className="icon-advantage4"></span>
                             </div>
                             <div className="advantages--content">
-                                <h3>Get your CV past screening software</h3>
+                                <strong>Get your CV past screening software</strong>
                                 <p>Most of the resume filtering is done by machine. So, it becomes very important to
                                     design your CV as per the ATS</p>
                             </div>
@@ -167,7 +237,7 @@ class Home extends Component {
                     </ul>
                 </section>
 
-                <ResumeSlider {...this.props} page={'home'}/>
+                <ResumeSlider {...this.props} page={'home'} />
 
                 <section className="section-container">
                     <h2>Resume builder features</h2>
@@ -178,7 +248,7 @@ class Home extends Component {
                                 <span className="icon-features1"></span>
                             </div>
                             <div className="features--content">
-                                <h3>Expert assistance</h3>
+                                <strong>Expert assistance</strong>
                                 <p>Get professional summary and job profile recommendation</p>
                             </div>
                         </li>
@@ -187,7 +257,7 @@ class Home extends Component {
                                 <span className="icon-features2"></span>
                             </div>
                             <div className="features--content">
-                                <h3>Import data from Shine</h3>
+                                <strong>Import data from Shine</strong>
                                 <p>You can import all data from your shine profile to your resume</p>
                             </div>
                         </li>
@@ -196,7 +266,7 @@ class Home extends Component {
                                 <span className="icon-features3"></span>
                             </div>
                             <div className="features--content">
-                                <h3>Update resume back to Shine</h3>
+                                <strong>Update resume back to Shine</strong>
                                 <p>You can update your resume on your shine profile</p>
                             </div>
                         </li>
@@ -205,7 +275,7 @@ class Home extends Component {
                                 <span className="icon-features4"></span>
                             </div>
                             <div className="features--content">
-                                <h3>Customize your resume</h3>
+                                <strong>Customize your resume</strong>
                                 <p>Customize your resume with professional font, colors and templates</p>
                             </div>
                         </li>
@@ -214,7 +284,7 @@ class Home extends Component {
                                 <span className="icon-features5"></span>
                             </div>
                             <div className="features--content">
-                                <h3>Reorder sections</h3>
+                                <strong>Reorder sections</strong>
                                 <p>All sections on resume can be reorder anywhere where you want</p>
                             </div>
                         </li>
@@ -223,14 +293,14 @@ class Home extends Component {
                                 <span className="icon-features6"></span>
                             </div>
                             <div className="features--content">
-                                <h3>Display your photo</h3>
+                                <strong>Display your photo</strong>
                                 <p>Display your photo in your resume for more views</p>
                             </div>
                         </li>
                     </ul>
 
                     <button className="orange-button"
-                            onClick={() => this.scrollTo('templates', 'BuildResume', 'Features')}>Build your resume
+                        onClick={() => this.scrollTo('templates', 'BuildResume', 'Features')}>Build your resume
                     </button>
 
                 </section>
@@ -241,12 +311,12 @@ class Home extends Component {
 
                     <div>
                         <img className="img-responsive" alt={"Next generation ready resume"}
-                             src={`${this.staticUrl}react/assets/images/nextgen-resume.jpg`}/>
+                            src={`${this.staticUrl}react/assets/images/nextgen-resume.jpg`} />
                     </div>
 
                 </section>
 
-                <Testimonial/>
+                <Testimonial />
 
                 <section className="section-container flex-container text-center">
                     <div className="shinelearning">
@@ -263,7 +333,7 @@ class Home extends Component {
                     </div>
                 </section>
 
-                <Footer/>
+                <Footer />
             </div>
         )
     }
@@ -282,9 +352,17 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        "loginCandidate": (token) => {
+        "getCandidateId": () => {
+            return dispatch(getCandidateId())
+        },
+        "loginCandidate": (payload, history, isTokenAvail) => {
             return new Promise((resolve, reject) => {
-                dispatch(actions.loginCandidate({payload: {alt: token}, resolve, reject, isTokenAvail: true}))
+                return dispatch(loginCandidate({ info: payload, resolve, reject, history, isTokenAvail: isTokenAvail }))
+            })
+        },
+        "getCandidateShineDetails": () => {
+            return new Promise((resolve, reject) => {
+                return dispatch(getCandidateShineDetails({ resolve, reject }))
             })
         },
         'showModal': () => {
@@ -293,14 +371,25 @@ const mapDispatchToProps = (dispatch) => {
         'hideModal': () => {
             return dispatch(hideModal())
         },
+        'showLoginModal': () => {
+            return dispatch(showLoginModal())
+        },
+        'hideLoginModal': () => {
+            return dispatch(hideLoginModal())
+        },
         'displaySelectedTemplate': (templateId) => {
             return dispatch(displaySelectedTemplate(templateId))
         },
         'feedback': (values) => {
-            return dispatch(actions.feedbackSubmit(values))
+            return dispatch(feedbackSubmit(values))
         },
         'eventClicked': (data) => {
             return dispatch(eventClicked(data))
+        },
+        'checkSessionAvaialability': () => {
+            return new Promise((resolve, reject) => {
+                return dispatch(checkSessionAvaialability({ resolve, reject }))
+            })
         }
     }
 };

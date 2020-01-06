@@ -3,8 +3,11 @@ import Modal from 'react-modal';
 import ResumeSlider from '../Core/Home/ResumeSlider/resumeSlider';
 import './selectTemplateModal.scss'
 
-Modal.setAppElement(document.getElementById('react-app'));
+if (typeof document !== 'undefined') {
 
+    Modal.setAppElement(document.getElementById('react-app'));
+
+}
 export default class SelectTemplateModal extends Component {
 
     render() {

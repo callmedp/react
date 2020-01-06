@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import Modal from 'react-modal';
 import './NeedHelpModal.scss'
 import {getTitleCase} from "../../../../services/getTitleCase";
-
-
-Modal.setAppElement(document.getElementById('react-app'));
+if(typeof document !== 'undefined') {
+    Modal.setAppElement(document.getElementById('react-app'));
+}
 
 export default class NeedHelpModal extends Component {
 

@@ -7,6 +7,8 @@ from django.conf import settings
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django_mysql.models.fields import JSONField
+from django.core.cache import  cache
+
 
 # local imports
 from .choices import *
@@ -16,6 +18,7 @@ from .constants import TEMPLATE_DEFAULT_ENTITY_POSITION, TEMPLATE_ALLOW_LEFT_RIG
 
 # inter app imports
 from seo.models import AbstractAutoDate
+from order.models import Order 
 
 # third party imports
 
@@ -42,10 +45,15 @@ class CandidateProfile(AbstractAutoDate):
     entity_preference_data = models.TextField(blank=True, null=True)
     upload_resume = models.BooleanField('Upload Resume', default=True)
     resume_generated = models.BooleanField('Resume Generated', default=True)
+    resume_creation_count = models.IntegerField(default=0)
 
     @property
     def owner_id(self):
         return self.candidate.candidate_id
+
+    @property
+    def free_resume_downloads(self):
+        return cache.get('free_resume_downloads', 1)
 
     @property
     def entity_id_data_mapping(self):
@@ -311,6 +319,14 @@ class CandidateLanguage(PreviewImageCreationMixin, models.Model):
 
     def __str__(self):
         return self.name
+
+
+class CandidateResumeOperations(models.Model):
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
+    order = models.ForeignKey(Order,null=True)
+    op_status = models.SmallIntegerField(default=-1,choices=CANDIDATE_OPERATION_STATUS)
+    created = models.DateTimeField(editable=False, auto_now_add=True,)
+
 
 
 senders = [Candidate, Skill, CandidateExperience, CandidateEducation, \

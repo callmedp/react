@@ -252,6 +252,13 @@ class OIFilterForm(forms.Form):
         widget=forms.Select(
             attrs={'class': 'form-control'}))
 
+    week_day_choice = forms.ChoiceField(
+        label=("Week Day"), choices=[(-1,'N.A')]+list(DAYS_CHOICES),
+        required=False,
+        initial=-1,
+        widget=forms.Select(
+            attrs={'class': 'form-control'}))
+
 
     def __init__(self, *args, **kwargs):
         queue_name = kwargs.pop('queue_name', None)

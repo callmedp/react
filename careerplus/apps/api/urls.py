@@ -83,7 +83,8 @@ urlpatterns = [
         views.ClaimOrderAPIView.as_view(),
         name='claim-order'
         ),
-    url(r'^v1/auto-login-token/(?P<order_item_id>\d+)/$',views.GetAutoLoginToken.as_view())
+    url(r'^v1/auto-login-token/(?P<order_item_id>\d+)/$',views.GetAutoLoginToken.as_view()),
+    url(r'^v1/cache/$', views.GetCacheValue.as_view(), name='get-cache-value')
 ]
 
 if settings.DEBUG:

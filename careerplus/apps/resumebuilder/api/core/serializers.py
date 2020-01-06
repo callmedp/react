@@ -32,6 +32,7 @@ class CandidateEntityPreferenceSerializer(serializers.Serializer):
 class CandidateSerializer(serializers.ModelSerializer):
     entity_preference_data = serializers.JSONField(required=False, allow_null=True)
     order_data = serializers.DictField(read_only=True)
+    free_resume_downloads = serializers.IntegerField(read_only=True)
 
     def validate_entity_preference_data(self, entity_preference_data):
         if not isinstance(entity_preference_data, list):
@@ -60,9 +61,10 @@ class CandidateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Candidate
         fields = (
-            'id', 'candidate_id', 'first_name', 'last_name', 'email', \
-            'date_of_birth', 'number', 'gender', 'location', 'order_data',\
-            'extra_info', 'extracurricular', 'image', 'resume_generated', 'entity_preference_data', 'selected_template', 'upload_resume')
+            'id', 'candidate_id', 'first_name', 'last_name', 'email', 'free_resume_downloads',\
+            'date_of_birth', 'number', 'gender', 'location', 'order_data','resume_creation_count',\
+            'extra_info', 'extracurricular', 'image', 'resume_generated', 'entity_preference_data',\
+             'selected_template', 'upload_resume')
 
 
 class SkillSerializer(serializers.ModelSerializer):

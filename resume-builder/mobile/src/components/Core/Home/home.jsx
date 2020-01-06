@@ -1,59 +1,135 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Header from '../../Common/Header/header.jsx';
 import Footer from '../../Common/Footer/footer.jsx';
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import './home.scss'
-import * as actions from "../../../store/landingPage/actions";
+import { getCandidateId, loginCandidate, feedbackSubmit, getComponentTitle, getCandidateShineDetails, checkSessionAvaialability } from "../../../store/landingPage/actions/index.js";
 import Banner from './Banner/banner.jsx';
 import ResumeSlider from './ResumeSlider/resumeSlider.jsx';
 import Testimonial from './Testimonial/testimonial.jsx';
 import queryString from "query-string";
-import {scroller} from 'react-scroll';
+import { scroller } from 'react-scroll';
 import Loader from '../../Common/Loader/loader.jsx';
-import {eventClicked} from '../../../store/googleAnalytics/actions/index'
-
+import { eventClicked } from '../../../store/googleAnalytics/actions/index'
+import { showLoginModal, hideLoginModal } from '../../../store/ui/actions/index'
+import LoginModal from '../../Common/LoginModal/loginModal.jsx'
 class Home extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            'token': ''
+            'token': '',
+            'login': ''
         }
-        if (document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]){
-        document.getElementsByClassName('chat-bot')[0].style.display='none'; 
-        }
+       
         const values = queryString.parse(this.props.location.search);
         this.scrollTo = this.scrollTo.bind(this);
-        const token = (values && values.token) || '';
+        const token = (values && values.token) || '', login = (values && values.login) || '';
         this.state.token = token;
+        this.state.login = login;
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
+        this.handleLoginSuccess = this.handleLoginSuccess.bind(this);
     }
 
     async componentDidMount() {
-        await this.props.loginCandidate(this.state.token);
+        
+        if (typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
+            document.getElementsByClassName('chat-bot')[0].style.display = 'none';
+        }
+        if (this.state.token) {
+            await this.props.loginCandidate({ alt: this.state.token }, this.props.history, true);
+        }
+        if (this.state.login === 'false') {
+            const isSessionAvailable = await this.props.checkSessionAvaialability();
+            if (isSessionAvailable) {
+                try {
+
+                    await this.props.getCandidateShineDetails()
+                    // redirect back from where it comes
+                    const { state } = this.props.location;
+                    if (state && state.from) {
+                        this.props.history.push(state.from);
+                    }
+                }
+                catch (e) {
+                    console.log(e.message);
+                }
+
+            }
+            else {
+                await this.props.showLoginModal()
+                // const { state } = this.props.location;
+                // if (state && state.from) {
+                //     this.props.history.push(state.from);
+                // }
+            }
+        }
+        const values = queryString.parse(this.props.location.search);
+        const template = (values && values.template) || '';
+
+        if (template === "false") {
+            this.scrollTo('templates', -15, 'Templates', 'Header')
+        }
+
     }
 
+    handleLoginSuccess() {
+        const { history, location } = this.props;
+        const pathFrom = location.state && location.state.from || '';
+
+        if (pathFrom) {
+            history.push(pathFrom);
+        }
+        else {
+            history.push('/resume-builder/edit/?type=profile')
+        }
+    }
     scrollTo(elem, action, label) {
         scroller.scrollTo(elem, {
             duration: 800,
             delay: 0,
             smooth: 'easeInOutQuad',
             offset: -50
-        })
+        });
         this.props.eventClicked({
             action,
             label
         })
     }
 
+    static getActions() {
+        return [getComponentTitle]
+    }
+
+    static async fetching({ dispatch }, params) {
+        const actionList = Home.getActions()
+        const results = [];
+        for (const [index, value] of actionList.entries()) {
+            // if (index == 0 && !(params && params.alt)) {
+            //     continue;
+            // }
+            results[index] = await new Promise((resolve, reject) => dispatch(value({
+                info: params,
+                resolve,
+                reject,
+                isTokenAvail: true
+            })))
+        }
+        return results;
+    }
+
+
     render() {
-        const {ui: {mainloader}, userInfo: {first_name}, eventClicked} = this.props;
+        const { ui: { mainloader }, userInfo: { first_name }, eventClicked } = this.props;
         return (
             <div className="home">
-                <Header eventClicked={eventClicked}/>
-                <Banner userName={first_name} eventClicked={eventClicked}/>
-                {mainloader ? <Loader/> : ""}
-
+                <Header eventClicked={eventClicked} />
+                <Banner userName={first_name} eventClicked={eventClicked} />
+                {
+                    !!(mainloader)
+                    && <Loader />
+                }
+                <LoginModal  {...this.props} handleLoginSuccess={this.handleLoginSuccess} />
 
                 <section className="section professional">
                     <div className="text-center">
@@ -105,11 +181,11 @@ class Home extends Component {
                                 <span className="sprite icon--choose-resume mr-20">
                                     <i className="how-works--count">1</i>
                                 </span>
-                                <p>Choose your resume <br/>template</p>
+                                <p>Choose your resume <br />template</p>
                             </li>
 
                             <li className="how-works__item justify-content-between">
-                                <p>Verify your profile <br/>imported from Shine</p>
+                                <p>Verify your profile <br />imported from Shine</p>
                                 <span className="sprite icon--choose-verify">
                                     <i className="how-works--count">2</i>
                                 </span>
@@ -125,7 +201,7 @@ class Home extends Component {
                     </div>
                 </section>
 
-                <ResumeSlider showtext={true} eventClicked={eventClicked}/>
+                <ResumeSlider showtext={true} eventClicked={eventClicked} {...this.props} />
 
                 <section className="section pt-30 pb-30">
                     <div className="text-center">
@@ -162,8 +238,8 @@ class Home extends Component {
                     </div>
 
                     <div className="text-center mt-30">
-                        <a className="btn btn__shadow btn__round btn__primary"
-                           onClick={() => this.scrollTo('templates', 'BuildResume', 'Features')}>Build your resume</a>
+                        <a className="btn btn__shadow btn__round btn__primary" alt="Build Your Resume"
+                            onClick={() => this.scrollTo('templates', 'BuildResume', 'Features')}>Build your resume</a>
                     </div>
 
                 </section>
@@ -174,11 +250,11 @@ class Home extends Component {
                     </div>
 
                     <div className="mt-20 resume-builder">
-                        <img src={`${this.staticUrl}react/assets/images/mobile/nextgen-resume.jpg`} alt=""
-                             className="img-fluid"/>
+                        <img src={`${this.staticUrl}react/assets/images/mobile/nextgen-resume.jpg`} alt="Resume Template"
+                            className="img-fluid" />
                     </div>
                 </section>
-                <Testimonial/>
+                <Testimonial />
                 <section className="section shine-learning mt-30 mb-40">
                     <div className="text-center">
                         <div className="shine-learning--logo"></div>
@@ -196,7 +272,7 @@ class Home extends Component {
                 </section>
 
 
-                <Footer/>
+                <Footer />
             </div>
         )
     }
@@ -214,15 +290,31 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         "getCandidateId": () => {
-            return dispatch(actions.getCandidateId())
+            return dispatch(getCandidateId())
         },
-        "loginCandidate": (token) => {
+        "loginCandidate": (payload, history, isTokenAvail) => {
             return new Promise((resolve, reject) => {
-                dispatch(actions.loginCandidate({payload: {alt: token}, resolve, reject, isTokenAvail: true}))
+                dispatch(loginCandidate({ info: payload, resolve, reject, history, isTokenAvail: isTokenAvail }))
+            })
+        },
+        "getCandidateShineDetails": () => {
+            return new Promise((resolve, reject) => {
+                return dispatch(getCandidateShineDetails({ resolve, reject }))
             })
         },
         'eventClicked': (data) => {
             return dispatch(eventClicked(data))
+        },
+        'showLoginModal': () => {
+            return dispatch(showLoginModal())
+        },
+        'hideLoginModal': () => {
+            return dispatch(hideLoginModal())
+        },
+        'checkSessionAvaialability': () => {
+            return new Promise((resolve, reject) => {
+                return dispatch(checkSessionAvaialability({ resolve, reject }))
+            })
         }
     }
 };

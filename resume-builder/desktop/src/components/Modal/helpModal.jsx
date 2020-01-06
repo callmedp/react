@@ -3,11 +3,14 @@ import Modal from 'react-modal';
 import './helpModal.scss'
 import {getTitleCase} from "../../services/getTitleCase";
 
-Modal.setAppElement(document.getElementById('react-app'));
+if (typeof document !== 'undefined') {
 
+    Modal.setAppElement(document.getElementById('react-app'));
 
+}
 export default class HelpModal extends React.Component {
-    constructor(props) {
+
+     constructor(props) {
         super(props);
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/';
         this.handleFeedback = this.handleFeedback.bind(this);
@@ -20,7 +23,7 @@ export default class HelpModal extends React.Component {
         }
     }
 
-    closeModal() {
+     closeModal() {
         this.setState({
             feedbackText: '',
             isError: false,
@@ -28,8 +31,6 @@ export default class HelpModal extends React.Component {
         });
         this.props.hideHelpModal();
     }
-
-
     handleFeedback(event) {
         event.preventDefault();
         const {feedback, userInfo, hideHelpModal, eventClicked} = this.props;
@@ -66,7 +67,7 @@ export default class HelpModal extends React.Component {
         hideHelpModal();
     }
 
-    onTextChange(event) {
+     onTextChange(event) {
         this.setState({
             feedbackText: event.target.value,
             isError: false,

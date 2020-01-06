@@ -12,16 +12,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='product',
-            name='short_description',
-            field=models.CharField(blank=True, max_length=300, null=True),
-        ),
-        migrations.AddField(
-            model_name='productscreen',
-            name='short_description',
-            field=models.CharField(blank=True, max_length=300, null=True),
-        ),
         migrations.AlterField(
             model_name='product',
             name='sub_type_flow',

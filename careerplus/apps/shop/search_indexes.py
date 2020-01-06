@@ -740,7 +740,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                         'label': pv.name,
                         'mode': pv.get_studymode(),
                         'duration': pv.get_duration(),
-                        'dur_days': obj.get_duration_in_day(),
+                        'dur_days': pv.get_duration_in_day(),
                         'type': pv.get_coursetype(),
                         'level': pv.get_courselevel(),
                         'certify': pv.get_cert(),

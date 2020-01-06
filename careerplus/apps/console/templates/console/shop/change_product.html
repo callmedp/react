@@ -184,6 +184,10 @@
           border: 1px solid #d7cdcd;
           padding: 10px 10px;
           min-height: 122px;
+        } 
+
+        .tag:after{
+          display: none;
         }
       </style>
   {% endcompress %}
@@ -706,7 +710,21 @@
                       {{seo_form.description}}
                     </div>
                     <div class="alert">{{seo_form.description.errors}}</div>
+                    <br>
+                      <br>
+                      <div class="col-md-7 col-sm-7 col-xs-12 col-md-offset-2 text-center">
+                        <button type="button" id="suggestion_skill_btn" class="btn btn-success">View Skill Suggestions</button>
+                      </div>
                   </div>
+                  <div class="item form-group">
+                      <div class=" item col-md-7 col-sm-7 col-xs-12 col-md-offset-2 text-center">
+                        <div>
+                          <p id="suggestion_box">
+
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                 <div class="item form-group {% if seo_form.description.errors %}bad{% endif %}">
                     <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ seo_form.visibility.id_for_label }}">Description visibility <span class="required">*</span>
                     </label>
@@ -902,6 +920,43 @@
                       <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-9 col-md-offset-3">
                           <button  type="submit" class="btn btn-success save_scroll">Submit</button>
+                        </div>
+                      </div>
+                    
+                    </form>
+                  </div>  
+          </div>
+        </div>
+
+        <div class="x_panel">
+          <div class="x_title">
+            <h2><i class="fa fa-thumb-tack"></i>Skill</h2>
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            <div class="accordion" id="accordion3" role="tablist" aria-multiselectable="true">
+                    <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" >
+                          {% csrf_token %}
+                      <div class="form-group col-md-6">
+                        <label> Product Skills</label>
+                        {{ prdskill_form.product_skill }}
+                        <button type="button" class="copy-tag" data-copy-tag-id="id_product_skill">Copy</button>
+                      </div>
+                      <div class="form-group">
+                        <label> User Skills</label>
+                          {{ prdskill_form.required_skill }}
+                        <button type="button" class="copy-tag" data-copy-tag-id="id_required_skill">Copy</button>
+                      </div>
+                    <input type="hidden" name="product" value="{{object.pk}}">
+                      <input type="hidden" name="slug" value="skill">
+                      <div class="ln_solid"></div>
+                      <div class="form-group">
+                        <div class="col-md-9 col-sm-9 col-xs-9 col-md-offset-3">
+                          <button type="submit" class="btn btn-success save_scroll">Submit</button>
                         </div>
                       </div>
                     
@@ -2036,7 +2091,41 @@
   
 </div>
 </div>
+ <!-- modal -->
+      <div class="modal fade bs-example-modal-sm filter" id="skill_suggestion_modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                  </button>
+                  <h4 class="modal-title" id="myModalLabel2">Filter By</h4>
+                </div>
+                <div class="modal-body">
+                  <form id="product_skill_form">
+                    <table id="product_skill_table" class="table">
+                      <thead>
+                      <tr>
+                        <th>Skill</th>
+                        <th>Type</th>
+                        <th>Remove</th>
+                      </tr>
+                    </thead>
+                      <tbody id="product_skill_data">
+                      </tbody>
+                    </table>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" onclick="UpdateProductSkill()">Add Skill</button>
+                </div>
+              </div>
+            </div>
+        </div>
+        <!-- modal end -->
         <!-- /page content -->
+        <!-- /page content -->
+
 {% endblock pagecontent %}
 
         
@@ -2100,6 +2189,7 @@
     <script type="text/javascript" src="{% static 'console/js/shop/console_shop.js' %}"></script>
 
     <script type="text/javascript" src="{% static 'console/js/shop/change_product.js' %}"></script>
+    <script type="text/javascript" src="{% static 'packages/jquery.tagsinput/src/jquery.tagsinput.js' %}"></script>
     <script type="text/javascript">
 
   $("#application_process_priority").val(application_process_order.join(','))
@@ -2186,9 +2276,135 @@
     $("#benefits_priority").val(benefits_order.join(','))
 
 });
+
+  $('#id_product_skill').tagsInput({
+        width: 'auto',
+        'delimiter': [','],   // Or a string with a single delimiter. Ex: ';'
+    });
+    paste_tage('id_product_skill')
+
+  $('#id_required_skill').tagsInput({
+        width: 'auto',
+        'delimiter': [','],   // Or a string with a single delimiter. Ex: ';'
+    });
+    paste_tage('id_required_skill')
+
+    function paste_tage(tag_id){
+      $("#"+tag_id+"_tag").on('paste',function(e){
+        var element=this;
+        setTimeout(function () {
+            var text = $(element).val();
+            var target=$("#"+tag_id);
+            var tags = (text).split(/[,]+/);
+            for (var i = 0, z = tags.length; i<z; i++) {
+                  var tag = $.trim(tags[i]);
+                  if (!target.tagExist(tag)) {
+                        target.addTag(tag);
+                  }
+                  else
+                  {
+                      $("#"+tag_id+"_tag").val('');
+                  }
+             }
+        }, 0);
+    });
+  }
+
+  $('.copy-tag').click(function(){
+      let elem_id = $(this).attr('data-copy-tag-id');
+      let k = $("#"+elem_id).siblings(".tagsinput").children('.tag')
+      let tags = [];
+      for (var i=0;i< k.length; i++) {  
+          tags.push($(k[i]).text().substring(0, $(k[i]).text().length -  1).trim());  
+      }
+      element = $('<textarea>').appendTo('body').val(tags.join(',')).select()
+      document.execCommand('copy')
+      element.remove()
+    });
   </script>
+   
 
     {% endcompress %}
+     <script>
+    var product_id = {{ object.id }}
+    $("#suggestion_skill_btn").click(function(){
+        let url = '/api/v1/parse-skill/'
+        text = CKEDITOR.instances['id_description'].document.getBody().getText()
+        data = {'text': text}
+        $(this).html('<i class="fa fa-spinner fa-spin"></i>Loading')
+        $(this).attr('disabled','disabled')
+        $.ajax({
+          url: url,
+          method: 'POST',
+          data: data,
+          success: function(data){
+            $("#suggestion_skill_btn").html('View Skill Suggestion')
+            $("#suggestion_skill_btn").removeAttr('disabled')
+            if(data.length > 0){
+                let k ='<p><b> Suggested Skill:- </b></p>'+ data.slice(0,3).join(',') +'<p><a type="button" id="view_suggestion_modal_btn">View All</a></p><br><br>'
+                $("#suggestion_box").html(k)
+                row = `<tr>
+                        <td class="skill">skill_name</td>
+                        <td>
+                            <select class="skill_type form-control">
+                               <option value="1">Product Skill</option>
+                               <option value="2">User Skill</option>
+                            </select>
+                        </td>
+                        <td><a  type="button" id='remove_skill'>Remove</a></td>
+                      </tr>`
+                $("#product_skill_data").empty()
+                data.forEach(function(ele){
+                  skill_row = row.replace('skill_name', ele)
+                  $("#product_skill_data").append(skill_row)
+                });
+             }
+          }
+        })
+    });
+
+    $("#suggestion_box").on('click','#view_suggestion_modal_btn',function(){
+      $("#skill_suggestion_modal").modal('show')
+
+    })
+    $('#product_skill_data').on('click',"#remove_skill", function(){
+      $(this).parents('tr').remove()
+    })
+
+    function UpdateProductSkill(){
+      all_skills = $("#product_skill_data").find('tr')
+      let data = {'user_type':[], 'product_type': [], 'product_id': product_id}
+      for(let i=0; i<all_skills.length; i++){
+          name = $(all_skills[i]).find('.skill').text()
+          type = $(all_skills[i]).find('.skill_type').val()
+          if(type == "1"){
+            data['product_type'].push(name)
+          }
+          else{
+            data['user_type'].push(name)
+          }
+      }
+      let url = '/api/v1/product-skill/update/'
+      $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+          if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+              xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+          }
+        }
+      });
+      $.ajax({
+        url: url,
+        method: 'POST',
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        dataType: "json",
+        success: function() {
+          $("#skill_suggestion_modal").modal('hide')
+        }
+      })
+    }
+
+  </script>
 
     {{prdskill_formset.media}}
 

@@ -478,7 +478,7 @@
                       {% if assesment_count > 5 %} 
                         <div class="d-flex justify-content-center mt-40 mb-30">
                           <button class="btn btn-outline-primary" onclick="loadProduct(this,'assesment')" role="button">
-                            Load more assesments
+                            Load more assessments
                           </button>
                           <div class="d-none">
                             <img aria-label="Loader image" class="img-fluid" src="{% static 'shinelearn/images/new-loader.gif' %}" alt="Loader image">
@@ -492,8 +492,8 @@
 
             {% if testimonialcategory|length %}
               <!-- learners stories section -->
-              <section id="testimonial" class="col-sm-12" >
-                <h2>Learners stories</h2>
+              <section id="testimonial" class="col-sm-12">
+                <h2>Learner's stories</h2>
                 <div id="carouselExampleCaptions" class="carousel slide learner-stories" data-ride="carousel">
                   <div class="carousel-inner" itemscope itemtype="http://schema.org/Review">
                     {% for testimonialsubgroup in  testimonialcategory|divide_testimonial_category_group_list_of_lists%}
@@ -620,7 +620,9 @@
       const modeChoices = {{product_mode_choices|safe}};
     </script>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="{% static 'shinelearn/js/skill/skillpage-new.js' %}"></script>
+    {% compress js %}
+      <script src="{% static 'shinelearn/js/skill/skillpage-new.js' %}"></script>
+    {% endcompress %}
 
 
 {% endblock js_section %}

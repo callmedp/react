@@ -2,7 +2,6 @@ function removeFromCartMobile(line_id) {
     //  show loader
     $('.overlay-background').show()
     $('body').addClass('body-noscroll')
-
     if (line_id) {
         var formData = $('#cart_remove_form' + line_id).serialize();
         $.ajax({
@@ -11,7 +10,6 @@ function removeFromCartMobile(line_id) {
             data: formData,
             dataType: 'json',
             success: function (json) {
-                
                 if (json.status == 1) {
                     window.location.reload();
                     //alert("product removed from cart successfully");
