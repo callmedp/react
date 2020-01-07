@@ -335,7 +335,7 @@ SUB_HEADING_CHOICES = (
 )
 
 SUB_HEADING_CHOICE_ATTR_MAPPING_DESKTOP = (
-    (1,'class="objective__list collapse" id="expand-list" aria-expanded="false"'),
+    (1,'class="objective__list" id="expand-list"'),
     (2,'class="who-should-learn__list d-flex flex-wrap"'),
 )
 

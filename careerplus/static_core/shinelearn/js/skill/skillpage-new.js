@@ -4,9 +4,9 @@ Following Funtions are used in skill page desktop
     2. needHelpFormSubmit => helper function to submit need help form response
     3. openMoreFAQ => to show faq is cound is more than 2
     4. stickyNavbarActiveScroll => used to make sticky navbar active in its elements while scrolling
-    5. objectiveDivCollasedHeightSet => set dynmically height of objective div to show just 3 items.
-    6. needHelpFormValidation => validate the need help form using jquery validate
-    7. indiaMobileValidator =>  To add a new validation rules of indian mobile no in jquery validate
+    5. needHelpFormValidation => validate the need help form using jquery validate
+    6. indiaMobileValidator =>  To add a new validation rules of indian mobile no in jquery validate
+    7. lettersOnlyValidator =>  To add a new validation rules of letters only in jquery validate
     8. gaEventFunc => gaEvent function for enquiry form
 
 */
@@ -40,8 +40,8 @@ $(document).ready(()=>{
 
     aboutSectionPosTop = $('#about').offset().top
     stickyNavbarActiveScroll(true) //true argument is to start active scroll
-    objectiveDivCollasedHeightSet()
     needHelpFormValidation()
+    lettersOnlyValidator()
     indiaMobileValidator()
 
 })
@@ -225,6 +225,7 @@ const needHelpFormValidation = () => {
         rules: {
             name: {
                 required: true,
+                lettersonly: true,
                 maxlength: 100
             },
             email: {
@@ -244,6 +245,7 @@ const needHelpFormValidation = () => {
         messages: {
             name: {
                 required: "Required",
+                lettersonly: 'Letters Only',
                 maxlength: "Max length 100"
             },
             email: {
@@ -287,6 +289,13 @@ const indiaMobileValidator = () => {
         }
         return true;
     });
+}
+
+// function to add a new validation rules of letters only in jquery validate
+const lettersOnlyValidator = () => {
+    $.validator.addMethod("lettersonly", function(value, element) {
+        return this.optional(element) || /^[a-z," "]+$/i.test(value);
+    }); 
 }
 
 
