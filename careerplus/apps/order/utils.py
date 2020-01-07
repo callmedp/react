@@ -258,8 +258,8 @@ class FeatureProfileUtil:
         if pause_resume_operations:
             last_op_date = pause_resume_operations.last().created
             time_diff = timezone.now() - last_op_date
-            # if time_diff.days == 0:    
-            #     return False
+            if time_diff.days == 0:    
+                return False
 
         if isPause:
             other_item_exist = OrderItem.objects.filter(
