@@ -45,7 +45,7 @@ class SkillPageView(DetailView, SkillPageMixin):
 
     def get_context_data(self, **kwargs):
         context = super(SkillPageView, self).get_context_data(**kwargs)
-        subheading = SubHeaderCategory.objects.filter(category=self.object)
+        subheading = SubHeaderCategory.objects.filter(category=self.object,active=True)
         career_outcomes = self.object.split_career_outcomes()
         subheading_id_data_mapping = {}
 
