@@ -201,21 +201,6 @@ const stickyNavbarActiveScroll = (startStickyActiveScroll) => {
    
 }
 
-
-//fucntion to dynamically set height for objective to show only 3 items
-const objectiveDivCollasedHeightSet = () => {
-    let objectiveLiELements = $('.objective__list').find('li').slice(0,3);
-    let totalWidth = 0
-    for(el of objectiveLiELements){
-        totalWidth+=$(el).outerHeight(true)
-    }
-    $('.objective__list').css({'height':totalWidth})
-    $('.objective__list').on('hidden.bs.collapse', function () {
-        $(this).css({'height':totalWidth})
-    })
-}
-
-
 // funtion to set rukes and validate need help form
 const needHelpFormValidation = () => {
 
