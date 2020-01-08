@@ -4,7 +4,6 @@
 
 {% block django_meta %}
     {% include 'meta/meta.html' %}
-
 {%  endblock django_meta %}
 
 {% block canonical_url %}
@@ -158,16 +157,17 @@
                 </div>
             </div><!-- // Our impact -->
 
-            <div class="white-box py-0 mt-20" id="tab-bar" categoryId="{{category.pk}}">
+            <div class="white-box py-0 mt-20" id="tab-bar" itemscope itemtype="http://schema.org/ItemList"
+                 categoryId="{{category.pk}}">
                 <div class="skill-tabs row">
                     <div class="tab-wrap">
                         <ul class="tabs d-flex">
                             {% if course_count %}
-                                <li class="tab-link current mb-0" id="tab-1-text" data-tab="tab-1" 
+                                <li class="tab-link current mb-0" id="tab-1-text" data-tab="tab-1" itemprop="name"
                                     onclick="changeTab('tab-1','tab-2')">Courses ({{course_count}})</li>
                             {% endif %}
                             {% if assesment_count %}
-                                <li class="tab-link mb-0" id="tab-2-text" data-tab="tab-2" 
+                                <li class="tab-link mb-0" id="tab-2-text" data-tab="tab-2" itemprop="name"
                                     onclick="changeTab('tab-2','tab-1')">
                                     Assessments ({{assesment_count}})
                                 </li>
@@ -177,7 +177,9 @@
                         <div id="tab-1" class="tab-content current">
                             <ul>
                                 {% for course in courses %}
-                                    <li class="d-flex row">
+                                    <li class="d-flex row" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                                        <meta itemprop="position" content="{{forloop.counter}}" />
+
                                         <span class="skill-tabs--image">
                                             <img aria-label="{{course.pNm}}" src="{{course.pImg}}" alt="{{course.pNm}}">
                                         </span><!-- // Image -->
@@ -188,7 +190,7 @@
                                             {% elif course.pTg == 2  %}
                                                 <div class="skill-tabs__content--tag skill-tabs__content--new">Newly Added</div>
                                             {% endif %}
-                                            <a class="d-block pt-5" href="{{course.pURL}}"><strong>{{course.pNm}}</strong></a>
+                                            <a class="d-block pt-5" itemprop="url" href="{{course.pURL}}"><strong>{{course.pNm}}</strong></a>
                                             <div class="ratingView mt-10">
                                                 <span class="rating" data-rating="{{course.pARx|floatformat:1}}"></span> 
                                                     {{course.pARx|floatformat:1}}/5
@@ -228,7 +230,9 @@
                         <div id="tab-2" class="tab-content">
                             <ul>
                                 {% for assesment in assesments %}
-                                    <li class="d-flex row">
+                                    <li class="d-flex row" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                                        <meta itemprop="position" content="{{forloop.counter}}" />
+
                                         <span class="skill-tabs--image">
                                             <img aria-label="{{assesment.pNm}}" src="{{assesment.pImg}}" alt="{{assesment.pNm}}">
                                         </span><!-- // Image -->
@@ -239,7 +243,7 @@
                                             {% elif assesment.pTg == 2  %}
                                                 <div class="skill-tabs__content--tag skill-tabs__content--new">Newly Added</div>
                                             {% endif %}
-                                            <a class="d-block pt-5" href="{{assesment.pURL}}"><strong>{{assesment.pNm}}</strong></a>
+                                            <a class="d-block pt-5" itemprop="url" href="{{assesment.pURL}}"><strong>{{assesment.pNm}}</strong></a>
                                             <div class="ratingView mt-10">
                                                 <span class="rating" data-rating="{{assesment.pARx|floatformat:1}}"></span>
                                                     {{assesment.pARx|floatformat:1}}/5
@@ -285,15 +289,15 @@
                 <div class="learner-stories row mt-20" id="testimonial">
                     <h2 class="pl-15">Learner’s stories</h2>
 
-                    <ul class="learner-stories__slider">
+                    <ul class="learner-stories__slider" itemscope itemtype="http://schema.org/Review">
                         {% for obj in testimonialcategory %}
                             <li>
                                 <div class="white-box border-bottom-blue text-center">
-                                    <span class="learner-stories--tag badge-1 m-auto my-15">
+                                    <span class="learner-stories--tag badge-1 m-auto my-15" itemprop="name">
                                         {{obj.testimonial.user_name|get_initials}}
                                     </span>
-                                    <p class="learner-stories--review-text">{{obj.testimonial.review}}</p>
-                                    <strong class="d-block learner-stories--name">
+                                    <p class="learner-stories--review-text" itemprop="description">{{obj.testimonial.review}}</p>
+                                    <strong class="d-block learner-stories--name" itemprop="author">
                                         {{obj.testimonial.user_name}}
                                     </strong>
                                     <p class="learner-stories--compaines">
@@ -309,20 +313,24 @@
 
             {% if 'faq'|get_value:subheading %}
                 {% with faq='faq'|get_value:subheading %}
-                    <div class="white-box faq mt-20" id="faqs">
-                        <h2>{{faq.heading}}</h2>
+                    <div class="white-box faq mt-20" id="faqs" itemscope itemtype="https://schema.org/FAQPage">
+                        <h2 itemprop="name">{{faq.heading}}</h2>
                         <!-- Accordion begin -->
                         {% with faq_list=faq.description|get_faq_list %}
                             <div class="css-accordion">
                                 {% for item in  faq_list%}
-                                    <div class="css-accordion--tab {% if forloop.counter > 2%}hide{% endif %}">
+                                    <div class="css-accordion--tab {% if forloop.counter > 2%}hide{% endif %}" itemscope 
+                                        itemprop="mainEntity" itemtype="https://schema.org/Question">
                                         <input class="faq-input" type="radio" id="rd{{ forloop.counter }}" 
                                             name="rd" {% if forloop.counter == 1%}checked{% endif %}>
-                                        <label class="css-accordion--heading" for="rd{{ forloop.counter }}">
+                                        <label class="css-accordion--heading" for="rd{{ forloop.counter }}" >
                                             {{item.heading|safe}}
+                                            <meta itemprop="name" content="{{item.heading|safe}}">
                                         </label>
-                                        <div class="css-accordion--content">
+                                        <div class="css-accordion--content" itemscope itemprop="acceptedAnswer" 
+                                            itemtype="https://schema.org/Answer">
                                             {{item.content|safe}}
+                                             <meta itemprop="text" content="{{item.content|safe}}">
                                         </div><!-- // css-accordion content -->
                                     </div><!-- // css-accordion -->
                                 {% endfor %}

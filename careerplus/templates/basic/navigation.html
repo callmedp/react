@@ -13,17 +13,20 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li class="searchbar-dropdown"> <!--searchNavBar -->
-          <form action="" class="search cls_search"> <!--searchNavBar -->
-            <input class="inputTags-list key_press_js_search form-control input-sm" data-selecttype="multiple"  maxlength="64" name="q" placeholder="Search" type="text" required="" autocomplete="off">
-            <button type="submit" class="search-button"><i class="search-icon"></i></button>
-          </form>
-        </li>
-<!--         <li class="ms-link">
-          <a class="cls_eventtrack" href="/talenteconomy/" data-category="TELINK" data-action="Header" data-label="learing.shine"><span class="hidden-sm">Executive Course</span></a>
-        </li> -->
-      </ul>
+      {% if not remove_nav_search %}
+        <ul class="nav navbar-nav">
+          <li class="searchbar-dropdown"> <!--searchNavBar -->
+            <form action="" class="search cls_search"> <!--searchNavBar -->
+              <input class="inputTags-list key_press_js_search form-control input-sm" data-selecttype="multiple"  maxlength="64" name="q" placeholder="Search" type="text" required="" autocomplete="off">
+              <button type="submit" class="search-button"><i class="search-icon"></i></button>
+            </form>
+          </li>
+          <!--li class="ms-link">
+            <a class="cls_eventtrack" href="/talenteconomy/" data-category="TELINK" data-action="Header" data-label="learing.shine"><span class="hidden-sm">Executive Course</span></a>
+          </li> -->
+        </ul>
+      {% endif %}
+      
 
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown jobs-dropdown">

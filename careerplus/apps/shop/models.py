@@ -152,14 +152,12 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
     display_order = models.IntegerField(default=1)
 
     _metadata_default = ModelMeta._metadata_default.copy()
-    
+
     _metadata = {
         'title': 'title',
         'description': 'get_description',
         'og_description': 'get_description',
-        'keywords': 'get_keywords',
-        'published_time': 'created',
-        'modified_time': 'modified',
+        'keywords':'get_keywords',
         'url': 'get_absolute_url',
     }
 
@@ -201,6 +199,7 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
             # cache.delete(unique_key)
                 
         super(Category, self).save(*args, **kwargs)
+
 
     def get_meta_desc(self, description=''):
         try:
