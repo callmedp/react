@@ -129,7 +129,8 @@
         flex-direction: column;
         margin: 0 10px 0 25px;
 
-        h3 {
+        strong {
+            font-weight: 700;
             margin-top: 10px;
         }
     }
@@ -250,6 +251,10 @@
         padding-left: 20px;
         padding-right: 10px;
         align-self: flex-start;
+
+        strong {
+            font-weight: 700;
+        }
     }
 }
 

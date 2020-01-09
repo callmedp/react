@@ -70,6 +70,7 @@ class Testimonial(AbstractAutoDate):
         max_digits=8, decimal_places=2,
         default=2.5)
     designation = models.CharField(max_length=200)
+    # location = models.CharField(max_length=200, null=True, blank=True)
     company = models.CharField(max_length=200, null=True, blank=True)
     image = models.ImageField(
         _('Profile Image'),
@@ -92,6 +93,16 @@ class Testimonial(AbstractAutoDate):
         if self.image:
             return self.image.url
         return settings.STATIC_URL + 'shinelearn/images/executive/default-user-pic.jpg'
+
+    def page_choice_text(self):
+        currency_dict = dict(PAGECHOICES)
+        return currency_dict.get(self.page)
+
+
+class TestimonialCategoryRelationship(AbstractAutoDate):
+    category = models.ForeignKey('shop.Category')
+    testimonial = models.ForeignKey('homepage.Testimonial')
+
 
 class StaticSiteContent(models.Model):
     page_type = models.PositiveIntegerField(

@@ -3,7 +3,9 @@ import Modal from 'react-modal';
 import './buyTemplateModal.scss'
 
 
-Modal.setAppElement(document.getElementById('react-app'));
+if(typeof document !== 'undefined') {
+    Modal.setAppElement(document.getElementById('react-app'));
+}
 
 export default class BuyTemplateModal extends Component{
 

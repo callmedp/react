@@ -227,7 +227,7 @@ class ChangeProductForm(forms.ModelForm):
         fields = [
             'name', 'type_flow',
             'upc', 'image', 'image_bg', 'icon', 'banner', 'video_url',
-            'vendor',
+            'vendor', 'product_tag',
             'no_review', 'buy_count', 'avg_rating', 'num_jobs', 'sub_type_flow']
 
     def __init__(self, *args, **kwargs):
@@ -276,6 +276,8 @@ class ChangeProductForm(forms.ModelForm):
         self.fields['no_review'].widget.attrs['class'] = form_class
         self.fields['buy_count'].widget.attrs['class'] = form_class
         self.fields['num_jobs'].widget.attrs['class'] = form_class
+        self.fields['product_tag'].widget.attrs['class'] = form_class
+
 
         if self.data and int(self.data['type_flow']) not in list(SUB_FLOWS.keys()):
             self.fields.pop('sub_type_flow')

@@ -1,0 +1,13 @@
+<header>
+    <div class="d-flex">
+        <span class="bar-menu" id="sidebar-main-trigger" role="button">
+            <span class="bar-menu--bar bar-menu--bar1"></span> 
+            <span class="bar-menu--bar bar-menu--bar2"></span>
+            <span class="bar-menu--bar bar-menu--bar2"></span>
+        </span><!-- // Bar Menu-->
+
+        <div class="d-flex flex-1 justify-content-end align-items-center">
+            <a class="icon-cart" href="{% url "cart:payment-summary" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+        </div>
+    </div>
+</header><!-- header ends here -->

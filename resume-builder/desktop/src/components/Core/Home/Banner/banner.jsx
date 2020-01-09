@@ -34,7 +34,7 @@ export default class Banner extends Component {
                 <div className="banner-content">
                     <h1>Resume Builder <strong>by Experts</strong></h1>
                     <p className="banner-content--txt">
-                        <strong>{userName || 'Hello'},</strong> secure the job you want with our resume builder
+                        <strong>Hello,</strong> secure the job you want with our resume builder
                     </p>
                     <ul>
                         <li> <span className="icon-builderexpert1"></span><strong>33% higher</strong> chances of shortlisting</li>

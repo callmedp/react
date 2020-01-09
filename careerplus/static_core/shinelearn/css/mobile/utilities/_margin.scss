@@ -1,3 +1,11 @@
+.m-auto {
+  margin: 0 auto;
+}
+
+.m-15 {
+  margin: 15px;
+}
+
 .mx-0 {
   margin-left: -imp(0);
   margin-right: -imp(0);
@@ -132,6 +140,10 @@
 }
 
 
+.ml-auto {
+  margin-left: auto;
+}
+
 .ml-0 {
   margin-left: -imp(0);
 }
@@ -148,8 +160,16 @@
   margin-left: -imp(15px);
 }
 
+.ml-20 {
+  margin-left: -imp(20px);
+}
+
 .ml-40 {
   margin-left: -imp(40px);
+}
+
+.mr-auto {
+  margin-right: -imp(auto);
 }
 
 .mr-0 {
@@ -177,3 +197,5 @@
     margin-bottom: -imp(120px);
   }
 }
+
+

@@ -252,6 +252,13 @@ class OIFilterForm(forms.Form):
         widget=forms.Select(
             attrs={'class': 'form-control'}))
 
+    week_day_choice = forms.ChoiceField(
+        label=("Week Day"), choices=[(-1,'N.A')]+list(DAYS_CHOICES),
+        required=False,
+        initial=-1,
+        widget=forms.Select(
+            attrs={'class': 'form-control'}))
+
 
     def __init__(self, *args, **kwargs):
         queue_name = kwargs.pop('queue_name', None)
@@ -424,6 +431,23 @@ class ReviewFilterForm(forms.Form):
             "readonly": True, }))
 
 
+class TestimonialFilterForm(forms.Form):
+    from careerplus.apps.homepage.config import PAGECHOICES
+    
+    filter_page_type = forms.ChoiceField(
+        choices=PAGECHOICES, initial=-1, required=True, widget=forms.Select(attrs={
+            'class': 'form-control col-md-7 col-xs-12',
+            'required': True}))
+
+    created = forms.CharField(
+        label=("Added On:"), required=False,
+        initial='',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control date-range-picker',
+            'placeholder': "from date - to date",
+            "readonly": True, }))
+
+
 class ReviewUpdateForm(forms.ModelForm):
 
     content = forms.CharField(
@@ -461,6 +485,7 @@ class ReviewUpdateForm(forms.ModelForm):
         self.fields['user_email'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
         self.initial['created'] = obj.created.astimezone().strftime("%b %e %Y %I:%M %p")
         self.fields['average_rating'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
+
 
 class emailupdateform(forms.ModelForm):
         class Meta:

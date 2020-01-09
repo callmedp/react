@@ -36,7 +36,6 @@ from users.models import User
 from console.feedbackCall.choices import FEEDBACK_RESOLUTION_CHOICES,FEEDBACK_CATEGORY_CHOICES,FEEDBACK_STATUS,TOTAL_FEEDBACK_OPERATION_TYPE
 from order.utils import get_ltv
 from coupon.models import Coupon
-from resumebuilder.models import Candidate
 from order.utils import FeatureProfileUtil
 
 
@@ -437,6 +436,7 @@ class Order(AbstractAutoDate):
             board_user_on_neo.delay(neo_ids=neo_items_id)
 
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_resume_builder():
+            from resumebuilder.models import Candidate   # imported here to not cause cyclic import for resumebuilder models
             if self.order_contains_expert_assistance():
                 cand_id = existing_obj and existing_obj.candidate_id
                 if cand_id:
@@ -897,6 +897,7 @@ class OrderItem(AbstractAutoDate):
             today = timezone.now()
             for i in range(0, weeks):
                 start = started + relativedelta.relativedelta(days=i * 7)
+                start = start + timedelta(hours=12)
                 if start > today:
                     break
                 links_count += links_per_week

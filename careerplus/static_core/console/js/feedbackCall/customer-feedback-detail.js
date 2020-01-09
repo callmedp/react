@@ -455,3 +455,7 @@ const viewMore = (id,viewMoreElement)=>{
 }
 
 
+// typeahead 
+
+
+

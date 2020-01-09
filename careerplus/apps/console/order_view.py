@@ -10,7 +10,7 @@ from io import StringIO
 from dateutil import relativedelta
 from wsgiref.util import FileWrapper
 from django.contrib.contenttypes.models import ContentType
-from django.views.generic import (
+from django.views.generic import (FormView,
     TemplateView, ListView, DetailView, View, UpdateView)
 from django.core.paginator import Paginator
 from django.db.models import Q, Count, Case, When, IntegerField, Value
@@ -19,6 +19,8 @@ from django import forms
 from django.contrib.auth.decorators import permission_required
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from django.core.urlresolvers import reverse_lazy
+
 from django.urls import reverse
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.contrib.auth import get_user_model
@@ -30,7 +32,7 @@ from django.template.response import TemplateResponse
 
 from geolocation.models import Country
 from order.models import Order, OrderItem, InternationalProfileCredential, OrderItemOperation
-from shop.models import DeliveryService, Product, JobsLinks
+from shop.models import DeliveryService, Product, JobsLinks,Category
 from blog.mixins import PaginationMixin
 from emailers.email import SendMail
 from emailers.tasks import send_email_task, send_booster_recruiter_mail_task
@@ -42,6 +44,8 @@ from order.functions import send_email, date_timezone_convert, create_short_url
 from .schedule_tasks.tasks import generate_compliance_report
 from scheduler.models import Scheduler
 from order.utils import LTVReportUtil
+from homepage.models import Testimonial,TestimonialCategoryRelationship
+from console.shop_form import TestimonialModelForm
 
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from review.models import Review
@@ -3011,6 +3015,184 @@ class ReviewModerateListView(ListView, PaginationMixin):
 
 
 @method_decorator(permission_required('review.can_change_review_queue', login_url='/console/login/'), name='dispatch')
+class TestimonialListView(ListView, PaginationMixin):
+
+    context_object_name = 'testionial_list'
+    template_name = 'console/order/testimonial-list.html'
+    model = Testimonial
+    http_method_names = [u'get', u'post']
+
+    def __init__(self):
+        self.page = 1
+        self.paginated_by = 20
+        self.query, self.created = '', ''
+        self.page_type = ''
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        self.created = request.GET.get('created', '')
+        self.page_type = request.GET.get('filter_page_type', '')
+        return super(self.__class__, self).get(request, args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        paginator = Paginator(context['testionial_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        initial = {
+            "created": self.created,
+            "status": self.page_type
+        }
+        context.update({
+            "query": self.query,
+            'filter_form': ReviewFilterForm(initial),
+            "messages": alert,
+        })
+        return context
+
+    def get_queryset(self):
+        queryset = super(TestimonialListView, self).get_queryset()
+        if self.query:
+            queryset = queryset.filter(Q(user_name__icontains=self.query))
+        
+        try:
+            if self.created:
+                date_range = self.created.split('-')
+                start_date = date_range[0].strip()
+                start_date = datetime.datetime.strptime(
+                    start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
+                end_date = date_range[1].strip()
+                end_date = datetime.datetime.strptime(
+                    end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
+                queryset = queryset.filter(
+                    created__range=[start_date, end_date])
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
+
+        if self.page_type:
+            queryset = queryset.filter(page=self.page_type)
+
+        return queryset
+
+
+# class CreateTestimonialView(View):
+#     model = Testimonial
+#     template_name = 'console/order/testimonial-add-update.html'
+#     http_method_names = [u'get', u'post']
+#     form_class = TestimonialModelForm
+
+#     def get(self, request, *args, **kwargs):
+#         self.object = self.get_object()
+#         return super(self.__class__, self).get(request, args, **kwargs)
+
+#     def get_context_data(self, **kwargs):
+#         context = super(self.__class__, self).get_context_data(**kwargs)
+#         categories = Category.objects.filter(active=True).only('id','name')
+#         categories_mapped = list(TestimonialCategoryRelationship.objects.filter\
+#                 (testimonial=self.object.id).values_list('category',flat=True))
+#         alert = messages.get_messages(self.request)
+#         context.update({
+#             'messages': alert,
+#             'categories':categories,
+#             'categories_mapped':categories_mapped,
+#             'update_page':False
+#         })
+#         return context
+
+@method_decorator(permission_required('review.can_change_review_queue', login_url='/console/login/'), name='dispatch')
+class CreateTestimonialView(FormView):
+    form_class = TestimonialModelForm
+    template_name = 'console/order/testimonial-add-update.html'
+    http_method_names = ['get', 'post']
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateTestimonialView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        return context
+
+    def form_valid(self, form):
+        form.save()
+        messages.success(
+            self.request,
+            "You have successfully added a Skill"
+        )
+        self.success_url = reverse_lazy('console:testimonial-list')
+        return super(CreateTestimonialView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(
+            self.request,
+            "Your addition has not been saved. Try again."
+        )
+        return super(CreateTestimonialView, self).form_invalid(form)
+
+
+@method_decorator(permission_required('review.can_change_review_queue', login_url='/console/login/'), name='dispatch')
+class UpdateTestimonialView(UpdateView):
+    model = Testimonial
+    template_name = 'console/order/testimonial-add-update.html'
+    http_method_names = [u'get', u'post']
+    form_class = TestimonialModelForm
+    success_url = "/console/queue/testimonial/testimonial-list/"
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        categories = Category.objects.filter(active=True).only('id','name')
+        categories_mapped = list(TestimonialCategoryRelationship.objects.filter\
+                (testimonial=self.object.id).values_list('category',flat=True))
+        alert = messages.get_messages(self.request)
+        context.update({
+            'messages': alert,
+            'categories':categories,
+            'categories_mapped':categories_mapped,
+            'update_page':True,
+            'testimonial':self.object,
+            # 'categories_mapped':categories_mapped,
+        })
+        return context
+
+
+@method_decorator(permission_required('review.can_change_review_queue', login_url='/console/login/'), name='dispatch')
+class ReviewModerateView(UpdateView):
+    model = Review
+    template_name = 'console/order/review-moderation-update.html'
+    success_url = "/console/queue/review/review-to-moderate/"
+    http_method_names = [u'get', u'post']
+    form_class = ReviewUpdateForm
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super(self.__class__, self).get(request, args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({
+            'messages': alert})
+        return context
+
+@method_decorator(permission_required('review.can_change_review_queue', login_url='/console/login/'), name='dispatch')
+class ReviewModerateView(UpdateView):
+    model = Review
+    template_name = 'console/order/review-moderation-update.html'
+    success_url = "/console/queue/review/review-to-moderate/"
+    http_method_names = [u'get', u'post']
+    form_class = ReviewUpdateForm
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super(self.__class__, self).get(request, args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({
+            'messages': alert})
+        return context
+
+@method_decorator(permission_required('review.can_change_review_queue', login_url='/console/login/'), name='dispatch')
 class ReviewModerateView(UpdateView):
     model = Review
     template_name = 'console/order/review-moderation-update.html'
@@ -3064,6 +3246,7 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
         self.query = request.GET.get('query', '').strip()
         self.oi_status = request.GET.getlist('oi_status', [])
         self.day_choice = request.GET.get('day_choice', '-1').strip()
+        self.week_day_choice = request.GET.get('week_day_choice', '-1').strip()
         self.sel_opt = request.GET.get('rad_search', 'number')
         self.payment_date = self.request.GET.get('payment_date', '')
         self.due_date = self.request.GET.get('due_date', '')
@@ -3076,7 +3259,7 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
         context.update(self.pagination(paginator, self.page))
         var = self.sel_opt
         alert = messages.get_messages(self.request)
-        initial = {"day_choice": self.day_choice}
+        initial = {"day_choice": self.day_choice, "week_day_choice": self.week_day_choice}
 
         filter_form = OIFilterForm(initial, queue_name='queue-whatsappjoblist')
         context.update({"assignment_form": AssignmentActionForm(), "messages": alert, "query": self.query,
@@ -3209,6 +3392,12 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
                     pending_links_count__gt=0
                 ).exclude(oi_status=4)
             queryset = queryset.filter(q_objects)
+
+        if int(self.week_day_choice) != -1:
+            queryset = queryset.filter(
+                whatsapp_profile_orderitem__day_of_week=int(self.week_day_choice)
+            )
+
         if self.sort_value:
             if int(self.sort_value) == 1:
                 queryset = queryset.select_related(

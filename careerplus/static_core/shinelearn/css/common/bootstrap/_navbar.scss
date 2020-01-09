@@ -27,39 +27,39 @@
 
 .navbar-header {
   @include clearfix;
-  width: 270px;
+  // width: 270px;
   padding: $navbar-padding-vertical $navbar-padding-horizontal;
   font-size: $font-size-large;
   line-height: $line-height-computed;
   height: $navbar-height;
-  position: relative;
+  // position: relative;
 
-  @media (max-width: 1190px) {
-    width: 215px;
-  }
+  // @media (max-width: 1190px) {
+  //   width: 215px;
+  // }
 
   @media (min-width: $grid-float-breakpoint) {
     float: left;
   }
 
-  &:after {
-      content: '';
-      background :$logo;
-      background-position: 0 0;
-      width: 287px;
-      height: 90px;
-      display: inline-block; 
-      position: absolute;
-      top: -10px;
-      left: 0;
-      z-index: 99;
+  // &:after {
+  //     content: '';
+  //     background :$logo;
+  //     background-position: 0 0;
+  //     width: 287px;
+  //     height: 90px;
+  //     display: inline-block; 
+  //     position: absolute;
+  //     top: -10px;
+  //     left: 0;
+  //     z-index: 99;
 
-      @media (max-width: 1190px) {
-        width: 215px;
-        background :$logo-sm;
-        background-position: 0 -10px;
-      }
-    } 
+  //     @media (max-width: 1190px) {
+  //       width: 215px;
+  //       background :$logo-sm;
+  //       background-position: 0 -10px;
+  //     }
+  //   } 
 }
 
 
@@ -187,12 +187,15 @@
 // Brand/project name
 
 .navbar-brand {
-  height: 55px;
-  width: 270px;
-  position: absolute;
-  left: 0;
-  top: 0; 
-  z-index: 999;      
+  height: 40px;
+  width: 203px;
+  background :$sprite;
+  background-position: 0 0;
+  display: inline-block;
+  // position: absolute;
+  // left: 0;
+  // top: 0; 
+  // z-index: 999;      
 
   &:hover,
   &:focus {

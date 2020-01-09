@@ -1,0 +1,70 @@
+@import '../../../styles/variables/vars.scss';
+@import '../../../styles/variables/mixins.scss';
+
+.login-modal {
+  @include square(100%);
+  background-color: $white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 20px;
+
+  h2 {
+    font-size: 2.0rem;
+    color: $grey-333;
+    font-weight: 700;
+  }
+
+  &__lists {
+    margin-top: 20px;
+
+    &--item {
+      &:not(:last-child) {
+        margin-bottom: 15px;
+      }
+    }
+  }
+
+  &__input {
+    @include size(100%, 45px, block);
+    @include border-radius(4px);
+    box-shadow: 0 0 4px rgba($black, .1);
+    border: 1px solid #E9E9E9;
+    padding: 12px;
+    font-size: 14px;
+    color: $grey-666;
+  }
+
+  input::-webkit-input-placeholder {
+    color: red;
+  }
+
+
+  &--close {
+    @include size(25px, 25px, block);
+    position: absolute;
+    right: 0;
+    top: 15px;
+    transform: rotate(45deg);
+
+    &::before,
+    &::after {
+      content: '';
+      @include border-radius(2px);
+      background-color: $grey-999;
+      position: absolute;
+    }
+
+    &::before {
+      @include size(20px, 2px, block);
+      top: 9px;
+      left: -9px;
+     
+    }
+    &::after {
+      @include size(2px, 20px, block);
+    }
+  }
+}

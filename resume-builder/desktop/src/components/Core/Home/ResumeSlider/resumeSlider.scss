@@ -110,6 +110,10 @@
     box-shadow: 0 0 15px rgba($black, .2);
     z-index: 9;
     position: absolute;
+    text-indent: -999999px;
+    border: 0;
+    top: 50%;
+    transform: translateY(-50%);
 
     &::after {
       content: '';

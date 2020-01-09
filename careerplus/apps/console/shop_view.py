@@ -41,7 +41,7 @@ from shop.models import (
     Product, Chapter, Skill, ProductAuditHistory, UniversityCoursePayment,
     SubHeaderCategory,SubCategory, ProductSkill
 )
-from homepage.models import Testimonial
+from homepage.models import Testimonial,TestimonialCategoryRelationship
 from .shop_form import (
     AddCategoryForm, ChangeCategoryForm,
     ChangeCategorySEOForm,
@@ -321,6 +321,7 @@ class ChangeCategoryView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ChangeCategoryView, self).get_context_data(**kwargs)
+        
         CategoryRelationshipFormSet = inlineformset_factory(
             Category, Category.related_to.through, fk_name='related_from',
             form=CategoryRelationshipForm,
@@ -328,18 +329,16 @@ class ChangeCategoryView(DetailView):
             formset=RelationshipInlineFormSet, extra=1,
             max_num=20, validate_max=True)
 
+        extra_subheading = 1 if SubHeaderCategory.objects.filter(category=self.object).count()<1 else 0
+
         SubHeaderFormSet = inlineformset_factory(
             Category, SubHeaderCategory,
             fk_name='category',
             form=SubHeaderCategoryForm,
-            can_delete=False,
+            can_delete=True,
             formset=SubHeaderInlineFormSet, extra=1,
             max_num=5, validate_max=True)
 
-        TestimonialModelFormset = modelformset_factory(
-            Testimonial, form=TestimonialModelForm,
-            can_delete=True, extra=1, max_num=5,
-            validate_max=True)
         alert = messages.get_messages(self.request)
         main_change_form = ChangeCategoryForm(
             instance=self.get_object())
@@ -361,12 +360,9 @@ class ChangeCategoryView(DetailView):
             context.update({'sub_heading_formset': sub_heading_formset})
 
         if self.object.type_level in [3, 4]:
-            testimonial_model_formset = TestimonialModelFormset(
-                data=None,
-                queryset=Testimonial.objects.filter(
-                    page=UNIVERSITY_PAGE,
-                    object_id=self.object.pk))
-            context.update({'testimonial_model_formset': testimonial_model_formset})
+            testimonialcategory = TestimonialCategoryRelationship.objects.filter(category=self.object.id,\
+                testimonial__is_active=True).select_related('testimonial')
+            context.update({"testimonialcategory":testimonialcategory})
 
         childrens = self.object.category_set.filter(
             from_category__related_to=self.object)
@@ -502,7 +498,7 @@ class ChangeCategoryView(DetailView):
                             Category, SubHeaderCategory,
                             fk_name='category',
                             form=SubHeaderCategoryForm,
-                            can_delete=False,
+                            can_delete=True,
                             formset=SubHeaderInlineFormSet, extra=1,
                             max_num=5, validate_max=True)
 
@@ -539,55 +535,6 @@ class ChangeCategoryView(DetailView):
                             messages.error(
                                 self.request,
                                 "You cannot add Sub Header for level1 and Level2")
-                            return HttpResponseRedirect(
-                                reverse('console:category-change', kwargs={'pk': cat}))
-
-                    elif slug == 'testimonial_model':
-                        TestimonialModelFormset = modelformset_factory(
-                            Testimonial,
-                            form=TestimonialModelForm,
-                            can_delete=True,
-                            extra=1,
-                            max_num=5, validate_max=True)
-
-                        if self.object.type_level in [3, 4]:
-                            formset = TestimonialModelFormset(
-                                request.POST, request.FILES,
-                                queryset=Testimonial.objects.filter(
-                                    page=UNIVERSITY_PAGE, object_id=obj.pk))
-                            from django.db import transaction
-                            if formset.is_valid():
-                                with transaction.atomic():
-                                    formset.save(commit=False)
-                                    saved_formset = formset.save(commit=False)
-                                    for ins in formset.deleted_objects:
-                                        ins.delete()
-
-                                    for form in saved_formset:
-                                        form.page = UNIVERSITY_PAGE
-                                        form.object_id = obj.pk
-                                        form.save()
-                                    formset.save_m2m()
-
-                                messages.success(
-                                    self.request,
-                                    "Category Testimonial changed Successfully")
-                                return HttpResponseRedirect(reverse('console:category-change',kwargs={'pk': obj.pk}))
-                            else:
-                                context = self.get_context_data()
-                                if formset:
-                                    context.update({'testimonial_model_formset': formset})
-                                messages.error(
-                                    self.request,
-                                    "Category Testimonial Change Failed, Changes not Saved")
-                                return TemplateResponse(
-                                    request, [
-                                        "console/shop/change_category.html"
-                                    ], context)
-                        else:
-                            messages.error(
-                                self.request,
-                                "You cannot add Testimonial for level1 and Level2")
                             return HttpResponseRedirect(
                                 reverse('console:category-change', kwargs={'pk': cat}))
 

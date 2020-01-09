@@ -24,6 +24,22 @@ function* fetchProductIds(action) {
     }
 }
 
+function* requestFreeResume(action) {
+    try {
+        const {payload: {resolve, reject}} = action
+        const response = yield call(Api.requestFreeResume);
+
+        if (response['error']) {
+            return reject(new SubmissionError({_error: response['errorMessage']}));
+        }
+
+        const {data: {result}} = response;        
+        return resolve(result)
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 function* addToCart(action) {
     try {
         const {payload: {data, resolve, reject}} = action
@@ -41,4 +57,6 @@ function* addToCart(action) {
 export default function* watchProductId() {
     yield takeLatest(Actions.GET_PRODUCT_IDS, fetchProductIds)
     yield takeLatest(Actions.ADD_TO_CART, addToCart)
+    yield takeLatest(Actions.REQUEST_FREE_RESUME, requestFreeResume)
+
 }

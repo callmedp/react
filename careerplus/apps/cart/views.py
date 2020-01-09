@@ -127,6 +127,7 @@ class AddToCartView(View, CartMixin):
 class RemoveFromCartView(View, CartMixin):
 
     def post(self, request, *args, **kwargs):
+        
         if request.is_ajax():
             data = {"status": -1}
             reference = request.POST.get('reference_id')

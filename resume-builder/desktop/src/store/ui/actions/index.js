@@ -15,7 +15,10 @@ import {
     HIDE_GENERATE_RESUME_MODAL,
     HIDE_HELP_MODAL,
     SHOW_HELP_MODAL,
-    UPDATE_UI
+    UPDATE_UI,
+    SHOW_LOGIN_MODAL,
+    HIDE_LOGIN_MODAL,
+    SUCCESS_LOGIN
 } from "./actionTypes";
 
 export const updateUi = (paylaod) => {
@@ -50,7 +53,7 @@ export const showGenerateResumeModal = () => {
 export const hideGenerateResumeModal = () => {
     return {
         type: HIDE_GENERATE_RESUME_MODAL,
-        data: {'generateResumeModal': true}
+        data: {'generateResumeModal': false}
     }
 }
 
@@ -144,3 +147,26 @@ export const hideHelpModal = () => {
         data: {helpModal: false}
     }
 }
+
+
+export const showLoginModal = () => {
+    return {
+        type: SHOW_LOGIN_MODAL,
+        data: {loginModal: true}
+    }
+}
+
+export const hideLoginModal = () => {
+    return {
+        type: HIDE_LOGIN_MODAL,
+        data: {loginModal: false}
+    }
+}
+
+export const successLogin = (payload) => {
+    return {
+        type: SUCCESS_LOGIN,
+        payload
+    }
+}
+

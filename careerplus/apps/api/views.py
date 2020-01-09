@@ -535,6 +535,13 @@ class ValidateCouponApiView(APIView):
                     "msg": 'This code is suspended.'},
                     status=status.HTTP_400_BAD_REQUEST)
 
+
+            if not coupon.active:
+                return Response({
+                    "status": "FAIL",
+                    "msg": 'This code is Inactive.'},
+                    status=status.HTTP_400_BAD_REQUEST)
+
             if coupon.site not in [0, 2]:
                 return Response({
                     "status": "FAIL",
@@ -1628,6 +1635,24 @@ class GetAutoLoginToken(APIView):
          login_token = token_gen.encode(email, candidate_id, None)
          return Response({"token": login_token, "msg": "Successfull"}, status=status.HTTP_200_OK)
 
+class GetCacheValue(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+
+    def get(self, request, *args, **kwargs):
+        key = request.GET.get('key','')
+        if not key: 
+            return Response({
+                'value':''
+            }, status=status.HTTP_400_BAD_REQUEST)
+        value = cache.get(key,'')
+        return Response({
+            'value': value
+        }, status=status.HTTP_200_OK)
+
+
+
+        
 
 
 

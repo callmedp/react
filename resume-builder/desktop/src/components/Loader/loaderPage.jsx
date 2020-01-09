@@ -14,8 +14,8 @@ export default class LoaderPage extends Component {
     }
 
     render() {
-        let body = document.body;
-        body.classList.add('scrollynone')
+        // let body = document.body;
+        // body.classList.add('scrollynone')
         return (
             <div className="">
                 <div className="loader-page">

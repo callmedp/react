@@ -2,8 +2,10 @@ import React from 'react';
 import Modal from 'react-modal';
 import './templateModal.scss'
 
-Modal.setAppElement(document.getElementById('react-app'));
+if (typeof document !== 'undefined') {
 
+    Modal.setAppElement(document.getElementById('react-app'));
+}
 
 // Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
 
@@ -19,7 +21,7 @@ export default class TemplateModal extends React.Component {
         this.props.hideModal()
     }
 
-    disableScroll = () => {
+    disableScroll() {
         document.body.style.overflow = 'hidden'
     }
 
