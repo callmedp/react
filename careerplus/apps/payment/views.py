@@ -620,8 +620,6 @@ class ZestMoneyResponseView(CartMixin,PaymentMixin,View):
         txn_obj.save()
 
     def get(self, request, *args, **kwargs):
-        import ipdb;
-        ipdb.set_trace();
         txn_id = kwargs.get('txn_id')
         if not txn_id:
             return HttpResponseForbidden()
