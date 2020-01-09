@@ -19,20 +19,34 @@ function filterquery(type) {
     $formFacets.submit();
 }
 
-
 function filterSearch(e)
     {
     clicked = $(e.target);
-    className = e.target.classList[0];
-    clicked.toggleClass('selected');
 
+    if (clicked.first().data()['data'] == 0){
+      clicked.first().siblings().removeClass('selected')
+      clicked.first().addClass('selected')
+      let val= $("input[name='farea']:checked").length;
+      for(area = 0 ;area <=val ;area++ ){
+        if ( $("input[name='farea']:checked")[0] != undefined){
+        $("input[name='farea']:checked")[0].toggleAttribute('checked');
+        }
+        }
+    }
+    else {
+    className = e.target.classList[0];
+    $('#facet-0').removeClass('selected')
+    clicked.toggleClass('selected');
     obj = $('#farea_filters .'+className)[0]
     obj.toggleAttribute('checked')
-    filterquery();
+
+    }
+        filterquery();
     }
 
 
 function paginate() {
+
     $('.cls_load_more').click(function(e){
         e.preventDefault();
         var $this = $(this),
@@ -64,6 +78,7 @@ function paginate() {
                 }
                 $('.js_listing').append(data["response"]);
             }
+
         });
     });
 

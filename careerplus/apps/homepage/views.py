@@ -9,14 +9,14 @@ from haystack.query import SearchQuerySet
 
 
 from shop.models import ProductClass, FunctionalArea, Skill
-from search.helpers import get_recommendations
+from search.helpers import get_recommendations,get_recommended_products
 from core.library.haystack.query import SQS
 from core.api_mixin import ShineCandidateDetail
 from geolocation.models import Country
 from meta.views import MetadataMixin
 from .models import TopTrending, Testimonial
 
-from .config import STATIC_SITE_SLUG_TO_ID_MAPPING, STATIC_PAGE_NAME_CHOICES
+from .config import STATIC_SITE_SLUG_TO_ID_MAPPING, STATIC_PAGE_NAME_CHOICES,TOPTRENDING_FA_MAPPING
 
 redis_conn = get_redis_connection("search_lookup")
 
@@ -62,10 +62,16 @@ class HomePageView(TemplateView, MetadataMixin):
             is_active=True, is_jobassistance=False)
         t_objects = t_objects[:4]
         show_pcourses = False
+
         # recommended
         if self.request.session.get('candidate_id'):
-            rcourses = get_recommendations(self.request.session.get('func_area', None),
-                                           self.request.session.get('skills', None))
+            # rcourses = get_recommendations(self.request.session.get('func_area', None),
+            #                                self.request.session.get('skills', None))
+
+            rcourses = get_recommended_products(self.request.session.get(
+                'job_title',None),self.request.session.get('all_skill_ids',
+                []),self.request.session.get('func_area',None))
+
             if rcourses:
                 rcourses = rcourses[:9]
             else:
@@ -73,19 +79,24 @@ class HomePageView(TemplateView, MetadataMixin):
         else:
             show_pcourses = True
         if show_pcourses:
-            pcourses = SQS().filter(
-                pPc='course').exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).only(
-                'pTt pURL pHd pAR pNJ pImA pImg pNm pBC pRC').order_by(
-                '-pBC')[:9]
+            # pcourses = SQS().filter(
+            #     pPc='course').exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).only(
+            #     'pTt pURL pHd pAR pNJ pImA pImg pNm pBC pRC').order_by(
+            #     '-pBC')[:9]
+            # will show the default products if it is not logged in
+            pcourses = get_recommended_products()
 
         i = 0
         tabs = ['home', 'profile', 'message', 'settings']
         course_classes = ProductClass.objects.filter(slug__in=settings.COURSE_SLUG)
         for tcourse in t_objects:
             tprds = tcourse.get_trending_products()
-            tprds = tprds.filter(product__product_class__in=course_classes, product__type_product__in=[0, 1, 3])
+            tprds = tprds.filter(product__product_class__in=course_classes,
+            product__type_product__in=[0, 1, 3])
             product_pks = list(tprds.all().values_list('product', flat=True))
-            tprds = SearchQuerySet().filter(id__in=product_pks).exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS)[:9]
+            tprds = SearchQuerySet().filter(id__in=product_pks).exclude(
+            id__in=settings.EXCLUDE_SEARCH_PRODUCTS)[:9]
+
             data = {
                 'name': tcourse.name,
                 'tprds': list(tprds),
@@ -94,7 +105,8 @@ class HomePageView(TemplateView, MetadataMixin):
             }
             tcourses.append(data)
             i += 1
-        pcourses = [pcourses[count:count + 3] for count in range(0, len(pcourses), 3)]
+        if not self.request.session.get('candidate_id'):
+            pcourses = [pcourses[count:count + 3] for count in range(0, len(pcourses), 3)]
         rcourses = [rcourses[count:count + 3] for count in range(0, len(rcourses), 3)]
 
         return {'tcourses': tcourses, 'pcourses': pcourses, 'rcourses': rcourses}
@@ -108,6 +120,7 @@ class HomePageView(TemplateView, MetadataMixin):
         context = super(HomePageView, self).get_context_data(**kwargs)
         candidate_id = self.request.session.get('candidate_id')
         candidate_detail = None
+
         session_fa = self.request.session.get('func_area')
         session_skills = self.request.session.get('mid_skills')
 
@@ -116,6 +129,9 @@ class HomePageView(TemplateView, MetadataMixin):
                 id=session_fa).first()
             if fa:
                 context.update({'recmnd_func_area': fa.name})
+                top_trend = fa.toptrending_set.filter(is_active=True,
+                                                      is_jobassistance=False).order_by('-priority').first()
+                context['preSelect'] = top_trend.name if top_trend else ""
 
         if session_skills:
             skills_found = Skill.objects.filter(pk__in=session_skills).values_list('name', flat=True)

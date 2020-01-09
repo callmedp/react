@@ -999,9 +999,6 @@ class Product(AbstractProduct, ModelMeta):
         _('Buy Count'), default=0)
     num_jobs = models.PositiveIntegerField(
         _('Num Jobs'), default=0)
-    search_keywords = models.TextField(
-        _('Search Keywords'),
-        blank=True, default='')
     keywords = models.ManyToManyField(
         'shop.Keyword',
         verbose_name=_('Product Keyword'),
@@ -2595,9 +2592,14 @@ class FunctionalArea(AbstractAutoDate, ModelMeta):
 
     def get_products(self):
         products = self.faproducts.filter(
-            active=True,
-            productfas__active=True)
-        return products
+            active=True, productfas__active=True)
+        return products.only('name')
+
+    def get_active_product_name(self):
+        return ProductFA.objects.filter(fa=self,active=True,
+                                        fa__active=True).exclude(
+            product=None).only(
+            'product__name')
 
 
 class ProductFA(AbstractAutoDate):
@@ -2618,6 +2620,11 @@ class ProductFA(AbstractAutoDate):
         unique_together = ('product', 'fa')
         verbose_name = _('Product FA')
         verbose_name_plural = _('Product FAs')
+
+    def __str__(self):
+        fa_name = self.fa.name if self.fa else "N/A"
+        product = self.product.name if self.product else "N/A"
+        return '{}-{}'.format(fa_name, product)
 
 
 class Skill(AbstractAutoDate, ModelMeta):
@@ -3395,6 +3402,27 @@ class PracticeTestInfo(AbstractAutoDate):
             if 'pt_level' in result:
                 return result['pt_level']
         return None
-    
+
+
+class ProductJobTitle(AbstractAutoDate):
+
+    product = models.ManyToManyField(
+        Product,
+        verbose_name=_('Product'),
+        related_name='jobtitle',
+        null=True)
+    name = models.CharField(
+        _('Job Title'), max_length=100,
+        help_text=_('Job title'),blank=True,null=True)
+
+    def __str__(self):
+        return self.name if self.name else self.id
+
+
+    def get_products(self):
+        return self.product.all()
+
+
+
 
 

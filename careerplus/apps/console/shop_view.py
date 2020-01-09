@@ -9,7 +9,7 @@ from io import StringIO
 
 from django.views.generic import (
     View, UpdateView, FormView,
-    TemplateView, ListView, DetailView)
+    TemplateView, ListView, DetailView,CreateView)
 
 from django.http import (
     HttpResponseForbidden, HttpResponse,
@@ -39,7 +39,8 @@ from shop.models import (
     Category, Keyword,
     Attribute, AttributeOptionGroup,
     Product, Chapter, Skill, ProductAuditHistory, UniversityCoursePayment,
-    SubHeaderCategory,SubCategory, ProductSkill
+    SubHeaderCategory,SubCategory, ProductSkill,FunctionalArea,ProductFA,
+    ProductJobTitle
 )
 from homepage.models import Testimonial,TestimonialCategoryRelationship
 from .shop_form import (
@@ -55,8 +56,9 @@ from .shop_form import (
     UniversityCoursesPaymentInlineFormset,
     SubHeaderCategoryForm, SubHeaderInlineFormSet,
     TestimonialModelForm,
-    AddSubCategoryForm,ChangeSubCategoryForm
-)
+    AddSubCategoryForm,ChangeSubCategoryForm,FunctionalAreaForm,
+    FunctionalAreaCreateForm,ProductJobTitleChangeForm,
+    ProductJobTitleCreateForm)
 
 from scheduler.models import Scheduler
 from console.schedule_tasks.tasks import generate_discount_report
@@ -86,6 +88,8 @@ from homepage.config import (
 from faq.models import FAQuestion
 from users.mixins import UserGroupMixin
 from wsgiref.util import FileWrapper
+from core.library.haystack.query import SQS
+
 
 
 class SkillAutocompleteView(autocomplete.Select2QuerySetView):
@@ -2950,5 +2954,286 @@ class SubCategoryChangeView(UpdateView):
         messages.add_message(request, messages.ERROR, 'Form Not Updated.Check the fields')
 
         return TemplateResponse(request,self.template_name, context)
+
+
+
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
+@Decorate(check_permission('shop.console_change_category'))
+class FunctionalAreaListView(ListView, PaginationMixin):
+    model = FunctionalArea
+    context_object_name = 'fa_list'
+    template_name = 'console/shop/fa-list.html'
+    http_method_names = [u'get', ]
+
+    def dispatch(self, request, *args, **kwargs):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+        return super(FunctionalAreaListView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        return super(FunctionalAreaListView, self).get(request, args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super(FunctionalAreaListView, self).get_queryset()
+        try:
+            if self.query:
+                queryset = queryset.filter(Q(name__icontains=self.query))
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get query set%s'%str(e))
+            pass
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(FunctionalAreaListView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        paginator = Paginator(context['fa_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        context.update({
+            "query": self.query,
+            "messages": alert,
+        })
+        return context
+
+
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
+class FaChangeView(UpdateView):
+    model = FunctionalArea
+    template_name = 'console/shop/change_fa.html'
+    success_url = reverse_lazy('console:fa-list')
+    http_method_names = [u'get', u'post']
+    form_class = FunctionalAreaForm
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = super(FaChangeView, self).get(request, *args, **kwargs)
+        return context
+
+    def get_queryset(self):
+        return FunctionalArea.objects.prefetch_related('faproducts').all()
+
+
+    def get_context_data(self, **kwargs):
+        context = super(FaChangeView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({
+            'messages': alert})
+        fa_object = self.get_object()
+        form = FunctionalAreaForm(instance=fa_object)
+        context.update({'form':form})
+        if fa_object:
+            prod_ids = fa_object.faproducts.values_list('id',flat=True)
+            prod = list(SQS().filter(id__in=prod_ids).values('id','pNm'))
+            context.update({'selected_products': json.dumps(prod)})
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        obj= self.object = self.get_object()
+        faids = self.request.POST.getlist('faproducts')
+        # setting all the products fas inactive
+        obj.productfas.update(active=False)
+        for id in faids:
+            fa, created = ProductFA.objects.get_or_create(product_id=id,fa=obj)
+            fa.active = True
+            fa.save()
+        form = FunctionalAreaForm(request.POST,instance=obj)
+        form.fields.pop('faproducts')
+        context = self.get_context_data()
+        if form.is_valid():
+            try:
+                form.save()
+                valid_form = self.form_valid(form)
+                messages.add_message(
+                    request, messages.SUCCESS,
+                    'FA has been updated')
+                return valid_form
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, 'Form %s Not Updated. Due to %s' % (self.object.id, str(e)))
+                return self.form_invalid(form)
+        context.update({'form': form})
+        messages.add_message(request, messages.ERROR, 'Form Not Updated.Check the fields')
+
+        return TemplateResponse(request,self.template_name, context)
+
+
+class FaCreateView(FormView):
+    model = FunctionalArea
+    template_name = 'console/shop/create_fa.html'
+    success_url = reverse_lazy('console:fa-list')
+    http_method_names = [u'get', u'post']
+    form_class = FunctionalAreaCreateForm
+
+
+    def form_valid(self, form,fa_prod_ids):
+        form.save(fa_ids=fa_prod_ids)
+        messages.success(
+            self.request,
+            "You have successfully added a FA"
+        )
+        return super(FaCreateView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(
+            self.request,
+            "Your addition has not been saved."
+        )
+        return super(FaCreateView, self).form_invalid(form)
+
+
+    def get_context_data(self, **kwargs):
+        context = super(FaCreateView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        return context
+
+
+    def post(self,request,*args,**kwargs):
+        form = self.get_form()
+        fa_prod_ids = self.request.POST.getlist('faproducts')
+        if not fa_prod_ids:
+            form.add_error('faproducts','Please Select the product id')
+            return self.form_invalid(form)
+        faproducts = form.fields.pop('faproducts')
+        if form.is_valid():
+            try:
+                # form.save(fa_ids=)
+                valid_form = self.form_valid(form,fa_prod_ids)
+                return valid_form
+            except Exception as e:
+                messages.add_message(request, messages.ERROR,'Fa not updated '
+                                               'due to {}'.format(str(e)))
+        return self.form_invalid(form)
+
+
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
+class JobTitleListView(ListView, PaginationMixin):
+    model = ProductJobTitle
+    context_object_name = 'job_list'
+    template_name = 'console/shop/job-list.html'
+    http_method_names = [ u'get', ]
+
+
+    def dispatch(self, request, *args, **kwargs):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+        return super(JobTitleListView, self).dispatch(request, *args,
+                                                            **kwargs)
+
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        return super(JobTitleListView, self).get(request, args, **kwargs)
+
+
+    def get_queryset(self):
+        queryset = super(JobTitleListView, self).get_queryset()
+        try:
+            if self.query:
+                queryset = queryset.filter(Q(name__icontains=self.query))
+        except Exception as e:
+            logging.getLogger('error_log').error(
+                'unable to get query set%s' % str(e))
+            pass
+        return queryset
+
+
+    def get_context_data(self, **kwargs):
+        context = super(JobTitleListView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages':alert})
+        paginator = Paginator(context['job_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        context.update({
+            "query"   :self.query,
+            "messages":alert,
+        })
+        return context
+
+
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
+class JobTitleChangeView(UpdateView):
+    model = ProductJobTitle
+    template_name = 'console/shop/change-product-job-title.html'
+    success_url = reverse_lazy('console:product-job-title')
+    http_method_names = [u'get', u'post']
+    form_class = ProductJobTitleChangeForm
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = super(JobTitleChangeView, self).get(request, *args, **kwargs)
+        return context
+
+    def get_context_data(self, **kwargs):
+        context = super(JobTitleChangeView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({
+            'messages': alert})
+        jt_object = self.get_object()
+        form = ProductJobTitleChangeForm(instance=jt_object)
+        context.update({'form':form})
+        if jt_object:
+            prod_ids = list(jt_object.product.values('id','name'))
+            context.update({'selected_products': json.dumps(prod_ids)})
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        obj= self.object = self.get_object()
+        form = ProductJobTitleChangeForm(request.POST,instance=obj)
+        context = self.get_context_data()
+        if form.is_valid():
+            try:
+                form.save()
+                valid_form = self.form_valid(form)
+                messages.add_message(
+                    request, messages.SUCCESS,
+                    'job title has been updated')
+                return valid_form
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, 'Form %s Not Updated. Due to %s' % (self.object.id, str(e)))
+                return self.form_invalid(form)
+        context.update({'form': form})
+        messages.add_message(request, messages.ERROR, 'Form Not Updated.Check the fields')
+
+        return TemplateResponse(request,self.template_name, context)
+
+
+class JobTitleCreateView(FormView):
+    model = ProductJobTitle
+    template_name = 'console/shop/create_job_title.html'
+    success_url = reverse_lazy('console:product-job-title')
+    http_method_names = [u'get', u'post']
+    form_class = ProductJobTitleCreateForm
+
+    def get_context_data(self, **kwargs):
+        context = super(JobTitleCreateView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        return context
+
+    def post(self,request,*args,**kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            try:
+                form.save()
+                valid_form = self.form_valid(form)
+                return valid_form
+            except Exception as e:
+                messages.add_message(request, messages.ERROR,'Job title not '
+                                                             'updated '
+                                               'due to {}'.format(str(e)))
+        return self.form_invalid(form)
 
 
