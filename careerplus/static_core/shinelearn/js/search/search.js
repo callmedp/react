@@ -113,7 +113,7 @@ var Scroller = function(itm,className) {
 
         if(windowTop >= parentDivTop && windowTop < (that.item.closest('.cls_scroller_parent').height() + parentDivTop)) {
           that.item.css({
-            'top': (windowTop - parentDivTop) + 53
+            'top': (windowTop - parentDivTop)
           })
           that.item.find('.cls_scroller_hiddenDiv').removeClass('hidden');
 
