@@ -646,6 +646,13 @@ class ZestMoneyResponseView(CartMixin,PaymentMixin,View):
             txn_obj.status = 0
             self.update_txn_info(order_status, txn_obj)
             self.closeCartObject(txn_obj.cart)
+            try: 
+                 del request.session['cart_pk']
+                 del request.session['checkout_type']
+                 request.session.modified = True
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to modify request session  %s'%str(e))
+                pass
             return HttpResponseRedirect(reverse('payment:thank-you'))
 
         failure_text = self.status_text_mapping.get(order_status, "")
