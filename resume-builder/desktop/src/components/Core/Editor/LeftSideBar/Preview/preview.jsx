@@ -63,7 +63,7 @@ export default class Preview extends Component {
 
 
     goToBuyPage() {
-        const {generateResumeAlert,eventClicked} = this.props;
+        const { generateResumeAlert, eventClicked } = this.props;
 
         eventClicked({
             'action': 'GetYourResume',
@@ -210,87 +210,97 @@ export default class Preview extends Component {
 
         }
 
+        if (slider1) {
+            slider1.onmousedown = (event) => {
+                event.preventDefault();
+                const { userInfo: { selected_template }, eventClicked } = self.props;
+                const elementValue = event.screenX - slider1.getBoundingClientRect().left;
+                const rightEdge = slider1.offsetWidth - elem1.offsetWidth;
+                let size = 1;
 
-        slider1.onmousedown = (event) => {
-            event.preventDefault();
-            const { userInfo: { selected_template }, eventClicked } = self.props;
-            const elementValue = event.screenX - slider1.getBoundingClientRect().left;
-            const rightEdge = slider1.offsetWidth - elem1.offsetWidth;
-            let size = 1;
+                if (elementValue > ((rightEdge / 2) + 50)) {
+                    elem1.style.left = rightEdge + 'px';
+                    size = 3;
+                } else if (elementValue < ((rightEdge / 2) - 50)) {
+                    elem1.style.left = 0 + 'px';
+                    size = 1;
+                } else if (((rightEdge / 2) - 50) <= elementValue && elementValue <= ((rightEdge / 2) + 50)) {
+                    elem1.style.left = rightEdge / 2 + 'px';
+                    size = 2;
+                }
+                eventClicked({
+                    'action': 'ChangeFont',
+                    'label': size === 1 ? 'S' : size === 2 ? 'M' : 'L'
+                })
 
-            if (elementValue > ((rightEdge / 2) + 50)) {
-                elem1.style.left = rightEdge + 'px';
-                size = 3;
-            } else if (elementValue < ((rightEdge / 2) - 50)) {
-                elem1.style.left = 0 + 'px';
-                size = 1;
-            } else if (((rightEdge / 2) - 50) <= elementValue && elementValue <= ((rightEdge / 2) + 50)) {
-                elem1.style.left = rightEdge / 2 + 'px';
-                size = 2;
-            }
-            eventClicked({
-                'action': 'ChangeFont',
-                'label': size === 1 ? 'S' : size === 2 ? 'M' : 'L'
-            })
+                self.props.customizeTemplate({
+                    'heading_font_size': size,
+                    'template': selected_template
+                })
 
-            self.props.customizeTemplate({
-                'heading_font_size': size,
-                'template': selected_template
-            })
-
-
-        };
-        slider2.onmousedown = (event) => {
-            event.preventDefault();
-            const { userInfo: { selected_template }, eventClicked } = self.props;
-            let size = 1;
-
-            const elementValue = event.screenX - slider2.getBoundingClientRect().left;
-            const rightEdge = slider2.offsetWidth - elem2.offsetWidth;
-            if (elementValue > ((rightEdge / 2) + 50)) {
-                elem2.style.left = rightEdge + 'px';
-                size = 3;
-
-            } else if (elementValue < ((rightEdge / 2) - 50)) {
-                elem2.style.left = 0 + 'px';
-                size = 1;
-
-            } else if (((rightEdge / 2) - 50) <= elementValue && elementValue <= ((rightEdge / 2) + 50)) {
-                elem2.style.left = rightEdge / 2 + 'px';
-                size = 2;
 
             }
-            eventClicked({
-                'action': 'ChangeFont',
-                'label': size === 1 ? 'S' : size === 2 ? 'M' : 'L'
-            })
-            self.props.customizeTemplate({
-                'text_font_size': size,
-                'template': selected_template
-            })
         }
 
-        elem1.onmousedown = function (event) {
-            event.preventDefault(); // prevent selection start (browser action)
+        if (slider2) {
+            slider2.onmousedown = (event) => {
+                event.preventDefault();
+                const { userInfo: { selected_template }, eventClicked } = self.props;
+                let size = 1;
 
-            handleElemEvent(event, elem1, slider1, 'heading');
-        };
+                const elementValue = event.screenX - slider2.getBoundingClientRect().left;
+                const rightEdge = slider2.offsetWidth - elem2.offsetWidth;
+                if (elementValue > ((rightEdge / 2) + 50)) {
+                    elem2.style.left = rightEdge + 'px';
+                    size = 3;
 
-        elem2.onmousedown = function (event) {
-            event.preventDefault(); // prevent selection start (browser action)
+                } else if (elementValue < ((rightEdge / 2) - 50)) {
+                    elem2.style.left = 0 + 'px';
+                    size = 1;
 
-            handleElemEvent(event, elem2, slider2, 'text');
-        };
+                } else if (((rightEdge / 2) - 50) <= elementValue && elementValue <= ((rightEdge / 2) + 50)) {
+                    elem2.style.left = rightEdge / 2 + 'px';
+                    size = 2;
 
+                }
+                eventClicked({
+                    'action': 'ChangeFont',
+                    'label': size === 1 ? 'S' : size === 2 ? 'M' : 'L'
+                })
+                self.props.customizeTemplate({
+                    'text_font_size': size,
+                    'template': selected_template
+                })
+            }
+        }
 
-        elem1.ondragstart = function () {
-            return false;
-        };
+        if (elem1) {
+            elem1.onmousedown = function (event) {
+                event.preventDefault(); // prevent selection start (browser action)
 
+                handleElemEvent(event, elem1, slider1, 'heading');
+            };
+        }
 
-        elem2.ondragstart = function () {
-            return false;
-        };
+        if (elem2) {
+            elem2.onmousedown = function (event) {
+                event.preventDefault(); // prevent selection start (browser action)
+
+                handleElemEvent(event, elem2, slider2, 'text');
+            };
+        }
+
+        if (elem1) {
+            elem1.ondragstart = function () {
+                return false;
+            };
+        }
+
+        if (elem2) {
+            elem2.ondragstart = function () {
+                return false;
+            };
+        }
 
     }
 

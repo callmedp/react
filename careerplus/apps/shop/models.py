@@ -1657,10 +1657,15 @@ class Product(AbstractProduct, ModelMeta):
                 else 0
             return dd
         elif self.is_service and self.type_flow == 5:
-            dd = getattr(self.attr, S_ATTR_DICT.get('FD')) \
+            dd = getattr(self.attr, S_ATTR_DICT.get('FD'), 180) \
                 if getattr(self.attr, S_ATTR_DICT.get('FD'), None) \
                 else 0
             return dd
+        elif self.sub_type_flow == 1701:
+            dd = int(getattr(self.attr, S_ATTR_DICT.get('SUB'), 14))\
+                if getattr(self.attr,S_ATTR_DICT.get('SUB'), None )\
+                else 0 
+            return dd 
         else:
             return ''
     @property

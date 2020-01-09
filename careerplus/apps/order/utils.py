@@ -234,7 +234,7 @@ class FeatureProfileUtil:
     def update_badges(self,candidate_id,oi,feature):
         badge_data = BadgingMixin().get_badging_data(
                         candidate_id=candidate_id, curr_order_item=oi, feature=feature
-                    )
+                    )        
         flag = BadgingMixin().update_badging_data(candidate_id=candidate_id, data=badge_data)
         if flag:
             logging.getLogger('info_log').info(
@@ -299,6 +299,8 @@ class FeatureProfileUtil:
             oi.oi_status = 28
             oi.closed_on = timezone.now()
             oi.last_oi_status = 6
+            oi.start_date = timezone.now()
+            oi.end_date = timezone.now() + timedelta(days=oi.product.day_duration)
             oi.save()
             self.create_oi_operation(oi,6,last_oi_status)
             self.create_oi_operation(oi,oi.oi_status,oi.last_oi_status)
@@ -316,7 +318,7 @@ class FeatureProfileUtil:
     
 
     def close_all_feature(self):
-        from  order.models import OrderItem
+        from order.models import OrderItem
         oi_status = [28,34,35]
         sub_type_flow = [501,503]
         featured_orderitems = self.get_featured_oi(oi_status,sub_type_flow)

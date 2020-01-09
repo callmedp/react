@@ -39,7 +39,6 @@ export default class ResumeSlider extends Component {
 
         localStorage.setItem('selected_template', templateId);
 
-
         const values = queryString.parse(location.search),
             pathFrom = location.state && location.state.from || '',
             template = (values && values.template) || '';

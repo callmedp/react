@@ -1,6 +1,11 @@
 # python imports
-import os, json, logging
+import os
+import json
+import logging
 from io import BytesIO
+from datetime import datetime, timedelta
+from django.utils import timezone
+
 
 # django imports
 from django.conf import settings
@@ -34,7 +39,7 @@ class ResumeEntityReorderUtility:
     Current pos - right 
         Swap with first top right if step  == -1
         Swap with first bottom right if step  == -1
-    
+
     Current pos - center
         Swap if top/bottom blocks also center
         Else move both left & right sections up/down depending upon step value.
@@ -44,11 +49,12 @@ class ResumeEntityReorderUtility:
         self.candidate_id = kwargs.get('candidate_id')
         self.template_no = kwargs.get('template_no')
         self.saved_entity_data = []
-        self.current_entity_obj = OrderCustomisation.objects.filter( \
+        self.current_entity_obj = OrderCustomisation.objects.filter(
             candidate__candidate_id=self.candidate_id, template_no=self.template_no).first()
 
         if self.current_entity_obj:
-            self.saved_entity_data = json.loads(self.current_entity_obj.entity_position)
+            self.saved_entity_data = json.loads(
+                self.current_entity_obj.entity_position)
 
     def get_pos_item_mapping(self):
         return {d['pos']: d for d in self.saved_entity_data}
@@ -89,7 +95,8 @@ class ResumeEntityReorderUtility:
                 continue
 
             if pos_item['alignment'] == alignment and pos_item['active']:
-                swap_dict.update({pos_in_focus: [pos, alignment, entity_pos != pos_in_focus]})
+                swap_dict.update(
+                    {pos_in_focus: [pos, alignment, entity_pos != pos_in_focus]})
                 pos_in_focus = pos
                 break
 
@@ -108,7 +115,8 @@ class ResumeEntityReorderUtility:
         if step_item.get('alignment') in ['left', 'right']:
             return {pos + step: [pos, pos_item_mapping[pos + step].get('alignment'), True],
                     pos + (2 * step): [pos + step, pos_item_mapping[pos + (2 * step)].get('alignment'), True],
-                    pos: [pos + (2 * step), pos_item_mapping[pos].get('alignment'), True]
+                    pos: [pos + (2 * step),
+                          pos_item_mapping[pos].get('alignment'), True]
                     }
 
         return {pos + step: [pos, "center", True], pos: [pos + step, "center", True]}
@@ -122,7 +130,8 @@ class ResumeEntityReorderUtility:
             if entity_pos + step > MAX_DEPTH or entity_pos + step <= MIN_DEPTH:
                 return swap_dict
 
-            swap_dict.update(self._handle_center_item_swapping(entity_pos, step))
+            swap_dict.update(
+                self._handle_center_item_swapping(entity_pos, step))
             return swap_dict
 
         if step == 0:
@@ -137,11 +146,12 @@ class ResumeEntityReorderUtility:
             if pos > MAX_DEPTH or pos <= MIN_DEPTH:
                 return swap_dict
 
-            allow_switch = (TEMPLATE_ALLOW_LEFT_RIGHT_SWITCH.get(self.template_no) or \
+            allow_switch = (TEMPLATE_ALLOW_LEFT_RIGHT_SWITCH.get(self.template_no) or
                             pos_item['alignment'] == alignment) and pos_item['alignment'] != 'center'
 
             if allow_switch and pos_item['active']:
-                swap_dict.update({pos: [entity_pos, alignment, True], entity_pos: [pos, alignment, True]})
+                swap_dict.update(
+                    {pos: [entity_pos, alignment, True], entity_pos: [pos, alignment, True]})
                 break
 
         return swap_dict
@@ -168,7 +178,7 @@ class ResumeEntityReorderUtility:
         if not swap_dict:
             return self.saved_entity_data
 
-        swapped_entity_data = [self.get_item_data_with_swapped_position(x, swap_dict) \
+        swapped_entity_data = [self.get_item_data_with_swapped_position(x, swap_dict)
                                for x in self.saved_entity_data]
         return sorted(swapped_entity_data, key=lambda x: x['pos'])
 
@@ -182,15 +192,13 @@ class ResumeGenerator(object):
 
         data_to_send = {"order_id": order.id, "template_no": index}
 
-
-
         if not is_combo:
-            data_to_send.update({"send_mail": True,'is_combo':False})
+            data_to_send.update({"send_mail": True, 'is_combo': False})
             generate_and_upload_resume_pdf.delay(json.dumps(data_to_send))
             return
 
         for i in range(1, 6):
-            data_to_send.update({"template_no": i,'is_combo':True})
+            data_to_send.update({"template_no": i, 'is_combo': True})
             generate_and_upload_resume_pdf.delay(json.dumps(data_to_send))
 
 
@@ -198,7 +206,8 @@ class ResumeGenerator(object):
 def store_resume_file(file_dir, file_name, file_content):
     directory_path = "{}/{}".format(settings.RESUME_TEMPLATE_DIR, file_dir)
     if settings.IS_GCP:
-        gcp_file = GCPResumeBuilderStorage().open("{}/{}".format(directory_path, file_name), 'wb')
+        gcp_file = GCPResumeBuilderStorage().open(
+            "{}/{}".format(directory_path, file_name), 'wb')
         gcp_file.write(file_content)
         gcp_file.close()
         return
@@ -210,3 +219,33 @@ def store_resume_file(file_dir, file_name, file_content):
     dest = open("{}/{}".format(directory_path, file_name), 'wb')
     dest.write(file_content)
     dest.close()
+
+
+class SubscriptionUtil:
+
+    def get_oi(self, sub_type_flow):
+        from order.models import OrderItem
+        return OrderItem.objects.filter(
+            order__status__in=[1, 3], product__type_flow__in=[17], oi_status__in=[0],
+            product__sub_type_flow__in=sub_type_flow).select_related('order')
+
+    def close_subscription(self):
+        sub_type_flow = [1701]
+        orderitems = self.get_oi(sub_type_flow)
+
+        for oi in orderitems:
+            if oi.end_date and (oi.end_date < timezone.now()):
+                # get shine candidate_id
+                oi.oi_status = 4
+                oi.save()
+                oi.orderitemoperation_set.create(
+                    oi_status=4,
+                    last_oi_status=0
+                )
+                candidate_id = oi.order.candidate_id
+                candidate = Candidate.objects.filter(
+                    candidate_id=candidate_id).first()
+                if not candidate:
+                    continue
+                candidate.active_subscription = False
+                candidate.save()

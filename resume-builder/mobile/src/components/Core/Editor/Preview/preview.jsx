@@ -7,7 +7,7 @@ import { updatePersonalInfo, fetchPersonalInfo } from "../../../../store/persona
 import { updateAlertModalStatus, showGenerateResumeModal, hideGenerateResumeModal } from "../../../../store/ui/actions/index"
 import Loader from '../../../Common/Loader/loader.jsx';
 import ChangeTemplateModal from './changeTemplateModal.jsx';
-import {loginCandidate} from '../../../../store/landingPage/actions/index';
+import { loginCandidate } from '../../../../store/landingPage/actions/index';
 
 import moment from 'moment'
 import {
@@ -28,10 +28,10 @@ class Preview extends Component {
 
     constructor(props) {
         super(props)
-        
+
         // check if the userexperinece is greater or equal to 4 years. (7 is the pid for 4 years (mapping done here))
 
-       
+
         this.state = {
             'customize': false,
             currentTab: 1,
@@ -59,7 +59,7 @@ class Preview extends Component {
 
     componentWillUpdate(prevProps) {
         const { template } = this.props
-        
+
         if (template !== prevProps.template) {
 
             this.setState({
@@ -71,7 +71,7 @@ class Preview extends Component {
     }
 
     async componentDidUpdate(prevProps) {
-        const { template: { entity_position, reorderFailToast }, personalInfo: { selected_template } , loginCandidate} = this.props;
+        const { template: { entity_position, reorderFailToast }, personalInfo: { selected_template }, loginCandidate } = this.props;
         if (!localStorage.getItem('candidateId') || !localStorage.getItem('token')) {
             await loginCandidate()
         }
@@ -117,11 +117,12 @@ class Preview extends Component {
     async componentDidMount() {
 
         if (parseInt(localStorage.getItem('userExperience') || 0) >= 7) {
-            if(document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]){document.getElementsByClassName('chat-bot')[0].style.display = 'none';
+            if (document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
+                document.getElementsByClassName('chat-bot')[0].style.display = 'none';
             }
         }
         else {
-            if(document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]){
+            if (document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
                 document.getElementsByClassName('chat-bot')[0].style.display = 'block';
             }
         }
@@ -200,7 +201,7 @@ class Preview extends Component {
             'action': 'GetYourResume',
             'label': 'Click'
         })
-        if (order_data && order_data.id) {
+        if (order_data && order_data.id && (localStorage.getItem('subscriptionActive') && localStorage.getItem('subscriptionActive') === 'true' ? true : false)) {
             if (!resume_generated) {
                 const swalWithBootstrapButtons = Swal.mixin({
                     customClass: {
@@ -260,7 +261,8 @@ class Preview extends Component {
                 {
                     (!(order_data && order_data.id) || !(resume_generated)) ?
                         <ChangeTemplateModal {...this.props} /> :
-                        (order_data && order_data.id && order_data.combo) ? <ChangeTemplateModal {...this.props} /> : ''
+                        (order_data && order_data.id && order_data.combo) ? <ChangeTemplateModal {...this.props} /> :
+                            (order_data && order_data.id && order_data.expiry) ? <ChangeTemplateModal {...this.props} /> : ''
                 }
 
                 {mainloader ? <Loader /> : ""}
@@ -576,7 +578,7 @@ const mapDispatchToProps = (dispatch) => {
         },
         "loginCandidate": (token) => {
             return new Promise((resolve, reject) => {
-                dispatch(loginCandidate({payload: {alt: token}, resolve, reject, isTokenAvail: false}))
+                dispatch(loginCandidate({ payload: { alt: token }, resolve, reject, isTokenAvail: false }))
             })
         },
     }

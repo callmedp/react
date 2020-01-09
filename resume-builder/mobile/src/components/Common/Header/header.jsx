@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './header.scss'
-import {feedbackSubmit} from "../../../store/landingPage/actions";
+import { feedbackSubmit } from "../../../store/landingPage/actions";
 import * as actions from "../../../store/sidenav/actions";
-import {showHelpModal,hideHelpModal} from "../../../store/ui/actions/index"
-import {connect} from "react-redux";
+import { showHelpModal, hideHelpModal } from "../../../store/ui/actions/index"
+import { connect } from "react-redux";
 import NeedHelpModal from '../../Core/Home/NeedHelpModal/needHelpModal.jsx'
 
 
@@ -19,20 +19,20 @@ class Header extends Component {
         this.props.fetchSideNavStatus()
     }
 
-    reachUsButton(){
-        const {showHelpModal,eventClicked} =this.props;
+    reachUsButton() {
+        const { showHelpModal, eventClicked } = this.props;
         showHelpModal()
         eventClicked({
-            'action':'ReachUs',
-            'label':'Header'
+            'action': 'ReachUs',
+            'label': 'Header'
         })
     }
 
-    changeTemplate(){
-        const {updateModalStatus,eventClicked}=this.props;
-        updateModalStatus({modal_status:true});
-        let eventData={
-            'action':'ChangeTemplate',
+    changeTemplate() {
+        const { updateModalStatus, eventClicked } = this.props;
+        updateModalStatus({ modal_status: true });
+        let eventData = {
+            'action': 'ChangeTemplate',
             'label': 'ResumeCreation'
         }
         eventClicked(eventData);
@@ -40,8 +40,8 @@ class Header extends Component {
 
     render() {
         const {
-            page, history, backPage, order_data, ui: {helpModal},
-            personalInfo,personalInfo:{resume_generated}, feedback, hideHelpModal,eventClicked
+            page, history, backPage, order_data, ui: { helpModal },
+            personalInfo, personalInfo: { resume_generated }, feedback, hideHelpModal, eventClicked
         } = this.props;
 
         return (
@@ -65,62 +65,59 @@ class Header extends Component {
                         </div>
 
                     </React.Fragment>
-                    : 
+                    :
                     page === 'preview' ?
-                    <React.Fragment>
-                        <div className="header__left">
-                            <button role="button" className="header__menu" onClick={()=>{history.goBack()}}>
-                                <i className="sprite icon--back-white"></i>
-                            </button>
-    
-                            {<span>Resume Preview</span>}
-                        </div>
-                        {
-                        (!(order_data && order_data.id) || !(resume_generated)) ?
-                        <a className="btn btn__round btn--outline" alt="Change Template" onClick={this.changeTemplate}>Change template</a>:
-                        (order_data && order_data.id && order_data.combo) ? <a className="btn btn__round btn--outline" alt="Change Template" onClick={this.changeTemplate}>Change template</a> : ''          
-                        }
-                    </React.Fragment>:
-                    page === 'buy' ?
-                    <React.Fragment>
-                        <div className="header__left">
-                            <button role="button" className="menu mr-10">
-                                <i className="sprite icon--back-white" onClick={() => {
-                                    // history.push('/resume-builder/edit')
-                                    history.goBack()
-                                }}></i>
-                            </button>
-                            <span>Choose your plan</span>
-                        </div>
+                        <React.Fragment>
+                            <div className="header__left">
+                                <button role="button" className="header__menu" onClick={() => { history.goBack() }}>
+                                    <i className="sprite icon--back-white"></i>
+                                </button>
 
-                        <div className="header__right">
-                        <span className="header--off">
-                            <img src={`${this.staticUrl}react/assets/images/mobile/launch-offer.png`} alt="Launch Offer"/>
-                        </span>
-                        </div>
+                                {<span>Resume Preview</span>}
+                            </div>
+                            {
+                                (order_data && order_data.id && order_data.combo) ? <a className="btn btn__round btn--outline" alt="Change Template" onClick={this.changeTemplate}>Change template</a>
+                                    : (order_data && order_data.id && order_data.expiry && (localStorage.getItem('subscriptionActive') && localStorage.getItem('subscriptionActive') === 'true' ? true : false)) ? <a className="btn btn__round btn--outline" alt="Change Template" onClick={this.changeTemplate}>Change template</a> :
+                                        (!(order_data && order_data.id) || !(resume_generated) || (localStorage.getItem('subscriptionActive') && localStorage.getItem('subscriptionActive') === 'false' ? true : false)) ?
+                                            <a className="btn btn__round btn--outline" alt="Change Template" onClick={this.changeTemplate}>Change template</a> : ''
+                            }
+                        </React.Fragment> :
+                        page === 'buy' ?
+                            <React.Fragment>
+                                <div className="header__left">
+                                    <button role="button" className="menu mr-10">
+                                        <i className="sprite icon--back-white" onClick={() => {
+                                            // history.push('/resume-builder/edit')
+                                            history.goBack()
+                                        }}></i>
+                                    </button>
+                                    <span>Choose your plan</span>
+                                </div>
 
-                    </React.Fragment>:
-                    
-                    page === 'menu' ?
-                    <React.Fragment>
-                        <div className="header__left">
-                            <button role="button" className="header__menu" 
-                                onClick={()=>{history.push(`/resume-builder/edit/?type=${backPage}`)}}>
-                                <i className="sprite icon--back-white"></i>
-                            </button>
-    
-                            {<span>Add / Remove</span>}
-                        </div>
-    
-                    </React.Fragment>:
+                                {/* <div className="header__right"></div> */}
 
-                    <React.Fragment>
-                        <div className="header--logo">
-                            <img src={`${this.staticUrl}react/assets/images/mobile/logo.png`} alt="Logo"/>
-                        </div>
-                        <div className="header--logo"></div>
-                        <a className="btn btn__transparent btn__round" alt="Reach Us" onClick={this.reachUsButton}>Reach us</a>
-                    </React.Fragment>}
+                            </React.Fragment> :
+
+                            page === 'menu' ?
+                                <React.Fragment>
+                                    <div className="header__left">
+                                        <button role="button" className="header__menu"
+                                            onClick={() => { history.push(`/resume-builder/edit/?type=${backPage}`) }}>
+                                            <i className="sprite icon--back-white"></i>
+                                        </button>
+
+                                        {<span>Add / Remove</span>}
+                                    </div>
+
+                                </React.Fragment> :
+
+                                <React.Fragment>
+                                    <div className="header--logo">
+                                        <img src={`${this.staticUrl}react/assets/images/mobile/logo.png`} alt="Logo" />
+                                    </div>
+                                    <div className="header--logo"></div>
+                                    <a className="btn btn__transparent btn__round" alt="Reach Us" onClick={this.reachUsButton}>Reach us</a>
+                                </React.Fragment>}
             </header>
         )
     }
@@ -144,10 +141,10 @@ const mapDispatchToProps = (dispatch) => {
         "updateSidenavStatus": (status) => {
             return dispatch(actions.updateSidenavStatus(status))
         },
-        "showHelpModal": () =>{
+        "showHelpModal": () => {
             return dispatch(showHelpModal())
         },
-        "hideHelpModal": ()=>{
+        "hideHelpModal": () => {
             return dispatch(hideHelpModal())
         },
         'feedback': (values) => {

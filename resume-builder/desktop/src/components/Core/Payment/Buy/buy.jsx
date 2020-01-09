@@ -118,7 +118,7 @@ export class Buy extends Component {
         this.setState({ 'timerId': timer, 'pollingStartTIme': startTime })
     }
 
-    async redirectToCart() {
+    async redirectToCart(checkedProduct) {
         this.props.eventClicked({
             'action': 'PayNow',
             'label': 'Click'
@@ -128,7 +128,7 @@ export class Buy extends Component {
         let product;
         this.props.showLoader();
 
-        if (this.state.checked === 'product1') {
+        if (checkedProduct === 'product1') {
             product = this.props.productIds[0]
         } else {
             product = this.props.productIds[1]
@@ -278,7 +278,8 @@ export class Buy extends Component {
                                                 </span>
                                                 <span className="free-trial--text">
                                                     <p>
-                                                        {free_download_count > 0 ? ` ${free_download_count} free download for 1st time users.`
+                                                        {free_download_count > 0 
+                                                        ? ` ${free_download_count} free download for 1st time users.`
                                                             : "You have exhausted the limit. Please buy resume builder with unlimited downloads to keep using resume builder for an year"}
                                                     </p>
                                                 </span>
@@ -291,40 +292,57 @@ export class Buy extends Component {
                                         </li>
                                     </ul> : ''
                                 }
-
                                 <ul>
                                     <li>
                                         <div className="flex-container">
-                                            <span className="choose-plann--child">
+                                            {/* <span className="choose-plann--child">
                                                 <input type="radio" name="product1"
                                                     checked={this.state.checked === 'product1' ? true : false}
                                                     onChange={this.handleOnChange.bind(this, 'product1')} />
-                                            </span>
+                                            </span> */}
                                             <span className="choose-plan--price">
-                                                <p>Buy 1 resume template</p>
+                                                <p>14-DAYS PLAN</p>
                                                 Rs. <strong>{price1}/-</strong>
                                                 <strike className="ml-10">Rs. 1499</strike>
-                                                <span className="choose-plan--off ml-10">Flat {discount1}% off</span>
+                                                <span className="choose-plan--off mt-10 db">Save up to {discount1}%</span>
                                             </span>
+                                            <button
+                                                className="choose-plan--btn-rt orange-button ml-auto"
+                                                onClick={this.redirectToCart.bind(this, 'product1')}>Pay now
+                                            </button>
                                         </div>
                                     </li>
                                     <li className="bdr pos-rel">
                                         <div className="flex-container">
                                             <span className="choose-plan--ribbon">Recommended</span>
-                                            <span className="choose-plann--child">
+                                            {/* <span className="choose-plann--child">
                                                 <input type="radio" name="product2"
                                                     checked={this.state.checked === 'product2' ? true : false}
                                                     onChange={this.handleOnChange.bind(this, 'product2')} />
-                                            </span>
+                                            </span> */}
                                             <span className="choose-plan--price">
-                                                <p>Buy all resume templates</p>
-                                                Rs. <strong>{price2}
+                                                <p>Yearly Pack</p>
+                                                <span>Rs.</span> <strong>  {price2}
                                                     /-</strong>
                                                 <strike className="ml-10">Rs. 1999</strike>
-                                                <span className="choose-plan--off ml-10">Flat {discount2}% off</span>
+                                                <span className="choose-plan--off mt-10 db">Save up to {discount2}%</span>
                                             </span>
+                                            <button
+                                                className="choose-plan--btn-rt orange-button ml-auto mt-20"
+                                                onClick={this.redirectToCart.bind(this, 'product2')}>Pay now
+                                            </button>
                                         </div>
+                                    </li>
+                                    <li className="bdr">
+                                        <ul className="choose-plan--planlist">
+                                            <li>Unlimited Downloads</li>
+                                            <li>100% access to all features</li>
+                                            <li>All Resume Templates</li>
+                                            <li>Auto-upgrade of new features</li>
+                                        </ul>
+                                    </li>
 
+                                    {/* <li className="bdr pos-rel">
                                         <Slider {...settings}>
 
                                             {
@@ -351,9 +369,9 @@ export class Buy extends Component {
                                                 ))
                                             }
                                         </Slider>
-                                    </li>
+                                    </li> */}
                                 </ul>
-                                <div className="">
+                                {/* <div className="">
                                     <div className="choose-plan--pay-price">
                                         You pay
                                         <span>Rs. <strong>{checked === 'product1' ? price1 : price2}/-</strong></span>
@@ -362,14 +380,14 @@ export class Buy extends Component {
                                         className="choose-plan--orange-button-change orange-button items-right pull-right mt-10"
                                         onClick={this.redirectToCart.bind(this)}>Pay now
                                     </button>
-                                </div>
+                                </div> */}
                             </div>
                         </section>
 
                     </section>
 
                     <div className="bottom-links">
-                        {order_data && order_data.id && !order_data.combo ? '' :
+                        {
                             <React.Fragment>
                                 <a onClick={this.changeTemplate}>Change template</a> |
                             </React.Fragment>
