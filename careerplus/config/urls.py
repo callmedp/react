@@ -127,7 +127,8 @@ urlpatterns += [
 
     url(r'^services/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='service-detail'),
-    url(r'^courses/', include('skillpage.urls', namespace='skillpage')),
+    url(r'^courses/', include(('skillpage.urls','skillpage'),
+                              namespace='skillpage')),
     url(r'^university/faculty/(?P<faculty_slug>[-\w]+)/(?P<pk>\d+)/$',
         UniversityFacultyView.as_view(), name='university-faculty'),
     url(r'^university/(?P<fa_slug>[-\w]+)/(?P<university_slug>[-\w]+)/(?P<pk>\d+)/$',
@@ -142,7 +143,8 @@ urlpatterns += [
         LocationSkillPageView.as_view(), 
         name='location-skillpage'),
 
-    url(r'^', include('assessment.urls', namespace='assessment')),
+    url(r'^', include(('assessment.urls','assessment'),
+                      namespace='assessment')),
 
     # url(r'^job-assistance/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
     #     ProductDetailView.as_view(), name='job-assist-detail'),

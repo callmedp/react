@@ -200,7 +200,7 @@ class Author(AbstractCommonModel, AbstractSEO, ModelMeta):
     
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, blank=True,
-        help_text='for user or writer')
+        help_text='for user or writer',on_delete=models.PROTECT)
     
     is_active = models.BooleanField(default=False)
     
@@ -231,7 +231,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
         help_text=("Set name for slug generation."))
     p_cat = models.ForeignKey(
         Category, related_name='primary_category',
-        blank=False, null=False)
+        blank=False, null=False,on_delete=models.CASCADE)
     sec_cat = models.ManyToManyField(
         Category, related_name='secondary_category',
         blank=True)
@@ -258,7 +258,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
         blank=True, default='')
     author = models.ForeignKey(
         Author, null=True, blank=True,
-        help_text='for author')
+        help_text='for author',on_delete=models.PROTECT)
     
     # sites = models.ManyToManyField(Site, blank=True, related_name='related_sites',
     #     help_text=("sites where blog published."))
@@ -266,7 +266,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
     #do not use#
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, blank=True,
-        help_text='for user or writer')
+        help_text='for user or writer',on_delete=models.PROTECT)
 
     status = models.PositiveIntegerField(choices=STATUS, default=0)
     allow_comment = models.BooleanField(default=False)
@@ -404,7 +404,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
 
 
 class Comment(AbstractCommonModel):
-    blog = models.ForeignKey(Blog)
+    blog = models.ForeignKey(Blog,on_delete=models.PROTECT)
     candidate_id = models.CharField(max_length=255, null=True)
     name = models.CharField(max_length=255, null=True, blank=True)
     message = models.TextField(null=False, blank=False)

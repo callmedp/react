@@ -1,6 +1,6 @@
 from django import template                                                                      
 from django.contrib.auth.models import Group
-from django.core.urlresolvers import reverse_lazy, reverse
+from django.urls import reverse_lazy, reverse
 from console.decorators import flatlist
 import logging
 register = template.Library()

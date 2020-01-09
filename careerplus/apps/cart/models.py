@@ -65,7 +65,7 @@ class Cart(AbstractAutoDate):
 
     state = models.CharField(max_length=255, null=True, blank=True)
 
-    country = models.ForeignKey(Country, null=True, blank=True)
+    country = models.ForeignKey(Country, null=True, blank=True,on_delete=models.PROTECT)
 
     shipping_done = models.BooleanField(default=False)  #shipping process
     payment_page = models.BooleanField(default=False)
@@ -108,14 +108,14 @@ class Cart(AbstractAutoDate):
 class LineItem(AbstractAutoDate):
     cart = models.ForeignKey(
         Cart, related_name='lineitems',
-        verbose_name=_("Cart"))
-    parent = models.ForeignKey('self', null=True, blank=True)
+        verbose_name=_("Cart"),on_delete=models.PROTECT)
+    parent = models.ForeignKey('self', null=True, blank=True,on_delete=models.PROTECT)
     type_item = models.PositiveSmallIntegerField(default=0)
     # unique slug for line item delete
     reference = models.CharField(max_length=255, unique=True, null=True, blank=True)
     product = models.ForeignKey(
         'shop.Product', related_name='cart_lineitems',
-        verbose_name=_("Product"))
+        verbose_name=_("Product"),on_delete=models.PROTECT)
     quantity = models.PositiveIntegerField(_('Quantity'), default=1)
     delivery_service = models.ForeignKey(
         'shop.DeliveryService',
@@ -236,7 +236,7 @@ SUBSCRIPTION_STATUS = (
 
 class Subscription(AbstractAutoDate):
     candidateid = models.CharField(max_length=255, null=True, blank=True)
-    order = models.ForeignKey(Order)
+    order = models.ForeignKey(Order,on_delete=models.PROTECT)
     status = models.SmallIntegerField(
         choices=SUBSCRIPTION_STATUS, default=-1)
     remark = models.CharField(max_length=255, null=True, blank=True)

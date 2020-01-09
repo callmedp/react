@@ -120,7 +120,7 @@ class Order(AbstractAutoDate):
     pincode = models.CharField(max_length=15, null=True, blank=True)
     state = models.CharField(max_length=255, null=True, blank=True)
 
-    country = models.ForeignKey(Country, null=True)
+    country = models.ForeignKey(Country, null=True,on_delete=models.PROTECT)
 
     # welcome call done or not
     assigned_to = models.ForeignKey(
@@ -470,9 +470,9 @@ class OrderItem(AbstractAutoDate):
         )
     
     order = models.ForeignKey(
-        'order.Order', related_name='orderitems', verbose_name=_("Order"))
+        'order.Order', related_name='orderitems', verbose_name=_("Order"),on_delete=models.PROTECT)
 
-    parent = models.ForeignKey('self', null=True, blank=True)
+    parent = models.ForeignKey('self', null=True, blank=True,on_delete=models.PROTECT)
 
     partner = models.ForeignKey(
         'partner.Vendor', related_name='order_items', blank=True, null=True,
@@ -548,7 +548,7 @@ class OrderItem(AbstractAutoDate):
     draft_counter = models.PositiveIntegerField(default=0)
     tat_date = models.DateTimeField(null=True, blank=True)
 
-    oio_linkedin = models.OneToOneField(Draft, null=True, blank=True)
+    oio_linkedin = models.OneToOneField(Draft, null=True, blank=True,on_delete=models.PROTECT)
 
     waiting_for_input = models.BooleanField(default=False)
 
@@ -1147,8 +1147,8 @@ class OrderItemOperation(AbstractAutoDate):
         null=True,
         editable=False)
     
-    oi = models.ForeignKey(OrderItem)
-    linkedin = models.ForeignKey(Draft, null=True, blank=True)
+    oi = models.ForeignKey(OrderItem,on_delete=models.PROTECT)
+    linkedin = models.ForeignKey(Draft, null=True, blank=True,on_delete=models.PROTECT)
     oi_resume = models.FileField(
         max_length=255, upload_to='shinelearning/resumes/', null=True, blank=True)
 
@@ -1208,8 +1208,8 @@ class OrderItemOperation(AbstractAutoDate):
             return dict_status.get(self.oi_status)
 
 class Message(AbstractAutoDate):
-    oi = models.ForeignKey(OrderItem, null=True)
-    oio = models.ForeignKey(OrderItemOperation, null=True)
+    oi = models.ForeignKey(OrderItem, null=True,on_delete=models.PROTECT)
+    oio = models.ForeignKey(OrderItemOperation, null=True,on_delete=models.PROTECT)
     added_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
         related_name='message_added_by',
@@ -1236,8 +1236,8 @@ class Message(AbstractAutoDate):
 
 
 class InternationalProfileCredential(AbstractAutoDate):
-    oi = models.ForeignKey(OrderItem)
-    country = models.ForeignKey(Country, null=True)
+    oi = models.ForeignKey(OrderItem,on_delete=models.PROTECT)
+    country = models.ForeignKey(Country, null=True,on_delete=models.PROTECT)
     username = models.CharField(_('Username'), max_length=100)
     password = models.CharField(_('Password'), max_length=100, null=True, blank=True)
     candidateid = models.CharField(_('CandidateId'), max_length=100, null=True, blank=True)
@@ -1250,7 +1250,7 @@ class InternationalProfileCredential(AbstractAutoDate):
 
 
 class EmailOrderItemOperation(AbstractAutoDate):
-    oi = models.ForeignKey(OrderItem)
+    oi = models.ForeignKey(OrderItem,on_delete=models.PROTECT)
     email_oi_status = models.PositiveIntegerField(
         _("Email Operation Status"), default=0, choices=OI_EMAIL_STATUS)
     draft_counter = models.PositiveIntegerField(default=0)
@@ -1267,7 +1267,7 @@ class EmailOrderItemOperation(AbstractAutoDate):
 
 
 class SmsOrderItemOperation(AbstractAutoDate):
-    oi = models.ForeignKey(OrderItem)
+    oi = models.ForeignKey(OrderItem,on_delete=models.PROTECT)
     sms_oi_status = models.PositiveIntegerField(
         _("SMS Operation Status"), default=0, choices=OI_SMS_STATUS)
     draft_counter = models.PositiveIntegerField(default=0)
@@ -1282,7 +1282,7 @@ class SmsOrderItemOperation(AbstractAutoDate):
 
 
 class CouponOrder(AbstractAutoDate):
-    order = models.ForeignKey(Order)
+    order = models.ForeignKey(Order,on_delete=models.PROTECT)
     coupon = models.ForeignKey(
         'coupon.Coupon',
         on_delete=models.SET_NULL,
@@ -1297,7 +1297,7 @@ class CouponOrder(AbstractAutoDate):
 
 class RefundRequest(AbstractAutoDate):
     order = models.ForeignKey(
-        'order.Order', verbose_name=_("Order"))
+        'order.Order', verbose_name=_("Order"),on_delete=models.PROTECT)
 
     message = models.TextField()
 
@@ -1352,7 +1352,7 @@ class RefundRequest(AbstractAutoDate):
 
 
 class RefundItem(AbstractAutoDate):
-    refund_request = models.ForeignKey('order.RefundRequest')
+    refund_request = models.ForeignKey('order.RefundRequest',on_delete=models.PROTECT)
     oi = models.ForeignKey(
         'order.OrderItem', on_delete=models.SET_NULL,
         related_name='refund_items',
@@ -1370,7 +1370,7 @@ class RefundItem(AbstractAutoDate):
 
 
 class RefundOperation(AbstractAutoDate):
-    refund_request = models.ForeignKey(RefundRequest)
+    refund_request = models.ForeignKey(RefundRequest,on_delete=models.PROTECT)
     status = models.PositiveIntegerField(
         _("Status"), default=0, choices=REFUND_OPS_STATUS)
     last_status = models.PositiveIntegerField(
@@ -1396,7 +1396,7 @@ class RefundOperation(AbstractAutoDate):
 
 
 class WelcomeCallOperation(AbstractAutoDate):
-    order = models.ForeignKey(Order)
+    order = models.ForeignKey(Order,on_delete=models.PROTECT)
     message = models.TextField(blank=True)
     wc_cat = models.PositiveIntegerField(
         _("Welcome Call Category"), default=0,
@@ -1417,7 +1417,7 @@ class WelcomeCallOperation(AbstractAutoDate):
         blank=True,
         null=True,
         related_name='wop_created_by',
-        verbose_name=_("Created By"))
+        verbose_name=_("Created By"),on_delete=models.PROTECT)
 
     def __str__(self):
         return str(self.pk)
@@ -1442,7 +1442,7 @@ class CustomerFeedback(models.Model):
     email = models.CharField('Full Name',max_length=255,blank=True, null=True)
     added_on = models.DateTimeField(editable=False, auto_now_add=True)
     status = models.SmallIntegerField(choices=FEEDBACK_STATUS,default=1)
-    assigned_to =  models.ForeignKey(User,blank=True, null=True) 
+    assigned_to =  models.ForeignKey(User,blank=True, null=True,on_delete=models.PROTECT)
     follow_up_date = models.DateTimeField('Follow Up Date', blank=True, null=True)
     comment = models.TextField('Feedback Comment',blank=True, null=True)
     last_payment_date = models.DateTimeField('Last Payment Date',blank=True, null=True)
@@ -1503,8 +1503,8 @@ class OrderItemFeedback(models.Model):
     category =  models.SmallIntegerField(choices=FEEDBACK_CATEGORY_CHOICES,blank=True, null=True)
     resolution =  models.SmallIntegerField(choices=FEEDBACK_RESOLUTION_CHOICES,blank=True, null=True)
     comment = models.TextField('Feedback Comment',blank=True, null=True)
-    order_item = models.ForeignKey(OrderItem)
-    customer_feedback  = models.ForeignKey(CustomerFeedback)
+    order_item = models.ForeignKey(OrderItem,on_delete=models.PROTECT)
+    customer_feedback  = models.ForeignKey(CustomerFeedback,on_delete=models.PROTECT)
     created = models.DateTimeField(editable=False, auto_now_add=True,null=True)
     
 
@@ -1528,13 +1528,13 @@ class OrderItemFeedback(models.Model):
         super(OrderItemFeedback, self).save(*args, **kwargs) # Call the real save() method
 
 class OrderItemFeedbackOperation(models.Model):
-    assigned_to = models.ForeignKey(User,blank=True, null=True) 
+    assigned_to = models.ForeignKey(User,blank=True, null=True,on_delete=models.PROTECT)
     added_on = models.DateTimeField(editable=False, auto_now_add=True)
     category =  models.SmallIntegerField(choices=FEEDBACK_CATEGORY_CHOICES,blank=True, null=True)
     resolution =  models.SmallIntegerField(choices=FEEDBACK_RESOLUTION_CHOICES,blank=True, null=True)
     comment = models.TextField('Feedback Comment',blank=True, null=True)
-    order_item = models.ForeignKey(OrderItem,blank=True, null=True)
-    customer_feedback  = models.ForeignKey(CustomerFeedback)
+    order_item = models.ForeignKey(OrderItem,blank=True, null=True,on_delete=models.PROTECT)
+    customer_feedback  = models.ForeignKey(CustomerFeedback,on_delete=models.PROTECT)
     oi_type = models.SmallIntegerField(choices=TOTAL_FEEDBACK_OPERATION_TYPE,default=-1)
     feedback_category = models.SmallIntegerField(choices=FEEDBACK_CATEGORY_CHOICES,default=-1)
     feedback_resolution =  models.SmallIntegerField(choices=FEEDBACK_RESOLUTION_CHOICES,default=-1)

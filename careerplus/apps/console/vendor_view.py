@@ -13,7 +13,7 @@ from django.conf import settings
 from django.forms.models import inlineformset_factory
 from django.template.response import TemplateResponse
 from django.contrib import messages
-from django.core.urlresolvers import reverse_lazy, reverse
+from django.urls import reverse_lazy, reverse
 from .decorators import (
     Decorate, check_permission, check_group,
     stop_browser_cache, has_group)

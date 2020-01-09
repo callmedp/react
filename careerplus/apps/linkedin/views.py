@@ -11,7 +11,8 @@ from django.http import (
     HttpResponseRedirect,
     HttpResponseForbidden,
 )
-from django.core.urlresolvers import reverse
+from django.urls import reverse
+
 from datetime import datetime
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import permission_required

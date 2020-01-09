@@ -28,7 +28,7 @@ STATUS_CHOICES = (
 
 
 class Review(AbstractAutoDate):
-    content_type = models.ForeignKey(ContentType)
+    content_type = models.ForeignKey(ContentType,on_delete=models.PROTECT)
     object_id = models.PositiveIntegerField()
     reviewed_item = fields.GenericForeignKey('content_type', 'object_id')
     user_name = models.CharField(
@@ -66,7 +66,7 @@ class Review(AbstractAutoDate):
     extra_content_type = models.ForeignKey(
         ContentType,
         related_name='reviews_attached',
-        null=True, blank=True,
+        null=True, blank=True,on_delete=models.PROTECT
     )
     extra_object_id = models.PositiveIntegerField(null=True, blank=True)
     extra_item = fields.GenericForeignKey(
@@ -120,7 +120,7 @@ class Review(AbstractAutoDate):
 class DetailPageWidget(AbstractAutoDate):
     limit_choices = models.Q(app_label='shop', model='Product') | models.Q(app_label='shop', model='Category') |  models.Q(app_label='blog', model='Blog')
     content_type = models.ForeignKey(
-        ContentType, limit_choices_to=limit_choices)
+        ContentType, limit_choices_to=limit_choices,on_delete=models.PROTECT)
     # object_id = models.CharField(
     #     max_length=500,
     #     null=True,
@@ -134,7 +134,7 @@ class DetailPageWidget(AbstractAutoDate):
     url = models.CharField(
         max_length=2048, null=True,
         blank=True)
-    widget = models.ForeignKey(Widget, null=True, blank=True)
+    widget = models.ForeignKey(Widget, null=True, blank=True,on_delete=models.PROTECT)
 
     class Meta:
         ordering = ['name']

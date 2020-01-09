@@ -17,7 +17,7 @@ from django.http import (
 from django.forms.models import inlineformset_factory
 from django.template.response import TemplateResponse
 from django.contrib import messages
-from django.core.urlresolvers import reverse_lazy, reverse
+from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.forms.models import modelformset_factory
 from dateutil.relativedelta import relativedelta

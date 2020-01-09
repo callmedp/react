@@ -31,6 +31,6 @@ urlpatterns = [
     url(r'^download-monthly-writer-invoice/$',
         DownloadMonthlyWriterInvoiceView.as_view(),
         name='download-monthly-writer-invoice'),
-    url(r'^api/', include('users.api.urls', namespace='api')),
+    url(r'^api/', include(('users.api.urls','users'), namespace='api')),
 
 ]

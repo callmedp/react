@@ -20,6 +20,6 @@ urlpatterns = [
     # url(r'^lead-management/$', LeadManagementView.as_view(),
     #     name='lead-management'),
 
-    url(r'^api/', include('cms.api.urls', namespace='api')),
+    url(r'^api/', include(('cms.api.urls','cms'), namespace='api')),
 
 ]

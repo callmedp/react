@@ -77,7 +77,7 @@ class Coupon(AbstractAutoDate):
     campaign = models.ForeignKey(
         'Campaign',
         verbose_name=_("Campaign"),
-        blank=True, null=True, related_name='coupons')
+        blank=True, null=True, related_name='coupons',on_delete=models.PROTECT)
     active = models.BooleanField(default=True)
 
     site = models.PositiveIntegerField(
@@ -195,7 +195,7 @@ class Campaign(AbstractAutoDate):
 
 
 class CouponUser(AbstractAutoDate):
-    coupon = models.ForeignKey(Coupon, related_name='users')
+    coupon = models.ForeignKey(Coupon, related_name='users',on_delete=models.PROTECT)
     user = models.CharField(
         _("User Email"),
         max_length=255, blank=True,

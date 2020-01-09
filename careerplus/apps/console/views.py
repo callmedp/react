@@ -7,7 +7,7 @@ from django.views.generic import View, TemplateView, FormView
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.conf import settings
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login, logout
 
 #local imports

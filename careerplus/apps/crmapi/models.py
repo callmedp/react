@@ -60,7 +60,7 @@ class UserQuries(AbstractAutoDate):
     email = models.CharField(
         max_length=255, null=True, blank=True)
     country = models.ForeignKey(
-        Country, null=True)
+        Country, null=True,on_delete=models.PROTECT)
     phn_number = models.CharField(
         max_length=50)
     message = models.TextField()

@@ -6,7 +6,7 @@ from rest_framework.serializers import (
 )
 from .models import Product
 from .search_indexes import ProductIndex
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse,reverse_lazy
 from decimal import Decimal
 from search.templatetags.search_tags import get_choice_display           
 

@@ -14,7 +14,7 @@ from django.views.generic import TemplateView, FormView
 from django.http import QueryDict, Http404
 from django.core.paginator import Paginator, InvalidPage
 from django.core.exceptions import ImproperlyConfigured
-from django.core.urlresolvers import reverse_lazy, resolve, reverse
+from django.urls import reverse_lazy, resolve, reverse
 from django.http import HttpResponse, Http404
 from django.conf import settings
 from django.utils.http import urlencode, urlquote_plus

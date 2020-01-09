@@ -102,7 +102,7 @@ class State(AbstractAutoDate):
     """
 
     name = models.CharField(max_length=200, db_index=True)
-    country = models.ForeignKey(Country)
+    country = models.ForeignKey(Country,on_delete=models.PROTECT)
 
     def __str__(self):
         return self.name
