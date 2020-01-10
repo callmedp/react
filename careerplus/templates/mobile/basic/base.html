@@ -240,6 +240,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         $('#enquire').removeClass('show');
       });
   });
+  $(document).ready(()=>{
+      if ($('.enquire-cta').length){
+            $('footer').find('.content-box').addClass('pb-60')
+      }
+  })
 
 </script>
 {% endblock jquery_block %}
