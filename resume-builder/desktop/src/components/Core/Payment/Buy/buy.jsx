@@ -216,10 +216,10 @@ export class Buy extends Component {
             order_data, resume_creation_count, free_resume_downloads },
             ui: { loader }, template: { templateImage, thumbnailImages },
             productIds, eventClicked } = this.props;
-        const { userInfo } = this.props;
-        const { checked, freeDownloadButtonDisable } = this.state;
+        const {userInfo} = this.props;
+        const {checked, freeDownloadButtonDisable } = this.state;
         const price1 = productIds[0] ? productIds[0].inr_price : 999
-        const discount1 = Math.floor(((1499 - price1) / 1499) * 100)
+        const discount1 = Math.floor(((99 - price1) / 99) * 100)
         const price2 = productIds[1] ? productIds[1].inr_price : 1248
         const discount2 = Math.floor(((1999 - price2) / 1999) * 100)
         const free_download_count = free_resume_downloads - resume_creation_count
@@ -267,8 +267,8 @@ export class Buy extends Component {
                         <section className="right-sidebar right-sidebar-scroll-main">
                             <div className="choose-plan">
                                 <h2 className="mt-10">Choose your plan</h2>
-                                <span
-                                    className="choose-plan-txt">Use resume builder for 12 months to<strong> create/edit</strong> unlimited resume.</span>
+                                {/* <span
+                                    className="choose-plan-txt">Use resume builder for 12 months to<strong> create/edit</strong> unlimited resume.</span> */}
                                 {free_resume_downloads ?
                                     <ul>
                                         <li className="bdr pos-rel free-trial">
@@ -303,7 +303,7 @@ export class Buy extends Component {
                                             <span className="choose-plan--price">
                                                 <p>14-DAYS PLAN</p>
                                                 Rs. <strong>{price1}/-</strong>
-                                                <strike className="ml-10">Rs. 1499</strike>
+                                                <strike className="ml-10">Rs. 99</strike>
                                                 <span className="choose-plan--off mt-10 db">Save up to {discount1}%</span>
                                             </span>
                                             <button

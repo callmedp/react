@@ -189,7 +189,7 @@ class Buy extends Component {
         const template = localStorage.getItem('selected_template') || 1;
         const { checked, modal_status, freeDownloadButtonDisable } = this.state
         const price1 = productIds[0] ? productIds[0].inr_price : 999
-        const discount1 = Math.floor(((1499 - price1) / 1499) * 100)
+        const discount1 = Math.floor(((99 - price1) / 99) * 100)
         const price2 = productIds[1] ? productIds[1].inr_price : 1248
         const discount2 = Math.floor(((1999 - price2) / 1999) * 100)
         const free_download_count = free_resume_downloads - resume_creation_count
@@ -251,7 +251,7 @@ class Buy extends Component {
                                     <span className="text-uppercase d-block color-333 bold">14- Days Plan</span>
                                     <span className="d-flex align-items-center">
                                         <strong className="mr-10">Rs. {price1}/-</strong>
-                                        <span className="line-through fs-16 color-999 font-weight-light">Rs. 499</span>
+                                        <span className="line-through fs-16 color-999 font-weight-light">Rs. 99</span>
                                     </span>
                                     <span className="fs-14">Save upto {discount1}%</span>
                                 </label>
