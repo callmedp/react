@@ -372,6 +372,7 @@ class ChangeProductForm(forms.ModelForm):
                     "Icon file is too large ( > 100kb ).")
         return file
 
+
     def save(self, commit=True, *args, **kwargs):
         product = super(ChangeProductForm, self).save(
             commit=True, *args, **kwargs)

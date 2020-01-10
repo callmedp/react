@@ -1,0 +1,198 @@
+{% extends "console/base_console.html" %}
+{% load static compress %}
+{% load humanize %}
+{% load thumbnail %}
+
+{% block title %}
+  <title>Job title Listing</title>
+{% endblock title %}
+
+{% block pagecontent %}
+<!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>Job Title List</h3>
+      </div>
+
+          <div class="title_right">
+            <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
+              <div class="input-group">
+              </div>
+            </div>
+          </div>
+      </form>
+    </div>
+    {% if perms.shop.console_add_category %}
+      <div class="row top_tiles">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+          <a class="btn btn-app" href="{% url "console:create-job-title" %}">
+            <i class="fa fa-edit"></i> Add New Job Title </a>
+        </div>
+      </div>
+    {% endif %}
+    
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        {% if messages %}
+            {% for message in messages %}
+
+              <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+              {{ message }}
+              </div>
+            {% endfor %}
+        {% endif %}
+
+      </div>
+    </div>
+
+
+
+    
+    <div class="clearfix"></div>
+    
+    <div class="row">
+
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Listing</h2>
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+
+          <div class="x_content">
+
+            <div class="table-responsive">
+              <table class="table table-striped jambo_table bulk_action">
+                <thead>
+                  <tr class="headings">
+                    <th class="column-title"># </th>
+                    <th class="column-title">Name</th>
+                    <th class="column-title">Products</th>
+                    <th class="column-title">Edit</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                  {% for obj in page %}
+                  
+                <tr class="even pointer">
+                  <td>{{obj.pk}}</td>
+                  <td>
+                    <a >{{obj.name}}</a>
+                    <br />
+                    <small>Modified {{obj.modified|naturaltime}}</small>
+                  </td>
+
+                    <td>
+                        <ul>
+                            {% for product in obj.get_products %}
+                            <li>
+                                {{product.name}}
+                            </li>
+                            {% endfor %}
+                        </ul>
+
+
+                    </td>
+                  <td>
+                    <a href="{% url "console:change-job-title" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                  </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+                   
+            {% block main_pagination %}
+                <div class="main_pagination">
+                  {% if page %}
+                  <div class="col-sm-4">
+                       <div class="pull-left" style="display: inline-block;adding-left: 0;margin: 20px 0;">
+                        {% with current_page=page.number total_page=page.paginator.num_pages %}Page {{ current_page }} of {{ total_page }}
+                        {% endwith %}
+                      </div>
+                  </div>
+                  
+
+                <div class="col-sm-8">
+                    <div class="pull-right">
+                        <ul class="pagination">
+                        {% if page.has_previous %}
+                            <li class="paginate_button previous">
+                                <a href="?page={{ page.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >&laquo;</a>
+                            </li>
+                        {% endif %}
+
+                        {% for page_number in begin %}
+                            <li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %} ">
+                                <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
+                            </li>
+                        {% endfor %}
+
+                        {% if middle %}
+                            <li class="paginate_button disable"><a href="javascript:void(0);">&hellip;</a></li>
+                            {% for page_number in middle %}
+                                <li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %}">
+                                    <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
+                                    
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if page_end %}
+                            <li class="paginate_button disable"><a href="javascript:void(0);">&hellip;</a></li>
+                            {% for page_number in page_end %}
+                                <li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %}">
+                                    <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if page.has_next %}
+                            <li class="paginate_button next">
+                                <a href="?page={{ page.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >&raquo;</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                  </div>
+                </div>
+                {% endif %}
+
+
+      </div><!-- main_pagination end here -->
+      {% endblock main_pagination %}
+     
+                
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /page content -->
+
+
+{% endblock pagecontent %}
+
+        
+{% block js_block %}
+  {{ block.super }}
+
+  {% compress js %}
+  <!-- Parsley Validate Scripts -->
+  <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
+  
+  <!-- Custom Theme Scripts -->
+  <script type="text/javascript" src="{% static 'console/js/shop/console_shop.js' %}"></script>
+  {% endcompress %}
+
+
+{% endblock js_block %}

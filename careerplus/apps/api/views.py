@@ -47,6 +47,7 @@ from shop.models import Skill, DeliveryService, ShineProfileData
 from blog.models import Blog
 from emailers.tasks import send_email_task
 from payment.models import PaymentTxn
+from resumebuilder.models import Candidate 
 
 from .serializers import (
     OrderListHistorySerializer,
@@ -778,18 +779,16 @@ class ResumeBuilderProductView(ListAPIView):
     authentication_classes = ()
     permission_classes = ()
     serializer_class = ResumeBuilderProductSerializer
-
     def get_queryset(self):
-        new_product_list =[]
         type_flow = self.request.query_params.get('type_flow')
-        product_list = Product.objects.filter(type_flow=type_flow, type_product=0, active=True).values('id', 'name', 'inr_price', 'usd_price', 'aed_price').order_by('inr_price')
+        product_list = Product.objects.filter(type_flow=type_flow, type_product=0, active=True, sub_type_flow='1701').values('id', 'name', 'inr_price', 'usd_price', 'aed_price').order_by('inr_price')
 
-        for item in  product_list:
-            product = Product.objects.filter(id=item['id']).first()
-            value = product.attr.get_value_by_attribute(product.attr.get_attribute_by_name('template_type')).value or '';
-            if( value == 'single' or value == 'multiple'):
-                new_product_list.append(item)
-        return new_product_list
+        # for item in  product_list:
+        #     product = Product.objects.filter(id=item['id']).first()
+        #     value = product.attr.get_value_by_attribute(product.attr.get_attribute_by_name('template_type')).value or '';
+        #     if( value == 'single' or value == 'multiple'):
+        #         new_product_list.append(item)
+        return product_list
 
 class ShineDataFlowDataApiView(ListAPIView):
     permission_classes = []
@@ -874,7 +873,8 @@ class ShineCandidateLoginAPIView(APIView):
             for item in order_obj.orderitems.all():
                 if item.product and item.product.type_flow == 17 and item.product.type_product == 0:
                     order_data = {"id": order_obj.id,
-                                  "combo": True if item.product.attr.get_value_by_attribute(item.product.attr.get_attribute_by_name('template_type')).value == 'multiple' else False
+                                  "combo": True if item.product.attr.get_value_by_attribute(item.product.attr.get_attribute_by_name('template_type')).value == 'multiple' else False,
+                                  "expiry": item.end_date,
                                   }
                     product_found = True
                     break
@@ -891,9 +891,14 @@ class ShineCandidateLoginAPIView(APIView):
         token = self.get_or_create_token(candidate_obj)
         personal_info = login_response.get('personal_detail')[0]
         personal_info['candidate_id']= personal_info.get('id')
+        subscription_active = False
+        # Check whether subscription active or not if resumebuilder candidate exists 
+        resumebuilder_candidate = Candidate.objects.filter(candidate_id=candidate_id).first()
+        if resumebuilder_candidate:
+            subscription_active = resumebuilder_candidate.active_subscription or False
 
         self.request.session.update(login_response)
-
+        
         self.request.session.update(personal_info)
 
         if with_info:
@@ -903,6 +908,7 @@ class ShineCandidateLoginAPIView(APIView):
                             "entity_status": self.get_entity_status_for_candidate(candidate_id),
                             "order_data": self.get_existing_order_data(candidate_id),
                             "userExperience": self.get_candidate_experience(login_response),
+                            "subscription_active": subscription_active
                             # TODO make param configurable
                             }
         else:

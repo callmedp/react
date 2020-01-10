@@ -1,0 +1,157 @@
+{% extends "console/base_console.html" %}
+{% load static compress %}
+{% load humanize %}
+
+{% block title %}
+  <title>Change Job title</title>
+{% endblock title %}
+
+{% block css_block %}
+    <link href="{% static 'packages/select2/dist/css/select2.min.css' %}" rel="stylesheet" type="text/css">
+
+  {{ block.super }}
+
+  {% compress css inline %}
+  <style type="text/css">
+    ul.parsley-errors-list {
+        float:right;
+        color: red;
+        padding-left: 0;
+    }
+    ul.errorlist  {
+        list-style: none;
+        color: red;
+        padding-left: 0;
+    }
+    .errorlist select2-selection__choice__remove {
+        color:red !important;
+    }
+    .select2{
+    max-width:463px;
+    width:463px !important;
+    }
+    .select2-selection__choice {
+    background:green;
+    }
+
+  </style>
+  {% endcompress %}
+{% endblock css_block %}
+
+{% block pagecontent %}
+        <!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>&nbsp;</h3>
+
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        {% if messages %}
+            {% for message in messages %}
+
+              <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+              {{ message }}
+              </div>
+            {% endfor %}
+        {% endif %}
+
+      </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Change Job Title Area</h2>
+
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+
+            <form class="form-horizontal form-label-left" method="POST" action='.' novalidate enctype="multipart/form-data" >
+              {% csrf_token %}
+
+              <span class="section">Change Job Title Area Form</span>
+
+              {% if form.non_field_errors %}
+                <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                  </button>
+                  {{form.non_field_errors}}
+                </div>
+              {% endif %}
+
+                {% for field in form %}
+              <div class="item form-group {% if form.name.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ field.id_for_label }}">{{field.label}} <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{field}}
+                </div>
+                <div>{{field.errors}}</div>
+              </div>
+
+              {% endfor %}
+
+              <div class="ln_solid"></div>
+              <div class="form-group">
+                <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                  <button type="submit" class="btn btn-success">Submit</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        <!-- /page content -->
+{% endblock pagecontent %}
+
+
+{% block js_block %}
+  {{ block.super }}
+
+  {% compress js %}
+  <!-- Parsley Validate Scripts -->
+  <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'packages/select2/dist/js/select2.full.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'packages/jquery.tagsinput/src/jquery.tagsinput.js' %}"></script>
+
+  {% endcompress %}
+
+<script>
+$(document).ready(function(){
+$('#id_product').select2();
+$('#id_product').removeAttr('required');
+
+$('#id_name').css('width', '35.5em');
+});
+var obj = {{selected_products|safe}};
+let data1 =[];
+  $(document).ready(function(){
+for (var i = 0; i < obj.length; i++) {
+    data1.push(obj[i].id);
+}
+
+$('#id_product').val(data1);
+$('#id_product').trigger('change');
+
+});
+</script>
+
+
+{% endblock js_block %}

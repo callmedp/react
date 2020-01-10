@@ -103,11 +103,14 @@ Search Result Page - Shine Learning
         <div class="amcat-tags mt-30">
             <div class="slide-container">
                 <ul class="skill-provider amcat-tags">
-                    <li class="cuad">
-
        {% for facet in facets.pFA %}
+                           <li class="cuad">
+                         {% if forloop.counter0 == 0 %}
+    <a name="filterBtn" id="facet-{{forloop.counter0}}" data-data="0" onclick="filterSearch(event)" class= "check{{forloop.counter0}}{% if not areaf %} selected{% endif %}">All</a>
+            {% endif %}
+                    </li>
                     <li class="cuad">
-            <a  name="filterBtn" value="{{facet.id}}" onclick="filterSearch(event)" class=
+            <a  name="filterBtn" data-data="{{facet.id}}" onclick="filterSearch(event)" class=
                     {% if facet.label == 'Others' %}
             {% if facet.id in areaf %}"check{{forloop.counter}} selected"{% endif %}
 

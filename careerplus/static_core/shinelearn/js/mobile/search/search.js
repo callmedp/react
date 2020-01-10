@@ -22,13 +22,28 @@ function filterquery(type) {
 function filterSearch(e)
     {
     clicked = $(e.target);
+
+    if (clicked.first().data()['data'] == 0){
+      $("a[name='filterBtn']").removeClass('selected')
+      clicked.first().addClass('selected')
+      let val= $("input[name='farea']:checked").length;
+      for(area = 0 ;area <=val ;area++ ){
+        if ( $("input[name='farea']:checked")[0] != undefined){
+        $("input[name='farea']:checked")[0].toggleAttribute('checked');
+        }
+        }
+    }
+    else {
     className = e.target.classList[0];
     clicked.toggleClass('selected');
-
+    $('#facet-0').removeClass('selected')
     obj = $('#farea_filters .'+className)[0]
     obj.toggleAttribute('checked')
-    filterquery();
+
     }
+        filterquery();
+    }
+
 
 
 $(document).ready(function () {

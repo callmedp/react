@@ -198,7 +198,7 @@
                     <!-- Nav tabs -->
                     <ul class="nav tab-link" role="tablist">
                         {% for course in tcourses %}
-                            <li role="presentation" {% if forloop.first %}class="active"{% endif %}><a href="#{{course.tab}}" aria-controls="{{course.tab}}" role="tab" data-toggle="tab">{{course.name}}</a></li>
+                            <li role="presentation" {% if course.name == preSelect %}class="active"{% endif %}><a href="#{{course.tab}}" aria-controls="{{course.tab}}" role="tab" data-toggle="tab">{{course.name}}</a></li>
                         {% endfor %}
                     </ul>
 
@@ -353,6 +353,9 @@
             
         if ( {{linkedin_modal}} ){
             $('#linkedin_modal').modal('show');
+        }
+                if($('.tab-link li.active').length == 0){
+            $('.tab-link li').first().addClass('active');
         }
     </script>
     

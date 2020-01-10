@@ -53,7 +53,7 @@ class Subscribe extends Component {
     render() {
         const {showSubscribeButton} = this.state;
         const {updateAlertModalStatus, userInfo: {order_data}} = this.props;
-        if (!showSubscribeButton || (order_data && order_data.id)) return null;
+        if (!showSubscribeButton || (((order_data && order_data.id)) && (localStorage.getItem('subscriptionActive') && localStorage.getItem('subscriptionActive') === 'true' ? true : false)))  return null;
         const newUser = localStorage.getItem('newUser');
 
 

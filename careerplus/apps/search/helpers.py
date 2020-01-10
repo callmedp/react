@@ -1,6 +1,5 @@
 # python built-in imports
 import re
-from collections import OrderedDict
 import time
 import logging
 import ast
@@ -8,18 +7,21 @@ import ast
 # django imports
 from django.utils.text import slugify
 from django.conf import settings
+from django_redis import get_redis_connection
+from django.core.cache import cache
+
+# local imports
+from .lookups import SEARCH_STOPWORDS_LOOKUP
+from search import inputs
+
+# interapp imports
+from shop.models import Product,ProductFA,ProductSkill
+
+# third party imports
 from core.library.haystack.query import SQS
 from haystack.query import EmptySearchQuerySet
 
-# third party imports
-from django_redis import get_redis_connection
 
-# local imports
-from .lookups import SEARCH_STOPWORDS_LOOKUP #SEARCH_LOCATION_LOOKUP, ,\
-# SKILL_SLUG, CITY_SLUG, EXPERIENCE_SLUG, FA_SLUG, INDUSTRY_SLUG, \
-# JOBTITLE_SLUG, COMPANY_SLUG, SPECIAL_CHARACTERS_LOOKUP
-from search import inputs
-from shop.models import ProductFA, ProductSkill
 redis_server = get_redis_connection("search_lookup")
 logger = logging.getLogger('info_log')
 
@@ -372,3 +374,163 @@ def get_recommendations(func_area, skills, results=None):
     else:
         results = EmptySearchQuerySet()
     return results
+
+
+def sort_prod_list(prod_skill_dict):
+    if not prod_skill_dict:
+        return []
+    return [prod_id[0] for prod_id in sorted(prod_skill_dict.items(),
+                                      key=lambda k: (len(k[1])), reverse=True)]
+
+# return the default products with skills id list
+def default_product_get_set_cache(skills=None):
+    cache_key = 'cache_key_for_static_recommend_product'
+    if cache.get(cache_key):
+        return cache.get(cache_key)
+
+    default_prod = SQS().filter(id__in=settings.DEFAULT_RECOMMEND_PRODUCT)
+    product_skill_map = convert_qs_to_pskill_mapping(default_prod,skills)
+    cache.set(cache_key,product_skill_map,60*24*24)
+    return cache.get(cache_key)
+
+
+def get_recommend_for_job_title_skills(job_title=None,skills=None,fa=None):
+
+    # when nothing  default product is returned
+    if not job_title and not skills and not fa:
+        return sort_prod_list(default_product_get_set_cache())
+
+    if not job_title and skills:
+        return get_recommendation_for_skill_and_fa(skills,fa)
+
+    jt_products = SQS().filter(pJbtn=job_title,pTF=2)
+
+    if not jt_products:
+        return get_recommendation_for_skill_and_fa(skills,fa)
+
+    product_list = sort_prod_list(convert_qs_to_pskill_mapping(jt_products,
+                                                               skills))
+    if len(product_list) >= 6:
+        return product_list[:6]
+
+    skill_product_list = get_skill_product_list(skills)
+    product_list_id = [prod.id for prod in product_list]
+    distinct_prod_list = [prod_id for prod_id in skill_product_list if
+                        prod_id.id not in product_list_id]
+    product_list += distinct_prod_list
+
+    if len(product_list) >= 6:
+        return product_list[:6]
+    product_list_id = [prod.id for prod in product_list]
+
+    rest_jt_products = [prod for prod in jt_products if prod.id not in
+                        product_list_id]
+    product_list += rest_jt_products
+    if len(product_list) >= 6:
+        return product_list[:6]
+    fa_products = get_recommendation_for_fa(fa)
+    fa_products_list = [ prod for prod in fa_products if
+                         prod.id not in product_list_id ]
+    product_list += fa_products_list
+    return product_list[:6]
+
+
+def convert_qs_to_pskill_mapping(qs,skill=None):
+    new_dict = {}
+    for prod in qs:
+        if not prod or (skill and not prod.uSkill):
+            continue
+        if not skill:
+            new_dict.update({prod: set(prod.uSkill) if prod.uSkill else {}})
+        else:
+            skill_len = len(set(prod.uSkill).intersection(set(skill)))
+            if not skill_len:
+                continue
+            new_dict.update({prod: set(prod.uSkill).intersection(set(
+                skill))})
+    return new_dict
+
+
+def get_fa_product_list(fa):
+    product_list = SQS().filter(pFnA=fa,pTF=2)
+
+    return sort_prod_list(convert_qs_to_pskill_mapping(product_list))
+
+
+def get_recommendation_for_fa(fa=None):
+
+
+    if not fa:
+        # if no fa found return the static product_ids
+        return sort_prod_list(default_product_get_set_cache())
+
+    fa_prod_list = get_fa_product_list(fa)
+    if len(fa_prod_list) < 6:
+        fa_prod_ids = [ prd.id for prd in fa_prod_list ]
+        default_products = sort_prod_list(default_product_get_set_cache())
+        default_products =[dfproduct for dfproduct in default_products if
+                           dfproduct.id not in fa_prod_ids]
+
+        fa_prod_list += default_products
+
+    return fa_prod_list[:6]
+
+
+def get_skill_product_list(skills):
+    if not skills:
+        return []
+    all_prod_skill = SQS().filter(uSkill__in=skills, pTF=2)
+    if not all_prod_skill:
+        return []
+    return sort_prod_list(convert_qs_to_pskill_mapping(
+        all_prod_skill,skills))
+
+
+def get_recommendation_for_skill_and_fa(skills=None,fa=None):
+
+    if not skills and not fa:
+        return sort_prod_list(default_product_get_set_cache())
+
+    if not skills and fa:
+        return get_recommendation_for_fa(fa)
+
+    product_list = get_skill_product_list(skills)
+
+    if len(product_list) >= 6:
+        return product_list[:6]
+
+    secondary_product_list = get_fa_product_list(fa)
+    product_list_id =[prod.id for prod in product_list]
+
+    fa_product_list = [prod_id for prod_id in secondary_product_list if
+                       prod_id.id not in product_list_id]
+
+    product_list += fa_product_list
+    if len(product_list) >= 6:
+        return product_list[:6]
+    product_list_id = [ prod.id for prod in product_list]
+    default_product = sort_prod_list(default_product_get_set_cache(skills))
+    default_product_list = [prod_id for prod_id in default_product if
+                       prod_id.id not in product_list_id]
+
+    product_list += default_product_list
+    return product_list[:6]
+
+
+def get_recommended_products(job_title=None, skills=None, func_area=None):
+
+    # if not job_title and not skills and not func_area:
+    #     return sort_prod_list(default_product_get_set_cache())
+    #
+    # if not job_title and not skills and func_area:
+    #     return get_recommendation_for_fa(func_area)
+    #
+    # if not job_title and skills:
+    #     return get_recommendation_for_skill_and_fa(skills, func_area)
+
+    return get_recommend_for_job_title_skills(job_title, skills,func_area)
+
+
+
+
+

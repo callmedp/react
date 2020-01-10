@@ -590,10 +590,11 @@ def process_jobs_on_the_move(obj_id=None):
                     salary_in_lakh = resp_status['workex'][0]['salary_in_lakh']
                     salary_in_thousand = resp_status['workex'][0]['salary_in_thousand']
                     current_salary = str(salary_in_lakh) + 'Lakh ' + str(salary_in_thousand) + 'Thousand'
-
+            #  TODO handle this empty contact number issue in order
+            contact_number =  obj.order.mobile or "NA"; 
             ProductUserProfile.objects.create(
                 order_item=obj,
-                contact_number=obj.order.mobile,
+                contact_number=contact_number,
                 desired_industry=desired_industry,
                 desired_location=desired_location,
                 desired_salary=desired_salary,
@@ -617,7 +618,11 @@ def generate_resume_for_order(order_id):
             product_id = item.product.id
             break
     product = Product.objects.filter(id=product_id).first()
-    is_combo = True if product.attr.get_value_by_attribute(product.attr.get_attribute_by_name('template_type')).value == 'multiple'  else False
+    if product.sub_type_flow == "1701":
+        is_combo = True
+    else:
+        is_combo = True if product.attr.get_value_by_attribute(product.attr.get_attribute_by_name('template_type')).value == 'multiple' else False
+    
     candidate_obj = Candidate.objects.filter(candidate_id = candidate_id).first()
     # if not candidate_obj create it by yourself. 
     if not candidate_obj:

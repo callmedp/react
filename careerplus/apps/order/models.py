@@ -198,12 +198,30 @@ class Order(AbstractAutoDate):
         items = self.orderitems.all()
         return any([item.product.type_flow == 17 for item in items])
 
+
     def order_contains_expert_assistance(self):
         items = self.orderitems.all()
         return any([item.product.sub_type_flow == 101 for item in items])
     def order_contains_neo_item(self):
         items = self.orderitems.all()
         return any([item.product.vendor.slug == 'neo' for item in items])
+
+    def order_contains_resumebuilder_subscription(self):
+        items = self.orderitems.all()
+        return any([item.product.sub_type_flow == 1701 for item in items])
+
+    def order_contains_jobs_on_the_move(self):
+        items = self.orderitems.all()
+        return any([item.product.sub_type_flow == 502 for item in items])
+
+
+    def update_subscription_in_order_item(self):
+        items = self.orderitems.all().select_related('product')
+        items = [item for item in items if item.product.sub_type_flow == 1701]
+        for oi in items :
+            oi.start_date = timezone.now() 
+            oi.end_date = timezone.now() + timedelta(days =oi.product.day_duration)
+            oi.save()
 
     @property
     def get_status(self):
@@ -435,8 +453,29 @@ class Order(AbstractAutoDate):
             ).values_list('id', flat=True))
             board_user_on_neo.delay(neo_ids=neo_items_id)
 
+        if self.status == 1 and existing_obj.status != 1 and self.order_contains_jobs_on_the_move():
+            jobs_on_the_move_items = self.orderitems.filter(product__sub_type_flow=502)
+
+            for jobs_oi in jobs_on_the_move_items:
+                jobs_oi.start_date = timezone.now()
+                jobs_oi.end_date = timezone.now() + timedelta(days = jobs_oi.product.day_duration)
+                jobs_oi.save()
+
+
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_resume_builder():
             from resumebuilder.models import Candidate   # imported here to not cause cyclic import for resumebuilder models
+            
+
+            if self.order_contains_resumebuilder_subscription():
+                
+                self.update_subscription_in_order_item()
+                cand_id = existing_obj and existing_obj.candidate_id
+                if cand_id:
+                    candidate_obj = Candidate.objects.filter(candidate_id=cand_id).first()
+                    if candidate_obj: 
+                        candidate_obj.active_subscription = True
+                        candidate_obj.save()
+
             if self.order_contains_expert_assistance():
                 cand_id = existing_obj and existing_obj.candidate_id
                 if cand_id:
@@ -571,6 +610,8 @@ class OrderItem(AbstractAutoDate):
     expiry_date = models.DateTimeField(null=True, blank=True)
     user_feedback = models.BooleanField(default=False)
     buy_count_updated = models.BooleanField(default=False)
+    start_date = models.DateTimeField(null=True, blank=True)
+    end_date = models.DateTimeField(null=True, blank=True)
 
     # welcome call flow
     wc_cat = models.PositiveIntegerField(
@@ -719,9 +760,15 @@ class OrderItem(AbstractAutoDate):
         return True
 
     @property
+    def get_duration_days(self):
+        if self.start_date and self.end_date: 
+            duration_days = self.end_date - self.start_date
+            return duration_days.days
+        return self.product.day_duration
+    @property
     def days_left_oi_product(self):
         can_be_paused = self.product.is_pause_service
-        duration_days = self.product.day_duration
+        duration_days = self.get_duration_days
         
         if not self.product or not self.product.is_service:
             return 0
@@ -730,15 +777,18 @@ class OrderItem(AbstractAutoDate):
 
         if not featured_op:
             return 0
-
-        sdt = featured_op.created
+        if not self.start_date:
+            sdt = featured_op.created
+        else:
+            sdt = self.start_date
         
+
         if not can_be_paused:
             edt = sdt + timedelta(days=duration_days)
             days_left = edt - timezone.now()
-            return days_left.days 
+            return days_left.days
 
-        sdt = featured_op.created
+
         edt = sdt + timedelta(days=duration_days*2)
         pause_resume_operations = self.orderitemoperation_set.filter(oi_status__in=[34,35]).values_list('created',flat=True)
         days_left = timedelta(days=duration_days)
@@ -746,7 +796,7 @@ class OrderItem(AbstractAutoDate):
 
         for pos in range(0,pause_resume_operations.count(),2):
             if pos==0:
-                days_between_pause_resume += pause_resume_operations[pos] -sdt
+                days_between_pause_resume += pause_resume_operations[pos] - sdt
                 continue
 
             days_between_pause_resume += pause_resume_operations[pos] - \
