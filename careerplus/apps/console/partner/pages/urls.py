@@ -2,6 +2,7 @@ from django.conf.urls import url
 from .import views
 from console.order.pages import views as order_views
 
+app_name='console'
 urlpatterns = [
 	url(r'^vendor/$', views.VendorListView.as_view(), name='vendor-list'),
 	url(r'^vendorhierarchy/$', views.VendorHierarchyListView.as_view(), name='vendorhierarchy-list'),

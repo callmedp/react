@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from . import views
-
+app_name = 'console'
 urlpatterns = [
 
     # partner inbox Queue

@@ -1041,7 +1041,7 @@ class ValidateCheckedItems(View):
             "error_message": '',
         }
         item_id = request.GET.get('item_id', None)
-        if request.is_ajax() and request.user.is_authenticated() and item_id:
+        if request.is_ajax() and request.user.is_authenticated and item_id:
             try:
                 var_list = []
                 addon_list = []
@@ -1092,7 +1092,7 @@ class ValidateUnCheckedItems(View):
             "error_message": '',
         }
         item_id = request.GET.get('item_id', None)
-        if request.is_ajax() and request.user.is_authenticated() and item_id:
+        if request.is_ajax() and request.user.is_authenticated and item_id:
             try:
                 var_list = []
                 addon_list = []

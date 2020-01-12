@@ -2,7 +2,7 @@ from django.conf.urls import url, include
 from assessment.views import *
 
 
-
+app_name = 'assessment'
 urlpatterns = [
 
 url(r'^practice-tests/(?P<slug>[-\w]+)-test/$',VskillTestView.as_view(), name='vskill-exam'),

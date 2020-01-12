@@ -7,7 +7,7 @@ from .views import ProductSkillAddView, SkillListView, ProductListView, ProductS
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-
+app_name= 'console'
 urlpatterns = [
     url(r'^product-skills/(?P<pk>\d+)/$', ProductSkillUpdateView.as_view()),
     url(r'^product-skills/$', ProductSkillAddView.as_view()),

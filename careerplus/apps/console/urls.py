@@ -7,13 +7,13 @@ from . import (
     refund_view, wallet_view, university_views, product_skill_view)
 from geolocation import adminviews
 
-
+app_name='console'
 urlpatterns = [
-    url(r'^cms/', include(('console.cms.urls','console'), namespace='cms')),
-    url(r'^order/', include(('console.order.urls','console'), namespace='order')),
-    url(r'^partner/', include(('console.partner.urls','console'), namespace='partner')),
-    url(r'^operations/', include(('console.operations.urls','console'), namespace='operations')),
-    url(r'^userquery/', include(('console.userquery.urls','console'), namespace='userquery')),
+    url(r'^cms/', include('console.cms.urls', namespace='cms')),
+    url(r'^order/', include('console.order.urls', namespace='order')),
+    url(r'^partner/', include('console.partner.urls', namespace='partner')),
+    url(r'^operations/', include('console.operations.urls', namespace='operations')),
+    url(r'^userquery/', include('console.userquery.urls', namespace='userquery')),
     url(r'^tasks/',
         include('console.schedule_tasks.urls', namespace='tasks')),
     url(r'^badge/',

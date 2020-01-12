@@ -44,6 +44,7 @@ from resumebuilder.views import (WriteResumeView,FreeResumeDownload)
 from django.conf.urls import (
     handler400, handler403, handler404, handler500
 )
+
 from seo.sitemap import (
     CourseSitemap, SkillSitemap,
     CategorySitemap, ServiceSitemap,
@@ -127,7 +128,7 @@ urlpatterns += [
 
     url(r'^services/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='service-detail'),
-    url(r'^courses/', include(('skillpage.urls','skillpage'),
+    url(r'^courses/', include('skillpage.urls',
                               namespace='skillpage')),
     url(r'^university/faculty/(?P<faculty_slug>[-\w]+)/(?P<pk>\d+)/$',
         UniversityFacultyView.as_view(), name='university-faculty'),
@@ -143,7 +144,7 @@ urlpatterns += [
         LocationSkillPageView.as_view(), 
         name='location-skillpage'),
 
-    url(r'^', include(('assessment.urls','assessment'),
+    url(r'^', include('assessment.urls',
                       namespace='assessment')),
 
     # url(r'^job-assistance/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
@@ -173,9 +174,8 @@ def get_urls():
 admin.site.get_urls = get_urls
 
 urlpatterns += [
-                   url(r'^admin/', include(admin.site.urls)),
-                   url(r'^api-auth/',
-                       include('rest_framework.urls', namespace='rest_framework')),
+                   url(r'^admin/', admin.site.urls),
+                   url(r'^api-auth/',include('rest_framework.urls', namespace='rest_framework')),
                    url(r'api/v1/', include('shop.api.v1.urls', namespace='shop-api')),
                    url(r'api/', include('skillpage.api.v1.urls', namespace='skillpage-api')),
                    url(r'^$', homepage_view.HomePageView.as_view(), name='homepage'),
@@ -238,11 +238,13 @@ urlpatterns += [
                    # entry point for react template
                    url(r'^resume-builder/', WriteResumeView.as_view()),
 
-               ] + static(
-    settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
+               ]
+if settings.DEBUG:
+    urlpatterns += static(
+    settings.MEDIA_URL, document_root=settings.MEDIA_ROOT,
 ) + static(
     settings.STATIC_URL, document_root=settings.STATIC_ROOT
-) + static(settings.DOWNLOAD_URL, document_root=settings.DOWNLOAD_ROOT) 
+) + static(settings.DOWNLOAD_URL, document_root=settings.DOWNLOAD_ROOT)
   
 urlpatterns += [url(r'^(?P<page_slug>tnc|disclaimer|privacy-policy)/$',
          homepage_view.StaticSiteContentView.as_view(),

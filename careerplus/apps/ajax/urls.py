@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from . import views
 
-
+app_name = 'ajax'
 urlpatterns = [
     url(r'^page/load-more/$',
         views.AjaxCommentLoadMoreView.as_view(), name='comment-load-more'),

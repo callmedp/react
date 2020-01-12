@@ -7,7 +7,7 @@ from .views import FeedbackQueueView,FeedbackCallsAssignUserView,CustomerFeedbac
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-
+app_name = 'console'
 urlpatterns = [
     # url(r'^customer-list/(?P<pk>\d+)/$', ProductSkillUpdateView.as_view()),
     url(r'^customer-list/$', FeedbackQueueView.as_view()),

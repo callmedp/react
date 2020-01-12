@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from . import views
-
+app_name = 'console'
 urlpatterns = [
     url(r'^queue/$', views.WelcomeQueueView.as_view(),
         name='queue'),

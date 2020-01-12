@@ -8,7 +8,7 @@ from .views import TalentEconomyLandingView, TEBlogCategoryListView,\
 #     LoginToCommentView, ShowCommentBoxView, LoadMoreCommentView,\
 #     BlogTagListView, RegisterToCommentView
 
-
+app_name = 'talenteconomy'
 urlpatterns = [
     url(r'^$', TalentEconomyLandingView.as_view(), name='talent-landing'),
     url(r'^load-more-article/$', TalentEconomyLoadMoreView.as_view(),

@@ -1,11 +1,11 @@
 from django.conf.urls import url
-from django.urls import reverse
+from django.urls import reverse,reverse_lazy
 from django.views.generic import RedirectView
 
 from .views import HRLandingView, HRBlogDetailView, HrConclaveLandingView,\
     HrJobFairLandingView, HrConclaveDetailView, HrJobFairDetailView, \
     HRBlogTagView, HRTagLoadArticleView, HRArticleLoadMoreView
-
+app_name = 'hrinsider'
 urlpatterns = [
     url(r'^$', HRLandingView.as_view(), name='hr-landing'),
     url(r'^blog/$', HRLandingView.as_view(), {'list': True},

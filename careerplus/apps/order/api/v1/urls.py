@@ -18,7 +18,7 @@ router = routers.SimpleRouter()
 # router.register(r'orderitem', OrderItemViewSet)
 
 urlpatterns = router.urls
-
+app_name = "order"
 urlpatterns = [
     url(r'^orderitem/$', OrderItemViewSet),
     url(r'^(?P<pk>\d+)/items/$', OrderItemsListView.as_view()),

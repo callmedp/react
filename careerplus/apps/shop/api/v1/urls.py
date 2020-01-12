@@ -9,7 +9,7 @@ from django.conf import settings
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-
+app_name='shop'
 urlpatterns = [
     url(r'^products/$', ProductListView.as_view()),
     url(r'^get-products/$', ProductDetailView.as_view(),name='get-product' ),

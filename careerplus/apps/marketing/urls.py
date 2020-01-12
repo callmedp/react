@@ -15,7 +15,7 @@ from . import views as marketing_views
 redirect_url_mapping = {"digital-marketing": "digital-marketing", "gst-cert": "gst-certification",
     "pmp-cert": "pmp-cert", "data-science-certification": "data-science-certification",
     "resume-writing": "resume-writing"}
-
+app_name = 'marketing'
 urlpatterns = [
 
                   #  marketing urls

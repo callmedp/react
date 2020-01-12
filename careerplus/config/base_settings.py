@@ -21,7 +21,7 @@ PROJECT_DIR = os.path.dirname(BASE_DIR)
 
 sys.path.append(os.path.join(BASE_DIR, 'apps'))
 
-GEOIP_PATH = BASE_DIR + '/apps/users/GeoIP.dat'
+GEOIP_PATH = BASE_DIR + '/apps/users/GeoLite2.mmdb'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -66,7 +66,7 @@ THIRD_PARTY_APPS = [
     'storages',
     'django_filters',
     'webpack_loader',
-    'corsheaders'
+    'corsheaders' ,
 ]
 
 # Apps specific for this project go here.
@@ -123,7 +123,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'core.middleware.UpgradedMobileDetectionMiddleware',
-    'core.middleware.UpgradedSetFlavourMiddleware',   
+    'core.middleware.UpgradedSetFlavourMiddleware',
     'core.middleware.LearningShineMiddleware',
     'core.middleware.LoginMiddleware',
     'core.middleware.TrackingMiddleware',
@@ -154,7 +154,7 @@ TEMPLATES = [
             ],
             'loaders': ([
                 # ('django_mobile.loader.CachedLoader', [
-                'django_mobile.loader.Loader',
+                # 'django_mobile.loader.Loader',
                 'django.template.loaders.filesystem.Loader',
                 'django.template.loaders.app_directories.Loader',
             ]),

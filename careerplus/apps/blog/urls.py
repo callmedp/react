@@ -7,7 +7,7 @@ from .views import BlogLandingPageView, BlogLandingAjaxView,\
 
 from . import mobile_view
 
-
+app_name ='blog'
 urlpatterns = [
     url(r'^$', BlogLandingPageView.as_view(), name='blog-landing'),
 

@@ -911,7 +911,7 @@ class SessionAvailabilityAPIView(APIView):
     serializer_class = None
 
     def get(self, request, *args, **kwargs):
-        if (request.user and request.user.is_authenticated()):
+        if (request.user and request.user.is_authenticated):
 
             return Response(
                 data={'result': True},

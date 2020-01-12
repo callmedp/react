@@ -15,7 +15,7 @@ EPayLaterRequestView, EPayLaterResponseView,ZestMoneyRequestApiView,\
 #inter app imports
 
 #third party imports
-
+app_name = 'payment'
 urlpatterns = [
     url(r'^payment-options/$', PaymentOptionView.as_view(),
         name='payment-option'),

@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from .import views
-
+app_name = 'console'
 urlpatterns = [
 	url(r'^indexerwidget/$', views.IndexerWidgetListView.as_view(), name='indexerwidget-list'),
 	url(r'^columnheading/$', views.ColumnHeadingListView.as_view(), name='columnheading-list'),

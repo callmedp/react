@@ -5,7 +5,7 @@ from users.views import (
     SocialLoginView, LinkedinLoginView,
     GenerateWriterInvoiceView, DownloadWriterInvoiceView,DownloadMonthlyWriterInvoiceView)
 
-
+app_name = 'users'
 urlpatterns = [
     url(r'^resume/download/$',
         DownloadBoosterResume.as_view(), name='download_booster_resume'),
@@ -31,6 +31,6 @@ urlpatterns = [
     url(r'^download-monthly-writer-invoice/$',
         DownloadMonthlyWriterInvoiceView.as_view(),
         name='download-monthly-writer-invoice'),
-    url(r'^api/', include(('users.api.urls','users'), namespace='api')),
+    url(r'^api/', include('users.api.urls', namespace='api')),
 
 ]

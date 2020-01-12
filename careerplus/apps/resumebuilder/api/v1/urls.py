@@ -26,7 +26,7 @@ from .views import (CandidateCreateView, CandidateRetrieveUpdateView, SkillRetri
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-
+app_name = 'resumebuilder'
 urlpatterns = [
     url(r'^candidates/(?P<pk>.+)/$', CandidateRetrieveUpdateView.as_view()),
     url(r'^candidates/$', CandidateCreateView.as_view()),

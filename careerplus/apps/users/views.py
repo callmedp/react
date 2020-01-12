@@ -622,14 +622,14 @@ class LinkedinCallbackView(View):
 
 
 # HTTP Error 404
-def page_not_found(request):
-    response = render(request, 'error_pages/404.html', {})
+def page_not_found(request,exception,template_name='error_pages/404.html'):
+    response = render(request, 'error_pages/404.html')
     response.status_code = 404
     return response
 
 
 # HTTP Error 500
-def server_error(request):
+def server_error(request,template_name='error_pages/500.html'):
     response = render(request, 'error_pages/500.html', {})
     response.status_code = 500
     return response

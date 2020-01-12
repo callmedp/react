@@ -2,7 +2,7 @@ from django.conf.urls import url
 
 from . import views
 
-
+app_name = 'crmapi'
 urlpatterns = [
     url(r'^lead-management/$',
         views.LeadManagement.as_view(), name='lead-management'),

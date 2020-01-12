@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from .views import SearchListView, RecommendedSearchView, RedirectToRecommendationsView
-
+app_name='search'
 urlpatterns = [
     # url(r'^recommended/(?P<area_slug>[-./\w+\(\)]+)-(?P<area>[\d]+)/(?P<skills_slug>[-./\w+]+)_(?P<skills>[-\d]+)/$',
     #     RecommendedSearchView.as_view(), name='recommended_listing'),

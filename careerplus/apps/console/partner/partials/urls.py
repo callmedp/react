@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from . import views
 from console.order.partials import views as order_views
-
+app_name = "console"
 urlpatterns = [
 	url(r'^vendor/$', views.VendorListPartial.as_view(), name='vendor-list-partial'),
 	url(r'^vendorhierarchy/$', views.VendorHierarchyListPartial.as_view(), name='vendorhierarchy-list-partial'),

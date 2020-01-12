@@ -12,7 +12,7 @@ from .views import (
 )
 from . import dashboard_view, mobile_view
 
-
+app_name='dashboard'
 urlpatterns = [
     url(r'^roundone/$', RoundoneDashboardView.as_view(),
         name='roundone-dashboard'),

@@ -461,7 +461,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         return super(InboxQueueVeiw, self).get(request, args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        if request.is_ajax() and request.user.is_authenticated():
+        if request.is_ajax() and request.user.is_authenticated:
             data = {"display_message": ''}
             try:
                 orderitem_list = request.POST.getlist('selected_id[]', [])
@@ -2858,7 +2858,7 @@ class AssignmentOrderItemView(View):
         selected_id = json.loads(selected)
         queue_name = request.POST.get('queue_name', '')
 
-        if user_pk and selected_id and request.user.is_authenticated():
+        if user_pk and selected_id and request.user.is_authenticated:
             try:
                 User = get_user_model()
                 assign_to = User.objects.get(pk=user_pk)
@@ -3815,7 +3815,7 @@ class LTVReportView(TemplateView):
     template_name = 'console/order/ltv_report.html'
 
     def dispatch(self,request,*args,**kwargs):
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             return HttpResponseForbidden()
         if 'order.can_download_ltv_report' not in request.user.get_all_permissions():
             return HttpResponseForbidden()
@@ -3859,7 +3859,7 @@ class LTVReportView(TemplateView):
         return response
 
     def post(self,request,*args,**kwargs):
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             return HttpResponseForbidden()
         if 'order.can_download_ltv_report' not in request.user.get_all_permissions():
             return HttpResponseForbidden()

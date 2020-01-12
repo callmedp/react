@@ -1,6 +1,6 @@
 from rest_framework import routers
 from . import views
-
+app_name = "cms"
 router = routers.SimpleRouter()
 
 router.register(r'indexerwidget', views.IndexerWidgetViewSet)

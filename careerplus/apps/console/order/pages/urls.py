@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from .import views
-
+app_name='console'
 urlpatterns = [
     url(r'^neworders/$', views.NewOrdersListView.as_view(), name='neworders-list'),
     url(r'^closedorders/$', views.ClosedOrdersListView.as_view(), name='closedorders-list'),

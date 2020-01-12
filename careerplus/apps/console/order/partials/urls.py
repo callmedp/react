@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from . import views
-
+app_name = 'console'
 urlpatterns = [
 	url(r'^neworders/$', views.NewOrdersListPartial.as_view(), name='neworders-list-partial'),
 	url(r'^closedorders/$', views.ClosedOrdersListPartial.as_view(), name='closedorders-list-partial'),

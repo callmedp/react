@@ -19,6 +19,7 @@ router.register(r'city', CityViewSet)
 
 urlpatterns = router.urls
 
+app_name = "geolocation"
 urlpatterns = [
     url(r'^country/$', CountryListView.as_view()),
     url(r'^validate/$',CountryValidationView.as_view())

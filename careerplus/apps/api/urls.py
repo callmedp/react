@@ -2,7 +2,7 @@ from django.conf.urls import url
 from django.conf import settings
 
 from . import views
-
+app_name='api'
 urlpatterns = [
     url(r'^v1/create-order/$',
         views.CreateOrderApiView.as_view(), name='api-createorder'),

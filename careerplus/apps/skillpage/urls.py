@@ -1,18 +1,17 @@
 from django.conf.urls import url, include
 
 from .views import (
-    SkillPageView, ServiceDetailPage,
-    UniversityPageView)
+    SkillPageView)
 from search.views import FuncAreaPageView
 
 # from .adminview import SkillAddFormView, SkillListView, SkillUpdateView
-
+app_name='skillpage'
 urlpatterns = [
     url(r'^(?P<fa_slug>[-\w]+)/(?P<pk>\d+)/$',
         FuncAreaPageView.as_view(), name='func_area_results'),
     url(r'^(?P<fa_slug>[-\w]+)/(?P<skill_slug>[-\w]+)/(?P<pk>\d+)/$',
         SkillPageView.as_view(), name='skill-page-listing'),
-    url(r'^api/',include(('skillpage.api.v1.urls','skillpage'),
+    url(r'^api/',include('skillpage.api.v1.urls',
                           namespace='skillpage-api')),
 
     ## NOT IN USE

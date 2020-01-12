@@ -12,7 +12,7 @@ from .views import EmailStatusView, CartRetrieveUpdateView
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-
+app_name='cart'
 urlpatterns = [
         url(r'^email-status/(?P<email>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/$', EmailStatusView.as_view()),
         url(r'^(?P<pk>\d+)/$', CartRetrieveUpdateView.as_view()),

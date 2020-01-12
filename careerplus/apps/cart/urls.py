@@ -9,7 +9,7 @@ from .views import CartView, AddToCartView, RemoveFromCartView,\
 
 from . import mobile_view
 
-
+app_name = 'cart'
 urlpatterns = [
     # url(r'^$', CartView.as_view(), name='cart-product-list'),
     url(r'^add-to-cart/$', AddToCartView.as_view(), name='add-to-cart'),
