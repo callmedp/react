@@ -2,7 +2,7 @@
 @import './variables/mixins.scss';
 
 .sprite {
-  background-image: url('#{$path}/sprite.svg');
+  background-image: $sprite;
   background-repeat: no-repeat;
 }
 
@@ -272,7 +272,7 @@
     &::before {
       @include size(13px, 20px, block);
       content: '';
-      background-image: url($sprite);
+      background-image: $sprite;
       position: absolute;
       background-position: -106px -59px;
       top: .2rem;
@@ -307,7 +307,7 @@
     &::before {
       @include size(16px, 16px, block);
       content: '';
-      background-image: url($sprite);
+      background-image: $sprite;
       position: absolute;
       background-position: -104px -85px;
       top: .2rem;
@@ -322,7 +322,7 @@
     &::before {
       @include size(13px, 13px, block);
       content: '';
-      background-image: url($sprite);
+      background-image: $sprite;
       position: absolute;
       background-position: -107px -107px;
       top: .2rem;
@@ -337,7 +337,7 @@
     &::before {
       @include size(16px, 16px, block);
       content: '';
-      background-image: url($sprite);
+      background-image: $sprite;
       position: absolute;
       background-position: -110px -127px;
       top: .2rem;
@@ -352,7 +352,7 @@
     &::before {
       @include size(16px, 16px, block);
       content: '';
-      background-image: url($sprite);
+      background-image: $sprite;
       position: absolute;
       background-position: -111px -156px;
       top: .2rem;

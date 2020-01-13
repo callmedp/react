@@ -95,7 +95,7 @@
                     &::after {
                         content: '';
                         @include size(8px, 14px);
-                        background-image: url($sprite);
+                        background-image: $sprite;
                         display: block;
                         position: absolute;
                         top: 50%;
@@ -180,7 +180,7 @@
                 @include size(12px, 20px, block);
                 content: '';
                 background-position: -82px -287px;
-                background-image: url($sprite);
+                background-image: $sprite;
                 position: absolute;
                 left: -11px;
             }
