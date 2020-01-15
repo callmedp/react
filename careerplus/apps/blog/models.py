@@ -304,6 +304,8 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
         _('Sponsor Image'), upload_to='images/blog/sponsor/',
         blank=True, null=True)
 
+    #position
+    position = models.PositiveIntegerField(default=0)
     _metadata_default = ModelMeta._metadata_default.copy()
 
     _metadata = {
