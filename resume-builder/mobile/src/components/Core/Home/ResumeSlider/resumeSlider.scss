@@ -40,7 +40,7 @@
             &::after {
                 content: '';
                 @include size(18px, 17px);
-                background-image: url($sprite);
+                background-image: $sprite;
                 display: block;
                 position: absolute;
                 top: 50%;

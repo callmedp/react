@@ -1,10 +1,18 @@
+# python imports
+
+#django imports
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
-from seo.models import AbstractAutoDate
-
+# local imports
 from .config import PAGECHOICES, STATIC_PAGE_NAME_CHOICES
+
+# interapp imports
+from seo.models import AbstractAutoDate
+from shop.models import FunctionalArea
+
+# third party imports
 from ckeditor.fields import RichTextField
 
 
@@ -22,6 +30,7 @@ class TopTrending(AbstractAutoDate):
     is_jobassistance = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     priority = models.IntegerField(default=0)
+    fa = models.ManyToManyField(FunctionalArea,null=True, blank=True)
 
     class Meta:
         ordering = ['priority']

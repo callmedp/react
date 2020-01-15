@@ -52,7 +52,6 @@ SEARCH_STOPWORDS_LOOKUP = {
     'we': '',
     'after': '',
     'jobs': '',
-    'resume': '',
     'here': '',
     'job': '',
     'by': '',

@@ -71,22 +71,32 @@ class LoginMiddleware(object):
             session_fa = True
         if 'skills' in request.session.keys():
             session_skills = True
+
         candidate_id = request.session.get('candidate_id')
         candidate_detail = None
-
         if not session_fa and candidate_id:
+
             candidate_detail = ShineCandidateDetail().get_candidate_public_detail(
                 shine_id=candidate_id)
+
+            func_area_obj = None
             if candidate_detail:
-                func_area = candidate_detail.get('jobs')[0].get("parent_sub_field", "") \
-                    if len(candidate_detail.get('jobs', [])) else ''
-                func_area_obj = FunctionalArea.objects.filter(name__iexact=func_area)
-                fa_id = None
+                candid_job_detail = candidate_detail.get('jobs')[0] if \
+                    candidate_detail.get('jobs') and isinstance(
+                        candidate_detail.get('jobs'), list) else None
+                if candid_job_detail:
+                    func_area = candid_job_detail.get("parent_sub_field", "")
+                    func_area_obj = FunctionalArea.objects.filter(
+                        name__iexact=func_area).first()
                 if func_area_obj:
-                    fa_id = func_area_obj[0].id
-                request.session.update({
-                    'func_area': fa_id
-                })
+                    request.session.update({
+                        'func_area': func_area_obj.id,
+						'recomm_fa':func_area_obj.id,})
+                if candid_job_detail and candid_job_detail.get('job_title'):
+                    request.session.update({
+                        'job_title': str.title(candid_job_detail.get(
+                            'job_title'))})
+
         if not session_skills:
             if not candidate_detail and candidate_id:
                 candidate_detail = ShineCandidateDetail().get_candidate_public_detail(
@@ -100,11 +110,13 @@ class LoginMiddleware(object):
                     except Exception as e:
                         logging.getLogger('error_log').error('error in decrypting skills into ascii {}'.format(str(e)))
                         skills_in_ascii.append("")
-                skills_obj = Skill.objects.filter(name__in=skills_in_ascii)[:15]
-                skills_ids = [str(s.id) for s in skills_obj]
+                # Settings all skill in sessions
+                skills_obj = Skill.objects.filter(name__in=skills_in_ascii)
+                skills_ids = [str(skill.id) for skill in skills_obj]
+
                 request.session.update({
-                    'mid_skills': skills_ids,
-                    'mid_skills_name': skills[:15],
+                    'mid_skills': skills_ids[:15],
+                    'all_skill_ids': skills_ids
                 })
         response = self.get_response(request)
         return response

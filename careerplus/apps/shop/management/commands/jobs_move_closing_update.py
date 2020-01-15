@@ -48,18 +48,26 @@ class Command(BaseCommand):
             else:
                 user_register(data={}, order=obj.order.pk)
 
-            featured_op = obj.orderitemoperation_set.filter(oi_status__in=[5, 23, 31]).order_by('id').order_by('id').first()
+            featured_op = obj.orderitemoperation_set.filter(
+                oi_status__in=[5, 23, 31]).order_by('id').order_by('id').first()
 
             try:
-                activation_date = featured_op.created
+                if obj.start_date:
+                    activation_date = obj.start_date
+                else:
+                    activation_date = featured_op.created
             except Exception as e:
-                logging.getLogger('error_log').error("unable to create activation date%s" % (str(e)))
+                logging.getLogger('error_log').error(
+                    "unable to create activation date%s" % (str(e)))
                 continue
 
-            duration_days = getattr(obj.product.attr, S_ATTR_DICT.get('FD'), 180)
+            duration_days = obj.get_duration_days
 
-            delta_time = activation_date + datetime.timedelta(days=duration_days)
+            delta_time = activation_date + \
+                datetime.timedelta(days=duration_days)
+        
             obj.update_pending_links_count()
+
             # Close the order if condition satisfies else
             if candidate_id:
                 if (delta_time < timezone.now()) and obj.pending_links_count == 0:
@@ -74,7 +82,8 @@ class Command(BaseCommand):
                         assigned_to=obj.assigned_to)
                     jobs_move_close_count += 1
                 else:
-                    sevice_started_op = obj.orderitemoperation_set.all().filter(oi_status__in=[5,23, 31]).order_by('id').first()
+                    sevice_started_op = obj.orderitemoperation_set.all().filter(
+                        oi_status__in=[5, 23, 31]).order_by('id').first()
 
                     if sevice_started_op:
                         if obj.pending_links_count > 0 and obj.oi_status == 32:

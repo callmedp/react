@@ -159,17 +159,33 @@
               </ul>
             </li>
           {% endif %}
+
+               {% if perms.shop.console_change_category %}
+            <li><a><i class="fa icon-category"></i> Product F.A <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="{% url 'console:fa-list' %}">Functional Area</a></li>
+
+              </ul>
+            </li>
+          {% endif %}
+
           
           {% if perms.shop.console_change_product %}
           
             <li><a><i class="fa icon-product"></i> Product <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
                 <li><a href="{% url 'console:product-list' %}">Product</a></li>
+            <li><a href="{% url 'console:product-job-title'%}">Job Title</a></li>
+
                 <li><a href="{% url 'console:product-audit-history'%}">Product Audit History</a></li>
                 <!-- <li><a href="{% url 'console:productskill-add' %}">Product-Skill</a></li> -->
 
               </ul>
             </li>
+
+
+
+
             <li><a><i class="fa icon-productcontent"></i> Product Content <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
               {% if perms.faq.console_change_faq %}

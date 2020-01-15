@@ -48,10 +48,19 @@ function* getCandidateShineDetails(action) {
             //redirect code here
         }
 
-        const { data: { candidate_id, candidate_profile, token, entity_status, userExperience } } = result;
+        const { data: { candidate_id, candidate_profile, token, entity_status, userExperience, order_data: orderData, subscription_active: subscriptionActive } } = result;
         localStorage.setItem('candidateId', (candidate_id) || '');
         localStorage.setItem('userExperience', (userExperience || 0));
+        if (orderData && orderData.id) {
+            localStorage.setItem('orderAvailable', true);
+        }
+        if (subscriptionActive) {
+            localStorage.setItem('subscriptionActive', true);
+        }
+        else {
+            localStorage.setItem('subscriptionActive', false);
 
+        }
         for (const key in candidate_profile) {
             const entityObj = entity_status.find(el => el['display_value'] === key);
 
@@ -64,6 +73,7 @@ function* getCandidateShineDetails(action) {
                 }
                 localStorage.setItem('email', candidate_profile[key]['email'] || '');
                 localStorage.setItem('mobile', candidate_profile[key]['number'])
+
                 yield put({ type: SAVE_USER_INFO, data: candidate_profile[key] })
             }
 
@@ -126,9 +136,19 @@ function* loginCandidate(action) {
             //redirect code here
         }
 
-        const { data: { candidate_id, candidate_profile, token, entity_status, userExperience } } = result;
+        const { data: { candidate_id, candidate_profile, token, entity_status, userExperience, order_data: orderData, subscription_active: subscriptionActive } } = result;
         localStorage.setItem('candidateId', (candidate_id) || '');
         localStorage.setItem('userExperience', (userExperience || 0));
+        if (orderData && orderData.id) {
+            localStorage.setItem('orderAvailable', true);
+        }
+        if (subscriptionActive) {
+            localStorage.setItem('subscriptionActive', true);
+        }
+        else {
+            localStorage.setItem('subscriptionActive', false);
+
+        }
 
         for (const key in candidate_profile) {
             const entityObj = entity_status.find(el => el['display_value'] === key);
@@ -190,7 +210,7 @@ function* feedbackSubmit(action) {
 
 function* getComponentTitle(action) {
     try {
-        let { payload: { resolve,reject}} = action;
+        let { payload: { resolve, reject } } = action;
         resolve('Resume Builder 2019 | Online Free Resume Maker [Unique Templates] @ Shine Learning')
     } catch (e) {
         console.log(e);

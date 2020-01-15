@@ -620,3 +620,7 @@ REDIRECT_ARTICLE_CATEGORY = [
 REDIRECT_ARTICLE_CATEGORY_TE_CATEGORY = {
     'competitive-exams': '/talenteconomy/career-help/'
 }
+
+
+# default recommend products to be shown
+DEFAULT_RECOMMEND_PRODUCT = [2634, 2787,1,4]

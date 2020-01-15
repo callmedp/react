@@ -1,20 +1,20 @@
-import {Api} from './Api';
-import {apiError} from '../../../Utils/apiError';
+import { Api } from './Api';
+import { apiError } from '../../../Utils/apiError';
 
-import {takeLatest,takeEvery, put, call, select} from "redux-saga/effects";
+import { takeLatest, takeEvery, put, call, select } from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
 import * as uiAction from '../../ui/actions/actionTypes';
 
 import moment from 'moment'
 
-import {SubmissionError} from 'redux-form'
+import { SubmissionError } from 'redux-form'
 
 
 function modifyPersonalInfo(data) {
-    let {date_of_birth, gender, extracurricular, image, first_name, selected_template} = data; 
-    if(!first_name){
-        localStorage.setItem('newUser',true);
+    let { date_of_birth, gender, extracurricular, image, first_name, selected_template } = data;
+    if (!first_name) {
+        localStorage.setItem('newUser', true);
     }
     let newData = {
         ...data,
@@ -34,15 +34,15 @@ function modifyPersonalInfo(data) {
 function* getPersonalDetails(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
-        const {payload} = action;
+        const { payload } = action;
         const loader = payload && payload.noUiLoader ? false : true
-        yield put({type: uiAction.UPDATE_MAIN_PAGE_LOADER, payload: {mainloader: loader}})
+        yield put({ type: uiAction.UPDATE_MAIN_PAGE_LOADER, payload: { mainloader: loader } })
         if (localStorage.getItem('personalInfo')) {
             yield put({
                 type: Actions.SAVE_USER_INFO,
                 data: modifyPersonalInfo(JSON.parse(localStorage.getItem('personalInfo')) || [])
             })
-            yield put({type: uiAction.UPDATE_MAIN_PAGE_LOADER, payload: {mainloader: false}})
+            yield put({ type: uiAction.UPDATE_MAIN_PAGE_LOADER, payload: { mainloader: false } })
             return;
         }
 
@@ -51,11 +51,19 @@ function* getPersonalDetails(action) {
         if (result['error']) {
             apiError();
         }
-        let {data} = result;
+        let { data } = result;
         data = modifyPersonalInfo(data)
-        yield put({type: Actions.SAVE_USER_INFO, data: data});
+        yield put({ type: Actions.SAVE_USER_INFO, data: data });
 
-        yield put({type: uiAction.UPDATE_MAIN_PAGE_LOADER, payload: {mainloader: false}})
+        const { active_subscription: subscriptionActive } = data;
+        if (subscriptionActive) {
+            localStorage.setItem('subscriptionActive', true);
+        }
+        else {
+            localStorage.setItem('subscriptionActive', false);
+        }
+
+        yield put({ type: uiAction.UPDATE_MAIN_PAGE_LOADER, payload: { mainloader: false } })
 
     } catch (e) {
         apiError();
@@ -64,15 +72,16 @@ function* getPersonalDetails(action) {
 
 function* updatePersonalDetails(action) {
     try {
-        let {payload: {personalDetails, resolve, reject}} = action;
+        let { payload: { personalDetails, resolve, reject } } = action;
         delete personalDetails['subscription_status']
         if (localStorage.getItem('newUser')) {
             localStorage.removeItem('newUser')
         }
-        const {resume_generated, order_data} = personalDetails;
-        const isOrderedAndSingle = Object.keys(order_data || {}).length  ?( order_data.combo ? false: true) : false; 
+        const { resume_generated, order_data } = personalDetails;
 
-        if (localStorage.getItem('selected_template') &&  !(resume_generated && isOrderedAndSingle )) {
+        const isOrderedAndSingle = Object.keys(order_data || {}).length ? (order_data.combo ? false : order_data.expiry  ? false: true) : false;
+
+        if (localStorage.getItem('selected_template') && !(resume_generated && isOrderedAndSingle)) {
             personalDetails = {
                 ...personalDetails,
                 ...{
@@ -81,7 +90,7 @@ function* updatePersonalDetails(action) {
             }
         }
         const candidateId = localStorage.getItem('candidateId') || '';
-        yield put({type: uiAction.UPDATE_DATA_LOADER, payload: {mainloader: true}})
+        yield put({ type: uiAction.UPDATE_DATA_LOADER, payload: { mainloader: true } })
 
         let result = null;
         if (localStorage.getItem('personalInfo')) result = yield call(Api.createPersonalInfo, personalDetails);
@@ -89,14 +98,14 @@ function* updatePersonalDetails(action) {
 
         if (result['error']) {
             apiError()
-            return reject(new SubmissionError({_error: result['errorMessage']}));
+            return reject(new SubmissionError({ _error: result['errorMessage'] }));
         }
 
         localStorage.removeItem('personalInfo');
 
 
-        yield put({type: Actions.SAVE_USER_INFO, data: modifyPersonalInfo(result['data'])});
-        yield put({type: uiAction.UPDATE_DATA_LOADER, payload: {mainloader: false}})
+        yield put({ type: Actions.SAVE_USER_INFO, data: modifyPersonalInfo(result['data']) });
+        yield put({ type: uiAction.UPDATE_DATA_LOADER, payload: { mainloader: false } })
 
         return resolve('User Personal  Info saved successfully.');
 
@@ -108,16 +117,16 @@ function* updatePersonalDetails(action) {
 
 function* getInterestList(action) {
     try {
-        const {payload: {value, resolve, reject}} = action;
+        const { payload: { value, resolve, reject } } = action;
         const result = yield call(Api.fetchInterestList, value);
 
         if (result['error']) {
-            return reject(new SubmissionError({_error: result['errorMessage']}));
+            return reject(new SubmissionError({ _error: result['errorMessage'] }));
         }
-        let {data: {data}} = result;
+        let { data: { data } } = result;
 
         const newResult = Object.keys(data).map((el, key) => {
-            return {'value': data[el], 'label': data[el]}
+            return { 'value': data[el], 'label': data[el] }
         })
 
         return resolve(newResult)
@@ -130,8 +139,8 @@ function* getInterestList(action) {
 
 function* fetchImageUrl(action) {
     try {
-        const {payload: {imageFile, resolve, reject}} = action;
-        yield put({type: uiAction.UPDATE_DATA_LOADER, payload: {mainloader: true}})
+        const { payload: { imageFile, resolve, reject } } = action;
+        yield put({ type: uiAction.UPDATE_DATA_LOADER, payload: { mainloader: true } })
 
 
         var data = new FormData();
@@ -149,7 +158,7 @@ function* fetchImageUrl(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
 
         const result = yield call(Api.fetchImageUrl, data, candidateId);
-        yield put({type: uiAction.UPDATE_DATA_LOADER, payload: {mainloader: false}})
+        yield put({ type: uiAction.UPDATE_DATA_LOADER, payload: { mainloader: false } })
 
 
         return resolve(result['data']['path'])
@@ -160,21 +169,21 @@ function* fetchImageUrl(action) {
     }
 }
 
-function* updateEntityPreference(action) {
+function* updateEntityPreference(action) {  
     try {
-        const {payload: {entity_preference_data, resolve, reject}} = action;
+        const { payload: { entity_preference_data, resolve, reject } } = action;
         const candidateId = localStorage.getItem('candidateId') || '';
-        yield put({type: uiAction.UPDATE_DATA_LOADER, payload: {mainloader: true}})
-        const result = yield call(Api.updateEntityPreference, {entity_preference_data}, candidateId);
+        yield put({ type: uiAction.UPDATE_DATA_LOADER, payload: { mainloader: true } })
+        const result = yield call(Api.updateEntityPreference, { entity_preference_data }, candidateId);
         if (result['error']) {
             apiError();
-            return reject(new SubmissionError({_error: result['errorMessage']}));
+            return reject(new SubmissionError({ _error: result['errorMessage'] }));
         }
 
         const data = modifyPersonalInfo(result['data']);
 
-        yield put({type: Actions.SAVE_USER_INFO, data: data});
-        yield put({type: uiAction.UPDATE_DATA_LOADER, payload: {mainloader: false}})
+        yield put({ type: Actions.SAVE_USER_INFO, data: data });
+        yield put({ type: uiAction.UPDATE_DATA_LOADER, payload: { mainloader: false } })
         return resolve("ENtity Updated")
 
     } catch (e) {

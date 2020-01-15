@@ -150,6 +150,16 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     # Assesment attributes
     pAsft = indexes.MultiValueField(null=True, indexed=False)
 
+    # user skill field
+    uSkill = indexes.MultiValueField(null=True)
+    uSkilln = indexes.MultiValueField(null=True)
+
+    #job title
+
+    pJbtn = indexes.MultiValueField(indexed=True,null=True)
+    pFnA = indexes.MultiValueField(indexed=True,null=True)
+
+
     def get_model(self):
         return Product
 
@@ -161,6 +171,14 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
 
     def should_update(self, instance, **kwargs):
         return instance.is_indexable
+
+    def prepare_pJbtn(self, obj):
+        if not obj.jobtitle.all():
+            return []
+        return list(obj.jobtitle.values_list('name', flat=True))
+
+    def prepare_pFnA(self, obj):
+        return list(obj.productfas.values_list('fa_id', flat=True))
 
     def prepare_pCtg(self, obj):
         categories = obj.categories.filter(
@@ -230,16 +248,31 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_pSkill(self, obj):
         # if obj.is_course:
         skill_ids = list(obj.productskills.filter(
-            skill__active=True,
+            skill__active=True,relation_type=1,
             active=True).values_list('skill', flat=True))
         return skill_ids
 
     def prepare_pSkilln(self, obj):
         # if obj.is_course:
         skill_names = list(obj.productskills.filter(
-            skill__active=True,
+            skill__active=True,relation_type=1,
             active=True).values_list('skill__name', flat=True))
         return skill_names
+
+
+    def prepare_uSkill(self, obj):
+        # user skills ids
+        skill_ids = list(obj.productskills.filter(skill__active=True,
+         active=True, relation_type=2).values_list('skill_id', flat=True))
+        return skill_ids
+
+    def prepare_uSkilln(self, obj):
+        # user skills names
+        skill_names = list(obj.productskills.filter(skill__active=True,
+         active=True, relation_type=2).values_list('skill__name', flat=True))
+
+        return skill_names
+
 
     def prepare_pCtgs(self, obj):
         categories = obj.categories.filter(

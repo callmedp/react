@@ -1,23 +1,29 @@
+# python imports
+import logging
+
+# django imports
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.forms.fields import MultipleChoiceField
+# local imports
 
-from dal import autocomplete
-
+# inter app imports
 from shop.models import (
     Category, CategoryRelationship, Skill, ProductSkill,
     Faculty, SubHeaderCategory, FacultyProduct,
     Product, UniversityCourseDetail,
-    UniversityCoursePayment,SubCategory)
+    UniversityCoursePayment,SubCategory,FunctionalArea,ProductFA,ProductJobTitle)
 
 from shop.choices import (
     APPLICATION_PROCESS_CHOICES, APPLICATION_PROCESS,
     BENEFITS_CHOICES, BENEFITS, FACULTY_PRINCIPAL
 )
-
 from homepage.models import Testimonial
-from homepage.config import (
-    PAGECHOICES, UNIVERSITY_PAGE)
+
+# third party imports
+from dal import autocomplete
+from core.library.haystack.query import SQS
+
 
 
 class TestimonialModelForm(forms.ModelForm):
@@ -1678,3 +1684,117 @@ class ChangeSubCategoryForm(forms.ModelForm):
             commit=True, *args, **kwargs)
         subcategory.create_icon()
         return subcategory
+
+
+class FunctionalAreaForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(FunctionalAreaForm, self).__init__(*args, **kwargs)
+        prod_objs = SQS().all().only('id','pNm')
+        choices = [
+            (p.id, '{}'.format(p.pNm),) for p in prod_objs]
+        self.fields['faproducts'] = forms.MultipleChoiceField(choices=choices)
+
+    class Meta:
+        model = FunctionalArea
+        fields = '__all__'
+
+
+class FunctionalAreaCreateForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(FunctionalAreaCreateForm, self).__init__(*args, **kwargs)
+        prod_objs = SQS().all().only('id','pNm')
+        choices = [
+            (p.id, '{}'.format(p.pNm),) for p in prod_objs]
+        self.fields['faproducts'] = forms.MultipleChoiceField(choices=choices)
+        self.fields['name'].required=False
+
+    class Meta:
+        model = FunctionalArea
+        fields = '__all__'
+
+
+    def clean_active(self):
+        return self.cleaned_data.get('active',False)
+
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+        if not name:
+            raise forms.ValidationError('Please Enter the FA name')
+        if FunctionalArea.objects.filter(name__iexact=name):
+            raise forms.ValidationError('Functional Area with same name {} '
+                                        'already exist'.format(name))
+        return name
+
+    def save(self, commit=True, *args, **kwargs):
+        fa_ids = kwargs.pop('fa_ids')
+        f = super(FunctionalAreaCreateForm, self).save(commit=True, *args, **kwargs)
+        for fa_id in fa_ids:
+            ProductFA.objects.create(fa=f,product_id=fa_id,active=True)
+        return f
+
+
+class ProductJobTitleCreateForm(forms.ModelForm):
+
+    class Meta:
+        model = ProductJobTitle
+        fields = ['name','product']
+
+    def __init__(self, *args, **kwargs):
+        super(ProductJobTitleCreateForm, self).__init__(*args, **kwargs)
+        form_class = 'form-control col-md-7 col-xs-12'
+        prod_objs = SQS().all().only('id', 'pNm')
+        choices = [
+            (p.id, '{}({})'.format(p.pNm,p.id),) for p in prod_objs]
+        self.fields['product'] = forms.MultipleChoiceField(choices=choices)
+
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+        if not name:
+            raise forms.ValidationError('Please Enter the Job Title name')
+        if ProductJobTitle.objects.filter(name__iexact=name):
+            raise forms.ValidationError('Duplicate Job Title Name {}'.format(
+                name))
+        return name
+
+
+class ProductJobTitleChangeForm(forms.ModelForm):
+
+    class Meta:
+        model = ProductJobTitle
+        fields = ['name','product']
+
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.get('instance')
+        super(ProductJobTitleChangeForm,self).__init__(*args,**kwargs)
+        if instance:
+            self.initial['product'] = list(instance.product.values_list('id',
+                                                                          flat=True))
+        form_class = 'form-control col-md-7 col-xs-12'
+        prod_objs = SQS().all().only('id', 'pNm')
+        choices = [
+            (p.id, '{}({})'.format(p.pNm,p.id),) for p in prod_objs]
+        self.fields['product'] = forms.MultipleChoiceField(choices=choices)
+
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+        if not name:
+            raise forms.ValidationError('Please Enter the Job Title name')
+        prodjt = ProductJobTitle.objects.filter(name__iexact=name).first()
+        if prodjt and prodjt.id:
+            attr = getattr(self,'instance')
+            if not attr:
+                raise forms.ValidationError('Duplicate Job Title Name {}'.format(
+                name))
+            if attr.id != prodjt.id:
+                raise forms.ValidationError(
+                    'Duplicate Job Title Name {}'.format(
+                        name))
+        return name
+
+
+
+
+
+

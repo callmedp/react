@@ -430,6 +430,7 @@ CANDIDATE_MONGO_USERNAME = 'candadmin'
 CANDIDATE_MONGO_PASSWORD = 'candadmin'
 CANDIDATE_MONGO_INSTANCE_STR = '172.22.67.226:27017'
 CANDIDATE_MONGO_DB = 'sumoplus'
+DEFAULT_RECOMMEND_PRODUCT = [2634,2787]
 
 try:
     from .settings_local import *
@@ -440,3 +441,5 @@ except:
 ##for testing purpose using live working key
 
 # CCAVENUE_WORKING_KEY = 'BB84397177B2D640744BA272627C2A61'
+
+
