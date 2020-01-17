@@ -378,6 +378,15 @@ class ArticleChangeForm(forms.ModelForm):
             raise forms.ValidationError("Address is required.")
         return address
 
+    def clean_position(self):
+        position = self.cleaned_data.get('position', '9')
+        position = int(position)
+        if position > 9:
+            messages.add_message(
+                self.request, messages.ERROR, 'Please enter Value less than 10')
+            raise forms.ValidationError("Please enter Value less than 10")
+        return position
+
 
 class TagAddForm(forms.ModelForm):
     name = forms.CharField(label=("Tag*:"), max_length=70,
