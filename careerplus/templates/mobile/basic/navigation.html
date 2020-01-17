@@ -221,7 +221,7 @@
                     </div>
                 </li>
 {#                <li><a href="#"><span class="icon-career"></span>Career Guidance</a></li>#}
-                <li><a href="/talenteconomy/" class="cls_eventtrack" data-category="TELINK" data-action="Menu" data-label="learning.shine"><span class="icon-talentEco"></span>Talent Economy</a></li>
+                <li><a href="/talenteconomy/" class="cls_eventtrack" data-category="TELINK" data-action="Menu" data-label="learning.shine"><span class="icon-talentEco"></span>Blog</a></li>
                 <li><a href="/cms/resume-format/1/"><span class="icon-sample"></span>Free Samples</a></li>
                 <li><a href="/practice-tests/"><span class="icon-practice-test"></span>Practice Tests <small class="new-tag">New</small></a></li>
 
@@ -246,7 +246,7 @@
                 {% endif %}
                 {% endcomment %}
 
-                <li><a href="{% url "blog:blog-landing"%}">Blog</a></li>
+                {% comment %} <li><a href="{% url "blog:blog-landing"%}">Blog</a></li> {% endcomment %} 
                 <li><a href="/about-us">About us</a></li>
                 <li><a href="/contact-us">Contact us</a></li>
             </ul>
