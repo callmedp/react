@@ -112,7 +112,7 @@ class ScreenFAQ(AbstractAutoDate):
 
     vendor = models.ForeignKey(
         Vendor,
-        null=True, blank=True,on_delete=models.PROTECT)
+        null=True, blank=True,on_delete=models.CASCADE)
 
     objects = FAQuestionManager()
     
