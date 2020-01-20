@@ -30,7 +30,8 @@ $theme-violet: #7C39CA;
 
 $static-url: get('staticUrl');
 $path: $static-url + "react/assets/images/mobile";
-$sprite: "#{$path}/sprite.svg";
+$sprite: url('#{$path}/sprite1578899676315.svg');
+
 
 
 // Shadow

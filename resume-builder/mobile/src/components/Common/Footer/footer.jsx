@@ -10,7 +10,7 @@ export default class Footer extends Component {
                     <li className="footer__item"><a href="#">Terms & Condition</a></li>
                     <li className="footer__item"><a href="#">Contact us</a></li>
                 </ul>
-                <p>Copyright © 2019 HT Media Limited. All rights reserved</p>
+                <p>Copyright © 2020 HT Media Limited. All rights reserved</p>
             </footer>
         )
     }

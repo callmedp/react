@@ -1,7 +1,18 @@
+# python imports
+
+# django imports
 from django.contrib import admin
-from . import models
-from core.api_mixin import ShineProfileDataUpdate
 from django.contrib import messages
+
+# local imports
+from . import models
+
+# inter-app imports
+from core.api_mixin import ShineProfileDataUpdate
+from console.shop_form import ProductJobTitleChangeForm
+
+#  third party imports
+
 
 class CategoryRelationshipInline(admin.StackedInline):
     model = models.CategoryRelationship
@@ -9,7 +20,6 @@ class CategoryRelationshipInline(admin.StackedInline):
     readonly_fields = ('modified',)
     raw_id_fields = ['related_from', 'related_to']
     extra = 1
-
 
 class CategoryProductInline(admin.TabularInline):
     model = models.ProductCategory
@@ -48,6 +58,18 @@ class FAQuestionInline(admin.TabularInline):
     raw_id_fields = ['question', 'product']
     fk_name = 'product'
     extra = 1
+
+
+class ProductFAInline(admin.TabularInline):
+    model = models.ProductFA
+    raw_id_fields = ['fa', 'product']
+    extra = 1
+
+
+class FunctionalAreaAdmin(admin.ModelAdmin):
+    model = models.FunctionalArea
+    inlines = [ProductFAInline]
+    list_display = ['active', 'name']
 
 
 class RelatedProductInline(admin.TabularInline):
@@ -147,17 +169,23 @@ class SkillAdmin(admin.ModelAdmin):
 class PracticeTestInfoAdmin(admin.ModelAdmin):
     list_display = ['email', 'mobile_no', 'name', 'order_item', 'is_boarded']
 
-
+            
+class ProductJobTitleAdmin(admin.ModelAdmin):
+    form = ProductJobTitleChangeForm
+    
 
 admin.site.register(models.Category, CategoryAdmin)
 admin.site.register(models.Attribute, AttributeAdmin)
 admin.site.register(models.Keyword)
+admin.site.register(models.ProductJobTitle,ProductJobTitleAdmin)
 admin.site.register(models.SubCategory)
 admin.site.register(models.ProductClass)
+admin.site.register(models.ProductFA)
 admin.site.register(models.Product, ProductAdmin)
 admin.site.register(models.AttributeOptionGroup, OptionGroupAdmin)
 admin.site.register(models.DeliveryService, DeliveryServiceAdmin)
 admin.site.register(models.ShineProfileData, ShineProfileDataAdmin)
 admin.site.register(models.Skill, SkillAdmin)
+admin.site.register(models.FunctionalArea, FunctionalAreaAdmin)
 admin.site.register(models.PracticeTestInfo, PracticeTestInfoAdmin)
 # admin.site.register(models.ProductExtraInfo, ProductExtraInfoAdmin)

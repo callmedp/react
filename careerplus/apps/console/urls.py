@@ -151,7 +151,28 @@ urlpatterns += [
     url(r'^category/action/(?P<action>[\w-]+)/$',
         shop_view.ActionCategoryView.as_view(),
         name='category-action'),
-    
+    url(r'^fa/list/$',
+        shop_view.FunctionalAreaListView.as_view(),
+        name='fa-list'),
+    url(r'^fa/change/(?P<pk>[\d]+)/$',
+        shop_view.FaChangeView.as_view(),
+        name='change-fa'),
+    url(r'^fa/create/$',
+        shop_view.FaCreateView.as_view(),
+        name='create-fa'),
+
+    url(r'^job-title/list/$',
+        shop_view.JobTitleListView.as_view(),
+        name='product-job-title'),
+
+    url(r'^job-title/change/(?P<pk>[\d]+)/$',
+        shop_view.JobTitleChangeView.as_view(),
+        name='change-job-title'),
+
+    url(r'^job-title/create/$',
+        shop_view.JobTitleCreateView.as_view(),
+        name='create-job-title'),
+
 
     url(r'^product/list/$',
         shop_view.ListProductView.as_view(), name='product-list'),
@@ -195,6 +216,7 @@ urlpatterns += [
     url(r'^keyword/change/(?P<pk>[\d]+)/$',
         shop_view.ChangeKeywordView.as_view(),
         name='keyword-change'),
+
     
 
     # url(r'^attribute/add/$',

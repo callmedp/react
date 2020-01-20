@@ -22,7 +22,7 @@
             @include size(43px, 36px, block);
             content: '';
             position: absolute;
-            background-image: url('#{$path}/sprite.svg');
+            background-image: $sprite;
             background-repeat: no-repeat;
             background-position: -156px 0;
             top: 15px;

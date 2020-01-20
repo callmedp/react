@@ -32,22 +32,39 @@ export default class Middleware {
   }
 
   privateRoute(component, pathname = '/') {
+
+    let buyPath = false;
+    const componentPathname = component && component.props && component.props.location && component.props.location.pathname || ''
+    if (componentPathname === '/resume-builder/buy' || componentPathname === '/resume-builder/buy/') {
+      buyPath = true;
+    }
     return (localStorage.getItem('candidateId') && localStorage.getItem('token')
-      ? localStorage.getItem('selected_template') ? this._getRouteReturn(true, component) :
+      ? localStorage.getItem('selected_template') ?
+        (buyPath ?
+          ((localStorage.getItem('subscriptionActive') && localStorage.getItem('subscriptionActive') === 'true' ? true : false) || false ?
+            this._getRouteReturn(false, <Redirect to={{
+              pathname: '/resume-builder',
+            }} />) :
+            this._getRouteReturn(true, component)
+          )
+          :
+          this._getRouteReturn(true, component)
+        )
+        :
         this._getRouteReturn(false,
           <Redirect to={{
             pathname: `/resume-builder/`,
             search: "?template=false",
             state: { from: pathname }
           }} />)
-      :
-      this._getRouteReturn(false,
+      : this._getRouteReturn(false,
         <Redirect to={{
           pathname: `/resume-builder/`,
           search: "?login=false",
           state: { from: pathname }
         }} />)
     )
+
   }
 
   alreadyLoggedIn(component) {

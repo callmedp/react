@@ -24,6 +24,7 @@ from django.db.models import Q
 from .templatetags.search_tags import get_choice_display
 from .forms import SearchForm, SearchRecommendedForm
 from .classes import SimpleSearch, SimpleParams, FuncAreaSearch, FuncAreaParams, RecommendedSearch, RecommendedParams
+from .choices import FA_ID_TO_CAT_ID_MAPPING
 
 #inter app imports
 from partner.models import Vendor
@@ -37,6 +38,7 @@ from django_redis import get_redis_connection
 
 #Global Constants
 RESULTS_PER_PAGE = getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
+# RESULTS_PER_PAGE = 4
 error_log = logging.getLogger('error_log')
 redis_conn = get_redis_connection("search_lookup")
 
@@ -180,7 +182,7 @@ class SearchBaseView(TemplateView):
             if float(result.pPfin):
                 result.discount = round((float(result.pPfin) - float(result.pPin)) * 100 / float(result.pPfin), 2)
 
-    def get_facets_dict(self):       
+    def get_facets_dict(self):
         results_facets = self.results.facet_counts()
         facet_fields_data = results_facets.get('fields',{})
         facet_dict = {}
@@ -287,11 +289,29 @@ class SearchBaseView(TemplateView):
 
         for facet,context_param in facet_context_param_mapping.items():
             context[context_param] = self.request.GET.getlist(facet)
-            
         context['breadcrumbs'] = self.get_breadcrumbs()
         context['products_found'] = self.found
         context['show_chat'] = True
+        func_area = self.request.session.get('recomm_fa')
+        if not func_area:
+            return context
+        # popping the recomm fun
+        try:
+            self.request.session.pop('recomm_fa')
+        except:
+            pass
+        facets = context.get('facets',{})
+        facets_ids = [str(id.get('id')) for id in facets.get('pFA',[]) if id \
+                                                                          and
+                      isinstance(id.get('id'),int)]
+        func_area = FA_ID_TO_CAT_ID_MAPPING.get(str(func_area))
+        if not func_area or not facets_ids:
+            return context
+        if func_area in facets_ids:
+            context.update({'areaf':func_area})
         return context
+
+
 
     def build_page(self):
         """
@@ -340,6 +360,7 @@ class SearchBaseView(TemplateView):
             logging.getLogger('error_log').error(str(e))
             context['search_params'].update({'prod_count': 0})
         if self.request.is_ajax():
+
             return HttpResponse(json.dumps({
                 'response': render_to_string(self.ajax_template_name, context, self.request),
                 'num_pages': paginator.num_pages,
@@ -435,6 +456,7 @@ class SearchListView(SearchBaseView):
         context['track_query_dict'] = self.track_query_dict.urlencode()
         context.update({"search_type": "simple"})
         vendor_id = self.request.GET.getlist('fvid',[])
+
         if len(vendor_id) != 1:
             return context
         if not vendor_id[0].isdigit():
@@ -450,6 +472,7 @@ class SearchListView(SearchBaseView):
         if not vendor or not vendor.banner_visibility or not getattr(vendor,\
                 banner,None):
             return context
+
         context.update({'vendor_banner':getattr(vendor,banner).url})
         return context
 

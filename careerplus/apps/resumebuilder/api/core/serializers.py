@@ -64,7 +64,7 @@ class CandidateSerializer(serializers.ModelSerializer):
             'id', 'candidate_id', 'first_name', 'last_name', 'email', 'free_resume_downloads',\
             'date_of_birth', 'number', 'gender', 'location', 'order_data','resume_creation_count',\
             'extra_info', 'extracurricular', 'image', 'resume_generated', 'entity_preference_data',\
-             'selected_template', 'upload_resume')
+             'selected_template', 'upload_resume', 'active_subscription')
 
 
 class SkillSerializer(serializers.ModelSerializer):

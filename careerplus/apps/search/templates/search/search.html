@@ -3,6 +3,12 @@
 
 {% block css_section %}
     {{block.super}}
+<style>
+    .cursor {
+    cursor:pointer;
+
+    }
+</style>
     <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
     {% compress css %}
     <link type="text/css" href="{% static 'shinelearn/css/search/jquery.mCustomScrollbar.css' %}" rel="stylesheet">
@@ -94,15 +100,22 @@
         <div class="amcat-tags mt-30" id="bannerBtns">
 
        {% for facet in facets.pFA %}
-            <a  name="filterBtn" value="{{facet.id}}" onclick="filterSearch(event)" class=
+            {% if forloop.counter0 == 0 %}
+            <a name="filterBtn" data-data="0" id="facet-{{forloop.counter0}}" onclick="filterSearch(event)"
+               class= "check{{forloop.counter0}} cursor {% if not areaf %} selected {% endif %}">All
+                </a>
+
+            {% endif %}
+
+            <a name="filterBtn"  data-data="{{facet.id}}" id="facet-{{forloop.counter}}" onclick="filterSearch(event)" class=
                     {% if facet.label == 'Others' %}
             {% if facet.id in areaf %}" selected"{% endif %}
-            check{{forloop.counter}}
+             check{{forloop.counter}} cursor
             {% else %}
             {% if facet.id|stringformat:"i" in areaf %}
-            "check{{forloop.counter}} selected"
+            "check{{forloop.counter}} cursor selected"
             {% else %}
-                    "check{{forloop.counter}}"
+                    "check{{forloop.counter}} cursor"
             {% endif %}
             {% endif %}>{{facet.label}}
                 </a>
@@ -174,7 +187,9 @@
             prefetchedFuncArea = '{{ recmnd_func_area }}',
             prefetchedSkills = '{{ recmnd_skills }}',
             categoryUrlSet = {{ category_url_set|safe }}
-            productUrlSet = {{ product_url_set|safe|safe }}
+            productUrlSet = {{ product_url_set|safe }}
+            funcArea    = '{{recmnd_func_area|safe}}'
+            
 
     </script>
 {% endblock js_section %}
