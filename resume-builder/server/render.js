@@ -21,13 +21,13 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
   </Provider>);
 
 
-  const cssUrl = isMobile ? `${staticUrl}react/dist/mobile/main-${timeStamp}.css` : `${staticUrl}react/dist/desktop/main-${timeStamp}.css`;
-  const jsBuildUrl = isMobile ? `${staticUrl}react/dist/mobile/main-${timeStamp}.js` : `${staticUrl}react/dist/desktop/main-${timeStamp}.js`;
+   const cssUrl = isMobile ? `${staticUrl}react/dist/mobile/main-${timeStamp}.css` : `${staticUrl}react/dist/desktop/main-${timeStamp}.css`;
+   const jsBuildUrl = isMobile ? `${staticUrl}react/dist/mobile/main-${timeStamp}.js` : `${staticUrl}react/dist/desktop/main-${timeStamp}.js`;
   const viewPort = isMobile ? `width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no`
     : "width=device-width, initial-scale=1, shrink-to-fit=no";
 
    //const cssUrl = isMobile ? `dist/main-mobile.css` : `dist/main-desktop.css`,
-   // jsBuildUrl = isMobile ? `dist/main-mobile.js` : `dist/main-desktop.js`;
+   //jsBuildUrl = isMobile ? `dist/main-mobile.js` : `dist/main-desktop.js`;
 
   // Meta descriptions 
 
@@ -69,7 +69,7 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
               "name": "Shine Learning",
               "alternateName": "Resume Builder",
               "url": "https://learning.shine.com/",
-              "logo": "https://static1.shine.com/l/s/shinelearn/images/sprite.png?1779d6917b6e"
+              "logo": "https://static1.shine.com/l/s/shinelearn/images/logo.png"
             }
          </script>
       </head>
