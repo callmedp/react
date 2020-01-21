@@ -35,8 +35,11 @@ class Command(BaseCommand):
         # run for following days
         days_to_consider = [7, 3, 0, -3]
         logging.getLogger('info_log').info("Starting service expiry mail send.")
-        for day in days_to_consider:
-            service_expiry_reminder(day)
+        try:
+            for day in days_to_consider:
+                service_expiry_reminder(day)
+        except Exception as e:
+            logging('error_log').error('Error occured :- {}'.format(str(e)))
 
 
 def check_if_going_to_expire(oi, days=0):
