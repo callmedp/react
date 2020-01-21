@@ -35,7 +35,7 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
 
   return `
   <!DOCTYPE html>
-      <html lang="en">
+      <html lang="en" itemscope itemtype="http://www.schema.org/WebPage">
       <head>
         <base href="/resume-builder/" />
          <title>${context.title}</title>
@@ -50,6 +50,7 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
          <meta property="fb:profile_id" content="282244838633660">
          <meta property="og:image" content="https://static1.shine.com/l/s/react/assets/images/home-banner-slider.png">
          <meta itemprop="name" content="${context.title}">
+         <meta itemprop="url" content="https://learning.shine.com/resume-builder/">
          <meta itemprop="description" content="Online Resume Builder, Make your resume with our easy-to-use templates & pro resume tips from experts. Select, Personalize/Customize any built-in resume templates for free download.">
          <link rel="canonical" href="${siteDomain}${pathname}">
          <meta charset="UTF-8">
@@ -57,9 +58,19 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
          <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
               integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
               crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" charset="UTF-8"
+         <link rel="stylesheet" type="text/css" charset="UTF-8"
               href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"/>
         ${desktopCssUrl}
+         <script type="application/ld+json">
+            {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Shine Learning",
+              "alternateName": "Resume Builder",
+              "url": "https://learning.shine.com/",
+              "logo": "https://static1.shine.com/l/s/shinelearn/images/sprite.png?1779d6917b6e"
+            }
+         </script>
       </head>
       <body>
       <div id="react-app">${content}</div>
