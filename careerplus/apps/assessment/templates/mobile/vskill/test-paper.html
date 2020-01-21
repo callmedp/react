@@ -178,7 +178,7 @@
             <p class="fs-16">You want to submit the test?</p>
             <div class="sure--btn-warp">
             <button class="btn btn-slg btn-round-30 btn-blue btn-lg mt-20" onclick="submitTestFinal();">Submit</button>
-            <button class="btn btn-slg btn-round-30 btn-outline btn-lg mt-20 close" >Cancel</button>
+            <button class="btn btn-slg btn-round-30 btn-outline btn-lg mt-20" >Cancel</button>
             </div>
             
         </div>
@@ -269,9 +269,6 @@
      $("#check_results").addClass("open");
     });
 
-    $(".close").click(function(){
-     $("#submitPermissionModal").removeClass("show");
-    });
 
     // $('#btn-more-question').click(function(){
     //     $('#more_question').toggleClass('open');
@@ -623,6 +620,9 @@ $(window).scroll(function () {
   }
 });
 
+    $(".close, .close-big").click(function(){
+     $("#submitPermissionModal").removeClass("show");
+    });
 
 </script>
 {% endblock js_section %}
