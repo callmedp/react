@@ -28,11 +28,13 @@ days_to_campign_name = {
     -3: 'renewalafter3days',
 }
 
+COUNT = 0
 class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         # run for following days
         days_to_consider = [7, 3, 0, -3]
+        logging.getLogger('info_log').info("Starting service expiry mail send.")
         for day in days_to_consider:
             service_expiry_reminder(day)
 
@@ -79,6 +81,7 @@ def get_expiry_date(oi):
 
 
 def service_expiry_reminder(days):
+    global COUNT
     for val in SERVICES.values():
         if days >= 0:
             ois = OrderItem.objects.filter(**val)
@@ -92,10 +95,12 @@ def service_expiry_reminder(days):
             expire_soon = check_if_going_to_expire(oi, days)
             if not expire_soon:
                 continue
+            COUNT += 1
             send_mail_for_service(oi, days)
 
 
 def send_mail_for_service(oi, days):
+    global COUNT
     if days >= 0:
         mail_type = "SERVICE_EXPIRY_REMINDER"
         subject = "Your service is expiring soon"
@@ -142,3 +147,5 @@ def send_mail_for_service(oi, days):
             logging.getLogger('error_log').error(
                 "%s - %s - %s" % (
                     str(to_emails), str(e), str(mail_type)))
+
+    logging.getLogger('info_log').info("{} mails has been sent for service expiry reminder.".format(COUNT))
