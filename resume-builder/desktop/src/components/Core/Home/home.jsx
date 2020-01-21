@@ -28,7 +28,7 @@ class Home extends Component {
             'scrolled': false,
             'token': '',
             'login': ''
-        }        
+        }
         const values = queryString.parse(this.props.location.search);
         const token = (values && values.token) || '', login = (values && values.login) || '';
 
@@ -79,7 +79,7 @@ class Home extends Component {
     }
     async componentDidMount() {
 
-        if ( typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
+        if (typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
             document.getElementsByClassName('chat-bot')[0].style.display = 'none';
         }
 
@@ -100,7 +100,7 @@ class Home extends Component {
                     console.log(e.message);
                 }
                 // redirect back from where it comes
-               
+
             }
             else {
                 await this.props.showLoginModal()
@@ -325,10 +325,10 @@ class Home extends Component {
                             Shine.com, Shine Learning has a vision to up-skill the Indian talent pool to adapt to the
                             changing job market.</p>
                         <ul>
-                            <li>Explore courses</li>
-                            <li>Job assistance</li>
-                            <li>Free rescources</li>
-                            <li>Talent economy</li>
+                            <li><a href="https://learning.shine.com/" className="hyper-link-urls" >Explore courses</a></li>
+                            <li> <a href="https://learning.shine.com/services/resume-writing/63/" className ="hyper-link-urls">Job assistance</a></li>
+                            <li>  <a href="https://learning.shine.com/cms/resume-format/1/" className ="hyper-link-urls" >Free rescources</a></li>
+                            <li><a href="https://learning.shine.com/talenteconomy/" className ="hyper-link-urls">Talent economy</a></li>
                         </ul>
                     </div>
                 </section>
