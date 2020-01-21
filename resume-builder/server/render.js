@@ -26,8 +26,8 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
   const viewPort = isMobile ? `width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no`
     : "width=device-width, initial-scale=1, shrink-to-fit=no";
 
-  // const cssUrl = isMobile ? `dist/main-mobile.css` : `dist/main-desktop.css`,
-  //   jsBuildUrl = isMobile ? `dist/main-mobile.js` : `dist/main-desktop.js`;
+   //const cssUrl = isMobile ? `dist/main-mobile.css` : `dist/main-desktop.css`,
+   // jsBuildUrl = isMobile ? `dist/main-mobile.js` : `dist/main-desktop.js`;
 
   // Meta descriptions 
 
@@ -80,20 +80,29 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
         window.config = {}
         config.staticUrl = "${staticUrl}" 
         config.siteDomain = "${siteDomain}"
-        document.onkeydown = function(e) {
-          if(event.keyCode == 123) {
+      </script>
+      <script>
+          document.oncontextmenu = document.body.oncontextmenu = function() {return false;}
+          document.onkeydown = function(e) {
+            if(e.keyCode == 123) {
+                return false;
+            }
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)){
+                return false;
+            }
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)){
+                return false;
+            }
+            if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)){
+                return false;
+            }
+            if(e.metaKey && e.altKey && e.keyCode == 'I'.charCodeAt(0) ){
               return false;
-          }
-          if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)){
+            }
+            if(e.metaKey && e.altKey && e.keyCode == 'J'.charCodeAt(0) ){
               return false;
+            }
           }
-          if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)){
-              return false;
-          }
-          if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)){
-              return false;
-          }
-      }
       </script>
       <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
