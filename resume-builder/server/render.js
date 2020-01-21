@@ -40,6 +40,7 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
         <base href="/resume-builder/" />
          <title>${context.title}</title>
          <link type="text/css" href="${cssUrl}" rel="stylesheet" />
+         <link rel="shortcut icon" href="${staticUrl}shinelearn/images/fav_icon.png"/>
          <meta name="viewport" content="${viewPort}"/>
          <meta name="description" content="Online Resume Builder, Make your resume with our easy-to-use templates & pro resume tips from experts. Select, Personalize/Customize any built-in resume templates for free download.">
          <meta property="og:title" content="${context.title}">
