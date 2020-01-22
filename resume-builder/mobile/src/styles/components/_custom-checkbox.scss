@@ -72,3 +72,13 @@
 .chatflow .responses li.feedback-response-list .input-body label span {
     display:none !important;
 }
+
+.form-wrap {
+  [type="checkbox"]:checked + label:after,
+  [type="checkbox"]:checked + label:before,
+  [type="checkbox"]:not(:checked) + label:after,
+  [type="checkbox"]:not(:checked) + label:before {
+    border: 0 none;
+  }
+}
+
