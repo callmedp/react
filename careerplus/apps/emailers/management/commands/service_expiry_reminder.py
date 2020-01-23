@@ -78,7 +78,7 @@ def get_expiry_date(oi):
     duration_dict = {
         'service': getattr(oi.product.attr, S_ATTR_DICT.get('FD'), 180),
     }
-    duration_days = duration_dict.get(oi.product.product_class.name)
+    duration_days = duration_dict.get(oi.product.product_class.name.lower())
     expiration_date = activation_date + datetime.timedelta(days=duration_days)
     return expiration_date
 
