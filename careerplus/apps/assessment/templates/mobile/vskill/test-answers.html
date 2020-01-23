@@ -156,7 +156,7 @@
                 <li><span></span>Answers & Detailed Explanations</li>
             </ul>
 
-            <a class="btn btn-round-30 btn-blue btn-lg mt-20" id="viewPaidTest" href="{{object.product.get_absolute_url}}">View test</a>
+            <a class="btn btn-round-30 btn-blue btn-lg mt-20 d-inline-block" id="viewPaidTest" href="{{object.product.get_absolute_url}}">View test</a>
        </div>
     </div>
 </div><!-- /. modal -->
@@ -425,7 +425,9 @@ if(flag){
 }
  });
 
-
+    $(".close-big").click(function(){
+     $("#testLimit").hide();
+    });
 
 
 </script>
