@@ -10,7 +10,7 @@ from weakref import ref
 #inter app imports
 
 #third party imports
-from kombu.five import buffer_t
+from vine.five import buffer_t
 from celery.worker import state
 from celery.utils.time import timezone
 from celery.utils.log import get_logger
