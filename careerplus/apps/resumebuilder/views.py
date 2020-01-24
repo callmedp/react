@@ -26,7 +26,7 @@ class FreeResumeDownload(View):
                                         free_resume_downloads})
 
     def post(self,request,*args,**kwargs):
-        cache.set('free_resume_downloads',request.POST.get('free_downloads',1))
+        cache.set('free_resume_downloads',request.POST.get('free_downloads',0),timeout=None)
         free_resume_downloads = cache.get('free_resume_downloads')
         return render(request, self.template_name, {'free_resume_downloads':
                                         free_resume_downloads,'success':True})
