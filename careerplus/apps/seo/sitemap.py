@@ -240,6 +240,12 @@ class PracticeTestSubCategorySitemap(CustomSitemap):
     def lastmod(self, item):
         return datetime.date.today() - datetime.timedelta(1)
 
+    
+
+# class ResumeBuilderSitemap(CustomSitemap):
+
+
+
 
 
 
