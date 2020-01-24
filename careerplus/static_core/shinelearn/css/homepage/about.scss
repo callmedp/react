@@ -8,10 +8,12 @@
 	background: url(#{$imagePath}images/about-header-bg.jpg) no-repeat center top; 
 	background-size: cover;
 	display: block;
+	height: 191px;
 }
 
 .about-heading {
 	display: table-cell;
+	padding-top:100px;
 
 	h1 {
 		display: block;

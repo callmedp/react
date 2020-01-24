@@ -109,14 +109,14 @@ Payment Summary - Shine Learning
             </span>
 
             <strong class="col-sm-4 col-md-3">Rs.
-              {% if item.product_class == 'course' or item.type_flow == 17 and  variations|length  %}
+              {% if item.product_class == 'course' and variations|length  or item.type_flow == 17 and  variations|length  %}
               {{variations.0.price}} {% else %} {{item.price}} {% endif %}/-
             </strong>
           </div><!-- // row -->
 
           <form role="form" id="cart_remove_form{{item.id}}">{% csrf_token %}
             <input type="hidden" name="product_reference"
-              value="{% if item.product_class == 'course' or item.type_flow == 17 and variations|length %}{{variations.0.reference}}{% else %}{{item.reference}}{% endif %}">
+              value="{% if item.product_class == 'course' and variations|length  or item.type_flow == 17 and variations|length %}{{variations.0.reference}}{% else %}{{item.reference}}{% endif %}">
             <span class="close-icon" onclick="removeFromCartMobile('{{item.id}}')"
               id="id-remove-cart{{item.id}}"></span>
           </form>
