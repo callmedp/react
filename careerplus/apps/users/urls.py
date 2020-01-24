@@ -1,4 +1,6 @@
-from django.conf.urls import url,include
+# from django.conf.urls import url,include
+
+from django.urls import re_path,include
 from users.views import (
     DownloadBoosterResume, ForgotPasswordResetView,
     ForgotHtmlView, ForgotPasswordEmailView,
@@ -7,30 +9,30 @@ from users.views import (
 
 app_name = 'users'
 urlpatterns = [
-    url(r'^resume/download/$',
+    re_path(r'^resume/download/$',
         DownloadBoosterResume.as_view(), name='download_booster_resume'),
-    url(r'^update/password/$',
+    re_path(r'^update/password/$',
         ForgotPasswordResetView.as_view(), name='update-password'),
-    url(r'^forgot/html/$',
+    re_path(r'^forgot/html/$',
         ForgotHtmlView.as_view(), name='forgot-html'),
-    url(r'^submit/forgot-email/$',
+    re_path(r'^submit/forgot-email/$',
         ForgotPasswordEmailView.as_view(), name='forgot-email-sent'),
-    url(r'^social/login/$',
+    re_path(r'^social/login/$',
         SocialLoginView.as_view(), name='social-login'),
-    url(r'^linkedin/code/$',
+    re_path(r'^linkedin/code/$',
         LinkedinLoginView.as_view(), name='linkedin-code'),
 
-    url(r'^generate-writer-invoice/$',
+    re_path(r'^generate-writer-invoice/$',
         GenerateWriterInvoiceView.as_view(),
         name='generate-writer-invoice'),
 
-    url(r'^download-writer-invoice/$',
+    re_path(r'^download-writer-invoice/$',
         DownloadWriterInvoiceView.as_view(),
         name='download-writer-invoice'),
 
-    url(r'^download-monthly-writer-invoice/$',
+    re_path(r'^download-monthly-writer-invoice/$',
         DownloadMonthlyWriterInvoiceView.as_view(),
         name='download-monthly-writer-invoice'),
-    url(r'^api/', include('users.api.urls', namespace='api')),
+    re_path(r'^api/', include('users.api.urls', namespace='api')),
 
 ]

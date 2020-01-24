@@ -1,30 +1,31 @@
-from django.conf.urls import url
+# from django.conf.urls import url
+from django.urls import re_path
 from . import views
 app_name = 'console'
 urlpatterns = [
 
     # partner inbox Queue
-    url(r'^generate-autologintoken/$',
+    re_path(r'^generate-autologintoken/$',
         views.GenerateAutoLoginTask.as_view(),
         name='generate-autologintoken'),
 
-    url(r'^generate-encrypted-urls-for-mailer/$',
+    re_path(r'^generate-encrypted-urls-for-mailer/$',
         views.GenerateEncryptedURLSForMailer.as_view(),
         name='generate-encrypted-urls'),
 
-    url(r'^tasklist/$',
+    re_path(r'^tasklist/$',
         views.TaskListView.as_view(),
         name='tasklist'),
 
-    url(r'^download-task/$',
+    re_path(r'^download-task/$',
         views.DownloadTaskView.as_view(),
         name='download-task'),
 
-    url(r'^download-product-list/$',
+    re_path(r'^download-product-list/$',
         views.DownloadProductListView.as_view(),
         name='download-product-list'),
 
-    url(r'^generate-pixel-tracker/$',
+    re_path(r'^generate-pixel-tracker/$',
         views.GeneratePixelTracker.as_view(),
         name='generate-pixel-tracker'),
 

@@ -14,7 +14,8 @@ from kombu.five import buffer_t
 from celery.worker import state
 from celery.utils.time import timezone
 from celery.utils.log import get_logger
-from kombu.async.timer import to_timestamp
+# from kombu.async.timer import to_timestamp
+from kombu.asynchronous.timer import to_timestamp
 from celery.worker.request import Request
 from celery.worker.state import task_reserved
 from celery.worker.strategy import proto1_to_proto2

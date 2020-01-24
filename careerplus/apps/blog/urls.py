@@ -1,4 +1,5 @@
-from django.conf.urls import url
+# from django.conf.urls import url
+from django.urls import re_path
 
 from .views import BlogLandingPageView, BlogLandingAjaxView,\
     BlogDetailView, BlogDetailAjaxView,\
@@ -9,30 +10,30 @@ from . import mobile_view
 
 app_name ='blog'
 urlpatterns = [
-    url(r'^$', BlogLandingPageView.as_view(), name='blog-landing'),
+    re_path(r'^$', BlogLandingPageView.as_view(), name='blog-landing'),
 
-    url(r'^category-wise-loading/$', BlogLandingAjaxView.as_view(),
+    re_path(r'^category-wise-loading/$', BlogLandingAjaxView.as_view(),
         name='blog-landing-load'),
 
-    url(r'^tags/(?P<slug>[-\w]+)/$', BlogTagListView.as_view(),
+    re_path(r'^tags/(?P<slug>[-\w]+)/$', BlogTagListView.as_view(),
         name='articles-by-tag'),
 
-    url(r'^ajax/article-detail-loading/$', BlogDetailAjaxView.as_view(),
+    re_path(r'^ajax/article-detail-loading/$', BlogDetailAjaxView.as_view(),
         name='article-detail-loading'),
 
-    url(r'^show-comment-box/$', ShowCommentBoxView.as_view(),
+    re_path(r'^show-comment-box/$', ShowCommentBoxView.as_view(),
         name='article-show-comment-box'),
 
-    url(r'^load-more-comment/$', LoadMoreCommentView.as_view(),
+    re_path(r'^load-more-comment/$', LoadMoreCommentView.as_view(),
         name='article-load-more-comment'),
 
-    url(r'^(?P<slug>[-\w]+)/(?P<pk>\d+)/$',
+    re_path(r'^(?P<slug>[-\w]+)/(?P<pk>\d+)/$',
         BlogDetailView.as_view(), name='articles-deatil'),
 
-    url(r'^login-to-comment/$',
+    re_path(r'^login-to-comment/$',
         LoginToCommentView.as_view(), name='login-to-comment'),
 
-    url(r'^register-to-comment/$',
+    re_path(r'^register-to-comment/$',
         RegisterToCommentView.as_view(), name='register-to-comment'),
 
 ]
@@ -41,13 +42,13 @@ urlpatterns = [
 # mobile page url
 
 urlpatterns += [
-    url(r'^categories/$', mobile_view.ArticleCategoryListMobile.as_view(),
+    re_path(r'^categories/$', mobile_view.ArticleCategoryListMobile.as_view(),
         name='article-mobile-categories'),
-    url(r'^lodemore-articlebycategory/$',
+    re_path(r'^lodemore-articlebycategory/$',
         mobile_view.ArticleLoadMoreMobileView.as_view(),
         name='lodemore-articlebycategory'),
 
-    url(r'^lodemore-articlebytag/$',
+    re_path(r'^lodemore-articlebytag/$',
         mobile_view.ArticleLoadMoreTagView.as_view(),
         name='lodemore-articlebytag'),
 ]

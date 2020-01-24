@@ -1,4 +1,5 @@
-from django.conf.urls import url
+# from django.conf.urls import url
+from django.urls import re_path
 
 #internal imports
 from .views import GetUsersView
@@ -9,6 +10,6 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 app_name = 'users'
 urlpatterns = [
-    url(r'^get-users/$', GetUsersView.as_view()),
+    re_path(r'^get-users/$', GetUsersView.as_view()),
 
 ]

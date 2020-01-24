@@ -640,7 +640,7 @@ class GenerateWriterInvoiceView(View):
     def get(self, request, *args, **kwargs):
         try:
             user = request.user
-            if user.is_authenticated():
+            if user.is_authenticated:
                 data = WriterInvoiceMixin().save_writer_invoice_pdf(
                     user=user)
                 if data.get('error'):
@@ -664,7 +664,7 @@ class DownloadWriterInvoiceView(View):
             import os
             user = request.user
             invoice = None
-            if user.is_authenticated() and user.userprofile and user.userprofile.user_invoice:
+            if user.is_authenticated and user.userprofile and user.userprofile.user_invoice:
                 invoice = user.userprofile.user_invoice
             if invoice:
                 file_path = invoice.name

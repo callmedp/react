@@ -344,7 +344,7 @@ class DraftAdminView(TemplateView):
         try:
             oi = OrderItem.objects.get(pk=orderitem_id)
             op_id = oi.orderitemoperation_set.get(pk=op_id)
-            if self.request.user.is_anonymous():
+            if self.request.user.is_anonymous:
                 return HttpResponseForbidden()
             if not self.request.user:
                 return HttpResponseForbidden()

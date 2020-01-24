@@ -220,7 +220,7 @@ class BaseSearch(object):
 
         extra_params = self.extra_params.copy()
 
-        # if self.user.is_authenticated():
+        # if self.user.is_authenticated:
         #     extra_params.update({"cid": str(self.user.pk)})
 
         if 'no_spelling' in self.params and self.params.get('no_spelling') == True:
