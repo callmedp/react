@@ -313,6 +313,7 @@ class CartMixin(object):
                     sqs = sqs[0]
                     main_id = m_prod.id
                     product_class = sqs.pPc
+                    product_type_flow = sqs.pTF
                     name = sqs.pHd if sqs.pHd else sqs.pNm
                     vendor_name = sqs.pPvn
                     price = round(Decimal(sqs.pPinb), 2)
@@ -421,6 +422,7 @@ class CartMixin(object):
                         "combos": combo_list,
                         "is_available": is_available,
                         "delivery_types": m_prod.product.get_delivery_types(),
+                        "type_flow": product_type_flow
                     }
                     cart_items.append(data)
 
