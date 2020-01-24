@@ -6,6 +6,7 @@ from django.conf import settings
 from shop.models import Product, Category, ProductCategory
 from cms.models import Page
 from blog.models import Blog, Category as BlogCategory, Author
+from resumebuilder.models import Candidate
 from assessment.models import Test
 
 EXCULDE_CATEGORY = [247, 176, 170, 145, 139, 87, 147, 132, 76, 73, 69, 65, 61, 249]
@@ -139,7 +140,7 @@ class TalentEconomySitemap(CustomSitemap):
         return 0.9
 
     def items(self):
-        return Blog.objects.filter(status=1, visibility=2)
+        return Blog.objects.filter(status=1, visibility=2)  
 
     def lastmod(self, item):
         return datetime.date.today() - datetime.timedelta(1)
@@ -242,7 +243,22 @@ class PracticeTestSubCategorySitemap(CustomSitemap):
 
     
 
-# class ResumeBuilderSitemap(CustomSitemap):
+class ResumeBuilderSitemap(CustomSitemap):
+    changefreq = 'daily'
+    
+    def priority(self,item):
+        return 0.8
+
+    def items(self):
+        return [Candidate.objects.filter().first()]
+
+    def lastmod(self,item):
+        return datetime.date.today() - datetime.timedelta(1)        
+
+
+
+
+    
 
 
 

@@ -17,6 +17,7 @@ sitemap: https://learning.shine.com/cms_sitemap.xml
 sitemap: https://learning.shine.com/job_services_sitemap.xml
 sitemap: https://learning.shine.com/te_sitemap.xml
 sitemap: https://learning.shine.com/practice-tests.xml
+sitemap: https://learning.shine.com/builder.xml
 
 {% else %}
 User-agent: *

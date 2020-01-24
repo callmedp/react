@@ -86,7 +86,7 @@ practicetest_sitemap = {
 }
 
 builder_sitemap = {
-    'home' : ResumeBuilderSitemap
+    'resume-builder' : ResumeBuilderSitemap
 }
 
 # Library Patches
@@ -125,12 +125,10 @@ urlpatterns += [
         cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
             'sitemaps': practicetest_sitemap,
             'template_name': 'sitemap.xml'}, name='sitemap'),
-    url(r'^resume-builder\.xml$',
+    url(r'^builder\.xml$',
         cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
             'sitemaps': builder_sitemap,
             'template_name': 'sitemap.xml'}, name='sitemap'),
-    )
-
     url(r'^course/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='course-detail'),
 
