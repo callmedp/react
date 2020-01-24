@@ -85,7 +85,7 @@
                     <div class="payment__summary__item--wrap">
                         <p class="payment__summary__item--course-title">{{item.name}}
                             <strong>Rs.
-                                {% if item.product_class == 'course' or item.type_flow == 17 and variations|length %}
+                                {% if item.product_class == 'course' and variations|length or item.type_flow == 17 and variations|length %}
                                 {{variations.0.price}} {% else %} {{item.price}} {% endif %} 
                             </strong>
                             <span id="delivery-charge{{item.id}}">{%if delivery_service.inr_price %}Rs. {{delivery_service.inr_price}}/-{% endif %}</span>
@@ -160,7 +160,7 @@
                         {% endif %}
                     </div>
                     <input type="hidden" name="product_reference"
-                        value="{% if item.product_class == 'course' or item.type_flow == 17 and variations|length  %}{{variations.0.reference}}{% else %}{{item.reference}}{% endif %}">
+                        value="{% if item.product_class == 'course' and variations|length  or item.type_flow == 17 and variations|length  %}{{variations.0.reference}}{% else %}{{item.reference}}{% endif %}">
 
                     <span class="payment__summary__item--close" onclick="removeFromCartMobile('{{item.id}}')">+</span>
                 </li>

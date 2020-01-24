@@ -657,8 +657,8 @@ class PaymentSummaryView(TemplateView, CartMixin):
         context.update({
             "cart_items": cart_items,
             "cart_contain_items" : True if len(cart_items)  else  False
-        })
-
+        }) 
+        
         return context
 
 
