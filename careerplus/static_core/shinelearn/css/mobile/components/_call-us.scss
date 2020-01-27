@@ -186,6 +186,7 @@
   z-index: 999;
   height: 100vh;
   display: none;
+  transition: all 0.3s;
 
 
   &__wrap {
@@ -264,6 +265,11 @@
 }
 .close:after {
   transform: rotate(-45deg);
+}
+
+.enquire-focus{
+  transform: translateY(-130px);
+  height:130vh;
 }
 
 

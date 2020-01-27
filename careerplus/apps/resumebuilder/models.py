@@ -65,7 +65,7 @@ class CandidateProfile(AbstractAutoDate):
 
     @property
     def free_resume_downloads(self):
-        return cache.get('free_resume_downloads', 1)
+        return cache.get('free_resume_downloads')
 
     @property
     def entity_id_data_mapping(self):

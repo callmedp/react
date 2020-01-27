@@ -164,6 +164,9 @@ class ArticleChangeForm(forms.ModelForm):
         to_field_name='name', widget=forms.SelectMultiple(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
+    position = forms.IntegerField(label=("Position:"),
+        widget=forms.TextInput(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
     # sites = forms.ModelMultipleChoiceField(label=("Sites:"),
     #     queryset=Site.objects.all(), widget=forms.SelectMultiple(
     #     attrs={'class': 'form-control col-md-7 col-xs-12'}))
@@ -206,7 +209,8 @@ class ArticleChangeForm(forms.ModelForm):
         fields = ['name', 'visibility', 'status', 'image', 'image_alt',
             'p_cat', 'content', 'sec_cat', 'tags', 'allow_comment', 'summary',
             'url', 'heading', 'title', 'slug', 'meta_desc', 'meta_keywords',
-            'author', 'speakers', 'start_date', 'end_date', 'venue', 'city', 'address', 'sponsor_img']
+            'author', 'speakers', 'start_date', 'end_date', 'venue', 'city', 'address', 'sponsor_img',
+            'position']
 
         widgets = {
             'url': forms.TextInput(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '100'}),
@@ -373,6 +377,15 @@ class ArticleChangeForm(forms.ModelForm):
                     self.request, messages.ERROR, 'Please fill the required fields.')
             raise forms.ValidationError("Address is required.")
         return address
+
+    def clean_position(self):
+        position = self.cleaned_data.get('position', '9')
+        position = int(position)
+        if position > 9:
+            messages.add_message(
+                self.request, messages.ERROR, 'Please enter Value less than 10')
+            raise forms.ValidationError("Please enter Value less than 10")
+        return position
 
 
 class TagAddForm(forms.ModelForm):

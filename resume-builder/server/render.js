@@ -21,13 +21,13 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
   </Provider>);
 
 
-  const cssUrl = isMobile ? `${staticUrl}react/dist/mobile/main-${timeStamp}.css` : `${staticUrl}react/dist/desktop/main-${timeStamp}.css`;
-  const jsBuildUrl = isMobile ? `${staticUrl}react/dist/mobile/main-${timeStamp}.js` : `${staticUrl}react/dist/desktop/main-${timeStamp}.js`;
+   const cssUrl = isMobile ? `${staticUrl}react/dist/mobile/main-${timeStamp}.css` : `${staticUrl}react/dist/desktop/main-${timeStamp}.css`;
+   const jsBuildUrl = isMobile ? `${staticUrl}react/dist/mobile/main-${timeStamp}.js` : `${staticUrl}react/dist/desktop/main-${timeStamp}.js`;
   const viewPort = isMobile ? `width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no`
     : "width=device-width, initial-scale=1, shrink-to-fit=no";
 
-  // const cssUrl = isMobile ? `dist/main-mobile.css` : `dist/main-desktop.css`,
-  //   jsBuildUrl = isMobile ? `dist/main-mobile.js` : `dist/main-desktop.js`;
+   //const cssUrl = isMobile ? `dist/main-mobile.css` : `dist/main-desktop.css`,
+   //jsBuildUrl = isMobile ? `dist/main-mobile.js` : `dist/main-desktop.js`;
 
   // Meta descriptions 
 
@@ -35,11 +35,12 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
 
   return `
   <!DOCTYPE html>
-      <html lang="en">
+      <html lang="en" itemscope itemtype="http://www.schema.org/WebPage">
       <head>
         <base href="/resume-builder/" />
          <title>${context.title}</title>
          <link type="text/css" href="${cssUrl}" rel="stylesheet" />
+         <link rel="shortcut icon" href="${staticUrl}shinelearn/images/fav_icon.png"/>
          <meta name="viewport" content="${viewPort}"/>
          <meta name="description" content="Online Resume Builder, Make your resume with our easy-to-use templates & pro resume tips from experts. Select, Personalize/Customize any built-in resume templates for free download.">
          <meta property="og:title" content="${context.title}">
@@ -50,6 +51,7 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
          <meta property="fb:profile_id" content="282244838633660">
          <meta property="og:image" content="https://static1.shine.com/l/s/react/assets/images/home-banner-slider.png">
          <meta itemprop="name" content="${context.title}">
+         <meta itemprop="url" content="https://learning.shine.com/resume-builder/">
          <meta itemprop="description" content="Online Resume Builder, Make your resume with our easy-to-use templates & pro resume tips from experts. Select, Personalize/Customize any built-in resume templates for free download.">
          <link rel="canonical" href="${siteDomain}${pathname}">
          <meta charset="UTF-8">
@@ -57,9 +59,19 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
          <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
               integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
               crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" charset="UTF-8"
+         <link rel="stylesheet" type="text/css" charset="UTF-8"
               href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"/>
         ${desktopCssUrl}
+         <script type="application/ld+json">
+            {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Shine Learning",
+              "alternateName": "Resume Builder",
+              "url": "https://learning.shine.com/",
+              "logo": "https://static1.shine.com/l/s/shinelearn/images/logo.png"
+            }
+         </script>
       </head>
       <body>
       <div id="react-app">${content}</div>
@@ -68,20 +80,29 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
         window.config = {}
         config.staticUrl = "${staticUrl}" 
         config.siteDomain = "${siteDomain}"
-        document.onkeydown = function(e) {
-          if(event.keyCode == 123) {
+      </script>
+      <script>
+          document.oncontextmenu = document.body.oncontextmenu = function() {return false;}
+          document.onkeydown = function(e) {
+            if(e.keyCode == 123) {
+                return false;
+            }
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)){
+                return false;
+            }
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)){
+                return false;
+            }
+            if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)){
+                return false;
+            }
+            if(e.metaKey && e.altKey && e.keyCode == 'I'.charCodeAt(0) ){
               return false;
-          }
-          if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)){
+            }
+            if(e.metaKey && e.altKey && e.keyCode == 'J'.charCodeAt(0) ){
               return false;
+            }
           }
-          if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)){
-              return false;
-          }
-          if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)){
-              return false;
-          }
-      }
       </script>
       <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

@@ -21,7 +21,7 @@ class Home extends Component {
             'token': '',
             'login': ''
         }
-       
+
         const values = queryString.parse(this.props.location.search);
         this.scrollTo = this.scrollTo.bind(this);
         const token = (values && values.token) || '', login = (values && values.login) || '';
@@ -32,7 +32,7 @@ class Home extends Component {
     }
 
     async componentDidMount() {
-        
+
         if (typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
             document.getElementsByClassName('chat-bot')[0].style.display = 'none';
         }
@@ -264,10 +264,11 @@ class Home extends Component {
                     </div>
 
                     <ul className="shine-learning__items">
-                        <li className="shine-learning__item">Explore courses</li>
-                        <li className="shine-learning__item">Job assistance</li>
-                        <li className="shine-learning__item">Free rescources</li>
-                        <li className="shine-learning__item">Talent economy</li>
+                        <li className="shine-learning__item">
+                            <a className="shine-learning__anchortag" href="https://learning.shine.com/">Explore courses</a></li>
+                        <li className="shine-learning__item shine-learning__anchortag"><a className="shine-learning__anchortag" href="https://learning.shine.com/services/resume-writing/63/">Job assistance</a></li>
+                        <li className="shine-learning__item shine-learning__anchortag"><a className = "shine-learning__anchortag" href="https://learning.shine.com/cms/resume-format/1/">Free rescources</a></li>
+                        <li className="shine-learning__item shine-learning__anchortag"><a className ="shine-learning__anchortag" href="https://learning.shine.com/talenteconomy/">Talent economy</a></li>
                     </ul>
                 </section>
 

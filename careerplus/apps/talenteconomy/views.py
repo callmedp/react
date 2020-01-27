@@ -80,10 +80,15 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
             list_article = render_to_string('include/article-load-more.html', {
                 "page_obj": page_obj,
                 "SITEDOMAIN": settings.SITE_DOMAIN})
-
-        top_article_list = Blog.objects.filter(
-            status=1, visibility=2).select_related('p_cat', 'author')[:9]
-
+        top_article_list = list(Blog.objects.filter(
+            status=1, visibility=2).select_related('p_cat', 'author').exclude(position__gt=0))[:9]
+        # use position of page
+        top_article_list_with_position = list(Blog.objects.filter(
+            status=1, visibility=2, position__gt=0).order_by('position').select_related('p_cat', 'author'))[:9]
+        if len(top_article_list_with_position) > 0:
+            [top_article_list.insert((article.position - 1), article)
+                for article in top_article_list_with_position]
+        top_article_list = top_article_list[:9]
         authors = Author.objects.filter(
             is_active=True, blog__visibility=2,
             blog__status=1).annotate(

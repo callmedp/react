@@ -9,10 +9,11 @@ Common function used in this file:
     a) get analytics script
     b) ga event raise
 5. showHideElement => //show or remove a element with fadeIn and fadeOut animation from DOM
-
+6. needHelpFormFocus => Focus class added when clicking an element in needHelpForm
 */
 
 $(document).ready(()=>{
+    needHelpFormFocus();
 })
 
 /*
@@ -91,4 +92,13 @@ const showHideElement = (showElement,id) => {
 	showElement ? $(`#${id}`).delay(100).fadeIn() : $(`#${id}`).delay(100).fadeOut()
 }
 
+
+// move elements up on focus in needHelpForm
+const needHelpFormFocus = () =>{
+    $("#enquire").find('input').focus(function(){
+        $("#enquire").addClass("enquire-focus")     
+    }).blur(function(){
+        $("#enquire").removeClass("enquire-focus")
+    })
+}
 
