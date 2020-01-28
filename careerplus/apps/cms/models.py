@@ -27,14 +27,14 @@ class IndexerWidget(AbstractCommonModel):
 class ColumnHeading(models.Model):
     column = models.PositiveIntegerField(choices=COLUMN_TYPE)
     name = models.CharField(max_length=255)
-    indexer = models.ForeignKey(IndexerWidget,on_delete=models.PROTECT)
+    indexer = models.ForeignKey(IndexerWidget,on_delete=models.CASCADE)
 
     def __str__(self):
         return '%s' % self.name
 
 
 class IndexColumn(models.Model):
-    indexer = models.ForeignKey(IndexerWidget,on_delete=models.PROTECT)
+    indexer = models.ForeignKey(IndexerWidget,on_delete=models.CASCADE)
     column = models.PositiveIntegerField(choices=COLUMN_TYPE)
     url = models.CharField(
         max_length=2048, null=True,
@@ -81,7 +81,7 @@ class Widget(AbstractCommonModel):
 
     iw = models.ForeignKey(
         IndexerWidget, null=True, blank=True,
-        verbose_name='Indexer Widget',on_delete=models.PROTECT)
+        verbose_name='Indexer Widget',on_delete=models.CASCADE)
 
     related_article = models.ManyToManyField(Blog, blank=True)
 
@@ -248,8 +248,8 @@ class Page(AbstractCommonModel, AbstractSEO, ModelMeta):
 
 class PageWidget(AbstractCommonModel):
 
-    page = models.ForeignKey(Page,on_delete=models.PROTECT)
-    widget = models.ForeignKey(Widget,on_delete=models.PROTECT)
+    page = models.ForeignKey(Page,on_delete=models.CASCADE)
+    widget = models.ForeignKey(Widget,on_delete=models.CASCADE)
     section = models.CharField(
         choices=SECTION, max_length=255,
         help_text='determine section of widget')
@@ -279,7 +279,7 @@ class Document(models.Model):
         upload_to=get_upload_path_cms_doc, null=False, blank=False)
     is_active = models.BooleanField(default=False)
     priority = models.IntegerField(default=0)
-    page = models.ForeignKey(Page,on_delete=models.PROTECT)
+    page = models.ForeignKey(Page,on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['-priority', ]
@@ -289,7 +289,7 @@ class Document(models.Model):
 
 
 class Comment(AbstractCommonModel):
-    page = models.ForeignKey(Page,on_delete=models.PROTECT)
+    page = models.ForeignKey(Page,on_delete=models.CASCADE)
     candidate_id = models.CharField(max_length=255, null=True)
     name = models.CharField(max_length=255, null=True, blank=True)
     message = models.TextField(null=False, blank=False)
@@ -308,7 +308,7 @@ class Comment(AbstractCommonModel):
 
 
 class PageCounter(models.Model):
-    page = models.ForeignKey(Page,on_delete=models.PROTECT)
+    page = models.ForeignKey(Page,on_delete=models.CASCADE)
     count_period = models.DateField()
     no_views = models.PositiveIntegerField(default=0)
     no_downloads = models.PositiveIntegerField(default=0)

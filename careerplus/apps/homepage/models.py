@@ -109,8 +109,8 @@ class Testimonial(AbstractAutoDate):
 
 
 class TestimonialCategoryRelationship(AbstractAutoDate):
-    category = models.ForeignKey('shop.Category',on_delete=models.PROTECT)
-    testimonial = models.ForeignKey('homepage.Testimonial',on_delete=models.PROTECT)
+    category = models.ForeignKey('shop.Category',on_delete=models.CASCADE)
+    testimonial = models.ForeignKey('homepage.Testimonial',on_delete=models.CASCADE)
 
 
 class StaticSiteContent(models.Model):

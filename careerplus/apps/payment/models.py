@@ -10,7 +10,7 @@ class PaymentTxn(AbstractAutoDate):
     txn = models.CharField(max_length=255, null=True, blank=True)
     order = models.ForeignKey(
         'order.Order', related_name='ordertxns',
-        verbose_name="Order",on_delete=models.PROTECT)
+        verbose_name="Order",on_delete=models.CASCADE)
     cart = models.ForeignKey(
         'cart.Cart', verbose_name="Cart",
         null=True, blank=True,

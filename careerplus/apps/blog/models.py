@@ -200,7 +200,7 @@ class Author(AbstractCommonModel, AbstractSEO, ModelMeta):
     
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, blank=True,
-        help_text='for user or writer',on_delete=models.PROTECT)
+        help_text='for user or writer',on_delete=models.CASCADE)
     
     is_active = models.BooleanField(default=False)
     
@@ -258,7 +258,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
         blank=True, default='')
     author = models.ForeignKey(
         Author, null=True, blank=True,
-        help_text='for author',on_delete=models.PROTECT)
+        help_text='for author',on_delete=models.CASCADE)
     
     # sites = models.ManyToManyField(Site, blank=True, related_name='related_sites',
     #     help_text=("sites where blog published."))
@@ -266,7 +266,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
     #do not use#
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, blank=True,
-        help_text='for user or writer',on_delete=models.PROTECT)
+        help_text='for user or writer',on_delete=models.CASCADE)
 
     status = models.PositiveIntegerField(choices=STATUS, default=0)
     allow_comment = models.BooleanField(default=False)
@@ -406,7 +406,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
 
 
 class Comment(AbstractCommonModel):
-    blog = models.ForeignKey(Blog,on_delete=models.PROTECT)
+    blog = models.ForeignKey(Blog,on_delete=models.CASCADE)
     candidate_id = models.CharField(max_length=255, null=True)
     name = models.CharField(max_length=255, null=True, blank=True)
     message = models.TextField(null=False, blank=False)

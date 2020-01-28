@@ -5,7 +5,7 @@ from order.models import OrderItem
 
 class QuizResponse(models.Model):
     """QuizResponse Sent with Linked In"""
-    oi = models.OneToOneField(OrderItem, default=None, null=True,on_delete=models.PROTECT)
+    oi = models.OneToOneField(OrderItem, default=None, null=True,on_delete=models.CASCADE)
     submitted = models.BooleanField(default=False)
     created_on = models.DateTimeField(auto_now_add=True)
     modified_on = models.DateTimeField(auto_now=True)

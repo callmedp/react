@@ -47,7 +47,7 @@ class FAQuestion(AbstractAutoDate):
     vendor = models.ForeignKey(
         Vendor,
         related_name='question_vendor',
-        null=True, blank=True,on_delete=models.PROTECT)
+        null=True, blank=True,on_delete=models.CASCADE)
     
     public_vendor = models.ManyToManyField(
         Vendor,

@@ -157,7 +157,7 @@ class VendorHierarchy(AbstractAutoDate):
 
 class Assesment(AbstractAutoDate):
     vendor_text = models.CharField(max_length=255, blank=True, null=True)
-    vendor_provider = models.ForeignKey(Vendor, null=True, blank=True,on_delete=models.PROTECT)
+    vendor_provider = models.ForeignKey(Vendor, null=True, blank=True,on_delete=models.CASCADE)
     assesment_name = models.CharField(max_length=255, blank=True, null=True)
     candidate_id = models.CharField(
         _('Candidate_id'), blank=True,
@@ -174,7 +174,7 @@ class Assesment(AbstractAutoDate):
         max_digits=12, null=True, blank=True
     )
     order_item = models.OneToOneField(
-        'order.OrderItem', related_name='assesment', on_delete=models.PROTECT,
+        'order.OrderItem', related_name='assesment', on_delete=models.CASCADE,
         verbose_name=_("Order Item"), blank=True, null=True)
 
 
@@ -182,7 +182,7 @@ class Certificate(AbstractAutoDate):
     name = models.CharField(
         max_length=255, null=False, blank=False, db_index=True)
     skill = models.CharField(max_length=128, null=False, blank=False)
-    vendor_provider = models.ForeignKey(Vendor, null=True, blank=True,on_delete=models.PROTECT)
+    vendor_provider = models.ForeignKey(Vendor, null=True, blank=True,on_delete=models.CASCADE)
     vendor_text = models.CharField(max_length=255, null=True, blank=True)
     certificate_file_url = models.URLField(max_length=500, blank=True, null=True)
     vendor_image_url = models.URLField(max_length=500, blank=True, null=True)
@@ -207,9 +207,9 @@ class Certificate(AbstractAutoDate):
 
 class UserCertificate(models.Model):
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,on_delete=models.PROTECT, null=True,
+        settings.AUTH_USER_MODEL,on_delete=models.CASCADE, null=True,
         blank=True, help_text=_('Created By'))
-    certificate = models.ForeignKey(Certificate,on_delete=models.PROTECT)
+    certificate = models.ForeignKey(Certificate,on_delete=models.CASCADE)
     year = models.PositiveIntegerField(
         null=True, blank=True, default=datetime.now().year)
     candidate_email = models.EmailField(
@@ -228,10 +228,10 @@ class UserCertificate(models.Model):
     expiry_date = models.DateTimeField(null=True, blank=True)
     order_item = models.ForeignKey(
         'order.OrderItem', related_name='user_certificate_orderitem',
-        verbose_name=_("Order Item"), blank=True, null=True,on_delete=models.PROTECT)
+        verbose_name=_("Order Item"), blank=True, null=True,on_delete=models.CASCADE)
     status = models.IntegerField(choices=USER_CERTITIFICATE_STATUS, default=0)
     extra_info = models.TextField(null=True, blank=True)
-    assesment = models.ForeignKey('Assesment', null=True, blank=True,on_delete=models.PROTECT)
+    assesment = models.ForeignKey('Assesment', null=True, blank=True,on_delete=models.CASCADE)
 
     def __str__(self):
         return '{}'.format(self.certificate.name)
@@ -293,7 +293,7 @@ class Report(models.Model):
 
 class Score(AbstractAutoDate):
     subject = models.CharField(max_length=255)
-    assesment = models.ForeignKey('Assesment', null=True, blank=True,on_delete=models.PROTECT)
+    assesment = models.ForeignKey('Assesment', null=True, blank=True,on_delete=models.CASCADE)
     score_type = models.PositiveSmallIntegerField(choices=SCORE_TYPE_CHOICES, default=0)
     max_score = models.CharField(max_length=255)
     score_obtained = models.IntegerField(default=0)
@@ -312,7 +312,7 @@ class ParsedAssesmentData:
         self.certificates = []
 
 class UserCertificateOperations(AbstractAutoDate):
-    user_certificate = models.ForeignKey(UserCertificate,on_delete=models.PROTECT)
+    user_certificate = models.ForeignKey(UserCertificate,on_delete=models.CASCADE)
     op_type = models.IntegerField(choices=USER_CERTITIFICATE_STATUS, default=0)
     last_op_type = models.IntegerField(choices=USER_CERTITIFICATE_STATUS, default=0)
 

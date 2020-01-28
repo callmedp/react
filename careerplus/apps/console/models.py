@@ -14,12 +14,12 @@ class OrderItemOperations(models.Model):
     """
     Any operation thats performed on a order item.
     """
-    order_item = models.ForeignKey(OrderItem,on_delete=models.PROTECT)
+    order_item = models.ForeignKey(OrderItem,on_delete=models.CASCADE)
     operation_type = models.PositiveSmallIntegerField(
         choices=OPERATION_TYPE, default=0)
-    assigned_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,on_delete=models.PROTECT)
+    assigned_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,on_delete=models.CASCADE)
     assigned_to = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
-                                    related_name='assigned_to',on_delete=models.PROTECT)
+                                    related_name='assigned_to',on_delete=models.CASCADE)
 
     added_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     modified_on = models.DateTimeField(auto_now=True, null=True, blank=True)
@@ -36,8 +36,8 @@ class CandidateAgentInteraction(models.Model):
     added_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     modified_on = models.DateTimeField(auto_now=True, null=True, blank=True)
     called_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
-                                    related_name='called_by',on_delete=models.PROTECT)
-    order = models.ForeignKey(Order, blank=True, null=True,on_delete=models.PROTECT)
+                                    related_name='called_by',on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, blank=True, null=True,on_delete=models.CASCADE)
 
     queue_name = models.PositiveSmallIntegerField(
         choices=QUEUE_NAME, default=0)

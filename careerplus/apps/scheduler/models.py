@@ -44,7 +44,7 @@ class Scheduler(AbstractAutoDate):
         blank=True)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, blank=True,
-        related_name='created_by',on_delete=models.PROTECT)
+        related_name='created_by',on_delete=models.CASCADE)
     completed_on = models.DateTimeField(null=True, blank=True)
 
     class Meta:
