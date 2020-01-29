@@ -30,6 +30,9 @@ export default class TopBar extends Component {
 
     render() {
         let { page, userInfo: { selected_template, order_data, resume_generated }, showAlertModal } = this.props;
+        if (!selected_template && localStorage.getItem('selected_template')) {
+            selected_template = localStorage.getItem('selected_template')
+        }
         const newUser = localStorage.getItem('newUser');
         return (
             <section className="flex-container">
