@@ -30,8 +30,8 @@ export default class TopBar extends Component {
 
     render() {
         let { page, userInfo: { selected_template, order_data, resume_generated }, showAlertModal } = this.props;
-        if (!selected_template && localStorage.getItem('selected_template')) {
-            selected_template = localStorage.getItem('selected_template')
+        if (!selected_template && !localStorage.getItem('selected_template')) {
+            selected_template = 1;
         }
         const newUser = localStorage.getItem('newUser');
         return (

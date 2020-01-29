@@ -26,15 +26,20 @@ const genderDict = {
 }
 
 function modifyPersonalInfo(data) {
-    const { date_of_birth, gender, extracurricular, entity_preference_data, first_name } = data;
+    const { date_of_birth, gender, extracurricular, entity_preference_data, first_name, selected_template } = data;
+    let templateId = selected_template;
     if (!first_name) {
         localStorage.setItem('newUser', true);
+    }
+    if (!selected_template && localStorage.getItem('selected_template')) {
+        templateId = localStorage.getItem('selected_template')
     }
     data = {
         ...data,
         ...{
             date_of_birth: (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
             gender: (gender && genderDict[gender]) || '',
+            selected_template: templateId,
             extracurricular: (extracurricular && extracurricular.split(',').map(key => ({
                 'value': key,
                 'label': key
