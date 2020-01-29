@@ -1,24 +1,24 @@
-import {call, takeLatest, put, all} from 'redux-saga/effects'
+import { call, takeLatest, put, all } from 'redux-saga/effects'
 
 import * as Actions from '../actions/actionTypes'
-import {Api} from "./Api";
-import {UPDATE_UI} from "../../ui/actions/actionTypes";
+import { Api } from "./Api";
+import { UPDATE_UI } from "../../ui/actions/actionTypes";
 import {
     SET_CUSTOMIZATION,
     SAVE_TEMPLATE_IMAGES,
     SAVE_THUMBNAIL_IMAGES
 } from "../actions/actionTypes";
-import {SHOW_ALERT_MODAL} from "../../ui/actions/actionTypes"
-import {Toast} from "../../../services/ErrorToast";
+import { SHOW_ALERT_MODAL } from "../../ui/actions/actionTypes"
+import { Toast } from "../../../services/ErrorToast";
 
 function* fetchTemplate(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
-        yield put({type: UPDATE_UI, data: {loader: true}});
-        const {template} = action.payload;
+        yield put({ type: UPDATE_UI, data: { loader: true } });
+        const { template } = action.payload;
         const result = yield call(Api.fetchTemplate, candidateId, template);
 
-        yield put({type: UPDATE_UI, data: {loader: false}});
+        yield put({ type: UPDATE_UI, data: { loader: false } });
 
         if (result['error']) {
             Toast.fire({
@@ -27,8 +27,8 @@ function* fetchTemplate(action) {
             });
         }
 
-        let {data} = result;
-        yield put({type: Actions.SAVE_TEMPLATE, data: data});
+        let { data } = result;
+        yield put({ type: Actions.SAVE_TEMPLATE, data: data });
     } catch (e) {
         console.log(e);
     }
@@ -37,8 +37,8 @@ function* fetchTemplate(action) {
 function* customizeTemplate(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
-        yield put({type: UPDATE_UI, data: {loader: true}});
-        const {payload} = action;
+        yield put({ type: UPDATE_UI, data: { loader: true } });
+        const { payload } = action;
         const result = yield call(Api.customizeTemplate, candidateId, payload.template, payload);
         if (result['error']) {
             Toast.fire({
@@ -47,7 +47,7 @@ function* customizeTemplate(action) {
             });
         }
 
-        let {data} = result;
+        let { data } = result;
 
         data = {
             ...data,
@@ -56,12 +56,12 @@ function* customizeTemplate(action) {
             }
         };
 
-        yield put({type: SET_CUSTOMIZATION, data: data});
+        yield put({ type: SET_CUSTOMIZATION, data: data });
 
-        yield call(fetchTemplate, {payload: {template: data['templateId']}})
+        yield call(fetchTemplate, { payload: { template: data['templateId'] } })
 
 
-        yield put({type: UPDATE_UI, data: {loader: false}});
+        yield put({ type: UPDATE_UI, data: { loader: false } });
 
 
     } catch (e) {
@@ -73,23 +73,25 @@ function* customizeTemplate(action) {
 function* fetchSelectedTemplateImage(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
-        yield put({type: UPDATE_UI, data: {loader: true}});
-        const {payload: {templateId, resolve, reject, isModal}} = action;
+        yield put({ type: UPDATE_UI, data: { loader: true } });
+        const { payload: { templateId, resolve, reject, isModal } } = action;
         const result = yield call(Api.fetchTemplateImages, candidateId, templateId)
 
         if (result['error']) {
+            yield put({ type: UPDATE_UI, data: { loader: false } });
+
             return reject("API request Failed")
 
         }
         if (isModal) {
-            yield  put({type: SAVE_TEMPLATE_IMAGES, data: {modalTemplateImage: result['data']}});
-            yield put({type: UPDATE_UI, data: {loader: false}});
+            yield put({ type: SAVE_TEMPLATE_IMAGES, data: { modalTemplateImage: result['data'] } });
+            yield put({ type: UPDATE_UI, data: { loader: false } });
             return resolve("Got the Modal Template Selected")
         }
         // const images = result.map(el => el.data);
-        yield  put({type: SAVE_TEMPLATE_IMAGES, data: {templateImage: result['data']}});
+        yield put({ type: SAVE_TEMPLATE_IMAGES, data: { templateImage: result['data'] } });
 
-        yield put({type: UPDATE_UI, data: {loader: false}});
+        yield put({ type: UPDATE_UI, data: { loader: false } });
         return resolve("Got the Template Selected")
 
         // yield call(fetchTemplate)
@@ -103,7 +105,7 @@ function* fetchSelectedTemplateImage(action) {
 function* fetchThumbnailImages(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
-        yield put({type: UPDATE_UI, data: {loader: true}});
+        yield put({ type: UPDATE_UI, data: { loader: true } });
 
         const query = 'tsize=151x249';
         const result = yield all([
@@ -120,9 +122,9 @@ function* fetchThumbnailImages(action) {
             });
         }
         const images = result.map(el => el.data);
-        yield  put({type: SAVE_THUMBNAIL_IMAGES, data: {thumbnailImages: images}});
+        yield put({ type: SAVE_THUMBNAIL_IMAGES, data: { thumbnailImages: images } });
 
-        yield put({type: UPDATE_UI, data: {loader: false}});
+        yield put({ type: UPDATE_UI, data: { loader: false } });
 
         // yield call(fetchTemplate)
 
@@ -136,7 +138,7 @@ function* fetchDefaultCustomization(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
         // yield put({type: UPDATE_UI, data: {loader: true}});
-        const {payload: {templateId, resolve, reject}} = action;
+        const { payload: { templateId, resolve, reject } } = action;
         const result = yield call(Api.fetchDefaultCustomization, candidateId, templateId);
 
         if (result['error']) {
@@ -147,7 +149,7 @@ function* fetchDefaultCustomization(action) {
             return reject(result['errorMessage'])
 
         }
-        let {data} = result;
+        let { data } = result;
 
         data = {
             ...data,
@@ -156,7 +158,7 @@ function* fetchDefaultCustomization(action) {
             }
         }
 
-        yield put({type: SET_CUSTOMIZATION, data: data});
+        yield put({ type: SET_CUSTOMIZATION, data: data });
 
 
         // yield put({type: UPDATE_UI, data: {loader: false}});
@@ -174,10 +176,10 @@ function* fetchDefaultCustomization(action) {
 function* reGeneratePDF(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
-        const {payload} = action;
+        const { payload } = action;
 
-        const result = yield call(Api.reGeneratePDF,candidateId, payload)
-            
+        const result = yield call(Api.reGeneratePDF, candidateId, payload)
+
         if (result['error']) {
             console.log(result['error'])
         }
@@ -191,8 +193,8 @@ function* reGeneratePDF(action) {
 function* reorderSection(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
-        yield put({type: UPDATE_UI, data: {loader: true}});
-        const {payload: {templateId, info}} = action;
+        yield put({ type: UPDATE_UI, data: { loader: true } });
+        const { payload: { templateId, info } } = action;
         const result = yield call(Api.reorderSection, candidateId, templateId, info);
 
         if (result['error']) {
@@ -201,40 +203,40 @@ function* reorderSection(action) {
                 title: result['errorMessage']
             });
         }
-        let {data: {data}} = result;
+        let { data: { data } } = result;
         let entity_position = (data && eval(data)) || [];
         if (entity_position[info.pos - 1].entity_id === info.entity_id) {
-            yield  put({type: SHOW_ALERT_MODAL, data: {alertModal: true, alertType: 'error'}});
+            yield put({ type: SHOW_ALERT_MODAL, data: { alertModal: true, alertType: 'error' } });
         }
 
         data = {
             entity_position: data
         }
-        yield put({type: SET_CUSTOMIZATION, data: data});
+        yield put({ type: SET_CUSTOMIZATION, data: data });
 
 
-        yield call(fetchTemplate, {payload: {template: templateId}})
+        yield call(fetchTemplate, { payload: { template: templateId } })
 
 
-        yield put({type: UPDATE_UI, data: {loader: false}});
+        yield put({ type: UPDATE_UI, data: { loader: false } });
 
 
         // yield call(fetchTemplate)
 
     } catch
-        (e) {
+    (e) {
         console.log(e);
     }
 }
 
 
 export default function* watchTemplate() {
-    yield  takeLatest(Actions.FETCH_TEMPLATE, fetchTemplate)
-    yield  takeLatest(Actions.CUSTOMIZE_TEMPLATE, customizeTemplate)
-    yield  takeLatest(Actions.FETCH_DEFAULT_CUSTOMIZATION, fetchDefaultCustomization)
-    yield  takeLatest(Actions.FETCH_SELECTED_TEMPLATE_IMAGE, fetchSelectedTemplateImage)
-    yield  takeLatest(Actions.FETCH_THUMBNAIL_IMAGES, fetchThumbnailImages)
-    yield  takeLatest(Actions.REORDER_SECTION, reorderSection)
-    yield  takeLatest(Actions.RE_GENERATE_PDF, reGeneratePDF)
+    yield takeLatest(Actions.FETCH_TEMPLATE, fetchTemplate)
+    yield takeLatest(Actions.CUSTOMIZE_TEMPLATE, customizeTemplate)
+    yield takeLatest(Actions.FETCH_DEFAULT_CUSTOMIZATION, fetchDefaultCustomization)
+    yield takeLatest(Actions.FETCH_SELECTED_TEMPLATE_IMAGE, fetchSelectedTemplateImage)
+    yield takeLatest(Actions.FETCH_THUMBNAIL_IMAGES, fetchThumbnailImages)
+    yield takeLatest(Actions.REORDER_SECTION, reorderSection)
+    yield takeLatest(Actions.RE_GENERATE_PDF, reGeneratePDF)
 
 }
