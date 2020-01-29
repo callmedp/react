@@ -50,7 +50,7 @@ from seo.sitemap import (
     ArticleSitemap, ArticleCategorySitemap,
     CMSSitemap, TalentEconomySitemap, TalentCategorySitemap,
     TalentAuthorSitemap,PracticeTestCategorySitemap,PracticeTestExamSitemap,
-    PracticeTestSubCategorySitemap)
+    PracticeTestSubCategorySitemap, ResumeBuilderSitemap)
 
 handler404 = 'users.views.page_not_found'
 handler500 = 'users.views.server_error'
@@ -83,6 +83,10 @@ practicetest_sitemap = {
     'category':     PracticeTestCategorySitemap,
     'sub-category': PracticeTestSubCategorySitemap,
     'practice-test-exam': PracticeTestExamSitemap
+}
+
+builder_sitemap = {
+    'resume-builder' : ResumeBuilderSitemap
 }
 
 # Library Patches
@@ -121,7 +125,10 @@ urlpatterns += [
         cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
             'sitemaps': practicetest_sitemap,
             'template_name': 'sitemap.xml'}, name='sitemap'),
-
+    url(r'^builder\.xml$',
+        cache_page(settings.SITEMAP_CACHING_TIME)(sitemaps_views.sitemap), {
+            'sitemaps': builder_sitemap,
+            'template_name': 'sitemap.xml'}, name='sitemap'),
     url(r'^course/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='course-detail'),
 
