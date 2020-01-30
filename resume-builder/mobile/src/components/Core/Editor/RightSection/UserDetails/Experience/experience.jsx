@@ -57,6 +57,7 @@ class Experience extends Component {
     }
 
     async handleSubmit(values) {
+        values = this.state.fields ? this.state.fields : values.list
         let { sidenav: { listOfLinks, currentLinkPos }, bulkUpdateUserExperience, generateResumeAlert, updateCurrentLinkPos,
             history } = this.props
         currentLinkPos++
