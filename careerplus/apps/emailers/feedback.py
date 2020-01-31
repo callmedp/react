@@ -6,9 +6,10 @@ from django.conf import settings
 from order.models import OrderItem
 from linkedin.autologin import AutoLogin
 from emailers.tasks import send_email_for_base_task
+from core.decorators import run_cron
 
-
-def feedback_emailer():
+@run_cron
+def feedback_emailer(cron_name):
     today_date = timezone.now() - datetime.timedelta(days=4)
     order_items = OrderItem.objects.filter(
         oi_status=4, closed_on__lte=today_date).exclude(
