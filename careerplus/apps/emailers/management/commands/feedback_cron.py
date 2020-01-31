@@ -11,4 +11,4 @@ class Command(BaseCommand):
         super(Command, self).__init__(*args, **kwargs)
 
     def handle(self, *args, **options):
-        feedback_emailer()
+        feedback_emailer('feedback_emailer')
