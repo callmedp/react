@@ -26,8 +26,8 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
   const viewPort = isMobile ? `width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no`
     : "width=device-width, initial-scale=1, shrink-to-fit=no";
 
-   //const cssUrl = isMobile ? `dist/main-mobile.css` : `dist/main-desktop.css`,
-   //jsBuildUrl = isMobile ? `dist/main-mobile.js` : `dist/main-desktop.js`;
+  //  const cssUrl = isMobile ? `dist/main-mobile.css` : `dist/main-desktop.css`,
+  //  jsBuildUrl = isMobile ? `dist/main-mobile.js` : `dist/main-desktop.js`;
 
   // Meta descriptions 
 
@@ -112,7 +112,7 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
         ga('create', 'UA-3537905-41', 'auto');
         ga('send', 'pageview');
        </script>
-       <script type="text/javascript" src="https://static1.shine.com/l/cm/chatbot/learning_resume-1580452763.js">
+       <script type="text/javascript" src="https://static1.shine.com/l/cm/chatbot/learning_resume-1580458292.js">
        </script>
       <script type="text/javascript" src="${jsBuildUrl}"></script>
       </body>
