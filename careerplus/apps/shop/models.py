@@ -20,6 +20,7 @@ from django.core.cache import cache
 from django.db.models.signals import post_save
 
 from ckeditor.fields import RichTextField
+from blog.models import Blog
 from seo.models import AbstractSEO, AbstractAutoDate
 from meta.models import ModelMeta
 from mongoengine import Document, ListField, FloatField,\
@@ -3422,6 +3423,15 @@ class ProductJobTitle(AbstractAutoDate):
     def get_products(self):
         return self.product.all()
 
+class BlogProductMapping(AbstractCommonModel):
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['-created_on', ]
+
+    def __str__(self):
+        return str(self.blog.name) + '_' + str(self.product.name)
 
 
 
