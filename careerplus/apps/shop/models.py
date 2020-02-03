@@ -353,10 +353,11 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
             products = self.categoryproducts.filter(
                 active=True,
                 productcategories__active=True)
-
         return products
 
     def split_career_outcomes(self):
+        if not self.career_outcomes:
+            return
         return self.career_outcomes.split(',')
 
     def has_children(self):
