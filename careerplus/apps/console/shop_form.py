@@ -384,7 +384,7 @@ class ChangeFacultyForm(forms.ModelForm):
 
     def clean_image(self):
         file = self.files.get('image', '')
-        if file and file._size > 30 * 1024:
+        if file and file.size > 30 * 1024:
             raise forms.ValidationError(
                 "Image file is too large ( > 30kb ).")
         elif file and file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
@@ -610,7 +610,7 @@ class AddFacultyForm(forms.ModelForm):
 
     def clean_image(self):
         file = self.files.get('image', '')
-        if file and file._size > 30 * 1024:
+        if file and file.size > 30 * 1024:
             raise forms.ValidationError(
                 "Image file is too large ( > 30kb ).")
         if file and file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
@@ -806,7 +806,7 @@ class AddCategoryForm(forms.ModelForm):
     def clean_banner(self):
         file = self.files.get('banner', '')
         if file:
-            if file._size > 500 * 1024:
+            if file.size > 500 * 1024:
                 raise forms.ValidationError(
                     "Image file is too large ( > 500kb ).")
             if file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
@@ -818,7 +818,7 @@ class AddCategoryForm(forms.ModelForm):
     def clean_image(self):
         file = self.files.get('image', '')
         if file:
-            if file._size > 500 * 1024:
+            if file.size > 500 * 1024:
                 raise forms.ValidationError(
                     "Image file is too large ( > 500kb ).")
             if file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
@@ -907,7 +907,7 @@ class ChangeCategoryForm(forms.ModelForm):
     def clean_image(self):
         file = self.files.get('image', '')
         if file:
-            if file._size > 500 * 1024:
+            if file.size > 500 * 1024:
                 raise forms.ValidationError(
                     "Image file is too large ( > 500kb ).")
             if file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
@@ -919,7 +919,7 @@ class ChangeCategoryForm(forms.ModelForm):
     def clean_banner(self):
         file = self.files.get('banner')
         if file:
-            if file._size > 500 * 1024:
+            if file.size > 500 * 1024:
                 raise forms.ValidationError(
                     "Image file is too large ( > 500kb ).")
             if file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
@@ -931,7 +931,7 @@ class ChangeCategoryForm(forms.ModelForm):
     def clean_icon(self):
         file = self.files.get('icon')
         if file:
-            if file._size > 30 * 1024:
+            if file.size > 30 * 1024:
                 raise forms.ValidationError(
                     "Image file is too large ( > 30kb ).")
             if file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
@@ -1078,7 +1078,7 @@ class ChangeCategorySkillForm(forms.ModelForm):
     def clean_graph_image(self):
         file = self.files.get('graph_image', '')
         if file:
-            if file._size > 100 * 1024:
+            if file.size > 100 * 1024:
                 raise forms.ValidationError(
                     "Image file is too large ( > 100kb ).")
             if file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
@@ -1530,7 +1530,7 @@ class AddSubCategoryForm(forms.ModelForm):
     def clean_banner(self):
         file = self.files.get('banner', '')
         if file:
-            if file._size > 500 * 1024:
+            if file.size > 500 * 1024:
                 raise forms.ValidationError(
                     "Image file is too large ( > 500kb ).")
             if file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
@@ -1561,7 +1561,7 @@ class AddSubCategoryForm(forms.ModelForm):
     def clean_image(self):
         file = self.files.get('image', '')
         if file:
-            if file._size > 500 * 1024:
+            if file.size > 500 * 1024:
                 raise forms.ValidationError(
                     "Image file is too large ( > 500kb ).")
             if file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
@@ -1637,7 +1637,7 @@ class ChangeSubCategoryForm(forms.ModelForm):
     def clean_banner(self):
         file = self.files.get('banner', '')
         if file:
-            if file._size > 500 * 1024:
+            if file.size > 500 * 1024:
                 raise forms.ValidationError(
                     "Image file is too large ( > 500kb ).")
             if file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
@@ -1672,7 +1672,7 @@ class ChangeSubCategoryForm(forms.ModelForm):
         file = self.files.get('image', '')
         if not file:
             return file
-        if file._size > 500 * 1024:
+        if file.size > 500 * 1024:
             raise forms.ValidationError(
                 "Image file is too large ( > 500kb ).")
         if file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
