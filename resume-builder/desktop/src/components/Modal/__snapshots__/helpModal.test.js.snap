@@ -1,0 +1,160 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HelpModalTest Help Modal  1`] = `
+<div
+  className="pr"
+>
+  <Modal
+    ariaHideApp={true}
+    bodyOpenClassName="ReactModal__Body--open"
+    className="help-modal1"
+    closeTimeoutMS={0}
+    contentLabel="Help Modal"
+    isOpen={false}
+    onRequestClose={[Function]}
+    parentSelector={[Function]}
+    portalClassName="ReactModalPortal"
+    role="dialog"
+    shouldCloseOnEsc={true}
+    shouldCloseOnOverlayClick={true}
+    shouldFocusAfterRender={true}
+    shouldReturnFocusAfterClose={true}
+  >
+    <form>
+      <div
+        className="pr help-modal"
+      >
+        <i
+          className="icon-close icon-close--position1"
+          onClick={[Function]}
+        />
+        <h2>
+          Reach out to us
+        </h2>
+        <p>
+          Let us know your feedback and suggestions, so we can help you build a powerful resume. 
+        </p>
+        <textarea
+          className="mb-20"
+          onChange={[Function]}
+          placeholder="Message"
+          rows="10"
+        />
+        <button
+          className="orange-button"
+          onClick={[Function]}
+          type="submit"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+  </Modal>
+</div>
+`;
+
+exports[`HelpModalTest Help Modal Test 1`] = `
+<div
+  className="pr"
+>
+  <Modal
+    ariaHideApp={true}
+    bodyOpenClassName="ReactModal__Body--open"
+    className="help-modal1"
+    closeTimeoutMS={0}
+    contentLabel="Help Modal"
+    isOpen={false}
+    onRequestClose={[Function]}
+    parentSelector={[Function]}
+    portalClassName="ReactModalPortal"
+    role="dialog"
+    shouldCloseOnEsc={true}
+    shouldCloseOnOverlayClick={true}
+    shouldFocusAfterRender={true}
+    shouldReturnFocusAfterClose={true}
+  >
+    <form>
+      <div
+        className="pr help-modal"
+      >
+        <i
+          className="icon-close icon-close--position1"
+          onClick={[Function]}
+        />
+        <h2>
+          Reach out to us
+        </h2>
+        <p>
+          Let us know your feedback and suggestions, so we can help you build a powerful resume. 
+        </p>
+        <textarea
+          className="mb-20"
+          onChange={[Function]}
+          placeholder="Message"
+          rows="10"
+        />
+        <button
+          className="orange-button"
+          onClick={[Function]}
+          type="submit"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+  </Modal>
+</div>
+`;
+
+exports[`HelpModalTest Help Modal debug 1`] = `
+<div
+  className="pr"
+>
+  <Modal
+    ariaHideApp={true}
+    bodyOpenClassName="ReactModal__Body--open"
+    className="help-modal1"
+    closeTimeoutMS={0}
+    contentLabel="Help Modal"
+    isOpen={false}
+    onRequestClose={[Function]}
+    parentSelector={[Function]}
+    portalClassName="ReactModalPortal"
+    role="dialog"
+    shouldCloseOnEsc={true}
+    shouldCloseOnOverlayClick={true}
+    shouldFocusAfterRender={true}
+    shouldReturnFocusAfterClose={true}
+  >
+    <form>
+      <div
+        className="pr help-modal"
+      >
+        <i
+          className="icon-close icon-close--position1"
+          onClick={[Function]}
+        />
+        <h2>
+          Reach out to us
+        </h2>
+        <p>
+          Let us know your feedback and suggestions, so we can help you build a powerful resume. 
+        </p>
+        <textarea
+          className="mb-20"
+          onChange={[Function]}
+          placeholder="Message"
+          rows="10"
+        />
+        <button
+          className="orange-button"
+          onClick={[Function]}
+          type="submit"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+  </Modal>
+</div>
+`;
