@@ -25,6 +25,7 @@
     "redux-beacon": "2.1.0",
     "redux-form": "8.2.6",
     "redux-saga": "1.1.1",
+    "reselect": "^4.0.0",
     "rewire": "4.0.1",
     "slick-carousel": "1.8.1",
     "start": "^5.1.0",
