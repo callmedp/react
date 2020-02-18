@@ -7,6 +7,7 @@ import requests
 import json
 from Crypto.Cipher import XOR
 
+from django.core.cache import cache
 from django.conf import settings
 from rest_framework import status
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
@@ -15,12 +16,16 @@ from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 class ShineToken(object):
     def get_client_token(self):
         try:
-            headers = {"User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'}
+            if cache.get('shine_client_access_token'):
+                return cache.get('shine_client_access_token')
+            headers = {"User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) '
+                                     'AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'}
             client_access_url = settings.SHINE_SITE + '/api/v2/client/access/?format=json'
             client_data = {'key': settings.CLIENT_ACCESS_KEY, 'secret': settings.CLIENT_ACCESS_SECRET}
             client_access_resp = requests.post(client_access_url, data=client_data, headers=headers)
             client_access_resp_json = client_access_resp.json()
             if client_access_resp.status_code == 201:
+                cache.set('shine_client_access_token', client_access_resp_json.get('access_token'), timeout=None)
                 return client_access_resp_json.get('access_token', None)
         except Exception as e:
             logging.getLogger('error_log').error('error in getting client token%s'%str(e))
@@ -28,16 +33,20 @@ class ShineToken(object):
 
     def get_access_token(self):
         try:
+            if cache.get('shine_user_access_token'):
+                return cache.get('shine_user_access_token')
             headers = {
-                "User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'}
+                "User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) '
+                              'AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'}
             user_access_url = settings.SHINE_SITE + '/api/v2/user/access/?format=json'
             user_data = {"email": settings.SHINE_API_USER, "password": settings.SHINE_API_USER_PWD}
             user_access_resp = requests.post(user_access_url, data=user_data, headers=headers)
             user_access_resp_json = user_access_resp.json()
             if user_access_resp.status_code == 201:
+                cache.set('shine_user_access_token', user_access_resp_json.get('access_token'), timeout=None)
                 return user_access_resp_json.get('access_token', None)
         except Exception as e:
-            logging.getLogger('error_log').error('error in accessing token %s'%str(e))
+            logging.getLogger('error_log').error('error in accessing token %s' % str(e))
         return None
 
     def get_api_headers(self):
@@ -48,7 +57,9 @@ class ShineToken(object):
                 if access_token:
                     headers = {"User-Access-Token": access_token,
                                "Client-Access-Token": client_token,
-                               "User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'}
+                               "User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) '
+                                             'AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 '
+                                             'Mobile Safari/535.19'}
                     return headers
         except Exception as e:
             logging.getLogger('error_log').error('error in getting header %s'%str(e))
@@ -65,9 +76,13 @@ class ShineCandidateDetail(ShineToken):
                 shine_id_url = settings.SHINE_SITE +\
                     "/api/v2/candidate/career-plus/email-detail/?email=" +\
                     email + "&format=json"
-                shine_id_response = requests.get(
-                    shine_id_url, headers=headers,
-                    timeout=settings.SHINE_API_TIMEOUT)
+                shine_id_response = requests.get(shine_id_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
+                if shine_id_response.status_code == 401:
+                    logging.getLogger('error_log').error('Token validity compromised, trying again')
+                    cache.set('shine_client_access_token', None)
+                    cache.set('shine_user_access_token', None)
+                    headers = self.get_api_headers()
+                    shine_id_response = requests.get(shine_id_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
                 if shine_id_response and shine_id_response.status_code == 200 and shine_id_response.json():
                     shine_id_json = shine_id_response.json()
                     if shine_id_json:
@@ -81,43 +96,47 @@ class ShineCandidateDetail(ShineToken):
         try:
             if shine_id:
                 headers = self.get_api_headers()
-                detail_url = settings.SHINE_SITE +\
-                        "/api/v2/candidate-profiles/" +\
-                        shine_id + "/?format=json"
+                detail_url = settings.SHINE_SITE + "/api/v2/candidate-profiles/" + shine_id + "/?format=json"
                 detail_response = requests.get(detail_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
+                if detail_response.status_code == 401:
+                    logging.getLogger('error_log').error('Token validity compromised, trying again')
+                    cache.set('shine_client_access_token', None)
+                    cache.set('shine_user_access_token', None)
+                    headers = self.get_api_headers()
+                    detail_response = requests.get(detail_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
                 if detail_response.status_code == 200 and detail_response.json():
                     return detail_response.json()
-                logging.getLogger('error_log').error('unable to get candidate details {} {}'.\
-                    format(email,shine_id))
+                logging.getLogger('error_log').error('unable to get candidate details {} {}'.format(email, shine_id))
                 return {}
             
             elif email:
                 headers = self.get_api_headers()
                 shine_id = self.get_shine_id(email=email, headers=headers)
                 if shine_id:
-                    detail_url = settings.SHINE_SITE +\
-                        "/api/v2/candidate-profiles/" +\
-                        shine_id + "/?format=json"
+                    detail_url = settings.SHINE_SITE + "/api/v2/candidate-profiles/" + shine_id + "/?format=json"
                     detail_response = requests.get(detail_url, headers=headers)
+                    if detail_response.status_code == 401:
+                        logging.getLogger('error_log').error('Token validity compromised, trying again')
+                        cache.set('shine_client_access_token', None)
+                        cache.set('shine_user_access_token', None)
+                        headers = self.get_api_headers()
+                        detail_response = requests.get(detail_url, headers=headers)
                     if detail_response.status_code == 200 and detail_response.json():
                         return detail_response.json()
                     
-                    logging.getLogger('error_log').error('unable to get candidate details {} {}'.\
-                    format(email,shine_id))
+                    logging.getLogger('error_log').error('unable to get candidate details {} {}'.format(email,
+                                                                                                        shine_id))
                     return {}
                 
-                logging.getLogger('error_log').error('unable to get candidate details {} {}'.\
-                    format(email,shine_id))
+                logging.getLogger('error_log').error('unable to get candidate details {} {}'.format(email, shine_id))
                 return {}
 
-            logging.getLogger('error_log').error('unable to get candidate details {} {}'.\
-                    format(email,shine_id))
+            logging.getLogger('error_log').error('unable to get candidate details {} {}'.format(email, shine_id))
             return {}
         except Exception as e:
-            logging.getLogger('error_log').error('unable to get candidate details%s'%str(e))
+            logging.getLogger('error_log').error('unable to get candidate details%s' % str(e))
 
-        logging.getLogger('error_log').error('unable to get candidate details {} {}'.\
-                    format(email,shine_id))
+        logging.getLogger('error_log').error('unable to get candidate details {} {}'.format(email, shine_id))
         return {}
 
     def get_candidate_public_detail(self, email=None, shine_id=None):
@@ -129,15 +148,19 @@ class ShineCandidateDetail(ShineToken):
         elif not email and not shine_id:
             logging.getLogger('error_log').error("Email ID or shine_id required for profile")
             return
-        detail_url = settings.SHINE_SITE + \
-            "/api/v2/candidate-public-profiles/" + \
-                shine_id + "/?format=json"
+        detail_url = settings.SHINE_SITE + "/api/v2/candidate-public-profiles/" + shine_id + "/?format=json"
         try:
             detail_response = requests.get(detail_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
+            if detail_response.status_code == 401:
+                logging.getLogger('error_log').error('Token validity compromised, trying again')
+                cache.set('shine_client_access_token', None)
+                cache.set('shine_user_access_token', None)
+                headers = self.get_api_headers()
+                detail_response = requests.get(detail_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
             if detail_response.status_code == 200 and detail_response.json():
                 return detail_response.json()
         except Exception as e:
-            logging.getLogger('error_log').error('unable to get detail response %s'%str(e))
+            logging.getLogger('error_log').error('unable to get detail response %s' % str(e))
         return
 
     def get_status_detail(self, email=None, shine_id=None, token=None):
@@ -146,16 +169,26 @@ class ShineCandidateDetail(ShineToken):
                 headers = self.get_api_headers()
                 status_url = "{}/api/v2/candidate/{}/status/?format=json".format(settings.SHINE_SITE, shine_id)
                 status_response = requests.get(status_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
+                if status_response.status_code == 401:
+                    logging.getLogger('error_log').error('Token validity compromised, trying again')
+                    cache.set('shine_client_access_token', None)
+                    cache.set('shine_user_access_token', None)
+                    headers = self.get_api_headers()
+                    status_response = requests.get(status_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
                 if status_response.status_code == 200 and status_response.json():
                     return status_response.json()
             elif email:
                 headers = self.get_api_headers()
                 shine_id = self.get_shine_id(email=email, headers=headers)
                 if shine_id:
-                    status_url = settings.SHINE_SITE +\
-                        "/api/v2/candidate/" +\
-                        shine_id + "/status/?format=json"
+                    status_url = settings.SHINE_SITE + "/api/v2/candidate/" + shine_id + "/status/?format=json"
                     status_response = requests.get(status_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
+                    if status_response.status_code == 401:
+                        logging.getLogger('error_log').error('Token validity compromised, trying again')
+                        cache.set('shine_client_access_token', None)
+                        cache.set('shine_user_access_token', None)
+                        headers = self.get_api_headers()
+                        status_response = requests.get(status_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
                     if status_response.status_code == 200 and status_response.json():
                         return status_response.json()
         except Exception as e:
@@ -167,56 +200,53 @@ class ShineCandidateDetail(ShineToken):
             if candidate_id and resume_id:
                 if not headers:
                     headers = self.get_api_headers()
-                    headers.update({
-                        "Accept": 'application/json',
-                    })
-                    api_url = settings.SHINE_SITE +\
-                        '/api/v2/candidate/' +\
-                        candidate_id + '/resumefiles/' +\
-                        resume_id + '/'
-                    response = requests.get(
-                        api_url,
-                        data=data, headers=headers)
+                    headers.update({"Accept": 'application/json'})
+                    api_url = settings.SHINE_SITE + '/api/v2/candidate/' + candidate_id + '/resumefiles/' + resume_id + '/'
+                    response = requests.get(api_url, data=data, headers=headers)
+                    if response.status_code == 401:
+                        logging.getLogger('error_log').error('Token validity compromised, trying again')
+                        cache.set('shine_client_access_token', None)
+                        cache.set('shine_user_access_token', None)
+                        headers = self.get_api_headers()
+                        response = requests.get(api_url, data=data, headers=headers)
                     if response.status_code == 200:
                         return response
         except Exception as e:
-            logging.getLogger('error_log').error('unable to return candidate resume response  %s'%str(e))
+            logging.getLogger('error_log').error('unable to return candidate resume response  %s' % str(e))
         return None
     
-    def upload_resume_shine(self, data={},file_path='', headers=None):
+    def upload_resume_shine(self, data={}, file_path='', headers=None):
         file = None
         try:
             if not settings.IS_GCP:
-                file = open(file_path,'rb')
+                file = open(file_path, 'rb')
             else:
                 file = GCPPrivateMediaStorage().open(file_path)
         except Exception as e:
             logging.getLogger('error_log').error("%s" % str(e))
-        files={
-            'resume_file':file
-        }
-
+        files = {'resume_file': file}
         try:
-            candidate_id = data.get('candidate_id','')
-            if candidate_id :
+            candidate_id = data.get('candidate_id', '')
+            if candidate_id:
                 if not headers:
                     headers = self.get_api_headers()
-                    headers.update({
-                        "Accept": 'application/json',
-                    })
-                    api_url = settings.SHINE_SITE +\
-                        '/api/v2/candidate/' +\
-                        candidate_id + '/resumefiles/'
-                    response = requests.post(
-                        api_url,
-                        data=data,files=files, headers=headers)
-                    if  status.is_success(response.status_code):
+                    headers.update({"Accept": 'application/json'})
+                    api_url = settings.SHINE_SITE + '/api/v2/candidate/' + candidate_id + '/resumefiles/'
+                    response = requests.post(api_url, data=data, files=files, headers=headers)
+                    if response.status_code == 401:
+                        logging.getLogger('error_log').error('Token validity compromised, trying again')
+                        cache.set('shine_client_access_token', None)
+                        cache.set('shine_user_access_token', None)
+                        headers = self.get_api_headers()
+                        response = requests.post(api_url, data=data, files=files, headers=headers)
+                    if status.is_success(response.status_code):
                         if not settings.IS_GCP:
                             file.close()
                         return True
         except Exception as e:
-            logging.getLogger('error_log').error('unable to return candidate resume response  %s'%str(e))
+            logging.getLogger('error_log').error('unable to return candidate resume response  %s' % str(e))
         return None
+
 
 class FeatureProfileUpdate(ShineToken):
 
@@ -226,13 +256,16 @@ class FeatureProfileUpdate(ShineToken):
                 if not headers:
                     headers = self.get_api_headers()
                     if data and headers:
-                        headers.update({
-                            "Content-Type": 'application/json',
-                            "Accept": 'application/json',
-                        })
-                        api_url = settings.SHINE_SITE + '/api/v2/candidate/' +\
-                            candidate_id + '/career-plus/detail/?format=json'
+                        headers.update({"Content-Type": 'application/json', "Accept": 'application/json'})
+                        api_url = settings.SHINE_SITE + '/api/v2/candidate/' + candidate_id + '/career-plus/' \
+                                                                                              'detail/?format=json'
                         response = requests.patch(api_url, data=json.dumps(data), headers=headers)
+                        if response.status_code == 401:
+                            logging.getLogger('error_log').error('Token validity compromised, trying again')
+                            cache.set('shine_client_access_token', None)
+                            cache.set('shine_user_access_token', None)
+                            headers = self.get_api_headers()
+                            response = requests.patch(api_url, data=json.dumps(data), headers=headers)
                         if response.status_code == 200:
                             return True
         except Exception as e:
@@ -248,36 +281,42 @@ class ShineCertificateUpdate(ShineToken):
                 if not headers:
                     headers = self.get_api_headers()
                 if data and headers:
-
-                    certificate_api_url = settings.SHINE_API_URL + "/candidate/" + candidate_id + "/certifications/?format=json"
-                    certification_response = requests.post(
-                        certificate_api_url, data=data,
-                        headers=headers)
+                    certificate_api_url = settings.SHINE_API_URL + "/candidate/" + candidate_id + "/certifications" \
+                                                                                                  "/?format=json"
+                    certification_response = requests.post(certificate_api_url, data=data, headers=headers)
+                    if certification_response.status_code == 401:
+                        logging.getLogger('error_log').error('Token validity compromised, trying again')
+                        cache.set('shine_client_access_token', None)
+                        cache.set('shine_user_access_token', None)
+                        headers = self.get_api_headers()
+                        certification_response = requests.post(certificate_api_url, data=data, headers=headers)
                     if certification_response.status_code == 201:
                         jsonrsp = certification_response.json()
-                        logging.getLogger('info_log').info(
-                            "api response:{}".format(jsonrsp))
+                        logging.getLogger('info_log').info("api response:{}".format(jsonrsp))
                         return True, jsonrsp
 
                     elif certification_response.status_code != 201:
                         jsonrsp = certification_response.json()
-                        logging.getLogger('error_log').error(
-                            "api fail:{}".format(jsonrsp))
+                        logging.getLogger('error_log').error("api fail:{}".format(jsonrsp))
                         return False, jsonrsp
         except Exception as e:
             logging.getLogger('error_log').error('unable to update certificate %s'%str(e))
         return False, None
 
+
 class ShineProfileDataUpdate(ShineToken):
 
     def update_shine_profile_data(self):
         headers = self.get_api_headers()
-        headers.update({
-            "Content-Type": 'application/json',
-            "Accept": 'application/json',
-        })
+        headers.update({"Content-Type": 'application/json', "Accept": 'application/json'})
         api_url = settings.SHINE_SITE + '/api/v2/career-plus/profile_badge_cache_reset/'
         response = requests.post(api_url, headers=headers)
+        if response.status_code == 401:
+            logging.getLogger('error_log').error('Token validity compromised, trying again')
+            cache.set('shine_client_access_token', None)
+            cache.set('shine_user_access_token', None)
+            headers = self.get_api_headers()
+            response = requests.post(api_url, headers=headers)
         if response.status_code == 200:
             return True
 
@@ -297,21 +336,20 @@ class UploadResumeToShine(ShineToken):
         if not headers:
             return False
 
-        headers.update({
-            "Accept": 'application/json',
-        })
-        api_url = settings.SHINE_SITE + \
-                  '/api/v2/candidate/' + \
-                  candidate_id + '/resumefiles/'
+        headers.update({"Accept": 'application/json'})
+        api_url = settings.SHINE_SITE + '/api/v2/candidate/' + candidate_id + '/resumefiles/'
         try:
-            response = requests.post(
-                api_url, files=files,
-                data=data, headers=headers)
+            response = requests.post(api_url, files=files, data=data, headers=headers)
+            if response.status_code == 401:
+                logging.getLogger('error_log').error('Token validity compromised, trying again')
+                cache.set('shine_client_access_token', None)
+                cache.set('shine_user_access_token', None)
+                headers = self.get_api_headers()
+                response = requests.post(api_url, files=files, data=data, headers=headers)
             if response.status_code in [200, 201]:
                 return True
         except Exception as e:
-            logging.getLogger('error_log').error(
-                "%s error in sync_candidate_resume_to_shine function" % (str(e)))
+            logging.getLogger('error_log').error("%s error in sync_candidate_resume_to_shine function" % (str(e)))
             return False
 
 
