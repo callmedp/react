@@ -164,6 +164,7 @@ function* fetchTemplateImages(action) {
 
         const result = yield call(Api.fetchTemplateImages, candidateId, template_id);
         if (result['error']) {
+            yield put({type:uiAction.UPDATE_DATA_LOADER,payload:{mainloader: false}})
             apiError();
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }

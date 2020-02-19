@@ -1,6 +1,7 @@
-import {SAVE_USER_INFO , SAVE_INTEREST_LIST,UPDATE_SUMMARY_WITH_SUGGESTION} from "../actions/actionTypes";
+import { SAVE_USER_INFO, SAVE_INTEREST_LIST, UPDATE_SUMMARY_WITH_SUGGESTION } from "../actions/actionTypes";
 
 const initialState = {
+    active_subscription: false,
     "candidate_id": '',
     "id": '',
     first_name: '',
@@ -14,7 +15,9 @@ const initialState = {
     extracurricular: '',
     extra_info: '',
     entity_preference_data: [],
-    interest_list:[]
+    interest_list: [],
+    selected_template: '',
+    free_resume_downloads: 0
 };
 
 
@@ -31,15 +34,15 @@ export const personalInfoReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...{
-                    interest_list:action.data
+                    interest_list: action.data
                 }
             }
         }
-        case UPDATE_SUMMARY_WITH_SUGGESTION:{
+        case UPDATE_SUMMARY_WITH_SUGGESTION: {
             return {
                 ...state,
                 ...{
-                    extra_info:action.payload
+                    extra_info: action.payload
                 }
             }
         }

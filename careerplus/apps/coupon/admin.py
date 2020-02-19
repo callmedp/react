@@ -1,4 +1,3 @@
-from django.conf.urls import url
 from django.contrib import admin
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _

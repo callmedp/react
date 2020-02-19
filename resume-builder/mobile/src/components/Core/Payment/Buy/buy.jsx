@@ -100,7 +100,7 @@ class Buy extends Component {
         else window['name'] = ''
 
         getProductIds();
-        fetchThumbNailImages();
+       // fetchThumbNailImages();
         fetchUserInfo();
     }
 
@@ -188,10 +188,13 @@ class Buy extends Component {
             userInfo: { free_resume_downloads, resume_creation_count } } = this.props
         const template = localStorage.getItem('selected_template') || 1;
         const { checked, modal_status, freeDownloadButtonDisable } = this.state
-        const price1 = productIds[0] ? productIds[0].inr_price : 999
-        const discount1 = Math.floor(((99 - price1) / 99) * 100)
-        const price2 = productIds[1] ? productIds[1].inr_price : 1248
-        const discount2 = Math.floor(((1999 - price2) / 1999) * 100)
+        const price1 = productIds[0] ? productIds[0].inr_price : 999, discount1 = productIds[0] ? productIds[0].discount : 50,
+            heading1 = productIds[0] ? productIds[0].heading : "14 DAYS PLAN",
+            fakePrice1 = productIds[0] ? productIds[0].fake_inr_price : 99;
+        const price2 = productIds[1] ? productIds[1].inr_price : 1248,
+            discount2 = productIds[1] ? productIds[1].discount : 50,
+            heading2 = productIds[1] ? productIds[1].heading : "YEARLY PLAN",
+            fakePrice2 = productIds[1] ? productIds[1].fake_inr_price : 1999;
         const free_download_count = free_resume_downloads - resume_creation_count
         return (
 
@@ -248,10 +251,10 @@ class Buy extends Component {
                                     onChange={this.handleOnChange.bind(this, 'product1')}></input>
                                 <label className="buy__item--label form__radio-label" htmlFor="your-resume">
                                     <span className="form__radio-button"></span>
-                                    <span className="text-uppercase d-block color-333 bold">14- Days Plan</span>
+                                    <span className="text-uppercase d-block color-333 bold">{heading1}</span>
                                     <span className="d-flex align-items-center">
                                         <strong className="mr-10">Rs. {price1}/-</strong>
-                                        <span className="line-through fs-16 color-999 font-weight-light">Rs. 99</span>
+                                        <span className="line-through fs-16 color-999 font-weight-light">Rs. {fakePrice1}</span>
                                     </span>
                                     <span className="fs-14">Save upto {discount1}%</span>
                                 </label>
@@ -269,10 +272,10 @@ class Buy extends Component {
 
                                 <label className="buy__item--label form__radio-label" htmlFor="all-resumes">
                                     <span className="form__radio-button"></span>
-                                    <span className="text-uppercase d-block color-333 bold">Yearly Pack</span>
+                                    <span className="text-uppercase d-block color-333 bold">{heading2}</span>
                                     <span className="d-flex align-items-center">
                                         <strong className="mr-10">Rs. {price2}/-</strong>
-                                        <span className="line-through fs-16 color-999 font-weight-light">Rs. 1999</span>
+                                        <span className="line-through fs-16 color-999 font-weight-light">Rs. {fakePrice2}</span>
                                     </span>
                                     <span className="fs-14">Save upto {discount2}%</span>
                                 </label>

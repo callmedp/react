@@ -1,8 +1,10 @@
 #python imports
-import logging
-
+import django,logging,sys,os
+from datetime import datetime
 #django imports
 
+#Settings imports
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'careerplus.config.settings_live') 
 #local imports
 
 #inter app imports
@@ -10,6 +12,14 @@ import logging
 #third party imports
 from geolocation.models import Country
 
+from django.conf import settings
+from django.core.mail import EmailMessage
+
+TEAM_EMAILS = ["Nidhish Sharma<nidhish.sharma@hindustantimes.com>",
+               "Priya Kharb<Priya.Kharb@hindustantimes.com> ",
+               "Sahil Singla<sahil.singla@hidustantimes.com>",
+               "Heena Afshan<heena.afshan@hindustantimes.com>"
+               ]
 
 def get_country_obj(country_code2):
     try:
@@ -63,4 +73,15 @@ def get_client_device_type(request):
 
 
 
-    
+def send_failure_mail(cron_name,exception):
+    html_content =  """<html><title></title><body><h3>Following CRON has Failed, please act on it as soon as possible.</h3><br>
+                Cron Name: {} <br>
+                Date: {}<br>
+                Reason: {}<br>
+                </body></html>""".format(cron_name.title(),datetime.now().strftime("%m/%d/%Y, %H:%M:%S"),exception)
+    email = EmailMessage(
+        subject = "Cron in Shine Learning has failed", body=html_content,
+        from_email=settings.DEFAULT_FROM_EMAIL, to=TEAM_EMAILS)
+    email.content_subtype = "html"
+    logging.getLogger('error_log').error('CRON: {} HAS FAILED'.format(cron_name.title()))
+    return email.send(fail_silently=False)

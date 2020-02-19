@@ -39,7 +39,6 @@ export class Buy extends Component {
             'freeDownloadButtonDisable': false,
         }
 
-
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
         this.showEnlargedTemplate = this.showEnlargedTemplate.bind(this);
         this.changeTemplate = this.changeTemplate.bind(this);
@@ -168,7 +167,7 @@ export class Buy extends Component {
         if (localStorage.getItem('name')) window['name'] = localStorage.getItem('name')
         else window['name'] = ''
 
-        this.props.fetchThumbNailImages();
+       // this.props.fetchThumbNailImages();
         this.props.fetchSelectedTemplateImage(localStorage.getItem('selected_template') || 1);
         this.props.getProductIds();
         this.props.fetchUserInfo();
@@ -216,12 +215,16 @@ export class Buy extends Component {
             order_data, resume_creation_count, free_resume_downloads },
             ui: { loader }, template: { templateImage, thumbnailImages },
             productIds, eventClicked } = this.props;
-        const {userInfo} = this.props;
-        const {checked, freeDownloadButtonDisable } = this.state;
-        const price1 = productIds[0] ? productIds[0].inr_price : 999
-        const discount1 = Math.floor(((99 - price1) / 99) * 100)
-        const price2 = productIds[1] ? productIds[1].inr_price : 1248
-        const discount2 = Math.floor(((1999 - price2) / 1999) * 100)
+        const { userInfo } = this.props;
+        const { checked, freeDownloadButtonDisable } = this.state;
+        const price1 = productIds[0] ? productIds[0].inr_price : 999, discount1 = productIds[0] ? productIds[0].discount : 50,
+            heading1 = productIds[0] ? productIds[0].heading : "14-DAYS PLAN",
+            fakePrice1 = productIds[0] ? productIds[0].fake_inr_price : 99;
+        const price2 = productIds[1] ? productIds[1].inr_price : 1248,
+            discount2 = productIds[1] ? productIds[1].discount : 50,
+            heading2 = productIds[1] ? productIds[1].heading : "YEARLY PLAN",
+            fakePrice2 = productIds[1] ? productIds[1].fake_inr_price : 1999;
+
         const free_download_count = free_resume_downloads - resume_creation_count
 
         return (
@@ -278,8 +281,8 @@ export class Buy extends Component {
                                                 </span>
                                                 <span className="free-trial--text">
                                                     <p>
-                                                        {free_download_count > 0 
-                                                        ? ` ${free_download_count} free download for 1st time users.`
+                                                        {free_download_count > 0
+                                                            ? ` ${free_download_count} free download for 1st time users.`
                                                             : "You have exhausted the limit. Please buy resume builder with unlimited downloads to keep using resume builder for an year"}
                                                     </p>
                                                 </span>
@@ -301,9 +304,9 @@ export class Buy extends Component {
                                                     onChange={this.handleOnChange.bind(this, 'product1')} />
                                             </span> */}
                                             <span className="choose-plan--price">
-                                                <p>14-DAYS PLAN</p>
+                                                <p>{heading1}</p>
                                                 Rs. <strong>{price1}/-</strong>
-                                                <strike className="ml-10">Rs. 99</strike>
+                                                <strike className="ml-10">Rs. {fakePrice1}</strike>
                                                 <span className="choose-plan--off mt-10 db">Save up to {discount1}%</span>
                                             </span>
                                             <button
@@ -321,10 +324,10 @@ export class Buy extends Component {
                                                     onChange={this.handleOnChange.bind(this, 'product2')} />
                                             </span> */}
                                             <span className="choose-plan--price">
-                                                <p>Yearly Pack</p>
+                                                <p>{heading2}</p>
                                                 <span>Rs.</span> <strong>  {price2}
                                                     /-</strong>
-                                                <strike className="ml-10">Rs. 1999</strike>
+                                                <strike className="ml-10">Rs. {fakePrice2}</strike>
                                                 <span className="choose-plan--off mt-10 db">Save up to {discount2}%</span>
                                             </span>
                                             <button

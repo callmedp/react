@@ -1,4 +1,4 @@
-import logging, binascii, os, pickle
+import logging, binascii, os, pickle,math
 import datetime
 
 import requests
@@ -779,16 +779,32 @@ class ResumeBuilderProductView(ListAPIView):
     authentication_classes = ()
     permission_classes = ()
     serializer_class = ResumeBuilderProductSerializer
+
+   
+    
     def get_queryset(self):
+       
+        def modify_product(product): 
+            try:
+                product['discount'] = math.floor(((product['fake_inr_price'] - product['inr_price'])/product['fake_inr_price'])* 100)
+                return product
+            except Exception as e:
+                logging.getLogger('error_log').error("Builder Product  - {}".format(e))
+                product['discount'] = None
+                return product
+
+
         type_flow = self.request.query_params.get('type_flow')
-        product_list = Product.objects.filter(type_flow=type_flow, type_product=0, active=True, sub_type_flow='1701').values('id', 'name', 'inr_price', 'usd_price', 'aed_price').order_by('inr_price')
+        product_list = list(Product.objects.filter(type_flow=type_flow, type_product=0, active=True, sub_type_flow='1701').values('id', 'name', 'inr_price', 'usd_price', 'aed_price', 'fake_inr_price', 'heading').order_by('inr_price'))
+        product_list = map(modify_product, product_list)
+
 
         # for item in  product_list:
         #     product = Product.objects.filter(id=item['id']).first()
         #     value = product.attr.get_value_by_attribute(product.attr.get_attribute_by_name('template_type')).value or '';
         #     if( value == 'single' or value == 'multiple'):
         #         new_product_list.append(item)
-        return product_list
+        return list(product_list)
 
 class ShineDataFlowDataApiView(ListAPIView):
     permission_classes = []

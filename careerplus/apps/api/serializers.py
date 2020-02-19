@@ -363,6 +363,10 @@ class ResumeBuilderProductSerializer(serializers.Serializer):
     inr_price = serializers.FloatField()
     usd_price = serializers.FloatField()
     aed_price = serializers.FloatField()
+    fake_inr_price = serializers.FloatField()
+    heading = serializers.CharField()
+    discount = serializers.IntegerField()
+
 
 class  ShineDataFlowDataSerializer(ModelSerializer):
 

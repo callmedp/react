@@ -87,6 +87,7 @@ class CandidateProfile(AbstractAutoDate):
 
     class Meta:
         abstract = True
+    
 
 
 class Candidate(PreviewImageCreationMixin, CandidateProfile):
@@ -127,6 +128,9 @@ class Candidate(PreviewImageCreationMixin, CandidateProfile):
             obj.entity_position = json.dumps(
                 TEMPLATE_DEFAULT_ENTITY_POSITION[i])
             obj.save()
+    
+    def get_absolute_url(self):
+        return "/resume-builder/"
 
     def save(self, **kwargs):
         created = not bool(getattr(self, "id"))

@@ -81,7 +81,7 @@ async function handleResponse(response, isFetchingHTML) {
             status: response['status'],
         }
     } else if (response['status'] === 204) {
-        window.location.href = `${siteDomain}/resume-builder/?login=false`;
+        return {data: {}};
     } else {
         let result = isFetchingHTML ? await response.text() : await response.json();
         return { data: result };

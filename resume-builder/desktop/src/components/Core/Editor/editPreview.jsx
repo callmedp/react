@@ -64,6 +64,7 @@ class EditPreview extends Component {
         if (!localStorage.getItem('candidateId')) {
             await loginCandidate()
         }
+        
         fetchEntityInfo();
 
         // get userInfo from LocalStorage
