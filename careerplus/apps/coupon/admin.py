@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.base import TemplateView
-
 from .forms import CouponGenerationForm
 from .models import Coupon, CouponUser, Campaign
 
@@ -22,9 +21,9 @@ class CouponAdmin(admin.ModelAdmin):
         'valid_from', 'active', 'code', 'coupon_type', 'value', 'user_count', 'user_limit', 'is_redeemed', 'valid_until', 'campaign'
     ]
     list_filter = ['coupon_type', 'campaign', 'created', 'valid_until']
-    raw_id_fields = ('campaign', )
+    raw_id_fields = ('campaign','products')
     search_fields = ('code', 'value')
-    filter_horizontal = ('products', )
+    # filter_horizontal = ('products', )
     inlines = (CouponUserInline,)
     
     def user_count(self, inst):
