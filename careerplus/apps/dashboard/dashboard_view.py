@@ -807,7 +807,7 @@ class DashboardResumeTemplateDownload(View):
         email = request.session.get('email', None)
         product_id = request.POST.get('product_id', None)
         product = Product.objects.filter(id=product_id).first()
-        if product.sub_type_flow == "1701":
+        if product.sub_type_flow == 1701:
             is_combo = True
         else:
             is_combo = True if product.attr.get_value_by_attribute(product.attr.get_attribute_by_name('template_type')).value == 'multiple' else False
