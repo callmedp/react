@@ -49,7 +49,7 @@ class ShineToken(object):
             logging.getLogger('error_log').error('error in accessing token %s' % str(e))
         return None
 
-    def get_api_headers(self):
+    def get_api_headers(self,token=None):
         try:
             client_token = self.get_client_token()
             if client_token:
