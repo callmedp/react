@@ -58,7 +58,7 @@ from .shop_form import (
     TestimonialModelForm,
     AddSubCategoryForm,ChangeSubCategoryForm,FunctionalAreaForm,
     FunctionalAreaCreateForm,ProductJobTitleChangeForm,
-    ProductJobTitleCreateForm)
+    ProductJobTitleCreateForm, BlogProductCategoryForm)
 
 from scheduler.models import Scheduler
 from console.schedule_tasks.tasks import generate_discount_report
@@ -74,7 +74,8 @@ from shop.forms import (
     VariationInlineFormSet, ProductChildForm,
     ChildInlineFormSet, ProductRelatedForm,
     RelatedInlineFormSet, ChangeProductVariantForm,
-    ChapterInlineFormSet, ProductChapterForm, SkillTypeForm)
+    ChapterInlineFormSet, ProductChapterForm, SkillTypeForm,
+    ProductBlogForm)
 
 from shop.utils import CategoryValidation, ProductValidation
 from faq.forms import (
@@ -348,6 +349,8 @@ class ChangeCategoryView(DetailView):
             instance=self.get_object())
         seo_change_form = ChangeCategorySEOForm(
             instance=self.get_object())
+        blog_categories_change_form = BlogProductCategoryForm(
+            instance= self.get_object())
         if self.object.type_level in [2, 3, 4]:
             skill_change_form = ChangeCategorySkillForm(
             instance=self.get_object())
@@ -375,6 +378,7 @@ class ChangeCategoryView(DetailView):
             'messages': alert,
             'form': main_change_form,
             'seo_form': seo_change_form,
+            'blog_category_form': blog_categories_change_form,
             "childrens": childrens,
             "products": products})
         return context
@@ -428,6 +432,26 @@ class ChangeCategoryView(DetailView):
                             messages.error(
                                 self.request,
                                 "Category SEO Change Failed, Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/shop/change_category.html"
+                                ], context)
+                    elif slug == 'category':
+                        form = BlogProductCategoryForm(request.POST, instance=obj)
+                        if form.is_valid():
+                            form.save()
+                            messages.success(
+                                self.request,
+                                "Blog Categories Changed Successfully")
+                            return HttpResponseRedirect(
+                                reverse('console:category-change',kwargs={'pk': obj.pk}))
+                        else:
+                            context = self.get_context_data()
+                            if form:
+                                context.update({'seo_form': form})
+                            messages.error(
+                                self.request,
+                                "Blog Categories Change Failed, Changes not Saved")
                             return TemplateResponse(
                                 request, [
                                     "console/shop/change_category.html"
@@ -1248,7 +1272,8 @@ class ChangeProductView(DetailView):
             instance=self.get_object())
         price_change_form = ProductPriceForm(
             instance=self.get_object())
-
+        blog_change_form = ProductBlogForm(
+            instance=self.get_object())
         attribute_form = ProductAttributeForm(
             instance=self.get_object(),)
         if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
@@ -1390,6 +1415,7 @@ class ChangeProductView(DetailView):
             'seo_form': seo_change_form,
             'op_form': op_change_form,
             'country_form': con_change_form,
+            'blog_form': blog_change_form,
             'price_form': price_change_form,
             'attribute_form': attribute_form})
         return context
@@ -1484,6 +1510,25 @@ class ChangeProductView(DetailView):
                             messages.error(
                                 self.request,
                                 "Product Country Change Failed, Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/shop/change_product.html"
+                                ], context)
+                    elif slug == 'blogs':
+                        form = ProductBlogForm(request.POST, instance=obj)
+                        if form.is_valid():
+                            product = form.save()
+                            messages.success(
+                                self.request,
+                                "Blog changed Successfully")
+                            return HttpResponseRedirect(reverse('console:product-change',kwargs={'pk': obj.pk}))
+                        else:
+                            context = self.get_context_data()
+                            if form:
+                                context.update({'price_form': form})
+                            messages.error(
+                                self.request,
+                                "Blog Change Failed, Changes not Saved")
                             return TemplateResponse(
                                 request, [
                                     "console/shop/change_product.html"

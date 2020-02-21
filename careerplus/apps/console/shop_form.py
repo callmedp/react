@@ -12,7 +12,10 @@ from shop.models import (
     Category, CategoryRelationship, Skill, ProductSkill,
     Faculty, SubHeaderCategory, FacultyProduct,
     Product, UniversityCourseDetail,
-    UniversityCoursePayment,SubCategory,FunctionalArea,ProductFA,ProductJobTitle)
+    UniversityCoursePayment, SubCategory, FunctionalArea, 
+    ProductFA, ProductJobTitle, BlogProductCategoryMapping)
+
+from blog.models import Category as blog_Category
 
 from shop.choices import (
     APPLICATION_PROCESS_CHOICES, APPLICATION_PROCESS,
@@ -1793,7 +1796,51 @@ class ProductJobTitleChangeForm(forms.ModelForm):
                         name))
         return name
 
+CATEGORY_CHOICE = [
+    (b.id, '{}({})'.format(b.name,b.id)) for b in blog_Category.objects.filter(is_active=True)]
 
+class BlogProductCategoryForm(forms.ModelForm):
+
+    categories = forms.MultipleChoiceField(
+        label=("Category:"),
+        choices=CATEGORY_CHOICE, required=False)
+
+    class Meta:
+        model = Category
+        fields = ('categories',)
+
+    def __init__(self, *args, **kwargs):
+        super(BlogProductCategoryForm, self).__init__(*args, **kwargs)
+        instance = kwargs.get('instance')
+        if instance:
+            blog_category_list = []
+            for bpcm in BlogProductCategoryMapping.objects.filter(product_category = instance):
+                blog_category_list.append(bpcm.blog_category.id)
+
+            self.initial['categories'] = blog_category_list
+
+    def save(self, commit=True):
+        category = super(BlogProductCategoryForm, self).save(commit=False)
+
+        if commit:
+            blog_category = self.cleaned_data.get('categories')
+            blog_category = [int(i) for i in blog_category]
+            blog_category_list = list(BlogProductCategoryMapping.objects.filter(product_category=category\
+                                            ).values_list('blog_category',flat=True))
+            inclusion_list = [ x for x in blog_category if x not in blog_category_list]
+            exclusion_list = [ x for x in blog_category_list if x not in blog_category]
+
+            for b_category_id in inclusion_list:
+                b_category = blog_Category.objects.get(id=int(b_category_id))
+                BlogProductCategoryMapping.objects.create(product_category=category,\
+                                                blog_category=b_category)
+
+            for b_category_id in exclusion_list:
+                b_category = blog_Category.objects.get(id=int(b_category_id))
+                BlogProductCategoryMapping.objects.filter(product_category=category, \
+                                        blog_category=b_category).delete()
+
+        return category
 
 
 

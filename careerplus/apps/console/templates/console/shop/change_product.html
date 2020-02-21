@@ -1622,6 +1622,50 @@
           </div>
         </div>
 
+        <div class="x_panel">
+          <div class="x_title">
+            <h2><i class="fa fa-thumb-tack"></i>Blogs</h2>
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+               <form class="form-horizontal form-label-left" method="POST" action="." novalidate id="change-blog-form">
+                {{blog_form.media}}
+                {% csrf_token %}
+                  
+                  {% if blog_form.non_field_errors %}
+                    <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                      </button>
+                      {{blog_form.non_field_errors}}
+                    </div>
+                  {% endif %}
+
+                  <div class="item form-group {% if blog_form.blogs.errors %}bad{% endif %}">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ blog_form.blogs.id_for_label }}">Blogs Available <span class="required">*</span>
+                    </label>
+                    <div class="col-md-7 col-sm-7 col-xs-12">
+                      {{blog_form.blogs}}
+                    </div>
+                    <div class="alert">{{blog_form.blogs.errors}}</div>
+                  </div>
+                  
+                  
+                  <input type="hidden" name="product" value="{{object.pk}}">
+                  <input type="hidden" name="slug" value="blogs">
+                  <div class="ln_solid"></div>
+                  <div class="form-group">
+                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                      <button type="submit" class="btn btn-success save_scroll">Submit</button>
+                    </div>
+                  </div>
+                </form>   
+          </div>
+        </div>
+
         {% if prd_university_form %}
           <div class="x_panel">
             <div class="x_title">
