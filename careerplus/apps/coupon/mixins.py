@@ -35,7 +35,7 @@ class CouponMixin(object):
             coupon_obj.valid_from = today
             coupon_obj.valid_until = expiry
             coupon_obj.coupon_scope = 1
-            coupon_obj.set(on_products)
+            coupon_obj.products.set(on_products)
             coupon_obj.save()
         except Exception as e:
             logging.getLogger('error_log').error(
