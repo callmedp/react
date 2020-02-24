@@ -2130,6 +2130,7 @@
 
         
 {% block js_block %}
+    {{prdskill_formset.media}}
   {{ block.super }}
    <script  type="text/javascript">
     var sub_type_flow_choices =  {{ sub_type_flow_choices|safe }}
@@ -2406,6 +2407,6 @@
 
   </script>
 
-    {{prdskill_formset.media}}
+
 
 {% endblock js_block %}
