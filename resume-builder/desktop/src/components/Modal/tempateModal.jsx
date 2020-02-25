@@ -27,7 +27,7 @@ export default class TemplateModal extends React.Component {
 
 
     render() {
-        const {template: {templateId, modalTemplateImage}, ui: {modal}, page} = this.props;
+        const { templateId, modalTemplateImage, modal, page } = this.props;
         return (
             <div className="pr">
 
@@ -48,9 +48,9 @@ export default class TemplateModal extends React.Component {
                         <i onClick={this.closeModal} className='icon-close icon-close--position'></i>
                         {page === 'buy' ?
                             < img alt="template" className="img-responsive"
-                                  src={`data:image/png;base64,${modalTemplateImage}`}/> :
+                                src={`data:image/png;base64,${modalTemplateImage}`} /> :
                             < img alt="static template" className="img-responsive"
-                                  src={`${this.staticUrl}react/assets/images/resume${templateId || '1'}_preview.jpg`}/>
+                                src={`${this.staticUrl}react/assets/images/resume${templateId || '1'}_preview.jpg`} />
                         }
                     </div>
                 </Modal>

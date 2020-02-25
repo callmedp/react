@@ -137,17 +137,33 @@ class Home extends Component {
     }
 
     render() {
-        const { ui: { loader }, userInfo, userInfo: { first_name }, feedback, eventClicked } = this.props;
+        const { ui: { loader, loginModal }, userInfo, userInfo: { first_name, number, email }, feedback, eventClicked, loginCandidate, hideLoginModal } = this.props;
+
         return (
             <div className="nav-fixed">
                 {
                     !!(loader) &&
                     <LoaderPage />
                 }
-                <Header userName={first_name} page={'home'} userInfo={userInfo} eventClicked={eventClicked}
-                    feedback={feedback} getclass={this.state.scrolled ? 'color-change' : ''} location={this.props.location} />
-                <Banner userName={first_name} eventClicked={eventClicked} />
-                <LoginModal {...this.props} handleLoginSuccess={this.handleLoginSuccess} />
+                <Header
+                    userName={first_name}
+                    number={number}
+                    email={email}
+                    page={'home'}
+                    eventClicked={eventClicked}
+                    feedback={feedback}
+                    getclass={this.state.scrolled ? 'color-change' : ''}
+                    location={this.props.location} />
+                <Banner
+                    userName={first_name}
+                    eventClicked={eventClicked} />
+                <LoginModal
+                    handleLoginSuccess={this.handleLoginSuccess}
+                    loginCandidate={loginCandidate}
+                    hideLoginModal={hideLoginModal}
+                    loginModal={loginModal}
+                    history={this.props.history}
+                />
                 <section className="section-container">
                     <h2>Resume builder advantages</h2>
                     <strong className="section-container--sub-head">Resume builder advantages which will make your
@@ -237,7 +253,10 @@ class Home extends Component {
                     </ul>
                 </section>
 
-                <ResumeSlider {...this.props} page={'home'} />
+                <ResumeSlider
+                    {...this.props}
+                    page={'home'}
+                />
 
                 <section className="section-container">
                     <h2>Resume builder features</h2>
@@ -326,9 +345,9 @@ class Home extends Component {
                             changing job market.</p>
                         <ul>
                             <li><a href="https://learning.shine.com/" className="hyper-link-urls" >Explore courses</a></li>
-                            <li> <a href="https://learning.shine.com/services/resume-writing/63/" className ="hyper-link-urls">Job assistance</a></li>
-                            <li>  <a href="https://learning.shine.com/cms/resume-format/1/" className ="hyper-link-urls" >Free rescources</a></li>
-                            <li><a href="https://learning.shine.com/talenteconomy/" className ="hyper-link-urls">Talent economy</a></li>
+                            <li> <a href="https://learning.shine.com/services/resume-writing/63/" className="hyper-link-urls">Job assistance</a></li>
+                            <li>  <a href="https://learning.shine.com/cms/resume-format/1/" className="hyper-link-urls" >Free rescources</a></li>
+                            <li><a href="https://learning.shine.com/talenteconomy/" className="hyper-link-urls">Talent economy</a></li>
                         </ul>
                     </div>
                 </section>

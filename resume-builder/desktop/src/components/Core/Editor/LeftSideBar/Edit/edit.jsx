@@ -1,13 +1,15 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import './edit.scss'
 import queryString from "query-string";
-import {formCategoryList} from "../../../../../Utils/formCategoryList";
-import {connect} from 'react-redux'
+import { formCategoryList } from "../../../../../Utils/formCategoryList";
+import { connect } from 'react-redux'
 import * as actions from '../../../../../store/personalInfo/actions/index'
-import {showAlertModal, hideAlertModal} from '../../../../../store/ui/actions/index'
+import { showAlertModal, hideAlertModal } from '../../../../../store/ui/actions/index'
 import AlertModal from '../../../../Modal/alertModal.jsx'
 import MenuModal from '../../../../Modal/menuModal';
+import { eventClicked } from '../../../../../store/googleAnalytics/actions/index'
+import { withRouter } from 'react-router-dom';
 
 
 const isSame = (initialField, formField) => {
@@ -47,7 +49,8 @@ class Edit extends Component {
     static getDerivedStateFromProps(nextProps, prevState) {
         const values = queryString.parse(nextProps.location.search);
         const entityPreferenceList = nextProps.entityList;
-        const {ui: {formName}} = nextProps;
+        const {formName} = nextProps;
+
         let currentEntityIndex = Object.values(formCategoryList).findIndex(item => item['itemType'] === formName);
         if (entityPreferenceList && entityPreferenceList.length) {
             if (!(entityPreferenceList[currentEntityIndex] && entityPreferenceList[currentEntityIndex].active)) {
@@ -74,7 +77,7 @@ class Edit extends Component {
             if (elem['entity_id'] === deletedElem['entity_id']) {
                 return {
                     ...elem,
-                    ...{active: false}
+                    ...{ active: false }
                 }
             }
             return elem;
@@ -108,7 +111,7 @@ class Edit extends Component {
     }
 
     openMenuModal() {
-        this.setState({menu_modal_status: true});
+        this.setState({ menu_modal_status: true });
         this.props.eventClicked({
             'action': 'Add/Remove',
             'label': 'Click'
@@ -116,12 +119,12 @@ class Edit extends Component {
     }
 
     closeMenuModal() {
-        this.setState({menu_modal_status: false})
+        this.setState({ menu_modal_status: false })
     }
 
     render() {
-        const {type, preferenceList, nextLink, elemToDelete, menu_modal_status} = this.state;
-        let {formData, ui: {formName}, updateCategoryEntity, showAlertModal, userInfo: {order_data}, eventClicked} = this.props;
+        const { type, preferenceList, nextLink, elemToDelete, menu_modal_status } = this.state;
+        let { formData, formName, updateCategoryEntity, showAlertModal, eventClicked, generateResumeModal,alertModal, hideAlertModal } = this.props;
         let error = [], filled = [], isError = false, isFilled = false;
         const obj = (formData && formData[formName]) || {};
         let syncErrors = obj['syncErrors'] || {};
@@ -142,11 +145,11 @@ class Edit extends Component {
                 initial = initial && initial['list'][0]
             }
             if ('list' in values) ((values && values['list'] || [])).map((el, index) => {
-                    filled[index] = false;
-                    return (el ? Object.keys(el) : []).map(
-                        key => (isSame(initial[key], el[key]) ? false : filled[index] = true)
-                    )
-                }
+                filled[index] = false;
+                return (el ? Object.keys(el) : []).map(
+                    key => (isSame(initial[key], el[key]) ? false : filled[index] = true)
+                )
+            }
             )
             else {
                 filled[0] = false;
@@ -173,25 +176,27 @@ class Edit extends Component {
                     formCategoryList={formCategoryList}
                     updateCategoryEntity={updateCategoryEntity}
                 />
-                <AlertModal {...this.props}
-                            nextLink={nextLink}
-                            elemToDelete={elemToDelete}
-                            newUser={newUser}
-                            order_data={order_data}
+                <AlertModal 
+                    alertModal = {alertModal}
+                    generateResumeModal = {generateResumeModal}
+                    nextLink={nextLink}
+                    elemToDelete={elemToDelete}
+                    newUser={newUser}
+                    hideAlertModal = {hideAlertModal}
                 />
                 <strong>Complete your information</strong>
                 <ul>
                     {
                         (preferenceList || []).filter(elem => elem.active === true).map((elem, index) => {
-                            const {link, icon, itemType, name} = formCategoryList[elem['entity_id']];
+                            const { link, icon, itemType, name } = formCategoryList[elem['entity_id']];
                             return (
-                                <li key={index}
+                                <li key={elem['entity_id']}
                                     className={(type === itemType ? ' edit-section--active' : '')}>
                                     {
                                         !!((isError && isFilled) || newUser) ?
                                             (
                                                 <div onClick={() => this.showErrorMessage(link)}
-                                                     className={"non-link"}>
+                                                    className={"non-link"}>
                                                     <span className={'mr-20 ' + icon}></span>
                                                     {elem['entity_text']}
                                                 </div>
@@ -202,12 +207,12 @@ class Edit extends Component {
 
                                             (
                                                 <Link to={link}
-                                                      onClick={() => {
-                                                          eventClicked({
-                                                              'action': 'SelectSection',
-                                                              'label': name
-                                                          })
-                                                      }}>
+                                                    onClick={() => {
+                                                        eventClicked({
+                                                            'action': 'SelectSection',
+                                                            'label': name
+                                                        })
+                                                    }}>
                                                     <span className={'mr-20 ' + icon}></span>
                                                     {elem['entity_text']}
                                                 </Link>
@@ -216,7 +221,7 @@ class Edit extends Component {
                                     {
                                         !!(elem['entity_id'] !== 1 && elem['entity_id'] !== 6) ?
                                             <span onClick={() => this.deleteFromVisibleList(elem)}
-                                                  className="icon-closemenu pull-right mt-20"/> : ''
+                                                className="icon-closemenu pull-right mt-20" /> : ''
                                     }
                                 </li>
                             )
@@ -238,8 +243,10 @@ class Edit extends Component {
 const mapStateToProps = (state) => {
     return {
         entityList: (state.personalInfo && state.personalInfo.entity_preference_data) || [],
-        ui: state.ui,
-        formData: state && state.form
+        formName: (state.ui && state.ui.formName) || '',
+        formData: state && state.form,
+        alertModal: (state.ui && state.ui.alertModal) || false,
+        generateResumeModal: (state.ui && state.ui.generateResumeModal) || false,
     }
 }
 
@@ -259,8 +266,12 @@ const mapDispatchToProps = (dispatch) => {
         'hideAlertModal': () => {
             return dispatch(hideAlertModal())
         },
+        'eventClicked': (data) => {
+            return dispatch(eventClicked(data))
+        },
+
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Edit)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Edit))
 

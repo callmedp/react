@@ -385,13 +385,19 @@ export default class Preview extends Component {
 
 
     render() {
-        const { userInfo: { selected_template, upload_resume }, template: { entity_position, entity_id_count_mapping } } = this.props;
+        const { userInfo: { selected_template, upload_resume },
+         ui: { alertModal, generateResumeModal }, hideAlertModal,
+          template: { entity_position, entity_id_count_mapping } } = this.props;
         const { currentTab, selectedColor, activeSection, sectionEntityName, selectedEntity } = this.state;
         const [currentEntity] = this.getEntityName(entity_position, activeSection);
 
         return (
             <div className="preview-section">
-                <AlertModal {...this.props} isPreview={true} />
+                <AlertModal
+                    alertModal={alertModal}
+                    generateResumeModal={generateResumeModal}
+                    hideAlertModal={hideAlertModal}
+                    isPreview={true} />
                 <strong>Complete your customisation</strong>
                 <Accordion
                     preExpanded={["1"]}>

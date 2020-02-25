@@ -125,7 +125,7 @@ function* handleProjectSwap(action) {
 
 function* deleteUserProject(action) {
     try {
-
+        
         const candidateId = localStorage.getItem('candidateId') || '';
 
         const {projectId} = action;
