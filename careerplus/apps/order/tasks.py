@@ -541,21 +541,31 @@ def process_jobs_on_the_move(obj_id=None):
                 order__candidate_id=obj.order.candidate_id
             ).exclude(whatsapp_profile_orderitem=None).first()
 
-            desired_industry, desired_location, desired_salary, current_salary, experience, skills = '', '' ,'', '', '', ''
+            desired_industry, desired_location, desired_salary, current_salary, \
+                experience, skills = '', '', '', '', '', ''
+            latest_education = None
 
             if other_jobs_on_the_move:
-                desired_industry = other_jobs_on_the_move.whatsapp_profile_orderitem.desired_industry
-                desired_location = other_jobs_on_the_move.whatsapp_profile_orderitem.desired_location
+                desired_industry = other_jobs_on_the_move.whatsapp_profile_orderitem.\
+                    desired_industry
+                desired_location = other_jobs_on_the_move.whatsapp_profile_orderitem.\
+                    desired_location
                 desired_salary = other_jobs_on_the_move.whatsapp_profile_orderitem.desired_salary
                 current_salary = other_jobs_on_the_move.whatsapp_profile_orderitem.current_salary
                 experience = other_jobs_on_the_move.whatsapp_profile_orderitem.experience
                 skills = other_jobs_on_the_move.whatsapp_profile_orderitem.skills
+                latest_education = other_jobs_on_the_move.whatsapp_profile_orderitem.\
+                    latest_education
             else:
-                resp_status = ShineCandidateDetail().get_candidate_detail(email=obj.order.email, shine_id=None)
+                resp_status = ShineCandidateDetail().get_candidate_detail(
+                    email=obj.order.email, shine_id=None
+                )
 
                 if 'total_experience' in resp_status and resp_status['total_experience']:
                     experience_years = resp_status['total_experience'][0].get('experience_in_years', 0)
-                    experience_months = resp_status['total_experience'][0].get('experience_in_months', 0)
+                    experience_months = resp_status['total_experience'][0].get(
+                        'experience_in_months', 0
+                    )
 
                     experience_years = dict(EXPERIENCE_IN_YEARS_MODEL_CHOICES).get(experience_years)
                     if experience_months:
@@ -564,6 +574,17 @@ def process_jobs_on_the_move(obj_id=None):
 
                 if 'skills' in resp_status and resp_status['skills']:
                     skills = ','.join([i['value'] for i in resp_status['skills']])[0:99]
+
+                if 'education' in resp_status and resp_status['education']:
+                    # extarcting the education level choice from shine api and storing it
+                    # in latest education. Then using mapping from choices to get the education.
+                    latest_education_dict = ''
+                    for education in resp_status['education']:
+                        if not latest_education_dict or latest_education_dict.year_of_passout\
+                                < latest_education_dict.year_of_passout:
+                            latest_education_dict = education
+
+                    latest_education = latest_education_dict.education_level
 
                 if resp_status and 'desired_job' in resp_status:
 
@@ -591,7 +612,7 @@ def process_jobs_on_the_move(obj_id=None):
                     salary_in_thousand = resp_status['workex'][0]['salary_in_thousand']
                     current_salary = str(salary_in_lakh) + 'Lakh ' + str(salary_in_thousand) + 'Thousand'
             #  TODO handle this empty contact number issue in order
-            contact_number =  obj.order.mobile or "NA"; 
+            contact_number = obj.order.mobile or "NA"
             ProductUserProfile.objects.create(
                 order_item=obj,
                 contact_number=contact_number,
@@ -600,7 +621,8 @@ def process_jobs_on_the_move(obj_id=None):
                 desired_salary=desired_salary,
                 current_salary=current_salary,
                 experience=experience,
-                skills=skills
+                skills=skills,
+                latest_education=latest_education,
             )
             obj.update_pending_links_count()
 

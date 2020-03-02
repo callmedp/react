@@ -5,7 +5,7 @@ from django.conf import settings
 from order.models import OrderItem, Message,Order
 from order.choices import STATUS_CHOICES
 from shop.models import DeliveryService, JobsLinks, ProductUserProfile
-from shop.choices import LINK_STATUS_CHOICES, DAYS_CHOICES
+from shop.choices import LINK_STATUS_CHOICES, DAYS_CHOICES, EDUCATION_CHOICES
 # from cart.choices import DELIVERY_TYPE
 from order.choices import OI_OPS_STATUS
 from review.models import Review, STATUS_CHOICES
@@ -564,8 +564,8 @@ class ProductUserProfileForm(forms.ModelForm):
         fields = (
             'contact_number', 'desired_industry', 'desired_location',
             'desired_position', 'desired_salary', 'current_salary',
-            'approved', 'experience', 'skills', 'onboard', 'day_of_week',
-            'manual_links_count'
+            'approved', 'experience', 'latest_education', 'skills',
+            'onboard', 'day_of_week', 'manual_links_count'
         )
     contact_number = forms.CharField(
         max_length=500,
@@ -606,6 +606,12 @@ class ProductUserProfileForm(forms.ModelForm):
     experience = forms.CharField(
         max_length=500,
         widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-3 col-xs-12'}),
+        required=False
+    )
+    latest_education = forms.ChoiceField(
+        choices=EDUCATION_CHOICES,
+        widget=forms.Select(attrs={
             'class': 'form-control col-md-3 col-xs-12'}),
         required=False
     )
