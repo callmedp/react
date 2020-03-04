@@ -1,6 +1,9 @@
 import logging
 from celery.decorators import task
 from django.conf import settings
+from django.core.files.base import ContentFile
+from django.core.cache import cache
+
 
 from linkedin.autologin import AutoLogin
 
@@ -18,7 +21,6 @@ from shine.core import ShineCandidateDetail
 from crmapi.config import (
     EXPERIENCE_IN_YEARS_MODEL_CHOICES
 )
-from django.core.cache import cache
 from shop.models import PracticeTestInfo
 from core.api_mixin import NeoApiMixin
 
@@ -54,8 +56,8 @@ def pending_item_email(pk=None):
                     token)
     })
     urlshortener = create_short_url(login_url=data)
-    data.update({'url':urlshortener.get('url')})
-    
+    data.update({'url': urlshortener.get('url')})
+
     to_emails = [order.get_email()]
     mail_type = "PENDING_ITEMS"
     product_names = []
@@ -74,71 +76,72 @@ def pending_item_email(pk=None):
                 'upload_url': "%s://%s/autologin/%s/?next=/dashboard/roundone/profile/" % (
                     settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                     token),
-                'type_flow':9,
+                'type_flow': 9,
                 'product_url': oi.product.get_url(),
             })
             send_email(to_emails, mail_type, type_flow_9_data, 121, oi.pk)
             urlshortener = create_short_url(login_url=type_flow_9_data)
             type_flow_9_data.update({'url': urlshortener.get('url')})
             SendSMS().send(sms_type=mail_type, data=type_flow_9_data)
-            sms_oi_status=121
+            sms_oi_status = 121
 
         elif (oi.product.type_flow == 10) and (131 not in email_sets) and (131 not in sms_sets):
             type_flow_10_data = data
             type_flow_10_data.pop('upload_url', None)
             type_flow_10_data.update({
                 'test_url': "%s/dashboard" % (settings.SITE_DOMAIN),
-                'type_flow':10,
+                'type_flow': 10,
                 'product_url': oi.product.get_url(),
             })
             send_email(to_emails, mail_type, type_flow_10_data, 131, oi.pk)
             urlshortener = create_short_url(login_url=type_flow_10_data)
-            type_flow_10_data.update({'url': urlshortener.get('url')})   
+            type_flow_10_data.update({'url': urlshortener.get('url')})
             SendSMS().send(sms_type=mail_type, data=type_flow_10_data)
-            sms_oi_status=131
-        
-        if oi.oi_resume or  oi.oi_status == 61:
+            sms_oi_status = 131
+
+        if oi.oi_resume or oi.oi_status == 61:
             continue
-        
+
         if (oi.product.type_flow == 1) and (21 not in email_sets) and (21 not in sms_sets):
-            oi_status_mapping.update({oi.id:21})
+            oi_status_mapping.update({oi.id: 21})
             product_names.append(oi.product.name)
-            sms_oi_status=21
+            sms_oi_status = 21
 
         elif (oi.product.type_flow == 3) and (41 not in email_sets) and (41 not in sms_sets):
-            oi_status_mapping.update({oi.id:41})
+            oi_status_mapping.update({oi.id: 41})
             product_names.append(oi.product.name)
-            sms_oi_status=41
+            sms_oi_status = 41
 
         elif (oi.product.type_flow == 4) and (61 not in email_sets or 61 not in sms_sets):
-            oi_status_mapping.update({oi.id:61})
+            oi_status_mapping.update({oi.id: 61})
             product_names.append(oi.product.name)
-            sms_oi_status=61
+            sms_oi_status = 61
 
-        elif (oi.product.type_flow == 5 and oi.product.sub_type_flow in [501]) and (71 not in email_sets) and (71 not in sms_sets):
-            oi_status_mapping.update({oi.id:71})
+        elif (oi.product.type_flow == 5 and oi.product.sub_type_flow in [501]) \
+                and (71 not in email_sets) and (71 not in sms_sets):
+            oi_status_mapping.update({oi.id: 71})
             product_names.append(oi.product.name)
-            sms_oi_status=71
+            sms_oi_status = 71
 
         elif (oi.product.type_flow in [7, 15]) and (91 not in email_sets) and (91 not in sms_sets):
-            oi_status_mapping.update({oi.id:91})
+            oi_status_mapping.update({oi.id: 91})
             product_names.append(oi.product.name)
-            sms_oi_status=91
+            sms_oi_status = 91
 
-        elif (oi.product.type_flow == 12) and (141 not in email_sets or 141 not in sms_sets) :
-            oi_status_mapping.update({oi.id:141})
+        elif (oi.product.type_flow == 12) and (141 not in email_sets or 141 not in sms_sets):
+            oi_status_mapping.update({oi.id: 141})
             product_names.append(oi.product.name)
-            sms_oi_status=141
+            sms_oi_status = 141
 
         elif (oi.product.type_flow == 13) and (151 not in email_sets) and (151 not in sms_sets):
-            oi_status_mapping.update({oi.id:151})
+            oi_status_mapping.update({oi.id: 151})
             product_names.append(oi.product.name)
-            sms_oi_status=151
+            sms_oi_status = 151
 
         elif (oi.product.type_flow == 8) and (108 not in email_sets) and (108 not in sms_sets):
-            oi_status_mapping.update({oi.id:108})
+            oi_status_mapping.update({oi.id: 108})
             product_names.append(oi.product.name)
-            sms_oi_status=108
+            sms_oi_status = 108
 
         if sms_oi_status:
             oi.smsorderitemoperation_set.create(
@@ -148,12 +151,14 @@ def pending_item_email(pk=None):
 
     if oi_status_mapping:
         data.update({
-                'product_names':product_names,
-                'combined_mail':True  # for type flow type_flow = [1,3,4,5,12,13,7,8,15]
+                'product_names': product_names,
+                'combined_mail': True  # for type flow type_flow = [1,3,4,5,12,13,7,8,15]
             })
         SendSMS().send(sms_type=mail_type, data=data)
-        send_email(to_emails=to_emails,mail_type=mail_type, email_dict=data,oi_status_mapping=oi_status_mapping)
-
+        send_email(
+            to_emails=to_emails, mail_type=mail_type,
+            email_dict=data, oi_status_mapping=oi_status_mapping
+            )
 
 
 @task(name="process_mailer")
@@ -163,10 +168,10 @@ def process_mailer(pk=None):
 
     if (not order) or (not order.status == 1):
         return
-    
+
     orderitems = order.orderitems.filter(no_process=False).select_related(
         'order', 'product', 'partner')
-    
+
     for oi in orderitems:
         token = AutoLogin().encode(
             oi.order.email, oi.order.candidate_id, days=None)
@@ -192,7 +197,7 @@ def process_mailer(pk=None):
             'mobile': oi.order.get_mobile(),
             'parent_name': oi.parent.product.name if oi.parent else None
         })
-        email_status,sms_status = None,None
+        email_status, sms_status = None, None
 
         if oi.product.type_flow in [1, 12, 13] and (25 not in email_sets and 25 not in sms_sets):
             data.update({
@@ -264,7 +269,7 @@ def process_mailer(pk=None):
         elif oi.product.type_flow == 14 and (191 not in email_sets and 191 not in sms_sets):
             email_status = 191
             sms_status = 191
-        
+
         elif oi.product.type_flow == 6 and (171 not in email_sets and 171 not in sms_sets):
             email_status = 171
             sms_status = 171
@@ -286,7 +291,7 @@ def process_mailer(pk=None):
             })
             email_status = 122
             sms_status = 122
-        
+
         if email_status:
             send_email(to_emails, mail_type, data, email_status, oi.pk)
 
@@ -394,7 +399,7 @@ def payment_realisation_mailer(pk=None):
     try:
         order = Order.objects.get(pk=pk)
     except Exception as e:
-        logging.getLogger('error_log').error('unable to get order object %s'%str(e))
+        logging.getLogger('error_log').error('unable to get order object %s' % str(e))
     try:
         invoice_data = InvoiceGenerate().get_invoice_data(order=order)
         pymt_objs = PaymentTxn.objects.filter(order=order)
@@ -442,7 +447,7 @@ def service_initiation(pk=None):
     try:
         order = Order.objects.get(pk=pk)
     except Exception as e:
-        logging.getLogger('error_log').error('unable to get order object%s'%str(e))
+        logging.getLogger('error_log').error('unable to get order object%s' % str(e))
     try:
         if order:
             orderitems = order.orderitems.filter(
@@ -463,12 +468,10 @@ def service_initiation(pk=None):
                         'sms_oi_status', flat=True).distinct())
 
                 urlshortener = create_short_url(login_url=data)
-                data.update({'url':urlshortener.get('url')})
+                data.update({'url': urlshortener.get('url')})
 
                 if oi.product.type_flow == 2 and 162 not in sms_sets:
                     try:
-                        
-                        
                         SendSMS().send(sms_type=sms_type, data=data)
                         oi.smsorderitemoperation_set.create(
                             sms_oi_status=162,
@@ -480,8 +483,6 @@ def service_initiation(pk=None):
 
                 elif oi.product.type_flow == 14 and 192 not in sms_sets:
                     try:
-                        
-                        
                         SendSMS().send(sms_type=sms_type, data=data)
                         oi.smsorderitemoperation_set.create(
                             sms_oi_status=192,
@@ -493,8 +494,6 @@ def service_initiation(pk=None):
 
                 elif oi.product.type_flow == 6 and 172 not in sms_sets:
                     try:
-                        
-                        
                         SendSMS().send(sms_type=sms_type, data=data)
                         oi.smsorderitemoperation_set.create(
                             sms_oi_status=172,
@@ -505,8 +504,6 @@ def service_initiation(pk=None):
                             str(sms_type), str(e)))
                 elif oi.product.type_flow == 10 and 133 not in sms_sets:
                     try:
-                        
-                        
                         SendSMS().send(sms_type=sms_type, data=data)
                         oi.smsorderitemoperation_set.create(
                             sms_oi_status=133,
@@ -516,7 +513,7 @@ def service_initiation(pk=None):
                         logging.getLogger('error_log').error(
                             "%s - %s" % (str(sms_type), str(e)))
     except Exception as e:
-        logging.getLogger('error_log').error('service initiation failed%s'%str(e))
+        logging.getLogger('error_log').error('service initiation failed%s' % str(e))
 
 
 @task(name="process_jobs_on_the_move")
@@ -541,25 +538,32 @@ def process_jobs_on_the_move(obj_id=None):
                 order__candidate_id=obj.order.candidate_id
             ).exclude(whatsapp_profile_orderitem=None).first()
 
-            desired_industry, desired_location, desired_salary, current_salary, experience, skills = '', '' ,'', '', '', ''
+            desired_industry, desired_location, desired_salary, current_salary,\
+                experience, skills = '', '', '', '', '', ''
 
             if other_jobs_on_the_move:
-                desired_industry = other_jobs_on_the_move.whatsapp_profile_orderitem.desired_industry
-                desired_location = other_jobs_on_the_move.whatsapp_profile_orderitem.desired_location
+                desired_industry = other_jobs_on_the_move.whatsapp_profile_orderitem.\
+                    desired_industry
+                desired_location = other_jobs_on_the_move.whatsapp_profile_orderitem.\
+                    desired_location
                 desired_salary = other_jobs_on_the_move.whatsapp_profile_orderitem.desired_salary
                 current_salary = other_jobs_on_the_move.whatsapp_profile_orderitem.current_salary
                 experience = other_jobs_on_the_move.whatsapp_profile_orderitem.experience
                 skills = other_jobs_on_the_move.whatsapp_profile_orderitem.skills
             else:
-                resp_status = ShineCandidateDetail().get_candidate_detail(email=obj.order.email, shine_id=None)
+                resp_status = ShineCandidateDetail().get_candidate_detail(
+                    email=obj.order.email, shine_id=None
+                    )
 
                 if 'total_experience' in resp_status and resp_status['total_experience']:
-                    experience_years = resp_status['total_experience'][0].get('experience_in_years', 0)
-                    experience_months = resp_status['total_experience'][0].get('experience_in_months', 0)
+                    experience_years = resp_status['total_experience'][0].\
+                        get('experience_in_years', 0)
+                    experience_months = resp_status['total_experience'][0].\
+                        get('experience_in_months', 0)
 
                     experience_years = dict(EXPERIENCE_IN_YEARS_MODEL_CHOICES).get(experience_years)
                     if experience_months:
-                        experience_months = str(experience_months) + ' months' 
+                        experience_months = str(experience_months) + ' months'
                     experience = '{} {}'.format(experience_years, experience_months)
 
                 if 'skills' in resp_status and resp_status['skills']:
@@ -571,27 +575,37 @@ def process_jobs_on_the_move(obj_id=None):
 
                     # Get canidate location
                     candidate_location = candidate_data['candidate_location']
-                    desired_location = ','.join([LOCATION_MAPPING.get(loc, '') for loc in candidate_location])[0:244]
+                    desired_location = ','.join(
+                        [LOCATION_MAPPING.get(loc, '') for loc in candidate_location]
+                        )[0:244]
 
                     # Get candidate industry
                     candidate_industry = candidate_data['industry']
-                    desired_industry = ','.join([INDUSTRY_MAPPING.get(ind, '') for ind in candidate_industry])[0:244]
+                    desired_industry = ','.join(
+                        [INDUSTRY_MAPPING.get(ind, '') for ind in candidate_industry]
+                        )[0:244]
 
                     # Get desired salary
                     maximum_salary = candidate_data['maximum_salary']
-                    expected_min_salary = ','.join([DESIRED_SALARY_MAPPING.get(l, 'N.A') for l in maximum_salary])
+                    expected_min_salary = ','.join(
+                        [DESIRED_SALARY_MAPPING.get(l, 'N.A') for l in maximum_salary]
+                        )
 
                     minimum_salary = candidate_data['minimum_salary']
-                    expected_max_salary = ','.join([DESIRED_SALARY_MAPPING.get(l, 'N.A') for l in minimum_salary])
+                    expected_max_salary = ','.join(
+                        [DESIRED_SALARY_MAPPING.get(l, 'N.A') for l in minimum_salary]
+                        )
 
-                    desired_salary = expected_min_salary if expected_min_salary else expected_max_salary
+                    desired_salary = expected_min_salary if expected_min_salary \
+                        else expected_max_salary
 
                     # get current salary
                     salary_in_lakh = resp_status['workex'][0]['salary_in_lakh']
                     salary_in_thousand = resp_status['workex'][0]['salary_in_thousand']
-                    current_salary = str(salary_in_lakh) + 'Lakh ' + str(salary_in_thousand) + 'Thousand'
+                    current_salary = str(salary_in_lakh) + 'Lakh ' + \
+                        str(salary_in_thousand) + 'Thousand'
             #  TODO handle this empty contact number issue in order
-            contact_number =  obj.order.mobile or "NA"; 
+            contact_number = obj.order.mobile or "NA"
             ProductUserProfile.objects.create(
                 order_item=obj,
                 contact_number=contact_number,
@@ -603,6 +617,7 @@ def process_jobs_on_the_move(obj_id=None):
                 skills=skills
             )
             obj.update_pending_links_count()
+
 
 @task
 def generate_resume_for_order(order_id):
@@ -621,25 +636,27 @@ def generate_resume_for_order(order_id):
     if product.sub_type_flow == "1701":
         is_combo = True
     else:
-        is_combo = True if product.attr.get_value_by_attribute(product.attr.get_attribute_by_name('template_type')).value == 'multiple' else False
-    
-    candidate_obj = Candidate.objects.filter(candidate_id = candidate_id).first()
-    # if not candidate_obj create it by yourself. 
+        is_combo = True if product.attr.get_value_by_attribute(
+            product.attr.get_attribute_by_name('template_type')
+            ).value == 'multiple' else False
+
+    candidate_obj = Candidate.objects.filter(candidate_id=candidate_id).first()
+    # if not candidate_obj create it by yourself.
     if not candidate_obj:
-        selected_template = 1 
-    else: 
-        selected_template = candidate_obj.selected_template or 1 
+        selected_template = 1
+    else:
+        selected_template = candidate_obj.selected_template or 1
     # selected_template
     builder_obj = ResumeGenerator()
-    builder_obj.save_order_resume_pdf(order=order_obj,is_combo=is_combo,index=selected_template)
+    builder_obj.save_order_resume_pdf(order=order_obj, is_combo=is_combo, index=selected_template)
 
 
 @task
-def send_resume_in_mail_resume_builder(attachment,data):
+def send_resume_in_mail_resume_builder(attachment, data):
     to_email = [data.get('email')]
     mail_type = "SEND_RESUME_IN_MAIL_RESUME_BUILDER"
     try:
-        SendMail().send(to_email, mail_type, data,attachment=attachment)
+        SendMail().send(to_email, mail_type, data, attachment=attachment)
     except Exception as e:
         logging.getLogger('error_log').error(
             "%s" % (str(e)))
@@ -652,7 +669,7 @@ def board_user_on_neo(neo_ids):
     - Board User on Trial Basis Or Regular Basis.
     - While Boarding User On Regular Basis Check.
         - If on Trial, then update SSO Profile.
-        - else hit for Boarding assuming either 
+        - else hit for Boarding assuming either
           already Regular user O New user.
     '''
     from datetime import datetime, timedelta
@@ -676,16 +693,22 @@ def board_user_on_neo(neo_ids):
                 })
         account_type = NeoApiMixin().get_student_account_type(email)
         if account_type and account_type == 'trial':
-                boarding_type = 'already_trial'
-                data = {
-                    'account_type': 'regular',
-                }
-                flag = NeoApiMixin().update_student_sso_profile(data=data, email=email)
-                if flag:
-                    cache.set('updated_from_trial_to_regular_{}'.format(str(item.id)), 1, 3600 * 24 * 2)
-                    logging.getLogger('error_log').error('Account update to Regular from Trial for email {}'.format(email))
-                else:
-                    logging.getLogger('error_log').error('Unable to Update SSO profile for email{}'.format(email))
+            boarding_type = 'already_trial'
+            data = {
+                'account_type': 'regular',
+            }
+            flag = NeoApiMixin().update_student_sso_profile(data=data, email=email)
+            if flag:
+                cache.set(
+                    'updated_from_trial_to_regular_{}'.format(str(item.id)), 1, 3600 * 24 * 2
+                    )
+                logging.getLogger('error_log').error(
+                    'Account update to Regular from Trial for email {}'.format(email)
+                    )
+            else:
+                logging.getLogger('error_log').error(
+                    'Unable to Update SSO profile for email{}'.format(email)
+                    )
 
         else:
             flag = NeoApiMixin().board_user_on_neo(email=email, data_dict=data_dict)
@@ -693,10 +716,11 @@ def board_user_on_neo(neo_ids):
                 cache.set('neo_mail_sent_{}'.format(str(item.id)), 1, 3600 * 24 * 2)
         return boarding_type
 
+
 @task
 def bypass_resume_midout(order_id):
-    from order.models import OrderItem,Order
-    from datetime import timedelta
+    from order.models import OrderItem, Order
+    from datetime import timedelta, datetime
     from django.utils import timezone
     order = Order.objects.filter(id=order_id).first()
 
@@ -710,27 +734,59 @@ def bypass_resume_midout(order_id):
     for order_item in order_items:
         if order_item.oi_status == 2 and order_item.product.type_flow in [1,12,13,8,3,4]:
             update_resume_oi_ids.append(order_item.id)
-    
+
     if not update_resume_oi_ids:
         logging.getLogger('error_log').error("No orderitem Id found to update resume")
         return
-    logging.getLogger('info_log').info("Order item to update resume : {} ".format(' '.join(map(str,update_resume_oi_ids))))
+    logging.getLogger('info_log').info(
+        "Order item to update resume : {} ".format(' '.join(map(str, update_resume_oi_ids)))
+        )
+
     old_resume = None
-    start_date = timezone.now() -timedelta(days=180)
+    oi_resume_creation_date = None
+    start_date = timezone.now() - timedelta(days=180)
     end_date = timezone.now()
-    #order items to get previous resume in previous 180 days
-    order_items = OrderItem.objects.filter(order__candidate_id=order.candidate_id,created__range=[start_date,end_date]).order_by('-id')
+    # order items to get previous resume in previous 180 days
+    order_items = OrderItem.objects.filter(
+        order__candidate_id=order.candidate_id, created__range=[start_date, end_date]
+        ).order_by('-id')
 
     for order_item in order_items:
         if order_item.oi_resume:
             old_resume = order_item.oi_resume
+            oi_operation = order_item.orderitemoperation_set.filter(oi_status=3).first()
+            oi_resume_creation_date = oi_operation.created if oi_operation else None
             break
-    
+
     if not old_resume:
         logging.getLogger('info_log').info("Old Resume Not Found")
         return
-    
-    #order items to update old resume in new order ->(order items)
+
+    try:
+        shine_resume_details = None
+        response = ShineCandidateDetail().get_candidate_detail(shine_id=order.candidate_id)
+        resumes = response.get('resumes', None)
+
+        if len(resumes) > 0:
+            shine_resume_details = resumes[0]
+
+        shine_resume_creation_date = datetime.strptime(
+            shine_resume_details.get('creation_date'), '%Y-%m-%dT%H:%M:%S'
+            ) if shine_resume_details else None
+
+        if oi_resume_creation_date and shine_resume_creation_date:
+            if oi_resume_creation_date < shine_resume_creation_date:
+                response = ShineCandidateDetail().get_shine_candidate_resume(
+                    candidate_id=order.candidate_id,
+                    resume_id=shine_resume_details.get('id')
+                    )
+                if response.status_code == 200:
+                    old_resume = ContentFile(response.content)
+
+    except Exception as e:
+        logging.getLogger('error_log').error('get resume failed from shine  %s' % str(e))
+
+    # order items to update old resume in new order ->(order items)
     order_items = OrderItem.objects.filter(id__in=update_resume_oi_ids)
 
     for oi in order_items:
@@ -748,7 +804,7 @@ def bypass_resume_midout(order_id):
             oi_status=oi.oi_status,
             last_oi_status=oi.last_oi_status,
             assigned_to=oi.assigned_to)
-    
+
     order.auto_upload = True
     order.save()
 
@@ -765,16 +821,16 @@ def upload_Resume_shine(order_item_id):
     if not order_item:
         return
     candidate_id = order_item.order.candidate_id
-    data={
-        'candidate_id':candidate_id,
-        'upload_medium':'direct',
-        'upload_source':'web',
-        'resume_source':7,
-        'resume_medium':7,
-        'resume_trigger':7
+    data = {
+        'candidate_id': candidate_id,
+        'upload_medium': 'direct',
+        'upload_source': 'web',
+        'resume_source': 7,
+        'resume_medium': 7,
+        'resume_trigger': 7
     }
     file_path = settings.RESUME_DIR + order_item.oi_draft.name
-    response = ShineCandidateDetail().upload_resume_shine(data=data,file_path=file_path)
+    response = ShineCandidateDetail().upload_resume_shine(data=data, file_path=file_path)
     if response:
         logging.getLogger('info_log').info("Uploaded to shine")
         order = order_item.order
@@ -782,10 +838,3 @@ def upload_Resume_shine(order_item_id):
         order.save()
         return
     logging.getLogger('error_log').info("Upload to shine failed ")
-
-
-
-
-
-
-
