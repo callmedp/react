@@ -8,7 +8,7 @@ from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 from blog.models import Tag, Category, Blog, Comment, Author, SITE_TYPE
 
-from shop.models import Product, Category as shop_Category, BlogProductCategoryMapping, BlogProductMapping
+from shop.models import Product, Category as shop_Category, BlogProductMapping
 from blog.config import STATUS
 from .decorators import (
     has_group,)
@@ -19,9 +19,6 @@ User = get_user_model()
 prod_objs = SQS().all().only('id', 'pNm')
 choices = [
     (p.id, '{}({})'.format(p.pNm,p.id)) for p in prod_objs]
-
-CATEGORY_CHOICE = [
-    (c.id, '{}({})'.format(c.name,c.id)) for c in shop_Category.objects.filter(active=True)]
 
 class ArticleAddForm(forms.ModelForm):
 
@@ -574,20 +571,10 @@ class CategoryChangeForm(forms.ModelForm):
             choices=SITE_TYPE, widget=forms.Select(attrs={
                 'class': 'form-control col-md-7 col-xs-12'}))
 
-    category = forms.MultipleChoiceField(
-        label=("Category:"),
-        choices=CATEGORY_CHOICE, required=False, widget=forms.SelectMultiple(
-        attrs={'class': 'form-control col-md-7 col-xs-12'}))
-    # product_categories = forms.ModelMultipleChoiceField(
-    #     label=("Product Categories:"),
-    #     queryset=shop_Category.objects.filter(active=True),
-    #     to_field_name='name', widget=forms.SelectMultiple(
-    #         attrs={'class': 'form-control col-md-7 col-xs-12'}))
-
     class Meta:
         model = Category
         fields = ['name', 'is_active', 'priority', 'image', 'image_alt', 'visibility',
-             'title', 'slug', 'url', 'meta_desc', 'meta_keywords','category']
+             'title', 'slug', 'url', 'meta_desc', 'meta_keywords']
 
         widgets = {
             'url': forms.TextInput(attrs={'class': 'form-control col-md-7 col-xs-12'}),
@@ -616,16 +603,6 @@ class CategoryChangeForm(forms.ModelForm):
             site_type.append((4, 'HR-Conclave'))
             site_type.append((5, 'HR-Jobfair'))
         self.fields['visibility'].choices = site_type
-
-        # self.fields['product_categories'].queryset = shop_Category.objects.filter(
-        #     is_active=True)
-        # self.fields['product_categories'].required = False
-
-        if instance:
-            shop_category_list = []
-            for bpcm in BlogProductCategoryMapping.objects.filter(blog_category=instance):
-                shop_category_list.append(bpcm.product_category.id)
-            self.initial['category'] = shop_category_list
 
         self.fields['slug'].required = False
         self.fields['slug'].widget.attrs['readonly'] = True
@@ -660,28 +637,6 @@ class CategoryChangeForm(forms.ModelForm):
                 if img_size > 50 * 1024:
                     raise forms.ValidationError("Image file too large ( > 50 kb )")
         return img_obj
-
-    def save(self, commit = True):
-        category = super(CategoryChangeForm, self).save(commit=False)
-
-        if commit:
-            shop_category = self.cleaned_data.get('category', '')
-            shop_category = [int(i) for i in shop_category]
-            shop_category_list = list(BlogProductCategoryMapping.objects.filter(blog_category=category\
-                                                        ).values_list('product_category',flat=True))
-            inclusion_list = [ x for x in shop_category if x not in shop_category_list ]
-            exclusion_list = [ x for x in shop_category_list if x not in shop_category ]
-
-            for s_category_id in inclusion_list:
-                s_category = shop_Category.objects.get(id=int(s_category_id))
-                BlogProductCategoryMapping.objects.create(blog_category=category, \
-                                        product_category=s_category)
-            for s_category_id in exclusion_list:
-                s_category = shop_Category.objects.get(id=int(s_category_id))
-                BlogProductCategoryMapping.objects.filter(blog_category=category, \
-                                        product_category=s_category).delete()
-
-        return category
 
 class CategoryAddForm(forms.ModelForm):
     name = forms.CharField(label=("Category*:"), max_length=70,

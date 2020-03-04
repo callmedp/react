@@ -834,50 +834,6 @@
           </div>
       </div>
       {% endif %}
-      <div class="x_panel">
-          <div class="x_title">
-            <h2>Blog Category</h2>
-            <ul class="nav navbar-right panel_toolbox">
-              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-              </li>
-            </ul>
-            <div class="clearfix"></div>
-          </div>
-
-          <div class="x_content">
-
-            <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-blog-category-form">
-                        {{form.media}}
-                        {% csrf_token %}
-                        
-                        {% if blog_category_form.non_field_errors %}
-                          <div class="alert alert-danger alert-dismissible fade in" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
-                            </button>
-                            {{blog_category_form.non_field_errors}}
-                          </div>
-                        {% endif %}
-
-                        <div class="item form-group {% if blog_category_form.categories.errors %}bad{% endif %}">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ blog_category_form.categories.id_for_label }}">Blog Categories<span class="required">*</span>
-                          </label>
-                          <div class="col-md-6 col-sm-6 col-xs-12">
-                            {{blog_category_form.categories}}
-                          </div>
-                          <div class="alert">{{blog_category_form.categories.errors}}</div>
-                        </div>
-                        <input type="hidden" name="category" value="{{object.pk}}">
-                        <input type="hidden" name="slug" value="category">
-                        <div class="ln_solid"></div>
-                        <div class="form-group">
-                          <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                            <button type="submit" class="btn btn-success">Submit</button>
-                          </div>
-                        </div>
-                      </form>
-            
-          </div>
-      </div>
     </div>
   </div>
 

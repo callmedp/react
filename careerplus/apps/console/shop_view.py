@@ -58,7 +58,7 @@ from .shop_form import (
     TestimonialModelForm,
     AddSubCategoryForm,ChangeSubCategoryForm,FunctionalAreaForm,
     FunctionalAreaCreateForm,ProductJobTitleChangeForm,
-    ProductJobTitleCreateForm, BlogProductCategoryForm)
+    ProductJobTitleCreateForm)
 
 from scheduler.models import Scheduler
 from console.schedule_tasks.tasks import generate_discount_report
@@ -349,8 +349,6 @@ class ChangeCategoryView(DetailView):
             instance=self.get_object())
         seo_change_form = ChangeCategorySEOForm(
             instance=self.get_object())
-        blog_categories_change_form = BlogProductCategoryForm(
-            instance= self.get_object())
         if self.object.type_level in [2, 3, 4]:
             skill_change_form = ChangeCategorySkillForm(
             instance=self.get_object())
@@ -378,7 +376,6 @@ class ChangeCategoryView(DetailView):
             'messages': alert,
             'form': main_change_form,
             'seo_form': seo_change_form,
-            'blog_category_form': blog_categories_change_form,
             "childrens": childrens,
             "products": products})
         return context
@@ -432,26 +429,6 @@ class ChangeCategoryView(DetailView):
                             messages.error(
                                 self.request,
                                 "Category SEO Change Failed, Changes not Saved")
-                            return TemplateResponse(
-                                request, [
-                                    "console/shop/change_category.html"
-                                ], context)
-                    elif slug == 'category':
-                        form = BlogProductCategoryForm(request.POST, instance=obj)
-                        if form.is_valid():
-                            form.save()
-                            messages.success(
-                                self.request,
-                                "Blog Categories Changed Successfully")
-                            return HttpResponseRedirect(
-                                reverse('console:category-change',kwargs={'pk': obj.pk}))
-                        else:
-                            context = self.get_context_data()
-                            if form:
-                                context.update({'seo_form': form})
-                            messages.error(
-                                self.request,
-                                "Blog Categories Change Failed, Changes not Saved")
                             return TemplateResponse(
                                 request, [
                                     "console/shop/change_category.html"

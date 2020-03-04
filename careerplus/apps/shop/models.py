@@ -3433,16 +3433,6 @@ class BlogProductMapping(AbstractCommonModel):
     def __str__(self):
         return str(self.blog.name) + '_' + str(self.product.name)
 
-class BlogProductCategoryMapping(AbstractCommonModel):
-    blog_category = models.ForeignKey(blog_Category, on_delete=models.CASCADE)
-    product_category = models.ForeignKey(Category, on_delete=models.CASCADE)
-
-    class Meta:
-        ordering = ['-created_on', ]
-
-    def __str__(self):
-        return str(self.blog_category.name) + '->' + str(self.product_category.name)
-
 
 
 
