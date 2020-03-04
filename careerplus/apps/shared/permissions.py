@@ -24,7 +24,7 @@ class IsObjectOwner(BasePermission):
         if request.method in list(SAFE_METHODS):
             return True
 
-        if not user.is_authenticated():
+        if not user.is_authenticated:
             return False
 
         if request.method == "POST":
@@ -38,7 +38,7 @@ class IsObjectOwner(BasePermission):
 
         user = request.user
 
-        if not user.is_authenticated():
+        if not user.is_authenticated:
             return False
 
         for field in owner_fields:
@@ -90,7 +90,7 @@ class HasGroupOrHasPermissions(BasePermission):
 
     def has_permission(self, request,view):
         user = request.user
-        if not user.is_authenticated():
+        if not user.is_authenticated:
             return False
         if not user.is_superuser:
             return True
@@ -108,7 +108,7 @@ class HasGroupOrHasPermissions(BasePermission):
         """if object has permission or has group then and only show the objects """
 
         user = request.user
-        if not user.is_authenticated():
+        if not user.is_authenticated:
             return False
         if user.is_superuser:
             return True

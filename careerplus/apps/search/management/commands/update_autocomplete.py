@@ -1,4 +1,4 @@
-import logging
+import logging ,json
 from decimal import Decimal
 from django.core.management.base import BaseCommand
 
@@ -36,13 +36,17 @@ def update_search_autocomplete():
     products = Product.objects.filter(active=True, is_indexable=True,is_indexed=True)
     redis_conn.delete('product_url_set')
     for product in products:
-        redis_conn.sadd('product_url_set', { "name":product.heading ,"url":product.get_absolute_url()})
+        redis_conn.sadd('product_url_set', json.dumps({ "name":product.heading ,
+                                              "url":product.get_absolute_url(
+
+                                              )}))
     logging.getLogger('info_log').info(
         "{} products added".format(products.count()))
     categories = Category.objects.filter(is_skill = True)
     redis_conn.delete('category_url_set')
     for category in categories:
         if category.get_absolute_url():
-            redis_conn.sadd("category_url_set", { "name":category.name, "url":category.get_absolute_url()})
+            redis_conn.sadd("category_url_set", json.dumps({
+                "name":category.name, "url":category.get_absolute_url()}))
     logging.getLogger('info_log').info(
         "{} categories added".format(categories.count()))

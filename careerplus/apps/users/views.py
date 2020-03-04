@@ -622,14 +622,14 @@ class LinkedinCallbackView(View):
 
 
 # HTTP Error 404
-def page_not_found(request):
-    response = render(request, 'error_pages/404.html', {})
+def page_not_found(request,exception,template_name='error_pages/404.html'):
+    response = render(request, 'error_pages/404.html')
     response.status_code = 404
     return response
 
 
 # HTTP Error 500
-def server_error(request):
+def server_error(request,template_name='error_pages/500.html'):
     response = render(request, 'error_pages/500.html', {})
     response.status_code = 500
     return response
@@ -640,7 +640,7 @@ class GenerateWriterInvoiceView(View):
     def get(self, request, *args, **kwargs):
         try:
             user = request.user
-            if user.is_authenticated():
+            if user.is_authenticated:
                 data = WriterInvoiceMixin().save_writer_invoice_pdf(
                     user=user)
                 if data.get('error'):
@@ -664,7 +664,7 @@ class DownloadWriterInvoiceView(View):
             import os
             user = request.user
             invoice = None
-            if user.is_authenticated() and user.userprofile and user.userprofile.user_invoice:
+            if user.is_authenticated and user.userprofile and user.userprofile.user_invoice:
                 invoice = user.userprofile.user_invoice
             if invoice:
                 file_path = invoice.name

@@ -7,7 +7,7 @@ from django.views.generic import View, TemplateView, FormView
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.conf import settings
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login, logout
 
 #local imports
@@ -35,7 +35,7 @@ class ConsoleDashboardView(TemplateView):
         return context
 
     def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             return super(ConsoleDashboardView, self).get(
                 request, *args, **kwargs)
         else:
@@ -46,7 +46,7 @@ class ConsoleLoginView(TemplateView):
     template_name = 'console/login.html'
 
     def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             return HttpResponseRedirect(reverse_lazy('console:dashboard'))
         return super(ConsoleLoginView, self).get(request, *args, **kwargs)
 

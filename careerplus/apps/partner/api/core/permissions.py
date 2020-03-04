@@ -16,5 +16,5 @@ class IsAdminOrEmployeeOfVendor(permissions.BasePermission):
                 return int(view.kwargs['vendor_id']) == request.user.vendor_set.all()[0].id
             else:
                 return True
-        if request.user.is_authenticated() and request.user.is_staff:
+        if request.user.is_authenticated and request.user.is_staff:
             return True

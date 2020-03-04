@@ -6,7 +6,7 @@
                   	<div class="box-panel">
                     	<a href="{% url 'talent:te-articles-detail' artList.p_cat.slug artList.slug %}" title="{{artList.heading}}" itemprop="url" class="db">
                       <figure class="pr">
-                      		<img aria-label="{{artList.image_alt}}" src="{{artList.image.url}}" alt="{{artList.image_alt}}" itemprop="image">
+                      		<img aria-label="{{artList.image_alt}}" src="{% if artList.image %}{{artList.image.url}}{% endif %}" alt="{{artList.image_alt}}" itemprop="image">
                       		<span class="product-title product-title-pos">{{artList.p_cat.name}}</span>
                     	</figure>
                     	<h3 class="heading-article" itemprop="name">{{artList.heading}}</h3>

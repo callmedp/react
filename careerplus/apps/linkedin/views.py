@@ -11,7 +11,8 @@ from django.http import (
     HttpResponseRedirect,
     HttpResponseForbidden,
 )
-from django.core.urlresolvers import reverse
+from django.urls import reverse
+
 from datetime import datetime
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import permission_required
@@ -343,7 +344,7 @@ class DraftAdminView(TemplateView):
         try:
             oi = OrderItem.objects.get(pk=orderitem_id)
             op_id = oi.orderitemoperation_set.get(pk=op_id)
-            if self.request.user.is_anonymous():
+            if self.request.user.is_anonymous:
                 return HttpResponseForbidden()
             if not self.request.user:
                 return HttpResponseForbidden()

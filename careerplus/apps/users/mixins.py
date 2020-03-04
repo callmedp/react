@@ -6,7 +6,7 @@ import datetime
 import calendar
 from dateutil import relativedelta
 
-from django.contrib.gis.geoip import GeoIP
+from django.contrib.gis.geoip2 import GeoIP2
 from django.conf import settings
 from django.utils import timezone
 from shine.core import ShineCandidateDetail
@@ -963,7 +963,7 @@ class UserMixin(object):
         return None
 
     def get_client_country(self, request):
-        g = GeoIP()
+        g = GeoIP2()
         ip = self.get_client_ip(request)
         try:
             if ip:

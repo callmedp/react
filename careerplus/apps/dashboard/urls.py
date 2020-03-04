@@ -1,4 +1,5 @@
-from django.conf.urls import url
+# from django.conf.urls import url
+from django.urls import re_path
 
 from .views import (
     RoundoneDashboardView,
@@ -12,97 +13,97 @@ from .views import (
 )
 from . import dashboard_view, mobile_view
 
-
+app_name='dashboard'
 urlpatterns = [
-    url(r'^roundone/$', RoundoneDashboardView.as_view(),
+    re_path(r'^roundone/$', RoundoneDashboardView.as_view(),
         name='roundone-dashboard'),
 
-    url(r'^roundone/saved/delete/$', DashboardSavedDeleteView.as_view(),
+    re_path(r'^roundone/saved/delete/$', DashboardSavedDeleteView.as_view(),
         name='dashboard_saved_delete'),
 
-    url(r'^roundone/upcoming/$', DashboardUpcomingView.as_view(),
+    re_path(r'^roundone/upcoming/$', DashboardUpcomingView.as_view(),
         name='dashboard_upcoming'),
 
-    url(r'^roundone/past/$', DashboardPastView.as_view(),
+    re_path(r'^roundone/past/$', DashboardPastView.as_view(),
         name='dashboard_past'),
 
-    url(r'^roundone/saved/$', DashboardSavedView.as_view(),
+    re_path(r'^roundone/saved/$', DashboardSavedView.as_view(),
         name='dashboard_saved'),
 
-    # url(r'^roundone/result/$', DashboardResultView.as_view(),
+    # re_path(r'^roundone/result/$', DashboardResultView.as_view(),
     #     name='dashboard_roundone_result'),
 
-    url(r'^roundone/profile/$', DashboardMyProfileView.as_view(),
+    re_path(r'^roundone/profile/$', DashboardMyProfileView.as_view(),
         name='dashboard_profile'),
 
-    url(r'^shine-profile/$',
+    re_path(r'^shine-profile/$',
         UpdateShineProfileView.as_view(), name='post_shine_detail'),
 
-    url(r'^roundone/result/(?P<order_id>.+)/?$',
+    re_path(r'^roundone/result/(?P<order_id>.+)/?$',
         DashboardResultView.as_view(), name='dashboard_roundone_result'),
 ]
 
 urlpatterns += [
-    url(r'^$',
+    re_path(r'^$',
         dashboard_view.DashboardView.as_view(), name='dashboard'),
 
-    url(r'^myorder/$',
+    re_path(r'^myorder/$',
         dashboard_view.DashboardMyorderView.as_view(),
         name='dashboard-myorder'),
 
-    url(r'^mywallet/$',
+    re_path(r'^mywallet/$',
         dashboard_view.DashboardMyWalletView.as_view(),
         name='dashboard-mywallet'),
 
     # ajax call
-    url(r'^inbox-detail/$',
+    re_path(r'^inbox-detail/$',
         dashboard_view.DashboardDetailView.as_view(),
         name='dashboard-detail'),
 
-    url(r'^inbox-comment/$',
+    re_path(r'^inbox-comment/$',
         dashboard_view.DashboardCommentView.as_view(),
         name='dashboard-comment'),
 
-    url(r'^inbox-feedback/$',
+    re_path(r'^inbox-feedback/$',
         dashboard_view.DashboardFeedbackView.as_view(),
         name='dashboard-feedback'),
 
-    url(r'^inbox-rejectservice/$',
+    re_path(r'^inbox-rejectservice/$',
         dashboard_view.DashboardRejectService.as_view(),
         name='dashboard-rejectservice'),
 
-    url(r'^inbox-acceptservice/$',
+    re_path(r'^inbox-acceptservice/$',
         dashboard_view.DashboardAcceptService.as_view(),
         name='dashboard-acceptservice'),
 
-    url(r'^loadmore/orderitem/$',
+    re_path(r'^loadmore/orderitem/$',
         dashboard_view.DashboardInboxLoadmoreView.as_view(),
         name='dashboard-inbox-loadmore'),
 
-    url(r'^inbox-filter/$',
+    re_path(r'^inbox-filter/$',
         dashboard_view.DashboardInboxFilterView.as_view(),
         name='dashboard-inboxfilter'),
 
-    url(r'^inbox-notificationbox/$',
+    re_path(r'^inbox-notificationbox/$',
         dashboard_view.DashboardNotificationBoxView.as_view(),
         name='dashboard-notificationbox'),
 
-    url(r'^order-invoicedownload/$',
+    re_path(r'^order-invoicedownload/$',
         dashboard_view.DashboardInvoiceDownload.as_view(),
         name='dashboard-invoicedownload'),
-    url(r'^order-resumetemplatedownload/$',
+    re_path(r'^order-resumetemplatedownload/$',
         dashboard_view.DashboardResumeTemplateDownload.as_view(),
         name='dashboard-resumetemplatedownload'),
 
-    url(r'^order-resumedownload/(?P<pk>[\d]+)/$',
+    re_path(r'^order-resumedownload/(?P<pk>[\d]+)/$',
         dashboard_view.DashboardResumeDownload.as_view(),
         name='dashboard-resumedownload'),
 
-    url(r'^downloadquestionnaire/$',
+    re_path(r'^downloadquestionnaire/$',
         dashboard_view.DownloadQuestionnaireView.as_view(),
         name='dashboard-downloadquestionnaire'),
 
-    url(r'cancel-order/$',
+    re_path(r'cancel-order/$',
         dashboard_view.DashboardCancelOrderView.as_view(),
         name='cancel-order')
 ]
@@ -111,18 +112,18 @@ urlpatterns += [
 # for mobile pages
 
 urlpatterns += [
-    url(r'^item-detail/$',
+    re_path(r'^item-detail/$',
         mobile_view.DashboardItemDetailView.as_view(),
         name='dashboard-itemdetail'),
-    url(r'^itemfeedback/$',
+    re_path(r'^itemfeedback/$',
         mobile_view.DashboardItemFeedbackView.as_view(),
         name='dashboard-itemfeedback'),
 
-    url(r'^conversation/$',
+    re_path(r'^conversation/$',
         mobile_view.DashboardMobileCommentView.as_view(),
         name='dashboard-conversation'),
 
-    url(r'^rejectconfirmation/$',
+    re_path(r'^rejectconfirmation/$',
         mobile_view.DashboardMobileRejectView.as_view(),
         name='dashboard-reject'),
 ]

@@ -7,7 +7,7 @@ from django.utils.html import strip_tags
 from django.utils import six
 from django.utils.translation import ugettext_lazy as _
 from django.utils.text import slugify
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.exceptions import ValidationError
 from django.core.cache import cache
 
@@ -354,10 +354,11 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
             products = self.categoryproducts.filter(
                 active=True,
                 productcategories__active=True)
-
         return products
 
     def split_career_outcomes(self):
+        if not self.career_outcomes:
+            return
         return self.career_outcomes.split(',')
 
     def has_children(self):
@@ -462,7 +463,7 @@ class SubHeaderCategory(AbstractAutoDate):
         default=1)
     category = models.ForeignKey(
         'shop.Category',
-        related_name='subheaders')
+        related_name='subheaders',on_delete=models.CASCADE)
     heading_choices = models.SmallIntegerField(default=-1,choices=SUB_HEADING_CHOICES)
 
     def __str__(self):
@@ -547,7 +548,7 @@ class AttributeOptionGroup(models.Model):
 class AttributeOption(models.Model):
     group = models.ForeignKey(
         'shop.AttributeOptionGroup', related_name='options',
-        verbose_name=_("Group"))
+        verbose_name=_("Group"),on_delete=models.CASCADE)
     option = models.CharField(_('Option'), max_length=255)
     code = models.CharField(_('Option Code'), max_length=4, unique=True)
 
@@ -606,7 +607,7 @@ class Attribute(AbstractAutoDate):
     option_group = models.ForeignKey(
         'shop.AttributeOptionGroup', blank=True, null=True,
         verbose_name=_("Option Group"),
-        help_text=_('Select an option group if using type "Option"'))
+        help_text=_('Select an option group if using type "Option"'),on_delete=models.CASCADE)
     attributeproducts = models.ManyToManyField(
         'shop.Product',
         verbose_name=_('Attribute Product'),
@@ -1028,7 +1029,7 @@ class Product(AbstractProduct, ModelMeta):
 
     vendor = models.ForeignKey(
         'partner.Vendor', related_name='productvendor', blank=True,
-        null=True, verbose_name=_("Product Vendor"))
+        null=True, verbose_name=_("Product Vendor"),on_delete=models.CASCADE)
     countries = models.ManyToManyField(
         Country,
         verbose_name=_('Country Available'),
@@ -1851,7 +1852,7 @@ class ProductScreen(AbstractProduct):
                     "displayed."))
     vendor = models.ForeignKey(
         'partner.Vendor', related_name='screenvendor', blank=True,
-        null=True, verbose_name=_("Product Vendor"))
+        null=True, verbose_name=_("Product Vendor"),on_delete=models.CASCADE)
     countries = models.ManyToManyField(
         Country,
         verbose_name=_('Country Available'),
@@ -2180,7 +2181,7 @@ class ProductAttribute(AbstractAutoDate):
         verbose_name=_('Rich Text'), blank=True, default='')
     value_option = models.ForeignKey(
         'shop.AttributeOption', blank=True, null=True,
-        verbose_name=_("Value option"))
+        verbose_name=_("Value option"),on_delete=models.CASCADE)
     value_multi_option = models.ManyToManyField(
         'shop.AttributeOption', blank=True,
         related_name='multi_valued_attribute_screen_values',
@@ -2194,7 +2195,7 @@ class ProductAttribute(AbstractAutoDate):
     value_entity = fields.GenericForeignKey(
         'entity_content_type', 'entity_object_id')
     entity_content_type = models.ForeignKey(
-        ContentType, null=True, blank=True, editable=False)
+        ContentType, null=True, blank=True, editable=False,on_delete=models.CASCADE)
     entity_object_id = models.PositiveIntegerField(
         null=True, blank=True, editable=False)
 
@@ -2274,7 +2275,7 @@ class ProductAttributeScreen(AbstractAutoDate):
         verbose_name=_('Value Large Text'), blank=True, default='')
     value_option = models.ForeignKey(
         'shop.AttributeOption', blank=True, null=True,
-        verbose_name=_("Value option"))
+        verbose_name=_("Value option"),on_delete=models.CASCADE)
     value_multi_option = models.ManyToManyField(
         'shop.AttributeOption', blank=True,
         related_name='multi_valued_attribute_values',
@@ -2288,7 +2289,7 @@ class ProductAttributeScreen(AbstractAutoDate):
     value_entity = fields.GenericForeignKey(
         'entity_content_type', 'entity_object_id')
     entity_content_type = models.ForeignKey(
-        ContentType, null=True, blank=True, editable=False)
+        ContentType, null=True, blank=True, editable=False,on_delete=models.CASCADE)
     entity_object_id = models.PositiveIntegerField(
         null=True, blank=True, editable=False)
 
@@ -2403,11 +2404,11 @@ class ProductExtraInfo(models.Model):
 
     product = models.ForeignKey(
         'shop.Product',
-        verbose_name=_('Product'),
+        verbose_name=_('Product'),on_delete=models.CASCADE
     )
 
     # GFK 'content_object'
-    content_type = models.ForeignKey(ContentType)
+    content_type = models.ForeignKey(ContentType,on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = fields.GenericForeignKey('content_type', 'object_id')
 
@@ -2441,7 +2442,7 @@ class Chapter(AbstractAutoDate):
     product = models.ForeignKey(
         Product,
         related_name='chapter_product',
-        null=True, blank=True)
+        null=True, blank=True,on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['ordering']
@@ -2500,11 +2501,11 @@ class ScreenChapter(AbstractAutoDate):
     product = models.ForeignKey(
         ProductScreen,
         related_name='chapter_product',
-        null=True, blank=True)
+        null=True, blank=True,on_delete=models.CASCADE)
     chapter = models.ForeignKey(
         Chapter,
         related_name='orig_ch',
-        null=True, blank=True)
+        null=True, blank=True,on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['ordering']
@@ -2770,7 +2771,7 @@ class UniversityCourseDetailScreen(models.Model):
     productscreen = models.OneToOneField(
         ProductScreen,
         help_text=_('Product related to these details'),
-        related_name='screen_university_course_detail',
+        related_name='screen_university_course_detail',on_delete=models.CASCADE
     )
     eligibility_criteria = models.CharField(
         max_length=500,
@@ -2826,7 +2827,7 @@ class UniversityCoursePaymentScreen(models.Model):
     )
     productscreen = models.ForeignKey(
         ProductScreen,
-        related_name='screen_university_course_payment'
+        related_name='screen_university_course_payment' ,on_delete=models.CASCADE
     )
     active = models.BooleanField(default=True)
 
@@ -2861,7 +2862,7 @@ class UniversityCourseDetail(models.Model):
     product = models.OneToOneField(
         Product,
         help_text=_('Product related to these details'),
-        related_name='university_course_detail',
+        related_name='university_course_detail',on_delete=models.CASCADE
     )
     eligibility_criteria = models.CharField(
         max_length=500,
@@ -2923,7 +2924,7 @@ class UniversityCoursePayment(models.Model):
     )
     product = models.ForeignKey(
         Product,
-        related_name='university_course_payment'
+        related_name='university_course_payment',on_delete=models.CASCADE
     )
     active = models.BooleanField(default=True)
 
@@ -2960,7 +2961,7 @@ class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
     institute = models.ForeignKey(
         'shop.Category',
         blank=True,
-        null=True)
+        null=True,on_delete=models.CASCADE)
     products = models.ManyToManyField(
         'shop.Product',
         verbose_name=_('Faculty Products'),
@@ -3265,7 +3266,7 @@ class ShineProfileData(AbstractAutoDate):
         blank=True,
         null=True,
         verbose_name=_('Vendor'),
-        related_name='vendor'
+        related_name='vendor',on_delete=models.CASCADE
     )
 
     class Meta:
@@ -3275,7 +3276,7 @@ class ShineProfileData(AbstractAutoDate):
 class ProductUserProfile(AbstractAutoDate):
     order_item = models.OneToOneField(
         'order.OrderItem', related_name='whatsapp_profile_orderitem',
-        verbose_name=_("Order Item"))
+        verbose_name=_("Order Item"),on_delete=models.CASCADE)
     contact_number = models.CharField(
         _("Contact number"), max_length=50)
     desired_industry = models.CharField(max_length=300, blank=True, null=True)
@@ -3325,7 +3326,7 @@ class JobsLinks(AbstractCommonModel, AbstractAutoDate):
     status = models.PositiveSmallIntegerField(choices=LINK_STATUS_CHOICES, default=0)
     oi = models.ForeignKey(
         'order.OrderItem', related_name='jobs_link',
-        verbose_name=_("Order Item"))
+        verbose_name=_("Order Item"),on_delete=models.CASCADE)
     sent_date = models.DateTimeField(
         _('Date'), blank=True, null=True)
 
@@ -3380,7 +3381,7 @@ class PracticeTestInfo(AbstractAutoDate):
         'order.OrderItem', related_name='test_info',
         verbose_name=_("Order Item"),
         null=True,
-        blank=True
+        blank=True ,on_delete=models.CASCADE
     )
 
     def __str__(self):

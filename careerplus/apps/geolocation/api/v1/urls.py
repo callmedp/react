@@ -2,7 +2,8 @@
 
 
 # django imports
-from django.conf.urls import url
+# from django.conf.urls import url
+from django.urls import re_path
 
 # local imports
 
@@ -19,7 +20,8 @@ router.register(r'city', CityViewSet)
 
 urlpatterns = router.urls
 
+app_name = "geolocation"
 urlpatterns = [
-    url(r'^country/$', CountryListView.as_view()),
-    url(r'^validate/$',CountryValidationView.as_view())
+    re_path(r'^country/$', CountryListView.as_view()),
+    re_path(r'^validate/$',CountryValidationView.as_view())
 ]

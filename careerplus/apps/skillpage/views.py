@@ -43,6 +43,13 @@ class SkillPageView(DetailView, SkillPageMixin):
     template_name = "skillpage/skill-new.html"
     no_of_products = 5
 
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if not self.object:
+            raise Http404
+        context = super(SkillPageView, self).get(request, args, **kwargs)
+        return context
+
     def get_context_data(self, **kwargs):
         context = super(SkillPageView, self).get_context_data(**kwargs)
         subheading = SubHeaderCategory.objects.filter(category=self.object,active=True)

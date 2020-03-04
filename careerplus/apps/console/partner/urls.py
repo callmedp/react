@@ -1,15 +1,16 @@
-from django.conf.urls import url, include
+# from django.conf.urls import url, include
+from django.urls import re_path, include
 from . import views
-
+app_name = 'console'
 urlpatterns = [
-    url(r'^partial/', include('console.partner.partials.urls', namespace='partials')),
-    url(r'^', include('console.partner.pages.urls', namespace='pages')),
+    re_path(r'^partial/', include('console.partner.partials.urls', namespace='partials')),
+    re_path(r'^', include('console.partner.pages.urls', namespace='pages')),
 
     # partner inbox Queue
-    url(r'^inbox/$', views.PartnerInboxQueueView.as_view(),
+    re_path(r'^inbox/$', views.PartnerInboxQueueView.as_view(),
         name='partnerinbox'),
-    url(r'^hold/$', views.PartnerHoldQueueView.as_view(),
+    re_path(r'^hold/$', views.PartnerHoldQueueView.as_view(),
         name='partnerholdqueue'),
-    url(r'^varification-reports/$', views.PartnerVarificationQueueView.as_view(),
+    re_path(r'^varification-reports/$', views.PartnerVarificationQueueView.as_view(),
         name='varificationreports'),
 ]

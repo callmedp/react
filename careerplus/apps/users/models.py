@@ -135,7 +135,7 @@ class UserProfile(models.Model):
     sql database , it will only return the user_ids of user model.
 
     """
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
     writer_type = models.PositiveIntegerField(
         choices=WRITER_TYPE,
         default=0)

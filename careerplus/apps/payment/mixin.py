@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.conf import settings
 
 from users.tasks import user_register

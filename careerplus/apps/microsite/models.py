@@ -47,9 +47,9 @@ class PartnerPage(models.Model):
 class MicroSite(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
     slug = models.SlugField(max_length=255, unique=True, blank=True)
-    home_page = models.ForeignKey(PartnerPage, null=True, blank=True, related_name='home_page')
-    listing_page = models.ForeignKey(PartnerPage, null=True, blank=True, related_name='listing_page')
-    detail_page = models.ForeignKey(PartnerPage, null=True, blank=True, related_name='detail_page')
+    home_page = models.ForeignKey(PartnerPage, null=True, blank=True, related_name='home_page',on_delete=models.CASCADE)
+    listing_page = models.ForeignKey(PartnerPage, null=True, blank=True, related_name='listing_page',on_delete=models.CASCADE)
+    detail_page = models.ForeignKey(PartnerPage, null=True, blank=True, related_name='detail_page',on_delete=models.CASCADE)
     active = models.BooleanField(default=False)
 
     def __str__(self):
@@ -62,9 +62,9 @@ class MicroSite(models.Model):
 
 
 class PartnerTestimonial(models.Model):
-    microsite = models.ForeignKey(MicroSite)
+    microsite = models.ForeignKey(MicroSite,on_delete=models.CASCADE)
     name_of_user = models.CharField(max_length=255, null=True, blank=False)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, verbose_name='User(if any)')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, verbose_name='User(if any)',on_delete=models.CASCADE)
     image = models.ImageField(max_length=200, upload_to="microsite/testimonial")
     title = models.CharField(max_length=255, null=True, blank=True)
     review = models.TextField(max_length=1024)
@@ -77,7 +77,7 @@ class PartnerTestimonial(models.Model):
 
 
 class PartnerFaq(models.Model):
-    microsite = models.ForeignKey(MicroSite)
+    microsite = models.ForeignKey(MicroSite,on_delete=models.CASCADE)
     question = models.CharField(max_length=1024, null=True, blank=False)
     answer = models.TextField()
     active = models.BooleanField(default=False)

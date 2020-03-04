@@ -1147,7 +1147,7 @@ class ShineCandidateLoginAPIView(APIView):
     def get(self, request, *args, **kwargs):
         user = request.user
         candidate_id = request.session.get('candidate_id')
-        if not user.is_authenticated() and not candidate_id:
+        if not user.is_authenticated and not candidate_id:
             return Response({"detail": "Not Authorised"}, status=status.HTTP_401_UNAUTHORIZED)
 
         if not candidate_id:

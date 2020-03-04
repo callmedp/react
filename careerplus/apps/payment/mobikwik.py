@@ -4,7 +4,7 @@ import logging
 import time
 import codecs
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.views.generic import TemplateView, View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.detail import SingleObjectMixin

@@ -249,7 +249,7 @@ class AjaxOrderItemCommentView(View):
 class ApproveByAdminDraft(View):
     def post(self, request, *args, **kwargs):
         data = {"status": 0}
-        if not (request.is_ajax() and request.user.is_authenticated()):
+        if not (request.is_ajax() and request.user.is_authenticated):
             return HttpResponseForbidden()
         oi_pk = request.POST.get('oi_pk', None)
         obj = OrderItem.objects.select_related('order', 'product').filter(
@@ -395,7 +395,7 @@ class RejectByAdminDraft(View):
 
     def post(self, request, *args, **kwargs):
         data = {"status": 0}
-        if not (request.is_ajax() and request.user.is_authenticated()):
+        if not (request.is_ajax() and request.user.is_authenticated):
             return HttpResponseForbidden()
         oi_pk = request.POST.get('oi_pk', None)
         if not oi_pk:
@@ -418,7 +418,7 @@ class RejectByAdminDraft(View):
 class UploadDraftView(View):
 
     def post(self, request, *args, **kwargs):
-        if request.is_ajax() and request.user.is_authenticated():
+        if request.is_ajax() and request.user.is_authenticated:
             data = {'display_message': "", }
             try:
                 flow = int(request.POST.get('flow', 0))
@@ -452,7 +452,7 @@ class UploadDraftView(View):
 class DetailPageUploadDraftView(View):
 
     def post(self, request, *args, **kwargs):
-        if request.is_ajax() and request.user.is_authenticated():
+        if request.is_ajax() and request.user.is_authenticated:
             data = {'display_message': "", }
             form = FileUploadForm(request.POST, request.FILES)
             if form.is_valid():
@@ -478,7 +478,7 @@ class DetailPageUploadDraftView(View):
 class SaveWaitingInput(View):
 
     def post(self, request, *args, **kwargs):
-        if request.is_ajax() and request.user.is_authenticated():
+        if request.is_ajax() and request.user.is_authenticated:
             data = {"message": "Waiting input Not Updated"}
             oi_pk = request.POST.get('oi_pk', None)
             msg = request.POST.get('inputmsg', None)
@@ -626,7 +626,7 @@ class RejectDraftByLinkedinAdmin(View):
 class GenerateAutoLoginToken(View):
     def post(self, request, *args, **kwargs):
         data = {"status": 0, "display_message": ''}
-        if request.is_ajax() and request.user.is_authenticated():
+        if request.is_ajax() and request.user.is_authenticated:
             try:
                 email = request.POST.get('email', '')
                 enc_type = int(request.POST.get('type', 1))
@@ -645,7 +645,7 @@ class GenerateAutoLoginToken(View):
 class MarkedPaidOrderView(View):
     def post(self, request, *args, **kwargs):
         data = {"status": 0, "display_message": ''}
-        if request.is_ajax() and request.user.is_authenticated() and request.user.has_perm('order.can_mark_order_as_paid'):
+        if request.is_ajax() and request.user.is_authenticated and request.user.has_perm('order.can_mark_order_as_paid'):
             order_pk = request.POST.get('order_pk', None)
             try:
                 obj = Order.objects.get(pk=order_pk)
@@ -684,7 +684,7 @@ class MarkedPaidOrderView(View):
             except Exception as e:
                 data['display_message'] = '%s order id - %s' % (str(e), str(order_pk))
             return HttpResponse(json.dumps(data), content_type="application/json")
-        elif request.is_ajax() and request.user.is_authenticated():
+        elif request.is_ajax() and request.user.is_authenticated:
             data['display_message'] = "Permission denied"
             return HttpResponse(json.dumps(data), content_type="application/json")
 
@@ -697,7 +697,7 @@ class GetLTVAjaxView(View):
         data = {"status": 0}
         return_list = []
             
-        if request.is_ajax() and request.user.is_authenticated():
+        if request.is_ajax() and request.user.is_authenticated:
             o_list = request.POST.getlist('order_list[]')
             data = {"status": 1}
             results = {order:"0" for order in o_list }

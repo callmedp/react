@@ -7,7 +7,7 @@ class IsVendorAssociated(BasePermission):
 
     def has_permission(self,request,view):
         user = request.user
-        if not user.is_authenticated():
+        if not user.is_authenticated:
             return False
         if user.is_superuser:
             return True
@@ -19,7 +19,7 @@ class IsVendorAssociated(BasePermission):
 
     def has_object_permission(self, request,view,obj):
         user = request.user
-        if not user.is_authenticated():
+        if not user.is_authenticated:
             return False
         if user.is_superuser:
             return True

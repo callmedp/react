@@ -1,25 +1,28 @@
-from django.conf.urls import url
+# from django.conf.urls import url
+from django.urls import re_path
+
+
 from .views import PartnerHomeView, PartnerListView, PartnerDetailView, \
     GetReferenceView, SaveJobView, RedirectProfileView
 
 urlpatterns = [
 
-    url(r'^(?P<partner>[-\w]+)/?$', PartnerHomeView.as_view(),
+    re_path(r'^(?P<partner>[-\w]+)/?$', PartnerHomeView.as_view(),
         name='partner-home'),
 
-    url(r'^(?P<partner>[-\w]+)/(?P<keyword>[-\w]+)-jobs-in-(?P<location>[-\w]+)/?$', 
+    re_path(r'^(?P<partner>[-\w]+)/(?P<keyword>[-\w]+)-jobs-in-(?P<location>[-\w]+)/?$', 
     	PartnerListView.as_view(), name='partner-listing'),
 
-    url(r'^(?P<partner>[-\w]+)/(?P<job_title>[-\w]+)/(?P<job_params>[-\w]+)/?$',
+    re_path(r'^(?P<partner>[-\w]+)/(?P<job_title>[-\w]+)/(?P<job_params>[-\w]+)/?$',
         PartnerDetailView.as_view(), name='partner-detail'),
 
-    url(r'^roundone/get-reference/$', GetReferenceView.as_view(),
+    re_path(r'^roundone/get-reference/$', GetReferenceView.as_view(),
         name='roundone-get-reference'),
 
-    url(regex=r'^roundone/redirect-profile/$',
-        view=RedirectProfileView.as_view(),
+    re_path(r'^roundone/redirect-profile/$',
+        RedirectProfileView.as_view(),
         name='roundone-redirect-profile'),
 
-    url(r'^roundone/save-job/$', SaveJobView.as_view(),
+    re_path(r'^roundone/save-job/$', SaveJobView.as_view(),
         name='roundone-save-job'),
 ]
