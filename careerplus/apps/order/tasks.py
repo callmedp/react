@@ -670,7 +670,7 @@ def board_user_on_neo(neo_ids):
     - While Boarding User On Regular Basis Check.
         - If on Trial, then update SSO Profile.
         - else hit for Boarding assuming either
-          already Regular user O New user.
+        already Regular user O New user.
     '''
     from datetime import datetime, timedelta
     from order.models import OrderItem
@@ -719,9 +719,13 @@ def board_user_on_neo(neo_ids):
 
 @task
 def bypass_resume_midout(order_id):
+    import os
     from order.models import OrderItem, Order
+    from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
     from datetime import timedelta, datetime
     from django.utils import timezone
+    from random import random
+
     order = Order.objects.filter(id=order_id).first()
 
     if not order:
@@ -729,15 +733,16 @@ def bypass_resume_midout(order_id):
 
     update_resume_oi_ids = []
 
-    #update order item id to upload previous resume
+    # update order item id to upload previous resume
     order_items = order.orderitems.all().exclude(no_process=True)
     for order_item in order_items:
-        if order_item.oi_status == 2 and order_item.product.type_flow in [1,12,13,8,3,4]:
+        if order_item.oi_status == 2 and order_item.product.type_flow in [1, 12, 13, 8, 3, 4]:
             update_resume_oi_ids.append(order_item.id)
 
     if not update_resume_oi_ids:
         logging.getLogger('error_log').error("No orderitem Id found to update resume")
         return
+
     logging.getLogger('info_log').info(
         "Order item to update resume : {} ".format(' '.join(map(str, update_resume_oi_ids)))
         )
@@ -758,10 +763,6 @@ def bypass_resume_midout(order_id):
             oi_resume_creation_date = oi_operation.created if oi_operation else None
             break
 
-    if not old_resume:
-        logging.getLogger('info_log').info("Old Resume Not Found")
-        return
-
     try:
         shine_resume_details = None
         response = ShineCandidateDetail().get_candidate_detail(shine_id=order.candidate_id)
@@ -769,22 +770,57 @@ def bypass_resume_midout(order_id):
 
         if len(resumes) > 0:
             shine_resume_details = resumes[0]
+            logging.getLogger('info_log').info(
+                "shine resume exist with id {}".format(shine_resume_details.get('id'))
+                )
 
         shine_resume_creation_date = datetime.strptime(
             shine_resume_details.get('creation_date'), '%Y-%m-%dT%H:%M:%S'
             ) if shine_resume_details else None
 
-        if oi_resume_creation_date and shine_resume_creation_date:
-            if oi_resume_creation_date < shine_resume_creation_date:
-                response = ShineCandidateDetail().get_shine_candidate_resume(
-                    candidate_id=order.candidate_id,
-                    resume_id=shine_resume_details.get('id')
-                    )
-                if response.status_code == 200:
-                    old_resume = ContentFile(response.content)
+        if ((oi_resume_creation_date and shine_resume_details) and
+                (oi_resume_creation_date < shine_resume_creation_date)) or \
+                (shine_resume_creation_date and not oi_resume_creation_date):
+            response = ShineCandidateDetail().get_shine_candidate_resume(
+                candidate_id=order.candidate_id,
+                resume_id=shine_resume_details.get('id')
+                )
+            if response.status_code == 200:
+                content_disposition_header = response.headers.get('Content-Disposition')
+                file_name_pos = content_disposition_header.find('filename=')
+                file_name = content_disposition_header[file_name_pos + 9:] if file_name_pos != -1\
+                    else 'file'
+                extention = file_name.split('.')[-1] if file_name else ''
+
+                shine_resume = open(file_name, 'wb+')
+                shine_resume.write(response.content)
+                shine_resume.seek(0)
+
+                file_name = 'resumeupload_' + str(order_id) + '_' + str(int(random() * 9999)) \
+                            + '_' + timezone.now().strftime('%Y%m%d') + '.' + extention
+
+                full_path = '%s/' % str(order.pk)
+                if not settings.IS_GCP:
+                    if not os.path.exists(settings.RESUME_DIR + full_path):
+                        os.makedirs(settings.RESUME_DIR + full_path)
+                    dest = open(
+                        settings.RESUME_DIR + full_path + file_name, 'wb')
+                    for chunk in shine_resume.chunks():
+                        dest.write(chunk)
+                    dest.close()
+                else:
+                    GCPPrivateMediaStorage().save(
+                        settings.RESUME_DIR + full_path + file_name, shine_resume
+                        )
+                shine_resume.close()
+                old_resume = full_path + file_name
 
     except Exception as e:
         logging.getLogger('error_log').error('get resume failed from shine  %s' % str(e))
+
+    if not old_resume:
+        logging.getLogger('info_log').info("Old Resume Not Found")
+        return
 
     # order items to update old resume in new order ->(order items)
     order_items = OrderItem.objects.filter(id__in=update_resume_oi_ids)
