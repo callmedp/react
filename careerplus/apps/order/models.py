@@ -1110,9 +1110,8 @@ class OrderItem(AbstractAutoDate):
             assigned_to=self.assigned_to)
 
     def is_assigned(self):
-        if self.assigned_to:
-            return True
-        return False
+        assigned_operations = self.orderitemoperation_set.filter(oi_status=1)
+        return True if len(assigned_operations) else False
 
     def save(self, *args, **kwargs):
         created = not bool(getattr(self, "id"))
