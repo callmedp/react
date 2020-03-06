@@ -580,11 +580,12 @@ def process_jobs_on_the_move(obj_id=None):
                     # in latest education. Then using mapping from choices to get the education.
                     latest_education_dict = ''
                     for education in resp_status['education']:
-                        if not latest_education_dict or latest_education_dict.year_of_passout\
-                                < latest_education_dict.year_of_passout:
+                        if not latest_education_dict or \
+                            latest_education_dict.get('year_of_passout', 0)\
+                                < education.get('year_of_passout', 0):
                             latest_education_dict = education
 
-                    latest_education = latest_education_dict.education_level
+                    latest_education = latest_education_dict.get('education_level')
 
                 if resp_status and 'desired_job' in resp_status:
 
