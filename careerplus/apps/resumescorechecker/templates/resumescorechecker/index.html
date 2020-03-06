@@ -1,0 +1,63 @@
+{% extends "basic/base.html" %}
+{% load render_bundle from webpack_loader %}
+{% load static thumbnail humanize compress %}
+
+
+{% block head %}
+    {{block.super}}
+
+   <title> {% block title %} 
+       Hello Title 
+    {% endblock title %} </title>
+     
+    {% block meta_html %}
+    {{block.super}}
+
+    {% endblock meta_html %}
+
+    {% block css_section %}
+            
+    {% endblock css_section %}
+
+{% endblock head %}
+
+{% block navigation %}
+
+{% endblock navigation %}
+
+
+{% block container %}
+<div>
+    Hello Team
+</div>
+    <!-- Webpack rendered JS -->
+{% endblock container %}
+
+{% block js_section %}
+     
+{% endblock js_section %}
+
+{% block banner_ads %}
+
+{% endblock banner_ads %}
+
+{% block banner_ads_bottom %}
+
+{% endblock banner_ads_bottom %}
+
+
+{% block footer %}
+
+{% endblock footer %}
+
+{% block marketingpopup %}
+
+{% endblock marketingpopup %}
+
+{% block  jquery_block %}
+
+{%endblock jquery_block %}
+
+{% block zendesk %}
+
+{% endblock zendesk %}

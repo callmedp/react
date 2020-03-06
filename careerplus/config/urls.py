@@ -42,6 +42,8 @@ from skillpage.views import (
 
 from resumebuilder.views import (WriteResumeView,FreeResumeDownload)
 
+from resumescorechecker.views import (ScoreCheckerView)
+
 from django.conf.urls import (
     handler400, handler403, handler404, handler500
 )
@@ -249,6 +251,9 @@ urlpatterns += [
 
                    # entry point for react template
                    re_path(r'^resume-builder/', WriteResumeView.as_view()),
+
+                   #resume score checker 
+                   re_path(r'^score-checker/', ScoreCheckerView.as_view())
 
                ]
 if settings.DEBUG:

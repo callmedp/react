@@ -104,7 +104,8 @@ LOCAL_APPS = [
     'hrinsider',
     'scheduler',
     'resumebuilder',
-    'assessment'
+    'assessment',
+    'resumescorechecker'
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
