@@ -14,6 +14,8 @@
  
 {% block css_section %}
     {{block.super}}
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.min.css" rel="stylesheet" />
+
     {% compress css %}
     <link type="text/scss" href="{% static 'shinelearn/css/product/detail.scss' %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/skill/extra.css' %}" rel="stylesheet">
@@ -109,6 +111,8 @@
 
 {% block js_section %}
     {{block.super}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.all.min.js"></script>
+
     {% compress js %}
     <script src="{% static 'shinelearn/js/common/plugin.activeOnScroll.js' %}"></script>
     <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
@@ -307,6 +311,7 @@ function get_create_profile(email, name, country_code, mobile) {
         'mobile_no': country_code + mobile ,
         'name': name,
     }
+
     $.ajaxSetup({
         beforeSend: function(xhr, settings) {
           if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -314,22 +319,32 @@ function get_create_profile(email, name, country_code, mobile) {
           }
         }
     });
-    $.ajax({
-        url: "/api/v1/create_practice_test_info/",
-        type: "POST",
-        data: data,
-        success: function(data, textStatus, jqXHR) {
-            check_for_load_test(data);
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-          console.log(errorThrown)
-           
-        }
-    });
+
+    $.post(`/api/v1/create_practice_test_info/`,data,function(response,status,responseJSON){
+      if(responseJSON.status == '201' || responseJSON.status =='200'){
+        check_for_load_test(response)
+      } 
+      else {
+       
+        $('#neo-test-modal').modal('hide')
+        Swal.fire(
+          'Oops...',
+          'Site is under maintenance! Please try after some time',
+          'warning'
+        )
+      }
+        
+    }).fail((error)=>{
+      $('#neo-test-modal').modal('hide')
+      Swal.fire(
+          'Oops...',
+          'Check your internet connectivity',
+          'warning'
+        )
+    })
 }
 
 function check_for_load_test(data){
- 
     if('has_completed' in data){
       if(data['has_completed']){
         //pass

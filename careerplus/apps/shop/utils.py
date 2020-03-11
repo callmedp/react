@@ -388,7 +388,7 @@ class ProductModeration(object):
                 product.gbp_price = screen.gbp_price
                 product.fake_gbp_price = screen.fake_gbp_price
                 product.vendor = screen.vendor
-                product.countries = screen.countries.all()
+                product.countries.set(screen.countries.all())
                 product.save()
                 screen.attr.initiate_attributes()
                 product.attr.initiate_attributes()
@@ -555,7 +555,7 @@ class ProductModeration(object):
                 screen.gbp_price = product.gbp_price
                 screen.fake_gbp_price = product.fake_gbp_price
 
-                screen.countries = product.countries.all()
+                screen.countries.set(product.countries.all())
                 screen.vendor = product.vendor
                 screen.save()
                 screen.attr.initiate_attributes()

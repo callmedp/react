@@ -87,11 +87,15 @@ INSTALLED_APPS += DEV_APPS
 ####### MIDDLEWARE SETTINGS #####################
 DEV_MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+
 ]
 MIDDLEWARE = MIDDLEWARE + DEV_MIDDLEWARE
 
 DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK" : lambda request: DEBUG and not request.GET.get('nodebug'),
+    'ENABLE_STACKTRACES_LOCALS': True,
+    'SHOW_COLLAPSED': True
+    
 }
 
 #### CELERY SETTINGS ########

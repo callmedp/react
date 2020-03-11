@@ -12,7 +12,7 @@ from django.http import (
 from django.core.paginator import Paginator
 from django.template.response import TemplateResponse
 from django.forms.models import inlineformset_factory
-from django.core.urlresolvers import reverse_lazy, reverse
+from django.urls import reverse_lazy, reverse
 # third party imports
 
 # local imports

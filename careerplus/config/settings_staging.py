@@ -87,10 +87,12 @@ if DEBUG:
     DEV_MIDDLEWARE = [
         'debug_toolbar.middleware.DebugToolbarMiddleware',
     ]
-    MIDDLEWARE = MIDDLEWARE + DEV_MIDDLEWARE
+ #   MIDDLEWARE = MIDDLEWARE + DEV_MIDDLEWARE
 
 DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK": lambda request: DEBUG and not request.GET.get('nodebug'),
+    'JQUERY_URL':'',
+
 }
 
 #### CELERY SETTINGS ########

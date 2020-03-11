@@ -15,7 +15,7 @@ from django.http import (
 # from django.contrib import messages
 from django.views.generic import TemplateView, View
 from rest_framework.views import APIView
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.template.response import TemplateResponse
 from django.conf import settings
 from django.utils import timezone

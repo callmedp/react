@@ -131,7 +131,7 @@ def getSearchSet(request):
 
 
 def get_console_sidebar_badges(request):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return {}
 
     return {"writer_badges_dict":cache.get("{}{}".format("writer_badges_dict_",request.user.id),{}),

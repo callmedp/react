@@ -2,7 +2,7 @@ from django.http import (
     HttpResponseRedirect)
 from django.views.generic import TemplateView
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 import logging
 # from django.views.decorators.cache import never_cache
 # from django.utils.decorators import method_decorator

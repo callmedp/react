@@ -40,7 +40,7 @@ class Draft(AbstractAutoDate):
 
 class Organization(AbstractAutoDate):
     draft = models.ForeignKey(
-        Draft, related_name='from_organization')
+        Draft, related_name='from_organization',on_delete=models.CASCADE)
     org_name = models.CharField(max_length=100, null=True, blank=True, verbose_name='Company Name')
     title = models.CharField(max_length=100, null=True, blank=True, verbose_name='Title')
     org_desc = RichTextField(verbose_name='Organization Description', null=True, blank=True)
@@ -54,7 +54,7 @@ class Organization(AbstractAutoDate):
 
 class Education(AbstractAutoDate):
     draft = models.ForeignKey(
-        Draft, related_name='from_education')
+        Draft, related_name='from_education',on_delete=models.CASCADE)
     school_name = models.CharField(max_length=100, null=True, blank=True, verbose_name='School Name')
     level = models.PositiveSmallIntegerField(default=1, choices=LEVEL)
     degree = models.CharField(max_length=100, null=True, blank=True, verbose_name='Degree')

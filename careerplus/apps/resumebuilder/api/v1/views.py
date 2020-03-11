@@ -95,7 +95,8 @@ class SkillListCreateView(ListCreateAPIView):
     def get_queryset(self):
         candidate_id = self.kwargs.get('candidate_id')
         candidate_obj = Candidate.objects.filter(candidate_id=candidate_id)
-        return Skill.objects.filter(candidate=candidate_obj).order_by('order')
+        return Skill.objects.filter(candidate__in=candidate_obj).order_by(
+            'order')
 
     def get_serializer(self, *args, **kwargs):
         if isinstance(kwargs.get('data', {}), list):
@@ -128,7 +129,8 @@ class CandidateExperienceListCreateView(ListCreateAPIView):
     def get_queryset(self):
         candidate_id = self.kwargs.get('candidate_id')
         candidate_obj = Candidate.objects.filter(candidate_id=candidate_id)
-        return CandidateExperience.objects.filter(candidate=candidate_obj).order_by('order')
+        return CandidateExperience.objects.filter(
+            candidate__in=candidate_obj).order_by('order')
 
     def get_serializer(self, *args, **kwargs):
         if isinstance(kwargs.get('data', {}), list):
@@ -156,7 +158,7 @@ class CandidateEducationListCreateView(ListCreateAPIView):
     def get_queryset(self):
         candidate_id = self.kwargs.get('candidate_id')
         candidate_obj = Candidate.objects.filter(candidate_id=candidate_id)
-        return CandidateEducation.objects.filter(candidate=candidate_obj)
+        return CandidateEducation.objects.filter(candidate__in=candidate_obj)
 
     def get_serializer(self, *args, **kwargs):
         if isinstance(kwargs.get('data', {}), list):
@@ -184,7 +186,8 @@ class CandidateCertificationListCreateView(ListCreateAPIView):
     def get_queryset(self):
         candidate_id = self.kwargs.get('candidate_id')
         candidate_obj = Candidate.objects.filter(candidate_id=candidate_id)
-        return CandidateCertification.objects.filter(candidate=candidate_obj).order_by('order')
+        return CandidateCertification.objects.filter(
+            candidate__in=candidate_obj).order_by('order')
 
     def get_serializer(self, *args, **kwargs):
         if isinstance(kwargs.get('data', {}), list):
@@ -217,7 +220,8 @@ class CandidateProjectListCreateView(ListCreateAPIView):
     def get_queryset(self):
         candidate_id = self.kwargs.get('candidate_id')
         candidate_obj = Candidate.objects.filter(candidate_id=candidate_id)
-        return CandidateProject.objects.filter(candidate=candidate_obj).order_by('order')
+        return CandidateProject.objects.filter(
+            candidate__in=candidate_obj).order_by('order')
 
 
 class CandidateProjectRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
@@ -245,7 +249,8 @@ class CandidateReferenceListCreateView(ListCreateAPIView):
     def get_queryset(self):
         candidate_id = self.kwargs.get('candidate_id')
         candidate_obj = Candidate.objects.filter(candidate_id=candidate_id)
-        return CandidateReference.objects.filter(candidate=candidate_obj).order_by('order')
+        return CandidateReference.objects.filter(
+            candidate__in=candidate_obj).order_by('order')
 
 
 class CandidateReferenceRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
@@ -273,7 +278,8 @@ class CandidateSocialLinkListCreateView(ListCreateAPIView):
     def get_queryset(self):
         candidate_id = self.kwargs.get('candidate_id')
         candidate_obj = Candidate.objects.filter(candidate_id=candidate_id)
-        return CandidateSocialLink.objects.filter(candidate=candidate_obj).order_by('order')
+        return CandidateSocialLink.objects.filter(
+            candidate__in=candidate_obj).order_by('order')
 
 
 class CandidateSocialLinkRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
@@ -301,7 +307,8 @@ class CandidateAchievementListCreateView(ListCreateAPIView):
     def get_queryset(self):
         candidate_id = self.kwargs.get('candidate_id')
         candidate_obj = Candidate.objects.filter(candidate_id=candidate_id)
-        return CandidateAchievement.objects.filter(candidate=candidate_obj).order_by('order')
+        return CandidateAchievement.objects.filter(
+            candidate__in=candidate_obj).order_by('order')
 
 
 class CandidateAchievementRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
@@ -324,7 +331,8 @@ class CandidateLanguageListCreateView(ListCreateAPIView):
     def get_queryset(self):
         candidate_id = self.kwargs.get('candidate_id')
         candidate_obj = Candidate.objects.filter(candidate_id=candidate_id)
-        return CandidateLanguage.objects.filter(candidate=candidate_obj).order_by('order')
+        return CandidateLanguage.objects.filter(
+            candidate__in=candidate_obj).order_by('order')
 
     def get_serializer(self, *args, **kwargs):
         if isinstance(kwargs.get('data', {}), list):
@@ -911,7 +919,7 @@ class SessionAvailabilityAPIView(APIView):
     serializer_class = None
 
     def get(self, request, *args, **kwargs):
-        if (request.user and request.user.is_authenticated()):
+        if (request.user and request.user.is_authenticated):
 
             return Response(
                 data={'result': True},

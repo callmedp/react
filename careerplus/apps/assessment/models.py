@@ -7,6 +7,7 @@ from django_mysql.models import JSONField
 from django.utils.text import slugify
 
 
+
 from shop.models import Category,Product
 from partner.models import Vendor
 from seo.models import AbstractAutoDate
@@ -35,11 +36,13 @@ class Test(AbstractAutoDate):
     max_score = models.PositiveSmallIntegerField(blank=True, null=True)
     instructions = models.TextField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    category = models.ForeignKey(Category, null=True, blank=True)
-    product = models.ForeignKey(Product, null=True, blank=True)
+    category = models.ForeignKey(Category, null=True, blank=True,
+                                 on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, null=True, blank=True,on_delete=models.CASCADE)
     categories = models.ManyToManyField(Category, null=True, blank=True,related_name='testcategories')
-    course = models.ForeignKey(Product, null=True, blank=True,related_name='testcourse')
-    vendor = models.ForeignKey(Vendor,blank=True, null=True)
+    course = models.ForeignKey(Product, null=True, blank=True,
+                               related_name='testcourse',on_delete=models.CASCADE)
+    vendor = models.ForeignKey(Vendor,blank=True, null=True,on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title + "-" + str(self.max_score)
@@ -75,7 +78,7 @@ class Section(AbstractAutoDate):
     name = models.CharField(
         max_length=255, null=False, blank=False)
     duration = models.PositiveSmallIntegerField(default=0)
-    test = models.ForeignKey(Test,blank=True, null=True)
+    test = models.ForeignKey(Test,blank=True, null=True,on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -99,11 +102,11 @@ class Question(AbstractAutoDate):
     is_active = models.BooleanField(default=False)
     marks = models.FloatField(default=1)
     negative_marks = models.FloatField(default=0.00)
-    test = models.ForeignKey(Test, blank=True, null=True)
-    section = models.ForeignKey(Section, blank=True, null=True)
+    test = models.ForeignKey(Test, blank=True, null=True,on_delete=models.CASCADE)
+    section = models.ForeignKey(Section, blank=True, null=True,on_delete=models.CASCADE)
     level = models.PositiveSmallIntegerField(choices=LEVELS_TYPE,default=1)
     question_type = models.PositiveSmallIntegerField(choices=QUESTION_TYPE,default=1)
-    subsection = models.ForeignKey(SubSection,blank=True,null=True)
+    subsection = models.ForeignKey(SubSection,blank=True,null=True,on_delete=models.CASCADE)
     question_options = models.TextField(null=True,blank=True)
     extra_info = models.CharField(
         max_length=255, null=False, blank=False,default="")

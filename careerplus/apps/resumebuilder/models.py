@@ -364,7 +364,7 @@ class CandidateLanguage(PreviewImageCreationMixin, models.Model):
 class CandidateResumeOperations(models.Model):
     candidate = models.ForeignKey(
         Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
-    order = models.ForeignKey(Order, null=True)
+    order = models.ForeignKey(Order, null=True,on_delete=models.CASCADE,)
     op_status = models.SmallIntegerField(
         default=-1, choices=CANDIDATE_OPERATION_STATUS)
     created = models.DateTimeField(editable=False, auto_now_add=True,)

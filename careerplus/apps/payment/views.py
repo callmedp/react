@@ -434,7 +434,7 @@ class EPayLaterRequestView(OrderMixin, TemplateView):
         epay_encdec_obj = EpayLaterEncryptDecryptUtil(settings.EPAYLATER_INFO['aeskey'], \
                                                       settings.EPAYLATER_INFO['iv'])
         checksum = epay_encdec_obj.checksum(json.dumps(initial_dict).encode('utf-8'))
-        encdata = epay_encdec_obj.encrypt(json.dumps(initial_dict).encode('utf-8'))
+        encdata = epay_encdec_obj.encrypt(json.dumps(initial_dict).encode('utf-8')).decode('utf-8')
 
         template_context = {"action": settings.EPAYLATER_INFO['payment_url'],
                             "mcode": settings.EPAYLATER_INFO['mCode'],

@@ -17,7 +17,7 @@ from django.http import (
 from django.forms.models import inlineformset_factory
 from django.template.response import TemplateResponse
 from django.contrib import messages
-from django.core.urlresolvers import reverse_lazy, reverse
+from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.forms.models import modelformset_factory
 from dateutil.relativedelta import relativedelta
@@ -94,7 +94,7 @@ from core.library.haystack.query import SQS
 
 class SkillAutocompleteView(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return Skill.objects.none()
         qs = Skill.objects.filter(active=True)
         if self.q:
@@ -104,7 +104,7 @@ class SkillAutocompleteView(autocomplete.Select2QuerySetView):
 
 class ProductAutocompleteView(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             return Product.objects.none()
         qs = Product.objects.filter(is_indexed=True,active=True)
         if self.q:
@@ -2493,7 +2493,7 @@ class DownloadDiscountReportView(TemplateView):
     template_name = "console/order/discount_report.html"
 
     def dispatch(self,request,*args,**kwargs):
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             return HttpResponseForbidden()
         if 'order.can_download_discount_report' not in request.user.get_all_permissions():
             return HttpResponseForbidden()
@@ -2565,7 +2565,7 @@ class DownloadDiscountReportView(TemplateView):
 
 
     def post(self,request,*args,**kwargs):
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             return HttpResponseForbidden()
         if 'order.can_download_discount_report' not in request.user.get_all_permissions():
             return HttpResponseForbidden()
@@ -2580,14 +2580,14 @@ class DownloadUpsellReportView(TemplateView):
     template_name = "console/order/upsell_report.html"
 
     def dispatch(self,request,*args,**kwargs):
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             return HttpResponseForbidden()
         if 'order.can_download_upsell_report' not in request.user.get_all_permissions():
             return HttpResponseForbidden()
         return super(DownloadUpsellReportView,self).dispatch(request,*args,**kwargs)
 
     def post(self,request,*args,**kwargs):
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             return HttpResponseForbidden()
         if 'order.can_download_upsell_report' not in request.user.get_all_permissions():
             return HttpResponseForbidden()

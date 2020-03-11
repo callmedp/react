@@ -63,7 +63,7 @@ class CommentModerateView(UpdateView):
                     blog = obj.blog
                     blog.comment_moderated += 1
                     blog.save()
-                if request.user.is_authenticated():
+                if request.user.is_authenticated:
                     obj.last_modified_by = request.user
                 valid_form = self.form_valid(form)
                 messages.add_message(request, messages.SUCCESS,
@@ -176,7 +176,7 @@ class ArticleUpdateView(UpdateView):
         if form.is_valid():
             try:
                 obj = form.save(commit=False)
-                if request.user.is_authenticated():
+                if request.user.is_authenticated:
                     obj.last_modified_by = request.user
 
                 valid_form = self.form_valid(form)
@@ -218,7 +218,7 @@ class ArticleAddView(FormView):
         if form.is_valid():
             try:
                 blog = form.save(commit=False)
-                if request.user.is_authenticated():
+                if request.user.is_authenticated:
                     blog.created_by = request.user
                     blog.last_modified_by = request.user
                     blog.save()
@@ -369,7 +369,7 @@ class CategoryUpdateView(UpdateView):
             try:
                 # form.save()
                 obj = form.save(commit=False)
-                if request.user.is_authenticated():
+                if request.user.is_authenticated:
                     obj.last_modified_by = request.user
 
                 valid_form = self.form_valid(form)
@@ -461,7 +461,7 @@ class CategoryAddView(FormView):
         if form.is_valid():
             try:
                 category = form.save(commit=False)
-                if request.user.is_authenticated():
+                if request.user.is_authenticated:
                     category.created_by = request.user
                     category.last_modified_by = request.user
                     category.save()
@@ -505,7 +505,7 @@ class TagUpdateView(UpdateView):
         if form.is_valid():
             try:
                 obj = form.save(commit=False)
-                if request.user.is_authenticated():
+                if request.user.is_authenticated:
                     obj.last_modified_by = request.user
                 valid_form = self.form_valid(form)
                 messages.add_message(request, messages.SUCCESS,
@@ -585,7 +585,7 @@ class TagAddView(FormView):
         if form.is_valid():
             try:
                 tag = form.save(commit=False)
-                if request.user.is_authenticated():
+                if request.user.is_authenticated:
                     tag.created_by = request.user
                     tag.last_modified_by = request.user
                     tag.save()
@@ -626,7 +626,7 @@ class AuthorAddView(FormView):
         if form.is_valid():
             try:
                 author = form.save(commit=False)
-                if request.user.is_authenticated():
+                if request.user.is_authenticated:
                     author.created_by = request.user
                     author.last_modified_by = request.user
                     author.save()
@@ -672,7 +672,7 @@ class AuthorUpdateView(UpdateView):
         if form.is_valid():
             try:
                 obj = form.save(commit=False)
-                if request.user.is_authenticated():
+                if request.user.is_authenticated:
                     obj.last_modified_by = request.user
 
                 valid_form = self.form_valid(form)

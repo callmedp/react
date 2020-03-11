@@ -12,9 +12,10 @@ class StaticSiteView(RetrieveAPIView):
     serializer_class = StaticSiteContentSerializer
     authentication_classes = ()
     permission_classes = ()
+    lookup_field = 'page_type'
 
     def get_queryset(self):
-        page_type = int(self.kwargs['pk'])
+        page_type = int(self.kwargs['page_type'])
         if page_type:
             return StaticSiteContent.objects.filter(page_type=page_type)
         return StaticSiteContent.objects.all()
