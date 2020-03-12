@@ -74,7 +74,8 @@ from shop.forms import (
     VariationInlineFormSet, ProductChildForm,
     ChildInlineFormSet, ProductRelatedForm,
     RelatedInlineFormSet, ChangeProductVariantForm,
-    ChapterInlineFormSet, ProductChapterForm, SkillTypeForm)
+    ChapterInlineFormSet, ProductChapterForm, SkillTypeForm,
+    ProductBlogForm)
 
 from shop.utils import CategoryValidation, ProductValidation
 from faq.forms import (
@@ -1248,7 +1249,8 @@ class ChangeProductView(DetailView):
             instance=self.get_object())
         price_change_form = ProductPriceForm(
             instance=self.get_object())
-
+        blog_change_form = ProductBlogForm(
+            instance=self.get_object())
         attribute_form = ProductAttributeForm(
             instance=self.get_object(),)
         if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
@@ -1390,6 +1392,7 @@ class ChangeProductView(DetailView):
             'seo_form': seo_change_form,
             'op_form': op_change_form,
             'country_form': con_change_form,
+            'blog_form': blog_change_form,
             'price_form': price_change_form,
             'attribute_form': attribute_form})
         return context
@@ -1484,6 +1487,25 @@ class ChangeProductView(DetailView):
                             messages.error(
                                 self.request,
                                 "Product Country Change Failed, Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/shop/change_product.html"
+                                ], context)
+                    elif slug == 'blogs':
+                        form = ProductBlogForm(request.POST, instance=obj)
+                        if form.is_valid():
+                            product = form.save()
+                            messages.success(
+                                self.request,
+                                "Blog changed Successfully")
+                            return HttpResponseRedirect(reverse('console:product-change',kwargs={'pk': obj.pk}))
+                        else:
+                            context = self.get_context_data()
+                            if form:
+                                context.update({'price_form': form})
+                            messages.error(
+                                self.request,
+                                "Blog Change Failed, Changes not Saved")
                             return TemplateResponse(
                                 request, [
                                     "console/shop/change_product.html"
