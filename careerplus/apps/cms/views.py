@@ -209,6 +209,8 @@ class CMSPageView(DetailView, LoadMoreMixin):
             "reset_form": PasswordResetRequestForm(),
         })
         context['meta'] = page_obj.as_meta(self.request)
+        year = datetime.datetime.now().year
+        context.update({'year':year})
 
         return context
 
