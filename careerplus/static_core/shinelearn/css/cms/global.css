@@ -318,9 +318,10 @@ h2, .h2 {
     position: relative;
     height: 19px !important;
     display: inline-block;
-    background: url("/media/static/shinelearn/images/sprite.png") no-repeat -686px -1px;
+    background: url('../../images/common/sprite.png') no-repeat -685px 0px;
     background-repeat: no-repeat;
-    top: 6px; }
+    top: 6px;
+    }
 
 
   /* .linkedin {
