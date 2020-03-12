@@ -13,6 +13,7 @@
   {% compress css %}
   <!-- Switchery -->
   <link href="{% static 'packages/switchery/dist/switchery.min.css' %}" rel="stylesheet" type="text/css">
+  <link type="text/css" href="{% static 'console/css/myadmin/django-admin-widgets.css' %}" rel="stylesheet">
   {% endcompress %}
 
   {% compress css inline %}
@@ -847,6 +848,8 @@
   {{ block.super }}
 
   {% compress js %}
+  <script src="{% static 'console/js/myadmin/django-admin.multiselect.js' %}"></script>
+  <script src="{% static 'console/js/blog/blog.js' %}"></script>
   <!-- Parsley Validate Scripts -->
   <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
   <!-- jQuery Tags Input -->
