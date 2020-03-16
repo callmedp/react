@@ -670,6 +670,9 @@ class ProductUserProfileForm(forms.ModelForm):
             self.cleaned_data['manual_change'] = manual_change
             self.cleaned_data['manual_data'] = already_sent_link
 
+    def clean_latest_education(self):
+        self.cleaned_data['latest_education'] = int(self.cleaned_data['latest_education'])
+
     def save(self, commit=True):
         existing_obj = ProductUserProfile.objects.filter(id=self.instance.id).first()
         instance = super(ProductUserProfileForm, self).save()
