@@ -720,11 +720,14 @@ def board_user_on_neo(neo_ids):
 @task
 def bypass_resume_midout(order_id):
     import os
+    import pytz
     from order.models import OrderItem, Order
     from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
     from datetime import timedelta, datetime
     from django.utils import timezone
     from random import random
+
+    utc=pytz.UTC
 
     order = Order.objects.filter(id=order_id).first()
 
@@ -778,7 +781,11 @@ def bypass_resume_midout(order_id):
             shine_resume_details.get('creation_date'), '%Y-%m-%dT%H:%M:%S'
             ) if shine_resume_details else None
 
-        if ((oi_resume_creation_date and shine_resume_details) and
+        if oi_resume_creation_date and shine_resume_creation_date:
+            oi_resume_creation_date = oi_resume_creation_date.replace(tzinfo=utc)
+            shine_resume_creation_date = shine_resume_creation_date.replace(tzinfo=utc)
+
+        if ((oi_resume_creation_date and shine_resume_creation_date) and
                 (oi_resume_creation_date < shine_resume_creation_date)) or \
                 (shine_resume_creation_date and not oi_resume_creation_date):
             response = ShineCandidateDetail().get_shine_candidate_resume(
