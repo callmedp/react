@@ -175,6 +175,7 @@ class DashboardInfo(object):
             last_oi_status = oi.oi_status
             oi.oi_status = 5
             oi.last_oi_status = data.get('last_oi_status') #3
+            oi.is_resume_candidate_upload = True
             oi.save()
             oi.orderitemoperation_set.create(
                 oi_status=data.get('last_oi_status'),

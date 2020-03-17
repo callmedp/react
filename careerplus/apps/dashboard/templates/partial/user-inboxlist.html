@@ -82,7 +82,7 @@
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
                 {% elif obj.waiting_for_input %}
                     <p><strong>Status:</strong> Waiting for input</p>
-                {% elif obj.order.auto_upload and not obj.is_assigned %}
+                {% elif obj.order.auto_upload and not obj.is_assigned and not oi.is_resume_candidate_upload %}
                     <p><strong>Status:</strong> Service is under progress- <a role="button" class="upload-resume">Upload Resume</a></p>
                 {% else %}
                     <p><strong>Status:</strong> Service is under progress</p> 
@@ -122,7 +122,7 @@
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
                 {% elif obj.waiting_for_input %}
                     <p><strong>Status:</strong> Waiting for input</p>
-                {% elif obj.order.auto_upload and not obj.is_assigned %}
+                {% elif obj.order.auto_upload and not obj.is_assigned and not oi.is_resume_candidate_upload %}
                     <p><strong>Status:</strong> Service is under progress- <a role="button" class="upload-resume">Upload Resume</a></p>
                 {% else %}
                     <p><strong>Status:</strong> Service is under progress</p>
@@ -142,7 +142,7 @@
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
                 {% elif obj.waiting_for_input %}
                     <p><strong>Status:</strong> Waiting for input</p>
-                {% elif obj.order.auto_upload and not obj.is_assigned %}
+                {% elif obj.order.auto_upload and not obj.is_assigned and not oi.is_resume_candidate_upload %}
                     <p><strong>Status:</strong> Service is under progress- <a role="button" class="upload-resume">Upload Resume</a></p>
                 {% else %}
                     <p><strong>Status:</strong> Service is under progress</p>
@@ -195,7 +195,7 @@
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
                 {% elif obj.waiting_for_input %}
                     <p><strong>Status:</strong> Waiting for input</p>
-                {% elif obj.order.auto_upload and not obj.is_assigned %}
+                {% elif obj.order.auto_upload and not obj.is_assigned and not oi.is_resume_candidate_upload %}
                     <p><strong>Status:</strong> Service is under progress- <a role="button" class="upload-resume">Upload Resume</a></p>
                 {% else %}
                    <p><strong>Status:</strong> Service is under progress</p>

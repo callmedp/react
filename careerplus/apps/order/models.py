@@ -492,7 +492,7 @@ class Order(AbstractAutoDate):
         obj = super(Order,self).save(**kwargs)
 
         if self.status == 1:
-            bypass_resume_midout.delay(self.id)
+            bypass_resume_midout(self.id)
         
         return obj
 
@@ -640,6 +640,8 @@ class OrderItem(AbstractAutoDate):
         null=True,
         default=0
     )
+
+    is_resume_candidate_upload = models.BooleanField(default=False)
 
 
     class Meta:

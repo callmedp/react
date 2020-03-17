@@ -727,7 +727,7 @@ def bypass_resume_midout(order_id):
     from django.utils import timezone
     from random import random
 
-    utc=pytz.UTC
+    utc = pytz.UTC
 
     order = Order.objects.filter(id=order_id).first()
 
@@ -762,7 +762,7 @@ def bypass_resume_midout(order_id):
     for order_item in order_items:
         if order_item.oi_resume:
             old_resume = order_item.oi_resume
-            oi_operation = order_item.orderitemoperation_set.filter(oi_status=3).first()
+            oi_operation = order_item.orderitemoperation_set.filter(oi_status=3).last()
             oi_resume_creation_date = oi_operation.created if oi_operation else None
             break
 
