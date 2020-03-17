@@ -42,7 +42,7 @@ from skillpage.views import (
 
 from resumebuilder.views import (WriteResumeView,FreeResumeDownload)
 
-from resumescorechecker.views import (ScoreCheckerView)
+from resumescorechecker.views import (ScoreCheckerView, ScoreCheckerView2)
 
 from django.conf.urls import (
     handler400, handler403, handler404, handler500
@@ -253,7 +253,10 @@ urlpatterns += [
                    re_path(r'^resume-builder/', WriteResumeView.as_view()),
 
                    #resume score checker 
-                   re_path(r'^score-checker/', ScoreCheckerView.as_view())
+                   re_path(r'^score-checker/', ScoreCheckerView.as_view()),
+
+                   #resume score checker 
+                   re_path(r'^result-page/', ScoreCheckerView2.as_view())
 
                ]
 if settings.DEBUG:
