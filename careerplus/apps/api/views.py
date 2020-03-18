@@ -1257,6 +1257,7 @@ class UpdateCertificateAndAssesment(APIView):
                 ),
                 "certificate_updated": certificate_updated,
                 "score": parsed_data.assesment.overallScore,
+                "certificate_url": parsed_data.user_certificate.certificate_file_url
 
             })
             create_assignment_lead.delay(obj_id=oi.id)
