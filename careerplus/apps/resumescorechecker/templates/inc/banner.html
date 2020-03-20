@@ -1,7 +1,7 @@
-import React from 'react';
+{% load static  %}
 
-export default function Banner(){
-    return (
+
+<!-- Header Start Here -->
 <section class="banner">
     <div class="container h-100">
         <div class="row h-100">
@@ -23,14 +23,13 @@ export default function Banner(){
                     </a>
                 </div>
                 <p class="banner__text">PDF, DOC, DOCX only  |  Max file size: 5MB</p>
-            </div>
+            </div><!-- // COL -->
             <div class="col-md-6">
                 <div class="banner__image">
-                    <img aria-label="header image" class="banner__image" src="{% static 'shinelearn/images/score-checker/banner-img.png' %}"/>
+                    <img aria-label="header image" class="banner__image" src="{% static 'shinelearn/images/score-checker/banner-img.png' %}">
                 </div>
             </div>
-        </div>
-    </div>
-</section>
-    );
-}
+        </div><!-- // row -->
+    </div><!-- // Container -->
+</section><!-- // banner -->
+<!-- Header Ends Here -->

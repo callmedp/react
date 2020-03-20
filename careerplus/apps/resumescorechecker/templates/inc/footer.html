@@ -1,8 +1,4 @@
-import React from  'react';
-
-
-export default function Footer() {
-    return (
+{% load static  %}
 
 <footer class="mt-40">
     <div class="container">
@@ -45,10 +41,8 @@ export default function Footer() {
             <figure class="b4-icon-payment-option"></figure>
         </div>
         <div class="copyright">
-            Copyright © 2019 HT Media Limited.
+            Copyright © {% now "Y" %} HT Media Limited.
         </div>
       </div>
     </div>
 </footer>
-    )
-}

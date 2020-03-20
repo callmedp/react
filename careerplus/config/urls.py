@@ -42,7 +42,7 @@ from skillpage.views import (
 
 from resumebuilder.views import (WriteResumeView,FreeResumeDownload)
 
-from resumescorechecker.views import (ScoreCheckerView, ScoreCheckerView2)
+from resumescorechecker.views import (ScoreCheckerView, ScoreCheckerView2, ScoreCheckerViewMobile)
 
 from django.conf.urls import (
     handler400, handler403, handler404, handler500
@@ -256,7 +256,13 @@ urlpatterns += [
                    re_path(r'^score-checker/', ScoreCheckerView.as_view()),
 
                    #resume score checker 
-                   re_path(r'^result-page/', ScoreCheckerView2.as_view())
+                   re_path(r'^result-page/', ScoreCheckerView2.as_view()),
+
+                   #resume score checker Mobile
+                   re_path(r'^score-checker/', ScoreCheckerViewMobile.as_view()),
+
+                   
+                   
 
                ]
 if settings.DEBUG:
@@ -272,7 +278,6 @@ urlpatterns += [re_path(r'^(?P<page_slug>tnc|disclaimer|privacy-policy)/$',
 
 if settings.DEBUG:
     import debug_toolbar
-
     from rest_framework.response import Response
     from rest_framework.schemas import SchemaGenerator
     from rest_framework.views import APIView
