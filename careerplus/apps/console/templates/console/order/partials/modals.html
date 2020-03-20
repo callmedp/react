@@ -1,4 +1,5 @@
 {% load static %}
+{% load console_tags %}
 {% block emailnumbermodals %}
 
 <div class="modal fade" id="alternatecontact_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -15,9 +16,11 @@
             <input type="text" class="form-control" id="alt_email" name="alt_email" value="" placeholder="Email">
             <span class="error-txt"></span>
           </div>
-          <label class="mb-20 pl-20 pr-20" style="width: 100%; padding-left:20px; padding-right:20px; text-align: left;"> 
-            <input type="checkbox" id="check_primary" name="check_primary"> Mark as Primary Email
-          </label>
+          {% if request.user|has_group:OPS_HEAD_GROUP_LIST %}
+            <label class="mb-20 pl-20 pr-20" style="width: 100%; padding-left:20px; padding-right:20px; text-align: left;"> 
+              <input type="checkbox" id="check_primary" name="check_primary"> Mark as Primary Email
+            </label>
+          {% endif %}
           <div class="form-group">
             <input type="text" class="form-control" id="alt_number" name="alt_mobile" value="" placeholder="Mobile">
             <span class="error-txt"></span>
