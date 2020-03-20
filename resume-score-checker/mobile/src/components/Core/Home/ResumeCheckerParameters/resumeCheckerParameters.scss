@@ -1,0 +1,32 @@
+.parameters {
+    background-color: #F8F3FF;
+    padding-top: 15px;
+    position: relative;
+
+    &__lists {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 0;
+    }
+
+    &__item {
+        @extend %green-tick;
+        flex: 0 0 100%;
+        max-width: 100%;
+        list-style-type: none;
+        padding: 10px 20px 10px 20px;
+        position: relative;
+        font-size: $font-base - .1;
+    }
+
+    &__head {
+        font-weight: $font-weight-medium;
+        font-size: $font-size-md;
+        color: $gray-darker;
+        padding-bottom: 5px;
+    }
+
+    &__image {
+        width: 38%;
+    }
+}

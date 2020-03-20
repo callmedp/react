@@ -1,0 +1,52 @@
+
+  // Icons Starts here 
+  .sprite {
+    background-image: url('/media/images/sprite.png');
+    background-repeat:  no-repeat;
+}
+
+.upload {
+    @include icon-block (14px, 19px, 0 0);
+}
+
+.export {
+    @include icon-block (14px, 18px, -18px 0);
+}
+
+.layout-resume {
+    @include icon-inblock (43px, 63px, 0 -22px);
+}
+
+.tips {
+    @include icon-inblock (52px, 63px, 0 -88px);
+}
+
+.review-score {
+    @include icon-inblock (46px, 63px, 0 -160px);
+}
+
+.expert-guidance {
+    @include icon-inblock (45px, 63px, 0 -224px);
+}
+
+.upload-resume {
+    @include icon-inblock (19px, 27px, 0 -308px);
+}
+
+.resume-analysis {
+    @include size(27px, 27px);
+    background-position: 0 -341px;
+}
+
+.get-resume {
+    @include size(20px, 27px);
+    background-position: 0 -380px;
+}
+
+.clip {
+    @include size(7px, 15px);
+    background-position: -33px -328px;
+    display: inline-block;
+    position: relative;
+    top: 2px;
+}
