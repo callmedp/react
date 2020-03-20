@@ -7,3 +7,7 @@ class ScoreCheckerView(TemplateView):
 
 class ScoreCheckerView2(TemplateView):
     template_name = 'resumescorechecker/inner.html'
+
+
+class ScoreCheckerViewMobile(TemplateView):
+    template_name = 'resumescorechecker/index.html'

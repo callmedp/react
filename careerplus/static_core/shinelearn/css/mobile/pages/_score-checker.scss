@@ -1,0 +1,333 @@
+@import '../../path';
+@import '../library/variables';
+@import '../library/mixin';
+// @import 'progress-bar';
+// @import 'progress-bar-sm';
+
+%blue-gr {
+    background: #7b46ab; 
+    background: -moz-linear-gradient(45deg,  #7b46ab 0%, #997bd5 50%, #997bd5 50%, #b0a2f4 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(45deg,  #7b46ab 0%,#997bd5 50%,#997bd5 50%,#b0a2f4 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(45deg,  #7b46ab 0%,#997bd5 50%,#997bd5 50%,#b0a2f4 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7b46ab', endColorstr='#b0a2f4',GradientType=1 );
+}
+
+%green-tick {
+    &::before {
+        @include size(14px, 11px);
+        content: '';
+        background-image: url($path + 'images/score-checker/sprite.png');
+        background-repeat:  no-repeat;
+        background-position: -28px -310px;
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 17px;
+        
+    }
+}
+
+%blue-bullet {
+    &::before {
+        content: '';
+        @include size(7px, 7px);
+        flex: 0 0 7px;
+        border-radius: 50%;
+        background-color: $blue;
+        display: block;
+        position: relative;
+        top: 6px;
+        left: -15px;
+
+    }
+}
+
+h1, h2 {
+    &::before {
+        content: '';
+        width: 100px;
+        display: inline-block;
+        border-top: 2px solid #40D2E7;
+        margin-bottom: 5px;
+    }
+
+    span {
+        display: block;
+    }
+}
+
+h1 {
+    font-size: 3.8rem;
+    line-height: 44px;
+    font-weight: 700;
+}
+
+h2 {
+    font-size: 1.625rem !important;
+    line-height: 2rem !important;
+    font-weight: 700 !important;
+}
+
+.circle {
+    @include size(168px, 168px);
+    background-color: rgba(#BAABFF, .1);
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    z-index: 0;
+}
+
+.dots {
+    @include size(119px, 93px);
+    background-image: url($path + 'images/score-checker/dots.png');
+    background-repeat:  no-repeat;
+    display: block;
+    position: absolute;
+    z-index: 0;
+}
+
+.container-box {
+    padding: 15px;
+}
+
+.banner {
+    @include size (100%, 431px);
+    @extend %blue-gr;
+    color: $white;
+    position: relative;
+    overflow: hidden;
+
+    h1 {
+        font-size:2.375rem;
+    }
+
+    &__image {
+        position: absolute;
+        z-index: 1;
+        right: 0;
+        bottom: 5px;
+
+        img {
+            position: relative;
+            z-index: 1;
+        }
+    }
+
+    &__text {
+        color: rgba($white, .6);
+        font-size: 11px;
+        margin-top: 20px;
+    }
+
+    .circle {
+        top: -30px;
+        left: 10px;
+    }
+
+    .dots {
+        top: 16px;
+        right: 30px;
+    }
+}
+
+.howit-works {
+
+    &::before {
+        content: '';
+        display: block;
+        background-image: url($path + 'images/mobile/score-checker/curve.png');
+        background-repeat:  no-repeat;
+        padding-top: 45px;
+        background-size: contain;
+        position: relative;
+        top: -27px;
+    }
+
+    &__lists {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: -35px;
+    }   
+
+    &__item {
+        max-width: 50%;
+        flex: 0 0 50%;
+        text-align: center;
+        text-align: center;
+        padding: 10px 16px;
+        font-size: $font-size-base;
+        font-weight: $font-weight-medium;
+    }
+}
+
+.call-to-action {
+    background-color: $primary;
+    padding: 15px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+
+
+.file-upload {
+    &__input {
+        position: absolute;
+        font-size: 50px;
+        opacity: 0;
+        right: 0;
+        top: 0;
+    }
+}
+
+
+.resume-checker {
+    box-shadow: 0 0 10px rgba($black, .2);
+    border-radius: 5px;
+    padding: 50px;
+    position: relative;
+    z-index: 1;
+    background-color: $white;
+
+    &__heading {
+        font-size: 30px;
+        font-weight: 700;
+    }
+
+    &__steps {
+        list-style-type: none;
+        margin-top: 50px;
+        margin-bottom: 50px;
+    }
+
+    &__step {
+        display: flex;
+        padding-left: 65px;
+        
+        &:not(:last-child) {
+            padding-bottom: 30px;
+        }
+    }
+
+    &__stepCircle {
+        @include size(49px, 49px);
+        @extend %blue-gr;
+        max-width: 49px;
+        flex: 0 0 49px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        left: 15px;
+    }
+
+    &__content {
+        font-size: $font-size-14;
+
+        &--heading {
+            font-size: 1rem;
+            color: $gray-darker;
+            font-weight: $font-weight-medium;
+        }
+    }   
+}
+
+.parameters {
+    background-color: #F8F3FF;
+    padding-top: 15px;
+    position: relative;
+
+    &__lists {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 0;
+    }
+
+    &__item {
+        @extend %green-tick;
+        flex: 0 0 100%;
+        max-width: 100%;
+        list-style-type: none;
+        padding: 10px 20px 10px 20px;
+        position: relative;
+        font-size: $font-base - .1;
+    }
+
+    &__head {
+        font-weight: 600;
+        font-size: 1rem;
+        color: $gray-darker;
+    }
+
+    &__image {
+        width: 38%;
+    }
+}
+
+.white-bg {
+    background-color: $white !important;
+}
+
+
+footer {
+    padding-bottom: 70px;
+}
+
+.body-wrapper-sc {
+    padding-bottom: 140px !important;
+}
+
+
+  // Icons Starts here 
+  .sprite-sc {
+    background-image: url($path + 'images/mobile/score-checker/sprite.png');
+    background-repeat:  no-repeat;
+}
+
+.upload {
+    @include icon-block (14px, 19px, 0 0);
+}
+
+.export {
+    @include icon-block (14px, 18px, -18px 0);
+}
+
+.layout-resume {
+    @include icon-inblock (43px, 63px, 0 -22px);
+}
+
+.tips {
+    @include icon-inblock (52px, 63px, 0 -90px);
+}
+
+.review-score {
+    @include icon-inblock (46px, 63px, 0 -160px);
+}
+
+.expert-guidance {
+    @include icon-inblock (45px, 63px, 0 -224px);
+}
+
+.upload-resume {
+    @include icon-inblock (19px, 27px, 0 -308px);
+}
+
+.resume-analysis {
+    @include size(27px, 27px);
+    background-position: 0 -341px;
+}
+
+.get-resume {
+    @include size(20px, 27px);
+    background-position: 0 -380px;
+}
+
+.clip {
+    @include size(7px, 15px);
+    background-position: -33px -328px;
+    display: inline-block;
+    position: relative;
+    top: 2px;
+}
