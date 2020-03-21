@@ -11,9 +11,9 @@ import './home.scss';
 export default function Home(){
     return (
 
-        <div className="body-wrapper body-wrapper-sc">
+        <div className="body-wrapper">
             {
-                <div>
+                <div className="h-100">
                     <Banner/>
                     <Features/>
                     <HowItWorks/>

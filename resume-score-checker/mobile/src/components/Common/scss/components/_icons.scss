@@ -33,6 +33,18 @@
     @include icon-inblock (19px, 27px, 0 -308px);
 }
 
+.fb-black {
+    @include icon-inblock (13px, 24px, -67px 0);
+}
+
+.linledin-black{
+    @include icon-inblock (25px, 24px, -59px -28px);
+}
+
+.tw-black {
+    @include icon-inblock (20px, 24px, -60px -56px);
+}
+
 .resume-analysis {
     @include size(27px, 27px);
     background-position: 0 -341px;

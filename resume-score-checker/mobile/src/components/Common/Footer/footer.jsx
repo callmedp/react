@@ -1,9 +1,7 @@
 import React from 'react';
 
-export default function footer() {
+export default function Footer() {
     return(
-
-
         <div>
             <footer className="footer-new">
                 <div className="content-box pb-60">
@@ -31,7 +29,6 @@ export default function footer() {
                     </a>
                 </div>
             </div>
-            
         </div>
     );
 }

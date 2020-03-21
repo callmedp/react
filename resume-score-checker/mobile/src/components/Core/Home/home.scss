@@ -16,6 +16,7 @@
 // From Components
 @import '../../Common/scss/components/icons';
 @import '../../Common/scss/components/buttons';
+@import '../../Common/scss/components/common';
 
 // From Home page Components
 @import './Banner/banner.scss';
@@ -23,52 +24,3 @@
 @import './HowItWorks/howItWorks.scss';
 @import './ResumeCheckerParameters/resumeCheckerParameters.scss';
 @import '../../Common/Footer/footer.scss';
-
-
-.circle {
-    @include size(168px, 168px);
-    background-color: rgba(#BAABFF, .1);
-    display: block;
-    position: absolute;
-    border-radius: 50%;
-    z-index: 0;
-}
-
-.dots {
-    @include size(119px, 93px);
-    background-image: url('/media/images/dots.png');
-    background-repeat:  no-repeat;
-    display: block;
-    position: absolute;
-    z-index: 0;
-}
-
-.container-box {
-    padding: 15px;
-}
-
-
-
-
-
-
-
-
-
-
-.white-bg {
-    background-color: $white;
-}
-
-
-
-
-
-footer {
-    padding-bottom: 70px;
-}
-
-.body-wrapper-sc {
-    padding-bottom: 140px !important;
-}
-
