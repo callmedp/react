@@ -27,6 +27,8 @@ html {
   line-height: 1.15; // 3
   -webkit-text-size-adjust: 100%; // 4
   -webkit-tap-highlight-color: rgba($black, 0); // 5
+  font-size: 62.5%;
+  scroll-behavior: smooth;
 }
 
 // Shim for "new" HTML5 structural elements to display correctly (IE10, older browsers)
@@ -479,4 +481,29 @@ template {
 // Needed for proper display in IE 10-.
 [hidden] {
   display: none !important;
+}
+
+
+h1, h2 {
+  &::before {
+      content: '';
+      width: 100px;
+      display: inline-block;
+      border-top: 2px solid #40D2E7; 
+      margin-bottom: 10px;
+  }
+
+  span {
+      display: block;
+  }
+}
+
+h1 {
+  font-size: 4.4rem;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 3.0rem;
+  font-weight: 700;
 }
