@@ -3,36 +3,36 @@ import React from 'react';
 export default function GetExperts(){
     return (
 
-<section class="container expert-help">
-    <div class="row">
-      <div class="col-md-8 col-md-8">
+<section className="container expert-help">
+    <div className="row">
+      <div className="col-md-8 col-md-8">
         <h2><span>Get Expert Help</span></h2>
         <p>Shine Learning is India’s largest professional courses and career skills portal. Launched by Shine.com, Shine Learning has a vision to up-skill the Indian talent pool to adapt to the changing job market.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-        <ul class="expert-help__list mt-5">
-          <li class="expert-help__item">Resume Writing</li>
-          <li class="expert-help__item">Resume Writing</li>
-          <li class="expert-help__item">Resume Writing</li>
-          <li class="expert-help__item">Resume Writing</li>
+        <ul className="expert-help__list mt-5">
+          <li className="expert-help__item">Resume Writing</li>
+          <li className="expert-help__item">Resume Writing</li>
+          <li className="expert-help__item">Resume Writing</li>
+          <li className="expert-help__item">Resume Writing</li>
         </ul>
       </div>
-      <div class="col-md-4">
-        <div class="expert-help__login need-help">
+      <div className="col-md-4">
+        <div className="expert-help__login need-help">
           <h3>Fill the form below to get help</h3>
-          <form class="mt-5" id="callUsForm" novalidate="novalidate">
+          <form className="mt-5" id="callUsForm" novalidate="novalidate">
             
-            <div class="form-group">
-              <input type="text" class="form-control input_field" id="email" name="email" value="" placeholder="Email"/>
-              <label for="email" class="input_label">Email</label>
+            <div className="form-group">
+              <input type="text" className="form-control input_field" id="email" name="email" value="" placeholder="Email"/>
+              <label for="email" className="input_label">Email</label>
             </div>
   
-            <div class="form-group">
-              <input type="text" class="form-control input_field" id="name" name="name" value="" placeholder="Name"/>
-              <label for="name" class="input_label">Name</label>
+            <div className="form-group">
+              <input type="text" className="form-control input_field" id="name" name="name" value="" placeholder="Name"/>
+              <label for="name" className="input_label">Name</label>
             </div>
   
-            <div class="d-flex expert-help__mobile">
-              <div class="custom-select-box">
-                    <select name="country" class="custom-select" id="country-code">
+            <div className="d-flex expert-help__mobile">
+              <div className="custom-select-box">
+                    <select name="country" className="custom-select" id="country-code">
                       <option value="1">
                 +1&nbsp;&nbsp;&nbsp;&nbsp; -- &nbsp;&nbsp;&nbsp;&nbsp;Canada
                 </option><option value="1">
@@ -524,12 +524,12 @@ export default function GetExperts(){
                 </option></select>
               </div>
               
-              <div class="form-group expert-help__mobile--mobile">
-                <input type="text" class="form-control input_field" id="number" name="number" value="" placeholder="Mobile"/>
-                <label for="mobile" class="input_label">Mobile</label>
+              <div className="form-group expert-help__mobile--mobile">
+                <input type="text" className="form-control input_field" id="number" name="number" value="" placeholder="Mobile"/>
+                <label for="mobile" className="input_label">Mobile</label>
               </div>
             </div>
-            <button type="submit" class="btn btn-primary btn-round-40 px-5 mt-3">Submit</button></form>
+            <button type="submit" className="btn btn-primary btn-round-40 px-5 mt-3">Submit</button></form>
         </div>
       </div>
     </div>
