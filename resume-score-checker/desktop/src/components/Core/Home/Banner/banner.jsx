@@ -1,4 +1,5 @@
 import React from 'react';
+import './banner.scss'
 
 export default function Banner(){
     return (
@@ -26,7 +27,7 @@ export default function Banner(){
             </div>
             <div className="col-md-6">
                 <div className="banner__image">
-                    <img aria-label="header image" className="banner__image" src="{% static 'shinelearn/images/score-checker/banner-img.png' %}"/>
+                    <img aria-label="header image" className="banner__image" src="media/images/banner-img.png"/>
                 </div>
             </div>
         </div>
