@@ -12,7 +12,6 @@ export default function Score(){
             {
                 <div className="h-100">
                    <Banner/>
-                   <Footer/>
                 </div>
             }
     </div>

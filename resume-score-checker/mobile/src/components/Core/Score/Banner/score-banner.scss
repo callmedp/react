@@ -1,7 +1,7 @@
-@import '../../../Common/scss/common.scss';
+// @import '../../../Common/scss/components/progress-bar';
 
-.banner {
-    @include size(100%, 344px, block);
+.score-banner {
+    @include size(100%, 400px, block);
     @extend %blue-gr;
     color: $white;
     position: relative;
@@ -11,34 +11,27 @@
         margin: 0;
         font-weight: $font-weight-bold;
         line-height: 1;
+        font-size: 3.0rem;
     }
 
     &__image {
-        position: absolute;
+        @include size(296px, 248px, block);
+        background-image: url('/media/images/score-bg.png');
+        margin: 0 auto;
+        position: relative;
+        top: 5px;
         z-index: 1;
-        right: 0;
-        bottom: 5px;
-
-        img {
-            position: relative;
-            z-index: 1;
-        }
-    }
-
-    &__text {
-        color: rgba($white, .6);
-        font-size: 11px;
-        margin-top: 20px;
+        box-shadow: 0 -25px 25px rgba($black, .2);
     }
 
     .circle {
-        top: -30px;
-        left: 10px;
+        top: 120px;
+        right: 10px;
     }
 
     .dots {
-        top: 16px;
-        right: 30px;
+        top: 170px;
+        right: 10px;
     }
 
     &::after {
