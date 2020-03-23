@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function resumeReview(){
+export default function ResumeReview(){
     return (
         <section>
     <div className="container">

@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import Banner from './Banner/banner.jsx';
 import Benefits from './Benefits/benefits.jsx';
 import Features from './Features/features.jsx';
-import GetExperts from './GetExperts/getExperts.jsx';
-import ImproveScore from './ImproveScore/improveScore.jsx';
 import Navbar from './Navbar/navbar.jsx';
 import Footer from '../../Common/Footer/footer.jsx';
+import Parameters from './Parameters/parameters'
+import HowItWorks from './HowItWorks/howItWorks.jsx';
 
 export default function Home(){
     return (
@@ -13,8 +13,8 @@ export default function Home(){
         <Navbar></Navbar>
         <Banner></Banner>
         <Features></Features>
-        <GetExperts></GetExperts>
-        <ImproveScore></ImproveScore>
+        <HowItWorks></HowItWorks>
+        <Parameters></Parameters>
         <Benefits></Benefits>
         <Footer></Footer>
     </div>
