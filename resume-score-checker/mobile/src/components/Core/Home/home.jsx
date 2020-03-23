@@ -10,7 +10,6 @@ import './home.scss';
 
 export default function Home(){
     return (
-
         <div className="body-wrapper">
             {
                 <div className="h-100">
@@ -21,11 +20,7 @@ export default function Home(){
                     <NextBenefit/>
                     <Footer/>
                 </div>
-            
-            /* 
-        <NextBenefit/>
-        <ResumeCheckerWorks/>
-        <ResumeCheckerParameter/> */}
-    </div>
+            }
+        </div>
     );
 }

@@ -16,7 +16,7 @@
 @import '../../../Common/scss/components/common';
 
 .banner {
-    @include size(100%, 344px, block);
+    @include size(100%, 450px, block);
     @extend %blue-gr;
     color: $white;
     position: relative;
@@ -26,18 +26,13 @@
         margin: 0;
         font-weight: $font-weight-bold;
         line-height: 1;
+        font-size: 3.2rem;
     }
 
     &__image {
-        position: absolute;
         z-index: 1;
         right: 0;
         bottom: 5px;
-
-        img {
-            position: relative;
-            z-index: 1;
-        }
     }
 
     &__text {

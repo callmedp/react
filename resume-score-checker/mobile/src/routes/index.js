@@ -1,5 +1,6 @@
 import {BrowserRouter as Router, Route} from "react-router-dom";
 import HomeContainer from '../components/Core/Home/home.jsx';
+import ScorePage from '../components/Core/Score/score.jsx';
 import React from "react";
 
 export const RouteWithSubRoutes = route => {
@@ -17,7 +18,6 @@ export const RouteWithSubRoutes = route => {
 
 
 
-
 const AppRouter = () => (
     <Router>
         <div>
@@ -30,7 +30,13 @@ const AppRouter = () => (
 export const routes = [
     {
         path: '/',
+        exact: true,
         component: HomeContainer,
+    },
+    
+    {
+        path: '/score',
+        component: ScorePage,
     },
 
 ]
