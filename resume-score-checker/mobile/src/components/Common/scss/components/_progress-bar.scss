@@ -3,7 +3,6 @@
 .ko-progress-circle {
 	width:  $circle-size;
     height: $circle-size;
-    margin-top: 105px;
 	background-color: $circle-background;
     border-radius: 50%;
     position: relative;
@@ -11,21 +10,20 @@
     &__text {
         position: absolute;
         z-index: 1;
-        color: $gray-300;
+        color: $gray-darker;
         width: 100%;
         text-align: center;
 
         strong {
-            font-size: 58px;
+            font-size: 5rem;
             position: relative;
-            top: 15px;
-            
+            top: 20px; 
         }
 
         p {
             position: relative;
             margin-bottom: 0;
-            top: -5px;
+            top: 40px;
         }
     }
     

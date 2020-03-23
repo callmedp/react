@@ -1,4 +1,4 @@
-// @import '../../../Common/scss/components/progress-bar';
+@import '../../../Common/scss/components/progress-bar';
 
 .score-banner {
     @include size(100%, 400px, block);
@@ -24,13 +24,21 @@
         box-shadow: 0 -25px 25px rgba($black, .2);
     }
 
+    &__progressBar {
+        @include size(100%, 100%, block);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-top: 60px;
+    }
+
     .circle {
         top: 120px;
         right: 10px;
     }
 
     .dots {
-        top: 170px;
+        top: 120px;
         right: 10px;
     }
 
@@ -42,4 +50,11 @@
         bottom: 0;
         background-size: cover;
     }
+}
+
+.resume-detail {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

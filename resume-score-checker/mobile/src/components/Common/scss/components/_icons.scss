@@ -56,9 +56,8 @@
 }
 
 .clip {
-    @include size(7px, 15px);
-    background-position: -33px -328px;
-    display: inline-block;
+    @include icon-inblock (7px, 15px, -33px -328px);
     position: relative;
+    margin-right: 5px;
     top: 2px;
 }
