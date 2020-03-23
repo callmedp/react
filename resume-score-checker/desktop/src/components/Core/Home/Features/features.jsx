@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './features.scss'
 
 export default function Features(){
     return (

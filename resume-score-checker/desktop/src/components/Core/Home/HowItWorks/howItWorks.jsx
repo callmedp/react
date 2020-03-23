@@ -1,4 +1,5 @@
 import React from 'react';
+import './howItWorks.scss'
 
 export default function HowItWorks(){
     return (
