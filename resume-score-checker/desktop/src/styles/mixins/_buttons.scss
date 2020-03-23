@@ -108,3 +108,31 @@
   // Manually declare to provide an override to the browser default
   @include border-radius($border-radius, 0);
 }
+
+
+
+// Resume Score Checker
+
+
+.btn-secondary {
+  color: $black;
+  cursor: pointer;
+
+  &:hover {
+    color: $black;
+  }
+
+}
+
+.btn-outline-light {
+  &:hover {
+    .export {
+        opacity: .4;
+        background-position: 0 0;
+    }
+  }
+}
+
+.btn-round-40 {
+  border-radius: 40px;
+}

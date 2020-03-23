@@ -136,27 +136,3 @@ input[type="button"] {
     width: 100%;
   }
 }
-
-
-.btn-secondary {
-  color: $black;
-  cursor: pointer;
-
-  &:hover {
-    color: $black;
-  }
-
-}
-
-.btn-outline-light {
-  &:hover {
-    .export {
-        opacity: .4;
-        background-position: 0 0;
-    }
-  }
-}
-
-.btn-round-40 {
-  border-radius: 40px;
-}
