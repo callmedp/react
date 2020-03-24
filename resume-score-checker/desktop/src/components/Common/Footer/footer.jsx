@@ -1,54 +1,50 @@
 import React from  'react';
+import './footer.scss';
 
 
 export default function Footer() {
     return (
 
-<footer className="mt-40">
-    <div className="container">
-      <nav className="navbar navbar-expand-lg">
-        <div className="collapse navbar-collapse" id="navbarText">
-          <ul className="navbar-nav mr-auto">
-            <li className="nav-item">
-              <a className="nav-link" href="/about-us">About Us</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/privacy-policy">Privacy Policy</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/tnc">Terms & Conditions</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/contact-us">Contact Us</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/disclaimer">Disclaimer</a> 
-            </li>
-          </ul>
-          <span className="navbar-text social-icon">
-            <a href="https://www.facebook.com/shinelearningdotcom/" className="b4-icon-facebook"></a>
-            <a href="https://www.linkedin.com/showcase/13203963/" className="b4-icon-linkedin"></a>
-            <a href="https://twitter.com/shinelearning" className="b4-icon-twitter"></a>
-          </span>
+<footer>
+  <div className="container">
+      <div className="row mb-4">
+        <div className="footer-links col-sm-8">
+          <a href="/about-us">About Us</a>
+          <a href="/privacy-policy">Privacy Policy</a>
+          <a href="/tnc">Terms &amp; Conditions</a>
+          <a href="/contact-us">Contact Us</a>
+          <a href="/disclaimer">Disclaimer</a>
         </div>
-      </nav>
-      <div className="d-flex justify-content-between align-items-center mt-20">
-        <div className="secure-payment">
-          <figure className="b4-icon-secure mr-20"></figure>
-          <span>
-            <strong>100% Secure Payment</strong>
-            All major credit & debit cards accepted
-          </span>
-        </div>
-        <div className="payment-option">
-            Payment options
-            <figure className="b4-icon-payment-option"></figure>
-        </div>
-        <div className="copyright">
-            Copyright © 2019 HT Media Limited.
+          
+        <div className="footer-social col-sm-4">
+          <a aria-label="follow us on facebook" className="sprite facebook mr-10" href="#"></a>
+          <a aria-label="follow us on linkedin" className="sprite linkedin mr-10" href="#"></a>
+          <a aria-label="follow us on twitter" className="sprite twitter" href="#"></a>
         </div>
       </div>
-    </div>
+      <hr></hr>
+
+      <div className="row my-5">
+            <div className="col-sm-4">
+              <div className="secure-payment">
+                <figure className="sprite secure-icon mr-3"></figure>
+                <span className="secure-text"><strong className="d-block">100% Secure Payment</strong>
+                All major credit &amp; debit cards accepted</span>
+              </div>
+            </div>
+                <div className="col-sm-5">
+                  <div className="payment-options">
+                    <figure className="payment-option-txt">Payment options</figure>
+                    <span className="sprite payment-option-bg"></span>
+                  </div>
+                </div>
+                <div className="col-sm-3">
+                  <div className="h-100 d-flex align-items-center">
+                    <span className="copyright-txt mt-20">Copyright © 2020 HT Media Limited.</span>
+                  </div>
+                </div>
+          </div>
+  </div>
 </footer>
     )
 }

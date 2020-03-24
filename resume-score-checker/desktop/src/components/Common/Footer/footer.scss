@@ -1,0 +1,70 @@
+@import '../../../styles/functions';
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
+footer {
+    background-color: #F8F8F8;
+    padding: 30px 0 0 0;
+    clear: both;
+    display: block;
+    overflow: hidden;
+    margin-top: 50px;
+
+    .footer-links a {
+        color: #333;
+        margin-right: 20px;
+        font-size: 1.3rem;
+    }
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+.ftr-bdr {
+    border-bottom: 1px solid #e1e1e1;
+    display: block;
+    clear: both;
+}
+
+.footer-social {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    a {
+        &:not(:last-child) {
+            margin-right: 15px;
+        }
+    }
+}
+
+.secure-payment {
+    display: flex;
+    align-items: center;
+}
+
+.facebook {
+    @include icon-details(13px, 24px, 0 -449px);
+    display: block;
+}
+
+.linkedin {
+    @include icon-details(25px, 24px, 0 -479px);
+    display: block;
+}
+
+.twitter {
+    @include icon-details(25px, 24px, 0 -508px);
+    display: block;
+}
+
+.secure-icon {
+    @include icon-details(29px, 40px, -53px -444px);
+    flex: 0 0 29px;
+    display: block;
+}
+
+.payment-option-bg {
+    @include icon-details(240px, 29px, 0 -540px);
+    display: block;
+}

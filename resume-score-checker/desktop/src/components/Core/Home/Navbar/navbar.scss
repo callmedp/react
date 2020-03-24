@@ -1,0 +1,10 @@
+@import '../../../../styles/functions';
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.navbar-brand {
+    @include size(204px, 41px);
+    display: block;
+    background: url('/media/images/sprite.png') no-repeat -36px -491px;
+    display: inline-block;
+}

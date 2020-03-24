@@ -1,5 +1,10 @@
+@import '../styles/functions';
+@import '../styles/variables';
+@import '../styles/mixins';
 
 h1, h2 {
+    color: $gray-300;
+
     &::before {
         content: '';
         width: 100px;
