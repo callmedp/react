@@ -1,0 +1,22 @@
+.get-expert-help {
+    padding: 1.5rem 0 3rem 0;
+
+    &__list {
+        li {
+            @extend %blue-bullet;
+            background-color: #F8F3FF;
+            padding: 1rem;
+            border-radius: 5px;
+            display: flex;
+
+            &::before {
+                left: 0;
+                margin-right: 5px;
+            }
+
+            &:not(:last-child) {
+                margin-bottom: 15px;
+            }
+        }
+    }
+}

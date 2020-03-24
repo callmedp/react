@@ -1,0 +1,12 @@
+@import '../../../components/Common/scss/common.scss';
+
+@import '../../../components/Common/scss/components/animation-input';
+@import '../../../components/Common/scss/components/form-control';
+
+
+.getExpertForm {
+    &__header {
+        padding: 1.5rem 1.5rem;
+        box-shadow: 0 0 10px rgba($black, .1);
+    }
+}

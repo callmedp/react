@@ -1,0 +1,14 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+
+    &__logo {
+        @include size(180px, 35px, block);
+    }
+
+    &__barMenu {
+        @include icon-block (26px, 17px, -58px -134px);
+    }
+}
