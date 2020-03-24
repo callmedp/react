@@ -9,4 +9,9 @@
         padding: 1.5rem 1.5rem;
         box-shadow: 0 0 10px rgba($black, .1);
     }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+    }
 }

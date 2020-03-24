@@ -11,7 +11,7 @@ export default function GetExpertForm() {
             </div>
 
             <div className="container-box">
-                <form action="">
+                <form action="" className="getExpertForm__form">
                     <ul>
                         <li class="form-group input-effect">
                             <input type="text" id="name" name="name" value="{{request.session.full_name}}" 
