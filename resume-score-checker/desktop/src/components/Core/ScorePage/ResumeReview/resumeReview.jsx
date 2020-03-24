@@ -1,4 +1,5 @@
 import React from 'react';
+import './resumeReview.scss'
 
 export default function ResumeReview(){
     return (

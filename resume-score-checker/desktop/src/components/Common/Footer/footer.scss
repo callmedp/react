@@ -45,27 +45,29 @@ footer {
 }
 
 .facebook {
-    @include icon-details(13px, 24px, 0 -449px);
+    @include icon-details(13px, 24px, -37px -541px);
     display: block;
 }
 
 .linkedin {
-    @include icon-details(25px, 24px, 0 -479px);
+    @include icon-details(25px, 23px, -64px -541px);
+    margin-left: 10px;
     display: block;
 }
 
 .twitter {
-    @include icon-details(25px, 24px, 0 -508px);
+    @include icon-details(24px, 20px, -106px -545px);
+    margin-left: 10px;
     display: block;
 }
 
 .secure-icon {
-    @include icon-details(29px, 40px, -53px -444px);
+    @include icon-details(29px, 40px, -1px -503px);
     flex: 0 0 29px;
     display: block;
 }
 
 .payment-option-bg {
-    @include icon-details(240px, 29px, 0 -540px);
+    @include icon-details(252px,29px, -49px -504px);
     display: block;
 }
