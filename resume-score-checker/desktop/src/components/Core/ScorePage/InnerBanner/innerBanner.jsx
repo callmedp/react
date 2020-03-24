@@ -12,7 +12,7 @@ export default function InnerBanner(){
                     <nav aria-label="breadcrumb">
                         <ol className="breadcrumb">
                           <li className="breadcrumb-item"><a href="#">Home</a></li>
-                          <li className="breadcrumb-item active" aria-current="page">Library</li>
+                          <li className="breadcrumb-item active" aria-current="page">Resume Review</li>
                         </ol>
                     </nav>
                     <div className="banner-score__resume-scoreWrap"> 
