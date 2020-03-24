@@ -3,6 +3,11 @@
     background-repeat:  no-repeat;
 }
 
+.sprite1 {
+    background-image: url(/media/images/sprite1.png);
+    background-repeat:  no-repeat;
+}
+
 .upload {
     @include size(14px, 19px);
     display: block;

@@ -1,3 +1,6 @@
+@import '../../../../styles/functions';
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
 
 .resume-detail {
     display: flex;
@@ -85,4 +88,73 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
+}
+
+
+// Sm Progress Circle
+
+
+
+.sm-progress-circle {
+	width:  $circle-size-sm;
+    height: $circle-size-sm;
+	background-color: $circle-background;
+    border-radius: 50%;
+    position: relative;
+
+    &__text {
+        position: absolute;
+        z-index: 1;
+        color: $gray-300;
+        width: 100%;
+        text-align: center;
+
+        strong {
+            font-size: 18px;
+            position: relative;
+            top: 12px;
+            
+        }
+    }
+    
+        .sm-progress-circle__slice, 
+        .sm-progress-circle__fill {
+			width:    $circle-size-sm;
+			height:   $circle-size-sm;
+			position: absolute;
+			-webkit-backface-visibility: hidden;
+			transition: transform $transition-length;
+			border-radius: 50%;
+		}
+		.sm-progress-circle__slice {
+			clip: rect(0px, $circle-size-sm, $circle-size-sm, $circle-size-sm/2);
+			.sm-progress-circle__fill {
+				clip: rect(0px, $circle-size-sm/2, $circle-size-sm, 0px);
+				background-color: $circle-color;
+			}
+	}
+	.sm-progress-circle__overlay {
+		width:       $inset-size-sm;
+		height:      $inset-size-sm;
+		position:    absolute;
+		margin-left: ($circle-size-sm - $inset-size-sm)/2;
+		margin-top:  ($circle-size-sm - $inset-size-sm)/2;
+
+		background-color: $inset-color;
+		border-radius: 50%;
+	}
+
+	$i: 0;
+	$increment: 180deg / 100;
+	@while $i <= 100 {
+		&[data-progress='#{$i}'] {
+				.sm-progress-circle__slice.full, .sm-progress-circle__fill {
+          transform: rotate($increment * $i);
+				}	
+				.sm-progress-circle__fill.sm-progress-circle__bar {
+					transform: rotate($increment * $i * 2);
+				}
+      $i: $i + 1;
+		}
+	}
 }

@@ -1,3 +1,8 @@
+@import '../../../../styles/functions';
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+@import '../../../../styles/utilities';
+
 .improve-score {
     background-color: #F8F3FF;
     margin-top: 100px;
@@ -6,7 +11,7 @@
     &::before {
         content: '';
         display: block;
-        background-image: url($path + 'images/score-checker/curve-timeToImprove.png');
+        background-image: url(/media/images/curve-timeToImprove.png);
         background-repeat:  no-repeat;
         padding-top: 74px;
         background-size: contain;

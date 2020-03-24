@@ -1146,3 +1146,42 @@ $print-body-min-width:              map-get($grid-breakpoints, "lg") !default;
 
 // Resume Score Checker Info
 $sprite-new: url(/media/images/sprite-new.png) no-repeat;
+
+
+
+//////// Variables created by Sachin ////////
+
+// $box-shadow-bottom: 0 2rem 1.6rem 0 rgba(208,208,208,0.50) !default;
+%box-shadow {
+  box-shadow: $box-shadow;
+  padding: 2rem;
+  border-radius: $border-radius;
+}
+%left-bdr {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 1.5rem;
+    left: 0;
+    height: 4rem;
+    width: .5rem;
+    background: #{$purple};
+  }
+}
+
+
+
+// Progress bar 
+
+
+$circle-size: 130px;
+$circle-background: #D8D8D8;
+$circle-color: #CBA5FF;
+$inset-size: 115px;
+$inset-color: #fff;
+$transition-length: 1s;
+
+$circle-size-sm: 50px;
+$inset-size-sm: 44px;

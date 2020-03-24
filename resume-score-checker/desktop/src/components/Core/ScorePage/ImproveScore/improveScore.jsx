@@ -1,5 +1,5 @@
 import React from 'react';
-
+import './improveScore.scss'
 export default function ImproveScore() {
   return (
 

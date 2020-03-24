@@ -484,7 +484,7 @@ template {
 }
 
 
-h1, h2 {
+ h2 {
   &::before {
       content: '';
       width: 100px;

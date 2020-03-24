@@ -1,5 +1,5 @@
 import React from 'react';
-
+import './innerBanner.scss';
 
 export default function InnerBanner(){
     return (
@@ -15,8 +15,7 @@ export default function InnerBanner(){
                           <li className="breadcrumb-item active" aria-current="page">Library</li>
                         </ol>
                     </nav>
-
-                    <div className="banner-score__resume-scoreWrap">
+                    <div className="banner-score__resume-scoreWrap"> 
                       <div className="banner-score__progressBar">
 
                         <div className="ko-progress-circle" data-progress="70">
@@ -34,18 +33,18 @@ export default function InnerBanner(){
                               </div>
                           </div>
                           <div className="ko-progress-circle__overlay"></div>
-                      </div>
+                        </div>
 
                       </div>
                       
-                      <div className="banner-score__myresume">
+                      {/* <div className="banner-score__myresume">
                         <a href="#">
                           <i className="sprite clip"></i>
                           Myresume.doc
                         </a>
 
                         <a href="#" className="btn btn-outline-primary btn-round-40 fs-12 py-1">Download</a>
-                      </div>
+                      </div> */}
                     </div>
 
                 </div>
@@ -57,21 +56,22 @@ export default function InnerBanner(){
                 <p className="text-white-50">Good Job! You are just few steps away for perfecting your resume. Check out the detailed reviews to improve the score. Score more to get perfect job match your profile</p>
 
                 <div className="d-flex mt-5">
+
+                    <div className="file-upload btn btn-outline-light btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
+                        <i className="sprite export uploadres mr-3"></i> Upload new resume                                
+                        <input className="file-upload__input" type="file" name="file"/>
+                    </div>
+
                     <a href="#" className="btn btn-secondary btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
                         Get expert help
                     </a>
-
-                    <div className="file-upload btn btn-outline-light btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
-                        <i className="sprite export mr-3"></i> Upload new resume                                
-                        <input className="file-upload__input" type="file" name="file"/>
-                    </div>
                 </div>
             </div>
             
         </div>
     </div>
 </section>
-<section className="howItWork" style={{height: '50px'}}></section>
+<section className="howItWork" style={{height: '60px'}}></section>
 </div>
     );
 }
