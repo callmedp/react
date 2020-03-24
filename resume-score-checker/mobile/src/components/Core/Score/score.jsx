@@ -1,6 +1,11 @@
-import React, { useState } from 'react';
-import Footer from '../../Common/Footer/footer';
+import React from 'react';
+import Header from '../../Common/Header/header';
 import Banner from './Banner/banner';
+import ResumeDetail from './ResumeDetail/resume-detail';
+import ImproveResumeScore from './ImproveResumeScore/improveResumeScore';
+import GetExpertHelp from './GetExpertHelp/getExpertHelp';
+import CallToActionScore from './CallToAction/callToActionScore';
+import Footer from '../../Common/Footer/footer';
 import './score.scss';
 
 
@@ -11,7 +16,13 @@ export default function Score(){
         <div className="body-wrapper">
             {
                 <div className="h-100">
+                   <Header/>
                    <Banner/>
+                   <ResumeDetail/>
+                   <ImproveResumeScore/>
+                   <GetExpertHelp/>
+                   <CallToActionScore/>
+                   <Footer/>
                 </div>
             }
     </div>

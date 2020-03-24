@@ -45,6 +45,21 @@
     @include icon-inblock (20px, 24px, -60px -56px);
 }
 
+.green-tick {
+    @include icon-inblock (14px, 11px, -28px -310px);
+}
+
+.question-mark {
+    @include icon-inblock (13px, 20px, -27px -383px);
+}
+
+.caution-mark {
+    @include icon-inblock (6px, 20px, 0 -416px);
+}
+
+.back-icon {
+    @include icon-inblock (22px, 17px, -62px -158px);
+}
 .resume-analysis {
     @include size(27px, 27px);
     background-position: 0 -341px;

@@ -33,7 +33,7 @@ export default function Banner() {
         </div>
 
             <div className="container-box">
-                <div className="resume-detail mb-30">
+                <div className="resume-detail mb-30 text-center">
                     <p>
                         <a href="#">
                             <i className="sprite clip"></i>
@@ -41,9 +41,10 @@ export default function Banner() {
                         </a>
                     </p>
 
-                    <a href="#" className="btn btn-round-30 btn-outline py-5">Download</a>
+                    {/* <a href="#" className="btn btn-round-30 btn-outline-blue py-5">Download</a> */}
+                    <p className="mt-15">Good Job! You are just few steps away for perfecting your resume. Check out the detailed reviews to improve the score. Score more to get perfect job match your profile</p>
                 </div>
-                <p>Good Job! You are just few steps away for perfecting your resume. Check out the detailed reviews to improve the score. Score more to get perfect job match your profile</p>
+               
             </div>
         </div>
         

@@ -1,6 +1,6 @@
 
 .body-wrapper {
-    padding-bottom: 173px;
+    padding-bottom: 202px;
     position: relative;
     height: 100%;
 }
@@ -34,4 +34,14 @@
 
 .white-bg {
     background-color: $white !important;
+}
+
+.blue-bullet {
+    padding-left: 15px;
+
+    li {
+        display: flex;
+        @extend %blue-bullet;
+        margin-bottom: 15px;
+    }
 }
