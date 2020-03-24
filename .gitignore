@@ -26,10 +26,13 @@ parts/
 sdist/
 var/
 media/
-
 #*
 #`!*/
 !media/attachment/**
+!resume-score-checker/desktop/public/media/
+
+
+
 
 *.egg-info/
 .installed.cfg
