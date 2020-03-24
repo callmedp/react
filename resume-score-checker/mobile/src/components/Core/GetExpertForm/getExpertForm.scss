@@ -2,16 +2,39 @@
 
 @import '../../../components/Common/scss/components/animation-input';
 @import '../../../components/Common/scss/components/form-control';
+@import '../../../components/Common/scss/components/error';
 
 
 .getExpertForm {
     &__header {
         padding: 1.5rem 1.5rem;
         box-shadow: 0 0 10px rgba($black, .1);
+        display: flex;
+        align-items: center;
     }
 
     &__form {
         display: flex;
         flex-direction: column;
     }
+
+    &__number {
+
+        .code {
+            flex: 0 0 100px;
+            margin-right: 10px;
+        }
+
+        .number {
+            flex-grow: 1;
+            position: relative;
+        }
+    }
+
+    &__head {
+        font-size: $font-size-md;
+        font-weight: 700;
+        margin: 15px 0;
+    }
 }
+  
