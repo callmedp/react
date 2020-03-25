@@ -66,6 +66,7 @@ from .choices import (
     convert_to_month,
     LINK_STATUS_CHOICES,
     MANUAL_CHANGES_CHOICES,
+    EDUCATION_CHOICES,
     DAYS_CHOICES,
     SUB_HEADING_CHOICES,
     SUB_HEADING_CHOICE_ATTR_MAPPING_DESKTOP,
@@ -3288,6 +3289,9 @@ class ProductUserProfile(AbstractAutoDate):
     skills = models.CharField(max_length=300, blank=True, null=True)
     approved = models.BooleanField(default=False)
     onboard = models.BooleanField(default=False)
+    latest_education = models.PositiveSmallIntegerField(
+        null=True, blank=True, choices=EDUCATION_CHOICES
+    )
     due_date = models.DateTimeField(
         _('Due Date'), blank=True, null=True)
     day_of_week = models.PositiveSmallIntegerField(
