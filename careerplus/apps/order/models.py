@@ -492,7 +492,7 @@ class Order(AbstractAutoDate):
         obj = super(Order,self).save(**kwargs)
 
         if self.status == 1:
-            bypass_resume_midout.delay(self.id)
+            bypass_resume_midout(self.id)
         
         return obj
 
@@ -640,6 +640,8 @@ class OrderItem(AbstractAutoDate):
         null=True,
         default=0
     )
+
+    is_resume_candidate_upload = models.BooleanField(default=False)
 
 
     class Meta:
@@ -1110,9 +1112,8 @@ class OrderItem(AbstractAutoDate):
             assigned_to=self.assigned_to)
 
     def is_assigned(self):
-        if self.assigned_to:
-            return True
-        return False
+        assigned_operations = self.orderitemoperation_set.filter(oi_status=1)
+        return True if len(assigned_operations) else False
 
     def save(self, *args, **kwargs):
         created = not bool(getattr(self, "id"))
