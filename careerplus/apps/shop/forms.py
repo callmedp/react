@@ -19,6 +19,8 @@ from geolocation.models import Country
 from shop.choices import BG_CHOICES, SUB_FLOWS
 from shop.utils import FIELD_FACTORIES, PRODUCT_TYPE_FLOW_FIELD_ATTRS
 from faq.models import FAQuestion
+from blog.models import Blog
+from shop.models import BlogProductMapping
 
 
 class AddKeywordForm(forms.ModelForm):
@@ -678,6 +680,53 @@ class ProductCountryForm(forms.ModelForm):
                 "This field is required.")
         return countries
 
+blog_objs = list(Blog.objects.values_list('id','name'))
+choices = [
+    (b[0], '{}({})'.format(b[1],b[0])) for b in blog_objs]
+
+class ProductBlogForm(forms.ModelForm):
+
+    blogs = forms.MultipleChoiceField(
+        choices=choices, label=("Blogs:"),
+        required=False)
+
+    class Meta:
+        model = Product
+        fields = ('blogs',)
+
+    def __init__(self, *args, **kwargs):
+        
+        super(ProductBlogForm, self).__init__(*args, **kwargs)
+        instance = kwargs.get('instance')
+        if instance: 
+            blog_list = []
+            for bpm in BlogProductMapping.objects.filter(product=instance):
+                blog_list.append(bpm.blog.id)
+            self.initial['blogs'] = blog_list
+
+    def save(self, commit=True):
+        
+        product = super(ProductBlogForm, self).save(commit=False)
+        
+        if commit:
+
+            blogs = self.cleaned_data.get('blogs')
+            blogs = [int(i) for i in blogs]
+            blog_list = list(BlogProductMapping.objects.filter(product=product\
+                            ).values_list('blog', flat=True))
+            inclusion_list = [ x for x in blogs if x not in blog_list]
+            exclusion_list = [ x for x in blog_list if x not in blogs]
+
+            for b_id in inclusion_list:
+                blog = Blog.objects.get(id=int(b_id))
+                BlogProductMapping.objects.create(product=product,\
+                    blog=blog)
+
+            for b_id in exclusion_list:
+                blog = Blog.objects.get(id=int(b_id))
+                BlogProductMapping.objects.filter(product=product,\
+                    blog=blog).delete()
+        return product
 
 class ChangeProductOperationForm(forms.ModelForm):
 

@@ -288,6 +288,8 @@ h2, .h2 {
         border: 1px solid #76a9ea; }
       .social-share ul li.gPlus {
         border: 1px solid #f34a38; }
+      .social-share ul li.linkedin {
+        border: 1px solid #3aa9de; }
 
 .icon-fb {
   background-position: -181px 0;
@@ -308,6 +310,28 @@ h2, .h2 {
   background-image: url("../../images/cms/sprite.png");
   background-repeat: no-repeat;
   top: 6px; }
+
+
+  .icon-li {
+    background-position: -198px 0;
+    width: 24px;;
+    position: relative;
+    height: 19px !important;
+    display: inline-block;
+    background: url('../../images/common/sprite.png') no-repeat -685px 0px;
+    background-repeat: no-repeat;
+    top: 6px;
+    }
+
+
+  /* .linkedin {
+    border-radius: 2px;
+    width: 28px;
+    height: 19px;
+    border: 1px solid #3aa9de;
+    display: inline-block;
+    text-align: center;
+    margin-left: 10px; } */
 
 .icon-gPlus {
   background-position: -230px 0;
