@@ -7,13 +7,18 @@ from django.contrib import messages
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 from blog.models import Tag, Category, Blog, Comment, Author, SITE_TYPE
+
+from shop.models import Product, Category as shop_Category, BlogProductMapping
 from blog.config import STATUS
 from .decorators import (
     has_group,)
 
+from core.library.haystack.query import SQS
 
 User = get_user_model()
-
+prod_objs = SQS().all().only('id', 'pNm')
+choices = [
+    (p.id, '{}({})'.format(p.pNm,p.id)) for p in prod_objs]
 
 class ArticleAddForm(forms.ModelForm):
 
@@ -204,13 +209,16 @@ class ArticleChangeForm(forms.ModelForm):
         to_field_name='name', widget=forms.SelectMultiple(
             attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
+    products = forms.MultipleChoiceField(label=("Product:"),
+        choices=choices, required=False)
+
     class Meta:
         model = Blog
         fields = ['name', 'visibility', 'status', 'image', 'image_alt',
             'p_cat', 'content', 'sec_cat', 'tags', 'allow_comment', 'summary',
             'url', 'heading', 'title', 'slug', 'meta_desc', 'meta_keywords',
             'author', 'speakers', 'start_date', 'end_date', 'venue', 'city', 'address', 'sponsor_img',
-            'position']
+            'position', 'products']
 
         widgets = {
             'url': forms.TextInput(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '100'}),
@@ -223,6 +231,7 @@ class ArticleChangeForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
+        instance = kwargs.get('instance')
         super(ArticleChangeForm, self).__init__(*args, **kwargs)
 
         self.required_field = False  # used in clean methods
@@ -250,6 +259,12 @@ class ArticleChangeForm(forms.ModelForm):
             visibility__in=visibility)
         self.fields['tags'].queryset = Tag.objects.filter(
             is_active=True)
+        if instance:
+            product_list = []
+            for bpm in BlogProductMapping.objects.filter(blog = instance):
+                product_list.append(bpm.product.id)
+            self.initial['products'] = product_list
+
         self.fields['author'].queryset = Author.objects.filter(
             is_active=True)
 
@@ -286,7 +301,22 @@ class ArticleChangeForm(forms.ModelForm):
         blog = super(ArticleChangeForm, self).save(commit=False)
         if self.cleaned_data.get('status') == '1' and int(self.cleaned_data.get('status')) != self.initial.get('status'):
             blog.publish_date = timezone.now()
+        
         if commit:
+            products = self.cleaned_data.get('products',[])
+            products = [int(i) for i in products]
+            product_list = list(BlogProductMapping.objects.filter(blog=blog).values_list('product',flat=True))
+            inclusion_list = [ x for x in products if x not in product_list ]
+            exclusion_list = [ x for x in product_list if x not in products ]
+
+            for product_id in inclusion_list:
+                product = Product.objects.get(id=int(product_id))
+                BlogProductMapping.objects.create(blog=blog, product=product)
+
+            for product_id in exclusion_list:
+                product = Product.objects.get(id=int(product_id))
+                BlogProductMapping.objects.filter(blog=blog, product=product).delete()
+
             blog.save()
         return blog
 
@@ -544,7 +574,7 @@ class CategoryChangeForm(forms.ModelForm):
     class Meta:
         model = Category
         fields = ['name', 'is_active', 'priority', 'image', 'image_alt', 'visibility',
-            'title', 'slug', 'url', 'meta_desc', 'meta_keywords']
+             'title', 'slug', 'url', 'meta_desc', 'meta_keywords']
 
         widgets = {
             'url': forms.TextInput(attrs={'class': 'form-control col-md-7 col-xs-12'}),
@@ -555,6 +585,7 @@ class CategoryChangeForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
+        instance = kwargs.get('instance')
         super(CategoryChangeForm, self).__init__(*args, **kwargs)
         visibility = []
         site_type = []
@@ -572,7 +603,7 @@ class CategoryChangeForm(forms.ModelForm):
             site_type.append((4, 'HR-Conclave'))
             site_type.append((5, 'HR-Jobfair'))
         self.fields['visibility'].choices = site_type
-        
+
         self.fields['slug'].required = False
         self.fields['slug'].widget.attrs['readonly'] = True
         
@@ -606,7 +637,6 @@ class CategoryChangeForm(forms.ModelForm):
                 if img_size > 50 * 1024:
                     raise forms.ValidationError("Image file too large ( > 50 kb )")
         return img_obj
-
 
 class CategoryAddForm(forms.ModelForm):
     name = forms.CharField(label=("Category*:"), max_length=70,
