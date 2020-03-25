@@ -1,8 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component, PureComponent } from 'react';
 import './leftSideBar.scss'
 import Edit from './Edit/edit.jsx'
 import Preview from './Preview/preview.jsx'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
+
 
 export default class LeftSideBar extends Component {
     constructor(props) {
@@ -14,7 +15,7 @@ export default class LeftSideBar extends Component {
         this.activatePreviewTab = this.activatePreviewTab.bind(this);
         this.previewClicked = this.previewClicked.bind(this);
         const path = this.props.match.path;
-        if (path === '/resume-builder/edit/'){ 
+        if (path === '/resume-builder/edit/') {
             this.state.edit = true;
         }
         else this.state.edit = false;
@@ -33,11 +34,11 @@ export default class LeftSideBar extends Component {
         })
     }
 
-    previewClicked(){
-        const {previewButtonClicked,eventClicked} = this.props;
+    previewClicked() {
+        const { previewButtonClicked, eventClicked } = this.props;
         previewButtonClicked(true);
         eventClicked({
-            'action':'Preview',
+            'action': 'Preview',
             'label': 'SideNav'
         })
     }
@@ -46,7 +47,18 @@ export default class LeftSideBar extends Component {
     render() {
         const isEdit = this.state.edit;
         const newUser = localStorage.getItem('newUser')
-        const {showAlertModal,} = this.props;
+        const {
+            showAlertModal,
+            onChange,
+            eventClicked,
+            customizeTemplate,
+            generateResumeAlert,
+            fetchDefaultCustomization,
+            userInfo: { selected_template },
+            reorderSection,
+            ui,
+            template: { entity_position, entity_id_count_mapping,text_font_size, color, heading_font_size},
+        } = this.props;
         return (
 
             <section className="left-sidebar">
@@ -58,17 +70,29 @@ export default class LeftSideBar extends Component {
                         <Link to="/resume-builder/edit">Add/ Edit</Link>
                     </li>
                     <li className={' tab-heading--top-right-radius ' +
-                    (!isEdit ? "active" : 'no-shadow')}>
+                        (!isEdit ? "active" : 'no-shadow')}>
                         <span className="icon-preview"></span>
                         {newUser ? <a onClick={showAlertModal}>Preview</a> :
-                            <a  onClick={isEdit ? this.previewClicked : () => {
-                                }}>Preview</a>
+                            <a onClick={isEdit ? this.previewClicked : () => {
+                            }}>Preview</a>
                             // <Link to="/resume-builder/preview">Preview</Link>
                         }
                     </li>
                 </ul>
                 {
-                    isEdit ? <Edit {...this.props} /> : <Preview  {...this.props} />
+                    isEdit ?
+                        <Edit /> :
+                        <Preview
+                            onChange={onChange}
+                            eventClicked={eventClicked}
+                            customizeTemplate={customizeTemplate}
+                            generateResumeAlert={generateResumeAlert}
+                            ui = {ui}
+                            fetchDefaultCustomization={fetchDefaultCustomization}
+                            userInfo={{ selected_template }}
+                            reorderSection={reorderSection}
+                            template={{ entity_position, entity_id_count_mapping, color, heading_font_size, text_font_size }}
+                        />
                 }
             </section>
         )

@@ -633,7 +633,7 @@ def generate_resume_for_order(order_id):
             product_id = item.product.id
             break
     product = Product.objects.filter(id=product_id).first()
-    if product.sub_type_flow == "1701":
+    if product.sub_type_flow == 1701:
         is_combo = True
     else:
         is_combo = True if product.attr.get_value_by_attribute(

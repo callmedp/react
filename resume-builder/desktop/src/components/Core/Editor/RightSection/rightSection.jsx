@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {connect} from "react-redux";
+import React, { Component } from 'react';
+import { connect } from "react-redux";
 import './rightSection.scss';
 import PersonalInfo from './UserDetails/PersonalInfo/personalInfo.jsx';
 import Education from './UserDetails/Education/education.jsx';
@@ -14,9 +14,11 @@ import Course from './UserDetails/Course/course.jsx';
 import Template from './Template/template.jsx';
 import queryString from 'query-string';
 import * as actions from '../../../../store/personalInfo/actions';
-import {currentForm, hideMoreSection} from '../../../../store/ui/actions';
-import {formCategoryList} from "../../../../Utils/formCategoryList";
+import { currentForm, hideMoreSection, previewButtonClicked } from '../../../../store/ui/actions';
+import { formCategoryList } from "../../../../Utils/formCategoryList";
 import Swal from 'sweetalert2';
+import { withRouter } from "react-router-dom";
+
 
 
 class RightSection extends Component {
@@ -31,7 +33,6 @@ class RightSection extends Component {
         this.changeOrderingDown = this.changeOrderingDown.bind(this);
         this.handleInputValue = this.handleInputValue.bind(this);
         this.showAlertMessage = this.showAlertMessage.bind(this);
-
 
         this.state = {
             type: (values && values.type) || '',
@@ -63,8 +64,8 @@ class RightSection extends Component {
             'isEditable': true
         });
         this.props.eventClicked({
-            'action':'EditSection',
-            'label':formCategoryList[entityId].name
+            'action': 'EditSection',
+            'label': formCategoryList[entityId].name
         })
     }
 
@@ -73,8 +74,8 @@ class RightSection extends Component {
         this.setState({
             'isEditable': false
         });
-        const {titleValue} = this.state;
-        let {entityList} = this.props;
+        const { titleValue } = this.state;
+        let { entityList } = this.props;
         if (entityList && entityList.length) {
             let index = entityList.findIndex(el => el.entity_id === entityId);
             entityList[index]['entity_text'] = titleValue || '';
@@ -123,14 +124,14 @@ class RightSection extends Component {
         // this.props.handleSwap([currentItem, nextItem])
     }
 
-    showAlertMessage(){
+    showAlertMessage() {
         Swal.fire(
             'You Can\'t add more!',
             'Please Fill current list first',
             'error'
-          )
+        )
     }
-    
+
     // handleResumeGeneration(orderId){
     //     showGenerateResumeModal()
     //         reGeneratePDF(order_data.id)
@@ -140,9 +141,9 @@ class RightSection extends Component {
     //         }, 5000);
     // }
     renderSwitch() {
-        const {entityList, ui: {showMoreSection}, hideMoreSection} = this.props;
+        const { entityList, ui: { showMoreSection }, hideMoreSection } = this.props;
         let entity, nextEntity;
-        const {isEditable} = this.state;
+        const { isEditable } = this.state;
 
         switch (this.state.type) {
             case 'profile': {
@@ -155,13 +156,13 @@ class RightSection extends Component {
                         <button className="orange-button" onClick={hideMoreSection}>Back to Edit</button>
                     </div>
                     : <PersonalInfo {...this.props}
-                                    isEditable={isEditable}
-                                    saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
-                                    handlePreview={this.handlePreview}
-                                    entityName={(entity && entity['entity_text']) || 'Personal Info'}
-                                    nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
-                                    editHeading={(elem) => this.editHeading(elem)}
-                                    handleInputValue={(value) => this.handleInputValue(value)}
+                        isEditable={isEditable}
+                        saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
+                        handlePreview={this.handlePreview}
+                        entityName={(entity && entity['entity_text']) || 'Personal Info'}
+                        nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
+                        editHeading={(elem) => this.editHeading(elem)}
+                        handleInputValue={(value) => this.handleInputValue(value)}
 
                     />
             }
@@ -177,17 +178,17 @@ class RightSection extends Component {
                         <button className="orange-button" onClick={hideMoreSection}>Back to Edit</button>
                     </div>
                     : <Education {...this.props}
-                                 isEditable={isEditable}
-                                 handlePreview={this.handlePreview}
-                                 editHeading={(elem) => this.editHeading(elem)}
-                                 entityName={(entity && entity['entity_text']) || 'Education'}
-                                 nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
-                                 changeOrderingUp={this.changeOrderingUp}
-                                 changeOrderingDown={this.changeOrderingDown}
-                                 saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
-                                 currentFields={this.state.currentFields}
-                                 handleInputValue={this.handleInputValue}
-                                 showAlertMessage = {this.showAlertMessage}
+                        isEditable={isEditable}
+                        handlePreview={this.handlePreview}
+                        editHeading={(elem) => this.editHeading(elem)}
+                        entityName={(entity && entity['entity_text']) || 'Education'}
+                        nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
+                        changeOrderingUp={this.changeOrderingUp}
+                        changeOrderingDown={this.changeOrderingDown}
+                        saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
+                        currentFields={this.state.currentFields}
+                        handleInputValue={this.handleInputValue}
+                        showAlertMessage={this.showAlertMessage}
 
                     />
             }
@@ -202,17 +203,17 @@ class RightSection extends Component {
                         <button className="orange-button" onClick={hideMoreSection}>Back to Edit</button>
                     </div>
                     : <Experience {...this.props}
-                                  isEditable={isEditable}
-                                  handlePreview={this.handlePreview}
-                                  nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
-                                  entityName={(entity && entity['entity_text']) || 'Experience'}
-                                  saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
-                                  changeOrderingUp={this.changeOrderingUp}
-                                  changeOrderingDown={this.changeOrderingDown}
-                                  editHeading={(elem) => this.editHeading(elem)}
-                                  currentFields={this.state.currentFields}
-                                  handleInputValue={this.handleInputValue}
-                                  showAlertMessage = {this.showAlertMessage}
+                        isEditable={isEditable}
+                        handlePreview={this.handlePreview}
+                        nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
+                        entityName={(entity && entity['entity_text']) || 'Experience'}
+                        saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
+                        changeOrderingUp={this.changeOrderingUp}
+                        changeOrderingDown={this.changeOrderingDown}
+                        editHeading={(elem) => this.editHeading(elem)}
+                        currentFields={this.state.currentFields}
+                        handleInputValue={this.handleInputValue}
+                        showAlertMessage={this.showAlertMessage}
 
 
                     />
@@ -228,17 +229,17 @@ class RightSection extends Component {
                         <button className="orange-button" onClick={hideMoreSection}>Back to Edit</button>
                     </div>
                     : <Project {...this.props}
-                               isEditable={isEditable}
-                               handlePreview={this.handlePreview}
-                               nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
-                               entityName={(entity && entity['entity_text']) || 'Project'}
-                               saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
-                               changeOrderingUp={this.changeOrderingUp}
-                               changeOrderingDown={this.changeOrderingDown}
-                               editHeading={(elem) => this.editHeading(elem)}
-                               currentFields={this.state.currentFields}
-                               handleInputValue={this.handleInputValue}
-                               showAlertMessage = {this.showAlertMessage}
+                        isEditable={isEditable}
+                        handlePreview={this.handlePreview}
+                        nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
+                        entityName={(entity && entity['entity_text']) || 'Project'}
+                        saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
+                        changeOrderingUp={this.changeOrderingUp}
+                        changeOrderingDown={this.changeOrderingDown}
+                        editHeading={(elem) => this.editHeading(elem)}
+                        currentFields={this.state.currentFields}
+                        handleInputValue={this.handleInputValue}
+                        showAlertMessage={this.showAlertMessage}
 
 
                     />
@@ -254,17 +255,17 @@ class RightSection extends Component {
                         <button className="orange-button" onClick={hideMoreSection}>Back to Edit</button>
                     </div>
                     : <Skill {...this.props}
-                             isEditable={isEditable}
-                             handlePreview={this.handlePreview}
-                             nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
-                             entityName={(entity && entity['entity_text']) || 'Skill'}
-                             saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
-                             changeOrderingUp={this.changeOrderingUp}
-                             changeOrderingDown={this.changeOrderingDown}
-                             editHeading={(elem) => this.editHeading(elem)}
-                             currentFields={this.state.currentFields}
-                             handleInputValue={this.handleInputValue}
-                             showAlertMessage = {this.showAlertMessage}
+                        isEditable={isEditable}
+                        handlePreview={this.handlePreview}
+                        nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
+                        entityName={(entity && entity['entity_text']) || 'Skill'}
+                        saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
+                        changeOrderingUp={this.changeOrderingUp}
+                        changeOrderingDown={this.changeOrderingDown}
+                        editHeading={(elem) => this.editHeading(elem)}
+                        currentFields={this.state.currentFields}
+                        handleInputValue={this.handleInputValue}
+                        showAlertMessage={this.showAlertMessage}
 
 
                     />
@@ -280,13 +281,13 @@ class RightSection extends Component {
                         <button className="orange-button" onClick={hideMoreSection}>Back to Edit</button>
                     </div>
                     : <Summary {...this.props}
-                               isEditable={isEditable}
-                               handlePreview={this.handlePreview}
-                               nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
-                               entityName={(entity && entity['entity_text']) || 'Summary'}
-                               saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
-                               editHeading={(elem) => this.editHeading(elem)}
-                               handleInputValue={this.handleInputValue}
+                        isEditable={isEditable}
+                        handlePreview={this.handlePreview}
+                        nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
+                        entityName={(entity && entity['entity_text']) || 'Summary'}
+                        saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
+                        editHeading={(elem) => this.editHeading(elem)}
+                        handleInputValue={this.handleInputValue}
 
                     />
             }
@@ -301,17 +302,17 @@ class RightSection extends Component {
                         <button className="orange-button" onClick={hideMoreSection}>Back to Edit</button>
                     </div>
                     : <Award {...this.props}
-                             isEditable={isEditable}
-                             handlePreview={this.handlePreview}
-                             nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
-                             entityName={(entity && entity['entity_text']) || 'Award'}
-                             saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
-                             changeOrderingUp={this.changeOrderingUp}
-                             changeOrderingDown={this.changeOrderingDown}
-                             editHeading={(elem) => this.editHeading(elem)}
-                             currentFields={this.state.currentFields}
-                             handleInputValue={this.handleInputValue}
-                             showAlertMessage = {this.showAlertMessage}
+                        isEditable={isEditable}
+                        handlePreview={this.handlePreview}
+                        nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
+                        entityName={(entity && entity['entity_text']) || 'Award'}
+                        saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
+                        changeOrderingUp={this.changeOrderingUp}
+                        changeOrderingDown={this.changeOrderingDown}
+                        editHeading={(elem) => this.editHeading(elem)}
+                        currentFields={this.state.currentFields}
+                        handleInputValue={this.handleInputValue}
+                        showAlertMessage={this.showAlertMessage}
 
                     />
             }
@@ -326,17 +327,17 @@ class RightSection extends Component {
                         <button className="orange-button" onClick={hideMoreSection}>Back to Edit</button>
                     </div>
                     : <Course {...this.props}
-                              isEditable={isEditable}
-                              handlePreview={this.handlePreview}
-                              nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
-                              entityName={(entity && entity['entity_text']) || 'Course'}
-                              saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
-                              changeOrderingUp={this.changeOrderingUp}
-                              changeOrderingDown={this.changeOrderingDown}
-                              editHeading={(elem) => this.editHeading(elem)}
-                              currentFields={this.state.currentFields}
-                              handleInputValue={this.handleInputValue}
-                              showAlertMessage = {this.showAlertMessage}
+                        isEditable={isEditable}
+                        handlePreview={this.handlePreview}
+                        nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
+                        entityName={(entity && entity['entity_text']) || 'Course'}
+                        saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
+                        changeOrderingUp={this.changeOrderingUp}
+                        changeOrderingDown={this.changeOrderingDown}
+                        editHeading={(elem) => this.editHeading(elem)}
+                        currentFields={this.state.currentFields}
+                        handleInputValue={this.handleInputValue}
+                        showAlertMessage={this.showAlertMessage}
 
                     />
             }
@@ -351,17 +352,17 @@ class RightSection extends Component {
                         <button className="orange-button" onClick={hideMoreSection}>Back to Edit</button>
                     </div>
                     : <Language {...this.props}
-                                isEditable={isEditable}
-                                handlePreview={this.handlePreview}
-                                nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
-                                entityName={(entity && entity['entity_text']) || 'Language'}
-                                saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
-                                changeOrderingUp={this.changeOrderingUp}
-                                changeOrderingDown={this.changeOrderingDown}
-                                editHeading={(elem) => this.editHeading(elem)}
-                                currentFields={this.state.currentFields}
-                                handleInputValue={this.handleInputValue}
-                                showAlertMessage = {this.showAlertMessage}
+                        isEditable={isEditable}
+                        handlePreview={this.handlePreview}
+                        nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
+                        entityName={(entity && entity['entity_text']) || 'Language'}
+                        saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
+                        changeOrderingUp={this.changeOrderingUp}
+                        changeOrderingDown={this.changeOrderingDown}
+                        editHeading={(elem) => this.editHeading(elem)}
+                        currentFields={this.state.currentFields}
+                        handleInputValue={this.handleInputValue}
+                        showAlertMessage={this.showAlertMessage}
 
                     />
             }
@@ -375,17 +376,17 @@ class RightSection extends Component {
                         <button className="orange-button" onClick={hideMoreSection}>Back to Edit</button>
                     </div>
                     : <Reference {...this.props}
-                                 isEditable={isEditable}
-                                 handlePreview={this.handlePreview}
-                                 nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
-                                 entityName={(entity && entity['entity_text']) || 'Reference'}
-                                 saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
-                                 changeOrderingUp={this.changeOrderingUp}
-                                 changeOrderingDown={this.changeOrderingDown}
-                                 editHeading={(elem) => this.editHeading(elem)}
-                                 currentFields={this.state.currentFields}
-                                 handleInputValue={this.handleInputValue}
-                                 showAlertMessage = {this.showAlertMessage}
+                        isEditable={isEditable}
+                        handlePreview={this.handlePreview}
+                        nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
+                        entityName={(entity && entity['entity_text']) || 'Reference'}
+                        saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
+                        changeOrderingUp={this.changeOrderingUp}
+                        changeOrderingDown={this.changeOrderingDown}
+                        editHeading={(elem) => this.editHeading(elem)}
+                        currentFields={this.state.currentFields}
+                        handleInputValue={this.handleInputValue}
+                        showAlertMessage={this.showAlertMessage}
 
                     />
             }
@@ -414,22 +415,26 @@ const mapStateToProps = (state) => {
     return {
         entityList: state.personalInfo && state.personalInfo.entity_preference_data,
         formData: state && state.form,
-        ui: state && state.ui
+        ui: state && state.ui,
+        userInfo: state.personalInfo
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         "updateEntityPreference": (entityList) => {
-            return dispatch(actions.updateEntityPreference({'entity_preference_data': entityList}));
+            return dispatch(actions.updateEntityPreference({ 'entity_preference_data': entityList }));
         },
         "currentForm": (formName = '') => {
-            return dispatch(currentForm({formName: formName}))
+            return dispatch(currentForm({ formName: formName }))
         },
         "hideMoreSection": () => {
             return dispatch(hideMoreSection())
-        }
+        },
+        'previewButtonClicked': (data) => {
+            return dispatch(previewButtonClicked(data))
+        },
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RightSection)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(RightSection))

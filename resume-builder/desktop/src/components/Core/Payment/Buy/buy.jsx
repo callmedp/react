@@ -25,7 +25,6 @@ import {
 } from "../../../../store/template/actions";
 import { eventClicked } from '../../../../store/googleAnalytics/actions/index'
 import { loginCandidate } from "../../../../store/landingPage/actions";
-import AlertModal from '../../../Modal/alertModal';
 import { Toast } from '../../../../services/ErrorToast';
 
 
@@ -167,7 +166,7 @@ export class Buy extends Component {
         if (localStorage.getItem('name')) window['name'] = localStorage.getItem('name')
         else window['name'] = ''
 
-       // this.props.fetchThumbNailImages();
+        // this.props.fetchThumbNailImages();
         this.props.fetchSelectedTemplateImage(localStorage.getItem('selected_template') || 1);
         this.props.getProductIds();
         this.props.fetchUserInfo();
@@ -212,9 +211,9 @@ export class Buy extends Component {
             slidesToScroll: 1,
         };
         const { userInfo: { first_name, last_name, number, email, selected_template,
-            order_data, resume_creation_count, free_resume_downloads },
-            ui: { loader }, template: { templateImage, thumbnailImages },
-            productIds, eventClicked } = this.props;
+            order_data, resume_creation_count, free_resume_downloads, resume_generated },
+            ui: { loader, modal }, template: { templateImage, thumbnailImages, templateId, modalTemplateImage },
+            productIds, eventClicked, hideModal } = this.props;
         const { userInfo } = this.props;
         const { checked, freeDownloadButtonDisable } = this.state;
         const price1 = productIds[0] ? productIds[0].inr_price : 999, discount1 = productIds[0] ? productIds[0].discount : 50,
@@ -238,15 +237,24 @@ export class Buy extends Component {
                     email={email}
                     location={this.props.location}
                 />
-                <TemplateModal {...this.props} page={'buy'} />
-                <AlertModal {...this.props} />
-                <SelectTemplateModal {...this.props} page={"buy"} />
+                <TemplateModal
+                    hideModal={hideModal}
+                    templateId={templateId}
+                    modalTemplateImage={modalTemplateImage}
+                    modal={modal}
+                    page={'buy'} />
+                <SelectTemplateModal
+                    {...this.props}
+                    page={"buy"} />
                 {
                     !!(loader) &&
                     <LoaderPage />
                 }
                 <div className="page-container">
-                    <TopBar page={'buy'} userInfo={userInfo} />
+                    <TopBar
+                        page={'buy'}
+                        userInfo={{ selected_template, order_data, resume_generated }}
+                    />
                     <section className={'flex-container mt-30'}>
 
                         <section className="left-sidebar half-width pos-rel">

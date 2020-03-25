@@ -88,7 +88,7 @@ export default class LoginModal extends React.Component {
     }
 
     render() {
-        const { ui: { loginModal }, handleLoginSuccess } = this.props
+        const { loginModal , handleLoginSuccess } = this.props
         return (
             <div className="pr">
                 <Modal

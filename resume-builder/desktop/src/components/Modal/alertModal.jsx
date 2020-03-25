@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {Component, PureComponent} from 'react';
 import Modal from 'react-modal';
 import './alertModal.scss'
+import { withRouter } from 'react-router-dom';
 
 if(typeof document !== 'undefined') {
     Modal.setAppElement(document.getElementById('react-app'));
@@ -8,7 +9,7 @@ if(typeof document !== 'undefined') {
 
 // Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
 
-export default class AlertModal extends React.Component {
+class AlertModal extends PureComponent {
     constructor(props) {
         super(props);
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
@@ -21,7 +22,7 @@ export default class AlertModal extends React.Component {
     }
 
     render() {
-        const {ui: {alertModal,generateResumeModal}, nextLink, newUser,isPreview} = this.props;
+        const {  alertModal,generateResumeModal , nextLink, newUser,isPreview} = this.props;
         return (
 
             <React.Fragment>
@@ -110,3 +111,5 @@ export default class AlertModal extends React.Component {
             ;
     }
 }
+
+export default withRouter(AlertModal) 

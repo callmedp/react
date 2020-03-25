@@ -64,7 +64,7 @@ class EditPreview extends Component {
         if (!localStorage.getItem('candidateId')) {
             await loginCandidate()
         }
-        
+
         fetchEntityInfo();
 
         // get userInfo from LocalStorage
@@ -109,7 +109,7 @@ class EditPreview extends Component {
     }
 
     generateResumeAlert() {
-        const { userInfo: { order_data, resume_generated }, history, showGenerateResumeModal, reGeneratePDF, hideGenerateResumeModal } = this.props;
+        const { userInfo: { order_data, resume_generated }, previewButtonClicked, history, showGenerateResumeModal, reGeneratePDF, hideGenerateResumeModal } = this.props;
         if (order_data && order_data.id && (localStorage.getItem('subscriptionActive') && localStorage.getItem('subscriptionActive') === 'true' ? true : false)) {
             if (!resume_generated) {
                 const swalWithBootstrapButtons = Swal.mixin({
@@ -154,7 +154,11 @@ class EditPreview extends Component {
     }
 
     render() {
-        const { ui: { loader }, userInfo: { first_name, last_name, number, email, upload_resume: uploadResume }, history: { location: { pathname } } } = this.props;
+        const { ui: { loader, alertModal, generateResumeModal }, reorderSection, fetchDefaultCustomization,
+            customizeTemplate, previewButtonClicked, template: { entity_position, entity_id_count_mapping, heading_font_size, color, text_font_size },
+            eventClicked, showSelectTemplateModal, showAlertModal,
+            userInfo: { first_name, last_name, number, email, upload_resume: uploadResume, selected_template, order_data, resume_generated },
+            history: { location: { pathname } } } = this.props;
         const showNote = localStorage.getItem('showNote') || '';
         const { visibleNote } = this.state;
         return (
@@ -171,11 +175,35 @@ class EditPreview extends Component {
                     location={this.props.location}
                 />
                 <div className="page-container">
-                    <SelectTemplateModal {...this.props} page={'edit'} />
-                    <TopBar {...this.props} />
+                    <SelectTemplateModal
+                        {...this.props}
+                        page={'edit'} />
+                    <TopBar
+                        eventClicked={eventClicked}
+                        showSelectTemplateModal={showSelectTemplateModal}
+                        userInfo={{ selected_template, order_data, resume_generated }}
+                        showAlertModal={showAlertModal}
+                    />
                     <section className={'flex-container mt-30'}>
-                        <LeftSideBar {...this.props} onChange={this.allowUploadResume} generateResumeAlert={this.generateResumeAlert} />
-                        <RightSection {...this.props} generateResumeAlert={this.generateResumeAlert} />
+                        <LeftSideBar
+                            showAlertModal={showAlertModal}
+                            eventClicked={eventClicked}
+                            customizeTemplate={customizeTemplate}
+                            fetchDefaultCustomization={fetchDefaultCustomization}
+                            userInfo={{ selected_template }}
+                            reorderSection={reorderSection}
+                            template={{ entity_position, entity_id_count_mapping, heading_font_size, color, text_font_size }}
+                            previewButtonClicked={previewButtonClicked}
+                            onChange={this.allowUploadResume}
+                            generateResumeAlert={this.generateResumeAlert}
+                            ui={{ alertModal, generateResumeModal }}
+                            match={this.props.match}
+                        />
+
+                        <RightSection
+                            eventClicked={eventClicked}
+                            generateResumeAlert={this.generateResumeAlert}
+                        />
                     </section>
                     {
                         pathname === '/resume-builder/preview/' && !!(!uploadResume) && !!(!showNote.length) && !!(visibleNote) &&
