@@ -1,3 +1,6 @@
+@import '../scss/library/variables';
+@import '../scss/library/mixin';
+
 .footer-new {
    background-color: $gray-lightest;
    border-top: 5px solid $primary-light;

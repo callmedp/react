@@ -1,4 +1,6 @@
 @import '../../../Common/scss/components/progress-bar';
+@import '../../../Common/scss/library/mixin';
+@import '../../../Common/scss/library/extends';
 
 .score-banner {
     @include size(100%, 400px, block);
@@ -16,7 +18,7 @@
 
     &__image {
         @include size(296px, 248px, block);
-        background-image: url('/media/images/score-bg.png');
+        background-image: url('/media/images/score.png');
         margin: 0 auto;
         position: relative;
         top: 5px;
@@ -45,7 +47,7 @@
     &::after {
         @include size(100%, 26px, block);
         content: '';
-        background-image: url('/media/images/curve.png');
+        background-image: url('/media/images/curve-timeToImprove.png');
         position: absolute;
         bottom: 0;
         background-size: cover;

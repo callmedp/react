@@ -36,7 +36,7 @@ export const routes = [
     },
     
     {
-        path: '/score',
+        path: '/scoreChecker',
         component: ScorePage,
     },
     
