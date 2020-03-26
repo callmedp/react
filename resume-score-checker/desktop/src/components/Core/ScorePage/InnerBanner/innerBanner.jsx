@@ -1,5 +1,6 @@
 import React from 'react';
 import './innerBanner.scss';
+import { Link } from 'react-router-dom';
 
 export default function InnerBanner(){
     return (
@@ -11,7 +12,7 @@ export default function InnerBanner(){
                 <div className="banner-score">
                     <nav aria-label="breadcrumb">
                         <ol className="breadcrumb">
-                          <li className="breadcrumb-item"><a href="#">Home</a></li>
+                          <li className="breadcrumb-item"><Link to='/'>Home</Link></li>
                           <li className="breadcrumb-item active" aria-current="page">Resume Review</li>
                         </ol>
                     </nav>

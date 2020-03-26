@@ -1,5 +1,5 @@
 import React from 'react';
-import Navbar from '../Home/Navbar/navbar';
+import Navbar from '../../Common/Navbar/navbar';
 import Footer from '../../Common/Footer/footer';
 import InnerBanner from './InnerBanner/innerBanner'
 import ImproveScore from './ImproveScore/improveScore';

@@ -1,5 +1,6 @@
 import React from 'react';
 import './benefits.scss'
+import { Link } from 'react-router-dom';
 
 export default function Benefits() {
     return (
@@ -8,7 +9,7 @@ export default function Benefits() {
                 <div className="col-md-6 benefits__left">
                     <h2><span>What's next- Benefits after getting resume score</span></h2>
                     <p>For a small fee, our professional resume writers can help you take those tips and make your resume, cover letter, and even LinkedIn profile into exactly what recruiters are looking for.</p>
-                    <a href="#" className="btn btn-primary btn-round-40 px-5 py-4 mr-5 mt-5">Check the score now</a>
+                    <Link to='/score-checker' className="btn btn-primary btn-round-40 px-5 py-4 mr-5 mt-5">Check the score now</Link>
                 </div>
                 <div className="col-md-6 pl-5 justify-content-end">
                     <div className="benefits__listBox">

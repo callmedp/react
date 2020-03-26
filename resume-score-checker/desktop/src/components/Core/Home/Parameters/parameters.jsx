@@ -1,5 +1,6 @@
 import React from 'react';
 import './parameters.scss'
+import { Link } from 'react-router-dom';
 
 export default function Parameters() {
     return (
@@ -47,7 +48,7 @@ export default function Parameters() {
                 </div>
 
                 <div className="text-center mt-5">
-                    <a href="#" className="btn btn-primary btn-round-40 px-5 py-4 mr-5">Check the score now</a>
+                    <Link to='/score-checker' className="btn btn-primary btn-round-40 px-5 py-4 mr-5">Check the score now</Link>
                 </div>
 
             </div>
