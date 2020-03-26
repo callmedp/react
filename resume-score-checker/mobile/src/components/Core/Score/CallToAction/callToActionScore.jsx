@@ -1,4 +1,5 @@
 import React from 'react';
+import './callToActionScore';
 
 export default function CallToActionScore() {
     return(
@@ -11,7 +12,7 @@ export default function CallToActionScore() {
 
 
                 <div className="d-flex align-items-center btn btn-outline-white btn-round-30 fs-11 px-20">
-                    <i className="sprite upload mr-5"></i> Upload new resume    ssdssd                            
+                    <i className="sprite upload mr-5"></i> Upload new resume                            
                     <input className="file-upload__input" type="file" name="file"></input>
                 </div>
 

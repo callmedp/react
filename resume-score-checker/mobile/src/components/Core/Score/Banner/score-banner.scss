@@ -47,7 +47,7 @@
     &::after {
         @include size(100%, 26px, block);
         content: '';
-        background-image: url('/media/images/curve-timeToImprove.png');
+        background-image: url('/media/images/curve.png');
         position: absolute;
         bottom: 0;
         background-size: cover;

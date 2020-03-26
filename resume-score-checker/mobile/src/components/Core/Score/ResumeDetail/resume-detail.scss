@@ -30,16 +30,16 @@ $clouds: #ecf0f1;
 
     &::after {
       content: "";
-      @include size(20px, 8px, block);
+      @include size(28px, 20px, block);
       text-align: center;
       transition: all .35s;
       position: absolute;
       right: 15px;
       top: 50%;
       margin-top: -10px;
-      background-image: url('/media/images/sprite1.png');
+      background-image: url('/media/images/sprite.png');
       background-repeat:  no-repeat;
-      background-position: -292px -489px;        //-64px -85px;
+      background-position: -64px -85px;
 
     }
   }
