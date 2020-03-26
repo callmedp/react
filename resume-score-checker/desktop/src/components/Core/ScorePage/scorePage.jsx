@@ -5,14 +5,14 @@ import InnerBanner from './InnerBanner/innerBanner'
 import ImproveScore from './ImproveScore/improveScore';
 import ResumeReview from './ResumeReview/resumeReview';
 
-export default function ScorePage(){
+export default function ScorePage() {
     return (
         <div>
-        <Navbar></Navbar>
-        <InnerBanner></InnerBanner>
-        <ResumeReview></ResumeReview>
-        <ImproveScore></ImproveScore>
-        <Footer></Footer>
+            <Navbar />
+            <InnerBanner />
+            <ResumeReview />
+            <ImproveScore />
+            <Footer />
         </div>
     );
 }
