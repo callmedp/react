@@ -1,12 +1,13 @@
 import React from 'react';
 import './getExpertForm.scss';
+import { Link } from 'react-router-dom';
 
 
 export default function GetExpertForm() {
     return(
         <div className="getExpertForm">
             <div className="getExpertForm__header">
-                <span className="sprite back-icon"></span>
+                <Link to = "/score-checker"><span className="sprite back-icon"></span></Link>
                 <strong className="ml-15">Get Help</strong>
             </div>
 
@@ -14,12 +15,12 @@ export default function GetExpertForm() {
                 <p className="getExpertForm__head">Fill the form below to get help</p>
                 <form action="" className="getExpertForm__form">
                     <ul>
-                        <li class="form-group error">
+                        <li class="form-group">
                             <div class="floating-label">      
                                 <input class="form--control floating-input" type="text" placeholder=" " />
                                 <label>Name</label>
                             </div>
-                            <span class="error--mgs">Name</span>
+                            {/* <span class="error--mgs">Name</span> */}
                         </li>   
 
                         <li class="form-group">
