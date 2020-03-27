@@ -1,6 +1,6 @@
 import React from 'react';
 import './innerBanner.scss';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-scroll';
 
 export default function InnerBanner(){
     return (
@@ -63,9 +63,9 @@ export default function InnerBanner(){
                         <input className="file-upload__input" type="file" name="file"/>
                     </div>
 
-                    <a href="#" className="btn btn-secondary btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
+                    <Link to='getexpert' className="btn btn-secondary btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
                         Get expert help
-                    </a>
+                    </Link>
                 </div>
             </div>
             
