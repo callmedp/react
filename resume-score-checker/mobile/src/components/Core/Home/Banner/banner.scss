@@ -1,4 +1,5 @@
-@import '../../../Common/scss/common.scss';
+// @import '../../../Common/scss/common.scss';
+@import '../../../../styles/common.scss';
 
 .banner {
     @include size(100%, 344px, block);

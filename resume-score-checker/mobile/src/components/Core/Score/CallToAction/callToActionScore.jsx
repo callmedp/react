@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import './callToAction.scss';
-import GetExpertForm from '../../GetExpertForm/getExpertForm';
+import GetExpertForm from '../../Forms/GetExpertForm/getExpertForm';
 
 export default function CallToActionScore() {
     const [isVisible, setIsVisible] = useState(false);

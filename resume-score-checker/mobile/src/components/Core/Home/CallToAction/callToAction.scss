@@ -1,5 +1,8 @@
-@import '../../../Common/scss/library/variables';
-@import '../../../Common/scss/utilities/flex';
+// @import '../../../Common/scss/library/variables';
+// @import '../../../Common/scss/utilities/flex';
+
+@import '../../../../styles/library/variables';
+@import '../../../../styles/utilities/flex';
 
 .call-to-action {
     background-color: $primary;

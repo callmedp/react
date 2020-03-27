@@ -1,8 +1,12 @@
-@import '../../../components/Common/scss/common.scss';
+// @import '../../../../components/Common/scss/common.scss';
+@import '../../../../styles/common.scss';
+@import '../../../../styles/components/animation-input';
+@import '../../../../styles/components/form-control';
+@import '../../../../styles/components/error';
 
-@import '../../../components/Common/scss/components/animation-input';
-@import '../../../components/Common/scss/components/form-control';
-@import '../../../components/Common/scss/components/error';
+// @import '../../../../components/Common/scss/components/animation-input';
+// @import '../../../../components/Common/scss/components/form-control';
+// @import '../../../../components/Common/scss/components/error';
 
 
 .getExpertForm {
