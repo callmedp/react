@@ -40,10 +40,10 @@ export const routes = [
         component: ScorePage,
     },
     
-    {
-        path: '/get-expert-form',
-        component: GetExpertForm,
-    },
+    // {
+    //     path: '/get-expert-form',
+    //     component: GetExpertForm,
+    // },
 
 ]
 

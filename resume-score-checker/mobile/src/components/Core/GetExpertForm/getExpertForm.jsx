@@ -1,13 +1,15 @@
 import React from 'react';
 import './getExpertForm.scss';
-import { Link } from 'react-router-dom';
 
 
-export default function GetExpertForm() {
-    return(
+const GetExpertForm = ({ isVisible, hide }) => isVisible ? 
+  (<div>
+    <div className="modal-overlay"/>
+    <div className="modal-wrapper" aria-modal aria-hidden tabIndex={-1} role="dialog">
+      <div className="modal">
         <div className="getExpertForm">
             <div className="getExpertForm__header">
-                <Link to = "/score-checker"><span className="sprite back-icon"></span></Link>
+                <button onClick={hide}><span className="sprite back-icon"></span></button>
                 <strong className="ml-15">Get Help</strong>
             </div>
 
@@ -47,10 +49,7 @@ export default function GetExpertForm() {
                                 </div>
                             </div>
                         </li>
-
-
                         
-
                         <li>
                             <button className="btn btn-round-30 btn-blue w-100">Submit</button>
                         </li>
@@ -58,5 +57,8 @@ export default function GetExpertForm() {
                 </form>
             </div>
         </div>
-    );
-}
+      </div>
+    </div>
+  </div>) : null;
+
+export default GetExpertForm;
