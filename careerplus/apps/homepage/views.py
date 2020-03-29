@@ -126,6 +126,11 @@ class HomePageView(TemplateView, MetadataMixin):
         session_fa = self.request.session.get('func_area')
         session_skills = self.request.session.get('mid_skills')
 
+        message = self.request.GET.get('message','')
+
+        if message:
+            context.update({'email_response':message})
+
         if session_fa:
             fa = FunctionalArea.objects.filter(
                 id=session_fa).first()
