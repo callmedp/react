@@ -30,7 +30,8 @@
   list-style: none;
   background-color: $dropdown-bg;
   background-clip: padding-box;
-  resume-score-checker/desktop/src/components/Core/Home/Navbar/navbar.jsx
+  // border: $dropdown-border-width solid transparent;
+  // @include border-radius($dropdown-border-radius);
   @include box-shadow($dropdown-box-shadow);
 }
 
