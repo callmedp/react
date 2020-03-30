@@ -1,3 +1,9 @@
+// @import '../../../Common/scss/library/variables';
+// @import '../../../Common/scss/utilities/flex';
+
+@import '../../../../styles/library/variables';
+@import '../../../../styles/utilities/flex';
+
 .call-to-action {
     background-color: $primary;
     padding: 15px;
@@ -8,11 +14,11 @@
 }
 
 .file-upload {
-    &__input {
+    &__input_right {
         position: absolute;
         font-size: 50px;
         opacity: 0;
-        right: 0;
+        right: 230px;
         top: 0;
     }
 }

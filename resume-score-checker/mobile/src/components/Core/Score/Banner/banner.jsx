@@ -1,4 +1,5 @@
 import React from 'react';
+import './score-banner.scss'
 
 export default function Banner() {
     return(

@@ -1,6 +1,6 @@
 import React from 'react';
 import './howItWorks.scss'
-
+import { Link } from 'react-router-dom';
 export default function HowItWorks(){
     return (
         
@@ -40,7 +40,7 @@ export default function HowItWorks(){
         </div>
     </div>
 
-    <div className="text-center mt-5"><a href="#" className="btn btn-primary btn-round-40 px-5 py-4 mr-5">Check the score now</a></div>
+    <div className="text-center mt-5"><Link to='/score-checker' className="btn btn-primary btn-round-40 px-5 py-4 mr-5">Check the score now</Link></div>
 </section>
     );
 }

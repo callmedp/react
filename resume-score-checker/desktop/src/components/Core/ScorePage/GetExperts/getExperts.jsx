@@ -1,9 +1,10 @@
 import React from 'react';
+import './getExperts.scss'
 
 export default function GetExperts(){
     return (
 
-<section className="container expert-help">
+<section className="container expert-help" id="getexpert">
     <div className="row">
       <div className="col-md-8 col-md-8">
         <h2><span>Get Expert Help</span></h2>

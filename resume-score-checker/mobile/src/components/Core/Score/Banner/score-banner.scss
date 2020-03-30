@@ -1,4 +1,10 @@
-@import '../../../Common/scss/components/progress-bar';
+// @import '../../../Common/scss/components/progress-bar';
+// @import '../../../Common/scss/library/mixin';
+// @import '../../../Common/scss/library/extends';
+
+@import '../../../../styles/components/progress-bar';
+@import '../../../../styles/library/mixin';
+@import '../../../../styles/library/extends';
 
 .score-banner {
     @include size(100%, 400px, block);
@@ -16,7 +22,7 @@
 
     &__image {
         @include size(296px, 248px, block);
-        background-image: url('/media/images/score-bg.png');
+        background-image: url('/media/images/score.png');
         margin: 0 auto;
         position: relative;
         top: 5px;

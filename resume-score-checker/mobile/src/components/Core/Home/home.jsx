@@ -21,6 +21,7 @@ export default function Home(){
                     <HowItWorks/>
                     <Parameters/>
                     <NextBenefit/>
+                    <CallToAction/>
                     <Footer/>
                 </div>
             }

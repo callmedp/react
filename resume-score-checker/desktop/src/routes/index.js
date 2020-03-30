@@ -35,7 +35,7 @@ export const routes = [
         exact : true,
     },
     {
-        path : '/scoreChecker',
+        path : '/score-checker',
         component : ScoreCheckerContainer,
     }
 
