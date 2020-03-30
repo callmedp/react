@@ -21,7 +21,7 @@
   z-index: $zindex-dropdown;
   display: none; // none by default, but block on "open" of the menu
   float: left;
-  min-width: $dropdown-min-width;
+  min-width: $dropdown-min-width + 15;
   padding: $dropdown-padding-y 0;
   margin: $dropdown-spacer 0 0; // override default ul
   @include font-size($dropdown-font-size);
@@ -30,8 +30,8 @@
   list-style: none;
   background-color: $dropdown-bg;
   background-clip: padding-box;
-  border: $dropdown-border-width solid $dropdown-border-color;
-  @include border-radius($dropdown-border-radius);
+  // border: $dropdown-border-width solid transparent;
+  // @include border-radius($dropdown-border-radius);
   @include box-shadow($dropdown-box-shadow);
 }
 
