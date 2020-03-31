@@ -81,3 +81,39 @@
     margin-right: 5px;
     top: 2px;
 }
+
+.icon-home {
+    @include icon-inblock (18px, 20px, -66px -180px);
+    position: relative;
+    top: -2px;
+}
+
+.icon-courses {
+    @include icon-inblock (18px, 21px, -66px -204px);
+    position: relative;
+    top: -2px;
+}
+
+.job-assistance {
+    @include icon-inblock (18px, 18px, -66px -227px);
+    position: relative;
+    top: 0;
+}
+
+.practice-tests {
+    @include icon-inblock (16px, 20px, -68px -275px);
+    position: relative;
+    top: -2px;
+}
+
+.free-resources {
+    @include icon-inblock (21px, 20px, -63px -298px);
+    position: relative;
+    top: -1px;
+}
+
+.blog {
+    @include icon-inblock (22px, 21px, -62px -250px);
+    position: relative;
+    top: 0;
+}
