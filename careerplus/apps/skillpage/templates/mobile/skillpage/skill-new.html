@@ -358,9 +358,9 @@
         {% endwith %}
         {% endif %}
 
-        {% if True %}
+        {% if widget_obj_data %}
         <div class="white-box mt-20">
-            <strong class="also-check-tag">Also Check:</strong>
+            <strong class="also-check-tag">{{widget_name}}</strong>
             <ul class="bullet-custom arrow">
                 {% for obj in widget_obj_data %}
                 <li><a href="{{obj.url}}">{{obj.name}}</a></li>
