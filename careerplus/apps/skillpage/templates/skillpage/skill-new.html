@@ -574,10 +574,10 @@
 
 
             <!-- also check section -->
-            {% if widget_obj_data %}
+            {% if True %}
               <section class="col-sm-12 padlr-0">
                 <div class="also-check">
-                  <strong>{{widget_name}}</strong>
+                  <strong class='also-check-tag'>Also Check:</strong>
                   <ul class="also-check__list">
                     {% for obj in widget_obj_data %}
                       <li><a href="{{obj.url}}">{{obj.name}}</a></li>
