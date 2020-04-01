@@ -231,7 +231,7 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         candidate_in_session = self.request.session.get('candidate_id','')
         debug_mode = False
 
-        if settings.DEGUG:
+        if settings.DEBUG:
             debug_mode = True
 
 
