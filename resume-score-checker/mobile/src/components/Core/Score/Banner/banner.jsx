@@ -9,27 +9,27 @@ export default function Banner() {
                 <h1 className="mb-10"><span>Hello Sachin <br/>Your resume scored 70 out of 100</span></h1>
                 
                 <div className="score-banner__image">
-                    <div class="score-banner__progressBar">
-                        <div class="ko-progress-circle" data-progress="70">
-                        <div class="ko-progress-circle__text">
+                    <div className="score-banner__progressBar">
+                        <div className="ko-progress-circle" data-progress="70">
+                        <div className="ko-progress-circle__text">
                             <strong>70</strong>
-                            <p class="fs-12">Resume score</p>
+                            <p className="fs-12">Resume score</p>
                         </div>
-                        <div class="ko-circle">
-                            <div class="full ko-progress-circle__slice">
-                                <div class="ko-progress-circle__fill"></div>
+                        <div className="ko-circle">
+                            <div className="full ko-progress-circle__slice">
+                                <div className="ko-progress-circle__fill"></div>
                             </div>
-                            <div class="ko-progress-circle__slice">
-                                <div class="ko-progress-circle__fill"></div>
-                                <div class="ko-progress-circle__fill ko-progress-circle__bar"></div>
+                            <div className="ko-progress-circle__slice">
+                                <div className="ko-progress-circle__fill"></div>
+                                <div className="ko-progress-circle__fill ko-progress-circle__bar"></div>
                             </div>
                         </div>
-                        <div class="ko-progress-circle__overlay"></div>
+                        <div className="ko-progress-circle__overlay"></div>
                         </div>
                     </div>
                 </div>
-                <div class="circle"></div>
-                <div class="dots"></div>                
+                <div className="circle"></div>
+                <div className="dots"></div>                
             </div>
         </div>
 

@@ -9,7 +9,7 @@ const GetExpertForm = ({ isVisible, hide }) => isVisible ?
       <div className="modal">
         <div className="getExpertForm">
             <div className="getExpertForm__header">
-                <button onClick={hide}><span className="sprite back-icon"></span></button>
+                <span onClick={hide} className="sprite back-icon"></span>
                 <strong className="ml-15">Get Help</strong>
             </div>
 
@@ -17,24 +17,24 @@ const GetExpertForm = ({ isVisible, hide }) => isVisible ?
                 <p className="getExpertForm__head">Fill the form below to get help</p>
                 <form action="" className="getExpertForm__form">
                     <ul>
-                        <li class="form-group">
-                            <div class="floating-label">      
-                                <input class="form--control floating-input" type="text" placeholder=" " />
+                        <li className="form-group">
+                            <div className="floating-label">      
+                                <input className="form--control floating-input" type="text" placeholder=" " />
                                 <label>Name</label>
                             </div>
                             {/* <span class="error--mgs">Name</span> */}
                         </li>   
 
-                        <li class="form-group">
-                            <div class="floating-label">      
-                                <input class="form--control floating-input" type="text" placeholder=" " />
+                        <li className="form-group">
+                            <div className="floating-label">      
+                                <input className="form--control floating-input" type="text" placeholder=" " />
                                 <label>Email ID</label>
                             </div>
                         </li>                 
 
-                        <li class="getExpertForm__number form-group d-flex">
-                            <div class="code">
-                                <select class="form--control floating-select">
+                        <li className="getExpertForm__number form-group d-flex">
+                            <div className="code">
+                                <select className="form--control floating-select">
                                     <option value="+91">+91</option>
                                     <option value="+92">+92</option>
                                     <option value="+2345">+2345</option>
@@ -42,9 +42,9 @@ const GetExpertForm = ({ isVisible, hide }) => isVisible ?
                                 </select>
                             </div>
 
-                            <div class="number"> 
-                                <div class="floating-label">      
-                                    <input class="form--control floating-input" type="text" placeholder=" " />
+                            <div className="number"> 
+                                <div className="floating-label">      
+                                    <input className="form--control floating-input" type="text" placeholder=" " />
                                     <label>Number</label>
                                 </div>
                             </div>
