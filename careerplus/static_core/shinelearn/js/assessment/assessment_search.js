@@ -34,3 +34,16 @@ $('#bloodhound .typeahead').typeahead(
 $('.typeahead').on('typeahead:selected', function(evt, item) {
  window.location = 'http://' + window.location.host +'/practice-tests/'+ item['slug'] +'-test/';
 })
+
+$('#bloodhound_submit').click(function() {
+  api_url = "/api/get-test/?nopage=true&fl=id,category,title,slug&title="+$('#bloodhound_input').val()+"&active=true&format=json"
+ $.ajax({url: api_url, success: function(result){
+  if(result.length == 1){
+    window.location = 'http://' + window.location.host +'/practice-tests/'+ result[0]['slug'] +'-test/';
+  }
+  else{
+    $("#bloodhound_message").show();
+  }
+ }});
+});
+

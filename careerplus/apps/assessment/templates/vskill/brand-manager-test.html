@@ -65,8 +65,11 @@
          <div class="col-sm-12 col-lg-12 col-md-12">
             <div class="search_content pull-right mt-0">
                 <div id="bloodhound" class="form-inline">
-                   <input type="text" class="typeahead form-control" placeholder="Search popular tests">
-                  <button type="submit" class=" skill-jobs-btn btn"></button>
+                   <input id ="bloodhound_input" type="text" class="typeahead form-control" placeholder="Search popular tests">
+                  <button id="bloodhound_submit" type="submit" class=" skill-jobs-btn btn"></button>
+                </div>
+                <div id="bloodhound_message" style="display: none;">
+                  <p style="color:red;"> Test not available</p>
                 </div>
             </div>
             <h1>{{Category.name}}</h1>
