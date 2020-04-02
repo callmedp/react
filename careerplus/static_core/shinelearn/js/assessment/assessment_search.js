@@ -4,11 +4,16 @@ var tests = new Bloodhound({
   },
   queryTokenizer: Bloodhound.tokenizers.whitespace,
   remote: {
-    url: "/api/get-test/?nopage=true&fl=id,category,title,slug&title=%QUERY&active=true",
+    url: "/api/get-test/?nopage=true&fl=id,category,title,slug&title=%QUERY&active=true&format=json",
     wildcard: '%QUERY',
-    filter: function(response) {
-      return response.results;
-    }
+    filter: function(responses) {
+      return $.map(responses, function(response){
+        return { 
+          value: response.title,
+          slug: response.slug
+        };
+      });
+    } 
   }
 });
 
@@ -16,16 +21,13 @@ var tests = new Bloodhound({
 tests.initialize();
 
 // instantiate the typeahead UI
-$('.typeahead').typeahead(
+$('#bloodhound .typeahead').typeahead(
   { hint: true,
     highlight: true,
     minLength: 1
   },
   {
-  name: 'tests',
-  displayKey: function(tests) {
-    return tests.title;
-  },
+  displayKey: 'value',
   source: tests.ttAdapter()
 });
 
