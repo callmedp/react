@@ -1,24 +1,34 @@
-import React,{ useState } from 'react';
+import React,{ useState} from 'react';
+import { useDispatch } from 'react-redux';
+import * as Actions from '../../../../store/LandingPage/actions/index';
 import './banner.scss'
-
+import { Link } from 'react-router-dom'
+import alertify from 'alertifyjs';
 
 export default function Banner(){
 
-    const [file, setFile] = useState('');
+    const [flag, setFlag] = useState(true);
     const [filename, setFileName] = useState('Upload Resume');
-    let fileUpload=event=>{
+    const dispatch = useDispatch()
+    const fileUpload = async event => {
         let file1 = event.target.files[0];
-        console.log(file)
-        if((file1.name.slice(-4)=='.txt' || file1.name.slice(-4)=='.doc' || file1.name.slice(-5)=='.docx') && (file1.size/(1024*1024)<=5)){
-            setFile(file1)
-            setFileName(file1.name)
-
+        if((file1.name.slice(-4)=='.pdf' || file1.name.slice(-4)=='.doc' || file1.name.slice(-5)=='.docx') ){
+            setFileName('File Uploading...')
+            let url = await new Promise((resolve, reject) => {
+                dispatch(Actions.uploadFileUrl({file1, resolve, reject}));
+            })
+            console.log("This is the url")
+            console.log(url)
+            setFlag(false)
+            setFileName('Check Score')
             }
         else{
-            console.log("file is unsafe")
+            alertify.alert('',"File format not supported!")
         }
     }
 
+
+   
     return (
 <section className="banner">
     <div className="container h-100">
@@ -30,11 +40,19 @@ export default function Banner(){
                 <p className="">Get the <strong>free review</strong> of your resume in <strong>just 30 sec</strong></p>
 
                 <div className="d-flex mt-5">
-                    <div className="file-upload btn btn-secondary btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
-                        <i className="sprite upload mr-3"></i> { filename }                          
-                        <input className="file-upload__input" type="file" name="file" onChange={fileUpload} />
-                        
-                    </div>
+                    
+                        { flag && 
+                            <div className="file-upload btn btn-secondary btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
+                                <i className="sprite upload mr-3"></i> 
+                                { filename }               
+                                <input className="file-upload__input" type="file"  onChange={fileUpload} name="resume"/>
+                            </div>
+                            
+                         ||
+                         <Link to = "/score-checker" className="file-upload btn btn-secondary btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">            
+                            <i ></i>  Check Score
+                        </Link>
+                        }
 
                     <a href="#" className="d-flex align-items-center btn btn-outline-light btn-round-40 font-weight-bold px-4">
                         <i className="sprite export mr-3"></i>

@@ -1,5 +1,5 @@
 import React from 'react';
-import './getExperts.scss'
+import './getExperts.scss';
 
 export default function GetExperts(){
     return (
@@ -16,19 +16,18 @@ export default function GetExperts(){
           <li className="expert-help__item">Resume Writing</li>
         </ul>
       </div>
-      <div className="col-md-4">
         <div className="expert-help__login need-help">
           <h3>Fill the form below to get help</h3>
           <form className="mt-5" id="callUsForm" novalidate="novalidate">
             
             <div className="form-group">
               <input type="text" className="form-control input_field" id="email" name="email" value="" placeholder="Email"/>
-              <label for="email" className="input_label">Email</label>
+              <label htmlFor="email" className="input_label">Email</label>
             </div>
   
             <div className="form-group">
               <input type="text" className="form-control input_field" id="name" name="name" value="" placeholder="Name"/>
-              <label for="name" className="input_label">Name</label>
+              <label htmlFor="name" className="input_label">Name</label>
             </div>
   
             <div className="d-flex expert-help__mobile">
@@ -527,13 +526,21 @@ export default function GetExperts(){
               
               <div className="form-group expert-help__mobile--mobile">
                 <input type="text" className="form-control input_field" id="number" name="number" value="" placeholder="Mobile"/>
-                <label for="mobile" className="input_label">Mobile</label>
+                <label htmlFor="mobile" className="input_label">Mobile</label>
               </div>
             </div>
             <button type="submit" className="btn btn-primary btn-round-40 px-5 mt-3">Submit</button></form>
         </div>
-      </div>
     </div>
   </section>
     );
 }
+
+
+
+
+
+
+
+
+
