@@ -2,14 +2,14 @@ import React,{useState}from 'react';
 import './innerBanner.scss';
 import { Link as LinkScroll} from 'react-scroll';
 import { Link } from 'react-router-dom'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../../../../store/LandingPage/actions/index';
 
 export default function InnerBanner(){
-
     const [flag, setFlag] = useState(true);
     const [filename, setFileName] = useState('Upload Resume');
     const dispatch = useDispatch()
+    const score = useSelector(state => state.home.score )
     const fileUpload = async event => {
         let file1 = event.target.files[0];
         if((file1.name.slice(-4)=='.pdf' || file1.name.slice(-4)=='.doc' || file1.name.slice(-5)=='.docx') && (file1.size/(1024*1024)<=5)){
@@ -45,7 +45,7 @@ export default function InnerBanner(){
 
                         <div className="ko-progress-circle" data-progress="70">
                           <div className="ko-progress-circle__text">
-                            <strong>70</strong>
+    <strong>{score}</strong>
                             <p className="fs-12">Resume score</p>
                           </div>
                           <div className="ko-circle">
@@ -76,7 +76,7 @@ export default function InnerBanner(){
             </div>
             <div className="col-md-6 h-100 d-flex align-items-self-start justify-content-center flex-column">
                 <h1 className="fs-30">
-                    <span>Hello Sachin,<br/>Your resume Scored 70 out of 100</span>
+                    <span>Hello Sachin,<br/>Your resume Scored {score} out of 100</span>
                 </h1>
                 <p className="text-white-50">Good Job! You are just few steps away for perfecting your resume. Check out the detailed reviews to improve the score. Score more to get perfect job match your profile</p>
 

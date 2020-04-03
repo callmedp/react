@@ -14,14 +14,16 @@ export default function Banner(){
         let file1 = event.target.files[0];
         if((file1.name.slice(-4)=='.pdf' || file1.name.slice(-4)=='.doc' || file1.name.slice(-5)=='.docx') ){
             setFileName('File Uploading...')
+            try{
             let url = await new Promise((resolve, reject) => {
                 dispatch(Actions.uploadFileUrl({file1, resolve, reject}));
             })
-            console.log("This is the url")
-            console.log(url)
             setFlag(false)
             setFileName('Check Score')
+            }catch(err){
+                alertify.alert('','Try Again!')
             }
+        }
         else{
             alertify.alert('',"File format not supported!")
         }
@@ -56,7 +58,7 @@ export default function Banner(){
 
                     <a href="#" className="d-flex align-items-center btn btn-outline-light btn-round-40 font-weight-bold px-4">
                         <i className="sprite export mr-3"></i>
-                        Export from shine.com
+                        Import from shine.com
                     </a>
                 </div>
                 <p className="banner__text">PDF, DOC, DOCX only  |  Max file size: 5MB</p>
