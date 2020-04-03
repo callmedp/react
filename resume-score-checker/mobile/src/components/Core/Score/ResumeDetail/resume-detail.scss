@@ -24,7 +24,7 @@ $clouds: #ecf0f1;
   
   &-label {
     display: flex;
-    padding: 1em;
+    padding: 0em 1em 1em 1em;
     background: $white;
     cursor: pointer;
     width: 100%;
@@ -38,10 +38,10 @@ $clouds: #ecf0f1;
       position: absolute;
       right: 15px;
       top: 50%;
-      margin-top: -10px;
+      margin: -23px 8px 0px 0px;
       background-image: url('/media/images/sprite.png');
       background-repeat:  no-repeat;
-      background-position: -64px -85px;
+      background-position: -60px -85px;
 
     }
   }

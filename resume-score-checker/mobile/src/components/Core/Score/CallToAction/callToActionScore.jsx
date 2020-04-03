@@ -24,6 +24,9 @@ export default function CallToActionScore() {
             })
             setFlag(!flag)
         }
+        else{
+            alert("Please Upload Valid Format File Only")
+        }
     }
     return (
     <div className="call-to-action">
@@ -41,7 +44,7 @@ export default function CallToActionScore() {
                     </div>
                     ||
                     <Link to = "/score-checker" className="d-flex align-items-center btn btn-outline-white btn-round-30 fs-11 px-20">
-                        Check Score
+                        &emsp;Check Score&emsp;
                     </Link>
                 }
                 <GetExpertForm isVisible={isVisible} hide={toggle}/>

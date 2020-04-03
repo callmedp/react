@@ -10,23 +10,23 @@ export const menuData = [
         icon: 'icon-courses'
     },
     {
-        label : 'job assistance',
+        label : 'Job Assistance',
         url: '/job-assistance',
         icon: 'job-assistance'
     },
     {
-        label : 'practice tests',
-        url: '/practice-tests',
+        label : 'Practice Tests',
+        url: 'https://learning.shine.com/practice-tests/',
         icon: 'practice-tests'
     },
     {
-        label : 'free resources',
-        url: '/free-resources',
+        label : 'Free Resources',
+        url: 'https://learning.shine.com/cms/resume-format/1/',
         icon: 'free-resources'
     },
     {
         label : 'Blog',
-        url: '/blog',
+        url: 'https://learning.shine.com/talenteconomy/',
         icon: 'blog'
     },
 ]

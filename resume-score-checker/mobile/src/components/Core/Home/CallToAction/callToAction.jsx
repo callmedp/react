@@ -19,6 +19,9 @@ export default function CallToAction() {
             })
             setFlag(!flag)
         }
+        else{
+            alert("Please Upload Valid Format File Only")
+        }
     }
 
     const scoreValue = useSelector(state => state.score)
@@ -34,7 +37,7 @@ export default function CallToAction() {
                 </div>
                 ||
                 <Link to="/score-checker" className="d-flex align-items-center file-upload btn btn-yellow btn-round-30 fs-11 mr-10 px-20">
-                    Check Score
+                    &emsp;Check Score&emsp;
                 </Link>
             }
             
