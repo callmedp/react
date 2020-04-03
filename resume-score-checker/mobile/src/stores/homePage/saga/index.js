@@ -1,6 +1,7 @@
 import * as Actions from '../actions/actionTypes';
-import { takeLatest, call } from 'redux-saga/effects';
+import { takeLatest, call, put } from 'redux-saga/effects';
 import { Api } from './Api';
+import { UPDATE_SCORE } from '../actions/actionTypes';
 
 function* fileUpload(action) {
     try {
@@ -8,6 +9,7 @@ function* fileUpload(action) {
         var fileData = new FormData();
         fileData.append('resume', file);
         const result = yield call(Api.fileUpload, fileData);
+        yield put({ type: UPDATE_SCORE, payload: { result }});
         return resolve(result)
 
     } catch (e) {

@@ -1,37 +1,44 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import './resume-detail.scss';
 
 export default function ResumeDetail() {
+    const section_score = useSelector(state => state.uploadFile.section_score)
     return(
-
             <div className="pb-30">
                 <div className="resume-detail mb-15">
                     <h2><span>Resume detailed review</span></h2>
                 </div>
-
-                <div className="container-box">
+            {
+                section_score == undefined ?  null:
+                (<div className="container-box">
                     <div className="tabs">
-                        <div className="tab">
-                            <input type="radio" id="rd1" name="rd"></input>
-                            <label className="tab-label" htmlFor="rd1">
-                                <i className="sprite green-tick mr-10 mt-5"></i>
-                                <div className="d-flex flex-direction-column">
-                                    <p className="d-block pb-0 font-weight-semiBold">Format /Style</p>
-                                    <p className="d-block pb-0 fs-12"><strong className="fs-14">40</strong>/100</p>
-                                </div>                               
-                            </label>
-                            <div className="tab-content">
-                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                        {
+                            section_score.map((value, index) => (
+                                <div className="tab" key={index}>
+                                    <input type="checkbox" id={index} name="rd"></input>
+                                    <label className="tab-label">
+                                    {(value.section_status == 1) ? <i className="sprite green-tick mr-10 mt-5"></i> : (value.section_status == 2) ? <i className="sprite question-mark mr-10 mt-5"></i> : <i className="sprite caution-mark mr-10 mt-5"></i>}
+                                        <div className="d-flex flex-direction-column">
+                                            <p className="d-block pb-0 font-weight-semiBold">{value.section_name}</p>
+                                            <p className="d-block pb-0 fs-12"><strong className="fs-14">{value.section_score}</strong>/{value.total_section_score}</p>
+                                        </div>                               
+                                    </label>
+                                    <div className="tab-content">
+                                        <p>{value.section_description}</p>
 
-                                <ul className="blue-bullet mt-15 mb-20">
-                                    <li>Lorem Ipsum is simply dummy text of the printing and typesetting ind an unknown printer took a galley of type and scrambled it to make a type.</li>
-                                    <li>Lorem Ipsum is simply dummy text of the printing and typesetting industry</li>
-                                    <li>Ipsum has been the industry's standard dummy text ever since the 1500s.</li>
-                                </ul>
-                            </div>
-                        </div>
+                                        <ul className="blue-bullet mt-15 mb-20">
+                                            <li>Lorem Ipsum is simply dummy text of the printing and typesetting ind an unknown printer took a galley of type and scrambled it to make a type.</li>
+                                            <li>Lorem Ipsum is simply dummy text of the printing and typesetting industry</li>
+                                            <li>Ipsum has been the industry's standard dummy text ever since the 1500s.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            ))
+                        }
+                        
 
-                        <div className="tab">
+                        {/* <div className="tab">
                             <input type="radio" id="rd2" name="rd"></input>
                             <label className="tab-label" htmlFor="rd2">
                                 <i className="sprite question-mark mr-10 mt-5"></i>
@@ -149,10 +156,10 @@ export default function ResumeDetail() {
                                     <li>Ipsum has been the industry's standard dummy text ever since the 1500s.</li>
                                 </ul>
                             </div>
-                        </div>
+                        </div> */}
 
                     </div>
-                </div>
+                </div>)}
             </div>
     );
 }

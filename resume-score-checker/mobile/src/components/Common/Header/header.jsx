@@ -1,27 +1,18 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { menuData } from './menuData';
 import './header.scss';
+import { useState } from 'react';
 
-class Header extends Component {
+export default function Header() {
 
-    constructor(porps) {
-        super(porps);   
-
-        this.state = {
-            isSideBarOpen: false
-        }
-    }
-
-    handleMenuButtonClick = () => {
-        this.setState({isSideBarOpen: ! this.state.isSideBarOpen})
-	};
-
-    render() {
-        const {isSideBarOpen} = this.state;
+        const [isSideBarOpen, setIsSideBarOpen]=useState(false)
+        const handleMenuButtonClick = () => {
+            setIsSideBarOpen(!isSideBarOpen)
+	    };
         return(
             <div className="header">
-                <span className="sprite header__barMenu mr-15" onClick={this.handleMenuButtonClick}></span>
+                <span className="sprite header__barMenu mr-15" onClick={handleMenuButtonClick}></span>
     
                 <Link to = "/">
                     <span className="header__logo">
@@ -66,10 +57,7 @@ class Header extends Component {
                         </nav>
 
                     )}
-                <div className={`overlay ${isSideBarOpen ? 'show' : ''}`} onClick={this.handleMenuButtonClick}></div>
+                <div className={`overlay ${isSideBarOpen ? 'show' : ''}`} onClick={handleMenuButtonClick}></div>
             </div>
         );
     }
-}
-
-export default Header;

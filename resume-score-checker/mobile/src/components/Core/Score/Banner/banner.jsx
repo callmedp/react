@@ -1,18 +1,20 @@
 import React from 'react';
-import './score-banner.scss'
+import { useSelector } from 'react-redux';
+import './score-banner.scss';
 
 export default function Banner() {
+    const score = useSelector(state => state.uploadFile.score)
     return(
         <div>
             <div className="score-banner">
             <div className="container-box">
-                <h1 className="mb-10"><span>Hello Sachin <br/>Your resume scored 70 out of 100</span></h1>
+                <h1 className="mb-10"><span>Hello Sachin <br/>Your resume scored {score} out of 100</span></h1>
                 
                 <div className="score-banner__image">
                     <div className="score-banner__progressBar">
-                        <div className="ko-progress-circle" data-progress="70">
+                        <div className="ko-progress-circle" data-progress={score}>
                         <div className="ko-progress-circle__text">
-                            <strong>70</strong>
+                            <strong>{score}</strong>
                             <p className="fs-12">Resume score</p>
                         </div>
                         <div className="ko-circle">
@@ -41,7 +43,6 @@ export default function Banner() {
                             Myresume.doc
                         </a>
                     </p>
-
                     {/* <a href="#" className="btn btn-round-30 btn-outline-blue py-5">Download</a> */}
                     <p className="mt-15">Good Job! You are just few steps away for perfecting your resume. Check out the detailed reviews to improve the score. Score more to get perfect job match your profile</p>
                 </div>

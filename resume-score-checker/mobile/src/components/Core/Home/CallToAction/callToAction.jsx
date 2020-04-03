@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import './callToAction.scss';
 import { Link } from 'react-router-dom';
 import * as Actions from '../../../../stores/homePage/actions/index';
@@ -20,6 +20,8 @@ export default function CallToAction() {
             setFlag(!flag)
         }
     }
+
+    const scoreValue = useSelector(state => state.score)
 
     return(
         <div className="call-to-action">
