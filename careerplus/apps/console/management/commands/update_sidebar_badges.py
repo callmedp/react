@@ -43,7 +43,12 @@ key_filter_dict_mapping = {"inbox":{"order__welcome_call_done":True,
                                 "oi_status":23,
                                 "product__type_flow__in":[1, 3, 12, 13]
                                 },
-
+                            "approved":{"order__welcome_call_done":True,
+                                "order__status":1,
+                                "no_process":False,
+                                "oi_status":24,
+                                "product__type_flow__in":[1, 3, 5, 12, 13]
+                                },
                             "midout":{"status":1, 
                                 "orderitems__oi_status":2,
                                 "orderitems__no_process":False
@@ -108,10 +113,33 @@ key_filter_dict_mapping = {"inbox":{"order__welcome_call_done":True,
                                 "welcome_call_done":False, 
                                 "wc_cat":22
                                 }
+                            # "domestic_profile_update":{"order__status__in":[1, 3],
+                            #     "product__type_flow":5, 
+                            #     "no_process":False,
+                            #     "oi_status__in":[5, 25, 61],
+                            #     "product__sub_type_flow__in":[501, 503],
+                            #     "order__welcome_call_done":True
+                            # },
+
+                            # "domestic_profile_initiated":{"order__status__in":[1, 3],
+                            #     "product__type_flow":5, 
+                            #     "no_process":False,
+                            #     "oi_status__in":[28, 4],
+                            #     "product__sub_type_flow__in":[501, 503],
+                            #     "order__welcome_call_done":True
+                            # },
+
+                            # "international_profile_update":{"order__status__in":[1, 3],
+                            #     "product__type_flow":4, 
+                            #     "no_process":False,
+                            #     "oi_status__in":[5, 25, 61],
+                            #     "order__welcome_call_done":True
+                            # }
                         }
 
 key_exclude_dict_mapping = {"inbox":{"wc_sub_cat__in":[64, 65]},
                             "approval":{"wc_sub_cat__in":[64, 65]},
+                            "approved":{"wc_sub_cat__in":[64, 65]},
                             "rejected_by_admin":{"wc_sub_cat__in":[64, 65]},
                             "rejected_by_candidate":{"wc_sub_cat__in":[64, 65]},
                             "linkedin_inbox":{"wc_sub_cat__in":[64, 65]},
@@ -123,6 +151,9 @@ key_exclude_dict_mapping = {"inbox":{"wc_sub_cat__in":[64, 65]},
                             "welcome_call_callback":{},
                             "welcome_call_issue":{},
                             "midout":{}
+                            # "domestic_profile_update":{"wc_sub_cat__in":[64, 65]},
+                            # "domestic_profile_initiated":{"wc_sub_cat__in":[64, 65]},
+                            # "international_profile_update":{"wc_sub_cat__in":[64, 65]},
                             }
 
 key_perm_filter_mapping = {"inbox":{
@@ -132,6 +163,9 @@ key_perm_filter_mapping = {"inbox":{
                             "approval":{
                                 "order.can_view_all_approval_list":{},
                                 "order.can_view_only_assigned_approval_list":{"assigned_to":invoke_user}
+                            },
+                            "approved":{
+                                "order.can_view_only_assigned_approved_list":{"assigned_to":invoke_user}
                             },
                             "midout":{
                                 "order.can_show_midout_queue":{}
@@ -158,7 +192,17 @@ key_perm_filter_mapping = {"inbox":{
                             },
                             "linkedin_approval":{
                                 "order.can_view_all_approval_list":{},
-                                }
+                            }
+                            # "domestic_profile_update":{
+                            #     "order.domestic_profile_update_assigner":{"assigned_to":None},
+                            #     "order.domestic_profile_update_assignee":{"assigned_to":invoke_user}
+                            # },
+                            # "domestic_profile_initiated":{
+                            # },
+                            # "international_profile_update":{
+                            #     "order.international_profile_update_assigner":{"assigned_to":None},
+                            #     "order.international_profile_update_assignee":{"assigned_to":invoke_user}
+                            # }
                         }
 
 key_model_mapping = {'midout':Order.objects.prefetch_related('orderitems')}
@@ -168,9 +212,11 @@ def cache_badges_for_writers():
 
     writer_profiles = UserProfile.objects.filter(writer_type__gt=0,user__is_active=True)
     key_prefix = "writer_badges_dict_"
-    oi_queues = ['inbox','approval','midout','rejected_by_admin',\
+    oi_queues = ['inbox','approval','approved','midout','rejected_by_admin',\
             'rejected_by_candidate','linkedin_inbox','linkedin_rejected_by_candidate',\
             'linkedin_rejected_by_admin','linkedin_approval']
+            # 'domestic_profile_update', 'domestic_profile_initiated',\
+            # 'international_profile_update']
 
     allowed_groups = ['WRITER','WRITER_HEAD']
     
@@ -220,9 +266,19 @@ def cache_badges_for_vendors():
         all_vendors = VendorHierarchy.objects.filter(employee_id=user.id,active=True).values_list('vendee',flat=True)
 
         data['inbox'] = OrderItem.objects.filter(Q(order__status=1, no_process=False,
-            product__type_flow__in=[2, 6, 9, 10, 14],order__welcome_call_done=True) & \
+            product__type_flow__in=[2, 6, 9, 10, 14, 16],order__welcome_call_done=True) & \
             (Q(product__vendor__in=all_vendors) | Q(partner__in=all_vendors) )).exclude(
             wc_sub_cat__in=[64, 65]).exclude(oi_status__in=[4, 10, 81, 161, 162, 163]).count()
+
+        data['hold_item'] = OrderItem.objects.filter(Q(order__status=1, oi_status=10, no_process=False,
+            product__type_flow__in=[2, 6, 9, 10, 14, 16],order__welcome_call_done=True) & \
+            (Q(product__vendor__in=all_vendors) | Q(partner__in=all_vendors) )).exclude(
+            wc_sub_cat__in=[64, 65]).count()
+
+        data['verification_report'] = OrderItem.objects.filter(Q(order__status=1, no_process=False,
+            oi_status=81, product__type_flow=6, order__welcome_call_done=True) & \
+            (Q(product__vendor__in=all_vendors) | Q(partner__in=all_vendors) )).exclude(
+            wc_sub_cat__in=[64, 65]).count()
 
         cache.set(cache_key,data,10*60)
         logging.getLogger('info_log').info("Cached Sidebar Badge for Vendor {}".format(user.id))

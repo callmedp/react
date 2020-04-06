@@ -87,6 +87,14 @@ class ConsoleLoginView(TemplateView):
             user.save()
             logging.getLogger('info_log').info("Console Login Record - {}, {}, {}".\
                 format(user.email,user.name,user.last_login))
+            writer = ['WRITER','WRITER_HEAD']
+            vendor = ['VENDOR']
+            group_list = list(user.groups.values('name'))
+            group_list = [ grp['name'] for grp in group_list ]
+            if len(set(group_list).intersection(set(writer))):
+                return HttpResponseRedirect(reverse_lazy('console:queue-inbox'))
+            elif len(set(group_list).intersection(set(vendor))):
+                return HttpResponseRedirect(reverse_lazy('console:partner:partnerinbox'))
             return HttpResponseRedirect(reverse_lazy('console:dashboard'))
         else:
             messages.add_message(

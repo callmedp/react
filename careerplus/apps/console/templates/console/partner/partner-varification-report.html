@@ -151,6 +151,9 @@
           <div class="x_content">
 
             <div class="table-responsive">
+              {% if page %}
+          <b>{{page.object_list.count}}</b> item listed out of <b>{{ page.paginator.count }}</b>
+          {% endif %}
               <table class="table table-striped jambo_table bulk_action" id="inbox-table">
                 <thead>
                   <tr class="headings">

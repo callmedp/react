@@ -432,7 +432,7 @@
             {% endif %}
 
             {% if perms.order.can_show_approved_queue %}
-                <li><a href="{% url "console:queue-approved" %}">Approved</a></li>
+                <li><a href="{% url "console:queue-approved" %}">Approved {% if writer_badges_dict.approved %} ({{writer_badges_dict.approved}}){% endif %}</a></li>
             {% endif %}
 
             {% if perms.order.can_show_rejectedbyadmin_queue %}
@@ -486,13 +486,13 @@
 
             {% if perms.order.can_show_hold_orderitem_queue %}
             <li>
-                <a href="{% url "console:partner:partnerholdqueue" %}">Hold Items</a>
+                <a href="{% url "console:partner:partnerholdqueue" %}">Hold Items{% if partner_badges_dict.hold_item %} ({{partner_badges_dict.hold_item}}){% endif %}</a>
             </li>
             {% endif %}
 
             {% if perms.order.can_show_varification_report_queue %}
             <li>
-                <a href="{% url "console:partner:varificationreports" %}">Verification Reports</a>
+                <a href="{% url "console:partner:varificationreports" %}">Verification Reports {% if partner_badges_dict.verification_report %} ({{partner_badges_dict.verification_report}}){% endif %}</a>
             </li>
             {% endif %}
         </ul>
