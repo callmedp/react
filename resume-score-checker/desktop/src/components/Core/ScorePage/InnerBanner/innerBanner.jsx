@@ -7,7 +7,7 @@ import * as Actions from '../../../../store/LandingPage/actions/index';
 
 export default function InnerBanner(){
     const [flag, setFlag] = useState(true);
-    const [filename, setFileName] = useState('Upload Resume');
+    const [filename, setFileName] = useState('Upload new resume');
     const dispatch = useDispatch()
     const score = useSelector(state => state.home.score )
     const fileUpload = async event => {
@@ -81,23 +81,27 @@ export default function InnerBanner(){
                 <p className="text-white-50">Good Job! You are just few steps away for perfecting your resume. Check out the detailed reviews to improve the score. Score more to get perfect job match your profile</p>
 
                 <div className="d-flex mt-5">
+                    <LinkScroll 
+                        to='getexpert' 
+                        className="btn btn-secondary btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
+                        Get expert help
+                    </LinkScroll>
+
+
                     { flag && 
-                            <div className="file-upload btn btn-secondary btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
-                                <i className="sprite upload mr-3"></i> 
+                            <div className="file-upload btn btn-outline-light btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
+                                <i className="sprite export mr-3"></i> 
                                 { filename }               
                                 <input className="file-upload__input" type="file"  onChange={fileUpload} name="resume"/>
                             </div>
                             
                          ||
-                         <Link to = "/score-checker" className="file-upload btn btn-secondary btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">            
-                            <i ></i>  Check Score
-                        </Link>
+                        ""
                         }
 
-                    <LinkScroll to='getexpert' className="btn btn-secondary btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
-                        Get expert help
-                    </LinkScroll>
+                    
                 </div>
+
             </div>
             
         </div>

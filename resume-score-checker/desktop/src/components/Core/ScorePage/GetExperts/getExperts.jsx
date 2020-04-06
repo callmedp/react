@@ -6,7 +6,7 @@ export default function GetExperts(){
 
 <section className="container expert-help" id="getexpert">
     <div className="row">
-      <div className="col-md-8 col-md-8">
+      <div className="col-md-8 pr-5">
         <h2><span>Get Expert Help</span></h2>
         <p>Shine Learning is India’s largest professional courses and career skills portal. Launched by Shine.com, Shine Learning has a vision to up-skill the Indian talent pool to adapt to the changing job market.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
         <ul className="expert-help__list mt-5">
@@ -16,17 +16,20 @@ export default function GetExperts(){
           <li className="expert-help__item">Resume Writing</li>
         </ul>
       </div>
-        <div className="expert-help__login need-help">
+
+        <div className="col-md-4 expert-help__login need-help pl-5">
           <h3>Fill the form below to get help</h3>
+
           <form className="mt-5" id="callUsForm" novalidate="novalidate">
-            
-            <div className="form-group">
-              <input type="text" className="form-control input_field" id="email" name="email" value="" placeholder="Email"/>
+
+            <div className="form-group error">
+              <input type="text" className="form-control input_field" id="email" name="email" placeholder="Email"/>
               <label htmlFor="email" className="input_label">Email</label>
+              <span className="error__msg">Only Digits</span>
             </div>
   
             <div className="form-group">
-              <input type="text" className="form-control input_field" id="name" name="name" value="" placeholder="Name"/>
+              <input type="text" className="form-control input_field" id="name" name="name" placeholder="Name"/>
               <label htmlFor="name" className="input_label">Name</label>
             </div>
   
@@ -525,12 +528,13 @@ export default function GetExperts(){
               </div>
               
               <div className="form-group expert-help__mobile--mobile">
-                <input type="text" className="form-control input_field" id="number" name="number" value="" placeholder="Mobile"/>
+                <input type="text" className="form-control input_field" id="number" name="number" placeholder="Mobile"/>
                 <label htmlFor="mobile" className="input_label">Mobile</label>
               </div>
             </div>
-            <button type="submit" className="btn btn-primary btn-round-40 px-5 mt-3">Submit</button></form>
+            <button type="submit" className="btn btn-primary btn-round-40 px-5 py-3 mt-3">Submit</button></form>
         </div>
+
     </div>
   </section>
     );
