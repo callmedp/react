@@ -4,7 +4,6 @@ import './getExpertForm.scss';
 
 const GetExpertForm = ({ isVisible, hide }) => isVisible ? 
   (<div>
-    <div className="modal-overlay"/>
     <div className="modal-wrapper" aria-modal aria-hidden tabIndex={-1} role="dialog">
       <div className="modal">
         <div className="getExpertForm">
@@ -17,12 +16,12 @@ const GetExpertForm = ({ isVisible, hide }) => isVisible ?
                 <p className="getExpertForm__head">Fill the form below to get help</p>
                 <form action="" className="getExpertForm__form">
                     <ul>
-                        <li className="form-group">
-                            <div className="floating-label">      
-                                <input className="form--control floating-input" type="text" placeholder=" " />
+                        <li class="form-group error">
+                            <div class="floating-label">      
+                                <input class="form--control floating-input" type="text" placeholder=" " />
                                 <label>Name</label>
                             </div>
-                            {/* <span class="error--mgs">Name</span> */}
+                            <span class="error--mgs">Please Enter Name</span>
                         </li>   
 
                         <li className="form-group">

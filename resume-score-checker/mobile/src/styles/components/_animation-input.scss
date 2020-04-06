@@ -1,20 +1,21 @@
+
 .floating-label { 
-    position:relative;
+    position:relative;    
 }
 
+label {
+  color:$gray-medium; 
+  font-size: $font-base;
+  position:absolute;
+  pointer-events:none;
+  left:12px;
+  top:14px;
+  transition:0.2s ease all; 
+  -moz-transition:0.2s ease all; 
+  -webkit-transition:0.2s ease all;
+}
   
   
-  label {
-    color:$gray-medium; 
-    font-size: $font-base;
-    position:absolute;
-    pointer-events:none;
-    left:12px;
-    top:14px;
-    transition:0.2s ease all; 
-    -moz-transition:0.2s ease all; 
-    -webkit-transition:0.2s ease all;
-  }
   
   .floating-input:focus ~ label, .floating-input:not(:placeholder-shown) ~ label {
     top:-10px;

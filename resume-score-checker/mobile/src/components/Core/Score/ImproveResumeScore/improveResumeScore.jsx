@@ -14,7 +14,7 @@ export default function ImproveResumeScore() {
                         <img src="/media/images/resume-writing.png" alt=""/>
                     </span>
                     <p className="improve-resume__head mb-20">Perfect your resume score with <strong>Resume Writing Service</strong></p>
-                    <a href="#" className="btn btn-round-30 btn-outline-blue px-15">Get details</a>
+                    <a href="https://learning.shine.com/services/resume-writing/63/" className="btn btn-round-30 btn-outline-blue px-15">Get details</a>
                 </div>
                 
                 <div className="improve-resume__slide">
@@ -22,7 +22,7 @@ export default function ImproveResumeScore() {
                         <img src="/media/images/resume-builder.png" alt=""/>
                     </span>
                     <p className="improve-resume__head mb-20">Create a Perfect Resume with <strong>Resume Builder</strong></p>
-                    <a href="#" className="btn btn-round-30 btn-outline-blue px-15">Create Now</a>
+                    <a href="https://learning.shine.com/resume-builder/" className="btn btn-round-30 btn-outline-blue px-15">Create Now</a>
                 </div>
                 
                 <div className="improve-resume__slide">
@@ -30,7 +30,7 @@ export default function ImproveResumeScore() {
                         <img src="/media/images/free-resume-format.png" alt=""/>
                     </span>
                     <p className="improve-resume__head mb-20">Explore <strong>Free resume Formats</strong>to search desired jobs</p>
-                    <a href="#" className="btn btn-round-30 btn-outline-blue px-15">Explore Now</a>
+                    <a href="https://learning.shine.com/cms/resume-format/1/" className="btn btn-round-30 btn-outline-blue px-15">Explore Now</a>
                 </div>
             </div>
         </div>

@@ -9,7 +9,6 @@ export default function CallToActionScore() {
     const [isVisible, setIsVisible] = useState(false);
     const toggle = () => {
         setIsVisible(!isVisible)
-        // setNewFlag(!newFlag)
     }
 
     const [flag, setFlag] = useState(true);

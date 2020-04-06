@@ -31,7 +31,7 @@ export default function Header() {
                                 <div className="flex-1">
                                     <h3>Welcome Guest</h3>
                                     <div className="mt-10 d-flex justify-content-between">
-                                        <a href="#" className="py-5 btn btn-round-30 btn-outline-white px-20">Login</a>
+                                        <a href="https://learning.shine.com/login/" className="py-5 btn btn-round-30 btn-outline-white px-20">Login</a>
                                     </div>
                                 </div>
 

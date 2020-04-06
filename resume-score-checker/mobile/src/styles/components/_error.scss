@@ -3,14 +3,15 @@
 
     &--mgs {
         font-size: 1.1rem;
-        color: $error;
+        background-color: $error;
+        color: $white;
         position: absolute;
-        right: 10px;
+        right: 0;
         line-height: 16px;
-        top: -9px;
+        top: 1px;
         display: none;
-        background-color: $white;
         padding: 1px 5px;
+        border-radius: 0 4px 4px 4px;
     }
 
     .form--control {
