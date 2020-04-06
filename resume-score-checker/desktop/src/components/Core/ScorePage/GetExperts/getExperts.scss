@@ -3,6 +3,9 @@
 @import '../../../../styles/mixins';
 @import '../../../../styles/utilities';
 @import '../../../../styles/forms';
+@import '../../../../styles/breadcrumb';
+@import '../../../../styles/error';
+
 
 
 .expert-help {
@@ -55,6 +58,18 @@
         .custom-select-box {
             flex: 0 0 25%;
             max-width: 25%;
+            margin-right: 15px;
+            position: relative;
+
+            &::after {
+                content: "";
+                width: .8rem;
+                height: .5rem;
+                background: url('/media/images/sprite.png') no-repeat -196px 0 #fff;
+                position: absolute;
+                right: .8rem;
+                top: 1.7rem;
+              }
         }
 
         &--mobile {

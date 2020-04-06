@@ -1,8 +1,32 @@
-import React from 'react';
+import React,{useState}from 'react';
 import './innerBanner.scss';
-import { Link } from 'react-scroll';
+import { Link as LinkScroll} from 'react-scroll';
+import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux';
+import * as Actions from '../../../../store/LandingPage/actions/index';
 
 export default function InnerBanner(){
+    const [flag, setFlag] = useState(true);
+    const [filename, setFileName] = useState('Upload new resume');
+    const dispatch = useDispatch()
+    const score = useSelector(state => state.home.score )
+    const fileUpload = async event => {
+        let file1 = event.target.files[0];
+        if((file1.name.slice(-4)=='.pdf' || file1.name.slice(-4)=='.doc' || file1.name.slice(-5)=='.docx') && (file1.size/(1024*1024)<=5)){
+            setFileName('File Uploading...')
+            let url = await new Promise((resolve, reject) => {
+                dispatch(Actions.uploadFileUrl({file1, resolve, reject}));
+            })
+            console.log("This is the url")
+            console.log(url)
+            setFlag(false)
+            setFileName('Check Score')
+            }
+        else{
+            console.log("file is unsafe")
+        }
+    }
+
     return (
 <div>        
 <section className="banner">
@@ -21,7 +45,7 @@ export default function InnerBanner(){
 
                         <div className="ko-progress-circle" data-progress="70">
                           <div className="ko-progress-circle__text">
-                            <strong>70</strong>
+    <strong>{score}</strong>
                             <p className="fs-12">Resume score</p>
                           </div>
                           <div className="ko-circle">
@@ -52,21 +76,32 @@ export default function InnerBanner(){
             </div>
             <div className="col-md-6 h-100 d-flex align-items-self-start justify-content-center flex-column">
                 <h1 className="fs-30">
-                    <span>Hello Sachin,<br/>Your resume Scored 70 out of 100</span>
+                    <span>Hello Sachin,<br/>Your resume Scored {score} out of 100</span>
                 </h1>
                 <p className="text-white-50">Good Job! You are just few steps away for perfecting your resume. Check out the detailed reviews to improve the score. Score more to get perfect job match your profile</p>
 
                 <div className="d-flex mt-5">
-
-                    <div className="file-upload btn btn-outline-light btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
-                        <i className="sprite export uploadres mr-3"></i> Upload new resume                                
-                        <input className="file-upload__input" type="file" name="file"/>
-                    </div>
-
-                    <Link to='getexpert' className="btn btn-secondary btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
+                    <LinkScroll 
+                        to='getexpert' 
+                        className="btn btn-secondary btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
                         Get expert help
-                    </Link>
+                    </LinkScroll>
+
+
+                    { flag && 
+                            <div className="file-upload btn btn-outline-light btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
+                                <i className="sprite export mr-3"></i> 
+                                { filename }               
+                                <input className="file-upload__input" type="file"  onChange={fileUpload} name="resume"/>
+                            </div>
+                            
+                         ||
+                        ""
+                        }
+
+                    
                 </div>
+
             </div>
             
         </div>

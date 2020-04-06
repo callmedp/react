@@ -72,18 +72,20 @@ $clouds: #ecf0f1;
     opacity: 0;
     z-index: -1;
   }
-}
 
-// :checked
-input:checked {
-  + .tab-label {
-    &::after {
-      transform: rotate(180deg);
+    // :checked
+  input:checked {
+    + .tab-label {
+      &::after {
+        transform: rotate(180deg);
+      }
+    }
+    ~ .tab-content {
+      max-height: 100vh;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
     }
   }
-  ~ .tab-content {
-    max-height: 100vh;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
 }
+
+

@@ -9,17 +9,17 @@ export default function Footer() {
       <div className="container">
         <div className="row mb-4">
           <div className="footer-links col-sm-8">
-            <a href="/about-us">About Us</a>
-            <a href="#">Partners</a>
-            <a href="/privacy-policy">Privacy Policy</a>
-            <a href="/tnc">Terms &amp; Conditions</a>
-            <a href="/contact-us">Contact Us</a>
+            <a href="https://learning.shine.com/about-us">About Us</a>
+            <a href="">Partners</a>
+            <a href="https://learning.shine.com/privacy-policy/">Privacy Policy</a>
+            <a href="https://learning.shine.com/tnc/">Terms &amp; Conditions</a>
+            <a href="https://learning.shine.com/contact-us">Contact Us</a>
           </div>
 
           <div className="footer-social col-sm-4">
-            <a aria-label="follow us on facebook" className="sprite1 facebook mr-10" href="#"></a>
-            <a aria-label="follow us on linkedin" className="sprite1 linkedin mr-10" href="#"></a>
-            <a aria-label="follow us on twitter" className="sprite1 twitter" href="#"></a>
+            <a aria-label="follow us on facebook" className="sprite1 facebook mr-10" href="https://www.facebook.com/shinelearningdotcom/"></a>
+            <a aria-label="follow us on linkedin" className="sprite1 linkedin mr-10" href="https://www.linkedin.com/showcase/shine-learning/"></a>
+            <a aria-label="follow us on twitter" className="sprite1 twitter" href="https://twitter.com/shinelearning"></a>
           </div>
         </div>
         <hr></hr>

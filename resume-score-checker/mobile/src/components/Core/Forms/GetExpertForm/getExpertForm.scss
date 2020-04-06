@@ -69,9 +69,8 @@
 .modal {
     z-index: 100;
     background: white;
-    position: relative;
-    margin: -0.25rem -.025rem;
+    position: sticky;
     border-radius: 6px;
     max-width: 500px;
-    padding: 1.5rem;
+    height: 100vh;
 }
