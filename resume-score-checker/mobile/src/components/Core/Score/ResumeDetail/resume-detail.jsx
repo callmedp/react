@@ -10,6 +10,7 @@ export default function ResumeDetail() {
 
                 <div className="container-box">
                     <div className="tabs">
+
                         <div className="tab">
                             <input type="radio" id="rd1" name="rd"></input>
                             <label className="tab-label" for="rd1">
