@@ -9,8 +9,8 @@ import {UPDATE_SCORE} from '../actions/actionTypes';
 
 
 function* uploadFileUrl(action) {
-    try {
-        const { payload: { file1, resolve } } = action;
+    const { payload: { file1, resolve, reject } } = action;
+    try {  
         var fileData = new FormData();
         fileData.append('resume', file1)
         const result = yield call(Api.uploadFileUrl, fileData);
@@ -18,9 +18,7 @@ function* uploadFileUrl(action) {
         return resolve(result)
  
     } catch (e) {
-
-        console.log('error', e);
-
+        return reject(e)
     }
 }
 

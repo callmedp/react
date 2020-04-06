@@ -1,38 +1,59 @@
 import React,{ useState} from 'react';
 import { useDispatch } from 'react-redux';
+import { Redirect } from 'react-router-dom'
 import * as Actions from '../../../../store/LandingPage/actions/index';
 import './banner.scss'
-import { Link } from 'react-router-dom'
-import alertify from 'alertifyjs';
+import  Loader  from '../../../Loader/loader';
+import Swal from 'sweetalert2'
 
 export default function Banner(){
 
-    const [flag, setFlag] = useState(true);
-    const [filename, setFileName] = useState('Upload Resume');
+    const [flag, setFlag] = useState(false);
+    const [redirect, setRedirect] = useState(false);
     const dispatch = useDispatch()
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-right',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        onOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+      })
     const fileUpload = async event => {
-        let file1 = event.target.files[0];
+        
+        let file1 = await event.target.files[0];
         if((file1.name.slice(-4)=='.pdf' || file1.name.slice(-4)=='.doc' || file1.name.slice(-5)=='.docx') ){
-            setFileName('File Uploading...')
             try{
+            setFlag(true)
             let url = await new Promise((resolve, reject) => {
                 dispatch(Actions.uploadFileUrl({file1, resolve, reject}));
             })
             setFlag(false)
-            setFileName('Check Score')
+            setRedirect(true)
             }catch(err){
-                alertify.alert('','Try Again!')
+                setFlag(false)
+                Toast.fire({
+                    icon: 'error',
+                    title : '<h3>Something went wrong! Try again.<h3>'
+                  })
             }
         }
         else{
-            alertify.alert('',"File format not supported!")
+             
+            Toast.fire({
+                icon: 'warning',
+                html: '<h3>Please select the file in the format PDF,DOC,DOCX only<h3>',
+            })
         }
     }
 
 
    
     return (
-<section className="banner">
+<section className="banner" id="banner">
     <div className="container h-100">
         <div className="row h-100">
             <div className="col-md-6 h-100 d-flex align-items-self-start justify-content-center flex-column">
@@ -43,18 +64,18 @@ export default function Banner(){
 
                 <div className="d-flex mt-5">
                     
-                        { flag && 
-                            <div className="file-upload btn btn-secondary btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
-                                <i className="sprite upload mr-3"></i> 
-                                { filename }               
-                                <input className="file-upload__input" type="file"  onChange={fileUpload} name="resume"/>
-                            </div>
+                <div className="file-upload btn btn-secondary btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
+                    <i className="sprite upload mr-3"></i> 
+                        Upload New Resume              
+                    <input className="file-upload__input" type="file"  onChange={fileUpload} name="resume"/>
+                </div> 
                             
-                         ||
-                         <Link to = "/score-checker" className="file-upload btn btn-secondary btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">            
-                            <i ></i>  Check Score
-                        </Link>
-                        }
+        { flag && <Loader></Loader> }
+                            
+            { redirect && 
+                <Redirect to = "/score-checker" className="file-upload btn btn-secondary btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4"> 
+                </Redirect>
+            }
 
                     <a href="#" className="d-flex align-items-center btn btn-outline-light btn-round-40 font-weight-bold px-4">
                         <i className="sprite export mr-3"></i>

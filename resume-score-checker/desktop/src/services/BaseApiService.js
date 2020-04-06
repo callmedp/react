@@ -1,4 +1,4 @@
-
+import {siteDomain} from '../utils/domains'
 
 
 const defaultHeaders = {
@@ -21,7 +21,7 @@ const post = (url, data, headers = {
         body: isStringify ? JSON.stringify(data) : isUpload ? data : handleParams(data)
     })
         .then(data => data)
-        .catch(err => console.log(err))
+        .catch(err =>{ throw err } )
         
 };
 
