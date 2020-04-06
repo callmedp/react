@@ -19,7 +19,7 @@ export default function ResumeDetail() {
                         {
                             section_score.map((value, index) => (
                                 <div className="tab" key={index} onClick={(event) => toggle(event.target.firstChild)}>
-                                    <input type="radio" id={index} name="rd" checked = {false}></input>
+                                    <input type="radio" id={index} name="rd" defaultChecked = {false}></input>
                                     <label className="tab-label">
                                     {(value.section_status == 1) ? <i className="sprite green-tick mr-10 mt-5"></i> : (value.section_status == 2) ? <i className="sprite question-mark mr-10 mt-5"></i> : <i className="sprite caution-mark mr-10 mt-5"></i>}
                                         <div className="d-flex flex-direction-column">

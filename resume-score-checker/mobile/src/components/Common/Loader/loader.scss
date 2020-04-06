@@ -1,0 +1,33 @@
+// @import '../../../styles/variables/vars.scss';
+// @import '../../../styles/variables/mixins.scss';
+@import '../../../styles/library/variables';
+@import '../../../styles/library/mixin';
+
+
+.loader {
+    @include size(100%, 100%);
+    position: fixed;
+    background-color: rgba($black, .4);
+    top: 0;
+    left: 0;
+    z-index: 10;
+
+    display: flex;
+    justify-content: center;
+    align-content: center;
+
+    &__wrap {
+        @include size(140px, 110px, block);
+        text-align: center;
+        align-self: center;
+        color: $white;
+        z-index: 10;
+        position: relative;
+        font-size: 2rem;
+    }
+
+    img {
+        @include size(50px, 50px); 
+        align-self: center;
+    }
+}
