@@ -163,6 +163,21 @@ export default function ResumeDetail() {
                         </div> */}
 
                     </div>
+
+                    <ul className="indicators d-flex mt-20">
+                        <li className="d-flex">
+                            <i className="sprite green-tick mr-5"></i>
+                            <span>Available in resume</span>
+                        </li>
+                        <li>
+                            <i className="sprite question-mark mr-5"></i>
+                            <span>Missing in resume</span>
+                        </li>
+                        <li>
+                            <i className="sprite caution-mark mr-5"></i>
+                            <span>Need major attention</span>
+                        </li>
+                    </ul>
                 </div>)}
             </div>
     );

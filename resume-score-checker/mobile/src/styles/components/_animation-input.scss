@@ -1,61 +1,8 @@
-%has-content {
-    top: -10px; 
-    left: 15px; 
-    font-size: 12px; 
-    padding: 0px 5px;
-    background-color: white;
-    color: $primary; 
-    transition: 0.3s;
-}
-
-.animation-input {
-    &~ label{
-        position: absolute; 
-        left: 12px;
-        top: 13px; 
-        color: #aaa; 
-        transition: 0.3s;
-        pointer-events: none;
-
-    }
-
-    &:focus ~ label{
-      @extend %has-content;
-    }
-}
-
-.has-content {
-    &.animation-input {
-        border: 2px solid $primary;
-
-        &~ label {
-            @extend %has-content;
-        }
-    }
-}
-
-input:-internal-autofill-selected {
-    background-color: white;  
-}
-
 .floating-label { 
     position:relative;
 }
-  .floating-input , 
-  .floating-select {
-    font-size: $font-base;
-    padding:4px 4px;
-    display:block;
-    background-color: transparent;
-    border:none;
-    border-bottom:1px solid #c1c1c1;
-  }
+
   
-  .floating-input:focus , 
-  .floating-select:focus {
-       outline:none;
-       border-color:$primary; 
-  }
   
   label {
     color:$gray-medium; 
