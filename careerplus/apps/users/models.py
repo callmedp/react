@@ -1,9 +1,10 @@
-#python imports
+# python imports
 from __future__ import unicode_literals
-import logging,os
+import logging
+import os
 from base64 import b64encode
 
-#django imports
+# django imports
 from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -14,13 +15,13 @@ from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save
 
 
-#local imports
+# local imports
 from .choices import WRITER_TYPE
-from .functions import get_upload_path_user_invoice
+from .functions import get_upload_path_user_invoice, get_upload_path_user_profile_photo
 
-#inter app imports
+# inter app imports
 
-#third party imports
+# third party imports
 
 
 class UserManager(BaseUserManager):
@@ -79,23 +80,24 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(
         _('active'), default=True,
         help_text=_(
-            'Designates whether this user should be treated as active. Unselect this instead of deleting accounts.')
+            'Designates whether this user \
+                should be treated as active. Unselect this instead of deleting accounts.'
+            )
     )
 
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
-    alt = models.CharField(max_length=128,null=True,blank=True)
+    alt = models.CharField(max_length=128, null=True, blank=True)
 
     objects = UserManager()
 
     @property
     def is_writer(self):
-        return bool(UserProfile.objects.filter(user_id=self.id,writer_type__gt=0))
-    
+        return bool(UserProfile.objects.filter(user_id=self.id, writer_type__gt=0))
+
     def __str__(self):
         if self.name:
             return self.name + '  (' + str(self.email) + ')'
         return "%s" % str(self.email)
-
 
     def get_short_name(self):
         """
@@ -124,9 +126,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_console_reset_password_endpoint(self):
         if not self.alt:
             return ""
-        
-        return "{}://{}/console/reset-password/?alt={}".format(\
-            settings.SITE_PROTOCOL,settings.SITE_DOMAIN,self.alt)
+
+        return "{}://{}/console/reset-password/?alt={}".format(
+            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, self.alt
+            )
 
 
 class UserProfile(models.Model):
@@ -135,7 +138,11 @@ class UserProfile(models.Model):
     sql database , it will only return the user_ids of user model.
 
     """
-    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_photo = models.ImageField(
+        _('Profile Photo'), upload_to=get_upload_path_user_profile_photo,
+        blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     writer_type = models.PositiveIntegerField(
         choices=WRITER_TYPE,
         default=0)
@@ -162,10 +169,13 @@ class UserProfile(models.Model):
     wt_changed_date = models.DateField(
         "Writer Type Update Date",
         blank=True, null=True)
+    facebook_url = models.URLField(max_length=200, blank=True, null=True)
+    twitter_url = models.URLField(max_length=200, blank=True, null=True)
+    linkedIn_url = models.URLField(max_length=200, blank=True, null=True)
 
     def __str__(self):
         if self.user.name:
-            return self.user.name + ' (' + str(self.user.email) +')'
+            return self.user.name + ' (' + str(self.user.email) + ')'
         return "%s" % str(self.user.email)
 
     def __init__(self, *args, **kwargs):
@@ -184,7 +194,8 @@ class UserProfile(models.Model):
                 elif self.writer_type != 0:
                     self.last_writer_type = self.writer_type
 
-            elif self.initial_wt_changed_date.month == today_date.month and self.initial_wt_changed_date.year == today_date.year:
+            elif self.initial_wt_changed_date.month == today_date.month \
+                    and self.initial_wt_changed_date.year == today_date.year:
                 self.wt_changed_date = today_date
 
             else:
@@ -205,6 +216,8 @@ def create_user_profile(sender, instance, created, **kwargs):
         logging.getLogger('error_log').error('unable to get/create userprofile object %s' % str(e))
 
         pass
+
+
 post_save.connect(create_user_profile, sender=User)
 
 
