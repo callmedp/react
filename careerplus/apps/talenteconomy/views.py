@@ -23,6 +23,7 @@ from django.conf import settings
 from meta.views import Meta
 from blog.mixins import BlogMixin, PaginationMixin
 from blog.models import Category, Blog, Tag, Author
+
 from geolocation.models import Country
 
 
@@ -644,9 +645,12 @@ class TEBlogDetailView(DetailView, BlogMixin):
 
         popular_courses = self.get_product(
             p_cat.slug, skills)
+
+        page_url = '{}://{}/search/results/?q={}'.format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN,p_cat.slug)
         context.update({
             "popular_courses": popular_courses,
-            "show_chat": True
+            "show_chat": True,
+            "page_url": page_url
         })
 
         context.update(self.get_meta_details())
