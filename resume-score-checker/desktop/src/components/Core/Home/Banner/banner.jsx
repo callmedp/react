@@ -1,5 +1,5 @@
 import React,{ useState} from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom'
 import * as Actions from '../../../../store/LandingPage/actions/index';
 import './banner.scss'
@@ -11,6 +11,8 @@ export default function Banner(){
     const [flag, setFlag] = useState(false);
     const [redirect, setRedirect] = useState(false);
     const dispatch = useDispatch()
+    const section_score = useSelector(state =>  state.home.section_score)
+    const score = useSelector(state=> state.home.score)
     const Toast = Swal.mixin({
         toast: true,
         position: 'top-right',
@@ -22,6 +24,20 @@ export default function Banner(){
           toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
       })
+
+    // const resumeImport = async event => {
+    //     if (!localStorage.getItem('candidateId') || !localStorage.getItem('token')) {
+    //         const isSessionAvailable = await checkSessionAvaialability();
+    //         if (isSessionAvailable) {
+    //             await getCandidateShineDetails()
+                
+            
+    //         }
+    //         else {
+    //             await this.props.showLoginModal()
+    // }
+    // }
+
     const fileUpload = async event => {
         
         let file1 = await event.target.files[0];
@@ -31,13 +47,14 @@ export default function Banner(){
             let url = await new Promise((resolve, reject) => {
                 dispatch(Actions.uploadFileUrl({file1, resolve, reject}));
             })
+            localStorage.setItem('resume_score',JSON.stringify({score,section_score}))
             setFlag(false)
             setRedirect(true)
             }catch(err){
                 setFlag(false)
                 Toast.fire({
                     icon: 'error',
-                    title : '<h3>Something went wrong! Try again.<h3>'
+                    html : '<h3>Something went wrong! Try again.<h3>'
                   })
             }
         }
@@ -48,6 +65,7 @@ export default function Banner(){
                 html: '<h3>Please select the file in the format PDF,DOC,DOCX only<h3>',
             })
         }
+
     }
 
 
@@ -66,7 +84,7 @@ export default function Banner(){
                     
                 <div className="file-upload btn btn-secondary btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
                     <i className="sprite upload mr-3"></i> 
-                        Upload New Resume              
+                        Upload Resume              
                     <input className="file-upload__input" type="file"  onChange={fileUpload} name="resume"/>
                 </div> 
                             

@@ -3,14 +3,11 @@ import './resumeReview.scss';
 import { useSelector } from 'react-redux';
 
 export default function ResumeReview(){
-
-    const section_score = useSelector(state =>  state.home.section_score)
-    const score = useSelector(state=> state.home.score)
+    const section_score =JSON.parse(localStorage.getItem('resume_score')).section_score
     const [secscore, setSecscore] =useState(section_score[0])
     const [toggle, setToggle] =useState(new Array(section_score.length).fill({'checked':false}))
     useEffect(()=>{
       setToggle([{'checked':true},...toggle])
-      localStorage.setItem('resume_score',JSON.stringify({score,section_score}))
     },[])
     const activateLi = (score,id) => {
       const newToggle = toggle.map((flag,index)=>{

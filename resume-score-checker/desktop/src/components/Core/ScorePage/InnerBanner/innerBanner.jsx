@@ -4,28 +4,57 @@ import { Link as LinkScroll} from 'react-scroll';
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../../../../store/LandingPage/actions/index';
+import  Loader  from '../../../Loader/loader';
+import Swal from 'sweetalert2'
 
 export default function InnerBanner(){
-    const [flag, setFlag] = useState(true);
-    const [filename, setFileName] = useState('Upload new resume');
-    const dispatch = useDispatch()
+ 
     const score = useSelector(state => state.home.score )
+    const section_score = useSelector( state => state.home.section_score)
+    const [flag, setFlag] = useState(false);
+    const [localScore, setLocalScore] =useState(JSON.parse(localStorage.getItem('resume_score')).score)
+    const dispatch = useDispatch()
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-right',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        onOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+      })
     const fileUpload = async event => {
-        let file1 = event.target.files[0];
-        if((file1.name.slice(-4)=='.pdf' || file1.name.slice(-4)=='.doc' || file1.name.slice(-5)=='.docx') && (file1.size/(1024*1024)<=5)){
-            setFileName('File Uploading...')
+        
+        let file1 = await event.target.files[0];
+        if((file1.name.slice(-4)=='.pdf' || file1.name.slice(-4)=='.doc' || file1.name.slice(-5)=='.docx') ){
+            try{
+            setFlag(true)
             let url = await new Promise((resolve, reject) => {
                 dispatch(Actions.uploadFileUrl({file1, resolve, reject}));
             })
-            console.log("This is the url")
-            console.log(url)
+            localStorage.removeItem('resume_score')
+            localStorage.setItem('resume_score',JSON.stringify({score,section_score}))
+            setLocalScore(score)
             setFlag(false)
-            setFileName('Check Score')
+            }catch(err){
+                setFlag(false)
+                Toast.fire({
+                    icon: 'error',
+                    html : '<h3>Something went wrong! Try again.<h3>'
+                  })
             }
+        }
         else{
-            console.log("file is unsafe")
+             
+            Toast.fire({
+                icon: 'warning',
+                html: '<h3>Please select the file in the format PDF,DOC,DOCX only<h3>',
+            })
         }
     }
+
 
     return (
 <div>        
@@ -45,7 +74,7 @@ export default function InnerBanner(){
 
                         <div className="ko-progress-circle" data-progress="70">
                           <div className="ko-progress-circle__text">
-    <strong>{score}</strong>
+    <strong>{localScore}</strong>
                             <p className="fs-12">Resume score</p>
                           </div>
                           <div className="ko-circle">
@@ -86,18 +115,12 @@ export default function InnerBanner(){
                         className="btn btn-secondary btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
                         Get expert help
                     </LinkScroll>
-
-
-                    { flag && 
-                            <div className="file-upload btn btn-outline-light btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
-                                <i className="sprite export mr-3"></i> 
-                                { filename }               
-                                <input className="file-upload__input" type="file"  onChange={fileUpload} name="resume"/>
-                            </div>
-                            
-                         ||
-                        ""
-                        }
+                    <div className="file-upload btn btn-outline-light btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
+                        <i className="sprite export mr-3"></i> 
+                            Upload Resume            
+                        <input className="file-upload__input" type="file"  onChange={fileUpload} name="resume"/>
+                    </div>
+                    { flag && <Loader></Loader> }
 
                     
                 </div>

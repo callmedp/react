@@ -11,6 +11,16 @@ const handleParams = (data) => Object.keys(data).map((key) => {
 }).join('&');
 
 
+const get = (url, headers = {
+    ...defaultHeaders,
+}, isFetchingHTML = false) => {
+    return fetch(url, {
+        headers,
+        method: 'GET'
+    })
+        .then(response => response.json())
+        .catch(err =>{ throw err } )
+};
 
 const post = (url, data, headers = {
     ...defaultHeaders,
@@ -20,7 +30,7 @@ const post = (url, data, headers = {
         method: 'POST',
         body: isStringify ? JSON.stringify(data) : isUpload ? data : handleParams(data)
     })
-        .then(data => data)
+        .then( response => response.json() )
         .catch(err =>{ throw err } )
         
 };
@@ -68,4 +78,5 @@ const post = (url, data, headers = {
 
 export default {
     post,
+    get
 }

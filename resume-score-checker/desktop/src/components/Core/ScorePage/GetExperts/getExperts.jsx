@@ -1,7 +1,43 @@
 import React from 'react';
 import './getExperts.scss';
-
+import { useForm } from 'react-hook-form'
+import Swal from 'sweetalert2';
+import { useDispatch } from 'react-redux';
+import * as Actions from '../../../../store/LandingPage/actions/index';
 export default function GetExperts(){
+
+  const { register, handleSubmit, errors } = useForm()
+  const dispatch = useDispatch()
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-right',
+    showConfirmButton: false,
+    timer: 4000,
+    timerProgressBar: true,
+    onOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  })
+  const onSubmit =async (data,event) =>{
+    console.log(data)
+    try{
+      let response = await new Promise((resolve, reject) => {
+        dispatch(Actions.expertFormSubmit({data, resolve, reject}));
+        })
+        event.target.reset();
+        Toast.fire({
+          icon: 'sucess',
+          html : '<h3>Submitted Successfully!<h3>'
+        })
+        
+    }catch(e){
+      Toast.fire({
+        icon: 'error',
+        html : '<h3>Something went wrong! Try again.<h3>'
+      })
+    }
+  } 
     return (
 
 <section className="container expert-help" id="getexpert">
@@ -20,22 +56,24 @@ export default function GetExperts(){
         <div className="col-md-4 expert-help__login need-help pl-5">
           <h3>Fill the form below to get help</h3>
 
-          <form className="mt-5" id="callUsForm" novalidate="novalidate">
+          <form className="mt-5" id="callUsForm" onSubmit={handleSubmit(onSubmit)}  novalidate="novalidate">
 
-            <div className="form-group error">
-              <input type="text" className="form-control input_field" id="email" name="email" placeholder="Email"/>
-              <label htmlFor="email" className="input_label">Email</label>
-              <span className="error__msg">Only Digits</span>
+            <div className={errors?.email ? "form-group error" : "form-group"} >
+              <input type="text" className="form-control input_field" id="email" name="email" placeholder="Email" ref={register({required:true,pattern:/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/})} />
+              <label htmlFor="email" className="input_label" >Email</label>
+              {errors?.email?.type === "required" && <span className="error__msg">This field is required</span>}
+              {errors?.email?.type === "pattern" && <span className="error__msg">Email address is invalid!</span>}
             </div>
   
-            <div className="form-group">
-              <input type="text" className="form-control input_field" id="name" name="name" placeholder="Name"/>
+            <div className={errors?.name ? "form-group error" : "form-group"}>
+              <input type="text" className="form-control input_field" id="name" name="name" placeholder="Name" ref={register({required : true,pattern:/^[A-Za-z_]+[0-9]+(\s)*([A-Za-z_]+[0-9]+)*$/})} />
               <label htmlFor="name" className="input_label">Name</label>
+              {errors?.name?.type === "required" && <span className="error__msg">This field is required</span>}
+              {errors?.name?.type === "pattern" && <span className="error__msg">Name should not start with digits!</span>}
             </div>
-  
             <div className="d-flex expert-help__mobile">
               <div className="custom-select-box">
-                    <select name="country" className="custom-select" id="country-code">
+                    <select name="country" className="custom-select" id="country-code" ref={register({required:true})}>
                       <option value="1">
                 +1&nbsp;&nbsp;&nbsp;&nbsp; -- &nbsp;&nbsp;&nbsp;&nbsp;Canada
                 </option><option value="1">
@@ -527,9 +565,11 @@ export default function GetExperts(){
                 </option></select>
               </div>
               
-              <div className="form-group expert-help__mobile--mobile">
-                <input type="text" className="form-control input_field" id="number" name="number" placeholder="Mobile"/>
+              <div className={ errors.number ? "form-group expert-help__mobile--mobile error " : "form-group expert-help__mobile--mobile"}>
+                <input type="text" className="form-control input_field error"  id="number" name="number" placeholder="Mobile" ref={register({required : true,pattern:/^[0-9-]+$/})} />
                 <label htmlFor="mobile" className="input_label">Mobile</label>
+                {errors?.number?.type === "required" && <span className="error__msg">This field is required</span>}
+                {errors?.number?.type === "pattern" && <span className="error__msg">Mobile number is not valid!</span>}
               </div>
             </div>
             <button type="submit" className="btn btn-primary btn-round-40 px-5 py-3 mt-3">Submit</button></form>
