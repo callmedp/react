@@ -12,7 +12,8 @@ from shop.models import (
     Category, CategoryRelationship, Skill, ProductSkill,
     Faculty, SubHeaderCategory, FacultyProduct,
     Product, UniversityCourseDetail,
-    UniversityCoursePayment,SubCategory,FunctionalArea,ProductFA,ProductJobTitle)
+    UniversityCoursePayment, SubCategory, FunctionalArea, 
+    ProductFA, ProductJobTitle)
 
 from shop.choices import (
     APPLICATION_PROCESS_CHOICES, APPLICATION_PROCESS,
@@ -1792,8 +1793,6 @@ class ProductJobTitleChangeForm(forms.ModelForm):
                     'Duplicate Job Title Name {}'.format(
                         name))
         return name
-
-
 
 
 

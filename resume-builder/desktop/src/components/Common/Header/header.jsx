@@ -51,10 +51,10 @@ class Header extends Component {
 
     }
     render() {
-        const { page, userName, ui: { helpModal }, hideHelpModal, feedback, userInfo, eventClicked } = this.props;
+        const { page, userName,lastName, number,email, ui: { helpModal }, hideHelpModal, feedback, eventClicked } = this.props;
         return (
             <header className={this.props.getclass + " home-nav-fixed"}>
-                <HelpModal modalStatus={helpModal} hideHelpModal={hideHelpModal} userInfo={userInfo} feedback={feedback} eventClicked={eventClicked} />
+                <HelpModal modalStatus={helpModal} hideHelpModal={hideHelpModal} userInfo={{ userName, email, number }} feedback={feedback} eventClicked={eventClicked} />
                 <div className="container">
                     <Link to={'/resume-builder/'} className="container--logo" />
                     {!!(page === 'home') &&
@@ -70,11 +70,14 @@ class Header extends Component {
                     <div className="signin">
                         {!!(page === 'home') &&
                             <React.Fragment>
-                                <button className="white-button mr-15" onClick={this.reachUsButton}>
-                                    Reach us
-                            </button>
+                                {
+                                    !!(localStorage.getItem('candidateId')) &&
+                                    <button className="white-button mr-15" onClick={this.reachUsButton}>
+                                        Reach us
+                                </button>
+                                }
                                 <button className="white-button mr-30" onClick={() => { this.scrollTo('templates', -60, 'BuildResume', 'Header') }}>Build your
-                                    resume
+                                        resume
                             </button>
                             </React.Fragment>
                         }

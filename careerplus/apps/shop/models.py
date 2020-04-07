@@ -20,6 +20,7 @@ from django.core.cache import cache
 from django.db.models.signals import post_save
 
 from ckeditor.fields import RichTextField
+from blog.models import Blog, Category as blog_Category
 from seo.models import AbstractSEO, AbstractAutoDate
 from meta.models import ModelMeta
 from mongoengine import Document, ListField, FloatField,\
@@ -65,6 +66,7 @@ from .choices import (
     convert_to_month,
     LINK_STATUS_CHOICES,
     MANUAL_CHANGES_CHOICES,
+    EDUCATION_CHOICES,
     DAYS_CHOICES,
     SUB_HEADING_CHOICES,
     SUB_HEADING_CHOICE_ATTR_MAPPING_DESKTOP,
@@ -3287,6 +3289,9 @@ class ProductUserProfile(AbstractAutoDate):
     skills = models.CharField(max_length=300, blank=True, null=True)
     approved = models.BooleanField(default=False)
     onboard = models.BooleanField(default=False)
+    latest_education = models.PositiveSmallIntegerField(
+        null=True, blank=True, choices=EDUCATION_CHOICES
+    )
     due_date = models.DateTimeField(
         _('Due Date'), blank=True, null=True)
     day_of_week = models.PositiveSmallIntegerField(
@@ -3422,6 +3427,16 @@ class ProductJobTitle(AbstractAutoDate):
 
     def get_products(self):
         return self.product.all()
+
+class BlogProductMapping(AbstractCommonModel):
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['-created_on', ]
+
+    def __str__(self):
+        return str(self.blog.name) + '_' + str(self.product.name)
 
 
 

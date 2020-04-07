@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React, { PureComponent } from 'react';
 import './testimonial.scss'
 import Slider from "react-slick";
-import {testimonials} from "../../../../Utils/testimonials";
+import { testimonials } from "../../../../Utils/testimonials";
 
-export default class Testimonial extends Component {
+export default class Testimonial extends PureComponent {
     constructor(props) {
         super(props);
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
@@ -28,17 +28,17 @@ export default class Testimonial extends Component {
                     builder</strong>
                 <Slider {...settings}>
                     {
-                        (testimonials || [])    .map((el, key) => {
-                            return(
+                        (testimonials || []).map((el, key) => {
+                            return (
                                 <div className="testimonials--list" key={key}>
                                     <span className="icon-quote"></span>
                                     <div className="testimonials--wrap">
 
-                                        
+
                                         <div className="testimonials--content">
                                             <p>{el.review}</p>
                                         </div>
-                                        
+
                                         <div className="testimonials--author">
                                             <strong>{el.name}</strong>
                                             <span>{el.profile}</span>

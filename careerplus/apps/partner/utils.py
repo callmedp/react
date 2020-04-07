@@ -578,7 +578,8 @@ class CertiticateParser:
                 'validation_date': today_date,
                 'active_date': today_date,
                 'skills': user_certificate.certificate.skill.split(','),
-                'provider': user_certificate.certificate.provider
+                'provider': user_certificate.certificate.provider,
+                'certification_url': user_certificate.certificate_file_url
             }
 
             flag, jsonrsp = ShineCertificateUpdate().update_shine_certificate_data(
@@ -619,7 +620,7 @@ class CertiticateParser:
                                 for index, field in enumerate(multiple_fields):
                                     setattr(data_instance, multiple_fields[index], val[index])
                             elif isinstance(multiple_fields, dict):
-                                for k, value in multiple_fields.items():
+                                for k, valuall_keys_for_parsed_datae in multiple_fields.items():
                                     print(k, value)
                                     setattr(data_instance, k, val[value])
                             parse_data.__dict__[key + 's'].append(data_instance)

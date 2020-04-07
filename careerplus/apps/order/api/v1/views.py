@@ -1,6 +1,7 @@
 # python imports
 
 # django imports
+import json
 
 # local imports
 from .serializers import OrderSerializer,LTVReportSerializer,OrderShineCandidateSerializer
@@ -11,6 +12,8 @@ from order.models import Order,MonthlyLTVRecord,OrderItemOperation,Message,Order
 from order.api.v1.serializers import OrderItemSerializer
 from order.api.core.serializers import OrderItemOperationsSerializer,\
     MessageCommunincationSerializer
+from core.api_mixin import ShineCandidateDetail
+from emailers.utils import BadgingMixin
 
 # 3rd party imports
 from rest_framework.viewsets import ModelViewSet
@@ -51,6 +54,22 @@ class OrderUpdateView(UpdateAPIView):
     queryset = Order.objects.all()
     lookup_field = "id"
     lookup_url_kwarg = "pk"
+
+    def patch(self, request, *args, **kwargs):
+        body = json.loads(request.body)
+        if body.get('check_primary'):
+            order_id = self.kwargs.get('pk')
+            order = Order.objects.filter(id=order_id).first()
+            old_candidate_id = order.candidate_id
+            details = ShineCandidateDetail().get_status_detail(body.get('alt_email'))
+            badging_details = BadgingMixin().get_badging_data(candidate_id = order.candidate_id, feature = True)
+            if badging_details:
+                BadgingMixin().update_badging_data(candidate_id = old_candidate_id, data = {})
+                BadgingMixin().update_badging_data(candidate_id = details.get('candidate_id'), data = badging_details)
+            order.email = details.get('email')
+            order.candidate_id = details.get('candidate_id')
+            order.save(update_fields = ['email', 'candidate_id'])
+        return super(OrderUpdateView, self).patch(request, *args, **kwargs)
 
     def get_serializer_class(self):
         if self.request._request.session.get('candidate_id'):
