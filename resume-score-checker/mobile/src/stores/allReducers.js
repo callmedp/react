@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { uploadFileReducer } from './homePage/reducer/index';
+import { uploadFileReducer } from './scorePage/reducer/index';
 
 const allReducer = combineReducers({
     uploadFile : uploadFileReducer

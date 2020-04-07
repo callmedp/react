@@ -3,7 +3,10 @@ import { useSelector } from 'react-redux';
 import './score-banner.scss';
 
 export default function Banner() {
-    const score = useSelector(state => state.uploadFile.score)
+    const localValue = JSON.parse(localStorage.getItem('resume_score'))
+    const storeValue = useSelector(state => state.uploadFile.score)
+
+    const score = localStorage.getItem('resume_score') === null ? storeValue : localValue.score
     return(
         <div>
             <div className="score-banner">

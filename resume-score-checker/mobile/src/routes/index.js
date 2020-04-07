@@ -1,7 +1,6 @@
 import {BrowserRouter as Router, Route} from "react-router-dom";
 import HomeContainer from '../components/Core/Home/home.jsx';
 import ScorePage from '../components/Core/Score/score.jsx';
-import GetExpertForm from '../components/Core/Forms/GetExpertForm/getExpertForm';
 import React from "react";
 
 export const RouteWithSubRoutes = route => {

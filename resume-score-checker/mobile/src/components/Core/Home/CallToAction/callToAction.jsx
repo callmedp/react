@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import './callToAction.scss';
-import Swal from 'sweetalert2';
-import * as Actions from '../../../../stores/homePage/actions/index';
-import Loader from '../../../Common/Loader/loader';
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { Redirect } from 'react-router';
+import Swal from 'sweetalert2';
+import './callToAction.scss';
+import * as Actions from '../../../../stores/scorePage/actions/index';
+import Loader from '../../../Common/Loader/loader';
 
 
 export default function CallToAction() {
@@ -13,34 +13,50 @@ export default function CallToAction() {
     const [visible, setVisible] = useState(false);
     const [filename, setFileName] = useState('Upload Resume');
 
+    useEffect(() => localStorage.getItem("resume_score") === null ? setFileName('Upload Resume') :  setFileName('Upload New Resume'),[])
+
     const dispatch = useDispatch();
     const fileUpload = async event => {
         setVisible(!visible)
         const file = event.target.files[0];
-        if((file.name.slice(-4)=='.pdf' || file.name.slice(-4)=='.txt' || file.name.slice(-4)=='.doc' || file.name.slice(-5)=='.docx') && (file.size/(1024*1024)<=5)){
+        if((file.name.slice(-4)==='.pdf' || file.name.slice(-4)==='.txt' || file.name.slice(-4)==='.doc' || file.name.slice(-5)==='.docx') && (file.size/(1024*1024)<=5)){
             setFileName('Uploading File...')
             let response = await new Promise((resolve, reject) => {
                 dispatch(Actions.uploadFile({file, resolve, reject}));
             })
-            if (response == undefined){
+            if (response){
+                localStorage.removeItem('resume_score')
+                localStorage.setItem("resume_score", JSON.stringify({response}))
+                setFlag(!flag)
+            }
+            else {
                 Swal.fire({
                     icon : 'error',
-                    title : 'Something went wrong. Please re-upload your Resume'
+                    title : 'Something went wrong. Try again!'
                 })
                 setFileName("Upload Resume")
                 setVisible(false)
             }
-            else {setFlag(!flag)}
         }
         else{
             Swal.fire({
                 icon: 'error',
-                title: 'Please Upload PDF, DOC, DOCX, TXT file only'
+                title: 'Please Upload only Pdf, Doc, Docx or txt format file only'
               })
+              setVisible(false) 
         }
     }
 
-    // const scoreValue = useSelector(state => state.score)
+    const importResume = async event => {
+        const isSessionAvailable = await Actions.checkSessionAvaialability();
+        if (isSessionAvailable) {
+            const candidateId = await Actions.getCandidateId()
+            let response = await new Promise((resolve, reject) => {
+                dispatch(Actions.importResume({candidateId, resolve, reject}));
+            })
+        }
+    }
+    
 
     return(
         <div className="call-to-action">
@@ -48,10 +64,6 @@ export default function CallToAction() {
             {
                 flag &&
                 <React.Fragment>
-                    <div className="d-flex align-items-center file-upload btn btn-yellow btn-round-30 fs-11 mr-10 px-20">
-                        <i className="sprite upload mr-5"></i> { filename }                               
-                        <input className="file-upload__input_right" type="file" name="file" onChange={fileUpload}></input>
-                    </div>
                     {
                         visible &&
                         <Loader />
@@ -60,8 +72,12 @@ export default function CallToAction() {
                 ||
                 <Redirect to="/score-checker" />
             }
-            
-            <a href="#" className="d-flex align-items-center btn btn-outline-white btn-round-30 fs-11 px-20">
+            <div className="d-flex align-items-center file-upload btn btn-yellow btn-round-30 fs-11 mr-10 px-20">
+                <i className="sprite upload mr-5"></i> { filename }                               
+                <input className="file-upload__input_right" type="file" name="file" onChange={fileUpload}></input>
+            </div>
+
+            <a href="#" className="d-flex align-items-center btn btn-outline-white btn-round-30 fs-11 px-20" onClick = {importResume}>
                 <i className="sprite export mr-5"></i>
                 Import from shine.com
             </a>

@@ -15,10 +15,10 @@ const get = (url, headers = {
         headers,
         method: 'GET'
     })
-        // .then(response => response.json())
-        .then(async (response) => {
-            return await handleResponse(response, isFetchingHTML)
-        })
+        .then(response => response.json())
+        // .then(async (response) => {
+        //     return await handleResponse(response, isFetchingHTML)
+        // })
 };
 
 const handleParams = (data) => Object.keys(data).map((key) => {
@@ -34,7 +34,8 @@ const post = (url, data, headers = {
         method: 'POST',
         body: isStringify ? JSON.stringify(data) : isUpload ? data : handleParams(data)
     })
-        .then(handleResponse)
+        .then(response => response)
+        // .then(handleResponse)
         .catch(e => console.log(e))
 };
 

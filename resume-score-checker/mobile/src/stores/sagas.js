@@ -1,5 +1,5 @@
 import { all } from 'redux-saga/effects';
-import watchHomePage from './homePage/saga/index';
+import watchHomePage from './scorePage/saga/index';
 
 export default function* rootSaga(){
     yield all([

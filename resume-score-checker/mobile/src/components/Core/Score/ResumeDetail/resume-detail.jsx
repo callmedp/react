@@ -3,8 +3,11 @@ import { useSelector } from 'react-redux';
 import './resume-detail.scss';
 
 export default function ResumeDetail() {
-    const section_score = useSelector(state => state.uploadFile.section_score)
+    // const section_score = useSelector(state => state.uploadFile.section_score)
+    const localValue = JSON.parse(localStorage.getItem('resume_score'))
+    const storeValue = useSelector(state => state.uploadFile.section_score)
 
+    const section_score = localStorage.getItem('resume_score') === null ? storeValue : localValue.section_score
     const toggle = (event) => (event.checked = !(event.checked))
 
     return(
@@ -13,7 +16,7 @@ export default function ResumeDetail() {
                     <h2><span>Resume detailed review</span></h2>
                 </div>
             {
-                section_score == undefined ?  null:
+                section_score ?
                 (<div className="container-box">
                     <div className="tabs">
                         {
@@ -178,7 +181,7 @@ export default function ResumeDetail() {
                             <span>Need major attention</span>
                         </li>
                     </ul>
-                </div>)}
+                </div>):null}
             </div>
     );
 }
