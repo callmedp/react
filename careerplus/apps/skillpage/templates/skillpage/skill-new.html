@@ -526,7 +526,7 @@
                     {% with faq_list=faq.description|get_faq_list %}
                       <div class="accordion" id="faq-accordion">
                         {% for item in faq_list %}
-                          <div class="card {% if forloop.counter > 2%}d-none{% endif %}" itemscope itemprop="mainEntity" 
+                          <div class="card {% if forloop.counter > 5%}d-none{% endif %}" itemscope itemprop="mainEntity" 
                               itemtype="https://schema.org/Question">
                             <div class="card__question" id="heading{{ forloop.counter }}">
                               <button class="btn {% if forloop.counter > 1 %}collapsed{% endif %}" type="button" 
