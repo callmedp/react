@@ -42,6 +42,24 @@
             background-color: $primary-light;
         }
     }
+    .also-check-tag {
+        position: relative;
+        margin-bottom: 12px;
+
+        &::before {
+            content: '';
+            @include size(5px, 35px, block);
+            position: absolute;
+            left: -15px;
+            background-color: $primary-light;
+        }
+
+        font-size: 1.125rem;
+        font-weight: 700;
+        line-height: 25px;
+        color: #333333;
+        line-height: 34px;
+    }
 }
 
 .body-wrapper {

@@ -297,7 +297,7 @@
                     <li class="nav-item">
                       <a class="nav-link active" id="courses-tab" data-toggle="tab" href="#courses" role="tab" 
                           aria-controls="courses" aria-selected="true" itemprop="name">
-                        <h2>Courses ({{course_count}})</h2>
+                        <h2>All {{category.name|title}} Courses ({{course_count}})</h2>
                       </a>
                     </li>
                   {% endif %}
@@ -577,7 +577,7 @@
             {% if widget_obj_data %}
               <section class="col-sm-12 padlr-0">
                 <div class="also-check">
-                  <h2>{{widget_name}}</h2>
+                  <strong class='also-check-tag'>{{widget_name}}</strong>
                   <ul class="also-check__list">
                     {% for obj in widget_obj_data %}
                       <li><a href="{{obj.url}}">{{obj.name}}</a></li>

@@ -455,27 +455,27 @@
                 <li><a href="{% url "console:queue-certification" %}">Certifications/Asessment Queue</a></li>
             {% endif %}
             {% if perms.order.can_show_domestic_profile_update_queue %}
-                <li><a href="{% url "console:queue-domesticprofileupdate" %}">Domestic Profile Update</a></li>
+                <li><a href="{% url "console:queue-domesticprofileupdate" %}">Domestic Profile Update{% if writer_badges_dict.domestic_profile_update %} ({{writer_badges_dict.domestic_profile_update}}){% endif %}</a></li>
             {% endif %}
 
             {% if perms.order.can_show_domestic_profile_approval_queue %}
                 <li><a href="{% url "console:queue-domesticprofileapproval" %}">Domestic Profile Approval</a></li>
             {% endif %}
             {% if perms.order.can_show_domestic_profile_initiated_queue %}
-                <li><a href="{% url "console:queue-domesticprofileinitiated" %}">Domestic Profile Initiated</a></li>
+                <li><a href="{% url "console:queue-domesticprofileinitiated" %}">Domestic Profile Initiated{% if writer_badges_dict.domestic_profile_initiated %} ({{writer_badges_dict.domestic_profile_initiated}}){% endif %}</a></li>
             {% endif %}
             {% if perms.order.can_show_international_profile_update_queue %}
-                <li><a href="{% url "console:queue-internationalprofileupdate" %}">International Profile Update</a></li>
+                <li><a href="{% url "console:queue-internationalprofileupdate" %}">International Profile Update{% if writer_badges_dict.international_profile_update %} ({{writer_badges_dict.international_profile_update}}){% endif %}</a></li>
             {% endif %}
             {% if perms.order.can_show_international_profile_approval_queue %}
-                <li><a href="{% url "console:queue-internationalapproval" %}">International Profile Approval</a></li>
+                <li><a href="{% url "console:queue-internationalapproval" %}">International Profile Approval{% if writer_badges_dict.international_profile_approval %} ({{writer_badges_dict.international_profile_approval}}){% endif %}</a></li>
             {% endif %}
             {% if perms.order.can_show_allocated_queue %}
-                <li><a href="{% url "console:queue-allocated" %}">Allocated</a></li>
+                <li><a href="{% url "console:queue-allocated" %}">Allocated{% if writer_badges_dict.allocated %} ({{writer_badges_dict.allocated}}){% endif %}</a></li>
             {% endif %}
 
             {% if perms.order.can_show_closed_oi_queue %}
-                <li><a href="{% url "console:queue-closed-orderitems" %}">Closed Orderitems</a></li>
+                <li><a href="{% url "console:queue-closed-orderitems" %}">Closed Orderitems{% if partner_badges_dict.closed_order_item %} ({{partner_badges_dict.closed_order_item}}){% endif %}</a></li>
             {% endif %}
 
             {% if perms.order.can_show_partner_inbox_queue %}
