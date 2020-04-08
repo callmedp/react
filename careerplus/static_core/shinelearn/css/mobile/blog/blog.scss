@@ -608,3 +608,14 @@ blockquote {
           flex-wrap: wrap; 
   height: auto; 
 }
+
+
+body{
+  font-family: $font-family-montserrat;
+}
+
+.cls_ajax_article {
+  a {
+    text-decoration: underline;
+  }
+}
