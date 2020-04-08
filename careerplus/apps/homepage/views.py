@@ -29,11 +29,11 @@ class HomePageView(TemplateView, MetadataMixin):
     
     def get_meta_title(self, context):
         # return 'Best Resume Writing Services | Online Courses | Linkedin Profile - Shine Learning'
-        return 'Shine Learning: Online Training Courses, Practice Tests, Job Assistance'
+        return 'Online Courses, Practice Tests, Job Assistance Services | Shine Learning'
 
     def get_meta_description(self, context):
         # return 'Pick up the Best Resume Services - Check out the Latest Resume Format or Templates - Online Professional Certification Courses'
-        return 'Shine Learning offers 500+ online certification training courses for various skills, practice tests, job assistance with 24X7 support. Learn digital marketing, data science, programming and more'
+        return 'Discover a variety of online courses and certification training, practice tests, job assistance services with 24X7 support.'
     
     def get_meta_url(self, context):
         return 'https://learning.shine.com'

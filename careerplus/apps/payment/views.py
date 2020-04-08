@@ -229,6 +229,12 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         state_list = self.get_state_list()
         guest_login = bool(self.request.session.get('candidate_id', {}))
         candidate_in_session = self.request.session.get('candidate_id','')
+        debug_mode = False
+
+        if settings.DEBUG:
+            debug_mode = True
+
+
 
         context.update({
             "state_form": StateForm(),
@@ -240,7 +246,8 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
             "first_name": first_name,
             "state_list": state_list,
             "guest_login": guest_login,
-            "candidate_in_session": candidate_in_session
+            "candidate_in_session": candidate_in_session,
+            "debug_mode": debug_mode
         })
         return context
 
