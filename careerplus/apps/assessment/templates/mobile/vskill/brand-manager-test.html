@@ -68,8 +68,11 @@
 
     <div class="search">
         <div class="search__searchbox" id="bloodhound">
-            <input type="text" class="typeahead"  name="" placeholder="Search popular tests">
-            <i class="icon_search"></i>
+            <input id ="bloodhound_input" type="text" class="typeahead"  name="" placeholder="Search popular tests">
+            <div id="bloodhound_message" style="display: none;">
+              <p style="color:red;"> Test not available</p>
+            </div>
+            <i id="bloodhound_submit" class="icon_search"></i>
         </div>
     </div>
 
