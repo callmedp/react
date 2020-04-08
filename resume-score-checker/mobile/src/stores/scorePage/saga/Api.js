@@ -18,20 +18,20 @@ const checkSessionAvailability = () => {
     return BaseApiService.get(`${siteDomain}/api/v1/resume/${url}`);
 }
 
-const importShineResume = (data) => {
-    const url = '';
-    return BaseApiService.get(`${siteDomain}/api/v1/resume/${url}`,data);
-}
-
 const getCandidateId = () => {
     const url = `user-profile/`;
     return BaseApiService.get(`${siteDomain}/api/v1/resume/${url}`);
-};
+}
+
+const getCandidateResume = () => {
+    const url = ``;
+    return BaseApiService.get(`${siteDomain}/api/v1/resume/${url}`);
+}
 
 export const Api = {
     fileUpload,
     expertFormSubmit,
-    importShineResume,
     checkSessionAvailability,
-    getCandidateId
+    getCandidateId,
+    getCandidateResume
 };

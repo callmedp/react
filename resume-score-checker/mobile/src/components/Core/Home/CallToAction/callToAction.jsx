@@ -21,15 +21,13 @@ export default function CallToAction() {
         const file = event.target.files[0];
         if((file.name.slice(-4)==='.pdf' || file.name.slice(-4)==='.txt' || file.name.slice(-4)==='.doc' || file.name.slice(-5)==='.docx') && (file.size/(1024*1024)<=5)){
             setFileName('Uploading File...')
-            let response = await new Promise((resolve, reject) => {
-                dispatch(Actions.uploadFile({file, resolve, reject}));
-            })
-            if (response){
-                localStorage.removeItem('resume_score')
-                localStorage.setItem("resume_score", JSON.stringify({response}))
+            try{
+                let response = await new Promise((resolve, reject) => {
+                    dispatch(Actions.uploadFile({file, resolve, reject}));
+                })
                 setFlag(!flag)
             }
-            else {
+            catch(e){
                 Swal.fire({
                     icon : 'error',
                     title : 'Something went wrong. Try again!'
@@ -42,18 +40,49 @@ export default function CallToAction() {
             Swal.fire({
                 icon: 'error',
                 title: 'Please Upload only Pdf, Doc, Docx or txt format file only'
-              })
-              setVisible(false) 
+            })
+            setVisible(false) 
         }
     }
 
-    const importResume = async event => {
-        const isSessionAvailable = await Actions.checkSessionAvaialability();
-        if (isSessionAvailable) {
-            const candidateId = await Actions.getCandidateId()
-            let response = await new Promise((resolve, reject) => {
-                dispatch(Actions.importResume({candidateId, resolve, reject}));
-            })
+    const importResume = async () => {
+        setVisible(!visible)
+        if (!localStorage.getItem('candidateId') || !localStorage.getItem('token')) {
+            const isSessionAvailable = await new Promise((resolve, reject) => dispatch(Actions.checkSessionAvailability({resolve, reject})));
+            if (isSessionAvailable) {
+                try{
+                    const candidateId = await new Promise((resolve, reject) => dispatch(Actions.getCandidateId({resolve, reject})))
+                    let resume = await new Promise((resolve, reject) => {
+                        dispatch(Actions.getCandidateResume({ resolve, reject }));
+                    })
+                    {fileUpload({target : {files : [resume]}})}
+                }
+                catch(error){
+                    Swal.fire({
+                        icon : 'error',
+                        title : 'Something went wrong. Try again!'
+                    })
+                    setVisible(false)
+                }
+            }
+            else{
+                window.location.href = 'https://learning.shine.com/login/?next=score-checker'
+            }
+        }
+        else{
+            try{
+                let resume = await new Promise((resolve, reject) => {
+                    dispatch(Actions.getCandidateResume({ resolve, reject }));
+                })
+                {fileUpload({target : { files : [resume] }})}
+            }
+            catch(e){
+                Swal.fire({
+                    icon : 'error',
+                    title : 'Something went wrong. Try again!'
+                })
+                setVisible(false)
+            }
         }
     }
     
@@ -61,6 +90,15 @@ export default function CallToAction() {
     return(
         <div className="call-to-action">
         <div className="d-flex justify-content-between">
+            <div className="d-flex align-items-center file-upload btn btn-yellow btn-round-30 fs-11 mr-10 px-20">
+                <i className="sprite upload mr-5"></i> { filename }                               
+                <input className="file-upload__input_right" type="file" name="file" onChange={fileUpload}></input>
+            </div>
+
+            <a href="#" className="d-flex align-items-center btn btn-outline-white btn-round-30 fs-11 px-20" onClick = {importResume}>
+                <i className="sprite export mr-5"></i>
+                Import from shine.com
+            </a>
             {
                 flag &&
                 <React.Fragment>
@@ -72,15 +110,6 @@ export default function CallToAction() {
                 ||
                 <Redirect to="/score-checker" />
             }
-            <div className="d-flex align-items-center file-upload btn btn-yellow btn-round-30 fs-11 mr-10 px-20">
-                <i className="sprite upload mr-5"></i> { filename }                               
-                <input className="file-upload__input_right" type="file" name="file" onChange={fileUpload}></input>
-            </div>
-
-            <a href="#" className="d-flex align-items-center btn btn-outline-white btn-round-30 fs-11 px-20" onClick = {importResume}>
-                <i className="sprite export mr-5"></i>
-                Import from shine.com
-            </a>
         </div>
     </div>
     );

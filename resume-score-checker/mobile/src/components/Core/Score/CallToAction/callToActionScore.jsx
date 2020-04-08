@@ -21,22 +21,18 @@ export default function CallToActionScore() {
         const file = event.target.files[0];
         if((file.name.slice(-4)==='.pdf' || file.name.slice(-4)==='.txt' || file.name.slice(-4)==='.doc' || file.name.slice(-5)==='.docx') && (file.size/(1024*1024)<=5)){
             setFileName('Uploading File...')
-            let response = await new Promise((resolve, reject) => {
-                dispatch(Actions.uploadFile({file, resolve, reject}));
-            })
-            setFlag(!flag)
-
-            if (response){
-                localStorage.removeItem('resume_score')
-                localStorage.setItem("resume_score", JSON.stringify({response}))
+            try{
+                let response = await new Promise((resolve, reject) => {
+                    dispatch(Actions.uploadFile({file, resolve, reject}));
+                })
                 setFlag(!flag)
             }
-            else {
+            catch(e){
                 Swal.fire({
                     icon : 'error',
                     title : 'Something went wrong. Try again!'
                 })
-                setFileName("Upload New Resume")
+                setFileName("Upload Resume")
                 setVisible(false)
             }
         }
@@ -47,7 +43,6 @@ export default function CallToActionScore() {
               })
               setVisible(false) 
         }
-        
     }
     return (
     <div className="call-to-action">

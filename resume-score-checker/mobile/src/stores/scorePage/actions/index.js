@@ -2,9 +2,9 @@ import {
     UPLOAD_FILE,
     UPDATE_SCORE,
     SUBMIT_EXPERT_FORM,
-    IMPORT_SHINE_RESUME,
     CHECK_SESSION_AVAILABILITY,
-    GET_CANDIDATE_ID
+    GET_CANDIDATE_ID,
+    GET_CANDIDATE_RESUME
 } from './actionTypes';
 
 
@@ -23,16 +23,17 @@ export const expertForm = (payload) => ({
     payload
 })
 
-export const checkSessionAvaialability = (payload) => ({
+export const checkSessionAvailability = (payload) => ({
     type: CHECK_SESSION_AVAILABILITY,
     payload
 })
 
-export const getCandidateId = () => ({
-    type: GET_CANDIDATE_ID
+export const getCandidateId = (payload) => ({
+    type: GET_CANDIDATE_ID,
+    payload
 })
 
-export const importResume = (payload) => ({
-    type : IMPORT_SHINE_RESUME,
+export const getCandidateResume = (payload) => ({
+    type: GET_CANDIDATE_RESUME,
     payload
 })
