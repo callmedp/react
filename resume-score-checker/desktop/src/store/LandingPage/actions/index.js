@@ -1,5 +1,6 @@
 import {
-    UPLOAD_FILE_URL,EXPERT_FORM_SUBMIT,CHECK_SESSION_AVAILABILITY,GET_CANDIDATE_ID
+    UPLOAD_FILE_URL,EXPERT_FORM_SUBMIT,CHECK_SESSION_AVAILABILITY,
+    GET_CANDIDATE_ID,GET_CANDIDATE_RESUME
 } from './actionTypes';
 
 
@@ -14,7 +15,7 @@ export const expertFormSubmit = (payload) =>({
 })
 
 
-export const checkSessionAvaialability = (payload) => ({
+export const checkSessionAvailability = (payload) => ({
     type: CHECK_SESSION_AVAILABILITY,
     payload
 })
@@ -23,3 +24,8 @@ export const getCandidateId = (payload) => ({
     type: GET_CANDIDATE_ID,
     payload
 });
+
+export const getCandidateResume = (payload) => ({
+    type : GET_CANDIDATE_RESUME,
+    payload
+})

@@ -1,7 +1,7 @@
 import React,{useState}from 'react';
 import './innerBanner.scss';
 import { Link as LinkScroll} from 'react-scroll';
-import { Link } from 'react-router-dom'
+import { Link , Route } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../../../../store/LandingPage/actions/index';
 import  Loader  from '../../../Loader/loader';
@@ -25,8 +25,8 @@ export default function InnerBanner(){
           toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
       })
+       
     const fileUpload = async event => {
-        
         let file1 = await event.target.files[0];
         if((file1.name.slice(-4)=='.pdf' || file1.name.slice(-4)=='.doc' || file1.name.slice(-5)=='.docx') ){
             try{
@@ -76,6 +76,7 @@ export default function InnerBanner(){
                           <div className="ko-progress-circle__text">
     <strong>{localScore}</strong>
                             <p className="fs-12">Resume score</p>
+                            
                           </div>
                           <div className="ko-circle">
                               <div className="full ko-progress-circle__slice">

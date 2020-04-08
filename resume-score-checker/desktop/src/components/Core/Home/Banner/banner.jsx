@@ -25,22 +25,43 @@ export default function Banner(){
         }
       })
 
-    // const resumeImport = async event => {
-    //     if (!localStorage.getItem('candidateId') || !localStorage.getItem('token')) {
-    //         const isSessionAvailable = await checkSessionAvaialability();
-    //         if (isSessionAvailable) {
-    //             await getCandidateShineDetails()
-                
-            
-    //         }
-    //         else {
-    //             await this.props.showLoginModal()
-    // }
-    // }
-
+    const resumeImport = async event => {
+        if (!localStorage.getItem('candidateId') || !localStorage.getItem('token')) {
+            const isSessionAvailable = await new Promise((resolve,reject)=>dispatch(Actions.checkSessionAvailability({resolve,reject})));
+            if (isSessionAvailable) {
+                await dispatch(Actions.getCandidateId())
+                try{
+                    const response = await new Promise((resolve,reject)=>dispatch(Actions.getCandidateResume({resolve,reject})))
+                    fileUpload({terget: {files : [response]}})
+                    }
+                    catch(e){
+                        Toast.fire({
+                            icon: 'error',
+                            html : '<h3>Something went wrong! Try again.<h3>'
+                          })
+                    }
+            }
+            else {
+                window.location.href = "https://learning.shine.com/login/?next=score-checker"
+            }
+        }
+        else{
+            try{
+            const response = await new Promise((resolve,reject)=>dispatch(Actions.getCandidateResume({resolve,reject})))
+            fileUpload({terget: {files : [response]}})
+            }
+            catch(e){
+                Toast.fire({
+                    icon: 'error',
+                    html : '<h3>Something went wrong! Try again.<h3>'
+                  })
+            }
+        }           
+    }
+    
     const fileUpload = async event => {
         
-        let file1 = await event.target.files[0];
+        let file1 = event.target.files[0];
         if((file1.name.slice(-4)=='.pdf' || file1.name.slice(-4)=='.doc' || file1.name.slice(-5)=='.docx') ){
             try{
             setFlag(true)
@@ -67,8 +88,6 @@ export default function Banner(){
         }
 
     }
-
-
    
     return (
 <section className="banner" id="banner">
@@ -95,7 +114,7 @@ export default function Banner(){
                 </Redirect>
             }
 
-                    <a href="#" className="d-flex align-items-center btn btn-outline-light btn-round-40 font-weight-bold px-4">
+                    <a  onClick={resumeImport} className="d-flex align-items-center btn btn-outline-light btn-round-40 font-weight-bold px-4">
                         <i className="sprite export mr-3"></i>
                         Import from shine.com
                     </a>

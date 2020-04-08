@@ -3,13 +3,24 @@ import { takeLatest, call, put } from 'redux-saga/effects';
 import { Api } from './API';
 import {UPDATE_SCORE} from '../actions/actionTypes';
 
+function* getCandidateId(action) {
+    try {
+        const { payload: { resolve, reject } } = action;
+        const result = yield call(Api.getCandidateId);
 
+        localStorage.setItem('candidateId', JSON.parse((result.data && result.data['candidate_id'])) || '');
+        resolve();
+
+    } catch (e) {
+        console.log(e);
+    }
+}
 
 
 
 
 function* uploadFileUrl(action) {
-    const { payload: { file1, resolve, reject } } = action;
+    const { payload: { file1, resolve, reject } } = action; 
     try {  
         var fileData = new FormData();
         fileData.append('resume', file1)
@@ -36,18 +47,29 @@ function* expertFormSubmit(action) {
     }
 }
 
-function* checkSessionAvaialability(action) {
+function* checkSessionAvailability(action) {
     let { payload: { resolve, reject } } = action;
     try {
-       
-        let result = yield call(Api.checkSessionAvaialability)
+       console.log("check session avail")
+        let result = yield call(Api.checkSessionAvailability)
         if (result["error"]) {
             resolve(false)
         }
         const { data } = result;
         resolve(data['result']);
     } catch (e) {
-        throw reject(e)
+        return resolve(false)
+    }
+}
+
+function* getCandidateResume(action){
+    const { payload: { resolve, reject } } = action; 
+    try {  
+        const result = yield call(Api.getCandidateResume);
+        yield put({ type : UPDATE_SCORE, payload : { result }});
+        return resolve(result)
+    } catch (e) {
+        return reject(e)
     }
 }
 
@@ -56,5 +78,7 @@ function* checkSessionAvaialability(action) {
 export default function* watchlandingPage() {
     yield takeLatest(Actions.UPLOAD_FILE_URL, uploadFileUrl);
     yield takeLatest(Actions.EXPERT_FORM_SUBMIT, expertFormSubmit);
-    yield takeLatest(Actions.CHECK_SESSION_AVAILABILITY, checkSessionAvaialability);
+    yield takeLatest(Actions.CHECK_SESSION_AVAILABILITY, checkSessionAvailability);
+    yield takeLatest(Actions.GET_CANDIDATE_ID, getCandidateId);
+    yield takeLatest(Actions.GET_CANDIDATE_RESUME, getCandidateResume);
 }

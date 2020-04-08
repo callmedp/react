@@ -24,15 +24,22 @@ const expertFormSubmit = (data) => {
 };
 
 
-const checkSessionAvaialability = () => {
+const checkSessionAvailability = () => {
     const url = 'session/';
+    return BaseApiService.get(`${siteDomain}/api/v1/resume/${url}`);
+}
+
+
+const getCandidateResume = () => {
+    const url = 'candidate-resume/';
     return BaseApiService.get(`${siteDomain}/api/v1/resume/${url}`);
 }
 
 export const Api ={
     uploadFileUrl,
     expertFormSubmit,
-    checkSessionAvaialability,
+    checkSessionAvailability,
     getCandidateId,
+    getCandidateResume,
 }
 
