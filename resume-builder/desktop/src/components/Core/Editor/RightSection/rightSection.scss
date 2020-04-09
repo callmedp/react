@@ -25,6 +25,12 @@
 
 .right-sidebar-scroll-main {
 	display: block;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.right-sidebar-scroll-main-height {
+	display: block;
 	height: 570px;
 	overflow-y: auto;
 	overflow-x: hidden;
