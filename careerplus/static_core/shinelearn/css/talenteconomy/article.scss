@@ -1412,8 +1412,16 @@ header {
 		 &:hover {
 			 text-decoration: none !important;
 		 }
-	 }
-
-	 
+	 }	 
 	
 }
+
+ .content-box-article-desk {
+	a {
+		text-decoration: underline !important;
+		&:hover {
+			text-decoration: none !important;
+		}
+	}	 
+   
+ }
