@@ -611,11 +611,11 @@ blockquote {
 
 
 body{
-  font-family: $font-family-montserrat;
+  font-family: $font-family-montserrat !important;
 }
 
 .cls_ajax_article {
   a {
-    text-decoration: underline;
+    text-decoration: underline !important;
   }
 }
