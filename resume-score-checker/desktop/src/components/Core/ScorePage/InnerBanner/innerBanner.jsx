@@ -29,10 +29,19 @@ const InnerBanner=props=>{
             setFlag(false)
             }catch(err){
                 setFlag(false)
-                Toast.fire({
-                    icon: 'error',
-                    html : '<h3>Something went wrong! Try again.<h3>'
-                  })
+                if(err==="parse_error"){
+                    Toast.fire({
+                        icon: 'error',
+                        html : `<h3>Unable to parse your resume<h3>
+                                <h4>Please provide with another resume<h4>`
+                      })
+                }
+                else{
+                    Toast.fire({
+                        icon: 'error',
+                        html : '<h3>Something went wrong! Try again.<h3>'
+                    })
+                }
             }
         }
         else{
