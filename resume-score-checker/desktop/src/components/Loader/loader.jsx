@@ -9,7 +9,7 @@ export default function Loader() {
             <div className="">
                 <div className="loader-page">
                     <span className="loader-img">
-                        <img className="" src="media/images/loader.png"/>
+                        <img className="" src="media/images/loader.png" alt="loading"/>
                         <div className="please-wait">
                             Please wait...
                         </div>

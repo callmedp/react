@@ -1,37 +1,26 @@
 import React,{useState}from 'react';
 import './innerBanner.scss';
 import { Link as LinkScroll} from 'react-scroll';
-import { Link , Route } from 'react-router-dom'
+import { Link  } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../../../../store/LandingPage/actions/index';
 import  Loader  from '../../../Loader/loader';
-import Swal from 'sweetalert2'
+import { Toast } from '../../../../services/Toast';
 
-export default function InnerBanner(){
+const InnerBanner=props=>{
  
     const score = useSelector(state => state.home.score )
     const section_score = useSelector( state => state.home.section_score)
     const [flag, setFlag] = useState(false);
     const [localScore, setLocalScore] =useState(JSON.parse(localStorage.getItem('resume_score')).score)
     const dispatch = useDispatch()
-    const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-right',
-        showConfirmButton: false,
-        timer: 4000,
-        timerProgressBar: true,
-        onOpen: (toast) => {
-          toast.addEventListener('mouseenter', Swal.stopTimer)
-          toast.addEventListener('mouseleave', Swal.resumeTimer)
-        }
-      })
        
     const fileUpload = async event => {
         let file1 = await event.target.files[0];
-        if((file1.name.slice(-4)=='.pdf' || file1.name.slice(-4)=='.doc' || file1.name.slice(-5)=='.docx') ){
+        if((file1.name.slice(-4)==='.pdf' || file1.name.slice(-4)==='.doc' || file1.name.slice(-5)==='.docx') ){
             try{
             setFlag(true)
-            let url = await new Promise((resolve, reject) => {
+            await new Promise((resolve, reject) => {
                 dispatch(Actions.uploadFileUrl({file1, resolve, reject}));
             })
             localStorage.removeItem('resume_score')
@@ -91,15 +80,6 @@ export default function InnerBanner(){
                         </div>
 
                       </div>
-                      
-                      {/* <div className="banner-score__myresume">
-                        <a href="#">
-                          <i className="sprite clip"></i>
-                          Myresume.doc
-                        </a>
-
-                        <a href="#" className="btn btn-outline-primary btn-round-40 fs-12 py-1">Download</a>
-                      </div> */}
                     </div>
 
                 </div>
@@ -118,7 +98,7 @@ export default function InnerBanner(){
                     </LinkScroll>
                     <div className="file-upload btn btn-outline-light btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
                         <i className="sprite export mr-3"></i> 
-                            Upload Resume            
+                            Upload New Resume            
                         <input className="file-upload__input" type="file"  onChange={fileUpload} name="resume"/>
                     </div>
                     { flag && <Loader></Loader> }
@@ -135,3 +115,5 @@ export default function InnerBanner(){
 </div>
     );
 }
+
+export default  InnerBanner;

@@ -2,7 +2,7 @@ import React,{useState, useEffect} from 'react';
 import './howItWorks.scss'
 import { Link } from 'react-router-dom';
 import { Link as LinkScroll } from 'react-scroll';
-export default function HowItWorks(){
+const HowItWorks=props=>{
 
     const [flag, setFlag] = useState(false)
     useEffect(()=>{
@@ -59,3 +59,4 @@ export default function HowItWorks(){
 </section>
     );
 }
+export default HowItWorks;

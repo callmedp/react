@@ -3,7 +3,7 @@ import './benefits.scss'
 import { Link } from 'react-router-dom';
 import {Link as LinkScroll } from 'react-scroll';
 
-export default function Benefits() {
+const Benefits=props=> {
 
     const [flag,setFlag] = useState('false')
 
@@ -43,3 +43,5 @@ export default function Benefits() {
         </section>
     );
 }
+
+export default  Benefits;

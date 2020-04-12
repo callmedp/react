@@ -5,7 +5,7 @@ import {UPDATE_SCORE} from '../actions/actionTypes';
 
 function* getCandidateId(action) {
     try {
-        const { payload: { resolve, reject } } = action;
+        const { payload: { resolve} } = action;
         const result = yield call(Api.getCandidateId);
 
         localStorage.setItem('candidateId', JSON.parse((result.data && result.data['candidate_id'])) || '');
@@ -25,10 +25,14 @@ function* uploadFileUrl(action) {
         var fileData = new FormData();
         fileData.append('resume', file1)
         const result = yield call(Api.uploadFileUrl, fileData);
+        if(result['status']===0){
+            reject("parse_error")
+        }
         yield put({ type : UPDATE_SCORE, payload : { result }});
         return resolve(result)
  
     } catch (e) {
+        
         return reject(e)
     }
 }
@@ -48,7 +52,7 @@ function* expertFormSubmit(action) {
 }
 
 function* checkSessionAvailability(action) {
-    let { payload: { resolve, reject } } = action;
+    let { payload: { resolve } } = action;
     try {
        console.log("check session avail")
         let result = yield call(Api.checkSessionAvailability)

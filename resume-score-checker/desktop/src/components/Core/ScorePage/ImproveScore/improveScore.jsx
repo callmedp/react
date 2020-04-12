@@ -1,6 +1,6 @@
 import React from 'react';
 import './improveScore.scss'
-export default function ImproveScore() {
+const ImproveScore=props=> {
   return (
 
     <section className="improve-score">
@@ -37,3 +37,5 @@ export default function ImproveScore() {
     </section>
   );
 }
+
+export default  ImproveScore;

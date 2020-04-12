@@ -1,10 +1,10 @@
 import React from 'react';
 import './navbar.scss';
 
-export default function Navbar(){
+const Navbar=props =>{
     return (
     <nav className="navbar navbar-expand-lg bg-light">
-    <a className="navbar-brand" href="https://learning.shine.com/"></a>
+    <a className="navbar-brand" href="https://learning.shine.com/">&nbsp;</a>
     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span className="navbar-toggler-icon"></span>
     </button>
@@ -13,7 +13,7 @@ export default function Navbar(){
         <ul className="navbar-nav ml-auto">
             
             <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Courses</a>
+                <a className="nav-link dropdown-toggle" href="/#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Courses</a>
                 <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a className="dropdown-item" href="https://learning.shine.com/courses/sales-and-marketing/17/">Sales &amp; Marketing</a>
                     <a className="dropdown-item" href="https://learning.shine.com/courses/operation-management/19/">Operation Management</a>
@@ -29,7 +29,7 @@ export default function Navbar(){
             </li>
             
             <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Job Assistance</a>
+                <a className="nav-link dropdown-toggle" href="/#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Job Assistance</a>
                 <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a className="dropdown-item" href="https://learning.shine.com/services/resume-services/entry-level-freshers-4/pd-2553">International Resume</a>
                     <a className="dropdown-item" href="https://learning.shine.com/services/resume-services/entry-level-freshers/pd-2052">Visual Resume</a>
@@ -44,7 +44,7 @@ export default function Navbar(){
 
        
             <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Free Resources</a>
+                <a className="nav-link dropdown-toggle" href="/#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Free Resources</a>
 
                 <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a className="dropdown-item" href="https://learning.shine.com/cms/resume-format/1/">Resume Formats</a>
@@ -58,14 +58,14 @@ export default function Navbar(){
             <li className="nav-item"><a className="nav-link" href="https://learning.shine.com/talenteconomy/">Blog</a></li>
 
             <li className="nav-item dropdown call-dropdown mr-4 d-flex align-items-center">
-                <a className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span className="call-icon"></span></a>
+                <a className="dropdown-toggle" href="/#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span className="call-icon"></span></a>
                 
                 <div className="dropdown-menu">
                     <a className="dropdown-item text-center" href="tel:0124-4312500"><strong>Call us:</strong>0124-4312500/01</a>
                 </div>
             </li>
             
-            <li className="mr-4 d-flex align-items-center"><a className="login-icon"></a> </li>
+            <li className="mr-4 d-flex align-items-center"><a href="/#" className="login-icon">&nbsp;</a> </li>
 
             <li className="d-flex align-items-center">
                 <a className="cart-icon" href="https://learning.shine.com/cart/payment-summary/">
@@ -77,3 +77,5 @@ export default function Navbar(){
 </nav>
     );
 }
+
+export default Navbar;

@@ -1,7 +1,7 @@
 import React from 'react';
 import './navbar.scss';
 
-export default function Navbar(){
+const Navbar=props=>{
     return (
     <nav className="navbar navbar-expand-lg bg-light">
     <a className="navbar-brand" href="#"></a>
@@ -77,3 +77,5 @@ export default function Navbar(){
 </nav>
     );
 }
+
+export default  Navbar;

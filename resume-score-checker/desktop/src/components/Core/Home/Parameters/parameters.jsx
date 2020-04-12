@@ -3,7 +3,7 @@ import './parameters.scss'
 import { Link } from 'react-router-dom';
 import { Link as LinkScroll } from 'react-scroll';
 
-export default function Parameters() {
+const Parameters=props=> {
 
     const [flag, setFlag] =useState(false)
     useEffect(()=>{
@@ -56,7 +56,7 @@ export default function Parameters() {
                             </li>
                         </ul>
                     </div>
-                    <img className="ml-5 img-fluid parameters__image" src={"media/images/parameters-image.png"} />
+                    <img className="ml-5 img-fluid parameters__image" alt="parameters" src={"media/images/parameters-image.png"} />
                 </div>
 
                 <div className="text-center mt-5">
@@ -68,3 +68,5 @@ export default function Parameters() {
         </section>
     );
 }
+
+export default Parameters;

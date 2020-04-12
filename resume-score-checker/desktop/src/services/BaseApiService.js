@@ -1,5 +1,3 @@
-import {siteDomain} from '../utils/domains'
-
 
 const defaultHeaders = {
     "Content-Type": "application/json",
