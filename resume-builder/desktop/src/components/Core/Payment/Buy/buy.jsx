@@ -259,7 +259,7 @@ export class Buy extends Component {
 
                         <section className="left-sidebar half-width pos-rel">
                             <span onClick={() => this.showEnlargedTemplate(selected_template)} className="zoom" />
-                            <div className="right-sidebar-scroll-main-height">
+                            <div className="right-sidebar-scroll-main">
                                 {
                                     !!(templateImage) ?
                                         <img
@@ -275,7 +275,7 @@ export class Buy extends Component {
 
                         </section>
 
-                        <section className="right-sidebar right-sidebar-scroll-main-height">
+                        <section className="right-sidebar right-sidebar-scroll-main">
                             <div className="choose-plan">
                                 <h2 className="mt-10">Choose your plan</h2>
                                 {/* <span
