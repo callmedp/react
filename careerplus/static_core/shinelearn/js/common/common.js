@@ -19,6 +19,11 @@ $(document).ready(function($) {
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         local: Object.keys(productUrlSet)
       });
+      var courseSource = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.whitespace,
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        local: Object.keys(courseUrlSet)
+      });
 
       $(".search").find("input").typeahead({
         highlight: false
@@ -33,7 +38,7 @@ $(document).ready(function($) {
       },
       {
         name: 'course',
-        source: categorySkillSource,
+        source: courseSource,
         limit: 3,
         templates: {
           header: '<h3>Courses</h3>'
@@ -66,8 +71,8 @@ $(document).ready(function($) {
         }
       },
       {
-        name: 'courses',
-        source: categorySkillSource,
+        name: 'course',
+        source: courseSource,
         limit: 3,
         templates: {
           header: '<h3>Courses</h3>'
