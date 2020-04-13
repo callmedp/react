@@ -3,7 +3,8 @@ import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import * as Actions from '../../../../stores/scorePage/actions/index';
 import './getExpertForm.scss';
-import Swal from 'sweetalert2';
+import { COUNTRY_CODES } from '../../../../services/countryCode';
+import { Toast } from '../../../../services/Toast';
 
 export function Form(hide){
     const { handleSubmit, register, errors } = useForm()
@@ -13,17 +14,11 @@ export function Form(hide){
             dispatch(Actions.expertForm({values, resolve, reject}))
         })
         if (response){
-            Swal.fire({
-                icon : 'success',
-                title : 'Form Submitted Successfully !'
-            })
+            Toast("success", "Form Submitted Successfully");
             event.target.reset();
         }
         else {
-            Swal.fire({
-                icon : 'error',
-                title : 'Something went wrong! Try again'
-            })
+            Toast('error', 'Something went wrong! Try Again');
         }
     }
 
@@ -71,10 +66,11 @@ export function Form(hide){
                             <li className={errors?.mobile ? "getExpertForm__number form-group d-flex error" : "getExpertForm__number form-group d-flex"}>
                                 <div className="code">
                                     <select className="form--control floating-select" name = "country_code" ref={register({required: true})}>
-                                        <option value="+91">+91</option>
-                                        <option value="+92">+92</option>
-                                        <option value="+2345">+2345</option>
-                                        <option value="+9834">+9834</option>
+                                        {
+                                            COUNTRY_CODES.map((value, index) => {
+                                            return <option key= {index} value={value.code}>&nbsp;{value.code}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&emsp; --- &nbsp;&nbsp;&nbsp;{value.country}</option>
+                                            })
+                                        }
                                     </select>
                                 </div>
 

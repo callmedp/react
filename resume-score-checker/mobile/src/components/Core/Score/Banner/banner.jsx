@@ -41,7 +41,7 @@ export default function Banner() {
             <div className="container-box">
                 <div className="resume-detail mb-30 text-center">
                     <p>
-                        <a href="#">
+                        <a href="#/">
                             <i className="sprite clip"></i>
                             Myresume.doc
                         </a>

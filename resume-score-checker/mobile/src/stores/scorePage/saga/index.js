@@ -9,7 +9,10 @@ function* fileUpload(action) {
         var fileData = new FormData();
         fileData.append('resume', file);
         const result = yield call(Api.fileUpload, fileData);
-        yield put({ type: UPDATE_SCORE, payload: { result }});
+        if(result['status'] === 1){
+            yield put({ type: UPDATE_SCORE, payload: { result }});
+            localStorage.setItem('resume_score', localStorage.setItem("resume_score", JSON.stringify({result})))
+        }
         return resolve(result)
 
     } catch (error) {
@@ -26,7 +29,6 @@ function* expertFormData(action) {
         formData.append('country_code', values.country_code);
         formData.append('mobile', values.mobile);
         const response = yield call(Api.expertFormSubmit, formData);
-        localStorage.setItem('resume_score', localStorage.setItem("resume_score", JSON.stringify({response})))
         return resolve(response)
     }
     catch(e){
@@ -49,7 +51,7 @@ function* getCandidateId(action) {
 function* getCandidateResume(action) {
     let { payload: { resolve, reject } } = action;
     try{
-        const resume = yield call(Api.getCandidateResume);
+        yield call(Api.getCandidateResume);
         return resolve(true)
     }
     catch (error) {
@@ -58,7 +60,7 @@ function* getCandidateResume(action) {
 }
 
 function* checkSessionAvailability(action) {
-    let { payload: { resolve, reject } } = action;
+    let { payload: { resolve } } = action;
     try {
         let result = yield call(Api.checkSessionAvailability)
         if (result["error"]) {

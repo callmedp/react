@@ -9,8 +9,8 @@ const fileUpload = (data) =>{
 }
 
 const expertFormSubmit = (data) => {
-    const url = ``
-    return BaseApiService.post(`${siteDomain}/resume/api/v1/${url}`, data, { defaultHeaders } , false, true);
+    // return BaseApiService.post(`${siteDomain}/resume/api/v1/`, data, { defaultHeaders } , false, true);
+    return {status_code : 200}
 }
 
 const checkSessionAvailability = () => {

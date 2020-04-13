@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import { useDispatch } from 'react-redux';
 import { Redirect } from 'react-router';
-import Swal from 'sweetalert2';
 import './callToAction.scss';
 import * as Actions from '../../../../stores/scorePage/actions/index';
 import GetExpertForm from '../../Forms/GetExpertForm/getExpertForm';
 import Loader from '../../../Common/Loader/loader';
+import { Toast } from '../../../../services/Toast';
 
 export default function CallToActionScore() {
     const [isFormVisible, setIsFormVisible] = useState(false);
@@ -22,28 +22,28 @@ export default function CallToActionScore() {
         if((file.name.slice(-4)==='.pdf' || file.name.slice(-4)==='.txt' || file.name.slice(-4)==='.doc' || file.name.slice(-5)==='.docx') && (file.size/(1024*1024)<=5)){
             setFileName('Uploading File...')
             try{
-                let response = await new Promise((resolve, reject) => {
+                let result = await new Promise((resolve, reject) => {
                     dispatch(Actions.uploadFile({file, resolve, reject}));
                 })
-                setFlag(!flag)
+                if(result['status'] === 0){
+                    Toast('error', 'Unable to parse your resume. Please upload a new resume')
+                    setFileName("Upload Resume")
+                    setVisible(false)
+                }
+                else {setFlag(!flag)}
             }
             catch(e){
-                Swal.fire({
-                    icon : 'error',
-                    title : 'Something went wrong. Try again!'
-                })
+                Toast('error', 'Something went wrong! Try again')
                 setFileName("Upload Resume")
                 setVisible(false)
             }
         }
         else{
-            Swal.fire({
-                icon: 'error',
-                title: 'Please Upload only Pdf, Doc, Docx or txt format file only'
-              })
-              setVisible(false) 
+            Toast('error', 'Please Upload only Pdf, Doc, Docx or txt format file only')
+            setVisible(false) 
         }
     }
+    
     return (
     <div className="call-to-action">
             <div className="d-flex justify-content-between">

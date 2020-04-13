@@ -37,12 +37,7 @@ export const routes = [
     {
         path: '/score-checker',
         component: ScorePage,
-    },
-    
-    // {
-    //     path: '/get-expert-form',
-    //     component: GetExpertForm,
-    // },
+    }
 
 ]
 

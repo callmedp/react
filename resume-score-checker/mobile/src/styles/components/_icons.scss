@@ -5,11 +5,6 @@
     background-repeat:  no-repeat;
 }
 
-.sprite1 {
-    background-image: url('/media/images/sprite1.png');
-    background-repeat:  no-repeat;
-}
-
 .upload {
     @include icon-block (14px, 19px, 0 0);
 }
@@ -39,15 +34,15 @@
 }
 
 .fb-black {
-    @include icon-inblock (13px, 24px, -37px -541px);
+    @include icon-inblock (13px, 24px, -71px 0px);
 }
 
 .linledin-black{
-    @include icon-inblock (25px, 24px, -64px -541px);
+    @include icon-inblock (25px, 24px, -59px -28px);
 }
 
 .tw-black {
-    @include icon-inblock (20px, 24px, -105px -542px);
+    @include icon-inblock (20px, 24px, -58px -56px);
 }
 
 .green-tick {

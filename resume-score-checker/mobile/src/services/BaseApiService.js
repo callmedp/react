@@ -1,10 +1,7 @@
-import { siteDomain } from "../Utils/domains";
 
 const defaultHeaders = {
     "Content-Type": "application/json",
 }
-
-// todo make seperate function for fetch request
 
 const get = (url, headers = {
     ...defaultHeaders,
@@ -15,9 +12,6 @@ const get = (url, headers = {
     })
         .then(response => response.json())
         .catch(e => { throw e })
-        // .then(async (response) => {
-        //     return await handleResponse(response, isFetchingHTML)
-        // })
 };
 
 const post = (url, data, headers = {
@@ -28,31 +22,23 @@ const post = (url, data, headers = {
         method: 'POST',
         body: isStringify ? JSON.stringify(data) : isUpload ? data : data
     })
-        .then(response => response)
+        .then(handleResponse)
         .catch(e => { throw e})
 };
 
-// async function handleResponse(response, isFetchingHTML) {
-//     // handle all the status and conditions here
-//     if (response['ok'] === false) {
-//         let message = '';
-//         let data = await response.json();
-//         for (const key in data) {
-//             message += `${data[key]} `;
-//         }
-//         return {
-//             error: true,
-//             errorMessage: message,
-//             status: response['status'],
-//         }
-//     } else if (response['status'] === 204) {
-//         return {data: {}};
-//     } else {
-//         let result = isFetchingHTML ? await response.text() : await response.json();
-//         return { data: result };
-//     }
-// }
+async function handleResponse(response) {
 
+    if (response['status'] === 0) {
+            return {
+                error: true,
+                errorMessage: "Unable to parse your resume. Please Upload new Resume",
+                status: response['status']
+            }
+    }
+    else{
+        throw response;
+    }
+}
 
 export default {
     get,

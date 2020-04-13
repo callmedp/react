@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Redirect } from 'react-router';
-import Swal from 'sweetalert2';
 import './callToAction.scss';
 import * as Actions from '../../../../stores/scorePage/actions/index';
 import Loader from '../../../Common/Loader/loader';
+import { Toast } from '../../../../services/Toast';
 
 
 export default function CallToAction() {
@@ -22,25 +22,24 @@ export default function CallToAction() {
         if((file.name.slice(-4)==='.pdf' || file.name.slice(-4)==='.txt' || file.name.slice(-4)==='.doc' || file.name.slice(-5)==='.docx') && (file.size/(1024*1024)<=5)){
             setFileName('Uploading File...')
             try{
-                let response = await new Promise((resolve, reject) => {
+                let result = await new Promise((resolve, reject) => {
                     dispatch(Actions.uploadFile({file, resolve, reject}));
                 })
-                setFlag(!flag)
+                if(result['status'] === 0){
+                    Toast('error', 'Unable to parse your resume. Please upload a new Resume')
+                    setFileName("Upload Resume")
+                    setVisible(false)
+                }
+                else {setFlag(!flag)}
             }
             catch(e){
-                Swal.fire({
-                    icon : 'error',
-                    title : 'Something went wrong. Try again!'
-                })
+                Toast('error', 'Something went wrong! Try again')
                 setFileName("Upload Resume")
                 setVisible(false)
             }
         }
         else{
-            Swal.fire({
-                icon: 'error',
-                title: 'Please Upload only Pdf, Doc, Docx or txt format file only'
-            })
+            Toast('error', 'Please Upload only Pdf, Doc, Docx or txt format file only')
             setVisible(false) 
         }
     }
@@ -51,17 +50,14 @@ export default function CallToAction() {
             const isSessionAvailable = await new Promise((resolve, reject) => dispatch(Actions.checkSessionAvailability({resolve, reject})));
             if (isSessionAvailable) {
                 try{
-                    const candidateId = await new Promise((resolve, reject) => dispatch(Actions.getCandidateId({resolve, reject})))
+                    await new Promise((resolve, reject) => dispatch(Actions.getCandidateId({resolve, reject})))
                     let resume = await new Promise((resolve, reject) => {
                         dispatch(Actions.getCandidateResume({ resolve, reject }));
                     })
-                    {fileUpload({target : {files : [resume]}})}
+                    fileUpload({target : {files : [resume]}})
                 }
                 catch(error){
-                    Swal.fire({
-                        icon : 'error',
-                        title : 'Something went wrong. Try again!'
-                    })
+                    Toast('error', 'Something went wrong! Try again')
                     setVisible(false)
                 }
             }
@@ -74,13 +70,10 @@ export default function CallToAction() {
                 let resume = await new Promise((resolve, reject) => {
                     dispatch(Actions.getCandidateResume({ resolve, reject }));
                 })
-                {fileUpload({target : { files : [resume] }})}
+                fileUpload({target : { files : [resume] }})
             }
             catch(e){
-                Swal.fire({
-                    icon : 'error',
-                    title : 'Something went wrong. Try again!'
-                })
+                Toast('error', 'Something went wrong! Try again')
                 setVisible(false)
             }
         }
@@ -95,7 +88,7 @@ export default function CallToAction() {
                 <input className="file-upload__input_right" type="file" name="file" onChange={fileUpload}></input>
             </div>
 
-            <a href="#" className="d-flex align-items-center btn btn-outline-white btn-round-30 fs-11 px-20" onClick = {importResume}>
+            <a href="#/" className="d-flex align-items-center btn btn-outline-white btn-round-30 fs-11 px-20" onClick = {importResume}>
                 <i className="sprite export mr-5"></i>
                 Import from shine.com
             </a>
