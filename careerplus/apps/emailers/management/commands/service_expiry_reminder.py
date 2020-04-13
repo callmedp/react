@@ -25,6 +25,7 @@ days_to_campign_name = {
     7: 'renewalbefore7days',
     3: 'renewalbefore3days',
     0: 'renewalonday',
+    -1: 'renewalafter1day',
     -3: 'renewalafter3days',
 }
 
@@ -33,7 +34,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         # run for following days
-        days_to_consider = [7, 3, 0, -3]
+        days_to_consider = [7, 3, 0, -1, -3]
         logging.getLogger('info_log').info("Starting service expiry mail send.")
         try:
             for day in days_to_consider:
@@ -85,6 +86,10 @@ def get_expiry_date(oi):
 
 def service_expiry_reminder(days):
     global COUNT
+    if days == -1:
+        values = [SERVICES.get(503)]
+    else:
+        values = [SERVICES.get(501)]
     for val in SERVICES.values():
         if days >= 0:
             ois = OrderItem.objects.filter(**val)
