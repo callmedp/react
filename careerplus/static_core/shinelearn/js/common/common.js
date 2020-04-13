@@ -32,6 +32,14 @@ $(document).ready(function($) {
         }
       },
       {
+        name: 'course',
+        source: categorySkillSource,
+        limit: 3,
+        templates: {
+          header: '<h3>Courses</h3>'
+        }
+      },
+      {
         name: 'products',
         source: productSource,
         limit: 3,
@@ -41,8 +49,10 @@ $(document).ready(function($) {
       }).bind('typeahead:select', function(ev, suggestion) {
         if (categoryUrlSet[suggestion]) 
           window.location.href = `${categoryUrlSet[suggestion]}`;
-        else 
+        else if (productUrlSet[suggestion])
           window.location.href = `${productUrlSet[suggestion]}`;
+        else 
+          window.location.href = `${courseUrlSet[suggestion]}`;
       });
       $("#id_q").typeahead({
         highlight: false
@@ -56,6 +66,14 @@ $(document).ready(function($) {
         }
       },
       {
+        name: 'courses',
+        source: categorySkillSource,
+        limit: 3,
+        templates: {
+          header: '<h3>Courses</h3>'
+        }
+      },
+      {
         name: 'products',
         source: productSource,
         limit: 3,
@@ -65,8 +83,10 @@ $(document).ready(function($) {
       }).bind('typeahead:select', function(ev, suggestion) {
         if (categoryUrlSet[suggestion]) 
           window.location.href = `${categoryUrlSet[suggestion]}`;
-        else 
+        else if (productUrlSet[suggestion])
           window.location.href = `${productUrlSet[suggestion]}`;
+        else 
+          window.location.href = `${courseUrlSet[suggestion]}`;
       });
       
     $('.cls_search').each(function(index,item){
