@@ -93,13 +93,13 @@ export default function CallToAction() {
                 Import from shine.com
             </a>
             {
-                flag &&
+                (flag &&
                 <React.Fragment>
                     {
                         visible &&
                         <Loader />
                     }
-                </React.Fragment>
+                </React.Fragment>)
                 ||
                 <Redirect to="/score-checker" />
             }

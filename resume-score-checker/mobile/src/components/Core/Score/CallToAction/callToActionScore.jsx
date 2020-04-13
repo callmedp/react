@@ -58,13 +58,13 @@ export default function CallToActionScore() {
                 </div>
             
                 {
-                    flag &&
+                    (flag &&
                     <React.Fragment>
                         {
                             visible &&
                             <Loader />
                         }
-                    </React.Fragment>
+                    </React.Fragment>)
                     ||
                     <Redirect to="/score-checker" />
                 }
