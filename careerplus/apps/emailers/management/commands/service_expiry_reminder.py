@@ -40,7 +40,7 @@ class Command(BaseCommand):
             for day in days_to_consider:
                 service_expiry_reminder(day)
         except Exception as e:
-            logging('error_log').error('Error occured :- {}'.format(str(e)))
+            logging.getLogger('error_log').error('Error occured :- {}'.format(str(e)))
 
 
 def check_if_going_to_expire(oi, days=0):
@@ -72,7 +72,7 @@ def get_expiry_date(oi):
     ).order_by('id').order_by('id').first()
 
     if not service_obj_op or not service_obj_op.created:
-        logging.getLogger('error_log').error("unable to create activation date%s" % (str(e)))
+        logging.getLogger('error_log').error("unable to create activation date%s")
         return ''
 
     activation_date = service_obj_op.created
@@ -90,15 +90,17 @@ def service_expiry_reminder(days):
         values = [SERVICES.get(503)]
     else:
         values = [SERVICES.get(501)]
-    for val in SERVICES.values():
+    for val in values:
         if days >= 0:
             ois = OrderItem.objects.filter(**val)
         else: # this filter is for closed order in the past
-            closed_date = timezone.now() + datetime.timedelta(days=days)
-            closed_date = closed_date.replace(hour=0, minute=0, second=0)
+            closed_date_gt = timezone.now() + datetime.timedelta(days=days)
+            closed_date_gt = closed_date_gt.replace(hour=0, minute=0, second=0)
+            closed_date_lt = closed_date_gt + datetime.timedelta(days=1)
             if 'oi_status' in val:
                 val.update({'oi_status': 4}, )
-            ois = OrderItem.objects.filter(**val).filter(oi_status=4, closed_on__gt=closed_date)
+            ois = OrderItem.objects.filter(**val).filter(oi_status=4, closed_on__gt=closed_date_gt,
+                                                         closed_on__lt=closed_date_lt)
         for oi in ois:
             expire_soon = check_if_going_to_expire(oi, days)
             if not expire_soon:
