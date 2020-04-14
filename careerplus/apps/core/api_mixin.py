@@ -75,20 +75,21 @@ class ShineCandidateDetail(ShineToken):
                 candidate_solr_url = settings.CANDIDATE_SOLR_URL
                 solr_query = '?fl=id&wt=json&qt=edismax&rows=1&q=sEm:{}'.format(email)
                 response = requests.get('{}{}'.format(candidate_solr_url, solr_query))
-                if not response and not isinstance(response, dict):
-                    return
-                response = response.get('response', {}).get('docs',[])
-                if not response and not isinstance(respone, list):
-                    return
-                response = response[0]
-
-                shine_id = json.loads(response.get('id', None))
                 
-                return shine_id
+                if response.status_code == 200: 
+                    response = response.json()
+                    if not response and not isinstance(response, dict):
+                        return
+                    response = response.get('response', {}).get('docs',[])
+                    if not response and not isinstance(response, list):
+                        return
+                    response = response[0]
 
+                    shine_id = response.get('id', None)
 
+                    if shine_id:
+                        return shine_id
 
-                
 
             if not headers:
                 headers = self.get_api_headers()
@@ -113,6 +114,7 @@ class ShineCandidateDetail(ShineToken):
         return None
 
     def get_candidate_detail(self, email=None, shine_id=None):
+
         try:
             if shine_id:
                 headers = self.get_api_headers()
@@ -162,7 +164,8 @@ class ShineCandidateDetail(ShineToken):
     def get_candidate_public_detail(self, email=None, shine_id=None):
 
         headers = self.get_api_headers()
-
+        
+    
         if not shine_id and email:
             shine_id = self.get_shine_id(email=email, headers=headers)
         elif not email and not shine_id:
