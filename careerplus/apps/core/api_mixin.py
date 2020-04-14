@@ -70,6 +70,26 @@ class ShineCandidateDetail(ShineToken):
 
     def get_shine_id(self, email=None, headers=None):
         try:
+            # try to get info from candidate solr 
+            if email: 
+                candidate_solr_url = settings.CANDIDATE_SOLR_URL
+                solr_query = '?fl=id&wt=json&qt=edismax&rows=1&q=sEm:{}'.format(email)
+                response = requests.get('{}{}'.format(candidate_solr_url, solr_query))
+                if not response and not isinstance(response, dict):
+                    return
+                response = response.get('response', {}).get('docs',[])
+                if not response and not isinstance(respone, list):
+                    return
+                response = response[0]
+
+                shine_id = json.loads(response.get('id', None))
+                
+                return shine_id
+
+
+
+                
+
             if not headers:
                 headers = self.get_api_headers()
             if email and headers:
