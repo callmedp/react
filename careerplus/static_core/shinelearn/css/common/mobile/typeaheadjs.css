@@ -104,7 +104,8 @@ span.twitter-typeahead {
 }
 
 .tt-dataset-category_skill h3, 
-.tt-dataset-products h3 {
+.tt-dataset-products h3,
+.tt-dataset-course h3{
   background: #f9f9f9;
   padding: 10px 15px;
   color: #3f5f94;

@@ -9,6 +9,10 @@
 	margin: 10px 0;
 }
 
+body {
+	font-family: $font-family-montserrat !important;
+}
+
 .article-carousel {
 	clear: both;
 	padding: 20px 0;
@@ -1401,3 +1405,23 @@ header {
     -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
     animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
+
+.cls_ajax_article{
+	 a {
+		 text-decoration: underline !important;
+		 &:hover {
+			 text-decoration: none !important;
+		 }
+	 }	 
+	
+}
+
+ .content-box-article-desk {
+	a {
+		text-decoration: underline !important;
+		&:hover {
+			text-decoration: none !important;
+		}
+	}	 
+   
+ }
