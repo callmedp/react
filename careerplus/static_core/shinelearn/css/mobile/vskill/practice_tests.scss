@@ -95,6 +95,52 @@ h2 {
     }
 }
 
+.search-test {
+    position: relative;
+    display: flex;
+    width: 100%;
+    margin-bottom: 10px;
+
+
+    &__searchbox {
+        background: $bg-white;
+        box-shadow: 0 2px 8px 0 rgba(202, 202, 202, 0.50);
+        border-radius: 42px;
+        margin: 20px auto 0;
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        padding: 0 20px;
+        height: 50px;
+        justify-content: center;
+        position: relative;
+
+        input {
+            position: relative !important; 
+            color: $txt-grey-999;
+            font-size: $font-size;
+            display: flex;
+            width: 90%;
+            height: 100%;
+            border: none;
+            top: -50px;
+            height: 50px;
+            background-color: transparent;
+        }
+
+        .icon_search {
+            display: flex;
+            width: 27px;
+            height: 28px;
+            background: url($practice-test) -10px -114px;
+            content: "";
+            align-self: center;
+
+        }
+
+    }
+}
+
 
 .load_more_button {
     background: $bg-white;

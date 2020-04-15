@@ -19,6 +19,11 @@ $(document).ready(function($) {
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         local: Object.keys(productUrlSet)
       });
+      var courseSource = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.whitespace,
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        local: Object.keys(courseUrlSet)
+      });
 
       $(".search").find("input").typeahead({
         highlight: false
@@ -32,6 +37,14 @@ $(document).ready(function($) {
         }
       },
       {
+        name: 'course',
+        source: courseSource,
+        limit: 3,
+        templates: {
+          header: '<h3>Courses</h3>'
+        }
+      },
+      {
         name: 'products',
         source: productSource,
         limit: 3,
@@ -41,8 +54,10 @@ $(document).ready(function($) {
       }).bind('typeahead:select', function(ev, suggestion) {
         if (categoryUrlSet[suggestion]) 
           window.location.href = `${categoryUrlSet[suggestion]}`;
-        else 
+        else if (productUrlSet[suggestion])
           window.location.href = `${productUrlSet[suggestion]}`;
+        else 
+          window.location.href = `${courseUrlSet[suggestion]}`;
       });
       $("#id_q").typeahead({
         highlight: false
@@ -56,6 +71,14 @@ $(document).ready(function($) {
         }
       },
       {
+        name: 'course',
+        source: courseSource,
+        limit: 3,
+        templates: {
+          header: '<h3>Courses</h3>'
+        }
+      },
+      {
         name: 'products',
         source: productSource,
         limit: 3,
@@ -65,8 +88,10 @@ $(document).ready(function($) {
       }).bind('typeahead:select', function(ev, suggestion) {
         if (categoryUrlSet[suggestion]) 
           window.location.href = `${categoryUrlSet[suggestion]}`;
-        else 
+        else if (productUrlSet[suggestion])
           window.location.href = `${productUrlSet[suggestion]}`;
+        else 
+          window.location.href = `${courseUrlSet[suggestion]}`;
       });
       
     $('.cls_search').each(function(index,item){
