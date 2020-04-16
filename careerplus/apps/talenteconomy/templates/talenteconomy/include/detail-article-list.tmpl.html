@@ -39,19 +39,6 @@
             <a class="linkedin" id="article_share" target="_blank" article-slug="{{article.slug}}" href="https://www.linkedin.com/shareArticle?mini=true&url=https://{{SITEDOMAIN}}{{main_article.get_absolute_url}}&title={{main_article.title}}&summary={{main_article.meta_desc}}&source={{SITEDOMAIN}}/"></a>
 
         </div>
-
-         <!-- Tagged in box -->
-        <!--{% with main_article.tags.all as tags %}-->
-        <!--{% if tags %}-->
-        <!--<div class="tagged-in mt-20">-->
-            <!--<strong>Tagged in</strong>-->
-            <!--{% for tag in tags %}-->
-            <!--<span><a href="{% url "talent:te-articles-by-tag" tag.slug %}" title="{{tag.name}}">{{tag.name}}</a></span>-->
-            <!--{% endfor %}-->
-        <!--</div>-->
-        <!--{% endif %}-->
-        <!--{% endwith %}-->
-
     </div>
 
 

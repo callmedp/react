@@ -14,12 +14,6 @@ var showTalentpageOnScroll = (function(){
 
 
         $(window).scroll(function() {
-            // console.log("Scrolltop");
-            // console.log($(window).scrollTop());
-            // console.log($('#id_ajax_talentpage').offset().top);
-            // console.log($(window).height());
-            // console.log($('#id_ajax_talentpage').height())
-
             var position = $(window).scrollTop();
             if (window.CURRENT_FLAVOUR == 'mobile'){
                 var bottom = ($(document).height() - $(window).height())*0.8;
@@ -48,7 +42,6 @@ var showTalentpageOnScroll = (function(){
                     dataType: "json",
                     success: function(data) {
                         $("#talent_cat_load_more").remove();
-                        // var dynamicDiv = $('<div/>',{'class' : 'cls_ajax_article','html' : data.article_detail,'data-url':data.url,'data-title':data.title});
                         $('#related-talent-container').append(data.article_list);
                         ajaxCalled = false;
                     },
