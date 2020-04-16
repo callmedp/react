@@ -66,8 +66,8 @@
          </ol>
          {% endblock breadcrumb %}
 
-    <div class="search">
-        <div class="search__searchbox" id="bloodhound">
+    <div class="search-test">
+        <div class="search-test__searchbox" id="bloodhound">
             <input id ="bloodhound_input" type="text"  class="typeahead form-control" name="" placeholder="Search popular tests">
             <div id="bloodhound_message" style="display: none;">
               <p style="color:red;"> Test Not Available</p>
@@ -142,7 +142,9 @@
    }
 
    </script>
+   {% compress js %}
 <script src="{% static 'shinelearn/js/assessment/assessment_search.js' %}"></script>
+{% endcompress %}
 
 {% endblock js_section %}
 {% block johukum %}

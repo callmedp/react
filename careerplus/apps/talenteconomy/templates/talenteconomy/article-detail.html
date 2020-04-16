@@ -3,6 +3,8 @@
 
 {% block django_meta %}
         {% include 'meta/meta.html' %}
+ <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700&display=swap" rel="stylesheet">
+
 <meta property="og:image" content="{{main_article.image.url}}">
 
 <meta name="twitter:card" content="summary">
@@ -166,7 +168,7 @@
             <span>or login with</span>
             <a class="facebook" onclick="Login();"></a>
             <a class="linkedin" href="{% url 'users:linkedin-code' %}"></a>
-            <a class="gplus" onclick="glogin();"></a>
+            <!-- <a class="gplus" onclick="glogin();"></a> -->
           </div>
           <small class="form-text text-muted text-center">Don’t have an account yet? <a role="button" data-toggle="modal" data-target=".bs-example-modal-sm2" data-dismiss="modal">Register Now</a></small>
         </form>
@@ -230,7 +232,7 @@
             <span>or Register with</span>
             <a class="facebook" onclick="Login();"></a>
             <a class="linkedin" href="{% url 'users:linkedin-code' %}"></a>
-            <a class="gplus" onclick="glogin();"></a>
+            <!-- <a class="gplus" onclick="glogin();"></a> -->
           </div>
           <small class="form-text text-muted text-center mt-4">Already have an account? <a role="button" data-toggle="modal" data-target=".login-div" data-dismiss="modal">Login Now</a></small>
         </form>

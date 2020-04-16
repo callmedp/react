@@ -33,16 +33,15 @@ def update_search_autocomplete():
         redis_conn.sadd('func_area_set', func_area.name)
     logging.getLogger('info_log').info(
         "{} functional areas added".format(func_areas.count()))
-    products = Product.objects.filter(active=True, is_indexable=True,is_indexed=True)
+    products = Product.objects.filter(active=True, is_indexable=True, \
+        is_indexed=True).exclude(product_class__slug__in=settings.COURSE_SLUG)
     redis_conn.delete('product_url_set')
     for product in products:
-        redis_conn.sadd('product_url_set', json.dumps({ "name":product.heading ,
-                                              "url":product.get_absolute_url(
-
-                                              )}))
+        redis_conn.sadd('product_url_set', json.dumps({ "name":product.heading,\
+                                              "url":product.get_absolute_url()}))
     logging.getLogger('info_log').info(
         "{} products added".format(products.count()))
-    categories = Category.objects.filter(is_skill = True)
+    categories = Category.objects.filter(is_skill=True)
     redis_conn.delete('category_url_set')
     for category in categories:
         if category.get_absolute_url():
@@ -50,3 +49,13 @@ def update_search_autocomplete():
                 "name":category.name, "url":category.get_absolute_url()}))
     logging.getLogger('info_log').info(
         "{} categories added".format(categories.count()))
+    courses = Product.objects.filter(active=True, \
+        product_class__slug__in=settings.COURSE_SLUG,is_indexable=True, is_indexed=True)
+    redis_conn.delete('course_url_set')
+    for course in courses:
+        if course.get_absolute_url():
+            redis_conn.sadd("course_url_set", json.dumps({
+                "name":course.name, "url":course.get_absolute_url()}))
+    logging.getLogger('info_log').info(
+        "{} courses added".format(courses.count()))
+
