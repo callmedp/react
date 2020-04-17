@@ -24,7 +24,7 @@ class Template extends Component {
 
     render() {
         const {template: {html}} = this.props;
-        return (
+        return html ? (
             <div>
                 <div className="right-sidebar-scroll-main"
                      dangerouslySetInnerHTML={{
@@ -32,7 +32,7 @@ class Template extends Component {
                      }}>
                 </div>
             </div>
-        )
+        ): null
     }
 
 }

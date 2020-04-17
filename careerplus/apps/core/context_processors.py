@@ -127,6 +127,8 @@ def getSearchSet(request):
                     eval(p.decode())['url'] for p in redis_conn.smembers('product_url_set')},
                 "category_url_set": {eval(p.decode())['name']:\
                     eval(p.decode())['url'] for p in redis_conn.smembers('category_url_set')},
+                "course_url_set": {eval(p.decode())['name']:\
+                    eval(p.decode())['url'] for p in redis_conn.smembers('course_url_set')},
            }
 
 

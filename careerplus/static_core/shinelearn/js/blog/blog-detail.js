@@ -79,7 +79,7 @@ function commentSubmit(article_id, login_status){
                     data:formdata,
                     success: function(response) {
                         $('#blog-comment-form' + article_id)[0].reset();
-                        alert('Thank you for sharing your opinion, your comment will be posted post moderation.');
+                        alert('Thank you, We are processing your review. This may take sometime, so we appreciate your patience.');
                         
                     },
                     failure: function(response){

@@ -329,7 +329,7 @@
             {% with faq_list=faq.description|get_faq_list %}
             <div class="css-accordion">
                 {% for item in  faq_list%}
-                <div class="css-accordion--tab {% if forloop.counter > 2%}hide{% endif %}" itemscope
+                <div class="css-accordion--tab {% if forloop.counter > 5%}hide{% endif %}" itemscope
                     itemprop="mainEntity" itemtype="https://schema.org/Question">
                     <input class="faq-input" type="radio" id="rd{{ forloop.counter }}" name="rd"
                         {% if forloop.counter == 1%}checked{% endif %}>
@@ -346,7 +346,7 @@
                 {% endfor %}
 
             </div> <!-- css-accordion end -->
-            {% if faq_list|length > 2 %}
+            {% if faq_list|length > 5 %}
             <div class="d-block text-center py-15 mt-15">
                 <a onclick="openMoreFAQ()" id="more-faq" class="btn btn-round btn-outline d-inline-block">
                     More FAQs

@@ -1,44 +1,46 @@
 <div class="popular-courses box-panel col-sm-6 col-md-12 mb-40">
 	<h2 class="heading-right-talent">
 		{% if titleCourses %}
-			{{titleCourses}}
+		{{titleCourses}}
 		{% else %}
-			Popular Courses
+		Popular Courses
 		{% endif %}
 	</h2>
 	<ul>
 		{% for popularCourses in popular_courses %}
 		<li>
-			<a href="{{popularCourses.url}}?itm_source=TE&itm_medium=PopularCourses&itm_campaign={{page}}&itm_content={{popularCourses.name.split|join:"-"}}" title="{% if popularCourses.display_name %} {{popularCourses.display_name}} {% else %} {{popularCourses.name}} {% endif %}">
-			  <h3>
-			  	{% if popularCourses.display_name %}
-			  		{{popularCourses.display_name}}
-			  	{% else %}
+			<a href="{{popularCourses.url}}?itm_source=TE&itm_medium=PopularCourses&itm_campaign={{page}}&itm_content={{popularCourses.name.split|join:"-"}}"
+				title="{% if popularCourses.display_name %} {{popularCourses.display_name}} {% else %} {{popularCourses.name}} {% endif %}">
+				<h3>
+					{% if popularCourses.display_name %}
+					{{popularCourses.display_name}}
+					{% else %}
 					{{popularCourses.name}}
-			  	{% endif %}
-			  </h3>
-			  <div class="rating-box">
-				  {% for star in popularCourses.star %}
-				  	{% if star == '*' %}
-				      <figure class="full-star"></figure>
-				    {% endif %}
-				  	{% if star == '+' %}
-				      <figure class="half-star"></figure>
-				    {% endif %}
-				  	{% if star == '-' %}
-				      <figure class="blank-star"></figure>
-				    {% endif %}
-			      {% endfor %}
-			      <strong>{{popularCourses.avg_rating_exact}}<small>/5</small></strong> 
-			  </div>
-			  <span class="jobs-available">
-			    <strong>{{popularCourses.num_jobs}}</strong>  jobs available
-			  </span>
-			  <span class="people-bought">
-			    <strong>{{popularCourses.buy_count}}</strong>  people bought
-			  </span>
+					{% endif %}
+				</h3>
+				<div class="rating-box">
+					{% for star in popularCourses.star %}
+					{% if star == '*' %}
+					<figure class="full-star"></figure>
+					{% endif %}
+					{% if star == '+' %}
+					<figure class="half-star"></figure>
+					{% endif %}
+					{% if star == '-' %}
+					<figure class="blank-star"></figure>
+					{% endif %}
+					{% endfor %}
+					<strong>{{popularCourses.avg_rating_exact}}<small>/5</small></strong>
+				</div>
+				<span class="jobs-available">
+					<strong>{{popularCourses.num_jobs}}</strong> jobs available
+				</span>
+				<span class="people-bought">
+					<strong>{{popularCourses.buy_count}}</strong> people bought
+				</span>
 			</a>
 		</li>
 		{% endfor %}
 	</ul>
+	<a type="button" href="{{page_url}}" target="_blank" class="submit-button">View ALL</a>
 </div>
