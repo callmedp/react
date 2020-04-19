@@ -2,6 +2,7 @@ import * as Actions from '../actions/actionTypes';
 import { takeLatest, call, put } from 'redux-saga/effects';
 import { Api } from './API';
 import {UPDATE_SCORE} from '../actions/actionTypes';
+import { Toast } from '../../../services/Toast';
 
 function* getCandidateId(action) {
     try {
@@ -25,12 +26,16 @@ function* uploadFileUrl(action) {
         var fileData = new FormData();
         fileData.append('resume', file1)
         const result = yield call(Api.uploadFileUrl, fileData);
-        if(result['status']===0){
-            reject("parse_error")
+        if(result.data['error_message']){
+            Toast.fire({
+                icon: 'error',
+                html : result.data.error_message
+            })
+            reject(result.data)
         }
-        yield put({ type : UPDATE_SCORE, payload : { result }});
+        localStorage.setItem('resume_score',JSON.stringify({...result.data}))
+        yield put({ type : UPDATE_SCORE, payload : result.data});
         return resolve(result)
- 
     } catch (e) {
         
         return reject(e)
