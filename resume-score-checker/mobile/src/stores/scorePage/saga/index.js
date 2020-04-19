@@ -9,11 +9,12 @@ function* fileUpload(action) {
         var fileData = new FormData();
         fileData.append('resume', file);
         const result = yield call(Api.fileUpload, fileData);
-        if(result['status'] === 1){
-            yield put({ type: UPDATE_SCORE, payload: { result }});
-            localStorage.setItem('resume_score', localStorage.setItem("resume_score", JSON.stringify({result})))
+
+        if(!result.data['error_message']){
+            yield put({ type: UPDATE_SCORE, payload: result.data });
+            localStorage.setItem("resume_score", JSON.stringify({...result.data}))
         }
-        return resolve(result)
+        return resolve(result.data)
 
     } catch (error) {
         return reject(error)

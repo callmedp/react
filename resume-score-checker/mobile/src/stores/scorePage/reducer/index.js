@@ -1,8 +1,9 @@
 import { UPLOAD_FILE, UPDATE_SCORE } from "../actions/actionTypes";
 
 const initState = {
-    score : 0,
-    section_score : []
+    'total_score' : 0,
+    'section_score' : [],
+    'error_message' : ''
 }
 
 export const uploadFileReducer = (state = initState, action) => {
@@ -10,10 +11,7 @@ export const uploadFileReducer = (state = initState, action) => {
         case UPDATE_SCORE :{
             return {
                 ...state,
-                ...{
-                    score : action.score,
-                    section_score : action.section_score
-                }
+                ...action.payload
             }
         }
 

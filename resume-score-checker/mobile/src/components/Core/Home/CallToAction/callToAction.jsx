@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Redirect } from 'react-router';
+import { Redirect } from 'react-router-dom';
 import './callToAction.scss';
 import * as Actions from '../../../../stores/scorePage/actions/index';
 import Loader from '../../../Common/Loader/loader';
@@ -25,8 +25,8 @@ export default function CallToAction() {
                 let result = await new Promise((resolve, reject) => {
                     dispatch(Actions.uploadFile({file, resolve, reject}));
                 })
-                if(result['status'] === 0){
-                    Toast('error', 'Unable to parse your resume. Please upload a new Resume')
+                if(result['error_message']){
+                    Toast('error', result['error_message'])
                     setFileName("Upload Resume")
                     setVisible(false)
                 }
@@ -101,7 +101,7 @@ export default function CallToAction() {
                     }
                 </React.Fragment>)
                 ||
-                <Redirect to="/score-checker" />
+                <Redirect push to="/score-checker" />
             }
         </div>
     </div>

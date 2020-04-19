@@ -4,9 +4,9 @@ import './score-banner.scss';
 
 export default function Banner() {
     const localValue = JSON.parse(localStorage.getItem('resume_score'))
-    const storeValue = useSelector(state => state.uploadFile.score)
+    const storeValue = useSelector(state => state.uploadFile['total_score'])
 
-    const score = localStorage.getItem('resume_score') === null ? storeValue : localValue.score
+    const score = localStorage.getItem('resume_score') === null ? storeValue : localValue['total_score']
     return(
         <div>
             <div className="score-banner">

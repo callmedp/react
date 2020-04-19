@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { useDispatch } from 'react-redux';
-import { Redirect } from 'react-router';
+import { Redirect } from 'react-router-dom';
 import './callToAction.scss';
 import * as Actions from '../../../../stores/scorePage/actions/index';
 import GetExpertForm from '../../Forms/GetExpertForm/getExpertForm';
@@ -25,12 +25,15 @@ export default function CallToActionScore() {
                 let result = await new Promise((resolve, reject) => {
                     dispatch(Actions.uploadFile({file, resolve, reject}));
                 })
-                if(result['status'] === 0){
-                    Toast('error', 'Unable to parse your resume. Please upload a new resume')
-                    setFileName("Upload Resume")
+                if(result['error_message']){
+                    Toast('error', result['error_message'])
+                    setFileName("Upload New Resume")
                     setVisible(false)
                 }
-                else {setFlag(!flag)}
+                else {
+                    setFileName("Upload New Resume")
+                    setFlag(!flag)
+                }
             }
             catch(e){
                 Toast('error', 'Something went wrong! Try again')
