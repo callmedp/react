@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DatePicker render correctly date component 1`] = `
+<div
+  class="input-group "
+>
+  <div
+    class="input-group--input-group-icon"
+  >
+    <span />
+  </div>
+  <div
+    class="Error "
+  >
+    <div>
+      <div
+        class="react-datepicker__input-container"
+      >
+        <input
+          autocomplete="off"
+          class=""
+          type="text"
+          value="2018-10-03"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

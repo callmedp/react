@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SelectTemplateModal Select Template Modal Test 1`] = `
+<Modal
+  ariaHideApp={true}
+  bodyOpenClassName="ReactModal__Body--open"
+  className="Modal"
+  closeTimeoutMS={0}
+  contentLabel="onRequestClose"
+  isOpen={true}
+  overlayClassName="Overlay"
+  parentSelector={[Function]}
+  portalClassName="ReactModalPortal"
+  role="dialog"
+  shouldCloseOnEsc={true}
+  shouldCloseOnOverlayClick={true}
+  shouldFocusAfterRender={true}
+  shouldReturnFocusAfterClose={true}
+>
+  <ResumeSlider
+    ui={
+      Object {
+        "select_template_modal": true,
+      }
+    }
+  />
+  <button
+    className="Modal--close"
+    onClick={[Function]}
+  >
+    +
+  </button>
+</Modal>
+`;
+
+exports[`SelectTemplateModal Select Template Modal debug 1`] = `
+<Modal
+  ariaHideApp={true}
+  bodyOpenClassName="ReactModal__Body--open"
+  className="Modal"
+  closeTimeoutMS={0}
+  contentLabel="onRequestClose"
+  isOpen={true}
+  overlayClassName="Overlay"
+  parentSelector={[Function]}
+  portalClassName="ReactModalPortal"
+  role="dialog"
+  shouldCloseOnEsc={true}
+  shouldCloseOnOverlayClick={true}
+  shouldFocusAfterRender={true}
+  shouldReturnFocusAfterClose={true}
+>
+  <ResumeSlider
+    ui={
+      Object {
+        "select_template_modal": true,
+      }
+    }
+  />
+  <button
+    className="Modal--close"
+    onClick={[Function]}
+  >
+    +
+  </button>
+</Modal>
+`;

@@ -1,0 +1,131 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MenuModal Menu Modal Test 1`] = `
+<div
+  className="pr scrollynone"
+>
+  <Modal
+    ariaHideApp={true}
+    bodyOpenClassName="ReactModal__Body--open"
+    closeTimeoutMS={0}
+    contentLabel="Menu Modal"
+    isOpen={false}
+    parentSelector={[Function]}
+    portalClassName="ReactModalPortal"
+    role="dialog"
+    shouldCloseOnEsc={true}
+    shouldCloseOnOverlayClick={true}
+    shouldFocusAfterRender={true}
+    shouldReturnFocusAfterClose={true}
+    style={
+      Object {
+        "content": Object {
+          "bottom": "0",
+          "height": "570px",
+          "left": "0",
+          "margin": "auto",
+          "overflow": "none",
+          "padding": "0",
+          "right": "0",
+          "top": "3%",
+          "width": "415px",
+        },
+      }
+    }
+  >
+    <div
+      className="menu-wrap"
+    >
+      <div
+        className="edit-section-menu"
+      >
+        <strong>
+          Add / remove sections in your resume
+        </strong>
+        <ul
+          className="enable"
+        />
+        <ul
+          className="disable"
+        />
+      </div>
+      <div
+        className="flex-container menu-btm-button"
+      >
+        <button
+          className="orange-button"
+          onClick={[Function]}
+          type="submit"
+        >
+          Done
+        </button>
+      </div>
+    </div>
+  </Modal>
+</div>
+`;
+
+exports[`MenuModal Menu Modal debug 1`] = `
+<div
+  className="pr scrollynone"
+>
+  <Modal
+    ariaHideApp={true}
+    bodyOpenClassName="ReactModal__Body--open"
+    closeTimeoutMS={0}
+    contentLabel="Menu Modal"
+    isOpen={false}
+    parentSelector={[Function]}
+    portalClassName="ReactModalPortal"
+    role="dialog"
+    shouldCloseOnEsc={true}
+    shouldCloseOnOverlayClick={true}
+    shouldFocusAfterRender={true}
+    shouldReturnFocusAfterClose={true}
+    style={
+      Object {
+        "content": Object {
+          "bottom": "0",
+          "height": "570px",
+          "left": "0",
+          "margin": "auto",
+          "overflow": "none",
+          "padding": "0",
+          "right": "0",
+          "top": "3%",
+          "width": "415px",
+        },
+      }
+    }
+  >
+    <div
+      className="menu-wrap"
+    >
+      <div
+        className="edit-section-menu"
+      >
+        <strong>
+          Add / remove sections in your resume
+        </strong>
+        <ul
+          className="enable"
+        />
+        <ul
+          className="disable"
+        />
+      </div>
+      <div
+        className="flex-container menu-btm-button"
+      >
+        <button
+          className="orange-button"
+          onClick={[Function]}
+          type="submit"
+        >
+          Done
+        </button>
+      </div>
+    </div>
+  </Modal>
+</div>
+`;

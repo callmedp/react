@@ -1,8 +1,20 @@
-import React from 'react';
+import React,{useEffect,useState } from 'react';
 import './parameters.scss'
 import { Link } from 'react-router-dom';
+import { Link as LinkScroll } from 'react-scroll';
 
-export default function Parameters() {
+const Parameters=props=> {
+
+    const [flag, setFlag] =useState(false)
+    useEffect(()=>{
+        if(!JSON.parse(localStorage.getItem('resume_score'))){
+            setFlag(false)
+        }
+        else{
+            setFlag(true)
+        }
+    },[])
+
     return (
 
         <section className="parameters">
@@ -44,14 +56,17 @@ export default function Parameters() {
                             </li>
                         </ul>
                     </div>
-                    <img className="ml-5 img-fluid parameters__image" src={"media/images/parameters-image.png"} />
+                    <img className="ml-5 img-fluid parameters__image" alt="parameters" src={"media/images/parameters-image.png"} />
                 </div>
 
                 <div className="text-center mt-5">
-                    <Link to='/score-checker' className="btn btn-primary btn-round-40 px-5 py-4 mr-5">Check the score now</Link>
+                    {flag ? <Link to='/score-checker' className="btn btn-primary btn-round-40 px-5 py-4 mr-5">Check the score now</Link> :
+                        <LinkScroll to='banner' className="btn btn-primary btn-round-40 px-5 py-4 mr-5">Check the score now</LinkScroll> }
                 </div>
 
             </div>
         </section>
     );
 }
+
+export default Parameters;

@@ -1,0 +1,143 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AlertModal Alert Modal 1`] = `
+<Fragment>
+  <div
+    className="pr alert-modal"
+  >
+    <Modal
+      ariaHideApp={true}
+      bodyOpenClassName="ReactModal__Body--open"
+      closeTimeoutMS={0}
+      contentLabel="Example Modal"
+      isOpen={true}
+      onRequestClose={[Function]}
+      parentSelector={[Function]}
+      portalClassName="ReactModalPortal"
+      role="dialog"
+      shouldCloseOnEsc={true}
+      shouldCloseOnOverlayClick={false}
+      shouldFocusAfterRender={true}
+      shouldReturnFocusAfterClose={true}
+      style={
+        Object {
+          "content": Object {
+            "bottom": "0",
+            "height": "280px",
+            "left": "0",
+            "margin": "auto",
+            "right": "0",
+            "top": "10%",
+            "width": "450px",
+          },
+        }
+      }
+    >
+      <div
+        className="pr"
+      >
+        <div
+          className="alert-modal"
+        >
+          <span
+            className="icon-alert"
+          />
+          <strong>
+            Are you sure?
+          </strong>
+          <p>
+            Some information may be lost as required fields are not filled.
+          </p>
+          <div
+            className="flex-container"
+          >
+            <button
+              className="orange-button mr-10"
+              onClick={[Function]}
+            >
+              Yes, change it.
+            </button>
+            <button
+              className="blue-button"
+              onClick={[Function]}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </Modal>
+  </div>
+</Fragment>
+`;
+
+exports[`AlertModal Alert modal  debug case  1`] = `
+<Fragment>
+  <div
+    className="pr alert-modal"
+  >
+    <Modal
+      ariaHideApp={true}
+      bodyOpenClassName="ReactModal__Body--open"
+      closeTimeoutMS={0}
+      contentLabel="Example Modal"
+      isOpen={true}
+      onRequestClose={[Function]}
+      parentSelector={[Function]}
+      portalClassName="ReactModalPortal"
+      role="dialog"
+      shouldCloseOnEsc={true}
+      shouldCloseOnOverlayClick={false}
+      shouldFocusAfterRender={true}
+      shouldReturnFocusAfterClose={true}
+      style={
+        Object {
+          "content": Object {
+            "bottom": "0",
+            "height": "280px",
+            "left": "0",
+            "margin": "auto",
+            "right": "0",
+            "top": "10%",
+            "width": "450px",
+          },
+        }
+      }
+    >
+      <div
+        className="pr"
+      >
+        <div
+          className="alert-modal"
+        >
+          <span
+            className="icon-alert"
+          />
+          <strong>
+            Are you sure?
+          </strong>
+          <p>
+            Some information may be lost as required fields are not filled.
+          </p>
+          <div
+            className="flex-container"
+          >
+            <button
+              className="orange-button mr-10"
+              onClick={[Function]}
+            >
+              Yes, change it.
+            </button>
+            <button
+              className="blue-button"
+              onClick={[Function]}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </Modal>
+  </div>
+</Fragment>
+`;

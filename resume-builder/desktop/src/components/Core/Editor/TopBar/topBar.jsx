@@ -1,7 +1,9 @@
-import React, { Component } from 'react'
+import React, { Component, PureComponent } from 'react'
 import './topBar.scss'
+import { withRouter } from 'react-router-dom';
 
-export default class TopBar extends Component {
+
+class TopBar extends Component {
     constructor(props) {
         super(props);
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
@@ -28,6 +30,17 @@ export default class TopBar extends Component {
         eventClicked(eventData);
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        // stop  unnecessary rendering 
+        const { page: oldPage, userInfo: { selected_template: oldSelectedTemplate, order_data: oldOrderData, resume_generated: oldResumeGenerated }, showAlertModal: oldAlertModal } = this.props;
+        const { page: newPage, userInfo: { selected_template: newSelectedTemplate, order_data: newOrderData, resume_generated: newResumeGenerated }, showAlertModal: newAlertModal } = nextProps;
+        if (oldSelectedTemplate !== newSelectedTemplate) return true;
+        if (oldResumeGenerated !== newResumeGenerated) return true;
+        if (oldPage !== newPage) return true;
+        if (oldAlertModal !== newAlertModal) return true;
+        if (JSON.stringify(oldOrderData) !== JSON.stringify(newOrderData)) return true;
+        return false;
+    }
     render() {
         let { page, userInfo: { selected_template, order_data, resume_generated }, showAlertModal } = this.props;
         if (!selected_template && !localStorage.getItem('selected_template')) {
@@ -120,3 +133,4 @@ export default class TopBar extends Component {
         )
     }
 }
+export default withRouter(TopBar)

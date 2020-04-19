@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, {Component, PureComponent} from 'react';
 import './banner.scss'
 import {scroller} from 'react-scroll'
 
-export default class Banner extends Component {
+export default class Banner extends PureComponent {
 
 
     constructor(props) {

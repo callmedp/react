@@ -1,7 +1,19 @@
-import React from 'react';
+import React,{useState, useEffect} from 'react';
 import './howItWorks.scss'
 import { Link } from 'react-router-dom';
-export default function HowItWorks(){
+import { Link as LinkScroll } from 'react-scroll';
+const HowItWorks=props=>{
+
+    const [flag, setFlag] = useState(false)
+    useEffect(()=>{
+        if(!JSON.parse(localStorage.getItem('resume_score'))){
+            setFlag(false)
+        }
+        else{
+            setFlag(true)
+        }
+    },[])
+
     return (
         
 <section className="container resume-checker my-0">
@@ -40,7 +52,11 @@ export default function HowItWorks(){
         </div>
     </div>
 
-    <div className="text-center mt-5"><Link to='/score-checker' className="btn btn-primary btn-round-40 px-5 py-4 mr-5">Check the score now</Link></div>
+    <div className="text-center mt-5">
+        { flag ? <Link to='/score-checker' className="btn btn-primary btn-round-40 px-5 py-4 mr-5">Check the score now</Link> :
+        <LinkScroll to='banner' className="btn btn-primary btn-round-40 px-5 py-4 mr-5">Check the score now</LinkScroll> }
+        </div>
 </section>
     );
 }
+export default HowItWorks;

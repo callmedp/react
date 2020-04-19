@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './features.scss'
 
-export default function Features(){
+const Features=props=>{
     return (
 
 <section className="howItWork">
@@ -36,3 +36,5 @@ export default function Features(){
 </section>
     );
 }
+
+export default Features;

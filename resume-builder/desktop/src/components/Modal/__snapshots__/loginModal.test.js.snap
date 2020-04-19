@@ -1,0 +1,173 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LoginModalTest Login Modal Test 1`] = `
+<div
+  className="pr"
+>
+  <Modal
+    ariaHideApp={true}
+    bodyOpenClassName="ReactModal__Body--open"
+    className="login-modal"
+    closeTimeoutMS={0}
+    contentLabel="Help Modal"
+    isOpen={true}
+    onRequestClose={[Function]}
+    parentSelector={[Function]}
+    portalClassName="ReactModalPortal"
+    role="dialog"
+    shouldCloseOnEsc={true}
+    shouldCloseOnOverlayClick={true}
+    shouldFocusAfterRender={true}
+    shouldReturnFocusAfterClose={true}
+  >
+    <form>
+      <div
+        className="mt-10"
+      >
+        <i
+          className="login-modal--close"
+          onClick={[Function]}
+        />
+        <h2
+          className="mt-30"
+        >
+          Login to build your resume
+        </h2>
+        <p
+          className="login-modal--error text-center"
+        />
+        <ul
+          className="login-modal__lists"
+        >
+          <li
+            className="login-modal__lists--item"
+          >
+            <input
+              className="login-modal__input"
+              onChange={[Function]}
+              placeholder="Email"
+            />
+          </li>
+          <li
+            className="login-modal__lists--item"
+          >
+            <input
+              className="login-modal__input"
+              onChange={[Function]}
+              placeholder="Password"
+              type="password"
+            />
+          </li>
+          <li
+            className="login-modal__lists--item"
+          >
+            <button
+              className="orange-button w-100"
+              onClick={[Function]}
+              type="submit"
+            >
+              Login
+            </button>
+          </li>
+        </ul>
+        <p
+          className="mt-30 mb-30 text-center"
+        >
+          Don’t have an account yet? 
+          <a
+            href="/register/"
+          >
+            Register Now
+          </a>
+        </p>
+      </div>
+    </form>
+  </Modal>
+</div>
+`;
+
+exports[`LoginModalTest Login Modal debug 1`] = `
+<div
+  className="pr"
+>
+  <Modal
+    ariaHideApp={true}
+    bodyOpenClassName="ReactModal__Body--open"
+    className="login-modal"
+    closeTimeoutMS={0}
+    contentLabel="Help Modal"
+    isOpen={true}
+    onRequestClose={[Function]}
+    parentSelector={[Function]}
+    portalClassName="ReactModalPortal"
+    role="dialog"
+    shouldCloseOnEsc={true}
+    shouldCloseOnOverlayClick={true}
+    shouldFocusAfterRender={true}
+    shouldReturnFocusAfterClose={true}
+  >
+    <form>
+      <div
+        className="mt-10"
+      >
+        <i
+          className="login-modal--close"
+          onClick={[Function]}
+        />
+        <h2
+          className="mt-30"
+        >
+          Login to build your resume
+        </h2>
+        <p
+          className="login-modal--error text-center"
+        />
+        <ul
+          className="login-modal__lists"
+        >
+          <li
+            className="login-modal__lists--item"
+          >
+            <input
+              className="login-modal__input"
+              onChange={[Function]}
+              placeholder="Email"
+            />
+          </li>
+          <li
+            className="login-modal__lists--item"
+          >
+            <input
+              className="login-modal__input"
+              onChange={[Function]}
+              placeholder="Password"
+              type="password"
+            />
+          </li>
+          <li
+            className="login-modal__lists--item"
+          >
+            <button
+              className="orange-button w-100"
+              onClick={[Function]}
+              type="submit"
+            >
+              Login
+            </button>
+          </li>
+        </ul>
+        <p
+          className="mt-30 mb-30 text-center"
+        >
+          Don’t have an account yet? 
+          <a
+            href="/register/"
+          >
+            Register Now
+          </a>
+        </p>
+      </div>
+    </form>
+  </Modal>
+</div>
+`;
