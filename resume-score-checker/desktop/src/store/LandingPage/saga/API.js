@@ -2,19 +2,17 @@
 
 
 import BaseApiService from '../../../services/BaseApiService'
-import {siteDomain} from "../../../utils/domains";
+import {siteDomain, shineSite} from "../../../utils/domains";
 
 const getCandidateId = () => {
     const url = `user-profile/`;
     return BaseApiService.get(`${siteDomain}/api/v1/resume/${url}`);
 };
 
-
-
 const uploadFileUrl = (data) => {
     const url = 'resume-score-checker/get-score/';
    
-    return BaseApiService.post(`${siteDomain}/${url}`, data,
+    return BaseApiService.post(`${shineSite}/${url}`, data,
         {}, false, true);
 };
 

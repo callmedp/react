@@ -26,22 +26,9 @@ const post = (url, data, headers = {
         method: 'POST',
         body: isStringify ? JSON.stringify(data) : isUpload ? data :handleParams(data)
     })
-        .then(handleResponse)
+        .then(response => response.json())
         .catch(e => { throw e })
 };
-
-async function handleResponse(response) {
-
-    if (response['error_message']) {
-            return {
-                error: true,
-                errorMessage: response['error_message']
-            }
-    }
-    else{
-        return response;
-    }
-}
 
 export default {
     get,

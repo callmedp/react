@@ -21,7 +21,7 @@ function* getCandidateId(action) {
 
 
 function* uploadFileUrl(action) {
-    const { payload: { file1, resolve, reject } } = action; 
+    const { payload: { file1, resolve, reject }} = action; 
     try {  
         var fileData = new FormData();
         fileData.append('resume', file1)
@@ -41,7 +41,6 @@ function* uploadFileUrl(action) {
         return reject(e)
     }
 }
-
 
 function* expertFormSubmit(action) {
     const { payload: { data , resolve, reject } } = action;

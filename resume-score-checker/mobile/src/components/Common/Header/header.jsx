@@ -14,7 +14,7 @@ export default function Header() {
             <div className="header">
                 <span className="sprite header__barMenu mr-15" onClick={handleMenuButtonClick}></span>
     
-                <Link to = "/resume-score-checker">
+                <Link to = "/resume-score-checker/">
                     <span className="header__logo">
                         <img src={`${imageUrl}score-checker/images/mobile/logo.png`} alt="Header"/>
                     </span>
