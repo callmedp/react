@@ -2,8 +2,8 @@
 @import '../../../../styles/library/mixin';
 @import '../../../../styles/library/extends';
 
-$static-url: get('staticUrl');
-$path: $static-url + "score-checker/images";
+// $static-url: get('staticUrl');
+// $path: $static-url + "score-checker/images";
 
 .score-banner {
     @include size(100%, 400px, block);

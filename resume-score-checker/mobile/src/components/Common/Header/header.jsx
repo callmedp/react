@@ -16,7 +16,7 @@ export default function Header() {
     
                 <Link to = "/resume-score-checker">
                     <span className="header__logo">
-                        <img src={`${imageUrl}score-checker/images/logo.png`} alt="Header"/>
+                        <img src={`${imageUrl}score-checker/images/mobile/logo.png`} alt="Header"/>
                     </span>
                 </Link>
     

@@ -11,7 +11,7 @@ export default function Banner(){
                 <p className="fs-16">Get the <strong>free review</strong> <br/>of your resume in <br/><strong>just 30 sec</strong></p>
                 
                 <div className="banner__image">
-                    <img src={`${imageUrl}score-checker/images/banner-image.png`} alt="Banner"/>
+                    <img src={`${imageUrl}score-checker/images/mobile/banner-image.png`} alt="Banner"/>
                     <div className="circle"></div>
                     <div className="dots"></div>
                 </div>

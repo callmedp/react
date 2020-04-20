@@ -1,6 +1,8 @@
-@import '../../../../../careerplus/static_core/shinelearn/css/path';
-$static-url: get('staticUrl');
-$path: $static-url + "score-checker/images";
+// @import '../../../../../careerplus/static_core/shinelearn/css/path';
+// $static-url: get('staticUrl');
+$static-url : '/media/static/';
+$path: $static-url + "score-checker/images/mobile";
+
 
 %blue-gr {
     background: #7b46ab; 

@@ -1,7 +1,7 @@
 
   // Icons Starts here 
-  $static-url: get('staticUrl');
-  $path: $static-url + "score-checker/images";
+//   $static-url: get('staticUrl');
+//   $path: $static-url + "score-checker/images";
 
   .sprite {
     background-image: url('#{$path}/sprite.png');

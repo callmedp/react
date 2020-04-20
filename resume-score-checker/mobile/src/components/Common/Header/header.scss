@@ -48,7 +48,7 @@
                     color: $gray-darker;
 
                     i {
-                        background-image: url('/media/images/sprite.png');
+                        background-image: url('#{$path}/sprite.png');
                         background-repeat:  no-repeat;
                         margin-right: 10px;
                     }

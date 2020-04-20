@@ -1,7 +1,9 @@
 @import '../../../../styles/common.scss';
 
-$static-url: get('staticUrl');
-$path: $static-url + "score-checker/images";
+// $static-url: get('staticUrl');
+$static-url: '/media/static/';
+
+$path: $static-url + "score-checker/images/mobile";
 
 .banner {
     @include size(100%, 344px, block);

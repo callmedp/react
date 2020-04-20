@@ -255,11 +255,11 @@ urlpatterns += [
                    #resume score checker 
                    re_path(r'^score-checker/', ScoreCheckerView.as_view()),
 
-                   #resume score checker 
-                   re_path(r'^result-page/', ScoreCheckerView2.as_view()),
+                #    #resume score checker 
+                #    re_path(r'^result-page/', ScoreCheckerView2.as_view()),
 
-                   #resume score checker Mobile
-                   re_path(r'^score-checker/', ScoreCheckerViewMobile.as_view()),
+                #    #resume score checker Mobile
+                #    re_path(r'^score-checker/', ScoreCheckerViewMobile.as_view()),
 
                    
                    

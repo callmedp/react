@@ -179,6 +179,14 @@ WEBPACK_LOADER = {
     'MOBILE': {
         'BUNDLE_DIR_NAME': 'react/dist/mobile/',
         'STATS_FILE': os.path.join(BASE_DIR, '..', 'webpack-mobile-stats.json'),
+    },
+    'SCORE-CHECKER-DESKTOP': {
+        'BUNDLE_DIR_NAME': 'score-checker/dist/desktop/',
+        'STATS_FILE': os.path.join(BASE_DIR, '..', 'webpack-score-checker-desktop-stats.json'),
+    },
+    'SCORE-CHECKER-MOBILE': {
+        'BUNDLE_DIR_NAME': 'score-checker/dist/mobile/',
+        'STATS_FILE': os.path.join(BASE_DIR, '..', 'webpack-score-checker-mobile-stats.json'),
     }
 }
 
