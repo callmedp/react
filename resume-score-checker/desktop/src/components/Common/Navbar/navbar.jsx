@@ -74,11 +74,11 @@ const Navbar=props =>{
                 </div> */}
                 
                 <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a className="dropdown-item" href="#">My Inbox</a>
-                    <a className="dropdown-item" href="#">My orders</a>
-                    <a className="dropdown-item" href="#">My wallet</a>
-                    <a className="dropdown-item" href="#">priya.kharb@hindustantimes.com</a>
-                    <a className="dropdown-item" href="#">logout</a>
+                    <a className="dropdown-item" href="/dashboard">My Inbox</a>
+                    <a className="dropdown-item" href="/dashboard/myorder">My orders</a>
+                    <a className="dropdown-item" href="dashboard/mywallet/">My wallet</a>
+                    <a className="dropdown-item" href="/#">priya.kharb@hindustantimes.com</a>
+                    <a className="dropdown-item" href="/">logout</a>
                 </div>
             </li>
 
