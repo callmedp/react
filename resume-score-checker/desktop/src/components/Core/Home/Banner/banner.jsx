@@ -49,6 +49,7 @@ const Banner=props=>{
     const fileUpload = async event => {
         
         let file1 = event.target.files[0];
+        event.target.value = null
         if((file1.name.slice(-4)==='.pdf' || file1.name.slice(-4)==='.doc' || file1.name.slice(-5)==='.docx' || file1.name.slice(-4)==='.txt') ){
             try{
             setFlag(true)

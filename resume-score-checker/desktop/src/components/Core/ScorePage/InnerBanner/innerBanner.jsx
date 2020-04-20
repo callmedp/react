@@ -21,6 +21,7 @@ const InnerBanner = props => {
     const history = useHistory()
     const fileUpload = async event => {
         let file1 = await event.target.files[0];
+        event.target.value = null
         if ((file1.name.slice(-4) === '.pdf' || file1.name.slice(-4) === '.doc' || file1.name.slice(-5) === '.docx')) {
             try {
                 setFlag(true)
@@ -32,7 +33,7 @@ const InnerBanner = props => {
             } catch (err) {
                 setFlag(false)
                 if (!err['error_message']) {
-                    
+
                     Toast.fire({
                         icon: 'error',
                         html: '<h3>Something went wrong! Try again.<h3>'
