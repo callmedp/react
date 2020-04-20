@@ -1019,8 +1019,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_pRT(self, obj):
         review = Review.objects.filter(object_id=obj.id).values(
-            'id', 'status', 'title', 'user_email', 'user_id', 'user_name')
-        return json.dumps(review)
+            'id', 'status', 'title', 'user_email', 'user_id', 'user_name','content','average_rating')
+        return json.dumps(list(review))
 
     def prepare_pBan(self,obj):
         return obj.get_banner_url()
@@ -1035,9 +1035,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             new_dict = {}
             new_dict.update({section.name: list(section.sub_section.values('description','icon','heading'))})
             section_list.append(new_dict)
-
         return json.dumps(section_list)
 
+
     def prepare_pOff(self, obj):
-        return json.dumps(obj.offer_set.filter(active=True,expiry_date__gt=datetime.now()).values('offers','id',
-                                                                                            'expiry_date'))
+        return json.dumps(list(obj.offer_set.filter(active=True,expiry_date__gt=datetime.now()).values('offers','id')))

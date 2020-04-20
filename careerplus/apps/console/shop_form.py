@@ -1840,7 +1840,7 @@ class OfferChangeForm(forms.ModelForm):
         instance = kwargs.get('instance')
         super(OfferChangeForm, self).__init__(*args,**kwargs)
         if instance:
-            self.initial['product'] = list(instance.products.values_list('id',
+            self.initial['product'] = list(instance.product.values_list('id',
                                                                           flat=True))
         form_class = 'form-control col-md-7 col-xs-12'
         prod_objs = SQS().all().only('id', 'pNm')
