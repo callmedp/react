@@ -1,6 +1,7 @@
-import React  from 'react';
+import React, {useEffect}  from 'react';
 import './loader.scss';
 import {imageUrl} from '../../utils/domains'
+
 export default function Loader() {
    
     useEffect(()=>{
