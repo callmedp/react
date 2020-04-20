@@ -79,3 +79,21 @@
         right: -60px;
     }
 }
+
+
+.login-dropdown {
+    a {
+        &::after {
+            content: none;
+        }
+
+        &:last-child {
+            border-top: 1px solid #ddd;
+        }
+    }
+
+    .dropdown-menu {
+        right: -25px;
+        left: auto;
+    }
+}

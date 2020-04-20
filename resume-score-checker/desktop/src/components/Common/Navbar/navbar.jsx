@@ -57,15 +57,30 @@ const Navbar=props =>{
             </li>
             <li className="nav-item"><a className="nav-link" href="https://learning.shine.com/talenteconomy/">Blog</a></li>
 
-            <li className="nav-item dropdown call-dropdown mr-4 d-flex align-items-center">
+            <li className="nav-item dropdown call-dropdown d-flex align-items-center">
                 <a className="dropdown-toggle" href="/#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span className="call-icon"></span></a>
                 
                 <div className="dropdown-menu">
                     <a className="dropdown-item text-center" href="tel:0124-4312500"><strong>Call us:</strong>0124-4312500/01</a>
                 </div>
             </li>
-            
-            <li className="mr-4 d-flex align-items-center"><a href="/#" className="login-icon">&nbsp;</a> </li>
+
+            <li className="nav-item dropdown login-dropdown">
+                <a className="nav-link dropdown-toggle" href="/#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="login-icon"></span></a>
+
+                {/* <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a className="dropdown-item" href="#">Resume Login</a>
+                    <a className="dropdown-item" href="#">Register</a>
+                </div> */}
+                
+                <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a className="dropdown-item" href="#">My Inbox</a>
+                    <a className="dropdown-item" href="#">My orders</a>
+                    <a className="dropdown-item" href="#">My wallet</a>
+                    <a className="dropdown-item" href="#">priya.kharb@hindustantimes.com</a>
+                    <a className="dropdown-item" href="#">logout</a>
+                </div>
+            </li>
 
             <li className="d-flex align-items-center">
                 <a className="cart-icon" href="https://learning.shine.com/cart/payment-summary/">
