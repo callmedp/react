@@ -13,7 +13,7 @@ from shop.models import (
     Faculty, SubHeaderCategory, FacultyProduct,
     Product, UniversityCourseDetail,
     UniversityCoursePayment, SubCategory, FunctionalArea, 
-    ProductFA, ProductJobTitle,Section)
+    ProductFA, ProductJobTitle,Section,Offer)
 
 from shop.choices import (
     APPLICATION_PROCESS_CHOICES, APPLICATION_PROCESS,
@@ -1829,6 +1829,24 @@ class SectionChangeForm(forms.ModelForm):
                     'Duplicate Job Title Name {}'.format(
                         name))
         return name
+
+class OfferChangeForm(forms.ModelForm):
+
+    class Meta:
+        model = Offer
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.get('instance')
+        super(OfferChangeForm, self).__init__(*args,**kwargs)
+        if instance:
+            self.initial['product'] = list(instance.products.values_list('id',
+                                                                          flat=True))
+        form_class = 'form-control col-md-7 col-xs-12'
+        prod_objs = SQS().all().only('id', 'pNm')
+        choices = [
+            (p.id, '{}({})'.format(p.pNm,p.id),) for p in prod_objs]
+        self.fields['product'] = forms.MultipleChoiceField(choices=choices)
 
 
 

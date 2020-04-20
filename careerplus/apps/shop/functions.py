@@ -63,12 +63,10 @@ def get_upload_path_feature_profile_file(instance, filename):
         feature_id=instance.id, filename=get_file_name(filename))
 
 def get_upload_path_product_subsection_icon(instance, filename):
-    return "product_file/{ven_id}/subsection/{filename}".format(
-        ven_id=instance.id, filename=get_file_name(filename))
+    return "section/subsection/product/{filename}".format(filename=get_file_name(filename))
 
 def get_upload_path_product_section_image(instance, filename):
-    return "product_file/{ven_id}/subsection/{filename}".format(
-        ven_id=instance.id, filename=get_file_name(filename))
+    return "section/product/{filename}".format(filename=get_file_name(filename))
 
 
 def upload_FA(filename):

@@ -903,7 +903,7 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
 
     visibility = models.BooleanField(verbose_name=_('Visible'), default=True)
 
-    Subheading = models.CharField(
+    sub_heading = models.CharField(
         _('Sub heading will be displayed above heading'),
         max_length=100,
         blank=False,default='', null=False)
@@ -3456,20 +3456,23 @@ class BlogProductMapping(AbstractCommonModel):
         return str(self.blog.name) + '_' + str(self.product.name)
 
 
-class Offer(AbstractCommonModel):
-    product = models.ManyToManyField(Product,blank=True)
-    offer = models.CharField(max_length=300, blank=True, null=True)
+
+class Offer(AbstractAutoDate):
+    offers = models.CharField(max_length=300, blank=True, null=True)
     expiry_date = models.DateTimeField(blank=True,null=True)
     max_used = models.PositiveIntegerField(_('Maximum number of times this offer can be used'),default=100)
     active = models.BooleanField(default=False)
+    product = models.ManyToManyField('shop.Product',blank=True,null=True)
 
     class Meta:
-        ordering = ['-created_on' ,]
+        ordering = ['-modified' ,]
 
     def __str__(self):
         return 'offer-' + str(self.id)
 
 
+
+#
 class SubSection(AbstractAutoDate):
 
     icon = models.ImageField(
@@ -3505,17 +3508,19 @@ class SubSection(AbstractAutoDate):
         return self.get_desc()
 
 
-
 class Section(AbstractAutoDate):
     name = models.CharField(max_length=300, blank=True, null=True,default='')
     priority = models.PositiveSmallIntegerField(default=1)
-    sub_section = models.ManyToManyField('shop.SubSection',blank=True)
     image = models.ImageField(
         _('subsection image'), upload_to=get_upload_path_product_section_image,
         blank=True, null=True)
     active = models.BooleanField(default=False)
     heading = models.CharField(_('heading'), max_length=255,blank=True,default='')
-    product = models.ManyToManyField('shop.Product',blank=True,)
+    sub_section = models.ManyToManyField('shop.SubSection',blank=True,null=True)
+
+    product = models.ManyToManyField('shop.Product',blank=True,null=True)
+
+
 
 
 

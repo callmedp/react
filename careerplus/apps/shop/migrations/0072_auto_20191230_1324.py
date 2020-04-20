@@ -12,9 +12,9 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name='product',
-            name='job_title',
-            field=models.TextField(blank=True, default='', null=True, verbose_name='Job Title'),
-        ),
+        # migrations.AlterField(
+        #     model_name='product',
+        #     name='job_title',
+        #     field=models.TextField(blank=True, default='', null=True, verbose_name='Job Title'),
+        # ),
     ]

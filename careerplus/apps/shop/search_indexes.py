@@ -2,6 +2,7 @@ import json
 import logging
 
 from haystack import indexes
+from datetime import datetime
 
 from django.template.loader import render_to_string
 from django.conf import settings
@@ -176,7 +177,11 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
 
     pSec = indexes.CharField(indexed=False)
 
+    #offer
+    pOff = indexes.CharField(indexed=False)
 
+    # subheading
+    pSub = indexes.CharField(indexed=False,model_attr='sub_heading')
 
     def get_model(self):
         return Product
@@ -1018,14 +1023,21 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         return json.dumps(review)
 
     def prepare_pBan(self,obj):
-        return obj.get_banner_url(relative=True)
+        return obj.get_banner_url()
 
 
     def prepare_pSec(self, obj):
-        return ''
+        section_list = []
+        sections = obj.section_set.filter(active=True)
+        if not sections.exists():
+            return section_list
+        for section in sections:
+            new_dict = {}
+            new_dict.update({section.name: list(section.sub_section.values('description','icon','heading'))})
+            section_list.append(new_dict)
 
+        return json.dumps(section_list)
 
-
-
-
-    
+    def prepare_pOff(self, obj):
+        return json.dumps(obj.offer_set.filter(active=True,expiry_date__gt=datetime.now()).values('offers','id',
+                                                                                            'expiry_date'))
