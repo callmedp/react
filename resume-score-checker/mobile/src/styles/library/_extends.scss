@@ -1,4 +1,7 @@
 @import '../../../../../careerplus/static_core/shinelearn/css/path';
+$static-url: get('staticUrl');
+$path: $static-url + "score-checker/images";
+
 %blue-gr {
     background: #7b46ab; 
     background: -moz-linear-gradient(45deg,  #7b46ab 0%, #997bd5 50%, #997bd5 50%, #b0a2f4 100%); /* FF3.6-15 */
@@ -11,7 +14,7 @@
     &::before {
         @include size(14px, 11px);
         content: '';
-        background-image: url('/media/images/sprite.png');
+        background-image: url('#{$path}/sprite.png');
         background-repeat:  no-repeat;
         background-position: -28px -310px;
         display: block;

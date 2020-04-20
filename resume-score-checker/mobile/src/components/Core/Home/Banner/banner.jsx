@@ -1,5 +1,6 @@
 import React from 'react';
-import './banner.scss'
+import './banner.scss';
+import { imageUrl } from '../../../../Utils/domains';
 
 export default function Banner(){
     return (
@@ -10,7 +11,7 @@ export default function Banner(){
                 <p className="fs-16">Get the <strong>free review</strong> <br/>of your resume in <br/><strong>just 30 sec</strong></p>
                 
                 <div className="banner__image">
-                    <img src="/media/images/banner-image.png" alt=""/>
+                    <img src={`${imageUrl}score-checker/images/banner-image.png`} alt="Banner"/>
                     <div className="circle"></div>
                     <div className="dots"></div>
                 </div>

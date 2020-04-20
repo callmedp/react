@@ -1,8 +1,11 @@
+$static-url: get('staticUrl');
+$path: $static-url + "score-checker/images";
+
 .features {
     &::before {
         content: '';
         display: block;
-        background-image: url($path + 'images/mobile/score-checker/curve.png');
+        background-image: url('#{$path}/curve.png');
         background-repeat:  no-repeat;
         padding-top: 45px;
         background-size: contain;

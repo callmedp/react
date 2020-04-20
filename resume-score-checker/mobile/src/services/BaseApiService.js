@@ -17,26 +17,26 @@ const get = (url, headers = {
 const post = (url, data, headers = {
     ...defaultHeaders,
 }, isStringify = true, isUpload = false) => {
+    console.log(data.get('resume'))
     return fetch(url, {
         headers,
         method: 'POST',
         body: isStringify ? JSON.stringify(data) : isUpload ? data : data
     })
         .then(handleResponse)
-        .catch(e => { throw e})
+        .catch(e => { throw e })
 };
 
 async function handleResponse(response) {
 
-    if (response['status'] === 0) {
+    if (response['error_message']) {
             return {
                 error: true,
-                errorMessage: "Unable to parse your resume. Please Upload new Resume",
-                status: response['status']
+                errorMessage: response['error_message']
             }
     }
     else{
-        throw response;
+        return response;
     }
 }
 

@@ -1,5 +1,8 @@
 @import '../../../../styles/common.scss';
 
+$static-url: get('staticUrl');
+$path: $static-url + "score-checker/images";
+
 .banner {
     @include size(100%, 344px, block);
     @extend %blue-gr;
@@ -44,7 +47,7 @@
     &::after {
         @include size(100%, 26px, block);
         content: '';
-        background-image: url('/media/images/curve.png');
+        background-image: url('#{$path}/curve.png');
         position: absolute;
         bottom: 0;
         background-size: cover;

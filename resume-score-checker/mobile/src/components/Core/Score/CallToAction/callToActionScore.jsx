@@ -69,7 +69,7 @@ export default function CallToActionScore() {
                         }
                     </React.Fragment>)
                     ||
-                    <Redirect to="/score-checker" />
+                    <Redirect to="/resume-score-checker/score-checker" />
                 }
                 <GetExpertForm isFormVisible={isFormVisible} hide={toggle}/>
             </div>

@@ -1,4 +1,7 @@
 // New CSS for input group using felx
+$static-url: get('staticUrl');
+$path: $static-url + "score-checker/images";
+
 .form-group {
     margin-bottom: 30px;
     position: relative;
@@ -31,7 +34,7 @@
     appearance: none;
     width: 100%;
     height: 40px;
-    background: url('/media/images/dropdown.svg');
+    background: url('#{$path}/dropdown.svg');
     background-color: #fff;
     background-position: 96% 5px;
     background-repeat: no-repeat;

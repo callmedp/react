@@ -29,13 +29,13 @@ const AppRouter = () => (
 
 export const routes = [
     {
-        path: '/',
+        path: '/resume-score-checker',
         exact: true,
         component: HomeContainer,
     },
     
     {
-        path: '/score-checker',
+        path: '/resume-score-checker/score-checker',
         component: ScorePage,
     }
 

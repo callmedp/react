@@ -3,20 +3,20 @@ import { Link } from 'react-router-dom';
 import { menuData } from './menuData';
 import './header.scss';
 import { useState } from 'react';
+import { imageUrl } from '../../../Utils/domains';
 
 export default function Header() {
-
         const [isSideBarOpen, setIsSideBarOpen]=useState(false)
         const handleMenuButtonClick = () => {
             setIsSideBarOpen(!isSideBarOpen)
-	    };
+        };
         return(
             <div className="header">
                 <span className="sprite header__barMenu mr-15" onClick={handleMenuButtonClick}></span>
     
-                <Link to = "/">
+                <Link to = "/resume-score-checker">
                     <span className="header__logo">
-                        <img src="/media/images/logo.png" alt=""/>
+                        <img src={`${imageUrl}score-checker/images/logo.png`} alt="Header"/>
                     </span>
                 </Link>
     
@@ -25,7 +25,7 @@ export default function Header() {
                         <nav className={`nav ${isSideBarOpen ? 'show' : ''}`}>
                             <div className="nav__loginWrap align-items-center">
                                 <span className="nav__loginWrap__image mr-15">
-                                    <img src="/media/images/user-loggedin.jpg" alt=""/>
+                                    <img src={`${imageUrl}score-checker/images/user-loggedin.jpg`} alt=""/>
                                 </span>
 
                                 <div className="flex-1">

@@ -1,3 +1,5 @@
+$static-url: get('staticUrl');
+$path: $static-url + "score-checker/images";
 
 .body-wrapper {
     padding-bottom: 202px;
@@ -25,7 +27,7 @@
 
 .dots {
     @include size(119px, 93px);
-    background-image: url('/media/images/dots.png');
+    background-image: url('#{$path}/dots.png');
     background-repeat:  no-repeat;
     display: block;
     position: absolute;

@@ -101,7 +101,7 @@ export default function CallToAction() {
                     }
                 </React.Fragment>)
                 ||
-                <Redirect push to="/score-checker" />
+                <Redirect push to="/resume-score-checker/score-checker" />
             }
         </div>
     </div>

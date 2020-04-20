@@ -2,6 +2,9 @@
 @import '../../../../styles/library/mixin';
 @import '../../../../styles/library/extends';
 
+$static-url: get('staticUrl');
+$path: $static-url + "score-checker/images";
+
 .score-banner {
     @include size(100%, 400px, block);
     @extend %blue-gr;
@@ -18,7 +21,7 @@
 
     &__image {
         @include size(296px, 248px, block);
-        background-image: url('/media/images/score.png');
+        background-image: url('#{$path}/score.png');
         margin: 0 auto;
         position: relative;
         top: 5px;
@@ -47,7 +50,7 @@
     &::after {
         @include size(100%, 26px, block);
         content: '';
-        background-image: url('/media/images/curve.png');
+        background-image: url('#{$path}/curve.png');
         position: absolute;
         bottom: 0;
         background-size: cover;

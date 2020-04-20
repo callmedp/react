@@ -4,6 +4,9 @@
 $midnight: #2c3e50;
 $clouds: #ecf0f1;
 
+$static-url: get('staticUrl');
+$path: $static-url + "score-checker/images";
+
 // Layout
 .row {
   display:flex;
@@ -41,7 +44,7 @@ $clouds: #ecf0f1;
       right: 0;
       top: 50%;
       margin: -23px 8px 0px 0px;
-      background-image: url('/media/images/sprite.png');
+      background-image: url('#{$path}/sprite.png');
       background-repeat:  no-repeat;
       background-position: -60px -85px;
 

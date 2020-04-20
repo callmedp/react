@@ -1,7 +1,7 @@
 export const menuData = [
     {
         label : 'Home',
-        url: '/',
+        url: '/resume-score-checker',
         icon: 'icon-home'
     },
     {
