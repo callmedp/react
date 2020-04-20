@@ -1,5 +1,6 @@
 import React from 'react';
 import './navbar.scss';
+import {siteDomain} from '../../../utils/domains'
 
 const Navbar=props =>{
     return (
@@ -74,11 +75,11 @@ const Navbar=props =>{
                 </div> */}
                 
                 <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a className="dropdown-item" href="/dashboard">My Inbox</a>
-                    <a className="dropdown-item" href="/dashboard/myorder">My orders</a>
-                    <a className="dropdown-item" href="dashboard/mywallet/">My wallet</a>
-                    <a className="dropdown-item" href="/#">priya.kharb@hindustantimes.com</a>
-                    <a className="dropdown-item" href="/">logout</a>
+                    <a className="dropdown-item" href={`${siteDomain}/dashboard/`}>My Inbox</a>
+                    <a className="dropdown-item" href={`${siteDomain}/dashboard/myorder/`}>My orders</a>
+                    <a className="dropdown-item" href={`${siteDomain}/dashboard/mywallet/`}>My wallet</a>
+                    <span className="dropdown-item" >priya.kharb@hindustantimes.com</span>
+                    <a className="dropdown-item" href={`${siteDomain}/logout/`}>logout</a>
                 </div>
             </li>
 
