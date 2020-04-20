@@ -24,11 +24,8 @@ function* fileUpload(action) {
 function* expertFormData(action) {
     try{
         const { payload: {values, resolve} } = action;
-        var formData = new FormData();
-        formData.append('name', values.name);
-        formData.append('email', values.email);
-        formData.append('country_code', values.country_code);
-        formData.append('mobile', values.mobile);
+         let formData = values; 
+        formData['lsource'] = 8;
         const response = yield call(Api.expertFormSubmit, formData);
         return resolve(response)
     }

@@ -12,16 +12,16 @@ const getCandidateId = () => {
 
 
 const uploadFileUrl = (data) => {
-    const url = 'resume-score-checker/';
+    const url = 'resume-score-checker/get-score/';
    
-    return BaseApiService.post(`${siteDomain}/resume/api/v1/${url}`, data,
+    return BaseApiService.post(`${siteDomain}/${url}`, data,
         {}, false, true);
 };
 
 const expertFormSubmit = (data) => {
-    const url = 'experts/';
-    return BaseApiService.post(`${siteDomain}/resume/api/v1/${url}`, data,
-        {}, false, true);
+    const url = 'lead/lead-management/';
+    return BaseApiService.post(`${siteDomain}/${url}`, data,
+    { 'Content-Type': 'application/x-www-form-urlencoded' }, false);
 };
 
 

@@ -46,8 +46,9 @@ function* uploadFileUrl(action) {
 function* expertFormSubmit(action) {
     const { payload: { data , resolve, reject } } = action;
     try {  
-        let formData = new FormData();
-        formData.append('resume', data)
+        let formData = data;
+        formData['lsource'] = 8;
+
         const result = yield call(Api.expertFormSubmit, formData);
         return resolve(result)
  

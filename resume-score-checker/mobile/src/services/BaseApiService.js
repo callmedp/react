@@ -3,6 +3,10 @@ const defaultHeaders = {
     "Content-Type": "application/json",
 }
 
+const handleParams = (data) => Object.keys(data).map((key) => {
+    return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
+}).join('&');
+
 const get = (url, headers = {
     ...defaultHeaders,
 }, isFetchingHTML = false) => {
@@ -17,11 +21,10 @@ const get = (url, headers = {
 const post = (url, data, headers = {
     ...defaultHeaders,
 }, isStringify = true, isUpload = false) => {
-    console.log(data.get('resume'))
     return fetch(url, {
         headers,
         method: 'POST',
-        body: isStringify ? JSON.stringify(data) : isUpload ? data : data
+        body: isStringify ? JSON.stringify(data) : isUpload ? data :handleParams(data)
     })
         .then(handleResponse)
         .catch(e => { throw e })
