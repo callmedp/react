@@ -22,7 +22,7 @@ const InnerBanner = props => {
                 await new Promise((resolve, reject) => {
                     dispatch(Actions.uploadFileUrl({ file1, resolve, reject }));
                 })
-                history.push('/score-checker')
+                history.push('/resume-score-checker/score-checker')
                 setFlag(false)
             } catch (err) {
                 setFlag(false)

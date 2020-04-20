@@ -6,6 +6,7 @@ import { Link as LinkScroll } from 'react-scroll';
 const Parameters=props=> {
 
     const [flag, setFlag] =useState(false)
+    const staticUrl =  window?.config?.staticUrl || '/media/static/'
     useEffect(()=>{
         if(!JSON.parse(localStorage.getItem('resume_score'))){
             setFlag(false)
@@ -56,7 +57,7 @@ const Parameters=props=> {
                             </li>
                         </ul>
                     </div>
-                    <img className="ml-5 img-fluid parameters__image" alt="parameters" src={"media/images/parameters-image.png"} />
+                    <img className="ml-5 img-fluid parameters__image" alt="parameters" src={`${staticUrl}score-checker/images/parameters-image.png`} />
                 </div>
 
                 <div className="text-center mt-5">

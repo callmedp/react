@@ -11,7 +11,7 @@ const Banner=props=>{
     const [flag, setFlag] = useState(false);
     const [redirect, setRedirect] = useState(false);
     const dispatch = useDispatch()
-
+    const staticUrl =  window?.config?.staticUrl || '/media/static/'
     const resumeImport = async event => {
         if (!localStorage.getItem('candidateId') || !localStorage.getItem('token')) {
             const isSessionAvailable = await new Promise((resolve,reject)=>dispatch(Actions.checkSessionAvailability({resolve,reject})));
@@ -94,9 +94,8 @@ const Banner=props=>{
                 </div> 
                             
         { flag && <Loader></Loader> }
-                            
             { redirect && 
-                <Redirect push to = "/score-checker" className="file-upload btn btn-secondary btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4"> 
+                <Redirect push to = "/resume-score-checker/score-checker" className="file-upload btn btn-secondary btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4"> 
                 </Redirect>
             }
 
@@ -109,7 +108,7 @@ const Banner=props=>{
             </div>
             <div className="col-md-6">
                 <div className="banner__image">
-                    <img aria-label="header image" className="banner__image" alt="banner" src="media/images/banner-img.png"/>
+                    <img aria-label="header image" className="banner__image" alt="banner"  src={`${staticUrl}score-checker/images/banner-img.png`}/>
                 </div>
             </div>
         </div>

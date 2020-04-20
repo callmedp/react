@@ -2,7 +2,7 @@
 //
 // Variables should follow the `$component-state-property-size` formula for
 // consistent naming. Ex: $nav-link-disabled-color and $modal-content-box-shadow-xs.
-
+$path:  get('staticUrl') + "score-checker/images";
 // Color system
 
 $white:    #fff !default;
@@ -585,7 +585,7 @@ $custom-select-bg:                  $input-bg !default;
 $custom-select-disabled-bg:         $gray-200 !default;
 $custom-select-bg-size:             8px 10px !default; // In pixels because image dimensions
 $custom-select-indicator-color:     $gray-800 !default;
-$custom-select-indicator:           url('/media/images/sprite.png') !default;
+$custom-select-indicator:            url('#{$path}/sprite.png') !default;
 
 $custom-select-background:          ($custom-select-indicator) no-repeat 0 -196px;
 
@@ -1146,7 +1146,7 @@ $print-body-min-width:              map-get($grid-breakpoints, "lg") !default;
 
 
 // Resume Score Checker Info
-$sprite-new: url(/media/images/sprite-new.png) no-repeat;
+$sprite-new: url('#{$path}/sprite-new.png') no-repeat;
 
 
 

@@ -45,6 +45,7 @@
 
 // Resume Score Checker Classes
 
+$path:  get('staticUrl') + "score-checker/images";
 
 /*****icons css****/
 [class^="b4-icon-"] {
@@ -85,13 +86,13 @@
 }
 
 .b4-skillpage-bg {
-  background: url(/media/images/skillpage-bg.jpg) no-repeat;
+  background:  url('#{$path}/skillpage-bg.jpg')  no-repeat;
   background-size: cover;
   min-height: 26.3rem;
 }
 
 .b4-form-bg {
-  background: url(/media/mages/form-bg.png) no-repeat 0 0 $white;;
+  background:  url('#{$path}/form-bg.png') no-repeat 0 0 $white;;
   background-size: contain;
 }
 
