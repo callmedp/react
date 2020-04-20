@@ -19,6 +19,7 @@ export default function CallToAction() {
     const fileUpload = async event => {
         setVisible(!visible)
         const file = event.target.files[0];
+        event.target.value = null
         if((file.name.slice(-4)==='.pdf' || file.name.slice(-4)==='.txt' || file.name.slice(-4)==='.doc' || file.name.slice(-5)==='.docx') && (file.size/(1024*1024)<=5)){
             setFileName('Uploading File...')
             try{
@@ -30,7 +31,10 @@ export default function CallToAction() {
                     setFileName("Upload Resume")
                     setVisible(false)
                 }
-                else {setFlag(!flag)}
+                else {
+                    localStorage.setItem('resume_file', file.name)
+                    setFlag(!flag)
+                }
             }
             catch(e){
                 Toast('error', 'Something went wrong! Try again')
@@ -62,7 +66,7 @@ export default function CallToAction() {
                 }
             }
             else{
-                window.location.href = 'https://learning.shine.com/login/?next=score-checker'
+                window.location.href = 'https://learning.shine.com/login/?next=resume-score-checker/score-checker'
             }
         }
         else{

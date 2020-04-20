@@ -10,14 +10,19 @@ export function Form(hide){
     const { handleSubmit, register, errors } = useForm()
     const dispatch = useDispatch()
     const onSubmit = async (values, event) => {
-        let response = await new Promise((resolve, reject) => {
-            dispatch(Actions.expertForm({values, resolve, reject}))
-        })
-        if (response){
-            Toast("success", "Form Submitted Successfully");
-            event.target.reset();
+        try{
+            let response = await new Promise((resolve, reject) => {
+                dispatch(Actions.expertForm({values, resolve, reject}))
+            })
+            if (response){
+                Toast("success", "Form Submitted Successfully");
+                event.target.reset();
+            }
+            else {
+                Toast('error', 'Oops! <br> Something went wrong! Try Again');
+            }
         }
-        else {
+        catch{
             Toast('error', 'Something went wrong! Try Again');
         }
     }
@@ -76,7 +81,7 @@ export function Form(hide){
 
                                 <div className="number"> 
                                     <div className="floating-label">      
-                                        <input className="form--control floating-input" type="text" name = 'mobile' placeholder=" " ref={register({
+                                        <input className="form--control floating-input" type="text" name = 'mobile' placeholder=" " maxLength = '13' ref={register({
                                             required : true,
                                             pattern : /^[0-9-]+$/
                                         })} />

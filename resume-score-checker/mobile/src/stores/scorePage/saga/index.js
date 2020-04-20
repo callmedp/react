@@ -9,7 +9,7 @@ function* fileUpload(action) {
         var fileData = new FormData();
         fileData.append('resume', file);
         const result = yield call(Api.fileUpload, fileData);
-
+        
         if(!result.data['error_message']){
             yield put({ type: UPDATE_SCORE, payload: result.data });
             localStorage.setItem("resume_score", JSON.stringify({...result.data}))
@@ -22,15 +22,15 @@ function* fileUpload(action) {
 }
 
 function* expertFormData(action) {
+    const { payload: {values, resolve, reject} } = action;
     try{
-        const { payload: {values, resolve} } = action;
          let formData = values; 
         formData['lsource'] = 8;
         const response = yield call(Api.expertFormSubmit, formData);
         return resolve(response)
     }
-    catch(e){
-        console.log(e)
+    catch(error){
+        return reject(error)
     }
 }
 
