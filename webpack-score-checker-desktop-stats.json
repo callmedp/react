@@ -1,0 +1,19 @@
+{
+    "status": "done",
+    "chunks": {
+        "main": [
+            {
+                "name": "main-1587362918329.css",
+                "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/score-checker/dist/desktop/main-1587362918329.css"
+            },
+            {
+                "name": "main-1587362918329.js",
+                "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/score-checker/dist/desktop/main-1587362918329.js"
+            },
+            {
+                "name": "main-1587362918329.js.map",
+                "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/score-checker/dist/desktop/main-1587362918329.js.map"
+            }
+        ]
+    }
+}

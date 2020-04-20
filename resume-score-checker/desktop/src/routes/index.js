@@ -30,12 +30,12 @@ const AppRouter = () => (
 
 export const routes = [
     {
-        path: '/',
+        path: '/resume-score-checker/',
         component: HomeContainer,
         exact : true,
     },
     {
-        path : '/score-checker',
+        path : '/resume-score-checker/score-checker',
         component : ScoreCheckerContainer,
     }
 
