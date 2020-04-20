@@ -60,7 +60,7 @@ const InnerBanner = props => {
                             <div className="banner-score">
                                 <nav aria-label="breadcrumb">
                                     <ol className="breadcrumb">
-                                        <li className="breadcrumb-item"><Link to='/'>Home</Link></li>
+                                        <li className="breadcrumb-item"><Link to='/resume-score-checker/'>Home</Link></li>
                                         <li className="breadcrumb-item active" aria-current="page">Resume Review</li>
                                     </ol>
                                 </nav>
