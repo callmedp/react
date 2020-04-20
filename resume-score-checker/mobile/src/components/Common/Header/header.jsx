@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { menuData } from './menuData';
 import './header.scss';
 import { useState } from 'react';
-import { imageUrl } from '../../../Utils/domains';
+import { imageUrl, siteDomain } from '../../../Utils/domains';
 
 export default function Header() {
         const [isSideBarOpen, setIsSideBarOpen]=useState(false)
@@ -25,13 +25,17 @@ export default function Header() {
                         <nav className={`nav ${isSideBarOpen ? 'show' : ''}`}>
                             <div className="nav__loginWrap align-items-center">
                                 <span className="nav__loginWrap__image mr-15">
-                                    <img src={`${imageUrl}score-checker/images/user-loggedin.jpg`} alt=""/>
+                                    <img src={`${imageUrl}score-checker/images/mobile/user-loggedin.jpg`} alt=""/>
                                 </span>
 
                                 <div className="flex-1">
                                     <h3>Welcome Guest</h3>
+                                    {/* <h3>Welcome Aman</h3> */}
+                                    {/* <div className="mt-10 d-flex justify-content-between">
+                                        <a href={`${siteDomain}/login/`} className="py-5 btn btn-round-30 btn-outline-white px-20">Login</a>
+                                    </div> */}
                                     <div className="mt-10 d-flex justify-content-between">
-                                        <a href="https://learning.shine.com/login/" className="py-5 btn btn-round-30 btn-outline-white px-20">Login</a>
+                                        <a href={`${siteDomain}/logout/`} className="py-5 btn btn-round-30 btn-outline-white px-20">Logout</a>
                                     </div>
                                 </div>
 
