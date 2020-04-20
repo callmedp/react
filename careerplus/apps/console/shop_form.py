@@ -13,11 +13,11 @@ from shop.models import (
     Faculty, SubHeaderCategory, FacultyProduct,
     Product, UniversityCourseDetail,
     UniversityCoursePayment, SubCategory, FunctionalArea, 
-    ProductFA, ProductJobTitle)
+    ProductFA, ProductJobTitle,Section)
 
 from shop.choices import (
     APPLICATION_PROCESS_CHOICES, APPLICATION_PROCESS,
-    BENEFITS_CHOICES, BENEFITS, FACULTY_PRINCIPAL
+    BENEFITS_CHOICES, BENEFITS, FACULTY_PRINCIPAL,
 )
 from homepage.models import Testimonial
 
@@ -1793,6 +1793,45 @@ class ProductJobTitleChangeForm(forms.ModelForm):
                     'Duplicate Job Title Name {}'.format(
                         name))
         return name
+
+
+
+class SectionChangeForm(forms.ModelForm):
+
+    class Meta:
+        model = Section
+        fields ='__all__'
+
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.get('instance')
+        super(SectionChangeForm,self).__init__(*args,**kwargs)
+        if instance:
+            self.initial['product'] = list(instance.product.values_list('id',
+                                                                          flat=True))
+        form_class = 'form-control col-md-7 col-xs-12'
+        prod_objs = SQS().all().only('id', 'pNm')
+        choices = [
+            (p.id, '{}({})'.format(p.pNm,p.id),) for p in prod_objs]
+        self.fields['product'] = forms.MultipleChoiceField(choices=choices)
+
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+        if not name:
+            raise forms.ValidationError('Please Enter the Job Title name')
+        prodjt = Section.objects.filter(name__iexact=name).first()
+        if prodjt and prodjt.id:
+            attr = getattr(self,'instance')
+            if not attr:
+                raise forms.ValidationError('Duplicate Job Title Name {}'.format(
+                name))
+            if attr.id != prodjt.id:
+                raise forms.ValidationError(
+                    'Duplicate Job Title Name {}'.format(
+                        name))
+        return name
+
+
+
 
 
 

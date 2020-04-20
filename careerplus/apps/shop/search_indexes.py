@@ -9,10 +9,11 @@ from django.conf import settings
 from shop.choices import DURATION_DICT, convert_to_month
 from shop.choices import (
     DURATION_DICT, convert_to_month)
-from .models import Product
+from .models import Product, Review
+
 
 def get_attributes(pv, currency='INR'):
-    SM, CL, CERT, DM, PI = '', '', '', '', '' 
+    SM, CL, CERT, DM, PI = '', '', '', '', ''
     if pv:
         SM = pv.get_studymode()
         CL = pv.get_courselevel()
@@ -26,9 +27,9 @@ def get_attributes(pv, currency='INR'):
             PI = pv.get_aed_price()
         elif currency == 'GBP':
             PI = pv.get_gbp_price()
-        
-    return 'SM'+ str(SM) + ' ' + 'CL' + str(CL) + ' '\
-        + str(CERT)+ ' ' + 'DM' + str(DM)+ ' ' + 'P' + str(PI)
+
+    return 'SM' + str(SM) + ' ' + 'CL' + str(CL) + ' '\
+        + str(CERT) + ' ' + 'DM' + str(DM) + ' ' + 'P' + str(PI)
 
 
 class ProductIndex(indexes.SearchIndex, indexes.Indexable):
@@ -36,7 +37,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         document=True, use_template=True,
         template_name='search/indexes/shop/product_text.txt')
     id = indexes.IntegerField(model_attr='id')
-    
+
     # Search Fields #
     pHd = indexes.CharField(model_attr='heading', null=True)
     pFA = indexes.MultiValueField(null=True, faceted=True)
@@ -45,13 +46,14 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pCtgn = indexes.MultiValueField(null=True)
     pCC = indexes.CharField(null=True)
     pAb = indexes.CharField(default='')
-    
+
     # Meta and SEO #
     pURL = indexes.CharField(null=True, indexed=False)
     pTt = indexes.CharField(model_attr='title', null=True, indexed=False)
-    pMtD = indexes.CharField(model_attr='meta_desc', null=True, indexed=False) 
-    pMK = indexes.CharField(model_attr='meta_keywords', null=True, indexed=False) 
-    
+    pMtD = indexes.CharField(model_attr='meta_desc', null=True, indexed=False)
+    pMK = indexes.CharField(model_attr='meta_keywords',
+                            null=True, indexed=False)
+
     # Control Field #
     pNm = indexes.CharField(model_attr='name', null=True)
     pSg = indexes.CharField(model_attr='slug', null=True)
@@ -62,7 +64,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pPv = indexes.IntegerField(null=True)
     pPvn = indexes.CharField(null=True)
     pCts = indexes.MultiValueField(null=True)
-    
+
     # Facets Fields #
     pAR = indexes.FloatField(default=0, faceted=True)
     pStM = indexes.MultiValueField(null=True, faceted=True)
@@ -73,39 +75,41 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pAttrUSD = indexes.MultiValueField(null=True)
     pAttrAED = indexes.MultiValueField(null=True)
     pAttrGBP = indexes.MultiValueField(null=True)
-    
+
     # Content Field #
     pIc = indexes.CharField(indexed=False)
     pIBg = indexes.IntegerField(default=0, indexed=False)
     pImg = indexes.CharField(indexed=False)
-    pImA = indexes.CharField(model_attr='image_alt', null=True, indexed=False) 
-    pvurl = indexes.CharField(indexed=False) # model_attr='video_url'
-    pDsc = indexes.CharField(model_attr='description', indexed=False) 
-    pBS = indexes.CharField(model_attr='buy_shine', indexed=False) 
+    pImA = indexes.CharField(model_attr='image_alt', null=True, indexed=False)
+    pvurl = indexes.CharField(indexed=False)  # model_attr='video_url'
+    pDsc = indexes.CharField(model_attr='description', indexed=False)
+    pBS = indexes.CharField(model_attr='buy_shine', indexed=False)
     pStar = indexes.MultiValueField(null=True, indexed=False)
-    pRC = indexes.IntegerField(model_attr='no_review', default=0, indexed=False) 
+    pRC = indexes.IntegerField(
+        model_attr='no_review', default=0, indexed=False)
     pBC = indexes.IntegerField(model_attr='buy_count', default=0, indexed=True)
-    pNJ = indexes.IntegerField(model_attr='num_jobs', default=0, indexed=False) 
-    pTg = indexes.IntegerField(model_attr='product_tag', default=0, indexed=False) 
+    pNJ = indexes.IntegerField(model_attr='num_jobs', default=0, indexed=False)
+    pTg = indexes.IntegerField(
+        model_attr='product_tag', default=0, indexed=False)
 
-    #Vendor Fields
+    # Vendor Fields
     pVi = indexes.CharField(null=True, indexed=False)
     pViA = indexes.CharField(null=True, indexed=False)
-    pVid = indexes.IntegerField(indexed=True,faceted=True)
+    pVid = indexes.IntegerField(indexed=True, faceted=True)
 
     pCT = indexes.CharField(null=True, indexed=False)
     pDD = indexes.IntegerField(default=0, indexed=False)
     pRD = indexes.BooleanField(default=True, indexed=False)
     pEX = indexes.CharField(null=True, indexed=False)
 
-    ##### Prices
-    ### Flat normalised array for filter on variations
+    # Prices
+    # Flat normalised array for filter on variations
     pPinr = indexes.MultiValueField(faceted=True)
     pPusd = indexes.MultiValueField(faceted=True)
     pPaed = indexes.MultiValueField(faceted=True)
     pPgbp = indexes.MultiValueField(faceted=True)
 
-    ### Calculated price of base + min var OR standalaone OR combos
+    # Calculated price of base + min var OR standalaone OR combos
     pPin = indexes.FloatField(indexed=False)
     pPfin = indexes.FloatField(indexed=False)
     pPus = indexes.FloatField(indexed=False)
@@ -115,7 +119,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pPgb = indexes.FloatField(indexed=False)
     pPfgb = indexes.FloatField(indexed=False)
 
-    ### DB price of each object
+    # DB price of each object
     pPinb = indexes.FloatField(model_attr='inr_price', indexed=False)
     pPfinb = indexes.FloatField(model_attr='fake_inr_price', indexed=False)
     pPusb = indexes.FloatField(model_attr='usd_price', indexed=False)
@@ -125,7 +129,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pPgbb = indexes.FloatField(model_attr='gbp_price', indexed=False)
     pPfgbb = indexes.FloatField(model_attr='fake_gbp_price', indexed=False)
 
-    pAbx = indexes.CharField(model_attr='about', default='', indexed=False) 
+    pAbx = indexes.CharField(model_attr='about', default='', indexed=False)
     pARx = indexes.FloatField(model_attr='avg_rating', indexed=True)
     pFAQs = indexes.CharField(indexed=False)
     pPChs = indexes.CharField(indexed=False)
@@ -154,10 +158,24 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     uSkill = indexes.MultiValueField(null=True)
     uSkilln = indexes.MultiValueField(null=True)
 
-    #job title
+    # job title
 
-    pJbtn = indexes.MultiValueField(indexed=True,null=True)
-    pFnA = indexes.MultiValueField(indexed=True,null=True)
+    pJbtn = indexes.MultiValueField(indexed=True, null=True)
+    pFnA = indexes.MultiValueField(indexed=True, null=True)
+
+    # product reviews
+
+    pRT = indexes.CharField(indexed=False)
+
+    #product banner
+
+    pBan = indexes.CharField(indexed=False)
+    pBanT = indexes.CharField(indexed=False,model_attr='banner_text')
+
+    # section
+
+    pSec = indexes.CharField(indexed=False)
+
 
 
     def get_model(self):
@@ -185,7 +203,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             productcategories__active=True,
             active=True)
         categories_list = []
-        
+
         for cat in categories:
             allowed_levels = [4]
             if cat.is_service or cat.is_university or cat.is_skill:
@@ -198,7 +216,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         categories_list = list(set(categories_list))
         if len(categories_list) > 0:
             return [cat.pk for cat in categories_list]
-        
+
     def prepare_pCtgn(self, obj):
         categories = obj.categories.filter(
             productcategories__active=True,
@@ -213,7 +231,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         categories_list = list(set(categories_list))
         if len(categories_list) > 0:
             return [cat.name for cat in categories_list]
-        
+
     def prepare_pFA(self, obj):
         # if obj.is_course:
         categories = obj.categories.filter(
@@ -224,7 +242,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                 categories = categories[0].get_parent()
 
         if len(categories) > 0:
-            p_category = [pcat for cat in categories for pcat in cat.get_parent()]
+            p_category = [
+                pcat for cat in categories for pcat in cat.get_parent()]
             # pp_category = [pcat for cat in p_category for pcat in cat.get_parent()]
             parents = [p_category, ]
             return [item.pk for sublist in parents for item in sublist if sublist]
@@ -239,40 +258,39 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             if categories[0].type_level == 4:
                 categories = categories[0].get_parent()
         if len(categories) > 0:
-            p_category = [pcat for cat in categories for pcat in cat.get_parent()]
+            p_category = [
+                pcat for cat in categories for pcat in cat.get_parent()]
             # pp_category = [pcat for cat in p_category for pcat in cat.get_parent()]
-            parents = [p_category,]
+            parents = [p_category, ]
             return [item.name for sublist in parents for item in sublist if sublist]
         return []
 
     def prepare_pSkill(self, obj):
         # if obj.is_course:
         skill_ids = list(obj.productskills.filter(
-            skill__active=True,relation_type=1,
+            skill__active=True, relation_type=1,
             active=True).values_list('skill', flat=True))
         return skill_ids
 
     def prepare_pSkilln(self, obj):
         # if obj.is_course:
         skill_names = list(obj.productskills.filter(
-            skill__active=True,relation_type=1,
+            skill__active=True, relation_type=1,
             active=True).values_list('skill__name', flat=True))
         return skill_names
-
 
     def prepare_uSkill(self, obj):
         # user skills ids
         skill_ids = list(obj.productskills.filter(skill__active=True,
-         active=True, relation_type=2).values_list('skill_id', flat=True))
+                                                  active=True, relation_type=2).values_list('skill_id', flat=True))
         return skill_ids
 
     def prepare_uSkilln(self, obj):
         # user skills names
         skill_names = list(obj.productskills.filter(skill__active=True,
-         active=True, relation_type=2).values_list('skill__name', flat=True))
+                                                    active=True, relation_type=2).values_list('skill__name', flat=True))
 
         return skill_names
-
 
     def prepare_pCtgs(self, obj):
         categories = obj.categories.filter(
@@ -340,7 +358,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         return ''
 
     def prepare_pAb(self, obj):
-        if obj.about:    
+        if obj.about:
             try:
                 from bs4 import BeautifulSoup
                 soup = BeautifulSoup(obj.about, 'html.parser')
@@ -383,7 +401,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                 for pv in var:
                     CERT.append(pv.get_cert())
             elif obj.type_product == 3:
-                cmbs =list()
+                cmbs = list()
                 cmbs = obj.get_combos()
                 for cmb in cmbs:
                     CERT.append(cmb.get_cert())
@@ -391,7 +409,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                 CERT.append(obj.get_cert())
             return list(set(CERT))
         elif obj.is_assesment and obj.sub_type_flow == 1602:
-                return ["true"]
+            return ["true"]
 
         return [0]
 
@@ -403,7 +421,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                 for pv in var:
                     SM.append(pv.get_studymode())
             elif obj.type_product == 3:
-                cmbs =list()
+                cmbs = list()
                 cmbs = obj.get_combos()
                 for cmb in cmbs:
                     SM.append(cmb.get_studymode())
@@ -420,7 +438,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                 for pv in var:
                     CL.append(pv.get_courselevel())
             elif obj.type_product == 3:
-                cmbs =list()
+                cmbs = list()
                 cmbs = obj.get_combos()
                 for cmb in cmbs:
                     CL.append(cmb.get_courselevel())
@@ -438,7 +456,9 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                 if (var_price and pv.inr_price < var_price) or not var_price:
                     var_price = pv.inr_price
             if var_price:
-                Pinr = Pinr + var_price if (obj.is_writing or obj.is_service) else var_price
+                Pinr = Pinr + \
+                    var_price if (
+                        obj.is_writing or obj.is_service) else var_price
         return Pinr
 
     def prepare_pPus(self, obj):
@@ -558,14 +578,14 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         if obj.type_product == 1:
             var = obj.get_variations()
             for pv in var:
-                ATTR.append(get_attributes(pv=pv,currency='INR'))
+                ATTR.append(get_attributes(pv=pv, currency='INR'))
         elif obj.type_product == 3:
-            cmbs =list()
+            cmbs = list()
             cmbs = obj.get_combos()
             for cmb in cmbs:
-                ATTR.append(get_attributes(pv=cmb,currency='INR'))
+                ATTR.append(get_attributes(pv=cmb, currency='INR'))
         else:
-            ATTR.append(get_attributes(pv=obj,currency='INR'))
+            ATTR.append(get_attributes(pv=obj, currency='INR'))
         return list(set(ATTR))
 
     def prepare_pAttrUSD(self, obj):
@@ -573,14 +593,14 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         if obj.type_product == 1:
             var = obj.get_variations()
             for pv in var:
-                ATTR.append(get_attributes(pv=pv,currency='USD'))
+                ATTR.append(get_attributes(pv=pv, currency='USD'))
         elif obj.type_product == 3:
-            cmbs =list()
+            cmbs = list()
             cmbs = obj.get_combos()
             for cmb in cmbs:
-                ATTR.append(get_attributes(pv=cmb,currency='USD'))
+                ATTR.append(get_attributes(pv=cmb, currency='USD'))
         else:
-            ATTR.append(get_attributes(pv=obj,currency='USD'))
+            ATTR.append(get_attributes(pv=obj, currency='USD'))
         return list(set(ATTR))
 
     def prepare_pAttrAED(self, obj):
@@ -588,14 +608,14 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         if obj.type_product == 1:
             var = obj.get_variations()
             for pv in var:
-                ATTR.append(get_attributes(pv=pv,currency='AED'))
+                ATTR.append(get_attributes(pv=pv, currency='AED'))
         elif obj.type_product == 3:
-            cmbs =list()
+            cmbs = list()
             cmbs = obj.get_combos()
             for cmb in cmbs:
-                ATTR.append(get_attributes(pv=cmb,currency='AED'))
+                ATTR.append(get_attributes(pv=cmb, currency='AED'))
         else:
-            ATTR.append(get_attributes(pv=obj,currency='AED'))
+            ATTR.append(get_attributes(pv=obj, currency='AED'))
         return list(set(ATTR))
 
     def prepare_pAttrGBP(self, obj):
@@ -603,14 +623,14 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         if obj.type_product == 1:
             var = obj.get_variations()
             for pv in var:
-                ATTR.append(get_attributes(pv=pv,currency='GBP'))
+                ATTR.append(get_attributes(pv=pv, currency='GBP'))
         elif obj.type_product == 3:
-            cmbs =list()
+            cmbs = list()
             cmbs = obj.get_combos()
             for cmb in cmbs:
-                ATTR.append(get_attributes(pv=cmb,currency='GBP'))
+                ATTR.append(get_attributes(pv=cmb, currency='GBP'))
         else:
-            ATTR.append(get_attributes(pv=obj,currency='GBP'))
+            ATTR.append(get_attributes(pv=obj, currency='GBP'))
         return list(set(ATTR))
 
     def prepare_pCT(self, obj):
@@ -632,26 +652,25 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         countries = obj.countries.all()
         if len(countries) > 0:
             return [con.code2 for con in countries]
-    
-        
+
     def prepare_pIc(self, obj):
         return obj.get_icon_url(relative=True)
-        
+
     def prepare_pImg(self, obj):
         return obj.get_image_url(relative=True)
 
     def prepare_pIBg(self, obj):
         return obj.image_bg
-    
+
     def prepare_pImA(self, obj):
         return obj.image_alt
-        
+
     def prepare_pvurl(self, obj):
         return obj.video_url
-    
+
     def prepare_pStar(self, obj):
         return obj.get_ratings()
-    
+
     def prepare_pVi(self, obj):
         if obj.vendor:
             return obj.vendor.image.url if obj.vendor.image else ''
@@ -662,23 +681,23 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             return obj.vendor.image_alt if obj.vendor.image_alt else ''
         return ''
 
-    def prepare_pVid(self,obj):
+    def prepare_pVid(self, obj):
         return obj.vendor.id if obj.vendor else -1
-    
+
     def prepare_pRD(self, obj):
         if obj.is_course:
             return getattr(obj.attr, 'requires_delivery', False)
-    
+
     def prepare_pEX(self, obj):
         return obj.get_exp()
-    
+
     def prepare_pFAQs(self, obj):
         structure = {
             'faq': False
         }
         faqs = obj.faqs.filter(
             productfaqs__active=True, status=2)\
-                .order_by('productfaqs__question_order') 
+            .order_by('productfaqs__question_order')
         faq_list = []
         if faqs:
             structure.update({
@@ -700,10 +719,10 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             'combo_list': []
         }
         combo_list = []
-        if obj.type_product == 3:    
+        if obj.type_product == 3:
             combos = obj.get_combos()
         else:
-            return json.dumps(combo_dict) 
+            return json.dumps(combo_dict)
         if combos:
             combo_dict.update({
                 'combo': True
@@ -761,7 +780,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             else:
                 return json.dumps(var_dict)
         else:
-            return json.dumps(var_dict) 
+            return json.dumps(var_dict)
         if var:
             if obj.is_course:
                 var_dict.update({
@@ -824,7 +843,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             'chapter': False
         }
         chapters = obj.chapter_product.filter(status=True)\
-                .order_by('ordering')
+            .order_by('ordering')
         chapter_list = []
         if chapters:
             structure.update({
@@ -847,17 +866,17 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             'fbt_list': []
         }
         fbt_list = []
-        fbt = obj.get_fbts() 
+        fbt = obj.get_fbts()
         if fbt:
             fbt_dict.update({
                 'fbt': True
             })
             for pv in fbt:
-                if pv.is_course:    
+                if pv.is_course:
                     fbt_list.append({
                         'id': pv.id,
                         'label': pv.name,
-                        'heading':pv.heading if pv.heading else '',
+                        'heading': pv.heading if pv.heading else '',
                         'mode': pv.get_studymode(),
                         'duration': pv.get_duration(),
                         'type': pv.get_coursetype(),
@@ -872,12 +891,12 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                         'fake_gbp_price': float(pv.fake_gbp_price),
                         "short_description": pv.short_description,
                         'visible_on_crm': pv.visible_on_crm
-                        })
+                    })
                 elif pv.is_writing or pv.is_service:
                     fbt_list.append({
                         'id': pv.id,
                         'label': pv.name,
-                        'heading':pv.heading if pv.heading else '',
+                        'heading': pv.heading if pv.heading else '',
                         'country': pv.get_profile_country(),
                         'experience': pv.get_exp(),
                         'inr_price': float(pv.inr_price),
@@ -901,7 +920,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             'pop_list': []
         }
         pop_list = []
-        pop = obj.get_pops() 
+        pop = obj.get_pops()
         if pop:
             if obj.is_course:
                 pop_dict.update({
@@ -911,7 +930,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                     pop_list.append({
                         'id': pv.id,
                         'label': pv.name,
-                        'heading':pv.heading if pv.heading else '',
+                        'heading': pv.heading if pv.heading else '',
                         'vendor': pv.vendor.name,
                         'vendor_image': pv.vendor.image.url if pv.vendor.image else None,
                         'url': pv.get_url(relative=True),
@@ -923,7 +942,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                         'fake_aed_price': float(pv.fake_aed_price),
                         'gbp_price': float(pv.gbp_price),
                         'fake_gbp_price': float(pv.fake_gbp_price),
-                        "short_description":pv.short_description})
+                        "short_description": pv.short_description})
                 pop_dict.update({
                     'pop_list': pop_list
                 })
@@ -935,7 +954,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                     pop_list.append({
                         'id': pv.id,
                         'label': pv.name,
-                        'heading':pv.heading if pv.heading else '',
+                        'heading': pv.heading if pv.heading else '',
                         'experience': pv.get_exp(),
                         'duration': pv.get_duration_in_day(),
                         'url': pv.get_url(relative=True),
@@ -947,7 +966,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                         'fake_aed_price': float(pv.fake_aed_price),
                         'gbp_price': float(pv.gbp_price),
                         'fake_gbp_price': float(pv.fake_gbp_price),
-                        "short_description":pv.short_description})
+                        "short_description": pv.short_description })
                 pop_dict.update({
                     'pop_list': pop_list
                 })
@@ -971,12 +990,14 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             sample_certificate = obj.university_course_detail.sample_certificate
             detail['sample_certificate'] = sample_certificate.url if sample_certificate else ''
             brochure_attr = obj.attributes.filter(name='Brochure')
-            detail['brochure'] = brochure_attr[0].productattributes.first().value_file.url if brochure_attr else ''
+            detail['brochure'] = brochure_attr[0].productattributes.first(
+            ).value_file.url if brochure_attr else ''
             payment_list = []
             for payment in obj.university_course_payment.filter(active=True):
                 data = {}
                 data['installment_fee'] = str(payment.installment_fee)
-                data['ldpayment'] = payment.last_date_of_payment.strftime('%d/%m/%Y')
+                data['ldpayment'] = payment.last_date_of_payment.strftime(
+                    '%d/%m/%Y')
 
                 payment_list.append(data)
             detail['payment'] = payment_list
@@ -990,3 +1011,21 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             for obj in objs:
                 detail[obj.attribute.name] = obj.value
             return json.dumps(detail)
+
+    def prepare_pRT(self, obj):
+        review = Review.objects.filter(object_id=obj.id).values(
+            'id', 'status', 'title', 'user_email', 'user_id', 'user_name')
+        return json.dumps(review)
+
+    def prepare_pBan(self,obj):
+        return obj.get_banner_url(relative=True)
+
+
+    def prepare_pSec(self, obj):
+        return ''
+
+
+
+
+
+    

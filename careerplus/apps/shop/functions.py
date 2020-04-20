@@ -62,6 +62,14 @@ def get_upload_path_feature_profile_file(instance, filename):
     return "featured_profile/{feature_id}/{filename}".format(
         feature_id=instance.id, filename=get_file_name(filename))
 
+def get_upload_path_product_subsection_icon(instance, filename):
+    return "product_file/{ven_id}/subsection/{filename}".format(
+        ven_id=instance.id, filename=get_file_name(filename))
+
+def get_upload_path_product_section_image(instance, filename):
+    return "product_file/{ven_id}/subsection/{filename}".format(
+        ven_id=instance.id, filename=get_file_name(filename))
+
 
 def upload_FA(filename):
     from .models import FunctionalArea, Product, ProductFA

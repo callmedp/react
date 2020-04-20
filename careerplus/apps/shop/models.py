@@ -49,7 +49,9 @@ from .functions import (
     get_upload_path_product_image,
     get_upload_path_product_file,
     get_upload_path_feature_profile_file,
-    get_upload_path_for_sample_certicate)
+    get_upload_path_for_sample_certicate,
+    get_upload_path_product_subsection_icon,
+    get_upload_path_product_section_image)
 from .choices import (
     SERVICE_CHOICES, FACULTY_CHOICES,
     CATEGORY_CHOICES,
@@ -874,6 +876,11 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
     banner = models.ImageField(
         _('Banner'), upload_to=get_upload_path_product_banner,
         blank=True, null=True)
+        
+    banner_text = models.CharField(
+        _('Banner Text'), max_length=100,default='',
+        help_text=_('This text will be displayed on Banner Image'))
+
     icon = models.ImageField(
         _('Icon'), upload_to=get_upload_path_product_icon,
         blank=True, null=True)
@@ -895,6 +902,11 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
         verbose_name=_('Description Product'), blank=True, default='')
 
     visibility = models.BooleanField(verbose_name=_('Visible'), default=True)
+
+    Subheading = models.CharField(
+        _('Sub heading will be displayed above heading'),
+        max_length=100,
+        blank=False,default='', null=False)
 
     attend = RichTextField(
         verbose_name=_('Who Should Attend'), blank=True, default='')
@@ -939,7 +951,7 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
     fake_gbp_price = models.DecimalField(
         _('Fake GBP Price'),
         max_digits=12, decimal_places=2,
-        default=0.0) 
+        default=0.0)
 
     class Meta:
         abstract = True
@@ -1066,6 +1078,7 @@ class Product(AbstractProduct, ModelMeta):
     is_indexable = models.BooleanField(default=False)
     is_indexed = models.BooleanField(default=False)
     visible_on_crm = models.BooleanField(default=True)
+    visible_on_resume_shine =  models.BooleanField(default=False)
     product_tag = models.SmallIntegerField(default=0,choices=PRODUCT_TAG_CHOICES)
     
     #associated model managers
@@ -1122,7 +1135,6 @@ class Product(AbstractProduct, ModelMeta):
     def save(self, *args, **kwargs):
         # deleting caches for absolute urls,solar data and product object
         if self.pk:
-
             delete_keys = cache.keys('prd_*_' + str(self.pk))
             for uk in delete_keys:
                 cache.delete(uk)
@@ -1296,6 +1308,11 @@ class Product(AbstractProduct, ModelMeta):
     def get_icon_url(self, relative=False):
         if self.icon:
             return self.get_full_url(url=self.icon.url) if not relative else self.icon.url
+        return ''
+
+    def get_banner_url(self, relative=False):
+        if self.banner:
+            return self.get_full_url(url=self.banner.url) if not relative else self.banner.url
         return ''
 
     def get_image_url(self, relative=False):
@@ -3439,6 +3456,66 @@ class BlogProductMapping(AbstractCommonModel):
         return str(self.blog.name) + '_' + str(self.product.name)
 
 
+class Offer(AbstractCommonModel):
+    product = models.ManyToManyField(Product,blank=True)
+    offer = models.CharField(max_length=300, blank=True, null=True)
+    expiry_date = models.DateTimeField(blank=True,null=True)
+    max_used = models.PositiveIntegerField(_('Maximum number of times this offer can be used'),default=100)
+    active = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['-created_on' ,]
+
+    def __str__(self):
+        return 'offer-' + str(self.id)
+
+
+class SubSection(AbstractAutoDate):
+
+    icon = models.ImageField(
+        _('subsection icon'), upload_to=get_upload_path_product_subsection_icon,
+        blank=True, null=True)
+    heading = models.CharField(_('Sub Section heading'),blank=True,default='', max_length=255)
+    description = RichTextField(
+        verbose_name=_('Sub Section Description'),
+        blank=True, default='')
+    active = models.BooleanField(default=False)
+    priority = models.PositiveSmallIntegerField(default=1)
+
+    class Meta:
+        ordering = ['-priority', ]
+
+    def __str__(self):
+        return 'SubSection' + str(self.id)
+
+
+    def get_desc(self):
+        try:
+            from bs4 import BeautifulSoup
+            soup = BeautifulSoup(self.description, 'html.parser')
+            cleantext = soup.get_text()
+            cleantext = cleantext.strip()
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+            cleantext = ''
+        return cleantext
+
+    @property
+    def descriptions(self):
+        return self.get_desc()
+
+
+
+class Section(AbstractAutoDate):
+    name = models.CharField(max_length=300, blank=True, null=True,default='')
+    priority = models.PositiveSmallIntegerField(default=1)
+    sub_section = models.ManyToManyField('shop.SubSection',blank=True)
+    image = models.ImageField(
+        _('subsection image'), upload_to=get_upload_path_product_section_image,
+        blank=True, null=True)
+    active = models.BooleanField(default=False)
+    heading = models.CharField(_('heading'), max_length=255,blank=True,default='')
+    product = models.ManyToManyField('shop.Product',blank=True,)
 
 
 

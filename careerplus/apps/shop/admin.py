@@ -9,7 +9,7 @@ from . import models
 
 # inter-app imports
 from core.api_mixin import ShineProfileDataUpdate
-from console.shop_form import ProductJobTitleChangeForm
+from console.shop_form import ProductJobTitleChangeForm,SectionChangeForm
 
 #  third party imports
 
@@ -172,9 +172,39 @@ class PracticeTestInfoAdmin(admin.ModelAdmin):
             
 class ProductJobTitleAdmin(admin.ModelAdmin):
     form = ProductJobTitleChangeForm
-    
+
+
+class Section(admin.ModelAdmin):
+    form = SectionChangeForm
+    # models = models.Section
+
+    # def save_model(self, request, obj, form, change):
+    #     import ipdb;ipdb.set_trace()
+    #     obj.save()
+    #
+    # def save_related(self, request, form, formsets, change):
+    #     import ipdb;ipdb.set_trace()
+    #     super(Section, self).save_related(request, form, formsets, change)
+    #     obj = form.instance
+    #     if obj.body:
+    #         tag_list = [Tag.objects.get_or_create(name=word)[0] for word in obj.body.split() if word.startswith("#")]
+    #         obj.tags.add(*tag_list)
+    #         print("from save_related")
+    #         obj.save()
+    #
+    #
+    #
+    #
+    # # def get_queryset(self, request):
+    # #     test_model_qs = super(Section, self).get_queryset(request)
+    # #     test_model_qs = test_model_qs.prefetch_related('product')
+    # #     return test_model_qs
+
 
 admin.site.register(models.Category, CategoryAdmin)
+admin.site.register(models.Offer)
+admin.site.register(models.Section,Section)
+admin.site.register(models.SubSection)
 admin.site.register(models.Attribute, AttributeAdmin)
 admin.site.register(models.Keyword)
 admin.site.register(models.ProductJobTitle,ProductJobTitleAdmin)
