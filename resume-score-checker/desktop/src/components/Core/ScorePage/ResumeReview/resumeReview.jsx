@@ -8,7 +8,7 @@ const Description = desc =>{
 const ResumeReview=props=>{
     const section_score =JSON.parse(localStorage.getItem('resume_score'))?.section_score
     const [toggle, setToggle] =useState(new Array(section_score?.length).fill({'checked':false}))
-    const [subSection,setSubSection] = useState(section_score[0])
+    const [subSection,setSubSection] = useState(section_score?.length ? section_score[0] : '')
     useEffect(()=>{
       setToggle([{'checked':true},...toggle])
     },[])

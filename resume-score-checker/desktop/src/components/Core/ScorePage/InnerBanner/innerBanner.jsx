@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './innerBanner.scss';
 import { Link as LinkScroll } from 'react-scroll';
 import { Link } from 'react-router-dom'
@@ -11,8 +11,13 @@ import { useHistory } from "react-router-dom";
 const InnerBanner = props => {
 
     const [flag, setFlag] = useState(false);
-    const localScore = JSON.parse(localStorage.getItem('resume_score')).total_score
+    const localScore = JSON.parse(localStorage.getItem('resume_score'))?.total_score
+    const total_local_score = JSON.parse(localStorage.getItem('resume_score'))?.section_score
+    const reduced = (accumulator, currentValue) => accumulator + currentValue.section_total_score;
     const dispatch = useDispatch()
+    useState(() => {
+
+    }, [])
     const history = useHistory()
     const fileUpload = async event => {
         let file1 = await event.target.files[0];
@@ -27,6 +32,7 @@ const InnerBanner = props => {
             } catch (err) {
                 setFlag(false)
                 if (!err['error_message']) {
+                    
                     Toast.fire({
                         icon: 'error',
                         html: '<h3>Something went wrong! Try again.<h3>'
@@ -60,7 +66,7 @@ const InnerBanner = props => {
                                 <div className="banner-score__resume-scoreWrap">
                                     <div className="banner-score__progressBar">
 
-                                        <div className="ko-progress-circle" data-progress={localScore}>
+                                        <div className="ko-progress-circle" data-progress={Math.round(localScore * 100 / total_local_score?.reduce(reduced, 0))}>
                                             <div className="ko-progress-circle__text">
                                                 <strong>{localScore}</strong>
                                                 <p className="fs-12">Resume score</p>
@@ -85,7 +91,7 @@ const InnerBanner = props => {
                         </div>
                         <div className="col-md-6 h-100 d-flex align-items-self-start justify-content-center flex-column">
                             <h1 className="fs-30">
-                                <span>Hello Sachin,<br />Your resume Scored {localScore} out of 100</span>
+                                <span>Hello Sachin,<br />Your resume Scored {localScore} out of {total_local_score?.reduce(reduced, 0)}</span>
                             </h1>
                             <p className="text-white-50">Good Job! You are just few steps away for perfecting your resume. Check out the detailed reviews to improve the score. Score more to get perfect job match your profile</p>
 

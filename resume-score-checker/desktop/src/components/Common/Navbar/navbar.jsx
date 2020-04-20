@@ -67,7 +67,7 @@ const Navbar=props =>{
             </li>
 
             <li className="nav-item dropdown login-dropdown">
-                <a className="nav-link dropdown-toggle" href="/#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="login-icon"></span></a>
+                <a className="nav-link dropdown-toggle" href="/#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span className="login-icon"></span></a>
 
                 {/* <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a className="dropdown-item" href="#">Resume Login</a>

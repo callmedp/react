@@ -56,7 +56,7 @@ const GetExperts=props=>{
             </div>
   
             <div className={errors?.name ? "form-group error" : "form-group"}>
-              <input type="text" className="form-control input_field" id="name" name="name" placeholder="Name" ref={register({required : true,pattern:/^[A-Za-z_]+[0-9]+(\s)*([A-Za-z_]+[0-9]+)*$/})} />
+              <input type="text" className="form-control input_field" id="name" name="name" placeholder="Name" ref={register({required : true,pattern:/^[A-Za-z_]+([0-9])*(\s)*([A-Za-z_]+([0-9])*)*$/})} />
               <label htmlFor="name" className="input_label">Name</label>
               {errors?.name?.type === "required" && <span className="error__msg">This field is required</span>}
               {errors?.name?.type === "pattern" && <span className="error__msg">Name should not start with digits!</span>}
@@ -77,10 +77,11 @@ const GetExperts=props=>{
               </div>
               
               <div className={ errors.number ? "form-group expert-help__mobile--mobile error " : "form-group expert-help__mobile--mobile"}>
-                <input type="text" className="form-control input_field error"  id="number" name="number" placeholder="Mobile" ref={register({required : true,pattern:/^[0-9-]+$/})} />
+                <input type="text" className="form-control input_field error"  id="number" name="number" placeholder="Mobile" ref={register({required : true,pattern:/^[0-9-]+$/, maxLength:13})} />
                 <label htmlFor="mobile" className="input_label">Mobile</label>
                 {errors?.number?.type === "required" && <span className="error__msg">This field is required</span>}
                 {errors?.number?.type === "pattern" && <span className="error__msg">Mobile number is not valid!</span>}
+                {errors?.number?.type === "maxLength" && <span className="error__msg">Mobile number is not valid!</span>}
               </div>
             </div>
             <button type="submit" className="btn btn-primary btn-round-40 px-5 py-3 mt-3">Submit</button></form>

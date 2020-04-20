@@ -3,6 +3,10 @@ import './loader.scss';
 import {imageUrl} from '../../utils/domains'
 export default function Loader() {
    
+    useEffect(()=>{
+        document.body.style.overflow = 'hidden';
+        return () => document.body.style.overflow = 'unset';
+    },[])
 
   
     return (
