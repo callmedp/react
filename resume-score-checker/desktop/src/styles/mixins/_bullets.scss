@@ -2,7 +2,7 @@
     &::before {
         @include size(14px, 11px);
         content: '';
-        background-image: url(/media/images/sprite.png);
+        background-image: url('#{$path}/sprite.png');
         background-repeat:  no-repeat;
         background-position: -28px -310px;
         display: block;

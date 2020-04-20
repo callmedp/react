@@ -6,7 +6,7 @@
 
 .banner-score {
     position: relative;
-    background-image: url(/media/images/result-score-curve.png);
+    background-image: url('#{$path}/result-score-curve.png');
     background-repeat: no-repeat;
     background-size: contain;
     height: 100%;
@@ -20,7 +20,7 @@
 
     &__resume-scoreWrap {
         @include size(347px, 305px);
-        background-image: url(/media/images/score.png);
+        background-image: url('#{$path}/score.png');
         box-shadow: 0 20px 30px rgba($black, .2);
         align-self: flex-end;
         display: flex;

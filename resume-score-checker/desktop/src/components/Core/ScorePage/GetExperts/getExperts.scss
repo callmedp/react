@@ -65,7 +65,7 @@
                 content: "";
                 width: .8rem;
                 height: .5rem;
-                background: url('/media/images/sprite.png') no-repeat -196px 0 #fff;
+                background: url('#{$path}/sprite.png') no-repeat -196px 0 #fff;
                 position: absolute;
                 right: .8rem;
                 top: 1.7rem;

@@ -11,7 +11,7 @@
     &::before {
         content: '';
         display: block;
-        background-image: url(/media/images/curve-timeToImprove.png);
+        background-image: url('#{$path}/curve-timeToImprove.png');
         background-repeat:  no-repeat;
         padding-top: 74px;
         background-size: contain;

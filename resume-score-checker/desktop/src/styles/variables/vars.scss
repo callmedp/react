@@ -24,10 +24,11 @@ $grey-bg1: #F3F3F3;
 
 
 
-$static-url: get('staticUrl');
+// $static-url: get('staticUrl');
+$static-url: '/media/static/';
 
 
-$sprite: url(#{get('staticUrl')}react/assets/images/sprite1578891067918.svg);
+$sprite: url(#{$static-url}score-checker/assets/images/sprite1578891067918.svg);
 
 //$sprite: get('sprite');
 

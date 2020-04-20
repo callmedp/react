@@ -44,8 +44,8 @@
 
 
 // Resume Score Checker Classes
-
-$path:  get('staticUrl') + "score-checker/images";
+// get('staticUrl')
+$path:  "/media/static/" + "score-checker/images";
 
 /*****icons css****/
 [class^="b4-icon-"] {

@@ -60,7 +60,7 @@
     
     &__men {
         @include size(92px, 202px);
-        background-image: url(/media/images/men.png);
+        background-image: url('#{$path}/men.png');
         background-repeat:  no-repeat;
         display: block;
         position: absolute;

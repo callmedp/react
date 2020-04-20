@@ -11,7 +11,7 @@
 .navbar-brand {
     @include size(204px, 41px);
     display: block;
-    background: url('/media/images/sprite.png') no-repeat 0 -448px;
+    background: url('#{$path}/sprite.png') no-repeat 0 -448px;
     display: inline-block;
 }
 
@@ -50,19 +50,19 @@
 }
 
 .call-icon {
-    background: url('/media/images/sprite.png') no-repeat -58px 0; 
+    background: url('#{$path}/sprite.png') no-repeat -58px 0; 
     @include size(21px, 21px);
     display: block;
 }
 
 .login-icon {
-    background: url('/media/images/sprite.png') no-repeat -113px 0; 
+    background: url('#{$path}/sprite.png') no-repeat -113px 0; 
     @include size(20px, 24px);
     display: block;
 }
 
 .cart-icon {
-    background: url('/media/images/sprite.png') no-repeat -86px 0; 
+    background: url('#{$path}/sprite.png') no-repeat -86px 0; 
     @include size(22px, 24px);
     display: block;
 }

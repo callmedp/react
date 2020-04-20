@@ -1,4 +1,5 @@
-$path:  get('staticUrl') + "score-checker/images";
+// $path:  get('staticUrl') + "score-checker/images";
+$path: '/media/static/' + "score-checker/images";
 
 .sprite {
     background-image: url('#{$path}/sprite.png');

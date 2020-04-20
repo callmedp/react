@@ -1,5 +1,10 @@
+@import '../../../../styles/functions';
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+
 .howItWork {
-    background-image: url(/media/images/how-it-works.png);
+    background-image: url('#{$path}/how-it-works.png');
     height: 225px;
     background-size: cover;
     position: relative;
