@@ -17,13 +17,23 @@ config.optimization.runtimeChunk = false;
 
 const currentTimeStamp = process.argv && process.argv[2] || +new Date();
 
-// JS
-config.output.filename = `../../../careerplus/static_core/score-checker/dist/mobile/main-${currentTimeStamp}.js`;
+__dirname = path.join(__dirname, '..', '..', '..')
+
+const staticPath = process.env.REACT_APP_ENV === 'development' ?
+    '/media/static/' : process.env.REACT_APP_ENV === 'staging' ?
+        "https://learning-static-staging-189607.storage.googleapis.com/l1/s/" :
+        'https://static1.shine.com/l/s/';
+       
+config.output.path = path.join(__dirname, 'careerplus', 'static_core', 'score-checker', 'dist', 'mobile');
+config.output.publicPath = `${staticPath}score-checker/dist/mobile/` 
+config.output.filename = `main-${currentTimeStamp}.js`;
 // CSS. "5" is MiniCssPlugin
-config.plugins[5].options.filename = `../../../careerplus/static_core/score-checker/dist/mobile/main-${currentTimeStamp}.css`;
+
+config.plugins[5].options.path = path.join(__dirname, 'careerplus', 'static_core', 'score-checker', 'dist', 'mobile');
+config.plugins[5].options.filename = `main-${currentTimeStamp}.css`;
 config.plugins.push(new BundleTracker({
     path: __dirname,
-    filename: '../../../webpack-score-checker-mobile-stats.json'
+    filename: 'webpack-score-checker-mobile-stats.json'
 }))
 
 const result = {
