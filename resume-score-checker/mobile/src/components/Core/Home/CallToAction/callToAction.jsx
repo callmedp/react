@@ -62,8 +62,12 @@ export default function CallToAction() {
                     // })
                     setFlag(true);
                     const candidateInfo = await new Promise((resolve, reject) => dispatch(Actions.getCandidateInfo({ resolve, reject })))
-                    await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: candidateInfo['candidate_id'], resolve, reject })))
-                    setFlag(false)
+                    let result = await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: candidateInfo['candidate_id'], resolve, reject })))
+                    if(result['error_message']){
+                        Toast('warning', result['error_message'])
+                        setVisible(false)
+                    }
+                    else{ setFlag(false) }
 
                     // fileUpload({target : {files : [resume]}})
                 }
@@ -74,7 +78,7 @@ export default function CallToAction() {
                 }
             }
             else{
-                window.location.href = `${siteDomain}/login/?next=resume-score-checker/`
+                window.location.href = `${siteDomain}/login/?next=/resume-score-checker/`
             }
         }
         else{
