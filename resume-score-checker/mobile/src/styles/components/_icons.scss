@@ -81,13 +81,13 @@
 }
 
 .icon-home {
-    @include icon-inblock (18px, 20px, -66px -182px);
+    @include icon-inblock (18px, 20px, -66px -181px);
     position: relative;
     top: -2px;
 }
 
 .icon-courses {
-    @include icon-inblock (18px, 21px, -66px -205px);
+    @include icon-inblock (18px, 21px, -66px -204px);
     position: relative;
     top: -2px;
 }
@@ -99,19 +99,19 @@
 }
 
 .practice-tests {
-    @include icon-inblock (16px, 20px, -68px -302px);
+    @include icon-inblock (16px, 20px, -68px -276px);
     position: relative;
     top: -2px;
 }
 
 .free-resources {
-    @include icon-inblock (21px, 20px, -63px -249px);
+    @include icon-inblock (21px, 20px, -63px -298px);
     position: relative;
     top: -1px;
 }
 
 .blog {
-    @include icon-inblock (22px, 21px, -62px -276px);
+    @include icon-inblock (22px, 21px, -62px -249px);
     position: relative;
     top: 0;
 }
