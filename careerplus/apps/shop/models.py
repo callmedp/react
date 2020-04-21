@@ -1009,7 +1009,8 @@ class Product(AbstractProduct, ModelMeta):
         max_digits=8, decimal_places=2,
         default=4.5)
     no_review = models.PositiveIntegerField(
-        _('No. Of Review'), default=0)
+        _('No. Of '
+          ''), default=0)
     buy_count = models.PositiveIntegerField(
         _('Buy Count'), default=0)
     num_jobs = models.PositiveIntegerField(
@@ -3491,7 +3492,6 @@ class SubSection(AbstractAutoDate):
     def __str__(self):
         return 'SubSection' + str(self.id)
 
-
     def get_desc(self):
         try:
             from bs4 import BeautifulSoup
@@ -3502,6 +3502,12 @@ class SubSection(AbstractAutoDate):
             logging.getLogger('error_log').error(str(e))
             cleantext = ''
         return cleantext
+
+    def get_icon_url(self):
+        if not self.icon:
+            return
+        return self.icon.url
+    
 
     @property
     def descriptions(self):
@@ -3519,6 +3525,9 @@ class Section(AbstractAutoDate):
     sub_section = models.ManyToManyField('shop.SubSection',blank=True,null=True)
 
     product = models.ManyToManyField('shop.Product',blank=True,null=True)
+
+    class Meta:
+        ordering = ['-priority', ]
 
 
 

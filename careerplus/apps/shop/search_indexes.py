@@ -1033,7 +1033,10 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             return section_list
         for section in sections:
             new_dict = {}
-            new_dict.update({'heading':section.name,section.name.replace(' ','').lower():list(section.sub_section.values( 'description','icon', 'heading'))})
+            data_list = [{'icon':data.get_icon_url(),'heading':data.heading,'description':data.descriptions} for data in
+                         section.sub_section.all()]
+
+            new_dict.update({'heading':section.name,section.name.replace(' ','').lower():data_list})
             section_list.append(new_dict)
         return json.dumps(section_list)
 
