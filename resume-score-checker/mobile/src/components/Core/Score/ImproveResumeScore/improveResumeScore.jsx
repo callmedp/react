@@ -15,7 +15,7 @@ export default function ImproveResumeScore() {
                         <img src={`${imageUrl}score-checker/images/mobile/resume-writing.png`} alt="resume-writing"/>
                     </span>
                     <p className="improve-resume__head mb-20">Perfect your resume score with <strong>Resume Writing Service</strong></p>
-                    <a href="https://learning.shine.com/services/mobile/resume-writing/63/" className="btn btn-round-30 btn-outline-blue px-15">Get details</a>
+                    <a href="https://learning.shine.com/services/resume-writing/63/" className="btn btn-round-30 btn-outline-blue px-15">Get details</a>
                 </div>
                 
                 <div className="improve-resume__slide">
