@@ -6,12 +6,12 @@ export const menuData = [
     },
     {
         label : 'Courses',
-        url: '/courses',
+        url: 'https://learning.shine.com',
         icon: 'icon-courses'
     },
     {
         label : 'Job Assistance',
-        url: '/job-assistance',
+        url: 'https://learning.shine.com/services/resume-writing/63/',
         icon: 'job-assistance'
     },
     {
