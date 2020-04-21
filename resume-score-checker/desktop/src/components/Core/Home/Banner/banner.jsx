@@ -38,7 +38,7 @@ const Banner = props => {
                 }
             }
             else {
-                window.location.href = `${siteDomain}login/?next=/resume-score-checker/`
+                window.location.href = `${siteDomain}/login/?next=/resume-score-checker/`
             }
         }
         else {
