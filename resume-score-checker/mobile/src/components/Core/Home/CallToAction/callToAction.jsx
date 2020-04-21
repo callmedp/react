@@ -68,7 +68,7 @@ export default function CallToAction() {
                     // fileUpload({target : {files : [resume]}})
                 }
                 catch(error){
-                    setFlag(false);
+                    //setFlag(false);
                     Toast('error', 'Something went wrong! Try again')
                     setVisible(false)
                 }
@@ -88,7 +88,7 @@ export default function CallToAction() {
                 setFlag(false)
             }
             catch(e){
-                setFlag(false)
+                //setFlag(false)
                 Toast('error', 'Something went wrong! Try again')
                 setVisible(false)
             }
