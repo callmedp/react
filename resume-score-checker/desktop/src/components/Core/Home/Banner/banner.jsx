@@ -12,7 +12,7 @@ const Banner = props => {
     const [flag, setFlag] = useState(false);
     const [redirect, setRedirect] = useState(false);
     const dispatch = useDispatch()
-    const staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
+    const staticUrl = window?.config?.staticUrl || '/media/static/'
     const resumeImport = async event => {
         if (!localStorage.getItem('userId')) {
             const isSessionAvailable = await new Promise((resolve, reject) => dispatch(Actions.checkSessionAvailability({ resolve, reject })));
@@ -52,24 +52,27 @@ const Banner = props => {
             }
             catch (e) {
                 setFlag(false)
+                if(!e['error_message']){
                 Toast.fire({
                     icon: 'error',
                     html: '<h3>Something went wrong! Try again.<h3>'
                 })
+                }
             }
         }
     }
 
     const fileUpload = async event => {
-
+        event.persist();
         let file1 = event.target.files[0];
         event.target.value = null
-        if ((file1.name.slice(-4) === '.pdf' || file1.name.slice(-4) === '.doc' || file1.name.slice(-5) === '.docx' || file1.name.slice(-4) === '.txt')) {
+        if ((file1.name.slice(-4) === '.pdf' || file1.name.slice(-4) === '.doc' || file1.name.slice(-5) === '.docx' || file1.name.slice(-4) === '.txt')   && (file1.size/(1024*1024)<=5)) {
             try {
                 setFlag(true)
                 await new Promise((resolve, reject) => {
                     dispatch(Actions.uploadFileUrl({ file1, resolve, reject }));
                 })
+                localStorage.setItem('file_name',file1.name);
                 setFlag(false)
                 setRedirect(true)
             } catch (err) {
@@ -85,7 +88,7 @@ const Banner = props => {
         else {
             Toast.fire({
                 icon: 'warning',
-                html: '<h3>Please select the file in the format PDF,DOC,DOCX only<h3>',
+                html: '<h3>Please select the file in the format PDF,DOC,DOCX,TXT and less than 5MB only <h3>',
             })
         }
     }

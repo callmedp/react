@@ -19,7 +19,7 @@
     }
 
     &__resume-scoreWrap {
-        @include size(347px, 305px);
+        @include size(347px, 336px);
         background-image: url('#{$path}/score.png');
         box-shadow: 0 20px 30px rgba($black, .2);
         align-self: flex-end;
@@ -39,7 +39,7 @@
         padding: 15px;
         margin-bottom: 15px;
         position: absolute;
-        bottom: 0;
+        bottom: 26px;
     }
 
     &__progressBar {

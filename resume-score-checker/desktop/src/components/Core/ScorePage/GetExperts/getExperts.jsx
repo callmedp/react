@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import * as Actions from '../../../../store/LandingPage/actions/index';
 import { Toast } from '../../../../services/Toast';
 import  {COUNTRY_CODES} from '../../../../services/countryCodes';
-
+import { siteDomain } from '../../../../utils/domains';
 const GetExperts=props=>{
 
   const { register, handleSubmit, errors } = useForm()
@@ -36,10 +36,10 @@ const GetExperts=props=>{
         <h2><span>Get Expert Help</span></h2>
         <p>Shine Learning is India’s largest professional courses and career skills portal. Launched by Shine.com, Shine Learning has a vision to up-skill the Indian talent pool to adapt to the changing job market.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
         <ul className="expert-help__list mt-5">
-          <li className="expert-help__item">Resume Writing</li>
-          <li className="expert-help__item">Resume Writing</li>
-          <li className="expert-help__item">Resume Writing</li>
-          <li className="expert-help__item">Resume Writing</li>
+          <li className="expert-help__item"><a href={`${siteDomain}/services/resume-writing/63/`}>Resume Writing</a></li>
+          <li className="expert-help__item"><a href={`${siteDomain}/services/resume-services/entry-level-freshers/pd-2052`}>Visual Resume</a></li>
+          <li className="expert-help__item"><a href={`${siteDomain}/resume-builder/`}>Resume Builder</a></li>
+          <li className="expert-help__item"><a href={`${siteDomain}services/resume-services/entry-level-freshers-4/pd-2553/`}>International Resume</a></li>
         </ul>
       </div>
 
