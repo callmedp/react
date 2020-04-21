@@ -28,10 +28,7 @@ export default function Header() {
                         }
                         catch (e) {
                             setFlag(false);
-                            Toast.fire({
-                                icon: 'error',
-                                html: '<h3>Something went wrong! Try again.<h3>'
-                            })
+                            Toast('error','Something went wrong! Try again.')
                         }
                     }
                 }
