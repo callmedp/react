@@ -104,10 +104,10 @@ export default function CallToAction() {
                 <input className="file-upload__input_right" type="file" name="file" onChange={fileUpload}></input>
             </div>
 
-            <a href = "/" className="d-flex align-items-center btn btn-outline-white btn-round-30 fs-11 px-20" onClick = {importResume}>
+            <button className="d-flex align-items-center btn btn-outline-white btn-round-30 fs-11 px-20" onClick = {importResume}>
                 <i className="sprite export mr-5"></i>
                 Import from shine.com
-            </a>
+            </button>
             {
                 (flag &&
                 <React.Fragment>
