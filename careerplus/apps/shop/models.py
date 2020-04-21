@@ -3464,6 +3464,7 @@ class Offer(AbstractAutoDate):
     active = models.BooleanField(default=False)
     product = models.ManyToManyField('shop.Product',blank=True,null=True)
 
+
     class Meta:
         ordering = ['-modified' ,]
 
@@ -3524,6 +3525,12 @@ class Section(AbstractAutoDate):
     sub_section = models.ManyToManyField('shop.SubSection',blank=True,null=True)
 
     product = models.ManyToManyField('shop.Product',blank=True,null=True)
+
+
+    def get_image(self):
+        if not self.image:
+            return
+        return self.image.url
 
     class Meta:
         ordering = ['-priority', ]

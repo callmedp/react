@@ -1036,7 +1036,9 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             data_list = [{'icon':data.get_icon_url(),'heading':data.heading,'description':data.descriptions} for data in
                          section.sub_section.all()]
 
-            new_dict.update({'heading':section.name,section.name.replace(' ','').lower():data_list})
+            new_dict.update({'image':section.get_image(),'heading':section.name,section.name.replace(' ','').lower(
+
+            ):data_list})
             section_list.append(new_dict)
         return json.dumps(section_list)
 
