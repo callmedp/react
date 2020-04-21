@@ -1009,8 +1009,7 @@ class Product(AbstractProduct, ModelMeta):
         max_digits=8, decimal_places=2,
         default=4.5)
     no_review = models.PositiveIntegerField(
-        _('No. Of '
-          ''), default=0)
+        _('No. Of Review'), default=0)
     buy_count = models.PositiveIntegerField(
         _('Buy Count'), default=0)
     num_jobs = models.PositiveIntegerField(
