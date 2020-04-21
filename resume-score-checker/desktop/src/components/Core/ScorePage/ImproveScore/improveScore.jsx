@@ -1,7 +1,7 @@
 import React from 'react';
 import './improveScore.scss'
-const ImproveScore=props=> {
-  const staticUrl =  window?.config?.staticUrl || '/media/static/'
+const ImproveScore = props => {
+  const staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
   return (
 
     <section className="improve-score">
@@ -39,4 +39,4 @@ const ImproveScore=props=> {
   );
 }
 
-export default  ImproveScore;
+export default ImproveScore;

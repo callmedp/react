@@ -253,7 +253,7 @@ urlpatterns += [
                    re_path(r'^resume-builder/', WriteResumeView.as_view()),
 
                    #resume score checker 
-                   re_path(r'^score-checker/', ScoreCheckerView.as_view()),
+                   re_path(r'^resume-score-checker/', ScoreCheckerView.as_view()),
 
                 #    #resume score checker 
                 #    re_path(r'^result-page/', ScoreCheckerView2.as_view()),

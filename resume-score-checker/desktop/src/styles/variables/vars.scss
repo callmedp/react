@@ -1,3 +1,5 @@
+@import '../_path.scss';
+
 /*Main-Colors*/
 $primary: #ff0000; //---heading with 40% opacity
 $link: #0acade;
@@ -25,10 +27,10 @@ $grey-bg1: #F3F3F3;
 
 
 // $static-url: get('staticUrl');
-$static-url: '/media/static/';
+// $static-url: '/media/static/score-checker/images';
 
 
-$sprite: url(#{$static-url}score-checker/assets/images/sprite1578891067918.svg);
+$sprite: url(#{$path}/sprite1578891067918.svg);
 
 //$sprite: get('sprite');
 

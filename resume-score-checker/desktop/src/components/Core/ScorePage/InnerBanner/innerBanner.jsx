@@ -92,7 +92,7 @@ const InnerBanner = props => {
                         </div>
                         <div className="col-md-6 h-100 d-flex align-items-self-start justify-content-center flex-column">
                             <h1 className="fs-30">
-                                <span>Hello Sachin,<br />Your resume Scored {localScore} out of {total_local_score?.reduce(reduced, 0)}</span>
+                                <span>Hello {localStorage.getItem('userName') || 'User'},<br />Your resume Scored {localScore} out of {total_local_score?.reduce(reduced, 0)}</span>
                             </h1>
                             <p className="text-white-50">Good Job! You are just few steps away for perfecting your resume. Check out the detailed reviews to improve the score. Score more to get perfect job match your profile</p>
 

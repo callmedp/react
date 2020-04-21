@@ -1,15 +1,56 @@
-import React from 'react';
+import React, {useState,useEffect} from 'react';
+import {useDispatch} from 'react-redux';
+import * as Actions from '../../../stores/scorePage/actions/index';
 import { Link } from 'react-router-dom';
+import Loader from '../Loader/loader';
+import {Toast} from '../../../services/Toast'
 import { menuData } from './menuData';
 import './header.scss';
-import { useState } from 'react';
 import { imageUrl, siteDomain } from '../../../Utils/domains';
 
 export default function Header() {
         const [isSideBarOpen, setIsSideBarOpen]=useState(false)
+        const [flag, setFlag] = useState(false);
+        const dispatch = useDispatch()
+        const [candidateInfo, setCandidateInfo] = useState({});
+
+        useEffect(() => {
+            async function fetchUserInfo() {
+                try {
+                    const isSessionAvailable = await new Promise((resolve, reject) => dispatch(Actions.checkSessionAvailability({ resolve, reject })));
+                    if (isSessionAvailable['result']) {
+                        // await dispatch(Actions.getCandidateId())
+                        try {
+                            setFlag(true);
+                            const candidateInformation = await new Promise((resolve, reject) => dispatch(Actions.getCandidateInfo({ resolve, reject })))
+                            setCandidateInfo(candidateInformation)
+                            setFlag(false)
+                        }
+                        catch (e) {
+                            setFlag(false);
+                            Toast.fire({
+                                icon: 'error',
+                                html: '<h3>Something went wrong! Try again.<h3>'
+                            })
+                        }
+                    }
+                }
+                catch (e) {
+    
+                }
+            }
+    
+            fetchUserInfo();
+        }, []);
         const handleMenuButtonClick = () => {
             setIsSideBarOpen(!isSideBarOpen)
         };
+
+        const handleLogout = ()=>{
+            localStorage.clear();
+            window.location.href = `${siteDomain}/logout/?next=/resume-score-checker/`
+        }
+
         return(
             <div className="header">
                 <span className="sprite header__barMenu mr-15" onClick={handleMenuButtonClick}></span>
@@ -29,14 +70,18 @@ export default function Header() {
                                 </span>
 
                                 <div className="flex-1">
-                                    <h3>Welcome Guest</h3>
-                                    {/* <h3>Welcome Aman</h3> */}
-                                    {/* <div className="mt-10 d-flex justify-content-between">
-                                        <a href={`${siteDomain}/login/`} className="py-5 btn btn-round-30 btn-outline-white px-20">Login</a>
-                                    </div> */}
+                                    <h3>Welcome {candidateInfo && candidateInfo.name || 'Guest'}</h3>
+                                    {
+                                    candidateInfo && candidateInfo.candidateId ?
+
                                     <div className="mt-10 d-flex justify-content-between">
-                                        <a href={`${siteDomain}/logout/`} className="py-5 btn btn-round-30 btn-outline-white px-20">Logout</a>
+                                        <span onClick={handleLogout} className="py-5 btn btn-round-30 btn-outline-white px-20">Logout</span>
                                     </div>
+                                    :
+                                    <div className="mt-10 d-flex justify-content-between">
+                                    <a href={`${siteDomain}/login/?next=/resume-score-checker/`} className="py-5 btn btn-round-30 btn-outline-white px-20">Login</a>
+                                </div>
+                                    }
                                 </div>
 
 

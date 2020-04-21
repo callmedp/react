@@ -5,6 +5,7 @@ import './callToAction.scss';
 import * as Actions from '../../../../stores/scorePage/actions/index';
 import Loader from '../../../Common/Loader/loader';
 import { Toast } from '../../../../services/Toast';
+import {siteDomain} from '../../../../Utils/domains';
 
 
 export default function CallToAction() {
@@ -50,33 +51,44 @@ export default function CallToAction() {
 
     const importResume = async () => {
         setVisible(!visible)
-        if (!localStorage.getItem('candidateId') || !localStorage.getItem('token')) {
+        if (!localStorage.getItem('userId')) {
             const isSessionAvailable = await new Promise((resolve, reject) => dispatch(Actions.checkSessionAvailability({resolve, reject})));
-            if (isSessionAvailable) {
+           
+            if (isSessionAvailable['result']) {
                 try{
-                    await new Promise((resolve, reject) => dispatch(Actions.getCandidateId({resolve, reject})))
-                    let resume = await new Promise((resolve, reject) => {
-                        dispatch(Actions.getCandidateResume({ resolve, reject }));
-                    })
-                    fileUpload({target : {files : [resume]}})
+                    // await new Promise((resolve, reject) => dispatch(Actions.getCandidateId({resolve, reject})))
+                    // let resume = await new Promise((resolve, reject) => {
+                    //     dispatch(Actions.getCandidateResume({ resolve, reject }));
+                    // })
+                    setFlag(true);
+                    const candidateInfo = await new Promise((resolve, reject) => dispatch(Actions.getCandidateInfo({ resolve, reject })))
+                    await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: candidateInfo['candidate_id'], resolve, reject })))
+                    setFlag(false)
+
+                    // fileUpload({target : {files : [resume]}})
                 }
                 catch(error){
+                    setFlag(false);
                     Toast('error', 'Something went wrong! Try again')
                     setVisible(false)
                 }
             }
             else{
-                window.location.href = 'https://learning.shine.com/login/?next=resume-score-checker/score-checker'
+                window.location.href = `${siteDomain}/login/?next=resume-score-checker/`
             }
         }
         else{
             try{
-                let resume = await new Promise((resolve, reject) => {
-                    dispatch(Actions.getCandidateResume({ resolve, reject }));
-                })
-                fileUpload({target : { files : [resume] }})
+                // let resume = await new Promise((resolve, reject) => {
+                //     dispatch(Actions.getCandidateResume({ resolve, reject }));
+                // })
+                // fileUpload({target : { files : [resume] }})
+                setFlag(true);
+                await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: localStorage.getItem('userId'), resolve, reject })))
+                setFlag(false)
             }
             catch(e){
+                setFlag(false)
                 Toast('error', 'Something went wrong! Try again')
                 setVisible(false)
             }

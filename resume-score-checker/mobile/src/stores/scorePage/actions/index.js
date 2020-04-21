@@ -4,7 +4,9 @@ import {
     SUBMIT_EXPERT_FORM,
     CHECK_SESSION_AVAILABILITY,
     GET_CANDIDATE_ID,
-    GET_CANDIDATE_RESUME
+    GET_CANDIDATE_RESUME,
+    GET_CANDIDATE_INFO,
+    GET_CANDIDATE_SCORE
 } from './actionTypes';
 
 
@@ -37,3 +39,15 @@ export const getCandidateResume = (payload) => ({
     type: GET_CANDIDATE_RESUME,
     payload
 })
+
+export const getCandidateScore = (payload) => {
+    return    {
+        type: GET_CANDIDATE_SCORE,
+        payload
+    }
+    }
+    
+    export const getCandidateInfo = (payload) => ({
+        type: GET_CANDIDATE_INFO,
+        payload
+    })

@@ -1,9 +1,10 @@
 @import '../../../../styles/common.scss';
+@import '../../../../styles/_path.scss';
 
 // $static-url: get('staticUrl');
-$static-url: '/media/static/';
+// $static-url: '/media/static/score-checker/images/mobile';
 
-$path: $static-url + "score-checker/images/mobile";
+// $path: $static-url + "score-checker/images/mobile";
 
 .banner {
     @include size(100%, 344px, block);

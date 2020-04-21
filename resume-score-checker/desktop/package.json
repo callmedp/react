@@ -50,6 +50,6 @@
     ]
   },
   "devDependencies": {
-    "webpack-bundle-tracker": "^0.4.3"
+    "webpack-bundle-tracker": "0.4.3"
   }
 }

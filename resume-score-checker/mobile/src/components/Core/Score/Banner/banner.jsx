@@ -14,7 +14,7 @@ export default function Banner() {
         <div>
             <div className="score-banner">
             <div className="container-box">
-                <h1 className="mb-10"><span>Hello Sachin <br/>Your resume scored {score} out of {store_section_value?.reduce(reduced, 0)}</span></h1>
+                <h1 className="mb-10"><span>Hello {localStorage.getItem('userName') || "User"} <br/>Your resume scored {score} out of {store_section_value?.reduce(reduced, 0)}</span></h1>
                 
                 <div className="score-banner__image">
                     <div className="score-banner__progressBar">

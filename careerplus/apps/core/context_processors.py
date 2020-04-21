@@ -71,6 +71,7 @@ def common_context_processor(request):
         pass
 
     context.update({
+        "SHINE_SITE": settings.SHINE_SITE,
         "SITE_DOMAIN": settings.SITE_DOMAIN,
         "MOBILE_SITE_DOMAIN": settings.SITE_DOMAIN,
         "SITE_PROTOCOL": settings.SITE_PROTOCOL,
@@ -106,6 +107,7 @@ def common_context_processor(request):
         "MAINTENANCE_MESSAGE": settings.MAINTENANCE_MESSAGE,
         "exoitel_status": cache.get('exoitel_status', False),
         "whatsapp_icon": cache.get('whatsapp_visibility_class', False),
+
      })
     return context
 

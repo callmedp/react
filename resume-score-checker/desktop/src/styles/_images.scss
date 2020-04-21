@@ -5,6 +5,9 @@
 // and abandoned it in Bootstrap v3 because it breaks lots of third-party widgets (including Google Maps)
 // which weren't expecting the images within themselves to be involuntarily resized.
 // See also https://github.com/twbs/bootstrap/issues/18178
+
+@import  './__path.scss';
+
 .img-fluid {
   @include img-fluid();
 }
@@ -45,7 +48,7 @@
 
 // Resume Score Checker Classes
 // get('staticUrl')
-$path:  "/media/static/" + "score-checker/images";
+// $path:  "/media/static/" + "score-checker/images";
 
 /*****icons css****/
 [class^="b4-icon-"] {

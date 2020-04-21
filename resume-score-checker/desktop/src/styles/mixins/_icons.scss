@@ -1,5 +1,7 @@
 // $path:  get('staticUrl') + "score-checker/images";
-$path: '/media/static/' + "score-checker/images";
+// $path: '/media/static/' + "score-checker/images";
+
+@import  '../__path.scss';
 
 .sprite {
     background-image: url('#{$path}/sprite.png');

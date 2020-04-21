@@ -60,16 +60,48 @@ function* getCandidateResume(action) {
 function* checkSessionAvailability(action) {
     let { payload: { resolve } } = action;
     try {
-        let result = yield call(Api.checkSessionAvailability)
-        if (result["error"]) {
-            resolve(false)
+        let resp = yield call(Api.checkSessionAvailability)
+        if (resp["error"]) {
+            resolve({result:false})
         }
-        const { data } = result;
-        resolve(data['result']);
+        const { result } = resp;
+        resolve({result: result});
     } catch (e) {
-        resolve(false)
+            resolve({result:false})
     }
 }
+
+
+function* getCandidateScore(action) {
+    const { payload: { candidateId, resolve, reject } } = action;
+    try {
+        const result = yield call(Api.getCandidateScore, candidateId)
+        if(!result.data['error_message']){
+            yield put({ type: UPDATE_SCORE, payload: result.data });
+            localStorage.setItem("resume_score", JSON.stringify({...result.data}))
+        }
+        return resolve(result.data)
+    }
+    catch (e) {
+        return reject(e)
+    }
+}
+
+function* getCandidateInfo(action) {
+    const { payload: { resolve, reject }} = action;
+    try {
+        const result = yield call(Api.getInformation);
+        const {candidate_id, profile:{first_name, email}} = result; 
+        localStorage.setItem('userId', candidate_id);
+        localStorage.setItem('userName', first_name);
+        localStorage.setItem('userEmail', email);
+        resolve({candidateId:candidate_id|| '', name: first_name||'', email:email|| ''});
+    }
+    catch (e) {
+        return reject(e);
+    }
+}
+
 
 export default function* watchHomePage() {
     yield takeLatest(Actions.UPLOAD_FILE, fileUpload);
@@ -77,4 +109,7 @@ export default function* watchHomePage() {
     yield takeLatest(Actions.CHECK_SESSION_AVAILABILITY, checkSessionAvailability);
     yield takeLatest(Actions.GET_CANDIDATE_ID, getCandidateId);
     yield takeLatest(Actions.GET_CANDIDATE_RESUME, getCandidateResume);
+    yield takeLatest(Actions.GET_CANDIDATE_SCORE, getCandidateScore);
+    yield takeLatest(Actions.GET_CANDIDATE_INFO, getCandidateInfo)
+
 }

@@ -1,7 +1,7 @@
-$static-url : '/media/static/';
-$path: $static-url + "score-checker/images/mobile";
+// $static-url : '/media/static/';
+// $path: $static-url + "score-checker/images/mobile";
 
-
+@import '../_path.scss';
 
 // fonts size
 $font-weight: 400;
