@@ -2,7 +2,7 @@ import { siteDomain } from '../../../Utils/domains';
 export const menuData = [
     {
         label : 'Home',
-        url: '/resume-score-checker',
+        url: `${siteDomain}`,
         icon: 'icon-home'
     },
     {
