@@ -1,5 +1,5 @@
 import React from 'react';
-import { imageUrl } from '../../../../Utils/domains';
+import { imageUrl, siteDomain } from '../../../../Utils/domains';
 
 export default function ImproveResumeScore() {
     return (
@@ -15,7 +15,7 @@ export default function ImproveResumeScore() {
                         <img src={`${imageUrl}score-checker/images/mobile/resume-writing.png`} alt="resume-writing"/>
                     </span>
                     <p className="improve-resume__head mb-20">Perfect your resume score with <strong>Resume Writing Service</strong></p>
-                    <a href="https://learning.shine.com/services/resume-writing/63/" className="btn btn-round-30 btn-outline-blue px-15">Get details</a>
+                    <a href = {`${siteDomain}/services/resume-writing/63/`} className="btn btn-round-30 btn-outline-blue px-15">Get details</a>
                 </div>
                 
                 <div className="improve-resume__slide">
@@ -23,7 +23,7 @@ export default function ImproveResumeScore() {
                         <img src={`${imageUrl}score-checker/images/mobile/resume-builder.png`} alt="resume-builder"/>
                     </span>
                     <p className="improve-resume__head mb-20">Create a Perfect Resume with <strong>Resume Builder</strong></p>
-                    <a href="https://learning.shine.com/resume-builder/" className="btn btn-round-30 btn-outline-blue px-15">Create Now</a>
+                    <a href={`${siteDomain}/resume-builder/`} className="btn btn-round-30 btn-outline-blue px-15">Create Now</a>
                 </div>
                 
                 <div className="improve-resume__slide">
@@ -31,7 +31,7 @@ export default function ImproveResumeScore() {
                         <img src={`${imageUrl}score-checker/images/mobile/free-resume-format.png`} alt="resume-format"/>
                     </span>
                     <p className="improve-resume__head mb-20">Explore <strong>Free resume Formats</strong>to search desired jobs</p>
-                    <a href="https://learning.shine.com/cms/resume-format/1/" className="btn btn-round-30 btn-outline-blue px-15">Explore Now</a>
+                    <a href={`${siteDomain}/cms/resume-format/1/`} className="btn btn-round-30 btn-outline-blue px-15">Explore Now</a>
                 </div>
             </div>
         </div>

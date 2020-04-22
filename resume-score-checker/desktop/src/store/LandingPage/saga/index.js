@@ -23,9 +23,11 @@ function* getCandidateId(action) {
 function* uploadFileUrl(action) {
     const { payload: { file1, resolve, reject } } = action;
     try {
+        
         var fileData = new FormData();
         fileData.append('resume', file1)
         const result = yield call(Api.uploadFileUrl, fileData);
+       
         if (result.data['error_message']) {
             Toast.fire({
                 icon: 'error',
@@ -34,6 +36,7 @@ function* uploadFileUrl(action) {
             reject(result.data)
         }
         localStorage.setItem('resume_score', JSON.stringify({ ...result.data }))
+
         yield put({ type: UPDATE_SCORE, payload: result.data });
         return resolve(result)
     } catch (e) {
@@ -51,7 +54,7 @@ function* getCandidateScore(action) {
                 icon: 'error',
                 html: result.data.error_message
             })
-            reject(result.data)
+            return reject(result.data)
         }
         localStorage.setItem('resume_score', JSON.stringify({ ...result.data }))
         yield put({ type: UPDATE_SCORE, payload: result.data });

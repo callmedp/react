@@ -6,7 +6,7 @@ import { Link as LinkScroll } from 'react-scroll';
 const Parameters=props=> {
 
     const [flag, setFlag] =useState(false)
-    const staticUrl =  window && window.config && window.config.staticUrl || '/media/static/'
+    const staticUrl = window?.config?.staticUrl || '/media/static/'
     useEffect(()=>{
         if(!JSON.parse(localStorage.getItem('resume_score'))){
             setFlag(false)

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './innerBanner.scss';
 import { Link as LinkScroll } from 'react-scroll';
 import { Link } from 'react-router-dom'
@@ -14,22 +14,29 @@ const InnerBanner = props => {
     const localScore = JSON.parse(localStorage.getItem('resume_score'))?.total_score
     const total_local_score = JSON.parse(localStorage.getItem('resume_score'))?.section_score
     const reduced = (accumulator, currentValue) => accumulator + currentValue.section_total_score;
+     const file_name = localStorage.getItem('file_name')
     const dispatch = useDispatch()
     useState(() => {
 
     }, [])
     const history = useHistory()
     const fileUpload = async event => {
+        event.persist();
         let file1 = await event.target.files[0];
         event.target.value = null
-        if ((file1.name.slice(-4) === '.pdf' || file1.name.slice(-4) === '.doc' || file1.name.slice(-5) === '.docx')) {
+
+        if ((file1.name.slice(-4) === '.pdf' || file1.name.slice(-4) === '.doc' || file1.name.slice(-5) === '.docx' || file1.name.slice(-4) === '.txt')  && file1.size/(1024*1024)<=5){
             try {
+
                 setFlag(true)
                 await new Promise((resolve, reject) => {
                     dispatch(Actions.uploadFileUrl({ file1, resolve, reject }));
                 })
-                history.push('/resume-score-checker/score-checker')
+                localStorage.setItem('file_name',file1.name);
                 setFlag(false)
+                history.push('/resume-score-checker/score-checker')
+               
+               
             } catch (err) {
                 setFlag(false)
                 if (!err['error_message']) {
@@ -40,13 +47,29 @@ const InnerBanner = props => {
                     })
                 }
             }
+
         }
         else {
 
             Toast.fire({
                 icon: 'warning',
-                html: '<h3>Please select the file in the format PDF,DOC,DOCX only<h3>',
+                html: '<h3>Please select the file in the format PDF,DOC,DOCX,TXT and less than 5MB only<h3>',
             })
+        }
+    }
+
+    const scoreBasedText = (score) => {
+        if (score > 80) {
+            return <p className="text-white-50">Great Job! Your resume scores well as per the industry standards. Check out the detailed reviews</p>
+        }
+        else if (score > 65 && score <= 80) {
+            return <p className="text-white-50">Good Job! You are just few steps away for perfecting your resume. Check out the detailed reviews to improve the score. Score more to get perfect job match your profile</p>
+        }
+        else if (score > 50 && score <= 65) {
+            return <p className="text-white-50">Your resume score is average and can be improved a lot with quick fixes we have highlighted in the detailed review. You can also get expert assistance to perfect the s core</p>
+        }
+        else {
+            return <p className="text-white-50">Your resume score is low. It has room for lot of improvements. Check out the detailed reviews to improve the score or reach out to our experts to improve your resume</p>
         }
     }
 
@@ -84,7 +107,14 @@ const InnerBanner = props => {
                                             </div>
                                             <div className="ko-progress-circle__overlay"></div>
                                         </div>
+                                    </div>
+                                    <div className="banner-score__myresume">
+                                        <a href="/#">
+                                            <i className="sprite clip"></i>
+                                        {file_name}
+                                        </a>
 
+                                        <a href="/#" className="btn btn-outline-primary btn-round-40 fs-12 py-1">Download</a>
                                     </div>
                                 </div>
 
@@ -94,8 +124,7 @@ const InnerBanner = props => {
                             <h1 className="fs-30">
                                 <span>Hello {localStorage.getItem('userName') || 'User'},<br />Your resume Scored {localScore} out of {total_local_score?.reduce(reduced, 0)}</span>
                             </h1>
-                            <p className="text-white-50">Good Job! You are just few steps away for perfecting your resume. Check out the detailed reviews to improve the score. Score more to get perfect job match your profile</p>
-
+                            {scoreBasedText(localScore * 100 / total_local_score?.reduce(reduced, 0))}
                             <div className="d-flex mt-5">
                                 <LinkScroll
                                     to='getexpert'

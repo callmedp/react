@@ -88,8 +88,12 @@ export default function CallToAction() {
                 // })
                 // fileUpload({target : { files : [resume] }})
                 setFlag(true);
-                await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: localStorage.getItem('userId'), resolve, reject })))
-                setFlag(false)
+                let result = await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: localStorage.getItem('userId'), resolve, reject })))
+                if(result['error_message']){
+                    Toast('warning', result['error_message'])
+                    setVisible(false)
+                }
+                else{ setFlag(false) }
             }
             catch(e){
                 //setFlag(false)

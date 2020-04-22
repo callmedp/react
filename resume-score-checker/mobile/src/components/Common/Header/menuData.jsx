@@ -1,3 +1,4 @@
+import { siteDomain } from '../../../Utils/domains';
 export const menuData = [
     {
         label : 'Home',
@@ -6,27 +7,27 @@ export const menuData = [
     },
     {
         label : 'Courses',
-        url: 'https://learning.shine.com',
+        url: `${siteDomain}`,
         icon: 'icon-courses'
     },
     {
         label : 'Job Assistance',
-        url: 'https://learning.shine.com/services/resume-writing/63/',
+        url: `${siteDomain}/services/resume-writing/63/`,
         icon: 'job-assistance'
     },
     {
         label : 'Practice Tests',
-        url: 'https://learning.shine.com/practice-tests/',
+        url: `${siteDomain}/practice-tests/`,
         icon: 'practice-tests'
     },
     {
         label : 'Free Resources',
-        url: 'https://learning.shine.com/cms/resume-format/1/',
+        url: `${siteDomain}/cms/resume-format/1/`,
         icon: 'free-resources'
     },
     {
         label : 'Blog',
-        url: 'https://learning.shine.com/talenteconomy/',
+        url: `${siteDomain}/talenteconomy/`,
         icon: 'blog'
     },
 ]
