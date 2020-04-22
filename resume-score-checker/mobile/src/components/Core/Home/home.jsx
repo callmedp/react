@@ -15,7 +15,7 @@ class Home extends Component {
             <div className="body-wrapper">
                 {
                     <div className="h-100">
-                        <Header/>
+                        <Header page = 'homePage' />
                         <Banner/>
                         <Features/>
                         <HowItWorks/>

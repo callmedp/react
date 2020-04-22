@@ -16,7 +16,7 @@ export default function Score(){
         <div className="body-wrapper">
             {
                 <div className="h-100">
-                   <Header/>
+                   <Header page = 'scorePage'/>
                    <Banner/>
                    <ResumeDetail/>
                    <ImproveResumeScore/>

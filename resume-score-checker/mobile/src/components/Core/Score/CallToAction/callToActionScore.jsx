@@ -26,7 +26,7 @@ export default function CallToActionScore() {
                 setVisible(false)
             }
             else{
-                setFileName('Uploading File...')
+                setFileName('Fetching Score...')
                 try{
                     let result = await new Promise((resolve, reject) => {
                         dispatch(Actions.uploadFile({file, resolve, reject}));
@@ -44,7 +44,7 @@ export default function CallToActionScore() {
                 }
                 catch(e){
                     Toast('error', 'Something went wrong! Try again')
-                    setFileName("Upload Resume")
+                    setFileName("Upload New Resume")
                     setVisible(false)
                 }
             }

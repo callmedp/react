@@ -27,7 +27,7 @@ export default function CallToAction() {
                 setVisible(false)
             }
             else{
-                setFileName('Uploading File...')
+                setFileName('Fetching Score...')
                 try{
                     let result = await new Promise((resolve, reject) => {
                         dispatch(Actions.uploadFile({file, resolve, reject}));

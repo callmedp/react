@@ -7,7 +7,7 @@ import { menuData } from './menuData';
 import './header.scss';
 import { imageUrl, siteDomain } from '../../../Utils/domains';
 
-export default function Header() {
+export default function Header(props) {
         const [isSideBarOpen, setIsSideBarOpen]=useState(false)
         const [flag, setFlag] = useState(false);
         const dispatch = useDispatch()
@@ -58,12 +58,13 @@ export default function Header() {
                         </span>
                     </Link>
                 </div>
-
-                <Link 
-                    to="/resume-score-checker/"
-                    className="btn btn-md btn-outline-blue btn-round-30">
-                        Check Score
-                </Link>
+                {
+                    ((props.page === 'homePage') && localStorage.getItem('resume_score')) ? (
+                        <Link to="/resume-score-checker/score-checker" className="btn btn-md btn-outline-blue btn-round-30">
+                            Check Score
+                        </Link>
+                    ) : null
+                }
     
                 {/* SideBar */}
                     { menuData.length && (
