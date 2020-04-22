@@ -1048,4 +1048,5 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
 
 
     def prepare_pOff(self, obj):
-        return json.dumps(list(obj.offer_set.filter(active=True,expiry_date__gt=datetime.now()).values('offers','id')))
+        return json.dumps(list(obj.offer_set.filter(active=True,expiry_date__gt=datetime.now()).values('offers','id',
+                                                                                                       'icon')))
