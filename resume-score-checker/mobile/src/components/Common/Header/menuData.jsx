@@ -12,7 +12,7 @@ export const menuData = [
     },
     {
         label : 'Job Assistance',
-        url: `${siteDomain}/services/resume-writing/63/`,
+        url: "https://learning.shine.com/services/resume-writing/63/",
         icon: 'job-assistance'
     },
     {

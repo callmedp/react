@@ -1,8 +1,7 @@
 import React, {useState,useEffect} from 'react';
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import * as Actions from '../../../stores/scorePage/actions/index';
 import { Link } from 'react-router-dom';
-import Loader from '../Loader/loader';
 import {Toast} from '../../../services/Toast'
 import { menuData } from './menuData';
 import './header.scss';
