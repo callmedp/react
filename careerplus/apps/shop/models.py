@@ -74,6 +74,7 @@ from .choices import (
     SUB_HEADING_CHOICE_ATTR_MAPPING_DESKTOP,
     SUB_HEADING_CHOICE_ATTR_MAPPING_MOBILE,
     PRODUCT_TAG_CHOICES,
+    SECTION_TYPE_CHOICES,
     convert_inr,
     convert_usd,
     convert_aed,
@@ -3523,7 +3524,7 @@ class Section(AbstractAutoDate):
     active = models.BooleanField(default=False)
     heading = models.CharField(_('heading'), max_length=255,blank=True,default='')
     sub_section = models.ManyToManyField('shop.SubSection',blank=True,null=True)
-
+    section_type = models.PositiveSmallIntegerField(default=0, choices=SECTION_TYPE_CHOICES)
     product = models.ManyToManyField('shop.Product',blank=True,null=True)
 
 
@@ -3531,6 +3532,9 @@ class Section(AbstractAutoDate):
         if not self.image:
             return
         return self.image.url
+
+    def section_type_text(self):
+        return dict(SECTION_TYPE_CHOICES).get(self.section_type, '')
 
     class Meta:
         ordering = ['-priority', ]
