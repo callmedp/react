@@ -58,7 +58,7 @@ export default function CallToActionScore() {
                 </button>
 
                 <div className="d-flex align-items-center btn btn-outline-white btn-round-30 fs-11 px-20">
-                    <i className="sprite upload mr-5"></i> { filename }                            
+                    <i className="sprite export mr-5"></i> { filename }                            
                     <input className="file-upload__input_left" type="file" name="file" onChange = { fileUpload }></input>
                 </div>
             

@@ -50,12 +50,20 @@ export default function Header() {
 
         return(
             <div className="header">
-                <span className="sprite header__barMenu mr-15" onClick={handleMenuButtonClick}></span>
-    
-                <Link to = "/resume-score-checker/">
-                    <span className="header__logo">
-                        <img src={`${imageUrl}score-checker/images/mobile/logo.png`} alt="Header"/>
-                    </span>
+                <div className="d-flex align-items-center">
+                    <span className="sprite header__barMenu mr-10" onClick={handleMenuButtonClick}></span>
+        
+                    <Link to = "/resume-score-checker/">
+                        <span className="header__logo">
+                            <img src={`${imageUrl}score-checker/images/mobile/logo.svg`} alt="Header"/>
+                        </span>
+                    </Link>
+                </div>
+
+                <Link 
+                    to="/resume-score-checker/"
+                    className="btn btn-md btn-outline-blue btn-round-30">
+                        Check Score
                 </Link>
     
                 {/* SideBar */}

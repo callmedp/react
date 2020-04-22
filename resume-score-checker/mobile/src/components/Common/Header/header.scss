@@ -4,7 +4,7 @@
 .header {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
     padding: 1rem 1.5rem;
 
     &__logo {
@@ -12,7 +12,7 @@
     }
 
     &__barMenu {
-        @include icon-block (26px, 17px, -58px -134px);
+        @include icon-block (21px, 19px, -63px -134px);
     }
 
     .nav {
