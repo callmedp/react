@@ -22,8 +22,6 @@ const ResumeReview=props=>{
           }
         })
         setSubSection(score)
-        console.log("this is score")
-        console.log(score)
         setToggle(newToggle)
       }
     

@@ -1056,7 +1056,7 @@ $figure-caption-color:              $gray-600 !default;
 
 // Breadcrumbs
 
-$breadcrumb-font-size:              null !default;
+$breadcrumb-font-size:              0.85em !default;
 
 $breadcrumb-padding-y:              .75rem !default;
 $breadcrumb-padding-x:              1rem !default;
@@ -1067,7 +1067,7 @@ $breadcrumb-margin-bottom:          1rem !default;
 $breadcrumb-bg:                     None !default;
 $breadcrumb-divider-color:          $gray-600 !default;
 $breadcrumb-active-color:           $white !default;
-$breadcrumb-divider:                quote("/") !default;
+$breadcrumb-divider:                quote("-") !default;
 
 $breadcrumb-border-radius:          $border-radius !default;
 

@@ -10,7 +10,7 @@ const ImproveScore = props => {
         <div className="improve-score__wrap">
           <div className="improve-score__leftPan">
             <h2><span>Time to improve your resume score</span></h2>
-            <p>“Figuring out the way to improve your resume score?” Reach out to our professional resume writers to make your resume more compelling.</p>
+            <p>Stuck on how to perfect your resume score? Reach out to our professional resume writers to get expert assistance</p>
           </div>
 
           <div className="improve-score__rightPan">

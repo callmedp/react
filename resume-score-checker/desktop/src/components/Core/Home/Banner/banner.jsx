@@ -66,7 +66,13 @@ const Banner = props => {
         event.persist();
         let file1 = event.target.files[0];
         event.target.value = null
-        if ((file1.name.slice(-4) === '.pdf' || file1.name.slice(-4) === '.doc' || file1.name.slice(-5) === '.docx' || file1.name.slice(-4) === '.txt')   && (file1.size/(1024*1024)<=5)) {
+        if(file1.size/(1024*1024)>5){
+            Toast.fire({
+                icon: 'warning',
+                html: '<h3>File size should be less than 5 MB<h3>',
+            })
+        }
+        else if (file1.name.slice(-4) === '.pdf' || file1.name.slice(-4) === '.doc' || file1.name.slice(-5) === '.docx' || file1.name.slice(-4) === '.txt') {
             try {
                 setFlag(true)
                 await new Promise((resolve, reject) => {
@@ -88,7 +94,7 @@ const Banner = props => {
         else {
             Toast.fire({
                 icon: 'warning',
-                html: '<h3>Please select the file in the format PDF,DOC,DOCX,TXT and less than 5MB only <h3>',
+                html: '<h3>Please select the file in the format PDF,DOC,DOCX,TXT only<h3>',
             })
         }
     }
