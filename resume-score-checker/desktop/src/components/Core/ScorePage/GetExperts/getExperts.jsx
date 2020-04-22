@@ -36,54 +36,57 @@ const GetExperts=props=>{
         <h2><span>Get Expert Help</span></h2>
         <p>Shine Learning is India’s largest professional courses and career skills portal. Launched by Shine.com, Shine Learning has a vision to up-skill the Indian talent pool to adapt to the changing job market.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
         <ul className="expert-help__list mt-5">
-          <li className="expert-help__item">Resume Writing</li>
-          <li className="expert-help__item">Resume Writing</li>
-          <li className="expert-help__item">Resume Writing</li>
-          <li className="expert-help__item">Resume Writing</li>
+          <li className="expert-help__item"><a href="#">Resume Writing</a></li>
+          <li className="expert-help__item"><a href="#">Visual Resume</a></li>
+          <li className="expert-help__item"><a href="#">Resume Builder</a></li>
+          <li className="expert-help__item"><a href="#">International Resume</a></li>
         </ul>
       </div>
 
-        <div className="col-md-4 expert-help__login need-help pl-5">
-          <h3>Fill the form below to get help</h3>
+        <div className="col-md-4 pl-5">
+          <div className="expert-help__login need-help pl-5">
+            <h3>Fill the form below to get help</h3>
 
-          <form className="mt-5" id="callUsForm" onSubmit={handleSubmit(onSubmit)}  noValidate="novalidate">
+            <form className="mt-5" id="callUsForm" onSubmit={handleSubmit(onSubmit)}  noValidate="novalidate">
 
-            <div className={errors?.email ? "form-group error" : "form-group"} >
-              <input type="text" className="form-control input_field" id="email" name="email" placeholder="Email" ref={register({required:true,pattern:/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/})} />
-              <label htmlFor="email" className="input_label" >Email</label>
-              {errors?.email?.type === "required" && <span className="error__msg">This field is required</span>}
-              {errors?.email?.type === "pattern" && <span className="error__msg">Email address is invalid!</span>}
-            </div>
-  
-            <div className={errors?.name ? "form-group error" : "form-group"}>
-              <input type="text" className="form-control input_field" id="name" name="name" placeholder="Name" ref={register({required : true})} />
-              <label htmlFor="name" className="input_label">Name</label>
-              {errors?.name?.type === "required" && <span className="error__msg">This field is required</span>}
-            </div>
-            <div className="d-flex expert-help__mobile">
-              <div className="custom-select-box">
-                    <select name="country" className="custom-select" id="country-code" ref={register({required:true})}>
-                      { 
-                      COUNTRY_CODES.map((item,index)=>{
-                      return (
-                        <option value={item.code} key={index}>
-                        {item.code}&nbsp;&nbsp;&nbsp;&nbsp; -- &nbsp;&nbsp;&nbsp;&nbsp;{item.country}
-                        </option>
-                      )
-                      })
-                    }
-                </select>
+              <div className={errors?.email ? "form-group error" : "form-group"} >
+                <input type="text" className="form-control input_field" id="email" name="email" placeholder="Email" ref={register({required:true,pattern:/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/})} />
+                <label htmlFor="email" className="input_label" >Email</label>
+                {errors?.email?.type === "required" && <span className="error__msg">This field is required</span>}
+                {errors?.email?.type === "pattern" && <span className="error__msg">Email address is invalid!</span>}
               </div>
-              
-              <div className={ errors.number ? "form-group expert-help__mobile--mobile error " : "form-group expert-help__mobile--mobile"}>
-                <input type="text" className="form-control input_field error"  id="number" name="number" placeholder="Mobile" ref={register({required : true,pattern:/^[0-9-]+$/, maxLength:13})} />
-                <label htmlFor="mobile" className="input_label">Mobile</label>
-                {errors?.number?.type === "required" && <span className="error__msg">This field is required</span>}
-                {errors?.number?.type === "pattern" && <span className="error__msg">Mobile number is not valid!</span>}
-                {errors?.number?.type === "maxLength" && <span className="error__msg">Mobile number is not valid!</span>}
+
+              <div className={errors?.name ? "form-group error" : "form-group"}>
+                <input type="text" className="form-control input_field" id="name" name="name" placeholder="Name" ref={register({required : true})} />
+                <label htmlFor="name" className="input_label">Name</label>
+                {errors?.name?.type === "required" && <span className="error__msg">This field is required</span>}
               </div>
-            </div>
-            <button type="submit" className="btn btn-primary btn-round-40 px-5 py-3 mt-3">Submit</button></form>
+              <div className="d-flex expert-help__mobile">
+                <div className="custom-select-box">
+                      <select name="country" className="custom-select" id="country-code" ref={register({required:true})}>
+                        { 
+                        COUNTRY_CODES.map((item,index)=>{
+                        return (
+                          <option value={item.code} key={index}>
+                          {item.code}&nbsp;&nbsp;&nbsp;&nbsp; -- &nbsp;&nbsp;&nbsp;&nbsp;{item.country}
+                          </option>
+                        )
+                        })
+                      }
+                  </select>
+                </div>
+                
+                <div className={ errors.number ? "form-group expert-help__mobile--mobile error " : "form-group expert-help__mobile--mobile"}>
+                  <input type="text" className="form-control input_field error"  id="number" name="number" placeholder="Mobile" ref={register({required : true,pattern:/^[0-9-]+$/, maxLength:13})} />
+                  <label htmlFor="mobile" className="input_label">Mobile</label>
+                  {errors?.number?.type === "required" && <span className="error__msg">This field is required</span>}
+                  {errors?.number?.type === "pattern" && <span className="error__msg">Mobile number is not valid!</span>}
+                  {errors?.number?.type === "maxLength" && <span className="error__msg">Mobile number is not valid!</span>}
+                </div>
+              </div>
+              <button type="submit" className="btn btn-primary btn-round-40 px-5 py-3 mt-3">Submit</button>
+            </form>
+          </div>
         </div>
 
     </div>

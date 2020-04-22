@@ -18,16 +18,21 @@
 
     &__item {
         list-style-type: none;
-        padding: 10px 10px 10px 30px;
-        background-color: #F8F3FF;
-        border-radius: 4px;
         position: relative;
+       
+
+        a {
+            padding: 10px 10px 10px 30px;
+            background-color: #F8F3FF;
+            border-radius: 4px;
+            color: $gray-300;
+        }
 
         &::before {
             content: '';
             @extend %blue-bullet;
             position: absolute;
-            top: 16px;
+            top: 7px;
             left: 12px;
 
         }

@@ -126,8 +126,10 @@
 
 .btn-outline-light {
   &:hover {
+    color: $gray-300;
+
     .export {
-        opacity: .4;
+        opacity: 1;
         background-position: 0 0;
     }
   }
