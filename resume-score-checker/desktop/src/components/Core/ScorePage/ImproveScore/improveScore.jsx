@@ -2,7 +2,7 @@ import React from 'react';
 import './improveScore.scss'
 import { siteDomain } from '../../../../utils/domains';
 const ImproveScore = props => {
-  const staticUrl = window&& window.config && window.config.staticUrl || '/media/static/'
+  const staticUrl = window?.config?.staticUrl || '/media/static/'
   return (
 
     <section className="improve-score">

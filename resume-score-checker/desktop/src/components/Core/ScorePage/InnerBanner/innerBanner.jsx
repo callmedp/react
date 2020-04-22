@@ -94,11 +94,10 @@ const InnerBanner = props => {
                                 <div className="banner-score__resume-scoreWrap">
                                     <div className="banner-score__progressBar">
 
-                                        <div className="ko-progress-circle" data-progress={Math.round(localScore)}>
+                                        <div className="ko-progress-circle" data-progress={localScore ? Math.round(localScore) : 0 }>
                                             <div className="ko-progress-circle__text">
                                                 <strong>{localScore}</strong>
                                                 <p className="fs-12">Resume score</p>
-
                                             </div>
                                             <div className="ko-circle">
                                                 <div className="full ko-progress-circle__slice">

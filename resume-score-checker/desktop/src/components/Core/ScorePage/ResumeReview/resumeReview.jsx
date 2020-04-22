@@ -48,6 +48,7 @@ const ResumeReview=props=>{
               {score.section_name}</div>
               <span className="fs-12"><strong className="fs-16">{score.section_score}</strong>/{score.section_total_score}</span>
             </li>
+
         )})
             }
         </ul> 
@@ -73,7 +74,7 @@ const ResumeReview=props=>{
             </div>
             </div>
           </div>
-          <p>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</p>
+         {/* <p>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</p>  */}
           <div dangerouslySetInnerHTML={Description(subSection?.section_description)}></div>
         </div>
       </div>
