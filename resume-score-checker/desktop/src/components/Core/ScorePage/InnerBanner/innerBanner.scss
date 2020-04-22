@@ -40,6 +40,13 @@
         margin-bottom: 15px;
         position: absolute;
         bottom: 26px;
+
+        &--fileName {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding-right: 30px;
+        }
     }
 
     &__progressBar {
@@ -66,7 +73,7 @@
 .ko-progress-circle {
 	width:  $circle-size;
     height: $circle-size;
-    margin-top: 105px;
+    margin-top: 90px;
 	background-color: $circle-background;
     border-radius: 50%;
     position: relative;

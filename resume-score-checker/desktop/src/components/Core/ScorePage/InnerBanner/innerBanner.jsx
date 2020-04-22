@@ -109,8 +109,8 @@ const InnerBanner = props => {
                                         </div>
                                     </div>
                                     <div className="banner-score__myresume">
-                                        <a href="/#">
-                                            <i className="sprite clip"></i>
+                                        <a className="banner-score__myresume--fileName " href="/#">
+                                            <i className="sprite clip mr-2"></i>
                                         {file_name}
                                         </a>
 
