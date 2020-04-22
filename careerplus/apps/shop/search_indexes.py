@@ -1018,9 +1018,12 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             return json.dumps(detail)
 
     def prepare_pRT(self, obj):
-        review = Review.objects.filter(object_id=obj.id,status=1).values(
-            'id', 'status', 'title', 'user_email', 'user_id', 'user_name','content','average_rating')
-        return json.dumps(list(review))
+        review = Review.objects.only('id', 'status', 'title', 'user_email', 'user_id', 'user_name','content','average_rating','created').filter(object_id=obj.id,status=1)
+        data = [{'id':rev.id,'status':rev.status,'title':rev.title ,'user_email':rev.user_email,'user_id':rev.user_id,
+                 'user_name':rev.user_name,'content':rev.content,'average_rating':rev.average_rating,
+                 'created':rev.created.strftime("%d %b, %Y"),'rating':rev.get_ratings()} for
+                rev in review]
+        return json.dumps(data)
 
     def prepare_pBan(self, obj):
         return obj.get_banner_url()

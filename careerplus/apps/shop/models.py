@@ -51,7 +51,8 @@ from .functions import (
     get_upload_path_feature_profile_file,
     get_upload_path_for_sample_certicate,
     get_upload_path_product_subsection_icon,
-    get_upload_path_product_section_image)
+    get_upload_path_product_section_image,
+    get_upload_path_product_offer_icon,)
 from .choices import (
     SERVICE_CHOICES, FACULTY_CHOICES,
     CATEGORY_CHOICES,
@@ -3463,6 +3464,9 @@ class Offer(AbstractAutoDate):
     expiry_date = models.DateTimeField(blank=True,null=True)
     max_used = models.PositiveIntegerField(_('Maximum number of times this offer can be used'),default=100)
     active = models.BooleanField(default=False)
+    icon  = models.ImageField(
+        _('offer icon'), upload_to=get_upload_path_product_offer_icon,
+        blank=True, null=True)
     product = models.ManyToManyField('shop.Product',blank=True,null=True)
 
 
@@ -3491,7 +3495,7 @@ class SubSection(AbstractAutoDate):
         ordering = ['-priority', ]
 
     def __str__(self):
-        return 'SubSection' + str(self.id)
+        return '{}={}'.format(self.id,self.heading)
 
     def get_desc(self):
         try:

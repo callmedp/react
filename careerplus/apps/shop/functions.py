@@ -68,6 +68,9 @@ def get_upload_path_product_subsection_icon(instance, filename):
 def get_upload_path_product_section_image(instance, filename):
     return "section/product/{filename}".format(filename=get_file_name(filename))
 
+def get_upload_path_product_offer_icon(instance, filename):
+    return "offer/{id}/product/{filename}".format(filename=get_file_name(filename),id=instance.id)
+
 
 def upload_FA(filename):
     from .models import FunctionalArea, Product, ProductFA
