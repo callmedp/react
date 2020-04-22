@@ -12,8 +12,6 @@ const InnerBanner = props => {
 
     const [flag, setFlag] = useState(false);
     const localScore = JSON.parse(localStorage.getItem('resume_score'))?.total_score
-    const total_local_score = JSON.parse(localStorage.getItem('resume_score'))?.section_score
-    const reduced = (accumulator, currentValue) => accumulator + currentValue.section_total_score;
     const file_name = localStorage.getItem('file_name')
     const dispatch = useDispatch()
     const history = useHistory()
@@ -96,7 +94,7 @@ const InnerBanner = props => {
                                 <div className="banner-score__resume-scoreWrap">
                                     <div className="banner-score__progressBar">
 
-                                        <div className="ko-progress-circle" data-progress={Math.round(localScore * 100 / total_local_score?.reduce(reduced, 0))}>
+                                        <div className="ko-progress-circle" data-progress={Math.round(localScore)}>
                                             <div className="ko-progress-circle__text">
                                                 <strong>{localScore}</strong>
                                                 <p className="fs-12">Resume score</p>
@@ -128,9 +126,9 @@ const InnerBanner = props => {
                         </div>
                         <div className="col-md-6 h-100 d-flex align-items-self-start justify-content-center flex-column">
                             <h1 className="fs-30">
-                                <span>Hello {localStorage.getItem('userName') || 'User'},<br />Your resume Scored {localScore} out of {total_local_score?.reduce(reduced, 0)}</span>
+                                <span>Hello {localStorage.getItem('userName') || 'User'},<br />Your resume Scored {localScore} out of 100 </span>
                             </h1>
-                            {scoreBasedText(localScore * 100 / total_local_score?.reduce(reduced, 0))}
+                            {scoreBasedText(localScore)}
                             <div className="d-flex mt-5">
                                 <LinkScroll
                                     to='getexpert'

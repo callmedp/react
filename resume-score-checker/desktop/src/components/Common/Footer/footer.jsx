@@ -10,10 +10,10 @@ const Footer=(props)=> {
         <div className="row mb-4">
           <div className="footer-links col-sm-8">
             <a href="https://learning.shine.com/about-us">About Us</a>
-            {/* <a href="#banner">Partners</a> */}
             <a href="https://learning.shine.com/privacy-policy/">Privacy Policy</a>
             <a href="https://learning.shine.com/tnc/">Terms &amp; Conditions</a>
             <a href="https://learning.shine.com/contact-us">Contact Us</a>
+            <a href="https://learning.shine.com/disclaimer">Disclaimer</a>
           </div>
 
           <div className="footer-social col-sm-4">
