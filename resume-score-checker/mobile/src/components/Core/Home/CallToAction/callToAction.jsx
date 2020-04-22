@@ -21,7 +21,7 @@ export default function CallToAction() {
         setVisible(!visible)
         const file = event.target.files[0];
         event.target.value = null
-        if(file.name.slice(-4)==='.pdf' || file.name.slice(-4)==='.txt' || file.name.slice(-4)==='.doc' || file.name.slice(-5)==='.docx'){
+        if(file.name.slice(-4).toLowerCase() ==='.pdf' || file.name.slice(-4).toLowerCase() ==='.txt' || file.name.slice(-4).toLowerCase() ==='.doc' || file.name.slice(-5).toLowerCase() ==='.docx'){
             if(!(file.size/(1024*1024)<=5)) {
                 Toast('error', 'File size should be less than 5MB')
                 setVisible(false)

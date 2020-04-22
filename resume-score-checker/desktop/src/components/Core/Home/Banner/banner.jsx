@@ -72,7 +72,7 @@ const Banner = props => {
                 html: '<h3>File size should be less than 5 MB<h3>',
             })
         }
-        else if (file1.name.slice(-4) === '.pdf' || file1.name.slice(-4) === '.doc' || file1.name.slice(-5) === '.docx' || file1.name.slice(-4) === '.txt') {
+        else if (file1.name.slice(-4).toLowerCase() === '.pdf' || file1.name.slice(-4).toLowerCase() === '.doc' || file1.name.slice(-5).toLowerCase() === '.docx' || file1.name.slice(-4).toLowerCase() === '.txt') {
             try {
                 setFlag(true)
                 await new Promise((resolve, reject) => {
