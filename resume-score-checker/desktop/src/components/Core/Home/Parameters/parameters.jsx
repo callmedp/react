@@ -61,7 +61,7 @@ const Parameters=props=> {
                 </div>
 
                 <div className="text-center mt-5">
-                    {flag ? <Link to='resume-score-checker/score-checker' className="btn btn-primary btn-round-40 px-5 py-4 mr-5">Check the score now</Link> :
+                    {flag ? <Link to='/resume-score-checker/score-checker' className="btn btn-primary btn-round-40 px-5 py-4 mr-5">Check the score now</Link> :
                         <LinkScroll to='banner' className="btn btn-primary btn-round-40 px-5 py-4 mr-5">Check the score now</LinkScroll> }
                 </div>
 
