@@ -33,7 +33,7 @@ export default function ResumeDetail() {
                                     </label>
                                     <div className="tab-content">
                                         {
-                                            !(value['section_score']) ? <p>Oops ! We weren't able to detect this section on your resume. Let our experts guide you with most-commonly used terms and best practices to make your resume ATS friendly.</p> : null
+                                            !(value['section_score']) ? <p><strong>Oops ! We weren't able to detect this section on your resume. Let our experts guide you with most-commonly used terms and best practices to make your resume ATS friendly.</strong></p> : null
                                         }
                                         <div dangerouslySetInnerHTML={Description(value['section_description'])} />
                                         <br/>
