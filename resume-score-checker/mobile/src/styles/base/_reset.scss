@@ -22,21 +22,22 @@
     
   }
   
+#root {
   a {
       color: $primary;
       text-decoration: none;
   }
-  
+
   figure {
     margin: 0;
   }
-  
+
   hr {
     border: 0 none;
     border-top: 1px solid #ddd;
     margin: 10px 0 15px;
   }
-  
+
   li {
       @extend %remove-space;
       list-style: none;
@@ -47,7 +48,8 @@
       list-style: none;
     }
 
-h1, h2 {
+    
+  h1, h2 {
     &::before {
         content: '';
         width: 100px;
@@ -59,4 +61,5 @@ h1, h2 {
     span {
         display: block;
     }
+  }
 }
