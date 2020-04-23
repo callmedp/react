@@ -1,9 +1,10 @@
+@import './_path.scss';
 // Variables
 //
 // Variables should follow the `$component-state-property-size` formula for
 // consistent naming. Ex: $nav-link-disabled-color and $modal-content-box-shadow-xs.
 //$path:  get('staticUrl') + "score-checker/images";
-$path:  '/meida/static/' + "score-checker/images";
+// $path:  '/meida/static/' + "score-checker/images";
 
 // Color system
 
