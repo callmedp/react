@@ -62,11 +62,11 @@ export default function Header(props) {
                 <div className="d-flex align-items-center">
                     <span className="sprite header__barMenu mr-10" onClick={handleMenuButtonClick}></span>
         
-                    <Link to = "/resume-score-checker/" onClick={handleCheckScoreClick}>
+                    <a href = {`${siteDomain}`} onClick={handleCheckScoreClick}>
                         <span className="header__logo">
                             <img src={`${imageUrl}score-checker/images/mobile/logo.svg`} alt="Header"/>
                         </span>
-                    </Link>
+                    </a>
                 </div>
                 {
                     ((props.page === 'homePage') && localStorage.getItem('resume_score')) ? (
