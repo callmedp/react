@@ -1,6 +1,7 @@
 import React, {useState,useEffect} from 'react';
 import { useDispatch } from 'react-redux';
 import * as Actions from '../../../stores/scorePage/actions/index';
+import {eventClicked} from '../../../stores/googleAnalytics/actions/index'
 import { Link } from 'react-router-dom';
 import {Toast} from '../../../services/Toast'
 import { menuData } from './menuData';
@@ -47,12 +48,21 @@ export default function Header(props) {
             window.location.href = `${siteDomain}/logout/?next=/resume-score-checker/`
         }
 
+        const handleCheckScoreClick = () =>{
+            dispatch(
+                eventClicked({
+                    'action': 'M_CheckScore',
+                    'label': 'Header'
+                })
+            )
+        }
+
         return(
             <div className="header">
                 <div className="d-flex align-items-center">
                     <span className="sprite header__barMenu mr-10" onClick={handleMenuButtonClick}></span>
         
-                    <Link to = "/resume-score-checker/">
+                    <Link to = "/resume-score-checker/" onClick={handleCheckScoreClick}>
                         <span className="header__logo">
                             <img src={`${imageUrl}score-checker/images/mobile/logo.svg`} alt="Header"/>
                         </span>

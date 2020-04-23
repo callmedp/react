@@ -5,9 +5,9 @@ import { useEffect } from 'react';
 export default function Banner() {
     useEffect(() => window.scrollTo(0,0),[])
     const localValue = JSON.parse(localStorage.getItem('resume_score'))
-    const storeValue = localValue?.total_score
+    const storeValue = localValue?.total_score;
 
-    const score = localStorage.getItem('resume_score') === null ? storeValue : localValue['total_score']
+    const score = localStorage.getItem('resume_score') === null ? storeValue : localValue['total_score'];
 
     const scoreBasedDescription = () => {
         switch(true){

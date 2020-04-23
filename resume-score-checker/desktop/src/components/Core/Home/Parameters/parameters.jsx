@@ -1,12 +1,16 @@
 import React,{useEffect,useState } from 'react';
 import './parameters.scss'
+import { useDispatch } from 'react-redux';
+import { eventClicked } from '../../../../store/googleAnalytics/actions/index'
 import { Link } from 'react-router-dom';
 import { Link as LinkScroll } from 'react-scroll';
 
 const Parameters=props=> {
 
     const [flag, setFlag] =useState(false)
-    const staticUrl = window?.config?.staticUrl || '/media/static/'
+    const staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
+    const dispatch = useDispatch()
+
     useEffect(()=>{
         if(!JSON.parse(localStorage.getItem('resume_score'))){
             setFlag(false)
@@ -15,6 +19,14 @@ const Parameters=props=> {
             setFlag(true)
         }
     },[])
+
+    const handleCheckScore = () => {
+        dispatch(eventClicked({
+            'action': 'CheckScore',
+            'label': 'Params'
+        }))
+
+    }
 
     return (
 
@@ -61,8 +73,8 @@ const Parameters=props=> {
                 </div>
 
                 <div className="text-center mt-5">
-                    {flag ? <Link to='/resume-score-checker/score-checker' className="btn btn-primary btn-round-40 px-5 py-4 mr-5">Check the score now</Link> :
-                        <LinkScroll to='banner' className="btn btn-primary btn-round-40 px-5 py-4 mr-5">Check the score now</LinkScroll> }
+                    {flag ? <Link to='/resume-score-checker/score-checker' className="btn btn-primary btn-round-40 px-5 py-4 mr-5" onClick={handleCheckScore}>Check the score now</Link> :
+                        <LinkScroll to='banner' className="btn btn-primary btn-round-40 px-5 py-4 mr-5" onClick={handleCheckScore}>Check the score now</LinkScroll> }
                 </div>
 
             </div>

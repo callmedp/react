@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import './callToAction.scss';
 import * as Actions from '../../../../stores/scorePage/actions/index';
+import {eventClicked} from '../../../../stores/googleAnalytics/actions/index';
 import Loader from '../../../Common/Loader/loader';
 import { Toast } from '../../../../services/Toast';
 import {siteDomain} from '../../../../Utils/domains';
@@ -18,9 +19,14 @@ export default function CallToAction() {
 
     const dispatch = useDispatch();
     const fileUpload = async event => {
+        dispatch(eventClicked({
+            'action': 'M_UploadResume',
+            'label': 'Footer'
+          }))
+
         setVisible(!visible)
         const file = event.target.files[0];
-        event.target.value = null
+        event.target.value = null;
         if(file.name.slice(-4).toLowerCase() ==='.pdf' || file.name.slice(-4).toLowerCase() ==='.txt' || file.name.slice(-4).toLowerCase() ==='.doc' || file.name.slice(-5).toLowerCase() ==='.docx'){
             if(!(file.size/(1024*1024)<=5)) {
                 Toast('error', 'File size should be less than 5MB')
@@ -56,6 +62,11 @@ export default function CallToAction() {
     }
 
     const importResume = async () => {
+
+        dispatch(eventClicked({
+            'action': 'M_ImportShine',
+            'label': 'Footer'
+          }))
         setVisible(!visible)
         if (!localStorage.getItem('userId')) {
             const isSessionAvailable = await new Promise((resolve, reject) => dispatch(Actions.checkSessionAvailability({resolve, reject})));
