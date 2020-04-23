@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
     position: 'top-right',
     showConfirmButton: false,
     timer: 4000,
-    timerProgressBar: true,
+    timerProgressBar: false,
     onOpen: (toast) => {
       toast.addEventListener('mouseenter', Swal.stopTimer)
       toast.addEventListener('mouseleave', Swal.resumeTimer)
