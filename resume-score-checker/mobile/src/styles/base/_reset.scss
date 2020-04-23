@@ -22,7 +22,7 @@
     
   }
   
-#root {
+
   a {
       color: $primary;
       text-decoration: none;
@@ -48,6 +48,7 @@
       list-style: none;
     }
 
+#root {
     
   h1, h2 {
     &::before {
