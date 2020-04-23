@@ -12,6 +12,7 @@ const GetExperts=props=>{
   const dispatch = useDispatch()
   const onSubmit =async (data,event) =>{
     try{
+      data.name = data.name.trim()
       await new Promise((resolve, reject) => {
         dispatch(Actions.expertFormSubmit({data, resolve, reject}));
         })
@@ -56,7 +57,7 @@ const GetExperts=props=>{
             </div>
   
             <div className={errors?.name ? "form-group error" : "form-group"}>
-              <input type="text" className="form-control input_field" id="name" name="name" placeholder="Name" ref={register({required : true, pattern : /^[A-Za-z][A-Za-z0-9\s]*$/})} />
+              <input type="text" className="form-control input_field" id="name" name="name" placeholder="Name" ref={register({required : true, pattern : /^[A-Za-z\s]+$/})} />
               <label htmlFor="name" className="input_label">Name</label>
               {errors?.name?.type === "required" && <span className="error__msg">This field is required</span>}
               {errors?.name?.type === "pattern" && <span className="error__msg">Invalid name</span>}

@@ -11,6 +11,7 @@ export function Form(hide){
     const dispatch = useDispatch()
     const onSubmit = async (values, event) => {
         try{
+            values.name = values.name.trim()
             let response = await new Promise((resolve, reject) => {
                 dispatch(Actions.expertForm({values, resolve, reject}))
             })
@@ -62,7 +63,7 @@ return (
                                     <input className="form--control floating-input" type="text" placeholder=" " name="name" ref={register({
                                         required : true,
                                         pattern : {
-                                            value : /^[a-zA-Z][a-zA-Z0-9\s]*$/
+                                            value : /^[a-zA-Z\s]+$/
                                         }
                                     })} />
                                     <label>Name</label>
