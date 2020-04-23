@@ -29,14 +29,14 @@ const HowItWorks=props=>{
                 <li className="resume-checker__step">
                     <span className="resume-checker__stepCircle mr-3"><i className="sprite upload-resume d-block"></i></span>
                     <div className="resume-checker__content">
-                        <p className="resume-checker__content--heading mb-0 font-weight-bold">Upload Resume</p>
+                        <p className="resume-checker__content--heading mb-0 font-weight-semi-bold">Upload Resume</p>
                         <p>Just upload your resume or export it from shine.com</p>
                     </div>
                 </li>
                 <li className="resume-checker__step">
                     <span className="resume-checker__stepCircle mr-3"><i className="sprite resume-analysis d-block"></i></span>
                     <div className="resume-checker__content">
-                        <p className="resume-checker__content--heading mb-0 font-weight-bold">Resume Analysis</p>
+                        <p className="resume-checker__content--heading mb-0 font-weight-semi-bold">Resume Analysis</p>
                         <p>Style and content of resume will be checked by industry experts</p>
                     </div>
                 </li>
@@ -44,7 +44,7 @@ const HowItWorks=props=>{
                     <span className="resume-checker__stepCircle mr-3"><i className="sprite get-resume d-block"></i></span>
                     <div className="resume-checker__content"
                     >
-                        <p className="resume-checker__content--heading mb-0 font-weight-bold">Get Report in 30 sec</p>
+                        <p className="resume-checker__content--heading mb-0 font-weight-semi-bold">Get Report in 30 sec</p>
                         <p>After checking your resume you will get your resume score also will let you know how to get it improved</p>
                     </div>
                 </li>
