@@ -1,20 +1,30 @@
-import React,{useEffect,useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import './benefits.scss'
 import { Link } from 'react-router-dom';
-import {Link as LinkScroll } from 'react-scroll';
+import { useDispatch } from 'react-redux';
+import { eventClicked } from '../../../../store/googleAnalytics/actions/index'
+import { Link as LinkScroll } from 'react-scroll';
 
-const Benefits=props=> {
+const Benefits = props => {
 
-    const [flag,setFlag] = useState('false')
-
-    useEffect(()=>{
-        if(!JSON.parse(localStorage.getItem('resume_score'))){
+    const [flag, setFlag] = useState('false')
+    const dispatch = useDispatch()
+    useEffect(() => {
+        if (!JSON.parse(localStorage.getItem('resume_score'))) {
             setFlag(false)
         }
-        else{
+        else {
             setFlag(true)
         }
-    },[])
+    }, [])
+
+    const handleCheckScore = () => {
+        dispatch(eventClicked({
+            'action': 'CheckScore',
+            'label': 'Benefits'
+        }))
+
+    }
 
     return (
         <section className="container">
@@ -22,9 +32,9 @@ const Benefits=props=> {
                 <div className="col-md-6 benefits__left">
                     <h2><span>What's next- Benefits after getting resume score</span></h2>
                     <p>For a small fee, our professional resume writers can help you take those tips and make your resume, cover letter, and even LinkedIn profile into exactly what recruiters are looking for.</p>
-    { flag ? <Link to='/resume-score-checker/score-checker' className="btn btn-primary btn-round-40 px-5 py-4 mr-5 mt-5">Check the score now</Link> : 
-     <LinkScroll to='banner' className="btn btn-primary btn-round-40 px-5 py-4 mr-5 mt-5">Check the score now</LinkScroll> } 
-            </div>
+                    {flag ? <Link to='/resume-score-checker/score-checker' onClick={handleCheckScore} className="btn btn-primary btn-round-40 px-5 py-4 mr-5 mt-5">Check the score now</Link> :
+                        <LinkScroll to='banner' className="btn btn-primary btn-round-40 px-5 py-4 mr-5 mt-5">Check the score now</LinkScroll>}
+                </div>
                 <div className="col-md-6 pl-5 justify-content-end">
                     <div className="benefits__listBox">
                         <ul className="benefits__lists">
@@ -44,4 +54,4 @@ const Benefits=props=> {
     );
 }
 
-export default  Benefits;
+export default Benefits;

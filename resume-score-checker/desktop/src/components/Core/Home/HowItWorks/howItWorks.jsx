@@ -1,10 +1,14 @@
 import React,{useState, useEffect} from 'react';
 import './howItWorks.scss'
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { eventClicked } from '../../../../store/googleAnalytics/actions/index'
 import { Link as LinkScroll } from 'react-scroll';
 const HowItWorks=props=>{
 
     const [flag, setFlag] = useState(false)
+    const dispatch = useDispatch()
+
     useEffect(()=>{
         if(!JSON.parse(localStorage.getItem('resume_score'))){
             setFlag(false)
@@ -13,6 +17,13 @@ const HowItWorks=props=>{
             setFlag(true)
         }
     },[])
+
+    const handleCheckScore = () => {
+        dispatch(eventClicked({
+            'action': 'CheckScore',
+            'label': 'Howitworks'
+        }))
+    }
 
     return (
         
@@ -53,8 +64,8 @@ const HowItWorks=props=>{
     </div>
 
     <div className="text-center mt-5">
-        { flag ? <Link to='/resume-score-checker/score-checker' className="btn btn-primary btn-round-40 px-5 py-4 mr-5">Check the score now</Link> :
-        <LinkScroll to='banner' className="btn btn-primary btn-round-40 px-5 py-4 mr-5">Check the score now</LinkScroll> }
+        { flag ? <Link to='/resume-score-checker/score-checker' className="btn btn-primary btn-round-40 px-5 py-4 mr-5" onClick={handleCheckScore}>Check the score now</Link> :
+        <LinkScroll to='banner' className="btn btn-primary btn-round-40 px-5 py-4 mr-5" onClick={handleCheckScore}>Check the score now</LinkScroll> }
         </div>
 </section>
     );

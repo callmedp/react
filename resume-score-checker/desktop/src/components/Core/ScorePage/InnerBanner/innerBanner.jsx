@@ -4,6 +4,7 @@ import { Link as LinkScroll } from 'react-scroll';
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux';
 import * as Actions from '../../../../store/LandingPage/actions/index';
+import { eventClicked } from '../../../../store/googleAnalytics/actions/index';
 import Loader from '../../../Loader/loader';
 import { Toast } from '../../../../services/Toast';
 import { useHistory } from "react-router-dom";
@@ -11,16 +12,23 @@ import { useHistory } from "react-router-dom";
 const InnerBanner = props => {
 
     const [flag, setFlag] = useState(false);
-    const localScore = JSON.parse(localStorage.getItem('resume_score'))?.total_score
+    const localScore = JSON.parse(localStorage.getItem('resume_score')) ?.total_score
     const file_name = localStorage.getItem('file_name')
     const dispatch = useDispatch()
     const history = useHistory()
 
-    useEffect(()=>{
-        window.scrollTo(0,0)
-    },[])
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [])
 
     const fileUpload = async event => {
+        dispatch(
+            eventClicked({
+                'action': 'UploadNew',
+                'label': 'Totalscoresection'
+            })
+        )
+
         event.persist();
         let file1 = await event.target.files[0];
         event.target.value = null
@@ -77,6 +85,15 @@ const InnerBanner = props => {
         }
     }
 
+    const handleGetExpertClick = () => {
+        dispatch(
+            eventClicked({
+                'action': 'ExpertHelp',
+                'label': 'Totalscoresection'
+            })
+        )
+    }
+
 
     return (
         <div>
@@ -94,7 +111,7 @@ const InnerBanner = props => {
                                 <div className="banner-score__resume-scoreWrap">
                                     <div className="banner-score__progressBar">
 
-                                        <div className="ko-progress-circle" data-progress={localScore ? Math.round(localScore) : 0 }>
+                                        <div className="ko-progress-circle" data-progress={localScore ? Math.round(localScore) : 0}>
                                             <div className="ko-progress-circle__text">
                                                 <strong>{localScore}</strong>
                                                 <p className="fs-12">Resume score</p>
@@ -114,7 +131,7 @@ const InnerBanner = props => {
                                     <div className="banner-score__myresume">
                                         <a className="banner-score__myresume--fileName " href="/#">
                                             <i className="sprite clip mr-2"></i>
-                                        {file_name}
+                                            {file_name}
                                         </a>
 
                                         {/* <a href="/#" className="btn btn-outline-primary btn-round-40 fs-12 py-1">Download</a> */}
@@ -131,12 +148,13 @@ const InnerBanner = props => {
                             <div className="d-flex mt-5">
                                 <LinkScroll
                                     to='getexpert'
+                                    onClick={handleGetExpertClick}
                                     className="btn btn-secondary btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
                                     Get expert help
                     </LinkScroll>
                                 <div className="file-upload btn btn-outline-light btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
                                     <i className="sprite export mr-3"></i>
-                            Upload New Resume
+                                    Upload New Resume
                         <input className="file-upload__input" type="file" onChange={fileUpload} name="resume" />
                                 </div>
                                 {flag && <Loader></Loader>}
