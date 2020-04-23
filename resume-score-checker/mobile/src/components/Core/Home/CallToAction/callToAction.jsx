@@ -130,7 +130,7 @@ export default function CallToAction() {
             </div>
 
             <button className="d-flex align-items-center btn btn-outline-white btn-round-30 fs-11 px-20" onClick = {importResume}>
-                <i className="sprite export mr-5"></i>
+                <i className="sprite export down mr-5"></i>
                 Import from shine.com
             </button>
             {

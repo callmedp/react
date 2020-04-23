@@ -39,13 +39,14 @@ const ResumeReview=props=>{
 
             <li key={index} onClick={ () => activateLi(score,index) } className={ toggle[index]?.checked ? "active" : ""}> 
               <div>
-                {
-                ((score.section_status===2 && <i className="sprite green-tick mr-4"></i> )
-                  || (score.section_status ===1 && <i className="sprite caution-mark mr-4"></i>)
-                || (<i className="sprite question-mark mr-4"></i>))
-    
-                }
-              {score.section_name}</div>
+                  {
+                  ((score.section_status===2 && <i className="sprite green-tick mr-4"></i> )
+                    || (score.section_status ===1 && <i className="sprite caution-mark mr-4"></i>)
+                  || (<i className="sprite question-mark mr-4"></i>))
+                  }
+                  
+                  {score.section_name}
+              </div>
               <span className="fs-12"><strong className="fs-16">{score.section_score}</strong>/{score.section_total_score}</span>
             </li>
 

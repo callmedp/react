@@ -6,11 +6,11 @@
 @import '../_path.scss';
 
 %blue-gr {
-    background: #7b46ab; 
-    background: -moz-linear-gradient(45deg,  #7b46ab 0%, #997bd5 50%, #997bd5 50%, #b0a2f4 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(45deg,  #7b46ab 0%,#997bd5 50%,#997bd5 50%,#b0a2f4 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(45deg,  #7b46ab 0%,#997bd5 50%,#997bd5 50%,#b0a2f4 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7b46ab', endColorstr='#b0a2f4',GradientType=1 );
+    background: #7B46AB; 
+    background: -moz-linear-gradient(45deg,  #7B46AB 0%, #997BD5 50%, #997BD5 50%, #997BD5 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(45deg,  #7B46AB 0%,#997BD5 50%,#997BD5 50%,#997BD5 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(45deg,  #7B46AB 0%,#997BD5 50%,#997BD5 50%,#997BD5 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7B46AB', endColorstr='#997BD5',GradientType=1 );
 }
 
 %green-tick {

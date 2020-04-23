@@ -1,8 +1,8 @@
-@import '../../../../styles/library/variables';
-@import '../../../../styles/utilities/flex';
+@import '../../../../styles/common.scss';
+@import '../../../../styles/_path.scss';
 
 .call-to-action {
-    background-color: $primary;
+    @extend %blue-gr;
     padding: 15px;
     position: fixed;
     bottom: 0;

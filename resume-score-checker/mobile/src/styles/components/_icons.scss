@@ -14,7 +14,13 @@
 
 .export {
     @include icon-block (14px, 18px, -18px 0);
+
+    &.down {
+        transform: rotate(180deg);
+    }
 }
+
+
 
 .layout-resume {
     @include icon-inblock (43px, 63px, 0 -22px);
