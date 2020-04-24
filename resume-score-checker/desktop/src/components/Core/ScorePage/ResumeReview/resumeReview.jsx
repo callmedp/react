@@ -1,4 +1,5 @@
 import React,{useState, useEffect} from 'react';
+import { useSelector } from 'react-redux';
 import './resumeReview.scss';
 
 const Description = desc =>{
@@ -9,9 +10,11 @@ const ResumeReview=props=>{
     const section_score =JSON.parse(localStorage.getItem('resume_score'))?.section_score
     const [toggle, setToggle] =useState(new Array(section_score?.length).fill({'checked':false}))
     const [subSection,setSubSection] = useState(section_score?.length ? section_score[0] : '')
+    const score_state = useSelector(state=>state?.home?.section_score);
     useEffect(()=>{
-      setToggle([{'checked':true},...toggle])
-    },[])
+      setSubSection(section_score?.length ? section_score[0] : '')
+      setToggle([{'checked':true},...(new Array(section_score?.length).fill({'checked':false}))])
+    },[score_state])
     const activateLi = (score,id) => {
       const newToggle = toggle.map((flag,index)=>{
           if(id===index){
