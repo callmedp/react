@@ -31,7 +31,7 @@ export default function Banner() {
                 
                 <div className="score-banner__image">
                     <div className="score-banner__progressBar">
-                        <div className="ko-progress-circle" data-progress={ Math.round(score) }>
+                        <div className="ko-progress-circle" data-progress={ Math.round(score) ? Math.round(score) : 0 }>
                         <div className="ko-progress-circle__text">
                             <strong>{score}</strong>
                             <p className="fs-12">Resume score</p>
