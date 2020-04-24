@@ -129,9 +129,8 @@ const InnerBanner = props => {
                                         </div>
                                     </div>
                                     <div className="banner-score__myresume">
-                                        <span className="banner-score__myresume--fileName " href="javascript:void(0)">
-                                            <i className="sprite clip mr-2"></i>
-                                            {file_name}
+                                        <span className="banner-score__myresume--fileName ">
+                                            {file_name} 
                                         </span>
 
                                         {/* <a href="/#" className="btn btn-outline-primary btn-round-40 fs-12 py-1">Download</a> */}
@@ -150,7 +149,7 @@ const InnerBanner = props => {
                                     to='getexpert'
                                     onClick={handleGetExpertClick}
                                     className="btn btn-secondary btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
-                                    Get expert help
+                                    Get Expert Help
                     </LinkScroll>
                                 <div className="file-upload btn btn-outline-light btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
                                     <i className="sprite export mr-3"></i>

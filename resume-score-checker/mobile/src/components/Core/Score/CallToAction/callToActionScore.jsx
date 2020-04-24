@@ -72,7 +72,7 @@ export default function CallToActionScore() {
             <div className="d-flex justify-content-between">
                 <button className="d-flex align-items-center file-upload btn btn-yellow btn-round-30 fs-11 mr-10 px-30" onClick={toggle}>
                     <i className="sprite mr-5"></i>
-                    Get expert help
+                    Get Expert Help
                 </button>
 
                 <div className="d-flex align-items-center btn btn-outline-white btn-round-30 fs-11 px-20">
