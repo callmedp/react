@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux';
 import * as Actions from '../../../../store/LandingPage/actions/index';
 import { eventClicked } from '../../../../store/googleAnalytics/actions/index';
-import { Toast } from '../../../../services/Toast';
+import Swal from 'sweetalert2';
 import { COUNTRY_CODES } from '../../../../services/countryCodes';
 import { siteDomain } from '../../../../utils/domains';
 const GetExperts = props => {
@@ -24,13 +24,13 @@ const GetExperts = props => {
         dispatch(Actions.expertFormSubmit({ data, resolve, reject }));
       })
       event.target.reset();
-      Toast.fire({
+      Swal.fire({
         icon: 'success',
         html: '<h3>Submitted Successfully!<h3>'
       })
 
     } catch (e) {
-      Toast.fire({
+      Swal.fire({
         icon: 'error',
         html: '<h3>Something went wrong! Try again.<h3>'
       })

@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import * as Actions from '../../../../store/LandingPage/actions/index';
 import { eventClicked } from '../../../../store/googleAnalytics/actions/index';
 import Loader from '../../../Loader/loader';
-import { Toast } from '../../../../services/Toast';
+import Swal from 'sweetalert2';
 import { useHistory } from "react-router-dom";
 
 const InnerBanner = props => {
@@ -33,7 +33,7 @@ const InnerBanner = props => {
         let file1 = await event.target.files[0];
         event.target.value = null
         if (file1.size / (1024 * 1024) > 5) {
-            Toast.fire({
+            Swal.fire({
                 icon: 'warning',
                 html: '<h3>File size should be less than 5 MB<h3>',
             })
@@ -53,7 +53,7 @@ const InnerBanner = props => {
                 setFlag(false)
                 if (!err['error_message']) {
 
-                    Toast.fire({
+                    Swal.fire({
                         icon: 'error',
                         html: '<h3>Something went wrong! Try again.<h3>'
                     })
@@ -63,7 +63,7 @@ const InnerBanner = props => {
         }
         else {
 
-            Toast.fire({
+            Swal.fire({
                 icon: 'warning',
                 html: '<h3>Please select the file in the format PDF,DOC,DOCX,TXT only<h3>',
             })

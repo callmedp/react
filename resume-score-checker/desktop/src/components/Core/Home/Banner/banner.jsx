@@ -5,7 +5,7 @@ import * as Actions from '../../../../store/LandingPage/actions/index';
 import { eventClicked } from '../../../../store/googleAnalytics/actions/index'
 import './banner.scss'
 import Loader from '../../../Loader/loader';
-import { Toast } from '../../../../services/Toast';
+import Swal from 'sweetalert2'
 import { siteDomain } from '../../../../utils/domains'
 
 const Banner = props => {
@@ -38,7 +38,7 @@ const Banner = props => {
                 }
                 catch (e) {
                     setFlag(false);
-                    Toast.fire({
+                    Swal.fire({
                         icon: 'error',
                         html: '<h3>Something went wrong! Try again.<h3>'
                     })
@@ -60,7 +60,7 @@ const Banner = props => {
             catch (e) {
                 setFlag(false)
                 if (!e['error_message']) {
-                    Toast.fire({
+                    Swal.fire({
                         icon: 'error',
                         html: '<h3>Something went wrong! Try again.<h3>'
                     })
@@ -79,7 +79,7 @@ const Banner = props => {
         let file1 = event.target.files[0];
         event.target.value = null
         if (file1.size / (1024 * 1024) > 5) {
-            Toast.fire({
+            Swal.fire({
                 icon: 'warning',
                 html: '<h3>File size should be less than 5 MB<h3>',
             })
@@ -96,7 +96,7 @@ const Banner = props => {
             } catch (err) {
                 setFlag(false)
                 if (!err['error_message']) {
-                    Toast.fire({
+                    Swal.fire({
                         icon: 'error',
                         html: '<h3>Something went wrong! Try again.<h3>'
                     })
@@ -104,7 +104,7 @@ const Banner = props => {
             }
         }
         else {
-            Toast.fire({
+            Swal.fire({
                 icon: 'warning',
                 html: '<h3>Please select the file in the format PDF,DOC,DOCX,TXT only<h3>',
             })
