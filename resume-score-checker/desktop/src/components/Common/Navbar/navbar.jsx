@@ -133,7 +133,7 @@ const Navbar = props => {
 
                         <li className="d-flex align-items-center">
                             <a className="cart-icon" href="https://learning.shine.com/cart/payment-summary/">
-                                <span className="" id="cart-counter-id"></span>
+                                <span className="cart-counter" id="cart-counter-id">10</span>
                             </a>
                         </li>
                     </ul>

@@ -65,6 +65,7 @@
     background: url('#{$path}/sprite.png') no-repeat -86px 0; 
     @include size(22px, 24px);
     display: block;
+    position: relative;
 }
 
 .call-dropdown {
@@ -96,4 +97,20 @@
         right: -25px;
         left: auto;
     }
+}
+
+.cart-icon .cart-counter {
+    position: absolute;
+    border-radius: 50%;
+    color: #333;
+    background-color: #ffcf00;
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+    text-align: center;
+    right: -8px;
+    top: -13px;
+    line-height: 18px;
+    font-size: 11px;
+    font-weight: 600;
 }
