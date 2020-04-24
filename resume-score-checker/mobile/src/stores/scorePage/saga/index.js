@@ -103,6 +103,21 @@ function* getCandidateInfo(action) {
 }
 
 
+
+function* getCartCount(action) {
+    try {
+        const result = yield call(Api.getCartCount);
+        const { count } = result;
+        yield put({ type: UPDATE_SCORE, payload: { cartCount: count }});
+
+    }
+    catch (e) {
+        // handle cart error in future.
+    }
+}
+
+
+
 export default function* watchHomePage() {
     yield takeLatest(Actions.UPLOAD_FILE, fileUpload);
     yield takeLatest(Actions.SUBMIT_EXPERT_FORM, expertFormData);
@@ -110,6 +125,8 @@ export default function* watchHomePage() {
     yield takeLatest(Actions.GET_CANDIDATE_ID, getCandidateId);
     yield takeLatest(Actions.GET_CANDIDATE_RESUME, getCandidateResume);
     yield takeLatest(Actions.GET_CANDIDATE_SCORE, getCandidateScore);
-    yield takeLatest(Actions.GET_CANDIDATE_INFO, getCandidateInfo)
+    yield takeLatest(Actions.GET_CANDIDATE_INFO, getCandidateInfo);
+    yield takeLatest(Actions.GET_CART_COUNT, getCartCount);
+
 
 }

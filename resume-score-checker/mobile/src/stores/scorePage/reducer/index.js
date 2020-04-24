@@ -3,7 +3,8 @@ import { UPLOAD_FILE, UPDATE_SCORE } from "../actions/actionTypes";
 const initState = {
     'total_score' : 0,
     'section_score' : [],
-    'error_message' : ''
+    'error_message' : '',
+    'cartCount': 0
 }
 
 export const uploadFileReducer = (state = initState, action) => {

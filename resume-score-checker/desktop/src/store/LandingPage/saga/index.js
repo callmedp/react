@@ -23,11 +23,11 @@ function* getCandidateId(action) {
 function* uploadFileUrl(action) {
     const { payload: { file1, resolve, reject } } = action;
     try {
-        
+
         var fileData = new FormData();
         fileData.append('resume', file1)
         const result = yield call(Api.uploadFileUrl, fileData);
-       
+
         if (result.data['error_message']) {
             Toast.fire({
                 icon: 'error',
@@ -84,7 +84,7 @@ function* checkSessionAvailability(action) {
     try {
         let resp = yield call(Api.checkSessionAvailability)
         const { result } = resp;
-        resolve({ result: result});
+        resolve({ result: result });
     } catch (e) {
         return resolve(false)
     }
@@ -102,20 +102,32 @@ function* getCandidateResume(action) {
 }
 
 function* getCandidateInfo(action) {
-    const { payload: { resolve, reject }} = action;
+    const { payload: { resolve, reject } } = action;
     try {
         const result = yield call(Api.getInformation);
-        const {candidate_id, profile:{first_name, email}} = result; 
+        const { candidate_id, profile: { first_name, email } } = result;
         localStorage.setItem('userId', candidate_id);
         localStorage.setItem('userName', first_name);
         localStorage.setItem('userEmail', email);
-        resolve({candidateId:candidate_id|| '', name: first_name||'', email:email|| ''});
+        resolve({ candidateId: candidate_id || '', name: first_name || '', email: email || '' });
     }
     catch (e) {
         return reject(e);
     }
 }
 
+
+function* getCartCount(action) {
+    try {
+        const result = yield call(Api.getCartCount);
+        const { count } = result;
+        yield put({ type: UPDATE_SCORE, payload: { cartCount: count }});
+
+    }
+    catch (e) {
+        // handle cart error in future.
+    }
+}
 
 
 
@@ -126,5 +138,7 @@ export default function* watchlandingPage() {
     yield takeLatest(Actions.GET_CANDIDATE_ID, getCandidateId);
     yield takeLatest(Actions.GET_CANDIDATE_RESUME, getCandidateResume);
     yield takeLatest(Actions.GET_CANDIDATE_SCORE, getCandidateScore);
-    yield takeLatest(Actions.GET_CANDIDATE_INFO, getCandidateInfo)
+    yield takeLatest(Actions.GET_CANDIDATE_INFO, getCandidateInfo);
+    yield takeLatest(Actions.GET_CART_COUNT, getCartCount);
+
 }

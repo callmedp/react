@@ -1,6 +1,6 @@
 import {
     UPLOAD_FILE_URL,EXPERT_FORM_SUBMIT,CHECK_SESSION_AVAILABILITY,
-    GET_CANDIDATE_ID,GET_CANDIDATE_RESUME, GET_CANDIDATE_SCORE, GET_CANDIDATE_INFO
+    GET_CANDIDATE_ID,GET_CANDIDATE_RESUME, GET_CANDIDATE_SCORE, GET_CANDIDATE_INFO, GET_CART_COUNT  
 } from './actionTypes';
 
 
@@ -35,6 +35,12 @@ return    {
     type: GET_CANDIDATE_SCORE,
     payload
 }
+}
+
+export const getCartCount = () =>{
+    return {
+        type: GET_CART_COUNT
+    }
 }
 
 export const getCandidateInfo = (payload) => ({
