@@ -50,7 +50,7 @@ const Navbar = props => {
     }
 
 
-    const cartScore = useSelector(state => state.scorePage && state.scorePage.cartCount);
+    const cartScore = useSelector(state => state.home && state.home.cartCount);
 
     return (
         <React.Fragment>
