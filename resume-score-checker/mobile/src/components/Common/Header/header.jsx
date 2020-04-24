@@ -68,13 +68,19 @@ export default function Header(props) {
                         </span>
                     </a>
                 </div>
-                {
+
+               <Link className="sprite icon-cart">
+                <span>0</span>
+               </Link>
+
+
+                {/* {
                     ((props.page === 'homePage') && localStorage.getItem('resume_score')) ? (
                         <Link to="/resume-score-checker/score-checker" className="btn btn-md btn-outline-blue btn-round-30">
                             Check Score
                         </Link>
                     ) : null
-                }
+                } */}
     
                 {/* SideBar */}
                     { menuData.length && (

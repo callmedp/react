@@ -121,3 +121,34 @@
     position: relative;
     top: 0;
 }
+
+.icon-cart {
+    @include icon-inblock (20px, 15px, -64px -326px);
+    // background-image: url('/media/static/score-checker/images/mobile/sprite.png');
+    // width: 20px;
+    // height: 15px;
+    // background-position: -64px -326px;
+    position: relative;
+    top: 0;
+
+    span {
+        display: block;
+        height: 15px;
+        width: 15px;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        -ms-border-radius: 50%;
+        border-radius: 50%;
+        position: absolute;
+        background-color: #fecd2f;
+        color: #000;
+        line-height: 15px;
+        text-align: center;
+        left: -7px;
+        top: -10px;
+        text-indent: 0px;
+        font-size: 9px;
+        font-weight: 600;
+        letter-spacing: -1px;
+    }
+}
