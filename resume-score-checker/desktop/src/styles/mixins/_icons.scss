@@ -23,6 +23,10 @@
     @include size(14px, 18px);
     display: block;
     background-position: -18px 0;
+
+    &.down {
+        transform: rotate(180deg);
+    }
 }
 
 .layout-resume {

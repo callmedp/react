@@ -136,7 +136,7 @@ const Banner = props => {
                             }
 
                             <button onClick={resumeImport} className="d-flex align-items-center btn btn-outline-light btn-round-40 font-weight-bold px-4">
-                                <i className="sprite export mr-3"></i>
+                                <i className="sprite export down mr-3"></i>
                                 Import from shine.com
                     </button>
                         </div>
