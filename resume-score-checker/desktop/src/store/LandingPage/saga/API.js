@@ -41,12 +41,18 @@ const getCandidateResume = () => {
     return BaseApiService.get(`${siteDomain}/api/v1/resume/${url}`);
 }
 
+const getCartCount = () =>{
+    const url = `count/`;
+    return BaseApiService.get(`${siteDomain}/api/v1/cart/${url}`);
+}
+
 export const Api = {
     uploadFileUrl,
     expertFormSubmit,
     checkSessionAvailability,
     getCandidateResume,
     getCandidateScore,
-    getInformation
+    getInformation,
+    getCartCount
 }
 

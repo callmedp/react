@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import * as Actions from '../../../store/LandingPage/actions/index';
 import Loader from '../../../components/Loader/loader';
 import { Toast } from '../../../services/Toast'
@@ -16,6 +16,7 @@ const Navbar = props => {
     useEffect(() => {
         async function fetchUserInfo() {
             try {
+                dispatch(Actions.getCartCount());
                 const isSessionAvailable = await new Promise((resolve, reject) => dispatch(Actions.checkSessionAvailability({ resolve, reject })));
                 if (isSessionAvailable['result']) {
                     // await dispatch(Actions.getCandidateId())
@@ -47,6 +48,9 @@ const Navbar = props => {
         localStorage.clear();
         window.location.href = `${siteDomain}/logout/?next=/resume-score-checker/`;
     }
+
+
+    const cartScore = useSelector(state => state.scorePage?.cartCount);
 
     return (
         <React.Fragment>

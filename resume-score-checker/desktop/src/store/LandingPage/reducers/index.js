@@ -3,7 +3,8 @@ import {UPDATE_SCORE} from "../actions/actionTypes";
 const initialState = {
     total_score : 0,
     section_score : [],
-    error_message : ''
+    error_message : '',
+    cartCount: 0
 };
 
 

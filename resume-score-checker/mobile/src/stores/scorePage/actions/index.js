@@ -6,7 +6,8 @@ import {
     GET_CANDIDATE_ID,
     GET_CANDIDATE_RESUME,
     GET_CANDIDATE_INFO,
-    GET_CANDIDATE_SCORE
+    GET_CANDIDATE_SCORE,
+    GET_CART_COUNT
 } from './actionTypes';
 
 
@@ -51,3 +52,9 @@ export const getCandidateScore = (payload) => {
         type: GET_CANDIDATE_INFO,
         payload
     })
+
+    export const getCartCount = () =>{
+        return {
+            type: GET_CART_COUNT
+        }
+    }

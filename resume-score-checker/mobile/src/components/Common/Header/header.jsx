@@ -1,5 +1,5 @@
 import React, {useState,useEffect} from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../../../stores/scorePage/actions/index';
 import {eventClicked} from '../../../stores/googleAnalytics/actions/index'
 import { Link } from 'react-router-dom';
@@ -14,9 +14,12 @@ export default function Header(props) {
         const dispatch = useDispatch()
         const [candidateInfo, setCandidateInfo] = useState({});
 
+        const cartScore = useSelector(state => state.scorePage?.cartCount);
+
         useEffect(() => {
             async function fetchUserInfo() {
                 try {
+                    dispatch(Actions.getCartCount());
                     const isSessionAvailable = await new Promise((resolve, reject) => dispatch(Actions.checkSessionAvailability({ resolve, reject })));
                     if (isSessionAvailable['result']) {
                         // await dispatch(Actions.getCandidateId())
@@ -39,7 +42,7 @@ export default function Header(props) {
     
             fetchUserInfo();
         }, []);
-        const handleMenuButtonClick = () => {
+        const handleMenuButtonClick = () => {   
             setIsSideBarOpen(!isSideBarOpen)
         };
 
