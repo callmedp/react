@@ -99,9 +99,10 @@ return (
 
                                 <div className="number"> 
                                     <div className="floating-label">     
-                                        <input className="form--control floating-input" type="number" name = 'mobile' placeholder=" " maxLength = {max} ref={register({
+                                        <input className="form--control floating-input" type="number" name = 'mobile' placeholder=" " ref={register({
                                             required : true,
                                             minLength : min,
+                                            maxLength : max,
                                             pattern : /^[0-9-]+$/
                                         })} />
                                         <label>Number</label>
@@ -110,6 +111,7 @@ return (
                                 {errors?.mobile?.type === 'required' && <span className="error--mgs">Required</span>}
                                 {errors?.mobile?.type === 'pattern' && <span className="error--mgs">Enter a valid Mobile Number</span>}
                                 {errors?.mobile?.type === 'minLength' && <span className="error--mgs">Enter a valid length Number</span>}
+                                {errors?.mobile?.type === 'maxLength' && <span className="error--mgs">Max length will be {max} </span>}
                             </li>
                             
                             <li>
