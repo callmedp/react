@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import './callToAction.scss';
 import * as Actions from '../../../../stores/scorePage/actions/index';
 import { eventClicked } from '../../../../stores/googleAnalytics/actions/index';
+import './callToAction.scss';
 
 import GetExpertForm from '../../Forms/GetExpertForm/getExpertForm';
 import Loader from '../../../Common/Loader/loader';

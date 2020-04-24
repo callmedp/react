@@ -2,6 +2,7 @@ import React from 'react';
 import { imageUrl, siteDomain } from '../../../../Utils/domains';
 import { eventClicked } from '../../../../stores/googleAnalytics/actions/index';
 import { useDispatch } from 'react-redux';
+import './improveResumeScore.scss';
 
 export default function ImproveResumeScore() {
 

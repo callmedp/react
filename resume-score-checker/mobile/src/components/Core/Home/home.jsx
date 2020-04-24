@@ -7,7 +7,6 @@ import Parameters from './ResumeCheckerParameters/resumeCheckerParameters';
 import NextBenefit from './NextBenefit/nextBenefit';
 import CallToAction from './CallToAction/callToAction';
 import Footer from '../../Common/Footer/footer';
-import './home.scss';
 
 class Home extends Component {
     render() {

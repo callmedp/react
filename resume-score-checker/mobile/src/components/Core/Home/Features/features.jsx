@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import './features.scss';
 
 
 class Features extends Component {

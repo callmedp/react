@@ -2,6 +2,8 @@ import React from 'react';
 import { siteDomain } from '../../../../Utils/domains';
 import { eventClicked } from '../../../../stores/googleAnalytics/actions/index';
 import { useDispatch } from 'react-redux';
+import './getExpertHelp.scss';
+
 
 
 export default function GetExpertHelp() {

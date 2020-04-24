@@ -1,10 +1,7 @@
-@import '../../../../styles/components/progress-bar';
-@import '../../../../styles/library/mixin';
-@import '../../../../styles/library/extends';
-
-
 // $static-url: get('staticUrl');
 // $path: $static-url + "score-checker/images";
+
+@import '../../../../styles/library';
 
 .score-banner {
     @include size(100%, 400px, block);

@@ -6,7 +6,6 @@ import ImproveResumeScore from './ImproveResumeScore/improveResumeScore';
 import GetExpertHelp from './GetExpertHelp/getExpertHelp';
 import CallToActionScore from './CallToAction/callToActionScore';
 import Footer from '../../Common/Footer/footer';
-import './score.scss';
 
 
 

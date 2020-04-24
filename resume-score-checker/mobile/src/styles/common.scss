@@ -1,19 +1,4 @@
-@import './library/variables';
-@import './library/mixin';
-@import './library/extends';
-
-@import './base/reset';
-@import './base/typography';
-
-
-@import './components/buttons';
-@import './components/common';
-@import './components/icons';
-
-@import './utilities/flex';
-@import './utilities/font-size';
-@import './utilities/margin';
-@import './utilities/padding';
-@import './utilities/text-align';
-
-@import '../components/Common/Footer/footer.scss';
+@import './base';
+@import './components';
+@import './library';
+@import './utilities';

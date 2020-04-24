@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import './resumeCheckerParameters.scss';
 
 class Parameters extends Component {
     render() {
