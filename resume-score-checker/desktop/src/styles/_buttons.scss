@@ -137,3 +137,9 @@ input[type="button"] {
     width: 100%;
   }
 }
+
+
+.swal2-styled:focus {
+  box-shadow: none !important;
+  outline: none !important;
+}

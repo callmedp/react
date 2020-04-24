@@ -99,7 +99,7 @@ return (
 
                                 <div className="number"> 
                                     <div className="floating-label">     
-                                        <input className="form--control floating-input" type="text" name = 'mobile' placeholder=" " maxLength = {max} ref={register({
+                                        <input className="form--control floating-input" type="number" name = 'mobile' placeholder=" " maxLength = {max} ref={register({
                                             required : true,
                                             minLength : min,
                                             pattern : /^[0-9-]+$/
