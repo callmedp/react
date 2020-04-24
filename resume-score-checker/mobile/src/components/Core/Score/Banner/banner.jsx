@@ -57,7 +57,6 @@ export default function Banner() {
             <div className="container-box">
                 <div className="resume-detail mb-30 text-center">
                     <p>
-                        <i className="sprite clip"></i>
                         {
                             localStorage.getItem('resume_file') ? localStorage.getItem('resume_file') : 'No Resume'
                         }

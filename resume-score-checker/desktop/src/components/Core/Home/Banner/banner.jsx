@@ -127,7 +127,7 @@ const Banner = props => {
                             <div className="file-upload btn btn-secondary btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
                                 <i className="sprite upload mr-3"></i>
                                 {
-                                    !!(JSON.parse(localStorage.getItem('resume_score'))) ? " Upload Resume": "Upload New Resume"
+                                    !!(JSON.parse(localStorage.getItem('resume_score'))) ? "Upload New Resume": "Upload Resume"
                                 }
                     <input className="file-upload__input" type="file" onChange={fileUpload} name="resume" />
                             </div>

@@ -72,9 +72,9 @@ export default function Header(props) {
                     </a>
                 </div>
 
-               <Link  to={`${siteDomain}/cart/payment-summary/`} className="sprite icon-cart">
+               <a  href={`${siteDomain}/cart/payment-summary/`} className="sprite icon-cart">
                 <span>{cartScore}</span>
-               </Link>
+               </a>
 
 
                 {/* {
