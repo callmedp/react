@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch,useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../../../store/LandingPage/actions/index';
 import Loader from '../../../components/Loader/loader';
 import { Toast } from '../../../services/Toast'
@@ -50,7 +50,7 @@ const Navbar = props => {
     }
 
 
-    const cartScore = useSelector(state => state.scorePage?.cartCount);
+    const cartScore = useSelector(state => state.scorePage && state.scorePage.cartCount);
 
     return (
         <React.Fragment>
@@ -136,8 +136,8 @@ const Navbar = props => {
                         </li>
 
                         <li className="d-flex align-items-center">
-                            <a className="cart-icon" href="https://learning.shine.com/cart/payment-summary/">
-                                <span className="cart-counter" id="cart-counter-id">10</span>
+                            <a className="cart-icon" href= {`${siteDomain}/cart/payment-summary/`} >
+                                <span className="cart-counter" id="cart-counter-id">{cartScore}</span>
                             </a>
                         </li>
                     </ul>

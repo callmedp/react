@@ -14,7 +14,7 @@ export default function Header(props) {
         const dispatch = useDispatch()
         const [candidateInfo, setCandidateInfo] = useState({});
 
-        const cartScore = useSelector(state => state.scorePage?.cartCount);
+        const cartScore = useSelector(state =>state.uploadFile?.cartCount);
 
         useEffect(() => {
             async function fetchUserInfo() {
@@ -72,8 +72,8 @@ export default function Header(props) {
                     </a>
                 </div>
 
-               <Link className="sprite icon-cart">
-                <span>0</span>
+               <Link  to={`${siteDomain}/cart/payment-summary/`} className="sprite icon-cart">
+                <span>{cartScore}</span>
                </Link>
 
 
