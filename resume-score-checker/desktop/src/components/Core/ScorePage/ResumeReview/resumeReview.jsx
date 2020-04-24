@@ -78,7 +78,7 @@ const ResumeReview=props=>{
          {/* <p>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</p>  */}
           
           {
-            !(subSection['section_score']) ? <p><strong>Oops ! We weren't able to detect this section on your resume. Let our experts guide you with most-commonly used terms and best practices to make your resume ATS friendly.</strong></p>:null
+            !(subSection['section_status']) ? <p><strong>Oops ! We weren't able to detect this section on your resume. Let our experts guide you with most-commonly used terms and best practices to make your resume ATS friendly.</strong></p>:null
           }
           <div dangerouslySetInnerHTML={Description(subSection?.section_description)}></div>
         </div>
