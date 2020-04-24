@@ -150,7 +150,7 @@ const InnerBanner = props => {
                                     to='getexpert'
                                     onClick={handleGetExpertClick}
                                     className="btn btn-secondary btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
-                                    Get expert help
+                                    Get Expert Help
                     </LinkScroll>
                                 <div className="file-upload btn btn-outline-light btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
                                     <i className="sprite export mr-3"></i>

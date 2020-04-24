@@ -33,7 +33,7 @@ const Parameters=props=> {
         <section className="parameters">
             <div className="container">
                 <div className="d-flex justify-content-center">
-                    <h2><span>Resume checker Parameters</span></h2>
+                    <h2><span>Resume Checker Parameters</span></h2>
                 </div>
 
                 <div className="media align-items-center">
