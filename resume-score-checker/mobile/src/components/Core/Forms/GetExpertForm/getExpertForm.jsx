@@ -74,7 +74,7 @@ return (
 
                             <li className={errors?.email ? 'form-group error' : 'form-group'}>
                                 <div className="floating-label">      
-                                    <input className="form--control floating-input" type="text" placeholder=" " name='email' ref={register({
+                                    <input className="form--control floating-input" type="email" placeholder=" " name='email' ref={register({
                                         required : true,
                                         pattern: {
                                             value : /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,

@@ -63,6 +63,7 @@ $clouds: #ecf0f1;
 
       li {
         display: flex;
+        padding-left: 10px;
 
         @extend %blue-bullet;
 
