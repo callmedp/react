@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState} from 'react';
+import { useDispatch} from 'react-redux';
 import { Redirect } from 'react-router-dom'
 import * as Actions from '../../../../store/LandingPage/actions/index';
 import { eventClicked } from '../../../../store/googleAnalytics/actions/index'
@@ -13,7 +13,7 @@ const Banner = props => {
     const [flag, setFlag] = useState(false);
     const [redirect, setRedirect] = useState(false);
     const dispatch = useDispatch()
-    const staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
+    const staticUrl = window && window.config && window.config.staticUrl || '/media/static/';   
 
     const resumeImport = async event => {
 
@@ -46,7 +46,11 @@ const Banner = props => {
                 }
             }
             else {
-                window.location.href = `${siteDomain}/login/?next=/resume-score-checker/`
+                setFlag(true);
+                setTimeout(() => {
+                    window.location.replace(`${siteDomain}/login/?next=/resume-score-checker/?import=true`)
+                }, 100)
+
             }
         }
         else {
@@ -71,10 +75,10 @@ const Banner = props => {
     }
 
     const fileUpload = async event => {
-        
+
         dispatch(eventClicked({
-            'label':"Upload Resume",
-            'action':"Firstfold"
+            'label': "Upload Resume",
+            'action': "Firstfold"
         }))
         event.persist();
         let file1 = event.target.files[0];
@@ -127,9 +131,9 @@ const Banner = props => {
                             <div className="file-upload btn btn-secondary btn-round-40 font-weight-bold d-flex px-5 py-4 mr-4">
                                 <i className="sprite upload mr-3"></i>
                                 {
-                                    !!(JSON.parse(localStorage.getItem('resume_score'))) ? "Upload New Resume": "Upload Resume"
+                                    !!(JSON.parse(localStorage.getItem('resume_score'))) ? "Upload New Resume" : "Upload Resume"
                                 }
-                    <input className="file-upload__input" type="file" onChange={fileUpload} name="resume" />
+                                <input className="file-upload__input" type="file" onChange={fileUpload} name="resume" />
                             </div>
 
                             {flag && <Loader></Loader>}
