@@ -1,7 +1,6 @@
 
 const defaultHeaders = {
-    "Content-Type": "application/json",
-    "credentials" : 'include'
+    "Content-Type": "application/json"
 }
 
 const handleParams = (data) => Object.keys(data).map((key) => {
