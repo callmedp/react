@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import * as Actions from '../../../../stores/scorePage/actions/index';
@@ -22,6 +22,7 @@ export default function CallToActionScore() {
     const [flag, setFlag] = useState(true);
     const [visible, setVisible] = useState(false);
     const [filename, setFileName] = useState('Upload New Resume');
+    useEffect(() => window.scrollTo(0,0),[flag])
 
     const dispatch = useDispatch();
     const fileUpload = async event => {
@@ -51,6 +52,7 @@ export default function CallToActionScore() {
                     else {
                         localStorage.setItem('resume_file', file.name)
                         setFileName("Upload New Resume")
+                        setVisible(false)
                         setFlag(!flag)
                     }
                 }
@@ -62,7 +64,7 @@ export default function CallToActionScore() {
             }
         }
         else {
-            Toast('error', 'Please Upload only Pdf, Doc, Docx or txt format file only')
+            Toast('error', 'Please Upload Pdf, Doc, Docx or txt format file only')
             setVisible(false)
         }
     }

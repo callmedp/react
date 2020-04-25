@@ -46,7 +46,7 @@ const Navbar = props => {
 
     const handleLogout = () => {
         localStorage.clear();
-        window.location.href = `${siteDomain}/logout/?next=/resume-score-checker/`;
+        window.location.replace(`${siteDomain}/logout/?next=/resume-score-checker/`);
     }
 
 

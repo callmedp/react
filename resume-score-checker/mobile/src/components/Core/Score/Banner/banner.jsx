@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './score-banner.scss';
-import { useEffect } from 'react';
 
 export default function Banner() {
     useEffect(() => window.scrollTo(0,0),[])

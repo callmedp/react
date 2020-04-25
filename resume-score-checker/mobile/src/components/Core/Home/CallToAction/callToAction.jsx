@@ -56,7 +56,7 @@ export default function CallToAction() {
             }
         }
         else{
-            Toast('error', 'Please Upload only Pdf, Doc, Docx or txt format file only')
+            Toast('error', 'Please Upload Pdf, Doc, Docx or txt format file only')
             setVisible(false) 
         }
     }
@@ -129,10 +129,10 @@ export default function CallToAction() {
                 <input className="file-upload__input_right" type="file" name="file" onChange={fileUpload}></input>
             </div>
 
-            <button className="d-flex align-items-center btn btn-outline-white btn-round-30 fs-11 px-20" onClick = {importResume}>
+            <div className="d-flex align-items-center btn btn-outline-white btn-round-30 fs-11 px-20" onClick = {importResume}>
                 <i className="sprite export down mr-5"></i>
                 Import from shine.com
-            </button>
+            </div>
             {
                 (flag &&
                 <React.Fragment>
