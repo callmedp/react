@@ -4,19 +4,19 @@
     "chunks": {
         "main": [
             {
-                "name": "main-1587817704194.css",
-                "publicPath": "https://static1.shine.com/l/s/score-checker/dist/mobile/main-1587817704194.css",
-                "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/score-checker/dist/mobile/main-1587817704194.css"
+                "name": "main-1587830034546.css",
+                "publicPath": "https://static1.shine.com/l/s/score-checker/dist/mobile/main-1587830034546.css",
+                "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/score-checker/dist/mobile/main-1587830034546.css"
             },
             {
-                "name": "main-1587817704194.js",
-                "publicPath": "https://static1.shine.com/l/s/score-checker/dist/mobile/main-1587817704194.js",
-                "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/score-checker/dist/mobile/main-1587817704194.js"
+                "name": "main-1587830034546.js",
+                "publicPath": "https://static1.shine.com/l/s/score-checker/dist/mobile/main-1587830034546.js",
+                "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/score-checker/dist/mobile/main-1587830034546.js"
             },
             {
-                "name": "main-1587817704194.js.map",
-                "publicPath": "https://static1.shine.com/l/s/score-checker/dist/mobile/main-1587817704194.js.map",
-                "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/score-checker/dist/mobile/main-1587817704194.js.map"
+                "name": "main-1587830034546.js.map",
+                "publicPath": "https://static1.shine.com/l/s/score-checker/dist/mobile/main-1587830034546.js.map",
+                "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/score-checker/dist/mobile/main-1587830034546.js.map"
             }
         ]
     }
