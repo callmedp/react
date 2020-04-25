@@ -111,7 +111,7 @@ return (
                                             required : true,
                                             minLength : min,
                                             maxLength : max,
-                                            inputmode="numeric",
+                                            inputmode:"numeric",
                                             pattern : /^[0-9-]+$/
                                         })} />
                                         <label>Number</label>
