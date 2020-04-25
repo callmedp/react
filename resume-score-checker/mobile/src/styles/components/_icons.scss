@@ -1,0 +1,154 @@
+
+  // Icons Starts here 
+//   $static-url: get('staticUrl');
+//   $path: $static-url + "score-checker/images";
+
+  .sprite {
+    background-image: url('#{$path}/sprite.png');
+    background-repeat:  no-repeat;
+}
+
+.upload {
+    @include icon-block (14px, 19px, 0 0);
+}
+
+.export {
+    @include icon-block (14px, 18px, -18px 0);
+
+    &.down {
+        transform: rotate(180deg);
+    }
+}
+
+
+
+.layout-resume {
+    @include icon-inblock (43px, 63px, 0 -22px);
+}
+
+.tips {
+    @include icon-inblock (52px, 63px, 0 -88px);
+}
+
+.review-score {
+    @include icon-inblock (46px, 63px, 0px -160px);
+}
+
+.expert-guidance {
+    @include icon-inblock (45px, 63px, 0px -224px);
+}
+
+.upload-resume {
+    @include icon-inblock (19px, 27px, 0 -308px);
+}
+
+.fb-black {
+    @include icon-inblock (13px, 24px, -71px 0px);
+}
+
+.linledin-black{
+    @include icon-inblock (25px, 24px, -59px -28px);
+}
+
+.tw-black {
+    @include icon-inblock (20px, 24px, -58px -56px);
+}
+
+.green-tick {
+    @include icon-inblock (14px, 11px, -28px -310px);
+}
+
+.question-mark {
+    @include icon-inblock (13px, 20px, -27px -383px);
+}
+
+.caution-mark {
+    @include icon-inblock (6px, 20px, 0 -416px);
+}
+
+.back-icon {
+    @include icon-inblock (22px, 17px, -62px -158px);
+}
+.resume-analysis {
+    @include size(27px, 27px);
+    background-position: 0 -341px;
+}
+
+.get-resume {
+    @include size(20px, 27px);
+    background-position: 0 -380px;
+}
+
+.clip {
+    @include icon-inblock (7px, 15px, -33px -328px);
+    position: relative;
+    margin-right: 5px;
+    top: 2px;
+}
+
+.icon-home {
+    @include icon-inblock (18px, 20px, -66px -182px);
+    position: relative;
+    top: -2px;
+}
+
+.icon-courses {
+    @include icon-inblock (18px, 21px, -66px -205px);
+    position: relative;
+    top: -2px;
+}
+
+.job-assistance {
+    @include icon-inblock (18px, 18px, -66px -227px);
+    position: relative;
+    top: 0;
+}
+
+.practice-tests {
+    @include icon-inblock (16px, 20px, -68px -302px);
+    position: relative;
+    top: -2px;
+}
+
+.free-resources {
+    @include icon-inblock (21px, 20px, -63px -249px);
+    position: relative;
+    top: -1px;
+}
+
+.blog {
+    @include icon-inblock (22px, 21px, -62px -276px);
+    position: relative;
+    top: 0;
+}
+
+.icon-cart {
+    @include icon-inblock (20px, 15px, -64px -326px);
+    // background-image: url('/media/static/score-checker/images/mobile/sprite.png');
+    // width: 20px;
+    // height: 15px;
+    // background-position: -64px -326px;
+    position: relative;
+    top: 0;
+
+    span {
+        display: block;
+        height: 15px;
+        width: 15px;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        -ms-border-radius: 50%;
+        border-radius: 50%;
+        position: absolute;
+        background-color: #fecd2f;
+        color: #000;
+        line-height: 15px;
+        text-align: center;
+        left: -7px;
+        top: -10px;
+        text-indent: 0px;
+        font-size: 9px;
+        font-weight: 600;
+        letter-spacing: -1px;
+    }
+}

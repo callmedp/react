@@ -1,0 +1,33 @@
+.banner {
+    @include size (100%, 431px);
+    @extend %blue-gr;
+    color: $white;
+    position: relative;
+    overflow: hidden;
+
+    h1 {
+        font-size: 44px;
+    }
+
+    &__image {
+        position: absolute;
+        z-index: 1;
+        right: -110px;
+    }
+
+    &__text {
+        color: rgba($white, .6);
+        font-size: 11px;
+        margin-top: 20px;
+    }
+}
+
+.file-upload {
+    &__input {
+        position: absolute;
+        font-size: 50px;
+        opacity: 0;
+        right: 0;
+        top: 0;
+    }
+}
