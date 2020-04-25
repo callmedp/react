@@ -1,7 +1,6 @@
 
 const defaultHeaders = {
     "Content-Type": "application/json",
-    "credentials": "include"
 };
 
 
@@ -15,7 +14,8 @@ const get = (url, headers = {
 }, isFetchingHTML = false) => {
     return fetch(url, {
         headers,
-        method: 'GET'
+        method: 'GET',
+        credentials: 'include'
     })
         .then(response => response.json())
         .catch(err =>{ throw err } )
@@ -27,6 +27,7 @@ const post = (url, data, headers = {
     return fetch(url, {
         headers,
         method: 'POST',
+        credentials: 'include',
         body: isStringify ? JSON.stringify(data) : isUpload ? data : handleParams(data)
     })
         .then( response => response.json() )

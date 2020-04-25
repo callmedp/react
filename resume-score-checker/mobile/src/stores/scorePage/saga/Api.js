@@ -27,8 +27,7 @@ const getCandidateScore = (candidateId) => {
 const expertFormSubmit = (data) => {
     const url = `lead/lead-management/`;
     return BaseApiService.post(`${siteDomain}/${url}`, data, {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'credentials' : 'include'
+        'Content-Type': 'application/x-www-form-urlencoded'
     }, false);
 }
 
