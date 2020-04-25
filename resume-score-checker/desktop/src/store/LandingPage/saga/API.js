@@ -26,7 +26,10 @@ const getCandidateScore = (candidateId) => {
 const expertFormSubmit = (data) => {
     const url = 'lead/lead-management/';
     return BaseApiService.post(`${siteDomain}/${url}`, data,
-        { 'Content-Type': 'application/x-www-form-urlencoded' }, false);
+        {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'credentials': 'include'
+        }, false);
 };
 
 
@@ -41,7 +44,7 @@ const getCandidateResume = () => {
     return BaseApiService.get(`${siteDomain}/api/v1/resume/${url}`);
 }
 
-const getCartCount = () =>{
+const getCartCount = () => {
     const url = `count/`;
     return BaseApiService.get(`${siteDomain}/api/v1/cart/${url}`);
 }

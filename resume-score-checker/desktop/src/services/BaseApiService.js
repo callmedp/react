@@ -1,6 +1,7 @@
 
 const defaultHeaders = {
     "Content-Type": "application/json",
+    "credentials": "include"
 };
 
 
