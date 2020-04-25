@@ -74,10 +74,15 @@ return (
 
                             <li className={errors?.email ? 'form-group error' : 'form-group'}>
                                 <div className="floating-label">      
-                                    <input className="form--control floating-input" type="email" placeholder=" " name='email' ref={register({
+                                    <input 
+                                        className="form--control floating-input" 
+                                        type="email" 
+                                        placeholder=" " 
+                                        name='email' 
+                                        ref={register({
                                         required : true,
                                         pattern: {
-                                            value : /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                                        value : /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
                                         }
                                     })} />
                                     <label>Email ID</label>
@@ -100,7 +105,7 @@ return (
                                 <div className="number"> 
                                     <div className="floating-label">     
                                         <input className="form--control floating-input" 
-                                            type="number" 
+                                            type="tel" 
                                             name = 'mobile' 
                                             placeholder=" " ref={register({
                                             required : true,
