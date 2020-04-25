@@ -99,10 +99,14 @@ return (
 
                                 <div className="number"> 
                                     <div className="floating-label">     
-                                        <input className="form--control floating-input" type="number" name = 'mobile' placeholder=" " ref={register({
+                                        <input className="form--control floating-input" 
+                                            type="number" 
+                                            name = 'mobile' 
+                                            placeholder=" " ref={register({
                                             required : true,
                                             minLength : min,
                                             maxLength : max,
+                                            inputmode="numeric",
                                             pattern : /^[0-9-]+$/
                                         })} />
                                         <label>Number</label>
