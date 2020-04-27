@@ -13,7 +13,7 @@ const InnerBanner = props => {
 
     const [flag, setFlag] = useState(false);
     const localScore = JSON.parse(localStorage.getItem('resume_score')) ?.total_score
-    const file_name = localStorage.getItem('file_name')
+    const [file_name,setFile_name] = useState(localStorage.getItem('file_name'))
     const dispatch = useDispatch()
     const history = useHistory()
 
@@ -45,6 +45,7 @@ const InnerBanner = props => {
                     dispatch(Actions.uploadFileUrl({ file1, resolve, reject }));
                 })
                 localStorage.setItem('file_name', file1.name);
+                setFile_name(file1.name);
                 setFlag(false)
                 history.push('/resume-score-checker/score-checker')
 
@@ -93,8 +94,7 @@ const InnerBanner = props => {
             })
         )
     }
-
-
+    
     return (
         <div>
             <section className="banner">

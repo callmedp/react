@@ -51,10 +51,10 @@ const GetExperts = props => {
           <h2><span>Get Expert Help</span></h2>
           <p>Make your resume more compelling with the help of our professional resume writers, who has helped over 10,000 professional to get interviewed in many companies and get hired quickly. Our experts will not only help in improving your score but also help you in customizing your resume as per your desired job and industry.</p>
           <ul className="expert-help__list mt-5">
-            <li className="expert-help__item"><a href={`${siteDomain}/services/resume-writing/63/`} onClick={() => handleEventClick('resumewriting', 'ExpertHelp')}>Resume Writing</a></li>
-            <li className="expert-help__item"><a href={`${siteDomain}/services/resume-services/entry-level-freshers/pd-2052/`} onClick={() => handleEventClick('VisualResume', 'ExpertHelp')}>Visual Resume</a></li>
+            <li className="expert-help__item"><a href={`${siteDomain}/services/resume-writing/63`} onClick={() => handleEventClick('resumewriting', 'ExpertHelp')}>Resume Writing</a></li>
+            <li className="expert-help__item"><a href={`${siteDomain}/services/resume-services/entry-level-freshers/pd-2052`} onClick={() => handleEventClick('VisualResume', 'ExpertHelp')}>Visual Resume</a></li>
             <li className="expert-help__item"><a href={`${siteDomain}/resume-builder/`} onClick={() => handleEventClick('Resume Builder', 'ExpertHelp')}>Resume Builder</a></li>
-            <li className="expert-help__item"><a href={`${siteDomain}/services/resume-services/entry-level-freshers-4/pd-2553/`} onClick={() => handleEventClick('IntResume', 'ExpertHelp')}>International Resume</a></li>
+            <li className="expert-help__item"><a href={`${siteDomain}/services/resume-services/entry-level-freshers-4/pd-2553`} onClick={() => handleEventClick('IntResume', 'ExpertHelp')}>International Resume</a></li>
           </ul>
         </div>
 

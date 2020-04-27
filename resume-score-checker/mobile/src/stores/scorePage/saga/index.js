@@ -79,6 +79,7 @@ function* getCandidateScore(action) {
         if(!result.data['error_message']){
             yield put({ type: UPDATE_SCORE, payload: result.data });
             localStorage.setItem("resume_score", JSON.stringify({...result.data}))
+            localStorage.setItem('resume_file', 'Imported from Shine')
         }
         return resolve(result.data)
     }
