@@ -27,7 +27,7 @@ export default function ImproveResumeScore() {
                         <img src={`${imageUrl}score-checker/images/mobile/resume-writing.png`} alt="resume-writing"/>
                     </span>
                     <p className="improve-resume__head mb-20">Perfect your resume score with <strong>Resume Writing Service</strong></p>
-                    <a href = {`${siteDomain}/services/resume-writing/63/`} className="btn btn-round-30 btn-outline-blue px-15" onClick={()=>handleEventClick('M_Resumewriting','Improvescore')}>Get details</a>
+                    <button className="btn btn-round-30 btn-outline-blue px-15"><a href = {`${siteDomain}/services/resume-writing/63/`} onClick={()=>handleEventClick('M_Resumewriting','Improvescore')}>Get details</a></button>
                 </div>
                 
                 <div className="improve-resume__slide">
@@ -35,7 +35,7 @@ export default function ImproveResumeScore() {
                         <img src={`${imageUrl}score-checker/images/mobile/resume-builder.png`} alt="resume-builder"/>
                     </span>
                     <p className="improve-resume__head mb-20">Create a Perfect Resume with <strong>Resume Builder</strong></p>
-                    <a href={`${siteDomain}/resume-builder/`} className="btn btn-round-30 btn-outline-blue px-15" onClick={()=>handleEventClick('M_ResumeBuilder','Improvescore')}>Create Now</a>
+                    <button className="btn btn-round-30 btn-outline-blue px-15"><a href={`${siteDomain}/resume-builder/`} onClick={()=>handleEventClick('M_ResumeBuilder','Improvescore')}>Create Now</a></button>
                 </div>
                 
                 <div className="improve-resume__slide">
@@ -43,7 +43,7 @@ export default function ImproveResumeScore() {
                         <img src={`${imageUrl}score-checker/images/mobile/free-resume-format.png`} alt="resume-format"/>
                     </span>
                     <p className="improve-resume__head mb-20">Explore <strong>Free resume Formats</strong>to search desired jobs</p>
-                    <a href={`${siteDomain}/cms/resume-format/1/`} className="btn btn-round-30 btn-outline-blue px-15" onClick={()=>handleEventClick('M_ResumeFormat','Improvescore')}>Explore Now</a>
+                    <button className="btn btn-round-30 btn-outline-blue px-15"><a href={`${siteDomain}/cms/resume-format/1/`} onClick={()=>handleEventClick('M_ResumeFormat','Improvescore')}>Explore Now</a></button>
                 </div>
             </div>
         </div>
