@@ -45,6 +45,7 @@ const InnerBanner = props => {
                     dispatch(Actions.uploadFileUrl({ file1, resolve, reject }));
                 })
                 localStorage.setItem('file_name', file1.name);
+                setFile_name(file1.name);
                 setFlag(false)
                 history.push('/resume-score-checker/score-checker')
 
@@ -93,8 +94,7 @@ const InnerBanner = props => {
             })
         )
     }
-
-
+    
     return (
         <div>
             <section className="banner">
