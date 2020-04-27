@@ -5,6 +5,7 @@ let config = defaults.__get__('config');
 var sass = require("node-sass");
 var sassUtils = require("node-sass-utils")(sass);
 var path = require('path');
+let paths = defaults.__get__('paths');
 var BundleTracker = require('webpack-bundle-tracker');
 
 config.optimization.splitChunks = {
@@ -18,6 +19,9 @@ config.optimization.runtimeChunk = false;
 const currentTimeStamp = process.argv && process.argv[2] || +new Date();
 
 __dirname = path.join(__dirname, '..', '..', '..')
+
+
+paths.appBuild =  path.join(__dirname, 'careerplus', 'static_core', 'score-checker', 'dist', 'mobile');
 
 const staticPath = process.env.REACT_APP_ENV === 'development' ?
     '/media/static/' : process.env.REACT_APP_ENV === 'staging' ?

@@ -1,1 +1,23 @@
-{"status":"done","publicPath":"https://learning-static-staging-189607.storage.googleapis.com/l1/s/score-checker/dist/mobile/","chunks":{"main":[{"name":"main-1587829224821.css","publicPath":"https://learning-static-staging-189607.storage.googleapis.com/l1/s/score-checker/dist/mobile/main-1587829224821.css","path":"/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/score-checker/dist/mobile/main-1587829224821.css"},{"name":"main-1587829224821.js","publicPath":"https://learning-static-staging-189607.storage.googleapis.com/l1/s/score-checker/dist/mobile/main-1587829224821.js","path":"/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/score-checker/dist/mobile/main-1587829224821.js"},{"name":"main-1587829224821.js.map","publicPath":"https://learning-static-staging-189607.storage.googleapis.com/l1/s/score-checker/dist/mobile/main-1587829224821.js.map","path":"/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/score-checker/dist/mobile/main-1587829224821.js.map"}]}}
+{
+    "status": "done",
+    "publicPath": "https://learning-static-staging-189607.storage.googleapis.com/l1/s/score-checker/dist/mobile/",
+    "chunks": {
+        "main": [
+            {
+                "name": "main-1588001909604.css",
+                "publicPath": "https://learning-static-staging-189607.storage.googleapis.com/l1/s/score-checker/dist/mobile/main-1588001909604.css",
+                "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/score-checker/dist/mobile/main-1588001909604.css"
+            },
+            {
+                "name": "main-1588001909604.js",
+                "publicPath": "https://learning-static-staging-189607.storage.googleapis.com/l1/s/score-checker/dist/mobile/main-1588001909604.js",
+                "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/score-checker/dist/mobile/main-1588001909604.js"
+            },
+            {
+                "name": "main-1588001909604.js.map",
+                "publicPath": "https://learning-static-staging-189607.storage.googleapis.com/l1/s/score-checker/dist/mobile/main-1588001909604.js.map",
+                "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/score-checker/dist/mobile/main-1588001909604.js.map"
+            }
+        ]
+    }
+}
